@@ -1,6 +1,21 @@
 # Current audit — 2026-08-21
 
-## Current result: exact action-free preflight runner externally approved
+## Current result: V1 failed closed at the public evidence boundary
+
+Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
+4604 tests. Manifest `18dd05a4…d71` was frozen once. The sole V1 preflight emitted a sanitized
+`public_evidence_authentication` failure with `effect_status=verified_zero` and
+`protected_access_status=verified_absent`. The
+[path-free receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+has SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`.
+
+Static public diagnosis found no reset or capability result: both receipt hashes matched, but the
+runner's compact-line canonicalizer rejected the repository's pretty sorted tracked JSON. V1 and
+its selected context are retired with no retry or substitution. All learning and authority boards
+remain unchanged. The next gate is only a generic public evidence reader qualification; it cannot
+open a Red scenario.
+
+## Previous result: exact action-free preflight runner externally approved
 
 Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

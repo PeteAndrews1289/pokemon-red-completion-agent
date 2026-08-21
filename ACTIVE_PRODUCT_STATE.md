@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Red dual-capability action-free scenario preflight V1** (`red-dual-capability-action-free-scenario-preflight-v1`)
+**Tracked public evidence reader qualification V1** (`tracked-public-evidence-reader-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If exactly one authentic same-reset menu passes with zero prediction and action, separately freeze one one-decision shadow-outcome execution. Otherwise close the context and reorient without replacement search, route repair, or gameplay.
+- Next decision: If the generic reader passes exact-head CI and adversarial tests, separately design a new scenario gate without reusing the consumed V1 invocation or selected V1 context. Otherwise close this reader design and choose a different public authentication boundary.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Authenticate exactly one preselected nonsealed Red reset as a genuine acquire-versus-evolve scenario by proving, without model scoring or controller input, that semantic venue traversal and bounded evolution are both independently executable from the same state and dependency. |
-| Authority now | The frozen ranker has descriptive synthetic support and the exact Red dual-capability preflight runner is published under green CI, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify only one authentic action-free Red scenario and its exact two-choice menu. Preflight success grants no prediction, execution, gameplay, completion, or transfer authority. |
-| Transfer test | The preflight must prove that title-specific traversal and species bindings stay behind private capability interfaces while the model-visible menu contains only retained multiplicity, unresolved dependency demand, availability, and collection-transition semantics. |
-| Cheapest falsifier | Run one manifest-pinned, action-free preflight over the first prospectively frozen eligible context. Require one reset identity, the exact two identity-free rows, a semantic route plan, sufficient capture resources, and an executable evolution offer; any mismatch closes the context without substitution or route repair. |
-| Time box | 1 session / 2 hours |
+| Reusable capability | Qualify one reusable tracked-public-evidence reader that authenticates an externally pinned SHA-256, rejects duplicate keys and non-ASCII or non-finite JSON, and accepts only the repository's canonical pretty sorted representation without opening any private input, ROM, claim registry, model, or scenario. |
+| Authority now | The frozen ranker has descriptive synthetic support, but the sole V1 Red dual-capability preflight stopped at public evidence authentication before inspecting a context. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Qualify only a reusable public-evidence reader. Success grants no scenario, prediction, execution, gameplay, completion, or transfer authority. |
+| Transfer test | None. This lane qualifies a title-independent public-evidence boundary and makes no Red or Crystal claim. |
+| Cheapest falsifier | Feed the reader exact tracked pretty JSON plus mutations for compact-line substitution, duplicate keys, reordered keys, changed bytes, non-ASCII, non-finite numbers, symlink or inode swaps, and oversized input. Any accepted mutation or protected access closes the reader design. |
+| Time box | 1 session / 1 hour |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-dual-capability-preflight-external-review-go** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+**2026-08-21-dual-capability-preflight-v1-public-evidence-failure** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The preflight engineering gate is now published. One authentic same-reset feasibility result is the shortest remaining bridge from synthetic dependency ranking to the first model-selected, collection-verified Red gameplay outcome. |
-| Learning output | No new measured learning output. Main 347f954d passed CI 32471913419/1. Antigravity's exact-byte audit returned GO with P0/P1/P2 all zero and permitted one exact public invocation freeze. The runner remains unable to score or act. |
-| Authority delta | No gameplay or transfer authority changed. Antigravity's GO used no private input, ROM, model prediction, controller action, frame, teacher query, fit, claim write, or learning counter. |
-| Transfer result | Not run. The runner keeps Red traversal, venue, species, and skill identity behind private bindings and exposes only two title-neutral rows, but no authentic Red menu or Crystal binding has yet been produced. |
-| Blocker | The exact preflight runner is published, green, and externally reviewed. Only the exact public invocation freeze remains before the one allowed private action-free preflight. |
-| Decision | Keep this lane active: freeze the exact public invocation and run exactly one action-free preflight. Do not score the model, claim an outcome, or send controller input. |
-| Next session | Freeze the exact reviewed public invocation and run exactly one action-free preflight over the fixed nonsealed Red context; stop immediately after its result with no score, claim write, controller input, frame advance, substitution, route patch, fit, Crystal, or promotion. |
-| Next falsifier | Authenticate the frozen public invocation, then run one action-free preflight that verifies the fixed reset, semantic route, capture resources, exact evolution offer, two-row menu, and unused physical root while predictions, actions, frames, and claim writes remain zero. |
-| Stop condition | Stop after the first action-free result. Any missing capability, reset drift, route mismatch, identity leak, prediction, action, frame advance, or need for substitution closes the context and this lane. |
+| Product alignment | This one bounded repair removes a generic public-boundary defect that would otherwise invalidate every future protected model or gameplay gate. It does not rescue the consumed Red context or produce learning evidence. |
+| Learning output | No new measured learning output. Main 188272b0 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once; the one preflight failed at public_evidence_authentication with private/ROM/claim/prediction/action/frame effects verified zero. V1 may not retry. |
+| Authority delta | No gameplay or transfer authority changed. The V1 attempt stopped before every protected input and all learning counters stayed unchanged. |
+| Transfer result | Not run. The V1 preflight did not reach the Red context, and this public-only reader lane has no title-specific or transfer authority. |
+| Blocker | The sole V1 invocation is consumed and retired. Its public receipt hashes matched, but its runner required compact canonical JSON while the tracked receipts use the repository's canonical pretty sorted JSON representation. |
+| Decision | Retire the exact V1 preflight without retry. Qualify only the generic tracked-public-evidence reader; do not freeze or run a successor scenario in this lane. |
+| Next session | Implement and qualify the public-only tracked-evidence reader, publish it under exact-head green CI, then stop and reorient separately before any new scenario selection, manifest freeze, private read, ROM access, prediction, action, fit, Crystal run, or promotion. |
+| Next falsifier | Prove the generic reader accepts only the exact SHA-pinned canonical tracked representation and fails before protected access on every representation, byte, path, and inode mutation. |
+| Stop condition | Stop after the reader and adversarial tests are published and green, or immediately if qualification needs any private input, ROM, claim registry, model, scenario, route, or outcome access. |
 
 ### Stop conditions
 
-- Stop if the selected context cannot expose both acquisition and evolution from one restored state through authenticated semantic traversal, or if the policy row leaks species, title, venue, route, or private skill identity.
-- Stop after one action-free preflight or two hours. Never substitute another context, patch a route, score the model, write an outcome claim, send controller input, advance a frame, fit, compare, run Crystal, or promote authority in this lane.
+- Stop if the reader accepts any non-exact byte representation, duplicate key, non-ASCII or non-finite value, symlink, inode swap, oversized document, or unpinned hash.
+- Stop after one public-only implementation session or one hour. Never inspect a scenario, open a private input or ROM, freeze a successor manifest, predict, act, fit, compare, run Crystal, or promote authority in this lane.
 
 ### Hard boundaries for this lane
 
@@ -88,6 +88,11 @@ outputs.
 - **Prohibited:** model fit
 - **Prohibited:** live model prediction
 - **Prohibited:** model refit
+- **Prohibited:** private input access
+- **Prohibited:** public manifest freeze
+- **Prohibited:** red preflight execution
+- **Prohibited:** rom access
+- **Prohibited:** scenario selection
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -119,6 +124,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red dual-capability action-free scenario preflight V1:** Published main 188272b01f88f549c39f6b693239fc7bc5e63bb5 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once and the sole preflight failed closed at public_evidence_authentication before any private input, ROM, claim registry, model prediction, controller action, or frame. Exact receipt hashes matched, but the runner rejected their tracked pretty JSON representation. The selected V1 context and invocation are closed without retry or replacement; all counters remain unchanged. Evidence is preserved; retry is no.
 - **Red dual-capability living-Dex curriculum implementation V1:** Source c946e8dba00ca246d3720b115f81691a1a8cdc91 passed CI 32465536131/1 with 4588 tests. The runtime requires authenticated semantic route execution, binds capture and evolution to one reset and dependency, exposes no policy identity, executes only the selected binding, and verifies exact living-ledger outcomes. Antigravity returned exact-byte GO with P0/P1/P2 all zero. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Red dual-capability living-Dex curriculum design V1:** Source 09e9b04bc2bb09b1d793a0484dca3898e010688b passed CI 32462322717/1 with 4580 tests. The public design freezes two same-reset capability roles, no preferred action, title-neutral rows, and an evolution-aware ledger verifier. Antigravity's initial route-reuse finding was removed and its exact-byte re-audit returned GO. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency zero-action preflight V1:** Main 8d559d230fc06fa83edc8015bb245df531600e16 passed CI 32458785817/1 with 4567 tests. One manifest-pinned nonsealed Red context authenticated its historical replay, exact fit/model, and read-only ledgers, then returned no eligible dependency opportunity. Predictions, claims, actions, frames, teachers, and counters stayed zero. The context is closed with no replacement or retry. Evidence is preserved; retry is no.

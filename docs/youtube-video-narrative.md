@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: the silent inspector passes review, then opens one classroom
+## August 21 scene: the silent inspector stops before the cartridge
+
+Open on **MAIN 188272B0 · CI 32473254566/1 GREEN · MANIFEST 18DD05A4 FROZEN ONCE**.
+The rail reaches **PUBLIC EVIDENCE AUTHENTICATION** and turns red before the ROM icon lights up.
+Stamp **PRIVATE READS 0 · ROM 0 · CLAIMS 0 · MODEL SCORES 0 · BUTTONS 0 · FRAMES 0 · RETRY NO**.
+Link the [failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+with **SHA-256 B09EF67E…C6D09**.
+
+Explain the bug honestly: the hashes were right, but compact JSON and the repository's pretty
+sorted tracked JSON were treated as different contracts. Retire V1 on screen. The next short rail
+is **QUALIFY GENERIC PUBLIC READER → ADVERSARIAL REPRESENTATION TESTS → GREEN CI → REORIENT**.
+Do not show gameplay footage here—the program never reached the game, and no training counter moved.
+
+## Previous August 21 scene: the silent inspector passed review, then opened one classroom
 
 Open on **MAIN 347F954D · CI 32471913419/1 GREEN · ACTION-FREE PREFLIGHT RUNNER
 PUBLISHED**. Animate **PUBLIC MANIFEST → ONE FIXED RED RESET → SEMANTIC DIGLETT'S CAVE ROUTE →

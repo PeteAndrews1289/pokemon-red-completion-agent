@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Ran the sole manifest-pinned Red dual-capability V1 preflight from main
+  `188272b01f88f549c39f6b693239fc7bc5e63bb5` under green CI `32473254566/1`.
+  Manifest `18dd05a4…d71` failed closed at `public_evidence_authentication` before any private
+  input, ROM, claim registry, prediction, controller action, or frame. The
+  [path-free failure receipt](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+  (SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`)
+  records zero counter deltas and no retry. Public diagnosis found an exact representation mismatch:
+  pinned receipt hashes matched, but the runner required compact JSON while tracked receipts are
+  canonical pretty sorted JSON. Retired V1 and activated a bounded public-only reader qualification.
+
 - Recorded Antigravity's exact-byte GO for the Red dual-capability action-free preflight runner at
   main `347f954dc029cf01db3bc366b30ce07b80e445b5` under green CI `32471913419/1`. The
   [qualification receipt](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

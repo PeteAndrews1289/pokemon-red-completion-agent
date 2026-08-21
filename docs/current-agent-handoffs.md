@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: external GO complete; Codex owns the invocation freeze and one silent preflight
+## Current override: Codex owns only the public evidence reader qualification
+
+Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1`. Exact
+manifest `18dd05a4…d71` was frozen once, and the sole V1 preflight failed at
+`public_evidence_authentication` before every protected access or effect. The
+[failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+(SHA-256 `b09ef67e…c6d09`) records zero counter delta and no retry.
+
+Codex may implement and publish only a generic exact-SHA, duplicate-safe tracked JSON reader and
+its public adversarial tests. Antigravity reviews after publication; Claude remains unavailable.
+No agent owns a V1 retry, its selected context, a successor manifest, private/ROM access, scoring,
+claims, actions, fit, Crystal, promotion, completion, or transfer. Reorient again after green CI.
+
+## Previous override: external GO complete; Codex owned the invocation freeze and one silent preflight
 
 Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

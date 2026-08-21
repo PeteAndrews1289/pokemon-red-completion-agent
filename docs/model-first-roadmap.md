@@ -8,7 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: external GO; freeze and run one silent dual-capability inspection
+## Current checkpoint: V1 failed before protected access; qualify the public evidence boundary
+
+Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
+4604 tests. The exact manifest `18dd05a4…d71` was frozen once; the sole preflight stopped at
+`public_evidence_authentication` with protected access, predictions, claims, actions, and frames
+all zero. The [failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+(SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`)
+retires V1 without retry or context substitution.
+
+The public mismatch is bounded: receipt hashes matched, but the runner asked for compact canonical
+JSON while tracked evidence is canonical pretty sorted JSON. Active
+`tracked-public-evidence-reader-qualification-v1` fixes and adversarially tests only that generic
+boundary. It may not select a scenario, freeze a successor manifest, or touch private data/ROM.
+After exact-head green CI, reorient separately to a new scenario design. No learning or authority
+counter advances here.
+
+## Previous checkpoint: external GO; freeze and run one silent dual-capability inspection
 
 Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

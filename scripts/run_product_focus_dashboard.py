@@ -113,7 +113,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
-        "campaign_execution": "execute",
+        "campaign_execution": "campaign",
         "comparison_execution": "compare",
         "consumed_trial_retry": "retry",
         "crystal_execution": "Crystal",
@@ -121,14 +121,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "development_payload_disclosure": "dev disclosure",
         "full_game_replay": "replay",
         "gameplay_execution": "gameplay",
-        "live_model_prediction": "live prediction",
+        "live_model_prediction": "prediction",
         "live_private_artifact_access": "live private artifacts",
         "model_fit": "fit",
         "model_prediction": "prediction",
         "model_refit": "refit",
         "private_artifact_access": "private artifacts",
-        "sealed_red_evaluation": "sealed Red",
-        "teacher_route_hardening": "teacher routes",
+        "private_input_access": "private",
+        "public_manifest_freeze": "manifest",
+        "red_preflight_execution": "preflight",
+        "rom_access": "ROM",
+        "scenario_selection": "scenario",
+        "sealed_red_evaluation": "sealed",
+        "teacher_route_hardening": "teacher",
     }
     prohibited = " / ".join(
         boundary_labels.get(value, value.replace("_", " "))
@@ -141,13 +146,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The exact dual-capability preflight runner is published, green, and externally "
-            "reviewed. Next is one public invocation freeze and one action-free same-reset Red "
-            "inspection; model score, claim write, action, and frame remain closed."
+            "Main 188272b0 · CI 32473254566/1. The sole V1 dual-capability preflight failed "
+            "closed at public evidence authentication before protected access. V1 is retired; "
+            "public-only reader qualification is next. Scenario and gameplay remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red preflight · authenticate one same-reset acquire/evolve menu → stop before score"
+            "Public evidence boundary · qualify exact tracked JSON reader → reorient"
         ),
         collection_target=150,
         model=DashboardModelState(
@@ -157,7 +162,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "authority · not scored"
             ),
             choice=(
-                "Authenticate one real same-reset two-capability menu without scoring or action"
+                "Qualify exact SHA-pinned tracked evidence without opening a Red scenario"
             ),
             decisions=0,
             teacher_queries=0,
@@ -193,17 +198,18 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"{composition_attempts} · verified compositions {verified_compositions}"
             ),
             (
-                f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
-                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} ineligible · "
-                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · candidate 0 · "
-                "runner published · Antigravity GO · invocation freeze + preflight next"
+                f"Rootless · train {synthetic_train_outcomes}/8 · atomic "
+                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} · comparison "
+                f"{synthetic_unseen_comparisons} · V1 manifest 18dd05a4 · "
+                "public_evidence_authentication · protected access 0 · no retry · reader "
+                "qualification next"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),
             _event("Next falsifier", _text(reorientation, "next_falsifier")),
             f"Authority promotions {authority_promotions} · transfer results {transfer_results}",
-            f"Hard boundaries · {prohibited}",
+            f"Closed · {prohibited}",
             (
                 f"Session budget · data {_count(budgets, 'data_and_scenarios')}% · model "
                 f"{_count(budgets, 'model_and_evaluation')}% · maintenance "
