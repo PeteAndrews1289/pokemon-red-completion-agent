@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: four V2 openings sealed; compliance-fit gate is active
+## 2026-08-20: clean V2 fit complete; comparison-preflight gate is active
+
+Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI run `32443875609`
+attempt 1. The
+[compliance-fit result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+(SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+binds fit `c544fa92…8d4bc3c`, model `a42db642…195f6582`, the exact dataset and three-record
+bundle, a consumed no-retry fit claim, and four authenticated sealed manifests. Development
+payloads opened/decoded and every counter delta are zero. Antigravity returned GO with no P0/P1
+blocker or overclaim.
+
+Codex now owns only `rootless-living-dex-dependency-v2-comparison-preflight-v1`: publish this
+checkpoint, freeze one fit-bound public manifest, and run exactly one metadata-only comparison
+preflight. Stop at its first terminal result. The current V2 runner has no comparison-execution
+mode, and no implementation or execution of that seam is owned in this session. No development
+payload decode, refit, gameplay, ROM/controller action, Red/Crystal play, promotion, completion,
+or transfer is owned. Counters remain **30/15/4/3/0/0**, development **14/4/0/1/1**, and
+rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: four V2 openings sealed; compliance-fit gate was active
 
 Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI run `32442951504`
 attempt 1. The

@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: seal four questions once, then train without peeking
+## August 20 scene: fit cleanly, leave all four answers sealed
+
+Open on **MAIN 15B2DBCB · CI 32443875609/1 GREEN · FIT PREFLIGHT PASSED**. Animate
+**4 SEALED MANIFESTS AUTHENTICATED → PAYLOAD OPEN/DECODE 0 → CLAIM EAF6BCB3 CONSUMED → FIT
+C544FA92 → MODEL A42DB642 → EXACT BUNDLE → RETRY 0**. Link the
+[compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+with **SHA-256 3A09AB09…E5C01** and stamp **ANTIGRAVITY GO · P0/P1 0 · OVERCLAIM 0**.
+
+Hold the scoreboard at **SAME 8 PUBLIC LESSONS · LEARNING COUNTER +0 · HELD-OUT COMPARISON
+0 · GAMEPLAY/AUTHORITY/TRANSFER 0**. The next rail is **FREEZE FIT-BOUND PREFLIGHT → JOIN
+MODEL/DATASET/MANIFEST/TERMINAL → INSPECT 4 ENVELOPES / OPEN 0 ANSWERS → VERIFY UNUSED
+COMPARISON IDENTITY → STOP**. Say plainly that the comparison runner is not built in this
+scene. This protects one acquire-versus-evolve reasoning test; it does not show the model playing
+or completing Pokémon.
+
+## Previous August 20 scene: seal four questions once, then train without peeking
 
 Open on **MAIN EC4C170 · CI 32442951504/1 GREEN · PREFLIGHT READY**. Animate one irreversible
 stamp: **CLAIM 27B0F00C CONSUMED → 4 SEALED OPENINGS → ROSTER 68D70487 → RETRY 0**. Link the

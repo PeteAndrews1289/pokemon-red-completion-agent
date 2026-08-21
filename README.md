@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): four V2 openings are sealed; run one clean
+> **Current product focus (August 20, 2026): the clean V2 fit is complete; authenticate one
+> comparison identity without opening the exam.** Main
+> `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. The
+> [compliance-fit result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+> (SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+> records **FIT C544FA92 · MODEL A42DB642 · 4 SEALED MANIFESTS AUTHENTICATED · DEVELOPMENT
+> PAYLOADS OPENED/DECODED 0 · FIT CLAIM CONSUMED · RETRY 0 · LEARNING COUNTER +0 · ANTIGRAVITY
+> GO · P0/P1 0 · OVERCLAIM 0**.
+>
+> Active `rootless-living-dex-dependency-v2-comparison-preflight-v1` permits exactly one
+> metadata-only preflight that binds this fit to the four sealed manifests and an unused
+> comparison identity. The current runner cannot execute the comparison. Stop at the preflight
+> terminal; do not open an answer, implement or execute comparison in this session, refit, touch
+> a ROM/controller, play Red or Crystal, or claim authority or transfer. Boards remain
+> **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**. This protects one
+> abstract living-Pokédex planning test; it is not evidence that the model can play a game.
+
+> **Previous product focus (August 20, 2026): four V2 openings are sealed; run one clean
 > compliance fit only after its metadata-only gate passes.** Main
 > `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
 > [provision result](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)

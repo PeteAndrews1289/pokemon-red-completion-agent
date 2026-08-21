@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: four fresh V2 evaluation openings were sealed once
+## August 20: a clean V2 replacement fit completed without opening the exam
+
+Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. After a
+metadata-only fit preflight authenticated all four sealed manifests, exactly one no-retry fit
+recomputed the eight already counted public deterministic examples. The
+[compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+(SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+binds fit `c544fa92…8d4bc3c`, model `a42db642…195f6582`, the dataset and exact bundle,
+with zero development payload opens or decodes. Antigravity returned GO with no P0/P1 blocker or
+overclaim.
+
+The replacement adds zero learning credit because its eight lessons were already counted. Active
+`rootless-living-dex-dependency-v2-comparison-preflight-v1` now authenticates one exact unused
+comparison identity without opening an answer, then stops. The comparison runner is not yet
+implemented. This remains an intermediary toward story completion and a cross-game living
+Pokédex, not evidence of gameplay, completion, learned authority, or transfer.
+
+## Previous August 20 checkpoint: four fresh V2 evaluation openings were sealed once
 
 Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. After the exact
 store-bound preflight returned `ready_identity_unclaimed`, one no-replacement provision created

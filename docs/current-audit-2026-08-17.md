@@ -1,6 +1,24 @@
 # Current audit — 2026-08-20
 
-## Current result: four fresh V2 openings provisioned once
+## Current result: clean V2 compliance fit completed once
+
+Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI run `32443875609`
+attempt 1. The
+[compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+(SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+authenticates four sealed manifests and binds fit `c544fa92…8d4bc3c`, model
+`a42db642…195f6582`, the exact dataset, executable, manifest, and terminal identities. The fit
+claim is consumed and cannot retry. Development payloads opened/decoded are zero. Antigravity
+returned GO with no P0/P1 blocker or overclaim.
+
+This compliance replacement repeats the already counted eight public deterministic values, so it
+adds zero learning credit. Counters remain legacy **30/15/4/3/0/0**, development
+**14/4/0/1/1**, and rootless **8/8/1/0**. Active
+`rootless-living-dex-dependency-v2-comparison-preflight-v1` allows exactly one metadata-only
+preflight and stops. It does not authorize development decode, comparison implementation or
+execution, gameplay, authority, Crystal, completion, or transfer.
+
+## Previous result: four fresh V2 openings provisioned once
 
 Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI run `32442951504`
 attempt 1. The
