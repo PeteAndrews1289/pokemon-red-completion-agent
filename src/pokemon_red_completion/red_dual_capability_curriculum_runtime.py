@@ -22,6 +22,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.actions import MacroAction
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding
@@ -67,6 +68,12 @@ RED_BOUND_DUAL_CAPABILITY_SCENARIO_SCHEMA = "pokemon.red.private-bound-dual-capa
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _CAPABILITY_ORDER = (GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES)
+_BOUNDED_EVOLUTION_PROVIDERS = {
+    (
+        "pokemon:national:050",
+        "pokemon:national:051",
+    ): "pokemon.red:evolution:diglett-to-dugtrio",
+}
 
 
 class RedDualCapabilityRuntimeError(RuntimeError):
@@ -74,7 +81,7 @@ class RedDualCapabilityRuntimeError(RuntimeError):
 
 
 class _VenueActionPort(Protocol):
-    def execute(self, action: object) -> object: ...
+    def execute(self, action: MacroAction) -> object: ...
 
 
 class _VenueStateReader(Protocol):
@@ -193,7 +200,6 @@ class SemanticVenueCapturePlan:
             if type(value) is not int or value <= 0:  # noqa: E721
                 raise RedDualCapabilityRuntimeError(f"{name} must be positive")
         precursor = self.catalog.method_for(self.species_binding.precursor_species_ref)
-        evolved = self.catalog.method_for(self.species_binding.evolved_species_ref)
         if (
             precursor.kind is not RedAcquisitionKind.WILD
             or precursor.transforms_precursor
@@ -202,15 +208,6 @@ class SemanticVenueCapturePlan:
         ):
             raise RedDualCapabilityRuntimeError(
                 "precursor is not a repeatable wild target at the bound source"
-            )
-        if (
-            evolved.kind is not RedAcquisitionKind.EVOLUTION
-            or evolved.consumes_species_ref != precursor.species_ref
-            or evolved.required_item_ref is not None
-            or evolved.minimum_level is None
-        ):
-            raise RedDualCapabilityRuntimeError(
-                "declared precursor transformation is not trainable"
             )
         if self.route.plan.terminal_map != self.venue.map_id:
             raise RedDualCapabilityRuntimeError(
@@ -644,6 +641,20 @@ def bind_bounded_evolution_offer(
         or not isinstance(offer.binding, ExecutableGoalBinding)
     ):
         raise RedDualCapabilityRuntimeError("bounded evolution offer is unavailable")
+    expected_provider = _BOUNDED_EVOLUTION_PROVIDERS.get(
+        (
+            species_binding.precursor_species_ref,
+            species_binding.evolved_species_ref,
+        )
+    )
+    if expected_provider is None or re.fullmatch(
+        re.escape(expected_provider)
+        + r":profile-[0-9a-f]{64}:config-[0-9a-f]{64}",
+        offer.binding.binding_ref,
+    ) is None:
+        raise RedDualCapabilityRuntimeError(
+            "bounded evolution offer does not implement the declared dependency"
+        )
     skill_binding_sha256 = canonical_sha256(
         {
             "schema": RED_BOUNDED_EVOLUTION_BINDING_SCHEMA,

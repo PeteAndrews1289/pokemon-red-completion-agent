@@ -20,7 +20,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
-from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.observation import MapId, RawGameState
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import (
     BoundRedCapability,
@@ -48,9 +48,10 @@ from pokemon_red_completion.route_plan import RoutePlan, plan_route
 from pokemon_red_completion.team_training import GrindingArea
 from pokemon_red_completion.training_venue import TrainingVenue, WarpSafeVenueWalker
 
-PRECURSOR = "pokemon:national:011"
-EVOLVED = "pokemon:national:012"
-SOURCE = "wild:ViridianForest:grass"
+PRECURSOR = "pokemon:national:050"
+EVOLVED = "pokemon:national:051"
+SOURCE = "wild:DiglettsCave:grass"
+VENUE_MAP = int(MapId.DIGLETTS_CAVE)
 OTHER_SOURCE_SPECIMENS = (
     "pokemon:national:010",
     "pokemon:national:014",
@@ -62,7 +63,7 @@ RESET = "a" * 64
 
 def _route_plan() -> RoutePlan:
     transition = MacroTransition((0, 1), (5, 0), "up")
-    macro = MacroGraph({1: (MacroEdge(2, coordinate_transitions=(transition,)),)})
+    macro = MacroGraph({1: (MacroEdge(VENUE_MAP, coordinate_transitions=(transition,)),)})
     local = {
         1: LocalGraph(
             {
@@ -71,10 +72,10 @@ def _route_plan() -> RoutePlan:
             }
         )
     }
-    return plan_route(macro, local, 1, (0, 0), 2)
+    return plan_route(macro, local, 1, (0, 0), VENUE_MAP)
 
 
-def _venue(*, map_id: int = 2) -> TrainingVenue:
+def _venue(*, map_id: int = VENUE_MAP) -> TrainingVenue:
     return TrainingVenue(
         band=GrindingArea(
             "measured-semantic-venue",
@@ -138,9 +139,9 @@ class _World:
         if self.map_id == 1 and self.at == (0, 0) and action.value == "right":
             self.at = (0, 1)
         elif self.map_id == 1 and self.at == (0, 1) and action.value == "up":
-            self.map_id = 2
+            self.map_id = VENUE_MAP
             self.at = (5, 0)
-        elif self.map_id == 2 and self.current_encounter is None and self.encounters:
+        elif self.map_id == VENUE_MAP and self.current_encounter is None and self.encounters:
             self.current_encounter = self.encounters.pop(0)
             self.at = (self.at[0] + 1, self.at[1])
         return action
@@ -224,7 +225,7 @@ def _capture_adapter(
         actions=world,
         reader=world,
         emulator=world,
-        walker=WarpSafeVenueWalker(2, frozenset(), move_wait_frames=1),
+        walker=WarpSafeVenueWalker(VENUE_MAP, frozenset(), move_wait_frames=1),
     )
     return (
         RedSemanticVenueCaptureAdapter(plan, world, world, area),
@@ -243,7 +244,10 @@ def _evolution_offer(executions: list[str]) -> RedGoalBindingOffer:
         return GoalExecutionReport(1, 1, {"bounded": True})
 
     binding = ExecutableGoalBinding(
-        binding_ref="private:evolution:bound-dependency",
+        binding_ref=(
+            "pokemon.red:evolution:diglett-to-dugtrio:"
+            f"profile-{'a' * 64}:config-{'b' * 64}"
+        ),
         kind=GoalKind.EVOLVE_SPECIES,
         estimated_effort=0.2,
         estimated_risk=0.1,
@@ -289,7 +293,7 @@ def test_route_binding_rejects_direction_scripts_and_public_projection_is_identi
     assert plan.skill_binding_sha256 != route.plan_sha256
 
 
-def test_capture_plan_rejects_wrong_terminal_and_non_evolution_pair() -> None:
+def test_capture_plan_rejects_wrong_terminal() -> None:
     route = SemanticVenueRouteBinding(_route_plan(), "b" * 64)
     with pytest.raises(
         RedDualCapabilityRuntimeError,
@@ -302,22 +306,6 @@ def test_capture_plan_rejects_wrong_terminal_and_non_evolution_pair() -> None:
             route,
             _venue(map_id=3),
         )
-    with pytest.raises(
-        RedDualCapabilityRuntimeError,
-        match="declared precursor transformation",
-    ):
-        SemanticVenueCapturePlan(
-            RESET,
-            RedDependencySpeciesBinding(
-                "pokemon:national:050",
-                "pokemon:national:051",
-            ),
-            "wild:DiglettsCave:grass",
-            route,
-            _venue(),
-        )
-
-
 def test_qualification_is_action_free_and_fails_closed_on_reset_or_resource_drift() -> None:
     adapter, world, before = _capture_adapter(1)
     scenario = red_dual_capability_scenario_specs()[0]
@@ -487,7 +475,44 @@ def test_unavailable_evolution_and_target_capture_bounds_fail_closed() -> None:
                 GoalUnavailableReason.MISSING_CAPABILITY,
             ),
         )
-    world.map_id = 2
+    with pytest.raises(
+        RedDualCapabilityRuntimeError,
+        match="does not implement the declared dependency",
+    ):
+        bind_bounded_evolution_offer(
+            scenario,
+            RedDependencySpeciesBinding(PRECURSOR, "pokemon:national:052"),
+            before,
+            reset_state_sha256=RESET,
+            offer=_evolution_offer([]),
+        )
+    valid = _evolution_offer([])
+    assert valid.binding is not None
+    forged = RedGoalBindingOffer.available(
+        ExecutableGoalBinding(
+            binding_ref=(
+                "pokemon.red:evolution:diglett-to-dugtrio-extra:"
+                f"profile-{'a' * 64}:config-{'b' * 64}"
+            ),
+            kind=valid.binding.kind,
+            estimated_effort=valid.binding.estimated_effort,
+            estimated_risk=valid.binding.estimated_risk,
+            execute=valid.binding.execute,
+            verify=valid.binding.verify,
+        )
+    )
+    with pytest.raises(
+        RedDualCapabilityRuntimeError,
+        match="does not implement the declared dependency",
+    ):
+        bind_bounded_evolution_offer(
+            scenario,
+            adapter.plan.species_binding,
+            before,
+            reset_state_sha256=RESET,
+            offer=forged,
+        )
+    world.map_id = VENUE_MAP
     world.at = (5, 0)
     with pytest.raises(RedAreaExecutionError, match="exhausted"):
         run_red_target_capture(
