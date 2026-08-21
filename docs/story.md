@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the inspector stopped at the paperwork desk
+## Current checkpoint: the paperwork desk became a reusable door
+
+Main `50c64f1c` passed CI `32475789328/1` with 4618 tests. The
+[reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+records a deliberately unglamorous success: the repository can now authenticate its exact pretty
+public receipts against both an external hash and the committed Git blob without wandering into
+private data. Mutated bytes, duplicate keys, alternate JSON forms, symlinks, inode swaps, unsafe
+modes, and injected Git repository settings all fail closed. Antigravity returned GO with no P0 or
+P1 blocker.
+
+No Pokémon moved, and that is the honest point. V1 stays retired. The next scene is only the public
+blueprint for V2: exclude the old classroom, preserve an anonymous acquire-versus-evolve question,
+and stop before choosing or opening a new classroom. This repair enables the next experiment; it
+is not itself model training, gameplay competence, a living Pokédex, or cross-game transfer.
+
+## Previous checkpoint: the inspector stopped at the paperwork desk
 
 Main `188272b0` passed CI `32473254566/1` with 4604 tests. We froze the exact public
 invocation once and ran the promised silent preflight. It never reached the game. The runner

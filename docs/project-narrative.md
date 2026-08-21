@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the one-shot V1 preflight failed before protected access
+## August 21: the generic public evidence boundary qualified
+
+Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with
+4618 tests. The [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+(SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+records exact external-hash and Git-blob authentication for canonical pretty tracked JSON through
+a bounded no-follow, inode-stable, environment-sanitized reader. Local validation passed 4619
+tests, and Antigravity's
+[audit](evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1 zero.
+
+This fixes the generic defect that stopped V1, but it does not revive V1 or prove anything about
+the model. The invocation and selected context remain retired. The next active lane designs a new
+public V2 contract that excludes all V1 identities and preserves a source-independent,
+identity-free acquire-versus-evolve question. Implementation and every protected or gameplay
+effect remain separate. All counters are unchanged.
+
+## Previous August 21 checkpoint: the one-shot V1 preflight failed before protected access
 
 Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
 4604 tests. Exact invocation manifest `18dd05a4…d71` was frozen once. The sole preflight returned

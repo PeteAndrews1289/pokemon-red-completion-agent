@@ -5,7 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): V1 failed safely before protected access; qualify
+> **Current product focus (August 21, 2026): the generic public reader is qualified; design V2
+> without reopening V1.** Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI
+> `32475789328/1` with 4618 tests, one skip, three deselections, and one expected failure. The
+> [reader qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+> (SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+> records **EXACT SHA + GIT HEAD BLOB · CANONICAL PRETTY JSON · DUPLICATE/NON-ASCII/NON-FINITE
+> REJECTION · NO-FOLLOW/INODE-STABLE READ · SANITIZED GIT ENVIRONMENT · PROTECTED EFFECTS 0**.
+> [Antigravity](docs/evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+> returned GO with P0/P1 zero and explicitly rejected any V1 retry or context reuse.
+>
+> Active `red-dual-capability-action-free-scenario-preflight-v2-design` is public design only:
+> exclude every V1 identity, preserve a source-independent physical root and anonymous
+> acquire-versus-evolve semantics, then stop. It may not select or inspect a scenario, freeze a
+> manifest, open private data or a ROM, predict, claim, act, fit, or run Crystal. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous product focus (August 21, 2026): V1 failed safely before protected access; qualify
 > the generic tracked-evidence reader.** Main
 > `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with 4604
 > tests, one skip, three deselections, and one expected failure. Exact manifest `18dd05a4…d71`

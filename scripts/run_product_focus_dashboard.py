@@ -146,14 +146,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Main 188272b0 · CI 32473254566/1. The sole V1 dual-capability preflight failed "
-            "closed at public evidence authentication before protected access. V1 is retired; "
-            "public-only reader qualification is next. Scenario and gameplay remain closed."
+            "Main 50c64f1c · CI 32475789328/1. The tracked-public-evidence reader is qualified "
+            "and Antigravity approved it with P0/P1 zero. V1 remains closed; only the public V2 "
+            "scenario-preflight design is active. Scenario and gameplay remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=(
-            "Public evidence boundary · qualify exact tracked JSON reader → reorient"
-        ),
+        location="Public V2 contract · exclude consumed V1 root → stop before implementation",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
@@ -162,7 +160,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "authority · not scored"
             ),
             choice=(
-                "Qualify exact SHA-pinned tracked evidence without opening a Red scenario"
+                "Design a source-independent acquire-versus-evolve preflight without selecting "
+                "a Red scenario"
             ),
             decisions=0,
             teacher_queries=0,
@@ -200,9 +199,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 f"Rootless · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} · comparison "
-                f"{synthetic_unseen_comparisons} · V1 manifest 18dd05a4 · "
-                "public_evidence_authentication · protected access 0 · no retry · reader "
-                "qualification next"
+                f"{synthetic_unseen_comparisons} · reader ecb93c44 qualified · Antigravity GO · "
+                "V1 retry 0 · scenario/private/ROM/prediction/action 0 · V2 design only"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),

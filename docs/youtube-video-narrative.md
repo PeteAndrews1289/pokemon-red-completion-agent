@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: the silent inspector stops before the cartridge
+## August 21 scene: rebuild the paperwork door, then stop
+
+Open on **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED**. Turn the failed paperwork
+desk into a narrow door labeled **EXACT SHA → GIT HEAD BLOB → CANONICAL PRETTY JSON → NO-FOLLOW
+INODE-STABLE READ**. Flash the adversarial mutations bouncing off it, then stamp
+**ANTIGRAVITY GO · P0/P1 0 · PRIVATE/ROM/SCENARIO/PREDICTION/ACTION 0**. Link the
+[qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json) with
+**SHA-256 7E1E576A…4620C**.
+
+Keep V1 visibly crossed out. The next rail is only **DESIGN V2 → EXCLUDE EVERY V1 IDENTITY →
+SOURCE-INDEPENDENT ROOT → ANONYMOUS ACQUIRE/EVOLVE MENU → STOP BEFORE IMPLEMENTATION**. Do not
+cut to gameplay: this makes the next experiment trustworthy, but it is not a model update, a
+Pokémon decision, living-Pokédex progress, or Crystal transfer.
+
+## Previous August 21 scene: the silent inspector stops before the cartridge
 
 Open on **MAIN 188272B0 · CI 32473254566/1 GREEN · MANIFEST 18DD05A4 FROZEN ONCE**.
 The rail reaches **PUBLIC EVIDENCE AUTHENTICATION** and turns red before the ROM icon lights up.

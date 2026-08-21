@@ -1,6 +1,21 @@
 # Current audit — 2026-08-21
 
-## Current result: V1 failed closed at the public evidence boundary
+## Current result: generic public evidence reader qualified
+
+Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618
+tests. The [qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+(SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+binds the reader's exact bytes and public-only guarantees. Local validation passed 4619 tests.
+Antigravity's [audit](evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+returned GO with no P0/P1 blocker.
+
+The reader accepted the exact committed pretty receipt and rejected compact, reordered,
+duplicate-key, changed-byte, non-ASCII, non-finite, symlink, hardlink, unsafe-mode, oversized,
+inode-swap, and Git-environment mutations. No scenario, private input, ROM, claim registry, model,
+controller, emulator, learning, authority, or transfer effect occurred. Active work is now public V2
+design only; V1 remains nonretryable and its selected context cannot be reused.
+
+## Previous result: V1 failed closed at the public evidence boundary
 
 Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
 4604 tests. Manifest `18dd05a4…d71` was frozen once. The sole V1 preflight emitted a sanitized

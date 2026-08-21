@@ -1,0 +1,45 @@
+{
+  "audit": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32475789328,
+    "exact_published_main": "50c64f1c9cbb0d73d0a3aad0210e326a4005c3de",
+    "p0_blockers": 0,
+    "p1_blockers": 0,
+    "p2_findings": 4,
+    "private_or_runtime_accesses": 0,
+    "reader_sha256": "ecb93c440883ce717569ebd6c6a0b7590fdb560179ff9deac6a858299fa21af2",
+    "reviewed_paths": [
+      "docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json",
+      "scripts/public_execution_manifest.py",
+      "tests/test_public_execution_manifest.py"
+    ],
+    "test_sha256": "f77243f9c8104545d02c8905930eda4e22d174b544ecaa28ba4a54b67ebcb387",
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "Antigravity's read-only exact-byte audit found no P0 or P1 blocker and concluded that the generic tracked-public-evidence reader is publishable for a separately designed future gate.",
+    "unsupported": "This audit does not reopen or retry V1, authorize a successor manifest freeze or scenario inspection, access a private input or ROM, score a model, execute gameplay, fit or compare a model, promote authority, establish Red completion, or establish Crystal transfer."
+  },
+  "recorded_on": "2026-08-21",
+  "review_output_sha256": "ff7a23e5e33abc5511d286529c6ba2b73aa28d5dccf58bf46420303197da777e",
+  "schema": "pokemon.core.tracked-public-evidence-reader-antigravity-audit.v1",
+  "status": "go_reader_publishable_v1_remains_closed",
+  "title_role": "External read-only engineering and mission audit; not scenario, execution, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "v1_disposition": {
+    "reopen_allowed": false,
+    "retry_allowed": false,
+    "selected_context_reuse_allowed": false
+  },
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "manifest_freezes": 0,
+    "model_predictions": 0,
+    "private_artifact_accesses": 0,
+    "rom_accesses": 0
+  }
+}
