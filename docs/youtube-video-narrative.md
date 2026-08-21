@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: design a fresh exam and make guessing the envelopes impractical
+## August 20 scene: qualify the exam machinery, then seal four questions once
+
+Open on **SOURCE 26E353B · CI 32442269879/1 GREEN · LOCAL 4,511 PASS · CI 4,510 PASS**. Link the
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+with **SHA-256 C5702DC0…98AF63**.
+
+Animate **MANIFEST-ONLY INVENTORY → EXACT PRIVATE-STORE BINDING → NO-REPLACEMENT PROVISION →
+CLAIM BEFORE FIT → EXACT BUNDLE JOIN → CLAIM BEFORE OPENING 4 HELD-OUT ANSWERS**. Stamp
+**ANTIGRAVITY GO · P0/P1 0** and show the crash boundary honestly: **CLAIM CONSUMED / UNCERTAIN /
+NOT ATTEMPTED**, never an invented zero-effect claim.
+
+Keep the scoreboard still: **OPENINGS 0 · FIT +0 · COMPARISON +0 · GAMEPLAY 0 · AUTHORITY 0 ·
+TRANSFER 0**. The next scene gets one store-bound preflight and, only on a pass, one provision of
+four sealed questions before a hard cut. Explain that the questions test one transferable
+living-Pokédex decision—preserve the only precursor or evolve a duplicate—not whether the model
+can yet play or finish Pokémon.
+
+## Previous August 20 scene: design a fresh exam and make guessing the envelopes impractical
 
 Open on **SOURCE 5ADE045 · CI 32437096447/1 GREEN · LOCAL 4,471 PASS · CI 4,470 PASS**. Link
 the

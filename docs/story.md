@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: we wrote the rules for a fresh exam without reopening the old answers
+## Current checkpoint: the fresh exam machinery passed; now seal its questions once
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+shows that the machinery can inventory envelopes without opening them, bind the provision to one
+exact private store, refuse replacement questions, claim the fit before learning, join every fit
+artifact exactly, and claim the comparison before an answer opens. Antigravity returned GO with
+no P0/P1 blocker; 4,511 local tests and 4,510 exact-head CI tests passed.
+
+This is still not a smarter Pokémon player. No question was sealed, no model was fit, no answer
+was opened, and no game ran. The next scene gets exactly one chance to create four sealed questions
+after a read-only gate passes, then cuts before fitting. These questions will later test whether
+the learner can reason about preserving a scarce precursor versus evolving a safe duplicate—a
+small reusable piece of living-Pokédex planning, not proof of game completion or transfer.
+
+## Previous checkpoint: we wrote the rules for a fresh exam without reopening the old answers
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. The
 [design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)

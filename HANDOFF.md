@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: fresh V2 design qualified; implementation qualification is active
+## 2026-08-20: fresh V2 implementation qualified; private provisioning is active
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI run `32442269879`
+attempt 1. The
+[implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+(SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+binds payload-blind inventory, one exact private artifact store, a no-replacement four-opening
+provision plan, claim-before-fit, exact fit-bundle joins, claim-before-development-open, and honest
+uncertain-claim reporting. Antigravity returned exact-delta GO with no P0/P1 blocker. Local
+validation passed 4,511 tests; exact-head CI passed 4,510 non-integration tests.
+
+Codex now owns only `rootless-living-dex-dependency-v2-private-provisioning-v1`: freeze one exact
+source-bound manifest, run one action-free store-bound preflight, and only if it passes run the
+single provision. Stop at its first terminal result. No fit, evaluation payload decode,
+comparison, ROM/controller action, Red/Crystal play, promotion, completion, or transfer is owned.
+Counters remain **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: fresh V2 design qualified; implementation qualification was active
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI run `32437096447`
 attempt 1. The

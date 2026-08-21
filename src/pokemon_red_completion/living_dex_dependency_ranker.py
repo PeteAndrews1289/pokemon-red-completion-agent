@@ -267,7 +267,41 @@ def fit_dependency_ranker(
         "design_sha256": design.design_sha256,
         "rows": [example.public_dict() for example in examples],
     }
-    dataset_sha = canonical_sha256(dataset_document)
+    return fit_dependency_ranker_examples(
+        design_sha256=design.design_sha256,
+        train_dataset_sha256=canonical_sha256(dataset_document),
+        examples=examples,
+    )
+
+
+def fit_dependency_ranker_examples(
+    *,
+    design_sha256: str,
+    train_dataset_sha256: str,
+    examples: Sequence[DependencyTrainExample],
+) -> DependencyRankerFit:
+    """Fit the frozen optimizer after a caller authenticates its exact dataset.
+
+    Successor protocols can have a different outer design and dataset schema while
+    retaining the same fixed numerical head.  The caller must derive its examples
+    through a typed protocol boundary; this function independently enforces the
+    eight-row denominator and every balance invariant before optimizing.
+    """
+
+    if not _is_sha256(design_sha256) or not _is_sha256(train_dataset_sha256):
+        raise LivingDexDependencyRankerError("dependency fit identity differs")
+    if (
+        not isinstance(examples, Sequence)
+        or len(examples) != 8
+        or any(not isinstance(example, DependencyTrainExample) for example in examples)
+        or len({example.scenario_id for example in examples}) != 8
+        or Counter(example.assigned_action for example in examples)
+        != {GoalKind.ACQUIRE_SPECIES: 4, GoalKind.EVOLVE_SPECIES: 4}
+        or Counter(example.reward for example in examples) != {-1: 4, 1: 4}
+        or Counter(example.preferred_action for example in examples)
+        != {GoalKind.ACQUIRE_SPECIES: 4, GoalKind.EVOLVE_SPECIES: 4}
+    ):
+        raise LivingDexDependencyRankerError("dependency fit example roster differs")
     weights = [0.0] * len(DEPENDENCY_RANKER_FEATURE_NAMES)
     for _ in range(DEPENDENCY_RANKER_ITERATIONS):
         gradient = [DEPENDENCY_RANKER_RIDGE * weight for weight in weights]
@@ -281,9 +315,11 @@ def fit_dependency_ranker(
     model = DependencyRankerModel(
         DEPENDENCY_RANKER_FEATURE_NAMES,
         tuple(float(value) for value in weights),
-        dataset_sha,
+        train_dataset_sha256,
     )
-    probabilities = [model.acquire_probability(scenario) for scenario in design.train_scenarios]
+    probabilities = [
+        _sigmoid(_dot(model.weights, example.acquire_minus_evolve)) for example in examples
+    ]
     targets = [
         1.0 if example.preferred_action is GoalKind.ACQUIRE_SPECIES else 0.0 for example in examples
     ]
@@ -293,8 +329,8 @@ def fit_dependency_ranker(
         for probability, target in zip(probabilities, targets, strict=True)
     ) / len(targets)
     fit = DependencyRankerFit(
-        design_sha256=design.design_sha256,
-        train_dataset_sha256=dataset_sha,
+        design_sha256=design_sha256,
+        train_dataset_sha256=train_dataset_sha256,
         model=model,
         baseline_cross_entropy=math.log(2.0),
         fitted_cross_entropy=fitted_loss,
@@ -303,6 +339,14 @@ def fit_dependency_ranker(
     if fit.train_accuracy != 1.0 or DependencyRankerModel.from_dict(model.to_dict()) != model:
         raise LivingDexDependencyRankerError("dependency fit failed its frozen train gate")
     return fit
+
+
+def dependency_candidate_vector(
+    candidate: DependencyCandidateFeatures,
+) -> tuple[float, ...]:
+    """Return the exact fixed representation used by the dependency ranker."""
+
+    return _candidate_vector(candidate)
 
 
 def dependency_train_examples(

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published the fresh rootless living-Dex V2 implementation at exact source
+  `26e353bee5d96b98c54244845f9a7457b726f842` under green CI `32442269879/1`. The
+  [path-free implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+  (SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+  records payload-blind inventory, exact private-store binding, no-replacement provisioning,
+  claim-before-fit and claim-before-development-open boundaries, exact fit-bundle joins, and
+  honest uncertain-claim reporting. Antigravity returned exact-delta GO with no P0/P1 blocker;
+  4,511 local and 4,510 exact-head CI tests passed. Retired the implementation lane without retry
+  and activated one exact private-provisioning gate. No opening, fit, comparison, ROM/controller
+  action, gameplay, authority, completion, Crystal, or transfer action occurred; every progress
+  counter remains unchanged.
+
 - Published the fresh rootless living-Dex evaluation V2 public design at exact source
   `5ade045859ff00601b2acfd34a6dad9d769f0859` under green CI `32437096447/1`. The
   [path-free design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
