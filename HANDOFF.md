@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-20 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-21 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -12,7 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: V2 comparison passed descriptively; narrow Red adapter is active
+## 2026-08-21: Red dependency adapter qualified; shadow-decision design is active
+
+Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
+[adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+(SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+records 26 canonical transformation edges, 22 supported ranker projections, four zero-reserve
+fail-closed edges, 11 focused tests, 4533 full ROM-free tests, zero identity leaks, zero
+predictions/actions, and exact-head Antigravity GO with no P0/P1/P2 finding.
+
+Codex owns only `red-living-dex-dependency-shadow-decision-design-v1`: freeze the public contract
+for one future pre-score-selected Red dependency opportunity, one exact shadow preference, and a
+hard zero-action terminal. No ROM/private/model/claim access, prediction, action, fit, comparison,
+Crystal, completion, or authority work occurs in this design lane. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: V2 comparison passed descriptively; narrow Red adapter was active
 
 Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
 [comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)

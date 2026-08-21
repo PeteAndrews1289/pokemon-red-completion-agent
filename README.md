@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the abstract dependency ranker passed; bridge it to
+> **Current product focus (August 21, 2026): the Red observation bridge is qualified; design one
+> zero-action shadow preference.** Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI
+> `32451757975/1`. The
+> [adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+> (SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+> records **26 TRANSFORMATION EDGES · 22 SUPPORTED · 4 ZERO-RESERVE FAIL CLOSED · 11 FOCUSED
+> TESTS · 4533 FULL ROM-FREE TESTS · IDENTITY LEAKS 0 · PREDICTIONS/ACTIONS 0 · ANTIGRAVITY
+> EXACT-HEAD GO · P0/P1/P2 0**. No learning counter changed; boards remain
+> **30/15/4/4/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/1**.
+>
+> Active `red-living-dex-dependency-shadow-decision-design-v1` is design-only maintenance. It
+> freezes one future authentic Red observation, pre-score opportunity selection, exact model and
+> adapter bindings, the full two-row acquire-versus-transform menu, one prediction maximum,
+> aggregate-only disclosure, and a hard zero-action terminal. This lane cannot open a ROM,
+> private context, claim, or model bundle and cannot predict, act, refit, compare, run Crystal, or
+> promote authority. A pass permits only separate implementation of the read-only runner.
+
+> **Previous product focus (August 21, 2026): the abstract dependency ranker passed; bridge it to
 > existing Red observations.** Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI
 > `32449287128/1`. The
 > [comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
@@ -15,7 +32,7 @@
 > P0/P1 0**. It adds exactly one synthetic and one global unseen comparison. Boards are now
 > **30/15/4/4/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/1**.
 >
-> Active `red-living-dex-dependency-observation-adapter-v1` is public/synthetic maintenance. It
+> `red-living-dex-dependency-observation-adapter-v1` was public/synthetic maintenance. It
 > must reuse the existing Red `CollectionObservation`, living-collection contract, and
 > cartridge-derived acquisition graph to derive the exact identity-free ranker inputs, including
 > multi-stage and branching evolution demand. Stop if species, map, route, or controller identity

@@ -129,6 +129,11 @@ ROOTLESS_DEPENDENCY_V2_COMPARISON_RESULT = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json"
 )
+RED_DEPENDENCY_ADAPTER_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -251,13 +256,13 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "red-living-dex-dependency-observation-adapter-v1"
+    assert state.active_lane["id"] == "red-living-dex-dependency-shadow-decision-design-v1"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
         "red-living-dex-dependency-shadow-decision-v1"
     )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 41
+    assert len(state.retired_lanes) == 42
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -449,6 +454,39 @@ def test_rootless_dependency_v2_comparison_result_is_aggregate_only_and_counted_
     } == {0}
     assert receipt["antigravity_review"]["verdict"] == "go"
     assert receipt["antigravity_review"]["p0_or_p1_blockers"] == 0
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_red_dependency_adapter_qualification_is_public_only_and_zero_effect() -> None:
+    receipt = json.loads(RED_DEPENDENCY_ADAPTER_QUALIFICATION.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "qualified_for_separate_shadow_observation_design"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32451757975,
+        "source_bundle_sha256": (
+            "3beb7ce9039422f84bfc470913b8054e6b4259f4d05daabb6bc02ba8038c8a8e"
+        ),
+        "source_commit": "6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3",
+    }
+    assert receipt["qualification"]["canonical_transformation_edges"] == 26
+    assert receipt["qualification"]["model_supported_incomplete_edges_on_empty_fixture"] == 22
+    assert receipt["qualification"]["unsupported_zero_reserve_edges"] == 4
+    assert receipt["qualification"]["policy_identity_leaks"] == 0
+    assert receipt["qualification"]["public_synthetic_adapter_tests_passed"] == 11
+    assert receipt["antigravity_review"] == {
+        "exact_head_verified": True,
+        "p0_blockers": 0,
+        "p1_blockers": 0,
+        "p2_findings": 0,
+        "private_or_rom_accesses": 0,
+        "verdict": "go",
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -1449,14 +1487,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Red living-Dex dependency observation adapter V1" in public["stage"]
+    assert "Red living-Dex dependency shadow-decision design V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "abstract dependency ranker passed" in encoded
+    assert "Red observation adapter is published" in encoded
     assert "actions 244/244" in encoded
-    assert "collection observation" in encoded
+    assert "one observation" in encoded
     assert "90288f57" in encoded
     assert "32449287128/1" in encoded
     assert "candidate 4/4" in encoded
@@ -1466,7 +1504,16 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no retry" in encoded
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
-    assert "Red adapter next" in encoded
+    assert "Red adapter qualified" in encoded
+    assert "shadow design next" in encoded
+    assert "6fe9a677" in encoded
+    assert "32451757975/1" in encoded
+    assert "26 edges" in encoded
+    assert "22 supported" in encoded
+    assert "4 zero-reserve fail closed" in encoded
+    assert "11 focused tests" in encoded
+    assert "Antigravity GO" in encoded
+    assert "predictions 0" in encoded
     assert "fit 1 counted/ineligible" in encoded
     assert "comparisons 1" in encoded
     assert "Rootless board" in encoded

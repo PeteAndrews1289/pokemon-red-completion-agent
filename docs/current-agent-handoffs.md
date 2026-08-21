@@ -1,12 +1,27 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-20. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-21. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the narrow Red dependency observation adapter
+## Current override: Codex owns the zero-action Red shadow-decision design
+
+Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
+[adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+(SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+records 26 edges, 22 supported projections, four zero-reserve closures, zero policy identity
+leaks, zero predictions/actions, 11 focused and 4533 full tests, and exact-head Antigravity GO.
+
+Codex may design only `red-living-dex-dependency-shadow-decision-design-v1`. It freezes one
+pre-score-selected dependency opportunity, exact model/adapter/observation bindings, two anonymous
+candidate rows, one-prediction maximum, aggregate-only disclosure, and a zero-action terminal.
+Antigravity audits; Claude remains unavailable. No live read, model load, prediction, action, fit,
+comparison, promotion, Crystal, completion, or transfer is owned. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned the narrow Red dependency observation adapter
 
 Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
 [comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)

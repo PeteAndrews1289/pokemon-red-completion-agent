@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-20. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-21. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: connect the passed abstract rule to existing Red state
+## Current checkpoint: design one authentic Red shadow preference with zero actions
+
+Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
+[adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+(SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+records exact projections for chain, branch, readiness, completed, and unsupported cases across
+all 26 Red transformations. Twenty-two are ranker-supported; four zero-reserve cases fail closed.
+Eleven focused and 4533 full ROM-free tests passed, policy identity leaks are zero, predictions and
+actions are zero, and Antigravity returned exact-head GO with no blocker.
+
+Active `red-living-dex-dependency-shadow-decision-design-v1` freezes only the contract for one
+future authentic Red observation. Eligibility and opportunity selection happen before scoring;
+the two policy rows remain identity-free; the exact model and adapter are bound; at most one
+preference may be recorded; and the terminal hard-stops with zero controller actions. This lane
+cannot touch the ROM, a private context, a model bundle, or a claim. A pass permits separate
+read-only runner implementation—not gameplay authority.
+
+## Previous checkpoint: connect the passed abstract rule to existing Red state
 
 Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
 [comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)

@@ -1,6 +1,22 @@
 # Current audit — 2026-08-21
 
-## Current result: V2 held-out dependency comparison passed descriptively
+## Current result: Red dependency adapter qualified; no live prediction yet
+
+Published main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI
+`32451757975/1`. The
+[adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+(SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+binds the exact adapter/test/source bundle and three refreshed source-bound registries. It records
+26 transformation edges, 22 supported projections, four zero-reserve closures, chain and branch
+parity, separated item/trade/level readiness, deterministic ordering, zero identity leaks, 11
+focused and 4533 full ROM-free tests, and exact-head Antigravity GO.
+
+All learning counters stay **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**. No ROM,
+private artifact, model prediction, controller action, outcome, fit, comparison, authority, or
+transfer occurred. Active `red-living-dex-dependency-shadow-decision-design-v1` may only freeze
+the contract for one later authentic Red preference and a hard zero-action terminal.
+
+## Previous result: V2 held-out dependency comparison passed descriptively
 
 Published main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI
 `32449287128/1`. After a clean metadata preflight and exact Antigravity GO, one no-retry execution

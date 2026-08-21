@@ -5,13 +5,25 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 90288F57 · CI 32449287128/1 GREEN · V2 COMPARISON COMPLETE ·
+> **Current rail:** Show **MAIN 6FE9A677 · CI 32451757975/1 GREEN · RED ADAPTER QUALIFIED ·
+> 26 EDGES · 22 SUPPORTED · 4 ZERO-RESERVE CLOSED · 11 FOCUSED · 4533 FULL · IDENTITY LEAKS
+> 0 · PREDICTIONS/ACTIONS 0 · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
+> [adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+> and show **SHA-256 6DF5485D…EE8BF**.
+>
+> Display active `red-living-dex-dependency-shadow-decision-design-v1`. Active rail:
+> **PUBLIC DESIGN → PRE-SCORE OPPORTUNITY SELECTION → EXACT ADAPTER + MODEL + OBSERVATION → TWO
+> ANONYMOUS ROWS → ONE PREDICTION MAX → AGGREGATE ONLY → ZERO-ACTION TERMINAL → STOP**. Show
+> **ROM/PRIVATE/CLAIM/MODEL LOAD/PREDICTION/ACTION/FIT/COMPARISON/CRYSTAL/AUTHORITY 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN 90288F57 · CI 32449287128/1 GREEN · V2 COMPARISON COMPLETE ·
 > CANDIDATE 4/4 · BASELINE 2/4 · CE 0.206/0.693 · WINNER P 0.815/0.500 · ROWS DISCLOSED 0 ·
 > CLAIM CONSUMED · RETRY 0 · ANTIGRAVITY GO**. Link the
 > [comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
 > and show **SHA-256 2A722D72…C3D4C7**.
 >
-> Display active `red-living-dex-dependency-observation-adapter-v1`. Active rail:
+> Display retired `red-living-dex-dependency-observation-adapter-v1`. Historical rail:
 > **EXISTING RED COLLECTION OBSERVATION + CARTRIDGE GRAPH → DERIVE CHAIN/BRANCH DEMAND → EXACT
 > ROOTLESS FEATURES → IDENTITY-LEAK GUARD → SYNTHETIC PARITY TESTS → ANTIGRAVITY → STOP**. Show
 > **ROM/PRIVATE/CLAIM/PREDICTION/ACTION/FIT/COMPARISON/CRYSTAL/AUTHORITY 0** and boards

@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-21 V2 comparison completed; Red observation-adapter work is active:** Main
+> **2026-08-21 Red adapter qualified; shadow-decision design is active:** Main
+> `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
+> [adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+> (SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+> records **26 EDGES · 22 SUPPORTED · 4 ZERO-RESERVE CLOSED · 11 FOCUSED · 4533 FULL ·
+> IDENTITY LEAKS 0 · PREDICTIONS/ACTIONS 0 · ANTIGRAVITY GO · P0/P1/P2 0**.
+>
+> Codex owns only `red-living-dex-dependency-shadow-decision-design-v1`: a public design for one
+> later authentic Red shadow preference with pre-score selection and a zero-action terminal.
+> Antigravity reviews the design; Claude remains unavailable. No agent owns ROM/private/model or
+> claim access, prediction, action, refit, comparison, Crystal, promotion, completion, or transfer.
+> Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 V2 comparison completed; Red observation-adapter work was active:** Main
 > `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
 > [comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
 > (SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)

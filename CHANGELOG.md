@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published and qualified the pure Red living-Dex dependency observation adapter at main
+  `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` under green CI `32451757975/1`. The
+  [qualification receipt](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+  (SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)
+  records exact chain, branch, completion, item/trade/level readiness, deterministic ordering, and
+  identity-leak coverage across all 26 Red transformation edges: 22 fit the ranker contract and
+  four zero-reserve edges fail closed. Eleven focused and 4533 full ROM-free tests passed;
+  Antigravity returned exact-head GO with no P0/P1/P2 finding. Refreshed all three current
+  source-bound registries. No prediction, action, outcome, fit, comparison, authority, or transfer
+  counter changed. Activated a separate design-only one-decision Red shadow-observation lane.
+
 - Completed exactly one no-retry V2 held-out dependency comparison at published main
   `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` under green CI `32449287128/1`. The
   [aggregate result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
