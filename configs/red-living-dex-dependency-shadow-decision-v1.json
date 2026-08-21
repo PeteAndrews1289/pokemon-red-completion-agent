@@ -1,0 +1,142 @@
+{
+  "authority_contract": {
+    "adapter_qualification_grants_gameplay_authority": false,
+    "causal_outcome_collected": false,
+    "controller_authority": false,
+    "crystal_transfer_measured": false,
+    "living_pokedex_completion_claimed": false,
+    "shadow_result_grants_gameplay_authority": false,
+    "story_completion_claimed": false
+  },
+  "binding_contract": {
+    "adapter_qualification_receipt_sha256": "6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf",
+    "adapter_sha256": "2ecff694292b6f110edbc692e5c2dc326dcbaab0eb1f9a20ecd9583bdd86015f",
+    "adapter_source_bundle_sha256": "3beb7ce9039422f84bfc470913b8054e6b4259f4d05daabb6bc02ba8038c8a8e",
+    "adapter_source_commit": "6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3",
+    "comparison_result_receipt_sha256": "2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7",
+    "feature_schema": "pokemon.core.proposed-rootless-living-dex-dependency-features.v3",
+    "fit_manifest_record_sha256": "1696e37c44b5a10b81c194a0816b35def463baa1a61b05c80da2e8c897fbbf36",
+    "fit_record_sha256": "ea56c85643614202bee0e1f4a911817dc8fbb27e871e3f5ffd339083c2cb40b6",
+    "fit_sha256": "c544fa92f0fc9ab51037cb88a79bf2917e112d16f42630d08de6810aa8d4bc3c",
+    "fit_terminal_record_sha256": "ccb77998a63b83ff47bce2575a492cefbdc42821cd93aa956a03f6c3f9fc7fa5",
+    "game_id": "pokemon.mainline:red:gb:us:rev0",
+    "model_sha256": "a42db6420d3ff999a894c8ca54fbca7714509bbe95a2020cf85c9cee195f6582",
+    "train_dataset_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba"
+  },
+  "counter_contract": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "eligibility_contract": {
+    "adapter_status_required": "rankable",
+    "candidate_readiness_required": [
+      "available",
+      "available"
+    ],
+    "context_partition": "development",
+    "context_replacement_after_read": false,
+    "context_role": "one_operator_supplied_exact_nonsealed_red_context",
+    "contexts_opened_maximum": 1,
+    "crystal_context_allowed": false,
+    "first_catalog_order_eligible_opportunity_only": true,
+    "model_guided_context_or_opportunity_search": false,
+    "model_predictions_before_context_and_opportunity_freeze": 0,
+    "no_eligible_opportunity_terminal": "no_eligible_opportunity_zero_prediction_zero_action",
+    "private_context_identity_frozen_before_read": true,
+    "sealed_red_context_allowed": false,
+    "zero_reserve_or_completed_opportunity_allowed": false
+  },
+  "lane_id": "red-living-dex-dependency-shadow-decision-v1",
+  "policy_contract": {
+    "candidate_count": 2,
+    "candidate_order": [
+      "acquire_precursor",
+      "transform_precursor"
+    ],
+    "candidate_policy_keys": [
+      "schema",
+      "precursor_count",
+      "evolved_count",
+      "required_precursor_count",
+      "required_evolved_count",
+      "precursor_surplus",
+      "unresolved_evolution_count",
+      "dependency_distance",
+      "adds_precursor",
+      "consumes_precursor",
+      "adds_evolved"
+    ],
+    "controller_actions_maximum": 0,
+    "emulator_frames_advanced_maximum": 0,
+    "full_menu_scored": true,
+    "maximum_model_predictions": 1,
+    "model_update_allowed": false,
+    "private_binding_fields_visible_to_model": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "tie_break": "lower_candidate_index",
+    "title_identity_fields_visible_to_model": 0
+  },
+  "result_contract": {
+    "causal_outcome_fields_public": 0,
+    "development_label_fields_public": 0,
+    "private_terminal_binds_candidate_rows": true,
+    "private_terminal_binds_context_and_opportunity": true,
+    "private_terminal_binds_model": true,
+    "public_fields": [
+      "status",
+      "candidate_count",
+      "selected_candidate_kind",
+      "selected_candidate_probability",
+      "score_margin",
+      "model_predictions",
+      "controller_actions",
+      "emulator_frames_advanced",
+      "teacher_queries",
+      "identity_fields_public"
+    ],
+    "public_identity_fields": 0,
+    "result_interpretation": "adapter_model_compatibility_only_not_goal_quality_or_gameplay",
+    "selected_candidate_kind_values": [
+      "acquire_precursor",
+      "transform_precursor"
+    ]
+  },
+  "schema": "pokemon.red.living-dex-dependency-shadow-decision-design.v1",
+  "stage_contract": {
+    "design_stage_predictions": 0,
+    "design_stage_private_accesses": 0,
+    "design_stage_status": "frozen_no_execution",
+    "ordered_stages": [
+      "design",
+      "runner_qualification",
+      "metadata_preflight",
+      "shadow_prediction"
+    ],
+    "prediction_requires_separate_published_runner": true,
+    "retry_same_execution_identity_after_prediction": false,
+    "runner_qualification_requires_separate_reorientation": true,
+    "shadow_execution_identity_frozen_before_prediction": true,
+    "shadow_prediction_requires_separate_reorientation": true,
+    "terminal_required_on_every_post_prediction_path": true
+  },
+  "stop_conditions": [
+    "Stop before prediction if source, adapter, model, fit bundle, observation, or candidate-menu identity differs.",
+    "Stop with zero prediction and zero action if the one frozen context has no first catalog-order rankable opportunity with both candidates mechanically available.",
+    "Stop if selection observes a model score, a private Red binding crosses the policy or public boundary, or any teacher fallback is requested.",
+    "Stop immediately after one durable shadow preference or the first failure terminal; never press a controller button, advance an emulator frame, retry the same identity, fit, compare, promote, or open Crystal."
+  ]
+}
