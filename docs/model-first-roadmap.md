@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: design the missing dual-capability Red curriculum
+## Current checkpoint: implement the qualified dual-capability Red curriculum seam
+
+Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
+4580 tests, one skip, three deselections, and one expected failure. The
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+freezes one same-reset, full-menu acquire-versus-evolve question with two distinct executable
+capability roles, no preferred action or teacher label, identity-free policy rows, and an exact
+evolution-aware living-ledger outcome verifier. Antigravity's first review found that proposed
+fixed Red movement callbacks were a disguised route dependency. Those callbacks were removed;
+the final exact-byte design requires authenticated semantic traversal and passed with P0/P1/P2
+all zero.
+
+Active `red-living-dex-dual-capability-curriculum-v1` is the smallest next step: implement only a
+ROM-free semantic venue-entry capture adapter and a same-reset scenario builder over existing
+semantic navigation and collection contracts. No direction strings, profile/curriculum route
+sequences, private root search, ROM execution, prediction, action, fit, Crystal, or promotion are
+allowed. A pass permits only a separate action-free Red scenario preflight.
+
+## Previous checkpoint: design the missing dual-capability Red curriculum
 
 Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
 tests. One exact

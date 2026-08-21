@@ -6,7 +6,24 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns public dual-capability curriculum design
+## Current override: Codex owns semantic dual-capability implementation
+
+Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
+4580 tests. The
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+records two distinct same-reset capability roles, no preferred action/teacher label, title-neutral
+rows, an evolution-aware ledger verifier, and final Antigravity GO with P0/P1/P2 all zero. The
+first review's fixed-direction objection was accepted and removed.
+
+Codex may only implement and mutation-test `red-living-dex-dual-capability-curriculum-v1` against
+ROM-free fixtures: the semantic venue-entry capture adapter and same-reset scenario builder.
+Direction strings and profile/curriculum route sequences are forbidden. Antigravity reviews;
+Claude is unavailable. No private/ROM access, model scoring, controller action, fit, Crystal,
+promotion, completion, or transfer is owned. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned public dual-capability curriculum design
 
 Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
 tests. The

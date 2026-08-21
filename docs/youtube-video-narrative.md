@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: the first silent look finds no honest choice
+## August 21 scene: remove the hidden walkthrough from the classroom
+
+Open on **SOURCE 09E9B04B · CI 32462322717/1 GREEN · 4580 PASSED · DUAL-CAPABILITY DESIGN
+QUALIFIED**. Animate **ONE RESET → TWO EXECUTABLE CAPABILITY ROLES → FULL ANONYMOUS MENU → NO
+PREFERRED ACTION → NO TEACHER LABEL → EXACT EVOLUTION-AWARE LEDGER OUTCOME**. Link the
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+with **SHA-256 AAD8CF42…F2F8**.
+
+Then show the review correction as the point of the scene: **FIXED RED DIRECTIONS FOUND → DESIGN
+REJECTED → ROUTE CALLBACK REMOVED → SEMANTIC TRAVERSAL REQUIRED → ANTIGRAVITY EXACT-BYTE GO ·
+P0/P1/P2 0**. The next rail is **ROM-FREE SEMANTIC VENUE ENTRY → SAME-RESET ACQUIRE + EVOLVE
+BUILDER → MUTATION TESTS → STOP BEFORE ROM/PREDICTION/ACTION**. Explain that this is how the
+project avoids mistaking a hidden walkthrough for transferable Pokémon knowledge.
+
+## Previous August 21 scene: the first silent look finds no honest choice
 
 Open on **MAIN 8D559D23 · CI 32458785817/1 GREEN · PREFLIGHT MANIFEST 0E3916BE · ONE NONSEALED
 CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/TEACHER 0 · CONTEXT CLOSED · RETRY 0**.

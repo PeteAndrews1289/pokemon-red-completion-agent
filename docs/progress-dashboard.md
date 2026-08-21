@@ -5,7 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 8D559D23 · CI 32458785817/1 GREEN · PREFLIGHT MANIFEST
+> **Current rail:** Show **SOURCE 09E9B04B · CI 32462322717/1 GREEN · 4580 PASSED · DESIGN
+> QUALIFIED · SAME-RESET ROLES 2 · PREFERRED ACTIONS/TEACHER LABELS 0 · TITLE/ROUTE IDENTITY
+> 0 · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
+> [design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+> and show **SHA-256 AAD8CF42…F2F8**. Note the review loop explicitly: **FIXED-DIRECTION REUSE
+> REJECTED → SEMANTIC TRAVERSAL REQUIRED → EXACT-BYTE GO**.
+>
+> Display active `red-living-dex-dual-capability-curriculum-v1`. Active rail: **SEMANTIC VENUE
+> ENTRY → SAME RESET → ACQUIRE + EVOLVE EXECUTABLE → FULL TITLE-NEUTRAL MENU → EXACT LEDGER
+> VERIFIER → STOP BEFORE LIVE PREFLIGHT**. Direction strings and profile-specific routes are
+> forbidden. Show **PRIVATE/ROM/PREDICTION/ACTION/FIT/CRYSTAL/AUTHORITY 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN 8D559D23 · CI 32458785817/1 GREEN · PREFLIGHT MANIFEST
 > 0E3916BE · ONE NONSEALED CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/TEACHER 0 ·
 > CONTEXT CLOSED · RETRY 0**. Link the
 > [preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)

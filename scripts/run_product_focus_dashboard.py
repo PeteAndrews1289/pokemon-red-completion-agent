@@ -141,13 +141,14 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The first authentic Red preflight stopped cleanly with no jointly executable "
-            "acquire-versus-evolve menu. Next is a public reusable curriculum design; another "
-            "context, model score, action, or frame remains closed in this lane."
+            "The public dual-capability design is qualified. Next is the ROM-free reusable "
+            "semantic venue-entry capture and same-reset builder; private state, model score, "
+            "action, and frame advancement remain closed in this lane."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red curriculum design · same state → acquire + evolve executable → verified outcome"
+            "Red implementation · semantic venue entry → same-reset acquire/evolve → verified "
+            "outcome"
         ),
         collection_target=150,
         model=DashboardModelState(
@@ -157,7 +158,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "authority · not scored"
             ),
             choice=(
-                "Design one resettable two-action menu and an independent collection verifier"
+                "Implement semantic venue-entry capture and bind two live offers without scoring"
             ),
             decisions=0,
             teacher_queries=0,
@@ -195,10 +196,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} ineligible · "
-                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · descriptive · "
-                "authentic preflight candidate 0 · dual-capability design next"
+                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · authentic "
+                "preflight candidate 0 · design qualified · implementation next"
             ),
-            f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),
@@ -218,6 +218,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 1", stop_conditions[0]),
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
+            (
+                "Dual-capability design · 09e9b04b · CI 32462322717/1 · same-reset roles 2 · "
+                "preferred actions 0 · private/ROM/prediction/action 0 · Antigravity GO"
+            ),
             (
                 "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"
                 "action/frame 0 · context closed · retry 0"

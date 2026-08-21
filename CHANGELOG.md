@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published and qualified the Red dual-capability dependency curriculum design at source
+  `09e9b04bc2bb09b1d793a0484dca3898e010688b` under green CI `32462322717/1`. The
+  [qualification receipt](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+  (SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+  freezes two distinct capability roles at one reset, no assigned/preferred action or teacher
+  label, identity-free model rows, and an evolution-aware exact specimen-ledger verifier.
+  Antigravity rejected an initial fixed-direction route reference; it was removed in favor of
+  authenticated semantic traversal, after which exact-byte review returned GO with P0/P1/P2 all
+  zero. Activated ROM-free semantic venue-entry and same-reset-builder implementation only; all
+  learning, gameplay, authority, and transfer counters remain unchanged.
+
 - Ran exactly one manifest-pinned, zero-action Red dependency preflight from main
   `8d559d230fc06fa83edc8015bb245df531600e16` under green CI `32458785817/1`. The
   [path-free result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
