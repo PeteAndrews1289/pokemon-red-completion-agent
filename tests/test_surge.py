@@ -68,6 +68,7 @@ from pokemon_red_completion.surge import (
     WILD_CAPTURE_POLICY,
     WILD_CAPTURE_THROWS_PER_ENCOUNTER,
     LiveWildCorridorSurveyExecutor,
+    LiveWildEncounterExecutor,
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
@@ -1254,6 +1255,21 @@ def test_live_wild_corridor_rejects_ambiguous_source_contracts(
             DEFAULT_SURGE_TIMING,
             **arguments,
         )
+
+
+def test_live_wild_encounter_executor_has_no_navigation_contract() -> None:
+    live = LiveWildEncounterExecutor(
+        object(),
+        object(),
+        object(),
+        DEFAULT_SURGE_TIMING,
+        label="semantic Diglett capture",
+    )
+
+    assert not hasattr(live, "_forward_directions")
+    assert not hasattr(live, "_directions")
+    with pytest.raises(RedAreaExecutionError, match="semantic venue walker must seek"):
+        live.seek_encounter()
 
 
 class _PartyMoveMemory:

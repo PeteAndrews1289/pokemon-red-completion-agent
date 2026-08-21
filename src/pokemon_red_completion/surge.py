@@ -2158,8 +2158,13 @@ def _wild_weakening_turn_result(
     return current_enemy_hp < before_enemy_hp
 
 
-class LiveWildCorridorSurveyExecutor:
-    """Bind a reversible two-endpoint wild corridor to the shared area loop."""
+class LiveWildEncounterExecutor:
+    """Perform live wild-battle capture mechanics without owning navigation.
+
+    ``seek_encounter`` deliberately fails.  A semantic venue wrapper must own
+    every overworld movement step so this executor cannot smuggle a corridor or
+    profile direction sequence into an otherwise semantic route.
+    """
 
     def __init__(
         self,
@@ -2169,30 +2174,15 @@ class LiveWildCorridorSurveyExecutor:
         timing: SurgeTiming,
         *,
         label: str,
-        forward_directions: tuple[str, ...],
-        starting_endpoint: str,
-        max_legs: int,
     ) -> None:
         if not label.strip():
-            raise ValueError("live wild corridor label must not be empty")
-        if not forward_directions:
-            raise ValueError("live wild corridor requires movement directions")
-        if starting_endpoint not in {"south", "north"}:
-            raise ValueError("starting_endpoint must be south or north")
-        if type(max_legs) is not int or max_legs <= 0:
-            raise ValueError("max_legs must be a positive integer")
+            raise ValueError("live wild encounter label must not be empty")
         self._emulator = emulator
         self._executor = executor
         self._reader = reader
         self._timing = timing
         self._label = label
-        self._forward_directions = forward_directions
-        self._starting_endpoint = starting_endpoint
-        self._max_legs = max_legs
         self._party_reader = PokemonRedPartyReader(emulator)
-        self._endpoint = starting_endpoint
-        self._directions: deque[str] = deque()
-        self._completed_legs = 0
 
     def read_collection(self) -> CollectionObservation:
         return red_collection_observation(
@@ -2215,11 +2205,9 @@ class LiveWildCorridorSurveyExecutor:
             ) from error
 
     def seek_encounter(self) -> None:
-        if self.encountered_species_ref() is not None:
-            raise RedAreaExecutionError(f"{self._label} cannot seek during an encounter")
-        if not self._directions:
-            self._start_leg()
-        self._advance_one_direction()
+        raise RedAreaExecutionError(
+            f"{self._label} has no encounter route; a semantic venue walker must seek"
+        )
 
     def capture_encounter(self, species_ref: str) -> bool:
         encountered = self.encountered_species_ref()
@@ -2315,6 +2303,43 @@ class LiveWildCorridorSurveyExecutor:
         raise RedAreaExecutionError(
             f"{self._label} cannot switch to box {box_index} without leaving the source"
         )
+
+
+class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
+    """Bind a reversible two-endpoint wild corridor to the shared area loop."""
+
+    def __init__(
+        self,
+        emulator: EmulatorState,
+        executor: CountingExecutor,
+        reader: PokemonRedStateReader,
+        timing: SurgeTiming,
+        *,
+        label: str,
+        forward_directions: tuple[str, ...],
+        starting_endpoint: str,
+        max_legs: int,
+    ) -> None:
+        if not forward_directions:
+            raise ValueError("live wild corridor requires movement directions")
+        if starting_endpoint not in {"south", "north"}:
+            raise ValueError("starting_endpoint must be south or north")
+        if type(max_legs) is not int or max_legs <= 0:
+            raise ValueError("max_legs must be a positive integer")
+        super().__init__(emulator, executor, reader, timing, label=label)
+        self._forward_directions = forward_directions
+        self._starting_endpoint = starting_endpoint
+        self._max_legs = max_legs
+        self._endpoint = starting_endpoint
+        self._directions: deque[str] = deque()
+        self._completed_legs = 0
+
+    def seek_encounter(self) -> None:
+        if self.encountered_species_ref() is not None:
+            raise RedAreaExecutionError(f"{self._label} cannot seek during an encounter")
+        if not self._directions:
+            self._start_leg()
+        self._advance_one_direction()
 
     def finish_at_starting_endpoint(self) -> None:
         """Normalize an early successful stop to the corridor's starting end."""
