@@ -1,6 +1,21 @@
 # Current audit — 2026-08-21
 
-## Current result: Red dependency adapter qualified; no live prediction yet
+## Current result: shadow design qualified; runner does not exist yet
+
+Published main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI
+`32453057425/1`. The
+[design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+binds the exact model/adapter/fit lineage, one-context admission, pre-score first-eligible selection,
+two identity-free rows, one prediction maximum, zero actions/frames, durable terminal, and no
+retry. GitHub passed 4537 ROM-free tests; Antigravity passed 4538 and returned exact-head GO with
+P0/P1/P2 all zero.
+
+No live context, model prediction, action, outcome, fit, comparison, authority, or transfer
+occurred. Active `red-shadow-runner-qualification-v1` is public/synthetic implementation only.
+All boards stay **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: Red dependency adapter qualified; no live prediction yet
 
 Published main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI
 `32451757975/1`. The

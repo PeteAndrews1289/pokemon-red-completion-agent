@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-21 Red adapter qualified; shadow-decision design is active:** Main
+> **2026-08-21 shadow design qualified; runner qualification is active:** Main
+> `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
+> [design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+> (SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+> records **ONE CONTEXT · PRE-SCORE SELECTION · EXACT MODEL/ADAPTER · TWO ANONYMOUS ROWS · ONE
+> PREDICTION MAX · ACTIONS/FRAMES 0 · DURABLE TERMINAL · ANTIGRAVITY GO · P0/P1/P2 0**.
+>
+> Codex owns only `red-shadow-runner-qualification-v1`: public/synthetic implementation, mutation
+> tests, publication, exact-head CI, and audit. Antigravity is the read-only reviewer; Claude is
+> unavailable and not a blocker. No agent owns live ROM/private/model/claim access, authentic
+> prediction, action, fit, comparison, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 Red adapter qualified; shadow-decision design was active:** Main
 > `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
 > [adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
 > (SHA-256 `6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf`)

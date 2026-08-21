@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the zero-action Red shadow-decision design
+## Current override: Codex owns read-only Red shadow-runner qualification
+
+Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
+[design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+records an exact one-context, pre-score-selected, two-row, one-prediction, zero-action design and
+Antigravity exact-head GO with P0/P1/P2 all zero.
+
+Codex may implement only `red-shadow-runner-qualification-v1` on public/synthetic fixtures, then
+publish and stop after exact-head audit. Antigravity reviews; Claude remains unavailable. No live
+ROM/private/model/claim access, authentic prediction, action, fit, comparison, promotion, Crystal,
+completion, or transfer is owned. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned the zero-action Red shadow-decision design
 
 Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
 [adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

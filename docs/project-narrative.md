@@ -1,6 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the Red observation adapter qualified without touching the game
+## August 21: the one-decision shadow contract qualified; runner implementation is next
+
+Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
+[design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+freezes exact source/model/adapter/fit bindings, one nonsealed development context, opportunity
+selection before scoring, two anonymous rows, one prediction maximum, zero action/frame effects,
+and durable no-retry termination. GitHub passed 4537 ROM-free tests; Antigravity passed 4538 and
+returned exact-head GO with P0/P1/P2 all zero.
+
+This changes no learning counter and grants no gameplay authority. Active work is the read-only
+runner implementation on public fixtures. Live context access, the first authentic shadow
+preference, causal action, Red completion, Crystal, and living-Pokédex transfer remain later gates.
+
+## Previous August 21 checkpoint: the Red observation adapter qualified without touching the game
 
 Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
 [adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

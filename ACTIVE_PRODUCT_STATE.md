@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Red living-Dex dependency shadow-decision design V1** (`red-living-dex-dependency-shadow-decision-design-v1`)
+**Red living-Dex dependency shadow runner qualification V1** (`red-shadow-runner-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the public design proves pre-score eligibility, exact model/adapter binding, one-prediction maximum, identity-free aggregate disclosure, and zero-action termination, implement and qualify its read-only runner separately. Otherwise close the design before touching live state.
+- Next decision: If the runner passes adversarial fixture tests, Antigravity audit, publication, and exact-head CI, reorient separately to one metadata-only live preflight. If any binding, ordering, privacy, durability, or zero-action guard fails, repair only the generic runner boundary or close before live state.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Freeze one action-free, one-decision Red shadow-observation contract that authenticates the published dependency ranker and adapter, selects a rankable two-candidate dependency before scoring, records one model preference, and never gives the model controller authority. |
-| Authority now | The frozen ranker has descriptive synthetic support and the published Red adapter can create its exact title-neutral rows. No authentic Red observation has been scored and no gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify a design for exactly one later authentic Red shadow preference with zero controller authority. Design qualification itself grants no prediction or gameplay authority. |
-| Transfer test | The design must bind only the title-neutral candidate rows at the model boundary so a future Crystal adapter can reuse the same shadow protocol; no Crystal implementation or transfer measurement occurs here. |
-| Cheapest falsifier | On public fixtures only, prove the design binds one exact model, adapter, observation identity, full acquire-versus-transform menu, at most one prediction, aggregate-only disclosure, and a hard zero-action terminal. Stop if eligibility depends on model score or a Red identity reaches policy features. |
+| Reusable capability | Implement and qualify the read-only runner for one frozen Red dependency shadow decision: authenticate exact source, design, adapter, model bundle, and context; select the first eligible opportunity before scoring; persist at most one preference; and terminate with zero controller actions or advanced frames. |
+| Authority now | The frozen ranker has descriptive synthetic support, the Red adapter can create its exact title-neutral rows, and the public shadow contract is qualified. No authentic Red observation has been scored and no gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Qualify the runner for exactly one later authentic Red shadow preference with zero controller authority. Runner qualification itself grants no prediction or gameplay authority. |
+| Transfer test | The runner must consume only the title-neutral candidate rows at the model boundary so a future Crystal adapter can reuse the same shadow protocol; no Crystal implementation or transfer measurement occurs here. |
+| Cheapest falsifier | On public and synthetic fixtures only, mutate every exact binding, selection order, one-context boundary, prediction cap, private/public identity boundary, terminal write, and zero-action guard. Stop if any mismatch can reach scoring or any post-prediction path lacks a durable terminal. |
 | Time box | 1 session / 2 hours |
 
 ### Required learning outputs
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-red-adapter-qualified-shadow-design-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+**2026-08-21-shadow-design-qualified-runner-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The adapter closes the title-observation gap without rewriting Red memory. A one-decision shadow design is the shortest honest bridge from the synthetic dependency rule to seeing whether the same model can consume authentic Red state before any causal gameplay trial. |
-| Learning output | No new measured learning output. Published source 6fe9a677 passed CI 32451757975/1; 11 adapter tests and 4533 full ROM-free tests passed, 22 of 26 Red transformation edges fit the ranker contract, four zero-reserve edges fail closed, and Antigravity returned exact-head GO. |
-| Authority delta | No gameplay or transfer authority changed. The published Red adapter has zero predictions and zero actions; the ranker still has only descriptive synthetic held-out support. |
+| Product alignment | The qualified design defines the first safe use of the synthetic dependency rule on authentic Red state. A read-only runner is the last engineering bridge before one measured shadow preference and then a separately verified causal gameplay trial. |
+| Learning output | No new measured learning output. Published source 8afb1db0 passed CI 32453057425/1 with 4537 ROM-free tests; the design binds one exact model, two identity-free rows, one pre-score opportunity, one prediction maximum, zero actions/frames, durable termination, and Antigravity exact-head GO with P0/P1/P2 all zero. |
+| Authority delta | No gameplay or transfer authority changed. The published design made zero predictions and zero actions; the ranker still has only descriptive synthetic held-out support. |
 | Transfer result | Not run. The adapter preserves a title-neutral policy schema, but neither an authentic Red shadow observation nor a Crystal adapter has been evaluated. |
-| Blocker | The adapter can now derive exact title-neutral rows from Red collection facts, but no frozen contract yet binds one authentic Red observation, the exact published model, one pre-score opportunity, one shadow preference, and a zero-action terminal. |
-| Decision | Retire the qualified adapter implementation and open one design-only shadow-observation lane. The next design may specify one future prediction but cannot read a ROM, private context, model bundle, or claim and cannot execute gameplay. |
-| Next session | Freeze and audit the path-free one-decision Red shadow-observation design. Stop before any ROM, private context, model loading, prediction, claim, or controller action; implementation and execution remain separate. |
-| Next falsifier | Require a public design whose opportunity is selected before model scoring, whose policy input is exactly two identity-free adapter rows, whose model and observation bindings are immutable, and whose only permitted live effect is one recorded shadow prediction followed by a zero-action terminal. |
-| Stop condition | Stop after one public design and audit. Never access a ROM, private artifact, claim registry, hidden context, or model bundle; never predict, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
+| Blocker | The exact shadow contract is now public and qualified, but no source-authenticated runner yet joins the frozen model and one authentic Red observation, enforces pre-score selection, persists one aggregate preference, and proves a zero-action terminal. |
+| Decision | Retire the qualified public design and implement only its read-only runner on public and synthetic fixtures. Live Red context access and the single shadow prediction remain a later, separately reoriented stage. |
+| Next session | Implement, mutation-test, audit, publish, and exact-head qualify the read-only shadow runner. Stop before any live ROM, private context, claim, authentic model prediction, controller action, Crystal execution, or authority promotion. |
+| Next falsifier | Require a source-authenticated runner whose public fixtures prove exact model/design/adapter joins, one-context admission, first-eligible selection before scoring, no identity leakage, one-prediction maximum, durable failure/success terminals, and zero controller/frame effects. |
+| Stop condition | Stop after one published and audited runner. Never access a live ROM, private artifact, hidden context, or claim registry; never run the authentic model on Red state, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
 
 ### Stop conditions
 
-- Stop if the design selects a context or transformation after seeing a model score, leaks a private Red binding into policy or public output, permits more than one prediction, or lacks a hard zero-action terminal.
-- Stop after one design/audit checkpoint. Never access a ROM, private artifact, claim registry, hidden context, model bundle, controller, Crystal, or authority promotion.
+- Stop if the runner can score before all exact bindings and the one frozen context/opportunity are authenticated, leaks a Red identity, permits more than one prediction, advances a frame, dispatches an action, or loses a post-prediction terminal.
+- Stop after one runner publication/audit checkpoint. Never access a live ROM, private artifact, claim registry, hidden context, or authentic model bundle; never execute Crystal or promote authority.
 
 ### Hard boundaries for this lane
 
@@ -86,9 +86,9 @@ outputs.
 - **Prohibited:** full game replay
 - **Prohibited:** gameplay execution
 - **Prohibited:** model fit
-- **Prohibited:** model prediction
+- **Prohibited:** live model prediction
 - **Prohibited:** model refit
-- **Prohibited:** private artifact access
+- **Prohibited:** live private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -120,6 +120,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red living-Dex dependency shadow-decision design V1:** Main 8afb1db0b345c9cdd83323585f54a1352fb31618 passed CI 32453057425/1. The design freezes one exact model/adapter, one nonsealed Red development context, pre-score selection, two anonymous rows, at most one prediction, zero actions/frames/teacher/update, durable termination, and no retry. GitHub passed 4537 tests; Antigravity passed 4538 and returned exact-head GO with P0/P1/P2 all zero. No live state or learning counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency observation adapter V1:** Published main 6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3 passed CI 32451757975/1. The pure adapter maps all 26 Red transformation edges through chain, branch, completion, and mechanical-readiness semantics into exact identity-free ranker rows; 22 edges are supported and four zero-reserve cases fail closed. Eleven focused tests and 4533 full ROM-free tests passed, and Antigravity returned exact-head GO with no P0/P1/P2 finding. It made zero predictions or actions and advances no learning counter. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution V2:** Published main 90288f57fb0b4d81533e049cc1b2c7bed28a07d3 passed CI 32449287128/1. After exact metadata preflight and Antigravity GO, semantic claim ed906f06 was consumed once; exactly four committed rows across two held-out families produced candidate 4/4 versus baseline 2/4, lower cross-entropy, higher winner probability, aggregate-only output, and durable no-retry records. The result is descriptive synthetic evidence only. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution qualification V2:** Published source 96ef8a1bd105e399963ec8656f3a81cb850742b9 passed CI 32447962527/1 with the exact-bundle, claim-before-open, four-row aggregate-only runner and durable no-retry terminals. Antigravity returned implementation and governance GO. A metadata-only preflight opened zero payloads and consumed no claim; because it occurred one reorientation early, its semantic qualification remains valid but its source-bound identity is superseded for execution. Evidence is preserved; retry is no.

@@ -1,0 +1,114 @@
+{
+  "antigravity_review": {
+    "exact_head_verified": true,
+    "local_full_tests_passed": 4538,
+    "local_skipped": 3,
+    "local_xfailed": 1,
+    "p0_blockers": 0,
+    "p1_blockers": 0,
+    "p2_findings": 0,
+    "private_or_runtime_accesses": 0,
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "Published public source freezes one exact one-context, pre-score-selected, two-candidate Red dependency shadow-decision contract with one prediction maximum, identity-free policy rows, aggregate-only public output, and a hard zero-action terminal.",
+    "unsupported": "This qualification is not a live Red observation, model prediction, controller action, causal outcome, model update, gameplay competence, story completion, living-Pokedex completion, authority promotion, Crystal result, or cross-title transfer result."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design_bindings": {
+    "adapter_qualification_receipt_sha256": "6df5485d4df6f9529a250674f9de6a4bbd617fb58b523f3d57e9696003dee8bf",
+    "adapter_sha256": "2ecff694292b6f110edbc692e5c2dc326dcbaab0eb1f9a20ecd9583bdd86015f",
+    "candidate_count": 2,
+    "candidate_policy_keys": 11,
+    "design_sha256": "5fbe527b3c1d126d376c5aae29ff10e47e9222b23cc408c4c37ad76b53e0f1dd",
+    "design_test_sha256": "95b9b8321b6247c4c2df2bb2ee5f51779407904a2fdc6ffe6983f3130868118f",
+    "fit_manifest_record_sha256": "1696e37c44b5a10b81c194a0816b35def463baa1a61b05c80da2e8c897fbbf36",
+    "fit_record_sha256": "ea56c85643614202bee0e1f4a911817dc8fbb27e871e3f5ffd339083c2cb40b6",
+    "fit_sha256": "c544fa92f0fc9ab51037cb88a79bf2917e112d16f42630d08de6810aa8d4bc3c",
+    "fit_terminal_record_sha256": "ccb77998a63b83ff47bce2575a492cefbdc42821cd93aa956a03f6c3f9fc7fa5",
+    "model_sha256": "a42db6420d3ff999a894c8ca54fbca7714509bbe95a2020cf85c9cee195f6582",
+    "train_dataset_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4537,
+    "ci_run_id": 32453057425,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "source_commit": "8afb1db0b345c9cdd83323585f54a1352fb31618"
+  },
+  "qualification": {
+    "context_contract": {
+      "context_frozen_before_read": true,
+      "context_replacement_after_read": false,
+      "contexts_opened_maximum": 1,
+      "development_nonsealed_red_only": true,
+      "first_catalog_order_eligible_opportunity_only": true,
+      "model_guided_search": false
+    },
+    "execution_contract": {
+      "controller_actions_maximum": 0,
+      "emulator_frames_advanced_maximum": 0,
+      "maximum_model_predictions": 1,
+      "model_update_allowed": false,
+      "retry_same_identity_after_prediction": false,
+      "teacher_queries": 0,
+      "terminal_required_on_every_post_prediction_path": true
+    },
+    "policy_contract": {
+      "candidate_order": [
+        "acquire_precursor",
+        "transform_precursor"
+      ],
+      "full_menu_scored": true,
+      "private_binding_fields_visible_to_model": 0,
+      "public_identity_fields": 0,
+      "title_identity_fields_visible_to_model": 0
+    },
+    "tests": {
+      "focused_design_tests_passed": 4,
+      "full_rom_free_tests_passed": 4537,
+      "public_artifact_check_passed": true,
+      "ruff_passed": true,
+      "strict_mypy_passed": true
+    }
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.red.living-dex-dependency-shadow-decision-design-qualification.v1",
+  "status": "published_shadow_decision_design_qualified_runner_not_implemented",
+  "title_role": "Red shadow-decision design maintenance; not prediction, gameplay, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_contexts_opened": 0,
+    "emulator_frames_advanced": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

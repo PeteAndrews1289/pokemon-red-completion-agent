@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: translate Red into the student's language without pressing a button
+## August 21 scene: the silent-look blueprint passes; build the read-only bridge
+
+Open on **MAIN 8AFB1DB0 · CI 32453057425/1 GREEN · SHADOW DESIGN QUALIFIED**. Animate **ONE
+CONTEXT FROZEN → FIRST ELIGIBLE DEPENDENCY SELECTED BEFORE SCORING → TWO ANONYMOUS ROWS → ONE
+PREFERENCE MAX → ZERO BUTTONS/FRAMES → DURABLE STOP**. Link the
+[qualification receipt](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+with **SHA-256 AA998310…5A056** and stamp **4537 CI · 4538 ANTIGRAVITY · GO · P0/P1/P2 0**.
+
+The next rail is **AUTHENTICATE EVERYTHING → ADMIT ONE FIXTURE → SELECT BEFORE SCORE → SCORE ONCE
+→ WRITE TERMINAL → PROVE ZERO ACTION → PUBLISH/AUDIT → STOP**. Say clearly: this builds the
+reader, but does not yet open the live game, make a gameplay decision, learn from an outcome,
+finish Red, build a living Pokédex, or transfer to Crystal.
+
+## Previous August 21 scene: translate Red into the student's language without pressing a button
 
 Open on **MAIN 6FE9A677 · CI 32451757975/1 GREEN · RED ADAPTER QUALIFIED**. Animate **26 RED
 TRANSFORMATIONS → 22 SUPPORTED ANONYMOUS DEPENDENCIES + 4 HONEST ZERO-RESERVE STOPS**. Show
