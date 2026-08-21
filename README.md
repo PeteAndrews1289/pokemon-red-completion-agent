@@ -6,19 +6,19 @@
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
 > **Current product focus (August 21, 2026): the exact dual-capability preflight runner is
-> published; freeze and silently inspect one fixed Red scenario.** Main
-> `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with 4603
-> tests, one skip, three deselections, and one expected failure. The
+> published and externally approved; freeze and silently inspect one fixed Red scenario.** Main
+> `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 > [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-> (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+> (SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 > records **MANIFEST BEFORE PRIVATE/ROM · ONE FIXED RESET/DEPENDENCY · SEMANTIC ROUTE ·
 > ENCOUNTER-ONLY CAPTURE · EXACT PROFILE-BOUND EVOLUTION · TWO ANONYMOUS ROWS · STABLE ROOT +
-> SCENARIO IDENTITIES · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0**. Two independent code audits
-> returned GO; the requested Antigravity exact-byte review is still pending. Route steps and cost
-> are aggregate semantic-plan metrics, never a direction script.
+> SCENARIO IDENTITIES · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0**. Independent mission, safety,
+> and [Antigravity](docs/evidence/red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json)
+> audits returned GO with P0/P1/P2 all zero. Route steps and cost are aggregate semantic-plan
+> metrics, never a direction script.
 >
-> Active `red-dual-capability-action-free-scenario-preflight-v1` now needs only the final external
-> review, one exact public invocation freeze, and one private action-free preflight. It may read the
+> Active `red-dual-capability-action-free-scenario-preflight-v1` now needs only one exact public
+> invocation freeze and one private action-free preflight. It may read the
 > fixed nonsealed reset and read-only ledgers, but it cannot score the model, write a claim, press a
 > button, advance a frame, substitute a context, or patch the route. Boards remain
 > **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**. A pass permits only a separately frozen

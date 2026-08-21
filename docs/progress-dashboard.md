@@ -5,15 +5,15 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN C3E07D26 · CI 32470280542/1 GREEN · 4603 PASSED · PREFLIGHT
+> **Current rail:** Show **MAIN 347F954D · CI 32471913419/1 GREEN · PREFLIGHT
 > RUNNER PUBLISHED · MANIFEST FIRST · FIXED RESET/DEPENDENCY · SEMANTIC ROUTE · ENCOUNTER-ONLY
 > CAPTURE · EXACT WRAPPED EVOLUTION · ANONYMOUS ROWS 2 · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0 ·
-> INTERNAL AUDITS GO · ANTIGRAVITY PENDING**. Link the
+> INTERNAL AUDITS GO · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
 > [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-> and show **SHA-256 CE285560…051F**.
+> and show **SHA-256 95B59F67…CA31**.
 >
 > Display active `red-dual-capability-action-free-scenario-preflight-v1`. Active rail:
-> **ANTIGRAVITY EXACT-BYTE REVIEW → FREEZE EXACT PUBLIC INVOCATION → OPEN ONE FIXED NONSEALED
+> **FREEZE EXACT PUBLIC INVOCATION → OPEN ONE FIXED NONSEALED
 > RESET ACTION-FREE → AUTHENTICATE ROUTE/CAPTURE/EVOLUTION/TWO-ROW MENU/UNUSED ROOT → STOP**.
 > Show that route steps/cost are aggregate metrics, not directions. No substitution or repair.
 > Show **PREDICTION/CLAIM-WRITE/ACTION/FRAME/FIT/CRYSTAL/AUTHORITY 0** and boards

@@ -12,21 +12,21 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: exact dual-capability preflight runner published; one silent inspection remains
+## 2026-08-21: external GO recorded; one silent inspection remains
 
-Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-4603 tests, one skip, three deselections, and one expected failure. The
+Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+(SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 binds manifest-first access, the fixed `red-goal-v1-032-evolve_species-train-05` reset,
 Diglett's Cave semantic traversal, encounter-only capture, the exact profile/config-bound
 Diglett-to-Dugtrio evolution offer, two anonymous policy rows, and stable physical-root plus
 semantic-scenario identities. The runner contains no scoring path. Route counts are aggregate
-plan metrics, not controller directions. Independent mission and safety audits returned GO;
-Antigravity's requested exact-byte review remains pending.
+plan metrics, not controller directions. Independent mission and safety audits returned GO.
+[Antigravity's exact-byte audit](docs/evidence/red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json)
+also returned GO with P0/P1/P2 all zero and approved one exact invocation freeze.
 
 Codex owns only the remaining boundary of
-`red-dual-capability-action-free-scenario-preflight-v1`: obtain Antigravity review, freeze one
+`red-dual-capability-action-free-scenario-preflight-v1`: freeze one
 exact public invocation, run one action-free preflight, and reorient immediately. No score, claim
 write, controller input, frame, substitution, route patch, fit, Crystal, or promotion is allowed.
 Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.

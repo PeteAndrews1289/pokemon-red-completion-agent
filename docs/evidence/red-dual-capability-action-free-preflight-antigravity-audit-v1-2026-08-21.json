@@ -1,0 +1,44 @@
+{
+  "audit": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32471913419,
+    "exact_published_main": "347f954dc029cf01db3bc366b30ce07b80e445b5",
+    "implementation_origin_commit": "c3e07d261545df03b519f5ba270ff0591e43bbe4",
+    "p0_blockers": 0,
+    "p1_findings": 0,
+    "p2_findings": 0,
+    "private_or_runtime_accesses": 0,
+    "reviewed_paths": [
+      "ACTIVE_PRODUCT_STATE.md",
+      "docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json",
+      "scripts/run_red_dual_capability_preflight.py",
+      "src/pokemon_red_completion/red_dual_capability_curriculum_runtime.py",
+      "src/pokemon_red_completion/surge.py",
+      "tests/test_red_dual_capability_curriculum_runtime.py",
+      "tests/test_run_red_dual_capability_preflight_script.py",
+      "tests/test_surge.py"
+    ],
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "Antigravity's read-only exact-byte audit found no P0, P1, or P2 issue and concluded that one exact public invocation may be frozen for the single action-free Red dual-capability preflight.",
+    "unsupported": "This audit is not a private preflight result, model prediction, controller action, causal gameplay outcome, model update, Red completion, living-Pokedex completion, authority promotion, Crystal evidence, or cross-title transfer evidence."
+  },
+  "recorded_on": "2026-08-21",
+  "review_output_sha256": "bf08b4b4481a88d8f92cb710c0cb8bc3feeeb444fe0e9752541f1d5d1b6369fb",
+  "schema": "pokemon.red.dual-capability-action-free-preflight-antigravity-audit.v1",
+  "status": "go_exact_public_invocation_may_be_frozen",
+  "title_role": "External read-only engineering and mission audit; not execution, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "manifest_accesses": 0,
+    "model_predictions": 0,
+    "private_artifact_accesses": 0,
+    "rom_accesses": 0
+  }
+}

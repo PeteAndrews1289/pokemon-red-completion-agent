@@ -1,16 +1,15 @@
 # Three-agent coordination
 
-> **2026-08-21 exact dual-capability preflight runner published; one silent inspection remains:**
-> Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-> 4603 tests. The
+> **2026-08-21 external GO recorded; one silent inspection remains:**
+> Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 > [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-> (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+> (SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 > records **MANIFEST FIRST · FIXED RESET/DEPENDENCY · SEMANTIC ROUTE · ENCOUNTER-ONLY CAPTURE ·
 > EXACT PROFILE-BOUND EVOLUTION · ANONYMOUS ROWS 2 · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0 ·
-> INTERNAL AUDITS GO · ANTIGRAVITY PENDING**.
+> INTERNAL AUDITS GO · ANTIGRAVITY GO · P0/P1/P2 0**.
 >
-> Codex owns final external review, one exact invocation freeze, one action-free preflight, and
-> immediate reorientation. Antigravity is the external reviewer; Claude is unavailable. No agent
+> Codex owns one exact invocation freeze, one action-free preflight, and immediate reorientation.
+> Antigravity's review is complete; Claude is unavailable. No agent
 > owns a model score, controller input, claim write, frame advancement, context substitution,
 > route patch, fit, Crystal, promotion, completion, or transfer. Boards remain
 > **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.

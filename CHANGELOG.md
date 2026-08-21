@@ -2,15 +2,15 @@
 
 ## Unreleased
 
-- Published the exact Red dual-capability action-free preflight runner at main
-  `c3e07d261545df03b519f5ba270ff0591e43bbe4` under green CI `32470280542/1`. The
+- Recorded Antigravity's exact-byte GO for the Red dual-capability action-free preflight runner at
+  main `347f954dc029cf01db3bc366b30ce07b80e445b5` under green CI `32471913419/1`. The
   [qualification receipt](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-  (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+  (SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
   binds one fixed Red reset/dependency, manifest-first authentication, semantic traversal,
   encounter-only capture, exact profile-bound evolution, two identity-free rows, and stable
-  physical-root/scenario identities. It cannot score or act. Main CI passed 4603 tests; independent
-  mission and safety audits returned GO. The external Antigravity review and one exact public
-  invocation freeze remain before the single private preflight. No private input, ROM, prediction,
+  physical-root/scenario identities. It cannot score or act. Independent mission, safety, and
+  Antigravity audits returned GO with P0/P1/P2 all zero. One exact public invocation freeze remains
+  before the single private preflight. No private input, ROM, prediction,
   claim write, controller action, frame, outcome, fit, authority, transfer, or learning counter
   changed.
 

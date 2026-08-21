@@ -1,19 +1,20 @@
 # Current audit — 2026-08-21
 
-## Current result: exact action-free preflight runner published and green
+## Current result: exact action-free preflight runner externally approved
 
-Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-4603 tests, one skip, three deselections, and one expected failure. The
+Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+(SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 binds manifest-first authentication, one fixed reset/dependency, semantic traversal,
 encounter-only capture, the exact profile/config-bound evolution offer, two title-neutral rows,
 and stable physical-root plus semantic-scenario identities. Focused tests passed 81/81, the full
 local ROM-free suite passed 4604, and independent mission/safety audits returned GO.
+[Antigravity's exact-byte audit](evidence/red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1/P2 all zero and approved one exact invocation freeze.
 
 This checkpoint opened no private input or ROM, made no prediction, wrote no claim, advanced no
-action or frame, fit no model, and changed no counter. Antigravity review and one public invocation
-freeze remain before exactly one action-free preflight. Any failure closes the context without a
+action or frame, fit no model, and changed no counter. One public invocation freeze remains before
+exactly one action-free preflight. Any failure closes the context without a
 replacement or route patch. Aggregate route steps/cost do not expose directions. Boards stay
 **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
 

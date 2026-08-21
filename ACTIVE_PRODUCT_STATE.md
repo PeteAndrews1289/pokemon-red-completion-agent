@@ -57,17 +57,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-dual-capability-preflight-runner-qualified** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+**2026-08-21-dual-capability-preflight-external-review-go** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The preflight engineering gate is now published. One authentic same-reset feasibility result is the shortest remaining bridge from synthetic dependency ranking to the first model-selected, collection-verified Red gameplay outcome. |
-| Learning output | No new measured learning output. Source c3e07d26 passed CI 32470280542/1 with 4603 tests. The manifest-first runner fixes one Red reset and dependency, binds a stable physical root and semantic scenario, requires semantic traversal plus encounter-only capture and exact evolution, exposes two anonymous rows, and cannot score or act. |
-| Authority delta | No gameplay or transfer authority changed. Runner publication and review used no private input, ROM, model prediction, controller action, frame, teacher query, fit, claim write, or learning counter. |
+| Learning output | No new measured learning output. Main 347f954d passed CI 32471913419/1. Antigravity's exact-byte audit returned GO with P0/P1/P2 all zero and permitted one exact public invocation freeze. The runner remains unable to score or act. |
+| Authority delta | No gameplay or transfer authority changed. Antigravity's GO used no private input, ROM, model prediction, controller action, frame, teacher query, fit, claim write, or learning counter. |
 | Transfer result | Not run. The runner keeps Red traversal, venue, species, and skill identity behind private bindings and exposes only two title-neutral rows, but no authentic Red menu or Crystal binding has yet been produced. |
-| Blocker | The exact preflight runner is published and green, but the external Antigravity audit and exact public invocation freeze remain before the one allowed private action-free preflight. |
-| Decision | Keep this lane active: obtain final Antigravity exact-byte review, freeze the exact public invocation, and run exactly one action-free preflight. Do not score the model, claim an outcome, or send controller input. |
-| Next session | Complete the external exact-byte audit, freeze the public invocation, and run exactly one action-free preflight over the fixed nonsealed Red context; stop immediately after its result with no score, claim write, controller input, frame advance, substitution, route patch, fit, Crystal, or promotion. |
+| Blocker | The exact preflight runner is published, green, and externally reviewed. Only the exact public invocation freeze remains before the one allowed private action-free preflight. |
+| Decision | Keep this lane active: freeze the exact public invocation and run exactly one action-free preflight. Do not score the model, claim an outcome, or send controller input. |
+| Next session | Freeze the exact reviewed public invocation and run exactly one action-free preflight over the fixed nonsealed Red context; stop immediately after its result with no score, claim write, controller input, frame advance, substitution, route patch, fit, Crystal, or promotion. |
 | Next falsifier | Authenticate the frozen public invocation, then run one action-free preflight that verifies the fixed reset, semantic route, capture resources, exact evolution offer, two-row menu, and unused physical root while predictions, actions, frames, and claim writes remain zero. |
 | Stop condition | Stop after the first action-free result. Any missing capability, reset drift, route mismatch, identity leak, prediction, action, frame advance, or need for substitution closes the context and this lane. |
 

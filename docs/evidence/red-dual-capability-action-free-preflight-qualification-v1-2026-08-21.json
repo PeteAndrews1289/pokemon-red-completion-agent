@@ -21,13 +21,17 @@
     "verified_outcome_examples_added": 0
   },
   "independent_code_audits": {
+    "antigravity_audit_path": "docs/evidence/red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json",
+    "antigravity_audit_sha256": "4dc5802cf630c9b158964a06c29cf19f2afd7bb8e74f054597735db31d5bff33",
+    "antigravity_review_output_sha256": "bf08b4b4481a88d8f92cb710c0cb8bc3feeeb444fe0e9752541f1d5d1b6369fb",
     "exact_bytes_verified": true,
     "mission_verdict": "go",
     "p0_blockers": 0,
     "p1_blockers": 0,
+    "p2_findings": 0,
     "private_or_runtime_accesses": 0,
     "safety_verdict": "go_for_publication_private_preflight_requires_exact_published_green_head",
-    "third_party_antigravity_review": "pending"
+    "third_party_antigravity_review": "go_exact_public_invocation_may_be_frozen"
   },
   "publication": {
     "ci_attempt": 1,

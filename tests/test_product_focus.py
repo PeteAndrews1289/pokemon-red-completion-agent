@@ -164,6 +164,11 @@ RED_DUAL_CAPABILITY_PREFLIGHT_QUALIFICATION = (
     / "docs/evidence"
     / "red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json"
 )
+RED_DUAL_CAPABILITY_PREFLIGHT_ANTIGRAVITY_AUDIT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -1722,8 +1727,17 @@ def test_red_dual_capability_preflight_qualification_is_counter_neutral() -> Non
     assert receipt["independent_code_audits"]["mission_verdict"] == "go"
     assert receipt["independent_code_audits"]["safety_verdict"].startswith("go_")
     assert receipt["independent_code_audits"]["third_party_antigravity_review"] == (
-        "pending"
+        "go_exact_public_invocation_may_be_frozen"
     )
+    antigravity = json.loads(
+        RED_DUAL_CAPABILITY_PREFLIGHT_ANTIGRAVITY_AUDIT.read_text(encoding="ascii")
+    )
+    assert antigravity["status"] == "go_exact_public_invocation_may_be_frozen"
+    assert antigravity["audit"]["verdict"] == "go"
+    assert antigravity["audit"]["p0_blockers"] == 0
+    assert antigravity["audit"]["p1_findings"] == 0
+    assert antigravity["audit"]["p2_findings"] == 0
+    assert set(antigravity["zero_effects"].values()) == {0}
     assert receipt["qualification"]["action_free_preflight_executed"] is False
     assert receipt["qualification"]["model_scoring_available_in_runner"] is False
     assert receipt["qualification"]["route_metrics_are_aggregate_only"] is True
@@ -1759,12 +1773,13 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no live authority" in encoded
     assert "candidate 0" in encoded
     assert "runner published" in encoded
-    assert "Antigravity + preflight next" in encoded
-    assert "c3e07d26" in encoded
-    assert "32470280542/1" in encoded
+    assert "Antigravity GO" in encoded
+    assert "invocation freeze + preflight next" in encoded
+    assert "347f954d" in encoded
+    assert "32471913419/1" in encoded
     assert "rows 2" in encoded
     assert "audits GO" in encoded
-    assert "Antigravity pending" in encoded
+    assert "Antigravity GO" in encoded
     assert "8d559d23" in encoded
     assert "32458785817/1" in encoded
     assert "prediction/claim/action/frame 0" in encoded
