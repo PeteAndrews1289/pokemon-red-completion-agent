@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-21 comparison execution reorientation is active:** Main
+> **2026-08-21 V2 comparison completed; Red observation-adapter work is active:** Main
+> `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
+> [comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+> (SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+> records **CANDIDATE 4/4 · BASELINE 2/4 · CE 0.206/0.693 · WINNER P 0.815/0.500 · ROW
+> DISCLOSURE 0 · CLAIM CONSUMED · RETRY 0 · ANTIGRAVITY GO · P0/P1 0**.
+>
+> Codex owns only `red-living-dex-dependency-observation-adapter-v1`: a public/synthetic bridge
+> from existing typed Red collection/catalog evidence to identity-free dependency rows.
+> Antigravity reviews chain/branch semantics and leakage; Claude remains unavailable. No agent owns
+> ROM/private/claim access, prediction, action, refit, another comparison, Crystal, promotion,
+> completion, or transfer. Boards are **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 comparison execution reorientation was active:** Main
 > `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
 > [execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
 > (SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Completed exactly one no-retry V2 held-out dependency comparison at published main
+  `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` under green CI `32449287128/1`. The
+  [aggregate result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+  (SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+  records candidate 4/4 versus baseline 2/4, cross-entropy 0.205636 versus 0.693147, mean winner
+  probability 0.814787 versus 0.5, zero row disclosure, consumed claim, and durable result/terminal
+  records. Added exactly one synthetic rootless and one global unseen comparison; all other
+  counters remain unchanged. Activated a bounded public/synthetic Red observation adapter over
+  existing collection/catalog types; this is descriptive synthetic evidence, not gameplay,
+  authority, completion, or transfer.
+
 - Published the one-shot V2 comparison runner at main
   `96ef8a1bd105e399963ec8656f3a81cb850742b9` under green CI `32447962527/1`, with exact
   fit joins, durable claim-before-open, exactly four committed rows, aggregate-only output, and

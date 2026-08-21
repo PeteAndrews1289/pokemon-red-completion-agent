@@ -12,7 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: comparison runner published; one exact-head comparison is active
+## 2026-08-21: V2 comparison passed descriptively; narrow Red adapter is active
+
+Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
+[comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+(SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+records candidate **4/4** versus baseline **2/4**, cross-entropy **0.205636** versus **0.693147**,
+mean winner probability **0.814787** versus **0.5**, zero row disclosure, one consumed claim, and
+no retry. Antigravity returned result/reorientation GO with no P0/P1 blocker.
+
+Codex now owns `red-living-dex-dependency-observation-adapter-v1`: build only the deterministic,
+identity-free bridge from existing Red collection/catalog types to the validated dependency
+features, with public fixtures covering scarce, duplicate-ready, chain, branch, item-gated, and
+complete states. No ROM/private/claim access, prediction, action, fit, comparison, Crystal, or
+authority work is owned. Boards are **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: comparison runner published; one exact-head comparison was active
 
 Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
 [execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)

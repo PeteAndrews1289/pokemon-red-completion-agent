@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the exam mechanism is ready, and the next opening is final
+## Current checkpoint: the abstract student passed; now translate the real world correctly
+
+At main `90288f57` under CI `32449287128/1`, the four sealed answers finally opened once. The
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+shows the candidate choosing correctly on all four while the neutral baseline got two. Its loss
+dropped from 0.693 to 0.206, its confidence in the winner rose from 0.500 to 0.815, and no hidden
+row appeared in public. The claim is consumed forever. Antigravity approved the result and its
+modest interpretation.
+
+This is a small but real learning result: the model captured “preserve the only precursor; evolve
+the duplicate.” It is not yet playing Pokémon. The next scene does not rebuild Red's mature memory
+reader. It translates the collection census and cartridge evolution graph already in the project
+into the same anonymous numbers the model learned, proving chain and branch demand without leaking
+species or routes. Only after that bridge works can the model observe one real Red decision in
+shadow.
+
+## Previous checkpoint: the exam mechanism was ready, and the next opening was final
 
 Main `96ef8a1b` passed CI `32447962527/1` with the complete one-shot comparison mechanism. The
 [execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)

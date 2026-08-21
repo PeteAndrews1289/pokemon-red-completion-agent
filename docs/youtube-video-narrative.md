@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: publish the decision, then open the exam exactly once
+## August 21 scene: four sealed answers, one real positive signal
+
+Open on **MAIN 90288F57 · CI 32449287128/1 GREEN · CLAIM CONSUMED · RETRY 0**. Reveal only the
+scoreboard: **CANDIDATE 4/4 · BASELINE 2/4 · CE 0.206 VS 0.693 · WINNER P 0.815 VS 0.500 ·
+ROWS DISCLOSED 0**. Link the
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+with **SHA-256 2A722D72…C3D4C7** and stamp **ANTIGRAVITY GO · DESCRIPTIVE ONLY**.
+
+Move directly to **EXISTING RED COLLECTION CENSUS + CARTRIDGE EVOLUTION GRAPH → ANONYMOUS
+DEPENDENCY COUNTS → LEAKAGE TESTS → SHADOW DECISION LATER**. Explain the distinction: the model
+has learned a small reusable preserve-versus-evolve rule, but it has not yet read a live Red state,
+pressed a button, finished a story, built a living Pokédex, or transferred to Crystal.
+
+## Previous August 21 scene: publish the decision, then open the exam exactly once
 
 Open on **MAIN 96EF8A1B · CI 32447962527/1 GREEN · RUNNER QUALIFIED · ANTIGRAVITY GO**. Show
 **4 ENVELOPES INTACT → PAYLOAD OPEN 0 → CLAIM ED906F06 UNUSED**, then stamp the old source
