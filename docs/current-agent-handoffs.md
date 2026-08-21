@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns exactly one metadata-only V2 comparison preflight
+## Current override: Codex owns public/synthetic V2 comparison-runner qualification
+
+Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+(SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+records one authenticated fit bundle, four authenticated sealed manifests, zero payload opens or
+decodes, unused comparison claim `ed906f06…e0583`, zero comparison executions, and zero counter
+delta. Antigravity returned GO with no P0/P1 blocker; Claude remains unavailable and is not a
+blocker.
+
+Codex may perform only
+`rootless-living-dex-dependency-v2-comparison-execution-qualification-v1`: implement and
+mutation-test the one-shot runner with public/synthetic fixtures, obtain Antigravity review,
+publish exact-head green CI, and stop. Do not touch the real private root or claim registry, open
+or decode a real development row, execute comparison, refit, access a ROM/controller, play,
+promote, complete, run Crystal, or claim transfer. Keep **30/15/4/3/0/0**, development
+**14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous override: Codex owned exactly one metadata-only V2 comparison preflight
 
 Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. The
 [compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)

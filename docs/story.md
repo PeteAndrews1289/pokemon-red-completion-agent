@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the clean model is sealed beside the unopened exam
+## Current checkpoint: the doorman checked every seal and left the answers untouched
+
+At main `c0956cc6` under green CI `32445054913/1`, the project ran its one permitted metadata-only
+preflight. The
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+says the clean model, its dataset and terminal, and all four exam envelopes belong to the same
+frozen experiment. No answer opened or decoded, and the one-shot comparison identity remains
+unused. Antigravity returned GO with no high-severity finding.
+
+This scene still contains no score and no gameplay. The next job is to qualify the doorman itself
+on synthetic envelopes: claim before opening, admit exactly four, reveal only the aggregate, keep
+a failure record, and never retry. Only after that code is separately published may a later lane
+consider the real exam. The destination remains story completion and living Pokédexes across
+games; this checkpoint makes one abstract reasoning result trustworthy but does not supply it.
+
+## Previous checkpoint: the clean model is sealed beside the unopened exam
 
 Main `15b2dbcb` passed CI `32443875609/1`, and the project used its one permitted fit identity.
 The

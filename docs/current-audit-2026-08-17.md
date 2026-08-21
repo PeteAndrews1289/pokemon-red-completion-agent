@@ -1,6 +1,24 @@
-# Current audit — 2026-08-20
+# Current audit — 2026-08-21
 
-## Current result: clean V2 compliance fit completed once
+## Current result: V2 metadata-only comparison preflight passed once
+
+Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI run `32445054913`
+attempt 1. The
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+(SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+authenticates the exact fit, model, dataset, executable, manifest, and terminal pins plus four
+sealed development manifests. Development payloads opened/decoded are zero. Comparison claim
+`ed906f06…e0583` remains unconsumed, and no comparison ran. Antigravity returned GO with no P0/P1
+blocker.
+
+Counters remain legacy **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless
+**8/8/1/0**. Active
+`rootless-living-dex-dependency-v2-comparison-execution-qualification-v1` permits public and
+synthetic implementation/mutation testing only. It does not authorize real private access, claim
+consumption, development decode, comparison execution, refit, gameplay, authority, Crystal,
+completion, or transfer.
+
+## Previous result: clean V2 compliance fit completed once
 
 Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI run `32443875609`
 attempt 1. The

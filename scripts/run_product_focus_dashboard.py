@@ -138,20 +138,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The clean V2 replacement fit is complete with zero new-learning credit. One "
-            "metadata-only comparison preflight may bind it to four sealed openings; comparison "
-            "execution remains closed."
+            "The metadata-only comparison preflight passed: four answers remain sealed and the "
+            "identity is unused. Public and synthetic runner qualification is next; real "
+            "comparison execution remains closed."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Rootless · clean fit ready · comparison preflight next",
+        location="Rootless · comparison preflight passed · runner qualification next",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V2 model a42db642 · four fresh V2 openings sealed and undisclosed"
+                "V2 model a42db642 · claim ed906f06 unused · four openings sealed"
             ),
             choice=(
-                "Authenticate one comparison identity metadata-only; do not open or compare"
+                "Qualify claim-before-open and aggregate-only runner on synthetic fixtures"
             ),
             decisions=0,
             teacher_queries=0,
@@ -188,10 +188,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             (
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
-                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} "
-                "counted/evaluation-ineligible · comparisons "
-                f"{synthetic_unseen_comparisons} · clean V2 fit zero-credit · openings 4 "
-                "sealed · comparison preflight next"
+                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} counted/ineligible · "
+                f"comparisons {synthetic_unseen_comparisons} · V2 openings 4 sealed · "
+                "preflight pass · runner qualification next"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -218,9 +217,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Clean V2 fit · main 15b2dbcb · CI 32443875609/1 · fit c544fa92 · "
-                "model a42db642 · dev payload opens 0 · counter delta 0 · comparison "
-                "preflight next"
+                "V2 comparison preflight · main c0956cc6 · CI 32445054913/1 · manifest "
+                "583050da · fit/model joined · openings 0/4 · claim unused · comparison 0 · "
+                "counter delta 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

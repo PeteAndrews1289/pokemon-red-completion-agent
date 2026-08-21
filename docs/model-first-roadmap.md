@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: clean V2 fit complete; preflight the sealed comparison
+## Current checkpoint: sealed comparison preflight passed; qualify the runner publicly
+
+Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+(SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+binds manifest `583050da…f423d1`, the exact clean fit bundle, four sealed manifests, and unused
+comparison identity `ed906f06…e0583`. Development payloads opened/decoded, comparison executions,
+and all counter deltas are zero. Antigravity returned GO with no P0/P1 blocker.
+
+Active `rootless-living-dex-dependency-v2-comparison-execution-qualification-v1` implements only
+the public/synthetic runner boundary: authenticate every fit pin, durably claim before opening,
+open exactly four committed rows, compute the frozen aggregate without publishing rows, retain a
+durable terminal on every claimed path, and never retry. Mutation-test it, obtain Antigravity
+review, publish exact-head green CI, then stop. No real private access, development decode,
+comparison execution, refit, ROM/controller input, gameplay, Crystal, completion, authority, or
+transfer is permitted.
+
+## Previous checkpoint: clean V2 fit complete; preflight the sealed comparison
 
 Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. The
 [compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)

@@ -1,0 +1,94 @@
+{
+  "antigravity_review": {
+    "development_payloads_or_private_claims_accessed_during_review": false,
+    "p0_or_p1_blockers": 0,
+    "proposed_next_lane": "public_synthetic_one_shot_comparison_runner_qualification",
+    "scope": "public_preflight_semantics_claim_boundary_counter_treatment_and_next_lane",
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "One exact source-bound V2 comparison preflight authenticated the clean fit bundle and four sealed development manifests without opening or decoding a development payload, and the comparison identity remained unused.",
+    "unsupported": "This preflight is not a comparison execution or result, unseen evidence, model improvement, gameplay, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "comparison": {
+    "comparison_claim_consumed": false,
+    "comparison_claim_sha256": "ed906f0660381b5420777d9a4890e1137ef824f9c001bb68db9b1294c2be0583",
+    "comparison_execution_identity_sha256": "34e741cbfd192eb7019a83042a854179c9260487bb41f36dac74746ba8a95e25",
+    "comparison_execution_supported_by_current_runner": false,
+    "development_manifest_rows_authenticated": 4,
+    "development_payloads_decoded": 0,
+    "development_payloads_opened": 0,
+    "fit_bundle_authenticated": true,
+    "status": "ready_identity_unclaimed"
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design": {
+    "design_document_sha256": "4c614c71344ef94a894f3a7866d4b3d9d5ec6e32e98f7994be1d88ea533cd5bb",
+    "design_sha256": "1cf7423f59b5c10a7b76199c35cc3fc1d3742edd17127e371bf1e12ecb42d74b",
+    "development_roster_sha256": "68d704876bd0b3a6b728722e44dda5bf258ac47053ad34b1548c27d781c764c1"
+  },
+  "execution_manifest": {
+    "execution_manifest_sha256": "583050da59fff94f3bcba6018533fa1eb77b94cd6754d2775b71a75bfcf423d1",
+    "operation": "comparison-preflight",
+    "private_input_role_count": 4,
+    "public_binding_count": 11,
+    "runner_sha256": "f721c9f7ed38c19c5ed12458f9449de9f33df11d8572a567c6949bd91d7bc320",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "semantic_binding_count": 12,
+    "source_bundle_sha256": "06d6428378dedb2d46381672fb79fa181204ec7df263624d028c35cf683d9f14"
+  },
+  "fit_bundle": {
+    "executable_bundle_sha256": "c6bd856ca0bc9d807dbf17bbb968eb7ffe86c40fcac35b8bbe49d8159b964861",
+    "fit_claim_sha256": "eaf6bcb37e328a331f285a39c7d68c46d379b862642042b41efc684053730747",
+    "fit_execution_identity_sha256": "9607a7238684b43def782c1d3cd401bcba8f78a322ab55093bd68e3f68a04d4d",
+    "fit_execution_manifest_sha256": "5a38225da79d06eec876507b5255aa68c0cb286c9f13d01534a5e8285692ff1a",
+    "fit_manifest_record_sha256": "1696e37c44b5a10b81c194a0816b35def463baa1a61b05c80da2e8c897fbbf36",
+    "fit_record_sha256": "ea56c85643614202bee0e1f4a911817dc8fbb27e871e3f5ffd339083c2cb40b6",
+    "fit_sha256": "c544fa92f0fc9ab51037cb88a79bf2917e112d16f42630d08de6810aa8d4bc3c",
+    "fit_source_commit": "15b2dbcb3cf881e97285c2611703d3c4dbac5206",
+    "fit_terminal_record_sha256": "ccb77998a63b83ff47bce2575a492cefbdc42821cd93aa956a03f6c3f9fc7fa5",
+    "model_sha256": "a42db6420d3ff999a894c8ca54fbca7714509bbe95a2020cf85c9cee195f6582",
+    "train_dataset_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32445054913,
+    "source_commit": "c0956cc634a56f4851102f9bc259e44d112532e8"
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.core.rootless-living-dex-dependency-comparison-preflight-result.v2",
+  "status": "ready_identity_unclaimed_development_remains_sealed",
+  "title_role": "Synthetic evaluation-readiness artifact; not comparison, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "comparison_claims_consumed": 0,
+    "comparison_executions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_evaluation_payloads_decoded": 0,
+    "development_evaluation_payloads_opened": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}
