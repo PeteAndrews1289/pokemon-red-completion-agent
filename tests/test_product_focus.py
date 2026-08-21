@@ -159,6 +159,11 @@ RED_DUAL_CAPABILITY_RUNTIME_QUALIFICATION = (
     / "docs/evidence"
     / "red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json"
 )
+RED_DUAL_CAPABILITY_PREFLIGHT_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -1695,6 +1700,38 @@ def test_red_dual_capability_runtime_qualification_is_counter_neutral() -> None:
     assert set(receipt["zero_effects"].values()) == {0}
 
 
+def test_red_dual_capability_preflight_qualification_is_counter_neutral() -> None:
+    receipt = json.loads(
+        RED_DUAL_CAPABILITY_PREFLIGHT_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "published_preflight_runner_qualified_private_preflight_not_run"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_deselected": 3,
+        "ci_passed": 4603,
+        "ci_run_id": 32470280542,
+        "ci_skipped": 1,
+        "ci_xfailed": 1,
+        "pull_request": 31,
+        "source_commit": "c3e07d261545df03b519f5ba270ff0591e43bbe4",
+    }
+    assert receipt["independent_code_audits"]["mission_verdict"] == "go"
+    assert receipt["independent_code_audits"]["safety_verdict"].startswith("go_")
+    assert receipt["independent_code_audits"]["third_party_antigravity_review"] == (
+        "pending"
+    )
+    assert receipt["qualification"]["action_free_preflight_executed"] is False
+    assert receipt["qualification"]["model_scoring_available_in_runner"] is False
+    assert receipt["qualification"]["route_metrics_are_aggregate_only"] is True
+    assert receipt["qualification"]["one_shot_identity_consumed"] is False
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+
+
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
     snapshot = DASHBOARD["product_focus_dashboard_snapshot"](state)
@@ -1708,7 +1745,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "public dual-capability runtime is qualified" in encoded
+    assert "exact dual-capability preflight runner is published" in encoded
     assert "actions 244/244" in encoded
     assert "same-reset" in encoded
     assert "90288f57" in encoded
@@ -1720,14 +1757,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no retry" in encoded
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
-    assert "authentic preflight candidate 0" in encoded
-    assert "runtime qualified" in encoded
-    assert "scenario preflight next" in encoded
-    assert "c946e8db" in encoded
-    assert "32465536131/1" in encoded
-    assert "direction strings 0" in encoded
-    assert "same-reset roles 2" in encoded
-    assert "Antigravity GO" in encoded
+    assert "candidate 0" in encoded
+    assert "runner published" in encoded
+    assert "Antigravity + preflight next" in encoded
+    assert "c3e07d26" in encoded
+    assert "32470280542/1" in encoded
+    assert "rows 2" in encoded
+    assert "audits GO" in encoded
+    assert "Antigravity pending" in encoded
     assert "8d559d23" in encoded
     assert "32458785817/1" in encoded
     assert "prediction/claim/action/frame 0" in encoded

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published the exact Red dual-capability action-free preflight runner at main
+  `c3e07d261545df03b519f5ba270ff0591e43bbe4` under green CI `32470280542/1`. The
+  [qualification receipt](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+  (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+  binds one fixed Red reset/dependency, manifest-first authentication, semantic traversal,
+  encounter-only capture, exact profile-bound evolution, two identity-free rows, and stable
+  physical-root/scenario identities. It cannot score or act. Main CI passed 4603 tests; independent
+  mission and safety audits returned GO. The external Antigravity review and one exact public
+  invocation freeze remain before the single private preflight. No private input, ROM, prediction,
+  claim write, controller action, frame, outcome, fit, authority, transfer, or learning counter
+  changed.
+
 - Published and qualified the Red dual-capability curriculum runtime at source
   `c946e8dba00ca246d3720b115f81691a1a8cdc91` under green CI `32465536131/1`. The
   [qualification receipt](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)

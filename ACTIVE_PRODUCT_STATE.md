@@ -40,7 +40,7 @@ Not the product:
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Authenticate exactly one preselected nonsealed Red reset as a genuine acquire-versus-evolve scenario by proving, without model scoring or controller input, that semantic venue traversal and bounded evolution are both independently executable from the same state and dependency. |
-| Authority now | The frozen ranker has descriptive synthetic support and the reusable Red dual-capability runtime is qualified, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority now | The frozen ranker has descriptive synthetic support and the exact Red dual-capability preflight runner is published under green CI, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
 | Authority target | Qualify only one authentic action-free Red scenario and its exact two-choice menu. Preflight success grants no prediction, execution, gameplay, completion, or transfer authority. |
 | Transfer test | The preflight must prove that title-specific traversal and species bindings stay behind private capability interfaces while the model-visible menu contains only retained multiplicity, unresolved dependency demand, availability, and collection-transition semantics. |
 | Cheapest falsifier | Run one manifest-pinned, action-free preflight over the first prospectively frozen eligible context. Require one reset identity, the exact two identity-free rows, a semantic route plan, sufficient capture resources, and an executable evolution offer; any mismatch closes the context without substitution or route repair. |
@@ -57,18 +57,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-dual-capability-runtime-qualified-preflight-next** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+**2026-08-21-dual-capability-preflight-runner-qualified** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The reusable capability seam is finished. Proving that one real Red state can expose both choices is now the shortest honest path to the first model-selected, collection-verified acquire-versus-evolve gameplay outcome. |
-| Learning output | No new measured learning output. Source c946e8db passed CI 32465536131/1 with 4588 tests. The runtime binds semantic route-based capture and bounded evolution to one reset and dependency, exposes zero identity fields, executes only the selected capability, and derives outcomes from the living ledger; Antigravity returned exact-byte GO with no P0/P1/P2 finding. |
-| Authority delta | No gameplay or transfer authority changed. Runtime qualification used no private input, ROM, model prediction, controller action, frame, teacher query, fit, or learning counter. |
-| Transfer result | Not run. The runtime is title-neutral at the model boundary and keeps Red traversal/species bindings private, but no authentic Red menu or Crystal binding has been produced. |
-| Blocker | The reusable Red runtime is now qualified, but no authentic Red reset has yet demonstrated that acquisition and evolution are jointly available under the exact title-neutral menu. |
-| Decision | Retire the implementation lane and qualify exactly one action-free, prospectively selected Red scenario. Do not score the model, claim an outcome, or send controller input in this lane. |
-| Next session | Publish and run exactly one action-free preflight over one prospectively frozen nonsealed Red context, with no model score, claim, controller input, frame advance, context substitution, route patch, fit, Crystal, or promotion. |
-| Next falsifier | Implement a manifest-first preflight that selects one context before scoring, authenticates its reset, semantic route, capture readiness, evolution readiness, exact two-row menu, and unused identity, and then terminates with predictions/actions/frames zero. |
+| Product alignment | The preflight engineering gate is now published. One authentic same-reset feasibility result is the shortest remaining bridge from synthetic dependency ranking to the first model-selected, collection-verified Red gameplay outcome. |
+| Learning output | No new measured learning output. Source c3e07d26 passed CI 32470280542/1 with 4603 tests. The manifest-first runner fixes one Red reset and dependency, binds a stable physical root and semantic scenario, requires semantic traversal plus encounter-only capture and exact evolution, exposes two anonymous rows, and cannot score or act. |
+| Authority delta | No gameplay or transfer authority changed. Runner publication and review used no private input, ROM, model prediction, controller action, frame, teacher query, fit, claim write, or learning counter. |
+| Transfer result | Not run. The runner keeps Red traversal, venue, species, and skill identity behind private bindings and exposes only two title-neutral rows, but no authentic Red menu or Crystal binding has yet been produced. |
+| Blocker | The exact preflight runner is published and green, but the external Antigravity audit and exact public invocation freeze remain before the one allowed private action-free preflight. |
+| Decision | Keep this lane active: obtain final Antigravity exact-byte review, freeze the exact public invocation, and run exactly one action-free preflight. Do not score the model, claim an outcome, or send controller input. |
+| Next session | Complete the external exact-byte audit, freeze the public invocation, and run exactly one action-free preflight over the fixed nonsealed Red context; stop immediately after its result with no score, claim write, controller input, frame advance, substitution, route patch, fit, Crystal, or promotion. |
+| Next falsifier | Authenticate the frozen public invocation, then run one action-free preflight that verifies the fixed reset, semantic route, capture resources, exact evolution offer, two-row menu, and unused physical root while predictions, actions, frames, and claim writes remain zero. |
 | Stop condition | Stop after the first action-free result. Any missing capability, reset drift, route mismatch, identity leak, prediction, action, frame advance, or need for substitution closes the context and this lane. |
 
 ### Stop conditions

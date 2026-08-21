@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: build two real tools, then stop before the choice
+## August 21 scene: publish the silent inspector, then open one classroom
+
+Open on **MAIN C3E07D26 · CI 32470280542/1 GREEN · 4603 PASSED · ACTION-FREE PREFLIGHT RUNNER
+PUBLISHED**. Animate **PUBLIC MANIFEST → ONE FIXED RED RESET → SEMANTIC DIGLETT'S CAVE ROUTE →
+ENCOUNTER-ONLY CAPTURE** beside **EXACT PROFILE-BOUND DIGLETT→DUGTRIO EVOLUTION**, joining at
+**TWO ANONYMOUS ROWS**. Link the
+[preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+with **SHA-256 CE285560…051F**.
+
+Stamp **MODEL SCORE 0 · CLAIM WRITE 0 · BUTTONS 0 · FRAMES 0 · COUNTERS UNCHANGED · INTERNAL
+AUDITS GO · ANTIGRAVITY PENDING**. Explain that route steps and cost are aggregate plan metrics,
+not a direction script. The next rail is **EXTERNAL EXACT-BYTE REVIEW → FREEZE ONE PUBLIC
+INVOCATION → RUN ONE SILENT PREFLIGHT → STOP/REORIENT**. A pass opens a separately frozen
+one-decision gameplay experiment; it does not itself prove learned play or living-Pokédex ability.
+
+## Previous August 21 scene: build two real tools, then stop before the choice
 
 Open on **SOURCE C946E8DB · CI 32465536131/1 GREEN · 4588 PASSED · DUAL-CAPABILITY RUNTIME
 QUALIFIED**. Animate **SEMANTIC ROUTE → MEASURED CAPTURE VENUE** beside **BOUNDED EVOLUTION**,

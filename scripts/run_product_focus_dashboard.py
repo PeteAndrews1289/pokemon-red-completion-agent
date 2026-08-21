@@ -141,9 +141,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The public dual-capability runtime is qualified. Next is one action-free, "
-            "same-reset Red scenario preflight; model score, controller action, and frame "
-            "advancement remain closed in this lane."
+            "The exact dual-capability preflight runner is published and green. Next is the "
+            "external audit, one public invocation freeze, and one action-free same-reset Red "
+            "inspection; model score, claim write, action, and frame remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
@@ -195,8 +195,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} ineligible · "
-                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · authentic "
-                "preflight candidate 0 · runtime qualified · scenario preflight next"
+                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · candidate 0 · "
+                "runner published · Antigravity + preflight next"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),
@@ -218,9 +218,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Dual-capability runtime · c946e8db · CI 32465536131/1 · semantic route · "
-                "same-reset roles 2 · direction strings 0 · prediction/action 0 · "
-                "Antigravity GO"
+                "Preflight · c3e07d26 · CI 32470280542/1 · 4603 passed · manifest first · "
+                "fixed reset · semantic route · rows 2 · prediction/action/frame 0 · audits GO · "
+                "Antigravity pending"
             ),
             (
                 "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"

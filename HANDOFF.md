@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: dual-capability runtime qualified; one action-free scenario preflight is active
+## 2026-08-21: exact dual-capability preflight runner published; one silent inspection remains
+
+Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
+4603 tests, one skip, three deselections, and one expected failure. The
+[preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+binds manifest-first access, the fixed `red-goal-v1-032-evolve_species-train-05` reset,
+Diglett's Cave semantic traversal, encounter-only capture, the exact profile/config-bound
+Diglett-to-Dugtrio evolution offer, two anonymous policy rows, and stable physical-root plus
+semantic-scenario identities. The runner contains no scoring path. Route counts are aggregate
+plan metrics, not controller directions. Independent mission and safety audits returned GO;
+Antigravity's requested exact-byte review remains pending.
+
+Codex owns only the remaining boundary of
+`red-dual-capability-action-free-scenario-preflight-v1`: obtain Antigravity review, freeze one
+exact public invocation, run one action-free preflight, and reorient immediately. No score, claim
+write, controller input, frame, substitution, route patch, fit, Crystal, or promotion is allowed.
+Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous 2026-08-21 checkpoint: dual-capability runtime qualified; one action-free scenario preflight was active
 
 Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
 4588 tests, one skip, three deselections, and one expected failure. The

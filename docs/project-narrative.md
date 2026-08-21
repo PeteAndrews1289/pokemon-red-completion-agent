@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the semantic Red dual-capability runtime qualified
+## August 21: the exact Red dual-capability preflight runner published
+
+Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
+4603 tests. The
+[preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+joins the public curriculum to one fixed nonsealed Red reset without opening it during
+qualification. It authenticates its public manifest first, requires semantic Diglett's Cave
+traversal, encounter-only capture mechanics, the exact profile/config-bound evolution offer, two
+anonymous policy rows, and stable code-independent root plus semantic-scenario identities. It has
+no scoring or controller path; route step/cost values are aggregate plan metrics only.
+
+Independent mission and safety audits returned GO. The requested Antigravity review, one exact
+public invocation freeze, and one action-free private preflight remain. This publication changed no
+learning or authority counter. A preflight pass would permit only a separate one-decision shadow
+outcome—not a claim that the model can play Red, complete a living Pokédex, or transfer to Crystal.
+
+## Previous August 21 checkpoint: the semantic Red dual-capability runtime qualified
 
 Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
 4588 tests. The

@@ -5,7 +5,21 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE C946E8DB · CI 32465536131/1 GREEN · 4588 PASSED · RUNTIME
+> **Current rail:** Show **MAIN C3E07D26 · CI 32470280542/1 GREEN · 4603 PASSED · PREFLIGHT
+> RUNNER PUBLISHED · MANIFEST FIRST · FIXED RESET/DEPENDENCY · SEMANTIC ROUTE · ENCOUNTER-ONLY
+> CAPTURE · EXACT WRAPPED EVOLUTION · ANONYMOUS ROWS 2 · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0 ·
+> INTERNAL AUDITS GO · ANTIGRAVITY PENDING**. Link the
+> [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+> and show **SHA-256 CE285560…051F**.
+>
+> Display active `red-dual-capability-action-free-scenario-preflight-v1`. Active rail:
+> **ANTIGRAVITY EXACT-BYTE REVIEW → FREEZE EXACT PUBLIC INVOCATION → OPEN ONE FIXED NONSEALED
+> RESET ACTION-FREE → AUTHENTICATE ROUTE/CAPTURE/EVOLUTION/TWO-ROW MENU/UNUSED ROOT → STOP**.
+> Show that route steps/cost are aggregate metrics, not directions. No substitution or repair.
+> Show **PREDICTION/CLAIM-WRITE/ACTION/FRAME/FIT/CRYSTAL/AUTHORITY 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **SOURCE C946E8DB · CI 32465536131/1 GREEN · 4588 PASSED · RUNTIME
 > QUALIFIED · SEMANTIC ROUTE · SAME-RESET ROLES 2 · DIRECTION/POLICY IDENTITY 0 · SELECTED
 > BINDING ONLY · EXACT LEDGER OUTCOME · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
 > [runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
