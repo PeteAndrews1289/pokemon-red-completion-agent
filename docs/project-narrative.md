@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the fresh V2 dependency-evaluation design passed
+## August 20: the fresh V2 evaluation implementation passed
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. Its
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+(SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+binds manifest-only inventory, an exact private-store identity, no-replacement provisioning,
+claim-before-fit, strict fit/model/dataset/manifest/terminal joins, and
+claim-before-development-open. Antigravity returned exact-delta GO with no P0/P1 blocker. Local
+validation passed 4,511 tests and exact-head CI passed 4,510.
+
+The implementation run produced no private opening, parameter update, held-out comparison, ROM or
+controller action, authority, or transfer result. Active
+`rootless-living-dex-dependency-v2-private-provisioning-v1` now permits one action-free preflight
+and, only on a pass, one four-opening provision before stopping. This is an intermediary that makes
+a later acquire-versus-evolve test scientifically usable; it is not evidence of story completion,
+living-Pokédex competence, or cross-game play.
+
+## Previous August 20 checkpoint: the fresh V2 dependency-evaluation design passed
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. Its
 [design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)

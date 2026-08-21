@@ -1,0 +1,115 @@
+{
+  "antigravity_review": {
+    "exact_delta": {
+      "exact_source_commit": "26e353bee5d96b98c54244845f9a7457b726f842",
+      "p0_or_p1_blockers": 0,
+      "private_or_runtime_execution_during_review": false,
+      "scope": "private_store_binding_claim_state_and_stop_boundary",
+      "verdict": "go"
+    },
+    "implementation": {
+      "p0_or_p1_blockers": 0,
+      "private_or_runtime_execution_during_review": false,
+      "verdict": "go"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published public source implements and adversarially qualifies one V1-disjoint V2 provisioner, payload-blind fit inventory, claim-before-fit bundle publisher and exact loader, and comparison preflight whose development records remain unopened.",
+    "unsupported": "This qualification is not private opening provision, a model fit, development-payload disclosure, a held-out comparison, gameplay, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "collection_registry_sha256": "5b31e0be4fab6896d5b850fe2d54283649cba783a09636e7391b31c56b3f9255",
+    "comparison_module_sha256": "abb542b2bfed2ba9da5af28aff1f58e94f428ef98aa36084e744ec1b1cd9903a",
+    "fit_runner_sha256": "f721c9f7ed38c19c5ed12458f9449de9f33df11d8572a567c6949bd91d7bc320",
+    "goal_manager_registry_sha256": "1f93133aea17f1b885a6a0dbff34d4ffb5dfff75c22680a67edc124539f783ac",
+    "integrity_module_sha256": "3af18701514237427fe1004ce55db039f5970e26fd5c82e48bb463fe967469df",
+    "provision_module_sha256": "58c21ab4cf403cb6f12d4b0a04188aff7bd611685a2246d36ce5639fe8caf5ff",
+    "provision_runner_sha256": "0ecd8d438cd71e092dcfd337294b10ba4b523f2c18b7048e7a8b3333664b8569",
+    "ranker_module_sha256": "d209526b85220cb1b55d42e9d88a022ff48fbf06476d3ed94192d1396c2e2b4c",
+    "source_bundle_sha256": "06d6428378dedb2d46381672fb79fa181204ec7df263624d028c35cf683d9f14",
+    "strategic_navigation_registry_sha256": "4d6fe8d8017ec5588645ec1ef26240612eb4d13f92e1c9995aa6b9d09104a3bf"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32442269879,
+    "source_commit": "26e353bee5d96b98c54244845f9a7457b726f842"
+  },
+  "qualification": {
+    "comparison_preflight": {
+      "comparison_claim_consumed": false,
+      "development_payloads_decoded": 0,
+      "development_payloads_opened": 0,
+      "exact_external_fit_bundle_join_required": true,
+      "global_claim_required_before_future_payload_open": true,
+      "same_process_fit_and_comparison_available": false
+    },
+    "fit": {
+      "claim_before_optimizer_required": true,
+      "completed_compliance_refit_counter_delta": 0,
+      "development_manifest_rows": 4,
+      "development_payloads_decoded": 0,
+      "development_payloads_opened": 0,
+      "distinct_postclaim_failure_terminal": true,
+      "uncertain_claim_state_disclosed": true
+    },
+    "provisioning": {
+      "committed_nonce_bits_per_opening": 256,
+      "exact_private_store_bound_into_execution_identity": true,
+      "fresh_openings_per_plan": 4,
+      "local_plan_must_be_absent_before_first_claim": true,
+      "replacement_allowed": false,
+      "resume_against_another_private_store_rejected": true,
+      "structure_count_domain_inclusive": [
+        17,
+        10000
+      ]
+    },
+    "tests": {
+      "ci_deselected": 3,
+      "ci_expected_failures": 1,
+      "ci_passed": 4510,
+      "ci_skipped": 1,
+      "local_expected_failures": 1,
+      "local_passed": 4511,
+      "local_skipped": 3
+    }
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-fresh-evaluation-implementation-qualification.v2",
+  "status": "fresh_v2_public_evaluation_implementation_published_and_qualified",
+  "title_role": "Synthetic evaluation-implementation maintenance; not learning, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_opening_payloads_accessed": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "private_openings_provisioned": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

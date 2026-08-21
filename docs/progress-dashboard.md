@@ -5,7 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 5ADE045 · CI 32437096447/1 GREEN · LOCAL 4,471 PASS · CI 4,470
+> **Current rail:** Show **SOURCE 26E353B · CI 32442269879/1 GREEN · LOCAL 4,511 PASS · CI 4,510
+> PASS · V2 IMPLEMENTATION QUALIFIED · PAYLOAD-BLIND INVENTORY · PRIVATE STORE BOUND ·
+> NO-REPLACEMENT PROVISION · CLAIM BEFORE FIT/DEV OPEN · EXACT BUNDLE JOIN · UNCERTAIN CLAIM
+> STATE HONEST · ANTIGRAVITY GO · P0/P1 0**. Link the
+> [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+> and show **SHA-256 C5702DC0…98AF63**.
+>
+> Display active `rootless-living-dex-dependency-v2-private-provisioning-v1`. Active rail:
+> **FREEZE EXACT PROVISION MANIFEST → ACTION-FREE STORE-BOUND PREFLIGHT → IF PASS, PROVISION 4
+> SEALED OPENINGS ONCE → TERMINAL → STOP BEFORE FIT**. Show **OPENINGS PROVISIONED 0 · FIT +0 ·
+> DEV DECODE 0 · COMPARISON +0 · GAMEPLAY/AUTHORITY/TRANSFER 0**. Hold **30/15/4/3/0/0 ·
+> 14/4/0/1/1 · ROOTLESS 8/8/1/0**.
+>
+> **Previous rail:** Show **SOURCE 5ADE045 · CI 32437096447/1 GREEN · LOCAL 4,471 PASS · CI 4,470
 > PASS · V2 BLUEPRINT 964248F1 · COMMITMENTS 4 · PRIVATE NONCE 256 BIT · NUMERIC SUPPORT
 > 17..10000 · V1 REUSE 0 · FIT/COMPARE CLAIMS SEPARATE · COMPLIANCE REFIT COUNTER +0 ·
 > ANTIGRAVITY PRE/POST GO · P0/P1 0**. Link the

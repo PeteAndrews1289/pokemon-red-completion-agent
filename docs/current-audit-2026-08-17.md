@@ -1,6 +1,24 @@
 # Current audit — 2026-08-20
 
-## Current result: fresh V2 public design qualified
+## Current result: fresh V2 implementation qualified
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI run `32442269879`
+attempt 1. The
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+(SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+records a payload-blind inventory path, exact private-store binding, no-replacement provisioning,
+claim-before-fit and claim-before-development-open ordering, strict fit/model/dataset/manifest/
+terminal joins, and honest uncertain-claim reporting. Antigravity returned exact-delta GO with no
+P0/P1 blocker. Local validation passed 4,511 tests; exact-head CI passed 4,510 non-integration
+tests.
+
+No opening was provisioned, no fit or comparison ran, and no ROM, controller, gameplay,
+authority, or transfer effect occurred. Counters remain legacy **30/15/4/3/0/0**, development
+**14/4/0/1/1**, and rootless **8/8/1/0**. Active
+`rootless-living-dex-dependency-v2-private-provisioning-v1` permits one action-free preflight and,
+only after a pass, one provision. It stops before fitting or development decode.
+
+## Previous result: fresh V2 public design qualified
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI run `32437096447`
 attempt 1. The

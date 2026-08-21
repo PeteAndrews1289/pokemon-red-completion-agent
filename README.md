@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): fresh V2 design is qualified; implementation
+> **Current product focus (August 20, 2026): fresh V2 implementation is qualified; provision
+> exactly once if its read-only gate passes.** Exact source
+> `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
+> [implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+> (SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+> records **PAYLOAD-BLIND INVENTORY · EXACT PRIVATE-STORE BINDING · NO-REPLACEMENT PROVISION ·
+> CLAIM BEFORE FIT · EXACT FIT-BUNDLE JOIN · CLAIM BEFORE DEVELOPMENT OPEN · UNCERTAIN CLAIM
+> STATE DISCLOSED · ANTIGRAVITY GO · P0/P1 0**. Local validation passed 4,511 tests;
+> exact-head CI passed 4,510 non-integration tests.
+>
+> Active `rootless-living-dex-dependency-v2-private-provisioning-v1` permits one exact
+> source-bound, store-bound preflight and, only if it passes, one no-replacement provision of four
+> sealed openings. Stop at the first terminal result. Do not fit, decode an opening for
+> evaluation, compare, access a ROM/controller, play Red or Crystal, promote authority, or claim
+> completion/transfer. Boards stay **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless
+> **8/8/1/0**. This supplies clean hidden inputs for a later reasoning test; it is not evidence that
+> the agent can play or complete a game.
+
+> **Previous product focus (August 20, 2026): fresh V2 design was qualified; implementation
 > qualification only.** Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI
 > `32437096447/1`. The
 > [design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)

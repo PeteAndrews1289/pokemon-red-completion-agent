@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: fresh V2 design qualified; qualify its implementation
+## Current checkpoint: fresh V2 implementation qualified; provision exactly once
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+(SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+binds payload-blind inventory, one exact private store, four CSPRNG-backed sealed openings,
+no-replacement provisioning, claim-before-fit, an exact fit-bundle join, and
+claim-before-development-open. Antigravity returned exact-delta GO with no P0/P1 blocker. No
+private opening, fit, comparison, ROM/controller action, gameplay, authority, or transfer occurred;
+all counters remain unchanged.
+
+Active `rootless-living-dex-dependency-v2-private-provisioning-v1` is the cheapest remaining
+falsifier. Freeze one exact provision manifest, verify the source/store/claim/local namespace
+without writing, and run the single provision only after that gate passes. Stop after the first
+terminal result. A success enables a separately reviewed compliance-fit lane; it does not itself
+authorize fitting, development decode, comparison, gameplay, Crystal, completion, or transfer.
+
+## Previous checkpoint: fresh V2 design qualified; qualify its implementation
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. The
 [design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)

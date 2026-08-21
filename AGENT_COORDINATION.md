@@ -1,7 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-20 fresh V2 design qualified; implementation qualification is the highest
-> checkpoint:** Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI
+> **2026-08-20 fresh V2 implementation qualified; one private provision is the highest
+> checkpoint:** Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI
+> `32442269879/1`. The
+> [implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+> (SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+> records **STORE-BOUND NO-REPLACEMENT PROVISION · PAYLOAD-BLIND FIT INVENTORY · CLAIM BEFORE
+> FIT/DEVELOPMENT OPEN · EXACT BUNDLE JOIN · UNCERTAIN CLAIM STATE HONEST · ANTIGRAVITY GO ·
+> P0/P1 0 · COUNTER DELTAS 0**.
+>
+> Codex owns only `rootless-living-dex-dependency-v2-private-provisioning-v1`: one exact
+> action-free preflight and, if it passes, one four-opening provision followed by an immediate
+> stop. Antigravity is the read-only architecture reviewer; Claude remains unavailable. No agent
+> owns a fit, development decode, comparison, ROM/controller action, gameplay, promotion,
+> completion, Crystal, or transfer. Preserve **30/15/4/3/0/0**, development **14/4/0/1/1**, and
+> rootless **8/8/1/0**.
+
+> **Previous checkpoint — 2026-08-20 fresh V2 design qualified; implementation qualification was
+> the highest checkpoint:** Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI
 > `32437096447/1`. The
 > [design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
 > (SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)

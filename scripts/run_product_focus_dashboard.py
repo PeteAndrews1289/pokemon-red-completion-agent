@@ -114,12 +114,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
         "campaign_execution": "execute",
+        "comparison_execution": "compare",
         "consumed_trial_retry": "retry",
         "crystal_execution": "Crystal",
         "development_payload_decode": "dev decode",
         "development_payload_disclosure": "dev disclosure",
         "full_game_replay": "replay",
+        "gameplay_execution": "gameplay",
         "model_fit": "fit",
+        "model_refit": "refit",
         "private_artifact_access": "private artifacts",
         "sealed_red_evaluation": "sealed Red",
         "teacher_route_hardening": "teacher routes",
@@ -135,19 +138,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Fresh V2 public design is qualified: the sealed nonce, identity graph, stage order, "
-            "and honest counters are frozen. Public implementation qualification is active."
+            "Fresh V2 implementation is qualified. One exact store-bound preflight may now "
+            "authorize one no-replacement four-opening provision, followed by a hard stop."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Rootless · V2 design green · implementation qualification only",
+        location="Rootless · V2 implementation green · private provision next",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V1 fit counted 1/evaluation-ineligible · V2 blueprint qualified · no V2 result"
+                "V1 fit counted 1/evaluation-ineligible · V2 openings not yet provisioned"
             ),
             choice=(
-                "Qualify V2 provision/fit/compare seams on synthetic fixtures; no private access"
+                "Preflight one exact bound store; if green, provision four sealed openings once"
             ),
             decisions=0,
             teacher_queries=0,
@@ -186,7 +189,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} "
                 "counted/evaluation-ineligible · comparisons "
-                f"{synthetic_unseen_comparisons} · integrity qualified · V2 design only"
+                f"{synthetic_unseen_comparisons} · V2 implementation qualified · provision next"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -213,8 +216,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Rootless integrity qualified · c0f7894 · CI 32425750185/1 green · payload files "
-                "opened 0 · exact fit join · V2 design only · authority 0"
+                "V2 qualified · 26e353b · CI 32442269879/1 green · store bound · no replacement "
+                "· payload files opened 0 · exact fit join · openings/fit/dev decode/comparison/"
+                "gameplay 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

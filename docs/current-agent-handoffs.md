@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns fresh V2 public implementation qualification
+## Current override: Codex owns exactly one fresh V2 private provision
+
+Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
+[implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+(SHA-256 `c5702dc032d53a6ad217d06f7364f92c892cf5cc884041dde0029f832098af63`)
+records exact private-store binding, no-replacement four-opening provisioning, payload-blind fit
+inventory, claim-before-fit/development-open, exact bundle joins, and honest uncertain claim state.
+Antigravity returned exact-delta GO with no P0/P1 blocker; Claude remains unavailable and is not a
+blocker.
+
+Codex may perform only `rootless-living-dex-dependency-v2-private-provisioning-v1`: freeze the
+exact source-bound manifest, run one action-free preflight, and if it passes provision once. Stop
+at the first terminal result. No fit, evaluation payload decode, comparison, ROM/controller
+action, gameplay, promotion, completion, Crystal, or transfer is owned. Keep **30/15/4/3/0/0**,
+development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous override: Codex owned fresh V2 public implementation qualification
 
 Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. The
 [design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
