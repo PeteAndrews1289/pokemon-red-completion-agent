@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: authenticate the exam without opening an answer
+## August 21 scene: publish the decision, then open the exam exactly once
+
+Open on **MAIN 96EF8A1B · CI 32447962527/1 GREEN · RUNNER QUALIFIED · ANTIGRAVITY GO**. Show
+**4 ENVELOPES INTACT → PAYLOAD OPEN 0 → CLAIM ED906F06 UNUSED**, then stamp the old source
+identity **SUPERSEDED AFTER REORIENTATION**. Link the
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+with **SHA-256 C0784447…C01BAE**.
+
+The next rail is **PUBLISH → NEW EXACT-HEAD PREFLIGHT → CLAIM ONCE → OPEN 4 → AGGREGATE ONLY →
+DURABLE TERMINAL → STOP**. Keep **ROOTLESS 8/8/1/0** until the terminal exists. Say clearly that
+even a successful held-out result demonstrates only a small abstract acquire-versus-evolve rule;
+it does not show gameplay, story completion, a living Pokédex, or Crystal transfer.
+
+## Previous August 21 scene: authenticate the exam without opening an answer
 
 Open on **MAIN C0956CC6 · CI 32445054913/1 GREEN · MANIFEST 583050DA**. Animate
 **MODEL + FIT + DATASET + MANIFEST + TERMINAL JOINED → 4 ENVELOPES AUTHENTICATED → PAYLOAD

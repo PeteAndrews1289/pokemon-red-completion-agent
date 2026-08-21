@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published the one-shot V2 comparison runner at main
+  `96ef8a1bd105e399963ec8656f3a81cb850742b9` under green CI `32447962527/1`, with exact
+  fit joins, durable claim-before-open, exactly four committed rows, aggregate-only output, and
+  durable no-retry terminals. The
+  [execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+  (SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+  records Antigravity implementation/governance GO and a zero-effect metadata preflight over four
+  manifests. That preflight occurred one reorientation early, so its semantic claim remains
+  clean and unused while its source-bound identity is superseded for execution. Activated one
+  exact-head-preflight-then-comparison lane; all counters remain unchanged until a completed
+  aggregate terminal exists.
+
 - Passed exactly one source-bound V2 metadata-only comparison preflight at published main
   `c0956cc634a56f4851102f9bc259e44d112532e8` under green CI `32445054913/1`. The
   [path-free result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)

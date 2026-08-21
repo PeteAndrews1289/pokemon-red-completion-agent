@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-21 comparison preflight passed; public/synthetic runner qualification is the highest
+> **2026-08-21 comparison execution reorientation is active:** Main
+> `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
+> [execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+> (SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+> records **ANTIGRAVITY IMPLEMENTATION/GOVERNANCE GO · P0/P1 0 · MANIFESTS 4/4 · PAYLOAD
+> OPEN/DECODE 0 · CLAIM ED906F06 UNUSED · COUNTER DELTA 0**. The early metadata preflight did
+> not contaminate the test, but identity `64c0916f…e0142e` is superseded for execution.
+>
+> Codex owns exactly `rootless-living-dex-dependency-v2-comparison-execution-v1`: publish this
+> lane, repeat metadata-only preflight at the new exact head, then run one no-retry four-row
+> aggregate comparison and stop. Antigravity audits the exact gate/result; Claude remains
+> unavailable and is not a blocker. No agent owns refit, row disclosure, ROM/controller gameplay,
+> promotion, Crystal, completion, or transfer. Preserve **30/15/4/3/0/0 · 14/4/0/1/1 ·
+> ROOTLESS 8/8/1/0** until a completed terminal exists.
+
+> **Previous checkpoint — 2026-08-21 comparison preflight passed; public/synthetic runner qualification was the highest
 > checkpoint:** Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI
 > `32445054913/1`. The
 > [comparison-preflight result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)

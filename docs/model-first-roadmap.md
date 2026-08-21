@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: sealed comparison preflight passed; qualify the runner publicly
+## Current checkpoint: publish, re-preflight, then run exactly one comparison
+
+Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1` with the complete
+one-shot runner. The
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+(SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+records Antigravity implementation/governance GO, four authenticated manifests, zero payload
+opens/decodes, unused semantic claim `ed906f06…e0583`, and zero counter delta. The 96ef preflight
+was one governance step early; it did not contaminate the sealed rows, but its source-bound
+identity is superseded.
+
+Active `rootless-living-dex-dependency-v2-comparison-execution-v1` has no further engineering
+carousel. Publish this lane, freeze and pass a new exact-head metadata preflight, then claim once,
+open exactly four rows, publish one aggregate and durable terminal, and stop. Pass or fail, do not
+retry, replace, refit, reveal rows, touch gameplay, promote, or open Crystal. A completed result is
+only descriptive held-out evidence for the abstract acquire-versus-evolve rule; it is not
+gameplay, completion, authority, or transfer.
+
+## Previous checkpoint: sealed comparison preflight passed; qualify the runner publicly
 
 Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
 [comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)

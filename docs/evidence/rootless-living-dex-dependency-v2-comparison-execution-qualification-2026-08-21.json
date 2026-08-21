@@ -1,0 +1,110 @@
+{
+  "antigravity_review": {
+    "development_payloads_or_private_claims_accessed_during_review": false,
+    "governance_reorientation_p0_or_p1_blockers": 0,
+    "governance_reorientation_verdict": "go",
+    "implementation_p0_or_p1_blockers": 0,
+    "implementation_verdict": "go",
+    "scope": "published_comparison_runner_exact_head_preflight_claim_boundary_counter_treatment_and_execution_reorientation"
+  },
+  "claim_boundary": {
+    "supported": "Published source 96ef8a1b passed exact-head CI and one metadata-only V2 preflight authenticated the clean fit bundle plus four sealed development manifests while opening and decoding zero payloads and consuming no comparison claim.",
+    "unsupported": "This qualification is not a held-out comparison or score, model improvement, gameplay, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, promotion, or cross-title transfer evidence."
+  },
+  "comparison": {
+    "comparison_claim_consumed": false,
+    "comparison_claim_sha256": "ed906f0660381b5420777d9a4890e1137ef824f9c001bb68db9b1294c2be0583",
+    "comparison_execution_identity_sha256": "64c0916fe307d81045e47f32bafacd306484cf21f7b2b6fb605a8d5643e0142e",
+    "development_manifest_rows_authenticated": 4,
+    "development_payloads_decoded": 0,
+    "development_payloads_opened": 0,
+    "fit_bundle_authenticated": true,
+    "identity_status": "valid_qualification_identity_superseded_for_execution_after_reorientation_commit",
+    "status": "ready_identity_unclaimed"
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design": {
+    "design_document_sha256": "4c614c71344ef94a894f3a7866d4b3d9d5ec6e32e98f7994be1d88ea533cd5bb",
+    "design_sha256": "1cf7423f59b5c10a7b76199c35cc3fc1d3742edd17127e371bf1e12ecb42d74b",
+    "development_roster_sha256": "68d704876bd0b3a6b728722e44dda5bf258ac47053ad34b1548c27d781c764c1"
+  },
+  "execution_manifest": {
+    "execution_manifest_sha256": "917e5f21b63c4ed33018c861533c0fc818e262117c915fb6fb1ef19d40102322",
+    "operation": "comparison-preflight",
+    "private_input_role_count": 4,
+    "public_binding_count": 11,
+    "semantic_binding_count": 15
+  },
+  "fit_bundle": {
+    "executable_bundle_sha256": "c6bd856ca0bc9d807dbf17bbb968eb7ffe86c40fcac35b8bbe49d8159b964861",
+    "fit_claim_sha256": "eaf6bcb37e328a331f285a39c7d68c46d379b862642042b41efc684053730747",
+    "fit_execution_identity_sha256": "9607a7238684b43def782c1d3cd401bcba8f78a322ab55093bd68e3f68a04d4d",
+    "fit_execution_manifest_sha256": "5a38225da79d06eec876507b5255aa68c0cb286c9f13d01534a5e8285692ff1a",
+    "fit_manifest_record_sha256": "1696e37c44b5a10b81c194a0816b35def463baa1a61b05c80da2e8c897fbbf36",
+    "fit_record_sha256": "ea56c85643614202bee0e1f4a911817dc8fbb27e871e3f5ffd339083c2cb40b6",
+    "fit_sha256": "c544fa92f0fc9ab51037cb88a79bf2917e112d16f42630d08de6810aa8d4bc3c",
+    "fit_terminal_record_sha256": "ccb77998a63b83ff47bce2575a492cefbdc42821cd93aa956a03f6c3f9fc7fa5",
+    "model_sha256": "a42db6420d3ff999a894c8ca54fbca7714509bbe95a2020cf85c9cee195f6582",
+    "train_dataset_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba"
+  },
+  "procedural_ordering": {
+    "claim_or_payload_effect": false,
+    "finding": "The metadata-only preflight ran after runner publication but one reorientation earlier than the active product lane permitted.",
+    "remedy": "Track this zero-effect qualification transparently, activate the execution lane, publish that reorientation, then freeze and run a new exact-head preflight before comparison.",
+    "root_or_semantic_claim_invalidation_required": false,
+    "scientific_contamination": false
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32447962527,
+    "source_bundle_sha256": "46c2f7aa73d4d262afde2d8d11e41e3f85759af4af185d299367dfc94c84af29",
+    "source_commit": "96ef8a1bd105e399963ec8656f3a81cb850742b9"
+  },
+  "published_bindings": {
+    "comparison_core_sha256": "aa2b2dfe58b29ab86ab8736d5b322f44dd0450020a58e6cefbb9d86e2293f9b7",
+    "design_core_sha256": "001000571c9931ec1489eebc49b38c8088ca7586e642ffa6a5a95f96d205ca6f",
+    "integrity_core_sha256": "3af18701514237427fe1004ce55db039f5970e26fd5c82e48bb463fe967469df",
+    "manifest_core_sha256": "218bc52bd1a4e6d5546f76770691bbe94f26afaf059974828b3eae13bf238de8",
+    "manifest_freezer_sha256": "2243d8e2c55c4f04f3481f960c6412b1168076929c0c17785523e30919472b7d",
+    "private_store_sha256": "57d823a0a1e75cd946d0ff5caba0f09e21ad03390eedbba11040bbf99d9b0033",
+    "ranker_sha256": "d209526b85220cb1b55d42e9d88a022ff48fbf06476d3ed94192d1396c2e2b4c",
+    "runner_sha256": "c62a6a3252523ba9e1f07d2aac13f3b9ed09e876932128675efadaf028734cbc",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4"
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.core.rootless-living-dex-dependency-comparison-execution-qualification.v2",
+  "status": "qualification_complete_execution_reorientation_required",
+  "title_role": "Synthetic held-out evaluation qualification; not comparison, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "comparison_claims_consumed": 0,
+    "comparison_executions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_evaluation_payloads_decoded": 0,
+    "development_evaluation_payloads_opened": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

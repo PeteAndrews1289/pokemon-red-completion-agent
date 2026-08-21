@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN C0956CC6 · CI 32445054913/1 GREEN · COMPARISON PREFLIGHT PASS ·
+> **Current rail:** Show **MAIN 96EF8A1B · CI 32447962527/1 GREEN · EXECUTION RUNNER
+> QUALIFIED · ANTIGRAVITY GO · MANIFESTS 4/4 · PAYLOAD OPEN/DECODE 0 · SEMANTIC CLAIM
+> ED906F06 UNUSED · 96EF SOURCE IDENTITY SUPERSEDED · COUNTER DELTAS 0**. Link the
+> [execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+> and show **SHA-256 C0784447…C01BAE**.
+>
+> Display active `rootless-living-dex-dependency-v2-comparison-execution-v1`. Active rail:
+> **PUBLISH REORIENTATION → FREEZE NEW EXACT-HEAD IDENTITY → METADATA PREFLIGHT → CLAIM ONCE →
+> OPEN EXACTLY 4 → AGGREGATE ONLY → DURABLE TERMINAL → STOP/NO RETRY**. Hold
+> **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/0** until success. Show
+> **GAMEPLAY/AUTHORITY/CRYSTAL/TRANSFER 0** regardless of the synthetic result.
+>
+> **Previous rail:** Show **MAIN C0956CC6 · CI 32445054913/1 GREEN · COMPARISON PREFLIGHT PASS ·
 > MANIFEST 583050DA · FIT BUNDLE AUTHENTICATED · SEALED MANIFESTS 4/4 · PAYLOAD OPEN/DECODE
 > 0 · CLAIM ED906F06 UNUSED · COMPARISON 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO · P0/P1
 > 0**. Link the

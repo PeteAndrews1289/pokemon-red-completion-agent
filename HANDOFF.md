@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: comparison preflight passed; public runner qualification is active
+## 2026-08-21: comparison runner published; one exact-head comparison is active
+
+Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
+[execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+(SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+records Antigravity implementation and governance GO, four authenticated manifests, zero payload
+opens/decodes, unused semantic claim `ed906f06…e0583`, and zero counter delta. The 96ef metadata
+preflight happened one reorientation early; it remains valid qualification evidence, but its
+source-bound identity `64c0916f…e0142e` is superseded for execution.
+
+Codex owns exactly `rootless-living-dex-dependency-v2-comparison-execution-v1`: publish this
+reorientation, freeze and pass a fresh exact-head metadata preflight, consume the semantic claim
+once, open exactly four committed rows, publish one aggregate plus durable terminal, and stop.
+Never retry or replace, refit, expose rows, touch a ROM/controller, play Red or Crystal, promote,
+or claim completion/transfer. Counters remain **30/15/4/3/0/0**, development
+**14/4/0/1/1**, and rootless **8/8/1/0** until a completed comparison terminal exists.
+
+## Previous checkpoint — 2026-08-21: comparison preflight passed; public runner qualification was active
 
 Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI run `32445054913`
 attempt 1. The

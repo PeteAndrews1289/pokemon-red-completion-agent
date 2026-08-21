@@ -8,36 +8,42 @@
   },
   "lanes": [
     {
-      "capability": "Qualify a source-authenticated one-shot V2 comparison runner on public and synthetic fixtures: exact fit-bundle join, durable claim before payload open, exactly four committed rows, aggregate-only output, and durable no-retry terminal behavior.",
-      "cheapest_falsifier": "Mutation-test the public runner against synthetic stores and claims; stop if any path can open a row before claim, accept a swapped fit or roster, publish row-level data, omit a terminal, retry, or touch real private storage.",
-      "id": "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1",
-      "kind": "maintenance",
+      "capability": "Execute exactly one source-authenticated V2 held-out dependency comparison: claim before opening exactly four committed rows, publish only the frozen aggregate, and retain a durable terminal with no retry.",
+      "cheapest_falsifier": "On a newly published exact head, repeat the metadata-only preflight. Stop before opening any payload if the fit bundle, four commitments, current source, or unused semantic claim fails authentication.",
+      "id": "rootless-living-dex-dependency-v2-comparison-execution-v1",
+      "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. The preflight opened no development payload and produced no comparison, gameplay, completion, Crystal, promotion, or transfer result.",
-        "blocker": "The fit-bound preflight passed and the comparison identity remains unused, but the current V2 runner has no comparison-execution mode. Claim-before-open, aggregate-only publication, and durable terminal behavior therefore require public/synthetic qualification before any private execution.",
-        "decision": "Close the metadata-only preflight lane after exact source c0956cc6 and CI 32445054913/1 authenticated the clean fit, four sealed manifests, and unused comparison identity with zero payload opens. Antigravity returned GO with no P0/P1 blocker. Activate public/synthetic runner qualification only.",
+        "authority_delta": "No authority changed. Published implementation and metadata-only qualification produced no comparison, gameplay, completion, Crystal, promotion, or transfer result.",
+        "blocker": "The 96ef8a1b preflight was scientifically clean but occurred one reorientation early. Its semantic claim remains unused, while its source-bound execution identity is superseded by this reorientation commit and must be refreshed on the newly published exact head.",
+        "decision": "Retire public/synthetic runner qualification after source 96ef8a1b passed CI 32447962527/1 and Antigravity returned implementation and governance GO. Transparently preserve the zero-effect early preflight, activate exactly one comparison execution, and require a fresh exact-head metadata preflight first.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json",
-          "sha256": "d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c"
+          "path": "docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json",
+          "sha256": "c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae"
         },
-        "learning_output": "No new measured learning output. One metadata-only preflight authenticated the clean fit bundle and four sealed manifests, opened and decoded zero development payloads, left the comparison claim unused, and changed no counter.",
-        "next_falsifier": "Stop qualification if synthetic mutation tests cannot prove exact-bundle authentication, durable claim-before-open, exact four-row denominator, aggregate-only output, failure-terminal retention, and permanent no-retry behavior.",
-        "next_session_goal": "Implement and mutation-test the one-shot comparison runner entirely on public and synthetic fixtures, obtain Antigravity review, publish exact-head green CI, and stop before any real private access, claim, payload decode, or comparison execution.",
-        "product_alignment": "A trustworthy unseen acquire-versus-evolve result needs a runner that cannot peek, retry, cherry-pick, or publish hidden rows. This qualifies that reusable evaluation seam without confusing infrastructure with model capability.",
-        "session_id": "2026-08-21-rootless-dependency-v2-comparison-preflight-complete",
+        "learning_output": "No new measured learning output. Source 96ef8a1b passed exact-head CI; its metadata-only preflight authenticated four manifests, opened and decoded zero payloads, consumed no claim, and changed no counter. The execution identity must be refreshed after reorientation.",
+        "next_falsifier": "Publish this reorientation, freeze a new exact-head comparison manifest, and stop if the repeated metadata-only preflight does not authenticate the exact fit, all four commitments, and the still-unused semantic claim with zero payload opens.",
+        "next_session_goal": "Publish the execution lane, pass a fresh exact-head metadata-only preflight, then consume the semantic claim once, open exactly four committed development payloads, publish one aggregate and terminal, and stop.",
+        "product_alignment": "This is the first clean held-out test of a species-neutral acquire-versus-evolve dependency rule needed by a living-Pokedex planner. It evaluates one abstract decision and does not establish gameplay or transfer.",
+        "session_id": "2026-08-21-rootless-dependency-v2-comparison-execution-reorientation",
         "status": "active",
-        "stop_condition": "Stop after public implementation, mutation tests, Antigravity audit, and exact-head green CI. Never access the real private store or claim registry, open a real development payload, execute comparison, refit, access a ROM/controller, promote, or run Crystal.",
-        "transfer_result": "Not run. The metadata-only preflight and synthetic runner qualification contain no title execution or transfer test."
+        "stop_condition": "Stop at the first durable comparison terminal, pass or fail. Never retry, replace an opening, refit, access a ROM/controller, promote authority, run Crystal, or turn this descriptive four-row result into a gameplay or transfer claim.",
+        "transfer_result": "Not run. This held-out synthetic comparison contains no title execution and cannot establish Red gameplay or cross-title transfer."
       },
       "learned_authority": {
-        "current": "Four V2 openings remain sealed; the clean fit bundle is authenticated and comparison identity ed906f06 remains unused. No comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
-        "target": "Qualify the public one-shot comparison runner so a later separately authorized execution may safely consume the frozen identity; implementation qualification grants no learned authority."
+        "current": "Four V2 openings remain sealed and semantic comparison claim ed906f06 remains unused. The 96ef8a1b preflight is valid qualification evidence but its source-bound execution identity is superseded. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
+        "target": "Measure one aggregate held-out synthetic acquire-versus-evolve result. Even a pass grants no gameplay or transfer authority; it only decides whether this abstract dependency representation merits a later real-observation adapter."
       },
-      "maintenance_unblocks": "rootless-living-dex-dependency-v2-comparison-execution-v1",
-      "measurable_outputs": [],
-      "name": "Fresh rootless living-Dex comparison execution qualification V2",
-      "next_decision": "A clean public implementation, mutation audit, Antigravity GO, and exact-head green CI permit a separately reoriented one-shot comparison execution lane. A failed qualification closes this design. Neither outcome authorizes private access, comparison execution, gameplay, authority, or transfer.",
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "synthetic_rootless_unseen_comparison",
+          "minimum": 1,
+          "partition": "development"
+        }
+      ],
+      "name": "Fresh rootless living-Dex comparison execution V2",
+      "next_decision": "After one durable terminal, reorient immediately. A completed aggregate decides whether to design a Red observation adapter or close/redesign the representation; any claimed failure closes this identity without retry. Neither result promotes authority or opens Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -101,29 +107,35 @@
         "verified_outcome_examples": 4
       },
       "prohibited_actions": [
-        "campaign_execution",
-        "comparison_execution",
         "consumed_trial_retry",
         "crystal_execution",
-        "development_payload_decode",
         "full_game_replay",
         "gameplay_execution",
         "model_refit",
-        "private_artifact_access",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
-      "rigor": "development",
+      "rigor": "benchmark",
       "status": "active",
       "stop_conditions": [
-        "Stop implementation if the runner cannot remain a thin source-authenticated wrapper over the frozen V2 fit authentication, claim-before-open, exact four-row opening, aggregate scorer, and durable terminal seams.",
-        "Stop after public/synthetic implementation qualification and exact-head green CI. Never access a real private artifact or claim, open or decode a real development payload, execute comparison, refit, access a ROM/controller, query a teacher, promote authority, or run Crystal."
+        "Before any development payload opens, stop if the newly published exact-head preflight does not authenticate the fit bundle, all four commitments, current execution identity, and unused semantic claim.",
+        "After the comparison claim is attempted, stop at the first durable success or failure terminal. Never retry, replace a row, refit, inspect individual results publicly, access a ROM/controller, query a teacher, promote authority, or run Crystal."
       ],
       "time_box": {
         "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "None. This lane qualifies only the synthetic evaluation runner; a later Red observation adapter and Crystal transfer remain separate gates."
+      "transfer_test": "None. This four-row synthetic held-out comparison tests only an abstract dependency rule; a later Red observation adapter and Crystal transfer remain separate gates."
+    },
+    {
+      "id": "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Fresh rootless living-Dex comparison execution qualification V2",
+      "preserve_evidence": true,
+      "reason": "Published source 96ef8a1bd105e399963ec8656f3a81cb850742b9 passed CI 32447962527/1 with the exact-bundle, claim-before-open, four-row aggregate-only runner and durable no-retry terminals. Antigravity returned implementation and governance GO. A metadata-only preflight opened zero payloads and consumed no claim; because it occurred one reorientation early, its semantic qualification remains valid but its source-bound identity is superseded for execution.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-v2-comparison-preflight-v1",

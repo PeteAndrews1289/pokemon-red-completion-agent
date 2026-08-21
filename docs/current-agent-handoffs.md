@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns public/synthetic V2 comparison-runner qualification
+## Current override: Codex owns one exact V2 held-out comparison
+
+Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+(SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+records Antigravity implementation/governance GO, four manifest checks, zero answer opens, unused
+semantic claim, and unchanged counters. The source-bound 96ef identity is superseded after this
+reorientation and cannot execute.
+
+Codex publishes the lane, repeats metadata-only preflight at the new exact head, then performs
+one claim-before-open four-row aggregate comparison and stops. Antigravity reviews the gate and
+result; Claude is unavailable. No retry, refit, row disclosure, ROM/controller gameplay,
+promotion, completion, Crystal, or transfer is owned. Keep **30/15/4/3/0/0 · 14/4/0/1/1 ·
+ROOTLESS 8/8/1/0** until a completed terminal exists.
+
+## Previous override: Codex owned public/synthetic V2 comparison-runner qualification
 
 Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
 [comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
