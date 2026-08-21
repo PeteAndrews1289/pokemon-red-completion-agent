@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published and qualified the one-context Red dependency shadow-decision design at main
+  `8afb1db0b345c9cdd83323585f54a1352fb31618` under green CI `32453057425/1`. The
+  [qualification receipt](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+  (SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+  binds the exact model/adapter/fit lineage, pre-score first-eligible selection, two anonymous
+  candidate rows, one-prediction maximum, aggregate-only output, zero actions/frames/teacher/model
+  update, durable terminal, and no retry. GitHub passed 4537 ROM-free tests; Antigravity passed
+  4538 and returned exact-head GO with no P0/P1/P2 finding. No live state or learning counter
+  changed. Activated the separate public/synthetic read-only runner qualification lane.
+
 - Published and qualified the pure Red living-Dex dependency observation adapter at main
   `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` under green CI `32451757975/1`. The
   [qualification receipt](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

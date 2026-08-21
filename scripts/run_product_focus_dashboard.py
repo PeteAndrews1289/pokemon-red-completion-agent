@@ -121,6 +121,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "development_payload_disclosure": "dev disclosure",
         "full_game_replay": "replay",
         "gameplay_execution": "gameplay",
+        "live_model_prediction": "live prediction",
+        "live_private_artifact_access": "live private artifacts",
         "model_fit": "fit",
         "model_prediction": "prediction",
         "model_refit": "refit",
@@ -139,17 +141,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The Red observation adapter is published and qualified across all 26 transformation "
-            "edges. Next, freeze one action-free shadow-decision design; no live state or model "
-            "prediction is permitted in this lane."
+            "The one-decision Red shadow contract is published and qualified. Next, implement "
+            "and adversarially test its read-only runner; live state and authentic prediction "
+            "remain closed in this lane."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red shadow design · one observation → one preference → zero actions",
+        location="Red shadow runner · authenticate → select before score → persist → zero actions",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate="V2 model a42db642 · held-out 4/4 · baseline 2/4 · no live authority",
-            choice="Freeze pre-score opportunity selection and a hard zero-action terminal",
+            choice="Qualify exact bindings, one prediction maximum, and a durable zero-action stop",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -187,7 +189,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} counted/ineligible · "
                 f"comparisons {synthetic_unseen_comparisons} · V2 result 4/4 vs 2/4 · "
-                "descriptive only · Red adapter qualified · shadow design next"
+                "descriptive only · shadow design qualified · runner qualification next"
             ),
             f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
@@ -210,8 +212,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Red adapter · 6fe9a677 · CI 32451757975/1 · 26 edges · 22 supported · "
-                "4 zero-reserve fail closed · 11 focused tests · Antigravity GO · predictions 0"
+                "Shadow design · 8afb1db0 · CI 32453057425/1 · exact model/adapter · two anonymous "
+                "rows · one prediction max · actions/frames 0 · Antigravity GO · P0/P1/P2 0"
             ),
             (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "

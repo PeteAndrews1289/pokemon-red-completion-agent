@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the translation layer is ready; design one silent real-world look
+## Current checkpoint: the silent-look contract is ready; build the reader
+
+Main `8afb1db0` passed CI `32453057425/1` with the exact shadow-decision contract. The
+[qualification receipt](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+freezes one Red context before it is read, chooses the first eligible dependency before scoring,
+shows the student only two anonymous rows, allows one preference, and ends with zero button presses
+or advanced frames. GitHub passed 4537 tests; Antigravity independently passed 4538 and found no
+P0, P1, or P2 issue.
+
+The next engineering step is now concrete: build the read-only runner that proves every binding,
+records the preference durably, and cannot accidentally move the game. It still will not touch a
+live context in this checkpoint. Once the runner itself is published and audited, one metadata
+preflight—not another sprawling infrastructure cycle—is the final gate before the model's first
+authentic silent look at Red.
+
+## Previous checkpoint: the translation layer was ready; design one silent real-world look
 
 Main `6fe9a677` passed CI `32451757975/1` with the new Red dependency adapter. The
 [qualification receipt](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

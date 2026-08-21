@@ -5,7 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the Red observation bridge is qualified; design one
+> **Current product focus (August 21, 2026): the shadow contract is qualified; build its
+> read-only runner.** Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI
+> `32453057425/1`. The
+> [design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+> (SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+> records **EXACT MODEL + ADAPTER · ONE CONTEXT · PRE-SCORE SELECTION · TWO ANONYMOUS ROWS ·
+> ONE PREDICTION MAX · ACTIONS/FRAMES/TEACHER/UPDATE 0 · DURABLE TERMINAL · ANTIGRAVITY GO ·
+> P0/P1/P2 0**. GitHub passed 4537 ROM-free tests; Antigravity independently passed 4538.
+> Every learning, authority, and transfer counter remains unchanged.
+>
+> Active `red-shadow-runner-qualification-v1` may implement and mutation-test only the public,
+> read-only runner boundary. It must authenticate all bindings before scoring, admit exactly one
+> frozen context and first eligible opportunity, persist at most one preference, and prove zero
+> action/frame effects. Live ROM/private access, an authentic shadow prediction, gameplay, fit,
+> comparison, Crystal, and authority remain separate. A pass permits only a metadata preflight.
+
+> **Previous product focus (August 21, 2026): the Red observation bridge was qualified; design one
 > zero-action shadow preference.** Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI
 > `32451757975/1`. The
 > [adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

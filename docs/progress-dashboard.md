@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 6FE9A677 · CI 32451757975/1 GREEN · RED ADAPTER QUALIFIED ·
+> **Current rail:** Show **MAIN 8AFB1DB0 · CI 32453057425/1 GREEN · SHADOW DESIGN QUALIFIED ·
+> EXACT MODEL/ADAPTER · ONE CONTEXT · PRE-SCORE SELECTION · TWO ANONYMOUS ROWS · ONE PREDICTION
+> MAX · ACTIONS/FRAMES 0 · DURABLE TERMINAL · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
+> [design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+> and show **SHA-256 AA998310…5A056**.
+>
+> Display active `red-shadow-runner-qualification-v1`. Active rail: **AUTHENTICATE SOURCE +
+> DESIGN + ADAPTER + MODEL → ADMIT ONE FIXTURE CONTEXT → SELECT BEFORE SCORE → SCORE ONCE →
+> DURABLE TERMINAL → ZERO ACTION/FRAME → ANTIGRAVITY → EXACT-HEAD CI → STOP**. Show
+> **LIVE ROM/PRIVATE/CLAIM/PREDICTION/ACTION/FIT/COMPARISON/CRYSTAL/AUTHORITY 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN 6FE9A677 · CI 32451757975/1 GREEN · RED ADAPTER QUALIFIED ·
 > 26 EDGES · 22 SUPPORTED · 4 ZERO-RESERVE CLOSED · 11 FOCUSED · 4533 FULL · IDENTITY LEAKS
 > 0 · PREDICTIONS/ACTIONS 0 · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
 > [adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

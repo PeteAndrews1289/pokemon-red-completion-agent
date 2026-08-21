@@ -8,7 +8,22 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: design one authentic Red shadow preference with zero actions
+## Current checkpoint: qualify the read-only runner for one Red shadow preference
+
+Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
+[design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+records exact model/adapter/fit bindings, one frozen nonsealed development context, first-eligible
+selection before scoring, two identity-free rows, one prediction maximum, zero actions/frames,
+durable termination, and no retry. GitHub passed 4537 ROM-free tests; Antigravity independently
+passed 4538 and returned exact-head GO with no P0/P1/P2 finding.
+
+Active `red-shadow-runner-qualification-v1` implements and adversarially tests only that read-only
+boundary. It must fail before scoring on any source/model/context/menu mismatch and retain every
+post-prediction terminal. This lane opens no live state and runs no authentic prediction. A pass
+permits one separate metadata-only preflight—not gameplay, learning, or authority.
+
+## Previous checkpoint: design one authentic Red shadow preference with zero actions
 
 Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
 [adapter qualification](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)

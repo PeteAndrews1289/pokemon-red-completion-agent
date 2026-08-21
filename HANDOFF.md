@@ -12,7 +12,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: Red dependency adapter qualified; shadow-decision design is active
+## 2026-08-21: shadow design qualified; read-only runner qualification is active
+
+Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
+[design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
+binds the exact model, adapter, fit lineage, one-context/pre-score selection rule, two anonymous
+rows, one-prediction maximum, zero actions/frames/teacher/update, durable terminal, and no retry.
+GitHub passed 4537 ROM-free tests; Antigravity passed 4538 and returned exact-head GO with
+P0/P1/P2 all zero.
+
+Codex owns only `red-shadow-runner-qualification-v1`: implement and adversarially test the
+read-only runner against public/synthetic fixtures, publish it, and stop after exact-head audit.
+No live ROM/private/model/claim access, authentic prediction, action, fit, comparison, Crystal,
+completion, or authority work occurs in this lane. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: Red dependency adapter qualified; shadow-decision design was active
 
 Main `6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3` passed CI `32451757975/1`. The
 [adapter qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
