@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-25 publication qualified; V3 learning lane active:** Source
+> `2c4504ac18c4a1259a013c0311563995099d5951` passed CI `32893761213/1` and merged as
+> `861ea62e4704e233209f0359913b418cb030f4c7`. The
+> [qualification](docs/evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+> proves the complete synthetic 8+8 plan, both access shapes, exact sealed round-trip, and both
+> integer-key rejection mutations. It changed no gameplay, learning, authority, or transfer
+> counter. Maintenance is retired.
+>
+> Codex owns the unchanged freezer's new V3 identities, exact-source publication, one action-free
+> freeze, path-free terminal, and immediate reorientation. Claude and Antigravity remain read-only
+> milestone reviewers and do not delay ordinary work. No agent owns V1/V2/V3 retry, model scoring
+> during the freeze, outcomes before a durable plan, development fitting, sealed Red, Crystal,
+> replay, promotion, completion, or transfer. Counters remain **development 15 · verified 5 ·
+> causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**.
+
 > **2026-08-25 V2 built 8+8, then strict publication failed closed:** Source
 > `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed CI `32890215789/1`. Its sole action-free
 > freeze read 81 states, passed the disjoint family/root partition, and constructed eight train and

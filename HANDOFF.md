@@ -12,7 +12,30 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: V2 proved the 8+8 inventory and failed only at strict publication
+## 2026-08-25: publication qualified; the new-identity V3 freeze is active
+
+Source `2c4504ac18c4a1259a013c0311563995099d5951` passed CI `32893761213/1` and
+merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`. The
+[qualification](docs/evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+(SHA-256 `8d443ba9cb358690643c6d483507873497fe441993dd7d86b44945438ca6908d`)
+builds all 16 synthetic trials, covers both PC-access shapes, publishes through the real sealed
+store, reopens identical content, and rejects both original integer-key mutations without leaving
+a record. It opened no Red input and changed no model or learning counter. The maintenance lane is
+retired.
+
+Active `red-living-dex-multifamily-option-value-curriculum-v3` must copy no consumed identity and
+change no curriculum semantics. Implement only new V3 lane/schema/result/failure/private-record
+identities plus direct identity/no-retry tests, publish exact green source, and run exactly one
+action-free private freeze. A pass means one durable eight-train/eight-development plan with
+complete anonymous menus and disjoint families and roots. A failure closes V3. Reorient before
+any root claim, model score, controller input, or outcome collector.
+
+Do not retry V1, V2, or V3; lower the 8+8 target; reuse an old record; fit development data; open
+sealed Red; run Crystal; promote; or replay the game. Counters remain **development 15 · verified
+5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**. A frozen plan remains
+readiness evidence, not a dataset.
+
+## Earlier 2026-08-25: V2 proved the 8+8 inventory and failed only at strict publication
 
 Published source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
 `32890215789/1` and reached main as `514aff4eab57c58b8c4839d4613766f39243098b`.
