@@ -594,6 +594,10 @@ def test_controller_and_frame_ports_are_physically_closed_until_claim() -> None:
         def release(self, button: str) -> None:
             events.append(("release", button))
 
+        def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+            events.append(("read_cartridge_ram", bank, address))
+            return 0x2A
+
     controller = SCRIPT["_ClaimGatedController"](Controller())
     frames = SCRIPT["_ClaimGatedFrames"](Frames())
 
@@ -621,6 +625,8 @@ def test_controller_and_frame_ports_are_physically_closed_until_claim() -> None:
     assert controller.attempted_before_claim == 1
     assert frames.attempted_frames_before_claim == 12
     assert frames.attempted_buttons_before_claim == 2
+    assert isinstance(frames, SCRIPT["ReadOnlyCartridgeRam"])
+    assert frames.read_cartridge_ram_u8(2, 0xA123) == 0x2A
 
     frames.arm()
     controller.arm()
@@ -629,6 +635,7 @@ def test_controller_and_frame_ports_are_physically_closed_until_claim() -> None:
     frames.tick(3)
     frames.release("a")
     assert events == [
+        ("read_cartridge_ram", 2, 0xA123),
         ("controller", "after"),
         ("press", "a"),
         ("frames", 3),
@@ -638,6 +645,37 @@ def test_controller_and_frame_ports_are_physically_closed_until_claim() -> None:
         controller.arm()
     with pytest.raises(SCRIPT["RedMultifamilyTrainTrialError"]):
         frames.arm()
+
+
+@pytest.mark.parametrize("value", (True, -1, 256, "byte"))
+def test_claim_gated_cartridge_ram_port_rejects_invalid_bytes(value: object) -> None:
+    class Frames:
+        frame_count = 0
+
+        def tick(self, frames: int) -> None:
+            del frames
+
+        def read_cartridge_ram_u8(self, bank: int, address: int) -> object:
+            del bank, address
+            return value
+
+    gated = SCRIPT["_ClaimGatedFrames"](Frames())
+
+    with pytest.raises(TypeError, match="cartridge-RAM reader returned an invalid byte"):
+        gated.read_cartridge_ram_u8(0, 0xA000)
+
+
+def test_claim_gated_cartridge_ram_port_requires_delegate_support() -> None:
+    class Frames:
+        frame_count = 0
+
+        def tick(self, frames: int) -> None:
+            del frames
+
+    gated = SCRIPT["_ClaimGatedFrames"](Frames())
+
+    with pytest.raises(TypeError, match="claim-gated frames lack cartridge-RAM access"):
+        gated.read_cartridge_ram_u8(0, 0xA000)
 
 
 @pytest.mark.parametrize("selected_index", (0, 1))

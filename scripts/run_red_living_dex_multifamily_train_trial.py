@@ -91,7 +91,11 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 )
 from pokemon_red_completion.goal_manager_trajectory import ordered_goal_manager_question
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
-from pokemon_red_completion.observation import ItemId, PokemonRedStateReader
+from pokemon_red_completion.observation import (
+    ItemId,
+    PokemonRedStateReader,
+    ReadOnlyCartridgeRam,
+)
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactRoot,
     SealedRecordSummary,
@@ -293,6 +297,17 @@ class _ClaimGatedFrames:
             self.attempted_buttons_before_claim += 1
             raise RedMultifamilyTrainTrialError("controller_input_before_claim")
         self._delegate.release(button)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Preserve bounded read-only storage observation before the claim."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("claim-gated frames lack cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
 
     def __getattr__(self, name: str) -> object:
         return getattr(self._delegate, name)
@@ -627,6 +642,8 @@ def _execute_selected_trial(
             maximum_total_frames=maximum_frames,
         )
         frames = _ClaimGatedFrames(bounded_frames)
+        if not isinstance(frames, ReadOnlyCartridgeRam):
+            raise RedMultifamilyTrainTrialError("cartridge_ram_observation_port")
         frame_safe = FrameSafeExecutor(
             frames,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
