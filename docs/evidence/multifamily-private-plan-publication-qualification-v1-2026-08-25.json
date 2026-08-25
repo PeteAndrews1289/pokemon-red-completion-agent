@@ -1,0 +1,64 @@
+{
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "maintenance_complete": true,
+    "private_red_inventory_access_authorized": false,
+    "v2_retry_allowed": false,
+    "v3_design_allowed_after_reorientation": true,
+    "v3_freeze_execution_authorized_by_this_receipt": false
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_red_inputs_opened": 0,
+    "roots_claimed": 0,
+    "teacher_queries": 0
+  },
+  "lane_id": "multifamily-private-plan-publication-qualification-v1",
+  "product_interpretation": "The complete multi-family curriculum document can now cross the strict durable publication boundary without changing its title-neutral policy contract. This removes one blocker to authentic Red outcome collection but creates no dataset, fit, gameplay authority, completion evidence, or cross-title transfer result.",
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32893761213,
+    "merged_main_commit": "861ea62e4704e233209f0359913b418cb030f4c7",
+    "pull_request": 41,
+    "source_bundle_sha256": "ae92c1bc710603d9991be52dcc55c8374bef40139a29cc53542bfa5e49bb76fc",
+    "source_commit": "2c4504ac18c4a1259a013c0311563995099d5951"
+  },
+  "qualification": {
+    "candidate_count_key_type": "string",
+    "development_trials": 8,
+    "exact_reopen_passed": true,
+    "family_root_disjoint": true,
+    "integer_key_mutations_killed": 2,
+    "mechanic_shapes": [
+      "observed_semantic_boundary",
+      "semantic_route"
+    ],
+    "mutation_records_published": 0,
+    "sealed_publication_passed": true,
+    "synthetic_trials": 16,
+    "train_trials": 8
+  },
+  "schema": "pokemon.multifamily-private-plan-publication-qualification.v1",
+  "status": "qualified",
+  "verification": {
+    "full_rom_free_deselected": 3,
+    "full_rom_free_expected_failures": 1,
+    "full_rom_free_passed": 4683,
+    "product_focus_passed": true,
+    "public_artifacts_passed": true,
+    "registries_passed": true,
+    "static_types_passed": true
+  }
+}

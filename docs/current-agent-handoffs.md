@@ -6,7 +6,27 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the ROM-free publication qualification
+## Current override: Codex owns the one-shot V3 action-free freeze
+
+Publication source `2c4504ac18c4a1259a013c0311563995099d5951` passed CI `32893761213/1`
+and merged as `861ea62e4704e233209f0359913b418cb030f4c7`. The
+[qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+(SHA-256 `8d443ba9…908d`) proves the full synthetic 8+8 document publishes and reopens exactly,
+while either original integer-key mutation fails before a record exists. No protected Red input
+or learning counter changed. That maintenance lane is retired.
+
+Codex owns `red-living-dex-multifamily-option-value-curriculum-v3`: give the unchanged qualified
+freezer new V3 lane, schema, result, failure, and private-record identities; mutation-test identity
+separation and no retry; publish exact green source; execute one action-free freeze; record its
+path-free terminal; and reorient. It must yield exactly 8+8 disjoint complete menus or close V3.
+
+Claude and Antigravity remain read-only milestone reviewers. Neither is a routine blocker, and no
+agent owns a V1/V2 reuse, V3 retry, model score during the freeze, outcome collection before a
+durable V3 plan, claimed-root action, development fit, sealed Red, Crystal, promotion, replay,
+completion, or transfer claim. Counters remain **development 15 · verified 5 · causal train 0 ·
+fits 4 · comparisons 4 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned only the ROM-free publication qualification
 
 V2 source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed CI `32890215789/1`.
 Its one action-free freeze read 81 states, passed the family/root split, and constructed the full

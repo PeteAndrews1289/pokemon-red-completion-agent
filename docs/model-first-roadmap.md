@@ -8,7 +8,31 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V2 built the 8+8 curriculum; qualify strict publication without Red
+## Current checkpoint: strict publication qualified; V3 returns to authentic learning
+
+Source `2c4504ac18c4a1259a013c0311563995099d5951` passed exact-head CI
+`32893761213/1` and merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`.
+The [publication qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+(SHA-256 `8d443ba9…908d`) records the complete 16-trial synthetic document, both semantic-route
+and observed-boundary mechanic shapes, strict string-key counters, sealed publication, exact
+reopen, and two rejected integer-key mutations with no residual record. Public-artifact,
+documentation, focus, registry, lint, type, and the 4,683-test ROM-free suite passed. The
+maintenance lane is complete.
+
+Active `red-living-dex-multifamily-option-value-curriculum-v3` now returns the project to the
+measured objective: varied authentic Red choices that can change or falsify the title-neutral
+ranker. The immediate step gives the already-qualified freezer new lane/schema/result/failure/
+record identities, publishes it through exact-source CI, and runs it once action-free. A pass must
+durably preserve exactly eight train and eight development trials with complete anonymous menus
+and disjoint families and roots. Reorient before any trial claim, score, or controller input.
+
+The sole V3 freeze cannot retry, reuse a V1/V2 identity, lower the 8+8 target, advance a frame, or
+alter the curriculum semantics. Its success would be readiness, not training. Counters remain
+**development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**. Only later one-shot outcomes, a train-only fit, and a paired untouched comparison
+can move them; Crystal still waits for a powered Red gate.
+
+## Previous checkpoint: V2 built the 8+8 curriculum; strict publication was qualified without Red
 
 Published source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
 `32890215789/1`; its tree reached main as `514aff4eab57c58b8c4839d4613766f39243098b`.

@@ -1,6 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the classroom exists, but the envelope refuses it
+## August 25: the envelope qualifies, so V3 can return to the student
+
+The generic repair shipped as source `2c4504ac18c4a1259a013c0311563995099d5951`, passed CI
+`32893761213/1`, and merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`.
+The [qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+does not merely test two dictionary keys. It builds the complete 16-trial synthetic curriculum,
+includes both moving to a semantic destination and already occupying one, publishes through the
+real sealed store, and reopens the exact record. Reintroducing either integer-key counter fails
+before a record appears.
+
+That closes maintenance without pretending it trained anything. V3 now gets fresh identities and
+one action-free chance to freeze the authentic Red 8+8 plan that V2 already constructed in memory.
+If the durable plan appears with complete anonymous menus and disjoint families and roots, the
+project will finally reorient to one-shot train and development outcomes. If not, V3 closes. The
+freeze cannot score the model, press a button, or retry.
+
+The story is back where it belongs: not making the teacher finish Red more reliably, but creating
+varied collection decisions from which a transferable ranker can learn. The counters are still
+zero for causal multi-family training and transfer. The next meaningful movement comes from
+audited outcomes, a train-only fit, and a paired untouched-family comparison—not another replay.
+
+## Earlier August 25: the classroom exists, but the envelope refuses it
 
 V2 source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
 `32890215789/1`. Its one action-free inventory read all 81 authenticated states, passed the

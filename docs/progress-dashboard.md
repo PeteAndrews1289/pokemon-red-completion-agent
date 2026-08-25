@@ -5,7 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **V2 SOURCE 3FF9AB36 · CI 32890215789/1 GREEN · 81 AUTHENTICATED STATES ·
+> **Current rail:** Show **PUBLICATION SOURCE 2C4504AC · CI 32893761213/1 GREEN · MAIN 861EA62E ·
+> SYNTHETIC 8+8 SEALED ROUND-TRIP PASSED · INTEGER-KEY MUTATIONS 2/2 KILLED · RED INPUTS 0 ·
+> LEARNING COUNTER DELTA 0**. Link the
+> [qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+> and show **SHA-256 8D443BA9…908D**.
+>
+> Animate active `red-living-dex-multifamily-option-value-curriculum-v3`: **NEW V3 LANE/SCHEMA/
+> RESULT/FAILURE/PRIVATE-RECORD IDS → GREEN EXACT SOURCE → ONE ACTION-FREE FREEZE → DURABLE 8
+> TRAIN + 8 DEVELOPMENT OR CLOSE V3 → PATH-FREE TERMINAL → REORIENT BEFORE OUTCOMES**. Keep the
+> board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 ·
+> AUTHORITY 0 · TRANSFER 0**. During the freeze show **FRAMES/ACTIONS/PREDICTIONS/CLAIMS/OUTCOMES
+> 0 · V1/V2/V3 RETRY NO**. Sealed Red, Crystal, promotion, completion, and replay remain closed.
+>
+> **Previous rail:** Show **V2 SOURCE 3FF9AB36 · CI 32890215789/1 GREEN · 81 AUTHENTICATED STATES ·
 > FAMILY/ROOT SPLIT PASSED · 8 TRAIN + 8 DEVELOPMENT BUILT IN MEMORY · FRAMES/ACTIONS/PREDICTIONS/
 > CLAIMS/OUTCOMES 0 · DURABLE PLAN 0 · FAILED CLOSED · RETRY NO**. Link the
 > [V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json) and

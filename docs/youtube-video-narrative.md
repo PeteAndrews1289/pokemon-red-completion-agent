@@ -1,6 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: the full classroom exists, but the sealed envelope rejects it
+## August 25 scene: the envelope passes; open V3 without pretending it is training
+
+Open on **SOURCE 2C4504AC · CI 32893761213/1 GREEN · MAIN 861EA62E**. Animate the full ROM-free
+fixture: **16 TRIALS · 8 TRAIN + 8 DEVELOPMENT · FAMILY/ROOT DISJOINT · SEMANTIC ROUTE + OBSERVED
+DESTINATION → SEALED PUBLISH → EXACT REOPEN**. Restore each integer-key map and stamp **REJECTED
+BEFORE RECORD · MUTATIONS 2/2**. Link the
+[qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
+with **SHA-256 8D443BA9…908D**.
+
+Retire the maintenance rail, then light a new one: **V3 NEW LANE/SCHEMA/RESULT/FAILURE/RECORD IDS →
+GREEN EXACT SOURCE → ONE ACTION-FREE FREEZE → DURABLE 8+8 OR CLOSE → REORIENT**. Keep **MODEL
+SCORES 0 · BUTTONS 0 · ROOT CLAIMS 0 · OUTCOMES 0** during that freeze and put **RETRY NO** over
+V1, V2, and V3.
+
+End with the actual learning sequence, still dark but now reachable: **CLAIM DISTINCT TRAIN ROOTS
+ONCE → EXECUTE THE PREREGISTERED CANDIDATE → INDEPENDENT LEDGER OUTCOME → TRAIN-ONLY FIT → SAME
+UNTOUCHED DEVELOPMENT QUESTIONS VS COST BASELINE → POWERED RED GATE → CRYSTAL**. Say clearly:
+**THE PUBLICATION PIPE IS QUALIFIED; THE NEXT DATA, NOT THIS PIPE, MUST MAKE THE MODEL SMARTER**.
+
+## Earlier August 25 scene: the full classroom exists, but the sealed envelope rejects it
 
 Open on **SOURCE 3FF9AB36 · CI 32890215789/1 GREEN**, count through **81 AUTHENTICATED STATES**,
 then light **FAMILY/ROOT PARTITION PASSED · 8 TRAIN + 8 DEVELOPMENT BUILT IN MEMORY**. Stop before

@@ -119,12 +119,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "V2 built the complete 8+8 Red curriculum in memory, then failed before durable "
-            "publication on strict JSON keys. This ROM-free qualification repairs that boundary; "
-            "no gameplay, training, authority, or transfer counter changed."
+            "The strict publication gate passed on exact source and is retired. V3 now reproduces "
+            "the proven 8+8 Red curriculum under a new action-free identity; no outcome, fit, "
+            "authority, or Crystal transfer has occurred."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="ROM-free qualification · canonical JSON → sealed publish → exact reopen",
+        location="Red V3 · action-free freeze → durable 8+8 plan → reorient before outcomes",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
@@ -148,8 +148,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_completed=unseen,
             sealed_total=max(5, unseen),
             predictions_committed=False,
-            heading="Private-plan publication qualification",
-            eyebrow="ROM-free maintenance · V3 remains closed",
+            heading="Multi-family option-value curriculum V3",
+            eyebrow="Red curriculum · living Pokedex · transfer later",
             counter_labels=(
                 "Causal train examples",
                 "Verified development outcomes",
