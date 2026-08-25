@@ -12,7 +12,40 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: V1 failed closed; the observed-destination V2 gate is active
+## 2026-08-25: V2 proved the 8+8 inventory and failed only at strict publication
+
+Published source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
+`32890215789/1` and reached main as `514aff4eab57c58b8c4839d4613766f39243098b`.
+The sole V2 action-free freeze authenticated 81 states, advanced no frame, passed the disjoint
+family/root partition, and constructed eight train plus eight development trials in memory. The
+next stage rejected the plan before writing it. See the
+[V2 failure](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
+(SHA-256 `31775cd6b3cb0ecb1c7633324c8c95f331bf1e1daaca36f3645bf36f40269996`).
+Never retry V2 or reuse its identities.
+
+Read-only diagnosis reproduced the exact cause without a ROM: `train_candidate_counts` and
+`development_candidate_counts` used integer keys. JSON hashing silently stringified them, but the
+private-artifact normalizer requires actual string keys and failed before a durable record. The
+store, record identities, permissions, and atomic round-trip were otherwise sound.
+
+The active lane is the two-hour ROM-free
+`multifamily-private-plan-publication-qualification-v1`. It changes only canonical counter
+serialization and the encoding/publication seam, then runs a complete synthetic 16-trial
+round-trip with both route-backed and observed-boundary mechanics. Either integer-key mutation
+must be rejected and leave no record. Publish through green exact-source CI, retire the
+maintenance lane, and reorient before any V3 private inventory freeze. No Red input, root claim,
+model prediction, outcome, fit, sealed evaluation, Crystal execution, promotion, or replay is
+authorized here.
+
+The exact local candidate passes **4,683 ROM-free tests**, with three intentional deselections and
+one expected failure. Public-artifact, documentation, product-focus, all generated-registry,
+lint, and type checks pass as well.
+
+Counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**. The full 8+8 curriculum existing in memory is valuable readiness
+evidence, but it is not a dataset and does not move model authority.
+
+## Earlier 2026-08-25: V1 failed closed; the observed-destination V2 gate became active
 
 Source `54eebbf834eecfa335e02105ddcf955064a7730d` passed exact-head CI
 `32886600958/1` and its tree reached main as `23a3047aba075c065cefff9f3a780741c553d1c3`.

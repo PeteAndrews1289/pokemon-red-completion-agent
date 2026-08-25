@@ -61,7 +61,10 @@ from pokemon_red_completion.goal_manager_protocol import (
     load_committed_goal_manager_registry_at_revision,
 )
 from pokemon_red_completion.observation import ItemId, PokemonRedStateReader
-from pokemon_red_completion.private_artifacts import open_private_root
+from pokemon_red_completion.private_artifacts import (
+    open_private_root,
+    validate_private_record,
+)
 from pokemon_red_completion.provenance import (
     canonical_sha256,
     detect_source_identity,
@@ -231,7 +234,7 @@ def main(argv: list[str] | None = None) -> int:
         stage = "source_authentication"
         source_commit, source_bundle = _authenticate_source(args)
         stage = "private_input_authentication"
-        rom_path, rom_sha256, rom_bytes, contexts, catalog_sha256, plan_sha256 = (
+        rom_path, rom_sha256, rom_bytes, contexts, catalog_sha256, context_plan_sha256 = (
             _authenticate_inputs(args, source_commit, source_bundle)
         )
         stage = "action_free_inventory"
@@ -244,17 +247,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         stage = "family_root_partition_freeze"
         plan = _freeze(inventory, mechanics)
-        stage = "private_plan_publication"
-        result = _publish(
-            args,
+        stage = "private_plan_encoding"
+        document, frozen_plan_sha256 = _private_plan_document(
             source_commit=source_commit,
             source_bundle=source_bundle,
             rom_sha256=rom_sha256,
+            registry_sha256=_sha(args.expected_registry_sha256, "registry"),
             catalog_sha256=catalog_sha256,
-            context_plan_sha256=plan_sha256,
+            context_plan_sha256=context_plan_sha256,
             inventory=inventory,
             curriculum=plan,
             mechanics=mechanics,
+        )
+        stage = "private_plan_publication"
+        result = _publish(
+            args,
+            document=document,
+            plan_sha256=frozen_plan_sha256,
+            inventory=inventory,
+            curriculum=plan,
             emulator_frames_advanced=frames,
         )
         print(json.dumps(result, allow_nan=False, separators=(",", ":"), sort_keys=True))
@@ -760,19 +771,20 @@ def _freeze(
     return plan
 
 
-def _publish(
-    args: argparse.Namespace,
+def _private_plan_document(
     *,
     source_commit: str,
     source_bundle: str,
     rom_sha256: str,
+    registry_sha256: str,
     catalog_sha256: str,
     context_plan_sha256: str,
     inventory: RedMultifamilyInventory,
     curriculum: RedMultifamilyCurriculumPlan,
     mechanics: dict[tuple[str, str], _FamilyMechanics],
-    emulator_frames_advanced: int,
-) -> dict[str, object]:
+) -> tuple[dict[str, object], str]:
+    """Build the complete strict-JSON private record before touching its store."""
+
     def trial_document(trial: object) -> dict[str, object]:
         opportunity = trial.opportunity
         context = opportunity.context
@@ -794,7 +806,7 @@ def _publish(
         "source_commit": source_commit,
         "source_bundle_sha256": source_bundle,
         "rom_sha256": rom_sha256,
-        "registry_sha256": _sha(args.expected_registry_sha256, "registry"),
+        "registry_sha256": registry_sha256,
         "context_catalog_sha256": catalog_sha256,
         "context_plan_sha256": context_plan_sha256,
         "inventory": inventory.public_dict(),
@@ -809,8 +821,23 @@ def _publish(
         "outcomes_observed": 0,
         "roots_claimed": 0,
     }
+    validate_private_record(payload)
     plan_sha256 = canonical_sha256(payload)
     document = {**payload, "plan_sha256": plan_sha256}
+    return document, plan_sha256
+
+
+def _publish(
+    args: argparse.Namespace,
+    *,
+    document: dict[str, object],
+    plan_sha256: str,
+    inventory: RedMultifamilyInventory,
+    curriculum: RedMultifamilyCurriculumPlan,
+    emulator_frames_advanced: int,
+) -> dict[str, object]:
+    """Publish one pre-encoded plan and return only its path-free summary."""
+
     store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
     record = store.publish_sealed_record(
         PLAN_RECORD_ID,

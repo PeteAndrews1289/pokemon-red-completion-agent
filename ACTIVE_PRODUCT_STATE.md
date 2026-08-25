@@ -29,31 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Red multi-family living-Dex option-value curriculum V2** (`red-living-dex-multifamily-option-value-curriculum-v2`)
+**Multi-family private-plan publication qualification V1** (`multifamily-private-plan-publication-qualification-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: After the train-only fit and paired family/root-disjoint comparison, either scale to a statistically powered Red benchmark, reject or revise the option representation, or repair one reusable semantic capability. Do not infer promotion or begin Crystal from a small descriptive pilot.
+- Next decision: If the exact synthetic round-trip and green CI pass, retire this maintenance lane and design one new-identity V3 action-free freeze from the already-qualified 8+8 contract. If they fail, reject the publication design without reopening Red.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Generate complete title-neutral collection-option menus across multiple Red evolution families from live ledger, cartridge graph, resource, and reachability facts; authenticate either semantic relocation or an already-observed exact destination boundary; execute model-selected semantic skills on distinct roots; retain independent success and cost outcomes; fit on train only; and compare on family/root-disjoint development contexts. |
+| Reusable capability | Serialize counterbalanced multi-family curriculum summaries with canonical string keys, build a complete V2-shaped private plan without protected inputs, and prove exact sealed publication plus reopen on an isolated private store before any successor inventory freeze. |
 | Authority now | The living-Dex ranker has selected and successfully executed one authentic Red acquisition under a complete two-option menu and independent ledger verification. It has no demonstrated competence beyond that family/root, no promoted autonomous authority, and no Crystal evidence. |
 | Authority target | Learn option value from distinct-root multi-family Red outcomes, then beat a paired cost-only baseline on untouched family/root-disjoint development contexts without violating symbolic living-Pokedex invariants. This pilot informs a later powered benchmark; it cannot itself promote or transfer authority. |
-| Transfer test | Partition Red by both physical root and transformation family, compare on untouched families with identical title-neutral rows, and only after a powered Red gate reuse the shared option contract in Crystal through a separate title adapter with zero-shot and post-adaptation reporting. |
-| Cheapest falsifier | Publish the generic already-at-destination boundary seam, then freeze a new-identity action-free pilot with at least eight train and eight development roots, complete multi-option menus, counterbalanced candidates, and no family or physical-root overlap. Stop if the inventory remains insufficient or needs a fake route, family-specific rescue, teacher preference, species identity at the policy boundary, or incomplete-menu scoring. |
-| Time box | 1 session / 4 hours |
+| Transfer test | Round-trip the same title-neutral curriculum and both route-backed and observed-boundary mechanic shapes without any Red input or identity; later V3 outcomes remain partitioned by family/root before the shared option contract enters Crystal. |
+| Cheapest falsifier | Construct a synthetic sixteen-trial family/root-disjoint plan containing both semantic-route and already-observed-boundary mechanics, require the strict private-record normalizer to accept it, publish it once to an isolated initialized store, reopen exact bytes, and reject the original integer-key mutation. Stop without another Red inventory read if any part fails. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 0 | 8 |
-| Verified Outcome Example · development | 5 | 13 |
-| Model Fit · train | 4 | 5 |
-| Unseen Comparison · development | 4 | 5 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -61,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-25-red-multifamily-freeze-v1-failed-closed** · status **active** · evidence [qualification](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+**2026-08-25-red-multifamily-freeze-v2-publication-failed-closed** · status **active** · evidence [qualification](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A transferable living-Pokedex agent must recognize that a semantic skill may begin at its destination; forcing artificial movement is a Red-specific execution artifact. An explicit observed-boundary contract broadens reusable skill applicability without teaching directions or changing the learner's anonymous option representation. |
-| Learning output | None. The failure is qualification evidence only. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The V1 action-free inventory made no model prediction, claimed no root, pressed no controller input, observed no outcome, and changed no learned authority. |
-| Transfer result | Not run. The failure concerns Red skill applicability and provides no transfer evidence. Family/root-disjoint Red outcomes and a powered comparison remain mandatory before the shared option contract may enter Crystal. |
-| Blocker | V1 supported only six available development roots because it required a nonempty relocation to the PC. Aggregate diagnosis found three additional base-ready development roots already standing at that exact authenticated boundary, but V1 had no honest representation for zero-distance access. |
-| Decision | Close V1 without retry. Open one short V2 successor that represents an already-observed exact semantic boundary explicitly, never as a fake zero-step route; publish and run one new-identity action-free freeze; then reorient before any outcome collector. |
-| Next session | Implement and mutation-test the generic observed-boundary access, publish it through green CI, execute one new-identity action-free V2 freeze, track its path-free terminal, and reorient before any model score or controller input. |
-| Next falsifier | A V2 action-free freeze must qualify at least eight train and eight untouched development roots across disjoint transformation families while exposing zero identity fields and inventing no route. Another shortfall closes V2 rather than lowering the outcome target. |
-| Stop condition | Stop V2 after one action-free freeze, any continued inventory shortfall, any identity leak or incomplete menu, or any need for a fake route or family-specific rescue. Never retry V1, claim a root, score a model, fit on development, open sealed Red, run Crystal, promote authority, or start a full replay in this gate. |
+| Product alignment | The 8+8 curriculum now exists at the semantic planning boundary, so rereading Red would add no knowledge. Qualifying durable generic publication is the minimum maintenance needed before those real choices can become auditable training examples. |
+| Learning output | None. V2 proved inventory sufficiency but failed before durable plan publication, so it created no training example, fit, comparison, authority, or transfer result. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0. |
+| Authority delta | None. V2 made no model prediction, claimed no root, pressed no controller input, queried no teacher, observed no outcome, and changed no learned authority. |
+| Transfer result | Not run. The serialization defect and its qualification provide no cross-title evidence. Family/root-disjoint Red outcomes and a powered comparison still precede Crystal. |
+| Blocker | V2 passed the 81-state action-free inventory and constructed the required family/root-disjoint 8+8 curriculum in memory, but private publication rejected integer keys in the candidate-count summaries before any durable record was written. |
+| Decision | Close V2 without retry. Qualify the generic strict-serialization and sealed-publication boundary entirely with a V2-shaped synthetic plan, then reorient separately before authorizing any new V3 inventory freeze. |
+| Next session | Change only the generic candidate-count serialization and publication seam, add a full sixteen-trial synthetic round-trip plus rejection mutations, publish through green CI, and reorient before any protected Red input is opened again. |
+| Next falsifier | A pure synthetic V2-shaped document must be accepted by the strict path-free serializer, remain below the sealed-record bound, publish atomically, reopen with identical bytes, and fail when either candidate-count map restores integer keys. |
+| Stop condition | Stop after the synthetic sealed-record round-trip and exact-source CI, or immediately if the cause cannot be reproduced without private data, the fix weakens path rejection, or any protected Red input would be needed. Never retry V2 or execute V3 in this lane. |
 
 ### Stop conditions
 
-- Stop immediately if an observed-boundary binding does not match the exact live map and coordinate, if any candidate row exposes title, species, route, slot, family, or skill identity, if a menu is incomplete, or if train and development roots or families overlap.
-- Stop after one new-identity action-free V2 freeze, whether it passes or fails. Do not retry V1, lower the eight-plus-eight target, claim a root, score or fit a model, rescue one family with a fixed route, open sealed Red, run Crystal, promote, or launch a full-game replay.
+- Stop immediately if the V2 integer-key failure cannot be reproduced and killed with a fully synthetic sixteen-trial plan, if strict path rejection is weakened, or if a private Red input is needed.
+- Stop after one isolated sealed-record round-trip and exact-source CI. Do not retry V1 or V2, execute a V3 freeze, claim a root, score or fit a model, open sealed Red, run Crystal, promote, or launch a full-game replay.
 
 ### Hard boundaries for this lane
 
@@ -87,6 +83,7 @@ outputs.
 - **Prohibited:** full game replay
 - **Prohibited:** model fit on development
 - **Prohibited:** opportunity identity feature
+- **Prohibited:** private red inventory access
 - **Prohibited:** promotion from pilot
 - **Prohibited:** reused v1 freeze identity
 - **Prohibited:** reused v1 context execution
@@ -96,6 +93,8 @@ outputs.
 - **Prohibited:** teacher route hardening
 - **Prohibited:** transfer claim
 - **Prohibited:** unpowered model quality claim
+- **Prohibited:** v2 freeze retry
+- **Prohibited:** v3 freeze execution
 
 ## Rigor belongs to the risk
 
@@ -125,6 +124,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red multi-family living-Dex option-value curriculum V2:** Source 3ff9ab364bd8a912bcee1aabf7472c45b128be58 passed CI 32890215789/1. Its sole action-free freeze read 81 states, passed the family/root partition, and constructed the required 8+8 curriculum in memory with zero frames, claims, predictions, actions, teachers, or outcomes. Private publication then rejected integer candidate-count keys before writing a durable record. V2 is closed without retry; a ROM-free publication qualification must precede any reoriented V3 identity. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V1:** Source 54eebbf834eecfa335e02105ddcf955064a7730d passed CI 32886600958/1. One action-free freeze read 81 authenticated states with zero frames, claims, predictions, inputs, teachers, or outcomes, then failed closed: six development roots passed against eight required. Three more base-ready roots already stood at the exact PC boundary. V1 is closed without retry; a generic observed-boundary successor may use a new identity. Evidence is preserved; retry is no.
 - **Red field-capability-complete living-Dex option execution V1:** Published main a448f5b99ceaaa1164267f627eacace29c0dd434 passed CI 32878889059/1. One untouched root was claimed once; the model selected acquisition at probability 0.7821; only that skill executed; and a fresh ledger verified the exact transition and specimen preservation after 665 actions and 33672 frames. Development is now 15 and verified outcomes 5. The root is permanently closed, authority was not promoted, and the lane completed successfully. Evidence is preserved; retry is no.
 - **Repeatable Red living-Dex option execution V1:** Published main 7c131a82f2011a56232de4be2379704195e158f7 passed CI 32875519562/1 with 4638 tests. Its decision and durability contracts remain valid, but action-free execution showed that traversal omitted existing live Cut, Surf, and Strength capabilities. Every eligible root shared the mismatch; none was claimed or scored, and the generic projection produced a cartridge-derived route. The lane retired at its declared falsifier. Evidence is preserved; retry is no.

@@ -1,6 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the first multi-family freeze fails for the right reason
+## August 25: the classroom exists, but the envelope refuses it
+
+V2 source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
+`32890215789/1`. Its one action-free inventory read all 81 authenticated states, passed the
+family/root separation, and assembled the planned eight train and eight development trials in
+memory. Then the private plan failed before it became durable. The
+[path-free V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
+records no frame, prediction, button, teacher, root claim, outcome, private path, or learning
+counter change. V2 cannot retry.
+
+The fault was mundane but revealing. Two summary maps used integer keys. The canonical hasher
+quietly converted them to JSON strings, but the security boundary correctly required that the
+in-memory record already be strict JSON. This meant the plan appeared hashable yet could not be
+sealed. The correction is intentionally generic: serialize canonical string keys, build the full
+private document before store access, and distinguish an encoding failure from a storage failure.
+
+The proof is also deliberately larger than the two broken fields. A ROM-free synthetic fixture
+constructs all 16 family/root-disjoint trials, includes both semantic relocation and an exact
+already-observed boundary, publishes through the real sealed store, and reopens identical content.
+Restoring either integer-key map must fail before any record appears. This maintenance creates no
+training data, but it is the minimum honest bridge from an in-memory curriculum to auditable
+outcomes. After green exact-source CI, the project will reorient before creating V3.
+
+## Earlier August 25: the first multi-family freeze fails for the right reason
 
 The multi-family engineering gate was published as source
 `54eebbf834eecfa335e02105ddcf955064a7730d` and passed exact-head CI

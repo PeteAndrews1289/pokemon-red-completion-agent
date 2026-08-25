@@ -80,6 +80,17 @@ class PrivateArtifactError(RuntimeError):
     """Raised when private artifacts cannot be handled without weakening isolation."""
 
 
+def validate_private_record(record: Mapping[str, object]) -> None:
+    """Require a mapping to satisfy the exact sealed-record JSON contract.
+
+    This permits callers to distinguish deterministic encoding defects from a
+    later filesystem publication failure without exposing a private path or
+    weakening the canonical writer.
+    """
+
+    _canonical_record(record)
+
+
 @dataclass(frozen=True, slots=True)
 class SealedRecordSummary:
     """Path-free identity and integrity data for one immutable private record."""

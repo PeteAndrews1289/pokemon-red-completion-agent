@@ -119,18 +119,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Main a448f5b9 · CI 32878889059/1. The first authentic Red collection choice "
-            "settled successfully; the next curriculum tests option value across distinct "
-            "families and roots. No promotion or Crystal transfer has been claimed."
+            "V2 built the complete 8+8 Red curriculum in memory, then failed before durable "
+            "publication on strict JSON keys. This ROM-free qualification repairs that boundary; "
+            "no gameplay, training, authority, or transfer counter changed."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=(
-            "Red curriculum · complete multi-family menus → train-only fit → paired untouched "
-            "development"
-        ),
+        location="ROM-free qualification · canonical JSON → sealed publish → exact reopen",
         collection_target=150,
         model=DashboardModelState(
-            mode="model",
+            mode="waiting",
             candidate=(
                 "Authenticated dependency ranker · one authentic settled Red choice · no promotion"
             ),
@@ -143,16 +140,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="qualification",
             zero_shot_completed=causal_train_examples,
             zero_shot_total=max(8, causal_train_examples),
             adaptation_completed=verified_outcomes,
             adaptation_total=max(13, verified_outcomes),
             sealed_completed=unseen,
             sealed_total=max(5, unseen),
-            predictions_committed=True,
-            heading="Multi-family option-value curriculum",
-            eyebrow="Red curriculum · living Pokedex · transfer later",
+            predictions_committed=False,
+            heading="Private-plan publication qualification",
+            eyebrow="ROM-free maintenance · V3 remains closed",
             counter_labels=(
                 "Causal train examples",
                 "Verified development outcomes",

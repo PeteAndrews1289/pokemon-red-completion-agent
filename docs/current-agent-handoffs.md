@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the one-shot V2 action-free freeze
+## Current override: Codex owns only the ROM-free publication qualification
+
+V2 source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed CI `32890215789/1`.
+Its one action-free freeze read 81 states, passed the family/root split, and constructed the full
+8+8 curriculum in memory before strict sealed publication rejected integer candidate-count keys.
+The [V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
+(SHA-256 `31775cd6…996`) records no durable plan, prediction, action, teacher, claim, outcome,
+private path, or counter delta. V2 and its freeze identity are permanently closed.
+
+Codex owns `multifamily-private-plan-publication-qualification-v1`: convert only the generic
+summary keys to their canonical string form, separate encoding from publication, and prove a full
+synthetic 16-trial V2-shaped document round-trips through an isolated sealed store. The test must
+include semantic-route and already-observed-boundary mechanics and must reject both original
+integer-key mutations. No protected Red input is needed or allowed.
+The complete local ROM-free suite is green at **4,683 passed · 3 deselected · 1 expected failure**,
+alongside the public-artifact, documentation, focus, registry, lint, and type gates.
+
+Claude and Antigravity remain read-only milestone reviewers; neither is a standing gate for this
+bounded maintenance repair. No agent owns a V2 retry, V3 freeze, root claim, model score or fit,
+outcome collection, sealed Red opening, Crystal run, full replay, promotion, completion, or
+transfer claim in this lane. Counters stay **development 15 · verified 5 · causal train 0 · fits
+4 · comparisons 4 · authority 0 · transfer 0**. After green exact-source CI, Codex must retire the
+repair and reorient separately before V3.
+
+## Previous override: Codex owned the one-shot V2 action-free freeze
 
 V1 source `54eebbf834eecfa335e02105ddcf955064a7730d` passed CI `32886600958/1` and
 the one authorized freeze read 81 authenticated states with zero frames or gameplay effects. It
