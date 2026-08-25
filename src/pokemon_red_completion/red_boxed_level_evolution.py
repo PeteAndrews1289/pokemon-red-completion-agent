@@ -56,13 +56,14 @@ from pokemon_red_completion.route_executor import (
     RouteReplanner,
     RouteResourceManager,
     TraversalObserver,
+    TraversalSnapshot,
     execute_route,
 )
 
 RED_BOXED_LEVEL_EVOLUTION_SCHEMA = "pokemon.red.private-boxed-level-evolution.v1"
-RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA = (
-    "pokemon.red.boxed-level-evolution-execution-report.v1"
-)
+RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA = "pokemon.red.boxed-level-evolution-execution-report.v1"
+RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA = "pokemon.red.private-observed-semantic-boundary.v1"
+RED_OBSERVED_SEMANTIC_BOUNDARY_REPORT_SCHEMA = "pokemon.red.observed-semantic-boundary-report.v1"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -81,6 +82,101 @@ class _RedStorageStateReader(Protocol):
     def read_current_box_state(self) -> RedCurrentBoxState: ...
 
     def read_input_readiness(self) -> object: ...
+
+
+@dataclass(frozen=True, slots=True)
+class ObservedSemanticBoundaryBinding:
+    """An exact destination already occupied at the authenticated reset.
+
+    This is deliberately not a zero-step route.  It binds the semantic boundary
+    to an independent live observation and permits no controller action.  The
+    private map, coordinate, and observer identity never enter policy rows or a
+    public report.
+    """
+
+    map_id: int
+    at: tuple[int, int]
+    observer_binding_sha256: str
+    boundary_source: str = "authenticated_live_observation"
+
+    def __post_init__(self) -> None:
+        if type(self.map_id) is not int or self.map_id < 0:  # noqa: E721
+            raise RedBoxedLevelEvolutionError("observed semantic boundary map differs")
+        if (
+            not isinstance(self.at, tuple)
+            or len(self.at) != 2
+            or any(type(value) is not int or value < 0 for value in self.at)  # noqa: E721
+        ):
+            raise RedBoxedLevelEvolutionError("observed semantic boundary coordinate differs")
+        _require_sha256(
+            self.observer_binding_sha256,
+            "observed semantic boundary observer",
+        )
+        if self.boundary_source != "authenticated_live_observation":
+            raise RedBoxedLevelEvolutionError("observed semantic boundary source differs")
+
+    @property
+    def binding_sha256(self) -> str:
+        return canonical_sha256(
+            {
+                "schema": RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA,
+                "map_id": self.map_id,
+                "at": list(self.at),
+                "observer_binding_sha256": self.observer_binding_sha256,
+                "boundary_source": self.boundary_source,
+            }
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA,
+            "authenticated_live_observation": True,
+            "controller_actions": 0,
+            "route_steps": 0,
+            "map_identity_fields": 0,
+            "coordinate_identity_fields": 0,
+            "observer_identity_fields": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ObservedSemanticBoundaryReport:
+    """Action-free proof that execution still occupies the frozen boundary."""
+
+    binding: ObservedSemanticBoundaryBinding
+    observed: TraversalSnapshot
+    controller_actions: int = 0
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.binding, ObservedSemanticBoundaryBinding):
+            raise TypeError("observed boundary report needs its binding")
+        if not isinstance(self.observed, TraversalSnapshot):
+            raise TypeError("observed boundary report needs a traversal snapshot")
+        if (
+            self.observed.map_id != self.binding.map_id
+            or self.observed.at != self.binding.at
+            or not self.observed.ready
+            or self.observed.interruption is not None
+            or type(self.controller_actions) is not int  # noqa: E721
+            or self.controller_actions != 0
+        ):
+            raise RedBoxedLevelEvolutionError(
+                "observed semantic boundary does not match the frozen destination"
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": RED_OBSERVED_SEMANTIC_BOUNDARY_REPORT_SCHEMA,
+            "passed": True,
+            "controller_actions": 0,
+            "route_steps": 0,
+            "map_identity_fields": 0,
+            "coordinate_identity_fields": 0,
+            "observer_identity_fields": 0,
+        }
+
+
+SemanticPCBoundaryAccess = SemanticVenueRouteBinding | ObservedSemanticBoundaryBinding
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,7 +210,7 @@ class BoxedLevelEvolutionPlan:
     precursor_box_slot: int
     deposit_party_slot: int
     deposit_internal_species_id: int
-    route_to_pc: SemanticVenueRouteBinding
+    route_to_pc: SemanticPCBoundaryAccess
     route_to_training: SemanticVenueRouteBinding
     training_binding_sha256: str
 
@@ -131,15 +227,12 @@ class BoxedLevelEvolutionPlan:
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
                 raise RedBoxedLevelEvolutionError(f"{name} differs")
-        if (
-            red_internal_species_number(self.precursor_internal_species_id)
-            != red_species_number(self.species_binding.precursor_species_ref)
-            or red_internal_species_number(self.evolved_internal_species_id)
-            != red_species_number(self.species_binding.evolved_species_ref)
+        if red_internal_species_number(self.precursor_internal_species_id) != red_species_number(
+            self.species_binding.precursor_species_ref
+        ) or red_internal_species_number(self.evolved_internal_species_id) != red_species_number(
+            self.species_binding.evolved_species_ref
         ):
-            raise RedBoxedLevelEvolutionError(
-                "boxed evolution internal species binding differs"
-            )
+            raise RedBoxedLevelEvolutionError("boxed evolution internal species binding differs")
         if self.deposit_internal_species_id in {
             self.precursor_internal_species_id,
             self.evolved_internal_species_id,
@@ -154,53 +247,63 @@ class BoxedLevelEvolutionPlan:
             raise RedBoxedLevelEvolutionError("boxed evolution precursor box slot differs")
         if type(self.deposit_party_slot) is not int or not 1 <= self.deposit_party_slot <= 6:  # noqa: E721
             raise RedBoxedLevelEvolutionError("boxed evolution deposit party slot differs")
-        if not isinstance(self.route_to_pc, SemanticVenueRouteBinding) or not isinstance(
-            self.route_to_training,
-            SemanticVenueRouteBinding,
-        ):
-            raise TypeError("boxed evolution needs two semantic routes")
+        if not isinstance(
+            self.route_to_pc,
+            (SemanticVenueRouteBinding, ObservedSemanticBoundaryBinding),
+        ) or not isinstance(self.route_to_training, SemanticVenueRouteBinding):
+            raise TypeError("boxed evolution needs semantic PC access and a training route")
+        pc_map, pc_at = _pc_access_terminal(self.route_to_pc)
         if (
-            self.route_to_pc.plan.terminal_map
-            != self.route_to_training.plan.macro_path.maps[0]
-            or self.route_to_pc.plan.terminal_at != self.route_to_training.plan.start_at
+            pc_map != self.route_to_training.plan.macro_path.maps[0]
+            or pc_at != self.route_to_training.plan.start_at
         ):
             raise RedBoxedLevelEvolutionError(
-                "boxed evolution PC routes do not share one exact boundary"
+                "boxed evolution PC access and training route do not share one exact boundary"
             )
 
     @property
     def skill_binding_sha256(self) -> str:
-        return canonical_sha256(
-            {
-                "schema": RED_BOXED_LEVEL_EVOLUTION_SCHEMA,
-                "reset_state_sha256": self.reset_state_sha256,
-                "dependency_binding_sha256": self.species_binding.binding_sha256,
-                "precursor_internal_species_id": self.precursor_internal_species_id,
-                "evolved_internal_species_id": self.evolved_internal_species_id,
-                "current_box_index": self.current_box_index,
-                "precursor_box_slot": self.precursor_box_slot,
-                "deposit_party_slot": self.deposit_party_slot,
-                "deposit_internal_species_id": self.deposit_internal_species_id,
-                "route_to_pc_plan_sha256": self.route_to_pc.plan_sha256,
-                "route_to_pc_planner_binding_sha256": (
-                    self.route_to_pc.planner_binding_sha256
-                ),
-                "route_to_training_plan_sha256": self.route_to_training.plan_sha256,
-                "route_to_training_planner_binding_sha256": (
-                    self.route_to_training.planner_binding_sha256
-                ),
-                "training_binding_sha256": self.training_binding_sha256,
-            }
-        )
+        document: dict[str, object] = {
+            "schema": RED_BOXED_LEVEL_EVOLUTION_SCHEMA,
+            "reset_state_sha256": self.reset_state_sha256,
+            "dependency_binding_sha256": self.species_binding.binding_sha256,
+            "precursor_internal_species_id": self.precursor_internal_species_id,
+            "evolved_internal_species_id": self.evolved_internal_species_id,
+            "current_box_index": self.current_box_index,
+            "precursor_box_slot": self.precursor_box_slot,
+            "deposit_party_slot": self.deposit_party_slot,
+            "deposit_internal_species_id": self.deposit_internal_species_id,
+            "route_to_training_plan_sha256": self.route_to_training.plan_sha256,
+            "route_to_training_planner_binding_sha256": (
+                self.route_to_training.planner_binding_sha256
+            ),
+            "training_binding_sha256": self.training_binding_sha256,
+        }
+        if isinstance(self.route_to_pc, SemanticVenueRouteBinding):
+            # Preserve every already-published route-backed skill identity.
+            document.update(
+                {
+                    "route_to_pc_plan_sha256": self.route_to_pc.plan_sha256,
+                    "route_to_pc_planner_binding_sha256": (self.route_to_pc.planner_binding_sha256),
+                }
+            )
+        else:
+            document.update(
+                {
+                    "pc_access_kind": "observed_semantic_boundary",
+                    "pc_boundary_binding_sha256": self.route_to_pc.binding_sha256,
+                }
+            )
+        return canonical_sha256(document)
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "schema": RED_BOXED_LEVEL_EVOLUTION_SCHEMA,
             "goal_kind": GoalKind.EVOLVE_SPECIES.value,
-            "execution_role": (
-                RedDependencyCapabilityRole.BOUNDED_TRAINING_EVOLUTION.value
+            "execution_role": (RedDependencyCapabilityRole.BOUNDED_TRAINING_EVOLUTION.value),
+            "semantic_routes": (
+                2 if isinstance(self.route_to_pc, SemanticVenueRouteBinding) else 1
             ),
-            "semantic_routes": 2,
             "storage_operations": 2,
             "participation_training": True,
             "model_predictions": 0,
@@ -209,6 +312,9 @@ class BoxedLevelEvolutionPlan:
             "storage_identity_fields": 0,
             "route_identity_fields": 0,
         }
+        if isinstance(self.route_to_pc, ObservedSemanticBoundaryBinding):
+            result["observed_semantic_boundaries"] = 1
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -218,7 +324,7 @@ class BoxedLevelEvolutionExecutionReport:
     plan: BoxedLevelEvolutionPlan
     before_ledger: DependencySpecimenLedger
     after_ledger: DependencySpecimenLedger
-    route_to_pc: RouteExecutionReport
+    route_to_pc: RouteExecutionReport | ObservedSemanticBoundaryReport
     deposit: RedPCDepositReport
     withdraw: RedPCWithdrawReport
     route_to_training: RouteExecutionReport
@@ -233,10 +339,15 @@ class BoxedLevelEvolutionExecutionReport:
             DependencySpecimenLedger,
         ):
             raise TypeError("boxed evolution report needs specimen ledgers")
-        if (
-            not isinstance(self.route_to_pc, RouteExecutionReport)
-            or not self.route_to_pc.passed
-            or not isinstance(self.route_to_training, RouteExecutionReport)
+        pc_access_passed = (
+            isinstance(self.route_to_pc, RouteExecutionReport) and self.route_to_pc.passed
+        ) or (
+            isinstance(self.route_to_pc, ObservedSemanticBoundaryReport)
+            and isinstance(self.plan.route_to_pc, ObservedSemanticBoundaryBinding)
+            and self.route_to_pc.binding == self.plan.route_to_pc
+        )
+        if not pc_access_passed or (
+            not isinstance(self.route_to_training, RouteExecutionReport)
             or not self.route_to_training.passed
         ):
             raise RedBoxedLevelEvolutionError("boxed evolution semantic route failed")
@@ -257,12 +368,17 @@ class BoxedLevelEvolutionExecutionReport:
             )
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        route_backed_pc = isinstance(self.route_to_pc, RouteExecutionReport)
+        result: dict[str, object] = {
             "schema": RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA,
             "settled": True,
-            "semantic_routes_passed": 2,
+            "semantic_routes_passed": 2 if route_backed_pc else 1,
             "acknowledged_route_steps": (
-                len(self.route_to_pc.executed_steps)
+                (
+                    len(self.route_to_pc.executed_steps)
+                    if isinstance(self.route_to_pc, RouteExecutionReport)
+                    else 0
+                )
                 + len(self.route_to_training.executed_steps)
             ),
             "deposit_transition_passed": True,
@@ -277,6 +393,9 @@ class BoxedLevelEvolutionExecutionReport:
             "storage_identity_fields": 0,
             "route_identity_fields": 0,
         }
+        if not route_backed_pc:
+            result["observed_semantic_boundaries_passed"] = 1
+        return result
 
 
 @dataclass(slots=True)
@@ -297,9 +416,10 @@ class RedBoxedLevelEvolutionAdapter:
     def __post_init__(self) -> None:
         if not isinstance(self.plan, BoxedLevelEvolutionPlan):
             raise TypeError("boxed evolution adapter needs a plan")
-        if not callable(getattr(self.actions, "execute", None)) or type(
-            getattr(self.actions, "actions_executed", None)
-        ) is not int:  # noqa: E721
+        if (
+            not callable(getattr(self.actions, "execute", None))
+            or type(getattr(self.actions, "actions_executed", None)) is not int
+        ):  # noqa: E721
             raise TypeError("boxed evolution adapter needs one counted action port")
         if any(
             not callable(getattr(self.reader, name, None))
@@ -348,7 +468,7 @@ class RedBoxedLevelEvolutionAdapter:
 
         self._require_ready(scenario, before_ledger)
         action_start = self.actions.actions_executed
-        first_route = self._execute_route(self.plan.route_to_pc)
+        first_access = self._enter_pc()
 
         open_bills_pc(self.actions, self.reader)  # type: ignore[arg-type]
         deposit = deposit_party_member(
@@ -378,9 +498,7 @@ class RedBoxedLevelEvolutionAdapter:
             or self.plan.precursor_internal_species_id not in party
             or self.plan.deposit_internal_species_id in party
         ):
-            raise RedBoxedLevelEvolutionError(
-                "boxed evolution storage preparation differs"
-            )
+            raise RedBoxedLevelEvolutionError("boxed evolution storage preparation differs")
         second_route = self._execute_route(self.plan.route_to_training)
         training = self.train_evolution(
             self.plan.precursor_internal_species_id,
@@ -400,13 +518,21 @@ class RedBoxedLevelEvolutionAdapter:
             self.plan,
             before_ledger,
             after,
-            first_route,
+            first_access,
             deposit,
             withdraw,
             second_route,
             training,
             self.actions.actions_executed - action_start,
         )
+
+    def _enter_pc(
+        self,
+    ) -> RouteExecutionReport | ObservedSemanticBoundaryReport:
+        access = self.plan.route_to_pc
+        if isinstance(access, SemanticVenueRouteBinding):
+            return self._execute_route(access)
+        return self._observe_semantic_boundary(access)
 
     def _execute_route(
         self,
@@ -425,6 +551,28 @@ class RedBoxedLevelEvolutionAdapter:
             raise RedBoxedLevelEvolutionError("boxed evolution semantic route failed")
         return report
 
+    def _observe_semantic_boundary(
+        self,
+        binding: ObservedSemanticBoundaryBinding,
+    ) -> ObservedSemanticBoundaryReport:
+        action_start = self.actions.actions_executed
+        snapshot = self.traversal_observer.observe()
+        raw = self.reader.read()
+        if (
+            getattr(raw, "map_id", None) != binding.map_id
+            or (getattr(raw, "player_y", None), getattr(raw, "player_x", None)) != binding.at
+            or getattr(raw, "battle_state", None) != 0
+            or self.actions.actions_executed != action_start
+        ):
+            raise RedBoxedLevelEvolutionError(
+                "live game state differs from the observed semantic boundary"
+            )
+        return ObservedSemanticBoundaryReport(
+            binding,
+            snapshot,
+            self.actions.actions_executed - action_start,
+        )
+
     def _require_ready(
         self,
         scenario: RedDualCapabilityScenarioSpec,
@@ -436,10 +584,8 @@ class RedBoxedLevelEvolutionAdapter:
             raise TypeError("boxed evolution qualification needs a ledger")
         binding = self.plan.species_binding
         if (
-            before_ledger.count(binding.precursor_species_ref)
-            != scenario.before.precursor_count
-            or before_ledger.count(binding.evolved_species_ref)
-            != scenario.before.evolved_count
+            before_ledger.count(binding.precursor_species_ref) != scenario.before.precursor_count
+            or before_ledger.count(binding.evolved_species_ref) != scenario.before.evolved_count
         ):
             raise RedBoxedLevelEvolutionError(
                 "boxed evolution ledger does not implement the scenario"
@@ -449,17 +595,21 @@ class RedBoxedLevelEvolutionAdapter:
             raise RedBoxedLevelEvolutionError(
                 "boxed evolution collection differs from the shared reset ledger"
             )
-        snapshot = self.traversal_observer.observe()
-        plan = self.plan.route_to_pc.plan
-        if (
-            snapshot.map_id != plan.macro_path.maps[0]
-            or snapshot.at != plan.start_at
-            or not snapshot.ready
-            or snapshot.interruption is not None
-        ):
-            raise RedBoxedLevelEvolutionError(
-                "boxed evolution route does not start at the observed reset"
-            )
+        pc_access = self.plan.route_to_pc
+        if isinstance(pc_access, SemanticVenueRouteBinding):
+            snapshot = self.traversal_observer.observe()
+            plan = pc_access.plan
+            if (
+                snapshot.map_id != plan.macro_path.maps[0]
+                or snapshot.at != plan.start_at
+                or not snapshot.ready
+                or snapshot.interruption is not None
+            ):
+                raise RedBoxedLevelEvolutionError(
+                    "boxed evolution route does not start at the observed reset"
+                )
+        else:
+            self._observe_semantic_boundary(pc_access)
         raw = self.reader.read()
         party = getattr(raw, "party_species_ids", None)
         battle_state = getattr(raw, "battle_state", None)
@@ -469,14 +619,11 @@ class RedBoxedLevelEvolutionAdapter:
             or len(party) != 6
             or battle_state != 0
             or getattr(readiness, "ready", None) is not True
-            or party[self.plan.deposit_party_slot - 1]
-            != self.plan.deposit_internal_species_id
+            or party[self.plan.deposit_party_slot - 1] != self.plan.deposit_internal_species_id
             or BLASTOISE_SPECIES_ID not in party
             or self.plan.precursor_internal_species_id in party
         ):
-            raise RedBoxedLevelEvolutionError(
-                "boxed evolution party boundary is not executable"
-            )
+            raise RedBoxedLevelEvolutionError("boxed evolution party boundary is not executable")
         box = self.reader.read_current_box_state()
         slot = self.plan.precursor_box_slot - 1
         if (
@@ -489,6 +636,16 @@ class RedBoxedLevelEvolutionAdapter:
             raise RedBoxedLevelEvolutionError(
                 "boxed evolution current-box boundary is not executable"
             )
+
+
+def _pc_access_terminal(
+    access: SemanticPCBoundaryAccess,
+) -> tuple[int, tuple[int, int]]:
+    if isinstance(access, SemanticVenueRouteBinding):
+        return access.plan.terminal_map, access.plan.terminal_at
+    if isinstance(access, ObservedSemanticBoundaryBinding):
+        return access.map_id, access.at
+    raise TypeError("boxed evolution PC access differs")
 
 
 def _expected_evolution_ledger(
@@ -515,9 +672,14 @@ def _require_sha256(value: str, subject: str) -> None:
 __all__ = [
     "RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA",
     "RED_BOXED_LEVEL_EVOLUTION_SCHEMA",
+    "RED_OBSERVED_SEMANTIC_BOUNDARY_REPORT_SCHEMA",
+    "RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA",
     "BoundedEvolutionTrainingResult",
     "BoxedLevelEvolutionExecutionReport",
     "BoxedLevelEvolutionPlan",
+    "ObservedSemanticBoundaryBinding",
+    "ObservedSemanticBoundaryReport",
     "RedBoxedLevelEvolutionAdapter",
     "RedBoxedLevelEvolutionError",
+    "SemanticPCBoundaryAccess",
 ]

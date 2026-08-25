@@ -1,33 +1,49 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: one real choice becomes a reusable multi-family classroom
+## August 25: the first multi-family freeze fails for the right reason
 
-The second session completed the engineering boundary needed to stop replaying the first successful
+The multi-family engineering gate was published as source
+`54eebbf834eecfa335e02105ddcf955064a7730d` and passed exact-head CI
+`32886600958/1`. The one authorized V1 freeze then inspected all 81 authenticated Red states. It
+never advanced a frame, scored the model, claimed a root, pressed a button, asked a teacher, or
+observed an outcome. It found six usable development roots where the preregistration required
+eight and stopped. The
+[path-free failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+closes V1 without retry.
+
+That failure exposed a useful distinction. Aggregate diagnosis found three additional base-ready
+development roots whose characters were already standing at the exact PC boundary. V1 knew how to
+route *to* a PC, but it had no honest way to say “the skill begins here.” Pretending those cases had
+a zero-step route would make the numbers pass while weakening the semantics. Discarding them would
+make a transferable capability depend on irrelevant Red starting positions.
+
+V2 instead introduces an explicit observed-destination proof. The private binding must match the
+authenticated traversal snapshot, raw map and coordinate, battle state, and a zero-action delta.
+It fails if the state drifts, publishes no location or observer identity, and is deliberately a
+different skill identity from relocation. Existing route-backed skill hashes remain byte-for-byte
+compatible with V1. The change is small, generic, and relevant beyond Red: a semantic skill can
+start at its destination in any title.
+
+Nothing has been trained by this checkpoint. Learning counters remain **development 15 · verified
+5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**. The next honest scene is
+publication, green exact-source CI, and exactly one new-identity V2 action-free freeze. It must
+produce eight train and eight development roots across disjoint families or close V2. Only after a
+successful plan and a fresh reorientation can outcome collection begin.
+
+## Earlier August 25: one real choice becomes a reusable multi-family classroom
+
+The second session built the engineering boundary needed to stop replaying the first successful
 family. The full local repository passed **4,671 tests**, with three intentional skips and one
-expected failure. Red can now derive complete acquire-versus-evolve opportunities across distinct
-families and physical roots, expose only the same title-neutral option rows, and preregister a
+expected failure. Red can derive complete acquire-versus-evolve opportunities across distinct
+families and physical roots, expose only title-neutral option rows, and preregister a
 counterbalanced eight-train/eight-development pilot with no family or root overlap.
 
-Two mechanics made that generalization honest. Capture can now use a cartridge-semantic wild
-source without pretending the location has a measured training band. Evolution can start with an
-underlevel precursor in storage: the adapter routes to the PC, deposits one explicitly bound
-non-target party member, withdraws the exact precursor, returns to a training boundary, and accepts
-success only when a fresh living-specimen census shows the exact precursor-to-evolved transition.
-The learner never sees species, family, map, route, source, box slot, or skill identity.
-
-The most valuable result was a failure caught before gameplay. Focused tests were green while the
-freezer joined a two-species verifier hash to a richer transformation-family hash; a live freeze
-would therefore have found no matching families. Manual semantic review exposed it, the join now
-uses the adapter's exact complete identity, and a parity test prevents recurrence. The old
-one-shot shadow design also remains bound to the historical adapter it actually qualified instead
-of being retroactively upgraded.
-
-Nothing has been trained by this checkpoint. It made no prediction, spent no root, pressed no
-button, collected no outcome, fit no model, and changed no learning counter. The next honest scene
-is publication and green exact-head CI followed by one action-free inventory/freeze. Only then can
-the project collect distinct-root causal outcomes, fit on train only, and ask whether the learned
-option value beats the cost-only baseline on an untouched family. That is the bridge toward
-Crystal and the cross-game living Pokédex—not another fixed Red walkthrough.
+Capture can use a cartridge-semantic wild source without inventing a measured training band.
+Evolution can start with an underlevel precursor in storage: the adapter reaches the PC, deposits
+one explicitly bound non-target party member, withdraws the exact precursor, returns to training,
+and accepts success only when a fresh living-specimen census shows the exact transition. Manual
+semantic review also caught a verifier-hash versus transformation-family-hash mismatch before the
+first publication; a direct parity test now prevents it.
 
 ## August 25: the model made its first authentic collection choice
 

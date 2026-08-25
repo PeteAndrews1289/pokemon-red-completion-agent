@@ -1,0 +1,65 @@
+{
+  "aggregate_diagnosis": {
+    "base_ready_available_contexts": {
+      "development": {
+        "already_at_exact_pc_boundary": 3,
+        "other_start": 0,
+        "supported_training_boundary": 6,
+        "total": 9
+      },
+      "train": {
+        "already_at_exact_pc_boundary": 7,
+        "other_start": 0,
+        "supported_training_boundary": 13,
+        "total": 20
+      }
+    },
+    "cheapest_successor_falsifier": "Represent an already-observed exact semantic boundary explicitly instead of fabricating a zero-step route; freeze under a new V2 identity and stop again if eight development roots still do not qualify.",
+    "diagnostic_controller_actions": 0,
+    "diagnostic_emulator_frames_advanced": 0,
+    "diagnostic_model_predictions": 0,
+    "diagnostic_private_identity_fields_published": 0,
+    "required_roots_per_partition": 8,
+    "supported_development_roots_in_v1": 6,
+    "working_cause": "V1 excluded contexts already standing at the authenticated PC boundary because its semantic-route type required at least one relocation step. The aggregate pool contains three additional development contexts at that boundary; this is a generic start-boundary limitation, not evidence of family scarcity."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "claimed_root_retry_allowed": false,
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "promotion_authorized": false,
+    "v1_freeze_retry_allowed": false,
+    "v2_successor_allowed": true
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_paths_published": 0,
+    "roots_claimed": 0,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "authenticated_states_read": 81,
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32886600958,
+    "failure_stage": "two_family_inventory_insufficient",
+    "source_bundle_sha256": "80c9b6b09b0c6215256a691a3d6a8be56ddea1ed6fa3e7e8116d1c4be4f2d197",
+    "source_commit": "54eebbf834eecfa335e02105ddcf955064a7730d"
+  },
+  "lane_id": "red-living-dex-multifamily-option-value-curriculum-v1",
+  "product_interpretation": "The action-free inventory falsified V1 applicability before training. It is not a model-quality, gameplay, completion, authority, or transfer result.",
+  "schema": "pokemon.red.living-dex-multifamily-pilot-freeze-failure.v1",
+  "status": "failed_closed"
+}

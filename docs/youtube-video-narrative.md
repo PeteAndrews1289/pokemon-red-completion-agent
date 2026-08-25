@@ -1,6 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: build the multi-family classroom, then catch a green-test lie
+## August 25 scene: the silent freeze finds an honest missing concept
+
+Open on **SOURCE 54EEBBF8 · CI 32886600958/1 GREEN**, then count through **81 AUTHENTICATED RED
+STATES** without showing a single controller input. Stop the rail at **DEVELOPMENT ROOTS 6/8 ·
+TWO-FAMILY INVENTORY INSUFFICIENT** and stamp **FRAMES 0 · MODEL SCORES 0 · ROOT CLAIMS 0 ·
+BUTTONS 0 · TEACHERS 0 · OUTCOMES 0 · V1 RETRY NO**. Link the
+[failure receipt](evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+with **SHA-256 2B37F64B…6BEF**.
+
+Then reveal the diagnosis without revealing private families: **3 MORE BASE-READY DEVELOPMENT
+ROOTS ALREADY STANDING AT THE PC**. Draw the old contract as **NONEMPTY ROUTE → PC**, and show why
+neither bad workaround is acceptable: cross out **INVENT A ZERO-STEP ROUTE** and **DISCARD VALID
+STARTING STATES**.
+
+Introduce the reusable concept as **ALREADY AT AN AUTHENTICATED SEMANTIC DESTINATION**. Animate
+**TRAVERSAL SNAPSHOT + RAW MAP/COORDINATE + BATTLE STATE + ACTION DELTA 0 → OBSERVED BOUNDARY**.
+Show **LOCATION/OBSERVER IDENTITY 0 AT POLICY BOUNDARY**, **OLD ROUTE HASH PRESERVED**, and **NEW
+OBSERVATION HASH DISTINCT**. This is not Pokémon-specific cleverness; any cross-game skill may
+begin at the place it needs.
+
+End on **PUBLISH V2 → GREEN EXACT-SOURCE CI → ONE NEW-IDENTITY ACTION-FREE FREEZE → 8 TRAIN + 8
+DEVELOPMENT OR CLOSE V2 → REORIENT**. Keep **CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 ·
+AUTHORITY 0 · TRANSFER 0** on screen. Say plainly: **THIS QUALIFIES THE CLASSROOM; IT DOES NOT
+TRAIN THE MODEL**.
+
+## Earlier August 25 scene: build the multi-family classroom, then catch a green-test lie
 
 Open on **SESSION 2 · 4,671 PASSED · 3 SKIPPED · 1 EXPECTED FAILURE**, then expand the first
 two-option classroom into **MULTIPLE TRANSFORMATION FAMILIES + UNIQUE PHYSICAL ROOTS**. Animate
@@ -8,17 +33,10 @@ two-option classroom into **MULTIPLE TRANSFORMATION FAMILIES + UNIQUE PHYSICAL R
 EXACT WITHDRAWAL → PARTICIPATION TRAINING → FRESH LIVING LEDGER**. Put a privacy wall between the
 mechanics and the learner labeled **SPECIES/FAMILY/MAP/ROUTE/SOURCE/SLOT/SKILL IDENTITY 0**.
 
-Then interrupt the triumphant green screen. Show two hashes that look similar but are not:
-**VERIFIER SPECIES PAIR ≠ COMPLETE TRANSFORMATION FAMILY**. Stamp **FOCUSED TESTS GREEN · LIVE
-FREEZE WOULD FAIL**, then replace the join with the adapter's exact family identity and add
-**DIRECT PARITY REGRESSION TEST**. This is an important narrative beat: trustworthy experiments
-come from semantic review as well as test count.
-
-End with **8 TRAIN + 8 DEVELOPMENT · 4 PER CANDIDATE · FAMILY OVERLAP 0 · ROOT OVERLAP 0**, but
-immediately overlay **FROZEN TRIALS ARE NOT TRAINING EXAMPLES**. The next rail is **PUBLISH → GREEN
-EXACT-HEAD CI → ACTION-FREE 81-STATE INVENTORY → IMMUTABLE PRIVATE PLAN + PATH-FREE RECEIPT →
-REORIENT → OUTCOME COLLECTOR**. Keep **PREDICTIONS/ROOT CLAIMS/BUTTONS/OUTCOMES/FITS/TRANSFER 0**
-for this scene.
+Interrupt the green screen with **VERIFIER SPECIES PAIR ≠ COMPLETE TRANSFORMATION FAMILY**. Stamp
+**FOCUSED TESTS GREEN · LIVE FREEZE WOULD FAIL**, then show the exact identity repair and **DIRECT
+PARITY REGRESSION TEST**. End with **8 TRAIN + 8 DEVELOPMENT**, overlaid by **FROZEN TRIALS ARE
+NOT TRAINING EXAMPLES**.
 
 ## August 25 scene: the first authentic collection choice lands
 
