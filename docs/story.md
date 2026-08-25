@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: stop inspecting the classroom and let the student choose
+## Current checkpoint: the student had the moves, but the map forgot to look
+
+Main `7c131a82` passed CI `32875519562/1` with 4638 tests. Then the first authentic collection
+choice stopped before the model scored anything. The game state had legal field moves, but the
+semantic map had been handed only story flags, so every unused classroom looked cut off from the
+capture lesson. The [falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+records the important zeros: no root claimed, no model prediction, no button, no frame, no outcome.
+
+We checked the whole eligible inventory and found the same structural cause five times. Then we
+gave the map the generic field-move facts the project already knew—badges, a living move holder,
+and live Surf permission—and it computed a 445-step route from the unchanged state. No arrow list
+was added and no easier reset was chosen. The next scene is short: publish that capability join,
+return to the same untouched classroom once, let the model choose acquire or evolve, and verify the
+living collection from the game afterward. That is still plumbing, not Pokémon mastery, but it is
+plumbing aimed directly at the cross-game living-Pokédex agent.
+
+## Previous checkpoint: stop inspecting the classroom and let the student choose
 
 Baseline main `06af22c1` passed CI `32476766226/1` with 4619 tests. We finally called out the
 loop the project had fallen into: capture worked, evolution worked, the anonymous two-choice menu

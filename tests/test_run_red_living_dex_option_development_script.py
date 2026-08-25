@@ -323,6 +323,21 @@ def test_runner_orders_one_claim_prediction_start_record_and_selected_execution(
     assert "teacher_fallback" not in source
 
 
+def test_runner_projects_live_field_capabilities_before_route_construction() -> None:
+    source = SCRIPT_PATH.read_text(encoding="utf-8")
+    execution = source[source.index("def _execute(") : source.index("def _claim_development_root(")]
+
+    observer = execution.index("traversal = Gen1TraversalObserver(")
+    capability = execution.index(
+        "capability_projector=lambda raw: gen1_field_capabilities(frames, raw)",
+        observer,
+    )
+    route = execution.index("route_plan = route_world.plan_to_map(", capability)
+    field_port = execution.index("field_actions = Gen1FieldMovePort(", route)
+
+    assert observer < capability < route < field_port
+
+
 def test_failure_receipt_never_echoes_private_details() -> None:
     result = SCRIPT["_failure_receipt"]("private_readiness_authentication")
 

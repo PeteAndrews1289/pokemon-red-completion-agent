@@ -14,6 +14,7 @@ from pokemon_red_completion.gen1_field_moves import (
     Gen1FieldMoveError,
     Gen1FieldMovePort,
     cut_menu_indices,
+    gen1_field_capabilities,
     strength_menu_indices,
     surf_menu_indices,
     surf_permission,
@@ -36,6 +37,36 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.route_executor import RouteActionPort
 
 TACKLE_MOVE_ID = 0x21
+
+
+def test_field_capabilities_join_cut_surf_and_strength_from_live_truth() -> None:
+    raw = replace(
+        surf_state(
+            hp=(15,),
+            moves=((CUT_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID),),
+        ),
+        badge_bits=int(Badge.CASCADE | Badge.SOUL | Badge.RAINBOW),
+    )
+    world = MenuWorld(raw=raw)
+
+    assert gen1_field_capabilities(world, raw) == frozenset(
+        {"move:cut", "move:surf", "move:strength"}
+    )
+
+
+def test_field_capabilities_close_only_surf_under_live_title_restriction() -> None:
+    raw = replace(
+        surf_state(
+            hp=(15,),
+            moves=((CUT_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID),),
+        ),
+        badge_bits=int(Badge.CASCADE | Badge.SOUL | Badge.RAINBOW),
+    )
+    world = MenuWorld(raw=raw, status_flags_6=ALWAYS_ON_BIKE_MASK)
+
+    assert gen1_field_capabilities(world, raw) == frozenset(
+        {"move:cut", "move:strength"}
+    )
 
 
 def surf_state(

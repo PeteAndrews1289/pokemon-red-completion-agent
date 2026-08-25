@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-25 repeatable Red option execution is active:** Baseline main
+> **2026-08-25 live field-capability falsifier; bounded successor active:** Published main
+> `7c131a82f2011a56232de4be2379704195e158f7` passed CI `32875519562/1` with 4638 tests.
+> The [falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+> (SHA-256 `dcb7ef94…b29c`) records five eligible action-free roots with the same missing
+> Cut/Surf/Strength projection, and zero claim, prediction, controller, frame, or counter effect.
+> The existing generic legality rules produced a cartridge-derived route from the unchanged root.
+>
+> Codex owns implementation/publication/execution of
+> `red-living-dex-field-capability-option-execution-v1`. Claude reviews statistics and leakage;
+> Antigravity reviews architecture and transfer. Both are read-only milestone reviewers, not
+> duplicate implementers or standing development gates. No agent owns a fixed route, easier-root
+> substitution, claimed-root retry, teacher choice/fallback, fit/refit, sealed Red, Crystal, full
+> replay, promotion, completion, or transfer claim. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1** until terminal evidence is tracked.
+
+> **Previous 2026-08-25 checkpoint — repeatable Red option execution was active:** Baseline main
 > `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI `32476766226/1` with 4619
 > tests. The
 > [focus redirect](docs/evidence/red-living-dex-development-redirect-v1-2026-08-25.json) closes

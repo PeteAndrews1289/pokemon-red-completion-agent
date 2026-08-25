@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: stop designing the doorway and let the model make one real collection choice
+## August 25: the model was ready to choose, but the router could not see its field moves
+
+Published main `7c131a82f2011a56232de4be2379704195e158f7` passed CI
+`32875519562/1` with 4638 tests. The first authentic option attempt then failed safely before a
+root claim, prediction, button, or advanced frame. The
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) captured a
+general integration error: the semantic router was given story flags but not the existing live
+Cut, Surf, and Strength capabilities. Every eligible unused training root therefore looked
+stranded even though the party legally carried the field moves.
+
+This is exactly the kind of failure the short scenario loop is meant to reveal. We did not spend a
+root, swap to an easier state, or add a Cinnabar-to-cave walkthrough. Feeding the router the
+already-qualified badge, living-holder, and Surf-permission rules produced a 445-step
+cartridge-derived route without gameplay. The bounded successor now makes that reusable join,
+mutation-tests it, publishes green, and returns to the same untouched root for one model-selected
+acquire-versus-evolve outcome. Learned authority, living-Pokédex progress, and Crystal transfer all
+remain unchanged until that independent ledger terminal exists.
+
+## Earlier August 25: stop designing the doorway and let the model make one real collection choice
 
 Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
 `32476766226/1` with 4619 tests. The
