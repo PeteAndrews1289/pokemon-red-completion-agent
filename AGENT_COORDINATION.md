@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-25 V3 train ordinal zero censored; observation recovery active:** Collector main
+> `7ebea63c` passed CI `32900424741/1`; storage-port repair main `14d7bcea` passed CI
+> `32902297341/1`. The authentic claim-stubbed rehearsal reached the claim boundary with zero
+> effects. The real frozen acquisition then interrupted after 4,379 actions and 304,680 frames.
+> Its [terminal](docs/evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
+> is durable, retry is forbidden, development remained untouched, and no train target was added.
+>
+> Codex owns one ROM-free generic repair: observe a fresh living ledger once after ordinary
+> selected-skill failure and settle from readable state; censor only observer failure. Claude's
+> next review is V4 power/censoring/leakage, Antigravity's is the exception/observer and root/family
+> boundary. Neither owns execution. No agent owns another V3 trial, V4 freeze during this lane,
+> retry, development opening, fit, sealed Red, Crystal, replay, promotion, completion, or transfer.
+> Counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+> authority 0 · transfer 0**.
+
 > **2026-08-25 publication qualified; V3 learning lane active:** Source
 > `2c4504ac18c4a1259a013c0311563995099d5951` passed CI `32893761213/1` and merged as
 > `861ea62e4704e233209f0359913b418cb030f4c7`. The

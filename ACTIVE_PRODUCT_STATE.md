@@ -29,31 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Red multi-family living-Dex option-value curriculum V3** (`red-living-dex-multifamily-option-value-curriculum-v3`)
+**Post-exception living-ledger qualification V1** (`post-exception-living-ledger-qualification-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: After one frozen train trial validates or falsifies the outcome bridge, reorient. A valid bridge may collect the remaining train trials and then the still-untouched development trials; only afterward fit on train and run the paired cost-only comparison, without inferring promotion or Crystal transfer from this pilot.
+- Next decision: After the generic observer seam passes mutation tests and green CI, retire this repair and reorient separately to a V4 action-free freeze. V4 must exclude every V3-consumed root, preserve family/root-disjoint development, and include preregistered train reserve before any protected execution.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Use the durable 8+8 family/root-disjoint Red curriculum to collect one-shot candidate outcomes on distinct roots under selected-skill-only execution, fit the title-neutral ranker on train only, and compare it with the cost-only baseline on the same untouched development questions. |
-| Authority now | The living-Dex ranker has selected and successfully executed one authentic Red acquisition under a complete two-option menu and independent ledger verification. It has no demonstrated competence beyond that family/root, no promoted autonomous authority, and no Crystal evidence. |
+| Reusable capability | Preserve causal option-value evidence when a selected semantic skill reports an ordinary execution failure: make one independent post-attempt living-Pokedex observation, derive a settled positive or negative target when the ledger is readable, and censor only when independent observation is unavailable. |
+| Authority now | The living-Dex ranker previously selected and successfully executed one authentic Red acquisition under a complete two-option menu and independent ledger verification. The new frozen V3 acquisition attempt was not model-selected and was censored, so it adds no competence or authority evidence. |
 | Authority target | Learn option value from distinct-root multi-family Red outcomes, then beat a paired cost-only baseline on untouched family/root-disjoint development contexts without violating symbolic living-Pokedex invariants. This pilot informs a later powered benchmark; it cannot itself promote or transfer authority. |
 | Transfer test | Partition Red by both physical root and transformation family, compare on untouched families with identical title-neutral rows, and only after a powered Red gate reuse the shared option contract in Crystal through a separate title adapter with zero-shot and post-adaptation reporting. |
-| Cheapest falsifier | Bind one frozen train trial from plan 50327b72...0947 to an immutable pre-action claim, execute only its frozen candidate skill, and settle the terminal from a fresh living-Pokedex ledger. Stop if the bridge needs a teacher, retry, identity feature, incomplete menu, scenario substitution, or any action before the claim is durable. |
-| Time box | 1 session / 8 hours |
+| Cheapest falsifier | In ROM-free tests, force the selected skill to raise after zero, partial, and exact living-ledger transitions. The independent observer must run exactly once, derive the corresponding title-neutral outcome without fallback or a second execution, and remain censored only when the observer itself fails. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 0 | 8 |
-| Verified Outcome Example · development | 5 | 13 |
-| Model Fit · train | 4 | 5 |
-| Unseen Comparison · development | 4 | 5 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -61,27 +57,28 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-25-multifamily-v3-plan-frozen-train-outcome-opened** · status **active** · evidence [qualification](docs/evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
+**2026-08-25-v3-trial-censored-observation-recovery-opened** · status **active** · evidence [qualification](docs/evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This moves directly from a durable diverse curriculum to authentic causal collection evidence. The first train trial tests the bridge cheaply; success permits the remaining train outcomes, while the separate development family and roots stay untouched for a later paired falsifier and Crystal still waits for powered Red evidence. |
-| Learning output | No measured learner output yet. The plan is a necessary curriculum artifact, not a training example: counters remain development 15, verified outcomes 5, causal train 0/8, model fits 4/5, unseen comparisons 4/5, authority 0, and transfer 0. |
-| Authority delta | None. The sole V3 freeze read 81 authenticated snapshots but advanced zero frames and made zero predictions, controller actions, teacher calls, root claims, or outcome observations. It froze readiness only and changed no learned authority. |
-| Transfer result | Not run. The frozen plan is Red curriculum readiness, not cross-title evidence. Eight distinct-root train outcomes, a train-only fit, and the untouched development-family comparison still precede the Crystal adapter test. |
-| Blocker | The durable V3 plan now exists with eight train and eight untouched development trials, but no exact-plan-bound one-shot outcome collector has been qualified. No frozen trial has been claimed or executed and no training row exists. |
-| Decision | Consume the successful V3 freeze without retry and reorient to the smallest authentic learning bridge: qualify a sealed-plan-bound, claim-before-action, selected-skill-only collector, then execute exactly one frozen train trial as the falsifier before scaling the campaign. |
-| Next session | Reuse the qualified semantic acquisition/evolution skills and ledger verifier to implement and mutation-test the minimal V3 outcome bridge; publish it through exact-source CI; execute exactly one frozen train trial; record the terminal; and reorient before any remaining train or development trial. |
-| Next falsifier | The published collector must authenticate the exact V3 plan and source, select one frozen train trial before private execution, write an immutable root/trial claim before controller input, execute only that trial's candidate skill, and derive one terminal from an independent living-Pokedex observation with no teacher or retry. |
-| Stop condition | Stop after exactly one frozen train trial settles or fails and reorient. Never rerun the consumed V3 freeze or a claimed trial, substitute a scenario, collect development early, fit a model, open sealed Red, run Crystal, promote, or replay the game. |
+| Product alignment | A transferable option-value model must learn that a skill can fail or partially change state, not silently discard every difficult attempt. This repair converts observable execution risk into honest title-neutral targets and prevents another protected root from being spent without a post-attempt census. |
+| Learning output | No new measured learner output. The claimed attempt is an honest censored tombstone, not a causal training example: counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0. |
+| Authority delta | None. V3 train ordinal zero was durably claimed and its frozen acquisition attempted once, but execution interrupted before an independent ledger observation. The immutable terminal is censored, contributes no target, and changes no model, authority, or transfer counter. |
+| Transfer result | Not run. V3 produced no train target and is closed. A new V4 train dataset, train-only fit, and untouched family/root-disjoint Red comparison still precede the Crystal adapter test. |
+| Blocker | V3 now has one permanently censored train trial and only seven unclaimed train trials, so it cannot meet its frozen eight-example minimum. The runner also discarded the chance to observe a trustworthy post-attempt ledger after an ordinary selected-skill exception, losing potentially valid negative or positive option-value evidence. |
+| Decision | Close V3 without retry or replacement. Qualify one generic observation-after-execution-failure seam before freezing V4: execute the selected skill at most once, attempt one independent read-only ledger observation even after an ordinary exception, settle from that ledger when available, and censor only an unavailable observation. |
+| Next session | Implement and adversarially qualify the observation-after-execution-failure seam without opening a ROM or private context. Publish it through green CI, retire this bounded maintenance lane, then separately freeze a new V4 family/root-disjoint curriculum with preregistered train reserve and all V3-consumed roots excluded. |
+| Next falsifier | Mutation-test the shared executor so an ordinary selected-skill exception cannot skip the independent post-attempt ledger. Exact, partial, and unchanged observable ledgers must become independently derived outcomes; observer failure alone remains censored; no teacher, retry, alternate skill, identity feature, or second execution may appear. |
+| Stop condition | One ROM-free session only. Stop when the post-exception observer contract and mutations pass or if it requires route-specific handling. Do not execute another V3 trial, freeze V4, open development, fit, run sealed Red or Crystal, promote, or replay the game in this lane. |
 
 ### Stop conditions
 
-- Stop immediately if the collector cannot authenticate the exact sealed V3 plan, choose a frozen train trial before private execution, durably claim its trial and physical root before input, execute only the frozen candidate skill, or settle from a fresh independent living-Pokedex observation without a teacher or identity feature.
-- Stop after exactly one claimed train trial settles or fails and reorient before any remaining train trial, development opening, model fit, sealed Red opening, Crystal run, promotion, or full-game replay. Never retry the consumed freeze or a claimed trial.
+- Stop if the repair executes a selected capability more than once, invokes an alternate capability or teacher, treats exception text or identity as a model feature, or cannot derive the terminal solely from the frozen selection and one fresh ledger.
+- Stop after one ROM-free qualification session and reorient before any V4 freeze, protected trial, development opening, model fit, sealed Red opening, Crystal run, promotion, or full-game replay. V3 is closed and may not execute again.
 
 ### Hard boundaries for this lane
 
+- **Prohibited:** additional v3 trial execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
 - **Prohibited:** full game replay
@@ -132,6 +129,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red multi-family living-Dex option-value curriculum V3:** Collector main 7ebea63c passed CI 32900424741/1; storage-port repair main 14d7bcea passed CI 32902297341/1 and a claim-stubbed preflight reached the boundary with zero effects. Train ordinal zero then interrupted after 4379 actions and 304680 frames. Its durable censored terminal forbids retry; development stayed untouched and no target was added. Seven remaining train trials cannot meet V3's frozen minimum of eight, so receipt aa573cb9...f4b0 closes V3 without replacement. Evidence is preserved; retry is no.
 - **Multi-family private-plan publication qualification V1:** Source 2c4504ac18c4a1259a013c0311563995099d5951 passed CI 32893761213/1 and merged as 861ea62e4704e233209f0359913b418cb030f4c7. A full synthetic 8+8 family/root-disjoint plan with both access shapes published and reopened exactly; both original integer-key mutations failed before a record existed. No Red input, prediction, action, claim, outcome, fit, authority, or transfer counter changed. The maintenance unblock is complete. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V2:** Source 3ff9ab364bd8a912bcee1aabf7472c45b128be58 passed CI 32890215789/1. Its sole action-free freeze read 81 states, passed the family/root partition, and constructed the required 8+8 curriculum in memory with zero frames, claims, predictions, actions, teachers, or outcomes. Private publication then rejected integer candidate-count keys before writing a durable record. V2 is closed without retry; a ROM-free publication qualification must precede any reoriented V3 identity. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V1:** Source 54eebbf834eecfa335e02105ddcf955064a7730d passed CI 32886600958/1. One action-free freeze read 81 authenticated states with zero frames, claims, predictions, inputs, teachers, or outcomes, then failed closed: six development roots passed against eight required. Three more base-ready roots already stood at the exact PC boundary. V1 is closed without retry; a generic observed-boundary successor may use a new identity. Evidence is preserved; retry is no.

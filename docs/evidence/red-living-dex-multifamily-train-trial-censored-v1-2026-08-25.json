@@ -1,0 +1,116 @@
+{
+  "claim_boundary": {
+    "supported": "Exactly one frozen V3 train intervention was durably claimed before controller input, only its preregistered acquisition skill started, and its ordinary execution failure became one immutable censored terminal without retry, fallback, alternate-candidate execution, development access, model scoring, or teacher choice.",
+    "unsupported": [
+      "autonomous_red_completion",
+      "authority_promotion",
+      "causal_training_example",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "curriculum_disposition": {
+    "development_trials_opened": 0,
+    "development_trials_untouched": 8,
+    "original_train_example_minimum": 8,
+    "train_trials_claimed": 1,
+    "train_trials_remaining_unclaimed": 7,
+    "v3_can_reach_original_train_example_minimum": false,
+    "v3_freeze_retry_allowed": false
+  },
+  "durability": {
+    "claim_manifest_sha256": "7655da1359d4da294ca8257aa6e22c3abd263a243d8c160bdb40b49be599455a",
+    "physical_root_claim_committed_before_controller_input": true,
+    "retry_allowed": false,
+    "terminal_manifest_sha256": "ea4d029d8171589da31de9e4e07821a770a7c27708e80d131e73d2a74cc9251a",
+    "trial_claim_committed_before_controller_input": true,
+    "trial_consumed": true
+  },
+  "effects": {
+    "attempted_controller_actions": 4379,
+    "controller_actions": 4379,
+    "emulator_frames_advanced": 304680,
+    "model_predictions": 0,
+    "private_paths_published": 0,
+    "roots_claimed": 1,
+    "selected_capabilities_executed": 0,
+    "selected_capabilities_started": 1,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "candidate_count": 2,
+    "candidate_index": 0,
+    "failure_stage": "selected_capability_execution",
+    "independent_post_transition_observation": false,
+    "outcome_reward": null,
+    "outcome_status": "interrupted",
+    "partition": "train",
+    "selected_goal_kind": "acquire_species",
+    "trial_ordinal": 0
+  },
+  "lane_id": "red-living-dex-multifamily-option-value-curriculum-v3",
+  "preaction_falsifier": {
+    "claims_created": 0,
+    "controller_actions": 0,
+    "diagnosis": "The first invocation stopped before claim because the claim-gated emulator wrapper did not explicitly preserve the bounded read-only cartridge-RAM protocol required by initialized living-Pokedex storage.",
+    "emulator_frames_advanced": 0,
+    "repair": "The wrapper now explicitly forwards and validates only the read-only cartridge-RAM byte port; controller, button, and frame gates remain closed before claim.",
+    "repaired_claim_stubbed_preflight_reached_claim_boundary": true,
+    "roots_claimed": 0,
+    "terminals_created": 0
+  },
+  "product_interpretation": "The first V3 train execution falsified campaign readiness without producing a learning target. Its durable censoring is useful engineering evidence, but the seven remaining V3 train trials cannot satisfy the preregistered eight-example minimum. V3 must close without replacement or retry; the shortest successor observes a fresh ledger even after an ordinary selected-skill exception, then freezes a new overprovisioned and root-disjoint curriculum before any further protected execution.",
+  "publication": {
+    "collector": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run_id": 32900424741,
+      "main_commit": "7ebea63cbc8dc18a7047a9db57262563237115b3",
+      "pull_request": 45
+    },
+    "local_gate": {
+      "deselected": 3,
+      "passed": 4722,
+      "targeted_mutations_killed": 18,
+      "xfailed": 1
+    },
+    "read_only_storage_port_repair": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run_id": 32902297341,
+      "main_commit": "14d7bcea5c26bd627a2722a32fd4110c1edf8784",
+      "pull_request": 46,
+      "runner_sha256": "a2e317a375af4ea93c9f83a2078f9489a46a6a1d78743de95eabd97beb7597f1",
+      "source_bundle_sha256": "ae92c1bc710603d9991be52dcc55c8374bef40139a29cc53542bfa5e49bb76fc"
+    }
+  },
+  "recorded_on": "2026-08-25",
+  "schema": "pokemon.red.living-dex-multifamily-train-trial-censored-evidence.v1",
+  "status": "one_frozen_train_intervention_interrupted_and_censored",
+  "title_role": "Red multi-family curriculum falsifier; durable censored attempt, not training, model quality, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "development_openings": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "sealed_red_accesses": 0,
+    "teacher_choices": 0,
+    "teacher_fallbacks": 0,
+    "transfer_results": 0
+  }
+}

@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom now contains sixteen honest lessons
+## Current checkpoint: the first lesson failed, and the notebook missed the result
+
+The classroom was real. The first frozen V3 train lesson was claimed before input, only acquisition
+could run, and no model or teacher could change the assignment. It lasted 4,379 controller actions
+and 304,680 emulator frames before the skill raised. The root is permanently closed and the
+[receipt](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json) honestly says
+there is no training target.
+
+The safety rails worked; the notebook did not. After the skill raised, the harness never asked the
+independent living-Pokedex observer what had actually changed. It threw away the chance to learn
+that the option failed, partially worked, or even completed before its report broke. With one of
+eight train roots censored, V3 can no longer reach its own eight-example promise and is closed.
+
+The next step is not another walkthrough patch. It is a title-neutral rule: after any ordinary
+skill failure, look at the world once. If the living ledger is readable, it becomes an honest
+positive or negative lesson; only a failed observer remains censored. Then V4 will begin with new
+roots and enough reserve to survive a lost observation. Red remains the curriculum, Crystal the
+first transfer test, and the multi-game living Pokédex remains the product.
+
+## Previous checkpoint: the classroom contained sixteen honest lessons
 
 Source `60710d6b` passed CI `32895364249/1`. The one permitted V3 freezer then opened all 81
 authenticated Red snapshots without advancing a frame and sealed a real curriculum: eight train

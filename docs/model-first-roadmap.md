@@ -8,7 +8,37 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the 8+8 curriculum is durable; cross the first outcome bridge
+## Current checkpoint: V3 spent one root without a target; preserve observable failures before V4
+
+Collector main `7ebea63c` passed CI `32900424741/1`; read-only storage-port repair main
+`14d7bcea` passed CI `32902297341/1`. An authentic claim-stubbed rehearsal then reached the claim
+boundary with zero effects. The real frozen train ordinal zero was claimed once, executed only its
+acquisition skill, and interrupted after 4,379 controller actions and 304,680 frames. The
+[path-free terminal](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
+(SHA-256 `aa573cb9…f4b0`) proves both pre-action claims and the immutable censored terminal. Teacher,
+model, fallback, alternate skill, development access, fit, promotion, and transfer remained zero.
+
+The important falsifier is not merely that acquisition failed. The runner skipped its independent
+post-attempt census when the selected skill raised. It therefore could not distinguish no change,
+partial change, or a completed transition followed by a reporting error. That throws away the
+execution-risk signal the option-value model is meant to learn. Because the censored trial cannot
+retry and only seven V3 train trials remain, V3 cannot reach its frozen eight-example minimum and
+is closed without replacement.
+
+Active `post-exception-living-ledger-qualification-v1` is deliberately small and ROM-free. Execute
+one selected binding at most once; whether it returns or raises an ordinary exception, call one
+fresh independent ledger observer. A readable ledger must derive the same title-neutral settled
+`+1` or `-1` outcome contract; only observer failure stays censored. Mutation tests must kill
+skipped observation, second execution, alternate-skill rescue, exception-derived model features,
+and relabelled censoring. Publish through green CI, retire the repair, and reorient before freezing
+V4. V4 must exclude all V3-consumed roots and preregister enough train reserve that one censored
+observer failure cannot make its minimum arithmetically impossible.
+
+No V3 trial, private context, ROM, model fit, sealed Red, Crystal run, promotion, or replay is
+allowed in this maintenance lane. Counters remain **development 15 · verified 5 · causal train
+0 · fits 4 · comparisons 4 · authority 0 · transfer 0**.
+
+## Previous checkpoint: the 8+8 curriculum was durable; cross the first outcome bridge
 
 V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed exact-head CI
 `32895364249/1` in PR 43 and merged as `5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`.

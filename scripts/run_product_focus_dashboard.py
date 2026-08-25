@@ -81,6 +81,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
+        "additional_v3_trial_execution": "V3 execution",
         "campaign_execution": "campaign",
         "comparison_execution": "compare",
         "consumed_trial_retry": "retry",
@@ -119,41 +120,43 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The strict publication gate passed on exact source and is retired. V3 now reproduces "
-            "the proven 8+8 Red curriculum under a new action-free identity; no outcome, fit, "
-            "authority, or Crystal transfer has occurred."
+            "V3 is closed after one safely censored train attempt. Current work preserves "
+            "observable outcomes after selected-skill failure before any new V4 curriculum is "
+            "frozen; no training, promotion, or Crystal transfer is active."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red V3 · action-free freeze → durable 8+8 plan → reorient before outcomes",
+        location=(
+            "ROM-free observer repair → adversarial qualification → green CI → V4 reorientation"
+        ),
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate=(
-                "Authenticated dependency ranker · one authentic settled Red choice · no promotion"
+                "Historical dependency ranker · one authentic settled Red choice · no promotion"
             ),
             choice=(
-                "Last: acquisition selected at 78.2%; dependency distance reduced from 2 to 1"
+                "Latest V3 attempt was not model-selected; its interrupted result was censored"
             ),
-            confidence=0.7820733395566392,
+            confidence=None,
             decisions=1,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
             phase="qualification",
-            zero_shot_completed=causal_train_examples,
-            zero_shot_total=max(8, causal_train_examples),
-            adaptation_completed=verified_outcomes,
-            adaptation_total=max(13, verified_outcomes),
-            sealed_completed=unseen,
-            sealed_total=max(5, unseen),
+            zero_shot_completed=0,
+            zero_shot_total=1,
+            adaptation_completed=0,
+            adaptation_total=1,
+            sealed_completed=0,
+            sealed_total=1,
             predictions_committed=False,
-            heading="Multi-family option-value curriculum V3",
-            eyebrow="Red curriculum · living Pokedex · transfer later",
+            heading="Observation recovery before V4",
+            eyebrow="ROM-free maintenance · no training run",
             counter_labels=(
-                "Causal train examples",
-                "Verified development outcomes",
-                "Paired unseen comparisons",
+                "Observer contract",
+                "Adversarial qualification",
+                "Exact-source CI",
             ),
         ),
         events=(
@@ -200,6 +203,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "teacher/fallback 0 · retry 0",
             ),
             (
+                "V3 terminal · main 14d7bcea · CI 32902297341/1 green · train ordinal 0 "
+                "consumed · actions 4379 · frames 304680 · censored · causal target +0 · "
+                "development untouched · retry 0"
+            ),
+            (
                 "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"
                 "action/frame 0 · context closed · retry 0"
             ),
@@ -215,10 +223,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "Closed DEVELOP_TEAM freeze · 6077173 · CI 32177113545/1 green · manifest d77d9f9d "
                 "· readiness_authentication · effects not attested · reported labels/fits/teacher "
                 "0 · retry 0"
-            ),
-            (
-                "Causal bootstrap qualified · aa65504 · CI 32179177930/1 green · clean process "
-                "preloads 0 · private/ROM/claim/prediction effects 0"
             ),
         ),
     )

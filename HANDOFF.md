@@ -12,7 +12,40 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: V3 froze the authentic 8+8 curriculum; one train outcome is next
+## 2026-08-25: V3's first train trial was safely censored; observe failures before V4
+
+The one-shot V3 collector was published through PR 45 as main
+`7ebea63cbc8dc18a7047a9db57262563237115b3` under green CI `32900424741/1`.
+Local qualification passed **4,717 tests**, and 15/15 selection, claim, effect-gate, retry, and
+terminal mutations were killed. Its first protected invocation failed before claim because the
+claim-gated emulator wrapper did not explicitly preserve the bounded read-only cartridge-RAM
+protocol required to census initialized boxes. The durability audit found zero local claims, zero
+global claims, zero terminals, zero controller actions, and zero frames.
+
+The generic storage-observation repair reached main as
+`14d7bcea5c26bd627a2722a32fd4110c1edf8784` through PR 46 and green CI `32902297341/1`.
+The full local gate passed **4,722 tests**, three additional port mutations were killed, and an
+authentic claim-stubbed rehearsal reached the claim boundary with zero effects. The still-unused
+train ordinal zero then ran exactly once. Its frozen acquisition skill started, used 4,379
+controller actions and 304,680 frames, and raised before returning an execution report. Both
+pre-action claims and the censored terminal are durable; retry is forbidden. Development remained
+untouched, no model or teacher participated, and no causal train example was added. See the
+[path-free result](docs/evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
+(SHA-256 `aa573cb96086271073072066eb387d351b586c120840f61266a92af380b3f4b0`).
+
+V3 is closed. Its seven remaining train trials cannot satisfy the frozen minimum of eight causal
+train examples, and running them anyway would silently weaken the experiment. Active
+`post-exception-living-ledger-qualification-v1` is one four-hour, ROM-free maintenance session:
+after an ordinary selected-skill exception, attempt exactly one fresh read-only living ledger and
+derive a settled +/-1 target when it is observable; censor only observer failure. No alternate
+skill, retry, teacher, exception-text feature, V3 execution, V4 freeze, fit, sealed Red, Crystal,
+promotion, or replay belongs in this lane. After green CI, retire it and separately freeze an
+overprovisioned V4 plan that excludes every V3-consumed root.
+
+Counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**. The censored trial is engineering evidence, not training.
+
+## Earlier 2026-08-25: V3 froze the authentic 8+8 curriculum; one train outcome was next
 
 V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed exact-head CI
 `32895364249/1` in PR 43 and merged to main as

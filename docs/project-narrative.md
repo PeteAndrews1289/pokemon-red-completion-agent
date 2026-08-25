@@ -1,6 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the authentic classroom is finally sealed
+## August 25: the first frozen lesson fails—and the observer looks away
+
+The project finally crossed from curriculum design into a real V3 train attempt. Collector main
+`7ebea63c` and its read-only storage repair `14d7bcea` both passed GitHub CI. A rehearsal restored
+the authentic Red context, reconstructed both anonymous choices, and stopped at the claim boundary
+without changing a frame. Then train ordinal zero was claimed for real. Only its frozen acquisition
+skill could act; no model, teacher, fallback, or alternate option participated.
+
+After 4,379 controller actions and 304,680 frames, that skill raised. The durability system did
+its job: the physical root and trial were already claimed, the failure became an immutable
+censored terminal, and retry was impossible. The
+[receipt](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json) records no
+development access, no target, no fit, and no authority change.
+
+The more consequential failure was in the experiment harness. When execution raised, it did not
+ask the independent living-Pokedex observer what state the game had actually reached. A difficult
+action might have done nothing, partially changed the collection, or completed its transition and
+failed only while reporting. Any readable post-attempt ledger could have produced an honest
+negative or positive option-value target; instead the harness discarded it.
+
+That closes V3. Seven remaining train roots cannot produce the frozen minimum of eight examples,
+and weakening the target after seeing a failure would corrupt the experiment. The next scene is a
+small reusable repair, not another Red route: observe once after ordinary execution failure,
+settle from the ledger when possible, and censor only when observation itself is impossible. A new
+V4 curriculum will then exclude every consumed V3 root and include a preregistered reserve. This is
+how failure becomes useful knowledge without pretending the model learned when it did not.
+
+## Earlier August 25: the authentic classroom was finally sealed
 
 V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed CI `32895364249/1`
 and merged as `5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`. Then the project took its one

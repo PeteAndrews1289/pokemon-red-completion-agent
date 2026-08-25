@@ -5,14 +5,30 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD ·
+> **Current rail:** Show **MAIN 14D7BCEA · CI 32902297341/1 GREEN · V3 TRAIN ORDINAL 0
+> CONSUMED ONCE · ACTIONS 4,379 · FRAMES 304,680 · DURABLE CLAIM + CENSORED TERMINAL ·
+> CAUSAL TRAIN +0 · DEVELOPMENT UNTOUCHED · RETRY NO**. Link the
+> [result](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
+> and show **SHA-256 AA573CB9…F4B0**.
+>
+> Animate active `post-exception-living-ledger-qualification-v1`: **SELECTED SKILL ONCE →
+> ORDINARY RETURN OR EXCEPTION → ONE INDEPENDENT LIVING-LEDGER OBSERVATION → OBSERVABLE
+> UNCHANGED/PARTIAL/EXACT STATE BECOMES A SETTLED TITLE-NEUTRAL OUTCOME → OBSERVER FAILURE ALONE
+> IS CENSORED → REORIENT**. Show **ROM/PRIVATE CONTEXT/CONTROLLER ACTION/TEACHER/ALTERNATE SKILL/
+> RETRY 0** for this repair. Keep the board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0 ·
+> FITS 4 · COMPARISONS 4 · AUTHORITY 0 · TRANSFER 0**. V3 is closed: seven remaining train
+> trials cannot meet its frozen minimum of eight. After this ROM-free repair, freeze a new V4 with
+> all V3-consumed roots excluded and preregistered train reserve. V4 execution, sealed Red,
+> Crystal, promotion, completion, and replay remain closed.
+>
+> **Previous rail:** Show **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD ·
 > 81 AUTHENTICATED STATES · DURABLE PLAN 50327B72…0947 · MANIFEST 763951CA…8A47 ·
 > 8 TRAIN + 8 DEVELOPMENT · 16 DISTINCT ROOTS · FAMILY/ROOT OVERLAP 0 · FRAMES/ACTIONS/
 > PREDICTIONS/TEACHERS/CLAIMS/OUTCOMES 0 · V3 RETRY NO**. Link the
 > [result](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
 > and show **SHA-256 27A71899…FC0E1**.
 >
-> Animate active `red-living-dex-multifamily-option-value-curriculum-v3`: **AUTHENTICATE SEALED
+> The then-active `red-living-dex-multifamily-option-value-curriculum-v3` rail was: **AUTHENTICATE SEALED
 > PLAN → SELECT ONE FROZEN TRAIN TRIAL → DURABLE TRIAL + ROOT CLAIM → SELECTED SKILL ONLY →
 > FRESH LIVING-POKEDEX OBSERVATION → ONE PATH-FREE TERMINAL → REORIENT**. Keep the
 > board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 ·
