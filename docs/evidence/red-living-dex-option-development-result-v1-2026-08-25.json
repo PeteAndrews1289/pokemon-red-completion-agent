@@ -1,0 +1,98 @@
+{
+  "claim_boundary": {
+    "supported": "One authenticated title-neutral two-candidate Red living-Dex menu was frozen before prediction; the fitted ranker selected acquisition exactly once; only that semantic skill received controller authority; and a fresh post-transition collection observation independently verified the exact selected living-ledger change while preserving required and unrelated specimens.",
+    "unsupported": [
+      "autonomous_red_completion",
+      "authority_promotion",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_quality_from_one_family_or_root",
+      "sealed_red_result"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 1,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 1
+  },
+  "durability": {
+    "decision_committed_before_controller_input": true,
+    "root_claimed_before_prediction_or_controller_authority": true,
+    "root_retry_allowed": false,
+    "start_manifest_sha256": "c66499b350a928174c79ecdd778ac5cb7a27a3ac47537a562decdcd41c222f19",
+    "terminal_manifest_sha256": "76bfe63439db726cabb9abfdca3eaa7ec06c88c9f5767b67f16fece567c45880"
+  },
+  "episode": {
+    "attempted_controller_actions": 665,
+    "candidate_count": 2,
+    "complete_menu_frozen_before_prediction": true,
+    "controller_actions": 665,
+    "emulator_frames_advanced": 33672,
+    "independent_post_transition_observation": true,
+    "model_decision": {
+      "model_predictions": 1,
+      "score_margin": 1.2777899345444856,
+      "selected_candidate_index": 0,
+      "selected_candidate_probability": 0.7820733395566392,
+      "selected_goal_kind": "acquire_species"
+    },
+    "outcome": {
+      "dependency_distance_after": 1,
+      "dependency_distance_before": 2,
+      "exact_selected_transition": true,
+      "required_living_preserved": true,
+      "reward": 1,
+      "status": "settled",
+      "unrelated_species_preserved": true
+    },
+    "partition": "development",
+    "selected_capabilities_executed": 1,
+    "status": "model_selected_option_settled_and_independently_verified",
+    "teacher_queries": 0
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32878889059,
+    "local_ci_deselected": 3,
+    "local_ci_passed": 4641,
+    "local_ci_xfailed": 1,
+    "pull_request": 37,
+    "source_commit": "a448f5b99ceaaa1164267f627eacace29c0dd434"
+  },
+  "recorded_on": "2026-08-25",
+  "root_disposition": {
+    "claimed": true,
+    "context_substitutions_after_model_selection": 0,
+    "retry_allowed": false,
+    "start_records": 1,
+    "terminal_records": 1
+  },
+  "schema": "pokemon.red.living-dex-option-development-result-evidence.v1",
+  "status": "one_authentic_model_selected_red_collection_option_settled",
+  "title_role": "Authentic Red living-Dex model-choice development evidence; plumbing and one verified outcome, not promotion, completion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "sealed_red_accesses": 0,
+    "teacher_choices": 0,
+    "teacher_fallbacks": 0,
+    "transfer_results": 0
+  }
+}

@@ -8,22 +8,40 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: let semantic routing see the legal moves the party already has
+## Current checkpoint: turn one authentic choice into a multi-family curriculum
 
-Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
-`32875519562/1` with 4638 tests. The model-choice runner reached its first authentic action-free
-boundary and stopped before root claim or prediction. The
-[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-(SHA-256 `dcb7ef94…b29c`) explains why: its traversal observer composed story flags but omitted the
-already-qualified live Cut, Surf, and Strength projection. Every eligible unused train root had
-the same structural issue. No root, score, button, frame, outcome, or counter was consumed.
+Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
+`32878889059/1`. It connects observed Cut, Surf, and Strength legality to cartridge-derived
+semantic routing. One untouched development root then ran exactly once. The
+[result](evidence/red-living-dex-option-development-result-v1-2026-08-25.json)
+(SHA-256 `cfcbaa89…c10`) records a complete anonymous acquire-versus-evolve menu, one authenticated
+model prediction, acquisition selected at probability `0.7821`, selected-skill-only execution,
+and an independently observed exact living-ledger transition after 665 actions and 33,672 frames.
+Dependency distance fell from two to one while required and unrelated specimens were preserved.
+The root is permanently closed. This is the first authentic learned collection choice, not a
+promotion or a claim that the model can play Red end to end.
 
-Active `red-living-dex-field-capability-option-execution-v1` is deliberately one short repair plus
-its learning falsifier. Reuse the generic badge/living-holder/Surf-permission rules, never a fixed
-direction sequence. Mutation-test the join, publish exact-head green CI, then run the unchanged
-first eligible root once. The action-free proof already found a cartridge-derived 445-step route.
-A settled or censored durable terminal advances the decision; a new preclaim blocker ends the lane.
-Crystal, sealed Red, refitting, teacher rescue, and full replay remain closed.
+Active `red-living-dex-multifamily-option-value-curriculum-v1` generalizes the decision instead of
+replaying the successful family. The next implementation must derive complete executable menus
+from live ledger, cartridge evolution graph, resources, and reachability facts across at least two
+families; expose only title-neutral features; and partition by both family and physical root. Each
+claimed root runs once. Train outcomes may fit the ranker; development outcomes may only evaluate
+it. The first bounded pilot targets eight causal train examples, thirteen cumulative verified
+development outcomes, one additional train-only fit, and one paired untouched comparison against
+the cost-only baseline.
+
+Success advances only to a statistically powered Red benchmark. Failure rejects or revises the
+option representation without jumping to Crystal. Stop on identity leakage, incomplete-menu
+scoring, train/development family overlap, or any family-specific route rescue. Crystal, sealed
+Red, authority promotion, and full replay remain closed until family/root-disjoint Red evidence
+supports the shared contract.
+
+## Previous checkpoint: let semantic routing see the legal moves the party already has
+
+Main `7c131a82` passed CI `32875519562/1`. Its
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) recorded
+the missing live field-move projection before claim, score, input, or frame advancement. The
+generic repair and successful one-shot execution are captured in the current checkpoint above.
 
 ## Previous checkpoint: make one authentic living-Dex model choice and verify its consequence
 

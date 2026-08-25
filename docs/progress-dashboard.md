@@ -5,18 +5,26 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 7C131A82 · CI 32875519562/1 GREEN · 4638 PASSED ·
-> FIELD-CAPABILITY-COMPLETE RED LIVING-DEX OPTION EXECUTION · DEVELOPMENT 14/15 · VERIFIED 4/5 ·
-> AUTHORITY PROMOTIONS 0 · TRANSFER RESULTS 0**. Link the
-> [action-free falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-> and show **SHA-256 DCB7EF94…B29C**.
+> **Current rail:** Show **MAIN A448F5B9 · CI 32878889059/1 GREEN · FIRST AUTHENTIC RED
+> COLLECTION CHOICE SETTLED · ACQUISITION 78.2% · ACTIONS 665 · FRAMES 33,672 · DEPENDENCY 2→1 ·
+> DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 · AUTHORITY 0 ·
+> TRANSFER 0**. Link the
+> [result](evidence/red-living-dex-option-development-result-v1-2026-08-25.json) and show
+> **SHA-256 CFCBAA89…C10**.
 >
-> Animate **LIVE BADGE + LIVING MOVE HOLDER + SURF PERMISSION → CUT/SURF/STRENGTH CAPABILITIES →
-> CARTRIDGE-DERIVED ROUTE → COMPLETE ANONYMOUS MENU → ROOT CLAIM → ONE MODEL SCORE → SELECTED
-> SKILL ONLY → FRESH LIVING LEDGER**. Show **ELIGIBLE ROOTS CHECKED 5 · ROOTS CLAIMED 0 · MODEL
-> SCORES 0 · BUTTONS/FRAMES 0 · ACTION-FREE ROUTE FOUND** before publication. Label the next live
-> terminal **PLUMBING EVIDENCE ONLY**: no fit, sealed Red, Crystal, completion, promotion, or
-> transfer claim.
+> Animate the completed rail **LIVE FIELD CAPABILITIES → CARTRIDGE-DERIVED ROUTE → COMPLETE
+> ANONYMOUS MENU → DURABLE ROOT CLAIM → ONE MODEL SCORE → SELECTED SKILL ONLY → FRESH LIVING
+> LEDGER → SETTLED**. Then switch to active
+> `red-living-dex-multifamily-option-value-curriculum-v1`: **MULTIPLE FAMILIES + DISTINCT ROOTS →
+> COMPLETE IDENTITY-FREE MENUS → TRAIN OUTCOMES → TRAIN-ONLY FIT → PAIRED UNTOUCHED DEVELOPMENT
+> COMPARISON**. Label the completed episode **PLUMBING + ONE VERIFIED OUTCOME, NOT PROMOTION**, and
+> keep sealed Red, Crystal, full replay, completion, and transfer closed.
+>
+> **Previous rail:** Show **MAIN 7C131A82 · CI 32875519562/1 GREEN · FIELD-CAPABILITY FALSIFIER ·
+> ELIGIBLE ROOTS CHECKED 5 · ROOTS CLAIMED 0 · SCORES/ACTIONS/FRAMES 0 · ACTION-FREE ROUTE FOUND**.
+> Link the
+> [falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) and show
+> **SHA-256 DCB7EF94…B29C**.
 >
 > **Previous rail:** Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
 > ECB93C44 QUALIFIED · EXACT SHA + GIT BLOB · CANONICAL PRETTY JSON · NO-FOLLOW/INODE STABLE ·

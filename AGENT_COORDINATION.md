@@ -1,19 +1,30 @@
 # Three-agent coordination
 
-> **2026-08-25 live field-capability falsifier; bounded successor active:** Published main
-> `7c131a82f2011a56232de4be2379704195e158f7` passed CI `32875519562/1` with 4638 tests.
-> The [falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-> (SHA-256 `dcb7ef94…b29c`) records five eligible action-free roots with the same missing
-> Cut/Surf/Strength projection, and zero claim, prediction, controller, frame, or counter effect.
-> The existing generic legality rules produced a cartridge-derived route from the unchanged root.
+> **2026-08-25 first authentic collection choice settled; multi-family curriculum active:**
+> Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
+> `32878889059/1`. One untouched development root was claimed and run exactly once. The
+> [result](docs/evidence/red-living-dex-option-development-result-v1-2026-08-25.json)
+> (SHA-256 `cfcbaa89…c10`) records a complete anonymous two-row menu, one model prediction,
+> acquisition selected at probability `0.7821`, selected-skill-only execution, 665 controller
+> actions, 33,672 frames, dependency distance `2 → 1`, and independent preservation checks. The
+> root is closed permanently. Teacher/fallback, promotion, sealed Red, Crystal, fit, and transfer
+> effects were zero.
 >
-> Codex owns implementation/publication/execution of
-> `red-living-dex-field-capability-option-execution-v1`. Claude reviews statistics and leakage;
-> Antigravity reviews architecture and transfer. Both are read-only milestone reviewers, not
-> duplicate implementers or standing development gates. No agent owns a fixed route, easier-root
-> substitution, claimed-root retry, teacher choice/fallback, fit/refit, sealed Red, Crystal, full
-> replay, promotion, completion, or transfer claim. Boards remain
-> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1** until terminal evidence is tracked.
+> Codex owns `red-living-dex-multifamily-option-value-curriculum-v1`: implement complete
+> title-neutral option inventories across distinct families and roots, collect train and untouched
+> development outcomes, fit on train only, and run one paired candidate-versus-cost comparison.
+> Claude reviews statistics, leakage, and power; Antigravity reviews architecture, identity
+> boundaries, and transfer readiness. They remain read-only milestone reviewers, not duplicate
+> implementers or standing gates. No agent owns claimed-root retry, teacher choice/fallback,
+> development-data fitting, family-specific route rescue, sealed Red, Crystal, full replay,
+> promotion, completion, or transfer claims. Boards are **development 15 · verified 5 · causal
+> train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-25 checkpoint — field-capability falsifier:** Main `7c131a82` passed CI
+> `32875519562/1`; the
+> [falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+> recorded the missing Cut/Surf/Strength projection before any root, score, action, or frame was
+> consumed. Its reusable repair is included in the successful published source above.
 
 > **Previous 2026-08-25 checkpoint — repeatable Red option execution was active:** Baseline main
 > `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI `32476766226/1` with 4619

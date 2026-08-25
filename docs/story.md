@@ -7,21 +7,37 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the student had the moves, but the map forgot to look
+## Current checkpoint: the student chose, acted, and improved the collection
 
-Main `7c131a82` passed CI `32875519562/1` with 4638 tests. Then the first authentic collection
-choice stopped before the model scored anything. The game state had legal field moves, but the
-semantic map had been handed only story flags, so every unused classroom looked cut off from the
-capture lesson. The [falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-records the important zeros: no root claimed, no model prediction, no button, no frame, no outcome.
+Main `a448f5b9` passed CI `32878889059/1`. We returned to the same untouched classroom that had
+previously exposed the field-move integration bug. This time the map saw the party's actual legal
+Cut, Surf, and Strength capabilities. Before the model could answer, the system froze the whole
+anonymous menu: acquire now or evolve what the collection already held. The model chose acquisition
+with `78.2%` confidence. No teacher voted, no fallback waited offstage, and only the chosen tool was
+allowed to touch the controller.
 
-We checked the whole eligible inventory and found the same structural cause five times. Then we
-gave the map the generic field-move facts the project already knew—badges, a living move holder,
-and live Surf permission—and it computed a 445-step route from the unchanged state. No arrow list
-was added and no easier reset was chosen. The next scene is short: publish that capability join,
-return to the same untouched classroom once, let the model choose acquire or evolve, and verify the
-living collection from the game afterward. That is still plumbing, not Pokémon mastery, but it is
-plumbing aimed directly at the cross-game living-Pokédex agent.
+The lesson took 665 controller actions and 33,672 emulator frames. Then the executor stepped aside
+and a fresh observer counted the living collection. The selected transition was exact; dependency
+distance fell from two to one; required and unrelated specimens survived. The
+[result receipt](evidence/red-living-dex-option-development-result-v1-2026-08-25.json) closes that
+physical root forever and records the first authentic model-selected collection improvement in the
+project.
+
+One right answer does not make the student a Pokémon master. It proves that the classroom is real:
+a title-neutral model decision can control a semantic skill and receive an independent outcome.
+The next lesson stops repeating one family. It builds complete menus across multiple evolution
+families and distinct roots, learns only from training outcomes, and compares against the cheap
+cost-only answer on the exact same untouched development choices. Crystal stays closed until that
+shared representation survives family/root separation inside Red.
+
+## Previous checkpoint: the student had the moves, but the map forgot to look
+
+Main `7c131a82` passed CI `32875519562/1`. The first action-free attempt stopped before any model
+score because semantic traversal had story flags but not live field-move legality. The
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) recorded
+five matching eligible roots and zero claims, buttons, frames, or outcomes. Joining the generic
+capability facts produced a 445-step cartridge-derived route without adding an arrow list or
+choosing an easier reset, enabling the successful scene above.
 
 ## Previous checkpoint: stop inspecting the classroom and let the student choose
 

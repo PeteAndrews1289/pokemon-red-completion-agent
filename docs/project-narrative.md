@@ -1,22 +1,39 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the model was ready to choose, but the router could not see its field moves
+## August 25: the model made its first authentic collection choice
 
-Published main `7c131a82f2011a56232de4be2379704195e158f7` passed CI
-`32875519562/1` with 4638 tests. The first authentic option attempt then failed safely before a
-root claim, prediction, button, or advanced frame. The
-[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) captured a
-general integration error: the semantic router was given story flags but not the existing live
-Cut, Surf, and Strength capabilities. Every eligible unused training root therefore looked
-stranded even though the party legally carried the field moves.
+Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
+`32878889059/1`. It repaired the reusable boundary between live field-move legality and semantic
+routing without adding a walkthrough. We then opened the unchanged unused development root once,
+froze its complete title-neutral acquire-versus-evolve menu, durably claimed it, and asked the
+authenticated ranker for one decision. The model chose acquisition with probability `0.7821`.
+Only that skill received controller authority.
 
-This is exactly the kind of failure the short scenario loop is meant to reveal. We did not spend a
-root, swap to an easier state, or add a Cinnabar-to-cave walkthrough. Feeding the router the
-already-qualified badge, living-holder, and Surf-permission rules produced a 445-step
-cartridge-derived route without gameplay. The bounded successor now makes that reusable join,
-mutation-tests it, publishes green, and returns to the same untouched root for one model-selected
-acquire-versus-evolve outcome. Learned authority, living-Pokédex progress, and Crystal transfer all
-remain unchanged until that independent ledger terminal exists.
+After 665 controller actions and 33,672 emulator frames, the game was observed again from scratch.
+The independent living-specimen ledger confirmed the exact selected transition, reduced the
+collection dependency from two steps to one, and showed that required and unrelated specimens
+were still present. The
+[result receipt](evidence/red-living-dex-option-development-result-v1-2026-08-25.json) preserves
+the outcome and the permanent no-retry disposition. There was no teacher choice, fallback, model
+fit, authority promotion, sealed Red access, Crystal access, or transfer claim.
+
+This is a genuine milestone and a deliberately narrow one. The project has now proved that a
+learned, identity-free collection choice can pass from model score through semantic execution to
+an independently verified living-Pokédex improvement. It has not proved that the ranker is broadly
+good. The next curriculum must repeat the pattern across distinct evolution families and physical
+roots, learn only from the training partition, and beat a paired cost-only baseline on untouched
+family/root-disjoint development decisions. Only a later powered Red result can justify the first
+Crystal transfer test.
+
+## Earlier August 25: the router could not see the party's legal field moves
+
+Main `7c131a82` passed CI `32875519562/1`, but the first action-free attempt stopped before claim,
+prediction, button, or frame. The
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) showed
+that semantic traversal had received story flags but not the existing live Cut, Surf, and Strength
+projection. All five eligible roots shared the omission. Joining the generic badge, living-holder,
+and Surf-permission rules yielded a 445-step cartridge-derived route from the unchanged first root
+without spending it; that repair enabled the successful episode above.
 
 ## Earlier August 25: stop designing the doorway and let the model make one real collection choice
 

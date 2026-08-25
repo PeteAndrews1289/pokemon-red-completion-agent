@@ -119,40 +119,44 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Main 06af22c1 · CI 32476766226/1. The first product-aligned session is building "
-            "one repeatable Red option-execution loop. V1 remains closed; no authentic "
-            "living-Dex choice or Crystal transfer has been claimed yet."
+            "Main a448f5b9 · CI 32878889059/1. The first authentic Red collection choice "
+            "settled successfully; the next curriculum tests option value across distinct "
+            "families and roots. No promotion or Crystal transfer has been claimed."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red development · full menu → one model choice → one skill → fresh ledger",
+        location=(
+            "Red curriculum · complete multi-family menus → train-only fit → paired untouched "
+            "development"
+        ),
         collection_target=150,
         model=DashboardModelState(
-            mode="shadow",
+            mode="model",
             candidate=(
-                "Dependency ranker a42db642 · authenticated · synthetic support only · not run"
+                "Authenticated dependency ranker · one authentic settled Red choice · no promotion"
             ),
             choice=(
-                "Next: score acquire/evolve once, execute only the choice, verify a fresh ledger"
+                "Last: acquisition selected at 78.2%; dependency distance reduced from 2 to 1"
             ),
-            decisions=0,
+            confidence=0.7820733395566392,
+            decisions=1,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
-            zero_shot_completed=development_episodes,
-            zero_shot_total=max(15, development_episodes),
+            phase="training",
+            zero_shot_completed=causal_train_examples,
+            zero_shot_total=max(8, causal_train_examples),
             adaptation_completed=verified_outcomes,
-            adaptation_total=max(5, verified_outcomes),
-            sealed_completed=transfer_results,
-            sealed_total=max(1, transfer_results),
-            predictions_committed=False,
-            heading="Product focus scorecard",
-            eyebrow="Living Pokedex · transferable learned play",
+            adaptation_total=max(13, verified_outcomes),
+            sealed_completed=unseen,
+            sealed_total=max(5, unseen),
+            predictions_committed=True,
+            heading="Multi-family option-value curriculum",
+            eyebrow="Red curriculum · living Pokedex · transfer later",
             counter_labels=(
-                "Development episodes",
-                "Verified outcomes",
-                "Crystal transfer (closed)",
+                "Causal train examples",
+                "Verified development outcomes",
+                "Paired unseen comparisons",
             ),
         ),
         events=(
@@ -192,10 +196,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 1", stop_conditions[0]),
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
-            (
-                "Preflight · main 347f954d · CI 32471913419/1 green · manifest first · "
-                "fixed reset · semantic route · rows 2 · prediction/action/frame 0 · audits GO · "
-                "Antigravity GO"
+            _event(
+                "First authentic option",
+                "main a448f5b9 · CI 32878889059/1 green · acquisition selected 78.2% · "
+                "actions 665 · frames 33672 · dependency 2→1 · fresh ledger settled · "
+                "teacher/fallback 0 · retry 0",
             ),
             (
                 "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"
