@@ -120,18 +120,66 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
 )
 
-LANE_ID = "red-living-dex-multifamily-option-value-curriculum-v2"
-PLAN_SCHEMA = "pokemon.red.private-living-dex-multifamily-pilot-plan.v2"
-RESULT_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-result.v2"
-FAILURE_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-failure.v2"
-PLAN_RECORD_ID = "red-living-dex-multifamily-pilot-plan-v2"
-PLAN_RECORD_KIND = "red-living-dex-multifamily-pilot-plan-v2"
 PC_GOAL_YX = (4, 13)
 TRAINING_GOAL_YX = (3, 3)
 TRIALS_PER_CANDIDATE = 4
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+
+
+@dataclass(frozen=True, slots=True)
+class MultifamilyFreezeProtocol:
+    """Public and private identities for one non-retryable freeze generation."""
+
+    lane_id: str
+    plan_schema: str
+    result_schema: str
+    failure_schema: str
+    success_status: str
+    plan_record_id: str
+    plan_record_kind: str
+
+    def __post_init__(self) -> None:
+        values = (
+            self.lane_id,
+            self.plan_schema,
+            self.result_schema,
+            self.failure_schema,
+            self.success_status,
+            self.plan_record_id,
+            self.plan_record_kind,
+        )
+        if any(
+            not isinstance(value, str)
+            or not value
+            or re.fullmatch(r"[a-z0-9._-]+", value) is None
+            for value in values
+        ):
+            raise ValueError("multifamily freeze protocol identity differs")
+        if len({self.plan_schema, self.result_schema, self.failure_schema}) != 3:
+            raise ValueError("multifamily freeze protocol schemas overlap")
+        if self.plan_record_id != self.plan_record_kind:
+            raise ValueError("multifamily freeze record identity differs")
+
+
+V2_PROTOCOL = MultifamilyFreezeProtocol(
+    lane_id="red-living-dex-multifamily-option-value-curriculum-v2",
+    plan_schema="pokemon.red.private-living-dex-multifamily-pilot-plan.v2",
+    result_schema="pokemon.red.living-dex-multifamily-pilot-freeze-result.v2",
+    failure_schema="pokemon.red.living-dex-multifamily-pilot-freeze-failure.v2",
+    success_status="two_family_root_disjoint_pilot_frozen_v2",
+    plan_record_id="red-living-dex-multifamily-pilot-plan-v2",
+    plan_record_kind="red-living-dex-multifamily-pilot-plan-v2",
+)
+
+# Historical aliases keep the consumed V2 runner and its tests byte-contract readable.
+LANE_ID = V2_PROTOCOL.lane_id
+PLAN_SCHEMA = V2_PROTOCOL.plan_schema
+RESULT_SCHEMA = V2_PROTOCOL.result_schema
+FAILURE_SCHEMA = V2_PROTOCOL.failure_schema
+PLAN_RECORD_ID = V2_PROTOCOL.plan_record_id
+PLAN_RECORD_KIND = V2_PROTOCOL.plan_record_kind
 
 
 class MultifamilyPilotFreezeError(RuntimeError):
@@ -227,7 +275,11 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(
+    argv: list[str] | None = None,
+    *,
+    protocol: MultifamilyFreezeProtocol = V2_PROTOCOL,
+) -> int:
     stage = "arguments"
     try:
         args = _parser().parse_args(argv)
@@ -249,6 +301,7 @@ def main(argv: list[str] | None = None) -> int:
         plan = _freeze(inventory, mechanics)
         stage = "private_plan_encoding"
         document, frozen_plan_sha256 = _private_plan_document(
+            protocol=protocol,
             source_commit=source_commit,
             source_bundle=source_bundle,
             rom_sha256=rom_sha256,
@@ -262,6 +315,7 @@ def main(argv: list[str] | None = None) -> int:
         stage = "private_plan_publication"
         result = _publish(
             args,
+            protocol=protocol,
             document=document,
             plan_sha256=frozen_plan_sha256,
             inventory=inventory,
@@ -277,7 +331,7 @@ def main(argv: list[str] | None = None) -> int:
     print(
         json.dumps(
             {
-                "schema": FAILURE_SCHEMA,
+                "schema": protocol.failure_schema,
                 "status": "failed_closed",
                 "failure_stage": failure_stage,
                 "controller_actions": 0,
@@ -773,6 +827,7 @@ def _freeze(
 
 def _private_plan_document(
     *,
+    protocol: MultifamilyFreezeProtocol = V2_PROTOCOL,
     source_commit: str,
     source_bundle: str,
     rom_sha256: str,
@@ -800,8 +855,8 @@ def _private_plan_document(
         }
 
     payload: dict[str, object] = {
-        "schema": PLAN_SCHEMA,
-        "lane_id": LANE_ID,
+        "schema": protocol.plan_schema,
+        "lane_id": protocol.lane_id,
         "status": "frozen_before_prediction_action_or_outcome",
         "source_commit": source_commit,
         "source_bundle_sha256": source_bundle,
@@ -830,6 +885,7 @@ def _private_plan_document(
 def _publish(
     args: argparse.Namespace,
     *,
+    protocol: MultifamilyFreezeProtocol = V2_PROTOCOL,
     document: dict[str, object],
     plan_sha256: str,
     inventory: RedMultifamilyInventory,
@@ -840,14 +896,14 @@ def _publish(
 
     store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
     record = store.publish_sealed_record(
-        PLAN_RECORD_ID,
-        kind=PLAN_RECORD_KIND,
+        protocol.plan_record_id,
+        kind=protocol.plan_record_kind,
         record=document,
     )
     return {
-        "schema": RESULT_SCHEMA,
-        "status": "two_family_root_disjoint_pilot_frozen_v2",
-        "lane_id": LANE_ID,
+        "schema": protocol.result_schema,
+        "status": protocol.success_status,
+        "lane_id": protocol.lane_id,
         "plan_sha256": plan_sha256,
         "plan_manifest_sha256": record.summary.manifest_sha256,
         "inventory": inventory.public_dict(),

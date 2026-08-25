@@ -30,6 +30,14 @@ action-free private freeze. A pass means one durable eight-train/eight-developme
 complete anonymous menus and disjoint families and roots. A failure closes V3. Reorient before
 any root claim, model score, controller input, or outcome collector.
 
+The local implementation is deliberately only a protocol wrapper. All inventory, selection,
+mechanics, strict encoding, and sealed-store code stays in the qualified shared runner. Direct
+tests run the complete synthetic plan under V3, require the V3 result/status/record, and confirm
+the V2 record namespace remains absent.
+The exact local candidate passes **4,686 ROM-free tests**, with three intentional deselections and
+one expected failure; all public-artifact, documentation, focus, registry, lint, and type checks
+are green.
+
 Do not retry V1, V2, or V3; lower the 8+8 target; reuse an old record; fit development data; open
 sealed Red; run Crystal; promote; or replay the game. Counters remain **development 15 · verified
 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**. A frozen plan remains

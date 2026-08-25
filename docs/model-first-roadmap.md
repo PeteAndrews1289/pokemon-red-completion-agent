@@ -26,6 +26,14 @@ record identities, publishes it through exact-source CI, and runs it once action
 durably preserve exactly eight train and eight development trials with complete anonymous menus
 and disjoint families and roots. Reorient before any trial claim, score, or controller input.
 
+The local V3 candidate is a thin protocol wrapper: inventory, partitioning, mechanic projection,
+strict serialization, and sealed publication remain in the qualified shared runner; only the
+lane, plan/result/failure schemas, success status, and private record identity change. ROM-free
+tests execute the complete synthetic round-trip through V2 and V3, require the V3 terminal, and
+verify that V3 creates no V2 record.
+The full local ROM-free suite passes **4,686 tests**, with three intentional deselections and one
+expected failure; public-artifact, documentation, focus, registry, lint, and type checks pass.
+
 The sole V3 freeze cannot retry, reuse a V1/V2 identity, lower the 8+8 target, advance a frame, or
 alter the curriculum semantics. Its success would be readiness, not training. Counters remain
 **development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
