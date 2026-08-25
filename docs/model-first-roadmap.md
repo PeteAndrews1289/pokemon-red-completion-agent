@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-21. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-25. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,29 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: public reader qualified; design the V2 gate without reopening V1
+## Current checkpoint: make one authentic living-Dex model choice and verify its consequence
+
+Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
+`32476766226/1` with 4619 tests. The
+[focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json) retires the
+design-only V2 successor because the semantic capture skill, bounded evolution skill, anonymous
+two-row menu, independent ledger verifier, authenticated ranker, and unused development inventory
+already exist. Another public gate would not increase learned authority.
+
+Active `repeatable-red-living-dex-option-execution-v1` is the missing authority bridge. It uses
+one unused nonsealed Red root selected without gameplay inspection, freezes the complete
+acquire-versus-evolve menu before prediction, lets the authenticated ranker choose once, consumes
+the root durably before prediction/controller authority, executes only that bound skill under hard
+action/frame limits, and observes a fresh living-specimen ledger. An execution or observation
+failure becomes a censored terminal, never a teacher fallback or a second option.
+
+This is an end-to-end plumbing falsifier, not evidence that the ranker is good. If it settles, the
+next learning lane is a powered, family/root-disjoint Red option-value curriculum with genuinely
+uncertain costs and outcomes. Crystal remains closed until shared option representations have
+survived that within-Red separation. Deterministic rules still protect living-Pokédex invariants;
+the model learns decisions under uncertainty rather than whether duplicate retention is required.
+
+## Previous checkpoint: public reader qualified; design the V2 gate without reopening V1
 
 Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618
 tests. The [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)

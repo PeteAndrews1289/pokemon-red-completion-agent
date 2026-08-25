@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the paperwork desk became a reusable door
+## Current checkpoint: stop inspecting the classroom and let the student choose
+
+Baseline main `06af22c1` passed CI `32476766226/1` with 4619 tests. We finally called out the
+loop the project had fallen into: capture worked, evolution worked, the anonymous two-choice menu
+worked, the verifier worked, and the ranker existed, but each next task designed another doorway
+instead of letting the model walk through one. The
+[focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json) retires that
+design-only lane.
+
+The next scene is deliberately concrete. From one unused Red reset, freeze both acquire and evolve
+before asking the model; let it score once; permanently mark that reset used; execute only its
+choice; then look at the game again to verify the living collection. The teacher cannot choose,
+rescue, or silently run the other option. A failure is censored and retained.
+
+This is the first authentic collection decision, but not proof of intelligence. The ranker learned
+from synthetic dependency examples, so one successful action only proves that learned authority
+can pass through the full system. The real curriculum comes next: different evolutionary families,
+different roots, uncertain costs and outcomes, then the same representation in Crystal. That is
+the path from one bounded Red choice to a legitimate living Pokédex across games.
+
+## Previous checkpoint: the paperwork desk became a reusable door
 
 Main `50c64f1c` passed CI `32475789328/1` with 4618 tests. The
 [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)

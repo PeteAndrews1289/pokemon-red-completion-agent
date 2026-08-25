@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 25 scene: the first real collection decision
+
+Open on **BASELINE MAIN 06AF22C1 · CI 32476766226/1 GREEN · 4619 PASSED**, then pull the camera
+back from a long row of design gates. Cross out **ANOTHER PREFLIGHT DESIGN** and replace it with
+**ONE UNUSED RED RESET → FULL ANONYMOUS MENU → MODEL SCORES ONCE → ONE SELECTED SKILL → FRESH
+LIVING LEDGER**. Link the
+[focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json).
+
+Show the anti-cheating details as part of the story: **ROOT CLAIMED BEFORE PREDICTION/ACTION ·
+START DURABLE BEFORE BUTTONS · OTHER OPTION NEVER RUNS · TEACHER CHOICE/FALLBACK 0 · FAILURE
+BECOMES CENSORED · V1 RESET NEVER REUSED**. Then place a large honest label over the scene:
+**PLUMBING TEST, NOT A SMART MODEL YET**.
+
+End with the next escalation: **ONE REAL CHOICE → FAMILY/ROOT-DISJOINT RED CURRICULUM → LEARN
+OPTION VALUE UNDER UNCERTAINTY → CRYSTAL ZERO-SHOT + ADAPTATION → MULTI-VERSION LIVING POKÉDEX**.
+The point of this scene is that the model finally receives bounded authority over a real Pokémon
+decision, while the collection rules remain symbolic safety invariants.
+
 ## August 21 scene: rebuild the paperwork door, then stop
 
 Open on **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED**. Turn the failed paperwork

@@ -1,12 +1,35 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-21. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-25. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the public V2 scenario-preflight design
+## Current override: Codex owns one repeatable Red model-choice development episode
+
+Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
+`32476766226/1` with 4619 tests. The
+[focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json) retires the
+expired V2 design-only lane and states the honest authority baseline: battle, goal-selection, and
+navigation components have bounded evidence, but the living-Dex ranker has never selected and
+executed an authentic collection option.
+
+Codex owns `repeatable-red-living-dex-option-execution-v1`: publish the parameterized runner, use
+the first eligible unused nonsealed Red development root after excluding the retired V1 context,
+freeze both title-neutral candidates before scoring, predict once, durably consume the root,
+execute only the selected semantic skill, and derive the terminal from a fresh collection-ledger
+observation. The deterministic teacher supplies neither the choice nor a fallback. Development is
+repeatable across distinct unused roots, but a claimed root never retries and no context may be
+substituted after selection.
+
+Claude and Antigravity remain read-only reviewers, not execution gates for this development
+episode. No agent owns a fit/refit, sealed Red evaluation, Crystal run, full replay, route rescue,
+promotion, completion claim, or transfer claim. Stop after one settled authentic outcome or one
+genuine falsifier. Until that terminal is tracked, boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned only the public V2 scenario-preflight design
 
 Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618
 tests. The [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)

@@ -412,7 +412,12 @@ def _semantic_bindings(
     }
 
 
-def _prepare_readiness(args: argparse.Namespace, gate: _PublicGate) -> _Readiness:
+def _prepare_readiness(
+    args: argparse.Namespace,
+    gate: _PublicGate,
+    *,
+    selected_slot_id: str = SELECTED_SLOT_ID,
+) -> _Readiness:
     runtime = build_runtime_identity()
     if runtime.sha256 != gate.public_bindings.get("runtime_sha256"):
         raise RedDualCapabilityPreflightError("runtime_authentication")
@@ -433,7 +438,7 @@ def _prepare_readiness(args: argparse.Namespace, gate: _PublicGate) -> _Readines
     registry = load_committed_goal_manager_registry_at_revision(PROJECT_ROOT, source_commit)
     if registry.registry_sha256 != _sha(args.expected_registry_sha256, "registry"):
         raise RedDualCapabilityPreflightError("registry_authentication")
-    assignment = registry.assignment(SELECTED_SLOT_ID)
+    assignment = registry.assignment(selected_slot_id)
     if assignment.partition != "train" or assignment.focus_kind is not GoalKind.EVOLVE_SPECIES:
         raise RedDualCapabilityPreflightError("selected_context_authentication")
 
@@ -448,7 +453,7 @@ def _prepare_readiness(args: argparse.Namespace, gate: _PublicGate) -> _Readines
     ):
         raise RedDualCapabilityPreflightError("context_catalog_authentication")
     catalog = parse_goal_manager_context_catalog(catalog_bytes, registry)
-    catalog_entry = catalog.entry(SELECTED_SLOT_ID)
+    catalog_entry = catalog.entry(selected_slot_id)
     if catalog_entry.assignment_id != assignment.assignment_id:
         raise RedDualCapabilityPreflightError("context_catalog_authentication")
 
@@ -466,6 +471,7 @@ def _prepare_readiness(args: argparse.Namespace, gate: _PublicGate) -> _Readines
         plan_bytes,
         registry_sha256=registry.registry_sha256,
         source_commit=registry.execution.source_commit,
+        selected_slot_id=selected_slot_id,
     )
     forbidden = (rom_path, args.context_catalog, args.context_plan)
     state_bytes = _read_external_bytes(
@@ -486,9 +492,9 @@ def _prepare_readiness(args: argparse.Namespace, gate: _PublicGate) -> _Readines
     capture = parse_goal_manager_context_capture(state_bytes, envelope_bytes)
     profile = parse_red_goal_context_profile(profile_bytes)
     if (
-        plan_entry.slot_id != SELECTED_SLOT_ID
-        or capture.capture_id != SELECTED_SLOT_ID
-        or profile.profile_id != SELECTED_SLOT_ID
+        plan_entry.slot_id != selected_slot_id
+        or capture.capture_id != selected_slot_id
+        or profile.profile_id != selected_slot_id
         or capture.capture_id != catalog_entry.capture_id
         or capture.state_sha256 != catalog_entry.state_sha256
         or capture.envelope_sha256 != catalog_entry.envelope_sha256
@@ -897,6 +903,7 @@ def _context_plan_entry(
     *,
     registry_sha256: str,
     source_commit: str | None,
+    selected_slot_id: str = SELECTED_SLOT_ID,
 ) -> _ContextPlanEntry:
     document = _canonical_document(payload, subject="context plan")
     if (
@@ -913,10 +920,10 @@ def _context_plan_entry(
     for raw in entries:
         if not isinstance(raw, dict) or set(raw) != {"envelope", "profile", "slot_id", "state"}:
             raise RedDualCapabilityPreflightError("context_plan_authentication")
-        if raw.get("slot_id") == SELECTED_SLOT_ID:
+        if raw.get("slot_id") == selected_slot_id:
             matches.append(
                 _ContextPlanEntry(
-                    SELECTED_SLOT_ID,
+                    selected_slot_id,
                     Path(_text(raw.get("state"), "state")),
                     Path(_text(raw.get("envelope"), "envelope")),
                     Path(_text(raw.get("profile"), "profile")),
