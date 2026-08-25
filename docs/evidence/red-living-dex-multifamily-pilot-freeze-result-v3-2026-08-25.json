@@ -1,0 +1,91 @@
+{
+  "artifacts": {
+    "plan_manifest_sha256": "763951ca0d55fba92ae9f7257ded1136d7568865496de6ff19fb464fab2a8a47",
+    "plan_sha256": "50327b728764affdd08e033c3ccc19f60466c0b3caeb8df44a5dd26c20880947"
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "curriculum": {
+    "candidate_count_per_menu": 2,
+    "complete_menus": true,
+    "development_candidate_counts": {
+      "0": 4,
+      "1": 4
+    },
+    "development_families": 1,
+    "development_trials": 8,
+    "distinct_physical_roots": 16,
+    "family_overlap": 0,
+    "fit_partition": "train_only",
+    "root_overlap": 0,
+    "train_candidate_counts": {
+      "0": 4,
+      "1": 4
+    },
+    "train_families": 1,
+    "train_trials": 8
+  },
+  "disposition": {
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "model_fit_authorized": false,
+    "outcome_collection_authorized_by_this_receipt": false,
+    "outcome_collector_engineering_allowed_after_reorientation": true,
+    "promotion_authorized": false,
+    "sealed_red_evaluation_authorized": false,
+    "v1_retry_allowed": false,
+    "v2_retry_allowed": false,
+    "v3_freeze_retry_allowed": false
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_family_fields_published": 0,
+    "private_paths_published": 0,
+    "private_species_fields_published": 0,
+    "roots_claimed": 0,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "authenticated_states_read": 81,
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32895364249,
+    "merged_main_commit": "5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42",
+    "pull_request": 43,
+    "source_bundle_sha256": "ae92c1bc710603d9991be52dcc55c8374bef40139a29cc53542bfa5e49bb76fc",
+    "source_commit": "60710d6b92f9dfc04d87d2302a4e0c96e84df4ba"
+  },
+  "inventory": {
+    "available_execution_qualified_opportunities": 68,
+    "available_roots": 78,
+    "complete_candidate_menus": true,
+    "contexts": 81,
+    "development_contexts": 27,
+    "execution_qualified_opportunities": 72,
+    "qualified_families": 3,
+    "rankable_opportunities": 1701,
+    "retired_roots": 3,
+    "train_contexts": 54
+  },
+  "lane_id": "red-living-dex-multifamily-option-value-curriculum-v3",
+  "metadata_only_cli_inspection": {
+    "classified_as_freeze_attempt": false,
+    "durable_record_created": false,
+    "failure_stage": "arguments",
+    "private_inputs_opened": 0,
+    "reason": "A help request passed no experimental bindings and exited before source or private-input authentication. It exposed an ergonomic CLI defect but did not inventory, publish, or consume a root or plan identity."
+  },
+  "product_interpretation": "V3 durably freezes the first authentic multi-family Red curriculum suitable for title-neutral option-value learning. It is readiness evidence, not training: no candidate outcome, fitted model, development comparison, autonomous authority, completion result, or Crystal transfer result exists yet.",
+  "schema": "pokemon.red.living-dex-multifamily-pilot-freeze-result.v3",
+  "status": "two_family_root_disjoint_pilot_frozen_v3"
+}

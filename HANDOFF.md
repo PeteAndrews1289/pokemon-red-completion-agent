@@ -12,36 +12,39 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: publication qualified; the new-identity V3 freeze is active
+## 2026-08-25: V3 froze the authentic 8+8 curriculum; one train outcome is next
 
-Source `2c4504ac18c4a1259a013c0311563995099d5951` passed CI `32893761213/1` and
-merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`. The
-[qualification](docs/evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
-(SHA-256 `8d443ba9cb358690643c6d483507873497fe441993dd7d86b44945438ca6908d`)
-builds all 16 synthetic trials, covers both PC-access shapes, publishes through the real sealed
-store, reopens identical content, and rejects both original integer-key mutations without leaving
-a record. It opened no Red input and changed no model or learning counter. The maintenance lane is
-retired.
+V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed exact-head CI
+`32895364249/1` in PR 43 and merged to main as
+`5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`. Its only new behavior was fresh protocol identity;
+the already-qualified V2 inventory, selection, mechanics, strict encoding, and sealed publication
+remained shared. Local verification was **4,686 passed, 3 deselected, 1 expected failure**, plus
+green public-artifact, documentation, focus, registry, lint, and type checks.
 
-Active `red-living-dex-multifamily-option-value-curriculum-v3` must copy no consumed identity and
-change no curriculum semantics. Implement only new V3 lane/schema/result/failure/private-record
-identities plus direct identity/no-retry tests, publish exact green source, and run exactly one
-action-free private freeze. A pass means one durable eight-train/eight-development plan with
-complete anonymous menus and disjoint families and roots. A failure closes V3. Reorient before
-any root claim, model score, controller input, or outcome collector.
+The sole V3 action-free freeze then succeeded. The
+[path-free result](docs/evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
+(SHA-256 `27a7189902d084e03cdfd9394dbd2ccb9a79c0db6acff8b9278e4fdb5b5fc0e1`)
+binds plan `50327b728764affdd08e033c3ccc19f60466c0b3caeb8df44a5dd26c20880947`
+and sealed manifest `763951ca0d55fba92ae9f7257ded1136d7568865496de6ff19fb464fab2a8a47`.
+It read all 81 authenticated snapshots, advanced zero frames, and durably preserved eight train
+plus eight development trials across 16 distinct physical roots. Menus are complete and have two
+candidates; candidate interventions are balanced 4/4 in each partition; train/development family
+and root overlap are both zero. Predictions, actions, teachers, claims, and outcomes all remain
+zero. V3 cannot retry.
 
-The local implementation is deliberately only a protocol wrapper. All inventory, selection,
-mechanics, strict encoding, and sealed-store code stays in the qualified shared runner. Direct
-tests run the complete synthetic plan under V3, require the V3 result/status/record, and confirm
-the V2 record namespace remains absent.
-The exact local candidate passes **4,686 ROM-free tests**, with three intentional deselections and
-one expected failure; all public-artifact, documentation, focus, registry, lint, and type checks
-are green.
+Active `red-living-dex-multifamily-option-value-curriculum-v3` is now reoriented to the smallest
+authentic learning bridge. Reuse the qualified semantic acquisition/evolution executors and fresh
+living-Pokedex verifier to build an exact-plan-bound collector. It must select one frozen **train**
+trial before private execution, durably claim its trial and physical root before controller input,
+execute only the frozen candidate skill, and settle from an independent post-action observation.
+No teacher, fallback, identity feature, scenario substitution, or retry is allowed. Publish exact
+green source, execute one train trial, record the terminal, and reorient before any remaining
+train or development trial.
 
-Do not retry V1, V2, or V3; lower the 8+8 target; reuse an old record; fit development data; open
+Do not rerun any V1/V2/V3 freeze; retry a claimed trial; open development early; fit a model; open
 sealed Red; run Crystal; promote; or replay the game. Counters remain **development 15 · verified
-5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**. A frozen plan remains
-readiness evidence, not a dataset.
+5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**. The frozen
+plan is readiness evidence, not a dataset.
 
 ## Earlier 2026-08-25: V2 proved the 8+8 inventory and failed only at strict publication
 

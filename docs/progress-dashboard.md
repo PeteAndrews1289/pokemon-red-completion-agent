@@ -5,18 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **PUBLICATION SOURCE 2C4504AC · CI 32893761213/1 GREEN · MAIN 861EA62E ·
-> SYNTHETIC 8+8 SEALED ROUND-TRIP PASSED · INTEGER-KEY MUTATIONS 2/2 KILLED · RED INPUTS 0 ·
-> LEARNING COUNTER DELTA 0**. Link the
-> [qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
-> and show **SHA-256 8D443BA9…908D**.
+> **Current rail:** Show **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD ·
+> 81 AUTHENTICATED STATES · DURABLE PLAN 50327B72…0947 · MANIFEST 763951CA…8A47 ·
+> 8 TRAIN + 8 DEVELOPMENT · 16 DISTINCT ROOTS · FAMILY/ROOT OVERLAP 0 · FRAMES/ACTIONS/
+> PREDICTIONS/TEACHERS/CLAIMS/OUTCOMES 0 · V3 RETRY NO**. Link the
+> [result](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
+> and show **SHA-256 27A71899…FC0E1**.
 >
-> Animate active `red-living-dex-multifamily-option-value-curriculum-v3`: **NEW V3 LANE/SCHEMA/
-> RESULT/FAILURE/PRIVATE-RECORD IDS → GREEN EXACT SOURCE → ONE ACTION-FREE FREEZE → DURABLE 8
-> TRAIN + 8 DEVELOPMENT OR CLOSE V3 → PATH-FREE TERMINAL → REORIENT BEFORE OUTCOMES**. Keep the
+> Animate active `red-living-dex-multifamily-option-value-curriculum-v3`: **AUTHENTICATE SEALED
+> PLAN → SELECT ONE FROZEN TRAIN TRIAL → DURABLE TRIAL + ROOT CLAIM → SELECTED SKILL ONLY →
+> FRESH LIVING-POKEDEX OBSERVATION → ONE PATH-FREE TERMINAL → REORIENT**. Keep the
 > board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 ·
-> AUTHORITY 0 · TRANSFER 0**. During the freeze show **FRAMES/ACTIONS/PREDICTIONS/CLAIMS/OUTCOMES
-> 0 · V1/V2/V3 RETRY NO**. Sealed Red, Crystal, promotion, completion, and replay remain closed.
+> AUTHORITY 0 · TRANSFER 0**. Show **TEACHER/FALLBACK/ALTERNATE-SKILL/RETRY 0** and keep all
+> development trials unopened. Sealed Red, Crystal, promotion, completion, and replay remain closed.
 >
 > **Previous rail:** Show **V2 SOURCE 3FF9AB36 · CI 32890215789/1 GREEN · 81 AUTHENTICATED STATES ·
 > FAMILY/ROOT SPLIT PASSED · 8 TRAIN + 8 DEVELOPMENT BUILT IN MEMORY · FRAMES/ACTIONS/PREDICTIONS/
