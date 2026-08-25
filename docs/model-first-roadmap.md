@@ -8,35 +8,38 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: Session 2 multi-family execution gate is ready to freeze
+## Current checkpoint: V1 failed safely; V2 represents an already-observed destination honestly
 
-The Session 2 engineering candidate passed the complete local repository suite: **4,671 passed,
-3 skipped, and 1 expected failure**. It replaces the single Diglett-family seam with four reusable
-pieces needed by the living-Pokédex curriculum:
+Published source `54eebbf834eecfa335e02105ddcf955064a7730d` passed exact-head CI
+`32886600958/1`; its tree reached main as `23a3047aba075c065cefff9f3a780741c553d1c3`.
+The one permitted V1 action-free freeze authenticated and inspected all 81 states, advanced zero
+frames, and stopped at `two_family_inventory_insufficient`: only six available development roots
+qualified against the frozen minimum of eight. The
+[path-free failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+(SHA-256 `2b37f64b…6bef`) records zero predictions, controller actions, teacher queries, claims, and
+outcomes. V1 is retired without retry.
 
-- an exact-pair attestation for underlevel level evolution, so “trainable” means a real bounded
-  capability exists rather than that the specimen already happens to meet the level threshold;
-- cartridge-semantic capture venues that route to a real wild source without inventing a measured
-  training band;
-- a generic boxed-precursor evolution adapter that semantically routes to a PC, deposits a frozen
-  non-target party member, withdraws the exact precursor, returns to training, and accepts only a
-  fresh exact living-ledger transition; and
-- an action-free multi-family inventory/freezer that requires complete two-option menus, unique
-  physical roots, counterbalanced interventions, and disjoint train/development families. Its
-  bounded pilot shape is eight train trials and eight development trials, four per candidate.
+An aggregate-only diagnosis found the shortest honest explanation. Three additional base-ready
+development roots were already standing at the exact PC boundary, but V1 required every evolution
+skill to begin with a nonempty relocation. That is a generic applicability defect: a transferable
+agent must be able to recognize that a semantic skill is already at its destination. It is not
+evidence that the family inventory is intrinsically too small, and it does not justify inventing a
+zero-step route.
 
-A manual semantic audit found a family-identity join that the first focused tests missed: the
-freezer had used the verifier's two-species hash while the opportunity adapter used the complete
-transformation binding. The implementation now derives exactly the adapter identity, and a direct
-parity test kills that regression. Retired one-shot evidence remains bound to its historical
-adapter rather than being silently requalified by the extension.
+The V2 engineering candidate passes the complete local suite: **4,679 passed, 3 skipped, and 1
+expected failure**. It adds an explicit, private observed-boundary binding that cross-checks the
+authenticated traversal snapshot, raw map and coordinate, battle state, and zero
+action delta; any drift fails before input. Public option rows still expose no map, coordinate,
+route, observer, family, species, slot, or skill identity. A route-backed evolution keeps its exact
+published V1 skill hash, while an observation-backed evolution receives a distinct identity. The
+new freezer identity accepts this seam only when the live state, planned start, planned terminal,
+and exact PC boundary all agree.
 
-This checkpoint contains **zero model predictions, controller actions, claimed roots, outcomes,
-fits, comparisons, promotions, or transfer results**. The next gate is therefore narrow: publish
-this exact source, require green exact-head CI, then run the action-free freezer once. Only a
-successful path-free freeze may authorize a separately implemented outcome collector. Do not
-mistake the 8+8 frozen design for 16 learning examples; counters move only after independently
-verified trial outcomes exist.
+This checkpoint still contains **zero new model predictions, controller actions, claimed roots,
+outcomes, fits, comparisons, promotions, or transfer results**. The remaining gate is narrow:
+publish V2, require green exact-source CI, then run exactly one new-identity action-free freeze.
+A pass freezes the 8-train/8-development curriculum; a shortfall closes V2 rather than lowering
+the target. Reorient before any outcome collector or model score.
 
 ## Previous checkpoint: turn one authentic choice into a multi-family curriculum
 

@@ -12,26 +12,44 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: Session 2 multi-family engineering gate is locally green
+## 2026-08-25: V1 failed closed; the observed-destination V2 gate is active
 
-The current unpublished candidate passes **4,671 tests, 3 skips, and 1 expected failure**. It adds
-exact-pair underlevel evolution attestation, cartridge-semantic wild capture venues, a generic
-boxed-precursor level-evolution adapter, and an action-free freezer for eight train plus eight
-development trials with complete menus, counterbalanced candidates, distinct physical roots, and
-disjoint transformation families.
+Source `54eebbf834eecfa335e02105ddcf955064a7730d` passed exact-head CI
+`32886600958/1` and its tree reached main as `23a3047aba075c065cefff9f3a780741c553d1c3`.
+The sole V1 action-free freeze authenticated 81 states, advanced zero frames, and failed at
+`two_family_inventory_insufficient`: six available development roots qualified against eight
+required. The
+[path-free failure](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+(SHA-256 `2b37f64b87d913f18fcbc1a9723ba4ec9ee9a80792d9d8ccf9ecae713d0f6bef`)
+records zero predictions, controller actions, teacher queries, claims, outcomes, and published
+private paths. Never retry V1 or reuse its freeze identity.
 
-Do not claim 16 examples. No model prediction, root claim, controller action, outcome, fit,
-comparison, promotion, sealed access, Crystal run, or transfer result has occurred. Counters remain
-**development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer
-0**. The next operator must commit and push the exact candidate, wait for green exact-head CI, run
-the action-free freezer once, track only its path-free receipt, and reorient before implementing or
-executing outcome collection.
+Aggregate-only diagnosis found three additional base-ready development roots already standing at
+the exact PC boundary. V1 rejected them because it required a nonempty semantic relocation. The V2
+candidate passes **4,679 tests, 3 skips, and 1 expected failure**. It adds an explicit
+`ObservedSemanticBoundaryBinding`, never a fake zero-step route. Qualification and
+execution cross-check the traversal snapshot, raw map and coordinate, battle state, and zero action
+delta. Drift fails before input. Its public shape contains no map, coordinate, observer, family,
+species, storage, route, or skill identity. Route-backed V1 skill hashes remain exactly compatible;
+observation-backed skills use a distinct binding.
 
-The crucial audit finding is already fixed: the first freezer draft joined the verifier's
-species-pair identity to the adapter's complete transformation-family identity. Focused tests did
-not expose it. `_family_identity()` now constructs the adapter's exact private binding, and a
-direct parity test prevents the mismatch. Retired one-shot evidence remains pinned to its
-historical adapter. Never “fix” either boundary by rewriting old results or weakening provenance.
+Codex must publish this exact V2 source, require green exact-source CI, run exactly one new-identity
+action-free freeze, track its path-free terminal, and reorient. A pass needs at least eight train
+and eight development roots with disjoint families and physical roots; a shortfall closes V2.
+Do not score a model, claim a root, press a button, run an outcome collector, lower the target, fit,
+open sealed Red, run Crystal, promote authority, or start a full replay in this gate.
+
+Counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**. A successful freeze is a plan, not 16 examples. The earlier family-hash
+audit repair remains in force: `_family_identity()` must equal the adapter's complete
+transformation binding, and retired evidence remains pinned to its historical adapter.
+
+## Earlier 2026-08-25: Session 2 multi-family engineering gate became locally green
+
+The published V1 candidate passed **4,671 tests, 3 skips, and 1 expected failure**. It added
+exact-pair underlevel evolution attestation, cartridge-semantic wild capture venues, generic boxed
+precursor evolution, and the family/root-disjoint freezer. This is engineering history, not a
+current authorization to rerun V1.
 
 ## 2026-08-25: the first authentic model-selected collection option settled successfully
 

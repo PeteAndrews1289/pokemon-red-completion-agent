@@ -310,11 +310,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 2 sessions / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 4 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == (
-        "red-living-dex-multifamily-option-value-curriculum-v1"
+        "red-living-dex-multifamily-option-value-curriculum-v2"
     )
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
@@ -336,7 +336,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
             "partition": "development",
         },
     ]
-    assert len(state.retired_lanes) == 52
+    assert len(state.retired_lanes) == 53
     assert focus_progress_fraction(state) == pytest.approx(129 / 260)
     assert focus_scorecard(state) == (
         ("Causal Train Example · train", 0, 8),
@@ -399,6 +399,7 @@ def test_product_focus_renderer_uses_singular_hour_with_plural_sessions() -> Non
     lane = _active(document)
     time_box = lane["time_box"]
     assert isinstance(time_box, dict)
+    time_box["maximum_sessions"] = 2
     time_box["maximum_hours"] = 1
 
     rendered = render_product_focus_markdown(validate_product_focus_document(document))
@@ -1885,7 +1886,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(129 / 260)
     assert public["actions"] == 0
-    assert "Red multi-family living-Dex option-value curriculum V1" in public["stage"]
+    assert "Red multi-family living-Dex option-value curriculum V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 5, "total": 13}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]

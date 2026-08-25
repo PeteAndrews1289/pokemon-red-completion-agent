@@ -1,19 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-25 Session 2 multi-family engineering candidate locally green:** The current
-> unpublished candidate passed **4,671 tests, 3 skips, and 1 expected failure**. It implements
-> generic underlevel evolution attestation, cartridge-semantic capture venues, boxed-precursor
-> evolution, and an action-free 8-train/8-development freezer with complete menus and family/root
-> isolation. A manual audit caught and fixed the verifier-hash versus transformation-family-hash
-> join before any official freeze.
+> **2026-08-25 V1 freeze failed closed; V2 observed-destination gate active:** Source
+> `54eebbf834eecfa335e02105ddcf955064a7730d` passed CI `32886600958/1`. Its sole
+> action-free freeze inspected 81 authenticated states, advanced zero frames, and found six
+> development roots against eight required. The
+> [failure](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+> records predictions, actions, teachers, claims, outcomes, and private paths all zero. V1 and its
+> freeze identity are closed without retry.
 >
-> Codex owns publication, exact-head CI confirmation, one action-free freeze, its path-free
-> receipt, and immediate reorientation. Claude reviews statistical power/leakage and Antigravity
-> reviews mechanic/transfer boundaries after that milestone; both are read-only. No agent owns an
-> outcome run before the freeze, claimed-root retry, teacher/fallback rescue, development fit,
-> sealed Red, Crystal, full replay, promotion, completion, or transfer claims. Counters remain
-> **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 ·
-> transfer 0**.
+> Aggregate diagnosis found three more base-ready development roots already at the exact PC
+> boundary. Codex owns a short V2 successor that represents that fact as an authenticated observed
+> boundary rather than a fake route, preserves all published route-backed skill identities,
+> publishes through green exact-source CI, executes one new-identity action-free freeze, records
+> its path-free terminal, and reorients. A shortfall closes V2 rather than lowering the 8+8 target.
+>
+> Claude reviews statistics/leakage and Antigravity reviews mechanic/transfer boundaries only
+> after a successful frozen plan; both are read-only. No agent owns V1 retry, model scoring,
+> claimed-root input, an outcome collector, teacher rescue, family-specific routing, development
+> fit, sealed Red, Crystal, full replay, promotion, completion, or transfer claims before
+> reorientation. Counters remain **development 15 · verified 5 · causal train 0 · fits 4 ·
+> comparisons 4 · authority 0 · transfer 0**.
 
 > **2026-08-25 first authentic collection choice settled; multi-family curriculum active:**
 > Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI

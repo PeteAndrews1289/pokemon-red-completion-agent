@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from types import SimpleNamespace
 
 import pytest
@@ -20,6 +20,8 @@ from pokemon_red_completion.red_boxed_level_evolution import (
     BoundedEvolutionTrainingResult,
     BoxedLevelEvolutionExecutionReport,
     BoxedLevelEvolutionPlan,
+    ObservedSemanticBoundaryBinding,
+    ObservedSemanticBoundaryReport,
     RedBoxedLevelEvolutionAdapter,
     RedBoxedLevelEvolutionError,
 )
@@ -192,6 +194,23 @@ def _plan() -> BoxedLevelEvolutionPlan:
     )
 
 
+def _observed_pc_plan() -> BoxedLevelEvolutionPlan:
+    _to_pc, to_training = _routes()
+    return BoxedLevelEvolutionPlan(
+        RESET,
+        RedDependencySpeciesBinding(red_species_ref(11), red_species_ref(12)),
+        PRECURSOR,
+        EVOLVED,
+        0,
+        1,
+        6,
+        HITMONLEE_SPECIES_ID,
+        ObservedSemanticBoundaryBinding(MAP_ID, (0, 1), "e" * 64),
+        to_training,
+        "d" * 64,
+    )
+
+
 def _patch_storage(monkeypatch: pytest.MonkeyPatch, world: _World) -> None:
     def open_pc(_actions: object, _reader: object, **_kwargs: object) -> None:
         world.log.append("pc:open")
@@ -258,6 +277,7 @@ def _adapter(
     world: _World,
     *,
     settle: bool = True,
+    plan: BoxedLevelEvolutionPlan | None = None,
 ) -> RedBoxedLevelEvolutionAdapter:
     _patch_storage(monkeypatch, world)
 
@@ -270,7 +290,7 @@ def _adapter(
         return BoundedEvolutionTrainingResult(3, 0)
 
     return RedBoxedLevelEvolutionAdapter(
-        _plan(),
+        plan or _plan(),
         world,
         world,
         world,
@@ -298,6 +318,14 @@ def test_qualification_is_action_free_and_generic_for_a_boxed_underlevel_family(
     assert red_species_ref(12) not in public
     assert str(PRECURSOR) not in public
     assert adapter.plan.skill_binding_sha256 not in public
+
+
+def test_route_backed_skill_identity_remains_compatible_with_published_v1() -> None:
+    assert (
+        _plan().skill_binding_sha256
+        == "fcf6f7882ceafc34eb8b5883e64afcb4de17750cd4f52c3113c9203476689ef8"
+    )
+    assert _observed_pc_plan().skill_binding_sha256 != _plan().skill_binding_sha256
 
 
 def test_selected_boxed_evolution_routes_stores_trains_and_proves_exact_transition(
@@ -330,6 +358,94 @@ def test_selected_boxed_evolution_routes_stores_trains_and_proves_exact_transiti
     encoded = json.dumps(report.public_dict(), sort_keys=True).lower()
     assert red_species_ref(11) not in encoded
     assert red_species_ref(12) not in encoded
+
+
+def test_exact_pc_start_uses_an_observed_boundary_without_a_fake_route(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    world.at = (0, 1)
+    adapter = _adapter(monkeypatch, world, plan=_observed_pc_plan())
+    before = dependency_specimen_ledger(world.collection())
+    scenario = red_dual_capability_scenario_specs()[1]
+
+    capability = adapter.qualify(scenario, before)
+
+    assert world.actions_executed == 0
+    assert world.log == []
+    report = capability.execute()
+    assert isinstance(report, BoxedLevelEvolutionExecutionReport)
+    assert isinstance(report.route_to_pc, ObservedSemanticBoundaryReport)
+    assert report.route_to_pc.controller_actions == 0
+    assert report.public_dict()["semantic_routes_passed"] == 1
+    assert report.public_dict()["observed_semantic_boundaries_passed"] == 1
+    assert report.public_dict()["acknowledged_route_steps"] == 1
+    assert world.log == [
+        "pc:open",
+        "pc:deposit",
+        "pc:withdraw",
+        "pc:close",
+        "route:left",
+        "training",
+    ]
+    encoded = json.dumps(report.public_dict(), sort_keys=True).lower()
+    assert "(0, 1)" not in encoded
+    assert isinstance(adapter.plan.route_to_pc, ObservedSemanticBoundaryBinding)
+    assert adapter.plan.route_to_pc.binding_sha256 not in encoded
+
+
+def test_observed_pc_boundary_rejects_coordinate_drift_without_acting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    monkeypatch.setattr(
+        world,
+        "observe",
+        lambda: TraversalSnapshot(MAP_ID, (0, 1), True),
+    )
+    adapter = _adapter(monkeypatch, world, plan=_observed_pc_plan())
+    before = dependency_specimen_ledger(world.collection())
+
+    with pytest.raises(RedBoxedLevelEvolutionError, match="live game state differs"):
+        adapter.qualify(red_dual_capability_scenario_specs()[1], before)
+    assert world.actions_executed == 0
+    assert world.log == []
+
+
+def test_observed_pc_boundary_rejects_battle_state_without_acting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    world.at = (0, 1)
+    original_read = world.read
+    monkeypatch.setattr(world, "read", lambda: replace(original_read(), battle_state=1))
+    adapter = _adapter(monkeypatch, world, plan=_observed_pc_plan())
+    before = dependency_specimen_ledger(world.collection())
+
+    with pytest.raises(RedBoxedLevelEvolutionError, match="live game state differs"):
+        adapter.qualify(red_dual_capability_scenario_specs()[1], before)
+    assert world.actions_executed == 0
+    assert world.log == []
+
+
+def test_observed_pc_boundary_rejects_an_observer_that_changes_action_count(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    world.at = (0, 1)
+
+    def acting_observer() -> TraversalSnapshot:
+        world.actions_executed += 1
+        return TraversalSnapshot(MAP_ID, (0, 1), True)
+
+    monkeypatch.setattr(world, "observe", acting_observer)
+    adapter = _adapter(monkeypatch, world, plan=_observed_pc_plan())
+    before = dependency_specimen_ledger(world.collection())
+
+    with pytest.raises(RedBoxedLevelEvolutionError, match="live game state differs"):
+        adapter.qualify(red_dual_capability_scenario_specs()[1], before)
+    assert world.actions_executed == 1
+    assert world.log == []
 
 
 def test_qualification_fails_closed_when_the_frozen_box_slot_drifts(

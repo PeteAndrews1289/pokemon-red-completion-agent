@@ -6,29 +6,33 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and the action-free multi-family freeze
+## Current override: Codex owns the one-shot V2 action-free freeze
 
-Session 2 has a locally green engineering candidate (**4,671 passed, 3 skipped, 1 expected
-failure**) for `red-living-dex-multifamily-option-value-curriculum-v1`. The candidate adds generic
-underlevel evolution attestation, cartridge-semantic wild capture venues, exact boxed-precursor
-storage/evolution orchestration, complete multi-family opportunity inventory, and an 8-train / 8-
-development family-and-root-disjoint freezer. A manual semantic audit caught and fixed a mismatched
-family hash before publication; the freezer now joins the exact complete transformation identity
-emitted by the adapter.
+V1 source `54eebbf834eecfa335e02105ddcf955064a7730d` passed CI `32886600958/1` and
+the one authorized freeze read 81 authenticated states with zero frames or gameplay effects. It
+failed closed because six development roots qualified against eight required. The
+[failure receipt](evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
+(SHA-256 `2b37f64b…6bef`) records predictions, claims, actions, teachers, and outcomes all zero. V1
+and its freeze identity are permanently closed.
 
-Codex next owns: commit and push this exact candidate; require green exact-head GitHub CI; execute
-one action-free private inventory/freeze; publish only its path-free result; and reorient before
-building or running an outcome collector. This checkpoint has made no prediction, claim, action,
-outcome, fit, comparison, promotion, sealed access, Crystal execution, or transfer claim. Learning
-counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
-authority 0 · transfer 0**.
+Aggregate diagnosis found three more base-ready development roots already at the exact PC
+boundary. The V2 candidate passes **4,679 tests, 3 skips, and 1 expected failure**. Codex owns the
+short successor: publish the generic observed-destination binding,
+preserve the exact identity of every route-backed skill, require green exact-source CI, execute one
+new-identity action-free freeze, publish only its path-free terminal, and reorient. The binding is
+not a zero-step route: it independently cross-checks the live semantic snapshot, raw map and
+coordinate, battle state, and zero action delta. It fails on drift and exposes no private boundary
+identity to the learner.
 
-Claude's next useful review is statistical and leakage-focused after the frozen public plan exists.
-Antigravity's next useful review is the semantic mechanic and cross-title boundary at the same
-milestone. Both remain read-only reviewers; neither should edit this worktree or delay ordinary
-development before a review is requested. No agent owns a claimed-root retry, teacher rescue,
-family-specific direction patch, development fit, sealed Red opening, Crystal run, promotion, or
-full replay.
+Learning counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons
+4 · authority 0 · transfer 0**. A successful freeze creates a curriculum plan, not 16 outcomes.
+No agent owns a V1 retry, lower sample target, claimed-root action, score, outcome collector,
+teacher rescue, family-specific route, development fit, sealed Red opening, Crystal run,
+promotion, or full replay before the required reorientation.
+
+Claude's next useful review is statistical and leakage-focused after a successful frozen V2 plan.
+Antigravity's next useful review is the semantic mechanic and cross-title boundary at that same
+milestone. Both remain read-only reviewers and do not delay this ordinary development gate.
 
 ## Previous override: Codex owned the multi-family Red option-value curriculum
 

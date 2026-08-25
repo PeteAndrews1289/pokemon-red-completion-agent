@@ -73,7 +73,10 @@ from pokemon_red_completion.red_acquisition import (
     RedAcquisitionKind,
     RedAcquisitionMethod,
 )
-from pokemon_red_completion.red_boxed_level_evolution import BoxedLevelEvolutionPlan
+from pokemon_red_completion.red_boxed_level_evolution import (
+    BoxedLevelEvolutionPlan,
+    ObservedSemanticBoundaryBinding,
+)
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_species_number,
@@ -104,6 +107,8 @@ from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
 from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
 from pokemon_red_completion.red_training_transitions import RED_TRAINING_FLY_CENTER_MAPS
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom
+from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.runtime_identity import (
     build_runtime_identity,
     require_pyboy_import_origins,
@@ -112,12 +117,12 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
 )
 
-LANE_ID = "red-living-dex-multifamily-option-value-curriculum-v1"
-PLAN_SCHEMA = "pokemon.red.private-living-dex-multifamily-pilot-plan.v1"
-RESULT_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-result.v1"
-FAILURE_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-failure.v1"
-PLAN_RECORD_ID = "red-living-dex-multifamily-pilot-plan-v1"
-PLAN_RECORD_KIND = "red-living-dex-multifamily-pilot-plan-v1"
+LANE_ID = "red-living-dex-multifamily-option-value-curriculum-v2"
+PLAN_SCHEMA = "pokemon.red.private-living-dex-multifamily-pilot-plan.v2"
+RESULT_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-result.v2"
+FAILURE_SCHEMA = "pokemon.red.living-dex-multifamily-pilot-freeze-failure.v2"
+PLAN_RECORD_ID = "red-living-dex-multifamily-pilot-plan-v2"
+PLAN_RECORD_KIND = "red-living-dex-multifamily-pilot-plan-v2"
 PC_GOAL_YX = (4, 13)
 TRAINING_GOAL_YX = (3, 3)
 TRIALS_PER_CANDIDATE = 4
@@ -161,6 +166,22 @@ class _FamilyMechanics:
     evolution_plan: BoxedLevelEvolutionPlan
 
     def private_dict(self) -> dict[str, object]:
+        pc_access = self.evolution_plan.route_to_pc
+        pc_document: dict[str, object]
+        if isinstance(pc_access, SemanticVenueRouteBinding):
+            pc_document = {
+                "pc_access_kind": "semantic_route",
+                "route_to_pc_plan_sha256": pc_access.plan_sha256,
+                "route_to_pc_planner_binding_sha256": (pc_access.planner_binding_sha256),
+                "route_to_pc_cost": pc_access.plan.cost,
+            }
+        else:
+            pc_document = {
+                "pc_access_kind": "observed_semantic_boundary",
+                "pc_boundary_binding_sha256": pc_access.binding_sha256,
+                "pc_boundary_observer_binding_sha256": (pc_access.observer_binding_sha256),
+                "route_to_pc_cost": 0,
+            }
         return {
             "family_identity_sha256": self.family_identity_sha256,
             "precursor_species_ref": self.species_binding.precursor_species_ref,
@@ -175,21 +196,14 @@ class _FamilyMechanics:
                 for value in sorted(self.capture_plan.venue.excluded_coordinates)  # type: ignore[union-attr]
             ],
             "evolution_skill_binding_sha256": self.evolution_plan.skill_binding_sha256,
-            "precursor_internal_species_id": (
-                self.evolution_plan.precursor_internal_species_id
-            ),
+            "precursor_internal_species_id": (self.evolution_plan.precursor_internal_species_id),
             "evolved_internal_species_id": self.evolution_plan.evolved_internal_species_id,
             "current_box_index": self.evolution_plan.current_box_index,
             "precursor_box_slot": self.evolution_plan.precursor_box_slot,
             "deposit_party_slot": self.evolution_plan.deposit_party_slot,
-            "deposit_internal_species_id": (
-                self.evolution_plan.deposit_internal_species_id
-            ),
-            "route_to_pc_plan_sha256": self.evolution_plan.route_to_pc.plan_sha256,
-            "route_to_pc_cost": self.evolution_plan.route_to_pc.plan.cost,
-            "route_to_training_plan_sha256": (
-                self.evolution_plan.route_to_training.plan_sha256
-            ),
+            "deposit_internal_species_id": (self.evolution_plan.deposit_internal_species_id),
+            **pc_document,
+            "route_to_training_plan_sha256": (self.evolution_plan.route_to_training.plan_sha256),
             "route_to_training_cost": self.evolution_plan.route_to_training.plan.cost,
             "training_binding_sha256": self.evolution_plan.training_binding_sha256,
         }
@@ -332,9 +346,7 @@ def _authenticate_inputs(
     claim_registry = open_fixed_account_claim_registry()
     authenticated: list[_AuthenticatedContext] = []
     with fixed_account_claim_registry_lease(claim_registry, exclusive=False):
-        for assignment in (
-            registry.assignment(slot.slot_id) for slot in registry.slots
-        ):
+        for assignment in (registry.assignment(slot.slot_id) for slot in registry.slots):
             if assignment.partition not in {"train", "validation"}:
                 continue
             entry = catalog.entry(assignment.slot_id)
@@ -474,9 +486,7 @@ def _inventory(
             if frames != 0:
                 raise MultifamilyPilotFreezeError("action_free_frame_advance")
             total_frames += frames
-            partition = (
-                "train" if private.assignment.partition == "train" else "development"
-            )
+            partition = "train" if private.assignment.partition == "train" else "development"
             context = RedMultifamilyContext(
                 private.context_identity_sha256,
                 private.root_consumption_sha256,
@@ -526,11 +536,14 @@ def _context_mechanics(
 
     try:
         route_to_pc_plan = route_world.plan_to_map(start, int(map_id), goal_at=PC_GOAL_YX)
+        route_to_pc = _pc_access_binding(
+            start,
+            route_to_pc_plan,
+            rom_sha256=rom_sha256,
+            source_bundle=source_bundle,
+            context_identity_sha256=context_identity_sha256,
+        )
     except Exception:
-        return RedDependencyExecutionFacts(), ()
-    if not route_to_pc_plan.steps:
-        # A context already standing at the PC is valid game state but cannot
-        # satisfy the two-route prospective binding without a synthetic step.
         return RedDependencyExecutionFacts(), ()
     pc_start = replace(
         start,
@@ -548,17 +561,6 @@ def _context_mechanics(
         return RedDependencyExecutionFacts(), ()
     if not route_to_training_plan.steps:
         return RedDependencyExecutionFacts(), ()
-    route_to_pc = SemanticVenueRouteBinding(
-        route_to_pc_plan,
-        _planner_binding(
-            "storage_pc",
-            rom_sha256,
-            source_bundle,
-            context_identity_sha256,
-            int(map_id),
-            route_to_pc_plan.cost,
-        ),
-    )
     route_to_training = SemanticVenueRouteBinding(
         route_to_training_plan,
         _planner_binding(
@@ -630,8 +632,7 @@ def _context_mechanics(
         deposit_slots = tuple(
             index + 1
             for index, species_id in enumerate(party)
-            if species_id
-            not in {BLASTOISE_SPECIES_ID, precursor_internal, evolved_internal}
+            if species_id not in {BLASTOISE_SPECIES_ID, precursor_internal, evolved_internal}
         )
         if not deposit_slots:
             continue
@@ -650,9 +651,7 @@ def _context_mechanics(
         capture_venue = SemanticCaptureVenue(
             precursor_method.source_id,
             int(source_map),
-            raw_exit_coordinates(
-                route_world.macro_graph.warp_locations.get(int(source_map), ())
-            ),
+            raw_exit_coordinates(route_world.macro_graph.warp_locations.get(int(source_map), ())),
         )
         capture_plan = SemanticVenueCapturePlan(
             reset_state_sha256,
@@ -705,10 +704,7 @@ def _freeze(
     inventory: RedMultifamilyInventory,
     mechanics: dict[tuple[str, str], _FamilyMechanics],
 ) -> RedMultifamilyCurriculumPlan:
-    boxed_families = {
-        family
-        for (_context, family), _mechanics in mechanics.items()
-    }
+    boxed_families = {family for (_context, family), _mechanics in mechanics.items()}
     counts: Counter[tuple[str, str]] = Counter(
         (item.context.partition, item.family_identity_sha256)
         for item in inventory.available_opportunities
@@ -730,8 +726,7 @@ def _freeze(
             (
                 family
                 for partition, family in counts
-                if partition == "development"
-                and counts[(partition, family)] >= required
+                if partition == "development" and counts[(partition, family)] >= required
             ),
             key=lambda family: (-counts[("development", family)], family),
         )
@@ -781,9 +776,7 @@ def _publish(
     def trial_document(trial: object) -> dict[str, object]:
         opportunity = trial.opportunity
         context = opportunity.context
-        mechanic = mechanics[
-            (context.context_identity_sha256, opportunity.family_identity_sha256)
-        ]
+        mechanic = mechanics[(context.context_identity_sha256, opportunity.family_identity_sha256)]
         return {
             "partition": trial.partition,
             "context_identity_sha256": context.context_identity_sha256,
@@ -826,7 +819,7 @@ def _publish(
     )
     return {
         "schema": RESULT_SCHEMA,
-        "status": "two_family_root_disjoint_pilot_frozen",
+        "status": "two_family_root_disjoint_pilot_frozen_v2",
         "lane_id": LANE_ID,
         "plan_sha256": plan_sha256,
         "plan_manifest_sha256": record.summary.manifest_sha256,
@@ -871,6 +864,55 @@ def _family_identity(method: RedAcquisitionMethod) -> str:
         source_id=method.source_id,
         required_item_ref=method.required_item_ref,
     ).binding_sha256
+
+
+def _pc_access_binding(
+    start: TraversalSnapshot,
+    plan: RoutePlan,
+    *,
+    rom_sha256: str,
+    source_bundle: str,
+    context_identity_sha256: str,
+) -> SemanticVenueRouteBinding | ObservedSemanticBoundaryBinding:
+    """Bind either a real relocation or the exact already-occupied PC boundary."""
+
+    if not isinstance(start, TraversalSnapshot) or not isinstance(plan, RoutePlan):
+        raise TypeError("PC access binding needs typed traversal inputs")
+    if plan.steps:
+        return SemanticVenueRouteBinding(
+            plan,
+            _planner_binding(
+                "storage_pc",
+                rom_sha256,
+                source_bundle,
+                context_identity_sha256,
+                start.map_id,
+                plan.cost,
+            ),
+        )
+    if (
+        start.at != PC_GOAL_YX
+        or not start.ready
+        or start.interruption is not None
+        or plan.macro_path.maps[0] != start.map_id
+        or plan.start_at != PC_GOAL_YX
+        or plan.terminal_map != start.map_id
+        or plan.terminal_at != PC_GOAL_YX
+        or plan.cost != 0
+    ):
+        raise MultifamilyPilotFreezeError("observed_pc_boundary_authentication")
+    return ObservedSemanticBoundaryBinding(
+        start.map_id,
+        PC_GOAL_YX,
+        _planner_binding(
+            "observed_storage_pc",
+            rom_sha256,
+            source_bundle,
+            context_identity_sha256,
+            start.map_id,
+            0,
+        ),
+    )
 
 
 def _planner_binding(
