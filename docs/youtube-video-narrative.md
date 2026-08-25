@@ -1,6 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: seal the real classroom, then point at the first lesson
+## August 25 scene: spend the first lesson, then discover the observer looked away
+
+Open on **COLLECTOR MAIN 7EBEA63C · CI 32900424741/1 GREEN**, then show the first zero-effect
+attempt stop before claim because the safety wrapper hid a read-only storage port. Stamp
+**CLAIMS 0 · ACTIONS 0 · FRAMES 0**. Repair only that observation seam, switch to
+**MAIN 14D7BCEA · CI 32902297341/1 GREEN**, and show the authentic rehearsal reach
+**CLAIM BOUNDARY · EFFECTS 0**.
+
+Now let the real counters move: **TRAIN ORDINAL 0 · ACQUISITION ONLY · MODEL 0 · TEACHER 0 →
+4,379 ACTIONS · 304,680 FRAMES → SELECTED SKILL EXCEPTION**. Lock both claim icons and stamp
+**CENSORED · RETRY NO · CAUSAL TRAIN +0**. Link the
+[receipt](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json) with
+**SHA-256 AA573CB9…F4B0**.
+
+Then expose the real experimental bug: animate **SKILL RAISES → OBSERVER SKIPPED** over three
+unknown endings—**NO CHANGE · PARTIAL CHANGE · EXACT CHANGE**. Cross out **RUN ANOTHER V3 ROOT**;
+seven remaining cannot satisfy the frozen minimum of eight. Light the successor rail:
+**ONE SELECTED EXECUTION → ALWAYS ONE FRESH LEDGER → OBSERVABLE +1/-1 OR OBSERVER-FAILED CENSOR →
+NEW V4 ROOTS + PREREGISTERED RESERVE**. Keep **AUTHORITY 0 · TRANSFER 0 · CRYSTAL CLOSED** on
+screen. The honest line is: **THE SAFETY SYSTEM SAVED THE FAILURE; THE NEXT VERSION MUST LEARN
+FROM OBSERVABLE FAILURE INSTEAD OF THROWING IT AWAY**.
+
+## Earlier August 25 scene: seal the real classroom, then point at the first lesson
 
 Open on **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD**. Count through
 **81 AUTHENTICATED RED STATES** while the frame counter stays at zero. Expand the inventory to

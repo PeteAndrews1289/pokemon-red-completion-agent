@@ -6,7 +6,32 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one frozen train-outcome bridge
+## Current override: Codex owns one ROM-free post-exception observation repair
+
+Collector main `7ebea63c` passed CI `32900424741/1`; storage-port repair main `14d7bcea`
+passed CI `32902297341/1`; and a claim-stubbed authentic rehearsal reached the claim boundary with
+zero effects. The real V3 train ordinal zero was then claimed once. Its frozen acquisition used
+4,379 controller actions and 304,680 frames before selected-skill execution raised. The
+[terminal](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
+(SHA-256 `aa573cb9…f4b0`) is durable and permanently censored. Development was not opened, no model
+or teacher ran, and no causal target was added. V3 now has only seven unclaimed train trials versus
+its frozen eight-example minimum, so it is closed without retry or replacement.
+
+Codex owns `post-exception-living-ledger-qualification-v1`: in shared ROM-free execution logic,
+attempt one independent living-ledger read after an ordinary selected-skill exception as well as
+after a normal return; derive a settled +/-1 outcome when that ledger is available; and censor only
+observer failure. Tests must distinguish unchanged, partial, and exact transitions and must prove
+one selected execution, one observation, no alternate skill, no teacher, no exception-text feature,
+and no retry. Publish through green CI and reorient before any V4 freeze or private execution.
+
+Claude's next useful milestone review is the V4 sample/censoring and leakage design. Antigravity's
+is the generic exception/observer boundary and V4 root/family separation. Both remain read-only
+and neither owns execution. No agent owns another V3 trial, V4 freeze during this lane, claimed-root
+retry, development opening, fit, sealed Red, Crystal, replay, promotion, completion, or transfer.
+Counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**.
+
+## Previous override: Codex owned one frozen train-outcome bridge
 
 V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed CI `32895364249/1`
 and merged as `5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`. The sole action-free freeze

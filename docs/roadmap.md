@@ -4,10 +4,11 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The only
-> active development lane is the V3 multi-family living-Pokedex curriculum: one durable 8-train/
-> 8-development family/root-disjoint plan, followed by claim-before-action candidate outcomes,
-> a train-only fit, and one paired untouched-development comparison. The older party and 14/55
-> campaigns remain evidence but are no longer the development leading edge.
+> active lane is the bounded ROM-free post-exception living-ledger qualification. V3 spent one
+> train root on a censored acquisition and can no longer reach its frozen eight-example minimum.
+> The repair must observe once after ordinary selected-skill failure so readable state becomes an
+> honest +/-1 target; then a separately frozen V4 curriculum excludes consumed roots and carries
+> preregistered train reserve. Older party and 14/55 campaigns remain historical evidence.
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by
