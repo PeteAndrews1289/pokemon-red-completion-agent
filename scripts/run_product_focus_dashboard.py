@@ -79,38 +79,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    synthetic_train_total = max(
-        [
-            8,
-            synthetic_train_outcomes,
-            *(
-                minimum
-                for label, _, minimum in outputs
-                if label.startswith("Synthetic Rootless Train Outcome")
-            ),
-        ]
-    )
-    synthetic_fit_total = max(
-        [
-            1,
-            synthetic_model_fits,
-            *(
-                minimum
-                for label, _, minimum in outputs
-                if label.startswith("Synthetic Rootless Model Fit")
-            ),
-        ]
-    )
-    synthetic_comparison_total = max(
-        [
-            synthetic_unseen_comparisons,
-            *(
-                minimum
-                for label, _, minimum in outputs
-                if label.startswith("Synthetic Rootless Unseen Comparison")
-            ),
-        ]
-    )
     stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
         "campaign_execution": "campaign",
@@ -133,7 +101,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "rom_access": "ROM",
         "scenario_selection": "scenario",
         "sealed_red_evaluation": "sealed",
+        "reused_v1_context_execution": "V1 context reuse",
+        "scenario_substitution_after_selection": "post-choice substitution",
+        "teacher_choice_or_fallback": "teacher choice/fallback",
         "teacher_route_hardening": "teacher",
+        "transfer_claim": "transfer claim",
+        "unpowered_model_quality_claim": "unpowered quality claim",
     }
     prohibited = " / ".join(
         boundary_labels.get(value, value.replace("_", " "))
@@ -146,42 +119,40 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Main 50c64f1c · CI 32475789328/1. The tracked-public-evidence reader is qualified "
-            "and Antigravity approved it with P0/P1 zero. V1 remains closed; only the public V2 "
-            "scenario-preflight design is active. Scenario and gameplay remain closed."
+            "Main 06af22c1 · CI 32476766226/1. The first product-aligned session is building "
+            "one repeatable Red option-execution loop. V1 remains closed; no authentic "
+            "living-Dex choice or Crystal transfer has been claimed yet."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Public V2 contract · exclude consumed V1 root → stop before implementation",
+        location="Red development · full menu → one model choice → one skill → fresh ledger",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V2 model a42db642 · exact bundle · held-out 4/4 · baseline 2/4 · no live "
-                "authority · not scored"
+                "Dependency ranker a42db642 · authenticated · synthetic support only · not run"
             ),
             choice=(
-                "Design a source-independent acquire-versus-evolve preflight without selecting "
-                "a Red scenario"
+                "Next: score acquire/evolve once, execute only the choice, verify a fresh ledger"
             ),
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="catalog",
-            zero_shot_completed=synthetic_train_outcomes,
-            zero_shot_total=synthetic_train_total,
-            adaptation_completed=synthetic_model_fits,
-            adaptation_total=synthetic_fit_total,
-            sealed_completed=synthetic_unseen_comparisons,
-            sealed_total=synthetic_comparison_total,
+            phase="qualification",
+            zero_shot_completed=development_episodes,
+            zero_shot_total=max(15, development_episodes),
+            adaptation_completed=verified_outcomes,
+            adaptation_total=max(5, verified_outcomes),
+            sealed_completed=transfer_results,
+            sealed_total=max(1, transfer_results),
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Synthetic train outcomes",
-                "Synthetic rootless fits",
-                "Eligible held-out comparisons",
+                "Development episodes",
+                "Verified outcomes",
+                "Crystal transfer (closed)",
             ),
         ),
         events=(
@@ -200,14 +171,14 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} · comparison "
                 f"{synthetic_unseen_comparisons} · reader ecb93c44 qualified · Antigravity GO · "
-                "V1 retry 0 · scenario/private/ROM/prediction/action 0 · V2 design only"
+                "V1 retry 0 · synthetic support is descriptive, not authentic authority"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),
             _event("Next falsifier", _text(reorientation, "next_falsifier")),
             f"Authority promotions {authority_promotions} · transfer results {transfer_results}",
-            f"Closed · {prohibited}",
+            _event("Closed", prohibited),
             (
                 f"Session budget · data {_count(budgets, 'data_and_scenarios')}% · model "
                 f"{_count(budgets, 'model_and_evaluation')}% · maintenance "

@@ -5,7 +5,23 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
+> **Current rail:** Show **BASELINE MAIN 06AF22C1 · CI 32476766226/1 GREEN · 4619 PASSED ·
+> ACTIVE REPEATABLE RED LIVING-DEX OPTION EXECUTION · DEVELOPMENT 14/15 · VERIFIED 4/5 ·
+> AUTHORITY PROMOTIONS 0 · TRANSFER RESULTS 0**. Link the
+> [focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json).
+>
+> Animate **UNUSED NONSEALED ROOT → COMPLETE ANONYMOUS ACQUIRE/EVOLVE MENU → DURABLE ROOT CLAIM →
+> ONE MODEL SCORE → DURABLE START → SELECTED SKILL ONLY → FRESH LIVING LEDGER → SETTLED OR
+> CENSORED**.
+> Show **TEACHER CHOICES/FALLBACKS 0 · HARD ACTION/FRAME CAPS · V1 CONTEXT REUSE 0 · CONTEXT
+> SUBSTITUTION 0**. Label the result **PLUMBING FALSIFIER ONLY**: no fit, sealed Red result,
+> Crystal run, completion, promotion, or transfer claim.
+>
+> **Previous rail:** Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
+> ECB93C44 QUALIFIED · EXACT SHA + GIT BLOB · CANONICAL PRETTY JSON · NO-FOLLOW/INODE STABLE ·
+> ANTIGRAVITY GO · P0/P1 0 · PROTECTED EFFECTS 0 · V1 RETRY NO**.
+>
+> Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
 > ECB93C44 QUALIFIED · EXACT SHA + GIT BLOB · CANONICAL PRETTY JSON · NO-FOLLOW/INODE STABLE ·
 > ANTIGRAVITY GO · P0/P1 0 · PROTECTED EFFECTS 0 · V1 RETRY NO**. Link the
 > [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)

@@ -306,20 +306,32 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == (
-        "red-dual-capability-action-free-scenario-preflight-v2-design"
+        "repeatable-red-living-dex-option-execution-v1"
     )
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == (
-        "red-dual-capability-action-free-scenario-preflight-v2-implementation"
+    assert state.active_lane["kind"] == "learning"
+    assert state.active_lane["maintenance_unblocks"] is None
+    assert state.active_lane["measurable_outputs"] == [
+        {
+            "kind": "development_episode",
+            "minimum": 15,
+            "partition": "development",
+        },
+        {
+            "kind": "verified_outcome_example",
+            "minimum": 5,
+            "partition": "development",
+        },
+    ]
+    assert len(state.retired_lanes) == 50
+    assert focus_progress_fraction(state) == pytest.approx(13 / 15)
+    assert focus_scorecard(state) == (
+        ("Development Episode · development", 14, 15),
+        ("Verified Outcome Example · development", 4, 5),
     )
-    assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 49
-    assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
@@ -1374,7 +1386,10 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == (
+        "Development Episode · development: 14/15",
+        "Verified Outcome Example · development: 4/5",
+    )
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1820,51 +1835,34 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 0.0
+    assert public["stage_progress"] == pytest.approx(13 / 15)
     assert public["actions"] == 0
-    assert "Red dual-capability action-free scenario preflight V2 design" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
+    assert "Repeatable Red living-Dex option execution V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 15}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 5}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "tracked-public-evidence reader is qualified" in encoded
-    assert "actions 244/244" in encoded
-    assert "public evidence authentication" in encoded
-    assert "90288f57" in encoded
-    assert "32449287128/1" in encoded
-    assert "candidate 4/4" in encoded
-    assert "baseline 2/4" in encoded
-    assert "CE 0.206/0.693" in encoded
-    assert "rows disclosed 0" in encoded
-    assert "no retry" in encoded
-    assert "model a42db642" in encoded
-    assert "no live authority" in encoded
-    assert "candidate 0" in encoded
+    assert "first product-aligned session" in encoded
+    assert "full menu" in encoded
+    assert "one model choice" in encoded
+    assert "fresh ledger" in encoded
+    assert "Development Episode 14/15" in encoded
+    assert "Verified Outcome Example 4/5" in encoded
+    assert "no authentic living-Dex choice" in encoded
+    assert "Crystal transfer" in encoded
+    assert "Dependency ranker a42db642" in encoded
+    assert "synthetic support only" in encoded
     assert "reader ecb93c44 qualified" in encoded
     assert "V1 retry 0" in encoded
-    assert "scenario/private/ROM/prediction/action 0" in encoded
-    assert "V2 design only" in encoded
-    assert "50c64f1c" in encoded
-    assert "32475789328/1" in encoded
-    assert "rows 2" in encoded
-    assert "audits GO" in encoded
-    assert "8d559d23" in encoded
-    assert "32458785817/1" in encoded
-    assert "prediction/claim/action/frame 0" in encoded
-    assert "context closed" in encoded
+    assert "synthetic support is descriptive" in encoded
+    assert "06af22c1" in encoded
+    assert "32476766226/1" in encoded
     assert "fit 1" in encoded
     assert "comparison 1" in encoded
     assert "Rootless" in encoded
     assert "logical atomic 0" in encoded
-    assert "6077173" in encoded
-    assert "32177113545/1" in encoded
-    assert "d77d9f9d" in encoded
-    assert "aa65504" in encoded
-    assert "32179177930/1" in encoded
-    assert "preloads 0" in encoded
-    assert "readiness_authentication" in encoded
-    assert "effects not attested" in encoded
-    assert "retry 0" in encoded
+    assert public["model"]["teacher_queries"] == 0  # type: ignore[index]
+    assert public["model"]["fallbacks"] == 0  # type: ignore[index]
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

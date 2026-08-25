@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 25: stop designing the doorway and let the model make one real collection choice
+
+Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
+`32476766226/1` with 4619 tests. The
+[focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json) records a needed
+course correction: the project had already built semantic capture, bounded evolution, a complete
+anonymous acquire-versus-evolve menu, an independent living-ledger verifier, and an authenticated
+ranker. Designing another public preflight would have improved paperwork without letting the model
+play.
+
+The first August 25 session therefore builds the narrow missing bridge. One unused nonsealed Red
+state supplies both real skills. The entire title-neutral menu is frozen before the model sees it;
+the reset is durably consumed; the model scores it exactly once; only the selected skill receives
+controller authority; and a fresh game observation—not the skill's own report—decides whether the
+living collection changed correctly. Ordinary failures are censored, not relabeled, retried, or
+handed to the other option.
+
+This matters because it is the first honest end-to-end test of learned collection authority, but
+it remains deliberately small. The current ranker was fit on synthetic dependency situations and
+this episode can validate plumbing, not competence. The next evidence must come from multiple
+family/root-disjoint Red choices where costs or success are uncertain. Only after that should the
+same shared contract be tested in Crystal. Story completion and a legitimate cross-version living
+Pokédex remain the product.
+
 ## August 21: the generic public evidence boundary qualified
 
 Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with

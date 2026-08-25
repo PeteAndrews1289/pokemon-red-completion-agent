@@ -1,0 +1,82 @@
+{
+  "active_lane": "repeatable-red-living-dex-option-execution-v1",
+  "authority_baseline": {
+    "current_end_to_end_living_dex_authority": "none",
+    "historical_component_authority": {
+      "battle_control": "bounded teacher-free Hall-of-Fame execution under scripted objectives and navigation",
+      "goal_selection": "bounded model execution across known Red contexts without unseen-episode promotion",
+      "strategic_navigation": "development advantage over a cost-only baseline with sealed evaluation unopened"
+    },
+    "living_dex_ranker": "descriptive synthetic acquire-versus-evolve support only; no authentic selected action has executed"
+  },
+  "baseline_publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4619,
+    "ci_run_id": 32476766226,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "source_commit": "06af22c14a44db4f61b6f55c05dcbaa5d6394ef8"
+  },
+  "claim_boundary": {
+    "supported": "The expired design-only lane is retired. The shortest product-aligned successor is a repeatable Red development loop that authenticates an unused state, freezes the full title-neutral collection-option menu before scoring, permits one model choice, executes only that semantic skill, and independently verifies the living-specimen ledger transition.",
+    "unsupported": [
+      "authority_promotion",
+      "autonomous_living_pokedex_completion",
+      "crystal_transfer",
+      "model_quality_from_one_episode",
+      "sealed_red_result"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "decision": {
+    "development_is_repeatable": true,
+    "next_falsifier": "one unused nonsealed Red development state that exposes both qualified skills",
+    "next_learning_output": "one authentic model-selected option with a settled or censored durable terminal",
+    "retire_design_only_gate": true,
+    "sealed_or_benchmark_execution_authorized": false,
+    "v1_invocation_retry_allowed": false
+  },
+  "external_audit_adjudication": {
+    "antigravity": "Proceed only through the minimal reusable option-execution seam and one development falsifier.",
+    "claude": "Redirect because the design-only successor repeated a gate loop and the synthetic ranker cannot establish authentic authority.",
+    "codex": "Accepted the shared focus finding, preserved V1 as retired history, and rejected both another design gate and a premature Crystal jump."
+  },
+  "recorded_on": "2026-08-25",
+  "schema": "pokemon.red.living-dex-development-redirect.v1",
+  "status": "focus_redirected_to_repeatable_model_selected_option_execution",
+  "title_role": "Product-focus correction and authority baseline; not gameplay, learning, completion, promotion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "gameplay_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_inputs_opened": 0,
+    "red_rom_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0,
+    "verified_outcomes": 0
+  }
+}

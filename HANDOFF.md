@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-21 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-25 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -11,6 +11,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-25: one authentic Red living-Dex option is the active falsifier
+
+Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
+`32476766226/1` with 4619 tests. The
+[focus redirect](docs/evidence/red-living-dex-development-redirect-v1-2026-08-25.json) retires the
+expired public V2 design-only lane. Current authority is component-level only: the living-Dex
+ranker has never selected and executed an authentic collection option.
+
+Codex owns `repeatable-red-living-dex-option-execution-v1`. The implementation freezes the full
+anonymous acquire/evolve menu, rejects the retired V1 reset, durably consumes one unused physical
+root, scores once, writes the decision before controller input, executes only the selection under
+hard limits, and settles from a fresh collection ledger. No teacher choice or fallback exists.
+Run one development root after exact-head publication and green CI; then track either the verified
+outcome or the genuine falsifier and reorient. Do not refit, substitute a context after selection,
+patch a route, open sealed Red, run Crystal, or start a full replay. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1** until the durable terminal exists.
 
 ## 2026-08-21: reader qualified; V2 public design is active
 

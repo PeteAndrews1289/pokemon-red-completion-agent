@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-25 repeatable Red option execution is active:** Baseline main
+> `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI `32476766226/1` with 4619
+> tests. The
+> [focus redirect](docs/evidence/red-living-dex-development-redirect-v1-2026-08-25.json) closes
+> the expired V2 design-only lane and opens one direct model-choice development falsifier.
+>
+> Codex is sole implementer and publisher for `repeatable-red-living-dex-option-execution-v1`.
+> Claude remains the forensic/statistical reviewer and Antigravity the architecture/transfer
+> challenger; both are read-only and neither is a standing gate for this development episode.
+> One unused nonsealed root may be claimed and run once. No agent owns V1 reuse, post-selection
+> substitution, teacher choice/fallback, fit/refit, sealed Red, Crystal, full replay, promotion,
+> completion, or transfer claims. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1** until tracked terminal evidence exists.
+
 > **2026-08-21 reader qualified; V2 public design is active:** Main
 > `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618 tests.
 > The [qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
