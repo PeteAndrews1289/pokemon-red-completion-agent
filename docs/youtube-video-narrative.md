@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: the silent freeze finds an honest missing concept
+## August 25 scene: the full classroom exists, but the sealed envelope rejects it
+
+Open on **SOURCE 3FF9AB36 · CI 32890215789/1 GREEN**, count through **81 AUTHENTICATED STATES**,
+then light **FAMILY/ROOT PARTITION PASSED · 8 TRAIN + 8 DEVELOPMENT BUILT IN MEMORY**. Stop before
+celebrating: stamp **DURABLE PLAN 0 · FRAMES 0 · MODEL SCORES 0 · BUTTONS 0 · TEACHERS 0 · ROOT
+CLAIMS 0 · OUTCOMES 0 · V2 RETRY NO** and link the
+[V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json) with
+**SHA-256 31775CD6…996**.
+
+Zoom into two tiny maps: **{0: 4, 1: 4}**. Show **HASHER → {"0": 4, "1": 4}** but **STRICT
+SEALED WRITER → REJECT BEFORE WRITE**. The lesson is not that Red needs another route; the exact
+curriculum already exists. The lesson is that a secure publication boundary must see the same
+representation that was hashed.
+
+Animate the ROM-free qualification as **FULL 16-TRIAL SYNTHETIC PLAN · FAMILY/ROOT DISJOINT ·
+SEMANTIC ROUTE + OBSERVED DESTINATION → SEALED PUBLISH → EXACT REOPEN**. Then restore either
+integer-key map and show **REJECTED · RECORD ABSENT**. End on **GREEN EXACT-SOURCE CI → RETIRE
+MAINTENANCE → REORIENT → NEW V3 IDENTITY**, while keeping **TRAINING EXAMPLES 0 · AUTHORITY 0 ·
+TRANSFER 0**. Say plainly: **THE CLASSROOM IS READY TO BE SAVED; THE STUDENT HAS NOT TRAINED YET**.
+
+## Earlier August 25 scene: the silent freeze finds an honest missing concept
 
 Open on **SOURCE 54EEBBF8 · CI 32886600958/1 GREEN**, then count through **81 AUTHENTICATED RED
 STATES** without showing a single controller input. Stop the rail at **DEVELOPMENT ROOTS 6/8 ·

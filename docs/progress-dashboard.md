@@ -5,24 +5,23 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **V1 SOURCE 54EEBBF8 · CI 32886600958/1 GREEN · 81 AUTHENTICATED STATES ·
-> FRAMES/ACTIONS/PREDICTIONS/CLAIMS/OUTCOMES 0 · DEVELOPMENT ROOTS 6/8 · FAILED CLOSED · RETRY
-> NO**. Link the
-> [failure receipt](evidence/red-living-dex-multifamily-pilot-freeze-failure-v1-2026-08-25.json)
-> and show **SHA-256 2B37F64B…6BEF**.
+> **Current rail:** Show **V2 SOURCE 3FF9AB36 · CI 32890215789/1 GREEN · 81 AUTHENTICATED STATES ·
+> FAMILY/ROOT SPLIT PASSED · 8 TRAIN + 8 DEVELOPMENT BUILT IN MEMORY · FRAMES/ACTIONS/PREDICTIONS/
+> CLAIMS/OUTCOMES 0 · DURABLE PLAN 0 · FAILED CLOSED · RETRY NO**. Link the
+> [V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json) and
+> show **SHA-256 31775CD6…996**.
 >
-> Add the diagnosis card **V2 LOCAL 4,679 PASSED · 3 SKIPPED · 1 EXPECTED FAILURE** and **3 MORE
-> BASE-READY DEVELOPMENT ROOTS ALREADY AT EXACT PC BOUNDARY → V1
-> COULD EXPRESS ONLY NONEMPTY RELOCATION**. Then animate the V2 rail: **EXPLICIT OBSERVED
-> DESTINATION · LIVE SNAPSHOT + RAW MAP/COORDINATE + BATTLE STATE + ACTION DELTA 0 · NOT A
-> ZERO-STEP ROUTE · ROUTE-BACKED HASH PRESERVED · OBSERVATION-BACKED HASH DISTINCT**.
+> Add the diagnosis card **INTEGER COUNTER KEYS IN MEMORY → HASHER SILENTLY STRINGIFIES → STRICT
+> PRIVATE NORMALIZER REJECTS BEFORE WRITE**. Animate the maintenance rail: **ROM-FREE 16-TRIAL
+> SYNTHETIC PLAN → STRING KEYS → SEMANTIC ROUTE + OBSERVED BOUNDARY → SEALED PUBLISH → EXACT
+> REOPEN**, with two red mutation arrows restoring integer keys and stopping before a record.
 >
-> Animate the next exact rail: **PUBLISH V2 → GREEN EXACT-SOURCE CI → ONE NEW-IDENTITY ACTION-FREE
-> FREEZE → 8 TRAIN + 8 DEVELOPMENT OR CLOSE V2 → PATH-FREE TERMINAL → REORIENT**. Keep the
+> Animate the next exact rail: **GREEN EXACT-SOURCE CI → RETIRE MAINTENANCE → REORIENT → DESIGN
+> NEW-IDENTITY V3 FREEZE**. Keep the
 > learning board unchanged at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 ·
 > COMPARISONS 4/5 · AUTHORITY 0 · TRANSFER 0**. Label this checkpoint **QUALIFICATION, NOT
-> TRAINING** and keep model scoring, claimed roots, sealed Red, Crystal, full replay, promotion,
-> and completion closed.
+> TRAINING** and keep V2 retry, V3 execution, model scoring, claimed roots, sealed Red, Crystal,
+> full replay, promotion, and completion closed.
 >
 > **Previous rail:** Show **MAIN A448F5B9 · CI 32878889059/1 GREEN · FIRST AUTHENTIC RED
 > COLLECTION CHOICE SETTLED · ACQUISITION 78.2% · ACTIONS 665 · FRAMES 33,672 · DEPENDENCY 2→1 ·

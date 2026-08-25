@@ -6,6 +6,7 @@ import hashlib
 import json
 import runpy
 import sys
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -17,10 +18,19 @@ from pokemon_red_completion.collection import (
 )
 from pokemon_red_completion.global_router import MacroGraph
 from pokemon_red_completion.local_router import LocalGraph
+from pokemon_red_completion.private_artifacts import (
+    PrivateArtifactError,
+    initialize_private_root,
+)
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_living_dex_dependency_adapter import (
     RedDependencyExecutionFacts,
     adapt_red_living_dex_dependencies,
+)
+from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
+    RedMultifamilyContext,
+    freeze_two_family_curriculum,
+    inventory_red_multifamily_contexts,
 )
 from pokemon_red_completion.route_executor import TraversalSnapshot
 from pokemon_red_completion.route_plan import plan_route
@@ -65,6 +75,130 @@ def _args() -> list[str]:
         "--rom",
         "/protected/red.gb",
     ]
+
+
+def _synthetic_curriculum() -> tuple[object, object, dict[tuple[str, str], object]]:
+    precursor_a = red_species_ref(11)
+    evolved_a = red_species_ref(12)
+    precursor_b = red_species_ref(14)
+    evolved_b = red_species_ref(15)
+    specimens = tuple(
+        LivingSpecimen(
+            species,
+            4,
+            CollectionLocation.BOX,
+            container_index=0,
+            slot_index=index,
+        )
+        for index, species in enumerate(
+            (precursor_a, precursor_a, precursor_b, precursor_b)
+        )
+    )
+    observation = CollectionObservation(
+        owned_species=frozenset({precursor_a, precursor_b}),
+        specimens=specimens,
+        party_size=0,
+        party_limit=6,
+        box_counts=(4,),
+        current_box_index=0,
+        box_capacity=20,
+    )
+    facts = RedDependencyExecutionFacts(
+        acquirable_precursor_refs=frozenset({precursor_a, precursor_b}),
+        trainable_evolution_pairs=frozenset(
+            {(precursor_a, evolved_a), (precursor_b, evolved_b)}
+        ),
+    )
+    contexts = tuple(
+        RedMultifamilyContext(
+            _sha(f"context-{index}"),
+            _sha(f"root-{index}"),
+            "train" if index < 8 else "development",
+            observation,
+            facts,
+            True,
+        )
+        for index in range(16)
+    )
+    inventory = inventory_red_multifamily_contexts(contexts)
+    family_a = next(
+        item.family_identity_sha256
+        for item in inventory.opportunities
+        if item.context.partition == "train"
+        and item.opportunity.binding.precursor_species_ref == precursor_a
+    )
+    family_b = next(
+        item.family_identity_sha256
+        for item in inventory.opportunities
+        if item.context.partition == "development"
+        and item.opportunity.binding.precursor_species_ref == precursor_b
+    )
+    curriculum = freeze_two_family_curriculum(
+        inventory,
+        train_family_identity_sha256=family_a,
+        development_family_identity_sha256=family_b,
+    )
+
+    class SyntheticMechanics:
+        def __init__(self, family: str, *, observed_boundary: bool) -> None:
+            self.family = family
+            self.observed_boundary = observed_boundary
+
+        def private_dict(self) -> dict[str, object]:
+            common: dict[str, object] = {
+                "family_identity_sha256": self.family,
+                "precursor_species_ref": precursor_a,
+                "evolved_species_ref": evolved_a,
+                "source_id": "wild:synthetic:grass",
+                "source_map_id": 1,
+                "capture_skill_binding_sha256": _sha("capture-skill"),
+                "capture_route_plan_sha256": _sha("capture-route"),
+                "capture_route_cost": 3,
+                "capture_exit_coordinates": [[1, 1]],
+                "evolution_skill_binding_sha256": _sha("evolution-skill"),
+                "precursor_internal_species_id": 124,
+                "evolved_internal_species_id": 125,
+                "current_box_index": 0,
+                "precursor_box_slot": 1,
+                "deposit_party_slot": 6,
+                "deposit_internal_species_id": 28,
+                "route_to_training_plan_sha256": _sha("training-route"),
+                "route_to_training_cost": 2,
+                "training_binding_sha256": _sha("training-binding"),
+            }
+            if self.observed_boundary:
+                common.update(
+                    {
+                        "pc_access_kind": "observed_semantic_boundary",
+                        "pc_boundary_binding_sha256": _sha("pc-boundary"),
+                        "pc_boundary_observer_binding_sha256": _sha("pc-observer"),
+                        "route_to_pc_cost": 0,
+                    }
+                )
+            else:
+                common.update(
+                    {
+                        "pc_access_kind": "semantic_route",
+                        "route_to_pc_plan_sha256": _sha("pc-route"),
+                        "route_to_pc_planner_binding_sha256": _sha("pc-planner"),
+                        "route_to_pc_cost": 2,
+                    }
+                )
+            return common
+
+    mechanics = {
+        (
+            trial.opportunity.context.context_identity_sha256,
+            trial.opportunity.family_identity_sha256,
+        ): SyntheticMechanics(
+            trial.opportunity.family_identity_sha256,
+            observed_boundary=index % 2 == 1,
+        )
+        for index, trial in enumerate(
+            (*curriculum.train_trials, *curriculum.development_trials)
+        )
+    }
+    return inventory, curriculum, mechanics
 
 
 def test_parser_requires_every_frozen_input_identity() -> None:
@@ -238,3 +372,174 @@ def test_zero_step_plan_outside_pc_is_not_relabelled_as_an_observed_boundary() -
             source_bundle=_sha("source"),
             context_identity_sha256=_sha("context"),
         )
+
+
+def test_full_synthetic_plan_round_trips_through_exact_sealed_publication(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    inventory, curriculum, mechanics = _synthetic_curriculum()
+    document, plan_sha256 = SCRIPT["_private_plan_document"](
+        source_commit="a" * 40,
+        source_bundle=_sha("source"),
+        rom_sha256=_sha("rom"),
+        registry_sha256=_sha("registry"),
+        catalog_sha256=_sha("catalog"),
+        context_plan_sha256=_sha("context-plan"),
+        inventory=inventory,
+        curriculum=curriculum,
+        mechanics=mechanics,
+    )
+
+    counts = document["curriculum"]
+    assert isinstance(counts, dict)
+    assert counts["train_candidate_counts"] == {"0": 4, "1": 4}
+    assert counts["development_candidate_counts"] == {"0": 4, "1": 4}
+    assert len(document["trials"]) == 16  # type: ignore[arg-type]
+    access_kinds = {
+        trial["mechanics"]["pc_access_kind"]  # type: ignore[index]
+        for trial in document["trials"]  # type: ignore[union-attr]
+    }
+    assert access_kinds == {"semantic_route", "observed_semantic_boundary"}
+
+    private_root = tmp_path / "private"
+    private_root.mkdir(mode=0o700)
+    store = initialize_private_root(
+        private_root,
+        repository_root=PROJECT_ROOT,
+        allow_same_device=True,
+    )
+    monkeypatch.setitem(
+        SCRIPT["_publish"].__globals__,
+        "open_private_root",
+        lambda *_args, **_kwargs: store,
+    )
+    parsed = SCRIPT["_parser"]().parse_args(_args())
+    result = SCRIPT["_publish"](
+        parsed,
+        document=document,
+        plan_sha256=plan_sha256,
+        inventory=inventory,
+        curriculum=curriculum,
+        emulator_frames_advanced=0,
+    )
+    reopened = store.find_sealed_record(
+        SCRIPT["PLAN_RECORD_ID"],
+        expected_kind=SCRIPT["PLAN_RECORD_KIND"],
+    )
+
+    assert reopened is not None
+    assert reopened.read() == document
+    assert result["plan_sha256"] == plan_sha256
+    assert result["plan_manifest_sha256"] == reopened.summary.manifest_sha256
+    assert result["private_paths_published"] == 0
+    assert str(tmp_path) not in json.dumps(result, sort_keys=True)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ("train_candidate_counts", "development_candidate_counts"),
+)
+def test_strict_sealed_publication_rejects_original_integer_key_mutation(
+    tmp_path: Path,
+    field: str,
+) -> None:
+    inventory, curriculum, mechanics = _synthetic_curriculum()
+    document, _plan_sha256 = SCRIPT["_private_plan_document"](
+        source_commit="a" * 40,
+        source_bundle=_sha("source"),
+        rom_sha256=_sha("rom"),
+        registry_sha256=_sha("registry"),
+        catalog_sha256=_sha("catalog"),
+        context_plan_sha256=_sha("context-plan"),
+        inventory=inventory,
+        curriculum=curriculum,
+        mechanics=mechanics,
+    )
+    mutated = deepcopy(document)
+    curriculum_document = mutated["curriculum"]
+    assert isinstance(curriculum_document, dict)
+    curriculum_document[field] = {0: 4, 1: 4}
+    private_root = tmp_path / "private"
+    private_root.mkdir(mode=0o700)
+    store = initialize_private_root(
+        private_root,
+        repository_root=PROJECT_ROOT,
+        allow_same_device=True,
+    )
+
+    with pytest.raises(PrivateArtifactError, match="keys must be strings"):
+        store.publish_sealed_record(
+            f"integer-key-{field.replace('_', '-')}",
+            kind="synthetic-multifamily-plan",
+            record=mutated,
+        )
+
+    assert (
+        store.find_sealed_record(
+            f"integer-key-{field.replace('_', '-')}",
+            expected_kind="synthetic-multifamily-plan",
+        )
+        is None
+    )
+
+
+def test_main_distinguishes_private_encoding_failure_from_publication(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    inventory, curriculum, mechanics = _synthetic_curriculum()
+    publication_calls = 0
+
+    class IntegerKeyCurriculum:
+        train_trials = curriculum.train_trials
+        development_trials = curriculum.development_trials
+
+        @staticmethod
+        def public_dict() -> dict[str, object]:
+            document = curriculum.public_dict()
+            document["train_candidate_counts"] = {0: 4, 1: 4}
+            return document
+
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_authenticate_source",
+        lambda _args: ("a" * 40, _sha("source")),
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_authenticate_inputs",
+        lambda *_args: (
+            Path("red.gb"),
+            _sha("rom"),
+            b"rom",
+            (),
+            _sha("catalog"),
+            _sha("context-plan"),
+        ),
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_inventory",
+        lambda *_args: (inventory, mechanics, 0),
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_freeze",
+        lambda *_args: IntegerKeyCurriculum(),
+    )
+
+    def publish(*_args: object, **_kwargs: object) -> object:
+        nonlocal publication_calls
+        publication_calls += 1
+        raise AssertionError("publication must not begin")
+
+    monkeypatch.setitem(SCRIPT["main"].__globals__, "_publish", publish)
+
+    assert SCRIPT["main"](_args()) == 1
+
+    failure = json.loads(capsys.readouterr().out)
+    assert failure["failure_stage"] == "private_plan_encoding"
+    assert failure["controller_actions"] == 0
+    assert failure["roots_claimed"] == 0
+    assert publication_calls == 0

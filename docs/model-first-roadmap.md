@@ -8,7 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V1 failed safely; V2 represents an already-observed destination honestly
+## Current checkpoint: V2 built the 8+8 curriculum; qualify strict publication without Red
+
+Published source `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed exact-head CI
+`32890215789/1`; its tree reached main as `514aff4eab57c58b8c4839d4613766f39243098b`.
+The sole V2 action-free freeze authenticated all 81 states, advanced zero frames, passed the
+family/root partition, and constructed the required eight-train/eight-development curriculum in
+memory. It then stopped at `private_plan_publication` before a durable record existed. The
+[path-free V2 failure](evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
+(SHA-256 `31775cd6…996`) records zero predictions, actions, teachers, claims, outcomes, paths, and
+counter deltas. V2 is closed without retry.
+
+The exact cause is generic and reproducible without protected inputs. The two candidate-count
+summaries held integer keys in memory. Canonical hashing silently rendered those keys as strings,
+while the stricter sealed-record normalizer correctly refused them before writing. The active
+maintenance lane makes the in-memory representation canonical, separates plan encoding from store
+publication for precise failure reporting, and exercises the complete V2 document through an
+isolated private store: 16 family/root-disjoint trials, both semantic-route and observed-boundary
+mechanic shapes, exact reopen, and rejection of either original integer-key mutation.
+The complete local ROM-free suite passes **4,683 tests**, with three intentional deselections and
+one expected failure; public-artifact, documentation, focus, registry, lint, and type checks also
+pass.
+
+This is the smallest unblock for
+`red-living-dex-multifamily-option-value-curriculum-v3`. It opens no Red input and may not retry
+V2, execute V3, score or fit a model, claim a root, run Crystal, promote authority, or replay the
+game. Learning counters remain **development 15 · verified 5 · causal train 0 · fits 4 ·
+comparisons 4 · authority 0 · transfer 0**. After exact-source CI passes, retire this maintenance
+lane and reorient separately before a new-identity V3 freeze.
+
+## Previous checkpoint: V1 failed safely; V2 represented an already-observed destination honestly
 
 Published source `54eebbf834eecfa335e02105ddcf955064a7730d` passed exact-head CI
 `32886600958/1`; its tree reached main as `23a3047aba075c065cefff9f3a780741c553d1c3`.

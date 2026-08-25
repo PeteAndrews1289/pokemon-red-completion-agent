@@ -1,0 +1,55 @@
+{
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnosis": {
+    "confirmed_cause": "The frozen curriculum public projection stored intervention counts under integer keys 0 and 1. Canonical plan hashing silently stringified those keys, but the stricter private sealed-record normalizer requires every mapping key to be a string and rejected the record before writing.",
+    "durable_private_record_detected_after_failure": false,
+    "family_root_partition_freeze_passed": true,
+    "private_plan_published": false,
+    "publication_identity_collision_detected": false,
+    "publication_mechanism_and_v2_identifiers_passed_synthetic_round_trip": true,
+    "pure_failure_reproducer": "A path-free mapping containing train_candidate_counts with integer keys 0 and 1 deterministically raises PrivateArtifactError: episode record keys must be strings.",
+    "required_development_trials": 8,
+    "required_train_trials": 8
+  },
+  "disposition": {
+    "claimed_root_retry_allowed": false,
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "model_fit_authorized": false,
+    "outcome_collection_authorized": false,
+    "private_publication_qualification_allowed": true,
+    "promotion_authorized": false,
+    "v2_freeze_retry_allowed": false,
+    "v3_freeze_authorized": false
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_paths_published": 0,
+    "roots_claimed": 0,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "authenticated_states_read": 81,
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32890215789,
+    "failure_stage": "private_plan_publication",
+    "source_bundle_sha256": "e2a2800eaa7befe729aac263d3a5431bc510118118c626337e38da3b40ba10d0",
+    "source_commit": "3ff9ab364bd8a912bcee1aabf7472c45b128be58"
+  },
+  "lane_id": "red-living-dex-multifamily-option-value-curriculum-v2",
+  "product_interpretation": "V2 established that an eight-train/eight-development family-and-root-disjoint curriculum can be constructed from the authenticated Red inventory, but it did not durably freeze that plan and created no training evidence. The failure is a generic private-publication contract defect, not a model-quality, gameplay, completion, authority, or transfer result.",
+  "schema": "pokemon.red.living-dex-multifamily-pilot-freeze-failure.v2",
+  "status": "failed_closed"
+}

@@ -249,13 +249,9 @@ class RedMultifamilyCurriculumPlan:
             "train_trials": len(self.train_trials),
             "development_trials": len(self.development_trials),
             "candidate_count_per_menu": 2,
-            "train_candidate_counts": dict(
-                sorted(Counter(item.candidate_index for item in self.train_trials).items())
-            ),
-            "development_candidate_counts": dict(
-                sorted(
-                    Counter(item.candidate_index for item in self.development_trials).items()
-                )
+            "train_candidate_counts": _candidate_count_document(self.train_trials),
+            "development_candidate_counts": _candidate_count_document(
+                self.development_trials
             ),
             "distinct_physical_roots": len(trials),
             "train_families": len(
@@ -281,6 +277,21 @@ class RedMultifamilyCurriculumPlan:
             "species_identity_fields": 0,
             "source_identity_fields": 0,
         }
+
+
+def _candidate_count_document(
+    trials: Sequence[RedMultifamilyTrial],
+) -> dict[str, int]:
+    """Return strict-JSON counters whose in-memory keys match their encoded keys.
+
+    ``json.dumps`` silently converts integer mapping keys to strings.  Private
+    artifact validation intentionally does not, so the curriculum projection
+    must make that canonical representation explicit before hashing or sealed
+    publication.
+    """
+
+    counts = Counter(item.candidate_index for item in trials)
+    return {str(index): counts[index] for index in sorted(counts)}
 
 
 def inventory_red_multifamily_contexts(

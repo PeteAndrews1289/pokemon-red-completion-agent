@@ -127,6 +127,13 @@ def test_freeze_uses_distinct_roots_counterbalanced_candidates_and_disjoint_fami
     assert plan.public_dict()["family_overlap"] == 0
     assert plan.public_dict()["root_overlap"] == 0
     assert plan.public_dict()["fit_partition"] == "train_only"
+    assert plan.public_dict()["train_candidate_counts"] == {"0": 4, "1": 4}
+    assert plan.public_dict()["development_candidate_counts"] == {"0": 4, "1": 4}
+    assert all(
+        isinstance(key, str)
+        for field in ("train_candidate_counts", "development_candidate_counts")
+        for key in plan.public_dict()[field]  # type: ignore[union-attr]
+    )
     assert train_family not in public
     assert development_family not in public
     assert red_species_ref(11) not in public

@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-25 V2 built 8+8, then strict publication failed closed:** Source
+> `3ff9ab364bd8a912bcee1aabf7472c45b128be58` passed CI `32890215789/1`. Its sole action-free
+> freeze read 81 states, passed the disjoint family/root partition, and constructed eight train and
+> eight development trials in memory. Strict publication rejected integer candidate-count keys
+> before writing a record. The
+> [V2 failure](docs/evidence/red-living-dex-multifamily-pilot-freeze-failure-v2-2026-08-25.json)
+> records every gameplay and learning delta at zero. V2 is closed without retry.
+>
+> Codex owns only `multifamily-private-plan-publication-qualification-v1`: canonical string-key
+> serialization plus a full ROM-free 16-trial sealed publish/reopen test with both mechanic shapes
+> and the original failure mutations. Claude and Antigravity remain read-only milestone reviewers;
+> ordinary qualification does not wait on them. No agent owns protected Red access, V2 retry, V3
+> execution, scoring, claims, outcomes, fits, sealed Red, Crystal, replay, promotion, completion,
+> or transfer in this lane. Reorient after green exact-source CI. Counters remain **development
+> 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer 0**.
+
 > **2026-08-25 V1 freeze failed closed; V2 observed-destination gate active:** Source
 > `54eebbf834eecfa335e02105ddcf955064a7730d` passed CI `32886600958/1`. Its sole
 > action-free freeze inspected 81 authenticated states, advanced zero frames, and found six
