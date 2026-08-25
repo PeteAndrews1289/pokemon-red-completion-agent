@@ -19,6 +19,11 @@ Codex owns `red-living-dex-multifamily-option-value-curriculum-v3`: give the unc
 freezer new V3 lane, schema, result, failure, and private-record identities; mutation-test identity
 separation and no retry; publish exact green source; execute one action-free freeze; record its
 path-free terminal; and reorient. It must yield exactly 8+8 disjoint complete menus or close V3.
+The local candidate implements V3 as identities plus delegation to the already-qualified runner;
+it does not duplicate or override inventory, partition, mechanic, serialization, or publication
+logic. Its full synthetic V3 round-trip leaves the V2 record namespace absent.
+Local verification is green at **4,686 passed · 3 deselected · 1 expected failure**, plus every
+public-artifact, documentation, focus, registry, lint, and type gate.
 
 Claude and Antigravity remain read-only milestone reviewers. Neither is a routine blocker, and no
 agent owns a V1/V2 reuse, V3 retry, model score during the freeze, outcome collection before a

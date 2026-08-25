@@ -46,6 +46,11 @@ SCRIPT = runpy.run_path(
     str(SCRIPT_PATH),
     run_name="freeze_red_living_dex_multifamily_pilot_test",
 )
+V3_SCRIPT_PATH = PROJECT_ROOT / "scripts/freeze_red_living_dex_multifamily_pilot_v3.py"
+V3_SCRIPT = runpy.run_path(
+    str(V3_SCRIPT_PATH),
+    run_name="freeze_red_living_dex_multifamily_pilot_v3_test",
+)
 
 
 def _sha(value: str) -> str:
@@ -219,6 +224,37 @@ def test_successor_uses_new_lane_and_private_plan_identities() -> None:
     assert SCRIPT["PLAN_RECORD_ID"].endswith("-v2")
 
 
+def test_v3_successor_uses_fresh_protocol_identities_without_semantic_overrides() -> None:
+    v2 = SCRIPT["V2_PROTOCOL"]
+    v3 = V3_SCRIPT["PROTOCOL"]
+
+    assert v3.lane_id == "red-living-dex-multifamily-option-value-curriculum-v3"
+    assert v3.plan_schema.endswith(".v3")
+    assert v3.result_schema.endswith(".v3")
+    assert v3.failure_schema.endswith(".v3")
+    assert v3.success_status.endswith("_v3")
+    assert v3.plan_record_id.endswith("-v3")
+    assert v3.plan_record_kind == v3.plan_record_id
+    assert {
+        v3.lane_id,
+        v3.plan_schema,
+        v3.result_schema,
+        v3.failure_schema,
+        v3.plan_record_id,
+    }.isdisjoint(
+        {
+            v2.lane_id,
+            v2.plan_schema,
+            v2.result_schema,
+            v2.failure_schema,
+            v2.plan_record_id,
+        }
+    )
+    assert V3_SCRIPT_PATH.read_text(encoding="utf-8").count("PROTOCOL =") == 1
+    assert "def _inventory" not in V3_SCRIPT_PATH.read_text(encoding="utf-8")
+    assert "def _freeze" not in V3_SCRIPT_PATH.read_text(encoding="utf-8")
+
+
 def test_source_failure_stops_before_private_inputs_and_receipt_is_path_free(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
@@ -243,6 +279,38 @@ def test_source_failure_stops_before_private_inputs_and_receipt_is_path_free(
 
     result = json.loads(capsys.readouterr().out)
     assert private_calls == 0
+    assert result["failure_stage"] == "source_authentication"
+    assert result["controller_actions"] == 0
+    assert result["roots_claimed"] == 0
+    assert "/protected" not in json.dumps(result)
+
+
+def test_v3_source_failure_uses_only_v3_receipt_and_stops_before_private_inputs(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    private_calls = 0
+    runner_globals = V3_SCRIPT["_run_freeze"].__globals__
+
+    def private(*_args: object, **_kwargs: object) -> object:
+        nonlocal private_calls
+        private_calls += 1
+        raise AssertionError("private inputs opened")
+
+    monkeypatch.setitem(
+        runner_globals,
+        "_authenticate_source",
+        lambda _args: (_ for _ in ()).throw(
+            runner_globals["MultifamilyPilotFreezeError"]("source_authentication")
+        ),
+    )
+    monkeypatch.setitem(runner_globals, "_authenticate_inputs", private)
+
+    assert V3_SCRIPT["main"](_args()) == 1
+
+    result = json.loads(capsys.readouterr().out)
+    assert private_calls == 0
+    assert result["schema"] == V3_SCRIPT["FAILURE_SCHEMA"]
     assert result["failure_stage"] == "source_authentication"
     assert result["controller_actions"] == 0
     assert result["roots_claimed"] == 0
@@ -374,12 +442,37 @@ def test_zero_step_plan_outside_pc_is_not_relabelled_as_an_observed_boundary() -
         )
 
 
+@pytest.mark.parametrize(
+    ("protocol", "record_id", "record_kind", "result_schema", "success_status"),
+    (
+        (
+            SCRIPT["V2_PROTOCOL"],
+            SCRIPT["PLAN_RECORD_ID"],
+            SCRIPT["PLAN_RECORD_KIND"],
+            SCRIPT["RESULT_SCHEMA"],
+            "two_family_root_disjoint_pilot_frozen_v2",
+        ),
+        (
+            V3_SCRIPT["PROTOCOL"],
+            V3_SCRIPT["PLAN_RECORD_ID"],
+            V3_SCRIPT["PLAN_RECORD_KIND"],
+            V3_SCRIPT["RESULT_SCHEMA"],
+            "two_family_root_disjoint_pilot_frozen_v3",
+        ),
+    ),
+)
 def test_full_synthetic_plan_round_trips_through_exact_sealed_publication(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
+    protocol: object,
+    record_id: str,
+    record_kind: str,
+    result_schema: str,
+    success_status: str,
 ) -> None:
     inventory, curriculum, mechanics = _synthetic_curriculum()
     document, plan_sha256 = SCRIPT["_private_plan_document"](
+        protocol=protocol,
         source_commit="a" * 40,
         source_bundle=_sha("source"),
         rom_sha256=_sha("rom"),
@@ -417,6 +510,7 @@ def test_full_synthetic_plan_round_trips_through_exact_sealed_publication(
     parsed = SCRIPT["_parser"]().parse_args(_args())
     result = SCRIPT["_publish"](
         parsed,
+        protocol=protocol,
         document=document,
         plan_sha256=plan_sha256,
         inventory=inventory,
@@ -424,16 +518,27 @@ def test_full_synthetic_plan_round_trips_through_exact_sealed_publication(
         emulator_frames_advanced=0,
     )
     reopened = store.find_sealed_record(
-        SCRIPT["PLAN_RECORD_ID"],
-        expected_kind=SCRIPT["PLAN_RECORD_KIND"],
+        record_id,
+        expected_kind=record_kind,
     )
 
     assert reopened is not None
     assert reopened.read() == document
     assert result["plan_sha256"] == plan_sha256
+    assert result["schema"] == result_schema
+    assert result["status"] == success_status
+    assert result["lane_id"] == protocol.lane_id  # type: ignore[attr-defined]
     assert result["plan_manifest_sha256"] == reopened.summary.manifest_sha256
     assert result["private_paths_published"] == 0
     assert str(tmp_path) not in json.dumps(result, sort_keys=True)
+    if record_id == V3_SCRIPT["PLAN_RECORD_ID"]:
+        assert (
+            store.find_sealed_record(
+                SCRIPT["PLAN_RECORD_ID"],
+                expected_kind=SCRIPT["PLAN_RECORD_KIND"],
+            )
+            is None
+        )
 
 
 @pytest.mark.parametrize(
