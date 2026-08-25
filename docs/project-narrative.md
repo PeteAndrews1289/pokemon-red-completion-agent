@@ -1,25 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the envelope qualifies, so V3 can return to the student
+## August 25: the authentic classroom is finally sealed
 
-The generic repair shipped as source `2c4504ac18c4a1259a013c0311563995099d5951`, passed CI
-`32893761213/1`, and merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`.
-The [qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
-does not merely test two dictionary keys. It builds the complete 16-trial synthetic curriculum,
-includes both moving to a semantic destination and already occupying one, publishes through the
-real sealed store, and reopens the exact record. Reintroducing either integer-key counter fails
-before a record appears.
+V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed CI `32895364249/1`
+and merged as `5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`. Then the project took its one
+action-free chance. The freezer restored all 81 authenticated Red snapshots without advancing a
+single frame. It found three qualified transformation families and 68 available executable
+opportunities, then sealed exactly eight train and eight development trials across 16 different
+physical roots.
 
-That closes maintenance without pretending it trained anything. V3 now gets fresh identities and
-one action-free chance to freeze the authentic Red 8+8 plan that V2 already constructed in memory.
-If the durable plan appears with complete anonymous menus and disjoint families and roots, the
-project will finally reorient to one-shot train and development outcomes. If not, V3 closes. The
-freeze cannot score the model, press a button, or retry.
+The [result](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json) matters
+because the classroom is now both diverse and honest. Every menu contains the same two
+title-neutral choices; candidate interventions are balanced four-and-four in each partition; the
+training family never appears in development; no physical root crosses the split. Plan
+`50327b72…0947` and manifest `763951ca…8a47` are durable. The freezer made no model prediction,
+pressed no button, asked no teacher, claimed no root, and observed no outcome. It cannot run again.
 
-The story is back where it belongs: not making the teacher finish Red more reliably, but creating
-varied collection decisions from which a transferable ranker can learn. The counters are still
-zero for causal multi-family training and transfer. The next meaningful movement comes from
-audited outcomes, a train-only fit, and a paired untouched-family comparison—not another replay.
+That last sentence is the honest boundary: this is still not training. It is the first authentic
+multi-family curriculum from which training can now begin. The next scene is intentionally small
+and causal. One frozen train trial must be claimed before input, only its preregistered acquisition
+or evolution skill may run, and a separate living-Pokedex observer must decide what actually
+happened. If that bridge works, the remaining train trials can teach the ranker while the entire
+development family stays untouched for the comparison. Crystal remains the later transfer test,
+not a shortcut around weak Red evidence.
 
 ## Earlier August 25: the classroom exists, but the envelope refuses it
 

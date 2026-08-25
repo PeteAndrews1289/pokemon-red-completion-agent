@@ -8,37 +8,38 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: strict publication qualified; V3 returns to authentic learning
+## Current checkpoint: the 8+8 curriculum is durable; cross the first outcome bridge
 
-Source `2c4504ac18c4a1259a013c0311563995099d5951` passed exact-head CI
-`32893761213/1` and merged to main as `861ea62e4704e233209f0359913b418cb030f4c7`.
-The [publication qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
-(SHA-256 `8d443ba9…908d`) records the complete 16-trial synthetic document, both semantic-route
-and observed-boundary mechanic shapes, strict string-key counters, sealed publication, exact
-reopen, and two rejected integer-key mutations with no residual record. Public-artifact,
-documentation, focus, registry, lint, type, and the 4,683-test ROM-free suite passed. The
-maintenance lane is complete.
+V3 source `60710d6b92f9dfc04d87d2302a4e0c96e84df4ba` passed exact-head CI
+`32895364249/1` in PR 43 and merged as `5cc5aabd69825ee7cb160f4a7734f3f4d38a7b42`.
+The sole V3 action-free freeze succeeded. The
+[path-free result](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
+(SHA-256 `27a71899…fc0e1`) binds plan `50327b72…0947` and manifest `763951ca…8a47`. It read
+81 authenticated Red snapshots, advanced zero frames, and froze eight train plus eight untouched
+development trials across 16 distinct physical roots. Every menu has two anonymous candidates;
+candidate interventions are balanced 4/4 in each partition; families and roots do not overlap.
+No prediction, action, teacher, claim, outcome, fit, authority, or transfer counter changed.
 
-Active `red-living-dex-multifamily-option-value-curriculum-v3` now returns the project to the
-measured objective: varied authentic Red choices that can change or falsify the title-neutral
-ranker. The immediate step gives the already-qualified freezer new lane/schema/result/failure/
-record identities, publishes it through exact-source CI, and runs it once action-free. A pass must
-durably preserve exactly eight train and eight development trials with complete anonymous menus
-and disjoint families and roots. Reorient before any trial claim, score, or controller input.
+The freeze is consumed and cannot retry. Active
+`red-living-dex-multifamily-option-value-curriculum-v3` now moves directly to authentic causal
+data. Build the smallest exact-plan-bound collector by reusing the already-qualified semantic
+acquisition/evolution executors and independent living-Pokedex verifier. Before any private
+execution it must authenticate the sealed plan, select one frozen **train** trial, and durably
+claim both trial and physical root. It may then execute only that trial's frozen candidate and
+derive the terminal from a fresh observation. Teacher choice/fallback, alternate-candidate rescue,
+scenario substitution, identity features, and retry are forbidden.
 
-The local V3 candidate is a thin protocol wrapper: inventory, partitioning, mechanic projection,
-strict serialization, and sealed publication remain in the qualified shared runner; only the
-lane, plan/result/failure schemas, success status, and private record identity change. ROM-free
-tests execute the complete synthetic round-trip through V2 and V3, require the V3 terminal, and
-verify that V3 creates no V2 record.
-The full local ROM-free suite passes **4,686 tests**, with three intentional deselections and one
-expected failure; public-artifact, documentation, focus, registry, lint, and type checks pass.
+Mutation-test plan/trial/root binding, claim-before-input, selected-skill exclusivity, independent
+terminal verification, failure/censoring durability, and no retry. Publish the collector through
+exact-source CI, execute exactly one train trial, record its path-free terminal, and reorient
+before any remaining train or development trial. A pass opens completion of the remaining train
+outcomes; a failure closes that claimed trial without replacement and forces redesign around the
+unchanged plan.
 
-The sole V3 freeze cannot retry, reuse a V1/V2 identity, lower the 8+8 target, advance a frame, or
-alter the curriculum semantics. Its success would be readiness, not training. Counters remain
-**development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
-transfer 0**. Only later one-shot outcomes, a train-only fit, and a paired untouched comparison
-can move them; Crystal still waits for a powered Red gate.
+Counters remain **development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons
+4/5 · authority 0 · transfer 0**. Only eight authentic train outcomes, a train-only fit, and the
+paired untouched development-family comparison can move the learned gate. Sealed Red and Crystal
+remain closed until that Red evidence is powered.
 
 ## Previous checkpoint: V2 built the 8+8 curriculum; strict publication was qualified without Red
 

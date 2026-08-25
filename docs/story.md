@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the student chose, acted, and improved the collection
+## Current checkpoint: the classroom now contains sixteen honest lessons
+
+Source `60710d6b` passed CI `32895364249/1`. The one permitted V3 freezer then opened all 81
+authenticated Red snapshots without advancing a frame and sealed a real curriculum: eight train
+trials, eight untouched development trials, sixteen different physical roots, and a different
+transformation family on each side of the split. Every question presents the same two anonymous
+ideas—acquire a missing precursor or evolve one already held—without showing the learner a species,
+map, route, family, root, or skill identity.
+
+The [result receipt](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json)
+locks plan `50327b72…0947`. No model answered, no teacher whispered, no button moved, and no outcome
+was recorded. That is important: a trustworthy textbook is not the same thing as a trained
+student.
+
+The next lesson is finally causal. One frozen training trial will be claimed before any input,
+only its preregistered acquire-or-evolve skill may act, and a fresh living-Pokedex observer will
+decide what changed. If that bridge survives, the remaining training roots can teach the shared
+ranker while development stays untouched. Red is still the curriculum; Crystal is still the first
+test of whether the lesson transfers.
+
+## Previous checkpoint: the student chose, acted, and improved the collection
 
 Main `a448f5b9` passed CI `32878889059/1`. We returned to the same untouched classroom that had
 previously exposed the field-move integration bug. This time the map saw the party's actual legal

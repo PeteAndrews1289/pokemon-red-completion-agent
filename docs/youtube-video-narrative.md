@@ -1,23 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: the envelope passes; open V3 without pretending it is training
+## August 25 scene: seal the real classroom, then point at the first lesson
 
-Open on **SOURCE 2C4504AC · CI 32893761213/1 GREEN · MAIN 861EA62E**. Animate the full ROM-free
-fixture: **16 TRIALS · 8 TRAIN + 8 DEVELOPMENT · FAMILY/ROOT DISJOINT · SEMANTIC ROUTE + OBSERVED
-DESTINATION → SEALED PUBLISH → EXACT REOPEN**. Restore each integer-key map and stamp **REJECTED
-BEFORE RECORD · MUTATIONS 2/2**. Link the
-[qualification](evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json)
-with **SHA-256 8D443BA9…908D**.
+Open on **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD**. Count through
+**81 AUTHENTICATED RED STATES** while the frame counter stays at zero. Expand the inventory to
+**3 QUALIFIED FAMILIES · 68 AVAILABLE EXECUTABLE OPPORTUNITIES**, then let the sealed plan lock:
+**8 TRAIN + 8 DEVELOPMENT · 16 DISTINCT ROOTS · TWO COMPLETE OPTIONS EACH · CANDIDATES 4/4 PER
+PARTITION · FAMILY OVERLAP 0 · ROOT OVERLAP 0**.
 
-Retire the maintenance rail, then light a new one: **V3 NEW LANE/SCHEMA/RESULT/FAILURE/RECORD IDS →
-GREEN EXACT SOURCE → ONE ACTION-FREE FREEZE → DURABLE 8+8 OR CLOSE → REORIENT**. Keep **MODEL
-SCORES 0 · BUTTONS 0 · ROOT CLAIMS 0 · OUTCOMES 0** during that freeze and put **RETRY NO** over
-V1, V2, and V3.
+Link the
+[result](evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json) with
+**SHA-256 27A71899…FC0E1**. Put the immutable labels **PLAN 50327B72…0947** and
+**MANIFEST 763951CA…8A47** on the envelope. Stamp **MODEL SCORES 0 · BUTTONS 0 · TEACHERS 0 ·
+ROOT CLAIMS 0 · OUTCOMES 0 · V3 RETRY NO** so the audience cannot confuse a curriculum with a
+trained model.
 
-End with the actual learning sequence, still dark but now reachable: **CLAIM DISTINCT TRAIN ROOTS
-ONCE → EXECUTE THE PREREGISTERED CANDIDATE → INDEPENDENT LEDGER OUTCOME → TRAIN-ONLY FIT → SAME
-UNTOUCHED DEVELOPMENT QUESTIONS VS COST BASELINE → POWERED RED GATE → CRYSTAL**. Say clearly:
-**THE PUBLICATION PIPE IS QUALIFIED; THE NEXT DATA, NOT THIS PIPE, MUST MAKE THE MODEL SMARTER**.
+Now light exactly one next rail: **AUTHENTICATE SEALED PLAN → CHOOSE ONE FROZEN TRAIN TRIAL →
+CLAIM TRIAL + ROOT BEFORE INPUT → RUN ONLY ITS ACQUIRE/EVOLVE SKILL → FRESH LIVING-POKEDEX
+OBSERVATION → ONE CAUSAL TRAIN ROW → REORIENT**. Keep every development root behind glass.
+End on the longer arc: **8 TRAIN OUTCOMES → TRAIN-ONLY FIT → SAME UNTOUCHED DEVELOPMENT FAMILY
+VS COST BASELINE → POWERED RED GATE → CRYSTAL ZERO-SHOT + ADAPTATION**. Say plainly: **THE
+CLASSROOM IS REAL AND SEALED; THE STUDENT'S FIRST MULTI-FAMILY LESSON IS NEXT**.
 
 ## Earlier August 25 scene: the full classroom exists, but the sealed envelope rejects it
 

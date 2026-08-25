@@ -8,27 +8,27 @@
   },
   "lanes": [
     {
-      "capability": "Freeze and durably publish a new-identity 8+8 family/root-disjoint Red curriculum, collect one-shot candidate outcomes on distinct roots under selected-skill-only execution, fit the title-neutral ranker on train only, and compare it with the cost-only baseline on the same untouched development questions.",
-      "cheapest_falsifier": "Publish a V3 freezer with no semantic change, run it once action-free, and require exactly eight train plus eight development trials with complete menus and disjoint families and roots. If it passes, execute one claimed train trial through selected-skill-only action and an independent ledger; stop if either boundary needs a teacher, retry, identity feature, or incomplete menu.",
+      "capability": "Use the durable 8+8 family/root-disjoint Red curriculum to collect one-shot candidate outcomes on distinct roots under selected-skill-only execution, fit the title-neutral ranker on train only, and compare it with the cost-only baseline on the same untouched development questions.",
+      "cheapest_falsifier": "Bind one frozen train trial from plan 50327b72...0947 to an immutable pre-action claim, execute only its frozen candidate skill, and settle the terminal from a fresh living-Pokedex ledger. Stop if the bridge needs a teacher, retry, identity feature, incomplete menu, scenario substitution, or any action before the claim is durable.",
       "id": "red-living-dex-multifamily-option-value-curriculum-v3",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Publication qualification opened no Red input, made no prediction, claimed no root, pressed no controller input, queried no teacher, observed no outcome, and changed no learned authority.",
-        "blocker": "Strict serialization and sealed publication are qualified, and V2 proved the 8+8 inventory exists. A durable new-identity V3 private plan does not yet exist, so no trial may be claimed or scored.",
-        "decision": "Retire the completed publication maintenance. Open V3 as the learning lane, first reproduce the already-qualified 8+8 contract under a new action-free identity, then reorient before any outcome collector.",
+        "authority_delta": "None. The sole V3 freeze read 81 authenticated snapshots but advanced zero frames and made zero predictions, controller actions, teacher calls, root claims, or outcome observations. It froze readiness only and changed no learned authority.",
+        "blocker": "The durable V3 plan now exists with eight train and eight untouched development trials, but no exact-plan-bound one-shot outcome collector has been qualified. No frozen trial has been claimed or executed and no training row exists.",
+        "decision": "Consume the successful V3 freeze without retry and reorient to the smallest authentic learning bridge: qualify a sealed-plan-bound, claim-before-action, selected-skill-only collector, then execute exactly one frozen train trial as the falsifier before scaling the campaign.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/multifamily-private-plan-publication-qualification-v1-2026-08-25.json",
-          "sha256": "8d443ba9cb358690643c6d483507873497fe441993dd7d86b44945438ca6908d"
+          "path": "docs/evidence/red-living-dex-multifamily-pilot-freeze-result-v3-2026-08-25.json",
+          "sha256": "27a7189902d084e03cdfd9394dbd2ccb9a79c0db6acff8b9278e4fdb5b5fc0e1"
         },
-        "learning_output": "None. Qualification removed a durability blocker but created no training example, fit, comparison, authority, or transfer result. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0.",
-        "next_falsifier": "The published V3 freezer must authenticate source and inputs, reproduce exactly eight train and eight development trials with complete anonymous menus and disjoint families and roots, publish one durable plan, and still report zero gameplay effects.",
-        "next_session_goal": "Give the qualified freezer a V3 lane, schema, result, failure, and private-record identity; add new-identity and no-retry tests; publish through exact-source CI; run one action-free V3 freeze; record its terminal; and reorient before any trial claim or score.",
-        "product_alignment": "The project now needs authentic, varied collection outcomes rather than more generic infrastructure. V3 turns the proven multi-family inventory into a durable curriculum whose train-only outcomes can change the ranker and whose untouched families can falsify it.",
-        "session_id": "2026-08-25-multifamily-publication-qualified-v3-opened",
+        "learning_output": "No measured learner output yet. The plan is a necessary curriculum artifact, not a training example: counters remain development 15, verified outcomes 5, causal train 0/8, model fits 4/5, unseen comparisons 4/5, authority 0, and transfer 0.",
+        "next_falsifier": "The published collector must authenticate the exact V3 plan and source, select one frozen train trial before private execution, write an immutable root/trial claim before controller input, execute only that trial's candidate skill, and derive one terminal from an independent living-Pokedex observation with no teacher or retry.",
+        "next_session_goal": "Reuse the qualified semantic acquisition/evolution skills and ledger verifier to implement and mutation-test the minimal V3 outcome bridge; publish it through exact-source CI; execute exactly one frozen train trial; record the terminal; and reorient before any remaining train or development trial.",
+        "product_alignment": "This moves directly from a durable diverse curriculum to authentic causal collection evidence. The first train trial tests the bridge cheaply; success permits the remaining train outcomes, while the separate development family and roots stay untouched for a later paired falsifier and Crystal still waits for powered Red evidence.",
+        "session_id": "2026-08-25-multifamily-v3-plan-frozen-train-outcome-opened",
         "status": "active",
-        "stop_condition": "Stop after the sole V3 action-free freeze passes or fails and reorient. Never retry V1 or V2, claim or score a V3 trial before a durable plan and separate reorientation, lower the 8+8 target, open sealed Red, run Crystal, promote, or replay the game.",
-        "transfer_result": "Not run. Publication qualification is title-neutral engineering, not cross-title evidence. Family/root-disjoint Red outcomes and a powered comparison still precede the Crystal adapter test."
+        "stop_condition": "Stop after exactly one frozen train trial settles or fails and reorient. Never rerun the consumed V3 freeze or a claimed trial, substitute a scenario, collect development early, fit a model, open sealed Red, run Crystal, promote, or replay the game.",
+        "transfer_result": "Not run. The frozen plan is Red curriculum readiness, not cross-title evidence. Eight distinct-root train outcomes, a train-only fit, and the untouched development-family comparison still precede the Crystal adapter test."
       },
       "learned_authority": {
         "current": "The living-Dex ranker has selected and successfully executed one authentic Red acquisition under a complete two-option menu and independent ledger verification. It has no demonstrated competence beyond that family/root, no promoted autonomous authority, and no Crystal evidence.",
@@ -58,7 +58,7 @@
         }
       ],
       "name": "Red multi-family living-Dex option-value curriculum V3",
-      "next_decision": "After the action-free V3 plan is durable, reorient to one-shot outcome collection. After eight train and eight untouched development trials, fit on train only and run the paired cost-only comparison; then scale, revise, or reject without inferring promotion or Crystal transfer from this pilot.",
+      "next_decision": "After one frozen train trial validates or falsifies the outcome bridge, reorient. A valid bridge may collect the remaining train trials and then the still-untouched development trials; only afterward fit on train and run the paired cost-only comparison, without inferring promotion or Crystal transfer from this pilot.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -138,7 +138,9 @@
         "model_prediction_during_action_free_freeze",
         "model_fit_on_development",
         "opportunity_identity_feature",
+        "outcome_collection_before_exact_source_qualification",
         "outcome_collection_before_durable_v3_plan",
+        "outcome_collection_without_preaction_claim",
         "promotion_from_pilot",
         "reused_v1_freeze_identity",
         "reused_v1_context_execution",
@@ -155,12 +157,12 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Stop immediately if V3 changes the qualified curriculum semantics, reuses a V1 or V2 identity, leaks title/species/family/root/route/skill identity, exposes an incomplete menu, overlaps train and development families or roots, or advances any frame during the freeze.",
-        "Stop after exactly one action-free V3 freeze, pass or fail, and reorient before any root claim, model score, outcome collector, fit, sealed Red opening, Crystal run, promotion, or full-game replay. Never lower the 8+8 target or retry the freeze."
+        "Stop immediately if the collector cannot authenticate the exact sealed V3 plan, choose a frozen train trial before private execution, durably claim its trial and physical root before input, execute only the frozen candidate skill, or settle from a fresh independent living-Pokedex observation without a teacher or identity feature.",
+        "Stop after exactly one claimed train trial settles or fails and reorient before any remaining train trial, development opening, model fit, sealed Red opening, Crystal run, promotion, or full-game replay. Never retry the consumed freeze or a claimed trial."
       ],
       "time_box": {
         "maximum_hours": 8,
-        "maximum_sessions": 2
+        "maximum_sessions": 1
       },
       "transfer_test": "Partition Red by both physical root and transformation family, compare on untouched families with identical title-neutral rows, and only after a powered Red gate reuse the shared option contract in Crystal through a separate title adapter with zero-shot and post-adaptation reporting."
     },

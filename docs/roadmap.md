@@ -4,9 +4,10 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The only
-> active development lane is repeatable completion-aware party learning: 32 train questions, 16
-> untouched development questions, one fit, and one unseen comparison. The one-shot 14/55 campaign
-> remains evidence but is no longer the development leading edge.
+> active development lane is the V3 multi-family living-Pokedex curriculum: one durable 8-train/
+> 8-development family/root-disjoint plan, followed by claim-before-action candidate outcomes,
+> a train-only fit, and one paired untouched-development comparison. The older party and 14/55
+> campaigns remain evidence but are no longer the development leading edge.
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by
