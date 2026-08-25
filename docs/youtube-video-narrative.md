@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 25 scene: build the multi-family classroom, then catch a green-test lie
+
+Open on **SESSION 2 · 4,671 PASSED · 3 SKIPPED · 1 EXPECTED FAILURE**, then expand the first
+two-option classroom into **MULTIPLE TRANSFORMATION FAMILIES + UNIQUE PHYSICAL ROOTS**. Animate
+**CARTRIDGE WILD SOURCE → SEMANTIC ROUTE → ONE CAPTURE** beside **BOXED PRECURSOR → PC DEPOSIT →
+EXACT WITHDRAWAL → PARTICIPATION TRAINING → FRESH LIVING LEDGER**. Put a privacy wall between the
+mechanics and the learner labeled **SPECIES/FAMILY/MAP/ROUTE/SOURCE/SLOT/SKILL IDENTITY 0**.
+
+Then interrupt the triumphant green screen. Show two hashes that look similar but are not:
+**VERIFIER SPECIES PAIR ≠ COMPLETE TRANSFORMATION FAMILY**. Stamp **FOCUSED TESTS GREEN · LIVE
+FREEZE WOULD FAIL**, then replace the join with the adapter's exact family identity and add
+**DIRECT PARITY REGRESSION TEST**. This is an important narrative beat: trustworthy experiments
+come from semantic review as well as test count.
+
+End with **8 TRAIN + 8 DEVELOPMENT · 4 PER CANDIDATE · FAMILY OVERLAP 0 · ROOT OVERLAP 0**, but
+immediately overlay **FROZEN TRIALS ARE NOT TRAINING EXAMPLES**. The next rail is **PUBLISH → GREEN
+EXACT-HEAD CI → ACTION-FREE 81-STATE INVENTORY → IMMUTABLE PRIVATE PLAN + PATH-FREE RECEIPT →
+REORIENT → OUTCOME COLLECTOR**. Keep **PREDICTIONS/ROOT CLAIMS/BUTTONS/OUTCOMES/FITS/TRANSFER 0**
+for this scene.
+
 ## August 25 scene: the first authentic collection choice lands
 
 Open on **MAIN A448F5B9 · CI 32878889059/1 GREEN**, then reconnect the previously missing rail:

@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the multi-family Red option-value curriculum
+## Current override: Codex owns publication and the action-free multi-family freeze
+
+Session 2 has a locally green engineering candidate (**4,671 passed, 3 skipped, 1 expected
+failure**) for `red-living-dex-multifamily-option-value-curriculum-v1`. The candidate adds generic
+underlevel evolution attestation, cartridge-semantic wild capture venues, exact boxed-precursor
+storage/evolution orchestration, complete multi-family opportunity inventory, and an 8-train / 8-
+development family-and-root-disjoint freezer. A manual semantic audit caught and fixed a mismatched
+family hash before publication; the freezer now joins the exact complete transformation identity
+emitted by the adapter.
+
+Codex next owns: commit and push this exact candidate; require green exact-head GitHub CI; execute
+one action-free private inventory/freeze; publish only its path-free result; and reorient before
+building or running an outcome collector. This checkpoint has made no prediction, claim, action,
+outcome, fit, comparison, promotion, sealed access, Crystal execution, or transfer claim. Learning
+counters remain **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**.
+
+Claude's next useful review is statistical and leakage-focused after the frozen public plan exists.
+Antigravity's next useful review is the semantic mechanic and cross-title boundary at the same
+milestone. Both remain read-only reviewers; neither should edit this worktree or delay ordinary
+development before a review is requested. No agent owns a claimed-root retry, teacher rescue,
+family-specific direction patch, development fit, sealed Red opening, Crystal run, promotion, or
+full replay.
+
+## Previous override: Codex owned the multi-family Red option-value curriculum
 
 Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
 `32878889059/1`. One untouched development root was then claimed and executed exactly once. The

@@ -164,6 +164,44 @@ class SemanticCaptureReadiness:
 
 
 @dataclass(frozen=True, slots=True)
+class SemanticCaptureVenue:
+    """A cartridge-grounded wild source, without invented training evidence.
+
+    Capturing only needs a semantic destination and a bounded way to take wild
+    encounter steps without crossing an exit.  It does not need an encounter
+    level band, healer, attack move, or a claim that runtime samples were
+    measured.  Those belong to :class:`TrainingVenue` and made non-training
+    sources look more evidenced than they were.
+    """
+
+    source_id: str
+    map_id: int
+    excluded_coordinates: frozenset[tuple[int, int]]
+    move_wait_frames: int = 120
+    maximum_no_progress_cycles: int = 2
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.source_id, str)
+            or not self.source_id
+            or len(self.source_id) > 256
+            or any(character in self.source_id for character in "\r\n\x00")
+        ):
+            raise RedDualCapabilityRuntimeError("semantic capture venue source is invalid")
+        # Reuse the traversal type's strict validation rather than maintaining a
+        # second, subtly different coordinate contract.
+        self.fresh_walk_to_grass()
+
+    def fresh_walk_to_grass(self) -> WarpSafeVenueWalker:
+        return WarpSafeVenueWalker(
+            self.map_id,
+            self.excluded_coordinates,
+            move_wait_frames=self.move_wait_frames,
+            maximum_no_progress_cycles=self.maximum_no_progress_cycles,
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class SemanticVenueCapturePlan:
     """Private semantic bindings for one bounded target capture."""
 
@@ -171,7 +209,7 @@ class SemanticVenueCapturePlan:
     species_binding: RedDependencySpeciesBinding
     source_id: str
     route: SemanticVenueRouteBinding
-    venue: TrainingVenue
+    venue: TrainingVenue | SemanticCaptureVenue
     maximum_actions: int = 2_000
     maximum_encounters: int = 400
     catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
@@ -189,8 +227,15 @@ class SemanticVenueCapturePlan:
             raise RedDualCapabilityRuntimeError("capture source identity is invalid")
         if not isinstance(self.route, SemanticVenueRouteBinding):
             raise TypeError("capture plan needs a semantic route binding")
-        if not isinstance(self.venue, TrainingVenue):
-            raise TypeError("capture plan needs a measured TrainingVenue")
+        if not isinstance(self.venue, (TrainingVenue, SemanticCaptureVenue)):
+            raise TypeError("capture plan needs a bounded capture venue")
+        if (
+            isinstance(self.venue, SemanticCaptureVenue)
+            and self.venue.source_id != self.source_id
+        ):
+            raise RedDualCapabilityRuntimeError(
+                "semantic capture venue differs from the bound wild source"
+            )
         if not isinstance(self.catalog, RedAcquisitionCatalog):
             raise TypeError("capture plan needs a Red acquisition catalog")
         if self.catalog != RED_ACQUISITION_CATALOG:
@@ -216,6 +261,31 @@ class SemanticVenueCapturePlan:
 
     @property
     def skill_binding_sha256(self) -> str:
+        venue_document: dict[str, object]
+        if isinstance(self.venue, TrainingVenue):
+            # Preserve the already-published Diglett capability binding exactly.
+            venue_document = {
+                "area_id": self.venue.area_id,
+                "conditions": list(self.venue.band.conditions),
+                "map_id": self.venue.map_id,
+                "minimum_encounter_level": self.venue.band.minimum_encounter_level,
+                "maximum_encounter_level": self.venue.band.maximum_encounter_level,
+                "rare_maximum_encounter_level": (
+                    self.venue.band.rare_maximum_encounter_level
+                ),
+                "measured_samples": self.venue.band.measured_samples,
+            }
+        else:
+            venue_document = {
+                "kind": "cartridge_semantic_source",
+                "source_id": self.venue.source_id,
+                "map_id": self.venue.map_id,
+                "excluded_coordinates": [
+                    list(coordinate) for coordinate in sorted(self.venue.excluded_coordinates)
+                ],
+                "move_wait_frames": self.venue.move_wait_frames,
+                "maximum_no_progress_cycles": self.venue.maximum_no_progress_cycles,
+            }
         return canonical_sha256(
             {
                 "schema": RED_SEMANTIC_VENUE_CAPTURE_SCHEMA,
@@ -224,15 +294,7 @@ class SemanticVenueCapturePlan:
                 "source_id": self.source_id,
                 "planner_binding_sha256": self.route.planner_binding_sha256,
                 "route_plan_sha256": self.route.plan_sha256,
-                "venue": {
-                    "area_id": self.venue.area_id,
-                    "conditions": list(self.venue.band.conditions),
-                    "map_id": self.venue.map_id,
-                    "minimum_encounter_level": self.venue.band.minimum_encounter_level,
-                    "maximum_encounter_level": self.venue.band.maximum_encounter_level,
-                    "rare_maximum_encounter_level": (self.venue.band.rare_maximum_encounter_level),
-                    "measured_samples": self.venue.band.measured_samples,
-                },
+                "venue": venue_document,
                 "maximum_actions": self.maximum_actions,
                 "maximum_encounters": self.maximum_encounters,
                 "capture_quota": 1,
@@ -240,17 +302,27 @@ class SemanticVenueCapturePlan:
         )
 
     def public_dict(self) -> dict[str, object]:
+        measured = isinstance(self.venue, TrainingVenue)
         return {
             "schema": RED_SEMANTIC_VENUE_CAPTURE_SCHEMA,
             "goal_kind": GoalKind.ACQUIRE_SPECIES.value,
-            "execution_role": RedDependencyCapabilityRole.MEASURED_VENUE_CAPTURE.value,
+            "execution_role": self.execution_role.value,
             "semantic_route": self.route.public_dict(),
-            "measured_venue": True,
+            "measured_venue": measured,
+            "cartridge_semantic_venue": not measured,
             "capture_quota": 1,
             "target_identity_fields": 0,
             "venue_identity_fields": 0,
             "route_identity_fields": 0,
         }
+
+    @property
+    def execution_role(self) -> RedDependencyCapabilityRole:
+        return (
+            RedDependencyCapabilityRole.MEASURED_VENUE_CAPTURE
+            if isinstance(self.venue, TrainingVenue)
+            else RedDependencyCapabilityRole.SEMANTIC_VENUE_CAPTURE
+        )
 
 
 @dataclass(slots=True)
@@ -434,6 +506,18 @@ class RedSemanticVenueCaptureAdapter:
             )
         if self.area_executor.walker.expected_map_id != self.plan.venue.map_id:
             raise RedDualCapabilityRuntimeError("venue walker map differs from the measured venue")
+        if isinstance(self.plan.venue, SemanticCaptureVenue):
+            expected = self.plan.venue.fresh_walk_to_grass()
+            if (
+                self.area_executor.walker.excluded_coordinates
+                != expected.excluded_coordinates
+                or self.area_executor.walker.move_wait_frames != expected.move_wait_frames
+                or self.area_executor.walker.maximum_no_progress_cycles
+                != expected.maximum_no_progress_cycles
+            ):
+                raise RedDualCapabilityRuntimeError(
+                    "venue walker differs from the semantic capture venue"
+                )
         if not isinstance(self.route_limits, RouteExecutionLimits):
             raise TypeError("semantic capture adapter needs route limits")
 
@@ -448,7 +532,7 @@ class RedSemanticVenueCaptureAdapter:
         self._require_ready(scenario, before_ledger, readiness)
         evidence = ProspectiveRedCapabilityBinding(
             GoalKind.ACQUIRE_SPECIES,
-            RedDependencyCapabilityRole.MEASURED_VENUE_CAPTURE,
+            self.plan.execution_role,
             self.plan.reset_state_sha256,
             self.plan.skill_binding_sha256,
             True,
@@ -866,6 +950,7 @@ __all__ = [
     "RedTargetCaptureReport",
     "SelectedRedDualCapability",
     "SemanticCaptureReadiness",
+    "SemanticCaptureVenue",
     "SemanticVenueAreaExecutor",
     "SemanticVenueCaptureExecutionReport",
     "SemanticVenueCapturePlan",

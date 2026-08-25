@@ -12,6 +12,27 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-25: Session 2 multi-family engineering gate is locally green
+
+The current unpublished candidate passes **4,671 tests, 3 skips, and 1 expected failure**. It adds
+exact-pair underlevel evolution attestation, cartridge-semantic wild capture venues, a generic
+boxed-precursor level-evolution adapter, and an action-free freezer for eight train plus eight
+development trials with complete menus, counterbalanced candidates, distinct physical roots, and
+disjoint transformation families.
+
+Do not claim 16 examples. No model prediction, root claim, controller action, outcome, fit,
+comparison, promotion, sealed access, Crystal run, or transfer result has occurred. Counters remain
+**development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 · transfer
+0**. The next operator must commit and push the exact candidate, wait for green exact-head CI, run
+the action-free freezer once, track only its path-free receipt, and reorient before implementing or
+executing outcome collection.
+
+The crucial audit finding is already fixed: the first freezer draft joined the verifier's
+species-pair identity to the adapter's complete transformation-family identity. Focused tests did
+not expose it. `_family_identity()` now constructs the adapter's exact private binding, and a
+direct parity test prevents the mismatch. Retired one-shot evidence remains pinned to its
+historical adapter. Never “fix” either boundary by rewriting old results or weakening provenance.
+
 ## 2026-08-25: the first authentic model-selected collection option settled successfully
 
 Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI

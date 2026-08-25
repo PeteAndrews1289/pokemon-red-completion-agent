@@ -85,12 +85,16 @@ class RedDependencyExecutionFacts:
     """Private, action-free facts supplied by a later Red skill adapter.
 
     ``acquirable_precursor_refs`` means that an independently authenticated skill
-    can add one retained specimen of that exact precursor.  Item and trade facts
-    affect only mechanical readiness; none enter the ranker's feature rows.
+    can add one retained specimen of that exact precursor.
+    ``trainable_evolution_pairs`` attests that a bounded participation-training
+    skill can raise and evolve that exact precursor even when its current level is
+    below the catalog threshold.  Item, trade, and training facts affect only
+    mechanical readiness; none enter the ranker's feature rows.
     """
 
     acquirable_precursor_refs: frozenset[str] = frozenset()
     available_item_refs: frozenset[str] = frozenset()
+    trainable_evolution_pairs: frozenset[tuple[str, str]] = frozenset()
     trade_available: bool = False
 
     def __post_init__(self) -> None:
@@ -100,6 +104,16 @@ class RedDependencyExecutionFacts:
                 not isinstance(value, str) or not value for value in values
             ):
                 raise TypeError(f"{name} must be a frozenset of non-empty strings")
+        if not isinstance(self.trainable_evolution_pairs, frozenset) or any(
+            not isinstance(pair, tuple)
+            or len(pair) != 2
+            or any(not isinstance(value, str) or not value for value in pair)
+            or pair[0] == pair[1]
+            for pair in self.trainable_evolution_pairs
+        ):
+            raise TypeError(
+                "trainable_evolution_pairs must be a frozenset of distinct species pairs"
+            )
         if not isinstance(self.trade_available, bool):
             raise TypeError("trade_available must be boolean")
 
@@ -395,6 +409,11 @@ def _transformation_readiness(
             if method.required_item_ref in execution_facts.available_item_refs
             else RedDependencyCandidateReadiness.ITEM_REQUIREMENT_UNSATISFIED
         )
+    if (
+        precursor,
+        method.species_ref,
+    ) in execution_facts.trainable_evolution_pairs:
+        return RedDependencyCandidateReadiness.AVAILABLE
     minimum_level = method.minimum_level
     if minimum_level is None or not any(item.level >= minimum_level for item in specimens):
         return RedDependencyCandidateReadiness.LEVEL_REQUIREMENT_UNSATISFIED
@@ -453,6 +472,7 @@ __all__ = [
     "RedDependencyCandidateReadiness",
     "RedDependencyExecutionFacts",
     "RedDependencyOpportunityStatus",
+    "RedDependencyPrivateBinding",
     "RedLivingDexDependencyAdapterError",
     "RedLivingDexDependencyAdapterResult",
     "RedLivingDexDependencyOpportunity",

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 from pokemon_red_completion.collection import (
@@ -38,6 +39,17 @@ def _document() -> dict[str, object]:
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _committed_sha256(revision: str, path: Path) -> str:
+    relative = path.relative_to(PROJECT_ROOT).as_posix()
+    payload = subprocess.run(
+        ["git", "show", f"{revision}:{relative}"],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _canonical_json(value: object) -> bytes:
@@ -87,7 +99,15 @@ def test_shadow_design_is_canonical_and_binds_exact_published_inputs() -> None:
     assert DESIGN_PATH.read_bytes() == _canonical_json(design)
     assert design["schema"] == "pokemon.red.living-dex-dependency-shadow-decision-design.v1"
     assert design["lane_id"] == "red-living-dex-dependency-shadow-decision-v1"
-    assert bindings["adapter_sha256"] == _sha256(ADAPTER_PATH)
+    # This retired one-shot design remains bound to the adapter it actually
+    # qualified.  A later backward-compatible adapter extension must not
+    # rewrite that historical input or inherit its qualification implicitly.
+    adapter_source_commit = bindings["adapter_source_commit"]
+    assert isinstance(adapter_source_commit, str)
+    assert bindings["adapter_sha256"] == _committed_sha256(
+        adapter_source_commit,
+        ADAPTER_PATH,
+    )
     assert bindings["adapter_qualification_receipt_sha256"] == _sha256(ADAPTER_QUALIFICATION_PATH)
     assert bindings["comparison_result_receipt_sha256"] == _sha256(COMPARISON_RESULT_PATH)
     assert bindings["model_sha256"] == (

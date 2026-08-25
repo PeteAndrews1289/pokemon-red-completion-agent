@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-25 Session 2 multi-family engineering candidate locally green:** The current
+> unpublished candidate passed **4,671 tests, 3 skips, and 1 expected failure**. It implements
+> generic underlevel evolution attestation, cartridge-semantic capture venues, boxed-precursor
+> evolution, and an action-free 8-train/8-development freezer with complete menus and family/root
+> isolation. A manual audit caught and fixed the verifier-hash versus transformation-family-hash
+> join before any official freeze.
+>
+> Codex owns publication, exact-head CI confirmation, one action-free freeze, its path-free
+> receipt, and immediate reorientation. Claude reviews statistical power/leakage and Antigravity
+> reviews mechanic/transfer boundaries after that milestone; both are read-only. No agent owns an
+> outcome run before the freeze, claimed-root retry, teacher/fallback rescue, development fit,
+> sealed Red, Crystal, full replay, promotion, completion, or transfer claims. Counters remain
+> **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 · authority 0 ·
+> transfer 0**.
+
 > **2026-08-25 first authentic collection choice settled; multi-family curriculum active:**
 > Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
 > `32878889059/1`. One untouched development root was claimed and run exactly once. The

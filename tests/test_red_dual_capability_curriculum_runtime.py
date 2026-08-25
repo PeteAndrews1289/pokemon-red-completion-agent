@@ -27,6 +27,7 @@ from pokemon_red_completion.red_dual_capability_curriculum_runtime import (
     RedDualCapabilityRuntimeError,
     RedSemanticVenueCaptureAdapter,
     SemanticCaptureReadiness,
+    SemanticCaptureVenue,
     SemanticVenueAreaExecutor,
     SemanticVenueCaptureExecutionReport,
     SemanticVenueCapturePlan,
@@ -88,6 +89,20 @@ def _venue(*, map_id: int = VENUE_MAP) -> TrainingVenue:
         heal_and_return=lambda _actions, _reader, _emulator: None,
         is_in_center=lambda _raw: False,
         move_slot=lambda _raw: 0,
+    )
+
+
+def _semantic_venue(
+    *,
+    source_id: str = SOURCE,
+    map_id: int = VENUE_MAP,
+    excluded_coordinates: frozenset[tuple[int, int]] = frozenset(),
+) -> SemanticCaptureVenue:
+    return SemanticCaptureVenue(
+        source_id,
+        map_id,
+        excluded_coordinates,
+        move_wait_frames=1,
     )
 
 
@@ -216,7 +231,7 @@ def _capture_adapter(
         RedDependencySpeciesBinding(PRECURSOR, EVOLVED),
         SOURCE,
         route,
-        _venue(),
+        _semantic_venue(),
         maximum_actions=20,
         maximum_encounters=10,
     )
@@ -305,6 +320,43 @@ def test_capture_plan_rejects_wrong_terminal() -> None:
             SOURCE,
             route,
             _venue(map_id=3),
+        )
+
+
+def test_semantic_capture_venue_is_source_bound_and_does_not_claim_training_measurements() -> None:
+    route = SemanticVenueRouteBinding(_route_plan(), "b" * 64)
+    venue = _semantic_venue(excluded_coordinates=frozenset({(5, 5)}))
+    plan = SemanticVenueCapturePlan(
+        RESET,
+        RedDependencySpeciesBinding(PRECURSOR, EVOLVED),
+        SOURCE,
+        route,
+        venue,
+    )
+
+    public = json.dumps(plan.public_dict(), sort_keys=True).lower()
+    assert plan.execution_role.value == "semantic_venue_capture"
+    assert plan.public_dict()["measured_venue"] is False
+    assert plan.public_dict()["cartridge_semantic_venue"] is True
+    assert SOURCE.lower() not in public
+    assert "5, 5" not in public
+    with pytest.raises(RedDualCapabilityRuntimeError, match="differs from the bound wild source"):
+        replace(plan, venue=_semantic_venue(source_id="wild:Elsewhere:grass"))
+
+
+def test_semantic_capture_adapter_rejects_a_walker_with_different_exit_guards() -> None:
+    adapter, world, _before = _capture_adapter(1)
+    guarded = replace(
+        adapter.plan,
+        venue=_semantic_venue(excluded_coordinates=frozenset({(5, 5)})),
+    )
+
+    with pytest.raises(RedDualCapabilityRuntimeError, match="walker differs"):
+        RedSemanticVenueCaptureAdapter(
+            guarded,
+            world,
+            world,
+            adapter.area_executor,
         )
 def test_qualification_is_action_free_and_fails_closed_on_reset_or_resource_drift() -> None:
     adapter, world, before = _capture_adapter(1)

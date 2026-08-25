@@ -8,7 +8,37 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: turn one authentic choice into a multi-family curriculum
+## Current checkpoint: Session 2 multi-family execution gate is ready to freeze
+
+The Session 2 engineering candidate passed the complete local repository suite: **4,671 passed,
+3 skipped, and 1 expected failure**. It replaces the single Diglett-family seam with four reusable
+pieces needed by the living-Pokédex curriculum:
+
+- an exact-pair attestation for underlevel level evolution, so “trainable” means a real bounded
+  capability exists rather than that the specimen already happens to meet the level threshold;
+- cartridge-semantic capture venues that route to a real wild source without inventing a measured
+  training band;
+- a generic boxed-precursor evolution adapter that semantically routes to a PC, deposits a frozen
+  non-target party member, withdraws the exact precursor, returns to training, and accepts only a
+  fresh exact living-ledger transition; and
+- an action-free multi-family inventory/freezer that requires complete two-option menus, unique
+  physical roots, counterbalanced interventions, and disjoint train/development families. Its
+  bounded pilot shape is eight train trials and eight development trials, four per candidate.
+
+A manual semantic audit found a family-identity join that the first focused tests missed: the
+freezer had used the verifier's two-species hash while the opportunity adapter used the complete
+transformation binding. The implementation now derives exactly the adapter identity, and a direct
+parity test kills that regression. Retired one-shot evidence remains bound to its historical
+adapter rather than being silently requalified by the extension.
+
+This checkpoint contains **zero model predictions, controller actions, claimed roots, outcomes,
+fits, comparisons, promotions, or transfer results**. The next gate is therefore narrow: publish
+this exact source, require green exact-head CI, then run the action-free freezer once. Only a
+successful path-free freeze may authorize a separately implemented outcome collector. Do not
+mistake the 8+8 frozen design for 16 learning examples; counters move only after independently
+verified trial outcomes exist.
+
+## Previous checkpoint: turn one authentic choice into a multi-family curriculum
 
 Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
 `32878889059/1`. It connects observed Cut, Surf, and Strength legality to cartridge-derived
