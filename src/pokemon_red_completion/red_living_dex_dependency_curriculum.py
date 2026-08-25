@@ -57,6 +57,7 @@ class RedDependencyCapabilityRole(StrEnum):
     """Species-neutral execution roles a later Red adapter must authenticate."""
 
     MEASURED_VENUE_CAPTURE = "measured_venue_capture"
+    SEMANTIC_VENUE_CAPTURE = "semantic_venue_capture"
     BOUNDED_TRAINING_EVOLUTION = "bounded_training_evolution"
 
 
@@ -69,10 +70,17 @@ class RedDependencyCapabilityRequirement:
 
     def __post_init__(self) -> None:
         expected = {
-            GoalKind.ACQUIRE_SPECIES: RedDependencyCapabilityRole.MEASURED_VENUE_CAPTURE,
-            GoalKind.EVOLVE_SPECIES: (RedDependencyCapabilityRole.BOUNDED_TRAINING_EVOLUTION),
+            GoalKind.ACQUIRE_SPECIES: frozenset(
+                {
+                    RedDependencyCapabilityRole.MEASURED_VENUE_CAPTURE,
+                    RedDependencyCapabilityRole.SEMANTIC_VENUE_CAPTURE,
+                }
+            ),
+            GoalKind.EVOLVE_SPECIES: frozenset(
+                {RedDependencyCapabilityRole.BOUNDED_TRAINING_EVOLUTION}
+            ),
         }
-        if self.kind not in expected or self.role is not expected[self.kind]:
+        if self.kind not in expected or self.role not in expected[self.kind]:
             raise RedDualCapabilityCurriculumError(
                 "dependency capability kind and execution role differ"
             )

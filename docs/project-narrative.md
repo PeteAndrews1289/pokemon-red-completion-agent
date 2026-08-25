@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 25: one real choice becomes a reusable multi-family classroom
+
+The second session completed the engineering boundary needed to stop replaying the first successful
+family. The full local repository passed **4,671 tests**, with three intentional skips and one
+expected failure. Red can now derive complete acquire-versus-evolve opportunities across distinct
+families and physical roots, expose only the same title-neutral option rows, and preregister a
+counterbalanced eight-train/eight-development pilot with no family or root overlap.
+
+Two mechanics made that generalization honest. Capture can now use a cartridge-semantic wild
+source without pretending the location has a measured training band. Evolution can start with an
+underlevel precursor in storage: the adapter routes to the PC, deposits one explicitly bound
+non-target party member, withdraws the exact precursor, returns to a training boundary, and accepts
+success only when a fresh living-specimen census shows the exact precursor-to-evolved transition.
+The learner never sees species, family, map, route, source, box slot, or skill identity.
+
+The most valuable result was a failure caught before gameplay. Focused tests were green while the
+freezer joined a two-species verifier hash to a richer transformation-family hash; a live freeze
+would therefore have found no matching families. Manual semantic review exposed it, the join now
+uses the adapter's exact complete identity, and a parity test prevents recurrence. The old
+one-shot shadow design also remains bound to the historical adapter it actually qualified instead
+of being retroactively upgraded.
+
+Nothing has been trained by this checkpoint. It made no prediction, spent no root, pressed no
+button, collected no outcome, fit no model, and changed no learning counter. The next honest scene
+is publication and green exact-head CI followed by one action-free inventory/freeze. Only then can
+the project collect distinct-root causal outcomes, fit on train only, and ask whether the learned
+option value beats the cost-only baseline on an untouched family. That is the bridge toward
+Crystal and the cross-game living Pokédex—not another fixed Red walkthrough.
+
 ## August 25: the model made its first authentic collection choice
 
 Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI

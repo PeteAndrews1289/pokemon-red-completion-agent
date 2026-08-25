@@ -15,6 +15,7 @@ from pokemon_red_completion.red_collection import (
     RED_SOLO_POKEDEX_TARGET_COUNT,
     red_all_living_specimens,
     red_collection_observation,
+    red_internal_species_id,
     red_internal_species_number,
     red_species_number,
     red_species_ref,
@@ -97,6 +98,22 @@ def test_internal_red_species_ids_translate_to_national_numbers(
     national_number: int,
 ) -> None:
     assert red_internal_species_number(internal_id) == national_number
+
+
+@pytest.mark.parametrize("national_number", (1, 11, 12, 14, 15, 151))
+def test_national_numbers_round_trip_through_red_internal_ids(
+    national_number: int,
+) -> None:
+    internal = red_internal_species_id(national_number)
+    assert red_internal_species_number(internal) == national_number
+
+
+@pytest.mark.parametrize("national_number", (0, 152))
+def test_red_internal_species_id_rejects_numbers_outside_generation_one(
+    national_number: int,
+) -> None:
+    with pytest.raises(ValueError, match="between 1 and 151"):
+        red_internal_species_id(national_number)
 
 
 def test_internal_missingno_holes_are_rejected() -> None:

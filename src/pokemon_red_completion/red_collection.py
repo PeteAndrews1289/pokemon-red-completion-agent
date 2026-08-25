@@ -272,6 +272,18 @@ def red_internal_species_number(internal_species_id: int) -> int:
     return national_number
 
 
+def red_internal_species_id(national_dex_number: int) -> int:
+    """Translate a National Pokédex number to Red's one-byte species identifier."""
+
+    # Validate through the shared reference constructor so this inverse keeps
+    # exactly the same 1..151 domain as every collection adapter.
+    red_species_ref(national_dex_number)
+    try:
+        return _RED_INTERNAL_TO_NATIONAL.index(national_dex_number) + 1
+    except ValueError:  # pragma: no cover - the module invariant covers all 151
+        raise AssertionError("Red internal species order is incomplete") from None
+
+
 def red_visible_living_specimens(
     party: PartyObservation,
     current_box: RedCurrentBoxState,

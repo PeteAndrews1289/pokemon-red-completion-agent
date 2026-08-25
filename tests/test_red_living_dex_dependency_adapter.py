@@ -233,6 +233,47 @@ def test_level_readiness_requires_one_eligible_precursor_without_changing_featur
     assert underleveled.policy_rows() == eligible.policy_rows()
 
 
+def test_attested_training_makes_an_underleveled_evolution_executable_without_leaking() -> None:
+    precursor = red_species_ref(11)
+    evolved = red_species_ref(12)
+    observation = _observation((11, 4), (11, 4))
+    acquisition_only = RedDependencyExecutionFacts(
+        acquirable_precursor_refs=frozenset({precursor}),
+    )
+    trainable = RedDependencyExecutionFacts(
+        acquirable_precursor_refs=frozenset({precursor}),
+        trainable_evolution_pairs=frozenset({(precursor, evolved)}),
+    )
+
+    blocked = _edge(
+        adapt_red_living_dex_dependencies(
+            observation,
+            execution_facts=acquisition_only,
+        ),
+        11,
+        12,
+    )
+    ready_result = adapt_red_living_dex_dependencies(
+        observation,
+        execution_facts=trainable,
+    )
+    ready = _edge(ready_result, 11, 12)
+
+    assert blocked.candidate_readiness[1] is (
+        RedDependencyCandidateReadiness.LEVEL_REQUIREMENT_UNSATISFIED
+    )
+    assert ready.candidate_readiness == (
+        RedDependencyCandidateReadiness.AVAILABLE,
+        RedDependencyCandidateReadiness.AVAILABLE,
+    )
+    assert ready.execution_qualified
+    assert blocked.policy_rows() == ready.policy_rows()
+    public = json.dumps(ready_result.public_dict(), sort_keys=True)
+    assert precursor not in public
+    assert evolved not in public
+    assert "trainable_evolution_pairs" not in public
+
+
 def test_policy_rows_are_exact_title_neutral_ranker_inputs() -> None:
     result = adapt_red_living_dex_dependencies(_observation((147, 30), (148, 30)))
     opportunity = _edge(result, 147, 148)
@@ -289,3 +330,17 @@ def test_execution_facts_are_strictly_typed() -> None:
         RedDependencyExecutionFacts(acquirable_precursor_refs={red_species_ref(1)})  # type: ignore[arg-type]
     with pytest.raises(TypeError, match="trade_available"):
         RedDependencyExecutionFacts(trade_available=1)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="trainable_evolution_pairs"):
+        RedDependencyExecutionFacts(
+            trainable_evolution_pairs={(red_species_ref(11), red_species_ref(12))},  # type: ignore[arg-type]
+        )
+    with pytest.raises(TypeError, match="trainable_evolution_pairs"):
+        RedDependencyExecutionFacts(
+            trainable_evolution_pairs=frozenset({(red_species_ref(11),)}),  # type: ignore[arg-type]
+        )
+    with pytest.raises(TypeError, match="trainable_evolution_pairs"):
+        RedDependencyExecutionFacts(
+            trainable_evolution_pairs=frozenset(
+                {(red_species_ref(11), red_species_ref(11))}
+            ),
+        )
