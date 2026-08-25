@@ -184,6 +184,10 @@ TRACKED_PUBLIC_EVIDENCE_READER_ANTIGRAVITY_AUDIT = (
     / "docs/evidence"
     / "tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json"
 )
+RED_LIVING_DEX_OPTION_DEVELOPMENT_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-option-development-result-v1-2026-08-25.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -306,37 +310,45 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 4 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 2 sessions / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == (
-        "red-living-dex-field-capability-option-execution-v1"
+        "red-living-dex-multifamily-option-value-curriculum-v1"
     )
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
     assert state.active_lane["measurable_outputs"] == [
         {
-            "kind": "development_episode",
-            "minimum": 15,
-            "partition": "development",
+            "kind": "causal_train_example",
+            "minimum": 8,
+            "partition": "train",
         },
         {
             "kind": "verified_outcome_example",
+            "minimum": 13,
+            "partition": "development",
+        },
+        {"kind": "model_fit", "minimum": 5, "partition": "train"},
+        {
+            "kind": "unseen_comparison",
             "minimum": 5,
             "partition": "development",
         },
     ]
-    assert len(state.retired_lanes) == 51
-    assert focus_progress_fraction(state) == pytest.approx(13 / 15)
+    assert len(state.retired_lanes) == 52
+    assert focus_progress_fraction(state) == pytest.approx(129 / 260)
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 14, 15),
-        ("Verified Outcome Example · development", 4, 5),
+        ("Causal Train Example · train", 0, 8),
+        ("Verified Outcome Example · development", 5, 13),
+        ("Model Fit · train", 4, 5),
+        ("Unseen Comparison · development", 4, 5),
     )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
-    assert state.progress["development_episode_attempts"] == 14
-    assert state.progress["verified_outcome_examples"] == 4
+    assert state.progress["development_episode_attempts"] == 15
+    assert state.progress["verified_outcome_examples"] == 5
     assert state.progress["verified_composition_episodes"] == 1
     assert state.progress["causal_train_examples"] == 0
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
@@ -348,7 +360,41 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "/Volumes/" not in encoded
 
 
-def test_product_focus_renderer_uses_singular_hour() -> None:
+def test_first_authentic_red_collection_choice_is_tracked_without_overclaim() -> None:
+    receipt = json.loads(RED_LIVING_DEX_OPTION_DEVELOPMENT_RESULT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "one_authentic_model_selected_red_collection_option_settled"
+    assert receipt["episode"]["status"] == (
+        "model_selected_option_settled_and_independently_verified"
+    )
+    assert receipt["episode"]["model_decision"] == {
+        "model_predictions": 1,
+        "score_margin": 1.2777899345444856,
+        "selected_candidate_index": 0,
+        "selected_candidate_probability": 0.7820733395566392,
+        "selected_goal_kind": "acquire_species",
+    }
+    assert receipt["episode"]["outcome"] == {
+        "dependency_distance_after": 1,
+        "dependency_distance_before": 2,
+        "exact_selected_transition": True,
+        "required_living_preserved": True,
+        "reward": 1,
+        "status": "settled",
+        "unrelated_species_preserved": True,
+    }
+    assert receipt["root_disposition"]["retry_allowed"] is False
+    assert receipt["zero_effects"]["authority_promotions"] == 0
+    assert receipt["zero_effects"]["crystal_accesses"] == 0
+    assert receipt["zero_effects"]["teacher_choices"] == 0
+    assert receipt["counter_treatment"]["development_episode_attempts_added"] == 1
+    assert receipt["counter_treatment"]["verified_outcome_examples_added"] == 1
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_product_focus_renderer_uses_singular_hour_with_plural_sessions() -> None:
     document = deepcopy(_document())
     lane = _active(document)
     time_box = lane["time_box"]
@@ -357,7 +403,7 @@ def test_product_focus_renderer_uses_singular_hour() -> None:
 
     rendered = render_product_focus_markdown(validate_product_focus_document(document))
 
-    assert "| Time box | 1 session / 1 hour |" in rendered
+    assert "| Time box | 2 sessions / 1 hour |" in rendered
 
 
 def test_red_dependency_shadow_design_qualification_is_zero_effect_and_exact_head() -> None:
@@ -1387,8 +1433,10 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Development Episode · development: 14/15",
-        "Verified Outcome Example · development: 4/5",
+        "Causal Train Example · train: 0/8",
+        "Verified Outcome Example · development: 5/13",
+        "Model Fit · train: 4/5",
+        "Unseen Comparison · development: 4/5",
     )
 
 
@@ -1459,8 +1507,8 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 14, 12),
-        ("Verified Outcome Example · development", 4, 12),
+        ("Development Episode · development", 15, 12),
+        ("Verified Outcome Example · development", 5, 12),
         ("Verified Composition Episode · development", 1, 2),
     )
 
@@ -1835,28 +1883,29 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(13 / 15)
+    assert public["stage_progress"] == pytest.approx(129 / 260)
     assert public["actions"] == 0
-    assert "Red field-capability-complete living-Dex option execution V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 15}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 5}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert "Red multi-family living-Dex option-value curriculum V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 13}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "first product-aligned session" in encoded
-    assert "full menu" in encoded
-    assert "one model choice" in encoded
+    assert "first authentic Red collection choice" in encoded
+    assert "complete multi-family menus" in encoded
+    assert "paired untouched development" in encoded
     assert "fresh ledger" in encoded
-    assert "Development Episode 14/15" in encoded
-    assert "Verified Outcome Example 4/5" in encoded
-    assert "no authentic living-Dex choice" in encoded
-    assert "Crystal transfer" in encoded
-    assert "Dependency ranker a42db642" in encoded
-    assert "synthetic support only" in encoded
+    assert "Causal Train Example 0/8" in encoded
+    assert "Verified Outcome Example 5/13" in encoded
+    assert "Model Fit 4/5" in encoded
+    assert "Unseen Comparison 4/5" in encoded
+    assert "No promotion or Crystal transfer" in encoded
+    assert "one authentic settled Red choice" in encoded
+    assert "a448f5b9" in encoded
+    assert "32878889059/1" in encoded
+    assert "78.2%" in encoded
     assert "reader ecb93c44 qualified" in encoded
     assert "V1 retry 0" in encoded
     assert "synthetic support is descriptive" in encoded
-    assert "06af22c1" in encoded
-    assert "32476766226/1" in encoded
     assert "fit 1" in encoded
     assert "comparison 1" in encoded
     assert "Rootless" in encoded

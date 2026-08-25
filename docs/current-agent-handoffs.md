@@ -6,24 +6,35 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the field-capability-complete Red option episode
+## Current override: Codex owns the multi-family Red option-value curriculum
 
-Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
-`32875519562/1` with 4638 tests. Its first live attempt failed before root claim, prediction,
-controller input, or frame advancement. The
-[path-free falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-(SHA-256 `dcb7ef94…b29c`) shows that all five eligible unused roots shared one engineering omission:
-the semantic traversal observer did not receive the project's existing live Cut, Surf, and
-Strength capability projection. Applying those generic legality rules action-free produced a
-cartridge-derived route from the unchanged first root.
+Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
+`32878889059/1`. One untouched development root was then claimed and executed exactly once. The
+[path-free result](evidence/red-living-dex-option-development-result-v1-2026-08-25.json)
+(SHA-256 `cfcbaa89…c10`) records the first authentic model-selected living-Dex outcome: acquisition
+selected at probability `0.7821`, only the selected semantic skill executed, 665 controller
+actions and 33,672 frames, dependency distance reduced from two to one, and a fresh ledger
+verified the exact transition while preserving required and unrelated specimens. The root never
+retries. No teacher choice/fallback, fit, promotion, sealed Red access, Crystal access, or transfer
+occurred. Counters are **development 15 · verified 5 · causal train 0 · fits 4 · comparisons 4 ·
+authority 0 · transfer 0**.
 
-Codex owns `red-living-dex-field-capability-option-execution-v1`: implement the reusable join,
-adversarially test its badge/holder/Surf-permission boundaries, publish exact-head green CI, then
-execute that same still-unused root once. Claude reviews statistics/leakage and Antigravity reviews
-architecture/transfer at the milestone; neither edits or blocks ordinary development. No agent
-owns a direction script, context substitution, claimed-root retry, teacher choice/fallback,
-fit/refit, sealed Red, Crystal, full replay, promotion, completion, or transfer claim. Counters
-remain **development 14/15 · verified 4/5 · authority 0 · transfer 0**.
+Codex owns `red-living-dex-multifamily-option-value-curriculum-v1`: implement a reusable
+opportunity inventory across at least two evolution families, freeze complete identity-free menus,
+partition train and development by both physical root and family, collect distinct-root outcomes,
+fit on train only, and compare with the cost-only baseline on the same untouched development
+decisions. Claude reviews leakage, statistics, and power; Antigravity reviews architecture,
+identity boundaries, and later transfer readiness. Both remain read-only milestone reviewers, not
+duplicate implementers or routine gates. No agent owns claimed-root retry, incomplete-menu
+scoring, family-specific route rescue, development-data fitting, sealed Red, Crystal, promotion,
+full replay, completion, or transfer claims.
+
+## Previous override: Codex owned the field-capability-complete Red option episode
+
+Main `7c131a82` passed CI `32875519562/1`; its action-free failure exposed the missing live
+Cut/Surf/Strength projection before any root, score, action, or frame was consumed. The
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) remains
+the zero-effect diagnostic record; its generic repair is included in the successful source above.
 
 ## Previous override: Codex owned one repeatable Red model-choice development episode
 

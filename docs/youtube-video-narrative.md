@@ -1,20 +1,33 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: the party knew the moves; the planner forgot to ask
+## August 25 scene: the first authentic collection choice lands
 
-Open on **MAIN 7C131A82 · CI 32875519562/1 GREEN · 4638 PASSED**, then show the first live option
-rail stopping before **ROOT CLAIM**. Stamp **PREDICTIONS 0 · BUTTONS 0 · FRAMES 0 · ROOTS SPENT
-0** and link the
+Open on **MAIN A448F5B9 · CI 32878889059/1 GREEN**, then reconnect the previously missing rail:
+**LIVE CUT/SURF/STRENGTH → CARTRIDGE-DERIVED ROUTE**. Return to the same untouched classroom and
+animate **COMPLETE ANONYMOUS MENU → DURABLE ROOT CLAIM → ONE MODEL SCORE**. Pause on the answer:
+**ACQUISITION · 78.2%**. Black out the other option and stamp **TEACHER CHOICE 0 · FALLBACK 0**.
+
+Run the execution counter to **665 CONTROLLER ACTIONS · 33,672 FRAMES**, then visibly hand control
+to a separate ledger observer. Reveal **EXACT SELECTED TRANSITION · DEPENDENCY 2 → 1 · REQUIRED
+SPECIMENS PRESERVED · UNRELATED SPECIMENS PRESERVED · SETTLED**. Link the
+[result](evidence/red-living-dex-option-development-result-v1-2026-08-25.json) with **SHA-256
+CFCBAA89…C10** and lock the physical root with **RETRY NO**.
+
+Do not cut straight to “the AI can play Pokémon.” Put the honest title over the footage: **FIRST
+AUTHENTIC LEARNED COLLECTION OUTCOME—PLUMBING PROVEN, COMPETENCE NOT YET PROVEN**. End on the next
+curriculum rail: **MULTIPLE EVOLUTION FAMILIES + DISTINCT ROOTS → COMPLETE IDENTITY-FREE MENUS →
+TRAIN OUTCOMES → TRAIN-ONLY FIT → PAIRED UNTOUCHED DEVELOPMENT COMPARISON → POWERED RED GATE →
+CRYSTAL TRANSFER TEST**. Keep promotion, sealed Red, full replay, completion, and transfer at zero.
+
+## Earlier August 25 scene: the party knew the moves; the planner forgot to ask
+
+Open on **MAIN 7C131A82 · CI 32875519562/1 GREEN**, then show the first action-free attempt stop
+before root claim. Stamp **PREDICTIONS 0 · BUTTONS 0 · FRAMES 0 · ROOTS SPENT 0** and link the
 [falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) with
-**SHA-256 DCB7EF94…B29C**.
-
-Reveal the bug visually: **STORY FLAGS → ROUTER**, while **CUT · SURF · STRENGTH** sit disconnected
-despite being legal in the live party. Show the same failure across **5 ELIGIBLE ROOTS**, then snap
-the existing capability adapter into place: **BADGE + LIVING HOLDER + SURF PERMISSION →
-CARTRIDGE-DERIVED ROUTE, 445 STEPS**. Make clear that no direction string or easier reset was used.
-End on the unchanged next rail: **PUBLISH GREEN → SAME UNUSED ROOT → FULL ANONYMOUS MENU → ONE
-MODEL CHOICE → SELECTED SKILL → FRESH LIVING LEDGER**. Label it **PLUMBING, NOT PROMOTION OR
-TRANSFER**.
+**SHA-256 DCB7EF94…B29C**. Reveal **STORY FLAGS → ROUTER** while live **CUT · SURF · STRENGTH**
+remain disconnected. Show all five eligible roots sharing the omission, then connect the generic
+badge/holder/Surf-permission adapter and reveal the 445-step cartridge-derived route. No direction
+string or easier reset was used; this is the bug that the successful scene above resolves.
 
 ## Earlier August 25 scene: the first real collection decision
 

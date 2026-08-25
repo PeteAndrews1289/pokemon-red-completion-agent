@@ -12,25 +12,42 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: the first live option attempt exposed a missing capability join
+## 2026-08-25: the first authentic model-selected collection option settled successfully
+
+Published main `a448f5b99ceaaa1164267f627eacace29c0dd434` passed exact-head CI
+`32878889059/1` after 4641 local tests, three deselections, and one expected failure. It joins live
+Cut, Surf, and Strength legality to cartridge-derived semantic traversal without adding a fixed
+route. The unchanged unused development root then ran exactly once. The model saw the complete
+two-row title-neutral menu, selected acquisition with probability `0.7821`, and only that semantic
+skill received controller authority. After 665 controller actions and 33,672 emulator frames, a
+fresh living-specimen ledger verified the exact selected transition, reduced dependency distance
+from two to one, and preserved both required and unrelated specimens.
+
+The [path-free result](docs/evidence/red-living-dex-option-development-result-v1-2026-08-25.json)
+(SHA-256 `cfcbaa89…c10`) records one development episode and one verified outcome. The physical
+root is permanently closed: do not retry it. Teacher choices, fallbacks, authority promotions,
+sealed Red access, Crystal access, model fits, and transfer results were all zero. Honest counters
+are now **development 15 · verified 5 · model fits 4 · comparisons 4 · authority 0 · transfer 0**.
+This proves the learned-choice plumbing and one successful outcome, not Red competence, living-
+Pokédex completion, promotion, or cross-game transfer.
+
+Codex now owns `red-living-dex-multifamily-option-value-curriculum-v1`: generate complete
+identity-free option menus across multiple evolution families, partition by both family and
+physical root, collect distinct-root train and untouched development outcomes, fit on train only,
+and compare the candidate with the cost-only baseline on the same development decisions. The
+first pilot target is **8 causal train examples · 13 cumulative verified development outcomes ·
+5 cumulative model fits · 5 cumulative unseen comparisons**. Reorient after every session; stop
+on an identity leak, incomplete menu, root/family overlap, family-specific route rescue, or the
+first paired comparison. Crystal, sealed Red, promotion, and full replay remain closed.
+
+## Previous 2026-08-25 checkpoint: the first live option attempt exposed a missing capability join
 
 Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
-`32875519562/1` with 4638 tests, three deselections, and one expected failure. The option runner's
-decision, durable claim, selected-skill-only execution, hard limits, and independent-ledger
-contracts are real. Its first action-free live boundary nevertheless stopped before claim or model
-score. The [path-free falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
-(SHA-256 `dcb7ef94…b29c`) records the cause: semantic traversal saw story flags but omitted the
-existing observed Cut, Surf, and Strength capabilities. All five eligible unused train roots
-shared that structural mismatch; none was consumed, scored, or acted through.
-
-The generic existing capability rules found a cartridge-derived 445-step route from the unchanged
-first root with zero controller actions or advanced frames. Codex now owns only
-`red-living-dex-field-capability-option-execution-v1`: join that reusable legality projection,
-mutation-test it, publish exact-head green CI, and run the same still-unused root once. This is not
-a fixed route or an easier-context substitution. After claim, interruption is terminal and the
-root never retries. Do not refit, open sealed Red, run Crystal, use a teacher choice/fallback, or
-start a full replay. Counters remain **development 14/15 · verified 4/5 · authority 0 · transfer
-0** until a tracked durable terminal exists.
+`32875519562/1` with 4638 tests. The first action-free attempt exposed a missing live field-move
+projection before claim, score, or controller input. The
+[path-free falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+(SHA-256 `dcb7ef94…b29c`) preserved that zero-effect failure and motivated the reusable capability
+join that is now published and successfully exercised above.
 
 ## Previous 2026-08-25 checkpoint: one authentic Red living-Dex option was the active falsifier
 
