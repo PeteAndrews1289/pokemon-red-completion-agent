@@ -1,0 +1,75 @@
+{
+  "active_lane": "repeatable-red-living-dex-option-execution-v1",
+  "baseline_publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4638,
+    "ci_run_id": 32875519562,
+    "ci_xfailed": 1,
+    "source_commit": "7c131a82f2011a56232de4be2379704195e158f7"
+  },
+  "claim_boundary": {
+    "supported": "The published model-selection and durable-outcome bridge failed action-free before root claim, model prediction, controller input, or gameplay because its traversal observer omitted the existing live Cut, Surf, and Strength capability projection. Every eligible unused train root exposed the same structural mismatch. Reusing the already-qualified generic field-capability rules produced a cartridge-derived route without advancing a frame.",
+    "unsupported": [
+      "authority_promotion",
+      "controller_execution",
+      "crystal_transfer",
+      "living_pokedex_progress",
+      "model_quality",
+      "verified_outcome"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "diagnosis": {
+    "eligible_unused_train_roots_checked_action_free": 5,
+    "field_capability_types_joined": 3,
+    "initial_failure_stage": "model_selected_option_execution",
+    "model_selection_reached": false,
+    "physical_roots_claimed": 0,
+    "retired_v1_roots_opened": 0,
+    "route_constructed_after_existing_generic_projection": true,
+    "route_source": "cartridge_topology_plus_observed_field_move_legality",
+    "scenario_substitutions_after_model_selection": 0,
+    "shared_cause_across_eligible_inventory": true
+  },
+  "next_lane": {
+    "id": "red-living-dex-field-capability-option-execution-v1",
+    "instruction": "Join the existing live Gen I Cut, Surf, and Strength capability projection to the semantic option route, mutation-test the boundary, publish exact-head green CI, and then execute the same still-unused first eligible development root exactly once. Do not add a fixed route or select a different context for easier gameplay."
+  },
+  "recorded_on": "2026-08-25",
+  "schema": "pokemon.red.living-dex-option-field-capability-falsifier.v1",
+  "status": "action_free_falsifier_found_no_root_consumed",
+  "title_role": "Red development engineering falsifier and learning-lane redirect; not gameplay, model learning, completion, promotion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "gameplay_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claim_writes": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0,
+    "verified_outcomes": 0
+  }
+}

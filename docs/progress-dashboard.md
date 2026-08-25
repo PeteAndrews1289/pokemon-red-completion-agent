@@ -5,17 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **BASELINE MAIN 06AF22C1 · CI 32476766226/1 GREEN · 4619 PASSED ·
-> ACTIVE REPEATABLE RED LIVING-DEX OPTION EXECUTION · DEVELOPMENT 14/15 · VERIFIED 4/5 ·
+> **Current rail:** Show **MAIN 7C131A82 · CI 32875519562/1 GREEN · 4638 PASSED ·
+> FIELD-CAPABILITY-COMPLETE RED LIVING-DEX OPTION EXECUTION · DEVELOPMENT 14/15 · VERIFIED 4/5 ·
 > AUTHORITY PROMOTIONS 0 · TRANSFER RESULTS 0**. Link the
-> [focus redirect](evidence/red-living-dex-development-redirect-v1-2026-08-25.json).
+> [action-free falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+> and show **SHA-256 DCB7EF94…B29C**.
 >
-> Animate **UNUSED NONSEALED ROOT → COMPLETE ANONYMOUS ACQUIRE/EVOLVE MENU → DURABLE ROOT CLAIM →
-> ONE MODEL SCORE → DURABLE START → SELECTED SKILL ONLY → FRESH LIVING LEDGER → SETTLED OR
-> CENSORED**.
-> Show **TEACHER CHOICES/FALLBACKS 0 · HARD ACTION/FRAME CAPS · V1 CONTEXT REUSE 0 · CONTEXT
-> SUBSTITUTION 0**. Label the result **PLUMBING FALSIFIER ONLY**: no fit, sealed Red result,
-> Crystal run, completion, promotion, or transfer claim.
+> Animate **LIVE BADGE + LIVING MOVE HOLDER + SURF PERMISSION → CUT/SURF/STRENGTH CAPABILITIES →
+> CARTRIDGE-DERIVED ROUTE → COMPLETE ANONYMOUS MENU → ROOT CLAIM → ONE MODEL SCORE → SELECTED
+> SKILL ONLY → FRESH LIVING LEDGER**. Show **ELIGIBLE ROOTS CHECKED 5 · ROOTS CLAIMED 0 · MODEL
+> SCORES 0 · BUTTONS/FRAMES 0 · ACTION-FREE ROUTE FOUND** before publication. Label the next live
+> terminal **PLUMBING EVIDENCE ONLY**: no fit, sealed Red, Crystal, completion, promotion, or
+> transfer claim.
 >
 > **Previous rail:** Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
 > ECB93C44 QUALIFIED · EXACT SHA + GIT BLOB · CANONICAL PRETTY JSON · NO-FOLLOW/INODE STABLE ·

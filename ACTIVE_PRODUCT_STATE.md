@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Repeatable Red living-Dex option execution V1** (`repeatable-red-living-dex-option-execution-v1`)
+**Red field-capability-complete living-Dex option execution V1** (`red-living-dex-field-capability-option-execution-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After one authentic outcome, decide whether the seam is sound enough to collect a powered, family/root-disjoint Red option-value curriculum or whether the result falsifies the current skill/context assumptions. Do not infer promotion or jump directly to Crystal from one episode.
+- Next decision: After the first authentic terminal, decide whether to collect a powered, family/root-disjoint Red option-value curriculum or whether the selected semantic skill exposed a deeper reusable blocker. One episode validates plumbing only; it cannot justify promotion or a Crystal jump.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Run one reusable, parameterized Red collection-option development loop: authenticate an unused nonsealed state, freeze the complete title-neutral acquire-versus-evolve menu before scoring, let the authenticated model select exactly once, execute only the selected semantic skill, and independently verify and retain the post-transition living-specimen ledger. |
+| Reusable capability | Project live legal field-move capabilities into cartridge-derived semantic routing, then run the already-published Red collection-option loop: freeze the complete title-neutral acquire-versus-evolve menu, let the authenticated model select exactly once, execute only that semantic skill, and verify the post-transition living-specimen ledger independently. |
 | Authority now | The project has bounded historical battle, goal-selection, and strategic-navigation component evidence, but the living-Dex ranker has only descriptive synthetic support. It has never selected and executed an authentic collection option, and no end-to-end living-Pokedex or Crystal transfer authority exists. |
 | Authority target | Grant the frozen living-Dex ranker one real development decision with execution authority over an already-qualified acquire-versus-evolve menu, then settle or censor the result through an independent ledger. One episode validates plumbing only and is not promotion. |
-| Transfer test | Keep policy rows title-neutral and, after this plumbing episode, require family/root-disjoint Red development before any Crystal work. Crystal remains the first cross-title transfer test and must reuse the shared option contract rather than Red identities or route scripts. |
-| Cheapest falsifier | Use one unused nonsealed Red development state whose authenticated reset exposes both semantic skills. Stop immediately if the full menu cannot be frozen before scoring, the model identity does not join exactly, either skill is unavailable, the selected skill cannot execute under its existing bounds, or an independent ledger cannot settle or censor the outcome. |
-| Time box | 1 session / 8 hours |
+| Transfer test | Keep the option rows title-neutral while Red and Crystal supply their own observed field-capability adapters. After this plumbing episode, require family/root-disjoint Red development before Crystal reuses the shared option contract without Red identities or route scripts. |
+| Cheapest falsifier | First require the same untouched development state to yield an action-free cartridge route only when its observed Cut, Surf, and Strength legality is joined. After exact-head green CI, run that still-unused root once and stop on either its durable settled/censored terminal or any new preclaim structural mismatch. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
@@ -59,24 +59,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-25-red-living-dex-development-redirect-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-redirect-v1-2026-08-25.json)
+**2026-08-25-red-field-capability-falsifier-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is the shortest direct test that learned collection planning can control a real semantic Pokemon skill while symbolic invariants protect a legitimate living Pokedex. It advances the Red curriculum without confusing one decision with completion or transfer. |
-| Learning output | No new measured output at reorientation. Main 06af22c1 passed CI 32476766226/1 with 4619 tests. The next session must produce one authentic model-selected development episode and one independently verified outcome, not another design receipt. |
-| Authority delta | No gameplay or transfer authority changed during reorientation. Historical component authority is now separated from the current fact that the living-Dex ranker has never selected and executed an authentic Red collection option. |
-| Transfer result | Not run. Title-neutral option rows are preserved for later family/root-disjoint Red evaluation and Crystal transfer, but this development episode grants no transfer claim. |
-| Blocker | No design blocker remains. The immediate engineering gap is the small authority bridge from an already-qualified two-skill menu through one authenticated model selection to one independently verified durable outcome. |
-| Decision | Retire the expired V2 design-only lane and implement the complete repeatable development loop in one bounded session. Preserve the failed V1 invocation and its selected physical root without retry, use an unused nonsealed context, and stop after one verified outcome or a genuine falsifying blocker. |
-| Next session | Implement and adversarially test the parameterized selection-to-outcome bridge, then use exactly one eligible unused Red development state to obtain a settled or honestly censored durable terminal. Update the dashboard and handoffs in the same session. |
-| Next falsifier | Run the parameterized loop against one unused nonsealed Red state and require both skills, one frozen full-menu prediction, only the selected execution, and an independently observed living-ledger terminal. |
-| Stop condition | Stop after one verified authentic model-selected development outcome, or after a genuine falsifier proves the existing semantic skills or context inventory cannot support the loop. Do not replace a failed context, patch a route, run Crystal, open sealed Red, or start a full replay. |
+| Product alignment | A transferable agent must reason from its actual legal action set. Joining observed field-move capability to semantic routing repairs that reusable boundary and immediately unblocks the first authentic living-Dex model decision without adding a walkthrough step. |
+| Learning output | No counter advanced. Published main 7c131a82 passed CI 32875519562/1 with 4638 tests. Five eligible roots reproduced the same action-free omission; zero were claimed, predicted, acted through, or substituted after selection. |
+| Authority delta | No gameplay or transfer authority changed. The runner failed before root claim, model prediction, controller input, or frame advancement, so the living-Dex ranker still has no authentic Red action authority. |
+| Transfer result | Not run. The field-capability adapter is title-specific while its policy menu remains title-neutral; Crystal still requires an independent adapter and a later family/root-disjoint transfer gate. |
+| Blocker | The published runner constructed traversal from story flags alone even though the state carried legal Cut, Surf, and Strength. That omission made every eligible root appear unable to reach the semantic capture venue; the existing generic field-capability projection restores a cartridge-derived route action-free. |
+| Decision | Retire the first execution lane at its declared falsifier. Reuse the already-qualified live field-move legality rules in the semantic traversal observer, mutation-test that join, publish exact-head green CI, and execute the same still-unused first eligible root once. This is a capability-projection repair, not a fixed route or context substitution. |
+| Next session | Finish and adversarially test the generic field-capability join, publish it under green CI, and obtain the first authentic model-selected Red collection-option terminal from the still-unused root. Update evidence and reorient immediately afterward. |
+| Next falsifier | From the same untouched first eligible root, require a full-menu prediction only after the generic field-capability-complete route exists, then execute only the selected skill and settle or censor from a fresh ledger. |
+| Stop condition | Do not claim, score, or act until the generic capability join is published green. Then stop after the first durable terminal or any new preclaim falsifier. Once a root is claimed, never retry or substitute it; do not add a direction string, run Crystal, open sealed Red, refit, or start a full replay. |
 
 ### Stop conditions
 
-- Stop immediately if the full anonymous menu is not fixed before scoring, the model or context identity differs, the V1 selected context or physical root would be reused, both semantic skills are not independently available, the executor could run both options, or post-transition verification depends on the selected skill's own report instead of a fresh collection observation.
-- Stop after one authentic development terminal or eight hours. A failure remains the terminal for that context; do not substitute another state after selection, patch a teacher route, refit the model, open sealed Red, run Crystal, or launch a full-game replay.
+- Stop immediately if route construction grants a field move without the observed badge, living holder, or live Surf permission; if the full anonymous menu is not fixed before scoring; if either skill is unavailable; or if verification depends on the skill's own report instead of a fresh collection observation.
+- Stop after one authentic development terminal or four hours. A claimed root is immutable even after interruption; do not substitute another state after selection, add a fixed route, refit the model, open sealed Red, run Crystal, or launch a full-game replay.
 
 ### Hard boundaries for this lane
 
@@ -116,11 +116,12 @@ and unmeasured teacher-label copying are also hard alarms.
 ## Reviewer use
 
 - **Codex:** Own implementation, measurement, adjudication, documentation, publication, and the active-lane counter.
-- **Claude:** Unavailable for the current usage window; do not pause development waiting for it. Resume its statistics and leakage role only after the user says its access has reset.
-- **Antigravity:** Act as the sole external auditor while Claude is at its usage limit; challenge architecture, claim boundaries, and cross-game transfer at milestone decisions.
+- **Claude:** Review statistics, leakage, experimental power, and semantic overclaims at milestone decisions; remain read-only and do not duplicate Codex implementation work.
+- **Antigravity:** Review architecture, claim boundaries, and cross-game transfer at milestone decisions; remain read-only and do not block ordinary development while no review is pending.
 
 ## Retired leading edges
 
+- **Repeatable Red living-Dex option execution V1:** Published main 7c131a82f2011a56232de4be2379704195e158f7 passed CI 32875519562/1 with 4638 tests. Its decision and durability contracts remain valid, but action-free execution showed that traversal omitted existing live Cut, Surf, and Strength capabilities. Every eligible root shared the mismatch; none was claimed or scored, and the generic projection produced a cartridge-derived route. The lane retired at its declared falsifier. Evidence is preserved; retry is no.
 - **Red dual-capability action-free scenario preflight V2 design:** The design-only successor was retired before implementation after the one-session anti-drift alarm fired. Independent audits agreed that the existing runtime already supplied the two semantic skills and ledger verifier, while another public design gate would not create authentic learned authority. Its reader evidence remains valid, but the shortest product-aligned successor is the repeatable model-selected development loop. Evidence is preserved; retry is no.
 - **Tracked public evidence reader qualification V1:** Published main 50c64f1c9cbb0d73d0a3aad0210e326a4005c3de passed CI 32475789328/1 with 4618 tests. The reusable reader authenticates exact SHA-pinned canonical pretty JSON against the Git HEAD blob through bounded no-follow and inode-stable reads with sanitized Git environment. Antigravity returned GO with P0/P1 zero. It opened no private input, ROM, claim registry, model, or scenario and changed no learning counter; V1 remains closed. Evidence is preserved; retry is no.
 - **Red dual-capability action-free scenario preflight V1:** Published main 188272b01f88f549c39f6b693239fc7bc5e63bb5 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once and the sole preflight failed closed at public_evidence_authentication before any private input, ROM, claim registry, model prediction, controller action, or frame. Exact receipt hashes matched, but the runner rejected their tracked pretty JSON representation. The selected V1 context and invocation are closed without retry or replacement; all counters remain unchanged. Evidence is preserved; retry is no.

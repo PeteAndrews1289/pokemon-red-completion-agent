@@ -12,7 +12,27 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: one authentic Red living-Dex option is the active falsifier
+## 2026-08-25: the first live option attempt exposed a missing capability join
+
+Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
+`32875519562/1` with 4638 tests, three deselections, and one expected failure. The option runner's
+decision, durable claim, selected-skill-only execution, hard limits, and independent-ledger
+contracts are real. Its first action-free live boundary nevertheless stopped before claim or model
+score. The [path-free falsifier](docs/evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+(SHA-256 `dcb7ef94…b29c`) records the cause: semantic traversal saw story flags but omitted the
+existing observed Cut, Surf, and Strength capabilities. All five eligible unused train roots
+shared that structural mismatch; none was consumed, scored, or acted through.
+
+The generic existing capability rules found a cartridge-derived 445-step route from the unchanged
+first root with zero controller actions or advanced frames. Codex now owns only
+`red-living-dex-field-capability-option-execution-v1`: join that reusable legality projection,
+mutation-test it, publish exact-head green CI, and run the same still-unused root once. This is not
+a fixed route or an easier-context substitution. After claim, interruption is terminal and the
+root never retries. Do not refit, open sealed Red, run Crystal, use a teacher choice/fallback, or
+start a full replay. Counters remain **development 14/15 · verified 4/5 · authority 0 · transfer
+0** until a tracked durable terminal exists.
+
+## Previous 2026-08-25 checkpoint: one authentic Red living-Dex option was the active falsifier
 
 Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
 `32476766226/1` with 4619 tests. The

@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: the first real collection decision
+## August 25 scene: the party knew the moves; the planner forgot to ask
+
+Open on **MAIN 7C131A82 · CI 32875519562/1 GREEN · 4638 PASSED**, then show the first live option
+rail stopping before **ROOT CLAIM**. Stamp **PREDICTIONS 0 · BUTTONS 0 · FRAMES 0 · ROOTS SPENT
+0** and link the
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json) with
+**SHA-256 DCB7EF94…B29C**.
+
+Reveal the bug visually: **STORY FLAGS → ROUTER**, while **CUT · SURF · STRENGTH** sit disconnected
+despite being legal in the live party. Show the same failure across **5 ELIGIBLE ROOTS**, then snap
+the existing capability adapter into place: **BADGE + LIVING HOLDER + SURF PERMISSION →
+CARTRIDGE-DERIVED ROUTE, 445 STEPS**. Make clear that no direction string or easier reset was used.
+End on the unchanged next rail: **PUBLISH GREEN → SAME UNUSED ROOT → FULL ANONYMOUS MENU → ONE
+MODEL CHOICE → SELECTED SKILL → FRESH LIVING LEDGER**. Label it **PLUMBING, NOT PROMOTION OR
+TRANSFER**.
+
+## Earlier August 25 scene: the first real collection decision
 
 Open on **BASELINE MAIN 06AF22C1 · CI 32476766226/1 GREEN · 4619 PASSED**, then pull the camera
 back from a long row of design gates. Cross out **ANOTHER PREFLIGHT DESIGN** and replace it with

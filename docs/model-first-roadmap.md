@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: make one authentic living-Dex model choice and verify its consequence
+## Current checkpoint: let semantic routing see the legal moves the party already has
+
+Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
+`32875519562/1` with 4638 tests. The model-choice runner reached its first authentic action-free
+boundary and stopped before root claim or prediction. The
+[falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+(SHA-256 `dcb7ef94…b29c`) explains why: its traversal observer composed story flags but omitted the
+already-qualified live Cut, Surf, and Strength projection. Every eligible unused train root had
+the same structural issue. No root, score, button, frame, outcome, or counter was consumed.
+
+Active `red-living-dex-field-capability-option-execution-v1` is deliberately one short repair plus
+its learning falsifier. Reuse the generic badge/living-holder/Surf-permission rules, never a fixed
+direction sequence. Mutation-test the join, publish exact-head green CI, then run the unchanged
+first eligible root once. The action-free proof already found a cartridge-derived 445-step route.
+A settled or censored durable terminal advances the decision; a new preclaim blocker ends the lane.
+Crystal, sealed Red, refitting, teacher rescue, and full replay remain closed.
+
+## Previous checkpoint: make one authentic living-Dex model choice and verify its consequence
 
 Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
 `32476766226/1` with 4619 tests. The

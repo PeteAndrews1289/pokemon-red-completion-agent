@@ -6,7 +6,26 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one repeatable Red model-choice development episode
+## Current override: Codex owns the field-capability-complete Red option episode
+
+Published main `7c131a82f2011a56232de4be2379704195e158f7` passed exact-head CI
+`32875519562/1` with 4638 tests. Its first live attempt failed before root claim, prediction,
+controller input, or frame advancement. The
+[path-free falsifier](evidence/red-living-dex-option-field-capability-falsifier-v1-2026-08-25.json)
+(SHA-256 `dcb7ef94…b29c`) shows that all five eligible unused roots shared one engineering omission:
+the semantic traversal observer did not receive the project's existing live Cut, Surf, and
+Strength capability projection. Applying those generic legality rules action-free produced a
+cartridge-derived route from the unchanged first root.
+
+Codex owns `red-living-dex-field-capability-option-execution-v1`: implement the reusable join,
+adversarially test its badge/holder/Surf-permission boundaries, publish exact-head green CI, then
+execute that same still-unused root once. Claude reviews statistics/leakage and Antigravity reviews
+architecture/transfer at the milestone; neither edits or blocks ordinary development. No agent
+owns a direction script, context substitution, claimed-root retry, teacher choice/fallback,
+fit/refit, sealed Red, Crystal, full replay, promotion, completion, or transfer claim. Counters
+remain **development 14/15 · verified 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one repeatable Red model-choice development episode
 
 Baseline main `06af22c14a44db4f61b6f55c05dcbaa5d6394ef8` passed CI
 `32476766226/1` with 4619 tests. The

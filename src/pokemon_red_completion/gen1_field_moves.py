@@ -155,6 +155,27 @@ def surf_permission(memory: ReadOnlyMemory, raw: RawGameState) -> SurfPermission
     return SurfPermission(True, "no_observed_title_restriction")
 
 
+def gen1_field_capabilities(
+    memory: ReadOnlyMemory,
+    raw: RawGameState,
+) -> frozenset[str]:
+    """Project only field moves that the observed party may legally execute.
+
+    Route construction and field-move execution must see the same capability
+    boundary.  Cut and Strength derive their badge and living-holder checks
+    from the party observation; Surf additionally requires the live title
+    restriction check above.  Keeping this composition here prevents callers
+    from silently building a land-only graph for a party that can cross water.
+    """
+
+    permission = surf_permission(memory, raw)
+    return (
+        cut_capabilities(raw)
+        .union(strength_capabilities(raw))
+        .union(surf_capabilities(raw, surf_allowed=permission.allowed))
+    )
+
+
 def surf_menu_indices(raw: RawGameState) -> tuple[int, int]:
     """Return a living Surf holder and Surf's row among its field moves."""
 

@@ -45,7 +45,10 @@ from pokemon_red_completion.executor import (
     FrameSafeExecutor,
     WindowedFrameBudgetController,
 )
-from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
+from pokemon_red_completion.gen1_field_moves import (
+    Gen1FieldMovePort,
+    gen1_field_capabilities,
+)
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
@@ -391,6 +394,7 @@ def _execute(
         traversal = Gen1TraversalObserver(
             reader,
             hazard_projector=Gen1TrainerSightProjector(readiness.rom_bytes, reader),
+            capability_projector=lambda raw: gen1_field_capabilities(frames, raw),
         )
         start = traversal.observe()
         route_plan = route_world.plan_to_map(start, int(MapId.DIGLETTS_CAVE))

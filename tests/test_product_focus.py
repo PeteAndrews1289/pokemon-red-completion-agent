@@ -306,11 +306,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 4 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == (
-        "repeatable-red-living-dex-option-execution-v1"
+        "red-living-dex-field-capability-option-execution-v1"
     )
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
@@ -326,7 +326,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
             "partition": "development",
         },
     ]
-    assert len(state.retired_lanes) == 50
+    assert len(state.retired_lanes) == 51
     assert focus_progress_fraction(state) == pytest.approx(13 / 15)
     assert focus_scorecard(state) == (
         ("Development Episode · development", 14, 15),
@@ -1837,7 +1837,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(13 / 15)
     assert public["actions"] == 0
-    assert "Repeatable Red living-Dex option execution V1" in public["stage"]
+    assert "Red field-capability-complete living-Dex option execution V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 15}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 5}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
