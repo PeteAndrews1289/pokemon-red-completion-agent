@@ -1,6 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: the lock survives a power loss
+## August 26 scene: freeze every real classroom address before moving the game
+
+Open on **PR 73 · SOURCE 89F967F9 · MAIN AD0E6049 · CI 32971132659/1**. Put a meter at zero before
+the source cable is even plugged in. Connect an adapter labelled **PRIVATE RED SOURCE** and make it
+hand over **15 SLOTS · 10 TRAIN + 5 DEVELOPMENT · 45 SEMANTIC ARMS · LOCAL 1 · ROUTED 14**. Check
+the meter after every handoff. Re-scan the source catalog at the end, place the complete plan in a
+**SEALED** envelope, and only then show the setup-runner port—still covered.
+
+Attack the cable. Make reading its meter property secretly request authority and flash **HIDDEN
+EFFECT REJECTED**. Swap a slot, change the protected catalog halfway through, replace an existing
+plan, throw an exception containing a private path, and cut power. Flash **CROSS-JOIN REJECTED ·
+SOURCE CHANGE REJECTED · REPLACEMENT REJECTED · PRIVATE ERROR SANITIZED · NO FALSE RECORD**. Try
+to drag a route hash or source identity onto the public card and make it disappear.
+
+Flash **12 DIRECT · 94 RELATED · 49 PROTOCOL · 5,087 PASSED · 275 SOURCE FILES TYPED**. Then reveal
+that the source cable was attached to **SYNTHETIC ROM-FREE FIXTURES**. Keep **CONCRETE RED ADAPTER:
+MISSING · AUTHENTIC PLAN: NOT SEALED · CAUSAL TRAIN: 0/8** red. The spoken line is: **“The freezer
+is real; the authentic map adapter is not. We qualify that adapter, freeze one zero-action plan,
+and stop again before pressing a button.”** End on **PRIVATE ADAPTER → ACTION-FREE 10+5 FREEZE →
+SETUP CAPTURES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT**, with **CRYSTAL TRANSFER LATER · TRADE
+REQUIRED FOR FULL LIVING DEX** underneath.
+
+## Previous August 26 scene: the lock survives a power loss
 
 Open on **PR 71 · SOURCE 2DF5F4B0 · MAIN 1D5CAB67 · CI 32965956178/1**. Lay out fifteen lesson-room
 cards and forty-five semantic doors. Before a controller icon can light, slide the entire plan into

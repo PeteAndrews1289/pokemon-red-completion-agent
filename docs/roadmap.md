@@ -5,13 +5,14 @@
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
 > active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The 10+5 schedule,
-> routed-semantic composer, and durable no-retry setup runner are published. Actual private Red
-> bindings remain absent. Next qualify the action-free materializer and freeze one exact fifteen-
-> slot plan with all forty-five genuine arms and fourteen routed joins; prove zero input and frames,
-> publish aggregate evidence, and reorient before setup execution. After complete captures exist,
-> collect at least 8 train + 4 disjoint development selected-arm outcomes, fit once on train, and
-> report descriptive calibration/variance. Stop before a powered benchmark, sealed Red, Crystal,
-> promotion, or replay. See [red-living-dex-setup-campaign-v1.md](red-living-dex-setup-campaign-v1.md).
+> routed-semantic composer, durable no-retry setup runner, and action-free whole-plan materializer
+> are published. The concrete private Red source adapter and authentic plan remain absent. Next
+> qualify that adapter without protected access, then perform one separately recorded action-free
+> fifteen-slot freeze with all forty-five genuine arms and fourteen routed joins; publish aggregate
+> evidence and reorient before setup execution. After complete captures exist, collect at least 8
+> train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
+> calibration/variance. Stop before a powered benchmark, sealed Red, Crystal, promotion, or replay.
+> See [red-living-dex-setup-binding-materialization-v1.md](red-living-dex-setup-binding-materialization-v1.md).
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

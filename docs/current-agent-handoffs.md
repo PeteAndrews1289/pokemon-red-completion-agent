@@ -6,7 +6,29 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns action-free private Red binding materialization
+## Current override: Codex owns the concrete Red source adapter and one action-free freeze
+
+The action-free whole-plan materializer is published from source
+`89f967f97390b1d0b8440863b5144cfaa1ad6cb1` through PR 73, merged as main
+`ad0e6049265fbfb0743a217b96dec93d608bf4d9`, and green at exact-main CI `32971132659/1`. The
+[qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
+binds 12 direct, 94 related setup/plan/protocol, 49 protocol, and 5,087 full-suite tests. It used
+only synthetic ROM-free sources and changed no learner, authority, or transfer counter.
+
+Codex owns only the concrete private Red setup-binding source adapter and one later action-free
+private plan freeze. Qualify the adapter without protected access; require the canonical fifteen-
+slot order, all forty-five genuine semantic provider arms, one local and fourteen routed slots,
+exact route-terminal-provider joins, zero protected-effect deltas, and a path-free aggregate. Stop
+and reorient before calling the published setup runner.
+
+Claude is the optional read-only statistics, causal-design, leakage, and semantic-overclaim
+reviewer. Antigravity is the optional read-only architecture, portability, and claim-boundary
+reviewer. Neither executes gameplay, edits the worktree, or delays ordinary work; Codex adjudicates.
+Outcomes, fitting, sealed Red, Crystal, promotion, and replay remain closed. Trade remains a later
+full-mission blocker. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
+4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned action-free private Red binding materialization
 
 The durable setup campaign is published from source
 `2df5f4b042b5766bf8f2f5e8863ed5966333a713` through PR 71, merged as main

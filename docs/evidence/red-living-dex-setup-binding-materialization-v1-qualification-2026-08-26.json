@@ -1,0 +1,154 @@
+{
+  "artifacts": {
+    "design": {
+      "path": "docs/red-living-dex-setup-binding-materialization-v1.md",
+      "sha256": "e05e38824505accc9e1662ccea65e9c4188030d61f0df775edf3899bf5b27fc6"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_materialization.py",
+      "sha256": "6e6c921d3286e2c6b040ae2247c71c13de7b53168db42a2619dc243afb53d38e"
+    },
+    "prospective_plan": {
+      "path": "configs/red-living-dex-prospective-capture-plan-v1.json",
+      "sha256": "511dff4f307c35e8b8aa4d383ea81182c7b0618d2a2e26684bae865735131843"
+    },
+    "tests": {
+      "path": "tests/test_red_living_dex_setup_materialization.py",
+      "sha256": "8145e1487411712a7239475998bce926c5ffd8fe5313fb692cd024a2be312ec6"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free source now supplies the action-free boundary that accepts one authenticated private-source protocol, requests all fifteen canonical Red setup slots in exact ten-train plus five-development order, validates all forty-five semantic provider arms and the one-local plus fourteen-routed census, reattests the unchanged protected input set, proves every protected-effect delta is zero, and seals the complete exact private plan before any later setup-execution decision. Public projections are aggregate and path-free.",
+    "unsupported": [
+      "actionful_red_setup_execution",
+      "actual_private_red_binding_plan",
+      "authentic_private_red_source_adapter",
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "runtime_private_binding_authentication",
+      "runtime_private_route_execution",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "materialization_contract": {
+    "actionful_setup_execution_authorized": false,
+    "complete_menu_bindings": 15,
+    "concrete_private_red_source_adapter_implemented": false,
+    "development_slots": 5,
+    "local_option_bindings": 3,
+    "local_slots": 1,
+    "materializer_runtime_contract_implemented": true,
+    "option_provider_bindings": 45,
+    "private_plan_sealed": false,
+    "routed_option_bindings": 42,
+    "routed_slots": 14,
+    "runtime_private_bindings_authenticated": false,
+    "runtime_private_routes_executed": false,
+    "slot_count": 15,
+    "train_slots": 10
+  },
+  "next_gate": {
+    "actionful_setup_execution_allowed": false,
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Implement and adversarially qualify the concrete private Red setup-binding source adapter without private access, then under a separate action-free gate authenticate approved private inputs and freeze exactly one canonical fifteen-slot plan. It must preserve all forty-five genuine arms and fourteen route-terminal-provider joins, prove every protected-effect delta is zero, publish only aggregate evidence, and stop before invoking the durable setup runner."
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_binding_reads": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32971132659,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32971132659",
+    "merged_main_commit": "ad0e6049265fbfb0743a217b96dec93d608bf4d9",
+    "pull_request": 73,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32970763796,
+    "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32970763796",
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73",
+    "source_bundle_sha256": "15b4f1f0e171fbaf036f8690595de16db87c35bf6337c1957fdb2ebfee7e569d",
+    "source_commit": "89f967f97390b1d0b8440863b5144cfaa1ad6cb1"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-setup-binding-materialization-qualification.v1",
+  "status": "published_action_free_materializer_qualified_concrete_private_adapter_still_missing",
+  "verification": {
+    "adversarial_contract_checks": [
+      "changed_protected_input_set_rejected",
+      "cross_joined_slot_rejected",
+      "different_sealed_plan_rejected",
+      "effectful_source_introspection_rejected",
+      "exact_shared_meter_required",
+      "incomplete_plan_rejected_by_setup_contract",
+      "invalid_or_synthetic_attestation_rejected",
+      "missing_or_failed_slot_leaves_no_record",
+      "ordinary_private_source_errors_sanitized",
+      "process_interruption_propagates_without_record",
+      "protected_effect_before_seal_rejected",
+      "public_identity_and_path_leaks_rejected"
+    ],
+    "documentation_check": "passed",
+    "focused_tests_passed": 12,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5087,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed_at_pull_request_and_exact_merged_main_commit",
+    "mypy_source_files": 275,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "protocol_tests_passed": 49,
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "c7ead8cd40e84793546c3d5f6e37676b79f13bca0da549fd29b64c205d9e7914",
+      "battle_teacher_sha256": "f63302e8752004b13cccae6d0e58b5af3b0031bc4c80e455b9079c5f988607b3",
+      "goal_manager_registry_sha256": "8e5964bd82dd38885f5e2d3de5b5bcc78e3281373ffca81d3fcdeaea4bbeabdc",
+      "goal_manager_teacher_sha256": "133b7518a2b117106d6e81e0500591fb95eb5d4f794ea3c4bf38705290e70cea",
+      "strategic_navigation_registry_sha256": "4db42a35177cb40b156e22b9b3424db8462da525b7b245157887d94207de30c4",
+      "strategic_navigation_teacher_sha256": "548e1856d5570b8ad3b970fa623c1b62ff7b7afeea68767dfe1616e079ea42a9"
+    },
+    "related_tests_passed": 94,
+    "ruff_format_status": "passed",
+    "ruff_status": "passed"
+  }
+}

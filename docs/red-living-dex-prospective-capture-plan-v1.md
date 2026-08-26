@@ -9,6 +9,9 @@ CI `32960694004/1`; see the
 The durable setup campaign then merged through PR 71 as main `1d5cab67` and passed exact-main CI
 `32965956178/1`; see its
 [qualification](evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json).
+The action-free binding materializer then merged through PR 73 as main `ad0e6049` and passed
+exact-main CI `32971132659/1`; see its
+[qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json).
 It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
@@ -16,9 +19,9 @@ It is subordinate to
 
 ## Result first
 
-The abstract Red schedule satisfies the shared 10+5 curriculum contract, and its restart-safe
-setup runner is published, but no actual private binding plan exists yet. The exact ten-slot train
-menu has a
+The abstract Red schedule satisfies the shared 10+5 curriculum contract; its restart-safe setup
+runner and action-free whole-plan materializer are published, but no concrete private source adapter
+or actual binding plan exists yet. The exact ten-slot train menu has a
 worst-case-after-any-two-censors probability of
 **2144/2187 = 98.0338%** of selecting at least four distinct option kinds. Family and location
 scope reserves pass. Seven portable kinds have implemented, independently tested Red provider
@@ -29,7 +32,8 @@ Fourteen need route-then-destination composition. The reusable
 [routed semantic goal composition V1](routed-semantic-goal-composition-v1.md) is now published and
 keeps that transport outside the learner label. The plan remains **plan-valid but
 execution-blocked** because no actual private per-slot route/terminal/provider bindings have been
-materialized and authenticated. The durable structural contract and runner are now qualified.
+materialized and authenticated. The structural contract, durable runner, and action-free
+materializer are now qualified.
 
 Trade is a separate full-product gap. The current `GoalKind`/Red binding layer has no repeatable
 semantic trade executor. The first calibration pilot intentionally excludes trade because its
@@ -125,9 +129,11 @@ promotion, or replay.
 3. **Complete:** re-run this ROM-free feasibility audit and bind the published component identities.
 4. **Complete:** publish and qualify the structural binding contract and durable Red setup runner
    against ROM-free adversarial fixtures.
-5. **Active:** qualify the action-free private materializer and freeze one exact fifteen-slot
+5. **Complete:** publish and qualify the action-free private materializer against synthetic
+   adversarial sources.
+6. **Active:** qualify the concrete private Red source adapter, then freeze one exact fifteen-slot
    binding plan with all forty-five real arms and fourteen routed joins; stop before setup input.
-6. Run every setup slot once, census complete captures, then collect randomized outcomes under a
+7. Run every setup slot once, census complete captures, then collect randomized outcomes under a
    new gate.
-7. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
+8. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
    trade; do not let an initial non-trade calibration fit erase that mission requirement.

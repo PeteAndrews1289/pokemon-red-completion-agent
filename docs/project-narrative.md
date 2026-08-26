@@ -1,6 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 26: a power loss can no longer turn one lesson into two
+## August 26: the whole lesson plan can now freeze before the game moves
+
+The action-free setup-binding materializer is published from source `89f967f9` as main
+`ad0e6049`. It establishes its independent protected-effect baseline before inspecting a private
+source, requires that source to share the same meter, authenticates the input catalog, requests all
+fifteen canonical slots in exact 10+5 order, validates all forty-five semantic arms and the
+one-local/fourteen-routed census, and reauthenticates the unchanged catalog. Only then does it seal
+the exact complete plan.
+
+The adversarial work mattered. A source property that secretly requested controller authority is
+caught before it can hide in the baseline. Changed input attestations, cross-joined slots, plan
+replacement, synthetic attestations, and any protected-effect delta fail before publication.
+Ordinary source exceptions are sanitized so a private path cannot become a log; process-level
+interruptions still propagate and leave no false record. Public output contains only aggregate
+counts and zero deltas.
+
+PR 73 and exact-main CI passed **12 direct, 94 related setup/plan/protocol, 49 protocol, and 5,087
+repository tests**, with type checking over 275 source files. Qualification used only synthetic
+ROM-free source fixtures. It opened no private capture or ROM, sealed no authentic Red plan, moved
+no controller or frame, and created no outcome or fit. Causal train therefore remains 0/8.
+
+The remaining bridge is concrete and bounded: implement and qualify the private Red source adapter
+without protected access, then use one separately recorded action-free freeze to bind the real
+routes, terminals, observations, and providers. Stop again before setup execution. This is the
+last address-book step before the project can create purpose-built decision states and start the
+first genuine living-Pokédex option-value training batch.
+
+## Previous August 26: a power loss can no longer turn one lesson into two
 
 The fifteen-slot setup campaign is now a published runner rather than a design. It freezes all
 forty-five semantic option-provider bindings before input, preserves Red's one local and fourteen

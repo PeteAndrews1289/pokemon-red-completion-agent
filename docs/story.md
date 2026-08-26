@@ -7,7 +7,32 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: every room has a safe lock; now verify the real addresses
+## Current checkpoint: the address freezer is safe; connect it to the authentic map
+
+The action-free materializer is published. It takes one source, checks an independent safety meter
+before even inspecting it, requests all fifteen lesson rooms and forty-five semantic doors in the
+frozen order, checks the meter after every answer, and verifies that the protected source did not
+change mid-read. Only then can it seal the complete private plan. A power loss propagates without a
+fake success, ordinary private errors lose their identifying details, and the public receipt shows
+counts rather than addresses.
+
+Twelve direct tests and ninety-four nearby setup/plan/protocol tests attacked that boundary. The
+whole repository passed **5,087 tests** on the pull request and exact merged main. One test even
+made the source spend authority merely by asking its name; the materializer caught the hidden
+effect because its baseline now comes first.
+
+But the plug is deliberately empty. All passing source fixtures were invented off-cartridge. The
+concrete Red adapter that turns approved captures into real route, terminal, observation, and
+provider bindings does not exist yet, and no authentic plan has been sealed. So the next job is to
+qualify that adapter without opening protected data, then perform one zero-effect private freeze
+and stop before running setup.
+
+The score remains **causal train 0/8, authority 0, transfer 0**. The project has closed another
+specific way to corrupt scarce training roots, not trained the player. Once the authentic plan
+exists, the route to useful evidence is finally direct: setup captures, randomized semantic arms,
+independent outcomes, and one train-only fit. Crystal and trade remain visible beyond that bridge.
+
+## Previous checkpoint: every room has a safe lock; now verify the real addresses
 
 The setup runner is published. Before any button can be pressed, it demands the complete fifteen-
 room plan and all forty-five semantic doors. It signs for each room durably, measures every button
