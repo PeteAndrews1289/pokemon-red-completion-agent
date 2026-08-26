@@ -3,6 +3,9 @@
 Status: published ROM-free feasibility plan. Source `ca7340d4` merged through PR 66 as main
 `f9f3310e` and passed exact-main CI `32956496929/1`; see the
 [qualification](evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json).
+The post-composition requalification merged through PR 69 as main `67d52f86` and passed exact-main
+CI `32960694004/1`; see the
+[combined qualification](evidence/red-routed-semantic-plan-requalification-2026-08-26.json).
 It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
@@ -106,7 +109,7 @@ frames 0 · behavior draws 0 · learner claims/actions/labels/outcomes 0 · pred
 aggregate scope counts, contract digests, the exact probability, and explicit zero/private-field
 counters.
 
-The plan does not authorize a routed skill, setup runner, protected setup campaign, capture
+The plan does not authorize a concrete routed skill, setup runner, protected setup campaign, capture
 inventory, selected-arm outcome, model fit, sealed Red evaluation, Crystal execution, promotion,
 or replay.
 
@@ -115,9 +118,9 @@ or replay.
 1. **Complete:** publish this exact feasibility result and reorient.
 2. **Complete:** publish and adversarially qualify the generic routed-semantic-goal composition
    seam plus the minimal Red adapter.
-3. **Active:** re-run this ROM-free feasibility audit and bind the published component identities.
-4. Separately freeze and qualify the durable Red setup runner and fourteen private route/terminal
-   bindings.
+3. **Complete:** re-run this ROM-free feasibility audit and bind the published component identities.
+4. **Active:** freeze and qualify the durable Red setup runner and fourteen private route/terminal
+   bindings without opening private setup execution.
 5. Run every setup slot once, census complete captures, then collect randomized outcomes under a
    new gate.
 6. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic

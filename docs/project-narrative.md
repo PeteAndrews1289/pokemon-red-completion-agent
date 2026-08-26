@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the doorway works; the classrooms still need addresses
+
+The route-to-skill abstraction is now real. The portable layer keeps the learner's choice semantic:
+acquire a species, evolve, develop the team, manage storage, resupply, advance the story, or
+explore. Red privately supplies transport, proves the exact terminal, takes a fresh coherent
+observation, and asks an existing destination provider for that same kind. The destination runs at
+most once. Route and destination reports reconcile against the same controller and frame counters,
+and neither a route label nor a raw direction sequence reaches the policy.
+
+That sounds small, but it closes the conceptual gap that made fourteen of Red's fifteen planned
+lessons fictional. PR 68 passed 36 focused tests, 168 related tests, and 5,057 repository tests;
+exact main stayed green. The follow-up requalification then did something equally important: it
+did not turn the new abstraction into a claim that the campaign could run. It credited the exact
+published component contracts while retaining **pilot execution not ready**. PR 69 passed the
+final 5,059-test suite and preserved the unchanged **2144/2187 = 98.0338%** curriculum result.
+
+The blocker is narrower now. Fourteen lessons need concrete private route, terminal, origin, and
+destination-provider attestations; all fifteen need a durable runner that claims before input,
+forbids retry after input, and records complete, failed, or interrupted setup terminals without
+creating a learner label. That is the next build. It is Red-specific plumbing around a
+title-neutral decision contract—the shape we want before Crystal tests whether the learned value
+function transfers. Trade remains visible as a later living-Pokédex requirement. No gameplay or
+learning counter moved in this milestone: the project built the doorway, not the training data.
+
 ## August 26: the blueprint passed—and exposed the one abstraction Red is missing
 
 The project now has Red's exact first classroom: ten train rooms, five held-out rooms, and three

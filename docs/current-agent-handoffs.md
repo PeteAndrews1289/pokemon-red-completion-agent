@@ -6,7 +6,32 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the routed semantic composition seam
+## Current override: Codex owns concrete Red setup binding and durability
+
+The reusable seam is published from source `c7a9feec54d0194c35829dcda5552ce4d12af3df`
+through PR 68, merged as main `fee453444a7f5789d35979fb06be9fd095f2f8e4`, and green at
+exact-main CI `32959509208/1`. The plan requalification is published from source
+`c3d74d9a1bd134e21929b0c4fe8af85bf8b7f884` through PR 69, merged as main
+`67d52f86ceb162df97af13c972fa3b6b228bb471`, and green at exact-main CI `32960694004/1`.
+The [qualification](evidence/red-routed-semantic-plan-requalification-2026-08-26.json) binds the
+exact components, unchanged 10+5 schedule, 36 composition tests, 17 plan tests, and 5,059 final
+suite tests. It used no ROM/private setup and changed no learner, authority, or transfer counter.
+
+Codex owns only ROM-free implementation and qualification of the concrete fifteen-slot setup
+schema and durable runner. Bind fourteen routed slots to exact private route/terminal/provider
+attestations; keep one local slot explicit; prove every planned menu arm genuine; claim before
+input; forbid retry after input; account complete, failed, and interrupted terminals; publish no
+identity; and emit no setup-derived learner label or outcome. Publish and reorient before private
+execution.
+
+Claude is the optional read-only statistics, causal-design, leakage, and semantic-overclaim
+reviewer. Antigravity is the optional read-only architecture, portability, and claim-boundary
+reviewer. Neither reads private captures, executes gameplay, edits the worktree, or delays ordinary
+work; Codex adjudicates. Outcomes, fitting, sealed Red, Crystal, promotion, and replay are closed.
+Trade remains a later full-mission blocker. Counters remain **development 15 · verified 5/9 ·
+causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the routed semantic composition seam
 
 The concrete Red prospective plan is published from source
 `ca7340d436698be7a90412ff304726d973da2ac3` through PR 66, merged as main
