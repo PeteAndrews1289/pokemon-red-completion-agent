@@ -8,7 +8,42 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: same-root lesson machinery exists; build genuine provider families
+## Current checkpoint: adversarial review blocked publication; repair the causal trust boundary
+
+PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but three independent read-only audits converged
+on **NO-GO for publication or private execution**. Synthetic tests proved useful schemas and
+durable ordering; they did not prove that the supplied emulator bytes were actually restored, that
+the semantic route really ran, that the provider was independently constructed, or that every
+protected effect stayed zero. One opaque runtime currently supplies all of those claims.
+
+The owner also reproduced three direct acceptance defects: fork-family proof drift, nested
+slot/option schema drift, and digest-shaped public failure codes. Plan, claim, capture, and terminal
+lack a complete title/revision/state-schema/route/provider/runtime identity. Root consumption is
+store-local rather than account-wide, and process-death behavior is not tested at every durable
+transition.
+
+The next gate gets one session / six hours and must:
+
+1. close exact fork-proof joins, nested schema validation, and public failure-code privacy;
+2. bind a sealed Red title/revision/state-schema/source/route/provider/runtime identity through the
+   plan, claim, capture, and terminal;
+3. replace action/frame-only metering with executor-owned measurement of every protected effect;
+4. isolate every candidate arm and require restore acknowledgement, an authenticated semantic-route
+   report, and an action-free offer constructed by a sealed provider registry;
+5. derive typed semantic family descriptors invariant to slot, root, profile, route, and candidate
+   order;
+6. enforce account-wide physical-root consumption and pass a failpoint/restart matrix; and
+7. run malicious ROM-free adapters, the full gate, and reorient.
+
+Only if all seven pass may provider inventory resume. The corrected capacity contract is **15
+recipes · 45 real offers · at least 33 distinct semantic families · 10 physical origins**. Reuse
+the existing boxed level-evolution and party-development engines; do not create duplicate mechanic
+engines. Stop before private setup, outcomes, fitting, sealed Red, Crystal, promotion, or replay.
+Trade, versions, events, cross-save retention, and living-storage consolidation remain explicit
+later mission gates. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: same-root lesson machinery existed; provider families were next
 
 The authenticated historical census falsified the active pre-observed catalog strategy. It found
 only eight complete three-option menus—five train and three development—and lacked the declared

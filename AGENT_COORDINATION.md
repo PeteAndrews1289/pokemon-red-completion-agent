@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-26 adversarial audit blocked publication; causal trust-boundary repair active:** PR 78
+> head `0fb3f0f4` passed CI `32990990854/1`, but passing synthetic tests do not make the contract
+> publication-ready. Claude CLI was logged out and the Claude/Antigravity desktop reviewers were
+> unavailable during the outage, so three independent read-only Codex reviewers covered causal
+> design, architecture/transfer, and durability/privacy. Codex reproduced the decisive defects and
+> adjudicated **NO-GO** in the
+> [path-free audit](docs/evidence/red-living-dex-same-root-setup-recipe-v1-adversarial-audit-2026-08-26.json).
+>
+> Codex owns one bounded repair session: complete proof/schema joins and closed public failures;
+> seal title/revision/adapter execution identity; measure every protected effect; isolate each arm;
+> require restore acknowledgement, authenticated route reports, registry-constructed offers, and
+> typed semantic families; enforce account-wide root consumption; and test every durable crash
+> cutpoint. Only after this passes may provider inventory resume. The schedule needs **45 real
+> offers, at least 33 distinct semantic families, and 10 physical origins**—not 45 unique families.
+> No private setup, outcome, fit, sealed Red, Crystal, promotion, or replay is open. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
 > **2026-08-26 same-root setup recipe locally qualified; publication and provider-family breadth
 > active:** The authenticated historical census cannot supply the frozen 10+5 family/location
 > schedule without false cross-joins. The successor contract constructs one decision origin, hashes

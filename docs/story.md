@@ -7,7 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: one state can now expose three honest futures
+## Current checkpoint: the witness could sign its own evidence
+
+The same-root machinery was green, but a hostile reviewer played the runtime rather than the game.
+That runtime could ignore the saved state, announce that restoration succeeded, announce that a
+route completed, and invent the provider offer used to validate itself. The independent meter
+watched buttons and frames but not every authority the setup promised to leave untouched.
+
+Three independent reviews returned **NO-GO**. Direct checks then changed a fork's family proof,
+changed nested schema identifiers, and inserted a digest-shaped public failure code; all three were
+accepted. Those are repairable joins, but they change the meaning of the checkpoint. The project
+has a strong lesson-plan format and restart policy, not yet a trustworthy causal classroom.
+
+The next session puts each fact under a separate seal: exact Red revision and state identity,
+restore acknowledgement, authenticated semantic-route reports, provider-registry offers, complete
+effect counters, semantic family descriptors, account-wide no-retry, and crash-cutpoint recovery.
+Only then does family inventory resume. The real target is fifteen rooms, forty-five honest doors,
+at least thirty-three distinct family identities, and ten physical origins—not forty-five renamed
+copies of one mechanic.
+
+The score remains **causal train 0/8, authority 0, transfer 0**. That red zero is doing its job: it
+prevents synthetic confidence from becoming a model target before Red, Crystal, trade, and the
+living-Pokédex mission can rely on it.
+
+## Previous checkpoint: one state appeared to expose three honest futures
 
 The promised authentic catalog did not exist. The historical bank contained only eight complete
 three-choice menus, and it lacked the family and location breadth required by the frozen lesson

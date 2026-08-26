@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the witness signs its own certificate
+
+Open on a green CI badge: **5,137 TESTS PASSED**. Put one character behind four desks labelled
+**RESTORE · ROUTE · PROVIDER · PROOF**. Have the character stamp every certificate itself. Then
+replace the saved-state bytes with ignored junk, fabricate arrival, and fabricate an offer while the
+dashboard remains green. Stamp the screen **ONE OPAQUE RUNTIME · NOT INDEPENDENT EVIDENCE**.
+
+Run three attacks: swap a fork-family hash, change a nested schema name, and paste a 64-character
+private digest into the public failure field. Show **ACCEPTED · ACCEPTED · ACCEPTED**, then a large
+**NO-GO FOR PUBLICATION**. Keep the useful cards—**EXACT STORED BYTES · CLAIM BEFORE INPUT · NO
+RETRY TERMINALS**—and move the other claims behind separate sealed authorities.
+
+Animate the repair chain: **TITLE/REVISION ID → RESTORE READBACK → AUTHENTICATED ROUTE REPORT →
+REGISTRY-BUILT OFFER → FULL EFFECT METER → EXACT PROOF JOIN → ACCOUNT-WIDE ROOT CLAIM → CRASH
+MATRIX**. Correct the capacity graphic from **45 UNIQUE FAMILIES** to **45 REAL OFFERS · ≥33
+SEMANTIC FAMILIES · 10 ORIGINS**. The spoken line is: **“Green tests gave us a sturdy format. The
+audit showed the witness could certify itself. We repair that trust boundary before we collect one
+training outcome.”** End on **REPAIR → MALICIOUS-ADAPTER TESTS → REAL PROVIDER INVENTORY →
+AUTHENTIC RED OUTCOMES → TRAIN-ONLY MODEL → CRYSTAL TRANSFER**, with **TRADE/VERSIONS/EVENTS STILL
+REQUIRED FOR THE LIVING POKÉDEX** below.
+
 ## August 26 scene: one save, three honest futures
 
 Open on the old catalog assembling three doors from three different save files. Stamp the result

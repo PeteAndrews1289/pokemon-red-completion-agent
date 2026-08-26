@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: green tests met an untrusted witness
+
+The same-root branch passed its test suite, but the adversarial audit asked a different question:
+who supplies the facts that make a fork causal? The answer was one opaque runtime. It could ignore
+the state bytes it was given, claim that it restored them, claim that a route finished, and return
+the provider offer later used to validate that claim. The safety meter watched buttons and frames,
+while the remaining zero-effect fields were constants.
+
+Three read-only reviewers independently reached **NO-GO**, and direct reproductions found that a
+fork's family proof could be altered without breaking the capture, nested schema identifiers could
+drift, and a private digest-shaped value could pass as a public failure code. Passing ROM-free tests
+had proved useful data shapes and durable claim ordering, not an independent causal witness.
+
+The response is a repair, not another restart: keep the schemas, exact stored bytes, and permanent
+claims; move restore, routing, provider construction, and protected-effect evidence under sealed,
+independently joined authorities. Isolate each arm, bind the Red revision and adapter, make family
+identity semantic rather than caller-named, consume roots account-wide, and attack every crash
+cutpoint. Provider expansion waits until that boundary can reject a malicious adapter.
+
+The audit also reduced an accidental burden: forty-five planned doors do not require forty-five
+unique mechanics. Their scopes require at least thirty-three genuine family identities, with honest
+reuse inside one logical scope. The mission remains unchanged—authentic Red collection choices,
+then a shared model and frozen-weight Crystal test—but the project will not train on a classroom
+whose doors can certify themselves.
+
 ## August 26: the project stopped inventing classrooms and learned to fork one state
 
 The authentic catalog check overturned the expected next step. The historical capture bank could

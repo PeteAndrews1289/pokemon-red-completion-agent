@@ -6,7 +6,37 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns purpose-built same-root Red recipes
+## Current override: Codex owns the same-root causal trust-boundary repair
+
+PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but independent adversarial review returned
+**NO-GO for publication or private execution**. The schema and claim-before-input work are worth
+preserving. The current runtime boundary is not: one opaque object may ignore supplied state bytes
+and then self-attest restore, route completion, provider provenance, and family identity. Only
+controller actions and frames are independently metered; the other protected-effect zeroes are
+constants. Execution identity is incomplete, proof and nested-schema joins are weak, no-retry is
+store-local, and durable crash cutpoints are incomplete.
+
+Codex independently reproduced three concrete acceptance bugs: a fork proof's family can differ
+from its binding, nested slot/option schema values can drift, and a digest-shaped private value can
+be accepted as a public failure code. The frozen schedule also requires forty-five real offers but
+only a minimum of thirty-three distinct semantic families under its current scopes. Within-scope
+family reuse is valid; manufacturing forty-five identities is not.
+
+Codex owns one six-hour repair session. Preserve existing reusable seams, but require a sealed Red
+title/revision/state/route/provider/runtime identity through plan, claim, capture, and terminal;
+executor-owned protected-effect checkpoints; fresh fork-isolated arm runtimes; restore
+acknowledgement; authenticated semantic-route reports; registry-constructed action-free offers;
+typed semantic family descriptors invariant to slot/root/profile/route/candidate order;
+account-wide root consumption; complete proof joins; closed public reason codes; and a failpoint
+restart matrix. Reorient before provider expansion or private setup.
+
+Claude and Antigravity remain optional read-only milestone reviewers when available. They were not
+available for this outage review; the recorded fallback was three independent read-only Codex
+reviewers, and no external verdict is claimed. No gameplay, provider execution, outcome, fit,
+sealed Red, Crystal, promotion, or replay is open. Counters remain **development 15 · verified 5/9
+· causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned purpose-built same-root Red recipes
 
 The historical pre-observed catalog path is retired after the authenticated census found only
 eight complete three-option menus—five train and three development—with insufficient family and

@@ -12,6 +12,35 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-26: adversarial audit blocked publication; repair trust before widening providers
+
+PR 78 head `0fb3f0f4` is green under CI `32990990854/1`, but do not merge or execute it as reusable
+causal infrastructure yet. During the GitHub Actions outage, Claude CLI was logged out and both
+external desktop reviewers were unavailable. Three independent read-only Codex audits instead
+covered causal/statistical design, architecture/transfer, and durability/privacy; Codex then
+reproduced the central acceptance defects. Their combined, adjudicated verdict is **NO-GO** and is
+recorded in the
+[audit evidence](docs/evidence/red-living-dex-same-root-setup-recipe-v1-adversarial-audit-2026-08-26.json).
+
+Preserve the plan schemas, exact source-byte authentication, claim-before-runtime ordering,
+permanent terminals, and complete-menu shape. Repair the execution trust boundary. One opaque
+runtime can currently ignore supplied origin bytes and self-attest restore, route, provider offer,
+and family truth. The meter observes only actions and frames while serializing other effect zeroes
+as constants. Plan/claim/capture/terminal omit a full Red revision and adapter identity. Fork
+proofs are incompletely joined, nested schema values are not checked, digest-shaped failure text
+can be published, root consumption is not account-wide, and crash recovery lacks every-cutpoint
+tests.
+
+The next session is one six-hour maintenance unblock: exact joins/schema/closed reasons; sealed
+execution identity; comprehensive executor-owned effect metering; fresh arm isolation; restore
+acknowledgement; authenticated semantic route reports; provider-registry construction; typed
+family descriptors; account-wide root consumption; and failpoint restart tests. Run malicious
+ROM-free adapters before resuming provider inventory. The real schedule is **15 recipes · 45 real
+offers · at least 33 distinct semantic families · 10 physical origins**. Reuse the existing boxed
+level-evolution and party-development engines only after the trust gate passes. Stop before private
+setup, outcomes, fitting, sealed Red, Crystal, promotion, or replay. Counters remain **development
+15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 ## 2026-08-26: same-root setup recipe qualified locally; publish, then widen real families
 
 The expected authentic plan freeze was falsified before controller input. The historical bank has
