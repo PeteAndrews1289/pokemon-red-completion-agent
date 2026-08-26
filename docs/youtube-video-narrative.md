@@ -1,6 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: the gauges are qualified; the classroom gets one reading
+## August 26 scene: one bad card stopped the classroom counter
+
+Start the sole V2 reading: **81 INPUTS AUTHENTICATED**. Advance the board to **12 CONTEXTS
+CONSIDERED · 11 STATES READ**. Put one card in **CONSUMED ROOT**, then ten in **FEWER THAN 3 MAPPED
+OPTIONS**. On the next card, freeze the machine at **STATE OBSERVATION** before replay, projection,
+or coverage. Keep **8+4 COVERAGE: NOT EVALUATED** in gray—not failed.
+
+Fill the safety rail with **CONTROLLER AUTHORITY 0 · BUTTONS 0 · FRAMES 0 · DRAWS 0 · CLAIMS 0 ·
+OUTCOMES 0 · PREDICTIONS 0 · TEACHERS 0 · FITS 0 · PRIVATE PLAN 0 · LEAKS 0**. Stamp **V2 RETRY
+FORBIDDEN**. The spoken line is: **“The gauge finally told us where it stopped. It still did not
+tell us what was in the rest of the classroom.”**
+
+Build the successor off-cartridge as a conveyor belt. A bad card drops into one anonymous bin:
+**RESTORE · OBSERVE · ENUMERATE · REPLAY · PROJECT**; the later cards keep moving. A global source,
+input, runtime, namespace, effect, integrity, or publication fault hits the emergency stop. End on
+**EVERY INPUT RECONCILED → UNCHANGED 8+4 GATE**, with the two honest terminals: **CLASSROOM EXISTS
+→ FREEZE PLAN**, or **CLASSROOM INSUFFICIENT → BUILD PURPOSE-MADE CAPTURES**. Never show a lowered
+gate or V1/V2 retry.
+
+## Previous August 26 scene: the gauges are qualified; the classroom gets one reading
 
 Open on **PR 58 · MAIN CCA0EB8D · CI 32942245005/1 · 4,910 TESTS**. Replace the single blank
 failure lamp with a row of exact gauges: **AUTHENTICATION · NAMESPACE · STATE READ · REPLAY ·

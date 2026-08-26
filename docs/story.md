@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom counter has exact gauges; read it once
+## Current checkpoint: the counter found a broken card before it counted the room
+
+The qualified counter got one reading. It authenticated all 81 Red inputs, considered twelve,
+and read eleven states. One card belonged to a root already spent. Ten cards replayed correctly
+but each offered fewer than three mapped choices. The next card failed while the machine was
+turning its state into an observation, so no complete menu was projected and the 8+4 gate was
+never counted.
+
+Nothing in the game moved. Controller authority, buttons, frames, draws, claims, outcomes,
+predictions, teacher answers, fits, private plans, and leaks all remained zero. V2 is now closed
+forever. The board remains **causal train 0/8, authority 0, transfer 0**.
+
+The lesson is not to make the classroom smaller. The next counter must keep going after a bad card
+and place it in one exact anonymous bin—restore, observe, enumerate, replay, or project—while any
+global authentication problem or nonzero effect still slams the whole machine shut. Only an
+exhaustive, reconciled count can tell us whether the old Red bank contains twelve honest 3+ choice
+lessons or whether we must create purpose-built living-Pokédex captures. That instrument is built
+off-cartridge before another reading.
+
+## Previous checkpoint: the classroom counter has exact gauges; read it once
 
 The replacement counter is published. V2 passed 4,910 tests on main and was qualified entirely
 off-cartridge. It can now say exactly whether source or input authentication, namespace state,

@@ -1,0 +1,123 @@
+{
+  "claim_boundary": {
+    "supported": "The sole V2 action-free authenticated census opened all 81 frozen Red inputs, reached the twelfth considered context, and failed closed at the finite state_observation stage after eleven state reads. Ten earlier contexts authenticated their historical menus but each offered fewer than three mapped options; one earlier context was excluded because its physical root was consumed. Every protected effect remained zero, no coverage evaluation ran, and no private plan or identity/path field was published.",
+    "unsupported": [
+      "authentic_curriculum_coverage_shortfall",
+      "authentic_curriculum_coverage_success",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "model_fit_authorized": false,
+    "outcome_collection_authorized": false,
+    "promotion_authorized": false,
+    "sealed_red_authorized": false,
+    "v1_inventory_retry_allowed": false,
+    "v2_inventory_retry_allowed": false
+  },
+  "execution": {
+    "diagnostic_qualification": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32942245005,
+      "main_commit": "cca0eb8dacc3fb90baf9a67172d3996761830ad8",
+      "source_bundle_sha256": "99857b1a82271a4e8250ea5ed9a65326b67f4eee15b53982d3ef3f64ffe95022"
+    },
+    "inventory_identity": "red-living-dex-authentic-inventory-plan-v2",
+    "private_plan_published": false,
+    "reorientation_publication": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32943145668,
+      "main_commit": "f20cdd6a981be7777dc1526fe8bb6055eacbcdb2",
+      "pull_request": 59,
+      "pull_request_ci_run_id": 32942917046
+    },
+    "retry_allowed": false,
+    "runner_exit_code": 1
+  },
+  "interpretation": {
+    "coverage_gate_weakened": false,
+    "finding": "V2 resolved V1's broad diagnostic ambiguity: this attempt stopped inside one context's state-observation pipeline before scenario projection or coverage. It also established that the first ten successfully replayed eligible contexts each had fewer than three mapped options. Those ten exclusions do not establish the composition of the remaining bank, and coverage was never evaluated.",
+    "smallest_next_problem": "Before another protected read, qualify a ROM-free exhaustive successor that distinguishes state restoration, observation adaptation, binding enumeration, historical replay, and projection; records preregistered context-local failures as finite aggregate exclusions; continues across the authenticated bank without leaking identity or weakening the 8+4 gate; and still fails globally on any protected effect, source/input/runtime/namespace/integrity/publication failure, or counter mismatch."
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "next_gate": {
+    "purpose": "Build and adversarially qualify only the exhaustive path-free successor boundary without opening a ROM or private capture. Reorient after publication before deciding whether one new inventory identity merits a single authenticated census.",
+    "protected_input_allowed_before_successor_publication_and_reorientation": false,
+    "v1_retry_allowed": false,
+    "v2_retry_allowed": false
+  },
+  "product_interpretation": "This is an authentic data-pipeline and curriculum-bank falsifier, not a learned Pokemon player. It prevents another blind run and points toward an exhaustive title-specific Red adapter census while preserving the title-neutral option-value learner and the cross-game living-Pokedex mission.",
+  "raw_path_free_receipt": {
+    "aggregate_counts": {
+      "authenticated_input_contexts": 81,
+      "complete_menus_projected": 0,
+      "contexts_considered": 12,
+      "coverage_evaluations": 0,
+      "emulator_states_read": 11,
+      "historical_replays_authenticated": 10,
+      "materializer_namespaces_authenticated": 11,
+      "private_plan_documents_encoded": 0,
+      "private_plan_encoding_attempts": 0,
+      "private_plan_publication_attempts": 0,
+      "private_plan_records_confirmed": 0,
+      "protected_integrity_attempts": 0,
+      "protected_integrity_checks_passed": 0,
+      "ready_coverage_plans": 0,
+      "scenario_projection_attempts": 0,
+      "zero_effect_checks": 11
+    },
+    "coverage": null,
+    "effects": {
+      "behavior_draws": 0,
+      "controller_actions": 0,
+      "controller_authority_attempts": 0,
+      "emulator_frames_advanced": 0,
+      "model_fits": 0,
+      "model_predictions": 0,
+      "outcomes_observed": 0,
+      "private_identity_fields_published": 0,
+      "private_path_fields": 0,
+      "root_claims": 0,
+      "teacher_queries": 0
+    },
+    "effects_verified_zero": true,
+    "exclusions": {
+      "consumed_physical_root": 1,
+      "empty_party_observation": 0,
+      "existing_materializer_claim": 0,
+      "fewer_than_three_mapped_options": 10,
+      "sealed_or_unsupported_partition": 0
+    },
+    "failure_reason": "state_observation",
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "protected_effect_total": 0,
+    "schema": "pokemon.red.living-dex-authentic-inventory-diagnostic.v2",
+    "status": "failed_closed"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-authentic-inventory-attempt.v2",
+  "status": "failed_closed_at_state_observation_without_retry"
+}

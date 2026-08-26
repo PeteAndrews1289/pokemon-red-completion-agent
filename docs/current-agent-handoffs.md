@@ -6,7 +6,30 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one exact action-free V2 census
+## Current override: Codex owns only the ROM-free exhaustive successor qualification
+
+The sole V2 action-free census ran from main `cca0eb8d` under CI `32942245005/1`, after the
+one-shot reorientation merged through PR 59/main `f20cdd6a` under CI `32943145668/1`. Its
+[terminal](evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json) authenticated
+81 inputs, considered 12 contexts, read 11 states, authenticated 10 historical replays, excluded
+one consumed root and ten fewer-than-three-option contexts, and stopped at `state_observation`.
+All protected effects and counter deltas are zero; no plan exists; V1/V2 cannot retry; coverage
+never ran.
+
+Codex owns one ROM-free implementation: an exhaustive successor with finite context-local
+restore/observe/enumerate/replay/project exclusions, continued iteration after each synthetic
+local failure, exact whole-bank reconciliation, and the unchanged 8+4 gate. Global source, input,
+runtime, namespace, protected-effect, integrity, encoding, and publication failures remain fatal.
+Adversarial tests must reject early abort, downgraded fatal errors, count drift, path/identity
+leakage, and false zeroes. Publish and reorient before any protected input is reopened.
+
+Claude remains the optional read-only statistics/leakage reviewer; Antigravity the optional
+read-only architecture/transfer reviewer. Neither inspects private captures, executes gameplay,
+edits the worktree, or blocks implementation; no verdict is claimed for V2. No agent owns retry,
+outcomes, fitting, sealed Red, Crystal, promotion, or replay. Counters remain **development 15 ·
+verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one exact action-free V2 census
 
 V2 diagnostic source `a73445f6fe0ef22bbf1114ee189dd8640d6479ce` passed PR CI
 `32942033866/1`, merged through PR 58 as main
