@@ -142,9 +142,19 @@ V1 has 24 features plus an intercept for each of nine outcome heads. The minimum
 batch is therefore an underdetermined integration and variance pilot even with ridge regularization;
 it cannot support coefficient interpretation, policy-superiority inference, or promotion.
 
-## Next integration boundary
+## Current integration boundary: prospective decision-rich captures
 
-The Red adapter, selected-arm collector, calibration coverage gate, and durable materializer now
+The exhaustive legacy-bank census failed the unchanged coverage gate with five train and three
+development complete menus. That bank is retired. The active successor is the shared
+[purpose-built capture contract](living-dex-purpose-built-capture-contract.md): pre-register a
+nonadaptive 10-train/5-development setup campaign, tolerate at most two/one censored setups,
+separate deterministic setup provenance from learner supervision, and prove selected-arm kind,
+family, and location coverage rather than offered-menu decoration. No setup run is open until that
+ROM-free contract is published and the project reorients.
+
+## Previous integration boundary: inventory the legacy bank
+
+The Red adapter, selected-arm collector, calibration coverage gate, and durable materializer
 implement items 1–4 below at the ROM-free contract boundary. The next lane must inventory their
 authentic repeatable Red inputs without acting, then publish the exact 8+4 plan before collection:
 

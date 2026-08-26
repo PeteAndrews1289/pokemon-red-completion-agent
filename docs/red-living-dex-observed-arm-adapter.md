@@ -161,7 +161,18 @@ after a zero-action execution failure. Independence is established by the separa
 and the published materializer's durable observation receipt, not by requiring the state value to
 change.
 
-## Next engineering gate
+## Current engineering gate: bind prospective title-neutral capture requirements
+
+The exhaustive authentic inventory established that the legacy Red bank cannot meet the unchanged
+8+4 gate. Its V1/V2/V3 identities are retired. The active ROM-free work is the
+[purpose-built capture contract](living-dex-purpose-built-capture-contract.md): a nonadaptive
+10-train/5-development setup campaign with two/one censor reserve, exact selected-kind coverage
+risk, selected-family/location scopes, durable no-retry setup terminals, and an absolute boundary
+between deterministic setup actions and learner labels. Red must later bind that shared contract
+to private setup predicates, roots, menus, families, locations, and observers; Crystal must bind
+the same shared schema independently.
+
+## Previous engineering gate: inventory the legacy bank
 
 Perform exactly one action-free inventory over authenticated repeatable, nonsealed, unconsumed Red
 captures. Derive their complete 3+ option menus and independent observer bindings, but do not claim,

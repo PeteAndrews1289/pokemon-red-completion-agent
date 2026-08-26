@@ -39,6 +39,8 @@ its independently observed outcome may train. Prove root uniqueness/repeatabilit
 decision provenance, privacy, interruption handling, and exact accounting on adversarial fixtures.
 Publish and reorient before opening a ROM/private capture or running setup, outcomes, fitting,
 sealed Red, Crystal, or replay.
+The shared contract is documented in
+[purpose-built capture contract](docs/living-dex-purpose-built-capture-contract.md).
 
 ## Previous 2026-08-26: exhaustive V3 published; run one whole-bank census
 

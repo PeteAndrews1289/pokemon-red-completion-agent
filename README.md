@@ -25,6 +25,8 @@
 > reorient before any new capture, outcome, fit, sealed Red, Crystal run, promotion, or replay.
 > Boards stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
 > authority 0 · transfer 0**.
+> See the [purpose-built capture contract](docs/living-dex-purpose-built-capture-contract.md) for
+> reserve, selected-arm coverage, setup-provenance, and cross-game adapter boundaries.
 
 > **Previous product focus (August 26, 2026): count the whole authentic classroom once.** Exhaustive
 > V3 shipped through
