@@ -19,7 +19,7 @@
         "evidence": {
           "kind": "qualification",
           "path": "docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json",
-          "sha256": "2d484a3752e7d678ef78e4c12e6cf1b0a5af87b22729b9b85a7f069bf6c5cf03"
+          "sha256": "cc4196022ae4f20e8651af900ae5a0bd1f64920b580a4e18989ab84ac4c9977e"
         },
         "learning_output": "No new measured learner output. The ROM-free contract and eighteen focused tests remove fabricated counterfactual targets, reward-balance requirements, binary-menu assumptions, identity leakage, censor relabeling, and untested propensity-weight and weighted-normalization paths, but they are an engineering unblock. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0.",
         "next_falsifier": "A ROM-free Red adapter fixture must produce a complete genuine menu with at least three distinct available rows, exact normalization provenance, zero private identity fields, hard masks for invariant violations, a replayable full-support behavior distribution, and selected-arm-only settled or censored output. Then one short repeatable authenticated development scenario may test the same boundary without a one-shot claim.",

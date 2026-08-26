@@ -18,7 +18,8 @@
 > pass. See the [contract](docs/living-dex-option-value-contract.md) and
 > [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md). The
 > [ROM-free qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
-> records the 4,748-test repository gate and both independent reviews.
+> records the 4,748-test repository gate, both independent reviews, main `070f40b1`, PR 50, and
+> green GitHub CI `32925402183/1`.
 >
 > Active `repeatable-red-living-dex-option-value-calibration-v1` next builds the Red adapter and
 > bounded repeatable collector, then targets eight settled train outcomes across four option kinds
