@@ -1,6 +1,7 @@
 # Red same-root living-Pokédex setup recipes V1
 
-Status: locally qualified successor contract; publication pending. This design is subordinate to
+Status: adversarial trust repair qualified at source `539454f3` under PR CI `33009960617/1`;
+authentic provider inventory is next. This design is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
@@ -22,6 +23,13 @@ catalog path is retired; its code remains historical evidence, not the active so
 The new contract is infrastructure, not training data. Qualification used ROM-free fakes and
 created **zero** authentic Red captures, behavior draws, learner labels, outcomes, predictions,
 fits, authority promotions, or transfer results.
+
+The V2 repair removes the earlier self-attestation boundary. Exact state restore, concrete route
+execution, provider construction, family derivation, protected-effect accounting, proof joins,
+physical-root consumption, and crash recovery now come from separately bound authorities rather
+than one opaque runtime. The
+[qualification evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+records **147 focused and 5,174 repository tests**.
 
 ## Why the same-root fork matters
 
@@ -69,25 +77,50 @@ sequence and cannot be labeled as a teacher route.
 
 ## Runtime validation
 
-The durable campaign seals the whole recipe plan, then handles each slot as follows:
+The durable campaign seals the whole recipe plan and execution identity, then handles each slot as
+follows:
 
-1. Create an exclusive episode and persist its claim before constructing a runtime.
-2. Read and independently hash the exact source-root state and envelope bytes.
-3. Construct the decision origin once and persist neither a path nor a public identity.
-4. For each candidate, restore the same origin bytes with zero actions and require the entire fresh
-   observation digest—not merely the same map coordinate—to match the captured origin.
-5. Execute only the candidate's transport route, if any, under the setup budget.
-6. Freshly observe the terminal and request the exact profile-bound provider offer with zero
-   actions.
-7. Require an available executable binding, exact provider/profile provenance, and the frozen
-   transformation-family digest. Do not invoke its executor or verifier.
-8. Restore the origin once more and require exact semantic equality.
-9. Persist the exact repeatable origin state/envelope, option bindings, fork proofs, accounting,
-   and immutable terminal privately; publish only aggregate counts and zero-effect claims.
+1. Require the exact **15 recipes / 45 offers / 33 families / 10 physical origins** capacity and
+   seal the Red title, revision, ROM, clean source, state, observation, route, provider, and runtime
+   identities before input.
+2. Read and independently hash the exact source-root state and envelope bytes. Derive the physical
+   root from those bytes and consume it in the current user's owner-private account registry before
+   opening the local episode.
+3. Construct the decision origin once under a concrete executor-owned effect meter and retain its
+   exact state bytes, canonical envelope, observation, route report, and construction proof.
+4. For each candidate, create a fresh isolated runtime, load the same origin bytes, save them back,
+   and require both byte equality and the entire fresh observation—not merely one coordinate—to
+   match.
+5. Execute the exact concrete semantic transport route, if any, through its sealed planner and
+   emulator; independently verify the authenticated route report and require measurable emulator
+   state change.
+6. Freshly observe the terminal and have the real sealed provider registry construct the exact
+   profile-bound offer with zero provider executions.
+7. Derive and verify the typed mechanics-based semantic family, exact provider/profile provenance,
+   complete route/fork joins, and all nested schema identities.
+8. Use another isolated runtime for the final origin restore and require exact byte and semantic
+   equality.
+9. Persist the complete construction/fork/final proof tree, repeatable private origin bytes,
+   accounting, and immutable terminal; publish only aggregates and a finite failure vocabulary.
 
-Complete, failed, and interrupted claims are permanent. Restart may recover a terminal or continue
-only a never-claimed slot. A power loss after a claim but before durable accounting becomes an
-interrupted terminal with unknown setup totals; it never becomes permission to retry.
+Complete, failed, and interrupted physical-root claims are permanent across stores and relabeled
+catalog identities. Restart may recover a terminal or continue only a never-claimed slot. Success,
+failure, and pre-local recovery transitions have failpoints; even a second interruption during
+recovery becomes a closed `process_interrupted` terminal and never permission to retry.
+
+## V2 adversarial trust repair
+
+The repair specifically rejects runtimes that ignore supplied state bytes, fabricate arrival,
+invent a provider or family, expose a forged object with the right shape, spend a protected
+authority, mutate nested identities, swap fork proofs, relabel one physical root in a second store,
+or tamper with any construction/fork/final proof. Public reasons are an enum rather than caller
+text. The concrete meter counts controller actions, frames, behavior draws, learner labels and
+outcomes, model predictions and fits, provider executions, teacher queries, and root claims.
+
+Qualification passed **63 collected recipe cases, 147 focused boundary/protocol tests, 5,174
+repository tests, static typing across 279 source files, generated-registry reproducibility,
+documentation, and public-artifact privacy checks**. GitHub reproduced the result in CI
+`33009960617/1`. No authentic input or learning output was consumed.
 
 ## What qualification falsified
 
@@ -122,7 +155,7 @@ living-Pokédex or cross-version authority claim may.
 
 ## Claim boundary
 
-Supported after publication:
+Supported by the qualified repair:
 
 - same-root recipe and fork semantics;
 - exact source-root and restored-origin authentication;

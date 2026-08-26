@@ -12,7 +12,35 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: adversarial audit blocked publication; repair trust before widening providers
+## 2026-08-26: trust boundary repaired; inventory genuine providers and freeze the real plan
+
+The adversarial repair is qualified at source `539454f351e3709d2ad912fbb8e5a3d79fc202e0`
+through [PR 78](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/78) and green
+PR CI `33009960617/1`. The
+[qualification](docs/evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+binds **147 focused · 5,174 repository tests · 279 typed source files** and zero gameplay or
+learner effects.
+
+The same-root boundary no longer lets one opaque runtime certify itself. Plan, claim, capture, and
+terminal share a sealed Red title/revision/ROM/source/state/route/provider/runtime identity. A
+concrete executor-owned meter covers every protected authority. Every arm uses a fresh runtime,
+exact load/save readback, an actually executed and independently verified semantic route, a fresh
+destination observation, and an offer built by the real provider registry without invoking its
+executor. Typed families derive from mechanics rather than slot/root/profile identity. Complete
+proof joins, closed failure codes, byte-derived account-wide root claims, and success/failure/
+recovery crash matrices now fail closed.
+
+Do not mistake this for training. No authentic fifteen-recipe plan or same-root capture exists;
+causal train is still zero. The active session is action-free provider-family inventory. Reuse the
+existing boxed evolution and party-development engines and add only the smallest reusable target-
+parameterized seams needed to construct **15 complete recipes · 45 real offers · at least 33
+semantic families · 10 physical origins**. Fail on synthetic identities, cross-joined captures,
+teacher routes, provider execution, or incomplete capacity. Freeze one complete authentic plan,
+then stop and reorient before setup execution. Trade, versions, events, cross-save retention, and
+living-storage consolidation remain later mission requirements. Counters remain **development 15
+· verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: adversarial audit blocked publication; repair trust before widening providers
 
 PR 78 head `0fb3f0f4` is green under CI `32990990854/1`, but do not merge or execute it as reusable
 causal infrastructure yet. During the GitHub Actions outage, Claude CLI was logged out and both

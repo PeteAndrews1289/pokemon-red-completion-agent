@@ -6,7 +6,30 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the same-root causal trust-boundary repair
+## Current override: Codex owns authentic provider inventory and plan freeze
+
+The causal boundary repair is qualified at source `539454f3` through PR 78 under green CI
+`33009960617/1`. Its
+[evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+records 147 focused and 5,174 repository tests. Exact restore readback, sealed execution identity,
+authenticated route reports, registry-built offers, comprehensive effect metering, typed semantic
+families, complete proof joins, byte-derived account-wide no-retry, closed public failure codes,
+and restart failpoints now reject the hostile ROM-free cases. No game or model ran.
+
+Codex now owns one bounded action-free provider-family inventory and authentic plan-freeze session.
+Reuse existing evolution and party-development mechanics; add only reusable target parameters that
+represent real transformations. Require all **15 recipes · 45 real offers · at least 33 semantic
+families · 10 physical origins** before any root claim. Stop on a synthetic family, cross-joined
+capture, teacher route, provider execution, protected effect, title-specific monolith, or incomplete
+capacity. Reorient before invoking the setup campaign.
+
+Claude remains the optional read-only causal/statistical reviewer and Antigravity the optional
+read-only architecture/transfer reviewer at the next milestone; neither should delay ordinary
+implementation. Codex adjudicates. Outcomes, fitting, sealed Red, Crystal, promotion, and replay
+remain closed. Trade remains a later full-mission blocker. Counters remain **development 15 ·
+verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the same-root causal trust-boundary repair
 
 PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but independent adversarial review returned
 **NO-GO for publication or private execution**. The schema and claim-before-input work are worth

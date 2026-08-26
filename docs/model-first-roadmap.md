@@ -8,7 +8,41 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: adversarial review blocked publication; repair the causal trust boundary
+## Current checkpoint: trust boundary repaired; build the authentic provider curriculum
+
+The repair is qualified at source `539454f3` through PR 78 under green CI `33009960617/1`. Its
+[evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+records **147 focused · 5,174 repository tests · 279 typed source files**. Qualification was
+ROM-free and created no capture, action, frame, provider execution, learner label, outcome,
+prediction, teacher query, fit, root claim, authority, or transfer result.
+
+The boundary now seals complete Red execution identity; uses one concrete executor-owned meter for
+all protected effects; restores and reads back exact bytes on a fresh runtime per arm; executes and
+independently verifies a concrete semantic route; constructs the fresh action-free offer through
+the real provider registry; derives typed mechanics-based family identities; joins the entire
+construction/fork/final proof tree; accepts only closed public failures; consumes the byte-derived
+physical root account-wide; and survives a second interruption during recovery without retry.
+
+The active blocker is now genuine curriculum breadth, not trust infrastructure. The next gate must:
+
+1. inventory every prospective real Red provider family without controller input or provider
+   execution;
+2. reuse the boxed evolution and party-development engines while adding the smallest reusable
+   target-specific parameters required by actual transformations;
+3. construct all **15 recipes · 45 real offers · at least 33 distinct semantic families · 10
+   physical origins** without slot/root/profile/route-derived identity;
+4. freeze exactly one complete authentic action-free plan; and
+5. reorient before private setup execution.
+
+Stop on synthetic families, cross-joined captures, a fixed teacher route, a species-specific
+monolith, any protected effect during inventory, or incomplete capacity. Only a complete plan may
+open the separately bounded setup-capture campaign; complete captures then open randomized
+selected-arm outcomes and the next train-only fit. Sealed Red, Crystal, promotion, and replay stay
+closed. Trade, versions, events, cross-save retention, and living-storage consolidation remain
+later mission gates. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: adversarial review blocked publication; repair the causal trust boundary
 
 PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but three independent read-only audits converged
 on **NO-GO for publication or private execution**. Synthetic tests proved useful schemas and

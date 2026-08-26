@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: eight seals replace one self-signed witness
+
+Reopen the **ONE OPAQUE RUNTIME** shot, then split it into eight locked stations: **RED EXECUTION
+IDENTITY · EXACT BYTE RESTORE · ROUTE EXECUTE/VERIFY · PROVIDER REGISTRY · FULL EFFECT METER ·
+SEMANTIC FAMILY · PROOF TREE · ACCOUNT-WIDE ROOT CLAIM**. Fork one origin three times; make each
+fresh emulator save back the identical bytes before it moves. Require the route to change emulator
+state, build the destination offer without pressing **EXECUTE**, then rejoin every proof.
+
+Attack the stations: ignored state bytes, fabricated arrival, forged provider, relabeled family,
+swapped fork, digest-shaped failure, the same physical state under a new catalog name, and a second
+power loss during recovery. Flash **REJECTED · NO RETRY** across all eight. Then show **147 FOCUSED
+· 5,174 REPOSITORY · 279 TYPED SOURCE FILES · CI 33009960617/1 GREEN**.
+
+Keep **CAUSAL TRAIN 0/8** bright red. The spoken line is: **“We repaired the classroom, not the
+student. Now every lesson must come from one real state and one honest mechanic.”** End on
+**INVENTORY REAL PROVIDERS → TARGET-SPECIFIC EVOLUTION/DEVELOPMENT → FREEZE 15 RECIPES / 45 OFFERS
+/ ≥33 FAMILIES / 10 ORIGINS → SAME-ROOT CAPTURES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT**, with
+**CRYSTAL, TRADE, VERSIONS, EVENTS, AND LIVING STORAGE STILL AHEAD** below.
+
 ## August 26 scene: the witness signs its own certificate
 
 Open on a green CI badge: **5,137 TESTS PASSED**. Put one character behind four desks labelled

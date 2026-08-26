@@ -1,0 +1,120 @@
+{
+  "capacity_contract": {
+    "minimum_distinct_semantic_families": 33,
+    "physical_origins": 10,
+    "provider_offers": 45,
+    "recipe_slots": 15
+  },
+  "claim_boundary": {
+    "authentic_red_recipe_plan_exists": false,
+    "crystal_execution_allowed": false,
+    "model_fitting_allowed": false,
+    "private_setup_execution_allowed": false,
+    "provider_inventory_allowed": true,
+    "sealed_red_evaluation_allowed": false,
+    "training_outcome_collection_allowed": false
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "implementation": {
+    "campaign_sha256": "b33375d207511e23256aad1dd77ae0b11ab31c4a3e2350fca3bb1a016879716e",
+    "recipe_sha256": "b4befaf1228b3d1a3d2577230d0aa75e636002cced936b3153665e8aad93f579",
+    "tests_sha256": "580a5c6544f105bfcb5d3bc6f218a75b95573fc02955d102398d94496171bd03",
+    "trust_authorities_sha256": "512deb61bb9d3adc6d2af277e39e1e21984c5ca0f238c73da58e465af3656379"
+  },
+  "next_gate": {
+    "goal": "Inventory genuine Red offer families, add the smallest reusable target-specific evolution and party-development providers, and freeze one complete fifteen-recipe forty-five-offer plan before any root claim.",
+    "stop_conditions": [
+      "synthetic_or_identity_derived_family",
+      "cross_joined_capture",
+      "fixed_teacher_route",
+      "provider_execution_during_inventory",
+      "fewer_than_fifteen_complete_recipes",
+      "fewer_than_forty_five_real_offers",
+      "fewer_than_thirty_three_distinct_semantic_families",
+      "fewer_than_ten_physical_origins"
+    ],
+    "training_readiness_after_gate": "A complete authentic plan opens a separately authorized setup-capture campaign. Only completed same-root captures then open randomized selected-arm outcomes and the next train-only model fit."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "branch": "feature/red-setup-recipe-validation",
+    "commit": "539454f351e3709d2ad912fbb8e5a3d79fc202e0",
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 33009960617,
+    "pull_request": 78
+  },
+  "recorded_on": "2026-08-26",
+  "repair_result": {
+    "account_wide_no_retry": "A current-user owner-private registry claims the byte-derived physical root under an exclusive lease; relabeling a catalog identity or using another local store cannot reopen it.",
+    "authenticated_route": "Each concrete semantic route is identity-bound, executed by its sealed planner and emulator, independently verified, retained as an authenticated report, and required to produce a measurable emulator-state change.",
+    "closed_failure_surface": "Only a finite public failure vocabulary is accepted; arbitrary private values and digest-shaped reasons cannot enter receipts.",
+    "complete_proof_joins": "Construction, origin, every candidate fork, terminal observation, provider offer, semantic family, route report, and final restore are cryptographically and structurally joined.",
+    "execution_identity": "The Red title, revision, ROM identities, clean published source, state schema, adapter, observation, route, provider, and runtime digests are sealed through plan, claim, capture, and terminal.",
+    "independent_effect_meter": "One exact concrete executor-owned meter counts controller actions, emulator frames, behavior draws, learner labels and outcomes, model predictions and fits, provider executions, teacher queries, and root claims.",
+    "restore_readback": "Every arm receives a fresh isolated runtime, loads the exact saved bytes, saves them back, and must reproduce both the exact bytes and complete origin observation before route execution.",
+    "sealed_provider_construction": "A real registry constructs the profile-bound provider offer from a fresh destination observation; setup validation never invokes its executor or verifier.",
+    "typed_semantic_families": "Family descriptors derive from the underlying acquisition, evolution, development, storage, resupply, story, or exploration mechanics and reject slot, root, route, profile, and candidate-order identity.",
+    "restart_safety": "Success, ordinary failure, and pre-local recovery transitions are covered by failpoints; a second interruption during recovery remains terminal and cannot grant a retry."
+  },
+  "schema": "pokemon.red.living-dex-same-root-trust-boundary-repair.qualification.v2",
+  "status": "qualified_for_authentic_provider_inventory",
+  "verification": {
+    "documentation_links": "passed",
+    "focused_tests": {
+      "passed": 147,
+      "recipe_cases_collected": 63
+    },
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5174,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "generated_registries": {
+      "battle_registry_sha256": "ddd519b3333e0f88901e5babe3a270c18f990c0368aaf1bca155e0a7de9ded39",
+      "goal_manager_registry_sha256": "49be90fdebd6fba8688b2c88d38f96612868741612ad0d870490fdf3167bbc83",
+      "source_bundle_sha256": "79da1865797db2c30eaaf816c06bf46c60addfc7e1098491f02e8834dbec85af",
+      "strategic_navigation_registry_sha256": "6f7ed02e260882f5d88ca390ae9d045cb3a4d5619f4b804999776ed36382c36f"
+    },
+    "mypy": "279 source files passed",
+    "public_artifact_check": "passed",
+    "ruff": "passed"
+  },
+  "what_remains_unproved": [
+    "fifteen_authentic_red_recipes",
+    "forty_five_real_provider_offers",
+    "thirty_three_genuine_semantic_families",
+    "ten_usable_physical_origin_scopes",
+    "authentic_red_same_root_setup_captures",
+    "authentic_red_causal_training_outcomes",
+    "a_new_train_only_model_fit",
+    "model_controlled_red_gameplay",
+    "powered_red_generalization",
+    "trade_version_event_cross_save_and_living_storage_completion",
+    "crystal_execution_or_transfer"
+  ]
+}

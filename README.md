@@ -5,19 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the concrete Red source is published; freeze one
-> authentic plan without moving the game.** The adapter shipped through
-> [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75) from source
-> `8b9c9f73`, merged as main `0daf5a5d`, and passed exact-main CI `32981526970/1`. Its
-> [qualification](docs/evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
-> records **24 direct · 177 combined related-regression · 5,111 full-suite tests**.
+> **Current product focus (August 26, 2026): the same-root trust boundary is repaired; build the
+> authentic provider curriculum.** The repair is qualified at source `539454f3` through
+> [PR 78](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/78) under green CI
+> `33009960617/1`. Its
+> [qualification](docs/evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+> records **147 focused · 5,174 full-suite tests · 279 typed source files**.
 >
-> Typed Red observations, allowlisted provider offers, and complete route plans now derive the
-> exact **15 slots · 45 semantic arms · 42 routed options** without invoking a skill. The adapter
-> rereads and authenticates the owner-private catalog on all seventeen source interactions and
-> publishes only aggregate evidence. Qualification used synthetic ROM-free witnesses; no authentic
-> private plan exists yet. Next run one separately recorded action-free 10+5 freeze and stop before
-> invoking the setup runner. Trade remains a later mission requirement. Counters remain
+> Exact state readback, independently verified concrete routes, registry-built offers, complete
+> effect metering and proof joins, mechanics-based families, account-wide physical-root no-retry,
+> and crash recovery now form a trustworthy causal lesson boundary. Qualification was ROM-free;
+> no authentic plan or training example exists yet. Next inventory genuine providers, add only
+> reusable target-specific evolution/development seams, and freeze one complete **15 recipes · 45
+> real offers · at least 33 semantic families · 10 physical origins** plan before setup execution.
+> Trade, versions, events, cross-save retention, and living storage remain later mission
+> requirements. Counters remain
 > **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
 > transfer 0**.
 

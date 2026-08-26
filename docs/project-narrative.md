@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the classroom stopped signing its own certificates
+
+The repair separated every fact that had previously come from one opaque witness. A sealed
+execution identity now follows the exact Red cartridge revision, source, state schema, adapter,
+route, provider registry, and runtime from plan through terminal. Every candidate receives a fresh
+runtime, loads the same saved origin, saves it back byte-for-byte, executes and independently
+verifies its concrete semantic route, and asks the real provider registry for a fresh offer without
+running the provider.
+
+The accounting boundary grew with it. One concrete executor-owned meter counts every protected
+effect, semantic families derive from the actual mechanic instead of a caller's label, the full
+construction/fork/final proof tree is joined, public failures use a closed vocabulary, and the
+byte-derived physical root is consumed account-wide. Power can fail during success, ordinary
+failure, or recovery—and even fail again during recovery—without turning interruption into retry.
+
+The repaired source passed **147 focused and 5,174 repository tests**, static typing over 279
+source files, reproducibility checks, privacy checks, and GitHub CI `33009960617/1`. The result is
+important but deliberately not counted as learning: no ROM moved, no provider executed, no root was
+claimed, and no outcome or model fit appeared.
+
+That leaves the project at a cleaner threshold. The trusted classroom exists, but its real lessons
+do not. The next work inventories genuine Red provider families, makes evolution and development
+target-specific through reusable mechanics, and freezes fifteen complete same-root recipes with
+forty-five honest offers, at least thirty-three semantic families, and ten physical origins. Only
+then do randomized outcomes—and actual new model training—begin.
+
 ## August 26: green tests met an untrusted witness
 
 The same-root branch passed its test suite, but the adversarial audit asked a different question:
