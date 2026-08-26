@@ -16,7 +16,8 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
+from enum import StrEnum
 from itertools import combinations
 from math import ceil
 
@@ -62,6 +63,9 @@ from pokemon_red_completion.red_living_dex_option_materializer import (
 RED_LIVING_DEX_ACTION_FREE_INVENTORY_SCHEMA = (
     "pokemon.red.living-dex-action-free-authentic-inventory.v1"
 )
+RED_LIVING_DEX_COVERAGE_DIAGNOSTIC_SCHEMA = (
+    "pokemon.red.living-dex-action-free-coverage-diagnostic.v2"
+)
 
 _GOAL_TO_OPTION_KIND: Mapping[GoalKind, LivingDexOptionKind] = {
     GoalKind.ADVANCE_STORY: LivingDexOptionKind.UNLOCK_ACCESS,
@@ -100,6 +104,119 @@ _SATISFIED_FAMILY_TOKEN = "*"
 
 class RedLivingDexActionFreeInventoryError(ValueError):
     """Authenticated Red captures cannot support the frozen calibration plan."""
+
+
+class RedLivingDexCoverageStatus(StrEnum):
+    """Finite path-free outcomes for the exact authentic 8+4 coverage gate."""
+
+    READY = "ready"
+    INSUFFICIENT_TRAIN_SCENARIOS = "insufficient_train_scenarios"
+    INSUFFICIENT_DEVELOPMENT_SCENARIOS = "insufficient_development_scenarios"
+    INSUFFICIENT_DEVELOPMENT_FAMILIES = "insufficient_development_families"
+    INSUFFICIENT_DEVELOPMENT_LOCATIONS = "insufficient_development_locations"
+    DEVELOPMENT_JOINT_DIVERSITY_UNSATISFIED = (
+        "development_joint_diversity_unsatisfied"
+    )
+    INSUFFICIENT_DISJOINT_TRAIN_SCENARIOS = (
+        "insufficient_disjoint_train_scenarios"
+    )
+    INSUFFICIENT_TRAIN_OPTION_KINDS = "insufficient_train_option_kinds"
+    INSUFFICIENT_TRAIN_FAMILIES = "insufficient_train_families"
+    COMBINED_TRAIN_GATE_UNSATISFIED = "combined_train_gate_unsatisfied"
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexCoverageDiagnostic:
+    """Aggregate-only explanation of one exact 8+4 freeze attempt."""
+
+    status: RedLivingDexCoverageStatus
+    scenario_count: int
+    train_scenario_count: int
+    development_scenario_count: int
+    train_offered_option_kind_count: int
+    development_offered_option_kind_count: int
+    train_family_count: int
+    development_family_count: int
+    train_location_count: int
+    development_location_count: int
+    candidate_development_subset_count: int
+    qualifying_development_subset_count: int
+    maximum_disjoint_train_scenario_count: int
+    maximum_disjoint_train_option_kind_count: int
+    maximum_disjoint_train_family_count: int
+    minimum_train_development_family_overlap: int
+    minimum_train_development_location_overlap: int
+    exact_plan_scenario_count: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.status, RedLivingDexCoverageStatus):
+            raise RedLivingDexActionFreeInventoryError(
+                "coverage diagnostic status differs"
+            )
+        counts = tuple(
+            getattr(self, item.name) for item in fields(self) if item.name != "status"
+        )
+        if any(type(value) is not int or value < 0 for value in counts):  # noqa: E721
+            raise RedLivingDexActionFreeInventoryError(
+                "coverage diagnostic counters differ"
+            )
+        if self.scenario_count != (
+            self.train_scenario_count + self.development_scenario_count
+        ):
+            raise RedLivingDexActionFreeInventoryError(
+                "coverage diagnostic partition total differs"
+            )
+        if (self.status is RedLivingDexCoverageStatus.READY) != (
+            self.exact_plan_scenario_count
+            == MINIMUM_SETTLED_TRAIN_EXAMPLES
+            + MINIMUM_SETTLED_DEVELOPMENT_EXAMPLES
+        ):
+            raise RedLivingDexActionFreeInventoryError(
+                "coverage diagnostic readiness differs"
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "candidate_development_subset_count": (
+                self.candidate_development_subset_count
+            ),
+            "development_family_count": self.development_family_count,
+            "development_location_count": self.development_location_count,
+            "development_offered_option_kind_count": (
+                self.development_offered_option_kind_count
+            ),
+            "development_scenario_count": self.development_scenario_count,
+            "exact_plan_scenario_count": self.exact_plan_scenario_count,
+            "identity_fields_public": 0,
+            "maximum_disjoint_train_family_count": (
+                self.maximum_disjoint_train_family_count
+            ),
+            "maximum_disjoint_train_option_kind_count": (
+                self.maximum_disjoint_train_option_kind_count
+            ),
+            "maximum_disjoint_train_scenario_count": (
+                self.maximum_disjoint_train_scenario_count
+            ),
+            "minimum_train_development_family_overlap": (
+                self.minimum_train_development_family_overlap
+            ),
+            "minimum_train_development_location_overlap": (
+                self.minimum_train_development_location_overlap
+            ),
+            "private_path_fields": 0,
+            "qualifying_development_subset_count": (
+                self.qualifying_development_subset_count
+            ),
+            "scenario_count": self.scenario_count,
+            "schema": RED_LIVING_DEX_COVERAGE_DIAGNOSTIC_SCHEMA,
+            "status": self.status.value,
+            "train_family_count": self.train_family_count,
+            "train_location_count": self.train_location_count,
+            "train_offered_option_kind_count": (
+                self.train_offered_option_kind_count
+            ),
+            "train_scenario_count": self.train_scenario_count,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -346,6 +463,141 @@ def freeze_red_living_dex_action_free_inventory(
     raise RedLivingDexActionFreeInventoryError(
         "action-free inventory cannot satisfy the 8+4 kind, family, and location gate"
     )
+
+
+def diagnose_red_living_dex_action_free_coverage(
+    scenarios: Sequence[RedLivingDexMaterializationScenario],
+) -> tuple[RedLivingDexCoverageDiagnostic, RedLivingDexMaterializationPlan | None]:
+    """Explain the exact 8+4 gate using aggregate counts and no private identity."""
+
+    if not isinstance(scenarios, Sequence):
+        raise TypeError("coverage diagnostic scenarios must be a sequence")
+    frozen = tuple(scenarios)
+    if frozen:
+        RedLivingDexActionFreeInventory(frozen)
+    train = tuple(
+        sorted(
+            (item for item in frozen if item.partition == "train"),
+            key=_scenario_key,
+        )
+    )
+    development = tuple(
+        sorted(
+            (item for item in frozen if item.partition == "development"),
+            key=_scenario_key,
+        )
+    )
+    train_families = _family_hashes(train)
+    development_families = _family_hashes(development)
+    train_locations = _location_hashes(train)
+    development_locations = _location_hashes(development)
+    candidate_subset_count = 0
+    qualifying_subset_count = 0
+    maximum_disjoint_count = 0
+    maximum_disjoint_kinds = 0
+    maximum_disjoint_families = 0
+    maximum_kinds_with_enough_train = 0
+    maximum_families_with_enough_kinds = 0
+    minimum_family_overlap: int | None = None
+    minimum_location_overlap: int | None = None
+    selected_plan: RedLivingDexMaterializationPlan | None = None
+
+    for development_selection in combinations(
+        development,
+        MINIMUM_SETTLED_DEVELOPMENT_EXAMPLES,
+    ):
+        candidate_subset_count += 1
+        selected_families = _family_hashes(development_selection)
+        selected_locations = _location_hashes(development_selection)
+        family_overlap = len(train_families & selected_families)
+        location_overlap = len(train_locations & selected_locations)
+        minimum_family_overlap = (
+            family_overlap
+            if minimum_family_overlap is None
+            else min(minimum_family_overlap, family_overlap)
+        )
+        minimum_location_overlap = (
+            location_overlap
+            if minimum_location_overlap is None
+            else min(minimum_location_overlap, location_overlap)
+        )
+        if len(selected_families) < 4 or len(selected_locations) < 4:
+            continue
+        qualifying_subset_count += 1
+        eligible_train = tuple(
+            item
+            for item in train
+            if not _family_hashes((item,)) & selected_families
+            and not _location_hashes((item,)) & selected_locations
+        )
+        eligible_kinds = len(_option_kinds(eligible_train))
+        eligible_families = len(_family_hashes(eligible_train))
+        maximum_disjoint_count = max(maximum_disjoint_count, len(eligible_train))
+        maximum_disjoint_kinds = max(maximum_disjoint_kinds, eligible_kinds)
+        maximum_disjoint_families = max(
+            maximum_disjoint_families,
+            eligible_families,
+        )
+        if len(eligible_train) >= MINIMUM_SETTLED_TRAIN_EXAMPLES:
+            maximum_kinds_with_enough_train = max(
+                maximum_kinds_with_enough_train,
+                eligible_kinds,
+            )
+            if eligible_kinds >= 4:
+                maximum_families_with_enough_kinds = max(
+                    maximum_families_with_enough_kinds,
+                    eligible_families,
+                )
+        train_selection = _select_train(eligible_train)
+        if selected_plan is None and train_selection is not None:
+            selected_plan = build_red_living_dex_materialization_plan(
+                (*train_selection, *development_selection)
+            )
+
+    if len(train) < MINIMUM_SETTLED_TRAIN_EXAMPLES:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_SCENARIOS
+    elif len(development) < MINIMUM_SETTLED_DEVELOPMENT_EXAMPLES:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_SCENARIOS
+    elif len(development_families) < 4:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_FAMILIES
+    elif len(development_locations) < 4:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_LOCATIONS
+    elif qualifying_subset_count == 0:
+        status = RedLivingDexCoverageStatus.DEVELOPMENT_JOINT_DIVERSITY_UNSATISFIED
+    elif selected_plan is not None:
+        status = RedLivingDexCoverageStatus.READY
+    elif maximum_disjoint_count < MINIMUM_SETTLED_TRAIN_EXAMPLES:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_DISJOINT_TRAIN_SCENARIOS
+    elif maximum_kinds_with_enough_train < 4:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_OPTION_KINDS
+    elif maximum_families_with_enough_kinds < 3:
+        status = RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_FAMILIES
+    else:
+        status = RedLivingDexCoverageStatus.COMBINED_TRAIN_GATE_UNSATISFIED
+
+    diagnostic = RedLivingDexCoverageDiagnostic(
+        status=status,
+        scenario_count=len(frozen),
+        train_scenario_count=len(train),
+        development_scenario_count=len(development),
+        train_offered_option_kind_count=len(_option_kinds(train)),
+        development_offered_option_kind_count=len(_option_kinds(development)),
+        train_family_count=len(train_families),
+        development_family_count=len(development_families),
+        train_location_count=len(train_locations),
+        development_location_count=len(development_locations),
+        candidate_development_subset_count=candidate_subset_count,
+        qualifying_development_subset_count=qualifying_subset_count,
+        maximum_disjoint_train_scenario_count=maximum_disjoint_count,
+        maximum_disjoint_train_option_kind_count=maximum_disjoint_kinds,
+        maximum_disjoint_train_family_count=maximum_disjoint_families,
+        minimum_train_development_family_overlap=minimum_family_overlap or 0,
+        minimum_train_development_location_overlap=minimum_location_overlap or 0,
+        exact_plan_scenario_count=(
+            len(selected_plan.scenarios) if selected_plan is not None else 0
+        ),
+    )
+    return diagnostic, selected_plan
 
 
 def red_living_dex_goal_family_ref(
@@ -690,10 +942,14 @@ def _integer_counter(counts: Counter[int]) -> dict[str, int]:
 
 __all__ = [
     "RED_LIVING_DEX_ACTION_FREE_INVENTORY_SCHEMA",
+    "RED_LIVING_DEX_COVERAGE_DIAGNOSTIC_SCHEMA",
     "RedLivingDexActionFreeInventory",
     "RedLivingDexActionFreeInventoryError",
+    "RedLivingDexCoverageDiagnostic",
+    "RedLivingDexCoverageStatus",
     "RedLivingDexInventoryObserverBinding",
     "build_verified_red_living_dex_goal_scenario",
+    "diagnose_red_living_dex_action_free_coverage",
     "freeze_red_living_dex_action_free_inventory",
     "red_living_dex_goal_family_ref",
 ]

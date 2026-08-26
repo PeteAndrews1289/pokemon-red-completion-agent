@@ -10,6 +10,7 @@ import pytest
 from test_red_living_dex_option_adapter import _budgets, _facts, _snapshot
 from test_red_living_dex_option_materializer import _adapted, _make_store
 
+import pokemon_red_completion.red_living_dex_option_inventory as inventory_module
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalKind,
@@ -36,8 +37,10 @@ from pokemon_red_completion.red_goal_context_profile import (
 from pokemon_red_completion.red_living_dex_option_inventory import (
     RedLivingDexActionFreeInventory,
     RedLivingDexActionFreeInventoryError,
+    RedLivingDexCoverageStatus,
     RedLivingDexInventoryObserverBinding,
     build_verified_red_living_dex_goal_scenario,
+    diagnose_red_living_dex_action_free_coverage,
     freeze_red_living_dex_action_free_inventory,
     red_living_dex_goal_family_ref,
 )
@@ -326,6 +329,149 @@ def test_action_free_inventory_freezes_same_exact_plan_in_any_input_order() -> N
         for scenario in scenarios
         for option in scenario.adapted.ordered_options
     )
+
+
+def test_coverage_diagnostic_reports_ready_plan_without_identity() -> None:
+    diagnostic, plan = diagnose_red_living_dex_action_free_coverage(
+        _inventory_scenarios()
+    )
+
+    assert diagnostic.status is RedLivingDexCoverageStatus.READY
+    assert plan is not None
+    assert len(plan.scenarios) == 12
+    public = diagnostic.public_dict()
+    assert public["scenario_count"] == 12
+    assert public["train_scenario_count"] == 8
+    assert public["development_scenario_count"] == 4
+    assert public["train_offered_option_kind_count"] == 4
+    assert public["train_family_count"] == 3
+    assert public["qualifying_development_subset_count"] == 1
+    assert public["exact_plan_scenario_count"] == 12
+    assert public["identity_fields_public"] == 0
+    assert public["private_path_fields"] == 0
+    encoded = json.dumps(public, sort_keys=True)
+    assert "private.family" not in encoded
+    assert "private.location" not in encoded
+
+
+@pytest.mark.parametrize(
+    ("mutation", "expected"),
+    (
+        ("short_train", RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_SCENARIOS),
+        (
+            "short_development",
+            RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_SCENARIOS,
+        ),
+        (
+            "development_families",
+            RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_FAMILIES,
+        ),
+        (
+            "development_locations",
+            RedLivingDexCoverageStatus.INSUFFICIENT_DEVELOPMENT_LOCATIONS,
+        ),
+        (
+            "development_joint",
+            RedLivingDexCoverageStatus.DEVELOPMENT_JOINT_DIVERSITY_UNSATISFIED,
+        ),
+        (
+            "disjoint_train",
+            RedLivingDexCoverageStatus.INSUFFICIENT_DISJOINT_TRAIN_SCENARIOS,
+        ),
+        (
+            "train_kinds",
+            RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_OPTION_KINDS,
+        ),
+        (
+            "train_families",
+            RedLivingDexCoverageStatus.INSUFFICIENT_TRAIN_FAMILIES,
+        ),
+    ),
+)
+def test_coverage_diagnostic_distinguishes_each_exact_gate(
+    mutation: str,
+    expected: RedLivingDexCoverageStatus,
+) -> None:
+    scenarios = list(_inventory_scenarios())
+    if mutation == "short_train":
+        scenarios.pop(0)
+    elif mutation == "short_development":
+        scenarios.pop()
+    elif mutation == "development_families":
+        for scenario in scenarios:
+            if scenario.partition == "development":
+                for option in scenario.adapted.ordered_options:
+                    object.__setattr__(option, "family_ref", "one-development-family")
+    elif mutation == "development_locations":
+        for scenario in scenarios:
+            if scenario.partition == "development":
+                for option in scenario.adapted.ordered_options:
+                    object.__setattr__(option, "location_ref", "one-development-location")
+    elif mutation == "development_joint":
+        scenarios = scenarios[:8]
+        joint = (
+            ("f0", "l0"),
+            ("f1", "l0"),
+            ("f2", "l0"),
+            ("f3", "l1"),
+            ("f3", "l2"),
+            ("f3", "l3"),
+        )
+        scenarios.extend(
+            _verified_scenario(
+                200 + index,
+                partition="development",
+                kind=LivingDexOptionKind.ACQUIRE,
+                family=family,
+                location=location,
+            )
+            for index, (family, location) in enumerate(joint)
+        )
+    elif mutation == "disjoint_train":
+        development_family = scenarios[8].adapted.ordered_options[0].family_ref
+        for option in scenarios[0].adapted.ordered_options:
+            object.__setattr__(option, "family_ref", development_family)
+    elif mutation == "train_kinds":
+        scenarios = [
+            _verified_scenario(
+                index,
+                partition="train",
+                kind=LivingDexOptionKind.ACQUIRE,
+                family=f"train-{index % 3}",
+                location=f"train-{index % 2}",
+            )
+            for index in range(8)
+        ] + scenarios[8:]
+    elif mutation == "train_families":
+        scenarios = [
+            _verified_scenario(
+                index,
+                partition="train",
+                kind=_OPTION_KINDS[index],
+                family="one-train-family",
+                location=f"train-{index % 2}",
+            )
+            for index in range(8)
+        ] + scenarios[8:]
+
+    diagnostic, plan = diagnose_red_living_dex_action_free_coverage(scenarios)
+
+    assert diagnostic.status is expected
+    assert plan is None
+    assert diagnostic.exact_plan_scenario_count == 0
+
+
+def test_coverage_diagnostic_retains_combined_gate_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(inventory_module, "_select_train", lambda _scenarios: None)
+
+    diagnostic, plan = diagnose_red_living_dex_action_free_coverage(
+        _inventory_scenarios()
+    )
+
+    assert diagnostic.status is RedLivingDexCoverageStatus.COMBINED_TRAIN_GATE_UNSATISFIED
+    assert plan is None
 
 
 def test_inventory_plan_cannot_open_collection_without_reconstructed_observers(
