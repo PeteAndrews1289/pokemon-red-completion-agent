@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from dataclasses import replace
 from fractions import Fraction
 from pathlib import Path
@@ -26,11 +28,14 @@ from pokemon_red_completion.red_goal_skills import (
     RedRouteGoalProvider,
 )
 from pokemon_red_completion.red_living_dex_capture_plan import (
+    RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
+    RED_DURABLE_SETUP_RUNNER_CAPABILITY,
     RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA,
     RED_LIVING_DEX_EXECUTOR_CAPABILITIES,
     RED_LIVING_DEX_OBSERVER_CONTRACT_SHA256,
     RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS,
     RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES,
+    RED_ROUTED_SEMANTIC_COMPONENTS,
     RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
     RedLivingDexCapturePlanError,
     RedLivingDexCapturePlanFeasibility,
@@ -39,6 +44,12 @@ from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
     qualify_red_living_dex_prospective_capture_plan,
 )
+from pokemon_red_completion.red_routed_semantic_goal import (
+    RedFreshGoalDestinationBinder,
+    RedSemanticTransportRoute,
+    build_red_routed_semantic_goal_composer,
+)
+from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalComposer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FROZEN_PUBLIC_PLAN = (
@@ -152,14 +163,24 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert trade.mechanics == ()
 
 
-def test_plan_reports_routed_composition_as_the_pilot_blocker() -> None:
+def test_plan_credits_the_routed_seam_but_keeps_concrete_setup_closed() -> None:
     result = _qualification()
 
     assert result.locally_composable_slot_count == 1
     assert result.routed_slot_count == 14
-    assert result.unresolved_runtime_capabilities == (
+    assert result.implemented_runtime_capabilities == (
         RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
     )
+    assert result.unresolved_runtime_capabilities == (
+        RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
+        RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+    )
+    assert (
+        RoutedSemanticGoalComposer,
+        RedSemanticTransportRoute,
+        RedFreshGoalDestinationBinder,
+        build_red_routed_semantic_goal_composer,
+    ) == RED_ROUTED_SEMANTIC_COMPONENTS
     assert (
         result.mission_missing_option_kinds[0].value
         != RED_ROUTED_SEMANTIC_GOAL_CAPABILITY
@@ -198,7 +219,7 @@ def test_public_feasibility_is_path_free_and_refuses_training_claims() -> None:
 
     assert public["schema"] == RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA
     assert public["qualification_sha256"] == (
-        "c084c6693668ca0b69bbf0cc44c57b52b61ffd1f10cdc4403ace5d10de9f9202"
+        "48d859dad473fe2018c60d664ac9fe91f470c05b70a419e12494ebae7725f3eb"
     )
     assert public["rom_accesses"] == 0
     assert public["setup_controller_actions"] == 0
@@ -293,9 +314,14 @@ def test_scheduling_trade_cannot_hide_the_missing_executor() -> None:
         match="schedules a missing local executor",
     ):
         RedLivingDexCapturePlanFeasibility(
-            plan,
-            result.capabilities,
-            result.unresolved_runtime_capabilities,
+            plan=plan,
+            capabilities=result.capabilities,
+            implemented_runtime_capabilities=(
+                result.implemented_runtime_capabilities
+            ),
+            unresolved_runtime_capabilities=(
+                result.unresolved_runtime_capabilities
+            ),
         )
 
 
@@ -304,12 +330,49 @@ def test_route_composition_blocker_cannot_be_removed_from_a_nonlocal_plan() -> N
 
     with pytest.raises(
         RedLivingDexCapturePlanError,
-        match="hides routed-goal composition",
+        match="hides implemented routed-goal composition",
     ):
         RedLivingDexCapturePlanFeasibility(
-            result.plan,
-            result.capabilities,
-            (),
+            plan=result.plan,
+            capabilities=result.capabilities,
+            implemented_runtime_capabilities=(),
+            unresolved_runtime_capabilities=(
+                result.unresolved_runtime_capabilities
+            ),
+        )
+
+
+def test_concrete_setup_blockers_cannot_be_erased_or_marked_implemented() -> None:
+    result = _qualification()
+
+    with pytest.raises(
+        RedLivingDexCapturePlanError,
+        match="hides concrete setup execution blockers",
+    ):
+        RedLivingDexCapturePlanFeasibility(
+            plan=result.plan,
+            capabilities=result.capabilities,
+            implemented_runtime_capabilities=(
+                result.implemented_runtime_capabilities
+            ),
+            unresolved_runtime_capabilities=(),
+        )
+
+    with pytest.raises(
+        RedLivingDexCapturePlanError,
+        match="status overlaps",
+    ):
+        RedLivingDexCapturePlanFeasibility(
+            plan=result.plan,
+            capabilities=result.capabilities,
+            implemented_runtime_capabilities=(
+                RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
+                RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
+            ),
+            unresolved_runtime_capabilities=(
+                RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
+                RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+            ),
         )
 
 
@@ -325,9 +388,14 @@ def test_capability_audit_cannot_drop_trade_or_forge_goal_mapping() -> None:
         match="capability audit is incomplete",
     ):
         RedLivingDexCapturePlanFeasibility(
-            result.plan,
-            without_trade,
-            result.unresolved_runtime_capabilities,
+            plan=result.plan,
+            capabilities=without_trade,
+            implemented_runtime_capabilities=(
+                result.implemented_runtime_capabilities
+            ),
+            unresolved_runtime_capabilities=(
+                result.unresolved_runtime_capabilities
+            ),
         )
 
     acquire = result.capabilities[0]
@@ -365,3 +433,17 @@ def test_tracked_public_plan_is_exactly_the_derived_rom_free_result() -> None:
     actual = json.loads(FROZEN_PUBLIC_PLAN.read_text(encoding="utf-8"))
 
     assert actual == expected
+
+
+def test_public_plan_generator_check_accepts_the_tracked_result() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/regenerate_red_living_dex_capture_plan.py",
+            "--check",
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
