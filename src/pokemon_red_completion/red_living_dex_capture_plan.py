@@ -9,8 +9,9 @@ a behavior draw, or manufacture a learner target.
 The audit keeps three layers separate:
 
 * the generic routed-goal composition seam is now implemented and published;
+* the durable setup-binding contract and whole-slot runner are implemented;
 * the calibration pilot still needs concrete private Red route/terminal
-  bindings and a durable setup runner;
+  bindings materialized against that runner;
 * the full living-Pokedex mission additionally needs a repeatable semantic
   trade executor, even though trade is not required to satisfy the first
   four-kind pilot gate.
@@ -51,15 +52,11 @@ from pokemon_red_completion.routed_semantic_goal import (
     RoutedSemanticGoalComposer,
 )
 
-RED_LIVING_DEX_CAPTURE_PLAN_SCHEMA = (
-    "pokemon.red.living-dex-prospective-capture-plan.v1"
-)
+RED_LIVING_DEX_CAPTURE_PLAN_SCHEMA = "pokemon.red.living-dex-prospective-capture-plan.v1"
 RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA = (
     "pokemon.red.living-dex-prospective-capture-feasibility.v2"
 )
-RED_LIVING_DEX_SETUP_REQUEST_SCHEMA = (
-    "pokemon.red.private-living-dex-semantic-setup-request.v1"
-)
+RED_LIVING_DEX_SETUP_REQUEST_SCHEMA = "pokemon.red.private-living-dex-semantic-setup-request.v1"
 RED_LIVING_DEX_TERMINAL_PREDICATE_SCHEMA = (
     "pokemon.red.private-living-dex-semantic-terminal-predicate.v1"
 )
@@ -75,9 +72,10 @@ RED_LIVING_DEX_OBSERVER_CONTRACT_SHA256 = canonical_sha256(
 RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS = 100_000
 RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES = 60_000_000
 RED_ROUTED_SEMANTIC_GOAL_CAPABILITY = "routed-semantic-goal-composition"
-RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY = (
-    "concrete-red-routed-setup-bindings"
+RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY = (
+    "action-free-red-setup-binding-materializer"
 )
+RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY = "concrete-red-routed-setup-bindings"
 RED_DURABLE_SETUP_RUNNER_CAPABILITY = "durable-red-setup-runner"
 
 RED_ROUTED_SEMANTIC_COMPONENTS = (
@@ -145,11 +143,55 @@ def _runtime_contract_id(component: object) -> str:
         or not isinstance(qualname, str)
         or not qualname
     ):
-        raise RedLivingDexCapturePlanError(
-            "Red routed semantic component provenance differs"
-        )
+        raise RedLivingDexCapturePlanError("Red routed semantic component provenance differs")
     return f"{module}.{qualname}"
 
+
+def red_living_dex_setup_runtime_contract_ids() -> tuple[str, ...]:
+    """Return published setup contracts without creating an import cycle.
+
+    The setup campaign imports this module's frozen plan and capabilities.  A
+    lazy import lets the feasibility audit credit the now-published runner only
+    after both modules are fully initialized.
+    """
+
+    from pokemon_red_completion.red_living_dex_setup_campaign import (
+        RedLivingDexSetupBindingPlan,
+        RedLivingDexSetupOptionBinding,
+        RedLivingDexSetupSlotBinding,
+        build_red_living_dex_setup_binding_plan,
+        run_red_living_dex_setup_campaign,
+    )
+
+    return tuple(
+        _runtime_contract_id(item)
+        for item in (
+            RedLivingDexSetupOptionBinding,
+            RedLivingDexSetupSlotBinding,
+            RedLivingDexSetupBindingPlan,
+            build_red_living_dex_setup_binding_plan,
+            run_red_living_dex_setup_campaign,
+        )
+    )
+
+
+def red_living_dex_setup_materialization_runtime_contract_ids() -> tuple[str, ...]:
+    """Return published action-free materialization contracts lazily."""
+
+    from pokemon_red_completion.red_living_dex_setup_materialization import (
+        RedLivingDexSetupBindingMaterialization,
+        RedLivingDexSetupPrivateSourceAttestation,
+        materialize_red_living_dex_setup_bindings,
+    )
+
+    return tuple(
+        _runtime_contract_id(item)
+        for item in (
+            RedLivingDexSetupPrivateSourceAttestation,
+            RedLivingDexSetupBindingMaterialization,
+            materialize_red_living_dex_setup_bindings,
+        )
+    )
 
 @dataclass(frozen=True, slots=True)
 class RedLivingDexExecutorCapability:
@@ -167,46 +209,35 @@ class RedLivingDexExecutorCapability:
         if not isinstance(self.option_kind, LivingDexOptionKind) or not isinstance(
             self.status, RedLivingDexExecutorStatus
         ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture executor capability identity differs"
-            )
+            raise RedLivingDexCapturePlanError("Red capture executor capability identity differs")
         if self.status is RedLivingDexExecutorStatus.IMPLEMENTED_LOCAL_CONTRACT:
             expected_goal = _OPTION_TO_GOAL_KIND.get(self.option_kind)
             if self.goal_kind is not expected_goal or expected_goal is None:
-                raise RedLivingDexCapturePlanError(
-                    "Red capture executor goal mapping differs"
-                )
+                raise RedLivingDexCapturePlanError("Red capture executor goal mapping differs")
             if (
                 not self.mechanics
                 or len(self.mechanics) != len(set(self.mechanics))
                 or any(not isinstance(item, RedGoalMechanic) for item in self.mechanics)
             ):
-                raise RedLivingDexCapturePlanError(
-                    "Red capture executor mechanics differ"
-                )
+                raise RedLivingDexCapturePlanError("Red capture executor mechanics differ")
             if (
                 not self.boundary_scopes
                 or len(self.boundary_scopes) != len(set(self.boundary_scopes))
                 or any(_SAFE_ID.fullmatch(item) is None for item in self.boundary_scopes)
             ):
-                raise RedLivingDexCapturePlanError(
-                    "Red capture executor boundary scopes differ"
-                )
+                raise RedLivingDexCapturePlanError("Red capture executor boundary scopes differ")
             expected_types = _OPTION_TO_EXECUTOR_TYPES.get(self.option_kind)
             if (
                 self.executor_types != expected_types
                 or not self.executor_types
                 or len(self.executor_types) != len(set(self.executor_types))
                 or any(
-                    not isinstance(item, type)
-                    or not callable(getattr(item, "offer", None))
+                    not isinstance(item, type) or not callable(getattr(item, "offer", None))
                     for item in self.executor_types
                 )
                 or self.missing_reason is not None
             ):
-                raise RedLivingDexCapturePlanError(
-                    "Red capture executor provenance differs"
-                )
+                raise RedLivingDexCapturePlanError("Red capture executor provenance differs")
         elif not (
             self.option_kind is LivingDexOptionKind.TRADE
             and self.goal_kind is None
@@ -215,9 +246,7 @@ class RedLivingDexExecutorCapability:
             and not self.executor_types
             and self.missing_reason == "missing-repeatable-semantic-trade-executor"
         ):
-            raise RedLivingDexCapturePlanError(
-                "Red missing executor record differs"
-            )
+            raise RedLivingDexCapturePlanError("Red missing executor record differs")
 
     @property
     def capability_sha256(self) -> str:
@@ -226,9 +255,7 @@ class RedLivingDexExecutorCapability:
     def public_dict(self) -> dict[str, object]:
         return {
             "boundary_scope_count": len(self.boundary_scopes),
-            "executor_contract_ids": [
-                _executor_contract_id(item) for item in self.executor_types
-            ],
+            "executor_contract_ids": [_executor_contract_id(item) for item in self.executor_types],
             "goal_kind": None if self.goal_kind is None else self.goal_kind.value,
             "mechanics": [item.value for item in self.mechanics],
             "missing_reason": self.missing_reason,
@@ -328,22 +355,16 @@ class _RedCaptureSlotTemplate:
             self.location_scope_id,
         ):
             if _SAFE_ID.fullmatch(value) is None:
-                raise RedLivingDexCapturePlanError(
-                    "Red capture slot template identity differs"
-                )
+                raise RedLivingDexCapturePlanError("Red capture slot template identity differs")
         if not isinstance(self.partition, LivingDexCapturePartition):
-            raise RedLivingDexCapturePlanError(
-                "Red capture slot template partition differs"
-            )
+            raise RedLivingDexCapturePlanError("Red capture slot template partition differs")
         if (
             not isinstance(self.kinds, tuple)
             or len(self.kinds) < 3
             or len(self.kinds) != len(set(self.kinds))
             or any(not isinstance(item, LivingDexOptionKind) for item in self.kinds)
         ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture slot template menu differs"
-            )
+            raise RedLivingDexCapturePlanError("Red capture slot template menu differs")
 
 
 _TRAIN_MENUS = (
@@ -521,14 +542,10 @@ class RedLivingDexCapturePlanFeasibility:
         self.plan.__post_init__()
         if (
             not isinstance(self.capabilities, tuple)
-            or tuple(item.option_kind for item in self.capabilities)
-            != tuple(LivingDexOptionKind)
-            or len({item.capability_sha256 for item in self.capabilities})
-            != len(self.capabilities)
+            or tuple(item.option_kind for item in self.capabilities) != tuple(LivingDexOptionKind)
+            or len({item.capability_sha256 for item in self.capabilities}) != len(self.capabilities)
         ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture capability audit is incomplete"
-            )
+            raise RedLivingDexCapturePlanError("Red capture capability audit is incomplete")
         for item in self.capabilities:
             item.__post_init__()
         for name in (
@@ -541,15 +558,11 @@ class RedLivingDexCapturePlanFeasibility:
                 or len(value) != len(set(value))
                 or any(_SAFE_ID.fullmatch(item) is None for item in value)
             ):
-                raise RedLivingDexCapturePlanError(
-                    f"Red capture {name.replace('_', ' ')} differ"
-                )
+                raise RedLivingDexCapturePlanError(f"Red capture {name.replace('_', ' ')} differ")
         if set(self.implemented_runtime_capabilities).intersection(
             self.unresolved_runtime_capabilities
         ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture runtime capability status overlaps"
-            )
+            raise RedLivingDexCapturePlanError("Red capture runtime capability status overlaps")
         capability_by_kind = {item.option_kind: item for item in self.capabilities}
         unavailable_scheduled = {
             kind
@@ -562,34 +575,31 @@ class RedLivingDexCapturePlanFeasibility:
                 "Red capture plan schedules a missing local executor"
             )
         routed_slots = self.routed_slot_count
-        if routed_slots and self.implemented_runtime_capabilities != (
+        expected_implemented = (
             RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
-        ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture plan hides implemented routed-goal composition"
-            )
-        if not routed_slots and RED_ROUTED_SEMANTIC_GOAL_CAPABILITY in (
-            self.implemented_runtime_capabilities
-        ):
-            raise RedLivingDexCapturePlanError(
-                "Red capture plan invents routed-goal composition"
-            )
-        if self.unresolved_runtime_capabilities != (
-            RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
             RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+            RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
+        )
+        if routed_slots and self.implemented_runtime_capabilities != expected_implemented:
+            raise RedLivingDexCapturePlanError(
+                "Red capture plan hides a published runtime capability"
+            )
+        if not routed_slots and self.implemented_runtime_capabilities != (
+            RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+            RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
         ):
+            raise RedLivingDexCapturePlanError("Red capture plan runtime capability census differs")
+        if self.unresolved_runtime_capabilities != (RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,):
             raise RedLivingDexCapturePlanError(
                 "Red capture plan hides concrete setup execution blockers"
             )
         tuple(_runtime_contract_id(item) for item in RED_ROUTED_SEMANTIC_COMPONENTS)
+        red_living_dex_setup_runtime_contract_ids()
+        red_living_dex_setup_materialization_runtime_contract_ids()
 
     @property
     def scheduled_option_kinds(self) -> tuple[LivingDexOptionKind, ...]:
-        present = {
-            kind
-            for slot in self.plan.slots
-            for kind in slot.available_option_kinds
-        }
+        present = {kind for slot in self.plan.slots for kind in slot.available_option_kinds}
         return tuple(kind for kind in LivingDexOptionKind if kind in present)
 
     @property
@@ -639,12 +649,11 @@ class RedLivingDexCapturePlanFeasibility:
             "full_mission_ready": self.full_mission_ready,
             "learner_effects": 0,
             "locally_composable_slot_count": self.locally_composable_slot_count,
-            "implemented_runtime_capabilities": list(
-                self.implemented_runtime_capabilities
-            ),
+            "implemented_runtime_capabilities": list(self.implemented_runtime_capabilities),
             "implemented_runtime_contract_ids": [
-                _runtime_contract_id(item)
-                for item in RED_ROUTED_SEMANTIC_COMPONENTS
+                *(_runtime_contract_id(item) for item in RED_ROUTED_SEMANTIC_COMPONENTS),
+                *red_living_dex_setup_runtime_contract_ids(),
+                *red_living_dex_setup_materialization_runtime_contract_ids(),
             ],
             "mission_missing_option_kinds": [
                 item.value for item in self.mission_missing_option_kinds
@@ -656,15 +665,11 @@ class RedLivingDexCapturePlanFeasibility:
             "private_path_fields": 0,
             "rom_accesses": 0,
             "routed_slot_count": self.routed_slot_count,
-            "scheduled_option_kinds": [
-                item.value for item in self.scheduled_option_kinds
-            ],
+            "scheduled_option_kinds": [item.value for item in self.scheduled_option_kinds],
             "schema": RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA,
             "setup_controller_actions": 0,
             "setup_emulator_frames": 0,
-            "unresolved_runtime_capabilities": list(
-                self.unresolved_runtime_capabilities
-            ),
+            "unresolved_runtime_capabilities": list(self.unresolved_runtime_capabilities),
         }
 
     def public_dict(self) -> dict[str, object]:
@@ -673,25 +678,25 @@ class RedLivingDexCapturePlanFeasibility:
         return document
 
 
-def qualify_red_living_dex_prospective_capture_plan() -> (
-    RedLivingDexCapturePlanFeasibility
-):
+def qualify_red_living_dex_prospective_capture_plan() -> RedLivingDexCapturePlanFeasibility:
     """Return the frozen schedule and its current, deliberately non-green audit."""
 
     return RedLivingDexCapturePlanFeasibility(
         plan=build_red_living_dex_prospective_capture_plan(),
         capabilities=RED_LIVING_DEX_EXECUTOR_CAPABILITIES,
-        implemented_runtime_capabilities=(RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,),
-        unresolved_runtime_capabilities=(
-            RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
+        implemented_runtime_capabilities=(
+            RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
             RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+            RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
         ),
+        unresolved_runtime_capabilities=(RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,),
     )
 
 
 __all__ = [
     "RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA",
     "RED_LIVING_DEX_CAPTURE_PLAN_SCHEMA",
+    "RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY",
     "RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY",
     "RED_DURABLE_SETUP_RUNNER_CAPABILITY",
     "RED_LIVING_DEX_EXECUTOR_CAPABILITIES",
@@ -706,4 +711,6 @@ __all__ = [
     "RedLivingDexExecutorStatus",
     "build_red_living_dex_prospective_capture_plan",
     "qualify_red_living_dex_prospective_capture_plan",
+    "red_living_dex_setup_materialization_runtime_contract_ids",
+    "red_living_dex_setup_runtime_contract_ids",
 ]
