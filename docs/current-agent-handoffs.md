@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one exact exhaustive V3 census
+## Current override: Codex owns the ROM-free purpose-built capture qualification
+
+The sole V3 census used executable main `1db9554624178a570a608cbf136a5d74182deee4` under
+CI `32946811445/1`, after PR 62/main `f18558284c18413f413966c93825a84a81e5e0f0` passed exact-main
+CI `32947744224/1`. Its
+[terminal](evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json) reconciles all
+81 contexts and establishes a real shortfall: **5 train · 3 development · 3 option kinds · 1
+location per partition**, versus the unchanged 8+4 gate. Sixty-five contexts had fewer than three
+mapped options, four failed enumeration, and four roots were consumed. Protected effects are zero,
+no plan exists, and V1/V2/V3 never retry.
+
+Codex owns only ROM-free implementation and qualification of the prospective capture schema,
+deficit-aware coverage planner, deterministic-setup versus learner-decision provenance boundary,
+repeatable-root ledger, path-free terminal, and adversarial tests. Publish through exact-source CI
+and reorient before any ROM/private capture, setup policy, selected option, outcome, fit, sealed
+Red, Crystal, promotion, or replay. The exact gate remains 8 train across 4 genuine option kinds
+and 3 families plus 4 development scenarios disjoint from train by family and location.
+
+Claude is the optional read-only statistics, causal-design, and leakage reviewer. Antigravity is
+the optional read-only architecture, portability, and transfer reviewer. Neither reads private
+captures, executes gameplay, edits the worktree, or delays ordinary work; no verdict is claimed
+for V3. Codex adjudicates and publishes. Counters remain **development 15 · verified 5/9 · causal
+train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one exact exhaustive V3 census
 
 V3 source `8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb` passed PR CI `32946586301/1`,
 merged through PR 61 as main `1db9554624178a570a608cbf136a5d74182deee4`, and passed

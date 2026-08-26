@@ -8,7 +8,40 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: run the exhaustive census once, then choose data or outcomes
+## Current checkpoint: the old bank is insufficient; prospectively create genuine lessons
+
+The sole V3 census used executable main `1db9554624178a570a608cbf136a5d74182deee4` under
+exact-main CI `32946811445/1`, after its authorization merged through PR 62 as main
+`f18558284c18413f413966c93825a84a81e5e0f0` under CI `32947744224/1`. Its
+[path-free terminal](evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json)
+reconciles all 81 contexts and evaluates coverage once. The full legacy bank contains **5 train ·
+3 development · 3 offered option kinds · 1 location per partition**. Sixty-five contexts have
+fewer than three mapped options, four fail binding enumeration, and four roots are consumed.
+Exact 8+4 coverage failed with every protected effect at zero. V1/V2/V3 never retry.
+
+The next sequence is prospective data engineering, not another inventory identity:
+
+1. ROM-free, freeze the purpose-built capture schema and deficit-aware coverage contract. Require
+   complete 3+ semantic menus, genuine executors, repeatable unique nonsealed roots, 8 train across
+   4 option kinds and 3 transformation families, and 4 development scenarios disjoint from train
+   by family and location.
+2. Prove that deterministic setup provenance is physically separate from the learner decision.
+   Setup may position Red at a rich choice later, but no setup action, teacher choice, route, or
+   outcome-dependent selection may become a target.
+3. Prove root accounting, interruption semantics, private/public separation, exact coverage, and
+   an anonymous receipt with adversarial fixtures. Publish and reorient.
+4. Only in a later separately frozen gate, create the minimum prospective Red captures needed by
+   the contract, then census those captures action-free before selecting or executing an arm.
+5. Once an exact 8+4 plan exists, collect randomized selected-arm outcomes, fit once on train,
+   report paired development calibration, and use the observed variance to power Red evaluation.
+   Crystal remains the first frozen-weight transfer test after Red evidence—not another teacher
+   project.
+
+The active work is steps 1–3 only. No protected input, setup run, outcome, fit, sealed Red,
+Crystal, promotion, or replay is open. Counters stay **development 15 · verified 5/9 · causal
+train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: run the exhaustive census once, then choose data or outcomes
 
 The V3 exhaustive boundary is published. Source `8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb`
 passed PR CI `32946586301/1`, merged through PR 61 as main

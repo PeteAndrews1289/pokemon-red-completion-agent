@@ -7,7 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the counter can finish the room; it gets one count
+## Current checkpoint: the count is finished; build the lessons we actually need
+
+The belt reached the end of all 81 cards. Eight became complete 3+ choice menus: five train and
+three held out. They covered only three option kinds and one location in each partition. Sixty-five
+cards were too binary, four could not enumerate a menu, and four roots were already spent. The
+unchanged 8+4 classroom does not exist in the old bank.
+
+That verdict cost no move in the game. Buttons, frames, draws, claims, outcomes, predictions,
+teacher answers, fits, private plans, and leaks all stayed zero. There is no fourth counter and no
+smaller standard. The old bank did its job: it told us to stop searching it.
+
+Now we design lessons on purpose. Each future capture must present at least three genuine semantic
+ways to advance a living Pokédex, come from a repeatable unsealed root, and help fill an explicit
+kind/family/location deficit. A setup policy may walk Red to the classroom door, but its arrows are
+never the answer key. The answer comes from trying one randomly selected semantic option and
+measuring what changed. First we prove that contract off-cartridge; then we create the minimum new
+captures. The board remains **causal train 0/8, authority 0, transfer 0** until real outcomes exist.
+
+## Previous checkpoint: the counter can finish the room; it gets one count
 
 The new conveyor is published. Every eligible Red card gets its own fresh emulator, so a broken
 restore cannot stain the next card. A local problem drops into one anonymous bin—restore, observe,
