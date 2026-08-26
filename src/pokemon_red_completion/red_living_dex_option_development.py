@@ -17,6 +17,7 @@ from __future__ import annotations
 import math
 import re
 from collections.abc import Callable
+from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -392,9 +393,11 @@ def execute_red_living_dex_option(
 ) -> RedLivingDexOptionEpisode:
     """Execute only the selected skill and verify a fresh independent ledger.
 
-    Ordinary execution or observation exceptions become a censored development
-    terminal.  ``BaseException`` subclasses such as process interruption remain
-    visible to the outer durable runner and are never silently converted.
+    An ordinary execution exception is not an outcome: the independent observer
+    still runs exactly once and its readable ledger settles the causal target.
+    Only observation or verification failure becomes censored.  ``BaseException``
+    subclasses such as process interruption remain visible to the outer durable
+    runner and are never silently converted.
     """
 
     if not isinstance(decision, RedLivingDexOptionDecision):
@@ -402,24 +405,74 @@ def execute_red_living_dex_option(
     if not callable(observe_after_ledger):
         raise TypeError("observe_after_ledger must be callable")
     decision._consume_execution()
-    bound = decision.preparation.bound
-    selected = bound.bind_selection(decision.selected_candidate_index)
-    try:
-        selected.execute()
-    except Exception:
-        return _interrupted_episode(decision, "selected_capability_execution")
+    outcome, _report = execute_red_living_dex_bound_selection(
+        decision.preparation.bound,
+        decision.selected_candidate_index,
+        observe_after_ledger=observe_after_ledger,
+    )
+    interruption_stage = (
+        None if outcome.status == "settled" else "independent_outcome_observation"
+    )
+    identity = _episode_identity(
+        decision,
+        outcome,
+        interruption_stage=interruption_stage,
+    )
+    return RedLivingDexOptionEpisode(
+        decision,
+        outcome,
+        outcome.status,
+        interruption_stage,
+        identity,
+    )
+
+
+def execute_red_living_dex_bound_selection(
+    bound: BoundRedDualCapabilityScenario,
+    selected_candidate_index: int,
+    *,
+    observe_after_ledger: Callable[[], DependencySpecimenLedger],
+) -> tuple[RedDualCapabilityOutcome, object | None]:
+    """Execute one frozen selection and settle only from one fresh ledger.
+
+    The selected executor's return value and ordinary exception are deliberately
+    excluded from the causal target.  A report is returned only as optional
+    diagnostics after a successful independent observation.  This primitive can
+    therefore be reused by a frozen curriculum without constructing a model
+    decision or teaching a route identity.
+    """
+
+    if not isinstance(bound, BoundRedDualCapabilityScenario):
+        raise TypeError("bound must be a BoundRedDualCapabilityScenario")
+    if type(selected_candidate_index) is not int or selected_candidate_index not in {  # noqa: E721
+        0,
+        1,
+    }:
+        raise RedLivingDexOptionDevelopmentError("selected candidate index differs")
+    if not callable(observe_after_ledger):
+        raise TypeError("observe_after_ledger must be callable")
+    selected_kind = _CAPABILITY_ORDER[selected_candidate_index]
+    selected = bound.bind_selection(selected_candidate_index)
+    report: object | None = None
+    # An executor can raise after changing emulator state.  Its exception is
+    # neither a target nor a reason to spend the root without observation.
+    with suppress(Exception):
+        report = selected.execute()
     try:
         after_ledger = observe_after_ledger()
         if not isinstance(after_ledger, DependencySpecimenLedger):
             raise TypeError("independent observer did not return a specimen ledger")
         outcome = bound.verify_outcome(
-            selected_kind=decision.selected_kind,
+            selected_kind=selected_kind,
             after_ledger=after_ledger,
         )
     except Exception:
-        return _interrupted_episode(decision, "independent_outcome_observation")
-    identity = _episode_identity(decision, outcome, interruption_stage=None)
-    return RedLivingDexOptionEpisode(decision, outcome, "settled", None, identity)
+        outcome = bound.verify_outcome(
+            selected_kind=selected_kind,
+            after_ledger=None,
+        )
+        return outcome, None
+    return outcome, report
 
 
 def _interrupted_episode(
@@ -545,6 +598,7 @@ __all__ = [
     "RedLivingDexOptionDecision",
     "RedLivingDexOptionDevelopmentError",
     "RedLivingDexOptionEpisode",
+    "execute_red_living_dex_bound_selection",
     "execute_red_living_dex_option",
     "prepare_red_living_dex_option",
     "score_red_living_dex_option",
