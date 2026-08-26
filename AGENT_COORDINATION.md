@@ -1,5 +1,25 @@
 # Three-agent coordination
 
+> **2026-08-26 Red prospective plan published; routed semantic composition active:** Source
+> `ca7340d4` passed PR 66 CI `32956245451/1`, merged as main `f9f3310e`, and passed exact-main CI
+> `32956496929/1`. The
+> [qualification](docs/evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)
+> records **15 focused · 136 related · 5,021 suite tests**, exact 10+5 schedule probability
+> **2144/2187**, one locally composable menu, fourteen routed menus, and zero ROM/private/learner/
+> authority/transfer effects.
+>
+> Codex owns ROM-free implementation, adversarial qualification, documentation, and publication of
+> one generic route-then-semantic-goal seam plus the minimal Red adapter. It must preserve the
+> destination kind, freshly reobserve at the route terminal, bind an implemented destination
+> provider, execute it once, independently verify both stages, reconcile one budget, and expose no
+> route label or teacher sequence. Publish and reorient before a durable runner or private capture.
+>
+> Claude remains the optional read-only statistics/leakage/semantic-overclaim reviewer; Antigravity
+> the optional read-only architecture/claim-boundary/transfer reviewer. Neither implements, opens
+> private captures, executes gameplay, or blocks ordinary development; Codex adjudicates. Trade is
+> a separate later full-mission requirement. Counters remain **development 15 · verified 5/9 ·
+> causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 > **2026-08-26 shared capture contract published; concrete Red plan active:** Source `24e2aae9`
 > passed PR 64 CI `32951694647/1`, merged as main `b678b58a`, and passed exact-main CI
 > `32952034242/1`. The

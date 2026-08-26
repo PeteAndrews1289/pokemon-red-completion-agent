@@ -8,7 +8,37 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the shared lesson contract is published; freeze the Red curriculum
+## Current checkpoint: the Red curriculum is valid; implement route-then-semantic composition
+
+The exact prospective plan shipped from source `ca7340d436698be7a90412ff304726d973da2ac3`
+through PR 66 and PR CI `32956245451/1`, merged as main
+`f9f3310e9d55f2bd16e7b326e83c0e702b7538a5`, and passed exact-main CI `32956496929/1`. Its
+[qualification](evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)
+binds **15 focused · 136 related · 5,021 full-suite tests** and zero gameplay or learner effects.
+
+The plan passes the shared schedule gate: ten train and five development menus, three distinct
+kinds per menu, train/development family and location separation, and exact minimum selected-kind
+probability **2144/2187 = 98.0338%** after any two train setup censors. Seven non-trade semantic
+kinds have concrete tested Red provider classes. Only one menu is locally composable; fourteen
+require routing. Repeatable trade remains explicit as a later full-living-Pokédex requirement.
+
+The next gate is one ROM-free reusable abstraction, not fifteen Red routes:
+
+1. own an authenticated bounded route to a declared destination boundary;
+2. require the exact route terminal and independent route verification;
+3. freshly reobserve and ask the existing destination provider for the unchanged semantic kind;
+4. execute that destination binding exactly once and require its independent verifier;
+5. reconcile route plus destination action/frame totals under one budget;
+6. expose the destination kind and combined outcome, never the route as a learner label.
+
+Adversarial tests must reject terminal mismatch, kind drift, stale observation, unavailable
+destination, double execution, either verifier failure, budget drift, and route-as-outcome
+relabelling. Publish and reorient before a durable fifteen-slot setup runner, private capture,
+selected arm, outcome, fit, sealed Red, Crystal, promotion, or replay. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous checkpoint: the shared lesson contract is published; freeze the Red curriculum
 
 The title-neutral purpose-built capture contract shipped from source
 `24e2aae906e09ec73d8742a50edc3e49ca2022dc` through PR 64 and PR CI `32951694647/1`, merged as

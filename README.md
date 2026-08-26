@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the lesson contract is published; prove Red can
+> **Current product focus (August 26, 2026): the Red lesson plan is valid; build the reusable
+> route-to-skill seam.** The exact 10+5 plan shipped through
+> [PR 66](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/66) from source
+> `ca7340d4`, merged as main `f9f3310e`, and passed exact-main CI `32956496929/1`. Its
+> [qualification](docs/evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)
+> binds **15 focused tests · 136 related boundary tests · 5,021 full-suite tests**. Fifteen complete
+> three-kind menus preserve the 10+5 reserve and exact worst-case train coverage
+> **2144/2187 = 98.0338%** after any two train setup censors.
+>
+> This is a valid curriculum plan, not a runnable campaign. One menu is co-located at existing Red
+> provider boundaries; fourteen require a generic route-then-semantic-goal composition seam. Seven
+> non-trade kinds point to concrete tested provider classes; repeatable semantic trade remains a
+> separate later full-living-Pokédex gap. The next work is ROM-free implementation and adversarial
+> qualification of that routed seam. A route must never become the learner-facing semantic label.
+> Durable setup, private captures, outcomes, fitting, sealed Red, Crystal, promotion, and replay are
+> still closed. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+> comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): the lesson contract is published; prove Red can
 > instantiate it.** The title-neutral purpose-built capture curriculum shipped through
 > [PR 64](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/64) from source
 > `24e2aae9`, merged as main `b678b58a`, and passed exact-main CI `32952034242/1`. Its

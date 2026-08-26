@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the schedule passes, but fourteen doors are in different buildings
+
+Open on **PR 66 · SOURCE CA7340D4 · MAIN F9F3310E · CI 32956496929/1**. Lay out **10 TRAIN + 5
+DEVELOPMENT** cards, each with **3 SEMANTIC OPTIONS**. Remove any two train cards and spin the
+lottery: freeze the counter at **2144/2187 = 98.0338% FOR 4+ SELECTED KINDS**. Keep the family and
+location reserve lights green. Flash **15 FOCUSED · 136 RELATED · 5,021 FULL SUITE**.
+
+Now place option doors on the map: **CAPTURE → WILD CORRIDOR · STORAGE → PC · RESUPPLY → MART ·
+EVOLVE/DEVELOP → PARTY BOUNDARY · STORY → OBJECTIVE**. Only one card has all its doors in one
+place. Stamp **LOCAL 1 · ROUTED 14 · PILOT EXECUTION NOT READY**. Show seven provider classes wired
+to real code, but keep **RUNTIME AUTHENTICATION: NOT YET** honest. Put **TRADE: LATER FULL-DEX
+REQUIREMENT** in a separate visible box.
+
+Build a single doorway diagram: **AUTHENTICATE ROUTE → VERIFY TERMINAL → FRESH OBSERVATION → BIND
+UNCHANGED SEMANTIC KIND → EXECUTE ONCE → VERIFY DESTINATION → RECONCILE BUDGET**. Try to drag the
+route label onto the learner output and make the system reject it. The spoken line is: **“The
+schedule worked. What failed was the fiction that storage, shopping, evolution, and capture all
+happen at the same tile. So we build one transferable doorway, not fifteen new walkthroughs.”**
+End on **ROUTED SEMANTIC SEAM → DURABLE SETUP RUNNER → 10+5 CAPTURES → RANDOMIZED OUTCOMES**, with
+**ROM/PRIVATE/LEARNER EFFECTS 0 · CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**.
+
 ## August 26 scene: publish the blueprint before building new Red lessons
 
 Open on **PR 64 · SOURCE 24E2AAE9 · MAIN B678B58A · CI 32952034242/1**. Turn the old eight-card

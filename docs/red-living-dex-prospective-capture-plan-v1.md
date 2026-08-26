@@ -1,6 +1,9 @@
 # Red prospective living-Pokédex capture plan V1
 
-Status: ROM-free feasibility plan under qualification on 2026-08-26. It is subordinate to
+Status: published ROM-free feasibility plan. Source `ca7340d4` merged through PR 66 as main
+`f9f3310e` and passed exact-main CI `32956496929/1`; see the
+[qualification](evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json).
+It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
 [shared capture contract](living-dex-purpose-built-capture-contract.md).
@@ -106,8 +109,9 @@ or replay.
 
 ## Next gates
 
-1. Publish this exact feasibility result and reorient.
-2. Implement and adversarially qualify only the generic routed-semantic-goal composition seam.
+1. **Complete:** publish this exact feasibility result and reorient.
+2. **Active:** implement and adversarially qualify only the generic routed-semantic-goal
+   composition seam.
 3. Re-run this ROM-free feasibility audit. The pilot blocker closes only when every scheduled kind
    can bind through genuine local or routed semantic execution without changing the schedule.
 4. Separately freeze and qualify the durable Red setup runner and private route/terminal bindings.

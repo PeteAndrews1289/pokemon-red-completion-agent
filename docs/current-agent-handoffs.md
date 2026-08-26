@@ -6,7 +6,35 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the concrete ROM-free Red capture plan
+## Current override: Codex owns the routed semantic composition seam
+
+The concrete Red prospective plan is published from source
+`ca7340d436698be7a90412ff304726d973da2ac3` through PR 66, merged as main
+`f9f3310e9d55f2bd16e7b326e83c0e702b7538a5`, and green at exact-main CI `32956496929/1`.
+Its [qualification](evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)
+binds 15 focused tests, 136 related boundary tests, and the 5,021-test suite. It used no ROM or
+private capture and changed no learner, authority, or transfer counter.
+
+The 10+5 schedule itself passes: all menus have three semantic kinds, exact train coverage is
+2144/2187 after any two train censors, and family/location reserves remain disjoint. Seven
+non-trade kinds point to concrete tested Red providers. The execution audit is intentionally red:
+one menu is local and fourteen need generic route-then-semantic-goal composition. Runtime bindings
+are not authenticated. Trade remains a separate later full-living-Pokédex gap.
+
+Codex owns only ROM-free implementation and qualification of that generic seam plus the minimal
+Red adapter. The route terminal and destination provider must both verify; a fresh observation
+must separate them; the declared destination kind cannot drift; the destination executes once;
+budgets reconcile; route identity/details never become learner features or labels. Codex publishes
+and reorients before a durable setup runner or private capture campaign.
+
+Claude is the optional read-only statistics, causal-design, leakage, and semantic-overclaim
+reviewer. Antigravity is the optional read-only architecture, portability, and claim-boundary
+reviewer. Neither reads private captures, executes gameplay, edits the worktree, or delays ordinary
+work; Codex adjudicates. Protected setup, outcomes, fitting, sealed Red, Crystal, promotion, and
+replay are closed. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the concrete ROM-free Red capture plan
 
 The title-neutral purpose-built curriculum is published from source
 `24e2aae906e09ec73d8742a50edc3e49ca2022dc` through PR 64, merged as main

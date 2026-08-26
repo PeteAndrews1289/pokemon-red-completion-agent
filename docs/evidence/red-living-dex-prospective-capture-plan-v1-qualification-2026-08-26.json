@@ -1,0 +1,156 @@
+{
+  "artifacts": {
+    "frozen_public_result": {
+      "path": "configs/red-living-dex-prospective-capture-plan-v1.json",
+      "sha256": "76cc065f3be8c2c3bf49808a8261f39906655a0a8c230a601bb5ddc68ae7f349"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_capture_plan.py",
+      "sha256": "5194997f0d34ecbc35cbe433969339943f80b81669a85cae658bfc33aa70f82b"
+    },
+    "plan_design": {
+      "path": "docs/red-living-dex-prospective-capture-plan-v1.md",
+      "sha256_at_source_commit": "b38b5b9e49d2e70e18ff90ba5f63652bfd473d604414582ab8936c09c13475c4"
+    },
+    "tests": {
+      "path": "tests/test_red_living_dex_capture_plan.py",
+      "sha256": "4c01044d414266aacb8ad70a2045b5eb43526d26dc5f8be1710bb2186565d84e"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free source freezes an exact Red ten-train plus five-development prospective living-Pokedex capture schedule. Its three-kind menus retain exact selected-kind probability 2144/2187 after any two train censors, preserve the required family and location reserves, and bind seven non-trade semantic kinds to concrete tested Red provider classes. The feasibility audit honestly stops execution because fourteen of fifteen menus require a generic routed-semantic-goal composition seam that does not yet exist.",
+    "unsupported": [
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "durable_red_setup_runner",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "pilot_execution_readiness",
+      "policy_superiority",
+      "runtime_executor_authentication",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "feasibility": {
+    "development_family_scopes": 5,
+    "development_location_scopes": 5,
+    "development_slots": 5,
+    "full_mission_ready": false,
+    "implemented_local_option_kinds": 7,
+    "locally_composable_slots": 1,
+    "menu_width": 3,
+    "mission_missing_option_kinds": [
+      "trade"
+    ],
+    "pilot_execution_ready": false,
+    "pilot_plan_contract_satisfied": true,
+    "plan_sha256": "d718c4d615f3ba86a0dc7d17e9f5327df0b6cace6d74f4e7b02d12c964a3b0ee",
+    "qualification_sha256": "c084c6693668ca0b69bbf0cc44c57b52b61ffd1f10cdc4403ace5d10de9f9202",
+    "routed_slots": 14,
+    "train_family_scopes": 3,
+    "train_minimum_selected_kind_probability": {
+      "denominator": 2187,
+      "numerator": 2144
+    },
+    "train_slots": 10,
+    "unresolved_runtime_capabilities": [
+      "routed-semantic-goal-composition"
+    ]
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "protected_capture_access_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "ROM-free, implement and adversarially qualify a generic route-then-semantic-goal composition seam. It must authenticate the declared route, execute and verify its terminal under one budget, freshly reobserve the title state, bind the unchanged declared destination kind through an existing provider, execute that destination exactly once, and require both route and destination verification. The route may never become the learner-facing option label. Publish and reorient before any private setup runner or capture campaign."
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32956496929,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32956496929",
+    "merged_main_commit": "f9f3310e9d55f2bd16e7b326e83c0e702b7538a5",
+    "pull_request": 66,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32956245451,
+    "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32956245451",
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/66",
+    "source_bundle_sha256": "b3cf45e5407f7ae275b8cd8341cde12f9e0df21de156dea7c483e8f5adc1b1a9",
+    "source_commit": "ca7340d436698be7a90412ff304726d973da2ac3"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-prospective-capture-plan-qualification.v1",
+  "status": "published_plan_valid_execution_blocked",
+  "verification": {
+    "adversarial_contract_checks": [
+      "capability_drop_rejected",
+      "executor_type_forgery_rejected",
+      "goal_mapping_forgery_rejected",
+      "missing_trade_scheduled_rejected",
+      "probability_reduction_rejected",
+      "route_blocker_removal_rejected",
+      "scope_collapse_rejected",
+      "train_reserve_removal_rejected",
+      "train_development_overlap_rejected"
+    ],
+    "documentation_check": "passed",
+    "focused_capture_plan_tests_passed": 15,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5021,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed_at_pull_request_and_exact_merged_main",
+    "mypy_source_files": 271,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "4d78e3826128c7ce7a4f08e511b4406a7700f2547c2f4f7e143bbd827898100e",
+      "battle_teacher_sha256": "38715774111101d559cfc09b4088c845a1a12e138697e00afe31a2776d8eddf2",
+      "goal_manager_registry_sha256": "17b0f0cafe723dae6f8bfef4a26079c14aef13cb7d933fa5742d9b968f556d7d",
+      "goal_manager_teacher_sha256": "6f7b184f9df5ead9fe056f35ba2a7a9020d34e13a7f55779859e70498c9d21e1",
+      "scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+      "strategic_navigation_registry_sha256": "697a968da647f8af8728bd58f6d7f724b6cfd882bdba5313b283abfc78640060",
+      "strategic_navigation_teacher_sha256": "95ac867cce56bd673f7001fd19ac2ff459596c843b8aff93884bc756c3346b4e"
+    },
+    "related_learning_boundary_tests_passed": 136,
+    "ruff_status": "passed"
+  }
+}
