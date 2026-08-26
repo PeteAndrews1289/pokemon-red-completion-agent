@@ -1,6 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: the first frozen lesson fails—and the observer looks away
+## August 25: teach the notebook to look, then budget for imperfect lessons
+
+The observer repair is now published as main `c663c3f4` under green CI `32913718889/1`. It did
+not reopen the failed V3 lesson. Instead, a ROM-free classroom proved the rule the next curriculum
+needs: run the selected semantic skill once, then look at the living collection once whether the
+skill returns normally or reports failure. An unchanged ledger becomes a negative lesson. A
+partially changed ledger also becomes a negative lesson. The exact intended transition becomes a
+positive lesson—even when the executor's report broke afterward. Only an unreadable observer
+remains censored.
+
+Seventeen focused tests and nine killed mutations make that more than a slogan. The suite catches
+a skipped or doubled observer, skipped or doubled execution, wrong candidate, discarded readable
+state, fabricated fallback state, unverified report, and swallowed process interruption. The
+[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json) records
+zero ROM, private context, controller, teacher, model, claim, outcome, authority, or transfer
+effects. This is better measurement, not model progress.
+
+The next classroom is V4, and its arithmetic is fixed before seeing results. It will seal twelve
+training trials: eight required lessons and four explicit reserves, plus eight untouched
+development trials. All twenty physical roots must be different and unused; train and development
+must separate both roots and transformation families; the consumed V3 root cannot return. A
+reserve may replace a censored target only because it was preregistered, never because a result was
+inconvenient. The freeze itself remains action-free and stops before the student answers anything.
+
+## Earlier August 25: the first frozen lesson fails—and the observer looks away
 
 The project finally crossed from curriculum design into a real V3 train attempt. Collector main
 `7ebea63c` and its read-only storage repair `14d7bcea` both passed GitHub CI. A rehearsal restored

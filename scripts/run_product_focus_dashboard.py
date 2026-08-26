@@ -95,6 +95,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "model_fit": "fit",
         "model_prediction": "prediction",
         "model_refit": "refit",
+        "private_development_outcome_opening": "dev outcomes",
         "private_artifact_access": "private artifacts",
         "private_input_access": "private",
         "public_manifest_freeze": "manifest",
@@ -108,6 +109,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "teacher_route_hardening": "teacher",
         "transfer_claim": "transfer claim",
         "unpowered_model_quality_claim": "unpowered quality claim",
+        "v4_trial_execution_before_reorientation": "V4 execution",
     }
     prohibited = " / ".join(
         boundary_labels.get(value, value.replace("_", " "))
@@ -120,13 +122,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "V3 is closed after one safely censored train attempt. Current work preserves "
-            "observable outcomes after selected-skill failure before any new V4 curriculum is "
-            "frozen; no training, promotion, or Crystal transfer is active."
+            "The post-exception observer repair is qualified and retired. V4 now freezes twelve "
+            "train trials with four fixed reserves plus eight untouched development trials; no "
+            "prediction, gameplay, promotion, or Crystal transfer is active."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "ROM-free observer repair → adversarial qualification → green CI → V4 reorientation"
+            "Red V4 · authenticate unused roots → freeze 12 train + 8 development → reorient"
         ),
         collection_target=150,
         model=DashboardModelState(
@@ -135,7 +137,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "Historical dependency ranker · one authentic settled Red choice · no promotion"
             ),
             choice=(
-                "Latest V3 attempt was not model-selected; its interrupted result was censored"
+                "No active model choice · V4 curriculum freeze is action-free"
             ),
             confidence=None,
             decisions=1,
@@ -144,19 +146,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         ),
         experiment=DashboardExperimentState(
             phase="qualification",
-            zero_shot_completed=0,
-            zero_shot_total=1,
-            adaptation_completed=0,
-            adaptation_total=1,
-            sealed_completed=0,
-            sealed_total=1,
+            zero_shot_completed=causal_train_examples,
+            zero_shot_total=max(8, causal_train_examples),
+            adaptation_completed=verified_outcomes,
+            adaptation_total=max(13, verified_outcomes),
+            sealed_completed=unseen,
+            sealed_total=max(5, unseen),
             predictions_committed=False,
-            heading="Observation recovery before V4",
-            eyebrow="ROM-free maintenance · no training run",
+            heading="Multi-family option-value curriculum V4",
+            eyebrow="Red curriculum · 12 train / 8 development · transfer later",
             counter_labels=(
-                "Observer contract",
-                "Adversarial qualification",
-                "Exact-source CI",
+                "Causal train examples",
+                "Verified development outcomes",
+                "Paired unseen comparisons",
             ),
         ),
         events=(
@@ -208,8 +210,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "development untouched · retry 0"
             ),
             (
-                "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"
-                "action/frame 0 · context closed · retry 0"
+                "Observer repair · main c663c3f4 · CI 32913718889/1 green · tests 4730 · "
+                "mutations 9/9 · ROM/private/action/frame/claim/prediction/teacher 0"
             ),
             (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "

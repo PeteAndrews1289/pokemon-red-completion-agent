@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-25 observer repair qualified; V4 action-free freeze active:** Main `c663c3f4` passed
+> CI `32913718889/1` with 4,730 tests. The
+> [qualification](docs/evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
+> records 17 focused tests, 9/9 killed mutations, readable unchanged/partial/exact outcomes of
+> -1/-1/+1 after ordinary execution failure, process-interruption propagation, and zero ROM,
+> private, gameplay, learning, authority, or transfer effects. Maintenance is retired.
+>
+> Codex owns one new-identity V4 action-free freeze: 12 train (8 required + 4 fixed reserves),
+> 8 untouched development, 20 distinct globally unused roots, V3-consumed-root exclusion, complete
+> two-row menus, and zero family/root overlap across partitions. Claude reviews power/censoring and
+> leakage after the plan exists; Antigravity reviews reserve/root identity and transfer boundaries.
+> Both are read-only milestone reviewers, not execution owners. No agent owns V3 retry, V4 trial
+> execution before reorientation, development outcomes, fit, sealed Red, Crystal, replay,
+> promotion, completion, or transfer. Counters remain **development 15 · verified 5 · causal train
+> 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 > **2026-08-25 V3 train ordinal zero censored; observation recovery active:** Collector main
 > `7ebea63c` passed CI `32900424741/1`; storage-port repair main `14d7bcea` passed CI
 > `32902297341/1`. The authentic claim-stubbed rehearsal reached the claim boundary with zero

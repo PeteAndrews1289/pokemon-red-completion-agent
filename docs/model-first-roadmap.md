@@ -8,7 +8,32 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V3 spent one root without a target; preserve observable failures before V4
+## Current checkpoint: observation recovery passed; freeze 12+8 V4 with reserve
+
+Main `c663c3f4` passed CI `32913718889/1` with 4,730 tests. The
+[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
+(SHA-256 `1b402002…f1463`) proves a generic frozen-selection seam: one selected semantic skill runs at
+most once; one fresh ledger is attempted after ordinary return or exception; readable unchanged,
+partial, and exact states derive `-1`, `-1`, and `+1`; only failed/invalid observation remains
+censored. Process interruption propagates, reports stay diagnostic-only, no exception identity
+crosses the policy boundary, and 9/9 targeted mutations died. ROM, private context, model,
+teacher, claim, action, frame, outcome, fit, authority, and transfer effects were all zero.
+
+Active `red-living-dex-multifamily-option-value-curriculum-v4` now fixes the arithmetic before
+spending another root. Adapt the existing action-free freezer under new V4 identities to seal
+exactly twelve train trials—eight required and four explicit reserves—plus eight untouched
+development trials. Require twenty distinct globally unused physical roots, exclude the consumed
+V3 root, preserve complete executable two-row menus, and enforce zero family or root overlap
+between train and development. The reserve is frozen before outcomes; it may not be invented after
+a censor.
+
+Mutation-test counts, reserve ordinals, global-claim exclusion, candidate balance, family/root
+partitions, and zero effects. Publish exact source, run one action-free freeze, preserve its terminal,
+and reorient immediately. Do not predict, claim a trial/root, execute a skill, inspect development
+outcomes, fit, open sealed Red, run Crystal, promote, or replay. Counters remain **development 15 ·
+verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: V3 spent one root without a target; preserve observable failures before V4
 
 Collector main `7ebea63c` passed CI `32900424741/1`; read-only storage-port repair main
 `14d7bcea` passed CI `32902297341/1`. An authentic claim-stubbed rehearsal then reached the claim

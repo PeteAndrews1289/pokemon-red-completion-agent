@@ -1,0 +1,88 @@
+{
+  "claim_boundary": {
+    "supported": "The shared Red living-Pokedex option executor invokes one selected semantic capability at most once, attempts exactly one independent post-attempt ledger observation after either an ordinary return or ordinary exception, settles every readable ledger as an independently derived positive or negative target, and censors only unavailable or invalid observation.",
+    "unsupported": [
+      "autonomous_red_completion",
+      "causal_training_example",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "effects": {
+    "controller_actions": 0,
+    "development_openings": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "private_artifact_reads": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32913718889,
+    "main_commit": "c663c3f4ee41ed57faf0fe94de5c1c2d88ae08b5",
+    "pull_request": 48,
+    "source_bundle_sha256": "27afc81271901c50f777055126e596d25bfa0bb829c376af06fd1cd94e24045f"
+  },
+  "qualification": {
+    "full_suite": {
+      "passed": 4730,
+      "skipped": 3,
+      "xfailed": 1
+    },
+    "generic_frozen_selection_api": true,
+    "observer_contract_tests_passed": 17,
+    "ordinary_exception_cases": {
+      "exact_transition": "settled_positive",
+      "partial_transition": "settled_negative",
+      "unchanged_ledger": "settled_negative"
+    },
+    "process_interruptions_propagate": true,
+    "report_available_only_after_verified_observation": true,
+    "selected_capability_maximum_executions": 1,
+    "teacher_or_alternate_capability_paths": 0
+  },
+  "recorded_on": "2026-08-25",
+  "schema": "pokemon.red.post-exception-living-ledger-qualification-evidence.v1",
+  "status": "rom_free_observation_recovery_qualified",
+  "targeted_mutations": {
+    "killed": 9,
+    "probes": [
+      "catch_process_level_interruption",
+      "discard_readable_ledger",
+      "execute_alternate_candidate",
+      "execute_selected_capability_twice",
+      "expose_report_without_verified_observation",
+      "fabricate_unchanged_ledger_after_observer_failure",
+      "observe_twice",
+      "skip_independent_observer",
+      "skip_selected_execution"
+    ],
+    "survived": 0
+  },
+  "title_role": "ROM-free generic evidence-preservation qualification before a new Red V4 living-Pokedex curriculum; not training, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "v4_requirement": {
+    "development_family_and_roots_disjoint_from_train": true,
+    "development_trials_to_freeze": 8,
+    "minimum_settled_train_targets": 8,
+    "preregistered_train_reserve": 4,
+    "train_trials_to_freeze": 12,
+    "v3_consumed_roots_excluded": true
+  }
+}
