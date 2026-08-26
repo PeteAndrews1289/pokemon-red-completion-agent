@@ -32,6 +32,7 @@ from pokemon_red_completion.red_living_dex_option_calibration import (
 from pokemon_red_completion.red_living_dex_option_collector import (
     RedLivingDexBehaviorCommitment,
     RedLivingDexCollectedExample,
+    RedLivingDexCollectionOrigin,
     collect_red_living_dex_observed_arm,
     issue_red_living_dex_behavior_commitment,
 )
@@ -55,6 +56,7 @@ def _collected(
     censored: bool = False,
     authenticated: bool = True,
     authenticated_commitment: bool = True,
+    materialized: bool = True,
     scenario_identity_sha256: str | None = None,
 ) -> RedLivingDexCollectedExample:
     scenario = (
@@ -138,11 +140,18 @@ def _collected(
             provenance=f"{6_000 + index:064x}",
         )
 
-    return collect_red_living_dex_observed_arm(
+    collected = collect_red_living_dex_observed_arm(
         adapted,
         commitment=commitment,
         observe_after=observe,  # type: ignore[arg-type]
     )
+    if materialized:
+        object.__setattr__(
+            collected,
+            "collection_origin",
+            RedLivingDexCollectionOrigin.DURABLE_VERIFIED_CAPTURE,
+        )
+    return collected
 
 
 def _fit_ready_examples() -> tuple[RedLivingDexCollectedExample, ...]:
@@ -254,6 +263,27 @@ def test_synthetic_randomization_commitment_cannot_open_the_fit_gate() -> None:
 
     assert batch.fit_ready is False
     assert batch.public_dict()["authenticated_randomization_counts"] == {
+        "development": 4,
+        "train": 7,
+    }
+    with pytest.raises(RedLivingDexCalibrationError, match="not ready"):
+        batch.train_fit_examples()
+
+
+def test_direct_unmaterialized_example_cannot_open_the_fit_gate() -> None:
+    ready = list(_fit_ready_examples())
+    ready[0] = _collected(
+        502,
+        partition="train",
+        kind=LivingDexOptionKind.ACQUIRE,
+        family="train-unmaterialized",
+        location="train-unmaterialized",
+        materialized=False,
+    )
+    batch = RedLivingDexCalibrationBatch(tuple(ready))
+
+    assert batch.fit_ready is False
+    assert batch.public_dict()["durable_materialization_counts"] == {
         "development": 4,
         "train": 7,
     }

@@ -26,6 +26,7 @@ from pokemon_red_completion.red_living_dex_option_adapter import (
 )
 from pokemon_red_completion.red_living_dex_option_collector import (
     RedLivingDexCollectedExample,
+    RedLivingDexCollectionOrigin,
 )
 
 RED_LIVING_DEX_CALIBRATION_BATCH_SCHEMA = (
@@ -121,6 +122,11 @@ class RedLivingDexCalibrationBatch:
                 example.behavior.commitment.authenticated_issuance
                 for example in (*self.settled_train, *self.settled_development)
             )
+            and all(
+                example.collection_origin
+                is RedLivingDexCollectionOrigin.DURABLE_VERIFIED_CAPTURE
+                for example in (*self.settled_train, *self.settled_development)
+            )
         )
 
     def train_fit_examples(self) -> tuple[LivingDexObservedArmExample, ...]:
@@ -194,6 +200,14 @@ class RedLivingDexCalibrationBatch:
                 )
                 for partition in ("development", "train")
             },
+            "durable_materialization_counts": {
+                partition: sum(
+                    example.collection_origin
+                    is RedLivingDexCollectionOrigin.DURABLE_VERIFIED_CAPTURE
+                    for example in self._settled(partition)
+                )
+                for partition in ("development", "train")
+            },
             "calibration_fit_ready": self.fit_ready,
             "censored_counts": _partition_document(censored_counts),
             "censoring_diagnostic": self._censoring_diagnostic(),
@@ -243,6 +257,7 @@ class RedLivingDexCalibrationBatch:
             "unselected_action_targets": 0,
             "synthetic_selected_executors_admitted_to_fit": False,
             "synthetic_randomization_admitted_to_fit": False,
+            "rehearsal_or_unmaterialized_examples_admitted_to_fit": False,
         }
 
     def private_dict(self) -> dict[str, object]:
