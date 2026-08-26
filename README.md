@@ -5,7 +5,29 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): prove the authentic Red curriculum action-free.** The
+> **Current product focus (August 26, 2026): preserve the exact reason before another authentic
+> census.** The action-free inventory shipped through
+> [PR 56](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/56) as main
+> `98d4f21a`, whose exact-main CI run `32938080397/1` passed 4,831 tests. Its one permitted V1
+> invocation authenticated all 81 private Red inputs and failed closed at the broad
+> `action_free_inventory` stage. The
+> [path-free receipt](docs/evidence/red-living-dex-authentic-inventory-failure-v1-2026-08-26.json)
+> records **draws 0 · claims 0 · actions 0 · frames 0 · outcomes 0 · predictions 0 · teachers 0 ·
+> fits 0 · private identities/paths published 0**; no plan or materializer namespace was created.
+> V1 cannot retry.
+>
+> That is safety evidence, not a proven coverage shortfall. The broad receipt cannot tell whether
+> namespace state, historical replay, scenario projection, or exact 8+4 coverage stopped the
+> inventory. The current gate is therefore ROM-free: qualify a V2 receipt with finite path-free
+> reasons and safe aggregate counters for every private stage, while adversarially proving that
+> identity/path leakage and false zeroes are impossible. Publish and reorient before any
+> new-identity authenticated read. The curriculum target remains 8 train across 4 genuine option
+> kinds and 3 families plus 4 family-and-location-disjoint development scenarios. No outcome
+> collection, fit, sealed Red, Crystal, promotion, or replay is open. Boards remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous product focus (August 26, 2026): prove the authentic Red curriculum action-free.** The
 > durable observed-arm materializer is published from source `98cfa010` through
 > [PR 54](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/54), green exact-source
 > CI `32933786447/1`, and main `34a2c920`. It freezes a complete 3+ option menu, claims before

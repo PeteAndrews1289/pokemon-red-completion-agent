@@ -6,7 +6,35 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free authenticated Red curriculum inventory
+## Current override: Codex owns only the ROM-free V2 diagnostic qualification
+
+Inventory source `069c44d9b48d87d586795e4d8ade58133f451e91` passed PR CI, merged through
+PR 56 as main `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed exact-main CI
+`32938080397/1` with 4,831 tests. The one permitted V1 inventory authenticated all 81 private
+inputs and failed closed at the broad `action_free_inventory` stage. Its
+[receipt](evidence/red-living-dex-authentic-inventory-failure-v1-2026-08-26.json) records draws,
+claims, actions, frames, outcomes, predictions, teachers, fits, and published private
+identity/path fields all zero. No private plan or materializer namespace exists. V1 and its record
+identity are permanently closed.
+
+The failure does **not** establish a coverage shortfall. The public receipt cannot distinguish
+materializer namespace state, historical replay, scenario projection, or exact freeze coverage.
+Codex therefore owns a single ROM-free V2 qualification: finite path-free reasons for each private
+stage, aggregate state-read/exclusion/partition/kind/family/location/overlap/effect counters, and
+tests that reject collapsed reasons, false zeroes, private identities, and private paths. Publish
+that exact boundary through green CI and reorient before deciding whether one new-identity
+authenticated census is warranted. The 8 train / 4 option kinds / 3 families plus 4
+family-and-location-disjoint development gate cannot shrink.
+
+Claude remains the optional read-only causal-design, leakage, diagnostic-power, and calibration
+reviewer. Antigravity remains the optional read-only architecture, claim-boundary, and cross-title
+adapter reviewer. Neither inspects private captures, executes gameplay, edits the worktree, or
+blocks ordinary work. Codex adjudicates and publishes. No agent owns V1 retry, V2 protected access
+before publication and reorientation, outcome collection, fitting, sealed Red, Crystal execution,
+promotion, or full replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 ·
+fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one action-free authenticated Red curriculum inventory
 
 The durable Red materializer is complete and published. Source `98cfa01096e16b36c3f6b9a829d05ffa7293af36`
 passed exact-source CI `32933786447/1` with 4,802 tests and merged through PR 54 as main

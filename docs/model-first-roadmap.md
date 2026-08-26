@@ -8,7 +8,41 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: prove the authentic Red 8+4 curriculum without acting
+## Current checkpoint: make the next authentic census explain exactly why it stops
+
+The action-free authentic inventory was published from source `069c44d9b48d87d586795e4d8ade58133f451e91`
+through PR 56, merged as main `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed
+exact-main GitHub CI `32938080397/1` with **4,831 passed · 3 deselected · 1 expected failure**.
+Its one permitted V1 invocation authenticated all **81** private inputs and failed closed at the
+broad `action_free_inventory` stage. The
+[receipt](evidence/red-living-dex-authentic-inventory-failure-v1-2026-08-26.json) records behavior
+draws, root claims, controller actions, emulator frames, outcomes, model predictions, teacher
+queries, fits, and published private identity/path fields all zero. It wrote no private plan and
+created no materializer namespace. V1 is retired without retry.
+
+The safety claim holds, but the experimental diagnosis does not. The public receipt collapsed the
+post-authentication stages, so it cannot establish whether materializer namespace state,
+historical-menu replay, scenario projection, or exact 8+4 coverage caused the stop. It therefore
+supports neither “the authentic curriculum exists” nor “the authentic curriculum is too small.”
+Blindly rerunning or lowering the gate would spend scarce authenticated access without learning.
+
+The shortest next step is one ROM-free V2 diagnostic qualification. It must use finite path-free
+reason codes for source/input authentication, materializer namespace, historical replay, scenario
+projection, and exact freeze coverage. It must preserve aggregate counts for authenticated
+contexts, emulator states read, exclusions by safe class, eligible train/development scenarios,
+offered option kinds, transformation families, locations, partition overlaps, and every protected
+effect. Tests must distinguish every reason, detect a collapsed stage or false zero, reject any
+identity/path-bearing public value, and prove no private input is needed for qualification.
+
+Only after that exact V2 boundary is published through green CI and the project reorients may a
+new-identity authenticated census be considered. The gate remains eight train scenarios across
+four genuine option kinds and three train families plus four development scenarios disjoint by
+family and location. A real shortfall stops rather than lowering it. Outcome collection, model
+fitting, sealed Red, Crystal, promotion, and full replay remain closed. Counters remain
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous checkpoint: prove the authentic Red 8+4 curriculum without acting
 
 The V4 12+8 freeze remains retired **before execution** because it could reward an option that never
 ran. Its replacement selected-arm contract, Red adapter, collector, calibration gate, and durable
