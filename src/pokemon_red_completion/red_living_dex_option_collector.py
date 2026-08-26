@@ -56,6 +56,14 @@ class RedLivingDexBehaviorIssuance(StrEnum):
     SYSTEM_CSPRNG = "system-csprng-single-draw-v1"
 
 
+class RedLivingDexCollectionOrigin(StrEnum):
+    """Whether the example crossed the once-only durable materializer."""
+
+    DIRECT_UNMATERIALIZED = "direct-unmaterialized"
+    DURABLE_REHEARSAL = "durable-materializer-rehearsal-v1"
+    DURABLE_VERIFIED_CAPTURE = "durable-materializer-verified-capture-v1"
+
+
 def _require_sha256(value: object, *, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise RedLivingDexOptionCollectorError(f"{subject} SHA-256 is invalid")
@@ -303,6 +311,10 @@ class RedLivingDexCollectedExample:
     selected_execution_raised: bool
     independent_observer_calls: int
     after_observer_provenance_sha256: str | None
+    collection_origin: RedLivingDexCollectionOrigin = field(
+        default=RedLivingDexCollectionOrigin.DIRECT_UNMATERIALIZED,
+        init=False,
+    )
 
     def __post_init__(self) -> None:
         if not isinstance(self.adapted, RedLivingDexAdaptedScenario):
@@ -311,6 +323,10 @@ class RedLivingDexCollectedExample:
             raise TypeError("collected example needs a behavior decision")
         if not isinstance(self.example, LivingDexObservedArmExample):
             raise TypeError("collected example needs an observed-arm example")
+        if not isinstance(self.collection_origin, RedLivingDexCollectionOrigin):
+            raise RedLivingDexOptionCollectorError(
+                "collected example materialization origin differs"
+            )
         if (
             self.example.menu != self.adapted.menu
             or self.behavior.commitment.menu_sha256
@@ -373,6 +389,15 @@ class RedLivingDexCollectedExample:
                 self.after_observer_provenance_sha256 is not None
             ),
             "behavior": self.behavior.public_dict(),
+            "collection_origin": self.collection_origin.value,
+            "durably_materialized": (
+                self.collection_origin
+                is not RedLivingDexCollectionOrigin.DIRECT_UNMATERIALIZED
+            ),
+            "verified_capture_materialization": (
+                self.collection_origin
+                is RedLivingDexCollectionOrigin.DURABLE_VERIFIED_CAPTURE
+            ),
             "example": self.example.public_dict(),
             "identity_fields_public": 0,
             "independent_observer_calls": self.independent_observer_calls,
@@ -721,6 +746,7 @@ __all__ = [
     "RedLivingDexBehaviorDecision",
     "RedLivingDexBehaviorIssuance",
     "RedLivingDexBehaviorCommitment",
+    "RedLivingDexCollectionOrigin",
     "RedLivingDexCollectedExample",
     "RedLivingDexExternalInterruption",
     "RedLivingDexOptionCollectorError",
