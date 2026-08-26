@@ -61,7 +61,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-26-red-observed-arm-materializer-opened** · status **active** · evidence [qualification](docs/red-living-dex-observed-arm-adapter.md)
+**2026-08-26-red-observed-arm-materializer-opened** · status **active** · evidence [qualification](docs/evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json)
 
 | Check | Session conclusion |
 | --- | --- |

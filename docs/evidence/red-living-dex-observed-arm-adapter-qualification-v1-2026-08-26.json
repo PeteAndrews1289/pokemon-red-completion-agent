@@ -1,0 +1,124 @@
+{
+  "artifacts": {
+    "adapter": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_adapter.py",
+      "sha256": "3ca7c6cac827ac4ad63da7711bcca35c495390d392c14b922aa54f560e535771"
+    },
+    "calibration": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_calibration.py",
+      "sha256": "c9e67c2b7f6f886d7ad6c80f4363d29b371bf3353c6972b008f6026463285502"
+    },
+    "collector": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_collector.py",
+      "sha256": "a5bc7f16b6024e5b904e2b418a02c6eb6ab5ef7e07ec9f3d4d88016a4efcb586"
+    },
+    "design": {
+      "path": "docs/red-living-dex-observed-arm-adapter.md",
+      "sha256": "c2b5181daf062d153ace32ee6863703ce68e1c442adf57b8b89449997e9fb5b8"
+    },
+    "tests": [
+      {
+        "path": "tests/test_red_living_dex_option_adapter.py",
+        "sha256": "d140b15a40b27957d1f77625d0559900b7020488fad2f6ceab0bafb80cde36f6"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_collector.py",
+        "sha256": "2de72a07e8cdb5e418b3153ea1cd7cdc1485a6e4d1c499045c156b1597b58347"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_calibration.py",
+        "sha256": "9931a4faa308d157a0987a70349546b2e62e591ab88874dcb2907ae115778c43"
+      }
+    ]
+  },
+  "claim_boundary": {
+    "supported": "A published ROM-free Red boundary materializes complete variable-size title-neutral option menus, applies hard availability and invariant masks, issues one authenticated system-random behavior commitment with full support, executes one authenticated semantic option at most once, independently observes the realized arm, preserves living specimens, and admits only authenticated train and development batches to calibration readiness.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "effects": {
+    "controller_actions": 0,
+    "development_openings": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "private_artifact_reads": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "independent_reviews": {
+    "antigravity": {
+      "model": "Gemini 3.7 Flash Medium",
+      "p0_findings": 0,
+      "verdict": "go"
+    },
+    "claude": {
+      "model": "Claude Opus CLI",
+      "p0_findings": 0,
+      "p1_findings_fixed": [
+        "caller-controlled seed shopping",
+        "synthetic executor admission"
+      ],
+      "post_fix_reaudit_available": false,
+      "verdict": "go_with_fixes"
+    }
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "real_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Implement and mutation-test a ROM-free durable authentic materializer that freezes a complete menu, claims a repeatable scenario before randomization, persists exactly one system-random commitment before controller input, binds genuine semantic executors, executes only the selected arm, independently observes its result, and resumes only never-claimed scenarios."
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32930451851,
+    "ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32930451851",
+    "merged_main_commit": "0320a5a8b20df4100396918b45597db03ec73515",
+    "pull_request": 52,
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/52",
+    "source_bundle_sha256": "40527bbc6659a7639cdaca281f391b6c50f39f8fa406f8629906250472bd0dae",
+    "source_commit": "3c63e461750e6ba0f8b584ce668e574f78e81ff8"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-observed-arm-adapter-qualification.v1",
+  "status": "published_rom_free_boundary_qualified_for_durable_materializer",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_tests_passed": 30,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 4778,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed",
+    "mypy_source_files": 265,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "related_tests_passed": 79,
+    "ruff_status": "passed"
+  }
+}

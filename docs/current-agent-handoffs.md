@@ -20,7 +20,9 @@ CSPRNG commitment bound to the scenario, partition, and complete menu; the authe
 must claim first, persist it before input, and forbid reissue. Raw synthetic callables cannot open
 fitting; counted examples must use the established dual-capability or Red goal-skill semantic
 wrappers. Thirty focused tests and a 79-test related slice pass. See
-[the adapter design](red-living-dex-observed-arm-adapter.md).
+[the qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json)
+and [the adapter design](red-living-dex-observed-arm-adapter.md). The boundary is published as main
+`0320a5a8` through PR 52 and green CI `32930451851/1`.
 
 Codex now owns the remaining materializer work for
 `repeatable-red-living-dex-option-value-calibration-v1`: enumerate authentic complete menus from
