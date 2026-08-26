@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-25. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-26. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,7 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: replace counterfactual ranking with observed-arm option value
+## Current checkpoint: materialize authentic Red observed-arm decisions durably
 
 The V4 12+8 freeze is retired **before execution**. Independent Claude and Antigravity audits found
 that its inherited binary ranker could turn a failed selected action into a positive target for the
@@ -16,24 +16,32 @@ alternative action that never ran. Its menus also collapsed to two reachable fea
 shapes, and its fitter required an outcome balance the freezer could not guarantee. More careful
 one-shot ceremony would have protected an invalid learning question.
 
-The replacement shared contract is now implemented ROM-free. It accepts variable-size anonymous
-menus; represents acquisition, evolution, trade, team development, storage, resupply, access, and
-exploration; hard-masks unavailable actions; records a replayable full-support behavior
-distribution; and learns only from the selected action's independently observed consequence.
-Censored attempts have no target. Settled attempts expose separate success, collection gain,
-dependency unlock, time, resource, party, storage, and irreversible-loss heads, so utility may be
-changed later without fabricating labels. Eighteen focused tests and an 84-test related slice are
-green; the [contract](living-dex-option-value-contract.md) and
-[redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md) define the boundary.
+The replacement shared contract and its Red adapter boundary are now implemented ROM-free. Red
+state projects to variable-size anonymous menus spanning acquisition, evolution, trade, team
+development, storage, resupply, access, and exploration. The adapter proves every normalization,
+hard-masks unavailable work, neutralizes row ordering, and binds only private semantic executors.
+The collector executes one selected binding once and learns only from its independently observed
+consequence. Censored attempts have no target, and a realized loss of a retained living specimen
+forces failure and irreversible-loss evidence. See the
+[adapter design](red-living-dex-observed-arm-adapter.md),
+[contract](living-dex-option-value-contract.md), and
+[redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md).
 
-Active `repeatable-red-living-dex-option-value-calibration-v1` now builds the smallest real Red
-adapter and bounded scenario collector around that contract. ROM-free fixtures must first prove a
-complete genuine menu with at least three distinct available rows, exact normalization provenance,
-no title/species/map/root identity, hard masks, replayable propensities, and selected-arm-only
-settlement. Then collect at least eight repeatable train outcomes across four option kinds and
-three transformation families plus four new family/location-disjoint development outcomes. Fit
-once on train only and report paired descriptive calibration and variance against random and
-cost-only baselines. These minimum counts size the later benchmark; they do not prove competence.
+Randomization is now one system-random commitment bound to the frozen scenario, partition, and
+complete menu. This replaces independently caller-selected seeds that could be searched until a
+desired arm won. Synthetic test callables are provenance-marked and cannot satisfy fit readiness;
+counted outcomes must trace to the established Red dual-capability or goal-skill runtimes.
+Thirty focused tests and a 79-test related slice are green ROM-free.
+
+Active `repeatable-red-living-dex-option-value-calibration-v1` now builds the durable authentic Red
+scenario materializer. It must enumerate a complete genuine menu with at least three distinct
+available rows, bind at least four real option kinds, claim before randomization, issue and persist
+exactly one commitment before controller input, prohibit reissue/retry, execute only the sampled
+binding, and settle one fresh outcome. Then collect at least eight repeatable train outcomes across
+four option kinds and three transformation families plus four new family/location-disjoint
+development outcomes. Fit once on train only and report descriptive calibration and variance
+against random and cost-only baselines. These minimum counts size the later paired benchmark; they
+do not prove competence.
 
 Stop before any powered benchmark, sealed Red, Crystal execution, authority promotion, or full
 replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·

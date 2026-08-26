@@ -1,24 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-25 observed-arm redesign implemented; repeatable Red calibration active:** The
-> proposed V4 12+8 freeze is retired unexecuted. Claude and Antigravity independently rejected its
-> failed-selected-arm-to-unexecuted-alternative targets, degenerate binary feature geometry, and
-> uncontrollable outcome-balance requirement. The replacement shared contract supports
-> variable-size anonymous menus, invariant hard masks, replayable full-support propensities,
-> selected-arm-only multi-outcome targets, censoring without labels, train-only fitting, and
-> held-out calibration. Eighteen focused tests and an 84-test related slice pass ROM-free. See the
-> [contract](docs/living-dex-option-value-contract.md) and
+> **2026-08-26 Red observed-arm boundary implemented; durable materializer active:** The Red
+> adapter now derives identity-free normalized 3+ row menus with hard masks and private executor
+> bindings. The collector uses one scenario/menu/partition-bound system-random commitment,
+> executes one selected binding once, and settles only its fresh observed outcome. Synthetic
+> callables cannot satisfy the calibration fit gate; counted rows must trace to the established
+> dual-capability or Red goal-skill runtime. Thirty focused tests and a 79-test related slice
+> pass ROM-free. See the
+> [adapter design](docs/red-living-dex-observed-arm-adapter.md),
+> [contract](docs/living-dex-option-value-contract.md), and
 > [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
 >
-> Codex owns `repeatable-red-living-dex-option-value-calibration-v1`: implement the Red adapter and
-> bounded repeatable scenario collector, then collect the minimum 8 train + 4 new development
-> outcomes and fit/report once. Claude owns read-only causal-design, leakage, calibration, and
-> power review. Antigravity owns read-only cross-title schema, hard-mask, propensity-replay, and
-> adversarial-boundary review; Gemini 3.7 Flash Medium is the routine audit choice, with Pro reserved
-> for a genuinely ambiguous architecture dispute. Neither reviewer executes gameplay or blocks
-> ordinary implementation. Codex adjudicates disagreements and records the reason. No agent owns
-> V4 execution, unobserved-arm labels, outcome-balanced selection, sealed/benchmark roots, sealed
-> Red, Crystal execution, promotion, or full replay in this lane. Counters remain **development
+> Codex owns the durable repeatable Red scenario materializer: complete authenticated menus,
+> claim-before-randomization, exactly one persisted commitment, no reissue/retry, genuine semantic
+> executors, one selected action, and fresh outcome settlement. Then collect the minimum 8 train +
+> 4 new disjoint development outcomes and fit/report once. Claude owns read-only causal-design,
+> leakage, calibration, and power review when authenticated. Antigravity owns read-only cross-title
+> schema, mask, propensity, and adversarial-boundary review; Gemini 3.7 Flash Medium remains the
+> routine choice. Antigravity returned `GO`; Claude's pre-fix `GO-WITH-FIXES` findings were repaired,
+> while its later CLI session was logged out. Neither reviewer executes gameplay or blocks ordinary
+> implementation. Codex adjudicates disagreements and records the reason. No agent owns V4 retry,
+> unobserved-arm labels, outcome-balanced selection, sealed/benchmark roots, sealed Red, Crystal
+> execution, promotion, or full replay in this lane. Counters remain **development
 > 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 > **2026-08-25 V3 train ordinal zero censored; observation recovery active:** Collector main

@@ -1,5 +1,36 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: Red gets an honest option classroom
+
+The abstract observed-arm contract now has a concrete Red boundary. One frozen Red snapshot can
+produce a complete anonymous menu of three or more genuinely distinct choices with exact
+normalization provenance and hard safety, resource, storage, and mechanical masks. Private
+species, maps, items, routes, families, and save identities stay behind the executor seam. Only one
+available binding executes, and only the fresh observed consequence of that binding can become a
+target. A private verifier cannot call an outcome successful if a previously retained living
+specimen disappeared.
+
+The review process found two experiment-breaking shortcuts before a ROM was opened. The first
+collector accepted independent probability and draw seeds, so a generator could search draw values
+until its desired arm won and then log a false inverse-propensity weight. The replacement issues
+one system-random commitment bound to the frozen scenario, partition, and complete menu. The next
+durable runner must claim first, persist that commitment before controller input, and never reissue
+it. The second shortcut let arbitrary test callables count as four kinds of real Pokémon work. Raw
+callables are now marked synthetic and cannot open fitting; counted examples must trace to the
+established semantic acquisition/evolution runtime or bounded Red goal skills.
+
+Thirty focused tests and a 79-test related slice now cover the Red adapter, behavior
+commitment, selected-once collector, independent settlement, living-collection-loss override,
+executor provenance, censoring, and train/development coverage gate. Claude's pre-fix audit was
+`GO-WITH-FIXES` and directly caused both corrections. Antigravity's post-change audit was `GO` with
+no P0. No ROM, private checkpoint, action, frame, model fit, or learning counter moved.
+
+The next engineering scene is the authentic materializer: enumerate complete menus from
+repeatable nonsealed Red checkpoints, bind at least four real option kinds, make every claim and
+random draw durable, collect eight train and four disjoint development outcomes, then fit once on
+train. That first batch is an integration and variance pilot—not evidence of policy superiority,
+game completion, or Crystal transfer.
+
 ## August 25: stop grading the road not taken
 
 The project was about to protect another scarce 12+8 Red curriculum when two independent reviews

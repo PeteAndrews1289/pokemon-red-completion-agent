@@ -1,5 +1,35 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: build the honest Red classroom, then catch two ways it could cheat
+
+Open with the abstract card from the prior scene, then plug it into a Red state. Fan out **3+
+ANONYMOUS OPTIONS**: **CATCH · EVOLVE · TRAIN · STORAGE · RESUPPLY · UNLOCK · EXPLORE**. Keep
+species, map, route, item, and save names behind frosted glass. Cross out unsafe rows with **HARD
+MASK · PROBABILITY 0**. Show the remaining rows shuffle without any semantic “catch first” order.
+
+Now reveal the first adversarial finding. Animate a script trying lottery seeds until its preferred
+arm wins: **TRY SEED → WRONG ARM → TRY AGAIN → DESIRED ARM**. Stamp the reported `1/p` weight
+**FALSE**. Replace it with **ONE SYSTEM-RANDOM COMMITMENT · BOUND TO SCENARIO + PARTITION + COMPLETE
+MENU · PERSIST BEFORE INPUT · REISSUE FORBIDDEN**. The line is: **“If you choose the lottery ticket
+after seeing which answer you want, it was never a lottery.”**
+
+Reveal the second finding with four cardboard buttons labelled as real skills. Let them satisfy the
+coverage counter, then peel off the labels to show arbitrary test callables. Stamp **SYNTHETIC ·
+CANNOT OPEN FITTING**. Connect the real path: **RED DUAL CAPABILITY / BOUNDED GOAL SKILL → PRIVATE
+EXECUTOR → INDEPENDENT VERIFIER**.
+
+Run one animated choice. Only the selected binding lights. The executor returns a card labelled
+**UNTRUSTED REPORT**; a fresh state observer fills in the actual progress and cost heads. Then make
+a retained specimen disappear while the private verifier says success. Override it on screen with
+**LIVING COLLECTION LOSS → VERIFIED FAILURE + IRREVERSIBLE LOSS**.
+
+Flash **30 FOCUSED TESTS · 79 RELATED TESTS · ANTIGRAVITY GO · ROM 0 · PRIVATE CHECKPOINT 0 ·
+ACTIONS 0 · FRAMES 0 · CAUSAL TRAIN 0/8**. End on the next rail: **AUTHENTIC REPEATABLE RED STATE →
+COMPLETE MENU → DURABLE CLAIM → ONE COMMITMENT → ONE GENUINE SKILL → ONE FRESH OUTCOME → 8 TRAIN +
+4 DISJOINT DEVELOPMENT → TRAIN-ONLY FIT**. Keep **AUTHORITY 0 · TRANSFER 0 · CRYSTAL CLOSED** visible.
+Say plainly: **“The classroom can now write honest lessons. The next job is making every real
+lesson durable enough that neither a crash nor a convenient redraw can rewrite the experiment.”**
+
 ## August 25 scene: the model was being graded on a move it never made
 
 Open on the proposed V4 envelope: **12 TRAIN + 8 DEVELOPMENT · ACTIONS 0**. Before it seals, split

@@ -6,12 +6,15 @@
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
 > proposed V4 12+8 freeze is retired unexecuted because its binary learner fabricated preferences
 > for unexecuted alternatives and lacked meaningful feature diversity. The active lane is
-> `repeatable-red-living-dex-option-value-calibration-v1`: connect Red to the shared observed-arm
-> option-value contract, prove title-neutral variable-size menus and replayable behavior
-> propensities, collect a minimum 8 train + 4 new disjoint development outcomes from repeatable
-> short scenarios, fit once on train, and report paired descriptive calibration/variance. Stop
-> before a powered benchmark, sealed Red, Crystal execution, promotion, or full replay. Older
-> party, V4, and 14/55 campaigns remain historical evidence only.
+> `repeatable-red-living-dex-option-value-calibration-v1`. The Red adapter, selected-arm collector,
+> and calibration gate are implemented ROM-free with 30 focused tests: complete 3+ row anonymous
+> menus, exact normalization, hard masks, one committed system-random draw, selected-once outcome
+> settlement, living-specimen-loss override, and synthetic-executor exclusion. Next build the
+> durable authentic materializer, then collect a minimum 8 train + 4 new disjoint development
+> outcomes, fit once on train, and report descriptive calibration/variance. Stop before a powered
+> benchmark, sealed Red, Crystal execution, promotion, or full replay. Older party, V4, and 14/55
+> campaigns remain historical evidence only. See
+> [red-living-dex-observed-arm-adapter.md](red-living-dex-observed-arm-adapter.md).
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

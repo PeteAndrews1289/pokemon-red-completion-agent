@@ -1,36 +1,43 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-25. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-26. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the observed-arm Red adapter and calibration loop
+## Current override: Codex owns the durable Red observed-arm materializer
 
-The proposed V4 12+8 freeze is retired without execution. Claude and Antigravity both found that
-its inherited binary learner generated a positive preference for an alternative it never executed
-whenever the selected arm failed. They also found only two reachable feature-difference shapes and
-an outcome-balance requirement the prospective freezer could not enforce. The shared replacement
-is implemented ROM-free with variable-size anonymous menus, hard masks, full-support behavior
-propensities, selected-arm-only multi-outcome targets, censored target exclusion, train-only fitting,
-and held-out selected-arm calibration. Eighteen focused tests and an 84-test related slice pass.
+The proposed V4 12+8 freeze remains retired without execution. Its counterfactual binary learner is
+replaced by the shared selected-arm option-value contract and the now-implemented Red adapter,
+collector, and calibration gate. Red private bindings project to 3+ row identity-free menus with
+exact normalization provenance, option-specific resource masks, neutral ordering, selected-once
+execution, fresh observed outcomes, and target-free censoring. A realized loss from the living
+collection cannot be laundered by a positive private verifier.
 
-Codex owns `repeatable-red-living-dex-option-value-calibration-v1`: build the Red adapter and
-bounded repeatable collector around the shared contract, prove three or more genuinely different
-available rows and cross-title schema parity in public fixtures, then collect at least eight train
-outcomes across four option kinds and three transformation families plus four new disjoint
-development outcomes. Fit exactly once on train and report paired descriptive calibration and
-variance against random and cost-only baselines. This is calibration for sizing a later benchmark,
-not authority or transfer evidence.
+The review pass also removed two subtle experimental shortcuts. Randomization now starts with one
+CSPRNG commitment bound to the scenario, partition, and complete menu; the authentic materializer
+must claim first, persist it before input, and forbid reissue. Raw synthetic callables cannot open
+fitting; counted examples must use the established dual-capability or Red goal-skill semantic
+wrappers. Thirty focused tests and a 79-test related slice pass. See
+[the adapter design](red-living-dex-observed-arm-adapter.md).
 
-Claude reviews causal validity, leakage, outcome definitions, calibration, and sample-power claims.
-Antigravity reviews cross-title schema invariance, masks, replayable propensities, private-boundary
-leakage, and adversarial fixtures. Both are read-only milestone reviewers. Codex is the sole
-implementer and decision maker, and records why any recommendation is declined. Gemini 3.7 Flash
-Medium is the default Antigravity model for these bounded audits; use Pro only for a disputed
-architecture decision. No agent owns V4 execution, counterfactual targets, outcome-balanced
-selection, sealed/benchmark roots, sealed Red, Crystal execution, promotion, or full replay.
+Codex now owns the remaining materializer work for
+`repeatable-red-living-dex-option-value-calibration-v1`: enumerate authentic complete menus from
+repeatable nonsealed Red checkpoints, bind at least four genuine option kinds, durably claim and
+randomize once, execute one selected skill, settle at least eight train and four new disjoint
+development outcomes, then fit exactly once on train and report development descriptively. This is
+calibration for sizing a later benchmark, not authority or transfer evidence.
+
+Claude reviews causal validity, leakage, outcome definitions, calibration, and sample-power claims
+when authenticated. Its pre-fix `GO-WITH-FIXES` found seed shopping and synthetic coverage; both are
+fixed, but its CLI was logged out for the requested re-review. Antigravity reviews cross-title
+schema invariance, masks, replayable propensities, private-boundary leakage, and adversarial
+fixtures; its post-change audit returned `GO` with no P0. Both remain read-only milestone reviewers.
+Codex is the sole implementer and decision maker, and records why any recommendation is declined.
+Gemini 3.7 Flash Medium is the default Antigravity model for bounded audits. No agent owns V4 retry,
+counterfactual targets, outcome-balanced selection, sealed/benchmark roots, sealed Red, Crystal
+execution, promotion, or full replay.
 Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
 authority 0 · transfer 0**.
 

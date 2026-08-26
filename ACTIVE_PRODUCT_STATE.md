@@ -39,11 +39,11 @@ Not the product:
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Generate repeatable Red living-Pokedex decisions as variable-size title-neutral menus, sample with logged full-support propensities, learn only from observed selected-arm outcomes, and calibrate the first causal option-value model without consuming one-shot roots. |
-| Authority now | The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. Its binary counterfactual target path is retired. |
+| Reusable capability | Materialize repeatable Red living-Pokedex decisions as complete variable-size title-neutral menus, durably claim and randomize each scenario once, execute one authenticated semantic option, learn only from its independently observed outcome, and calibrate the first causal option-value model without consuming one-shot or benchmark roots. |
+| Authority now | The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. The new Red observed-arm boundary grants no action authority until durable authentic outcomes and later evaluation exist. |
 | Authority target | Collect the first repeatable selected-arm Red outcomes across genuine option kinds and transformation families, fit the shared multi-outcome value model on train only, and estimate paired development variance against random and cost-only baselines. Calibration cannot promote authority or claim transfer. |
 | Transfer test | Require Red-shaped and Crystal-shaped private fixtures to produce the identical feature, normalization, outcome, and model schema now. After a powered Red benchmark, freeze the Red weights and compare realized zero-shot Crystal outcomes against random and cost-only controls before any adaptation. |
-| Cheapest falsifier | Prove ROM-free that Red-shaped and Crystal-shaped private bindings project to the same policy schema, both arms may fail without either producing a positive target for the other, arbitrary outcome mixtures fit, censored outcomes remain target-free, unavailable options stay hard-masked, and at least three genuine candidate rows vary beyond the retired precursor-surplus bit. |
+| Cheapest falsifier | A ROM-free durable-runner rehearsal must reject a second behavior commitment, selection before the complete menu is frozen, a synthetic counted executor, a masked or second execution, retry after scenario claim, and an unbound observer receipt while preserving path-free restart of only never-claimed scenarios. |
 | Time box | 2 sessions / 12 hours |
 
 ### Required learning outputs
@@ -61,28 +61,29 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-25-observed-arm-redesign-calibration-opened** · status **active** · evidence [qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
+**2026-08-26-red-observed-arm-materializer-opened** · status **active** · evidence [qualification](docs/red-living-dex-observed-arm-adapter.md)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The replacement makes living-Pokedex planning a transferable outcome-learning problem rather than a Red-specific binary preference exercise. It can represent acquisition, evolution, trade, development, storage, resources, access, and exploration while keeping title identities private and learning only from consequences actually observed. |
-| Learning output | No new measured learner output. The ROM-free contract and eighteen focused tests remove fabricated counterfactual targets, reward-balance requirements, binary-menu assumptions, identity leakage, censor relabeling, and untested propensity-weight and weighted-normalization paths, but they are an engineering unblock. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The redesign audit and ROM-free shared contract create no gameplay prediction, selected action, observed outcome, model fit, authority promotion, or transfer result. The historical binary ranker is retired from the active path but preserved for evidence reproducibility. |
-| Transfer result | Not run. Cross-title policy projection is now enforced ROM-free, but no Crystal adapter or zero-shot outcome exists. Crystal remains closed until the Red adapter and repeatable outcome loop produce a calibrated, non-counterfactual model. |
-| Blocker | The shared observed-arm contract exists, but no Red adapter yet derives its normalized context, genuine variable-size candidates, hard masks, replayable behavior distribution, and independently settled outcomes from repeatable authenticated scenarios. |
-| Decision | Retire the unexecuted V4 freeze before it spends another root. Activate one fast repeatable Red calibration lane around the shared selected-arm contract: implement the Red adapter and bounded scenario collector, collect minimum coverage outcomes across option kinds and families, fit once on train only, and use the development partition only for descriptive calibration and variance estimation. |
-| Next session | Implement the Red adapter and repeatable bounded scenario collector directly against the shared observed-arm contract. Reuse the semantic acquire/evolve executors and independent ledger observer, add storage/resupply/develop or access options only when genuinely executable, prove normalization and behavior-policy replay ROM-free, and collect calibration data without exact-source or per-case ceremony. |
-| Next falsifier | A ROM-free Red adapter fixture must produce a complete genuine menu with at least three distinct available rows, exact normalization provenance, zero private identity fields, hard masks for invariant violations, a replayable full-support behavior distribution, and selected-arm-only settled or censored output. Then one short repeatable authenticated development scenario may test the same boundary without a one-shot claim. |
-| Stop condition | Stop on identity leakage, unobserved-arm targets, an outcome-balanced roster requirement, non-replayable propensities, fabricated menu choices, or destructive-action authority. Otherwise stop after the calibration fit and paired descriptive development report, before any powered benchmark, Crystal execution, promotion, or full replay. |
+| Product alignment | The Red boundary now expresses collection planning as transferable consequence learning across acquisition, evolution, trade, development, storage, resources, access, and exploration while keeping title identities private. Durable authentic materialization is the missing bridge from that reusable representation to real training evidence. |
+| Learning output | No new measured learner output. Thirty focused tests and a 79-test related slice prove the ROM-free Red adapter, exact normalization, hard masks, authenticated single committed system draw, selected-once settlement, living-specimen-loss override, and synthetic-executor exclusion. Counters remain development 15, verified outcomes 5, causal train 0, model fits 4, unseen comparisons 4, authority 0, and transfer 0. |
+| Authority delta | None. The Red adapter, behavior commitment, selected-arm collector, and calibration gate are ROM-free engineering. They produced no gameplay prediction, selected game action, observed cartridge outcome, model fit, authority promotion, or transfer result. |
+| Transfer result | Not run. Red-shaped and Crystal-shaped private fixtures share the policy schema, but no Crystal adapter or zero-shot outcome exists. Crystal remains closed until the durable Red loop produces a calibrated, non-counterfactual model and a powered Red benchmark justifies the frozen-weight transfer test. |
+| Blocker | The ROM-free Red boundary is implemented, but no durable authentic materializer yet enumerates complete menus from repeatable checkpoints, claims before randomization, persists exactly one system-random commitment before controller input, binds four genuine option kinds, and resumes only never-claimed scenarios. |
+| Decision | Publish the qualified Red observed-arm boundary, then implement the shortest durable authentic materializer. Keep the 8+4 minimum as an integration and variance pilot: train-only fit, descriptive development report, no policy-quality or transfer claim. |
+| Next session | Implement the durable repeatable Red scenario materializer against the published adapter. Enumerate complete authentic menus from nonsealed checkpoints, bind at least four genuine semantic option kinds, claim and persist one behavior commitment before input, execute one arm, settle one fresh outcome, and stop before real collection until the full gate and exact-source CI are green. |
+| Next falsifier | Mutation-test a ROM-free durable materializer rehearsal: claim before behavior issuance, one persisted commitment before input, no reissue, complete 3+ row menu, authenticated selected executor, zero masked or unselected execution, fresh bound observation, and restart of only never-claimed scenarios. |
+| Stop condition | Stop on identity leakage, unobserved-arm targets, behavior-commitment reissue, synthetic counted executors, incomplete menus, outcome-dependent selection, retry after claim, or destructive-action authority. Otherwise stop after the calibration fit and descriptive development report, before any powered benchmark, Crystal execution, promotion, or full replay. |
 
 ### Stop conditions
 
-- Stop before gameplay if the Red adapter cannot produce title-neutral normalized rows, genuine variable-size menus, invariant hard masks, replayable full-support propensities, and selected-arm-only outcomes from ROM-free fixtures.
-- Stop after the first train-only calibration fit and paired descriptive development report, or sooner on identity leakage, counterfactual targets, outcome-dependent row selection, one-shot-root dependence, or a need for fixed Red route rescue. Do not open a powered benchmark, sealed Red, Crystal, promotion, or full replay in this lane.
+- Stop before real gameplay if the materializer cannot prove a complete authentic menu, claim-before-randomization, exactly one persisted behavior commitment, authenticated semantic executors, selected-only execution, bound fresh observation, and no retry after claim in ROM-free rehearsal.
+- Stop after the first train-only calibration fit and descriptive development report, or sooner on identity leakage, counterfactual targets, commitment reissue, synthetic counted executors, outcome-dependent row selection, one-shot-root dependence, or a need for fixed Red route rescue. Do not open a powered benchmark, sealed Red, Crystal, promotion, or full replay in this lane.
 
 ### Hard boundaries for this lane
 
 - **Prohibited:** counterfactual target
+- **Prohibited:** behavior commitment reissue
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
 - **Prohibited:** full game replay
@@ -91,6 +92,7 @@ outputs.
 - **Prohibited:** opportunity identity feature
 - **Prohibited:** outcome balanced row selection
 - **Prohibited:** sealed or benchmark root use
+- **Prohibited:** synthetic executor fit admission
 - **Prohibited:** promotion from pilot
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher choice or fallback
