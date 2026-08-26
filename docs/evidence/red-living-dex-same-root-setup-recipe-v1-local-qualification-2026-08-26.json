@@ -111,7 +111,7 @@
   "publication": {
     "github_ci": "pending",
     "main_commit": null,
-    "pull_request": null,
+    "pull_request": 78,
     "source_bundle_sha256": "0d71d26b869a23bc92f2fee537d8fecab4a8db5602b25eb3ba66c646bf27e4cc",
     "source_commit": "4862831541229febc08152090fe8f22c82ae0379"
   },
