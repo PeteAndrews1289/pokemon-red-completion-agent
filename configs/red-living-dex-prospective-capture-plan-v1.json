@@ -137,6 +137,15 @@
     }
   ],
   "full_mission_ready": false,
+  "implemented_runtime_capabilities": [
+    "routed-semantic-goal-composition"
+  ],
+  "implemented_runtime_contract_ids": [
+    "pokemon_red_completion.routed_semantic_goal.RoutedSemanticGoalComposer",
+    "pokemon_red_completion.red_routed_semantic_goal.RedSemanticTransportRoute",
+    "pokemon_red_completion.red_routed_semantic_goal.RedFreshGoalDestinationBinder",
+    "pokemon_red_completion.red_routed_semantic_goal.build_red_routed_semantic_goal_composer"
+  ],
   "learner_effects": 0,
   "locally_composable_slot_count": 1,
   "mission_missing_option_kinds": [
@@ -199,7 +208,7 @@
   },
   "private_identity_fields": 0,
   "private_path_fields": 0,
-  "qualification_sha256": "c084c6693668ca0b69bbf0cc44c57b52b61ffd1f10cdc4403ace5d10de9f9202",
+  "qualification_sha256": "48d859dad473fe2018c60d664ac9fe91f470c05b70a419e12494ebae7725f3eb",
   "rom_accesses": 0,
   "routed_slot_count": 14,
   "scheduled_option_kinds": [
@@ -211,10 +220,11 @@
     "unlock_access",
     "explore"
   ],
-  "schema": "pokemon.red.living-dex-prospective-capture-feasibility.v1",
+  "schema": "pokemon.red.living-dex-prospective-capture-feasibility.v2",
   "setup_controller_actions": 0,
   "setup_emulator_frames": 0,
   "unresolved_runtime_capabilities": [
-    "routed-semantic-goal-composition"
+    "concrete-red-routed-setup-bindings",
+    "durable-red-setup-runner"
   ]
 }

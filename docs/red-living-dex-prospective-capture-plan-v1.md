@@ -10,20 +10,19 @@ It is subordinate to
 
 ## Result first
 
-The abstract Red schedule satisfies the shared 10+5 curriculum contract, but Red cannot execute it
-yet. The exact ten-slot train menu has a worst-case-after-any-two-censors probability of
+The abstract Red schedule satisfies the shared 10+5 curriculum contract, but its concrete setup
+campaign still cannot execute. The exact ten-slot train menu has a
+worst-case-after-any-two-censors probability of
 **2144/2187 = 98.0338%** of selecting at least four distinct option kinds. Family and location
 scope reserves pass. Seven portable kinds have implemented, independently tested Red provider
 contracts; this does not authenticate a runtime binding for any new setup.
 
 Only one of the fifteen requested menus is co-located at an existing physical skill boundary.
-Fourteen need a reusable composition seam that can execute an authenticated route to a destination
-semantic skill and then independently verify that skill. That seam does not exist. The pilot is
-therefore **plan-valid but execution-blocked**.
-
-The ROM-free implementation candidate for that seam is specified in
-[routed semantic goal composition V1](routed-semantic-goal-composition-v1.md). It is not credited
-here until its own publication, exact-head CI, and qualification are complete.
+Fourteen need route-then-destination composition. The reusable
+[routed semantic goal composition V1](routed-semantic-goal-composition-v1.md) is now published and
+keeps that transport outside the learner label. The plan remains **plan-valid but
+execution-blocked** because no concrete private per-slot route/terminal bindings or durable setup
+runner have been frozen and qualified.
 
 Trade is a separate full-product gap. The current `GoalKind`/Red binding layer has no repeatable
 semantic trade executor. The first calibration pilot intentionally excludes trade because its
@@ -80,12 +79,12 @@ those classes runtime-authenticated until a setup supplies and verifies a real b
 callables, teacher steps, routes relabelled as destination outcomes, and synthetic test executors do
 not count.
 
-## Why routing is the smallest pilot blocker
+## How the routed seam narrows the pilot blocker
 
 Moving the setup state to a Mart makes resupply available but does not make storage, evolution, or
 acquisition available. Moving it to a PC has the inverse problem. Simply declaring those menu rows
-would produce unavailable or synthetic arms. The missing abstraction is one selected semantic
-option that owns this sequence:
+would produce unavailable or synthetic arms. The published abstraction lets one selected semantic
+option own this sequence:
 
 1. authenticate a frozen route from the common decision boundary to the destination boundary;
 2. execute that route under hard action/frame limits and verify the exact terminal;
@@ -114,11 +113,11 @@ or replay.
 ## Next gates
 
 1. **Complete:** publish this exact feasibility result and reorient.
-2. **Active:** implement and adversarially qualify only the generic routed-semantic-goal
-   composition seam.
-3. Re-run this ROM-free feasibility audit. The pilot blocker closes only when every scheduled kind
-   can bind through genuine local or routed semantic execution without changing the schedule.
-4. Separately freeze and qualify the durable Red setup runner and private route/terminal bindings.
+2. **Complete:** publish and adversarially qualify the generic routed-semantic-goal composition
+   seam plus the minimal Red adapter.
+3. **Active:** re-run this ROM-free feasibility audit and bind the published component identities.
+4. Separately freeze and qualify the durable Red setup runner and fourteen private route/terminal
+   bindings.
 5. Run every setup slot once, census complete captures, then collect randomized outcomes under a
    new gate.
 6. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic

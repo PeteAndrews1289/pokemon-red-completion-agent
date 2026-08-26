@@ -1,19 +1,20 @@
 # Routed semantic goal composition V1
 
-Status: ROM-free implementation candidate. Publication, exact-head CI, and a separate public
-qualification are still required before this can requalify the Red 10+5 plan. This document is
-subordinate to [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the
+Status: published ROM-free implementation. Source `c7a9feec` passed PR 68 CI `32959232118/1`,
+merged as main `fee45344`, and passed exact-main CI `32959509208/1`. A separate Red-plan
+requalification is still required before concrete setup work. This document is subordinate to
+[MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the
 [purpose-built capture contract](living-dex-purpose-built-capture-contract.md).
 
 ## Result first
 
-The missing reusable route-to-skill boundary now has a title-neutral contract and a thin Red
+The reusable route-to-skill boundary now has a published title-neutral contract and a thin Red
 adapter. A learner-facing binding keeps the **destination semantic kind**—for example acquire,
 evolve, develop, manage storage, resupply, unlock access, or explore—while private transport gets
 the game to that skill's physical boundary. Travel is never relabelled as the destination outcome
 and never becomes an `explore` choice unless exploration itself is the selected goal.
 
-This closes an engineering abstraction, not the Red campaign. No concrete private route or setup
+This closes the engineering abstraction, not the Red campaign. No concrete private route or setup
 root is bound here. No ROM, emulator, controller, teacher, model, capture, outcome, fit, sealed Red
 case, Crystal case, promotion, or replay is opened by this work.
 
@@ -65,7 +66,9 @@ observation coherence, kind preservation, route-source provenance, path-free pub
 single-use behavior, report substitution, unavailable destinations, shared counters, independent
 budget reconciliation, budget exhaustion, verifier side effects, state drift, and interruption.
 
-The next gate is publication and repository-wide qualification. Only after that may the prospective
-Red plan be re-audited. That re-audit must still report fourteen concrete private route/terminal
-bindings and a durable setup runner as missing until they actually exist. Repeatable semantic trade
-also remains a separate full-living-Pokédex blocker; this seam does not erase it.
+Publication passed 36 focused tests, 168 related tests and the full 5,057-test non-integration
+suite, plus Ruff, mypy over 273 source files, public-artifact, documentation and generated-registry
+checks. The next gate is the prospective Red-plan re-audit. It must still report fourteen concrete
+private route/terminal bindings and a durable setup runner as missing until they actually exist.
+Repeatable semantic trade also remains a separate full-living-Pokédex blocker; this seam does not
+erase it.
