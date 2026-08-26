@@ -19,7 +19,12 @@
   },
   "candidate": {
     "audited_against_commit": "dee52ff2ad6b6561fcecd447db891715b0664b2a",
-    "publication_status": "uncommitted_working_tree",
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run_id": 32925402183,
+    "publication_status": "published_main",
+    "published_main_commit": "070f40b14f96954547a6abd0b3fd790b383b61f4",
+    "pull_request": 50,
     "source_bundle_sha256": "6b61e533e90cda08bca1142f928bcc8e65f1b49a7ec3d90f76e0ce88e2d15c86"
   },
   "claim_boundary": {

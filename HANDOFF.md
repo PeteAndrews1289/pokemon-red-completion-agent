@@ -33,7 +33,8 @@ an 84-test related slice pass ROM-free. Read
 [the contract](docs/living-dex-option-value-contract.md) before adapting it. The
 [qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
 records the final **4,748 passed · 3 deselected · 1 expected failure** gate, green Ruff/mypy/docs/
-privacy/registry checks, and both read-only external reviews.
+privacy/registry checks, both read-only external reviews, and publication as main `070f40b1` through
+PR 50 and green GitHub CI `32925402183/1`.
 
 Active `repeatable-red-living-dex-option-value-calibration-v1` is the next two-session lane. Codex
 owns the Red adapter and bounded repeatable collector. First prove with public fixtures that a
