@@ -22,6 +22,8 @@
 > protected read. Outcomes, fits, sealed Red, Crystal, promotion, and replay remain closed. Boards
 > stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority
 > 0 · transfer 0**.
+> See the [V3 exhaustive-inventory design](docs/red-living-dex-exhaustive-inventory-v3-design.md)
+> for the context-local/global boundary and exact whole-bank accounting contract.
 
 > **Previous product focus (August 26, 2026): use the published gauges for one exact census.** V2
 > diagnostics shipped through
