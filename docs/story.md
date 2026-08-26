@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom survives a crash; now prove that it has enough real lessons
+## Current checkpoint: the classroom counter stopped, but its display showed only “failed”
+
+The silent classroom census was real. Its exact source passed 4,831 tests, reached main through
+PR 56, authenticated all 81 private Red inputs, and then failed closed. Every dangerous counter
+stayed still: no lottery ticket, root claim, button, frame, outcome, prediction, teacher answer, or
+fit. No private plan appeared, no private identity or path escaped, and V1 can never run again.
+
+But the display had only one red lamp: `action_free_inventory`. It did not say whether a namespace
+was occupied, an old menu failed to replay, a state could not become a complete anonymous question,
+or the classroom truly lacked eight train and four held-out lessons. The machine protected the
+experiment while losing the one fact the experiment was meant to learn.
+
+So the next job is not another Red run and not a smaller classroom. Before touching a cartridge or
+capture, V2 must grow an exact path-free gauge for every stage and safe aggregate counts for what
+was read, excluded, projected, and offered. Tests will deliberately break each gauge, fake its
+zeroes, and try to smuggle private identities through it. Only a published, qualified gauge can
+earn one new-identity census. The gate remains **8 train across 4 option kinds and 3 families + 4
+family-and-location-disjoint development**. The board remains **causal train 0/8, authority 0,
+transfer 0**.
+
+## Previous checkpoint: the classroom survives a crash; now prove that it has enough real lessons
 
 The honest Red classroom is now durable. Before a lesson begins, it freezes the whole anonymous
 menu and claims the scenario. Only then does it draw one system-random ticket. The selected card is

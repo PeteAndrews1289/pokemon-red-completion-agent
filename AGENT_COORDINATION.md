@@ -1,6 +1,31 @@
 # Three-agent coordination
 
-> **2026-08-26 durable Red materializer published; authentic curriculum inventory active:** Source
+> **2026-08-26 authentic inventory V1 failed safely; V2 diagnostics active:** Inventory source
+> `069c44d9b48d87d586795e4d8ade58133f451e91` passed PR CI, merged through PR 56 as main
+> `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed exact-main CI `32938080397/1`
+> with 4,831 tests. The one permitted V1 authenticated all 81 private inputs and failed closed at
+> the broad `action_free_inventory` stage. Its
+> [receipt](docs/evidence/red-living-dex-authentic-inventory-failure-v1-2026-08-26.json) records
+> draws, claims, actions, frames, outcomes, predictions, teachers, fits, and published private
+> identities/paths all zero; it created no plan or materializer namespace. V1 cannot retry.
+>
+> Codex owns only the ROM-free V2 diagnostic qualification: finite path-free reasons for input
+> authentication, materializer namespace, historical replay, scenario projection, and exact 8+4
+> coverage; safe aggregate counts for state reads, exclusions, partition eligibility, offered
+> kinds, families, locations, overlaps, and protected effects; and adversarial tests against
+> collapsed stages, false zeroes, and identity/path leakage. Codex publishes through exact-source
+> CI and reorients before any new-identity protected read. The 8-train/4-development gate remains
+> unchanged.
+>
+> Claude and Antigravity remain optional read-only milestone reviewers of causal design, leakage,
+> diagnostic completeness, architecture, and transfer boundaries. They inspect no private capture,
+> execute no gameplay, edit no worktree, and do not block ordinary implementation. Codex
+> adjudicates. No agent owns a V1 retry, protected V2 census before publication/reorientation,
+> outcome collection, fit, sealed Red, Crystal, promotion, or replay. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous 2026-08-26 durable Red materializer published; authentic curriculum inventory active:** Source
 > `98cfa01096e16b36c3f6b9a829d05ffa7293af36` passed exact-source CI `32933786447/1` with
 > 4,802 tests and merged through PR 54 as main `34a2c920c5e5a95bc4f29eaba18510d329815ed4`.
 > Complete-menu freeze, claim-before-randomization, selection persistence before controller

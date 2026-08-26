@@ -12,7 +12,45 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: durable Red materializer published; inventory the authentic curriculum action-free
+## 2026-08-26: authentic inventory V1 failed safely; diagnose exactly before another read
+
+The action-free authentic inventory boundary was published from source
+`069c44d9b48d87d586795e4d8ade58133f451e91` through
+[PR 56](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/56), merged as main
+`98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed exact-main GitHub CI
+`32938080397/1` with **4,831 passed · 3 deselected · 1 expected failure**. Its source bundle is
+`d124f33308c0c9c4b36b9d1638af661d6805a294829da957107f372ec5e56b48`.
+
+The one permitted V1 inventory authenticated all **81** private inputs and then failed closed at
+the broad `action_free_inventory` stage. Its
+[path-free receipt](docs/evidence/red-living-dex-authentic-inventory-failure-v1-2026-08-26.json)
+records **behavior draws 0 · controller actions 0 · emulator frames 0 · root claims 0 · outcomes
+0 · model predictions 0 · teacher queries 0 · fits 0 · private identities/paths published 0**.
+No private plan or materializer namespace was created. V1 and its record identity are retired;
+never retry them.
+
+Do not call this a curriculum-coverage failure. The public receipt retained no safe stage detail
+after private-input authentication, so it cannot distinguish materializer-namespace state,
+historical-menu replay, scenario projection, or the exact 8+4 coverage gate. It proves a useful
+safety falsifier and a diagnostic-design failure—not coverage success, coverage shortfall,
+training, gameplay authority, or transfer.
+
+Active work is one **ROM-free V2 diagnostic qualification**. Define finite, path-free reason codes
+for source/input authentication, materializer namespace, historical replay, scenario projection,
+and exact freeze coverage. Preserve safe aggregate counters for authenticated contexts, emulator
+states read, exclusions, eligible train/development scenarios, offered option kinds, families,
+locations, partition overlap, and every protected effect. Tests must make collapsed stages, false
+zeroes, and any identity/path-bearing public field fail. Publish that new boundary through
+exact-source CI, then reorient before any new-identity authenticated census. No protected input is
+open during qualification.
+
+The gate does not shrink: a later V2 census still needs eight train scenarios across four genuine
+option kinds and three transformation families plus four development scenarios disjoint from train
+by family and location. Outcome collection, fitting, sealed Red, Crystal, promotion, and full replay
+remain closed. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: durable Red materializer published; inventory the authentic curriculum action-free
 
 Do **not** freeze or execute the retired V4 12+8 curriculum. Its binary target could reward an
 alternative that never ran. The replacement observed-arm contract learns only from the selected

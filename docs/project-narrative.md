@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the silent census stopped safely, but threw away the reason
+
+The authentic Red inventory boundary reached main `98d4f21a` through PR 56 and passed 4,831 tests
+in exact-main CI. Its one permitted run authenticated all 81 private inputs, then stopped at the
+broad `action_free_inventory` stage. The safety story is clean: no random draw, root claim,
+controller action, emulator frame, outcome, model prediction, teacher query, fit, private plan, or
+published private identity/path occurred. V1 is closed forever.
+
+The scientific story is less flattering and more useful. The path-free receipt says only that the
+inventory failed. It discarded whether the materializer namespace was already occupied, a
+historical menu could not replay, a scenario could not be projected, or the classroom genuinely
+missed the exact 8+4 coverage gate. Calling this a coverage shortfall would invent evidence; rerun
+would spend another protected look without fixing the blind spot.
+
+The project therefore stops before training again. The next bounded job is ROM-free: give V2 a
+finite path-free reason for every private stage and safe aggregate gauges for state reads,
+exclusions, eligible partitions, option kinds, families, locations, overlap, and all protected
+effects. Adversarial tests must catch a collapsed diagnosis, a false zero, or any identity/path
+leak. Only after that boundary is published and the project reorients may a new-identity census
+read the captures. The living-Pokédex curriculum gate remains unchanged; no model evidence or
+authority moved.
+
 ## August 26: make the lesson survive the crash, then count the real classroom
 
 The Red classroom can now preserve an honest lesson across the failure modes that previously made

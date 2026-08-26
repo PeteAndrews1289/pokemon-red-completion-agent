@@ -1,0 +1,91 @@
+{
+  "claim_boundary": {
+    "supported": "The first authenticated Red living-Dex inventory attempt failed closed after private-input authentication and before any behavior draw, controller authority, emulator frame, root claim, outcome observation, teacher query, model prediction, fit, or plan publication.",
+    "unsupported": [
+      "authentic_curriculum_coverage_shortfall",
+      "authentic_curriculum_coverage_success",
+      "causal_red_training_example",
+      "crystal_transfer",
+      "learned_authority",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnostic_gap": {
+    "coverage_gate_weakened": false,
+    "confirmed_cause": null,
+    "failure_receipt_distinguishes_projection_from_coverage": false,
+    "finding": "The path-free receipt retained only the broad action_free_inventory stage. It cannot distinguish an authentication, namespace, historical-replay, menu-projection, or exact 8+4 coverage failure. Treating this as a proven coverage shortfall would overclaim the evidence.",
+    "v1_inventory_retry_allowed": false
+  },
+  "disposition": {
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "model_fit_authorized": false,
+    "outcome_collection_authorized": false,
+    "promotion_authorized": false,
+    "sealed_red_authorized": false,
+    "v2_action_free_successor_allowed_after_rom_free_qualification": true
+  },
+  "effects": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_paths_published": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "authenticated_input_contexts": 81,
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32938080397,
+    "emulator_states_read": null,
+    "failure_stage": "action_free_inventory",
+    "merged_main_commit": "98d4f21aab2f0e5c0087c89fc2759122381d1663",
+    "private_materializer_episode_namespaces_created": 0,
+    "private_plan_published": false,
+    "pull_request": 56,
+    "source_bundle_sha256": "d124f33308c0c9c4b36b9d1638af661d6805a294829da957107f372ec5e56b48"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "next_gate": {
+    "purpose": "Qualify a V2 action-free diagnostic boundary without reopening protected inputs. Every private-stage failure must map to a finite path-free reason and preserve aggregate state-read, exclusion, eligible-partition, offered-kind, family, location, overlap, and zero-effect counters. Only a new published V2 identity may perform another authenticated inventory; it keeps the exact 8+4 gate unchanged and stops again on a genuine shortfall.",
+    "protected_input_allowed_before_publication": false,
+    "v1_retry_allowed": false
+  },
+  "product_interpretation": "This is a useful safety falsifier and a diagnostic-design failure, not a model, gameplay, completion, authority, or transfer result. The project remains aimed at a transferable living-Pokedex agent; Red is still only its first curriculum.",
+  "raw_path_free_receipt": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "failure_stage": "action_free_inventory",
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-authentic-inventory-failure.v1",
+    "status": "failed_closed",
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-authentic-inventory-attempt.v1",
+  "status": "failed_closed_without_diagnostic_resolution"
+}

@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the safety lights stayed green, but the diagnostic screen went blank
+
+Open on **PR 56 · MAIN 98D4F21A · CI 32938080397/1 · 4,831 TESTS**. Let the silent counter reach
+**81 AUTHENTICATED RED INPUTS**, then freeze it on **ACTION-FREE INVENTORY: FAILED CLOSED**. Fill
+the safety rail with zeroes: **DRAWS 0 · CLAIMS 0 · BUTTONS 0 · FRAMES 0 · OUTCOMES 0 · MODEL
+PREDICTIONS 0 · TEACHERS 0 · FITS 0 · PRIVATE LEAKS 0**. Show **PLAN ABSENT · MATERIALIZER
+NAMESPACE ABSENT · V1 RETRY FORBIDDEN**.
+
+Then zoom into the diagnostic screen. It should have separate gauges for **NAMESPACE · HISTORICAL
+REPLAY · SCENARIO PROJECTION · EXACT 8+4 COVERAGE**, but all four are hidden behind one label:
+**ACTION_FREE_INVENTORY**. Cross out both tempting captions—**CURRICULUM PASSED** and **CURRICULUM
+TOO SMALL**—because neither follows from the receipt. The spoken line is: **“The machine stopped
+safely, but it forgot to tell us why.”**
+
+Build V2 entirely off-cartridge. Add finite path-free reason lamps and aggregate gauges for
+**STATES READ · EXCLUSIONS · TRAIN/DEVELOPMENT ELIGIBLE · OPTION KINDS · FAMILIES · LOCATIONS ·
+OVERLAP · EFFECTS**. Mutate each lamp until the tests turn red; try a private path and identity and
+show immediate rejection; fake one zero and show the receipt rejected. End on **PUBLISH EXACT V2 →
+REORIENT → ONE NEW-IDENTITY CENSUS**, with the unchanged gate underneath: **8 TRAIN / 4 KINDS / 3
+FAMILIES + 4 FAMILY-AND-LOCATION-DISJOINT DEVELOPMENT**. Keep **OUTCOME COLLECTION · FIT · SEALED
+RED · CRYSTAL · PROMOTION · REPLAY CLOSED** visible.
+
 ## August 26 scene: make one lesson crash-proof, then count the classroom before play
 
 Open on a frozen **3+ OPTION MENU**. Put the claim envelope on the table **before** a glass lottery
