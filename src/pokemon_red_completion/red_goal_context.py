@@ -141,6 +141,65 @@ class RedGoalContextRuntime:
         )
         return RedGoalOpportunityEnumerator(providers)
 
+    def offer_for(
+        self,
+        kind: GoalKind,
+        observation: RedGoalObservation,
+        actions: CountingExecutor,
+    ) -> RedGoalContextProviderOffer:
+        """Construct one offer through the real profile registry.
+
+        This is the narrow action-free seam used by same-root validation.  The
+        caller receives the concrete provider class that the registry built,
+        not a class name reported by an opaque campaign adapter.
+        """
+
+        if not isinstance(kind, GoalKind):
+            raise TypeError("goal context offer needs a goal kind")
+        if not isinstance(observation, RedGoalObservation):
+            raise TypeError("goal context offer needs a Red observation")
+        if not isinstance(actions, CountingExecutor):
+            raise TypeError("goal context offer actions must be a CountingExecutor")
+        specs = tuple(item for item in self.profile.providers if item.kind is kind)
+        if len(specs) != 1:
+            raise RedGoalContextError("goal context profile lacks one requested provider")
+        spec = specs[0]
+        provider = _build_provider(self, spec, actions)
+        wrapped = _ProfileBoundProvider(
+            provider=provider,
+            profile_sha256=self.profile.profile_sha256,
+            configuration_sha256=spec.configuration_sha256,
+        )
+        return RedGoalContextProviderOffer(
+            provider_type=type(provider),
+            profile_sha256=self.profile.profile_sha256,
+            provider_configuration_sha256=spec.configuration_sha256,
+            offer=wrapped.offer(observation),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RedGoalContextProviderOffer:
+    """Registry-authored action-free offer plus concrete provider provenance."""
+
+    provider_type: type[object]
+    profile_sha256: str
+    provider_configuration_sha256: str
+    offer: RedGoalBindingOffer
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.provider_type, type):
+            raise TypeError("goal context provider type differs")
+        for value, subject in (
+            (self.profile_sha256, "profile"),
+            (self.provider_configuration_sha256, "provider configuration"),
+        ):
+            if not isinstance(value, str) or len(value) != 64:
+                raise RedGoalContextError(f"goal context {subject} digest differs")
+        if not isinstance(self.offer, RedGoalBindingOffer):
+            raise TypeError("goal context provider offer differs")
+        self.offer.__post_init__()
+
 
 def build_red_goal_context_runtime(
     *,
@@ -784,6 +843,7 @@ def _directions(parameters: Mapping[str, object], key: str) -> tuple[str, ...]:
 
 __all__ = (
     "RedGoalContextError",
+    "RedGoalContextProviderOffer",
     "RedGoalContextRuntime",
     "build_red_goal_context_runtime",
     "red_team_development_quantum_policy",

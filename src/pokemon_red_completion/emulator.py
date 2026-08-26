@@ -287,6 +287,21 @@ class PyBoyAdapter:
         with path.open("wb") as handle:
             self._require_backend().save_state(handle)
 
+    def save_state_bytes(self) -> bytes:
+        """Return an exact in-memory state for immediate restore readback.
+
+        The payload never receives a path, which lets causal validators prove
+        that the bytes they supplied were the bytes the emulator accepted
+        without creating an extra private file.
+        """
+
+        with io.BytesIO() as handle:
+            self._require_backend().save_state(handle)
+            payload = handle.getvalue()
+        if not payload:
+            raise EmulatorError("saved state bytes are unavailable")
+        return payload
+
     def load_state(self, source: str | Path) -> None:
         """Restore a state written by :meth:`save_state`.
 

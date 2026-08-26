@@ -10,8 +10,10 @@ from typing import Any
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.domain import GameMode, GameState
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import (
     MacroEdge,
     MacroPath,
@@ -20,7 +22,10 @@ from pokemon_red_completion.global_router import (
 from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
-    GoalUnavailableReason,
+)
+from pokemon_red_completion.goal_manager_context_catalog import (
+    GoalManagerContextCapture,
+    parse_goal_manager_context_capture,
 )
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
@@ -33,13 +38,22 @@ from pokemon_red_completion.goal_manager_state import (
 )
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
 from pokemon_red_completion.local_router import LocalPath
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import (
+    InputReadiness,
+    ItemId,
+    MapId,
+    RawGameState,
+    RedBoxCollectionState,
+    RedCurrentBoxState,
+    RedPokedexState,
+)
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactRoot,
     initialize_private_root,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfile,
     RedGoalMechanic,
@@ -47,7 +61,6 @@ from pokemon_red_completion.red_goal_context_profile import (
     parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_goal_manager import (
-    RedGoalBindingOffer,
     RedGoalObservation,
     RedStoryGoalBindingProvider,
 )
@@ -55,6 +68,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedBoxSwitchGoalProvider,
     RedEncounterDiscoveryGoalProvider,
+    RedEncounterSourceDevelopmentGoalProvider,
     RedMartResupplyGoalProvider,
     RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
@@ -67,8 +81,7 @@ from pokemon_red_completion.red_living_dex_option_inventory import (
     red_living_dex_goal_family_ref,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
-    RedLivingDexConstructedOrigin,
-    RedLivingDexObservedProviderOffer,
+    RedLivingDexAuthenticatedSetupRoot,
     RedLivingDexSetupProviderRecipe,
     RedLivingDexSetupRecipeError,
     RedLivingDexSetupRouteRecipe,
@@ -88,19 +101,63 @@ from pokemon_red_completion.red_living_dex_setup_recipe_campaign import (
 from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
 )
+from pokemon_red_completion.red_living_dex_setup_trust import (
+    RedLivingDexSetupEffectMeter,
+    RedLivingDexSetupExecutionIdentity,
+    RedLivingDexSetupFailureReason,
+    RedLivingDexSetupTrustError,
+    RedLivingDexTransformationFamily,
+    build_red_living_dex_transformation_family,
+)
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
 from pokemon_red_completion.red_routed_semantic_goal import (
     FreshRedGoalObservation,
     RedRoutedSemanticBoundary,
+    RedSemanticTransportRoute,
 )
 from pokemon_red_completion.route_executor import TraversalSnapshot
 from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
-from pokemon_red_completion.routed_semantic_goal import (
-    RoutedSemanticBudgetCheckpoint,
-)
 
 
 def _sha(value: object) -> str:
     return hashlib.sha256(repr(value).encode("ascii")).hexdigest()
+
+
+_VERIFIED_TO_CINNABAR = (
+    "power_on",
+    "begin_adventure",
+    "choose_starter",
+    "receive_pokedex",
+    "reach_pewter",
+    "defeat_brock",
+    "reach_cerulean",
+    "defeat_misty",
+    "help_bill",
+    "reach_vermilion",
+    "obtain_cut",
+    "defeat_surge",
+    "reach_lavender",
+    "rescue_fuji",
+    "reach_celadon",
+    "clear_rocket_hideout",
+    "obtain_silph_scope",
+    "reach_fuchsia",
+    "obtain_surf",
+    "defeat_koga",
+)
+
+
+def _identity() -> RedLivingDexSetupExecutionIdentity:
+    return RedLivingDexSetupExecutionIdentity(
+        source_commit="a" * 40,
+        source_bundle_sha256=_sha("source-bundle"),
+        adapter_version_sha256=_sha("adapter-version"),
+        state_schema_sha256=_sha("state-schema"),
+        observation_schema_sha256=_sha("observation-schema"),
+        route_registry_sha256=_sha("route-registry"),
+        provider_registry_sha256=_sha("provider-registry"),
+        runtime_contract_sha256=_sha("runtime-contract"),
+    )
 
 
 def _root_payloads(index: int) -> tuple[bytes, bytes]:
@@ -109,9 +166,9 @@ def _root_payloads(index: int) -> tuple[bytes, bytes]:
         state_sha256=hashlib.sha256(state_bytes).hexdigest(),
         checkpoint_id=f"root-{index:02d}",
         checkpoint_label="authenticated purpose-built recipe root",
-        checkpoints_completed=0,
-        checkpoints_total=1,
-        verified_objective_ids=(),
+        checkpoints_completed=len(_VERIFIED_TO_CINNABAR),
+        checkpoints_total=36,
+        verified_objective_ids=_VERIFIED_TO_CINNABAR,
     )
     envelope_bytes = (
         json.dumps(
@@ -138,7 +195,7 @@ _OPTION_TO_GOAL = {
 _OPTION_TO_MECHANIC = {
     LivingDexOptionKind.ACQUIRE: RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
     LivingDexOptionKind.EVOLVE: RedGoalMechanic.DIGLETT_EVOLUTION,
-    LivingDexOptionKind.DEVELOP: RedGoalMechanic.BALANCED_TEAM,
+    LivingDexOptionKind.DEVELOP: RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
     LivingDexOptionKind.MANAGE_STORAGE: RedGoalMechanic.BOX_SWITCH,
     LivingDexOptionKind.RESUPPLY: RedGoalMechanic.MART_RESUPPLY,
     LivingDexOptionKind.UNLOCK_ACCESS: RedGoalMechanic.MIDGAME_STORY,
@@ -149,7 +206,7 @@ _OPTION_TO_MECHANIC = {
 _OPTION_TO_PROVIDER = {
     LivingDexOptionKind.ACQUIRE: RedAreaSurveyGoalProvider,
     LivingDexOptionKind.EVOLVE: RedObservedGoalSkillProvider,
-    LivingDexOptionKind.DEVELOP: RedProgressGoalProvider,
+    LivingDexOptionKind.DEVELOP: RedEncounterSourceDevelopmentGoalProvider,
     LivingDexOptionKind.MANAGE_STORAGE: RedBoxSwitchGoalProvider,
     LivingDexOptionKind.RESUPPLY: RedMartResupplyGoalProvider,
     LivingDexOptionKind.UNLOCK_ACCESS: RedStoryGoalBindingProvider,
@@ -289,9 +346,37 @@ def _profile_parameters(
     boundary: RedRoutedSemanticBoundary,
     token: str,
 ) -> dict[str, object]:
-    if kind in {LivingDexOptionKind.ACQUIRE, LivingDexOptionKind.EXPLORE}:
-        return {
-            "source_id": f"wild:{token}",
+    token_index = int(token[1:3], 16)
+    token_option = int(token[3:5], 16)
+    storage_target_by_slot = (0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 4, 5, 6, 7)
+    wild_sources = (
+        "wild:ViridianForest:grass",
+        "wild:Route2:grass",
+        "wild:Route1:grass",
+        "wild:Route14:grass",
+        "wild:Route16:grass",
+        "wild:Route22:grass",
+        "wild:Route18:grass",
+        "wild:Route4:grass",
+        "wild:Route23:grass",
+        "wild:CeruleanCave1F:grass",
+        "wild:MtMoon1F:grass",
+        "wild:Route3:grass",
+        "wild:CeruleanCave2F:grass",
+        "wild:SeafoamIslands1F:grass",
+        "wild:Route24:grass",
+    )
+    if kind in {
+        LivingDexOptionKind.ACQUIRE,
+        LivingDexOptionKind.DEVELOP,
+        LivingDexOptionKind.EXPLORE,
+    }:
+        values: dict[str, object] = {
+            "source_id": (
+                f"wild:PokemonMansion1F:{token}"
+                if kind is LivingDexOptionKind.DEVELOP
+                else wild_sources[token_index]
+            ),
             "label": f"source {token}",
             "map_id": boundary.map_id,
             "player_x": boundary.at[1],
@@ -302,9 +387,12 @@ def _profile_parameters(
             "maximum_seek_steps": 20,
             "maximum_encounters": 4,
         }
+        if kind is LivingDexOptionKind.DEVELOP:
+            values["completed_battles"] = 1
+        return values
     if kind is LivingDexOptionKind.MANAGE_STORAGE:
         return {
-            "target_box_index": int(token[-1], 16) % 12,
+            "target_box_index": storage_target_by_slot[token_index],
             "map_id": boundary.map_id,
             "player_x": boundary.at[1],
             "player_y": boundary.at[0],
@@ -319,7 +407,7 @@ def _profile_parameters(
                 {
                     "absolute_index": 0,
                     "item_id": 4,
-                    "quantity": 1 + int(token[-1], 16) % 9,
+                    "quantity": 1 + token_index * 3 + token_option,
                     "unit_price": 200,
                 }
             ],
@@ -359,10 +447,16 @@ def _provider_terminal(
     origin: RedRoutedSemanticBoundary,
     index: int,
 ) -> RedRoutedSemanticBoundary:
-    if kind in {LivingDexOptionKind.EVOLVE, LivingDexOptionKind.DEVELOP}:
+    if kind is LivingDexOptionKind.EVOLVE:
         return RedRoutedSemanticBoundary(
             int(MapId.CINNABAR_POKECENTER),
             (3, 3),
+            None,
+        )
+    if kind is LivingDexOptionKind.DEVELOP:
+        return RedRoutedSemanticBoundary(
+            int(MapId.POKEMON_MANSION_1F),
+            (1, 1),
             None,
         )
     if kind is LivingDexOptionKind.MANAGE_STORAGE:
@@ -423,12 +517,27 @@ def _recipe(
         terminal = _provider_terminal(kind, origin, option_index)
         token = f"s{index:02x}{option_index:02x}"
         profile = _profile(kind, terminal, token)
+        family = build_red_living_dex_transformation_family(
+            option_kind=kind,
+            profile=profile,
+            story_objective_id=(token if kind is LivingDexOptionKind.UNLOCK_ACCESS else None),
+        )
+        if kind is LivingDexOptionKind.EVOLVE:
+            family = RedLivingDexTransformationFamily(
+                kind,
+                _OPTION_TO_GOAL[kind],
+                RedGoalMechanic.DIGLETT_EVOLUTION,
+                {
+                    "source": f"precursor-{token}",
+                    "target": f"evolved-{token}",
+                },
+            )
         providers.append(
             RedLivingDexSetupProviderRecipe(
                 option_kind=kind,
                 provider_type=_OPTION_TO_PROVIDER[kind],
                 profile=profile,
-                expected_family_sha256=_expected_family_sha256(profile, kind, token),
+                family=family,
                 route=(
                     None
                     if terminal == origin
@@ -473,165 +582,296 @@ def _recipes(*, alias_last_location: bool = False) -> tuple[RedLivingDexSetupSlo
     return tuple(_recipe(index, origin_map=map_id) for index, map_id in enumerate(maps))
 
 
-class _Meter:
-    def __init__(self) -> None:
-        self.actions = 0
-        self.frames = 0
-
-    def checkpoint(self) -> RoutedSemanticBudgetCheckpoint:
-        return RoutedSemanticBudgetCheckpoint(self.actions, self.frames)
-
-    def spend(self, actions: int = 1, frames: int = 10) -> None:
-        self.actions += actions
-        self.frames += frames
+_Meter = RedLivingDexSetupEffectMeter
 
 
-class _Probe:
-    def __init__(self) -> None:
-        self.executions = 0
-        self.verifications = 0
+def _cross_protected_effect(meter: _Meter, name: str) -> None:
+    recorders = {
+        "behavior_draws": meter.record_behavior_draw,
+        "learner_labels": meter.record_learner_label,
+        "learner_outcomes": meter.record_learner_outcome,
+        "model_predictions": meter.record_model_prediction,
+        "model_fits": meter.record_model_fit,
+        "provider_executions": meter.record_provider_execution,
+        "teacher_queries": meter.record_teacher_query,
+        "root_claims": meter.record_root_claim,
+    }
+    recorders[name]()
 
-    def execute(self) -> GoalExecutionReport:
-        self.executions += 1
-        return GoalExecutionReport(0, 0, {})
 
-    def verify(self, _report: GoalExecutionReport) -> GoalVerification:
-        self.verifications += 1
-        return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+class _Reader:
+    def __init__(self, arm: _Arm) -> None:
+        self.arm = arm
+
+    def read(self) -> RawGameState:
+        boundary = self.arm.boundary
+        species = (BLASTOISE_SPECIES_ID, 59, 64, 118, 132, 104)
+        levels = (60, 55, 56, 57, 58, 59)
+        return RawGameState(
+            game_started=True,
+            map_id=boundary.map_id,
+            player_x=boundary.at[1],
+            player_y=boundary.at[0],
+            party_count=6,
+            battle_state=0,
+            bag_item_ids=(int(ItemId.POKE_BALL), int(ItemId.HYPER_POTION)),
+            bag_items=(
+                (int(ItemId.POKE_BALL), 20),
+                (int(ItemId.HYPER_POTION), 20),
+            ),
+            party_species_ids=species,
+            party_levels=levels,
+            party_hp=(150, 100, 100, 100, 100, 100),
+            party_max_hp=(150, 100, 100, 100, 100, 100),
+            party_status=(0, 0, 0, 0, 0, 0),
+            party_moves=(
+                (0x39, 0x3A, 0x46, 0x82),
+                (0xA3, 0x0A, 0x5B, 0),
+                (55, 57, 58, 0),
+                (55, 57, 58, 0),
+                (55, 57, 58, 0),
+                (55, 57, 58, 0),
+            ),
+            party_pp=((25, 15, 10, 10), (20, 35, 10, 0)) + ((25, 15, 10, 0),) * 4,
+            player_money=99_999,
+        )
+
+    def read_pokedex_state(self) -> RedPokedexState:
+        return RedPokedexState(frozenset(), frozenset())
+
+    def read_all_box_states(self) -> RedBoxCollectionState:
+        return RedBoxCollectionState(
+            tuple(RedCurrentBoxState(index, (), ()) for index in range(12)),
+            0,
+            False,
+        )
+
+    def read_input_readiness(self) -> InputReadiness:
+        return InputReadiness(0, 0, 0, 0, 0)
 
 
-class _Runtime:
-    def __init__(self, recipe: RedLivingDexSetupSlotRecipe, meter: _Meter) -> None:
-        self.recipe = recipe
+class _StateEmulator:
+    def __init__(self, arm: _Arm, meter: _Meter) -> None:
+        self.arm = arm
         self.meter = meter
-        self.state_bytes = f"origin-{recipe.recipe_sha256}".encode("ascii")
-        self.restores: list[bytes] = []
-        self.route_calls: list[str] = []
-        self.offer_calls: list[str] = []
-        self.probe = _Probe()
-        self.restore_spends = False
-        self.offer_spends = False
-        self.unavailable = False
-        self.bad_family = False
-        self.bad_root = False
-        self.bad_root_state_bytes = False
-        self.bad_candidate_restore = False
-        self.bad_final_restore = False
+        self.frame_count = 0
+        self.pressed_buttons: frozenset[str] = frozenset()
+        self.payload = b"unloaded"
 
-    def construct_origin(
+    def load_state_bytes(self, payload: bytes) -> None:
+        if self.arm.factory.ignore_state_bytes:
+            return
+        self.payload = payload
+        if self.arm.factory.restore_spends:
+            self.meter.record_controller_actions()
+            self.meter.record_emulator_frames(10)
+
+    def save_state_bytes(self) -> bytes:
+        return self.payload
+
+    def read_u8(self, _address: int) -> int:
+        return 0
+
+    def press(self, _button: str) -> None:
+        pass
+
+    def release(self, _button: str) -> None:
+        pass
+
+    def tick(self, frames: int) -> None:
+        self.frame_count += frames
+        self.meter.record_emulator_frames(frames)
+
+
+class _TraversalObserver:
+    def __init__(self, arm: _Arm) -> None:
+        self.arm = arm
+
+    def observe(self) -> TraversalSnapshot:
+        return _traversal(self.arm.boundary)
+
+
+class _RouteDelegate:
+    def __init__(self, arm: _Arm) -> None:
+        self.arm = arm
+
+    def execute(self, action: MacroAction) -> MacroAction:
+        terminal = self.arm.pending_terminal
+        if terminal is None:
+            raise AssertionError("route action lacked a terminal")
+        self.arm.boundary = terminal
+        if not self.arm.factory.fabricated_arrival_without_state:
+            self.arm.emulator.payload = (
+                self.arm.emulator.payload
+                + f":{terminal.map_id}:{terminal.at[0]}:{terminal.at[1]}".encode("ascii")
+            )
+        self.arm.factory.meter.record_controller_actions()
+        self.arm.emulator.tick(10)
+        return action
+
+
+class _Arm:
+    def __init__(
         self,
+        factory: _ArmFactory,
         recipe: RedLivingDexSetupSlotRecipe,
-    ) -> RedLivingDexConstructedOrigin:
-        if recipe.construction_route is not None:
-            steps = len(recipe.construction_route.plan.steps)
-            self.meter.spend(steps, 10 * steps)
+        purpose: str,
+        ordinal: int,
+        sequence: int,
+    ) -> None:
+        self.factory = factory
+        self.recipe = recipe
+        self.purpose = purpose
+        self.ordinal = ordinal
+        self.arm_identity_sha256 = (
+            _sha("reused-arm")
+            if factory.reuse_arm_identity
+            else _sha((recipe.recipe_sha256, purpose, ordinal, sequence))
+        )
+        self.execution_identity_sha256 = factory.identity.identity_sha256
+        self.effect_meter = factory.meter
+        self.boundary = (
+            recipe.base_boundary if purpose == "construction" else recipe.origin_boundary
+        )
+        self.pending_terminal: RedRoutedSemanticBoundary | None = None
+        self.emulator = _StateEmulator(self, factory.meter)
+        self.actions = CountingExecutor(_RouteDelegate(self))
+        self.reader = _Reader(self)
+
+    def _profile(self) -> RedGoalContextProfile:
+        if self.purpose == "candidate":
+            return self.recipe.providers[self.ordinal].profile
+        return self.recipe.providers[0].profile
+
+    def _capture(self) -> GoalManagerContextCapture:
         envelope = CapturedProgressEnvelope(
-            state_sha256=hashlib.sha256(self.state_bytes).hexdigest(),
-            checkpoint_id=f"origin-{recipe.recipe_sha256[:16]}",
-            checkpoint_label="purpose-built recipe origin",
-            checkpoints_completed=0,
-            checkpoints_total=1,
-            verified_objective_ids=(),
+            state_sha256=hashlib.sha256(self.emulator.payload).hexdigest(),
+            checkpoint_id=f"arm-{self.arm_identity_sha256[:20]}",
+            checkpoint_label="isolated setup arm",
+            checkpoints_completed=len(_VERIFIED_TO_CINNABAR),
+            checkpoints_total=36,
+            verified_objective_ids=_VERIFIED_TO_CINNABAR,
         )
         envelope_bytes = (
-            json.dumps(
-                envelope.to_dict(),
-                ensure_ascii=True,
-                sort_keys=True,
-            ).encode("ascii")
+            json.dumps(envelope.to_dict(), ensure_ascii=True, sort_keys=True).encode("ascii")
             + b"\n"
         )
-        slots = build_red_living_dex_prospective_capture_plan().slots
-        index = next(
-            index for index, slot in enumerate(slots) if slot.slot_sha256 == recipe.slot_sha256
+        return parse_goal_manager_context_capture(self.emulator.payload, envelope_bytes)
+
+    def observe_fresh(self) -> FreshRedGoalObservation:
+        if self.factory.protected_effect_name is not None:
+            name = self.factory.protected_effect_name
+            self.factory.protected_effect_name = None
+            _cross_protected_effect(self.factory.meter, name)
+        context = build_red_goal_context_runtime(
+            profile=self._profile(),
+            capture=self._capture(),
+            emulator=self.emulator,
+            reader=self.reader,  # type: ignore[arg-type]
         )
-        root_state_bytes, root_envelope_bytes = _root_payloads(index)
-        if self.bad_root_state_bytes:
-            root_state_bytes = b"wrong-root-state"
-        return RedLivingDexConstructedOrigin(
-            state_bytes=self.state_bytes,
-            envelope_bytes=envelope_bytes,
-            consumed_root_state_bytes=root_state_bytes,
-            consumed_root_envelope_bytes=root_envelope_bytes,
-            fresh=_fresh(recipe.origin_boundary),
-            root_consumption_sha256=(
-                _sha("wrong-root") if self.bad_root else recipe.root_consumption_sha256
-            ),
-            consumed_root_state_sha256=recipe.root_state_sha256,
-            consumed_root_envelope_sha256=recipe.root_envelope_sha256,
-            construction_route_sha256=(
-                None
-                if recipe.construction_route is None
-                else recipe.construction_route.route_plan_sha256
-            ),
+        observation = context.adapter.observe()
+        provisional = FreshRedGoalObservation(
+            "0" * 64,
+            observation,
+            _traversal(self.boundary),
+        )
+        return replace(
+            provisional,
+            observation_sha256=red_living_dex_setup_fresh_observation_sha256(provisional),
         )
 
-    def restore_origin(self, state_bytes: bytes) -> FreshRedGoalObservation:
-        self.restores.append(state_bytes)
-        if self.restore_spends:
-            self.meter.spend()
-        if self.bad_candidate_restore and len(self.restores) == 1:
-            return _fresh(self.recipe.origin_boundary, capture_item_count=1)
-        if self.bad_final_restore and len(self.restores) == len(self.recipe.providers) + 1:
-            boundary = RedRoutedSemanticBoundary(
-                self.recipe.origin_boundary.map_id,
-                (2, 3),
-                None,
-            )
-            return _fresh(boundary)
-        return _fresh(self.recipe.origin_boundary)
-
-    def execute_route(
+    def build_route(
         self,
         route: RedLivingDexSetupRouteRecipe,
-    ) -> FreshRedGoalObservation:
-        self.route_calls.append(route.recipe_sha256)
-        self.meter.spend(len(route.plan.steps), 10 * len(route.plan.steps))
-        return _fresh(route.terminal_boundary)
-
-    def offer_provider(
-        self,
-        recipe: RedLivingDexSetupProviderRecipe,
-        fresh: FreshRedGoalObservation,
-    ) -> RedLivingDexObservedProviderOffer:
-        self.offer_calls.append(recipe.recipe_sha256)
-        if self.offer_spends:
-            self.meter.spend()
-        if self.unavailable:
-            offer = RedGoalBindingOffer.unavailable(
-                recipe.goal_kind,
-                GoalUnavailableReason.MISSING_CAPABILITY,
-            )
-        else:
-            spec = next(item for item in recipe.profile.providers if item.kind is recipe.goal_kind)
-            token = recipe.profile.profile_id.removeprefix("recipe-")
-            binding = ExecutableGoalBinding(
-                binding_ref=(
-                    f"{_semantic_binding_ref(recipe.option_kind, token)}"
-                    f":profile-{recipe.profile.profile_sha256}:"
-                    f"config-{spec.configuration_sha256}"
-                ),
-                kind=recipe.goal_kind,
-                estimated_effort=0.2,
-                estimated_risk=0.1,
-                execute=self.probe.execute,
-                verify=self.probe.verify,
-            )
-            if self.bad_family:
-                binding = replace(
-                    binding,
-                    binding_ref=(
-                        f"pokemon.red:test-family:wrong:profile-{recipe.profile.profile_sha256}:"
-                        f"config-{spec.configuration_sha256}"
-                    ),
-                )
-            offer = RedGoalBindingOffer.available(binding)
-        del fresh
-        return RedLivingDexObservedProviderOffer(
-            provider_type=recipe.provider_type,
-            profile=recipe.profile,
-            offer=offer,
+        *,
+        origin_observation_sha256: str,
+    ) -> RedSemanticTransportRoute:
+        if self.factory.forged_route_type:
+            return object()  # type: ignore[return-value]
+        self.pending_terminal = route.terminal_boundary
+        return RedSemanticTransportRoute(
+            binding_ref=f"test-route-{route.recipe_sha256[:16]}",
+            origin_observation_sha256=origin_observation_sha256,
+            planner_binding_sha256=route.planner_binding_sha256,
+            plan=route.plan,
+            actions=self.actions,
+            traversal_observer=_TraversalObserver(self),
+            emulator=self.emulator,
         )
+
+    def build_goal_context(
+        self,
+        profile: RedGoalContextProfile,
+        capture: GoalManagerContextCapture,
+    ):  # type: ignore[no-untyped-def]
+        if self.factory.context_spends:
+            self.factory.meter.record_controller_actions()
+            self.factory.meter.record_emulator_frames(10)
+        context = build_red_goal_context_runtime(
+            profile=profile,
+            capture=capture,
+            emulator=self.emulator,
+            reader=self.reader,  # type: ignore[arg-type]
+        )
+        if self.factory.wrong_context_emulator:
+            context.emulator = object()  # type: ignore[assignment]
+        return context
+
+
+class _ArmFactory:
+    def __init__(
+        self,
+        identity: RedLivingDexSetupExecutionIdentity,
+        meter: _Meter,
+    ) -> None:
+        self.identity = identity
+        self.meter = meter
+        self.arms: list[_Arm] = []
+        self.ignore_state_bytes = False
+        self.restore_spends = False
+        self.context_spends = False
+        self.reuse_arm_identity = False
+        self.forged_route_type = False
+        self.fabricated_arrival_without_state = False
+        self.wrong_context_emulator = False
+        self.protected_effect_name: str | None = None
+
+    def __call__(
+        self,
+        recipe: RedLivingDexSetupSlotRecipe,
+        purpose: str,
+        ordinal: int,
+    ) -> _Arm:
+        arm = _Arm(self, recipe, purpose, ordinal, len(self.arms))
+        self.arms.append(arm)
+        return arm
+
+
+def _root(index: int) -> RedLivingDexAuthenticatedSetupRoot:
+    state, envelope = _root_payloads(index)
+    return RedLivingDexAuthenticatedSetupRoot(
+        root_consumption_sha256=_sha(("root", index)),
+        state_bytes=state,
+        envelope_bytes=envelope,
+    )
+
+
+def _validate_fixture(
+    index: int,
+    recipe: RedLivingDexSetupSlotRecipe,
+    meter: _Meter,
+    factory: _ArmFactory | None = None,
+):
+    identity = _identity()
+    resolved_factory = factory or _ArmFactory(identity, meter)
+    return validate_red_living_dex_setup_recipe(
+        build_red_living_dex_prospective_capture_plan().slots[index],
+        recipe,
+        execution_identity=identity,
+        root=_root(index),
+        arm_factory=resolved_factory,
+        meter=meter,
+    )
 
 
 def _store(tmp_path: Path) -> PrivateArtifactRoot:
@@ -651,6 +891,13 @@ def _store(tmp_path: Path) -> PrivateArtifactRoot:
     )
 
 
+def _claim_registry(tmp_path: Path) -> Path:
+    registry = tmp_path / "account-claims"
+    registry.mkdir(mode=0o700)
+    registry.chmod(0o700)
+    return registry
+
+
 def test_evolution_capability_names_the_provider_the_profile_really_builds() -> None:
     capabilities = {item.option_kind: item for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES}
     assert capabilities[LivingDexOptionKind.EVOLVE].executor_types == (
@@ -667,23 +914,29 @@ def test_provider_recipe_rejects_the_old_false_evolution_provenance() -> None:
 
 
 def test_recipe_plan_requires_ten_real_origin_maps_for_ten_logical_scopes() -> None:
-    plan = build_red_living_dex_setup_recipe_plan(_recipes())
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
     assert plan.public_dict() == {
         "claim_before_controller_input": True,
         "development_slots": 5,
+        "execution_identity_bound": True,
         "learner_effects": 0,
         "option_count": 45,
+        "physical_origin_count": 10,
         "private_identity_fields": 0,
         "private_path_fields": 0,
         "retry_after_controller_input": False,
         "routed_option_count": 26,
         "same_origin_fork_required": True,
-        "schema": "pokemon.red.private-living-dex-setup-recipe-plan.v1",
+        "schema": "pokemon.red.private-living-dex-setup-recipe-plan.v2",
+        "semantic_family_count": 42,
+        "semantic_family_minimum": 33,
         "slot_count": 15,
         "train_slots": 10,
     }
     with pytest.raises(RedLivingDexSetupRecipeError, match="reused"):
-        build_red_living_dex_setup_recipe_plan(_recipes(alias_last_location=True))
+        build_red_living_dex_setup_recipe_plan(
+            _recipes(alias_last_location=True), execution_identity=_identity()
+        )
 
 
 def test_recipe_plan_rejects_expected_family_overlap_before_controller_input() -> None:
@@ -692,7 +945,7 @@ def test_recipe_plan_rejects_expected_family_overlap_before_controller_input() -
     development = recipes[10]
     development_acquire = replace(
         development.providers[0],
-        expected_family_sha256=train_acquire.expected_family_sha256,
+        family=train_acquire.family,
     )
     recipes[10] = replace(
         development,
@@ -700,7 +953,7 @@ def test_recipe_plan_rejects_expected_family_overlap_before_controller_input() -
     )
 
     with pytest.raises(RedLivingDexSetupRecipeError, match="families overlap"):
-        build_red_living_dex_setup_recipe_plan(tuple(recipes))
+        build_red_living_dex_setup_recipe_plan(tuple(recipes), execution_identity=_identity())
 
 
 def test_slot_recipe_rejects_a_candidate_route_from_another_origin() -> None:
@@ -740,24 +993,24 @@ def test_same_root_validation_derives_real_menu_without_executing_a_provider() -
     slot = build_red_living_dex_prospective_capture_plan().slots[0]
     recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
     meter = _Meter()
-    runtime = _Runtime(recipe, meter)
+    identity = _identity()
+    factory = _ArmFactory(identity, meter)
 
     result = validate_red_living_dex_setup_recipe(
         slot,
         recipe,
-        runtime=runtime,
+        execution_identity=identity,
+        root=_root(0),
+        arm_factory=factory,
         meter=meter,
     )
 
-    assert len(runtime.restores) == 4
-    assert all(item == runtime.state_bytes for item in runtime.restores)
-    assert len(runtime.route_calls) == 1
-    assert len(runtime.offer_calls) == 3
-    assert runtime.probe.executions == 0
-    assert runtime.probe.verifications == 0
-    assert result.origin_restore_count == 4
-    assert result.attestation.setup_controller_actions == 1
-    assert result.attestation.setup_emulator_frames == 10
+    assert len(factory.arms) == 5
+    assert len({item.arm_identity_sha256 for item in factory.arms}) == 5
+    assert meter.provider_executions == 0
+    assert result.origin_restore_count == 5
+    assert result.attestation.setup_controller_actions == 2
+    assert result.attestation.setup_emulator_frames == 20
     assert result.binding.location_sha256 == recipe.location_sha256
     assert result.binding.available_family_sha256s == tuple(
         item.family_sha256 for item in result.fork_proofs
@@ -781,31 +1034,37 @@ def test_routed_origin_construction_is_counted_before_candidate_forks() -> None:
         construction_route=construction,
     )
     meter = _Meter()
-    runtime = _Runtime(recipe, meter)
+    identity = _identity()
+    factory = _ArmFactory(identity, meter)
 
     result = validate_red_living_dex_setup_recipe(
         slot,
         recipe,
-        runtime=runtime,
+        execution_identity=identity,
+        root=_root(0),
+        arm_factory=factory,
         meter=meter,
     )
 
-    assert result.attestation.setup_controller_actions == 2
-    assert result.attestation.setup_emulator_frames == 20
-    assert len(runtime.route_calls) == 1
+    assert result.attestation.setup_controller_actions == 4
+    assert result.attestation.setup_emulator_frames == 40
+    assert sum(item.pending_terminal is not None for item in factory.arms) == 2
+    assert result.construction_route_recipe_sha256 == construction.recipe_sha256
+    assert result.construction_route_plan_sha256 == construction.route_plan_sha256
+    assert result.construction_route_report_sha256 is not None
+    assert result.construction_route_controller_actions == 2
+    assert result.construction_route_emulator_frames == 20
+
+    document = deepcopy(result.private_dict())
+    document["construction_route_report_sha256"] = "f" * 64
+    with pytest.raises(RedLivingDexSetupRecipeError, match="observer proof tree"):
+        restore_red_living_dex_validated_setup_capture(document)
 
 
 def test_validated_capture_private_round_trip_retains_exact_repeatable_bytes() -> None:
-    slot = build_red_living_dex_prospective_capture_plan().slots[0]
     recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
     meter = _Meter()
-    runtime = _Runtime(recipe, meter)
-    original = validate_red_living_dex_setup_recipe(
-        slot,
-        recipe,
-        runtime=runtime,
-        meter=meter,
-    )
+    original = _validate_fixture(0, recipe, meter)
 
     restored = restore_red_living_dex_validated_setup_capture(
         json.loads(json.dumps(original.private_dict()))
@@ -837,22 +1096,49 @@ def test_validated_capture_private_round_trip_retains_exact_repeatable_bytes() -
             ),
             "learner boundary",
         ),
+        (
+            lambda value: value["binding"].__setitem__(  # type: ignore[union-attr]
+                "schema", "pokemon.red.private-living-dex-setup-slot-binding.v1"
+            ),
+            "binding schema",
+        ),
+        (
+            lambda value: value["binding"]["option_bindings"][0].__setitem__(  # type: ignore[index,union-attr]
+                "schema", "pokemon.red.private-living-dex-setup-option-binding.v1"
+            ),
+            "option schema",
+        ),
+        (
+            lambda value: value["fork_proofs"][0].__setitem__(  # type: ignore[index,union-attr]
+                "family_sha256", "1" * 64
+            ),
+            "observer proof tree",
+        ),
+        (
+            lambda value: value["fork_proofs"][1].__setitem__(  # type: ignore[index,union-attr]
+                "route_report_sha256", "2" * 64
+            ),
+            "observer proof tree",
+        ),
+        (
+            lambda value: value["fork_proofs"][0].__setitem__(  # type: ignore[index,union-attr]
+                "fork_runtime_sha256", "3" * 64
+            ),
+            "observer proof tree",
+        ),
+        (
+            lambda value: value.__setitem__("construction_runtime_sha256", "4" * 64),
+            "observer proof tree",
+        ),
     ),
 )
 def test_validated_capture_private_restore_rejects_tampering(
     mutation: Any,
     message: str,
 ) -> None:
-    slot = build_red_living_dex_prospective_capture_plan().slots[0]
     recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
     meter = _Meter()
-    runtime = _Runtime(recipe, meter)
-    result = validate_red_living_dex_setup_recipe(
-        slot,
-        recipe,
-        runtime=runtime,
-        meter=meter,
-    )
+    result = _validate_fixture(0, recipe, meter)
     document = deepcopy(result.private_dict())
     mutation(document)
 
@@ -863,14 +1149,10 @@ def test_validated_capture_private_restore_rejects_tampering(
 @pytest.mark.parametrize(
     ("flag", "message"),
     (
-        ("restore_spends", "origin restore changed"),
-        ("offer_spends", "provider offer changed"),
-        ("unavailable", "available offer"),
-        ("bad_family", "frozen recipe"),
-        ("bad_root", "authenticated root recipe"),
-        ("bad_root_state_bytes", "source state digest"),
-        ("bad_candidate_restore", "captured decision state"),
-        ("bad_final_restore", "final restored origin boundary differs"),
+        ("restore_spends", "restore changed protected effects"),
+        ("context_spends", "registry construction changed protected effects"),
+        ("ignore_state_bytes", "restore readback differs"),
+        ("reuse_arm_identity", "reused an isolated arm identity"),
     ),
 )
 def test_same_root_validation_fails_closed_on_boundary_mutations(
@@ -880,14 +1162,170 @@ def test_same_root_validation_fails_closed_on_boundary_mutations(
     slot = build_red_living_dex_prospective_capture_plan().slots[0]
     recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
     meter = _Meter()
-    runtime = _Runtime(recipe, meter)
-    setattr(runtime, flag, True)
+    identity = _identity()
+    factory = _ArmFactory(identity, meter)
+    setattr(factory, flag, True)
 
     with pytest.raises(RedLivingDexSetupRecipeError, match=message):
         validate_red_living_dex_setup_recipe(
             slot,
             recipe,
-            runtime=runtime,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=factory,
+            meter=meter,
+        )
+
+
+@pytest.mark.parametrize(
+    "effect_name",
+    (
+        "behavior_draws",
+        "learner_labels",
+        "learner_outcomes",
+        "model_predictions",
+        "model_fits",
+        "provider_executions",
+        "teacher_queries",
+        "root_claims",
+    ),
+)
+def test_same_root_validation_meters_every_protected_authority(
+    effect_name: str,
+) -> None:
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    meter = _Meter()
+    identity = _identity()
+    factory = _ArmFactory(identity, meter)
+    factory.protected_effect_name = effect_name
+
+    with pytest.raises(RedLivingDexSetupRecipeError, match="observation changed protected effects"):
+        validate_red_living_dex_setup_recipe(
+            slot,
+            recipe,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=factory,
+            meter=meter,
+        )
+
+
+def test_same_root_validation_rejects_a_self_attested_meter() -> None:
+    class _SelfAttestedMeter:
+        def checkpoint(self) -> object:
+            return object()
+
+        def record_root_claim(self) -> None:
+            pass
+
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    identity = _identity()
+    real_meter = _Meter()
+
+    with pytest.raises(TypeError, match="comprehensive effect meter"):
+        validate_red_living_dex_setup_recipe(
+            slot,
+            recipe,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=_ArmFactory(identity, real_meter),
+            meter=_SelfAttestedMeter(),  # type: ignore[arg-type]
+        )
+
+
+@pytest.mark.parametrize(
+    ("flag", "message"),
+    (
+        ("forged_route_type", "different semantic route"),
+        ("fabricated_arrival_without_state", "without changing emulator state"),
+        ("wrong_context_emulator", "isolated candidate state"),
+    ),
+)
+def test_same_root_validation_rejects_self_attested_route_or_provider_context(
+    flag: str,
+    message: str,
+) -> None:
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    meter = _Meter()
+    identity = _identity()
+    factory = _ArmFactory(identity, meter)
+    setattr(factory, flag, True)
+
+    with pytest.raises(RedLivingDexSetupRecipeError, match=message):
+        validate_red_living_dex_setup_recipe(
+            slot,
+            recipe,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=factory,
+            meter=meter,
+        )
+
+
+def test_same_root_validation_rejects_an_arm_from_another_execution_identity() -> None:
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    meter = _Meter()
+    identity = _identity()
+    other_identity = replace(identity, source_bundle_sha256=_sha("other-source-bundle"))
+
+    with pytest.raises(RedLivingDexSetupRecipeError, match="execution identity"):
+        validate_red_living_dex_setup_recipe(
+            slot,
+            recipe,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=_ArmFactory(other_identity, meter),
+            meter=meter,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("game_id", "pokemon-blue"),
+        ("title", "Pokemon - Blue Version (USA, Europe)"),
+        ("rom_sha1", "0" * 40),
+        ("rom_sha256", "0" * 64),
+        ("source_published", False),
+        ("worktree_dirty", True),
+    ),
+)
+def test_execution_identity_rejects_other_titles_or_unpublished_source(
+    field: str,
+    value: object,
+) -> None:
+    with pytest.raises(RedLivingDexSetupTrustError):
+        replace(_identity(), **{field: value})
+
+
+def test_same_root_validation_derives_family_from_the_registry_binding() -> None:
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    acquire = recipe.providers[0]
+    wrong_family = RedLivingDexTransformationFamily(
+        acquire.family.option_kind,
+        acquire.family.goal_kind,
+        acquire.family.mechanic,
+        {"source_id": "wild:Route2:grass"},
+    )
+    forged = replace(
+        recipe,
+        providers=(replace(acquire, family=wrong_family), *recipe.providers[1:]),
+    )
+    meter = _Meter()
+    identity = _identity()
+
+    with pytest.raises(RedLivingDexSetupRecipeError, match="provider family"):
+        validate_red_living_dex_setup_recipe(
+            slot,
+            forged,
+            execution_identity=identity,
+            root=_root(0),
+            arm_factory=_ArmFactory(identity, meter),
             meter=meter,
         )
 
@@ -898,175 +1336,555 @@ def test_recipe_rejects_a_profile_whose_coordinate_does_not_match_terminal() -> 
     mismatched_profile = _profile(
         LivingDexOptionKind.ACQUIRE,
         RedRoutedSemanticBoundary(int(MapId.ROUTE_1), (9, 8), None),
-        "mismatch",
+        "s0000-mismatch",
     )
     wrong = replace(acquire, profile=mismatched_profile)
     with pytest.raises(RedLivingDexSetupRecipeError, match="provider profile"):
         replace(recipe, providers=(wrong, *recipe.providers[1:]))
 
 
-def test_recipe_campaign_claims_all_slots_and_recovers_without_runtime_reentry(
+def test_recipe_campaign_claims_account_wide_and_recovers_without_arm_reentry(
     tmp_path: Path,
 ) -> None:
-    plan = build_red_living_dex_setup_recipe_plan(_recipes())
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
     store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
     meter = _Meter()
-    calls: list[str] = []
+    actual = _ArmFactory(plan.execution_identity, meter)
+    construction_calls: list[str] = []
 
-    def factory(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
-        ordinal = plan.recipes.index(recipe)
-        episode_id = f"red-living-dex-recipe-{ordinal:02d}-{recipe.recipe_sha256[:20]}"
-        assert store.inspect_episode_state(episode_id).status == "partial"
-        sealed = store.find_sealed_record(
-            RED_LIVING_DEX_RECIPE_PLAN_RECORD_ID,
-            expected_kind=RED_LIVING_DEX_RECIPE_PLAN_RECORD_KIND,
-        )
-        assert sealed is not None
-        assert sealed.read()["recipe_plan_sha256"] == plan.plan_sha256
-        calls.append(recipe.recipe_sha256)
-        return _Runtime(recipe, meter)
+    def factory(
+        recipe: RedLivingDexSetupSlotRecipe,
+        purpose: str,
+        ordinal: int,
+    ) -> _Arm:
+        if purpose == "construction":
+            construction_calls.append(recipe.recipe_sha256)
+            episode = plan.recipes.index(recipe)
+            episode_id = f"red-living-dex-recipe-{episode:02d}-{recipe.recipe_sha256[:20]}"
+            assert store.inspect_episode_state(episode_id).status == "partial"
+            sealed = store.find_sealed_record(
+                RED_LIVING_DEX_RECIPE_PLAN_RECORD_ID,
+                expected_kind=RED_LIVING_DEX_RECIPE_PLAN_RECORD_KIND,
+            )
+            assert sealed is not None
+            assert sealed.read()["recipe_plan_sha256"] == plan.plan_sha256
+            if recipe is not plan.recipes[0]:
+                raise RedLivingDexControlledRecipeFailure(
+                    RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
+                )
+        return actual(recipe, purpose, ordinal)
 
     first = run_red_living_dex_setup_recipe_campaign(
         store,
         plan,
-        runtime_factory=factory,
+        roots=roots,
+        arm_factory=factory,
         meter=meter,
+        claim_registry=registry,
     )
 
-    assert len(calls) == 15
-    assert first.inventory_qualification_available is True
-    assert first.qualified_inventory().public_dict()["status_counts"] == {
-        "complete": 15,
-        "failed": 0,
-        "interrupted": 0,
-    }
+    assert construction_calls == [item.recipe_sha256 for item in plan.recipes]
+    assert meter.root_claims == 15
+    assert first.inventory_qualification_available is False
     assert first.public_dict()["terminal_status_counts"] == {
-        "complete": 15,
-        "failed": 0,
+        "complete": 1,
+        "failed": 14,
         "interrupted": 0,
     }
+    assert all(
+        item.terminal.execution_identity_sha256 == plan.execution_identity.identity_sha256
+        for item in first.receipts
+    )
+    assert all(
+        {"reason_code", "setup_controller_actions", "setup_emulator_frames", "status"}.isdisjoint(
+            item.public_dict()
+        )
+        for item in first.receipts
+    )
     before = meter.checkpoint()
 
-    def forbidden_factory(_recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
-        raise AssertionError("a recovered recipe must not reenter its runtime")
+    def forbidden_factory(
+        _recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        raise AssertionError("a recovered recipe must not reenter an isolated arm")
 
     recovered = run_red_living_dex_setup_recipe_campaign(
         store,
         plan,
-        runtime_factory=forbidden_factory,
+        roots=roots,
+        arm_factory=forbidden_factory,
         meter=meter,
+        claim_registry=registry,
     )
 
     assert meter.checkpoint() == before
-    assert all(
-        item.disposition is RedLivingDexSetupRecipeDisposition.RECOVERED_COMPLETE
-        for item in recovered.receipts
+    assert recovered.receipts[0].disposition is (
+        RedLivingDexSetupRecipeDisposition.RECOVERED_COMPLETE
     )
-    assert recovered.qualified_inventory().qualification_sha256 == (
-        first.qualified_inventory().qualification_sha256
+    assert all(
+        item.disposition is RedLivingDexSetupRecipeDisposition.RECOVERED_FAILED
+        for item in recovered.receipts[1:]
+    )
+    assert tuple(item.terminal.private_dict() for item in recovered.receipts) == tuple(
+        item.terminal.private_dict() for item in first.receipts
     )
 
 
 def test_recipe_campaign_never_retries_a_claimed_validation_failure(
     tmp_path: Path,
 ) -> None:
-    plan = build_red_living_dex_setup_recipe_plan(_recipes())
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
     store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
     meter = _Meter()
-    first_calls: list[str] = []
-
-    def failing_factory(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
-        first_calls.append(recipe.recipe_sha256)
-        runtime = _Runtime(recipe, meter)
-        runtime.unavailable = True
-        return runtime
+    failing = _ArmFactory(plan.execution_identity, meter)
+    failing.ignore_state_bytes = True
 
     with pytest.raises(RedLivingDexSetupRecipeCampaignError, match="durable claim"):
         run_red_living_dex_setup_recipe_campaign(
             store,
             plan,
-            runtime_factory=failing_factory,
+            roots=roots,
+            arm_factory=failing,
             meter=meter,
+            claim_registry=registry,
         )
-    assert first_calls == [plan.recipes[0].recipe_sha256]
+    assert len(failing.arms) == 1
 
     resumed_calls: list[str] = []
 
-    def resumed_factory(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
+    def resumed_factory(
+        recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
         resumed_calls.append(recipe.recipe_sha256)
-        return _Runtime(recipe, meter)
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     resumed = run_red_living_dex_setup_recipe_campaign(
         store,
         plan,
-        runtime_factory=resumed_factory,
+        roots=roots,
+        arm_factory=resumed_factory,
         meter=meter,
+        claim_registry=registry,
     )
 
     assert resumed_calls == [item.recipe_sha256 for item in plan.recipes[1:]]
     assert resumed.receipts[0].terminal.status.value == "failed"
     assert resumed.receipts[0].terminal.retry_allowed is False
     assert resumed.receipts[0].disposition is (RedLivingDexSetupRecipeDisposition.RECOVERED_FAILED)
-    assert resumed.inventory_qualification_available is True
 
 
-def test_recipe_campaign_continues_after_a_sanitized_controlled_failure(
+def test_recipe_campaign_uses_a_closed_failure_vocabulary_and_aggregate_publication(
     tmp_path: Path,
 ) -> None:
-    plan = build_red_living_dex_setup_recipe_plan(_recipes())
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
     store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
     meter = _Meter()
     calls = 0
 
-    def factory(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
+    def factory(
+        _recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
         nonlocal calls
         calls += 1
-        if recipe is plan.recipes[0]:
-            raise RedLivingDexControlledRecipeFailure("root_unavailable")
-        return _Runtime(recipe, meter)
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     run = run_red_living_dex_setup_recipe_campaign(
         store,
         plan,
-        runtime_factory=factory,
+        roots=roots,
+        arm_factory=factory,
         meter=meter,
+        claim_registry=registry,
     )
 
     assert calls == 15
-    assert run.receipts[0].terminal.reason_code == "root_unavailable"
-    assert run.receipts[0].disposition is (RedLivingDexSetupRecipeDisposition.EXECUTED_FAILED)
+    assert run.receipts[0].terminal.reason_code is (RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
+    assert run.public_dict()["failure_category_counts"]["root_unavailable"] == 15
     assert run.receipts[0].terminal.setup_controller_actions == 0
-    assert run.inventory_qualification_available is True
+    with pytest.raises(
+        RedLivingDexSetupRecipeCampaignError,
+        match="controlled recipe failure reason",
+    ):
+        RedLivingDexControlledRecipeFailure("a" * 64)  # type: ignore[arg-type]
 
 
-def test_recipe_campaign_counts_runtime_factory_effects_and_fails_closed(
+def test_recipe_campaign_counts_arm_factory_effects_and_fails_closed(
     tmp_path: Path,
 ) -> None:
-    plan = build_red_living_dex_setup_recipe_plan(_recipes())
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
     store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
     meter = _Meter()
+    actual = _ArmFactory(plan.execution_identity, meter)
 
-    def actionful_factory(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
-        meter.spend()
-        return _Runtime(recipe, meter)
+    def actionful_factory(
+        recipe: RedLivingDexSetupSlotRecipe,
+        purpose: str,
+        ordinal: int,
+    ) -> _Arm:
+        meter.record_controller_actions()
+        meter.record_emulator_frames(10)
+        return actual(recipe, purpose, ordinal)
 
     with pytest.raises(RedLivingDexSetupRecipeCampaignError, match="durable claim"):
         run_red_living_dex_setup_recipe_campaign(
             store,
             plan,
-            runtime_factory=actionful_factory,
+            roots=roots,
+            arm_factory=actionful_factory,
             meter=meter,
+            claim_registry=registry,
         )
 
-    def forbidden_first(recipe: RedLivingDexSetupSlotRecipe) -> _Runtime:
-        assert recipe is not plan.recipes[0]
-        return _Runtime(recipe, meter)
+    def remaining_failures(
+        _recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     recovered = run_red_living_dex_setup_recipe_campaign(
         store,
         plan,
-        runtime_factory=forbidden_first,
+        roots=roots,
+        arm_factory=remaining_failures,
         meter=meter,
+        claim_registry=registry,
     )
-    assert recovered.receipts[0].terminal.setup_controller_actions == 2
+    assert recovered.receipts[0].terminal.setup_controller_actions == 1
     assert recovered.receipts[0].terminal.retry_allowed is False
+
+
+@pytest.mark.parametrize(
+    "cutpoint",
+    (
+        "after_plan_seal",
+        "after_account_root_claim",
+        "after_local_episode_open",
+        "after_local_claim",
+        "after_capture_append",
+        "after_episode_complete",
+        "after_terminal_publish",
+    ),
+)
+def test_recipe_campaign_restart_matrix_never_reuses_a_claimed_root(
+    tmp_path: Path,
+    cutpoint: str,
+) -> None:
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
+    store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
+    meter = _Meter()
+    actual = _ArmFactory(plan.execution_identity, meter)
+    armed = True
+
+    def failpoint(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
+        nonlocal armed
+        if armed and recipe is plan.recipes[0] and name == cutpoint:
+            armed = False
+            raise KeyboardInterrupt(cutpoint)
+
+    with pytest.raises(KeyboardInterrupt, match=cutpoint):
+        run_red_living_dex_setup_recipe_campaign(
+            store,
+            plan,
+            roots=roots,
+            arm_factory=actual,
+            meter=meter,
+            claim_registry=registry,
+            failpoint=failpoint,
+        )
+
+    arms_before_restart = len(actual.arms)
+    first_recipe_reentered = False
+
+    def recovery_factory(
+        recipe: RedLivingDexSetupSlotRecipe,
+        purpose: str,
+        ordinal: int,
+    ) -> _Arm:
+        nonlocal first_recipe_reentered
+        if recipe is plan.recipes[0]:
+            first_recipe_reentered = True
+            if cutpoint != "after_plan_seal":
+                raise AssertionError("a globally claimed root reentered an arm")
+            return actual(recipe, purpose, ordinal)
+        raise RedLivingDexControlledRecipeFailure(
+            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
+        )
+
+    recovered = run_red_living_dex_setup_recipe_campaign(
+        store,
+        plan,
+        roots=roots,
+        arm_factory=recovery_factory,
+        meter=meter,
+        claim_registry=registry,
+    )
+
+    assert meter.root_claims == 15
+    assert all(item.terminal.retry_allowed is False for item in recovered.receipts)
+    if cutpoint == "after_plan_seal":
+        assert first_recipe_reentered is True
+        assert len(actual.arms) == arms_before_restart + 5
+        assert recovered.receipts[0].terminal.status.value == "complete"
+    else:
+        assert first_recipe_reentered is False
+        assert len(actual.arms) == arms_before_restart
+    before_second_recovery = meter.checkpoint()
+
+    def forbidden_factory(
+        _recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        raise AssertionError("a terminal campaign must not construct another arm")
+
+    second = run_red_living_dex_setup_recipe_campaign(
+        store,
+        plan,
+        roots=roots,
+        arm_factory=forbidden_factory,
+        meter=meter,
+        claim_registry=registry,
+    )
+    assert meter.checkpoint() == before_second_recovery
+    assert tuple(item.terminal.private_dict() for item in second.receipts) == tuple(
+        item.terminal.private_dict() for item in recovered.receipts
+    )
+
+
+@pytest.mark.parametrize(
+    "cutpoint",
+    (
+        "after_failure_append",
+        "after_failure_terminal_publish",
+        "after_failure_episode_abort",
+    ),
+)
+def test_recipe_campaign_failure_restart_matrix_is_also_no_retry(
+    tmp_path: Path,
+    cutpoint: str,
+) -> None:
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
+    store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
+    meter = _Meter()
+    first_calls = 0
+    armed = True
+
+    def controlled_failure(
+        recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        nonlocal first_calls
+        if recipe is plan.recipes[0]:
+            first_calls += 1
+        raise RedLivingDexControlledRecipeFailure(
+            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
+        )
+
+    def failpoint(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
+        nonlocal armed
+        if armed and recipe is plan.recipes[0] and name == cutpoint:
+            armed = False
+            raise KeyboardInterrupt(cutpoint)
+
+    with pytest.raises(KeyboardInterrupt, match=cutpoint):
+        run_red_living_dex_setup_recipe_campaign(
+            store,
+            plan,
+            roots=roots,
+            arm_factory=controlled_failure,
+            meter=meter,
+            claim_registry=registry,
+            failpoint=failpoint,
+        )
+    assert first_calls == 1
+
+    recovered = run_red_living_dex_setup_recipe_campaign(
+        store,
+        plan,
+        roots=roots,
+        arm_factory=controlled_failure,
+        meter=meter,
+        claim_registry=registry,
+    )
+
+    assert first_calls == 1
+    assert meter.root_claims == 15
+    assert recovered.receipts[0].terminal.retry_allowed is False
+    assert recovered.receipts[0].terminal.status.value in {"failed", "interrupted"}
+
+
+@pytest.mark.parametrize(
+    "cutpoint",
+    (
+        "after_prelocal_claim",
+        "after_prelocal_failure_append",
+        "after_prelocal_episode_abort",
+        "after_prelocal_terminal_publish",
+    ),
+)
+def test_prelocal_interruption_recovery_survives_a_second_power_loss(
+    tmp_path: Path,
+    cutpoint: str,
+) -> None:
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
+    store = _store(tmp_path)
+    registry = _claim_registry(tmp_path)
+    meter = _Meter()
+
+    def first_crash(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
+        if recipe is plan.recipes[0] and name == "after_account_root_claim":
+            raise KeyboardInterrupt(name)
+
+    with pytest.raises(KeyboardInterrupt, match="after_account_root_claim"):
+        run_red_living_dex_setup_recipe_campaign(
+            store,
+            plan,
+            roots=roots,
+            arm_factory=_ArmFactory(plan.execution_identity, meter),
+            meter=meter,
+            claim_registry=registry,
+            failpoint=first_crash,
+        )
+    assert meter.root_claims == 1
+    armed = True
+
+    def second_crash(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
+        nonlocal armed
+        if armed and recipe is plan.recipes[0] and name == cutpoint:
+            armed = False
+            raise KeyboardInterrupt(name)
+
+    def no_arm(
+        _recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        raise AssertionError("prelocal recovery cannot construct an arm")
+
+    with pytest.raises(KeyboardInterrupt, match=cutpoint):
+        run_red_living_dex_setup_recipe_campaign(
+            store,
+            plan,
+            roots=roots,
+            arm_factory=no_arm,
+            meter=meter,
+            claim_registry=registry,
+            failpoint=second_crash,
+        )
+
+    def remaining_failures(
+        recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        if recipe is plan.recipes[0]:
+            raise AssertionError("the twice-interrupted root cannot reenter an arm")
+        raise RedLivingDexControlledRecipeFailure(
+            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
+        )
+
+    recovered = run_red_living_dex_setup_recipe_campaign(
+        store,
+        plan,
+        roots=roots,
+        arm_factory=remaining_failures,
+        meter=meter,
+        claim_registry=registry,
+    )
+    assert meter.root_claims == 15
+    assert recovered.receipts[0].terminal.status.value == "interrupted"
+    assert recovered.receipts[0].terminal.retry_allowed is False
+
+
+def test_account_claim_blocks_the_same_physical_root_in_another_store(
+    tmp_path: Path,
+) -> None:
+    plan = build_red_living_dex_setup_recipe_plan(_recipes(), execution_identity=_identity())
+    roots = tuple(_root(index) for index in range(15))
+    first_directory = tmp_path / "first-store"
+    second_directory = tmp_path / "second-store"
+    first_directory.mkdir()
+    second_directory.mkdir()
+    first_store = _store(first_directory)
+    second_store = _store(second_directory)
+    registry = _claim_registry(tmp_path)
+    meter = _Meter()
+
+    def crash_after_global_claim(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
+        if recipe is plan.recipes[0] and name == "after_account_root_claim":
+            raise KeyboardInterrupt(name)
+
+    with pytest.raises(KeyboardInterrupt, match="after_account_root_claim"):
+        run_red_living_dex_setup_recipe_campaign(
+            first_store,
+            plan,
+            roots=roots,
+            arm_factory=_ArmFactory(plan.execution_identity, meter),
+            meter=meter,
+            claim_registry=registry,
+            failpoint=crash_after_global_claim,
+        )
+
+    relabeled_id = _sha("same-bytes-different-catalog-label")
+    relabeled_recipe = replace(
+        plan.recipes[0],
+        root_consumption_sha256=relabeled_id,
+    )
+    second_plan = build_red_living_dex_setup_recipe_plan(
+        (relabeled_recipe, *plan.recipes[1:]),
+        execution_identity=plan.execution_identity,
+    )
+    second_roots = (
+        replace(roots[0], root_consumption_sha256=relabeled_id),
+        *roots[1:],
+    )
+
+    first_root_reentered = False
+
+    def second_store_factory(
+        recipe: RedLivingDexSetupSlotRecipe,
+        _purpose: str,
+        _ordinal: int,
+    ) -> _Arm:
+        nonlocal first_root_reentered
+        if recipe is second_plan.recipes[0]:
+            first_root_reentered = True
+            raise AssertionError("account-wide consumed root entered another store")
+        raise RedLivingDexControlledRecipeFailure(
+            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
+        )
+
+    result = run_red_living_dex_setup_recipe_campaign(
+        second_store,
+        second_plan,
+        roots=second_roots,
+        arm_factory=second_store_factory,
+        meter=meter,
+        claim_registry=registry,
+    )
+
+    assert first_root_reentered is False
+    assert meter.root_claims == 15
+    assert result.receipts[0].terminal.status.value == "interrupted"
+    assert result.receipts[0].terminal.setup_controller_actions == 0
