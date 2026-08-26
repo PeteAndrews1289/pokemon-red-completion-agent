@@ -12,7 +12,37 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: durable setup runner published; materialize private bindings next
+## 2026-08-26: action-free binding materializer published; qualify the authentic source next
+
+The materializer shipped from source `89f967f97390b1d0b8440863b5144cfaa1ad6cb1` through
+[PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73), passed PR CI
+`32970763796/1`, merged as main `ad0e6049265fbfb0743a217b96dec93d608bf4d9`, and passed
+exact-main CI `32971132659/1`. The
+[qualification](docs/evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
+binds source bundle `15b4f1f0…569d`, 12 direct, 94 related setup/plan/protocol, 49 protocol, and
+**5,087 full-suite tests**.
+
+The published boundary accepts one authenticated private-source protocol, checkpoints an
+independent meter before source inspection, requests the canonical fifteen slots in exact 10+5
+order, validates all forty-five semantic provider arms and the one-local/fourteen-routed census,
+reattests the unchanged protected input set, and seals the whole exact plan. It rejects hidden
+effects during source inspection, changed inputs, cross-joins, replacement plans, and public
+identity/path leakage. Ordinary private errors are sanitized; process interruption leaves no false
+record.
+
+Do not overclaim it. Qualification used synthetic ROM-free sources and read no private capture or
+ROM. No authentic Red binding was produced; no controller action, frame, draw, label, outcome,
+prediction, teacher query, fit, authority, or transfer counter moved. The concrete private Red
+source adapter is still missing.
+
+The next gate is: implement and adversarially qualify that adapter without protected access, then
+under a separate action-free gate freeze exactly one authentic fifteen-slot plan. Preserve all
+forty-five genuine arms and fourteen route-terminal-provider joins, prove every protected-effect
+delta is zero, publish only aggregate evidence, and stop before invoking the durable setup runner.
+Trade remains a later living-Pokédex blocker. Counters remain **development 15 · verified 5/9 ·
+causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: durable setup runner published; materialize private bindings next
 
 The setup campaign shipped from source `2df5f4b042b5766bf8f2f5e8863ed5966333a713` through
 [PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71), passed PR CI

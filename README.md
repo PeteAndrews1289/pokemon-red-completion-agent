@@ -5,20 +5,30 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the safe setup runner is published; bind the real Red
+> **Current product focus (August 26, 2026): the action-free plan freezer is published; connect
+> the authentic Red source without moving the game.** The materializer shipped through
+> [PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73) from source
+> `89f967f9`, merged as main `ad0e6049`, and passed exact-main CI `32971132659/1`. Its
+> [qualification](docs/evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
+> records **12 direct · 94 related · 49 protocol · 5,087 full-suite tests**.
+>
+> The boundary asks one authenticated source for the exact fifteen slots and forty-five semantic
+> arms, proves a shared independent protected-effect meter never moves, reattests the unchanged
+> private input set, seals the whole plan, and publishes only aggregate counts. Qualification used
+> synthetic ROM-free sources; the concrete private Red adapter and authentic plan are still absent.
+> Next qualify that adapter, perform one action-free 10+5 freeze, and stop before invoking the setup
+> runner. Trade remains a later mission requirement. Counters remain **development 15 · verified
+> 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): the safe setup runner is published; bind the real Red
 > lesson states without pressing a button.** The campaign shipped through
 > [PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71) from source
 > `2df5f4b0`, merged as main `1d5cab67`, and passed exact-main CI `32965956178/1`. Its
 > [qualification](docs/evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json)
-> records **16 focused · 199 related · 49 protocol · 5,075 full-suite tests**.
->
-> The runner freezes all fifteen slots and forty-five semantic arms before input, durably claims a
-> setup before the controller port, independently reconciles action/frame totals, retains every
-> complete/failed/interrupted terminal, forbids retry, and publishes no private identity. The tests
-> use synthetic ROM-free bindings; actual Red bindings are still absent. Next qualify the
-> action-free private materializer and freeze one exact 10+5 binding plan, then stop before setup
-> execution. Trade remains a later mission requirement. Counters remain **development 15 · verified
-> 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+> records **16 focused · 199 related · 49 protocol · 5,075 full-suite tests**. The runner freezes
+> all fifteen slots and forty-five semantic arms before input, durably claims before the setup
+> port, retains complete/failed/interrupted terminals, forbids retry, and publishes no private
+> identity. It did not authenticate a private Red plan or create a training example.
 
 > **Previous product focus (August 26, 2026): the reusable doorway is published; bind the actual
 > Red classrooms.** The title-neutral composition seam shipped through

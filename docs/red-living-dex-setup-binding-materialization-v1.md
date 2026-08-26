@@ -1,9 +1,12 @@
 # Red living-Pokédex setup-binding materialization V1
 
-Status: ROM-free implementation under qualification. This document does not authorize a private
-binding read, ROM access, setup execution, controller authority, frame advance, behavior draw,
-learner action, outcome, fit, sealed Red evaluation, Crystal execution, promotion, or replay. It is
-subordinate to [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
+Status: published ROM-free implementation. Source `89f967f9` merged through PR 73 as main
+`ad0e6049` and passed exact-main CI `32971132659/1`; see the
+[qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json).
+This document does not authorize a private binding read, ROM access, setup execution, controller
+authority, frame advance, behavior draw, learner action, outcome, fit, sealed Red evaluation,
+Crystal execution, promotion, or replay. It is subordinate to [MISSION.md](../MISSION.md),
+[NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
 [setup campaign](red-living-dex-setup-campaign-v1.md).
 
@@ -60,7 +63,7 @@ were authenticated but routes were not executed and setup execution is not autho
 the materialization digest, source manifest, protected input-set digest, binding-plan digest, slot
 and state identities, routes, terminal boundaries, observations, providers, paths, and episode IDs.
 
-## Next gate after publication
+## Next gate
 
 Implement the concrete private Red source adapter and adversarially qualify its readers without
 opening controller authority. Then, under a separate private action-free gate, freeze exactly one

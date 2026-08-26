@@ -1,6 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-26 durable setup runner published; private action-free bindings active:** Source
+> **2026-08-26 action-free materializer published; concrete private Red adapter active:** Source
+> `89f967f9` passed [PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73)
+> CI `32970763796/1`, merged as main `ad0e6049`, and passed exact-main CI `32971132659/1`.
+> The [qualification](docs/evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
+> records 12 direct, 94 related setup/plan/protocol, 49 protocol, and 5,087 full-suite tests. It
+> exercised the fifteen-slot/forty-five-arm source boundary only through ROM-free fixtures and
+> changed no learner, authority, or transfer counter.
+>
+> Codex owns only the next action-free bridge: implement and adversarially qualify the concrete
+> private Red source adapter without protected access, then freeze one exact 10+5 plan under a
+> separate action-free gate. Preserve all forty-five genuine arms and fourteen routed joins, prove
+> zero protected-effect deltas, publish path-free aggregate evidence, and reorient before invoking
+> setup. Do not draw an arm, collect an outcome, fit, open sealed Red, run Crystal, promote, or
+> replay.
+>
+> Claude remains the optional read-only statistics/leakage/semantic-overclaim reviewer; Antigravity
+> the optional read-only architecture/claim-boundary/transfer reviewer. Neither implements or
+> blocks ordinary development; Codex adjudicates. Trade remains a later full-mission requirement.
+> Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5
+> · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 durable setup runner published; private action-free bindings active:** Source
 > `2df5f4b0` passed [PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71)
 > CI `32965576726/1`, merged as main `1d5cab67`, and passed exact-main CI `32965956178/1`.
 > The [qualification](docs/evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json)

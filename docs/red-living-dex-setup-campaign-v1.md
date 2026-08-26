@@ -134,14 +134,15 @@ that anything transfers to Crystal. The learning counters therefore remain uncha
 
 ## Next gate
 
-Publication is complete. Build and adversarially qualify only the action-free private Red binding
-materializer, then freeze and validate one exact fifteen-slot binding plan from approved private
-inputs. It must either:
+The action-free whole-plan materializer is now published through PR 73 and exact-main CI
+`32971132659/1`. Implement and adversarially qualify only the concrete private Red source adapter
+without protected access. Then, under a separate action-free gate, authenticate approved inputs and
+freeze one exact fifteen-slot binding plan. It must either:
 
 - freeze all fifteen exact private slot manifests with fourteen genuine routed joins and forty-five
   genuinely bindable semantic arms; or
 - stop with finite aggregate reasons and no controller input.
 
-It must produce zero controller actions and frames and publish only aggregate evidence. Only a
-complete authenticated binding plan may open a later setup-execution decision. Trade remains a
-separate full-living-Pokédex capability after the first Red calibration experiment.
+It must produce zero protected-effect deltas and publish only aggregate evidence. Only a complete
+authenticated binding plan may open a later setup-execution decision. Trade remains a separate
+full-living-Pokédex capability after the first Red calibration experiment.

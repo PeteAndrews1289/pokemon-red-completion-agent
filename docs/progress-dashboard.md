@@ -5,22 +5,22 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 0320A5A8 · CI 32930451851/1 GREEN · RED OBSERVED-ARM BOUNDARY
-> PUBLISHED · COMPLETE 3+ ROW MENUS · 8
-> PORTABLE OPTION KINDS · TITLE/IDENTITY FEATURES 0 · EXACT NORMALIZATION · HARD MASKS · ONE
-> SCENARIO/MENU/PARTITION-BOUND SYSTEM DRAW · FULL SUPPORT · SELECTED ONCE · UNSELECTED TARGETS 0 ·
-> SYNTHETIC EXECUTORS ADMITTED TO FIT 0 · LIVING-SPECIMEN LOSS CANNOT VERIFY SUCCESS · 30 FOCUSED /
-> 79 RELATED TESTS GREEN · ROM/PRIVATE/ACTIONS/FRAMES/CLAIMS/TEACHERS 0**. Link the
-> [adapter qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json),
-> [adapter design](red-living-dex-observed-arm-adapter.md),
-> [contract](living-dex-option-value-contract.md), and
-> [redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md).
+> **Current rail:** Show **MAIN AD0E6049 · CI 32971132659/1 GREEN · ACTION-FREE RED SETUP-BINDING
+> MATERIALIZER PUBLISHED · 15 SLOTS · 10 TRAIN + 5 DEVELOPMENT · 45 GENUINE SEMANTIC ARM SLOTS ·
+> LOCAL 1 · ROUTED 14 · BASELINE BEFORE SOURCE INSPECTION · SHARED INDEPENDENT EFFECT METER ·
+> INPUT SET REATTESTED UNCHANGED · COMPLETE PLAN SEALED BEFORE SETUP · PUBLIC IDENTITIES/PATHS 0 ·
+> 12 DIRECT / 94 RELATED / 49 PROTOCOL / 5,087 FULL-SUITE TESTS GREEN · ROM/PRIVATE READS/
+> ACTIONS/FRAMES/CLAIMS/OUTCOMES/FITS 0**. Link the
+> [materializer qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json),
+> [materializer design](red-living-dex-setup-binding-materialization-v1.md),
+> [setup campaign](red-living-dex-setup-campaign-v1.md), and
+> [capture contract](living-dex-purpose-built-capture-contract.md).
 >
-> Animate active `repeatable-red-living-dex-option-value-calibration-v1`: **AUTHENTIC REPEATABLE
-> RED SCENARIOS → COMPLETE GENUINE 3+ ROW MENUS → DURABLE CLAIM → ISSUE/PERSIST ONE COMMITMENT →
-> GENUINE SEMANTIC EXECUTORS → ONE SELECTED OUTCOME → 8 TRAIN ACROSS 4 OPTION KINDS / 3 FAMILIES +
-> 4 NEW DISJOINT DEVELOPMENT → TRAIN-ONLY FIT → DESCRIPTIVE CALIBRATION + VARIANCE →
-> STOP/REORIENT**. Show
+> Animate active `repeatable-red-living-dex-option-value-calibration-v1`: **QUALIFY CONCRETE RED
+> SOURCE ADAPTER → ONE ACTION-FREE AUTHENTIC 10+5 PLAN FREEZE → STOP/REORIENT → 15 ONE-SHOT SETUP
+> CAPTURES → COMPLETE GENUINE 3+ ROW MENUS → DURABLE CLAIM → ISSUE/PERSIST ONE COMMITMENT → GENUINE
+> SEMANTIC EXECUTORS → ONE SELECTED OUTCOME → 8 TRAIN ACROSS 4 OPTION KINDS / 3 FAMILIES + 4 NEW
+> DISJOINT DEVELOPMENT → TRAIN-ONLY FIT → DESCRIPTIVE CALIBRATION + VARIANCE → STOP/REORIENT**. Show
 > **POWERED BENCHMARK/SEALED RED/CRYSTAL/PROMOTION/FULL REPLAY 0**. Keep the board at
 > **DEVELOPMENT 15 · VERIFIED 5/9 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 · AUTHORITY 0 ·
 > TRANSFER 0**.
