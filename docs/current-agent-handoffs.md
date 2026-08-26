@@ -6,7 +6,32 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the ROM-free purpose-built capture qualification
+## Current override: Codex owns the concrete ROM-free Red capture plan
+
+The title-neutral purpose-built curriculum is published from source
+`24e2aae906e09ec73d8742a50edc3e49ca2022dc` through PR 64, merged as main
+`b678b58acaffe37cfe72db2d1eea159386cbf0f3`, and green at exact-main CI `32952034242/1`.
+Its [qualification](evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+binds 25 focused tests, 122 related boundary tests, 17/17 killed mutations, and the 5,006-test
+suite. It used no ROM/private capture and changed no learner, authority, or transfer counter.
+
+Codex owns only ROM-free design and qualification of a concrete prospective Red plan with at least
+10 train and 5 development setup slots. The plan must preserve complete 3+ kind menus, the 2+1
+censor reserve, the exact 98% selected-train-kind probability floor, family/location scope survival
+and disjointness, nonadaptive whole-slot accounting, repeatable roots, setup isolation, and private/
+public separation. It must bind genuine semantic executor contracts or explicitly report the
+smallest missing reusable skill. Do not encode teacher routes, buttons, species/map identities, or
+synthetic options as learner choices.
+
+Claude is the optional read-only statistics, causal-design, leakage, and power reviewer.
+Antigravity is the optional read-only architecture, portability, and transfer reviewer. Neither
+reads private captures, executes gameplay, edits the worktree, or delays ordinary work; Codex
+adjudicates and publishes. A durable Red setup runner is a later separate gate. Protected setup,
+capture inventory, selected-arm outcomes, fitting, sealed Red, Crystal, promotion, and replay are
+closed. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons
+4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the ROM-free purpose-built capture qualification
 
 The sole V3 census used executable main `1db9554624178a570a608cbf136a5d74182deee4` under
 CI `32946811445/1`, after PR 62/main `f18558284c18413f413966c93825a84a81e5e0f0` passed exact-main

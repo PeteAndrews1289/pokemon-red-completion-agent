@@ -5,7 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): stop mining the old classroom; create the right
+> **Current product focus (August 26, 2026): the lesson contract is published; prove Red can
+> instantiate it.** The title-neutral purpose-built capture curriculum shipped through
+> [PR 64](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/64) from source
+> `24e2aae9`, merged as main `b678b58a`, and passed exact-main CI `32952034242/1`. Its
+> [qualification](docs/evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+> binds **25 focused tests · 122 related boundary tests · 17/17 mutations killed · 5,006 full-suite
+> tests**. It requires at least **10 train + 5 development setup slots**, tolerates at most **2+1**
+> setup censors, demands complete 3+ kind menus, and computes an exact minimum **98%** prospective
+> chance of retaining four selected train kinds. Selected-family and location coverage, durable
+> whole-slot accounting, deterministic-setup isolation, private attestation joins, and anonymous
+> public receipts are enforced.
+>
+> This is robust data infrastructure, not training. It used **ROM 0 · private captures 0 · learner
+> actions/frames/outcomes/labels/fits 0**, so the board remains **development 15 · verified 5/9 ·
+> causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**. The active gate is a
+> ROM-free concrete Red 10+5 setup plan and semantic-skill feasibility report. Each planned menu
+> must use genuine executors; missing reusable skills must be named rather than disguised as
+> teacher routes or raw buttons. A durable setup runner is a separate later gate. No protected
+> capture, setup execution, outcome, fit, sealed Red, Crystal run, promotion, or replay is open.
+> See the [published capture contract](docs/living-dex-purpose-built-capture-contract.md).
+
+> **Previous product focus (August 26, 2026): stop mining the old classroom; create the right
 > lessons.** The sole exhaustive census used executable main `1db95546` under CI
 > `32946811445/1`, after its authorization reached main `f1855828` through
 > [PR 62](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/62) and passed CI

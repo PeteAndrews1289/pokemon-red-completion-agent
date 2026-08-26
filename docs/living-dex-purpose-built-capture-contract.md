@@ -1,7 +1,9 @@
 # Purpose-built living-Pokédex capture contract
 
-Status: ROM-free shared contract under qualification on 2026-08-26. This document is subordinate
-to [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
+Status: published ROM-free shared contract on 2026-08-26. Source passed PR 64 CI and exact merged-
+main CI; the immutable [qualification evidence](evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+binds the artifacts and claim boundary. This document is subordinate to
+[MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
 ## Why this exists
@@ -123,9 +125,10 @@ model schemas with its own observation and execution bindings.
 ## Claim boundary and next gates
 
 This ROM-free contract is infrastructure, not a learned player. It creates no training example,
-does not authorize a setup run, and does not prove that Red can supply the requested states. Its
-focused tests must still pass mutation, full-suite, source-registry, documentation, lint, and type
-checks before publication.
+does not authorize a setup run, and does not prove that Red can supply the requested states. It
+passed 25 focused tests, a 122-test related boundary, a 17/17 targeted mutation audit, the 5,006-
+test full suite, source-registry, documentation, lint, type, PR-CI, and exact-main-CI checks before
+publication.
 
 After publication and reorientation, the separate next gates are:
 

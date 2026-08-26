@@ -1,0 +1,148 @@
+{
+  "artifacts": {
+    "contract": {
+      "path": "docs/living-dex-purpose-built-capture-contract.md",
+      "sha256_at_source_commit": "8e036b803ea055449144b9b5933d5a7c0b6cdda298a0a01f2df92520df7085ba"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/living_dex_capture_curriculum.py",
+      "sha256": "c5744b1d2e88ac731e9341b12d769a84eb89e55ef420ef0dcc903b67e4f2fb2e"
+    },
+    "tests": {
+      "path": "tests/test_living_dex_capture_curriculum.py",
+      "sha256": "f82e3799f08bc9a6db8a41b440a52aebc3954368ef7358c837c137c3f915691f"
+    }
+  },
+  "claim_boundary": {
+    "supported": "A published ROM-free title-neutral contract can preregister and qualify purpose-built living-Pokedex capture campaigns with complete three-or-more-kind menus, exact selected-kind risk, family and location scope survival after bounded setup censoring, deterministic-setup isolation, durable whole-slot accounting, private attestation joins, and anonymous public receipts. It requires at least ten train and five development setup slots to support an eight-plus-four settled pilot after at most two train and one development setup censors.",
+    "unsupported": [
+      "authentic_red_capture_feasibility",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "concrete_red_setup_plan",
+      "crystal_execution",
+      "crystal_transfer",
+      "durable_red_setup_runner",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "contract": {
+    "adaptive_replacement_allowed": false,
+    "capture_before_behavior_draw": true,
+    "claim_before_controller_input": true,
+    "complete_menu_minimum_distinct_kinds": 3,
+    "development": {
+      "maximum_setup_censors": 1,
+      "minimum_family_scopes_after_censor": 4,
+      "minimum_location_scopes_after_censor": 4,
+      "minimum_settled_examples": 4,
+      "minimum_setup_slots": 5
+    },
+    "early_stop_allowed": false,
+    "learner_labels_from_setup": 0,
+    "retry_after_controller_input": false,
+    "selected_arm_outcome_required_for_target": true,
+    "title_neutral_schema": true,
+    "train": {
+      "maximum_setup_censors": 2,
+      "minimum_family_scopes_after_censor": 3,
+      "minimum_selected_kind_probability": {
+        "denominator": 100,
+        "numerator": 98
+      },
+      "minimum_selected_option_kinds": 4,
+      "minimum_settled_examples": 8,
+      "minimum_setup_slots": 10
+    },
+    "whole_slot_terminal_accounting_required": true
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "protected_capture_access_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "ROM-free, freeze a concrete prospective Red ten-train plus five-development setup plan and prove that each requested three-or-more-kind semantic menu has genuine existing or explicitly missing Red executor skills. Preserve the published censor, selected-kind probability, family-scope, location-scope, setup-isolation, privacy, and whole-slot-accounting gates. A separately qualified durable setup runner is required before any protected capture or controller input."
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32952034242,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32952034242",
+    "merged_main_commit": "b678b58acaffe37cfe72db2d1eea159386cbf0f3",
+    "pull_request": 64,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32951694647,
+    "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32951694647",
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/64",
+    "source_bundle_sha256": "add74762044b222c3ec463013409e07b9349ae5b59e003ec44c47119180dec28",
+    "source_commit": "24e2aae906e09ec73d8742a50edc3e49ca2022dc"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.core.living-dex-capture-contract-qualification.v1",
+  "status": "published_rom_free_title_neutral_capture_contract_qualified",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_capture_contract_tests_passed": 25,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5006,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed_at_pull_request_and_exact_merged_main",
+    "mypy_source_files": 270,
+    "mypy_status": "passed",
+    "mutation_audit": {
+      "killed": 17,
+      "probes": 17,
+      "survivors": 0
+    },
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "e1f29ac46715cf1d9d9ea434c0e24e4c6d0f95140249c3e456f56f74cd52ba9a",
+      "battle_teacher_sha256": "58f0551253d16f2088fdcf71779d879cea57b78508f91cabc6a338924aca6df5",
+      "goal_manager_registry_sha256": "91feefa969125a8bfd539cab5dfbe9731372e5c9a47cff3175bfd3c4754beac7",
+      "goal_manager_teacher_sha256": "11809716ac41d2362ae042fe4b035914ba5529e7a4b2708f90cd1be44dc49ee3",
+      "scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+      "strategic_navigation_registry_sha256": "bcb0b4c767cebc29ea5fabe5dca37bef0c4ad343ba0f9ac74bed299df896554a",
+      "strategic_navigation_teacher_sha256": "8b7ad00da98dc0277ec3370f98b23f640a52b7d95f1a5a8718fc4bbd44a497df"
+    },
+    "related_learning_boundary_tests_passed": 122,
+    "ruff_status": "passed"
+  }
+}

@@ -164,13 +164,14 @@ change.
 ## Current engineering gate: bind prospective title-neutral capture requirements
 
 The exhaustive authentic inventory established that the legacy Red bank cannot meet the unchanged
-8+4 gate. Its V1/V2/V3 identities are retired. The active ROM-free work is the
-[purpose-built capture contract](living-dex-purpose-built-capture-contract.md): a nonadaptive
-10-train/5-development setup campaign with two/one censor reserve, exact selected-kind coverage
-risk, selected-family/location scopes, durable no-retry setup terminals, and an absolute boundary
-between deterministic setup actions and learner labels. Red must later bind that shared contract
-to private setup predicates, roots, menus, families, locations, and observers; Crystal must bind
-the same shared schema independently.
+8+4 gate. Its V1/V2/V3 identities are retired. The shared
+[purpose-built capture contract](living-dex-purpose-built-capture-contract.md) is now published. It
+freezes a nonadaptive 10-train/5-development setup campaign with two/one censor reserve, exact
+selected-kind coverage risk, selected-family/location scopes, durable no-retry setup terminals,
+and an absolute boundary between deterministic setup actions and learner labels. Active ROM-free
+work is the concrete Red plan that binds requested setup predicates, menus, family/location
+scopes, observers, and genuine executor contracts. A separate durable runner must qualify before
+private roots or gameplay open. Crystal must later bind the same shared schema independently.
 
 ## Previous engineering gate: inventory the legacy bank
 

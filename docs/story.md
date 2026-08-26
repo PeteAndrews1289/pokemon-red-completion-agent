@@ -7,7 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the count is finished; build the lessons we actually need
+## Current checkpoint: the blueprint is published; prove Red can build the classroom
+
+We now know exactly what one honest batch of lessons looks like. Schedule at least ten train rooms
+and five held-out rooms before entering the game. If two train setups and one held-out setup fail,
+the rest must still support eight plus four examples. Every finished room offers at least three
+real semantic choices, and the lottery over the surviving train rooms must retain at least a 98%
+chance of showing four different kinds. Family and location variety must survive the same failures;
+it cannot hide in cards the lottery never selects.
+
+The setup worker and learner stand on opposite sides of a locked door. Setup can walk and spend
+frames, but it claims the room before touching the controller and can never retry it afterward.
+It saves the decision state before the learner's lottery turns. The arrows used to reach the room
+never become an answer key. Every room finishes as complete, failed, or interrupted, so no one can
+replace an inconvenient result with an easier one.
+
+Seventeen deliberate attempts to weaken those rules all broke a test. The focused, related, full-
+suite, pull-request, and exact-main checks are green. But this is still a blueprint: **causal train
+0/8, authority 0, transfer 0**. The next job is to lay out Red's fifteen rooms on paper and prove
+that each menu has genuine reusable skills behind it. If one skill is missing, we name and build
+that small capability before gameplay instead of smuggling a walkthrough back into the model.
+
+## Previous checkpoint: the count is finished; build the lessons we actually need
 
 The belt reached the end of all 81 cards. Eight became complete 3+ choice menus: five train and
 three held out. They covered only three option kinds and one location in each partition. Sixty-five

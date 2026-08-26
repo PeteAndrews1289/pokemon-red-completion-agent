@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: publish the blueprint before building new Red lessons
+
+Open on **PR 64 · SOURCE 24E2AAE9 · MAIN B678B58A · CI 32952034242/1**. Turn the old eight-card
+classroom into a blueprint labelled **10 TRAIN SETUPS + 5 DEVELOPMENT SETUPS**. Remove two train
+cards and one development card; the board must still show **8+4 SETTLED**. Fan every surviving
+card into **3+ DISTINCT SEMANTIC KINDS**. Run the exact lottery calculation and stop only at
+**P(AT LEAST 4 TRAIN KINDS) ≥ 98%**. Pull cards again and keep **TRAIN FAMILIES ≥ 3 · DEVELOPMENT
+FAMILIES ≥ 4 · DEVELOPMENT LOCATIONS ≥ 4 · TRAIN/DEVELOPMENT DISJOINT** lit.
+
+Draw a locked wall between **DETERMINISTIC SETUP** and **LEARNER**. On the setup side show **CLAIM
+BEFORE INPUT · NO RETRY AFTER INPUT · COMPLETE/FAILED/INTERRUPTED ALL COUNT**. Save a capture at
+the wall **BEFORE BEHAVIOR DRAW**. Let setup buttons and frames fall into a provenance bin; do not
+let them cross. On the learner side leave **LABELS 0 · OUTCOMES 0 · FITS 0**.
+
+Attack the blueprint with **17 MUTATIONS**—erase a reserve, overlap locations, reuse a root, weaken
+the probability, leak an identity, retry a slot—and stamp **17/17 KILLED**. Flash **25 FOCUSED ·
+122 RELATED · 5,006 FULL SUITE · EXACT MAIN GREEN**. The spoken line is: **“We finally designed
+data for the model we want, not for the walkthrough we already have. We still have not trained
+it.”** End on **CONCRETE RED 10+5 PLAN → GENUINE EXECUTOR AUDIT → DURABLE SETUP RUNNER**, with
+**PROTECTED GAMEPLAY CLOSED** until each gate is published.
+
 ## August 26 scene: the final count says the classroom is too small
 
 Resume the conveyor and let it process all **81** cards. End on **8 COMPLETE MENUS**, then split
