@@ -6,7 +6,91 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free authentic Red plan freeze
+## Current override: Codex owns authentic provider inventory and plan freeze
+
+The causal boundary repair is qualified at source `539454f3` through PR 78 under green CI
+`33009960617/1`. Its
+[evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+records 147 focused and 5,174 repository tests. Exact restore readback, sealed execution identity,
+authenticated route reports, registry-built offers, comprehensive effect metering, typed semantic
+families, complete proof joins, byte-derived account-wide no-retry, closed public failure codes,
+and restart failpoints now reject the hostile ROM-free cases. No game or model ran.
+
+Codex now owns one bounded action-free provider-family inventory and authentic plan-freeze session.
+Reuse existing evolution and party-development mechanics; add only reusable target parameters that
+represent real transformations. Require all **15 recipes · 45 real offers · at least 33 semantic
+families · 10 physical origins** before any root claim. Stop on a synthetic family, cross-joined
+capture, teacher route, provider execution, protected effect, title-specific monolith, or incomplete
+capacity. Reorient before invoking the setup campaign.
+
+Claude remains the optional read-only causal/statistical reviewer and Antigravity the optional
+read-only architecture/transfer reviewer at the next milestone; neither should delay ordinary
+implementation. Codex adjudicates. Outcomes, fitting, sealed Red, Crystal, promotion, and replay
+remain closed. Trade remains a later full-mission blocker. Counters remain **development 15 ·
+verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the same-root causal trust-boundary repair
+
+PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but independent adversarial review returned
+**NO-GO for publication or private execution**. The schema and claim-before-input work are worth
+preserving. The current runtime boundary is not: one opaque object may ignore supplied state bytes
+and then self-attest restore, route completion, provider provenance, and family identity. Only
+controller actions and frames are independently metered; the other protected-effect zeroes are
+constants. Execution identity is incomplete, proof and nested-schema joins are weak, no-retry is
+store-local, and durable crash cutpoints are incomplete.
+
+Codex independently reproduced three concrete acceptance bugs: a fork proof's family can differ
+from its binding, nested slot/option schema values can drift, and a digest-shaped private value can
+be accepted as a public failure code. The frozen schedule also requires forty-five real offers but
+only a minimum of thirty-three distinct semantic families under its current scopes. Within-scope
+family reuse is valid; manufacturing forty-five identities is not.
+
+Codex owns one six-hour repair session. Preserve existing reusable seams, but require a sealed Red
+title/revision/state/route/provider/runtime identity through plan, claim, capture, and terminal;
+executor-owned protected-effect checkpoints; fresh fork-isolated arm runtimes; restore
+acknowledgement; authenticated semantic-route reports; registry-constructed action-free offers;
+typed semantic family descriptors invariant to slot/root/profile/route/candidate order;
+account-wide root consumption; complete proof joins; closed public reason codes; and a failpoint
+restart matrix. Reorient before provider expansion or private setup.
+
+Claude and Antigravity remain optional read-only milestone reviewers when available. They were not
+available for this outage review; the recorded fallback was three independent read-only Codex
+reviewers, and no external verdict is claimed. No gameplay, provider execution, outcome, fit,
+sealed Red, Crystal, promotion, or replay is open. Counters remain **development 15 · verified 5/9
+· causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned purpose-built same-root Red recipes
+
+The historical pre-observed catalog path is retired after the authenticated census found only
+eight complete three-option menus—five train and three development—with insufficient family and
+physical-location diversity. It cannot truthfully manufacture missing route-terminal observations
+by cross-joining unrelated captures.
+
+Codex has locally qualified the successor
+[same-root setup-recipe contract](red-living-dex-same-root-setup-recipe-v1.md). It freezes fifteen
+unique authenticated roots, ten physical origin-map scopes, three genuine provider recipes per
+slot, prospectively disjoint transformation families, and optional semantic-router transport. The
+durable runner claims before runtime construction, validates the exact source-root bytes, restores
+the exact captured origin before every arm, derives each offer after its own route, never executes
+a candidate provider during setup, persists repeatable private state bytes, and permanently
+accounts complete/failed/interrupted claims. Qualification is ROM-free and adds no learner output.
+
+Codex now owns publication of that contract, followed by one bounded action-free provider-family
+feasibility inventory. The immediate product blocker is genuine family breadth: the current
+Diglett-to-Dugtrio evolution offer and generic one-level development offer cannot satisfy the
+frozen cross-scope separation when those kinds recur. Implement only reusable target-specific
+evolution/development offers needed by a real fifteen-recipe plan; do not rescue the schedule with
+profile IDs, root IDs, synthetic bindings, fixed directions, or teacher choices. Reorient before
+any private setup campaign.
+
+Claude remains the optional read-only statistics, causal-design, leakage, and semantic-overclaim
+reviewer. Antigravity remains the optional read-only architecture, portability, and claim-boundary
+reviewer. Neither executes gameplay or edits this worktree; Codex adjudicates. Outcomes, fitting,
+sealed Red, Crystal, promotion, and replay remain closed. Trade remains a later full-mission
+blocker. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one action-free authentic Red plan freeze
 
 The concrete private Red source adapter is published from source
 `8b9c9f73c75ab06f0dff464ba27b1ff14933a660` through PR 75, merged as main

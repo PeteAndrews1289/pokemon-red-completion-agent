@@ -1262,10 +1262,25 @@ def _materialize_slot(
     routes: Mapping[str, Mapping[str, object]],
 ) -> RedLivingDexSetupSlotBinding:
     option_bindings: list[RedLivingDexSetupOptionBinding] = []
-    for kind, option in zip(
-        slot.available_option_kinds,
-        _mapping_sequence(source_slot["options"], "Red setup source options"),
-        strict=True,
+    legacy_execution_identity_sha256 = canonical_sha256(
+        {
+            "schema": "pokemon.red.retired-setup-source-execution-identity.v1",
+            "slot_sha256": slot.slot_sha256,
+        }
+    )
+    family_sha256s = tuple(
+        _string(value, "Red setup family")
+        for value in _sequence(
+            source_slot["available_family_sha256s"],
+            "Red setup families",
+        )
+    )
+    for option_index, (kind, option) in enumerate(
+        zip(
+            slot.available_option_kinds,
+            _mapping_sequence(source_slot["options"], "Red setup source options"),
+            strict=True,
+        )
     ):
         provider_ref = _string(
             option["provider_join_sha256"],
@@ -1292,6 +1307,9 @@ def _materialize_slot(
                     provider["provider_capability_sha256"],
                     "Red setup provider capability",
                 ),
+                provider_recipe_sha256=provider_ref,
+                expected_family_sha256=family_sha256s[option_index],
+                execution_identity_sha256=legacy_execution_identity_sha256,
                 origin_state_sha256=_string(
                     source_slot["state_sha256"],
                     "Red setup origin state",
@@ -1344,6 +1362,7 @@ def _materialize_slot(
         setup_plan_sha256=slot.setup.setup_plan_sha256,
         terminal_predicate_sha256=slot.setup.terminal_predicate_sha256,
         observer_contract_sha256=slot.setup.observer_contract_sha256,
+        execution_identity_sha256=legacy_execution_identity_sha256,
         partition=slot.partition,
         available_option_kinds=slot.available_option_kinds,
         root_consumption_sha256=_string(

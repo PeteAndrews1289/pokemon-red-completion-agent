@@ -4,16 +4,17 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
-> active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The 10+5 schedule,
-> routed-semantic composer, durable no-retry setup runner, and action-free whole-plan materializer
-> are published. The concrete private Red source adapter is now also published through PR 75 as
-> main `0daf5a5d` under exact-main CI `32981526970/1`; the authentic plan remains absent. Next
-> perform one separately recorded action-free fifteen-slot freeze with all forty-five genuine arms
-> and fourteen routed joins; publish aggregate
+> active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The same-root causal
+> trust boundary is repaired at source `539454f3` through PR 78 and CI `33009960617/1`: exact
+> restore readback, authenticated route execution, registry-built offers, comprehensive effect
+> metering, typed families, complete proof joins, account-wide physical-root no-retry, and restart
+> recovery are qualified. No authentic plan exists and causal train remains zero. Next inventory
+> genuine providers action-free, add only reusable target-specific evolution/development seams,
+> and freeze one complete **15-recipe / 45-offer / ≥33-family / 10-origin** plan; publish aggregate
 > evidence and reorient before setup execution. After complete captures exist, collect at least 8
 > train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
 > calibration/variance. Stop before a powered benchmark, sealed Red, Crystal, promotion, or replay.
-> See [red-living-dex-setup-source-adapter-v1.md](red-living-dex-setup-source-adapter-v1.md).
+> See [red-living-dex-same-root-setup-recipe-v1.md](red-living-dex-same-root-setup-recipe-v1.md).
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

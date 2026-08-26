@@ -66,6 +66,7 @@ def _binding(index: int) -> RedLivingDexSetupSlotBinding:
     slot = build_red_living_dex_prospective_capture_plan().slots[index]
     origin_state = _digest(("origin-state", index))
     origin_boundary = _digest(("origin-boundary", index))
+    execution_identity = _digest(("execution-identity", index))
     local = index == 0
     options = []
     for option_index, kind in enumerate(slot.available_option_kinds):
@@ -81,6 +82,11 @@ def _binding(index: int) -> RedLivingDexSetupSlotBinding:
                 ),
                 provider_contract_id=_provider_contract(kind),
                 provider_capability_sha256=_CAPABILITY[kind].capability_sha256,
+                provider_recipe_sha256=_digest(("provider-recipe", *suffix)),
+                expected_family_sha256=_digest(
+                    ("family", slot.family_scope_id, option_index, index)
+                ),
+                execution_identity_sha256=execution_identity,
                 origin_state_sha256=origin_state,
                 origin_boundary_sha256=origin_boundary,
                 destination_terminal_boundary_sha256=(
@@ -103,6 +109,7 @@ def _binding(index: int) -> RedLivingDexSetupSlotBinding:
         setup_plan_sha256=slot.setup.setup_plan_sha256,
         terminal_predicate_sha256=slot.setup.terminal_predicate_sha256,
         observer_contract_sha256=slot.setup.observer_contract_sha256,
+        execution_identity_sha256=execution_identity,
         partition=slot.partition,
         available_option_kinds=slot.available_option_kinds,
         root_consumption_sha256=_digest(("root", index)),
@@ -112,8 +119,7 @@ def _binding(index: int) -> RedLivingDexSetupSlotBinding:
         menu_sha256=_digest(("menu", index)),
         observer_binding_sha256=_digest(("observer", index)),
         available_family_sha256s=tuple(
-            _digest(("family", slot.family_scope_id, option_index, index))
-            for option_index, _kind in enumerate(slot.available_option_kinds)
+            item.expected_family_sha256 for item in options
         ),
         location_sha256=_digest(("location", slot.location_scope_id)),
         option_bindings=tuple(options),

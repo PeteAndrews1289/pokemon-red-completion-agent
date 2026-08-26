@@ -1,5 +1,72 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: eight seals replace one self-signed witness
+
+Reopen the **ONE OPAQUE RUNTIME** shot, then split it into eight locked stations: **RED EXECUTION
+IDENTITY · EXACT BYTE RESTORE · ROUTE EXECUTE/VERIFY · PROVIDER REGISTRY · FULL EFFECT METER ·
+SEMANTIC FAMILY · PROOF TREE · ACCOUNT-WIDE ROOT CLAIM**. Fork one origin three times; make each
+fresh emulator save back the identical bytes before it moves. Require the route to change emulator
+state, build the destination offer without pressing **EXECUTE**, then rejoin every proof.
+
+Attack the stations: ignored state bytes, fabricated arrival, forged provider, relabeled family,
+swapped fork, digest-shaped failure, the same physical state under a new catalog name, and a second
+power loss during recovery. Flash **REJECTED · NO RETRY** across all eight. Then show **147 FOCUSED
+· 5,174 REPOSITORY · 279 TYPED SOURCE FILES · CI 33009960617/1 GREEN**.
+
+Keep **CAUSAL TRAIN 0/8** bright red. The spoken line is: **“We repaired the classroom, not the
+student. Now every lesson must come from one real state and one honest mechanic.”** End on
+**INVENTORY REAL PROVIDERS → TARGET-SPECIFIC EVOLUTION/DEVELOPMENT → FREEZE 15 RECIPES / 45 OFFERS
+/ ≥33 FAMILIES / 10 ORIGINS → SAME-ROOT CAPTURES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT**, with
+**CRYSTAL, TRADE, VERSIONS, EVENTS, AND LIVING STORAGE STILL AHEAD** below.
+
+## August 26 scene: the witness signs its own certificate
+
+Open on a green CI badge: **5,137 TESTS PASSED**. Put one character behind four desks labelled
+**RESTORE · ROUTE · PROVIDER · PROOF**. Have the character stamp every certificate itself. Then
+replace the saved-state bytes with ignored junk, fabricate arrival, and fabricate an offer while the
+dashboard remains green. Stamp the screen **ONE OPAQUE RUNTIME · NOT INDEPENDENT EVIDENCE**.
+
+Run three attacks: swap a fork-family hash, change a nested schema name, and paste a 64-character
+private digest into the public failure field. Show **ACCEPTED · ACCEPTED · ACCEPTED**, then a large
+**NO-GO FOR PUBLICATION**. Keep the useful cards—**EXACT STORED BYTES · CLAIM BEFORE INPUT · NO
+RETRY TERMINALS**—and move the other claims behind separate sealed authorities.
+
+Animate the repair chain: **TITLE/REVISION ID → RESTORE READBACK → AUTHENTICATED ROUTE REPORT →
+REGISTRY-BUILT OFFER → FULL EFFECT METER → EXACT PROOF JOIN → ACCOUNT-WIDE ROOT CLAIM → CRASH
+MATRIX**. Correct the capacity graphic from **45 UNIQUE FAMILIES** to **45 REAL OFFERS · ≥33
+SEMANTIC FAMILIES · 10 ORIGINS**. The spoken line is: **“Green tests gave us a sturdy format. The
+audit showed the witness could certify itself. We repair that trust boundary before we collect one
+training outcome.”** End on **REPAIR → MALICIOUS-ADAPTER TESTS → REAL PROVIDER INVENTORY →
+AUTHENTIC RED OUTCOMES → TRAIN-ONLY MODEL → CRYSTAL TRANSFER**, with **TRADE/VERSIONS/EVENTS STILL
+REQUIRED FOR THE LIVING POKÉDEX** below.
+
+## August 26 scene: one save, three honest futures
+
+Open on the old catalog assembling three doors from three different save files. Stamp the result
+**NOT A CAUSAL MENU**. Pull back to the authenticated census: **81 INPUTS · 8 COMPLETE MENUS · 5
+TRAIN · 3 DEVELOPMENT · INSUFFICIENT FAMILY/LOCATION BREADTH**. Cross out **CROSS-JOIN OLD
+CAPTURES**.
+
+Replace it with one state card. Animate **AUTHENTIC ROOT → BOUNDED CONSTRUCTION → SAVE EXACT
+ORIGIN**. Fork it three ways. Before each branch, flash the same state hash and full observation
+hash. Then show **RESTORE → OPTIONAL SEMANTIC ROUTE → FRESH OBSERVATION → REAL PROVIDER OFFER**.
+Keep the provider's **EXECUTE** button covered. Merge the three branches into one **COMPLETE
+3-OPTION MENU** card.
+
+Cut power halfway through a branch and make the claimed slot settle **INTERRUPTED · NO RETRY**.
+Swap `(y, x)` to `(x, y)`, return a different source-root byte string under the expected digest,
+change one restored inventory count without moving the character, substitute the old evolution
+provider class, and alias one expected family across train and development. Flash **REJECTED** for
+all five.
+
+Then reveal the honest red light: **AUTHENTIC 15-RECIPE PLAN: NOT YET · CAUSAL TRAIN: 0/8**. Put
+two cards beside it: **DIGLETT→DUGTRIO: ONE EVOLUTION FAMILY** and **ONE-LEVEL QUANTUM: ONE
+DEVELOPMENT FAMILY**. The spoken line is: **“We can now create three honest futures from one
+state. What we cannot do is pretend one evolution target is five independent lessons. Next we
+build reusable target-specific skills, freeze the real classrooms, and only then train.”** End on
+**PROVIDER FAMILY BREADTH → 15 SAME-ROOT RECIPES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT → RED
+BENCHMARK → FROZEN-WEIGHT CRYSTAL**, with **TRADE STILL REQUIRED FOR THE LIVING POKÉDEX** below.
+
 ## August 26 scene: plug the authentic Red map into a socket that cannot press a button
 
 Open on **PR 75 · SOURCE 8B9C9F73 · MAIN 0DAF5A5D · CI 32981526970/1**. Feed a socket three typed

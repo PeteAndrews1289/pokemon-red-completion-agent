@@ -315,6 +315,7 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
     # explicit review here rather than silently inheriting the old result.
     assert drifted == (
         "src/pokemon_red_completion/blaine.py",
+        "src/pokemon_red_completion/emulator.py",
         "src/pokemon_red_completion/executor.py",
         "src/pokemon_red_completion/observation.py",
         "src/pokemon_red_completion/red_party_development_venue_priors.py",

@@ -314,6 +314,15 @@ class RedSemanticTransportRoute:
             verify=self._verify,
         )
 
+    def authenticated_report(self) -> RouteExecutionReport:
+        """Expose the concrete closed-loop report only after verification."""
+
+        if not self._verified or self._route_report is None:
+            raise RedRoutedSemanticGoalError(
+                "Red semantic route report is unavailable before verification"
+            )
+        return self._route_report
+
     def _execute(self) -> GoalExecutionReport:
         if self._executed:
             raise RedRoutedSemanticGoalError(
