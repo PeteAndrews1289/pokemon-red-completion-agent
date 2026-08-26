@@ -1,0 +1,130 @@
+{
+  "adjudication": {
+    "accepted": [
+      "restore_route_and_provider_authenticity_are_self_attested_by_one_opaque_runtime",
+      "protected_effect_zeroes_are_declared_but_only_controller_actions_and_frames_are_measured",
+      "plan_claim_capture_and_terminal_lack_a_complete_title_revision_and_adapter_execution_identity",
+      "expected_family_identity_is_caller_supplied_and_can_be_manufactured_from_slot_or_profile_identity",
+      "fork_proofs_are_not_fully_joined_to_their_recipe_binding_attestation_and_expected_family",
+      "nested_slot_and_option_schema_values_are_not_validated_during_restore",
+      "free_form_public_reason_codes_can_encode_private_digest_shaped_values",
+      "no_retry_is_store_local_instead_of_account_wide_for_a_consumed_physical_root",
+      "crash_recovery_lacks_a_failpoint_matrix_across_every_durable_transition",
+      "state_and_roadmap_language_overstates_what_synthetic_rom_free_qualification_proves",
+      "the_fixed_schedule_requires_forty_five_real_offers_but_only_thirty_three_minimum_distinct_semantic_families",
+      "mission_readiness_does_not_yet_cover_trade_version_event_cross_save_or_living_storage_consolidation"
+    ],
+    "deferred": [
+      "provider_family_expansion_until_the_execution_trust_boundary_passes_adversarial_tests",
+      "target_specific_evolution_and_development_adapter_work_until_trusted_offer_construction_exists"
+    ],
+    "rejected": [
+      "immediate_provider_expansion_before_trust_boundary_repair"
+    ]
+  },
+  "capacity_correction": {
+    "family_lower_bound_by_kind": {
+      "acquire": 5,
+      "develop": 4,
+      "evolve": 5,
+      "explore": 5,
+      "manage_storage": 5,
+      "resupply": 4,
+      "unlock_access": 5
+    },
+    "minimum_distinct_semantic_families": 33,
+    "physical_origin_map_scopes": 10,
+    "provider_offers": 45,
+    "recipe_slots": 15
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "mission_check": {
+    "capability": "Make same-root living-Pokedex lessons causally trustworthy by binding exact title state, semantic transport, provider provenance, protected effects, and durable identity before any outcome collection.",
+    "cheapest_falsifier": "A malicious ROM-free adapter that ignores supplied state bytes, fabricates a route report, fabricates a provider family or offer, spends any protected authority, mutates a nested schema, or crosses a crash cutpoint must be rejected or recovered without retry.",
+    "learned_authority": "None in the repair session; this bounded maintenance unblocks the first eight authentic model-choice train outcomes and grants no gameplay authority by itself.",
+    "stop_condition": "Stop before provider expansion or private gameplay if exact restore acknowledgement, authenticated semantic-route reporting, sealed provider construction, comprehensive effect metering, and account-wide root consumption cannot be composed from existing reusable seams without a second controller or title-specific monolith.",
+    "time_box": "one session or six hours",
+    "transfer_test": "The execution identity and semantic family descriptor must reject Red-to-Crystal state or adapter substitution while keeping title-neutral family and outcome schemas compatible; no Crystal execution is authorized."
+  },
+  "next_session": {
+    "ordered_work": [
+      "repair_exact_fork_proof_joins_nested_schema_validation_and_closed_public_failure_codes",
+      "bind_a_sealed_title_revision_state_schema_source_route_provider_and_runtime_execution_identity_through_plan_claim_capture_and_terminal",
+      "replace_the_action_frame_only_meter_with_a_comprehensive_executor_owned_protected_effect_checkpoint",
+      "separate_origin_construction_from_fresh_per_arm_runtimes_and_require_restore_readback_authenticated_route_reports_and_registry_constructed_action_free_offers",
+      "derive_typed_semantic_family_descriptors_invariant_to_slot_root_profile_route_and_candidate_order",
+      "enforce_account_wide_root_consumption_and_add_a_failpoint_restart_matrix",
+      "run_malicious_runtime_mutations_full_rom_free_validation_and_reorientation",
+      "only_if_all_prior_gates_pass_inventory_real_offers_and_adapt_existing_boxed_evolution_and_party_development_engines"
+    ],
+    "private_gameplay_allowed": false,
+    "provider_expansion_is_initial_work": false,
+    "publication_allowed": false
+  },
+  "protected_effects_during_audit": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-26",
+  "review": {
+    "adversarial_durability_privacy_review": "no_go",
+    "architecture_transfer_review": "no_go",
+    "causal_statistics_review": "no_go",
+    "external_desktop_reviewers_available": false,
+    "fallback": "three_independent_read_only_codex_subagents_plus_owner_reproduction",
+    "owner_verdict": "repair_required_before_publication_or_private_execution"
+  },
+  "schema": "pokemon.red.living-dex-same-root-setup-recipe-adversarial-audit.v1",
+  "status": "no_go_repair_required",
+  "target": {
+    "branch": "feature/red-setup-recipe-validation",
+    "campaign_implementation_sha256": "aa86c2b99411d074709519c23c4369bb2b67cb7abb99fc1adbbcde694b867e69",
+    "commit": "0fb3f0f419baffb894b6250dc28096605beee39c",
+    "design_sha256": "61e15e2b89a7279c1391c40a7b16eeb74d222d86668d90cf9dd68aea2433dbb0",
+    "github_ci_conclusion": "success",
+    "github_ci_run": 32990990854,
+    "pull_request": 78,
+    "recipe_implementation_sha256": "97cf3d933483546f24f34e603b67f76284bff9dafb0f1ea27531de82b6c5521b",
+    "tests_sha256": "c39aff24166d5bb8b16bb5fbd9e144d4ba8cd59ff5585202b85c357501bf3bf6"
+  },
+  "verified_reproductions": {
+    "digest_shaped_controlled_failure_reason_accepted": true,
+    "fork_family_mismatch_accepted": true,
+    "nested_slot_and_option_schema_drift_accepted": true
+  },
+  "what_remains_unproved": [
+    "exact_emulator_restore_readback",
+    "authenticated_semantic_route_execution",
+    "registry_constructed_genuine_provider_offer",
+    "complete_protected_effect_zeroes",
+    "account_wide_no_retry",
+    "fifteen_authentic_recipes",
+    "forty_five_real_offers",
+    "thirty_three_genuine_semantic_families",
+    "ten_usable_physical_origin_scopes",
+    "authentic_red_causal_training_outcomes",
+    "red_story_or_living_pokedex_completion",
+    "trade_version_exclusive_event_or_cross_save_consolidation",
+    "crystal_execution_or_transfer"
+  ]
+}

@@ -1,5 +1,90 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the classroom stopped signing its own certificates
+
+The repair separated every fact that had previously come from one opaque witness. A sealed
+execution identity now follows the exact Red cartridge revision, source, state schema, adapter,
+route, provider registry, and runtime from plan through terminal. Every candidate receives a fresh
+runtime, loads the same saved origin, saves it back byte-for-byte, executes and independently
+verifies its concrete semantic route, and asks the real provider registry for a fresh offer without
+running the provider.
+
+The accounting boundary grew with it. One concrete executor-owned meter counts every protected
+effect, semantic families derive from the actual mechanic instead of a caller's label, the full
+construction/fork/final proof tree is joined, public failures use a closed vocabulary, and the
+byte-derived physical root is consumed account-wide. Power can fail during success, ordinary
+failure, or recovery—and even fail again during recovery—without turning interruption into retry.
+
+The repaired source passed **147 focused and 5,174 repository tests**, static typing over 279
+source files, reproducibility checks, privacy checks, and GitHub CI `33009960617/1`. The result is
+important but deliberately not counted as learning: no ROM moved, no provider executed, no root was
+claimed, and no outcome or model fit appeared.
+
+That leaves the project at a cleaner threshold. The trusted classroom exists, but its real lessons
+do not. The next work inventories genuine Red provider families, makes evolution and development
+target-specific through reusable mechanics, and freezes fifteen complete same-root recipes with
+forty-five honest offers, at least thirty-three semantic families, and ten physical origins. Only
+then do randomized outcomes—and actual new model training—begin.
+
+## August 26: green tests met an untrusted witness
+
+The same-root branch passed its test suite, but the adversarial audit asked a different question:
+who supplies the facts that make a fork causal? The answer was one opaque runtime. It could ignore
+the state bytes it was given, claim that it restored them, claim that a route finished, and return
+the provider offer later used to validate that claim. The safety meter watched buttons and frames,
+while the remaining zero-effect fields were constants.
+
+Three read-only reviewers independently reached **NO-GO**, and direct reproductions found that a
+fork's family proof could be altered without breaking the capture, nested schema identifiers could
+drift, and a private digest-shaped value could pass as a public failure code. Passing ROM-free tests
+had proved useful data shapes and durable claim ordering, not an independent causal witness.
+
+The response is a repair, not another restart: keep the schemas, exact stored bytes, and permanent
+claims; move restore, routing, provider construction, and protected-effect evidence under sealed,
+independently joined authorities. Isolate each arm, bind the Red revision and adapter, make family
+identity semantic rather than caller-named, consume roots account-wide, and attack every crash
+cutpoint. Provider expansion waits until that boundary can reject a malicious adapter.
+
+The audit also reduced an accidental burden: forty-five planned doors do not require forty-five
+unique mechanics. Their scopes require at least thirty-three genuine family identities, with honest
+reuse inside one logical scope. The mission remains unchanged—authentic Red collection choices,
+then a shared model and frozen-weight Crystal test—but the project will not train on a classroom
+whose doors can certify themselves.
+
+## August 26: the project stopped inventing classrooms and learned to fork one state
+
+The authentic catalog check overturned the expected next step. The historical capture bank could
+not supply fifteen honest decision rooms: it held only eight complete three-option menus, and its
+family and location diversity was far below the frozen curriculum. Worse, the adapter expected a
+route's endpoint observation before the route had happened. Combining an acquisition offer from
+one save, a storage offer from another, and an evolution offer from a third would look like a menu
+but would not answer a causal question.
+
+The replacement is a same-root fork. One authenticated root constructs one decision state and
+saves its exact bytes. Every candidate restores those bytes, proves the complete observation is
+identical, follows only its own semantic route, freshly asks the real provider for an offer, and
+returns to the origin. The provider is not executed during setup. The setup therefore discovers a
+genuine menu without teaching a button sequence or turning a route into a label.
+
+The audit caught three quiet errors while building it. Red's routing coordinates are `(y, x)`, but
+diagonal fixtures had made the order impossible to distinguish. Evolution provenance named the
+wrong provider class. And a runtime could echo the right source-root hash while having loaded the
+wrong bytes. Off-diagonal tests, actual provider provenance, source-byte hashing/parsing, and exact
+per-arm restore equality now close those gaps.
+
+The durable layer seals all fifteen recipes and their expected transformation families before
+input, claims each slot before runtime construction, retains exact private origin bytes, and never
+retries complete, failed, or interrupted work. Public output remains aggregate and path-free.
+Qualification is still ROM-free: it produced no Red capture, outcome, fit, authority, or transfer
+result.
+
+That honesty exposes the next substantive problem. Red currently offers only one Diglett evolution
+family and one generic balanced-development family, while the curriculum needs those kinds in
+several disjoint scopes. The next work is to create reusable target-specific evolution and
+development offers—not to run the teacher, cross-join old saves, or train on invented alternatives.
+This is slower than declaring a dataset ready, but it is the shortest route to a model whose
+collection choices can transfer beyond Red.
+
 ## August 26: the authentic source cable now has a real, tested socket
 
 The concrete Red setup source adapter is published from source `8b9c9f73` as main `0daf5a5d`

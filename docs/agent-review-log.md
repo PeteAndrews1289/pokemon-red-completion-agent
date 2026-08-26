@@ -3,6 +3,36 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Same-root recipe adversarial audit — publication rejected, repair accepted 2026-08-26
+
+Claude CLI was logged out and the Claude/Antigravity desktop sessions were unavailable during the
+GitHub Actions outage. No external-agent verdict is claimed. Codex assigned three independent
+read-only fallback reviews: causal/statistical validity, architecture/transfer, and adversarial
+durability/privacy. All three returned **NO-GO for publication**, while preserving the useful
+schema and durable-claim scaffolding.
+
+Codex accepted the convergent trust-boundary findings. One opaque runtime can ignore origin bytes
+and provide every fact later treated as proof; the independent meter sees only actions and frames;
+execution identity omits title/revision/adapter compatibility; caller-defined families can encode
+slot/profile identity; no-retry is not account-wide; and crash recovery lacks a transition-complete
+failpoint matrix. The durability reviewer additionally found incomplete fork-proof joins, unchecked
+nested schema values, and free-form public reason codes. Codex reproduced all three acceptance
+bugs directly against head `0fb3f0f4`.
+
+The capacity correction is also accepted: the fixed plan contains forty-five offers but requires
+only thirty-three minimum distinct semantic family identities across its logical scopes. Within-
+scope reuse is legitimate. Documentation that demanded forty-five unique families would encourage
+fake identity splitting.
+
+Decision: hold PR 78 as non-publishable infrastructure. Repair exact joins, execution identity,
+protected effects, arm isolation, restore acknowledgement, route reports, provider-registry
+construction, typed family provenance, account-wide consumption, public privacy, and crash
+recovery before provider expansion. The suggestion to widen evolution/development providers in
+parallel is rejected for now because it would enlarge an untrusted catalog. The full adjudication
+is in the
+[path-free audit](evidence/red-living-dex-same-root-setup-recipe-v1-adversarial-audit-2026-08-26.json).
+No private input, gameplay, outcome, fit, authority, or transfer counter changed.
+
 ## Product-focus audit — accepted with bounded corrections 2026-08-16
 
 Claude's cross-project audit accepted the implementation integrity but rejected the experiment's

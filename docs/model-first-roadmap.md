@@ -8,7 +8,118 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the concrete Red source is published; freeze one authentic plan
+## Current checkpoint: trust boundary repaired; build the authentic provider curriculum
+
+The repair is qualified at source `539454f3` through PR 78 under green CI `33009960617/1`. Its
+[evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
+records **147 focused · 5,174 repository tests · 279 typed source files**. Qualification was
+ROM-free and created no capture, action, frame, provider execution, learner label, outcome,
+prediction, teacher query, fit, root claim, authority, or transfer result.
+
+The boundary now seals complete Red execution identity; uses one concrete executor-owned meter for
+all protected effects; restores and reads back exact bytes on a fresh runtime per arm; executes and
+independently verifies a concrete semantic route; constructs the fresh action-free offer through
+the real provider registry; derives typed mechanics-based family identities; joins the entire
+construction/fork/final proof tree; accepts only closed public failures; consumes the byte-derived
+physical root account-wide; and survives a second interruption during recovery without retry.
+
+The active blocker is now genuine curriculum breadth, not trust infrastructure. The next gate must:
+
+1. inventory every prospective real Red provider family without controller input or provider
+   execution;
+2. reuse the boxed evolution and party-development engines while adding the smallest reusable
+   target-specific parameters required by actual transformations;
+3. construct all **15 recipes · 45 real offers · at least 33 distinct semantic families · 10
+   physical origins** without slot/root/profile/route-derived identity;
+4. freeze exactly one complete authentic action-free plan; and
+5. reorient before private setup execution.
+
+Stop on synthetic families, cross-joined captures, a fixed teacher route, a species-specific
+monolith, any protected effect during inventory, or incomplete capacity. Only a complete plan may
+open the separately bounded setup-capture campaign; complete captures then open randomized
+selected-arm outcomes and the next train-only fit. Sealed Red, Crystal, promotion, and replay stay
+closed. Trade, versions, events, cross-save retention, and living-storage consolidation remain
+later mission gates. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: adversarial review blocked publication; repair the causal trust boundary
+
+PR 78 head `0fb3f0f4` passed CI `32990990854/1`, but three independent read-only audits converged
+on **NO-GO for publication or private execution**. Synthetic tests proved useful schemas and
+durable ordering; they did not prove that the supplied emulator bytes were actually restored, that
+the semantic route really ran, that the provider was independently constructed, or that every
+protected effect stayed zero. One opaque runtime currently supplies all of those claims.
+
+The owner also reproduced three direct acceptance defects: fork-family proof drift, nested
+slot/option schema drift, and digest-shaped public failure codes. Plan, claim, capture, and terminal
+lack a complete title/revision/state-schema/route/provider/runtime identity. Root consumption is
+store-local rather than account-wide, and process-death behavior is not tested at every durable
+transition.
+
+The next gate gets one session / six hours and must:
+
+1. close exact fork-proof joins, nested schema validation, and public failure-code privacy;
+2. bind a sealed Red title/revision/state-schema/source/route/provider/runtime identity through the
+   plan, claim, capture, and terminal;
+3. replace action/frame-only metering with executor-owned measurement of every protected effect;
+4. isolate every candidate arm and require restore acknowledgement, an authenticated semantic-route
+   report, and an action-free offer constructed by a sealed provider registry;
+5. derive typed semantic family descriptors invariant to slot, root, profile, route, and candidate
+   order;
+6. enforce account-wide physical-root consumption and pass a failpoint/restart matrix; and
+7. run malicious ROM-free adapters, the full gate, and reorient.
+
+Only if all seven pass may provider inventory resume. The corrected capacity contract is **15
+recipes · 45 real offers · at least 33 distinct semantic families · 10 physical origins**. Reuse
+the existing boxed level-evolution and party-development engines; do not create duplicate mechanic
+engines. Stop before private setup, outcomes, fitting, sealed Red, Crystal, promotion, or replay.
+Trade, versions, events, cross-save retention, and living-storage consolidation remain explicit
+later mission gates. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: same-root lesson machinery existed; provider families were next
+
+The authenticated historical census falsified the active pre-observed catalog strategy. It found
+only eight complete three-option menus—five train and three development—and lacked the declared
+family and physical-location breadth. More fundamentally, the old source adapter expected route
+terminal observations and provider offers before their routes had run. Cross-joining another
+capture would produce a counterfactual menu rather than a causal same-state decision.
+
+The locally qualified
+[same-root setup-recipe contract](red-living-dex-same-root-setup-recipe-v1.md) replaces that
+boundary. One private plan now freezes all fifteen authenticated roots, ten physical origin-map
+scopes, exact route/profile/provider recipes, and expected transformation-family separation before
+input. Each claimed slot constructs one origin, saves its exact bytes, restores that origin before
+every candidate, routes only that branch, freshly obtains the actual offer, and restores once more.
+The validator hashes and parses the source-root bytes itself and requires every restore to match
+the entire origin observation—not just its coordinates. Provider executors and verifiers remain
+untouched; setup emits no learner target or outcome. Complete, failed, and interrupted terminals
+are durable and never retry.
+
+The contract is infrastructure and changes no learning counter. Its cheapest falsifier now exposes
+the real next blocker before scarce roots are consumed: repeated logical family scopes cannot share
+an actual provider family. Red currently has one Diglett-to-Dugtrio evolution family and one
+generic one-level balanced-development family, while both kinds recur across train and development
+scopes.
+
+The next gate must:
+
+1. publish the same-root contract and its path-free qualification through exact-source CI;
+2. inventory the prospective family identities emitted by every real provider recipe without
+   controller input;
+3. implement the smallest reusable target-specific evolution and development offers needed to
+   represent genuinely different transformations, rather than embedding slot/root/profile IDs;
+4. freeze a complete fifteen-recipe, ten-origin-map plan whose expected families are disjoint
+   before any root claim; and
+5. reorient before private setup execution, selected-arm outcomes, fitting, sealed Red, Crystal, or
+   replay.
+
+This gate gets one session. Stop if family breadth requires synthetic identities, a fixed teacher
+route, cross-joined captures, or a species-specific implementation with no reusable target
+contract. Trade remains a separate full-living-Pokédex requirement. Counters stay **development 15
+· verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: the concrete Red source was published; freeze one authentic plan
 
 The adapter shipped through PR 75 from source `8b9c9f73`, merged as main `0daf5a5d`, and passed
 exact-main CI `32981526970/1`. Its

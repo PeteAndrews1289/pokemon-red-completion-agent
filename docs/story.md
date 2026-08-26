@@ -7,7 +7,77 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the authentic-source socket is published; connect the real addresses once
+## Current checkpoint: the witness has been split into independent authorities
+
+The trust repair is green. The saved-state authority now proves exact byte readback, the route
+authority must actually move the emulator and independently verify arrival, and the provider
+registry builds the fresh semantic offer without executing it. A sealed Red identity follows the
+whole record, one real meter counts every protected effect, and every arm starts in a fresh runtime
+from the same authenticated origin.
+
+The nastier edges are closed too. A caller cannot rename a family with a slot or route ID, swap a
+fork proof, smuggle a private digest into a public reason, or reopen the same physical save through
+another local database. Power loss at any durable transition—including a second loss during
+recovery—settles safely without retry.
+
+The proof is **147 focused tests, 5,174 repository tests, 279 typed source files, and green GitHub
+CI 33009960617/1**. The honest counter is still **causal train 0/8** because a safer classroom is
+not a lesson. Next we inventory the real Red mechanics and freeze **15 rooms, 45 honest doors, at
+least 33 semantic families, and 10 physical origins**. Completed same-root captures then open
+randomized outcomes and the next train-only fit. Crystal, trade, versions, events, and a true living
+Pokédex remain later tests of whether the knowledge really transfers.
+
+## Previous checkpoint: the witness could sign its own evidence
+
+The same-root machinery was green, but a hostile reviewer played the runtime rather than the game.
+That runtime could ignore the saved state, announce that restoration succeeded, announce that a
+route completed, and invent the provider offer used to validate itself. The independent meter
+watched buttons and frames but not every authority the setup promised to leave untouched.
+
+Three independent reviews returned **NO-GO**. Direct checks then changed a fork's family proof,
+changed nested schema identifiers, and inserted a digest-shaped public failure code; all three were
+accepted. Those are repairable joins, but they change the meaning of the checkpoint. The project
+has a strong lesson-plan format and restart policy, not yet a trustworthy causal classroom.
+
+The next session puts each fact under a separate seal: exact Red revision and state identity,
+restore acknowledgement, authenticated semantic-route reports, provider-registry offers, complete
+effect counters, semantic family descriptors, account-wide no-retry, and crash-cutpoint recovery.
+Only then does family inventory resume. The real target is fifteen rooms, forty-five honest doors,
+at least thirty-three distinct family identities, and ten physical origins—not forty-five renamed
+copies of one mechanic.
+
+The score remains **causal train 0/8, authority 0, transfer 0**. That red zero is doing its job: it
+prevents synthetic confidence from becoming a model target before Red, Crystal, trade, and the
+living-Pokédex mission can rely on it.
+
+## Previous checkpoint: one state appeared to expose three honest futures
+
+The promised authentic catalog did not exist. The historical bank contained only eight complete
+three-choice menus, and it lacked the family and location breadth required by the frozen lesson
+plan. More importantly, its choices came from different saves. Combining them would be like asking
+three people in three different cities what happened after three different decisions and calling
+that one controlled experiment.
+
+The project now builds a real fork instead. It constructs one Red decision state, saves its exact
+bytes, and restores that same complete observation before every candidate. One branch may travel to
+a Mart, another to a PC, and another stay local. Only after each branch arrives does it ask the real
+semantic provider what is executable. It never runs that provider during setup, so none of the
+travel or construction work becomes an answer for the learner.
+
+Twenty-six focused tests and 156 nearby regressions now attack that boundary. They caught the
+`(y, x)` coordinate convention hidden by diagonal fixtures, a falsely named evolution provider,
+source hashes that were not backed by source bytes, and restores that matched a coordinate but not
+the whole state. The campaign also freezes family separation before input and makes every claimed
+success, failure, or power loss permanent.
+
+This is still a locally qualified mechanism, not a dataset. No authentic recipe plan has run, and
+causal train remains **0/8**. The new red light is useful: Diglett-to-Dugtrio is only one evolution
+family, and generic balanced development is only one development family. The next job is to build
+reusable target-specific skills and freeze fifteen genuinely different classrooms—not rename one
+skill five times. Crystal still waits for measured Red evidence, and trade remains mandatory for
+the living Pokédex.
+
+## Previous checkpoint: the authentic-source socket is published; connect the real addresses once
 
 The concrete Red source adapter is published. It accepts typed fresh observations, executable
 offers from the exact provider allowlist, and complete semantic-router plans. It turns them into the

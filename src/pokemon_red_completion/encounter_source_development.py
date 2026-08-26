@@ -24,7 +24,10 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 
-_SAFE_SOURCE_REF = re.compile(r"[a-z0-9][a-z0-9._:-]{0,127}\Z")
+# Cartridge-derived Red source identities preserve canonical map names (for
+# example ``PokemonMansion1F``).  They are still closed to path separators and
+# whitespace, but must not be silently rejected merely for retaining case.
+_SAFE_SOURCE_REF = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
 
 
 class EncounterSourceDevelopmentError(ValueError):

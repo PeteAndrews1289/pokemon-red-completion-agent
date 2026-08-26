@@ -58,9 +58,9 @@ from pokemon_red_completion.routed_semantic_goal import (
 )
 
 RED_LIVING_DEX_SETUP_OPTION_BINDING_SCHEMA = (
-    "pokemon.red.private-living-dex-setup-option-binding.v1"
+    "pokemon.red.private-living-dex-setup-option-binding.v2"
 )
-RED_LIVING_DEX_SETUP_SLOT_BINDING_SCHEMA = "pokemon.red.private-living-dex-setup-slot-binding.v1"
+RED_LIVING_DEX_SETUP_SLOT_BINDING_SCHEMA = "pokemon.red.private-living-dex-setup-slot-binding.v2"
 RED_LIVING_DEX_SETUP_BINDING_PLAN_SCHEMA = "pokemon.red.private-living-dex-setup-binding-plan.v1"
 RED_LIVING_DEX_SETUP_OPTION_PROOF_SCHEMA = "pokemon.red.private-living-dex-setup-option-proof.v1"
 RED_LIVING_DEX_SETUP_EXECUTION_SCHEMA = "pokemon.red.private-living-dex-setup-execution.v1"
@@ -131,6 +131,9 @@ class RedLivingDexSetupOptionBinding:
     transport_kind: RedLivingDexSetupTransportKind
     provider_contract_id: str
     provider_capability_sha256: str
+    provider_recipe_sha256: str
+    expected_family_sha256: str
+    execution_identity_sha256: str
     origin_state_sha256: str
     origin_boundary_sha256: str
     destination_terminal_boundary_sha256: str
@@ -163,6 +166,9 @@ class RedLivingDexSetupOptionBinding:
                 "setup option provider capability provenance differs"
             )
         for value, subject in (
+            (self.provider_recipe_sha256, "setup option provider recipe"),
+            (self.expected_family_sha256, "setup option family"),
+            (self.execution_identity_sha256, "setup option execution identity"),
             (self.origin_state_sha256, "setup option origin state"),
             (self.origin_boundary_sha256, "setup option origin boundary"),
             (
@@ -228,14 +234,17 @@ class RedLivingDexSetupOptionBinding:
         return {
             "destination_terminal_boundary_sha256": (self.destination_terminal_boundary_sha256),
             "expected_executable_binding_sha256": (self.expected_executable_binding_sha256),
+            "expected_family_sha256": self.expected_family_sha256,
             "expected_fresh_observation_sha256": (self.expected_fresh_observation_sha256),
             "expected_provider_offer_sha256": self.expected_provider_offer_sha256,
+            "execution_identity_sha256": self.execution_identity_sha256,
             "goal_kind": self.goal_kind.value,
             "option_kind": self.option_kind.value,
             "origin_boundary_sha256": self.origin_boundary_sha256,
             "origin_state_sha256": self.origin_state_sha256,
             "provider_capability_sha256": self.provider_capability_sha256,
             "provider_contract_id": self.provider_contract_id,
+            "provider_recipe_sha256": self.provider_recipe_sha256,
             "raw_controller_sequence_steps": self.raw_controller_sequence_steps,
             "route_plan_sha256": self.route_plan_sha256,
             "route_planner_binding_sha256": self.route_planner_binding_sha256,
@@ -276,6 +285,7 @@ class RedLivingDexSetupSlotBinding:
     setup_plan_sha256: str
     terminal_predicate_sha256: str
     observer_contract_sha256: str
+    execution_identity_sha256: str
     partition: LivingDexCapturePartition
     available_option_kinds: tuple[LivingDexOptionKind, ...]
     root_consumption_sha256: str
@@ -294,6 +304,7 @@ class RedLivingDexSetupSlotBinding:
             (self.setup_plan_sha256, "setup plan"),
             (self.terminal_predicate_sha256, "setup terminal predicate"),
             (self.observer_contract_sha256, "setup observer contract"),
+            (self.execution_identity_sha256, "setup execution identity"),
             (self.root_consumption_sha256, "setup root"),
             (self.state_sha256, "setup state"),
             (self.origin_boundary_sha256, "setup origin boundary"),
@@ -334,11 +345,22 @@ class RedLivingDexSetupSlotBinding:
         if any(
             item.origin_state_sha256 != self.state_sha256
             or item.origin_boundary_sha256 != self.origin_boundary_sha256
+            or item.execution_identity_sha256 != self.execution_identity_sha256
             for item in self.option_bindings
         ):
             raise RedLivingDexSetupCampaignError(
                 "setup slot options do not share the captured origin"
             )
+        if tuple(item.expected_family_sha256 for item in self.option_bindings) != (
+            self.available_family_sha256s
+        ):
+            raise RedLivingDexSetupCampaignError(
+                "setup slot option families differ from its family census"
+            )
+        _require_unique(
+            (item.provider_recipe_sha256 for item in self.option_bindings),
+            "setup provider recipes",
+        )
         _require_unique(
             (item.binding_sha256 for item in self.option_bindings),
             "setup option bindings",
@@ -360,6 +382,7 @@ class RedLivingDexSetupSlotBinding:
             "available_family_sha256s": list(self.available_family_sha256s),
             "available_option_kinds": [item.value for item in self.available_option_kinds],
             "envelope_sha256": self.envelope_sha256,
+            "execution_identity_sha256": self.execution_identity_sha256,
             "location_sha256": self.location_sha256,
             "menu_sha256": self.menu_sha256,
             "observer_binding_sha256": self.observer_binding_sha256,
