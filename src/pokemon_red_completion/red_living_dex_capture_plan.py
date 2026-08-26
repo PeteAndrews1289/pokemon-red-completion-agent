@@ -40,6 +40,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedEncounterDiscoveryGoalProvider,
     RedEncounterSourceDevelopmentGoalProvider,
     RedMartResupplyGoalProvider,
+    RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
     RedRouteGoalProvider,
 )
@@ -72,12 +73,13 @@ RED_LIVING_DEX_OBSERVER_CONTRACT_SHA256 = canonical_sha256(
 RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS = 100_000
 RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES = 60_000_000
 RED_ROUTED_SEMANTIC_GOAL_CAPABILITY = "routed-semantic-goal-composition"
-RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY = (
-    "action-free-red-setup-binding-materializer"
-)
+RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY = "action-free-red-setup-binding-materializer"
 RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY = "private-red-setup-source-adapter"
 RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY = "concrete-red-routed-setup-bindings"
 RED_DURABLE_SETUP_RUNNER_CAPABILITY = "durable-red-setup-runner"
+RED_SAME_ROOT_SETUP_RECIPE_CAPABILITY = "same-root-red-setup-recipe-validation"
+RED_DURABLE_SETUP_RECIPE_CAMPAIGN_CAPABILITY = "durable-red-setup-recipe-campaign"
+RED_PURPOSE_BUILT_SETUP_RECIPES_CAPABILITY = "purpose-built-red-setup-recipes"
 
 RED_ROUTED_SEMANTIC_COMPONENTS = (
     RoutedSemanticGoalComposer,
@@ -115,7 +117,10 @@ _OPTION_TO_EXECUTOR_TYPES: dict[
     tuple[type[object], ...],
 ] = {
     LivingDexOptionKind.ACQUIRE: (RedAreaSurveyGoalProvider,),
-    LivingDexOptionKind.EVOLVE: (RedProgressGoalProvider,),
+    # The profile-bound Diglett evolution seam builds an independently
+    # observed skill provider.  ``RedProgressGoalProvider`` is used for the
+    # ordinary development quantum, not for the evolution offer.
+    LivingDexOptionKind.EVOLVE: (RedObservedGoalSkillProvider,),
     LivingDexOptionKind.DEVELOP: (
         RedEncounterSourceDevelopmentGoalProvider,
         RedProgressGoalProvider,
@@ -217,6 +222,40 @@ def red_living_dex_setup_source_runtime_contract_ids() -> tuple[str, ...]:
         )
     )
 
+
+def red_living_dex_setup_recipe_runtime_contract_ids() -> tuple[str, ...]:
+    """Return the successor same-root recipe and durability contracts lazily."""
+
+    from pokemon_red_completion.red_living_dex_setup_recipe import (
+        RedLivingDexSetupProviderRecipe,
+        RedLivingDexSetupRecipePlan,
+        RedLivingDexSetupRouteRecipe,
+        RedLivingDexSetupSlotRecipe,
+        RedLivingDexValidatedSetupCapture,
+        build_red_living_dex_setup_recipe_plan,
+        validate_red_living_dex_setup_recipe,
+    )
+    from pokemon_red_completion.red_living_dex_setup_recipe_campaign import (
+        RedLivingDexSetupRecipeRun,
+        run_red_living_dex_setup_recipe_campaign,
+    )
+
+    return tuple(
+        _runtime_contract_id(item)
+        for item in (
+            RedLivingDexSetupRouteRecipe,
+            RedLivingDexSetupProviderRecipe,
+            RedLivingDexSetupSlotRecipe,
+            RedLivingDexSetupRecipePlan,
+            RedLivingDexValidatedSetupCapture,
+            build_red_living_dex_setup_recipe_plan,
+            validate_red_living_dex_setup_recipe,
+            RedLivingDexSetupRecipeRun,
+            run_red_living_dex_setup_recipe_campaign,
+        )
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class RedLivingDexExecutorCapability:
     """ROM-free evidence for one existing or missing Red semantic skill."""
@@ -307,7 +346,7 @@ RED_LIVING_DEX_EXECUTOR_CAPABILITIES = (
         GoalKind.EVOLVE_SPECIES,
         (RedGoalMechanic.DIGLETT_EVOLUTION,),
         ("pokemon-center",),
-        (RedProgressGoalProvider,),
+        (RedObservedGoalSkillProvider,),
     ),
     RedLivingDexExecutorCapability(
         LivingDexOptionKind.TRADE,
@@ -604,6 +643,8 @@ class RedLivingDexCapturePlanFeasibility:
             RED_DURABLE_SETUP_RUNNER_CAPABILITY,
             RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
             RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
+            RED_SAME_ROOT_SETUP_RECIPE_CAPABILITY,
+            RED_DURABLE_SETUP_RECIPE_CAMPAIGN_CAPABILITY,
         )
         if routed_slots and self.implemented_runtime_capabilities != expected_implemented:
             raise RedLivingDexCapturePlanError(
@@ -613,9 +654,11 @@ class RedLivingDexCapturePlanFeasibility:
             RED_DURABLE_SETUP_RUNNER_CAPABILITY,
             RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
             RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
+            RED_SAME_ROOT_SETUP_RECIPE_CAPABILITY,
+            RED_DURABLE_SETUP_RECIPE_CAMPAIGN_CAPABILITY,
         ):
             raise RedLivingDexCapturePlanError("Red capture plan runtime capability census differs")
-        if self.unresolved_runtime_capabilities != (RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,):
+        if self.unresolved_runtime_capabilities != (RED_PURPOSE_BUILT_SETUP_RECIPES_CAPABILITY,):
             raise RedLivingDexCapturePlanError(
                 "Red capture plan hides concrete setup execution blockers"
             )
@@ -623,6 +666,7 @@ class RedLivingDexCapturePlanFeasibility:
         red_living_dex_setup_runtime_contract_ids()
         red_living_dex_setup_materialization_runtime_contract_ids()
         red_living_dex_setup_source_runtime_contract_ids()
+        red_living_dex_setup_recipe_runtime_contract_ids()
 
     @property
     def scheduled_option_kinds(self) -> tuple[LivingDexOptionKind, ...]:
@@ -682,6 +726,7 @@ class RedLivingDexCapturePlanFeasibility:
                 *red_living_dex_setup_runtime_contract_ids(),
                 *red_living_dex_setup_materialization_runtime_contract_ids(),
                 *red_living_dex_setup_source_runtime_contract_ids(),
+                *red_living_dex_setup_recipe_runtime_contract_ids(),
             ],
             "mission_missing_option_kinds": [
                 item.value for item in self.mission_missing_option_kinds
@@ -717,8 +762,10 @@ def qualify_red_living_dex_prospective_capture_plan() -> RedLivingDexCapturePlan
             RED_DURABLE_SETUP_RUNNER_CAPABILITY,
             RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
             RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
+            RED_SAME_ROOT_SETUP_RECIPE_CAPABILITY,
+            RED_DURABLE_SETUP_RECIPE_CAMPAIGN_CAPABILITY,
         ),
-        unresolved_runtime_capabilities=(RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,),
+        unresolved_runtime_capabilities=(RED_PURPOSE_BUILT_SETUP_RECIPES_CAPABILITY,),
     )
 
 
@@ -728,13 +775,16 @@ __all__ = [
     "RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY",
     "RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY",
     "RED_DURABLE_SETUP_RUNNER_CAPABILITY",
+    "RED_DURABLE_SETUP_RECIPE_CAMPAIGN_CAPABILITY",
     "RED_LIVING_DEX_EXECUTOR_CAPABILITIES",
     "RED_LIVING_DEX_OBSERVER_CONTRACT_SHA256",
     "RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY",
+    "RED_PURPOSE_BUILT_SETUP_RECIPES_CAPABILITY",
     "RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS",
     "RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES",
     "RED_ROUTED_SEMANTIC_GOAL_CAPABILITY",
     "RED_ROUTED_SEMANTIC_COMPONENTS",
+    "RED_SAME_ROOT_SETUP_RECIPE_CAPABILITY",
     "RedLivingDexCapturePlanError",
     "RedLivingDexCapturePlanFeasibility",
     "RedLivingDexExecutorCapability",
@@ -743,5 +793,6 @@ __all__ = [
     "qualify_red_living_dex_prospective_capture_plan",
     "red_living_dex_setup_materialization_runtime_contract_ids",
     "red_living_dex_setup_runtime_contract_ids",
+    "red_living_dex_setup_recipe_runtime_contract_ids",
     "red_living_dex_setup_source_runtime_contract_ids",
 ]
