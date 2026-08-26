@@ -1,8 +1,12 @@
 # Red living-Pokédex observed-arm adapter
 
-Status: ROM-free implementation published as main `0320a5a8` through PR 52 and green GitHub CI
-`32930451851/1` on 2026-08-26. The exact artifact and verification record is the
+Status: ROM-free adapter implementation published as main `0320a5a8` through PR 52 and green
+GitHub CI `32930451851/1` on 2026-08-26. Its durable outer materializer is published from source
+`98cfa010` through PR 54, green CI `32933786447/1`, and main `34a2c920`. The adapter's exact
+artifact and verification record is the
 [path-free qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json).
+The materializer's is the
+[durability qualification](evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json).
 No ROM, private checkpoint,
 teacher, model prediction, controller input, emulator frame, outcome campaign, fit, learning
 counter, or authority counter was opened by this work.
@@ -63,7 +67,7 @@ is bound to the frozen scenario, partition, and complete policy menu. Separate p
 and weighted-ticket seeds derive from that commitment, so the distribution and selected row can be
 replayed exactly.
 
-The authentic materializer must do four things durably:
+The published authentic materializer does four things durably:
 
 1. claim the scenario before selection;
 2. issue exactly one system-random commitment after the complete menu is frozen;
@@ -75,8 +79,8 @@ make the logged inverse-propensity weight false. The public collector no longer 
 caller-selected probability and draw seeds, and the calibration fixture no longer searches seeds
 to manufacture kind/family coverage. Manually constructed fixture commitments are provenance-
 marked synthetic and cannot open the calibration fit; counted rows require the system CSPRNG
-issuer. Cross-process once-only durability belongs to the next materializer and remains a stop
-condition until implemented and mutation-tested.
+issuer. The durable outer state machine now proves this ordering across fresh-process reload,
+ordinary failure, orphan power-loss recovery, and tamper rejection.
 
 ## Genuine executor provenance
 
@@ -154,21 +158,22 @@ rather than silently represented as a second final approval.
 We reject one non-blocking review suggestion: equal before/after observer hashes do not prove an
 observation was reused. An independently invoked observer may legitimately return identical state
 after a zero-action execution failure. Independence is established by the separate observer call
-and the next materializer's durable observation receipt, not by requiring the state value to
+and the published materializer's durable observation receipt, not by requiring the state value to
 change.
 
 ## Next engineering gate
 
-Build the repeatable Red scenario materializer. It must enumerate real, complete 3+ option menus
-from authenticated nonsealed checkpoints; bind at least four genuinely available semantic option
-kinds; durably claim each scenario; issue and persist one behavior commitment; execute one selected
-skill; settle one fresh outcome; and resume only never-claimed scenarios after interruption.
+Perform exactly one action-free inventory over authenticated repeatable, nonsealed, unconsumed Red
+captures. Derive their complete 3+ option menus and independent observer bindings, but do not claim,
+draw, select, execute, advance a frame, observe an after-state, or fit. Freeze a path-free plan only
+if it proves at least eight train scenarios across four genuine train option kinds and three train
+families plus four development scenarios disjoint from train by both family and location.
 
-The cheapest falsifier is a ROM-free durable-runner rehearsal that kills mutations for reissuing a
-commitment, selecting before the full menu is frozen, counting a synthetic executor, executing a
-masked or second arm, retrying a claimed scenario, or accepting an unbound observer receipt. Stop
-before any real collection until that runner, its public path-free plan, and exact-source CI gate
-are green.
+The cheapest falsifier is the inventory itself. Reject any capture with a mismatched
+state/envelope/capture/attestation join and any sealed, consumed, nonrepeatable, duplicate,
+synthetic, incomplete-menu, family-overlapping, or location-overlapping candidate. A coverage
+shortfall stops for reorientation rather than lowering the gate. Stop before real collection until
+the exact plan and its action-free preflight are published through green source-bound CI.
 
 After the 8+4 pilot: fit once on train, report development descriptively, power a paired Red
 benchmark, and reorient. Crystal remains a frozen-weight transfer test, not another Red-specific

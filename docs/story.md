@@ -7,47 +7,38 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: Red can now write honest lessons; the classroom must make them durable
+## Current checkpoint: the classroom survives a crash; now prove that it has enough real lessons
 
-The next textbook was stopped before printing. Two independent reviewers noticed that its old
-binary grader made up an answer: when the chosen action failed, it declared the action that never
-ran to be better. The student could have failed both choices, yet the report card invented a
-positive lesson. The choices also looked diverse to a person while collapsing to almost the same
-single bit for the model.
+The honest Red classroom is now durable. Before a lesson begins, it freezes the whole anonymous
+menu and claims the scenario. Only then does it draw one system-random ticket. The selected card is
+synced to disk before any skill can touch the controller. Exactly one authenticated semantic skill
+may move, and only a fresh independent observation can grade it.
 
-That curriculum is now retired unplayed. In its place is a shared option-value contract, and Red
-can finally speak it. A real Red state can offer several anonymous things the student could do—
-catch, evolve, trade, train, manage storage, restock, unlock access, or explore. Impossible choices
-stay on the card but are crossed out. The card has to contain at least three genuinely different
-available choices before this first calibration will count it.
+That order now survives the failures that made earlier one-shot work so costly. If a skill reports
+an ordinary error, the record closes as failed. If power disappears after the claim and the next
+process finds an orphan, it closes as interrupted. They are different diagnoses, but neither can
+be rerun. A changed menu, selected card, capture attestation, observation join, or terminal fails
+closed. A fully completed lesson reloads exactly after a fresh process starts.
 
-Two quiet ways of cheating were found while building the classroom. First, a script could keep
-trying lottery tickets until the action it wanted happened to win, then pretend the original odds
-were honest. Now the classroom receives one system-random ticket bound to that exact state and full
-menu. The next runner must seal it before touching the controller and may never draw again. Second,
-toy callables could dress up as catching, training, or storage work and satisfy a coverage counter.
-Now toy actions are stamped synthetic and cannot open training; counted lessons must use Red's
-existing bounded, independently verified skills.
+The provenance rule is just as important as the crash rule. A rehearsal may prove that the
+machinery works, but it cannot dress itself up as training data. Only a byte-verified authenticated
+capture can create a fit-eligible row. Twenty-four focused materializer tests and a 55-test related
+slice attack the ordering, exclusivity, tamper, restart, interruption, and overclaim boundaries.
+The exact source passed 4,802 tests in GitHub CI and merged through PR 54. Antigravity found no
+P0/P1 defect and clarified the transfer line: Red owns this cartridge-facing adapter, while the
+anonymous features, observed outcomes, calibration, and eventual model are what Crystal can share.
 
-Before acting, the system records the exact lottery that selected one available choice. Only that
-choice may move. Afterward, only what a fresh observer sees becomes evidence. If the private skill
-claims success while a previously retained living specimen disappeared, the report card overrules
-it: the lesson is a failure with irreversible loss. If the observer cannot read the ending, the
-lesson stays blank.
+None of that is a trained player. No ROM or private capture was opened, no button moved, no frame
+advanced, no outcome arrived, and no fit ran. The board is still **causal train 0/8, authority 0,
+transfer 0**.
 
-The report card keeps progress and cost separate: success, new collection entries, unlocked
-dependencies, time, resources, party wear, storage pressure, and irreversible loss. That matters
-for transfer. Crystal can value the same ideas even though its map, species opportunities, and
-mechanics differ from Red. Thirty focused tests now attack this boundary without opening a
-ROM. An independent Antigravity audit returned `GO`; Claude's earlier `GO-WITH-FIXES` is what
-exposed the two cheating paths before they became data.
-
-The next session builds the durable classroom around repeatable Red checkpoints. It must freeze a
-complete menu, claim the lesson, seal one lottery ticket, execute one genuine skill, and record one
-fresh ending without retries. The first target remains eight honest training outcomes and four new
-held-out development outcomes, followed by one calibration fit. Those are enough to debug the
-learning loop and size a real benchmark—not enough to claim that the student can play a game. The
-board remains **causal train 0/8, authority 0, transfer 0**.
+The next move is a silent inventory, not another infrastructure layer and not a full replay. The
+project will authenticate its repeatable, unused Red captures and ask whether they can form eight
+train lessons across four real option kinds and three train families, plus four held-out lessons
+whose families and locations do not appear in training. Claims, draws, actions, frames, outcomes,
+and fits stay at zero. If the classroom is too small, the project stops and says so. If it is large
+enough, it publishes the exact path-free plan before paying for the first real lesson. Only then
+does the first causal calibration campaign begin.
 
 ## Previous checkpoint: the notebook now looks; the next textbook had spare lessons
 

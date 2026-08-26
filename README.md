@@ -5,34 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): build the durable authentic Red materializer.** The
-> observed-arm boundary is published on main `0320a5a8` through
-> [PR 52](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/52) and green CI
-> `32930451851/1`. The shared title-neutral option-value contract now has a Red
-> adapter, selected-arm collector, and calibration-coverage gate. The boundary derives exact
-> normalization provenance, requires a genuine policy-distinguishable 3+ option menu, isolates
-> option-specific resources, hard-masks unsafe work, neutralizes row order, and keeps every private
-> species/map/item/route identity out of policy input.
->
-> Behavior selection now comes from one scenario/menu/partition-bound system-random commitment,
-> not caller-searchable probability and draw seeds. Only the selected binding executes once; only
-> its fresh observed outcome becomes a target; realized loss of a retained living specimen
-> overrides a positive private verifier. Raw test callables are marked synthetic and cannot open
-> fitting—counted rows must trace to the established semantic acquire/evolve runtime or a bounded
-> Red goal skill. Thirty focused tests, a 79-test related slice, and the complete 4,778-test
-> non-integration repository gate pass. See the
-> [adapter qualification](docs/evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json),
+> **Current product focus (August 26, 2026): prove the authentic Red curriculum action-free.** The
+> durable observed-arm materializer is published from source `98cfa010` through
+> [PR 54](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/54), green exact-source
+> CI `32933786447/1`, and main `34a2c920`. It freezes a complete 3+ option menu, claims before
+> randomness, persists the exact selected arm before controller authority, executes only that
+> authenticated semantic binding, binds one fresh independent observation, survives a fresh-process
+> reload exactly, rejects tampering, and permanently closes failed or power-loss-interrupted claims.
+> Synthetic rehearsals and raw collector rows cannot open fitting. See the
+> [materializer qualification](docs/evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json),
 > [adapter design](docs/red-living-dex-observed-arm-adapter.md),
-> [contract](docs/living-dex-option-value-contract.md), and
+> [shared contract](docs/living-dex-option-value-contract.md), and
 > [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
 >
-> The next gate is a durable, repeatable Red scenario materializer: enumerate authentic complete
-> menus, claim before selection, issue and persist exactly one behavior commitment before
-> controller input, forbid reissue/retry, bind at least four genuine option kinds, and settle 8
-> train + 4 family/location-disjoint development outcomes. Then fit once on train and report
-> development descriptively. This remains an integration/variance pilot, not gameplay authority,
-> a powered benchmark, or Crystal transfer. Boards remain **development 15 · verified 5/9 ·
-> causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+> The next gate is one read-only inventory of authenticated repeatable, nonsealed, unconsumed Red
+> captures. It must prove a path-free plan with 8 train scenarios across at least 4 genuine option
+> kinds and 3 train families plus 4 development scenarios disjoint from train by family and
+> location. It may derive menus and observer bindings, but it cannot claim, randomize, press a
+> button, advance a frame, observe an outcome, or fit. A shortfall stops for reorientation instead
+> of lowering the gate. Only after the exact plan is published can a separate real-outcome campaign
+> begin. The eventual 8+4 batch is an integration/variance pilot—not gameplay authority, a powered
+> benchmark, or Crystal transfer. Boards remain **development 15 · verified 5/9 · causal train
+> 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 > **Previous product focus (August 21, 2026): the generic public reader is qualified; design V2
 > without reopening V1.** Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI

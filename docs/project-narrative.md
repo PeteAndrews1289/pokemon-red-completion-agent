@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: make the lesson survive the crash, then count the real classroom
+
+The Red classroom can now preserve an honest lesson across the failure modes that previously made
+one-shot experiments so expensive. The durable materializer freezes the full anonymous menu and
+claims the scenario before it draws. It syncs the exact selected option before any executor can
+touch the controller, permits only that authenticated semantic option to run, and binds one fresh
+independent after-observation. A complete record reloads byte-for-byte after a new process starts.
+A normal failure and an orphan recovered after a power loss are distinguished, but neither can be
+retried. A changed menu, capture envelope, attestation, selection, observer join, or terminal fails
+closed rather than rewriting history.
+
+That durability also closes a quieter shortcut: a synthetic rehearsal cannot masquerade as a real
+training example. Only a byte-verified authenticated capture can produce fit-eligible provenance.
+Twenty-four focused materializer tests and a 55-test related slice exercise claim ordering,
+selection persistence, selected-arm exclusivity, tamper rejection, process interruption, power-loss
+recovery, receipt overclaim, and exact fresh-process replay. Source `98cfa010` passed 4,802 tests in
+GitHub CI and merged through PR 54 as main `34a2c920`. Antigravity approved the exact commit with no
+P0/P1 defect and one useful boundary clarification: Red owns this observation/materialization
+adapter; the feature, outcome, calibration, and eventual model are the pieces intended to transfer.
+
+The honesty bar remains important: **ROM 0 · PRIVATE CAPTURE READS 0 · ACTIONS 0 · FRAMES 0 ·
+OUTCOMES 0 · FITS +0 · AUTHORITY 0 · TRANSFER 0**. This was sturdy laboratory equipment, not a
+trained Pokémon player.
+
+The next scene is therefore not another framework layer and not a full Red replay. It is one
+action-free census of authenticated repeatable captures. The project must prove that the existing
+classroom can supply eight train decisions across four real option kinds and three train families,
+plus four family-and-location-disjoint development decisions. If it cannot, the shortfall is the
+result and the project reorients. If it can, the exact path-free plan is published before any draw,
+claim, button, frame, outcome, or fit. That is the shortest honest bridge from robust engineering to
+the first causal option-value model.
+
 ## August 26: Red gets an honest option classroom
 
 The abstract observed-arm contract now has a concrete Red boundary. One frozen Red snapshot can
