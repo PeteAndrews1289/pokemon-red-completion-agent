@@ -8,7 +8,34 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: run the one exact V2 census, then reorient
+## Current checkpoint: exhaust the bank without hiding a bad context
+
+The sole V2 census ran from published main `cca0eb8d` and stopped exactly where the old V1 could
+not: `state_observation`. Its
+[path-free terminal](evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)
+authenticated all 81 inputs, considered 12 contexts, read 11 states, authenticated 10 historical
+replays, excluded one consumed root and ten contexts with fewer than three mapped options, and
+then failed before replaying the next context. Protected effects are zero, no plan was written,
+coverage did not run, and V1/V2 never retry.
+
+The shortest honest successor is exhaustive rather than more permissive. ROM-free code must split
+state restore, observation adaptation, binding enumeration, historical replay, and scenario
+projection into finite aggregate context-local exclusions and continue to later contexts. It must
+still stop globally on source/input/runtime/materializer-namespace authentication, any protected
+effect, integrity, encoding, publication, or counter mismatch. Every authenticated context must
+reconcile exactly once as a fixed exclusion, a projected menu, or a fatal terminal. No private
+identity, path, ordering clue, or free-form exception may escape.
+
+Only after adversarial tests prove that boundary, exact-source CI publishes it, and the project
+reorients may a new inventory identity be considered. The gate does not shrink: eight train
+scenarios across four genuine option kinds and three families plus four development scenarios
+disjoint by family and location. If the exhaustive bank cannot supply that, the next decision is
+purpose-built capture generation—not binary menus, lowered coverage, or another blind census.
+Outcomes, fitting, sealed Red, Crystal, promotion, and replay remain closed. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous checkpoint: run the one exact V2 census, then reorient
 
 The V2 diagnostic boundary is published. Source `a73445f6fe0ef22bbf1114ee189dd8640d6479ce`
 passed PR CI `32942033866/1`, merged through PR 58 as main

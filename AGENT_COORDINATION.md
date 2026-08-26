@@ -1,6 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-26 V2 diagnostics published; one exact action-free census active:** Diagnostic source
+> **2026-08-26 V2 retired at state observation; exhaustive successor qualification active:** The
+> sole V2 census ran from main `cca0eb8d` under CI `32942245005/1` after PR 59/main `f20cdd6a`
+> passed CI `32943145668/1`. Its
+> [terminal](docs/evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)
+> authenticated 81 inputs, considered 12 contexts, read 11 states, authenticated 10 historical
+> replays, excluded one consumed root and ten fewer-than-three-option contexts, then stopped at
+> `state_observation`. Protected effects, private plans, identity/path fields, and counter deltas
+> are zero. Coverage did not run; V1/V2 cannot retry.
+>
+> Codex owns only a ROM-free exhaustive successor qualification. Split restore, observe,
+> enumerate, replay, and projection into finite aggregate context-local exclusions that cannot
+> abort later synthetic contexts. Keep source/input/runtime/namespace/effect/integrity/publication
+> failures fatal, reconcile the whole bank, preserve the unchanged 8+4 gate, and adversarially
+> reject false counts, privacy leaks, and false zeroes. Publish and reorient before protected use.
+>
+> Claude and Antigravity remain optional read-only milestone reviewers; no verdict is claimed for
+> this execution. Neither owns private access or implementation. No agent owns V1/V2 retry,
+> outcome collection, fitting, sealed Red, Crystal, promotion, or replay. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous 2026-08-26 V2 diagnostics published; one exact action-free census active:** Diagnostic source
 > `a73445f6fe0ef22bbf1114ee189dd8640d6479ce` passed PR CI `32942033866/1`, merged through
 > PR 58 as main `cca0eb8dacc3fb90baf9a67172d3996761830ad8`, and passed exact-main CI
 > `32942245005/1` with 4,910 tests. Its

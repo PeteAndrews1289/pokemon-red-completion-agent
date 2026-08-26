@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): use the published gauges for one exact census.** V2
+> **Current product focus (August 26, 2026): the exact census found the earliest blocker.** The
+> sole V2 action-free census authenticated all 81 private Red inputs, considered 12 contexts, read
+> 11 states, and failed closed at `state_observation`. Its
+> [path-free terminal](docs/evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)
+> records **protected effects 0 · plan absent · private identities/paths 0 · retry forbidden**.
+> One early root was consumed; ten successfully replayed contexts each had fewer than three mapped
+> options. No scenario projection or 8+4 coverage evaluation occurred, so neither coverage success
+> nor shortfall is established.
+>
+> The next gate is ROM-free. Qualify an exhaustive successor that distinguishes restore,
+> observation, enumeration, replay, and projection failures; counts only preregistered
+> context-local failures as aggregate exclusions; continues through the bank; and keeps global
+> authentication/effect/integrity failures fatal. The unchanged **8 train / 4 option kinds / 3
+> families + 4 disjoint development** gate remains exact. Publish and reorient before any new
+> protected read. Outcomes, fits, sealed Red, Crystal, promotion, and replay remain closed. Boards
+> stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority
+> 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): use the published gauges for one exact census.** V2
 > diagnostics shipped through
 > [PR 58](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/58) as main
 > `cca0eb8d`, whose exact-main CI run `32942245005/1` passed 4,910 tests. The

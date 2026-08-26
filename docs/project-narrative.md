@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: one bad context stopped the counter before it saw the classroom
+
+The one V2 reading paid off, though not with a curriculum. It authenticated 81 inputs, reached the
+twelfth considered context, and stopped at `state_observation` after eleven state reads. One root
+was already consumed. Ten readable contexts replayed honestly but each offered fewer than three
+mapped choices. Then one context failed before its historical menu could replay. No scenario was
+projected and coverage never ran.
+
+All dangerous counters stayed at zero, no plan or private identity/path escaped, and V2 is retired
+without retry. The result therefore supports neither “the classroom exists” nor “the classroom is
+too small.” It proves that a single context-local adapter problem can prevent the instrument from
+counting the rest of the bank—and provides the first authentic hint that many old goal-manager
+captures may be too binary for the new living-Pokédex lesson contract.
+
+The next instrument will be exhaustive. It will name restore, observation, enumeration, replay,
+and projection as separate aggregate exclusion classes and continue after a bad context, while
+keeping global authentication, effects, integrity, and publication failures fatal. If the full
+bank still cannot supply 8+4 genuine multi-option lessons, the project will build purpose-made
+captures instead of weakening what the model must learn.
+
 ## August 26: the diagnostic screen now has exact gauges
 
 V2 reached main `cca0eb8d` through PR 58 and passed 4,910 tests in exact-main CI. It was built and

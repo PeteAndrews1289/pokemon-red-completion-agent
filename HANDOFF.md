@@ -12,7 +12,34 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: V2 diagnostics published; run one exact action-free census
+## 2026-08-26: V2 stopped at state observation; make the next census exhaustive
+
+The sole V2 action-free census ran from published main
+`cca0eb8dacc3fb90baf9a67172d3996761830ad8` under exact-main CI `32942245005/1`, after the
+one-shot reorientation merged through PR 59 as main
+`f20cdd6a981be7777dc1526fe8bb6055eacbcdb2` under CI `32943145668/1`. It authenticated all
+**81** inputs, considered **12** contexts, read **11** states, and stopped at the finite
+`state_observation` reason. Its
+[path-free terminal](docs/evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)
+records **protected effects 0 · private plan absent · retry forbidden**.
+
+The counts matter. One early context was excluded because its physical root was consumed. Ten
+others authenticated their historical menus but each offered fewer than three mapped options. The
+next context failed during restore/observe/enumerate before historical replay. No scenario was
+projected and the exact 8+4 coverage gate never ran. Do not call this coverage success or
+shortfall, and never retry V1 or V2.
+
+Active work is ROM-free only: qualify an exhaustive successor that distinguishes state restore,
+observation adaptation, binding enumeration, historical replay, and projection. A preregistered
+context-local failure may become a finite aggregate exclusion so the remaining bank is still
+counted; source/input/runtime/namespace/effect/integrity/publication failures remain fatal. Tests
+must prove full accounting, continued iteration after local failures, exact 8+4 coverage,
+path/identity privacy, and honest nonzero effects. Publish and reorient before any new protected
+read. Outcomes, fitting, sealed Red, Crystal, promotion, and replay remain closed. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous 2026-08-26: V2 diagnostics published; run one exact action-free census
 
 The exact diagnostic successor was published from source
 `a73445f6fe0ef22bbf1114ee189dd8640d6479ce` through
