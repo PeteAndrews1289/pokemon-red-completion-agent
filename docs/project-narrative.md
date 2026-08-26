@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the blueprint passed—and exposed the one abstraction Red is missing
+
+The project now has Red's exact first classroom: ten train rooms, five held-out rooms, and three
+portable semantic choices in every room. Even if any two train setups fail, the system-random
+selection policy still has probability **2144/2187 = 98.0338%** of realizing at least four option
+kinds. Family and location reserves survive too. Seven non-trade kinds map to concrete provider
+classes already tested elsewhere in the Red goal layer.
+
+Then the physical audit did the useful thing: it refused to pretend the blueprint was runnable.
+Only one menu can exist at a single current skill boundary. A Mart can resupply but cannot also
+switch storage boxes or evolve a party; a PC has the inverse problem. Fourteen menus therefore need
+one reusable abstraction: route to a destination boundary, verify arrival, freshly reobserve, bind
+the intended semantic provider, execute it once, and independently verify its result. The route is
+transport, never the answer label.
+
+That distinction closes a long-running source of drift. The next task is not another walkthrough,
+teacher route, old-save census, or fifteen bespoke setup scripts. It is one ROM-free
+route-then-semantic-skill seam useful to Red, Crystal, and later titles. Trade remains visible as a
+separate eventual living-Pokédex capability rather than being erased because the first pilot can
+start without it. PR 66 and exact main passed 5,021 tests; gameplay and learning counters remained
+zero. The blueprint is complete. The model's next real prerequisite is now exact and falsifiable.
+
 ## August 26: design the classroom before walking back into the game
 
 The project now has a published definition of a useful living-Pokédex lesson. It does not ask a

@@ -12,7 +12,39 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: shared capture contract published; freeze the concrete Red plan
+## 2026-08-26: Red capture plan published; build the routed semantic seam
+
+The concrete prospective plan shipped from source
+`ca7340d436698be7a90412ff304726d973da2ac3` through
+[PR 66](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/66), passed PR CI
+`32956245451/1`, merged as main `f9f3310e9d55f2bd16e7b326e83c0e702b7538a5`, and passed exact-
+main CI `32956496929/1`. Its
+[qualification](docs/evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)
+binds source bundle `b3cf45e5…b1a9`, **15 focused · 136 related · 5,021 full-suite tests**, the
+frozen public plan, and all refreshed source-bound registries.
+
+The exact ten-train/five-development schedule passes. All fifteen menus contain three distinct
+portable kinds; the train schedule retains exact worst-case-after-two-censors probability
+**2144/2187 = 98.0338%** of selecting at least four kinds; family and location reserves and
+train/development disjointness pass. Seven non-trade option kinds bind to concrete, independently
+tested Red provider classes. This is implemented-contract evidence, not authenticated runtime
+binding evidence.
+
+The honest terminal is **plan valid, execution blocked**. Only one menu shares a local physical
+boundary. Fourteen need a generic routed-semantic-goal composition seam. It must authenticate and
+verify one declared route terminal, freshly reobserve, bind the unchanged destination kind through
+an existing provider, execute that destination exactly once, independently verify it, and reconcile
+both stages under one budget. A route may never masquerade as acquisition, evolution, storage,
+resupply, party development, or story progress. Repeatable semantic trade is a separate later
+full-mission blocker and is intentionally absent from the first pilot schedule.
+
+Active work is ROM-free implementation and adversarial qualification of only that reusable seam
+plus the minimal Red adapter. Publish and reorient before a durable setup runner or any private
+capture. No protected setup, behavior draw, outcome, fit, sealed Red, Crystal, promotion, or replay
+is open. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: shared capture contract published; freeze the concrete Red plan
 
 The title-neutral purpose-built capture curriculum shipped from source
 `24e2aae906e09ec73d8742a50edc3e49ca2022dc` through

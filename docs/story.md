@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the blueprint is published; prove Red can build the classroom
+## Current checkpoint: the classroom fits on paper; build one honest doorway
+
+Red's fifteen rooms are now laid out. Ten are training rooms and five are held out. Every room has
+three real semantic doors. Pull away any two training setups and the random lesson policy still has
+a **2144/2187 = 98.0338%** chance of walking through at least four different kinds of door. The
+families and locations remain diverse after the same failures. The blueprint passed.
+
+But fourteen rooms have doors in different buildings. Storage lives at a PC, supplies at a Mart,
+evolution and party care at their own boundaries, and capture in a wild corridor. Writing all
+three labels on one state would be fiction. So the audit stopped before gameplay and named the
+missing doorway: travel to the selected destination, prove the arrival, look at the world again,
+then execute and verify the semantic skill exactly once. The travel arrows never become the model's
+answer.
+
+That doorway is the next build. It is generic enough for Crystal and later games, while each title
+supplies its own routes and observations. Trade remains a later required door for the full living
+Pokédex. The score remains **causal train 0/8, authority 0, transfer 0** because PR 66's 5,021 green
+tests proved a design and a blocker, not a trained player.
+
+## Previous checkpoint: the blueprint is published; prove Red can build the classroom
 
 We now know exactly what one honest batch of lessons looks like. Schedule at least ten train rooms
 and five held-out rooms before entering the game. If two train setups and one held-out setup fail,
