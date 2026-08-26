@@ -12,7 +12,33 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: authentic inventory V1 failed safely; diagnose exactly before another read
+## 2026-08-26: V2 diagnostics published; run one exact action-free census
+
+The exact diagnostic successor was published from source
+`a73445f6fe0ef22bbf1114ee189dd8640d6479ce` through
+[PR 58](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/58), passed PR CI
+`32942033866/1`, merged as main `cca0eb8dacc3fb90baf9a67172d3996761830ad8`, and passed
+exact-main CI `32942245005/1` with **4,910 passed · 3 deselected · 1 expected failure**. The
+[qualification](docs/evidence/red-living-dex-authentic-inventory-v2-diagnostic-qualification-2026-08-26.json)
+records its exact source bundle and registries. It opened no ROM or private capture and changed no
+gameplay, learning, authority, or transfer counter.
+
+V2 no longer collapses the private pipeline into `action_free_inventory`. It has a finite,
+path-free terminal for every authentication, namespace, state-read, replay, projection,
+zero-effect, coverage, encoding, integrity, and publication stage. Its receipt reconciles every
+authenticated context through fixed exclusions and safe aggregate coverage counters. **91 focused
+tests** distinguish the stages and exact 8+4 coverage failures; **25 receipt mutations** and every
+tested nonzero protected effect are rejected with no survivor.
+
+Exactly one new-identity V2 authenticated census is now open. Run the published source once against
+the repeatable, nonsealed, unconsumed Red bank. It either freezes the unchanged **8 train / 4 option
+kinds / 3 families + 4 family-and-location-disjoint development** plan or returns one finite exact
+failure with reconciled safe counts. Stop and reorient at that first terminal. V1 and V2 never
+retry. No draw, claim, controller authority, action, frame, outcome, prediction, teacher query,
+fit, sealed Red, Crystal execution, promotion, or replay is open. Counters remain **development
+15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: authentic inventory V1 failed safely; diagnose exactly before another read
 
 The action-free authentic inventory boundary was published from source
 `069c44d9b48d87d586795e4d8ade58133f451e91` through

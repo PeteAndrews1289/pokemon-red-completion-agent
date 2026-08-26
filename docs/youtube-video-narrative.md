@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: the safety lights stayed green, but the diagnostic screen went blank
+## August 26 scene: the gauges are qualified; the classroom gets one reading
+
+Open on **PR 58 · MAIN CCA0EB8D · CI 32942245005/1 · 4,910 TESTS**. Replace the single blank
+failure lamp with a row of exact gauges: **AUTHENTICATION · NAMESPACE · STATE READ · REPLAY ·
+PROJECTION · ZERO EFFECTS · COVERAGE · ENCODING · INTEGRITY · PUBLICATION**. Underneath, show
+**91 FOCUSED TESTS · 25 RECEIPT MUTATIONS KILLED · SURVIVORS 0**. Try to fake one zero or slip a
+private identity/path onto the display; make the instrument reject both.
+
+Keep the honesty bar visible: **ROM 0 · PRIVATE CAPTURE READS 0 · BUTTONS 0 · FRAMES 0 · OUTCOMES
+0 · CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**. The spoken line is: **“We fixed the gauge; we
+still have not trained the player.”**
+
+Then authorize one silent V2 reading. Split only at the terminal: **8 TRAIN / 4 KINDS / 3 FAMILIES
++ 4 DISJOINT DEVELOPMENT → FREEZE PRIVATE PLAN**, or **FINITE EXACT FAILURE + RECONCILED COUNTS →
+STOP AND REORIENT**. Stamp **V1/V2 RETRY FORBIDDEN** across both branches. Keep **DRAWS · CLAIMS ·
+CONTROLLER AUTHORITY · ACTIONS · FRAMES · OUTCOMES · FIT · SEALED RED · CRYSTAL · REPLAY CLOSED**.
+
+## Previous August 26 scene: the safety lights stayed green, but the diagnostic screen went blank
 
 Open on **PR 56 · MAIN 98D4F21A · CI 32938080397/1 · 4,831 TESTS**. Let the silent counter reach
 **81 AUTHENTICATED RED INPUTS**, then freeze it on **ACTION-FREE INVENTORY: FAILED CLOSED**. Fill

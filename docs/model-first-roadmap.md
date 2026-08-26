@@ -8,7 +8,33 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: make the next authentic census explain exactly why it stops
+## Current checkpoint: run the one exact V2 census, then reorient
+
+The V2 diagnostic boundary is published. Source `a73445f6fe0ef22bbf1114ee189dd8640d6479ce`
+passed PR CI `32942033866/1`, merged through PR 58 as main
+`cca0eb8dacc3fb90baf9a67172d3996761830ad8`, and passed exact-main CI `32942245005/1` with
+**4,910 passed · 3 deselected · 1 expected failure**. Its
+[qualification](evidence/red-living-dex-authentic-inventory-v2-diagnostic-qualification-2026-08-26.json)
+binds the source bundle and registries. No protected input, game, outcome, model, or teacher was
+used during qualification.
+
+V2 assigns finite path-free reasons to source/input authentication, materializer namespace,
+state reading, historical replay, projection, zero-effect verification, exact coverage, encoding,
+integrity, and publication. Its receipt reconciles every authenticated context through fixed
+exclusions and safe aggregate coverage counters. Ninety-one focused tests distinguish the stages
+and exact coverage shortfalls; 25 receipt mutations and every tested nonzero protected effect are
+rejected without a survivor.
+
+The only next step is one new-identity V2 authenticated census. It may read the repeatable,
+nonsealed, unconsumed Red bank and publish a private plan only if it proves eight train scenarios
+across four genuine option kinds and three families plus four development scenarios disjoint by
+family and location. Otherwise the finite reason and safe counts are the result. Stop and
+reorient after that first terminal. Neither inventory identity may retry; do not draw, claim, act,
+advance a frame, observe an outcome, predict, ask a teacher, fit, open sealed Red, run Crystal,
+promote authority, or replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 ·
+fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: make the next authentic census explain exactly why it stops
 
 The action-free authentic inventory was published from source `069c44d9b48d87d586795e4d8ade58133f451e91`
 through PR 56, merged as main `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed

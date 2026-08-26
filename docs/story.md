@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom counter stopped, but its display showed only “failed”
+## Current checkpoint: the classroom counter has exact gauges; read it once
+
+The replacement counter is published. V2 passed 4,910 tests on main and was qualified entirely
+off-cartridge. It can now say exactly whether source or input authentication, namespace state,
+state reading, old-menu replay, question projection, the unchanged 8+4 gate, encoding, integrity,
+or publication stopped. Its safe counts reconcile every input without naming a save, species,
+map, route, or path.
+
+The gauges were tested by breaking them. Ninety-one focused tests distinguish every stage and
+coverage reason; 25 altered receipts all failed, and a fake zero cannot hide controller authority,
+actions, frames, draws, claims, outcomes, predictions, teacher calls, or fits. No ROM or private
+capture was opened to prove this. The board remains **causal train 0/8, authority 0, transfer 0**.
+
+Now the counter earns one reading. V2 may look at the authentic repeatable Red classroom exactly
+once. It either freezes **8 train across 4 option kinds and 3 families + 4 family-and-location-
+disjoint development** or stops with the precise reason and reconciled totals. There is no retry
+and no path that lowers the gate. The first terminal triggers another mission reorientation before
+any Pokémon moves.
+
+## Previous checkpoint: the classroom counter stopped, but its display showed only “failed”
 
 The silent classroom census was real. Its exact source passed 4,831 tests, reached main through
 PR 56, authenticated all 81 private Red inputs, and then failed closed. Every dangerous counter
