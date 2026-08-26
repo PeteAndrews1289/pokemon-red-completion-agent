@@ -137,7 +137,10 @@ class RedRoutedSemanticBoundary:
         raw = value.raw
         return (
             raw.map_id == self.map_id
-            and (raw.player_x, raw.player_y) == self.at
+            # Route coordinates are always (row, column), which is Red's
+            # (player_y, player_x).  Keep this aligned with
+            # Gen1TraversalObserver and RoutePlan.
+            and (raw.player_y, raw.player_x) == self.at
             and value.input_ready
             and not raw.battle_state
         )
@@ -158,7 +161,7 @@ class FreshRedGoalObservation:
         if not isinstance(self.traversal, TraversalSnapshot):
             raise TypeError("fresh Red destination needs a traversal snapshot")
         raw = self.observation.raw
-        if (raw.map_id, raw.player_x, raw.player_y) != (
+        if (raw.map_id, raw.player_y, raw.player_x) != (
             self.traversal.map_id,
             *self.traversal.at,
         ):

@@ -63,7 +63,7 @@ class _World:
         if action.kind is MacroActionKind.MOVE:
             if action.value != "right" or self.at != (2, 3):
                 raise AssertionError("test route received an unexpected movement")
-            self.at = (3, 3)
+            self.at = (2, 4)
         return action
 
     def observe(self) -> TraversalSnapshot:
@@ -79,18 +79,18 @@ class _World:
 
 
 def _plan() -> RoutePlan:
-    edge = LocalEdge((3, 3), "right")
+    edge = LocalEdge((2, 4), "right")
     return RoutePlan(
         macro_path=MacroPath((1,), ()),
         start_at=(2, 3),
         start_mode=None,
         segments=(),
         terminal_approach=LocalPath(
-            ((2, 3), (3, 3)),
+            ((2, 3), (2, 4)),
             (edge,),
             (None, None),
         ),
-        terminal_at=(3, 3),
+        terminal_at=(2, 4),
         terminal_mode=None,
     )
 
@@ -101,8 +101,8 @@ def _observation(world: _World) -> RedGoalObservation:
         raw=RawGameState(
             game_started=True,
             map_id=world.map_id,
-            player_x=world.at[0],
-            player_y=world.at[1],
+            player_x=world.at[1],
+            player_y=world.at[0],
             party_count=0,
             battle_state=0,
         ),
@@ -149,7 +149,8 @@ class _Provider:
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         self.world.events.append("provider_offer")
-        assert observation.raw.player_x == 3
+        assert observation.raw.player_x == 4
+        assert observation.raw.player_y == 2
         before_actions = self.actions.actions_executed
         before_frames = self.world.frame_count
 
@@ -229,7 +230,7 @@ def test_red_composition_routes_then_binds_the_real_semantic_goal() -> None:
     assert report.actions_executed == 2
     assert report.frames_executed == 6
     assert verdict == GoalVerification.succeeded()
-    assert world.at == (3, 3)
+    assert world.at == (2, 4)
     assert world.events.index("action:right") < world.events.index("provider_offer")
     assert world.events.index("provider_offer") < world.events.index(
         "destination_execute"
@@ -331,9 +332,9 @@ def test_transport_verifier_rejects_an_observer_with_frame_effects() -> None:
 
 
 def test_fresh_observation_requires_red_and_traversal_coherence() -> None:
-    world = _World(at=(3, 3))
+    world = _World(at=(2, 4))
     traversal = world.observe()
-    world.at = (4, 3)
+    world.at = (3, 4)
 
     with pytest.raises(RedRoutedSemanticGoalError, match="disagree"):
         FreshRedGoalObservation(FRESH, _observation(world), traversal)
@@ -349,7 +350,7 @@ def test_destination_rejects_a_fresh_state_outside_the_route_terminal() -> None:
 
 
 def test_destination_preserves_a_provider_unavailability_reason() -> None:
-    world = _World(at=(3, 3))
+    world = _World(at=(2, 4))
     actions = CountingExecutor(world)
 
     @dataclass
@@ -370,7 +371,7 @@ def test_destination_preserves_a_provider_unavailability_reason() -> None:
 
 
 def test_destination_rejects_provider_kind_drift() -> None:
-    world = _World(at=(3, 3))
+    world = _World(at=(2, 4))
     actions = CountingExecutor(world)
 
     @dataclass
@@ -450,4 +451,3 @@ def test_transport_and_composite_bindings_are_single_use() -> None:
     with pytest.raises(RoutedSemanticGoalError, match="already executed"):
         binding.execute()
     assert binding.verify(report) == GoalVerification.succeeded()
-

@@ -108,8 +108,8 @@ def _goal_observation(boundary: RedRoutedSemanticBoundary) -> RedGoalObservation
         raw=RawGameState(
             game_started=True,
             map_id=boundary.map_id,
-            player_x=boundary.at[0],
-            player_y=boundary.at[1],
+            player_x=boundary.at[1],
+            player_y=boundary.at[0],
             party_count=0,
             battle_state=0,
         ),
