@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the counter found a broken card before it counted the room
+## Current checkpoint: the counter can finish the room; it gets one count
+
+The new conveyor is published. Every eligible Red card gets its own fresh emulator, so a broken
+restore cannot stain the next card. A local problem drops into one anonymous bin—restore, observe,
+enumerate, replay, or project—and the belt continues. A global authentication problem, a button or
+frame, a dishonest count, a private leak, or a publication fault still hits the emergency stop.
+
+The machine proves its arithmetic before it grades the classroom. Every authenticated input must
+end as one fixed exclusion or one complete menu. Seventy-one focused tests and 213 related tests
+try to stop the belt early, downgrade fatal errors, hide effects, alter counts, and leak identities.
+The full 4,981-test repository and GitHub CI are green. No game or learner ran; the board remains
+**causal train 0/8, authority 0, transfer 0**.
+
+Now V3 gets one count of all 81 cards. It either finds **8 train across 4 option kinds and 3
+families + 4 family-and-location-disjoint development** and seals the lesson plan, or tells us the
+complete reason the old bank is too small. The first result opens real causal outcomes later; the
+second opens purpose-built capture generation. Both branches begin only after another mission
+reorientation. There is no retry and no smaller classroom.
+
+## Previous checkpoint: the counter found a broken card before it counted the room
 
 The qualified counter got one reading. It authenticated all 81 Red inputs, considered twelve,
 and read eleven states. One card belonged to a root already spent. Ten cards replayed correctly

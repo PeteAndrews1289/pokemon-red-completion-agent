@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: one bad card stopped the classroom counter
+## August 26 scene: the conveyor can finish the classroom; count it once
+
+Open on **PR 61 · MAIN 1DB95546 · CI 32946811445/1 · 4,981 TESTS**. Put every eligible card in a
+fresh emulator sleeve. Send broken cards into anonymous bins: **RESTORE · OBSERVE · ENUMERATE ·
+REPLAY · PROJECT**. Keep the belt moving. Then trigger a global fault—**AUTHENTICATION · NAMESPACE
+· EFFECT · ACCOUNTING · INTEGRITY · PUBLICATION**—and slam the emergency stop.
+
+Show the equation across all inputs: **FIXED EXCLUSIONS + COMPLETE MENUS = 81** before the coverage
+lamp can turn on. Flash **71 FOCUSED · 213 RELATED · FATAL DOWNGRADE REJECTED · HIDDEN FRAME
+RETAINED · PRIVATE LEAKS 0**. Keep **ROM/PRIVATE READS DURING QUALIFICATION 0 · CAUSAL TRAIN 0/8 ·
+AUTHORITY 0 · TRANSFER 0** beneath it.
+
+Run exactly one silent V3 count. Split the final screen: **UNCHANGED 8+4 PASSES → SEAL PLAN →
+LATER CAUSAL OUTCOMES**, or **EXACT SHORTFALL → PURPOSE-BUILT CAPTURES**. Stamp **V1/V2/V3 RETRY
+FORBIDDEN** and **STOP + REORIENT** on both. The spoken line is: **“This count cannot train the
+player, but it finally decides whether the classroom exists.”**
+
+## Previous August 26 scene: one bad card stopped the classroom counter
 
 Start the sole V2 reading: **81 INPUTS AUTHENTICATED**. Advance the board to **12 CONTEXTS
 CONSIDERED · 11 STATES READ**. Put one card in **CONSUMED ROOT**, then ten in **FEWER THAN 3 MAPPED

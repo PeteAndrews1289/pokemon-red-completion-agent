@@ -12,7 +12,35 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: V2 stopped at state observation; make the next census exhaustive
+## 2026-08-26: exhaustive V3 published; run one whole-bank census
+
+The exhaustive successor was published from source
+`8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb` through
+[PR 61](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/61), passed PR CI
+`32946586301/1`, merged as main `1db9554624178a570a608cbf136a5d74182deee4`, and passed
+exact-main CI `32946811445/1` with **4,981 passed · 3 deselected · 1 expected failure**. Its
+[qualification](docs/evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)
+binds source bundle `e1948ea8…5038b`, every artifact, and all four source-bound registries.
+Qualification opened no ROM/private capture and changed no gameplay, learning, authority, or
+transfer counter.
+
+V3 isolates every eligible context in a fresh emulator. Restore, observation, enumeration,
+historical-replay, and projection failures become finite anonymous context-local exclusions, so
+one bad capture cannot hide later contexts. Authentication, namespace, any protected effect,
+whole-bank accounting, integrity, encoding, publication, and process-level interruption remain
+global stops. Exact accounting is verified before coverage and before plan publication. **71
+focused tests · 213 related boundary tests** prove continuation, fatal-stop non-downgrade, hidden
+effect retention, privacy, canonical receipts, and the unchanged gate.
+
+Exactly one V3 authenticated action-free census is now open. It must account for the complete
+81-context repeatable, nonsealed, unconsumed Red bank and either freeze **8 train / 4 genuine option
+kinds / 3 families + 4 family-and-location-disjoint development**, or return exact aggregate
+exclusions and finite coverage. Stop and reorient at the first terminal. V1, V2, and V3 never
+retry. No draw, claim, controller authority/action, frame, outcome, prediction, teacher query,
+fit, sealed Red, Crystal, promotion, or replay is open. Counters remain **development 15 · verified
+5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: V2 stopped at state observation; make the next census exhaustive
 
 The sole V2 action-free census ran from published main
 `cca0eb8dacc3fb90baf9a67172d3996761830ad8` under exact-main CI `32942245005/1`, after the

@@ -8,7 +8,32 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: exhaust the bank without hiding a bad context
+## Current checkpoint: run the exhaustive census once, then choose data or outcomes
+
+The V3 exhaustive boundary is published. Source `8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb`
+passed PR CI `32946586301/1`, merged through PR 61 as main
+`1db9554624178a570a608cbf136a5d74182deee4`, and passed exact-main CI `32946811445/1` with
+**4,981 passed · 3 deselected · 1 expected failure**. Its
+[qualification](evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)
+binds artifacts, source bundle, and four registries. No protected input or gameplay was used.
+
+Each eligible context now runs in an isolated emulator. Finite restore, observe, enumerate,
+replay, and project failures become aggregate context-local exclusions; global authentication,
+namespace, effects, accounting, integrity, encoding, publication, and process interruption remain
+terminal. Every input must reconcile once before coverage or publication. Seventy-one focused and
+213 related tests exercise continuation, fatal non-downgrade, hidden effects, exact counts,
+privacy, coverage, and plan durability.
+
+The sole next step is one new-identity V3 census. It either freezes eight train scenarios across
+four genuine option kinds and three families plus four family/location-disjoint development
+scenarios, or establishes the full bank's exact exclusion/coverage profile. The first terminal
+decides the next branch: a passing plan opens separately authorized observed-arm outcomes; a real
+shortfall opens purpose-built capture generation. Stop and reorient before either. V1/V2/V3 never
+retry; outcomes, fitting, sealed Red, Crystal, promotion, and replay remain closed. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous checkpoint: exhaust the bank without hiding a bad context
 
 The sole V2 census ran from published main `cca0eb8d` and stopped exactly where the old V1 could
 not: `state_observation`. Its

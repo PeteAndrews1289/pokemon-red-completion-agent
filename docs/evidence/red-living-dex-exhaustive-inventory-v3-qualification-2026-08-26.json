@@ -1,0 +1,152 @@
+{
+  "artifacts": {
+    "design": {
+      "path": "docs/red-living-dex-exhaustive-inventory-v3-design.md",
+      "sha256": "db1898d1566f1d2b1a87102a65f77f2ec4be28020ad396c09ebf41ede6799bab"
+    },
+    "diagnostic_contract": {
+      "path": "src/pokemon_red_completion/red_living_dex_exhaustive_inventory_diagnostics.py",
+      "sha256": "d83a6bbff09d9c5dff81bcdebf5e8126094ad7fadf5176920cc2ee6fa2cf314b"
+    },
+    "runner": {
+      "path": "scripts/freeze_red_living_dex_authentic_inventory_v3.py",
+      "sha256": "70ca908aacaf6b5f799babfa1a1478f801a8d0e848230287ee9429d45ab8fd50"
+    },
+    "tests": [
+      {
+        "path": "tests/test_freeze_red_living_dex_authentic_inventory_v3_script.py",
+        "sha256": "5e57aae49dca1d04303e4158fddfcc72d05ec2a1dd7f18a22a0f532bab2b0d78"
+      },
+      {
+        "path": "tests/test_red_living_dex_exhaustive_inventory_diagnostics.py",
+        "sha256": "7c728cd69159a93b1e15ada07c70ea35ebede0e3ab31e4ce7e6790e4f44d4878"
+      }
+    ]
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free V3 source isolates each eligible Red context in a fresh emulator, accounts every authenticated context exactly once through finite anonymous exclusions or a complete menu, continues after context-local restore/observe/enumerate/replay/project failures, keeps global authentication/namespace/effect/accounting/integrity/encoding/publication failures terminal, and verifies whole-bank reconciliation before coverage or private-plan publication.",
+    "unsupported": [
+      "authentic_curriculum_coverage_shortfall",
+      "authentic_curriculum_coverage_success",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "exhaustive_contract": {
+    "context_local_exclusions": [
+      "sealed_or_unsupported_partition",
+      "consumed_physical_root",
+      "existing_materializer_claim",
+      "state_restore_failure",
+      "state_observation_failure",
+      "binding_enumeration_failure",
+      "historical_replay_failure",
+      "fewer_than_three_mapped_options",
+      "empty_party_observation",
+      "scenario_projection_failure"
+    ],
+    "fresh_emulator_per_eligible_context": true,
+    "global_failure_reasons": [
+      "argument_authentication",
+      "source_authentication",
+      "private_input_authentication",
+      "runtime_authentication",
+      "materializer_namespace_authentication",
+      "zero_effect_authentication",
+      "exhaustive_accounting",
+      "exact_coverage",
+      "protected_input_integrity",
+      "private_plan_encoding",
+      "private_plan_publication",
+      "unexpected_failure"
+    ],
+    "private_identity_values_public": false,
+    "private_path_values_public": false,
+    "v1_retry_allowed": false,
+    "v2_retry_allowed": false,
+    "v3_plan_record_identity": "red-living-dex-authentic-inventory-plan-v3",
+    "whole_bank_accounting_before_coverage": true,
+    "whole_bank_accounting_before_plan_publication": true
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "After publishing this qualification and reorienting, perform exactly one new-identity V3 action-free authenticated census from the published main commit and exact-main green CI. It must reconcile the complete bank and either freeze the unchanged 8-train plus 4-development plan or stop with exact aggregate exclusions and coverage. Claims, draws, controller authority/actions, frames, outcomes, predictions, teacher queries, and fits remain zero. Stop and reorient after the first terminal; V1, V2, and V3 may not retry."
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32946811445,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32946811445",
+    "merged_main_commit": "1db9554624178a570a608cbf136a5d74182deee4",
+    "pull_request": 61,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32946586301,
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/61",
+    "source_bundle_sha256": "e1948ea8288a003b378d33cb50f7e526d970a3fca1b628d3ab758d2f50e5038b",
+    "source_commit": "8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-exhaustive-inventory-v3-qualification.v1",
+  "status": "published_rom_free_v3_exhaustive_boundary_qualified_for_one_action_free_census",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_v3_tests_passed": 71,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 4981,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed",
+    "mypy_source_files": 269,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "ba73e9398c5bc389aeb95c05c20b197f492d6dd2b84ada978618c0c3951ef1ae",
+      "goal_manager_registry_sha256": "9e43173d9d8544e7263ff9ba6e4e92c93f0fa6c04d93e2e4635e124ec79f3228",
+      "scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+      "strategic_navigation_registry_sha256": "46e4d28e0b654630547b8a6b24fc8e51f83a66c8ca737af33c78c4ab27c6e7c6"
+    },
+    "related_boundary_tests_passed": 213,
+    "ruff_status": "passed"
+  }
+}
