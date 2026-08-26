@@ -8,7 +8,49 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the concrete Red source is published; freeze one authentic plan
+## Current checkpoint: same-root lesson machinery exists; build genuine provider families
+
+The authenticated historical census falsified the active pre-observed catalog strategy. It found
+only eight complete three-option menus—five train and three development—and lacked the declared
+family and physical-location breadth. More fundamentally, the old source adapter expected route
+terminal observations and provider offers before their routes had run. Cross-joining another
+capture would produce a counterfactual menu rather than a causal same-state decision.
+
+The locally qualified
+[same-root setup-recipe contract](red-living-dex-same-root-setup-recipe-v1.md) replaces that
+boundary. One private plan now freezes all fifteen authenticated roots, ten physical origin-map
+scopes, exact route/profile/provider recipes, and expected transformation-family separation before
+input. Each claimed slot constructs one origin, saves its exact bytes, restores that origin before
+every candidate, routes only that branch, freshly obtains the actual offer, and restores once more.
+The validator hashes and parses the source-root bytes itself and requires every restore to match
+the entire origin observation—not just its coordinates. Provider executors and verifiers remain
+untouched; setup emits no learner target or outcome. Complete, failed, and interrupted terminals
+are durable and never retry.
+
+The contract is infrastructure and changes no learning counter. Its cheapest falsifier now exposes
+the real next blocker before scarce roots are consumed: repeated logical family scopes cannot share
+an actual provider family. Red currently has one Diglett-to-Dugtrio evolution family and one
+generic one-level balanced-development family, while both kinds recur across train and development
+scopes.
+
+The next gate must:
+
+1. publish the same-root contract and its path-free qualification through exact-source CI;
+2. inventory the prospective family identities emitted by every real provider recipe without
+   controller input;
+3. implement the smallest reusable target-specific evolution and development offers needed to
+   represent genuinely different transformations, rather than embedding slot/root/profile IDs;
+4. freeze a complete fifteen-recipe, ten-origin-map plan whose expected families are disjoint
+   before any root claim; and
+5. reorient before private setup execution, selected-arm outcomes, fitting, sealed Red, Crystal, or
+   replay.
+
+This gate gets one session. Stop if family breadth requires synthetic identities, a fixed teacher
+route, cross-joined captures, or a species-specific implementation with no reusable target
+contract. Trade remains a separate full-living-Pokédex requirement. Counters stay **development 15
+· verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: the concrete Red source was published; freeze one authentic plan
 
 The adapter shipped through PR 75 from source `8b9c9f73`, merged as main `0daf5a5d`, and passed
 exact-main CI `32981526970/1`. Its

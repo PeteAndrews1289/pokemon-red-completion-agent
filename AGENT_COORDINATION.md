@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-26 same-root setup recipe locally qualified; publication and provider-family breadth
+> active:** The authenticated historical census cannot supply the frozen 10+5 family/location
+> schedule without false cross-joins. The successor contract constructs one decision origin, hashes
+> the exact source bytes, restores the identical full observation before each candidate, derives a
+> real provider offer only after that candidate's optional semantic route, freezes expected family
+> separation before input, and durably accounts every claimed slot without provider execution or a
+> learner effect. Its
+> [local qualification](docs/evidence/red-living-dex-same-root-setup-recipe-v1-local-qualification-2026-08-26.json)
+> records 26 focused, 156 related, and 5,137 full-suite tests; GitHub publication remains pending.
+>
+> Codex owns publication, then one bounded action-free provider-family inventory and the smallest
+> reusable target-specific evolution/development offers needed for a genuine fifteen-recipe,
+> ten-origin-map plan. Stop before private setup execution. Claude and Antigravity remain optional
+> read-only milestone reviewers; neither executes gameplay or edits this worktree. Trade remains a
+> later full-mission requirement. Counters remain **development 15 · verified 5/9 · causal train
+> 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 > **2026-08-26 concrete Red source adapter published; one authentic action-free freeze active:**
 > Source `8b9c9f73` passed [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75)
 > CI `32981065341/1`, merged as main `0daf5a5d`, and passed exact-main CI `32981526970/1`.

@@ -15,6 +15,11 @@ exact-main CI `32971132659/1`; see its
 The concrete source adapter then merged through PR 75 as main `0daf5a5d` and passed exact-main CI
 `32981526970/1`; see its
 [qualification](evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json).
+An authenticated census then proved that the historical bank cannot supply the declared family and
+location coverage without false cross-joins. The active successor is the
+[same-root setup-recipe contract](red-living-dex-same-root-setup-recipe-v1.md): construct one
+origin, restore it before every candidate, derive each offer only after its own route, and freeze
+expected family separation before input.
 It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
@@ -22,21 +27,23 @@ It is subordinate to
 
 ## Result first
 
-The abstract Red schedule satisfies the shared 10+5 curriculum contract; its restart-safe setup
-runner, action-free whole-plan materializer, and concrete Red source adapter are published, but no
-actual private binding plan exists yet. The exact ten-slot train menu has a
+The abstract Red schedule satisfies the shared 10+5 curriculum contract, but the historical
+pre-observed catalog cannot instantiate it honestly. Its restart-safe setup runner, action-free
+whole-plan materializer, and concrete Red source adapter remain published evidence; they are not a
+source of counterfactual endpoint offers. The exact ten-slot train menu has a
 worst-case-after-any-two-censors probability of
 **2144/2187 = 98.0338%** of selecting at least four distinct option kinds. Family and location
 scope reserves pass. Seven portable kinds have implemented, independently tested Red provider
 contracts; this does not authenticate a runtime binding for any new setup.
 
-Only one of the fifteen requested menus is co-located at an existing physical skill boundary.
-Fourteen need route-then-destination composition. The reusable
+The initial feasibility audit found only one fully co-located abstract menu and fourteen requiring
+route-then-destination composition. Authentic same-root recipes may contain a mixture of local and
+routed arms, but every routed arm still uses the reusable
 [routed semantic goal composition V1](routed-semantic-goal-composition-v1.md) is now published and
-keeps that transport outside the learner label. The plan remains **plan-valid but
-execution-blocked** because no actual private per-slot route/terminal/provider bindings have been
-materialized and authenticated. The structural contract, durable runner, and action-free
-materializer are now qualified.
+keeps that transport outside the learner label. The schedule remains **plan-valid but
+execution-blocked** because no purpose-built fifteen-recipe plan has been frozen. The active
+blocker is genuine provider-family breadth—especially evolution and development—not another pass
+over the historical capture bank.
 
 Trade is a separate full-product gap. The current `GoalKind`/Red binding layer has no repeatable
 semantic trade executor. The first calibration pilot intentionally excludes trade because its
@@ -136,9 +143,16 @@ promotion, or replay.
    adversarial sources.
 6. **Complete:** publish and qualify the concrete private Red source adapter without protected
    access.
-7. **Active:** under a separately recorded action-free gate, freeze one exact fifteen-slot binding
-   plan with all forty-five real arms and fourteen routed joins; stop before setup input.
-8. Run every setup slot once, census complete captures, then collect randomized outcomes under a
-   new gate.
-9. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
+7. **Retired after authentic census:** do not cross-join historical endpoint captures to force a
+   fifteen-slot catalog; the bank has only eight complete menus and insufficient family/location
+   breadth.
+8. **Locally qualified; publication pending:** publish the same-root recipe validator and durable
+   campaign, which freeze expected families and ten physical origin maps before input and derive
+   each actual offer from its own restored fork.
+9. **Next:** inventory genuine provider-family breadth, implement the smallest reusable
+   target-specific evolution/development offers, and freeze fifteen purpose-built recipes without
+   opening gameplay.
+10. After publication and a separate development gate, run each setup recipe once, qualify the
+   complete capture inventory, and collect randomized selected-arm outcomes.
+11. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
    trade; do not let an initial non-trade calibration fit erase that mission requirement.

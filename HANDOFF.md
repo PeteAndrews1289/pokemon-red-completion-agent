@@ -12,7 +12,40 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: concrete Red source adapter published; freeze one authentic plan next
+## 2026-08-26: same-root setup recipe qualified locally; publish, then widen real families
+
+The expected authentic plan freeze was falsified before controller input. The historical bank has
+only eight complete three-option menus—five train and three development—and insufficient family
+and physical-location breadth. Its endpoint observations cannot be cross-joined across unrelated
+saves without manufacturing counterfactual menu arms. Treat the old action-free source adapter and
+materializer as preserved implementation history, not the active path to a dataset.
+
+The successor [same-root contract](docs/red-living-dex-same-root-setup-recipe-v1.md) is locally
+qualified. A private plan freezes fifteen roots, ten physical origin-map scopes, forty-five exact
+provider/profile recipes, optional semantic routes, and prospectively disjoint expected families.
+The durable runner seals that plan and claims each slot before runtime construction. It hashes and
+parses the actual source-root bytes, constructs one origin, restores the exact full origin
+observation before every candidate, derives each provider offer after that candidate's route,
+never executes a provider during setup, restores once more, and persists exact repeatable private
+state. Complete, failed, and interrupted claims never retry.
+
+Qualification has **26 focused, 156 related, and 5,137 full-suite tests**. The first full-suite
+pass found only three source-registry drift failures; all three were repaired and the clean second
+suite confirmed them. GitHub publication is pending. No ROM/private capture, controller
+input, frame, behavior draw, learner label, outcome, prediction, teacher query, fit, authority, or
+transfer result was created.
+
+The next honest blocker is genuine provider-family breadth. Current Red evolution exposes only
+Diglett-to-Dugtrio and balanced development exposes one generic one-level quantum; those families
+cannot satisfy the frozen cross-scope separation when the kinds recur. Publish this contract,
+inventory every real prospective family action-free, and implement only reusable target-specific
+evolution/development offers required to freeze a genuine fifteen-recipe plan. Stop and reorient
+before private setup execution. Do not use root/profile/slot IDs as fake families, add a teacher
+route, or reopen the historical catalog. Trade remains a later mission blocker. Counters remain
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous 2026-08-26: concrete Red source adapter published; freeze one authentic plan next
 
 The adapter shipped from source `8b9c9f73c75ab06f0dff464ba27b1ff14933a660` through
 [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75), passed PR CI

@@ -7,7 +7,34 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the authentic-source socket is published; connect the real addresses once
+## Current checkpoint: one state can now expose three honest futures
+
+The promised authentic catalog did not exist. The historical bank contained only eight complete
+three-choice menus, and it lacked the family and location breadth required by the frozen lesson
+plan. More importantly, its choices came from different saves. Combining them would be like asking
+three people in three different cities what happened after three different decisions and calling
+that one controlled experiment.
+
+The project now builds a real fork instead. It constructs one Red decision state, saves its exact
+bytes, and restores that same complete observation before every candidate. One branch may travel to
+a Mart, another to a PC, and another stay local. Only after each branch arrives does it ask the real
+semantic provider what is executable. It never runs that provider during setup, so none of the
+travel or construction work becomes an answer for the learner.
+
+Twenty-six focused tests and 156 nearby regressions now attack that boundary. They caught the
+`(y, x)` coordinate convention hidden by diagonal fixtures, a falsely named evolution provider,
+source hashes that were not backed by source bytes, and restores that matched a coordinate but not
+the whole state. The campaign also freezes family separation before input and makes every claimed
+success, failure, or power loss permanent.
+
+This is still a locally qualified mechanism, not a dataset. No authentic recipe plan has run, and
+causal train remains **0/8**. The new red light is useful: Diglett-to-Dugtrio is only one evolution
+family, and generic balanced development is only one development family. The next job is to build
+reusable target-specific skills and freeze fifteen genuinely different classrooms—not rename one
+skill five times. Crystal still waits for measured Red evidence, and trade remains mandatory for
+the living Pokédex.
+
+## Previous checkpoint: the authentic-source socket is published; connect the real addresses once
 
 The concrete Red source adapter is published. It accepts typed fresh observations, executable
 offers from the exact provider allowlist, and complete semantic-router plans. It turns them into the

@@ -1,5 +1,39 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the project stopped inventing classrooms and learned to fork one state
+
+The authentic catalog check overturned the expected next step. The historical capture bank could
+not supply fifteen honest decision rooms: it held only eight complete three-option menus, and its
+family and location diversity was far below the frozen curriculum. Worse, the adapter expected a
+route's endpoint observation before the route had happened. Combining an acquisition offer from
+one save, a storage offer from another, and an evolution offer from a third would look like a menu
+but would not answer a causal question.
+
+The replacement is a same-root fork. One authenticated root constructs one decision state and
+saves its exact bytes. Every candidate restores those bytes, proves the complete observation is
+identical, follows only its own semantic route, freshly asks the real provider for an offer, and
+returns to the origin. The provider is not executed during setup. The setup therefore discovers a
+genuine menu without teaching a button sequence or turning a route into a label.
+
+The audit caught three quiet errors while building it. Red's routing coordinates are `(y, x)`, but
+diagonal fixtures had made the order impossible to distinguish. Evolution provenance named the
+wrong provider class. And a runtime could echo the right source-root hash while having loaded the
+wrong bytes. Off-diagonal tests, actual provider provenance, source-byte hashing/parsing, and exact
+per-arm restore equality now close those gaps.
+
+The durable layer seals all fifteen recipes and their expected transformation families before
+input, claims each slot before runtime construction, retains exact private origin bytes, and never
+retries complete, failed, or interrupted work. Public output remains aggregate and path-free.
+Qualification is still ROM-free: it produced no Red capture, outcome, fit, authority, or transfer
+result.
+
+That honesty exposes the next substantive problem. Red currently offers only one Diglett evolution
+family and one generic balanced-development family, while the curriculum needs those kinds in
+several disjoint scopes. The next work is to create reusable target-specific evolution and
+development offers—not to run the teacher, cross-join old saves, or train on invented alternatives.
+This is slower than declaring a dataset ready, but it is the shortest route to a model whose
+collection choices can transfer beyond Red.
+
 ## August 26: the authentic source cable now has a real, tested socket
 
 The concrete Red setup source adapter is published from source `8b9c9f73` as main `0daf5a5d`

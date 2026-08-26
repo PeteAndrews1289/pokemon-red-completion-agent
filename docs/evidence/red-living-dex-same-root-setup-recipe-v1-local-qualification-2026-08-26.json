@@ -1,0 +1,147 @@
+{
+  "artifacts": {
+    "campaign_implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_recipe_campaign.py",
+      "sha256": "aa86c2b99411d074709519c23c4369bb2b67cb7abb99fc1adbbcde694b867e69"
+    },
+    "design": {
+      "path": "docs/red-living-dex-same-root-setup-recipe-v1.md",
+      "sha256": "61e15e2b89a7279c1391c40a7b16eeb74d222d86668d90cf9dd68aea2433dbb0"
+    },
+    "feasibility_implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_capture_plan.py",
+      "sha256": "6ebc39eb5d45dad0bf59a889d00a76bf461db9ed3a929e56added4bea1700edf"
+    },
+    "prospective_plan": {
+      "path": "configs/red-living-dex-prospective-capture-plan-v1.json",
+      "sha256": "26b2fe480f41d9f5a94ee60b20236c880eddb49da5950b74b3c3c7a5c0277cde"
+    },
+    "recipe_implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_recipe.py",
+      "sha256": "97cf3d933483546f24f34e603b67f76284bff9dafb0f1ea27531de82b6c5521b"
+    },
+    "tests": {
+      "path": "tests/test_red_living_dex_setup_recipe.py",
+      "sha256": "c39aff24166d5bb8b16bb5fbd9e144d4ba8cd59ff5585202b85c357501bf3bf6"
+    }
+  },
+  "claim_boundary": {
+    "supported": "ROM-free source now freezes complete same-root Red setup recipes before input, validates exact source-root bytes, restores the identical captured-origin observation before every candidate, derives each genuine provider offer only after its own optional semantic route, binds prospectively disjoint provider-family identities and ten physical origin-map scopes, persists exact repeatable private captures, and permanently accounts complete, failed, and interrupted claims without executing a candidate provider or crossing the learner boundary.",
+    "unsupported": [
+      "actionful_authentic_red_setup_campaign",
+      "actual_private_red_recipe_plan",
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "powered_red_comparison",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "contract": {
+    "candidate_provider_executions_during_setup": 0,
+    "complete_recipe_slots_required": 15,
+    "development_slots": 5,
+    "exact_origin_restore_per_candidate_required": true,
+    "expected_family_separation_frozen_before_input": true,
+    "final_origin_restore_required": true,
+    "learner_effects": 0,
+    "minimum_option_recipes": 45,
+    "physical_origin_map_scopes_required": 10,
+    "plan_sealed_before_slot_claim": true,
+    "provider_offer_effects_allowed": 0,
+    "restore_effects_allowed": 0,
+    "retry_after_claim": false,
+    "route_or_local_per_candidate": true,
+    "source_root_bytes_independently_authenticated": true,
+    "train_slots": 10
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "findings": [
+    "historical_preobserved_catalog_cannot_supply_the_frozen_family_and_location_coverage",
+    "cross_joining_unrelated_endpoint_captures_would_create_counterfactual_menu_arms",
+    "route_coordinate_order_is_y_x_and_diagonal_fixtures_cannot_test_that_contract",
+    "diglett_evolution_profiles_emit_red_observed_goal_skill_provider_not_red_progress_goal_provider",
+    "reported_source_root_digests_are_insufficient_without_hashing_and_parsing_the_source_bytes",
+    "same_coordinate_restore_is_insufficient_without_exact_fresh_observation_equality",
+    "current_static_evolution_and_balanced_development_families_cannot_satisfy_cross_scope_separation"
+  ],
+  "next_gate": {
+    "actionful_setup_execution_allowed": false,
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Publish this same-root contract, then perform one bounded action-free inventory of genuine provider-family identities and implement only the reusable target-specific evolution and development offers needed to freeze a complete fifteen-recipe, ten-origin-map plan before any root claim. Stop and reorient before private setup execution."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "github_ci": "pending",
+    "main_commit": null,
+    "pull_request": null,
+    "source_bundle_sha256": "0d71d26b869a23bc92f2fee537d8fecab4a8db5602b25eb3ba66c646bf27e4cc",
+    "source_commit": "4862831541229febc08152090fe8f22c82ae0379"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-same-root-setup-recipe-local-qualification.v1",
+  "status": "locally_qualified_publication_pending_authentic_recipe_plan_missing",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_recipe_tests_passed": 26,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5137,
+      "first_pass_failures_repaired": 3,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "mypy_source_files": 278,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "related_regression_tests_passed": 156,
+    "registry_checks": {
+      "battle_registry_sha256": "92f30c6ce18d38efadd33ad8644b42a7687d240a80dd014edda1a7422a262286",
+      "battle_teacher_sha256": "d9eac7da7dfd512e16c6898b296a1ca104b6850b5c9cea91b1b482805fdbd828",
+      "goal_manager_registry_sha256": "227dd833d712589b451cca8e91dde6a0a67e404cfafbbfdcd48311de2a014efc",
+      "goal_manager_teacher_sha256": "04363c43a73b3897c89880d5ee132e4f50cec6501d920310fca47f1fb9b801b3",
+      "strategic_navigation_registry_sha256": "9089468a8843bbc4f94f2142cf0d2dd878c5aaebf49bfb819ec6aaaaddc4c344",
+      "strategic_navigation_teacher_sha256": "11ef69427836cc4e1dda4e905f5a8540fc500020185db4bc3b0e4fa2ef2dbe6f"
+    },
+    "ruff_format_status": "passed",
+    "ruff_status": "passed"
+  }
+}

@@ -1,5 +1,32 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: one save, three honest futures
+
+Open on the old catalog assembling three doors from three different save files. Stamp the result
+**NOT A CAUSAL MENU**. Pull back to the authenticated census: **81 INPUTS · 8 COMPLETE MENUS · 5
+TRAIN · 3 DEVELOPMENT · INSUFFICIENT FAMILY/LOCATION BREADTH**. Cross out **CROSS-JOIN OLD
+CAPTURES**.
+
+Replace it with one state card. Animate **AUTHENTIC ROOT → BOUNDED CONSTRUCTION → SAVE EXACT
+ORIGIN**. Fork it three ways. Before each branch, flash the same state hash and full observation
+hash. Then show **RESTORE → OPTIONAL SEMANTIC ROUTE → FRESH OBSERVATION → REAL PROVIDER OFFER**.
+Keep the provider's **EXECUTE** button covered. Merge the three branches into one **COMPLETE
+3-OPTION MENU** card.
+
+Cut power halfway through a branch and make the claimed slot settle **INTERRUPTED · NO RETRY**.
+Swap `(y, x)` to `(x, y)`, return a different source-root byte string under the expected digest,
+change one restored inventory count without moving the character, substitute the old evolution
+provider class, and alias one expected family across train and development. Flash **REJECTED** for
+all five.
+
+Then reveal the honest red light: **AUTHENTIC 15-RECIPE PLAN: NOT YET · CAUSAL TRAIN: 0/8**. Put
+two cards beside it: **DIGLETT→DUGTRIO: ONE EVOLUTION FAMILY** and **ONE-LEVEL QUANTUM: ONE
+DEVELOPMENT FAMILY**. The spoken line is: **“We can now create three honest futures from one
+state. What we cannot do is pretend one evolution target is five independent lessons. Next we
+build reusable target-specific skills, freeze the real classrooms, and only then train.”** End on
+**PROVIDER FAMILY BREADTH → 15 SAME-ROOT RECIPES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT → RED
+BENCHMARK → FROZEN-WEIGHT CRYSTAL**, with **TRADE STILL REQUIRED FOR THE LIVING POKÉDEX** below.
+
 ## August 26 scene: plug the authentic Red map into a socket that cannot press a button
 
 Open on **PR 75 · SOURCE 8B9C9F73 · MAIN 0DAF5A5D · CI 32981526970/1**. Feed a socket three typed
