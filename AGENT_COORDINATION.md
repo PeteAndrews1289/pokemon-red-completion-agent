@@ -1,6 +1,26 @@
 # Three-agent coordination
 
-> **2026-08-26 V3 proved the legacy classroom insufficient; prospective capture design active:**
+> **2026-08-26 shared capture contract published; concrete Red plan active:** Source `24e2aae9`
+> passed PR 64 CI `32951694647/1`, merged as main `b678b58a`, and passed exact-main CI
+> `32952034242/1`. The
+> [qualification](docs/evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+> records **25 focused · 122 related · 17/17 mutations killed · 5,006 suite tests** and zero ROM,
+> private-capture, learner, model, authority, or transfer effects.
+>
+> Codex owns one ROM-free concrete Red 10+5 prospective setup plan and semantic-skill feasibility
+> report. It must preserve the published 2+1 censor reserve, complete 3+ kind menus, exact 98%
+> selected-kind risk floor, family/location survival and disjointness, nonadaptive accounting,
+> repeatable roots, setup isolation, and private/public boundary. Missing genuine executors are a
+> result, not permission to add teacher routes or button labels. Publish and reorient before a
+> durable runner, protected setup, capture census, outcome, fit, sealed Red, Crystal, promotion, or
+> replay.
+>
+> Claude remains the optional read-only statistics/leakage reviewer; Antigravity the optional
+> read-only architecture/transfer reviewer. Neither implements, touches private captures, executes
+> gameplay, or blocks ordinary work; Codex adjudicates. Counters remain **development 15 · verified
+> 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 V3 proved the legacy classroom insufficient; prospective capture design active:**
 > The sole V3 census used executable main `1db95546` under CI `32946811445/1`, after PR 62/main
 > `f1855828` passed CI `32947744224/1`. Its
 > [terminal](docs/evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json)

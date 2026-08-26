@@ -149,8 +149,10 @@ development complete menus. That bank is retired. The active successor is the sh
 [purpose-built capture contract](living-dex-purpose-built-capture-contract.md): pre-register a
 nonadaptive 10-train/5-development setup campaign, tolerate at most two/one censored setups,
 separate deterministic setup provenance from learner supervision, and prove selected-arm kind,
-family, and location coverage rather than offered-menu decoration. No setup run is open until that
-ROM-free contract is published and the project reorients.
+family, and location coverage rather than offered-menu decoration. That ROM-free contract is now
+published and qualified. The active gate is a concrete Red 10+5 feasibility plan with genuine
+semantic executor contracts; protected setup remains closed until the plan and a separate durable
+runner publish.
 
 ## Previous integration boundary: inventory the legacy bank
 

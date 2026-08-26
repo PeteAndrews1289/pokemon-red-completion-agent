@@ -8,7 +8,44 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the old bank is insufficient; prospectively create genuine lessons
+## Current checkpoint: the shared lesson contract is published; freeze the Red curriculum
+
+The title-neutral purpose-built capture contract shipped from source
+`24e2aae906e09ec73d8742a50edc3e49ca2022dc` through PR 64 and PR CI `32951694647/1`, merged as
+main `b678b58acaffe37cfe72db2d1eea159386cbf0f3`, and passed exact-main CI `32952034242/1`. Its
+[qualification](evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+binds **25 focused · 122 related · 17/17 targeted mutations killed · 5,006 full-suite tests**.
+Qualification opened no ROM/private capture and changed no learning, authority, or transfer
+counter.
+
+The shared contract now fixes the shape of useful prospective data:
+
+1. preregister at least 10 train and 5 development setup slots, with no adaptive replacement or
+   early stop, so 8+4 settled examples remain possible after at most 2+1 setup censors;
+2. require every complete capture to expose a planned menu of at least three distinct portable
+   semantic kinds with authenticated executors;
+3. retain at least an exact 98% prospective chance of four selected train kinds after any allowed
+   pair of train censors, while preserving selected-family and location scope coverage;
+4. keep train/development family and location scopes disjoint, bind actual private families and
+   locations to those scopes, and account every slot through complete/failed/interrupted;
+5. claim setup before controller input, forbid retry after input, capture before any behavior draw,
+   and keep all setup actions, frames, routes, and choices outside learner labels;
+6. expose only counts, digests, exact probability, setup totals, and zero learner effects publicly.
+
+The active gate is now a **ROM-free concrete Red 10+5 feasibility plan**, not gameplay. Declare the
+semantic purpose, planned kind menu, family scope, location scope, deterministic terminal, observer,
+and executor contracts for every slot. Prove the full schedule against the shared validator. If a
+genuine executor is missing, name the smallest reusable skill and stop; do not substitute a fixed
+route, raw buttons, title identity, or synthetic arm.
+
+After that plan publishes and the project reorients, the next gates remain separate: qualify a
+durable setup runner; run the frozen setup campaign; census only its complete captures; collect all
+preregistered randomized selected-arm outcomes; fit once on train and report development
+calibration; then use observed variance to power Red evaluation. Crystal remains closed until a
+powered Red result justifies frozen-weight transfer. Counters stay **development 15 · verified 5/9
+· causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: the old bank is insufficient; prospectively create genuine lessons
 
 The sole V3 census used executable main `1db9554624178a570a608cbf136a5d74182deee4` under
 exact-main CI `32946811445/1`, after its authorization merged through PR 62 as main

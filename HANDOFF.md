@@ -12,7 +12,38 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: exhaustive V3 proved the old bank insufficient; build purpose-made captures
+## 2026-08-26: shared capture contract published; freeze the concrete Red plan
+
+The title-neutral purpose-built capture curriculum shipped from source
+`24e2aae906e09ec73d8742a50edc3e49ca2022dc` through
+[PR 64](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/64), passed PR CI
+`32951694647/1`, merged as main `b678b58acaffe37cfe72db2d1eea159386cbf0f3`, and passed exact-
+main CI `32952034242/1`. Its
+[qualification](docs/evidence/living-dex-purpose-built-capture-contract-qualification-v1-2026-08-26.json)
+binds source bundle `add74762…28`, **25 focused · 122 related · 17/17 mutations killed · 5,006
+full-suite tests**, three refreshed source-bound registries, and the unchanged scenario registry.
+
+The contract preregisters at least **10 train + 5 development** setup slots so **8+4** settled
+examples remain possible after at most **2+1** setup censors. Every complete capture must expose a
+planned menu of at least three distinct portable kinds. Exact prospective train-kind risk must be
+at least 98%; selected-family and location scopes must survive allowed censors and remain disjoint;
+every slot reaches one durable terminal; and no adaptive replacement, early stop, or claimed-slot
+retry is allowed. Setup may record its own actions and frames but emits zero learner effects or
+labels. Private state, root, menu, observer, family, and location joins never enter public receipts.
+
+Do not overclaim this milestone. Qualification used no ROM/private capture and created no learner
+draw, claim, action, frame, label, outcome, prediction, teacher query, fit, authority, or transfer
+result. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons
+4/5 · authority 0 · transfer 0**.
+
+Active work is now ROM-free design of a concrete prospective Red 10+5 setup plan. Prove every slot
+has a distinct purpose, complete planned semantic menu, adequate family/location scope, and genuine
+authenticated executor contracts. Name any missing reusable Red skill before gameplay; never
+substitute a teacher route, raw button sequence, title identity, or synthetic arm. Publish and
+reorient. A durable setup runner, protected setup campaign, capture census, randomized outcomes,
+fit, sealed Red, Crystal, promotion, and replay are all separate closed gates.
+
+## Previous 2026-08-26: exhaustive V3 proved the old bank insufficient; build purpose-made captures
 
 The sole V3 census ran from published executable main
 `1db9554624178a570a608cbf136a5d74182deee4` under exact-main CI `32946811445/1`, after its

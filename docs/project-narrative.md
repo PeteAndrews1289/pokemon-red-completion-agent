@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: design the classroom before walking back into the game
+
+The project now has a published definition of a useful living-Pokédex lesson. It does not ask a
+teacher which buttons to press. It preregisters at least ten train and five held-out setup slots,
+tolerates two plus one setup failures, and requires every completed state to offer at least three
+genuine semantic options. The exact prospective risk calculation must still give at least a 98%
+chance that the realized train batch spans four option kinds. Family and location diversity must
+survive the failures too; it cannot be decorative variety in unselected menu rows.
+
+The contract is deliberately split at the learner boundary. A deterministic Red setup may spend
+buttons and frames getting to a decision, but it is claimed before input, cannot retry after input,
+and emits no learner label. The capture is taken before the behavior draw. Only a later randomized
+semantic arm and its independently observed consequence may train the model. Every setup slot ends
+complete, failed, or interrupted, so inconvenient failures cannot be silently replaced.
+
+That boundary survived 25 focused tests, 122 related tests, and 17 targeted mutations with no
+survivor; the full 5,006-test repository passed locally and on exact merged main. It still created
+zero examples. The next honest question is concrete: can Red supply fifteen such decision states
+using genuine reusable semantic skills? The project will freeze that plan off-cartridge and expose
+any missing skill before another button is pressed. The answer may be a viable curriculum or a
+small executor gap; either is more useful than another week of route polishing.
+
 ## August 26: the final count ended the old classroom
 
 V3 counted every one of the 81 legacy Red contexts. Eight were honest complete menus; five were
