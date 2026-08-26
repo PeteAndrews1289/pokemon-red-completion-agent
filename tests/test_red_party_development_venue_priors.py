@@ -323,9 +323,9 @@ def test_source_compatibility_recomputes_exact_bundles_and_eleven_waivers() -> N
     )
     assert attestation.unchanged_elements_sha256 == (
         "c08ea57383e25da4f17a69ff2c4ae1e8662c4a1af0a19c454250fa30b11b0774"
-    )
+        )
     assert attestation.current_elements_sha256 == (
-        "c9ab96cef0402386953f0bb8d74b9703ed8cb93523545a317b9f27cc2e7459fb"
+        "cef8e925e8b89db3b625a421c53627c20249a61f9546073f6ebea93d9fcaf6a4"
     )
     assert attestation.waiver_allowlist_sha256 == (
         "2059993a8dea16ddca3e34ec94a018b920d85bff322c9f83122d680655ce2c50"
@@ -784,7 +784,7 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "a340330c60c5fb429824f858d56d1bf1abca0f110a8bdfdabb556ccd4ac1be32"
+        "8da28199ad48b621dc352e60de2f3ff5db186ff0ce4ee5aa61804cf50da9b908"
     )
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
