@@ -138,13 +138,23 @@
   ],
   "full_mission_ready": false,
   "implemented_runtime_capabilities": [
-    "routed-semantic-goal-composition"
+    "routed-semantic-goal-composition",
+    "durable-red-setup-runner",
+    "action-free-red-setup-binding-materializer"
   ],
   "implemented_runtime_contract_ids": [
     "pokemon_red_completion.routed_semantic_goal.RoutedSemanticGoalComposer",
     "pokemon_red_completion.red_routed_semantic_goal.RedSemanticTransportRoute",
     "pokemon_red_completion.red_routed_semantic_goal.RedFreshGoalDestinationBinder",
-    "pokemon_red_completion.red_routed_semantic_goal.build_red_routed_semantic_goal_composer"
+    "pokemon_red_completion.red_routed_semantic_goal.build_red_routed_semantic_goal_composer",
+    "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupOptionBinding",
+    "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupSlotBinding",
+    "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupBindingPlan",
+    "pokemon_red_completion.red_living_dex_setup_campaign.build_red_living_dex_setup_binding_plan",
+    "pokemon_red_completion.red_living_dex_setup_campaign.run_red_living_dex_setup_campaign",
+    "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupPrivateSourceAttestation",
+    "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupBindingMaterialization",
+    "pokemon_red_completion.red_living_dex_setup_materialization.materialize_red_living_dex_setup_bindings"
   ],
   "learner_effects": 0,
   "locally_composable_slot_count": 1,
@@ -208,7 +218,7 @@
   },
   "private_identity_fields": 0,
   "private_path_fields": 0,
-  "qualification_sha256": "48d859dad473fe2018c60d664ac9fe91f470c05b70a419e12494ebae7725f3eb",
+  "qualification_sha256": "0c9eef6c4bf86055c50841eb85d94ae7db7ec110cfb99c70f6f111a0dc97134a",
   "rom_accesses": 0,
   "routed_slot_count": 14,
   "scheduled_option_kinds": [
@@ -224,7 +234,6 @@
   "setup_controller_actions": 0,
   "setup_emulator_frames": 0,
   "unresolved_runtime_capabilities": [
-    "concrete-red-routed-setup-bindings",
-    "durable-red-setup-runner"
+    "concrete-red-routed-setup-bindings"
   ]
 }

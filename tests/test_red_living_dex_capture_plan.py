@@ -28,6 +28,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedRouteGoalProvider,
 )
 from pokemon_red_completion.red_living_dex_capture_plan import (
+    RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
     RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
     RED_DURABLE_SETUP_RUNNER_CAPABILITY,
     RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA,
@@ -43,6 +44,8 @@ from pokemon_red_completion.red_living_dex_capture_plan import (
     RedLivingDexExecutorStatus,
     build_red_living_dex_prospective_capture_plan,
     qualify_red_living_dex_prospective_capture_plan,
+    red_living_dex_setup_materialization_runtime_contract_ids,
+    red_living_dex_setup_runtime_contract_ids,
 )
 from pokemon_red_completion.red_routed_semantic_goal import (
     RedFreshGoalDestinationBinder,
@@ -52,9 +55,7 @@ from pokemon_red_completion.red_routed_semantic_goal import (
 from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalComposer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-FROZEN_PUBLIC_PLAN = (
-    PROJECT_ROOT / "configs/red-living-dex-prospective-capture-plan-v1.json"
-)
+FROZEN_PUBLIC_PLAN = PROJECT_ROOT / "configs/red-living-dex-prospective-capture-plan-v1.json"
 
 
 def _qualification() -> RedLivingDexCapturePlanFeasibility:
@@ -69,9 +70,7 @@ def test_red_plan_freezes_exact_10_plus_5_schedule_and_probability() -> None:
     assert len(plan.partition_slots(LivingDexCapturePartition.DEVELOPMENT)) == 5
     assert plan.minimum_train_selected_kind_probability == Fraction(2144, 2187)
     assert plan.minimum_train_selected_kind_probability > Fraction(98, 100)
-    assert plan.plan_sha256 == (
-        "d718c4d615f3ba86a0dc7d17e9f5327df0b6cace6d74f4e7b02d12c964a3b0ee"
-    )
+    assert plan.plan_sha256 == ("d718c4d615f3ba86a0dc7d17e9f5327df0b6cace6d74f4e7b02d12c964a3b0ee")
 
     public = plan.public_dict()
     assert public["partition_counts"] == {"development": 5, "train": 10}
@@ -105,24 +104,18 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert tuple(item.option_kind for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES) == tuple(
         LivingDexOptionKind
     )
-    capabilities = {
-        item.option_kind: item for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES
-    }
+    capabilities = {item.option_kind: item for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES}
 
     assert capabilities[LivingDexOptionKind.ACQUIRE].goal_kind is GoalKind.ACQUIRE_SPECIES
     assert capabilities[LivingDexOptionKind.ACQUIRE].mechanics == (
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
     )
-    assert capabilities[LivingDexOptionKind.ACQUIRE].executor_types == (
-        RedAreaSurveyGoalProvider,
-    )
+    assert capabilities[LivingDexOptionKind.ACQUIRE].executor_types == (RedAreaSurveyGoalProvider,)
     assert capabilities[LivingDexOptionKind.EVOLVE].goal_kind is GoalKind.EVOLVE_SPECIES
     assert capabilities[LivingDexOptionKind.EVOLVE].mechanics == (
         RedGoalMechanic.DIGLETT_EVOLUTION,
     )
-    assert capabilities[LivingDexOptionKind.EVOLVE].executor_types == (
-        RedProgressGoalProvider,
-    )
+    assert capabilities[LivingDexOptionKind.EVOLVE].executor_types == (RedProgressGoalProvider,)
     assert capabilities[LivingDexOptionKind.DEVELOP].mechanics == (
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         RedGoalMechanic.BALANCED_TEAM,
@@ -137,9 +130,7 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert capabilities[LivingDexOptionKind.MANAGE_STORAGE].executor_types == (
         RedBoxSwitchGoalProvider,
     )
-    assert capabilities[LivingDexOptionKind.RESUPPLY].mechanics == (
-        RedGoalMechanic.MART_RESUPPLY,
-    )
+    assert capabilities[LivingDexOptionKind.RESUPPLY].mechanics == (RedGoalMechanic.MART_RESUPPLY,)
     assert capabilities[LivingDexOptionKind.RESUPPLY].executor_types == (
         RedMartResupplyGoalProvider,
     )
@@ -163,17 +154,18 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert trade.mechanics == ()
 
 
-def test_plan_credits_the_routed_seam_but_keeps_concrete_setup_closed() -> None:
+def test_plan_credits_the_routed_seam_and_runner_but_keeps_private_bindings_closed() -> None:
     result = _qualification()
 
     assert result.locally_composable_slot_count == 1
     assert result.routed_slot_count == 14
     assert result.implemented_runtime_capabilities == (
         RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
+        RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+        RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
     )
     assert result.unresolved_runtime_capabilities == (
         RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
-        RED_DURABLE_SETUP_RUNNER_CAPABILITY,
     )
     assert (
         RoutedSemanticGoalComposer,
@@ -181,10 +173,19 @@ def test_plan_credits_the_routed_seam_but_keeps_concrete_setup_closed() -> None:
         RedFreshGoalDestinationBinder,
         build_red_routed_semantic_goal_composer,
     ) == RED_ROUTED_SEMANTIC_COMPONENTS
-    assert (
-        result.mission_missing_option_kinds[0].value
-        != RED_ROUTED_SEMANTIC_GOAL_CAPABILITY
+    assert red_living_dex_setup_runtime_contract_ids() == (
+        "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupOptionBinding",
+        "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupSlotBinding",
+        "pokemon_red_completion.red_living_dex_setup_campaign.RedLivingDexSetupBindingPlan",
+        "pokemon_red_completion.red_living_dex_setup_campaign.build_red_living_dex_setup_binding_plan",
+        "pokemon_red_completion.red_living_dex_setup_campaign.run_red_living_dex_setup_campaign",
     )
+    assert red_living_dex_setup_materialization_runtime_contract_ids() == (
+        "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupPrivateSourceAttestation",
+        "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupBindingMaterialization",
+        "pokemon_red_completion.red_living_dex_setup_materialization.materialize_red_living_dex_setup_bindings",
+    )
+    assert result.mission_missing_option_kinds[0].value != RED_ROUTED_SEMANTIC_GOAL_CAPABILITY
 
 
 def test_setup_requests_are_unique_bounded_and_emit_no_learner_effects() -> None:
@@ -198,12 +199,8 @@ def test_setup_requests_are_unique_bounded_and_emit_no_learner_effects() -> None
     }
     for slot in plan.slots:
         setup = slot.setup
-        assert setup.maximum_controller_actions == (
-            RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS
-        )
-        assert setup.maximum_emulator_frames == (
-            RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES
-        )
+        assert setup.maximum_controller_actions == (RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS)
+        assert setup.maximum_emulator_frames == (RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES)
         assert setup.claim_before_controller_input is True
         assert setup.retry_after_controller_input is False
         assert setup.capture_before_behavior_draw is True
@@ -219,7 +216,7 @@ def test_public_feasibility_is_path_free_and_refuses_training_claims() -> None:
 
     assert public["schema"] == RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA
     assert public["qualification_sha256"] == (
-        "48d859dad473fe2018c60d664ac9fe91f470c05b70a419e12494ebae7725f3eb"
+        "0c9eef6c4bf86055c50841eb85d94ae7db7ec110cfb99c70f6f111a0dc97134a"
     )
     assert public["rom_accesses"] == 0
     assert public["setup_controller_actions"] == 0
@@ -316,12 +313,8 @@ def test_scheduling_trade_cannot_hide_the_missing_executor() -> None:
         RedLivingDexCapturePlanFeasibility(
             plan=plan,
             capabilities=result.capabilities,
-            implemented_runtime_capabilities=(
-                result.implemented_runtime_capabilities
-            ),
-            unresolved_runtime_capabilities=(
-                result.unresolved_runtime_capabilities
-            ),
+            implemented_runtime_capabilities=(result.implemented_runtime_capabilities),
+            unresolved_runtime_capabilities=(result.unresolved_runtime_capabilities),
         )
 
 
@@ -330,15 +323,13 @@ def test_route_composition_blocker_cannot_be_removed_from_a_nonlocal_plan() -> N
 
     with pytest.raises(
         RedLivingDexCapturePlanError,
-        match="hides implemented routed-goal composition",
+        match="hides a published runtime capability",
     ):
         RedLivingDexCapturePlanFeasibility(
             plan=result.plan,
             capabilities=result.capabilities,
             implemented_runtime_capabilities=(),
-            unresolved_runtime_capabilities=(
-                result.unresolved_runtime_capabilities
-            ),
+            unresolved_runtime_capabilities=(result.unresolved_runtime_capabilities),
         )
 
 
@@ -352,9 +343,7 @@ def test_concrete_setup_blockers_cannot_be_erased_or_marked_implemented() -> Non
         RedLivingDexCapturePlanFeasibility(
             plan=result.plan,
             capabilities=result.capabilities,
-            implemented_runtime_capabilities=(
-                result.implemented_runtime_capabilities
-            ),
+            implemented_runtime_capabilities=(result.implemented_runtime_capabilities),
             unresolved_runtime_capabilities=(),
         )
 
@@ -367,21 +356,18 @@ def test_concrete_setup_blockers_cannot_be_erased_or_marked_implemented() -> Non
             capabilities=result.capabilities,
             implemented_runtime_capabilities=(
                 RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
-                RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
-            ),
-            unresolved_runtime_capabilities=(
-                RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
                 RED_DURABLE_SETUP_RUNNER_CAPABILITY,
+                RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
+                RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
             ),
+            unresolved_runtime_capabilities=(RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,),
         )
 
 
 def test_capability_audit_cannot_drop_trade_or_forge_goal_mapping() -> None:
     result = _qualification()
     without_trade = tuple(
-        item
-        for item in result.capabilities
-        if item.option_kind is not LivingDexOptionKind.TRADE
+        item for item in result.capabilities if item.option_kind is not LivingDexOptionKind.TRADE
     )
     with pytest.raises(
         RedLivingDexCapturePlanError,
@@ -390,12 +376,8 @@ def test_capability_audit_cannot_drop_trade_or_forge_goal_mapping() -> None:
         RedLivingDexCapturePlanFeasibility(
             plan=result.plan,
             capabilities=without_trade,
-            implemented_runtime_capabilities=(
-                result.implemented_runtime_capabilities
-            ),
-            unresolved_runtime_capabilities=(
-                result.unresolved_runtime_capabilities
-            ),
+            implemented_runtime_capabilities=(result.implemented_runtime_capabilities),
+            unresolved_runtime_capabilities=(result.unresolved_runtime_capabilities),
         )
 
     acquire = result.capabilities[0]
