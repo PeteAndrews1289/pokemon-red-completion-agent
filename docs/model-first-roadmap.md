@@ -19,7 +19,9 @@ reconciles all 81 contexts and evaluates coverage once. The full legacy bank con
 fewer than three mapped options, four fail binding enumeration, and four roots are consumed.
 Exact 8+4 coverage failed with every protected effect at zero. V1/V2/V3 never retry.
 
-The next sequence is prospective data engineering, not another inventory identity:
+The next sequence is prospective data engineering, not another inventory identity. The shared
+[purpose-built capture contract](living-dex-purpose-built-capture-contract.md) records the exact
+setup/learner and Red/Crystal boundaries:
 
 1. ROM-free, freeze the purpose-built capture schema and deficit-aware coverage contract. Require
    complete 3+ semantic menus, genuine executors, repeatable unique nonsealed roots, 8 train across
