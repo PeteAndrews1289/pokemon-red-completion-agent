@@ -5,11 +5,13 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **RED OBSERVED-ARM BOUNDARY IMPLEMENTED · COMPLETE 3+ ROW MENUS · 8
+> **Current rail:** Show **MAIN 0320A5A8 · CI 32930451851/1 GREEN · RED OBSERVED-ARM BOUNDARY
+> PUBLISHED · COMPLETE 3+ ROW MENUS · 8
 > PORTABLE OPTION KINDS · TITLE/IDENTITY FEATURES 0 · EXACT NORMALIZATION · HARD MASKS · ONE
 > SCENARIO/MENU/PARTITION-BOUND SYSTEM DRAW · FULL SUPPORT · SELECTED ONCE · UNSELECTED TARGETS 0 ·
 > SYNTHETIC EXECUTORS ADMITTED TO FIT 0 · LIVING-SPECIMEN LOSS CANNOT VERIFY SUCCESS · 30 FOCUSED /
 > 79 RELATED TESTS GREEN · ROM/PRIVATE/ACTIONS/FRAMES/CLAIMS/TEACHERS 0**. Link the
+> [adapter qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json),
 > [adapter design](red-living-dex-observed-arm-adapter.md),
 > [contract](living-dex-option-value-contract.md), and
 > [redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md).

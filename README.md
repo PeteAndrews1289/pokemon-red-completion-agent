@@ -5,8 +5,10 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): publish the Red observed-arm boundary, then build its
-> durable authentic materializer.** The shared title-neutral option-value contract now has a Red
+> **Current product focus (August 26, 2026): build the durable authentic Red materializer.** The
+> observed-arm boundary is published on main `0320a5a8` through
+> [PR 52](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/52) and green CI
+> `32930451851/1`. The shared title-neutral option-value contract now has a Red
 > adapter, selected-arm collector, and calibration-coverage gate. The boundary derives exact
 > normalization provenance, requires a genuine policy-distinguishable 3+ option menu, isolates
 > option-specific resources, hard-masks unsafe work, neutralizes row order, and keeps every private
@@ -19,6 +21,7 @@
 > fitting—counted rows must trace to the established semantic acquire/evolve runtime or a bounded
 > Red goal skill. Thirty focused tests, a 79-test related slice, and the complete 4,778-test
 > non-integration repository gate pass. See the
+> [adapter qualification](docs/evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json),
 > [adapter design](docs/red-living-dex-observed-arm-adapter.md),
 > [contract](docs/living-dex-option-value-contract.md), and
 > [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).

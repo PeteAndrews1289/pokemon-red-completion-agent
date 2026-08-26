@@ -1,6 +1,9 @@
 # Red living-Pokédex observed-arm adapter
 
-Status: ROM-free implementation complete locally on 2026-08-26. No ROM, private checkpoint,
+Status: ROM-free implementation published as main `0320a5a8` through PR 52 and green GitHub CI
+`32930451851/1` on 2026-08-26. The exact artifact and verification record is the
+[path-free qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json).
+No ROM, private checkpoint,
 teacher, model prediction, controller input, emulator frame, outcome campaign, fit, learning
 counter, or authority counter was opened by this work.
 

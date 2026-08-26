@@ -12,7 +12,7 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: Red observed-arm boundary implemented; build the durable materializer
+## 2026-08-26: Red observed-arm boundary published; build the durable materializer
 
 Do **not** freeze or execute the proposed V4 12+8 curriculum. It is retired unexecuted. Claude and
 Antigravity independently found the same experimental defect: when the selected arm failed, the
@@ -45,6 +45,13 @@ and the 4,778-test non-integration repository gate pass. Claude's initial review
 `GO-WITH-FIXES` and caused both corrections;
 Antigravity's post-change review returned `GO` with no P0 blocker. Claude CLI authentication was
 unavailable for the requested post-fix re-review and that is recorded honestly.
+
+The exact boundary is published as main
+`0320a5a8b20df4100396918b45597db03ec73515` through PR 52 and green GitHub CI
+`32930451851/1`. Its path-free
+[qualification](docs/evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json)
+records the artifact hashes, 4,778-test gate, zero protected effects, zero counter deltas, review
+dispositions, and the materializer as the next—and only—open engineering gate.
 
 Active `repeatable-red-living-dex-option-value-calibration-v1` now moves to the durable authentic
 scenario materializer. It must enumerate complete 3+ row menus from repeatable nonsealed Red
