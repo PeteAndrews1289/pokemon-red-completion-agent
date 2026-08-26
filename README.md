@@ -24,7 +24,8 @@
 > must use genuine executors; missing reusable skills must be named rather than disguised as
 > teacher routes or raw buttons. A durable setup runner is a separate later gate. No protected
 > capture, setup execution, outcome, fit, sealed Red, Crystal run, promotion, or replay is open.
-> See the [published capture contract](docs/living-dex-purpose-built-capture-contract.md).
+> See the [published capture contract](docs/living-dex-purpose-built-capture-contract.md) and the
+> [Red prospective-plan design](docs/red-living-dex-prospective-capture-plan-v1.md).
 
 > **Previous product focus (August 26, 2026): stop mining the old classroom; create the right
 > lessons.** The sole exhaustive census used executable main `1db95546` under CI

@@ -1,0 +1,220 @@
+{
+  "capabilities": [
+    {
+      "boundary_scope_count": 1,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedAreaSurveyGoalProvider"
+      ],
+      "goal_kind": "acquire_species",
+      "mechanics": [
+        "wild_corridor_capture"
+      ],
+      "missing_reason": null,
+      "option_kind": "acquire",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 1,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedProgressGoalProvider"
+      ],
+      "goal_kind": "evolve_species",
+      "mechanics": [
+        "diglett_evolution"
+      ],
+      "missing_reason": null,
+      "option_kind": "evolve",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 0,
+      "executor_contract_ids": [],
+      "goal_kind": null,
+      "mechanics": [],
+      "missing_reason": "missing-repeatable-semantic-trade-executor",
+      "option_kind": "trade",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "missing",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 2,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedEncounterSourceDevelopmentGoalProvider",
+        "pokemon_red_completion.red_goal_skills.RedProgressGoalProvider"
+      ],
+      "goal_kind": "develop_team",
+      "mechanics": [
+        "wild_corridor_development",
+        "balanced_team"
+      ],
+      "missing_reason": null,
+      "option_kind": "develop",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 1,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedBoxSwitchGoalProvider"
+      ],
+      "goal_kind": "manage_storage",
+      "mechanics": [
+        "box_switch"
+      ],
+      "missing_reason": null,
+      "option_kind": "manage_storage",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 1,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedMartResupplyGoalProvider"
+      ],
+      "goal_kind": "resupply",
+      "mechanics": [
+        "mart_resupply"
+      ],
+      "missing_reason": null,
+      "option_kind": "resupply",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 1,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_manager.RedStoryGoalBindingProvider"
+      ],
+      "goal_kind": "advance_story",
+      "mechanics": [
+        "midgame_story"
+      ],
+      "missing_reason": null,
+      "option_kind": "unlock_access",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    },
+    {
+      "boundary_scope_count": 2,
+      "executor_contract_ids": [
+        "pokemon_red_completion.red_goal_skills.RedEncounterDiscoveryGoalProvider",
+        "pokemon_red_completion.red_goal_skills.RedRouteGoalProvider"
+      ],
+      "goal_kind": "explore",
+      "mechanics": [
+        "wild_corridor_discovery"
+      ],
+      "missing_reason": null,
+      "option_kind": "explore",
+      "private_identity_fields": 0,
+      "private_path_fields": 0,
+      "raw_controller_sequence": false,
+      "status": "implemented_local_contract",
+      "teacher_route": false
+    }
+  ],
+  "full_mission_ready": false,
+  "learner_effects": 0,
+  "locally_composable_slot_count": 1,
+  "mission_missing_option_kinds": [
+    "trade"
+  ],
+  "pilot_execution_ready": false,
+  "pilot_plan_contract_satisfied": true,
+  "plan": {
+    "adaptive_replacement_allowed": false,
+    "behavior_policy": "system-random-rank-full-support-uniform-row-marginal-v1",
+    "development_family_scope_count": 5,
+    "development_location_scope_count": 5,
+    "execute_every_slot": true,
+    "family_scope_overlap": 0,
+    "gate": {
+      "maximum_censored_development_slots": 1,
+      "maximum_censored_train_slots": 2,
+      "minimum_development_examples": 4,
+      "minimum_development_families": 4,
+      "minimum_development_locations": 4,
+      "minimum_train_examples": 8,
+      "minimum_train_families": 3,
+      "minimum_train_kind_probability": {
+        "denominator": 50,
+        "numerator": 49
+      },
+      "minimum_train_option_kinds": 4
+    },
+    "identity_fields_public": 0,
+    "location_scope_overlap": 0,
+    "menu_width_counts": {
+      "3": 15
+    },
+    "minimum_train_selected_kind_probability": {
+      "denominator": 2187,
+      "numerator": 2144
+    },
+    "minimum_train_selected_kind_probability_role": "prospective_system-commitment_marginal_not_policy-quality",
+    "partition_counts": {
+      "development": 5,
+      "train": 10
+    },
+    "plan_sha256": "d718c4d615f3ba86a0dc7d17e9f5327df0b6cace6d74f4e7b02d12c964a3b0ee",
+    "private_path_fields": 0,
+    "schema": "pokemon.core.living-dex-capture-plan.v1",
+    "setup_behavior_draws": 0,
+    "setup_learner_labels": 0,
+    "setup_outcomes_observed": 0,
+    "slot_count": 15,
+    "train_family_scope_count": 3,
+    "train_offered_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ]
+  },
+  "private_identity_fields": 0,
+  "private_path_fields": 0,
+  "qualification_sha256": "c084c6693668ca0b69bbf0cc44c57b52b61ffd1f10cdc4403ace5d10de9f9202",
+  "rom_accesses": 0,
+  "routed_slot_count": 14,
+  "scheduled_option_kinds": [
+    "acquire",
+    "evolve",
+    "develop",
+    "manage_storage",
+    "resupply",
+    "unlock_access",
+    "explore"
+  ],
+  "schema": "pokemon.red.living-dex-prospective-capture-feasibility.v1",
+  "setup_controller_actions": 0,
+  "setup_emulator_frames": 0,
+  "unresolved_runtime_capabilities": [
+    "routed-semantic-goal-composition"
+  ]
+}

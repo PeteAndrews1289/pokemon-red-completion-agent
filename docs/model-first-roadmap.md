@@ -32,9 +32,10 @@ The shared contract now fixes the shape of useful prospective data:
    and keep all setup actions, frames, routes, and choices outside learner labels;
 6. expose only counts, digests, exact probability, setup totals, and zero learner effects publicly.
 
-The active gate is now a **ROM-free concrete Red 10+5 feasibility plan**, not gameplay. Declare the
-semantic purpose, planned kind menu, family scope, location scope, deterministic terminal, observer,
-and executor contracts for every slot. Prove the full schedule against the shared validator. If a
+The active gate is now a **ROM-free concrete Red 10+5 feasibility plan**, not gameplay. The
+[prospective-plan design](red-living-dex-prospective-capture-plan-v1.md) declares the semantic
+purpose, planned kind menu, family scope, location scope, deterministic terminal, observer, and
+executor contracts for every slot. Prove the full schedule against the shared validator. If a
 genuine executor is missing, name the smallest reusable skill and stop; do not substitute a fixed
 route, raw buttons, title identity, or synthetic arm.
 

@@ -42,6 +42,8 @@ authenticated executor contracts. Name any missing reusable Red skill before gam
 substitute a teacher route, raw button sequence, title identity, or synthetic arm. Publish and
 reorient. A durable setup runner, protected setup campaign, capture census, randomized outcomes,
 fit, sealed Red, Crystal, promotion, and replay are all separate closed gates.
+The exact design and feasibility criteria are in the
+[Red prospective capture plan](docs/red-living-dex-prospective-capture-plan-v1.md).
 
 ## Previous 2026-08-26: exhaustive V3 proved the old bank insufficient; build purpose-made captures
 
