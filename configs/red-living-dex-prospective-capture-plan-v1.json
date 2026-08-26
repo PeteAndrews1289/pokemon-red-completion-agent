@@ -140,7 +140,8 @@
   "implemented_runtime_capabilities": [
     "routed-semantic-goal-composition",
     "durable-red-setup-runner",
-    "action-free-red-setup-binding-materializer"
+    "action-free-red-setup-binding-materializer",
+    "private-red-setup-source-adapter"
   ],
   "implemented_runtime_contract_ids": [
     "pokemon_red_completion.routed_semantic_goal.RoutedSemanticGoalComposer",
@@ -154,7 +155,12 @@
     "pokemon_red_completion.red_living_dex_setup_campaign.run_red_living_dex_setup_campaign",
     "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupPrivateSourceAttestation",
     "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupBindingMaterialization",
-    "pokemon_red_completion.red_living_dex_setup_materialization.materialize_red_living_dex_setup_bindings"
+    "pokemon_red_completion.red_living_dex_setup_materialization.materialize_red_living_dex_setup_bindings",
+    "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupSlotWitness",
+    "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupRouteWitness",
+    "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupProviderWitness",
+    "pokemon_red_completion.red_living_dex_setup_source.build_red_living_dex_setup_source_payload",
+    "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupCatalogSource"
   ],
   "learner_effects": 0,
   "locally_composable_slot_count": 1,
@@ -218,7 +224,7 @@
   },
   "private_identity_fields": 0,
   "private_path_fields": 0,
-  "qualification_sha256": "0c9eef6c4bf86055c50841eb85d94ae7db7ec110cfb99c70f6f111a0dc97134a",
+  "qualification_sha256": "e0ae8df967a6a505f2998025516be2fcd5c3943e9ae63469cde6496cd04927b0",
   "rom_accesses": 0,
   "routed_slot_count": 14,
   "scheduled_option_kinds": [
