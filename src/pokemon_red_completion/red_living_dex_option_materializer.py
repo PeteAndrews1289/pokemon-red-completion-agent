@@ -657,6 +657,13 @@ def run_red_living_dex_materialization_plan(
         raise TypeError("materialization needs a validated private artifact root")
     if not isinstance(plan, RedLivingDexMaterializationPlan):
         raise TypeError("materialization needs a frozen plan")
+    if any(
+        getattr(scenario.observe_after, "inventory_only", False)
+        for scenario in plan.scenarios
+    ):
+        raise RedLivingDexOptionMaterializerError(
+            "inventory-only observer descriptors must be reconstructed before collection"
+        )
     receipts: list[RedLivingDexMaterializationReceipt] = []
     with store.collection_session(
         RED_LIVING_DEX_MATERIALIZATION_COLLECTION_ID
