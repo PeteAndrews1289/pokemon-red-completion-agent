@@ -85,16 +85,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "campaign_execution": "campaign",
         "comparison_execution": "compare",
         "consumed_trial_retry": "retry",
+        "counterfactual_target": "counterfactual target",
         "crystal_execution": "Crystal",
         "development_payload_decode": "dev decode",
         "development_payload_disclosure": "dev disclosure",
         "full_game_replay": "replay",
         "gameplay_execution": "gameplay",
+        "identity_bearing_policy_feature": "identity-bearing feature",
         "live_model_prediction": "prediction",
         "live_private_artifact_access": "live private artifacts",
         "model_fit": "fit",
         "model_prediction": "prediction",
         "model_refit": "refit",
+        "outcome_balanced_row_selection": "outcome-balanced selection",
         "private_development_outcome_opening": "dev outcomes",
         "private_artifact_access": "private artifacts",
         "private_input_access": "private",
@@ -103,12 +106,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "rom_access": "ROM",
         "scenario_selection": "scenario",
         "sealed_red_evaluation": "sealed",
+        "sealed_or_benchmark_root_use": "sealed/benchmark roots",
         "reused_v1_context_execution": "V1 context reuse",
         "scenario_substitution_after_selection": "post-choice substitution",
         "teacher_choice_or_fallback": "teacher choice/fallback",
         "teacher_route_hardening": "teacher",
         "transfer_claim": "transfer claim",
         "unpowered_model_quality_claim": "unpowered quality claim",
+        "unselected_action_target": "unselected-action target",
+        "v4_freeze_or_trial_execution": "V4 freeze/trial",
         "v4_trial_execution_before_reorientation": "V4 execution",
     }
     prohibited = " / ".join(
@@ -122,13 +128,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The post-exception observer repair is qualified and retired. V4 now freezes twelve "
-            "train trials with four fixed reserves plus eight untouched development trials; no "
-            "prediction, gameplay, promotion, or Crystal transfer is active."
+            "The invalid binary counterfactual curriculum is retired. The ROM-free observed-arm "
+            "contract is qualified. Next: a repeatable Red adapter and calibration loop; gameplay "
+            "authority and Crystal transfer remain at zero."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red V4 · authenticate unused roots → freeze 12 train + 8 development → reorient"
+            "Red calibration V1 · adapter → repeatable outcomes → train-only fit → paired report"
         ),
         collection_target=150,
         model=DashboardModelState(
@@ -137,7 +143,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "Historical dependency ranker · one authentic settled Red choice · no promotion"
             ),
             choice=(
-                "No active model choice · V4 curriculum freeze is action-free"
+                "No active model choice · Red adapter and repeatable collector are not built yet"
             ),
             confidence=None,
             decisions=1,
@@ -149,12 +155,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             zero_shot_completed=causal_train_examples,
             zero_shot_total=max(8, causal_train_examples),
             adaptation_completed=verified_outcomes,
-            adaptation_total=max(13, verified_outcomes),
+            adaptation_total=max(9, verified_outcomes),
             sealed_completed=unseen,
             sealed_total=max(5, unseen),
             predictions_committed=False,
-            heading="Multi-family option-value curriculum V4",
-            eyebrow="Red curriculum · 12 train / 8 development · transfer later",
+            heading="Observed-arm living-Dex calibration V1",
+            eyebrow="Red repeatable · selected outcomes only · transfer later",
             counter_labels=(
                 "Causal train examples",
                 "Verified development outcomes",
@@ -214,17 +220,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "mutations 9/9 · ROM/private/action/frame/claim/prediction/teacher 0"
             ),
             (
+                "Observed-arm redesign · variable-size menus · full-support propensities · "
+                "hard masks · selected outcomes only · censored targets 0 · V4 retired unexecuted"
+            ),
+            (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "
                 "CE 0.206/0.693 · rows disclosed 0 · no retry"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "
                 "decision · actions 244/244 · frames 16,296/16,296"
-            ),
-            (
-                "Closed DEVELOP_TEAM freeze · 6077173 · CI 32177113545/1 green · manifest d77d9f9d "
-                "· readiness_authentication · effects not attested · reported labels/fits/teacher "
-                "0 · retry 0"
             ),
         ),
     )

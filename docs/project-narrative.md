@@ -1,6 +1,36 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 25: teach the notebook to look, then budget for imperfect lessons
+## August 25: stop grading the road not taken
+
+The project was about to protect another scarce 12+8 Red curriculum when two independent reviews
+found a deeper problem: its lesson was not causal. If the selected action failed, the binary
+ranker marked the other action as preferred even though the other action never ran. The apparent
+training target described a road not taken. Its inputs were little better—almost every choice
+reduced to the same precursor-surplus bit—and the downstream fitter expected a success/failure
+balance no prospective freezer could honestly guarantee.
+
+V4 was retired before it consumed a root. That is not lost progress; it prevents expensive,
+well-audited data from answering the wrong question. The replacement treats living-Pokédex play as
+option-value learning. A decision may contain acquisition, evolution, trade, team development,
+storage, resupply, access, or exploration options. Unavailable options remain visible but can
+never be selected. The behavior distribution is recorded before action. Only the selected action's
+observed consequence becomes a target, and a censored attempt teaches nothing rather than being
+quietly relabelled.
+
+The outcome is no longer one brittle win/loss bit. The model keeps separate estimates for success,
+collection gain, dependency unlock, time, resources, party damage, storage pressure, and
+irreversible loss. A later game—or a later definition of “complete”—can change how those outcomes
+are valued without rewriting the evidence. Eighteen focused tests cover the contract, including
+all eight option kinds, non-uniform and cap-saturating propensities, and weighted normalization;
+the related 84-test slice is green without a ROM.
+
+The next real scene is intentionally repeatable: adapt Red states into this shared anonymous
+schema, generate genuine variable-size menus, run short resettable scenarios, collect at least
+eight train and four new disjoint development outcomes, fit once, and measure calibration and
+variance. It is the first honest data loop toward a model that can plan a living Pokédex; it is not
+yet proof that the model can play Red, transfer to Crystal, or complete either game.
+
+## Earlier August 25: teach the notebook to look, then budget for imperfect lessons
 
 The observer repair is now published as main `c663c3f4` under green CI `32913718889/1`. It did
 not reopen the failed V3 lesson. Instead, a ROM-free classroom proved the rule the next curriculum
