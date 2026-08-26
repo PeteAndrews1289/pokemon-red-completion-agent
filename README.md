@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): preserve the exact reason before another authentic
+> **Current product focus (August 26, 2026): use the published gauges for one exact census.** V2
+> diagnostics shipped through
+> [PR 58](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/58) as main
+> `cca0eb8d`, whose exact-main CI run `32942245005/1` passed 4,910 tests. The
+> [qualification](docs/evidence/red-living-dex-authentic-inventory-v2-diagnostic-qualification-2026-08-26.json)
+> records finite path-free reasons for every private pipeline stage, reconciled safe aggregate
+> coverage/effect counters, 91 focused tests, and 25 killed receipt mutations. It opened no ROM or
+> private capture and changed no learning counter.
+>
+> Exactly one new-identity action-free V2 census is open. It must either freeze the unchanged
+> **8 train / 4 genuine option kinds / 3 families + 4 family-and-location-disjoint development**
+> curriculum or stop once with a finite exact reason and reconciled counts. Stop and reorient at
+> that first terminal; V1 and V2 cannot retry. Draws, claims, controller authority, actions,
+> frames, outcomes, predictions, teacher queries, fitting, sealed Red, Crystal, promotion, and
+> replay remain closed. Boards remain **development 15 · verified 5/9 · causal train 0/8 · fits
+> 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): preserve the exact reason before another authentic
 > census.** The action-free inventory shipped through
 > [PR 56](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/56) as main
 > `98d4f21a`, whose exact-main CI run `32938080397/1` passed 4,831 tests. Its one permitted V1

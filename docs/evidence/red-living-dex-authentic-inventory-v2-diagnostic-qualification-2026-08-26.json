@@ -1,0 +1,186 @@
+{
+  "artifacts": {
+    "coverage_and_freeze": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_inventory.py",
+      "sha256": "0e3ee9b84e50f9a50f0b10eb6d0ff89ef2adbc2fd45648d0c1362c4e116bbbbd"
+    },
+    "diagnostic_contract": {
+      "path": "src/pokemon_red_completion/red_living_dex_inventory_diagnostics.py",
+      "sha256": "bb0b87d5368d3c3380daf8e5e18648b672e43149cc63387c3ee699cb7e2dc5de"
+    },
+    "runner": {
+      "path": "scripts/freeze_red_living_dex_authentic_inventory_v2.py",
+      "sha256": "924b2f124378251771be51a990046eaaeeb852b256719772a351cfba8b5423a7"
+    },
+    "tests": [
+      {
+        "path": "tests/test_freeze_red_living_dex_authentic_inventory_v2_script.py",
+        "sha256": "1559dc94a13e537208b16badca40b668f5956140c1eb1c728db947d47d2fb120"
+      },
+      {
+        "path": "tests/test_red_living_dex_inventory_diagnostics.py",
+        "sha256": "07e3cebf48630e4eb232638e2951587dca26c1046b5abade21a1ef841d58d61e"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_inventory.py",
+        "sha256": "280e49325540c11ef7e98f8b7ee65af0d187fd9a82f3fbbdb91c00c6e04b15a1"
+      }
+    ]
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free V2 source assigns a finite path-free reason to every authentic-inventory stage, retains mathematically reconciled aggregate counters from input authentication through plan publication, distinguishes every exact 8+4 curriculum shortfall, rejects private identity/path-bearing fields and free-form exception text, and records any controller-authority attempt, action, frame, or other protected effect rather than reporting a false zero.",
+    "unsupported": [
+      "authentic_curriculum_coverage_shortfall",
+      "authentic_curriculum_coverage_success",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnostic_contract": {
+    "aggregate_stage_counters": [
+      "authenticated_input_contexts",
+      "contexts_considered",
+      "materializer_namespaces_authenticated",
+      "emulator_states_read",
+      "historical_replays_authenticated",
+      "scenario_projection_attempts",
+      "complete_menus_projected",
+      "zero_effect_checks",
+      "coverage_evaluations",
+      "ready_coverage_plans",
+      "private_plan_encoding_attempts",
+      "private_plan_documents_encoded",
+      "protected_integrity_attempts",
+      "protected_integrity_checks_passed",
+      "private_plan_publication_attempts",
+      "private_plan_records_confirmed"
+    ],
+    "coverage_reasons": [
+      "ready",
+      "insufficient_train_scenarios",
+      "insufficient_development_scenarios",
+      "insufficient_development_families",
+      "insufficient_development_locations",
+      "development_joint_diversity_unsatisfied",
+      "insufficient_disjoint_train_scenarios",
+      "insufficient_train_option_kinds",
+      "insufficient_train_families",
+      "combined_train_gate_unsatisfied"
+    ],
+    "exclusion_reasons": [
+      "sealed_or_unsupported_partition",
+      "consumed_physical_root",
+      "existing_materializer_claim",
+      "fewer_than_three_mapped_options",
+      "empty_party_observation"
+    ],
+    "failure_reasons": [
+      "argument_authentication",
+      "source_authentication",
+      "private_input_authentication",
+      "runtime_authentication",
+      "materializer_namespace_authentication",
+      "state_observation",
+      "historical_replay",
+      "scenario_projection",
+      "zero_effect_authentication",
+      "exact_coverage",
+      "protected_input_integrity",
+      "private_plan_encoding",
+      "private_plan_publication",
+      "unexpected_failure"
+    ],
+    "free_form_failure_text_public": false,
+    "private_identity_values_public": false,
+    "private_path_values_public": false,
+    "v1_retry_allowed": false,
+    "v2_plan_record_identity": "red-living-dex-authentic-inventory-plan-v2"
+  },
+  "effects": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Perform exactly one new-identity V2 action-free authenticated census from the published main commit and exact-main green CI. It must either freeze the unchanged 8-train plus 4-development path-free plan or stop with one finite exact reason and reconciled aggregate counters. Claims, behavior draws, controller authority/actions, emulator frames, outcomes, predictions, teacher queries, and fits must remain zero. Stop and reorient after the first terminal; do not retry V1 or V2."
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32942245005,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32942245005",
+    "merged_main_commit": "cca0eb8dacc3fb90baf9a67172d3996761830ad8",
+    "pull_request": 58,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32942033866,
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/58",
+    "source_bundle_sha256": "99857b1a82271a4e8250ea5ed9a65326b67f4eee15b53982d3ef3f64ffe95022",
+    "source_commit": "a73445f6fe0ef22bbf1114ee189dd8640d6479ce"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-authentic-inventory-v2-diagnostic-qualification.v1",
+  "status": "published_rom_free_v2_diagnostics_qualified_for_one_action_free_census",
+  "targeted_adversarial_cases": {
+    "actual_runner_stage_injections": 8,
+    "coverage_falsifiers": 8,
+    "receipt_mutations_killed": 25,
+    "survived": 0
+  },
+  "verification": {
+    "documentation_check": "passed",
+    "focused_v2_tests_passed": 91,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 4910,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed",
+    "mypy_source_files": 268,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "4dae3a8e870cb0a06930ff36689e845c746bed521817e7fc5fa0b1a4138bb4c5",
+      "goal_manager_registry_sha256": "7d121ffaa34ed0d5711a73ea41e3e314e8a53f894678de2bf623a41969915bfd",
+      "scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+      "strategic_navigation_registry_sha256": "61cbef00e0c4e2f192345912fbab118603b5e5a8220f48ab0c9db4a5ffda7f3a"
+    },
+    "related_boundary_tests_passed": 129,
+    "ruff_status": "passed"
+  }
+}

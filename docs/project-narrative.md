@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the diagnostic screen now has exact gauges
+
+V2 reached main `cca0eb8d` through PR 58 and passed 4,910 tests in exact-main CI. It was built and
+qualified without opening a ROM or private capture. Instead of one vague failure lamp, it now has
+a finite path-free terminal for each authentication, namespace, state-read, replay, projection,
+effect, coverage, encoding, integrity, and publication stage. Its aggregate counters reconcile the
+whole private pipeline without exposing a capture identity or path.
+
+The qualification attacked the instrument rather than trusting it: 91 focused tests distinguish
+the stages and exact 8+4 shortfalls, and 25 receipt mutations died with no survivor. A false zero
+or nonzero protected effect cannot quietly become a clean receipt. This is better laboratory
+equipment, not learner progress: causal train remains 0/8, authority 0, transfer 0.
+
+One bounded observation is now justified. The new V2 identity may census the authentic repeatable
+Red bank exactly once. It either proves the unchanged eight-train/four-development classroom and
+freezes its private plan, or explains the smallest real blocker with reconciled safe counts. The
+project stops and reorients at that first terminal. No gameplay, outcome collection, fit, sealed
+test, Crystal run, or replay is part of the census.
+
 ## August 26: the silent census stopped safely, but threw away the reason
 
 The authentic Red inventory boundary reached main `98d4f21a` through PR 56 and passed 4,831 tests

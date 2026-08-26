@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the ROM-free V2 diagnostic qualification
+## Current override: Codex owns one exact action-free V2 census
+
+V2 diagnostic source `a73445f6fe0ef22bbf1114ee189dd8640d6479ce` passed PR CI
+`32942033866/1`, merged through PR 58 as main
+`cca0eb8dacc3fb90baf9a67172d3996761830ad8`, and passed exact-main CI `32942245005/1` with
+4,910 tests. Its
+[qualification](evidence/red-living-dex-authentic-inventory-v2-diagnostic-qualification-2026-08-26.json)
+binds the exact source and registries. Qualification used no ROM/private input and changed no
+gameplay, learning, authority, or transfer counter.
+
+Codex owns exactly one new-identity authenticated V2 census over repeatable, nonsealed, unconsumed
+Red captures. Publish a private plan only if the unchanged gate passes: 8 train scenarios across
+4 genuine option kinds and 3 train families plus 4 development scenarios disjoint from train by
+family and location. Otherwise publish one path-free finite failure and its mathematically
+reconciled safe counts. Stop and reorient at the first terminal. V1 and V2 never retry. No draw,
+claim, controller authority, action, frame, outcome, prediction, teacher query, fit, sealed Red,
+Crystal run, promotion, or replay is open.
+
+Claude remains the optional read-only statistics, leakage, and causal-design reviewer. Antigravity
+remains the optional read-only architecture, claim-boundary, and transfer reviewer. Neither reads
+private captures, executes gameplay, edits the worktree, or delays ordinary work; no verdict is
+claimed for this qualification. Codex adjudicates and publishes. Counters remain **development
+15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned only the ROM-free V2 diagnostic qualification
 
 Inventory source `069c44d9b48d87d586795e4d8ade58133f451e91` passed PR CI, merged through
 PR 56 as main `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed exact-main CI

@@ -1,6 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-26 authentic inventory V1 failed safely; V2 diagnostics active:** Inventory source
+> **2026-08-26 V2 diagnostics published; one exact action-free census active:** Diagnostic source
+> `a73445f6fe0ef22bbf1114ee189dd8640d6479ce` passed PR CI `32942033866/1`, merged through
+> PR 58 as main `cca0eb8dacc3fb90baf9a67172d3996761830ad8`, and passed exact-main CI
+> `32942245005/1` with 4,910 tests. Its
+> [qualification](docs/evidence/red-living-dex-authentic-inventory-v2-diagnostic-qualification-2026-08-26.json)
+> binds the source and registries. Qualification opened no ROM/private capture and changed no
+> gameplay, learning, authority, or transfer counter.
+>
+> Codex owns exactly one new-identity V2 authenticated census over the repeatable, nonsealed,
+> unconsumed Red bank. The finite path-free receipt must reconcile every authenticated context
+> through exclusions, namespace state, state reads, replays, projections, zero-effect checks,
+> coverage, encoding, integrity, and publication. It either freezes the unchanged 8-train plus
+> 4-development plan or stops once with its exact reason and safe counts. Stop and reorient after
+> the first terminal; V1 and V2 never retry.
+>
+> Claude and Antigravity remain optional read-only milestone reviewers; no reviewer verdict is
+> claimed for this qualification. Neither reviewer inspects private captures, executes gameplay,
+> edits the worktree, or blocks ordinary work. No agent owns a draw, claim, controller action,
+> frame, outcome, fit, sealed Red, Crystal, promotion, or replay. Counters remain **development
+> 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 authentic inventory V1 failed safely; V2 diagnostics active:** Inventory source
 > `069c44d9b48d87d586795e4d8ade58133f451e91` passed PR CI, merged through PR 56 as main
 > `98d4f21aab2f0e5c0087c89fc2759122381d1663`, and passed exact-main CI `32938080397/1`
 > with 4,831 tests. The one permitted V1 authenticated all 81 private inputs and failed closed at
