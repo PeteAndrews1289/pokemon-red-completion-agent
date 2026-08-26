@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 26: the counter can now finish the room without ignoring a broken card
+## August 26: the final count ended the old classroom
+
+V3 counted every one of the 81 legacy Red contexts. Eight were honest complete menus; five were
+train and three development. Together they offered only three option kinds, and each partition
+occupied one location. Sixty-five other contexts had fewer than three mapped choices, four failed
+binding enumeration, and four roots were already consumed. The unchanged 8+4 curriculum therefore
+failed exact coverage.
+
+Nothing in Pokémon moved to establish that result. There was no draw, claim, button, frame,
+outcome, prediction, teacher answer, fit, plan, or private leak. The instrument finally answered
+the question it was built to answer, and every inventory identity is now retired. The mistake
+would be to lower the lesson standard or keep excavating saves that were recorded for a different
+purpose.
+
+The project now changes from archaeology to prospective data engineering. It will specify the
+decision-rich captures it needs—complete 3+ semantic choices across acquisition, evolution, party,
+storage, resource, and progression concerns—and create only enough repeatable Red states to meet
+the frozen multi-kind, multi-family, held-out-location contract. A deterministic setup policy may
+bring the game to those states, but the setup is provenance, not a label. The model learns only
+from a selected semantic option and its independently measured consequence. That separation is
+the bridge from one Red script to a transferable living-Pokédex agent.
+
+## Previous August 26: the counter can now finish the room without ignoring a broken card
 
 V3 reached main `1db95546` through PR 61 and passed 4,981 tests in exact-main CI. Every eligible
 context now opens in a fresh emulator, so a failed restore cannot contaminate the next card.

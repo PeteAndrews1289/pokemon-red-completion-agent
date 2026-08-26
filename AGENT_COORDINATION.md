@@ -1,6 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-26 exhaustive V3 published; one whole-bank census active:** Source `8decf85d` passed
+> **2026-08-26 V3 proved the legacy classroom insufficient; prospective capture design active:**
+> The sole V3 census used executable main `1db95546` under CI `32946811445/1`, after PR 62/main
+> `f1855828` passed CI `32947744224/1`. Its
+> [terminal](docs/evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json)
+> reconciles 81 inputs and measures **8 complete menus · train 5 · development 3 · option kinds
+> 3 · one location per partition**. Sixty-five contexts had fewer than three mapped options, four
+> failed enumeration, and four roots were consumed. Exact coverage failed; protected effects and
+> counter deltas are zero; V1/V2/V3 never retry.
+>
+> Codex owns one ROM-free purpose-built capture qualification: schema, deficit-aware exact 8+4
+> coverage planner, setup-versus-decision provenance, repeatable-root ledger, anonymous receipt,
+> and adversarial tests. Deterministic setup may later create decision states but cannot supply
+> learner labels. Publish and reorient before any protected input, setup run, selected arm,
+> outcome, fit, sealed Red, Crystal, promotion, or replay.
+>
+> Claude remains the optional read-only statistics/leakage reviewer; Antigravity the optional
+> read-only architecture/transfer reviewer. No reviewer verdict is claimed for this terminal.
+> Neither reads private captures, executes gameplay, edits the worktree, or blocks ordinary work;
+> Codex adjudicates. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
+> 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 exhaustive V3 published; one whole-bank census active:** Source `8decf85d` passed
 > PR CI `32946586301/1`, merged through PR 61 as main `1db95546`, and passed exact-main CI
 > `32946811445/1` with 4,981 tests. Its
 > [qualification](docs/evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)

@@ -1,0 +1,156 @@
+{
+  "claim_boundary": {
+    "supported": "The sole V3 action-free authenticated census reconciled all 81 frozen Red inputs, evaluated exact coverage once, and established that the complete old bank contains eight genuine 3+ option menus: five train and three development. That is below the unchanged 8-train plus 4-development gate. Sixty-five contexts had fewer than three mapped options, four failed binding enumeration, and four physical roots were already consumed. Every protected effect remained zero, and no private curriculum plan was encoded or published.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "crystal_authorized": false,
+    "full_replay_authorized": false,
+    "model_fit_authorized": false,
+    "outcome_collection_authorized": false,
+    "promotion_authorized": false,
+    "sealed_red_authorized": false,
+    "v1_inventory_retry_allowed": false,
+    "v2_inventory_retry_allowed": false,
+    "v3_inventory_retry_allowed": false
+  },
+  "execution": {
+    "authorization_publication": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32947744224,
+      "main_commit": "f18558284c18413f413966c93825a84a81e5e0f0",
+      "pull_request": 62,
+      "pull_request_ci_run_id": 32947517303
+    },
+    "diagnostic_qualification": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32946811445,
+      "main_commit": "1db9554624178a570a608cbf136a5d74182deee4",
+      "source_bundle_sha256": "e1948ea8288a003b378d33cb50f7e526d970a3fca1b628d3ab758d2f50e5038b"
+    },
+    "inventory_identity": "red-living-dex-authentic-inventory-plan-v3",
+    "private_plan_published": false,
+    "retry_allowed": false,
+    "runner_exit_code": 1
+  },
+  "interpretation": {
+    "coverage_gate_weakened": false,
+    "finding": "V3 exhaustively resolves the old bank rather than another adapter stage. Five train scenarios cannot meet the minimum of eight. Three development scenarios cannot meet the minimum of four, and the available scenarios also provide only three offered option kinds and one location per partition. The old bank therefore cannot support the preregistered complete-menu curriculum even though eight individual contexts are technically usable.",
+    "smallest_next_problem": "Retire the old inventory identities and design a purpose-built capture curriculum that prospectively creates repeatable, complete 3+ option menus at genuine living-Pokedex decisions. It must fill the measured deficits without relabeling, resampling by outcome, lowering the 8+4 gate, using sealed roots, or teaching controller sequences. Capture creation may use a deterministic setup policy, but model targets must come only from independently observed selected-arm outcomes."
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "next_gate": {
+    "purpose": "Qualify a ROM-free purpose-built capture contract and frozen coverage specification first. It must declare required option kinds, transformation families, location separation, repeatability, complete-menu observation, setup-policy isolation, selected-arm outcome semantics, root accounting, privacy, and interruption handling. Publish and reorient before any gameplay creates a new capture.",
+    "protected_input_allowed_before_capture_contract_publication_and_reorientation": false,
+    "v1_retry_allowed": false,
+    "v2_retry_allowed": false,
+    "v3_retry_allowed": false
+  },
+  "product_interpretation": "This is the decisive end of mining the legacy Red capture bank, not a failure of the title-neutral learner. It replaces repeated inventory archaeology with prospective data engineering aimed directly at the cross-game living-Pokedex mission: genuine semantic choices, observed consequences, and adapters that can later be implemented for Crystal and other games.",
+  "raw_path_free_receipt": {
+    "aggregate_counts": {
+      "authenticated_input_contexts": 81,
+      "binding_enumeration_attempts": 77,
+      "binding_enumerations_completed": 73,
+      "complete_menus_projected": 8,
+      "contexts_considered": 81,
+      "coverage_evaluations": 1,
+      "emulator_states_restored": 77,
+      "historical_replay_attempts": 73,
+      "historical_replays_authenticated": 73,
+      "materializer_namespaces_authenticated": 77,
+      "observation_attempts": 77,
+      "observations_completed": 77,
+      "private_plan_documents_encoded": 0,
+      "private_plan_encoding_attempts": 0,
+      "private_plan_publication_attempts": 0,
+      "private_plan_records_confirmed": 0,
+      "protected_integrity_attempts": 0,
+      "protected_integrity_checks_passed": 0,
+      "ready_coverage_plans": 0,
+      "scenario_projection_attempts": 8,
+      "state_restore_attempts": 77,
+      "zero_effect_checks": 77
+    },
+    "coverage": {
+      "candidate_development_subset_count": 0,
+      "development_family_count": 3,
+      "development_location_count": 1,
+      "development_offered_option_kind_count": 3,
+      "development_scenario_count": 3,
+      "exact_plan_scenario_count": 0,
+      "identity_fields_public": 0,
+      "maximum_disjoint_train_family_count": 0,
+      "maximum_disjoint_train_option_kind_count": 0,
+      "maximum_disjoint_train_scenario_count": 0,
+      "minimum_train_development_family_overlap": 0,
+      "minimum_train_development_location_overlap": 0,
+      "private_path_fields": 0,
+      "qualifying_development_subset_count": 0,
+      "scenario_count": 8,
+      "schema": "pokemon.red.living-dex-action-free-coverage-diagnostic.v2",
+      "status": "insufficient_train_scenarios",
+      "train_family_count": 3,
+      "train_location_count": 1,
+      "train_offered_option_kind_count": 3,
+      "train_scenario_count": 5
+    },
+    "effects": {
+      "behavior_draws": 0,
+      "controller_actions": 0,
+      "controller_authority_attempts": 0,
+      "emulator_frames_advanced": 0,
+      "model_fits": 0,
+      "model_predictions": 0,
+      "outcomes_observed": 0,
+      "private_identity_fields_published": 0,
+      "private_path_fields": 0,
+      "root_claims": 0,
+      "teacher_queries": 0
+    },
+    "effects_verified_zero": true,
+    "exclusions": {
+      "binding_enumeration_failure": 4,
+      "consumed_physical_root": 4,
+      "empty_party_observation": 0,
+      "existing_materializer_claim": 0,
+      "fewer_than_three_mapped_options": 65,
+      "historical_replay_failure": 0,
+      "scenario_projection_failure": 0,
+      "sealed_or_unsupported_partition": 0,
+      "state_observation_failure": 0,
+      "state_restore_failure": 0
+    },
+    "failure_reason": "exact_coverage",
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "protected_effect_total": 0,
+    "schema": "pokemon.red.living-dex-exhaustive-inventory-diagnostic.v3",
+    "status": "failed_closed"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-exhaustive-inventory-attempt.v3",
+  "status": "failed_closed_at_exact_coverage_without_retry"
+}

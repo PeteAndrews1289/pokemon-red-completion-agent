@@ -5,7 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): count the whole authentic classroom once.** Exhaustive
+> **Current product focus (August 26, 2026): stop mining the old classroom; create the right
+> lessons.** The sole exhaustive census used executable main `1db95546` under CI
+> `32946811445/1`, after its authorization reached main `f1855828` through
+> [PR 62](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/62) and passed CI
+> `32947744224/1`. Its
+> [path-free terminal](docs/evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json)
+> reconciles all **81** contexts and proves the legacy bank contains only **8 complete menus: 5
+> train · 3 development · 3 offered option kinds · 1 location per partition**. It also records 65
+> fewer-than-three-option contexts, 4 binding-enumeration failures, and 4 consumed roots. Exact
+> 8+4 coverage failed; every protected effect remained zero; V1/V2/V3 cannot retry.
+>
+> The active gate is ROM-free purpose-built capture qualification. Build a prospective schema,
+> deficit-aware coverage planner, repeatable-root ledger, and setup-versus-decision provenance
+> boundary for complete 3+ option living-Pokedex choices. The gate remains **8 train / 4 genuine
+> option kinds / 3 families + 4 family-and-location-disjoint development**. A deterministic setup
+> policy may later create a decision state, but setup actions never become model targets; learning
+> comes only from a randomized selected arm and its independently observed outcome. Publish and
+> reorient before any new capture, outcome, fit, sealed Red, Crystal run, promotion, or replay.
+> Boards stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+> authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): count the whole authentic classroom once.** Exhaustive
 > V3 shipped through
 > [PR 61](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/61) as main
 > `1db95546`; exact-main CI `32946811445/1` passed 4,981 tests. Its

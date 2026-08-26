@@ -1,6 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: the conveyor can finish the classroom; count it once
+## August 26 scene: the final count says the classroom is too small
+
+Resume the conveyor and let it process all **81** cards. End on **8 COMPLETE MENUS**, then split
+them into **TRAIN 5 · DEVELOPMENT 3 · OPTION KINDS 3 · ONE LOCATION PER PARTITION**. Stack the
+rest into **65 FEWER THAN 3 OPTIONS · 4 ENUMERATION FAILURES · 4 CONSUMED ROOTS**. Turn the exact
+coverage lamp red without moving the safety rail: **BUTTONS 0 · FRAMES 0 · DRAWS 0 · CLAIMS 0 ·
+OUTCOMES 0 · PREDICTIONS 0 · TEACHERS 0 · FITS 0 · PRIVATE PLAN 0 · LEAKS 0**.
+
+Stamp **V1/V2/V3 RETIRED · NO RETRY · GATE NOT LOWERED**. Cross out a fourth census. Replace the
+old box of saves with blank capture cards labelled **COMPLETE 3+ MENU · GENUINE EXECUTORS ·
+REPEATABLE ROOT · KIND/FAMILY/LOCATION DEFICIT**. Draw a wall between **DETERMINISTIC SETUP** and
+**LEARNER DECISION**. Arrows stop at the wall; only **RANDOMIZED SELECTED SEMANTIC ARM → FRESH
+OBSERVED OUTCOME** crosses into training.
+
+The spoken line is: **“We did not fail to train a model here. We proved that data recorded for a
+walkthrough cannot teach the choices required by a living Pokédex—and stopped pretending it
+could.”** End on **PURPOSE-BUILT CONTRACT → MINIMUM NEW RED CAPTURES → 8+4 PLAN → CAUSAL OUTCOMES
+→ RED EVALUATION → FROZEN-WEIGHT CRYSTAL TRANSFER**.
+
+## Previous August 26 scene: the conveyor can finish the classroom; count it once
 
 Open on **PR 61 · MAIN 1DB95546 · CI 32946811445/1 · 4,981 TESTS**. Put every eligible card in a
 fresh emulator sleeve. Send broken cards into anonymous bins: **RESTORE · OBSERVE · ENUMERATE ·

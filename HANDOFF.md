@@ -12,7 +12,35 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: exhaustive V3 published; run one whole-bank census
+## 2026-08-26: exhaustive V3 proved the old bank insufficient; build purpose-made captures
+
+The sole V3 census ran from published executable main
+`1db9554624178a570a608cbf136a5d74182deee4` under exact-main CI `32946811445/1`, after its
+one-shot authorization merged through [PR 62](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/62)
+as main `f18558284c18413f413966c93825a84a81e5e0f0` and passed CI `32947744224/1`. Its
+[path-free terminal](docs/evidence/red-living-dex-exhaustive-inventory-v3-failure-2026-08-26.json)
+reconciles all **81** authenticated contexts, projects **8** complete 3+ option menus, evaluates
+coverage once, and fails closed at `exact_coverage`. The complete bank contains **5 train · 3
+development · 3 offered option kinds · 1 location per partition**. It also records **65
+fewer-than-three-option contexts · 4 binding-enumeration failures · 4 consumed roots**.
+
+Every protected effect is exactly zero: no draw, claim, controller authority/action, frame,
+outcome, prediction, teacher query, fit, private plan, or published identity/path. V1, V2, and V3
+are permanently closed. Do not retry, lower the gate, relabel binary menus, or call the eight
+menus training examples. Counters remain **development 15 · verified 5/9 · causal train 0/8 ·
+fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+Active work is ROM-free purpose-built capture qualification. Define a prospective schema and
+deficit-aware coverage planner for genuine repeatable living-Pokedex decisions: complete 3+
+semantic options, 8 train across 4 option kinds and 3 transformation families, plus 4 development
+scenarios disjoint from train by family and location. Deterministic setup may create a decision
+state later, but setup buttons can never become learner labels; only a randomized selected arm and
+its independently observed outcome may train. Prove root uniqueness/repeatability, setup-versus-
+decision provenance, privacy, interruption handling, and exact accounting on adversarial fixtures.
+Publish and reorient before opening a ROM/private capture or running setup, outcomes, fitting,
+sealed Red, Crystal, or replay.
+
+## Previous 2026-08-26: exhaustive V3 published; run one whole-bank census
 
 The exhaustive successor was published from source
 `8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb` through
