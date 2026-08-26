@@ -4,15 +4,14 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
-> active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The 10+5 lesson schedule
-> and reusable routed-semantic composer are published. The current result is still execution red:
-> fourteen slots need concrete private route/terminal/provider attestations and all fifteen need a
-> durable claim-before-input setup runner. Build and attack only that ROM-free setup layer next,
-> then publish and reorient before private setup. After complete captures exist, collect at least
-> 8 train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
-> calibration/variance. Stop before a powered benchmark, sealed Red, Crystal execution, promotion,
-> or full replay. See [routed-semantic-goal-composition-v1.md](routed-semantic-goal-composition-v1.md)
-> and [red-living-dex-prospective-capture-plan-v1.md](red-living-dex-prospective-capture-plan-v1.md).
+> active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The 10+5 schedule,
+> routed-semantic composer, and durable no-retry setup runner are published. Actual private Red
+> bindings remain absent. Next qualify the action-free materializer and freeze one exact fifteen-
+> slot plan with all forty-five genuine arms and fourteen routed joins; prove zero input and frames,
+> publish aggregate evidence, and reorient before setup execution. After complete captures exist,
+> collect at least 8 train + 4 disjoint development selected-arm outcomes, fit once on train, and
+> report descriptive calibration/variance. Stop before a powered benchmark, sealed Red, Crystal,
+> promotion, or replay. See [red-living-dex-setup-campaign-v1.md](red-living-dex-setup-campaign-v1.md).
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

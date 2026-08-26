@@ -69,7 +69,7 @@ budget reconciliation, budget exhaustion, verifier side effects, state drift, an
 
 Publication passed 36 focused tests, 168 related tests and the full 5,057-test non-integration
 suite, plus Ruff, mypy over 273 source files, public-artifact, documentation and generated-registry
-checks. The Red-plan re-audit kept fourteen concrete private route/terminal bindings and a durable
-setup runner explicitly missing. That concrete setup layer is now the active gate.
-Repeatable semantic trade also remains a separate full-living-Pokédex blocker; this seam does not
-erase it.
+checks. The later Red setup campaign published the structural fifteen-slot binding contract and
+durable runner through PR 71 as main `1d5cab67` under exact-main CI `32965956178/1`. Actual private
+bindings remain unmaterialized; their action-free materializer is now the active gate. Repeatable
+semantic trade also remains a separate full-living-Pokédex blocker; this seam does not erase it.

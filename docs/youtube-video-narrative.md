@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the lock survives a power loss
+
+Open on **PR 71 · SOURCE 2DF5F4B0 · MAIN 1D5CAB67 · CI 32965956178/1**. Lay out fifteen lesson-room
+cards and forty-five semantic doors. Before a controller icon can light, slide the entire plan into
+a **SEALED** envelope and stamp the first room **CLAIMED**. Branch into three terminals:
+**COMPLETE · FAILED · POWER LOSS**. Reopen each branch and make a second attempt bounce off a large
+**NO RETRY** shield.
+
+Swap one provider proof between two doors and flash **CROSS-JOIN REJECTED**. Make the setup report
+one fewer button than the independent meter and flash **BUDGET REJECTED**. Push an over-budget run
+into a permanent red terminal instead of a trash can. Try to drag **ROOT · MAP · ROUTE · PATH ·
+EPISODE ID · BUTTON SEQUENCE** into the public receipt and make each disappear. Flash
+**16 FOCUSED · 199 RELATED · 49 PROTOCOL · 5,075 PASSED · 274 SOURCE FILES TYPED**.
+
+Then pull back the camera: every address on screen is labelled **SYNTHETIC ROM-FREE FIXTURE**. Keep
+**PRIVATE RED BINDINGS: NOT YET** and **CAUSAL TRAIN: 0/8** red. The spoken line is: **“The lock is
+real, but we have not forged the addresses. Next we verify all fifteen private lesson states without
+pressing a button. Only then can authentic training data begin.”** End on **ACTION-FREE PRIVATE
+BINDINGS → SETUP CAPTURES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT → RED BENCHMARK → FROZEN-WEIGHT
+CRYSTAL**, with **TRADE REQUIRED BEFORE FULL LIVING-DEX AUTHORITY** underneath.
+
 ## August 26 scene: the doorway works, but no classroom address is forged
 
 Open on **PR 68 · MAIN FEE45344 · CI 32959509208/1**. Put **RESUPPLY** on the learner side of a

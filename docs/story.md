@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the doorway works; give every classroom a durable address
+## Current checkpoint: every room has a safe lock; now verify the real addresses
+
+The setup runner is published. Before any button can be pressed, it demands the complete fifteen-
+room plan and all forty-five semantic doors. It signs for each room durably, measures every button
+and frame independently, and keeps success, failure, or a power loss permanent. Nothing retries,
+and no travel instruction becomes an answer for the learner. Sixteen focused tests and 199 nearby
+tests attacked those rules; the complete repository finished at **5,075 passed** on both the PR and
+merged main.
+
+There is still an honest red lamp. Those tests used invented ROM-free addresses. The next job is to
+read the approved private evidence without moving the game and bind every real address—one local
+room, fourteen routed rooms, forty-five genuine option providers. Any missing or cross-wired door,
+teacher route, frame advance, or leaked private identity ends that attempt. Only a complete
+action-free plan can justify a later setup run.
+
+So the score remains **causal train 0/8, authority 0, transfer 0**. That is not another detour: it is
+the final action-free bridge before authentic Red lesson captures and randomized outcomes. Crystal
+still waits for Red evidence, and trade still waits as a required door before the living Pokédex
+mission can ever be called complete.
+
+## Previous checkpoint: the doorway works; give every classroom a durable address
 
 The generic doorway is built. When the model chooses “buy supplies,” Red may privately walk to a
 Mart, but the answer remains “buy supplies”—never “follow these arrows” and never a fake explore

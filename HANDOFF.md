@@ -12,6 +12,31 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-26: durable setup runner published; materialize private bindings next
+
+The setup campaign shipped from source `2df5f4b042b5766bf8f2f5e8863ed5966333a713` through
+[PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71), passed PR CI
+`32965576726/1`, merged as main `1d5cab677dde1197a92ad17e2568dae69a533146`, and passed
+exact-main CI `32965956178/1`. The
+[qualification](docs/evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json)
+binds source bundle `ae581af0…b4e62`, 16 focused, 199 related, 49 protocol, and **5,075
+full-suite tests**.
+
+The published runner requires the canonical 10+5 order, all fifteen slot manifests, all forty-five
+semantic option-provider joins, one local and fourteen routed slots, and the entire private plan
+sealed before any claim. Each setup is durably claimed before the private execution port can touch
+input. Complete, failed, and interrupted terminals are permanent; exact action/frame accounting is
+independently reconciled; public views are aggregate and path-free. Synthetic fixtures prove this
+contract but authenticate no actual Red state or route.
+
+The next gate is narrower than another runner redesign: implement and attack the action-free private
+binding materializer, then freeze and validate exactly one complete fifteen-slot private plan. It
+must preserve all forty-five real arms and fourteen route-terminal-provider joins with **zero
+controller actions and zero frames**. Publish only aggregate evidence and reorient before setup
+execution. No capture, behavior draw, outcome, fit, sealed Red, Crystal, promotion, or replay is
+open. Trade remains a later living-Pokédex blocker. Counters remain **development 15 · verified
+5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 ## 2026-08-26: routed semantic seam published; bind concrete setup slots next
 
 The reusable composition shipped from source

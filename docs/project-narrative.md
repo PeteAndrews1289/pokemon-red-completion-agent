@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: a power loss can no longer turn one lesson into two
+
+The fifteen-slot setup campaign is now a published runner rather than a design. It freezes all
+forty-five semantic option-provider bindings before input, preserves Red's one local and fourteen
+routed lesson census, and places the one-shot claim before the private setup port. Every complete,
+failed, or interrupted setup becomes a permanent terminal. A restarted process recovers the exact
+claim and execution or records unknown accounting honestly; it never fabricates zero work and never
+retries a slot that may have received input.
+
+The verifier also closes the quieter failure modes. A route, observation, provider offer, or
+executable proof joined to the wrong arm fails. The reported action/frame total must equal an
+independent meter. Over-budget work is retained as a failed denominator member rather than erased.
+Public receipts contain aggregate partitions, transport counts, terminal counts, and protected-
+effect zeroes—not roots, maps, routes, paths, observations, episode IDs, or controller sequences.
+
+PR 71 published source `2df5f4b0` as main `1d5cab67`; PR and exact-main CI passed. The gate finished
+with **16 focused, 199 related, 49 protocol, and 5,075 repository tests**, plus type checking over
+274 source files. Those tests used synthetic ROM-free bindings. No private state, ROM, controller,
+teacher, learner label, outcome, fit, authority, or transfer result moved, so the learning counters
+correctly stayed unchanged.
+
+The remaining blocker is now factual rather than architectural: materialize the actual private Red
+10+5 binding plan without pressing a button. The next gate must authenticate all forty-five real
+arms and fourteen route-terminal-provider joins, emit zero actions and frames, and publish only an
+aggregate result. Then the project stops and decides whether to execute setups. This keeps the
+shortest path aimed at eight causal Red train examples and a first real calibration model, while
+keeping Crystal transfer and semantic trade visible as later mission gates.
+
 ## August 26: the doorway works; the classrooms still need addresses
 
 The route-to-skill abstraction is now real. The portable layer keeps the learner's choice semantic:

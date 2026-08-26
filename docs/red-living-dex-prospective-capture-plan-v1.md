@@ -6,6 +6,9 @@ Status: published ROM-free feasibility plan. Source `ca7340d4` merged through PR
 The post-composition requalification merged through PR 69 as main `67d52f86` and passed exact-main
 CI `32960694004/1`; see the
 [combined qualification](evidence/red-routed-semantic-plan-requalification-2026-08-26.json).
+The durable setup campaign then merged through PR 71 as main `1d5cab67` and passed exact-main CI
+`32965956178/1`; see its
+[qualification](evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json).
 It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
@@ -13,8 +16,9 @@ It is subordinate to
 
 ## Result first
 
-The abstract Red schedule satisfies the shared 10+5 curriculum contract, but its concrete setup
-campaign still cannot execute. The exact ten-slot train menu has a
+The abstract Red schedule satisfies the shared 10+5 curriculum contract, and its restart-safe
+setup runner is published, but no actual private binding plan exists yet. The exact ten-slot train
+menu has a
 worst-case-after-any-two-censors probability of
 **2144/2187 = 98.0338%** of selecting at least four distinct option kinds. Family and location
 scope reserves pass. Seven portable kinds have implemented, independently tested Red provider
@@ -24,8 +28,8 @@ Only one of the fifteen requested menus is co-located at an existing physical sk
 Fourteen need route-then-destination composition. The reusable
 [routed semantic goal composition V1](routed-semantic-goal-composition-v1.md) is now published and
 keeps that transport outside the learner label. The plan remains **plan-valid but
-execution-blocked** because no concrete private per-slot route/terminal bindings or durable setup
-runner have been frozen and qualified.
+execution-blocked** because no actual private per-slot route/terminal/provider bindings have been
+materialized and authenticated. The durable structural contract and runner are now qualified.
 
 Trade is a separate full-product gap. The current `GoalKind`/Red binding layer has no repeatable
 semantic trade executor. The first calibration pilot intentionally excludes trade because its
@@ -109,9 +113,9 @@ frames 0 · behavior draws 0 · learner claims/actions/labels/outcomes 0 · pred
 aggregate scope counts, contract digests, the exact probability, and explicit zero/private-field
 counters.
 
-The plan does not authorize a concrete routed skill, setup runner, protected setup campaign, capture
-inventory, selected-arm outcome, model fit, sealed Red evaluation, Crystal execution, promotion,
-or replay.
+The plan and published runner do not authorize a private binding read, protected setup campaign,
+capture inventory, selected-arm outcome, model fit, sealed Red evaluation, Crystal execution,
+promotion, or replay.
 
 ## Next gates
 
@@ -119,9 +123,11 @@ or replay.
 2. **Complete:** publish and adversarially qualify the generic routed-semantic-goal composition
    seam plus the minimal Red adapter.
 3. **Complete:** re-run this ROM-free feasibility audit and bind the published component identities.
-4. **Active:** freeze and qualify the durable Red setup runner and fourteen private route/terminal
-   bindings without opening private setup execution.
-5. Run every setup slot once, census complete captures, then collect randomized outcomes under a
+4. **Complete:** publish and qualify the structural binding contract and durable Red setup runner
+   against ROM-free adversarial fixtures.
+5. **Active:** qualify the action-free private materializer and freeze one exact fifteen-slot
+   binding plan with all forty-five real arms and fourteen routed joins; stop before setup input.
+6. Run every setup slot once, census complete captures, then collect randomized outcomes under a
    new gate.
-6. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
+7. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
    trade; do not let an initial non-trade calibration fit erase that mission requirement.

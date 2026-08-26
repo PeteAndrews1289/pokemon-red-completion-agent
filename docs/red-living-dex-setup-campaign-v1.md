@@ -1,9 +1,12 @@
 # Red living-Pokédex setup campaign V1
 
-Status: ROM-free implementation under qualification. This document does not authorize a private
-binding read, setup execution, behavior draw, learner action, outcome, fit, sealed Red evaluation,
-Crystal execution, promotion, or full replay. It is subordinate to [MISSION.md](../MISSION.md),
-[NORTH_STAR.md](../NORTH_STAR.md), and the generated
+Status: published ROM-free implementation. Source `2df5f4b0` passed
+[PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71) CI
+`32965576726/1`, merged as main `1d5cab67`, and passed exact-main CI `32965956178/1`; see the
+[qualification](evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json). This
+document does not authorize a private binding read, setup execution, behavior draw, learner action,
+outcome, fit, sealed Red evaluation, Crystal execution, promotion, or full replay. It is subordinate
+to [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
 ## Why this exists
@@ -129,14 +132,16 @@ It cannot establish that any private Red route exists, that all fifteen authenti
 materialized, that a setup succeeded, that a causal example exists, that the model improved, or
 that anything transfers to Crystal. The learning counters therefore remain unchanged.
 
-## Next gate after publication
+## Next gate
 
-Publish and reorient first. Then perform one separately authorized, action-free private binding
-materialization that either:
+Publication is complete. Build and adversarially qualify only the action-free private Red binding
+materializer, then freeze and validate one exact fifteen-slot binding plan from approved private
+inputs. It must either:
 
-- freezes all fifteen exact private slot manifests with fourteen genuine routed joins and forty-five
+- freeze all fifteen exact private slot manifests with fourteen genuine routed joins and forty-five
   genuinely bindable semantic arms; or
-- stops with finite aggregate reasons and no controller input.
+- stop with finite aggregate reasons and no controller input.
 
-Only a complete authenticated binding plan may open a later setup-execution decision. Trade remains
-a separate full-living-Pokédex capability after the first Red calibration experiment.
+It must produce zero controller actions and frames and publish only aggregate evidence. Only a
+complete authenticated binding plan may open a later setup-execution decision. Trade remains a
+separate full-living-Pokédex capability after the first Red calibration experiment.

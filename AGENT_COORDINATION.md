@@ -1,5 +1,24 @@
 # Three-agent coordination
 
+> **2026-08-26 durable setup runner published; private action-free bindings active:** Source
+> `2df5f4b0` passed [PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71)
+> CI `32965576726/1`, merged as main `1d5cab67`, and passed exact-main CI `32965956178/1`.
+> The [qualification](docs/evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json)
+> records 16 focused, 199 related, 49 protocol, and 5,075 full-suite tests. It exercised fifteen
+> slots and forty-five semantic option joins only through ROM-free fixtures and changed no learner,
+> authority, or transfer counter.
+>
+> Codex owns only the action-free private Red binding-materialization gate: qualify the materializer,
+> freeze one exact 10+5 plan with all forty-five genuine arms and fourteen routed joins, prove zero
+> controller actions and frames, publish path-free aggregate evidence, and reorient. Do not execute
+> setup, draw an arm, collect an outcome, fit, open sealed Red, run Crystal, promote, or replay.
+>
+> Claude remains the optional read-only statistics/leakage/semantic-overclaim reviewer; Antigravity
+> the optional read-only architecture/claim-boundary/transfer reviewer. Neither implements or
+> blocks ordinary development; Codex adjudicates. Trade remains a later full-mission requirement.
+> Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5
+> · authority 0 · transfer 0**.
+
 > **2026-08-26 routed composition published; concrete Red setup binding active:** Composition source
 > `c7a9feec` passed PR 68 CI `32959232118/1`, merged as main `fee45344`, and passed exact-main CI
 > `32959509208/1`. Requalification source `c3d74d9a` passed PR 69 CI `32960441513/1`, merged as main
