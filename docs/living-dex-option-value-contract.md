@@ -1,6 +1,7 @@
 # Living-Pokédex observed-arm option-value contract
 
-Status: ROM-free shared contract implemented on 2026-08-25. This document is subordinate to
+Status: ROM-free shared contract implemented on 2026-08-25; Red adapter boundary implemented on
+2026-08-26. This document is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
@@ -143,14 +144,24 @@ it cannot support coefficient interpretation, policy-superiority inference, or p
 
 ## Next integration boundary
 
-The next lane builds a repeatable Red adapter and scenario generator. It must:
+The Red adapter, selected-arm collector, and calibration coverage gate now implement items 1–4
+below at the ROM-free contract boundary. The next lane must materialize them from authenticated,
+repeatable Red checkpoints and add durable once-only execution:
 
 1. enumerate genuine multi-family menus from ledger, dependency, reachability, resource, party, and
    storage state;
 2. prove every feature normalization and hard mask before selection;
-3. sample with a replayable, genuinely non-uniform full-support behavior policy that exercises the
-   declared importance-weight cap in ROM-free qualification;
+3. issue exactly one system-random commitment bound to the frozen scenario, partition, and complete
+   menu; persist it before controller input; prohibit reissue; then sample with a replayable,
+   genuinely non-uniform full-support behavior policy that exercises the declared importance-
+   weight cap;
 4. execute one selected semantic skill and settle it through the independent ledger observer;
 5. generate a small calibration batch without consuming sealed or benchmark roots, and report both
    context/menu sampling coverage and censoring diagnostics;
 6. stop before a powered benchmark, Crystal execution, or authority promotion.
+
+Raw callable fixtures are explicitly synthetic and cannot satisfy fit readiness. Counted settled
+rows must trace to the existing Red dual-capability or bounded goal-skill semantic runtimes. The
+next materializer must mutation-test claim-before-randomization, single commitment issuance,
+commitment-before-input persistence, masked/nonselected exclusion, fresh observation binding, and
+no retry after claim. See the [Red adapter design](red-living-dex-observed-arm-adapter.md).

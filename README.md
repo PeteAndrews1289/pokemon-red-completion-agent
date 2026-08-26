@@ -5,28 +5,31 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 25, 2026): build the repeatable Red observed-arm calibration
-> loop.** The proposed V4 12+8 one-shot curriculum is retired unexecuted after independent Claude
-> and Antigravity audits found counterfactual labels for unexecuted alternatives, degenerate binary
-> feature geometry, and an uncontrollable outcome-balance requirement. Its evidence remains
-> historical and it cannot authorize a freeze or trial.
+> **Current product focus (August 26, 2026): publish the Red observed-arm boundary, then build its
+> durable authentic materializer.** The shared title-neutral option-value contract now has a Red
+> adapter, selected-arm collector, and calibration-coverage gate. The boundary derives exact
+> normalization provenance, requires a genuine policy-distinguishable 3+ option menu, isolates
+> option-specific resources, hard-masks unsafe work, neutralizes row order, and keeps every private
+> species/map/item/route identity out of policy input.
 >
-> The replacement shared option-value contract is implemented ROM-free with variable-size
-> anonymous menus, eight portable option kinds, invariant hard masks, replayable full-support
-> behavior propensities, selected-arm-only multi-outcome targets, censoring without labels,
-> train-only fitting, and held-out calibration. Eighteen focused tests and an 84-test related slice
-> pass. See the [contract](docs/living-dex-option-value-contract.md) and
-> [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md). The
-> [ROM-free qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
-> records the 4,748-test repository gate, both independent reviews, main `070f40b1`, PR 50, and
-> green GitHub CI `32925402183/1`.
+> Behavior selection now comes from one scenario/menu/partition-bound system-random commitment,
+> not caller-searchable probability and draw seeds. Only the selected binding executes once; only
+> its fresh observed outcome becomes a target; realized loss of a retained living specimen
+> overrides a positive private verifier. Raw test callables are marked synthetic and cannot open
+> fitting—counted rows must trace to the established semantic acquire/evolve runtime or a bounded
+> Red goal skill. Thirty focused tests, a 79-test related slice, and the complete 4,778-test
+> non-integration repository gate pass. See the
+> [adapter design](docs/red-living-dex-observed-arm-adapter.md),
+> [contract](docs/living-dex-option-value-contract.md), and
+> [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
 >
-> Active `repeatable-red-living-dex-option-value-calibration-v1` next builds the Red adapter and
-> bounded repeatable collector, then targets eight settled train outcomes across four option kinds
-> and three transformation families plus four new disjoint development outcomes. One train-only
-> fit and paired descriptive calibration/variance report follow. This pilot sizes a later powered
-> benchmark; it does not claim gameplay authority or transfer. Boards remain **development 15 ·
-> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+> The next gate is a durable, repeatable Red scenario materializer: enumerate authentic complete
+> menus, claim before selection, issue and persist exactly one behavior commitment before
+> controller input, forbid reissue/retry, bind at least four genuine option kinds, and settle 8
+> train + 4 family/location-disjoint development outcomes. Then fit once on train and report
+> development descriptively. This remains an integration/variance pilot, not gameplay authority,
+> a powered benchmark, or Crystal transfer. Boards remain **development 15 · verified 5/9 ·
+> causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 > **Previous product focus (August 21, 2026): the generic public reader is qualified; design V2
 > without reopening V1.** Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI

@@ -12,7 +12,7 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: observed-arm redesign implemented; build the repeatable Red adapter
+## 2026-08-26: Red observed-arm boundary implemented; build the durable materializer
 
 Do **not** freeze or execute the proposed V4 12+8 curriculum. It is retired unexecuted. Claude and
 Antigravity independently found the same experimental defect: when the selected arm failed, the
@@ -21,35 +21,44 @@ also had only two reachable shapes, while its fitter required outcome balance th
 selection could not control. The exact findings and disposition are in the
 [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
 
-The local implementation now has a shared, title-neutral observed-arm contract in
-`src/pokemon_red_completion/living_dex_option_value.py`. It supports variable-size menus and eight
-portable option kinds, retains unavailable rows under hard masks, logs a replayable full-support
-behavior distribution, and trains only on the selected arm's settled outcome. Censored attempts
-have no targets. Separate outcome heads preserve completion gain, dependency unlock, success,
-costs, and irreversible loss so later utility changes do not rewrite history. Model fitting is
-train-only, inverse-propensity weighted, deterministic under input ordering, and evaluated on
-selected development arms without opening unobserved counterfactuals. Eighteen focused tests and
-an 84-test related slice pass ROM-free. Read
-[the contract](docs/living-dex-option-value-contract.md) before adapting it. The
+The shared title-neutral contract in `src/pokemon_red_completion/living_dex_option_value.py` now has
+a Red integration in `red_living_dex_option_adapter.py`, `red_living_dex_option_collector.py`, and
+`red_living_dex_option_calibration.py`. It derives exact context/candidate normalization from
+private state, requires three or more genuine policy-distinguishable available rows, hard-masks
+invariant/resource/storage/mechanical failures, uses neutral seeded ordering, and settles only the
+selected arm from a fresh independent snapshot. A realized loss of a retained living target forces
+failure and irreversible-loss evidence even if a private verifier says success. Read the
+[adapter design](docs/red-living-dex-observed-arm-adapter.md) and
+[contract](docs/living-dex-option-value-contract.md). The earlier shared-contract
 [qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
 records the final **4,748 passed · 3 deselected · 1 expected failure** gate, green Ruff/mypy/docs/
 privacy/registry checks, both read-only external reviews, and publication as main `070f40b1` through
 PR 50 and green GitHub CI `32925402183/1`.
 
-Active `repeatable-red-living-dex-option-value-calibration-v1` is the next two-session lane. Codex
-owns the Red adapter and bounded repeatable collector. First prove with public fixtures that a
-Red-shaped and Crystal-shaped private binding project to the same schema and that a Red fixture can
-produce at least three genuinely different available options, invariant masks, normalized values,
-and replayable propensities. Then collect at least eight settled train outcomes across four option
-kinds and three transformation families plus four new family/location-disjoint development
-outcomes. Fit one train-only model and produce paired descriptive calibration/variance against
-random and cost-only baselines. Do not call that minimum pilot statistically powered.
+The Red boundary closes two review-discovered loopholes. The collector no longer accepts separate
+caller-selected probability/draw seeds: it issues one CSPRNG commitment bound to the frozen
+scenario, partition, and complete menu. The later materializer must durably claim first, persist
+that commitment before controller input, and prohibit reissue. Raw callable bindings are explicitly
+synthetic and cannot satisfy fit readiness; selected settled rows must be wrapped by the existing
+dual-capability or Red goal-skill semantic runtime. Thirty focused tests, a 79-test related slice,
+and the 4,778-test non-integration repository gate pass. Claude's initial review returned
+`GO-WITH-FIXES` and caused both corrections;
+Antigravity's post-change review returned `GO` with no P0 blocker. Claude CLI authentication was
+unavailable for the requested post-fix re-review and that is recorded honestly.
 
-Claude is the read-only experimental-design reviewer for leakage, causal validity, calibration,
-and power. Antigravity is the read-only cross-title/adversarial reviewer for schema invariance,
-identity leakage, masks, and replayability. Neither agent implements, executes private gameplay,
-or blocks ordinary work; Codex makes and documents the final decision. Stop before a powered
-benchmark, sealed Red, Crystal execution, promotion, or full replay. Counters remain **development
+Active `repeatable-red-living-dex-option-value-calibration-v1` now moves to the durable authentic
+scenario materializer. It must enumerate complete 3+ row menus from repeatable nonsealed Red
+checkpoints, bind at least four genuine option kinds, claim before randomization, persist exactly
+one commitment before action, forbid reissue/retry, execute only one selected skill, and settle at
+least eight train plus four family/location-disjoint development outcomes. Fit once on train and
+produce only descriptive development calibration/variance. Do not call the minimum pilot powered.
+
+Claude remains the read-only experimental-design reviewer for leakage, causal validity,
+calibration, and power when its session is available. Antigravity remains the read-only
+cross-title/adversarial reviewer for schema invariance, identity leakage, masks, and replayability.
+Neither agent implements, executes private gameplay, or blocks ordinary work; Codex makes and
+documents the final decision. Stop before a powered benchmark, sealed Red, Crystal execution,
+promotion, or full replay. Counters remain **development
 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Earlier 2026-08-25: V3's first train trial was safely censored; observe failures before V4
