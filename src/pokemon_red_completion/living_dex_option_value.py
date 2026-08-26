@@ -17,6 +17,7 @@ import re
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import cast
 
 import numpy as np
 from numpy.typing import NDArray
@@ -870,7 +871,7 @@ def fit_living_dex_option_value(
     left = design.T @ weighted_design + ridge_value * penalty
     right = design.T @ (weights[:, np.newaxis] * targets)
     try:
-        parameters = np.linalg.solve(left, right)
+        parameters = cast(NDArray[np.float64], np.linalg.solve(left, right))
     except np.linalg.LinAlgError:
         raise LivingDexOptionValueError("living-Dex option fit is singular") from None
     intercept = parameters[0]

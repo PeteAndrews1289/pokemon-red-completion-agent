@@ -6,7 +6,7 @@
     },
     "implementation": {
       "path": "src/pokemon_red_completion/living_dex_option_value.py",
-      "sha256": "e42095c7983f88186496dbe2b7cddd61d4b8f89d9716b553ad0e12b73602d0b0"
+      "sha256": "3a8507caf16f60b3339d5b5dde1e5135e87f9de7870eae61dc08946b6ce97693"
     },
     "redesign_adjudication": {
       "path": "docs/living-dex-option-value-redesign-audit-2026-08-25.md",
@@ -20,7 +20,7 @@
   "candidate": {
     "audited_against_commit": "dee52ff2ad6b6561fcecd447db891715b0664b2a",
     "publication_status": "uncommitted_working_tree",
-    "source_bundle_sha256": "5c459a20753028a683b10b3d12788bde00e7b4020d2baaee6f467a4054da1a18"
+    "source_bundle_sha256": "6b61e533e90cda08bca1142f928bcc8e65f1b49a7ec3d90f76e0ce88e2d15c86"
   },
   "claim_boundary": {
     "supported": "A ROM-free title-neutral contract can represent variable-size living-Pokedex option menus, hard-mask unavailable actions, log replayable full-support behavior propensities, learn separate outcomes only from the selected arm, exclude censored targets, fit on train only, and evaluate selected development arms without identity features or fabricated counterfactual labels.",
