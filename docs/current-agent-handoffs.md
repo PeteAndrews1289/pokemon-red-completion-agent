@@ -6,20 +6,23 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the concrete Red source adapter and one action-free freeze
+## Current override: Codex owns one action-free authentic Red plan freeze
 
-The action-free whole-plan materializer is published from source
-`89f967f97390b1d0b8440863b5144cfaa1ad6cb1` through PR 73, merged as main
-`ad0e6049265fbfb0743a217b96dec93d608bf4d9`, and green at exact-main CI `32971132659/1`. The
-[qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
-binds 12 direct, 94 related setup/plan/protocol, 49 protocol, and 5,087 full-suite tests. It used
-only synthetic ROM-free sources and changed no learner, authority, or transfer counter.
+The concrete private Red source adapter is published from source
+`8b9c9f73c75ab06f0dff464ba27b1ff14933a660` through PR 75, merged as main
+`0daf5a5d1edb688d21b7a4f290d4686ea12dec4c`, and green at exact-main CI `32981526970/1`. The
+[qualification](evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
+binds 24 direct, 177 combined related-regression, and 5,111 full-suite tests. It used only typed
+synthetic ROM-free witnesses, invoked no executor or verifier, and changed no learner, authority,
+or transfer counter.
 
-Codex owns only the concrete private Red setup-binding source adapter and one later action-free
-private plan freeze. Qualify the adapter without protected access; require the canonical fifteen-
-slot order, all forty-five genuine semantic provider arms, one local and fourteen routed slots,
-exact route-terminal-provider joins, zero protected-effect deltas, and a path-free aggregate. Stop
-and reorient before calling the published setup runner.
+Codex now owns exactly one separately recorded action-free private plan freeze. Bind approved Red
+captures, exact route terminals, fresh observations, and allowlisted provider offers into the
+canonical catalog; require the fifteen-slot order, all forty-five genuine semantic provider arms,
+one local and fourteen routed slots, exact route-terminal-provider joins, zero protected-effect
+deltas, current-user owner-private input, and a path-free aggregate. Stop and reorient before
+calling the published setup runner. A failed or changed protected attempt cannot be repaired into a
+success or retried after any protected effect.
 
 Claude is the optional read-only statistics, causal-design, leakage, and semantic-overclaim
 reviewer. Antigravity is the optional read-only architecture, portability, and claim-boundary

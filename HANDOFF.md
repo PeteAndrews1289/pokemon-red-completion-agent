@@ -12,7 +12,36 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: action-free binding materializer published; qualify the authentic source next
+## 2026-08-26: concrete Red source adapter published; freeze one authentic plan next
+
+The adapter shipped from source `8b9c9f73c75ab06f0dff464ba27b1ff14933a660` through
+[PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75), passed PR CI
+`32981065341/1`, merged as main `0daf5a5d1edb688d21b7a4f290d4686ea12dec4c`, and passed
+exact-main CI `32981526970/1`. The
+[qualification](docs/evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
+binds source bundle `4cbb0868…c65d`, 24 direct, 177 combined related-regression, and **5,111
+full-suite tests**.
+
+The typed producer accepts coherent Red/traversal observations, available executable offers from
+the exact published provider allowlist, and complete semantic-router plans. It derives the exact
+fifteen slots, forty-five provider arms, three local options, and forty-two routed options without
+invoking any executor or verifier. The freezer accepts only current-user owner-private input
+outside the repository and rereads/re-hashes the full catalog on all seventeen source interactions.
+Changed, detached, aliased, synthetic, unavailable, teacher-derived, actionful, or leaking inputs
+fail closed.
+
+Do not overclaim it. Qualification used only synthetic ROM-free witnesses. No authentic private
+catalog was read or sealed; no setup, controller, frame, behavior draw, outcome, fit, authority, or
+transfer counter moved.
+
+The next gate is exactly one separately recorded action-free private plan freeze. Bind approved
+captures, routes, terminal observations, and allowlisted provider offers; require all 15/45/42
+joins and zero protected-effect deltas; publish only aggregate evidence; then stop and reorient
+before invoking the setup runner. Trade remains a later living-Pokédex blocker. Counters remain
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous 2026-08-26: action-free binding materializer published; qualify the authentic source next
 
 The materializer shipped from source `89f967f97390b1d0b8440863b5144cfaa1ad6cb1` through
 [PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73), passed PR CI

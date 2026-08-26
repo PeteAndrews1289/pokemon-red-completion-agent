@@ -8,33 +8,32 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the action-free materializer is published; qualify the authentic source
+## Current checkpoint: the concrete Red source is published; freeze one authentic plan
 
-The materializer shipped through PR 73 from source `89f967f9`, merged as main `ad0e6049`, and
-passed exact-main CI `32971132659/1`. Its
-[qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)
-records 12 direct, 94 related setup/plan/protocol, 49 protocol, and 5,087 repository tests. No ROM,
-private capture, controller input, frame, behavior draw, learner label, outcome, prediction,
-teacher query, fit, authority, or transfer result was used.
+The adapter shipped through PR 75 from source `8b9c9f73`, merged as main `0daf5a5d`, and passed
+exact-main CI `32981526970/1`. Its
+[qualification](evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
+records 24 direct, 177 combined related-regression, and 5,111 repository tests. No ROM, private
+capture, controller input, frame, behavior draw, learner label, outcome, prediction, teacher query,
+fit, authority, or transfer result was used.
 
-The boundary requests all fifteen canonical slots from one authenticated private-source protocol,
-checks one independent protected-effect meter before and after every source interaction, validates
-all forty-five semantic provider arms plus the one-local/fourteen-routed census, reattests the
-unchanged input set, and seals the whole exact plan. Ordinary private source failures are
-sanitized; process interruptions propagate without a false record; public output is aggregate and
-path-free. Synthetic fixtures qualify the boundary but are not authentic Red evidence.
+The typed producer now accepts coherent Red/traversal observations, available executable offers
+from the exact published provider allowlist, and complete semantic-router plans. It derives the
+canonical fifteen slots, forty-five provider arms, three local options, and forty-two routed
+options without invoking an executor or verifier. The owner-private freezer rereads and rehashes
+the complete catalog on all seventeen source interactions, shares the materializer's independent
+protected-effect meter, and publishes only aggregate path-free evidence. Synthetic witnesses
+qualify the implementation but are not authentic Red evidence.
 
 The next gate must:
 
-1. implement and adversarially qualify the concrete private Red source adapter without opening
-   protected inputs;
-2. bind approved Red captures, route terminals, fresh observations, and existing semantic
-   providers to the published source protocol;
-3. under a separately recorded action-free gate, authenticate the complete protected input set
+1. under a separately recorded action-free gate, bind approved Red captures, route terminals,
+   fresh observations, and existing semantic providers to the published source protocol;
+2. authenticate the complete protected input set
    and freeze exactly one canonical 10+5 private plan;
-4. preserve all forty-five genuine arms, fourteen routed joins, and one local slot;
-5. prove every controller, frame, learner, model, claim, and teacher delta remains zero; and
-6. publish only aggregate success or finite failure evidence, then stop before invoking the setup
+3. preserve all forty-five genuine arms, fourteen routed joins, and one local slot;
+4. prove every controller, frame, learner, model, claim, and teacher delta remains zero; and
+5. publish only aggregate success or finite failure evidence, then stop before invoking the setup
    runner.
 
 Only a complete authentic plan may open the later one-shot setup campaign. Complete setup captures

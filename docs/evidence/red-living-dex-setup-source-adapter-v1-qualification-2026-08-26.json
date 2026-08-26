@@ -1,0 +1,140 @@
+{
+  "adapter_contract": {
+    "actionful_setup_execution_authorized": false,
+    "catalog_reads_per_complete_materialization": 17,
+    "concrete_private_red_source_adapter_implemented": true,
+    "development_slots": 5,
+    "executable_or_verifier_invocations_during_production": 0,
+    "local_option_bindings": 3,
+    "local_slots": 1,
+    "option_provider_bindings": 45,
+    "private_plan_sealed": false,
+    "routed_option_bindings": 42,
+    "routed_slots": 14,
+    "runtime_private_bindings_authenticated": false,
+    "runtime_private_routes_executed": false,
+    "slot_count": 15,
+    "train_slots": 10,
+    "typed_runtime_witness_producer_implemented": true
+  },
+  "artifacts": {
+    "design": {
+      "path": "docs/red-living-dex-setup-source-adapter-v1.md",
+      "sha256": "78046376e9d9cf8a0dacba6eccf965a0017b4cb12bbf21f3e460189fcc3864f7"
+    },
+    "freezer": {
+      "path": "scripts/freeze_red_living_dex_setup_bindings.py",
+      "sha256": "7aa984a3e27377e7de70fc82683059e4872649471b33eddf3f7a8eaa0387b232"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_source.py",
+      "sha256": "b366bba5047f0d7f936c60738aff65b672a2e42859f12345c49ffb0d493a9ffb"
+    },
+    "local_qualification": {
+      "path": "docs/evidence/red-living-dex-setup-source-adapter-v1-local-qualification-2026-08-26.json",
+      "sha256": "c63b76b9c7e055ac4641c3419bd2c8879315ed41d613ae0c14ba59791e726759"
+    },
+    "script_tests": {
+      "path": "tests/test_freeze_red_living_dex_setup_bindings_script.py",
+      "sha256": "3e9c0fd3f582889094d7bf8108ee9895f5cee164ff7be447a946809430e0a8d7"
+    },
+    "source_tests": {
+      "path": "tests/test_red_living_dex_setup_source.py",
+      "sha256": "55aee156a025f7296b60af6049b5e71a4a639b38c4312714bedc45db9281d4f1"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published exact-source code supplies the concrete action-free Red source adapter and owner-private freezer for the canonical fifteen-slot setup materializer. Typed Red observations, exact allowlisted provider offers, and complete RoutePlan witnesses derive all forty-five semantic arms and forty-two routed joins without invoking any skill. The source is reread and rehashed on all seventeen interactions, protected-effect drift fails closed, and public evidence is aggregate and path-free.",
+    "unsupported": [
+      "actionful_red_setup_execution",
+      "actual_private_red_binding_plan",
+      "authentic_private_red_input_read",
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "runtime_private_binding_authentication",
+      "runtime_private_route_execution",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "next_gate": {
+    "actionful_setup_execution_allowed": false,
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Record one separate action-free private-input gate and run the published freezer once. It must either seal all fifteen slots, all forty-five genuine semantic offers, and all fourteen routed joins with zero protected effects, or return one finite path-free failure; stop before invoking the durable setup runner."
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_binding_reads": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32981526970,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32981526970",
+    "merged_main_commit": "0daf5a5d1edb688d21b7a4f290d4686ea12dec4c",
+    "pull_request": 75,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32981065341,
+    "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32981065341",
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75",
+    "source_bundle_sha256": "4cbb086897763c911d98a81afb67b11aa5fa0f734ce55a131d91633620bdc65d",
+    "source_commit": "8b9c9f73c75ab06f0dff464ba27b1ff14933a660"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-setup-source-adapter-qualification.v1",
+  "status": "published_concrete_action_free_source_adapter_qualified_authentic_plan_still_missing",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_tests_passed": 24,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5111,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed_at_pull_request_and_exact_merged_main_commit",
+    "mypy_source_files": 276,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "related_regression_tests_passed": 177,
+    "ruff_format_status": "passed",
+    "ruff_status": "passed"
+  }
+}

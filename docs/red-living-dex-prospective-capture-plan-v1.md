@@ -12,6 +12,9 @@ The durable setup campaign then merged through PR 71 as main `1d5cab67` and pass
 The action-free binding materializer then merged through PR 73 as main `ad0e6049` and passed
 exact-main CI `32971132659/1`; see its
 [qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json).
+The concrete source adapter then merged through PR 75 as main `0daf5a5d` and passed exact-main CI
+`32981526970/1`; see its
+[qualification](evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json).
 It is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the published
@@ -20,8 +23,8 @@ It is subordinate to
 ## Result first
 
 The abstract Red schedule satisfies the shared 10+5 curriculum contract; its restart-safe setup
-runner and action-free whole-plan materializer are published, but no concrete private source adapter
-or actual binding plan exists yet. The exact ten-slot train menu has a
+runner, action-free whole-plan materializer, and concrete Red source adapter are published, but no
+actual private binding plan exists yet. The exact ten-slot train menu has a
 worst-case-after-any-two-censors probability of
 **2144/2187 = 98.0338%** of selecting at least four distinct option kinds. Family and location
 scope reserves pass. Seven portable kinds have implemented, independently tested Red provider
@@ -131,9 +134,11 @@ promotion, or replay.
    against ROM-free adversarial fixtures.
 5. **Complete:** publish and qualify the action-free private materializer against synthetic
    adversarial sources.
-6. **Active:** qualify the concrete private Red source adapter, then freeze one exact fifteen-slot
-   binding plan with all forty-five real arms and fourteen routed joins; stop before setup input.
-7. Run every setup slot once, census complete captures, then collect randomized outcomes under a
+6. **Complete:** publish and qualify the concrete private Red source adapter without protected
+   access.
+7. **Active:** under a separately recorded action-free gate, freeze one exact fifteen-slot binding
+   plan with all forty-five real arms and fourteen routed joins; stop before setup input.
+8. Run every setup slot once, census complete captures, then collect randomized outcomes under a
    new gate.
-8. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
+9. Before any living-Pokédex or cross-version authority claim, implement and evaluate semantic
    trade; do not let an initial non-trade calibration fit erase that mission requirement.

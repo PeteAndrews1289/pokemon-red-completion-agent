@@ -5,19 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN AD0E6049 · CI 32971132659/1 GREEN · ACTION-FREE RED SETUP-BINDING
-> MATERIALIZER PUBLISHED · 15 SLOTS · 10 TRAIN + 5 DEVELOPMENT · 45 GENUINE SEMANTIC ARM SLOTS ·
-> LOCAL 1 · ROUTED 14 · BASELINE BEFORE SOURCE INSPECTION · SHARED INDEPENDENT EFFECT METER ·
-> INPUT SET REATTESTED UNCHANGED · COMPLETE PLAN SEALED BEFORE SETUP · PUBLIC IDENTITIES/PATHS 0 ·
-> 12 DIRECT / 94 RELATED / 49 PROTOCOL / 5,087 FULL-SUITE TESTS GREEN · ROM/PRIVATE READS/
-> ACTIONS/FRAMES/CLAIMS/OUTCOMES/FITS 0**. Link the
-> [materializer qualification](evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json),
-> [materializer design](red-living-dex-setup-binding-materialization-v1.md),
+> **Current rail:** Show **MAIN 0DAF5A5D · CI 32981526970/1 GREEN · CONCRETE ACTION-FREE RED
+> SOURCE ADAPTER PUBLISHED · 15 SLOTS · 10 TRAIN + 5 DEVELOPMENT · 45 ALLOWLISTED SEMANTIC ARMS ·
+> LOCAL OPTIONS 3 · ROUTED OPTIONS 42 · ROUTED SLOTS 14 · TYPED FRESH OBSERVATIONS + PROVIDER
+> OFFERS + COMPLETE ROUTE PLANS · 17 EXACT CATALOG READS · EXECUTOR/VERIFIER INVOCATIONS 0 ·
+> OWNER-PRIVATE INPUT · SHARED INDEPENDENT EFFECT METER · PUBLIC IDENTITIES/PATHS 0 · 24 DIRECT /
+> 177 COMBINED RELATED-REGRESSION / 5,111 FULL-SUITE TESTS GREEN · ROM/PRIVATE READS/ACTIONS/
+> FRAMES/CLAIMS/OUTCOMES/FITS 0**. Link the
+> [adapter qualification](evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json),
+> [adapter design](red-living-dex-setup-source-adapter-v1.md),
 > [setup campaign](red-living-dex-setup-campaign-v1.md), and
 > [capture contract](living-dex-purpose-built-capture-contract.md).
 >
-> Animate active `repeatable-red-living-dex-option-value-calibration-v1`: **QUALIFY CONCRETE RED
-> SOURCE ADAPTER → ONE ACTION-FREE AUTHENTIC 10+5 PLAN FREEZE → STOP/REORIENT → 15 ONE-SHOT SETUP
+> Animate active `repeatable-red-living-dex-option-value-calibration-v1`: **ONE ACTION-FREE
+> AUTHENTIC 10+5 PLAN FREEZE → VERIFY 15/45/42 + ZERO PROTECTED EFFECTS → STOP/REORIENT → 15 ONE-SHOT SETUP
 > CAPTURES → COMPLETE GENUINE 3+ ROW MENUS → DURABLE CLAIM → ISSUE/PERSIST ONE COMMITMENT → GENUINE
 > SEMANTIC EXECUTORS → ONE SELECTED OUTCOME → 8 TRAIN ACROSS 4 OPTION KINDS / 3 FAMILIES + 4 NEW
 > DISJOINT DEVELOPMENT → TRAIN-ONLY FIT → DESCRIPTIVE CALIBRATION + VARIANCE → STOP/REORIENT**. Show

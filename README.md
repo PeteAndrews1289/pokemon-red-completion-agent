@@ -5,7 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the action-free plan freezer is published; connect
+> **Current product focus (August 26, 2026): the concrete Red source is published; freeze one
+> authentic plan without moving the game.** The adapter shipped through
+> [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75) from source
+> `8b9c9f73`, merged as main `0daf5a5d`, and passed exact-main CI `32981526970/1`. Its
+> [qualification](docs/evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
+> records **24 direct · 177 combined related-regression · 5,111 full-suite tests**.
+>
+> Typed Red observations, allowlisted provider offers, and complete route plans now derive the
+> exact **15 slots · 45 semantic arms · 42 routed options** without invoking a skill. The adapter
+> rereads and authenticates the owner-private catalog on all seventeen source interactions and
+> publishes only aggregate evidence. Qualification used synthetic ROM-free witnesses; no authentic
+> private plan exists yet. Next run one separately recorded action-free 10+5 freeze and stop before
+> invoking the setup runner. Trade remains a later mission requirement. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous product focus (August 26, 2026): the action-free plan freezer is published; connect
 > the authentic Red source without moving the game.** The materializer shipped through
 > [PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73) from source
 > `89f967f9`, merged as main `ad0e6049`, and passed exact-main CI `32971132659/1`. Its

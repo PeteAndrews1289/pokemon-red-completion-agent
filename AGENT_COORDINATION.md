@@ -1,6 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-26 action-free materializer published; concrete private Red adapter active:** Source
+> **2026-08-26 concrete Red source adapter published; one authentic action-free freeze active:**
+> Source `8b9c9f73` passed [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75)
+> CI `32981065341/1`, merged as main `0daf5a5d`, and passed exact-main CI `32981526970/1`.
+> The [qualification](docs/evidence/red-living-dex-setup-source-adapter-v1-qualification-2026-08-26.json)
+> records 24 direct, 177 combined related-regression, and 5,111 full-suite tests. It used typed
+> synthetic ROM-free witnesses and changed no learner, authority, or transfer counter.
+>
+> Codex owns exactly one separately recorded action-free private Red plan freeze. Bind approved
+> inputs into all fifteen slots, forty-five allowlisted provider arms, and forty-two routed option
+> joins; prove every protected-effect delta remains zero; publish a path-free aggregate; and
+> reorient before invoking setup. Do not draw an arm, collect an outcome, fit, open sealed Red, run
+> Crystal, promote, or replay.
+>
+> Claude remains the optional read-only statistics/leakage/semantic-overclaim reviewer; Antigravity
+> the optional read-only architecture/claim-boundary/transfer reviewer. Neither implements or
+> blocks ordinary development; Codex adjudicates. Trade remains a later full-mission requirement.
+> Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5
+> · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 action-free materializer published; concrete private Red adapter active:** Source
 > `89f967f9` passed [PR 73](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/73)
 > CI `32970763796/1`, merged as main `ad0e6049`, and passed exact-main CI `32971132659/1`.
 > The [qualification](docs/evidence/red-living-dex-setup-binding-materialization-v1-qualification-2026-08-26.json)

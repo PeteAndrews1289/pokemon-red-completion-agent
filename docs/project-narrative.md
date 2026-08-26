@@ -1,6 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 26: the whole lesson plan can now freeze before the game moves
+## August 26: the authentic source cable now has a real, tested socket
+
+The concrete Red setup source adapter is published from source `8b9c9f73` as main `0daf5a5d`
+under exact-main CI `32981526970/1`. It takes typed fresh Red observations, available executable
+offers from the exact provider allowlist, and full semantic-router plans. From those private facts
+it derives the frozen fifteen slots, forty-five genuine provider arms, three local options, and
+forty-two routed options without invoking an executor or verifier.
+
+The route digest binds more than arrows. Two paths with the same buttons but different costs or
+Cut/Surf/Strength requirements cannot alias. Detached origins, stale observations, non-allowlisted
+providers, teacher/profile directions, repeated plans, cross-joins, weak file permissions, and
+mid-read catalog replacement all fail. A complete materialization rereads and rehashes the catalog
+seventeen times while the independent protected-effect meter stays at zero.
+
+PR 75 and exact-main CI passed **24 direct, 177 combined related-regression, and 5,111 repository
+tests**, with type checking over 276 source files. The evidence remains deliberately modest: every
+witness was synthetic and ROM-free. No private Red plan was read or sealed, no game moved, and no
+learning counter changed.
+
+That leaves one bounded bridge: under a separately recorded action-free gate, bind the approved
+private Red witnesses into this catalog and run the freezer once. A complete 15/45/42 result can
+open the later setup campaign; a finite failure closes the attempt. Either way, stop before setup
+execution. This is the point where the project finally moves from building safe address machinery
+to proving that the authentic lesson addresses exist.
+
+## Previous August 26: the whole lesson plan can now freeze before the game moves
 
 The action-free setup-binding materializer is published from source `89f967f9` as main
 `ad0e6049`. It establishes its independent protected-effect baseline before inspecting a private

@@ -134,9 +134,9 @@ that anything transfers to Crystal. The learning counters therefore remain uncha
 
 ## Next gate
 
-The action-free whole-plan materializer is now published through PR 73 and exact-main CI
-`32971132659/1`. Implement and adversarially qualify only the concrete private Red source adapter
-without protected access. Then, under a separate action-free gate, authenticate approved inputs and
+The action-free whole-plan materializer is published through PR 73 and exact-main CI
+`32971132659/1`. The concrete private Red source adapter is now also published through PR 75 and
+exact-main CI `32981526970/1`. Under a separate action-free gate, authenticate approved inputs and
 freeze one exact fifteen-slot binding plan. It must either:
 
 - freeze all fifteen exact private slot manifests with fourteen genuine routed joins and forty-five

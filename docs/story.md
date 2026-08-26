@@ -7,7 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the address freezer is safe; connect it to the authentic map
+## Current checkpoint: the authentic-source socket is published; connect the real addresses once
+
+The concrete Red source adapter is published. It accepts typed fresh observations, executable
+offers from the exact provider allowlist, and complete semantic-router plans. It turns them into the
+frozen fifteen rooms and forty-five semantic doors—three local options and forty-two routed
+options—without calling any skill. The owner-private catalog is reread and rehashed seventeen times
+during one complete materialization, while an independent safety meter must stay at zero.
+
+Twenty-four direct tests and 177 combined nearby regressions attacked the socket. The repository
+finished at **5,111 passed** on both the pull request and exact merged main. Same-button routes with
+different traversal requirements no longer alias; stale observations, detached origins, wrong
+providers, teacher directions, cross-joins, weak file protection, and a changed catalog all fail.
+
+But the cable has not been plugged into the private Red evidence. Every passing witness was
+synthetic and ROM-free. No authentic fifteen-room plan exists yet, so causal train remains **0/8**.
+The next move is exactly one separately recorded action-free freeze: bind the approved real
+addresses, require all 15/45/42 joins, publish only aggregate evidence, and stop before setup.
+
+That is the last address proof before authentic lesson captures and randomized outcomes. Crystal
+still waits for measured Red evidence, and trade remains mandatory before the living-Pokédex
+mission can ever be called complete.
+
+## Previous checkpoint: the address freezer is safe; connect it to the authentic map
 
 The action-free materializer is published. It takes one source, checks an independent safety meter
 before even inspecting it, requests all fifteen lesson rooms and forty-five semantic doors in the

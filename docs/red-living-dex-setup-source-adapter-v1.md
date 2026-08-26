@@ -1,8 +1,10 @@
 # Red living-Pokédex setup source adapter V1
 
-Status: locally qualified, publication pending. This gate implements the concrete private Red
-source boundary required by the published fifteen-slot materializer. It did not open a ROM,
-private capture, sealed evaluation input, or emulator, and it did not invoke a setup skill. It is
+Status: published through [PR 75](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/75)
+from source `8b9c9f73`, merged as main `0daf5a5d`, and green under exact-main CI
+`32981526970/1`. This gate implements the concrete private Red source boundary required by the
+published fifteen-slot materializer. It did not open a ROM, private capture, sealed evaluation
+input, or emulator, and it did not invoke a setup skill. It is
 subordinate to [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), and the
 [model-first roadmap](model-first-roadmap.md).
@@ -78,8 +80,8 @@ quality, not the existence of one authentic Red plan.
 
 ## Next gate
 
-Publish this adapter under exact-source green CI. Then record a separate **action-free only** gate
-for approved private inputs and run the freezer once. That attempt must either seal all fifteen
+Record a separate **action-free only** gate for approved private inputs and run the freezer once.
+That attempt must either seal all fifteen
 slots, all forty-five genuine semantic offers, and all fourteen routed joins with zero protected
 effects, or stop with one finite path-free failure. It must stop before invoking the durable setup
 runner. Trade remains a later mission requirement before any full living-Pokédex authority claim.

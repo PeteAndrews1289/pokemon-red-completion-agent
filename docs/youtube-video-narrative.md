@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 26 scene: freeze every real classroom address before moving the game
+## August 26 scene: plug the authentic Red map into a socket that cannot press a button
+
+Open on **PR 75 · SOURCE 8B9C9F73 · MAIN 0DAF5A5D · CI 32981526970/1**. Feed a socket three typed
+cables: **FRESH RED OBSERVATION · ALLOWLISTED PROVIDER OFFER · COMPLETE ROUTE PLAN**. Make it output
+**15 SLOTS · 45 PROVIDERS · LOCAL OPTIONS 3 · ROUTED OPTIONS 42** while the executor and verifier
+counters stay at zero. Read the owner-private catalog seventeen times and make all seventeen hashes
+land on the same value.
+
+Give two paths identical arrows but different Cut requirements and flash **ROUTE IDENTITY DIFFERS**.
+Detach a route origin, swap a provider class, stale an observation, reuse a route, weaken the file
+mode, change the catalog halfway through, and smuggle in a teacher direction. Flash **REJECTED** for
+each. Try to drag a map, species, path, root, or binding onto the public card and make it disappear.
+
+Flash **24 DIRECT · 177 COMBINED RELATED-REGRESSION · 5,111 PASSED · 276 SOURCE FILES TYPED**.
+Then pull back and label every witness **SYNTHETIC ROM-FREE**. Keep **AUTHENTIC PLAN: NOT SEALED ·
+CAUSAL TRAIN: 0/8** red. The spoken line is: **“The real socket exists. Next we connect the approved
+private Red addresses once, without moving the game, and either seal all 15/45/42 joins or stop.”**
+End on **ACTION-FREE AUTHENTIC FREEZE → STOP/REORIENT → SETUP CAPTURES → RANDOMIZED OUTCOMES →
+TRAIN-ONLY FIT**, with **CRYSTAL LATER · TRADE REQUIRED FOR FULL LIVING DEX** underneath.
+
+## Previous August 26 scene: freeze every real classroom address before moving the game
 
 Open on **PR 73 · SOURCE 89F967F9 · MAIN AD0E6049 · CI 32971132659/1**. Put a meter at zero before
 the source cable is even plugged in. Connect an adapter labelled **PRIVATE RED SOURCE** and make it
