@@ -1,0 +1,158 @@
+{
+  "adapter_contract": {
+    "actionful_setup_execution_authorized": false,
+    "catalog_reads_per_complete_materialization": 17,
+    "concrete_private_red_source_adapter_implemented": true,
+    "development_slots": 5,
+    "executable_or_verifier_invocations_during_production": 0,
+    "local_option_bindings": 3,
+    "local_slots": 1,
+    "option_provider_bindings": 45,
+    "private_plan_sealed": false,
+    "routed_option_bindings": 42,
+    "routed_slots": 14,
+    "runtime_private_bindings_authenticated": false,
+    "runtime_private_routes_executed": false,
+    "slot_count": 15,
+    "train_slots": 10,
+    "typed_runtime_witness_producer_implemented": true
+  },
+  "artifacts": {
+    "design": {
+      "path": "docs/red-living-dex-setup-source-adapter-v1.md",
+      "sha256": "d2d15eedfa3dbbe5a019e9e60ebcb617cdeb62eea48530b22042488dfdd0e3e5"
+    },
+    "freezer": {
+      "path": "scripts/freeze_red_living_dex_setup_bindings.py",
+      "sha256": "7aa984a3e27377e7de70fc82683059e4872649471b33eddf3f7a8eaa0387b232"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_source.py",
+      "sha256": "b366bba5047f0d7f936c60738aff65b672a2e42859f12345c49ffb0d493a9ffb"
+    },
+    "prospective_plan": {
+      "path": "configs/red-living-dex-prospective-capture-plan-v1.json",
+      "sha256": "9b809f36a6f287bf64a90c0703043529b947eed1c4a4db0fe8e2e077daf17522"
+    },
+    "script_tests": {
+      "path": "tests/test_freeze_red_living_dex_setup_bindings_script.py",
+      "sha256": "3e9c0fd3f582889094d7bf8108ee9895f5cee164ff7be447a946809430e0a8d7"
+    },
+    "source_tests": {
+      "path": "tests/test_red_living_dex_setup_source.py",
+      "sha256": "55aee156a025f7296b60af6049b5e71a4a639b38c4312714bedc45db9281d4f1"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Locally qualified source now supplies a concrete action-free Red boundary that derives one canonical fifteen-slot, forty-five-provider, forty-two-route private catalog from typed Red observations, exact allowlisted provider offers, and full RoutePlan witnesses; rereads and authenticates the exact catalog on all seventeen materializer interactions; requires a current-user-owned owner-private regular file outside the repository; detects protected-effect drift; and publishes only aggregate path-free materialization evidence.",
+    "unsupported": [
+      "actionful_red_setup_execution",
+      "actual_private_red_binding_plan",
+      "authentic_private_red_input_read",
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "exact_source_github_ci",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "runtime_private_binding_authentication",
+      "runtime_private_route_execution",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "next_gate": {
+    "actionful_setup_execution_allowed": false,
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Publish this exact adapter under green source-bound CI. Then record one separate action-free private-input gate and run the catalog freezer once. It must either seal all fifteen slots, all forty-five genuine semantic offers, and all fourteen routed joins with zero protected effects, or return one finite path-free failure; stop before invoking the durable setup runner."
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_binding_reads": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "exact_source_ci": null,
+    "source_commit": null,
+    "status": "pending"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-setup-source-adapter-local-qualification.v1",
+  "status": "locally_qualified_publication_pending",
+  "verification": {
+    "adversarial_contract_checks": [
+      "aliased_complete_binding_plan_rejected",
+      "catalog_changed_between_reads_rejected",
+      "cross_joined_route_rejected",
+      "detached_route_origin_rejected",
+      "duplicate_key_or_noncanonical_catalog_rejected",
+      "duplicate_route_plan_rejected",
+      "executable_and_verifier_never_invoked",
+      "fresh_observation_forgery_rejected",
+      "hidden_controller_authority_rejected",
+      "missing_or_reordered_slot_rejected",
+      "non_allowlisted_provider_rejected",
+      "non_owner_or_weak_file_mode_rejected",
+      "provider_capability_or_goal_mismatch_rejected",
+      "route_cost_and_requirement_alias_rejected",
+      "synthetic_or_unavailable_provider_rejected",
+      "teacher_or_profile_route_rejected"
+    ],
+    "documentation_check": "passed",
+    "focused_tests_passed": 24,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5111,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "pending",
+    "mypy_source_files": 276,
+    "mypy_status": "passed",
+    "product_focus_check": "pending_reorientation_in_same_change",
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "e34b8e0b1467feaa8884af6ee323c8cefead2384ac1535dfe1d2dc6c7607d5fb",
+      "battle_teacher_sha256": "f977a1416e4c539746eb4f013a5206420ab1832ec6efea51f38afa57fba28de8",
+      "goal_manager_registry_sha256": "1a6b48e6bc886b8e0772a0cba4129aa9936e706b915c2d8ce62c4ee3326c4c63",
+      "goal_manager_teacher_sha256": "b87fff9fbe1b5d98c21fbba0650a553f30f03f7e658f31b1f9a1a478d372d992",
+      "source_bundle_sha256": "4cbb086897763c911d98a81afb67b11aa5fa0f734ce55a131d91633620bdc65d",
+      "strategic_navigation_registry_sha256": "1cf4ed1d0462bcd5c5a55386c7895f42bf6c24a5a580566c445041acbb85473f",
+      "strategic_navigation_teacher_sha256": "575d056ab721afcdfe7c23f6f46ab2158f0f3b768ed3d3554417367a71667efa"
+    },
+    "related_regression_tests_passed": 177,
+    "ruff_format_status": "passed",
+    "ruff_status": "passed"
+  }
+}

@@ -36,6 +36,7 @@ from pokemon_red_completion.red_living_dex_capture_plan import (
     RED_LIVING_DEX_OBSERVER_CONTRACT_SHA256,
     RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS,
     RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES,
+    RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
     RED_ROUTED_SEMANTIC_COMPONENTS,
     RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
     RedLivingDexCapturePlanError,
@@ -46,6 +47,7 @@ from pokemon_red_completion.red_living_dex_capture_plan import (
     qualify_red_living_dex_prospective_capture_plan,
     red_living_dex_setup_materialization_runtime_contract_ids,
     red_living_dex_setup_runtime_contract_ids,
+    red_living_dex_setup_source_runtime_contract_ids,
 )
 from pokemon_red_completion.red_routed_semantic_goal import (
     RedFreshGoalDestinationBinder,
@@ -163,6 +165,7 @@ def test_plan_credits_the_routed_seam_and_runner_but_keeps_private_bindings_clos
         RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
         RED_DURABLE_SETUP_RUNNER_CAPABILITY,
         RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
+        RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
     )
     assert result.unresolved_runtime_capabilities == (
         RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
@@ -184,6 +187,13 @@ def test_plan_credits_the_routed_seam_and_runner_but_keeps_private_bindings_clos
         "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupPrivateSourceAttestation",
         "pokemon_red_completion.red_living_dex_setup_materialization.RedLivingDexSetupBindingMaterialization",
         "pokemon_red_completion.red_living_dex_setup_materialization.materialize_red_living_dex_setup_bindings",
+    )
+    assert red_living_dex_setup_source_runtime_contract_ids() == (
+        "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupSlotWitness",
+        "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupRouteWitness",
+        "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupProviderWitness",
+        "pokemon_red_completion.red_living_dex_setup_source.build_red_living_dex_setup_source_payload",
+        "pokemon_red_completion.red_living_dex_setup_source.RedLivingDexSetupCatalogSource",
     )
     assert result.mission_missing_option_kinds[0].value != RED_ROUTED_SEMANTIC_GOAL_CAPABILITY
 
@@ -216,7 +226,7 @@ def test_public_feasibility_is_path_free_and_refuses_training_claims() -> None:
 
     assert public["schema"] == RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA
     assert public["qualification_sha256"] == (
-        "0c9eef6c4bf86055c50841eb85d94ae7db7ec110cfb99c70f6f111a0dc97134a"
+        "e0ae8df967a6a505f2998025516be2fcd5c3943e9ae63469cde6496cd04927b0"
     )
     assert public["rom_accesses"] == 0
     assert public["setup_controller_actions"] == 0
@@ -358,6 +368,7 @@ def test_concrete_setup_blockers_cannot_be_erased_or_marked_implemented() -> Non
                 RED_ROUTED_SEMANTIC_GOAL_CAPABILITY,
                 RED_DURABLE_SETUP_RUNNER_CAPABILITY,
                 RED_ACTION_FREE_SETUP_BINDING_MATERIALIZER_CAPABILITY,
+                RED_PRIVATE_SETUP_SOURCE_ADAPTER_CAPABILITY,
                 RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,
             ),
             unresolved_runtime_capabilities=(RED_CONCRETE_ROUTED_SETUP_BINDINGS_CAPABILITY,),
