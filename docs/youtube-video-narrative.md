@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the doorway works, but no classroom address is forged
+
+Open on **PR 68 · MAIN FEE45344 · CI 32959509208/1**. Put **RESUPPLY** on the learner side of a
+glass wall. Behind it, animate **PRIVATE ROUTE → EXACT TERMINAL → FRESH OBSERVATION → REAL MART
+PROVIDER → EXECUTE ONCE**. Keep the output card labelled **RESUPPLY** throughout. Try to drag
+**RIGHT, UP, MAP ID, ROUTE REF, EXPLORE** across the wall and make each bounce away. Run two meters
+under the whole animation: **CONTROLLER ACTIONS** and **EMULATOR FRAMES**. Misreport either half
+and stamp the attempt failed.
+
+Flash **36 FOCUSED · 168 RELATED · 5,057 FULL SUITE**. Then cut to PR 69 reloading the exact fifteen
+lesson cards. Leave **10 TRAIN + 5 DEVELOPMENT · 2144/2187 = 98.0338%** unchanged. Move
+**ROUTED-SEMANTIC COMPOSITION** from red to green, but keep the large status lamp red:
+**PILOT EXECUTION NOT READY**. Reveal the honest remaining list:
+**14 PRIVATE ROUTE/TERMINAL/PROVIDER BINDINGS · 15-SLOT DURABLE RUNNER · TRADE LATER**. Flash
+**MAIN 67D52F86 · CI 32960694004/1 · 5,059 TESTS**.
+
+The spoken line is: **“We built the reusable doorway and then refused to pretend every classroom
+already had an address. Next we bind those addresses and the no-retry ledger off-cartridge. Only
+then do we press a button.”** End on **CONCRETE SETUP BINDINGS → DURABLE CLAIM/TERMINAL RUNNER →
+10+5 SETUPS → RANDOMIZED OUTCOMES**, with **CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**.
+
 ## August 26 scene: the schedule passes, but fourteen doors are in different buildings
 
 Open on **PR 66 · SOURCE CA7340D4 · MAIN F9F3310E · CI 32956496929/1**. Lay out **10 TRAIN + 5

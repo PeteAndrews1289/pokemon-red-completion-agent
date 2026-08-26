@@ -4,17 +4,15 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
-> proposed V4 12+8 freeze is retired unexecuted because its binary learner fabricated preferences
-> for unexecuted alternatives and lacked meaningful feature diversity. The active lane is
-> `repeatable-red-living-dex-option-value-calibration-v1`. The Red adapter, selected-arm collector,
-> and calibration gate are implemented ROM-free with 30 focused tests: complete 3+ row anonymous
-> menus, exact normalization, hard masks, one committed system-random draw, selected-once outcome
-> settlement, living-specimen-loss override, and synthetic-executor exclusion. Next build the
-> durable authentic materializer, then collect a minimum 8 train + 4 new disjoint development
-> outcomes, fit once on train, and report descriptive calibration/variance. Stop before a powered
-> benchmark, sealed Red, Crystal execution, promotion, or full replay. Older party, V4, and 14/55
-> campaigns remain historical evidence only. See
-> [red-living-dex-observed-arm-adapter.md](red-living-dex-observed-arm-adapter.md).
+> active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The 10+5 lesson schedule
+> and reusable routed-semantic composer are published. The current result is still execution red:
+> fourteen slots need concrete private route/terminal/provider attestations and all fifteen need a
+> durable claim-before-input setup runner. Build and attack only that ROM-free setup layer next,
+> then publish and reorient before private setup. After complete captures exist, collect at least
+> 8 train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
+> calibration/variance. Stop before a powered benchmark, sealed Red, Crystal execution, promotion,
+> or full replay. See [routed-semantic-goal-composition-v1.md](routed-semantic-goal-composition-v1.md)
+> and [red-living-dex-prospective-capture-plan-v1.md](red-living-dex-prospective-capture-plan-v1.md).
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

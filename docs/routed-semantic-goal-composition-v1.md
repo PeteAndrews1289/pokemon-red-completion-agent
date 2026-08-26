@@ -2,7 +2,8 @@
 
 Status: published ROM-free implementation. Source `c7a9feec` passed PR 68 CI `32959232118/1`,
 merged as main `fee45344`, and passed exact-main CI `32959509208/1`. A separate Red-plan
-requalification is still required before concrete setup work. This document is subordinate to
+requalification then merged through PR 69 as main `67d52f86` and passed exact-main CI
+`32960694004/1`; its next gate is concrete setup work. This document is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the
 [purpose-built capture contract](living-dex-purpose-built-capture-contract.md).
 
@@ -68,7 +69,7 @@ budget reconciliation, budget exhaustion, verifier side effects, state drift, an
 
 Publication passed 36 focused tests, 168 related tests and the full 5,057-test non-integration
 suite, plus Ruff, mypy over 273 source files, public-artifact, documentation and generated-registry
-checks. The next gate is the prospective Red-plan re-audit. It must still report fourteen concrete
-private route/terminal bindings and a durable setup runner as missing until they actually exist.
+checks. The Red-plan re-audit kept fourteen concrete private route/terminal bindings and a durable
+setup runner explicitly missing. That concrete setup layer is now the active gate.
 Repeatable semantic trade also remains a separate full-living-Pokédex blocker; this seam does not
 erase it.

@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the Red lesson plan is valid; build the reusable
+> **Current product focus (August 26, 2026): the reusable doorway is published; bind the actual
+> Red classrooms.** The title-neutral composition seam shipped through
+> [PR 68](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/68) as main
+> `fee45344` under exact-main CI `32959509208/1`. The unchanged Red 10+5 plan was requalified
+> through [PR 69](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/69) as main
+> `67d52f86` under exact-main CI `32960694004/1`. The combined
+> [qualification](docs/evidence/red-routed-semantic-plan-requalification-2026-08-26.json) binds
+> **36 composition tests · 168 related tests · 17 plan tests · 5,059 final full-suite tests**.
+>
+> The learner now keeps the real destination kind while Red privately routes, verifies the exact
+> terminal, reobserves, binds an existing provider, executes it once, and reconciles one budget.
+> The plan still reports **pilot execution not ready**: fourteen slots need concrete private
+> route/terminal/provider bindings and all fifteen need one durable setup runner. Trade remains a
+> later full-living-Pokédex requirement. The next gate is ROM-free setup-binding and runner
+> qualification—no private setup, outcome, fit, sealed Red, Crystal, promotion, or replay yet.
+> Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5
+> · authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): the Red lesson plan is valid; build the reusable
 > route-to-skill seam.** The exact 10+5 plan shipped through
 > [PR 66](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/66) from source
 > `ca7340d4`, merged as main `f9f3310e`, and passed exact-main CI `32956496929/1`. Its

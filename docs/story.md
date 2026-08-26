@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom fits on paper; build one honest doorway
+## Current checkpoint: the doorway works; give every classroom a durable address
+
+The generic doorway is built. When the model chooses “buy supplies,” Red may privately walk to a
+Mart, but the answer remains “buy supplies”—never “follow these arrows” and never a fake explore
+label. Arrival is proved, the game is observed again, the real Mart skill is bound and run once,
+and both halves must agree with independent button and frame counters. The same shape works for a
+PC, encounter source, evolution boundary, or later another Pokémon game.
+
+Then the project deliberately refused to skip a step. Re-running the fifteen-room blueprint did
+not turn it green. One room already has all three doors nearby; fourteen still need exact private
+addresses joining their route terminals to genuine destination skills. Every room also needs a
+durable setup worker that signs for the room before touching the controller, cannot try again after
+touching it, and records success, failure, or interruption without giving the learner an answer.
+
+PRs 68 and 69 passed 36 doorway tests, 168 related tests, 17 plan tests, and a final 5,059-test
+repository. The old **2144/2187 = 98.0338%** coverage remains intact. The score also remains
+**causal train 0/8, authority 0, transfer 0**. We now know the next honest job: bind the addresses
+and ledger off-cartridge, then reorient before a single setup run. Trade is still a later door the
+full living Pokédex must learn to use.
+
+## Previous checkpoint: the classroom fits on paper; build one honest doorway
 
 Red's fifteen rooms are now laid out. Ten are training rooms and five are held out. Every room has
 three real semantic doors. Pull away any two training setups and the random lesson policy still has

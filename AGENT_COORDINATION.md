@@ -1,6 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-26 Red prospective plan published; routed semantic composition active:** Source
+> **2026-08-26 routed composition published; concrete Red setup binding active:** Composition source
+> `c7a9feec` passed PR 68 CI `32959232118/1`, merged as main `fee45344`, and passed exact-main CI
+> `32959509208/1`. Requalification source `c3d74d9a` passed PR 69 CI `32960441513/1`, merged as main
+> `67d52f86`, and passed exact-main CI `32960694004/1`. The
+> [qualification](docs/evidence/red-routed-semantic-plan-requalification-2026-08-26.json) records
+> 36 composition, 168 related, 17 plan, and 5,059 final suite tests with protected effects zero.
+>
+> Codex owns ROM-free implementation, adversarial qualification, documentation, and publication of
+> the concrete fifteen-slot Red setup-binding schema and durable whole-slot runner. Fourteen slots
+> need private route/terminal/provider attestations; all fifteen must claim before input, forbid
+> retry after input, terminally account, preserve complete menus, and emit no learner target. Codex
+> publishes and reorients before private setup execution.
+>
+> Claude remains the optional read-only statistics/leakage/semantic-overclaim reviewer; Antigravity
+> the optional read-only architecture/claim-boundary/transfer reviewer. Neither implements, opens
+> private captures, executes gameplay, or blocks ordinary development; Codex adjudicates. Trade is
+> a separate later full-mission requirement. Counters remain **development 15 · verified 5/9 ·
+> causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 Red prospective plan published; routed semantic composition active:** Source
 > `ca7340d4` passed PR 66 CI `32956245451/1`, merged as main `f9f3310e`, and passed exact-main CI
 > `32956496929/1`. The
 > [qualification](docs/evidence/red-living-dex-prospective-capture-plan-v1-qualification-2026-08-26.json)

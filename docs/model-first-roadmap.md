@@ -8,7 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the Red curriculum is valid; implement route-then-semantic composition
+## Current checkpoint: composition is published; qualify concrete setup bindings
+
+The title-neutral composition seam shipped through PR 68 as main `fee45344` under exact-main CI
+`32959509208/1`; the Red plan requalification shipped through PR 69 as main `67d52f86` under
+exact-main CI `32960694004/1`. The combined
+[qualification](evidence/red-routed-semantic-plan-requalification-2026-08-26.json) binds 36
+composition tests, 168 related tests, 17 plan tests, 49 protocol tests, and the final 5,059-test
+suite with every gameplay and learner counter unchanged.
+
+The learner-facing kind now remains acquisition, evolution, party development, storage, resupply,
+story, or exploration while Red privately routes and proves the terminal. A fresh observation
+binds an existing provider; destination execution is single-use; both stages independently verify
+and reconcile against one budget. The exact 10+5 schedule and **2144/2187 = 98.0338%** probability
+remain unchanged.
+
+This is infrastructure, not a runnable capture campaign. The next ROM-free gate must:
+
+1. bind all fifteen frozen setup slots exactly once and retain their 10+5 partition identities;
+2. join each of fourteen routed slots to exact private route, terminal, origin, and destination-
+   provider attestations without publishing any of them;
+3. prove every planned menu arm remains genuinely executable after setup rather than synthetic;
+4. claim durably before controller input and forbid retry once any input occurs;
+5. settle every slot as complete, failed, or interrupted and reconcile the whole denominator;
+6. emit zero learner draw, label, outcome, prediction, teacher query, or fit during setup.
+
+Publish and reorient before opening private setup execution. Trade remains a later full-living-
+Pokédex capability. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous checkpoint: the Red curriculum is valid; implement route-then-semantic composition
 
 The exact prospective plan shipped from source `ca7340d436698be7a90412ff304726d973da2ac3`
 through PR 66 and PR CI `32956245451/1`, merged as main

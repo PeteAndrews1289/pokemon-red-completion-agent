@@ -12,7 +12,42 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: Red capture plan published; build the routed semantic seam
+## 2026-08-26: routed semantic seam published; bind concrete setup slots next
+
+The reusable composition shipped from source
+`c7a9feec54d0194c35829dcda5552ce4d12af3df` through
+[PR 68](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/68), passed PR CI
+`32959232118/1`, merged as main `fee453444a7f5789d35979fb06be9fd095f2f8e4`, and passed
+exact-main CI `32959509208/1`. The Red plan requalification shipped from source
+`c3d74d9a1bd134e21929b0c4fe8af85bf8b7f884` through
+[PR 69](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/69), passed PR CI
+`32960441513/1`, merged as main `67d52f86ceb162df97af13c972fa3b6b228bb471`, and passed
+exact-main CI `32960694004/1`. The combined
+[qualification](docs/evidence/red-routed-semantic-plan-requalification-2026-08-26.json) binds
+source bundle `00a76db0…4755`, 36 composition-focused, 168 related, 17 plan-focused, 49 protocol,
+and **5,059 full-suite tests**.
+
+The title-neutral composer preserves the selected destination kind, executes and verifies private
+transport first, requires a fresh terminal observation, binds an existing Red provider, executes
+that destination at most once, and reconciles route, destination, and total actions/frames against
+one independent meter. The Red adapter reuses the existing route executor and provider layer; it
+does not create a second controller or label travel as exploration. Public projections contain no
+map, coordinate, route, observation, provider, path, or controller-sequence identity.
+
+The unchanged 10+5 schedule and **2144/2187 = 98.0338%** train-kind probability still pass, but
+the honest terminal remains **plan valid, execution blocked**. The generic composition blocker is
+closed. Fourteen slots now require concrete private route/terminal/provider attestations, and all
+fifteen require one durable setup runner that claims before input, records every terminal, forbids
+retry after input, and emits zero learner labels or outcomes. Repeatable semantic trade remains a
+separate later full-mission blocker.
+
+Active work is ROM-free design and adversarial qualification of only that concrete setup-binding
+schema and durable runner. Publish and reorient before opening any private route or controller
+input. No setup campaign, capture, behavior draw, outcome, fit, sealed Red, Crystal, promotion, or
+replay is open. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-26: Red capture plan published; build the routed semantic seam
 
 The concrete prospective plan shipped from source
 `ca7340d436698be7a90412ff304726d973da2ac3` through

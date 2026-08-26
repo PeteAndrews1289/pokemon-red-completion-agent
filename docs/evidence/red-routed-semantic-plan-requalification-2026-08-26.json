@@ -1,0 +1,219 @@
+{
+  "artifacts": {
+    "generic_composition": {
+      "path": "src/pokemon_red_completion/routed_semantic_goal.py",
+      "sha256": "633a8a37cfe5ef90307da69fba44ba68834de7700003feaceca23bc1b792eae6"
+    },
+    "generic_tests": {
+      "path": "tests/test_routed_semantic_goal.py",
+      "sha256": "e8db0db149a7b9cbcf187c6f3197c2638bacfe1f7c3753632f9fe033f348f479"
+    },
+    "plan_implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_capture_plan.py",
+      "sha256": "53fb01a82775d842062cdf874afe187dab8da4fe8111b918ba23acb77f1cd7da"
+    },
+    "plan_snapshot": {
+      "path": "configs/red-living-dex-prospective-capture-plan-v1.json",
+      "sha256": "5c06a6597e05243fadc60a317c276688fe5b0c404e1cc902a32ed973ee277a4e"
+    },
+    "plan_snapshot_generator": {
+      "path": "scripts/regenerate_red_living_dex_capture_plan.py",
+      "sha256": "ed041fb5054c2c0eafb31b713a460d7f6831cf5e4b4a497d5c49c0bae8da2636"
+    },
+    "plan_tests": {
+      "path": "tests/test_red_living_dex_capture_plan.py",
+      "sha256": "f8a5073f82bbed3f15dc7f06c979eb401b942750edb5c7646614726914c43f7b"
+    },
+    "red_adapter": {
+      "path": "src/pokemon_red_completion/red_routed_semantic_goal.py",
+      "sha256": "d1b1531aaa864d2cfccad0d5bb8fad72566899882c19d1846039b24cfbcbf432"
+    },
+    "red_adapter_tests": {
+      "path": "tests/test_red_routed_semantic_goal.py",
+      "sha256": "52ad2dca77499f75c27de417d0adb32544dd918c9e2bb673e0e13762f08c3b76"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free source now supplies a title-neutral route-then-semantic-goal contract and a thin Red adapter. The learner-facing kind remains the selected semantic destination; private transport executes and verifies first, a fresh coherent terminal observation binds an existing destination provider, the destination executes at most once, and both stages reconcile against one controller/frame meter. The unchanged Red ten-train plus five-development prospective plan credits those exact component contracts but remains execution-blocked because fourteen concrete private route/terminal bindings and a durable setup runner do not yet exist.",
+    "unsupported": [
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "concrete_red_routed_setup_bindings",
+      "crystal_execution",
+      "crystal_transfer",
+      "durable_red_setup_runner",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "pilot_execution_readiness",
+      "policy_superiority",
+      "runtime_private_route_authentication",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "composition_contract": {
+    "destination_executes_at_most_once": true,
+    "destination_kind_preserved": true,
+    "destination_verification_required": true,
+    "fresh_destination_observation_required": true,
+    "independent_budget_reconciliation_required": true,
+    "implemented_component_contract_ids": [
+      "pokemon_red_completion.routed_semantic_goal.RoutedSemanticGoalComposer",
+      "pokemon_red_completion.red_routed_semantic_goal.RedSemanticTransportRoute",
+      "pokemon_red_completion.red_routed_semantic_goal.RedFreshGoalDestinationBinder",
+      "pokemon_red_completion.red_routed_semantic_goal.build_red_routed_semantic_goal_composer"
+    ],
+    "profile_or_curriculum_direction_sequences_allowed": false,
+    "route_is_policy_kind": false,
+    "route_verification_required": true,
+    "title_neutral_core": true
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "plan_requalification": {
+    "development_slots": 5,
+    "full_mission_ready": false,
+    "implemented_runtime_capabilities": [
+      "routed-semantic-goal-composition"
+    ],
+    "locally_composable_slots": 1,
+    "mission_missing_option_kinds": [
+      "trade"
+    ],
+    "pilot_execution_ready": false,
+    "pilot_plan_contract_satisfied": true,
+    "plan_sha256": "d718c4d615f3ba86a0dc7d17e9f5327df0b6cace6d74f4e7b02d12c964a3b0ee",
+    "qualification_sha256": "48d859dad473fe2018c60d664ac9fe91f470c05b70a419e12494ebae7725f3eb",
+    "routed_slots_requiring_concrete_bindings": 14,
+    "train_minimum_selected_kind_probability": {
+      "denominator": 2187,
+      "numerator": 2144
+    },
+    "train_slots": 10,
+    "unresolved_runtime_capabilities": [
+      "concrete-red-routed-setup-bindings",
+      "durable-red-setup-runner"
+    ]
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "composition": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32959509208,
+      "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32959509208",
+      "merged_main_commit": "fee453444a7f5789d35979fb06be9fd095f2f8e4",
+      "pull_request": 68,
+      "pull_request_ci_attempt": 1,
+      "pull_request_ci_conclusion": "success",
+      "pull_request_ci_run_id": 32959232118,
+      "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32959232118",
+      "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/68",
+      "source_commit": "c7a9feec54d0194c35829dcda5552ce4d12af3df"
+    },
+    "requalification": {
+      "main_ci_attempt": 1,
+      "main_ci_conclusion": "success",
+      "main_ci_run_id": 32960694004,
+      "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32960694004",
+      "merged_main_commit": "67d52f86ceb162df97af13c972fa3b6b228bb471",
+      "pull_request": 69,
+      "pull_request_ci_attempt": 1,
+      "pull_request_ci_conclusion": "success",
+      "pull_request_ci_run_id": 32960441513,
+      "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32960441513",
+      "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/69",
+      "source_bundle_sha256": "00a76db0b198dc4235f72e7a7bc9153d1a89df7bfc7ae7bf2be3f945e1ba4755",
+      "source_commit": "c3d74d9a1bd134e21929b0c4fe8af85bf8b7f884"
+    }
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.routed-semantic-plan-requalification.v1",
+  "status": "published_composition_qualified_plan_still_execution_blocked",
+  "verification": {
+    "adversarial_contract_checks": [
+      "actionful_binder_rejected",
+      "actionful_destination_verifier_rejected",
+      "actionful_route_verifier_rejected",
+      "budget_misreport_rejected",
+      "concrete_setup_blocker_erasure_rejected",
+      "destination_kind_drift_rejected",
+      "destination_report_substitution_rejected",
+      "different_destination_counter_rejected",
+      "route_report_substitution_rejected",
+      "route_terminal_drift_rejected",
+      "scripted_route_provenance_rejected",
+      "stale_origin_observation_rejected",
+      "whole_composite_budget_exhaustion_rejected"
+    ],
+    "composition_focused_tests_passed": 36,
+    "composition_full_suite": {
+      "deselected": 3,
+      "passed": 5057,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "composition_related_tests_passed": 168,
+    "documentation_check": "passed",
+    "github_ci": "passed_at_both_pull_requests_and_both_exact_merged_main_commits",
+    "mypy_source_files": 273,
+    "mypy_status": "passed",
+    "plan_focused_tests_passed": 17,
+    "plan_full_suite": {
+      "deselected": 3,
+      "passed": 5059,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "plan_snapshot_generator_check": "passed",
+    "product_focus_check": "passed",
+    "protocol_tests_passed": 49,
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "6b4a88b7798d34d6387521b7308f75e30b325bfda126d245186d9abbc693e8a5",
+      "battle_teacher_sha256": "0745c2c10b6ff470ccd56be671faacefd69b4f72bdcca26f37e632a379275bf0",
+      "goal_manager_registry_sha256": "b22ceff8939d5449f7f49789975c86ca96d1b25b92b68483fdfccf06dcb39e29",
+      "goal_manager_teacher_sha256": "3c2f7aab66d99ae1c3bc06263ca782f80c0bad9e231919c8499ec5087dc2b034",
+      "scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+      "strategic_navigation_registry_sha256": "53a34a30bc580f275f0ecf564bf03fc4b4283f0b5c023071ea13d5f45b19a2e1",
+      "strategic_navigation_teacher_sha256": "6484a04852cad0f6e2d0d47e400333a93823a5751c9f82e34675796b0be7adb9"
+    },
+    "requalification_related_tests_passed": 125,
+    "ruff_status": "passed"
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "protected_capture_access_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "ROM-free, define and adversarially qualify the concrete Red setup-composition contract for all fifteen frozen slots. Bind each of the fourteen routed slots to private route/terminal/provider attestations without publishing identities, and design one durable whole-slot runner that claims before controller input, records every terminal, forbids retry after input, and emits zero learner labels or outcomes during setup. Publish and reorient before opening private setup execution."
+  }
+}
