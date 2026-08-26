@@ -6,7 +6,30 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one ROM-free post-exception observation repair
+## Current override: Codex owns one action-free V4 12+8 curriculum freeze
+
+The observer repair reached main as `c663c3f4` under green CI `32913718889/1`. Its
+[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
+(SHA-256 `1b402002…f1463`) records 4,730 tests, 17 focused observer-contract tests, 9/9 killed
+mutations, and zero ROM/private/gameplay/learning/authority/transfer effects. Readable state after
+ordinary selected-skill failure now settles honestly; only observation failure censors. The repair
+is retired.
+
+Codex owns `red-living-dex-multifamily-option-value-curriculum-v4`: implement or minimally adapt
+the action-free freezer under new identities; freeze twelve train trials with eight required plus
+four fixed reserves and eight untouched development trials; require twenty distinct globally
+unused physical roots, exclude every consumed root including V3's, keep train/development families
+and roots disjoint, preserve both executable anonymous choices in every menu, and stop after one
+freeze. No model, teacher, claim, controller input, outcome, or fit belongs in this session.
+
+Claude's next useful review is V4 censoring arithmetic, sample power, and leakage after the plan
+exists. Antigravity's is global-root exclusion, reserve identity, and cross-game abstraction. Both
+are read-only milestone reviewers, not execution owners or standing blockers. No agent owns V3
+retry, V4 trial execution before reorientation, development outcome opening, fit, sealed Red,
+Crystal, replay, promotion, completion, or transfer. Counters remain **development 15 · verified
+5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned one ROM-free post-exception observation repair
 
 Collector main `7ebea63c` passed CI `32900424741/1`; storage-port repair main `14d7bcea`
 passed CI `32902297341/1`; and a claim-stubbed authentic rehearsal reached the claim boundary with

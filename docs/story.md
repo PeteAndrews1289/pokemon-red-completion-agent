@@ -7,7 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first lesson failed, and the notebook missed the result
+## Current checkpoint: the notebook now looks; the next textbook has spare lessons
+
+The missing rule is fixed. Main `c663c3f4` passed CI `32913718889/1`: after one selected Pokémon
+skill returns or reports an ordinary failure, the system now checks the living collection exactly
+once. No change and partial change are honest negative lessons; an exact change is positive; only
+an observer that cannot read the world leaves the lesson blank. Nine deliberately broken versions
+all turned the tests red. No game or model ran while proving this.
+
+Now V4 builds a textbook that admits some lessons may still be unreadable. It will freeze twelve
+training roots before play begins—eight required and four spare—plus eight development roots kept
+behind glass. Every root must be unique and unused, the development families must differ from the
+training families, and V3's consumed root can never reappear. The four reserves are part of the
+original lesson plan, not replacements chosen after seeing failures.
+
+The next session only seals that 12+8 textbook and stops. The model has still not gained a new
+training example: **causal train 0/8, authority 0, transfer 0**. Red remains the first curriculum,
+Crystal remains the first transfer test, and a cross-game living Pokédex remains the product.
+
+## Previous checkpoint: the first lesson failed, and the notebook missed the result
 
 The classroom was real. The first frozen V3 train lesson was claimed before input, only acquisition
 could run, and no model or teacher could change the assignment. It lasted 4,379 controller actions

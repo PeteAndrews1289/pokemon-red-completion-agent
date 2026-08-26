@@ -3,12 +3,12 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The only
-> active lane is the bounded ROM-free post-exception living-ledger qualification. V3 spent one
-> train root on a censored acquisition and can no longer reach its frozen eight-example minimum.
-> The repair must observe once after ordinary selected-skill failure so readable state becomes an
-> honest +/-1 target; then a separately frozen V4 curriculum excludes consumed roots and carries
-> preregistered train reserve. Older party and 14/55 campaigns remain historical evidence.
+> **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
+> post-exception observer repair is published and retired. The only active lane is one action-free
+> V4 freeze: 12 train trials (8 required + 4 fixed reserves), 8 untouched development trials, 20
+> distinct globally unused roots, zero family/root overlap across partitions, and the V3-consumed
+> root excluded. Stop and reorient before prediction, claim, execution, outcome, or fit. Older
+> party and 14/55 campaigns remain historical evidence.
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

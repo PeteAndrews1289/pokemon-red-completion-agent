@@ -5,21 +5,35 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 14D7BCEA · CI 32902297341/1 GREEN · V3 TRAIN ORDINAL 0
+> **Current rail:** Show **MAIN C663C3F4 · CI 32913718889/1 GREEN · OBSERVER RECOVERY QUALIFIED ·
+> 4,730 TESTS · FOCUSED 17 · MUTATIONS 9/9 KILLED · UNCHANGED/PARTIAL/EXACT AFTER ORDINARY
+> FAILURE = -1/-1/+1 · OBSERVER FAILURE = CENSORED · ROM/PRIVATE/ACTIONS/FRAMES/CLAIMS/
+> PREDICTIONS/TEACHERS/TARGETS 0**. Link the
+> [qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
+> and show **SHA-256 1B402002…F1463**.
+>
+> Animate active `red-living-dex-multifamily-option-value-curriculum-v4`: **AUTHENTICATE GLOBAL
+> UNUSED ROOTS → EXCLUDE V3-CONSUMED ROOT → FREEZE 12 TRAIN (8 REQUIRED + 4 RESERVE) → FREEZE 8
+> UNTOUCHED DEVELOPMENT → VERIFY 20 DISTINCT ROOTS + FAMILY/ROOT OVERLAP 0 + COMPLETE TWO-ROW
+> MENUS → DURABLE PLAN → STOP/REORIENT**. Show **MODEL/TEACHER/CLAIM/ACTION/FRAME/OUTCOME 0**.
+> Keep the board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS
+> 4/5 · AUTHORITY 0 · TRANSFER 0**. V4 execution, development outcomes, fit, sealed Red, Crystal,
+> promotion, completion, and replay remain closed.
+>
+> **Previous rail:** Show **MAIN 14D7BCEA · CI 32902297341/1 GREEN · V3 TRAIN ORDINAL 0
 > CONSUMED ONCE · ACTIONS 4,379 · FRAMES 304,680 · DURABLE CLAIM + CENSORED TERMINAL ·
 > CAUSAL TRAIN +0 · DEVELOPMENT UNTOUCHED · RETRY NO**. Link the
 > [result](evidence/red-living-dex-multifamily-train-trial-censored-v1-2026-08-25.json)
 > and show **SHA-256 AA573CB9…F4B0**.
 >
-> Animate active `post-exception-living-ledger-qualification-v1`: **SELECTED SKILL ONCE →
+> The then-active `post-exception-living-ledger-qualification-v1` rail was: **SELECTED SKILL ONCE →
 > ORDINARY RETURN OR EXCEPTION → ONE INDEPENDENT LIVING-LEDGER OBSERVATION → OBSERVABLE
 > UNCHANGED/PARTIAL/EXACT STATE BECOMES A SETTLED TITLE-NEUTRAL OUTCOME → OBSERVER FAILURE ALONE
 > IS CENSORED → REORIENT**. Show **ROM/PRIVATE CONTEXT/CONTROLLER ACTION/TEACHER/ALTERNATE SKILL/
 > RETRY 0** for this repair. Keep the board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0 ·
 > FITS 4 · COMPARISONS 4 · AUTHORITY 0 · TRANSFER 0**. V3 is closed: seven remaining train
-> trials cannot meet its frozen minimum of eight. After this ROM-free repair, freeze a new V4 with
-> all V3-consumed roots excluded and preregistered train reserve. V4 execution, sealed Red,
-> Crystal, promotion, completion, and replay remain closed.
+> trials cannot meet its frozen minimum of eight. The repair is now complete; V3 and its retry
+> remain closed.
 >
 > **Previous rail:** Show **V3 SOURCE 60710D6B · CI 32895364249/1 GREEN · MAIN 5CC5AABD ·
 > 81 AUTHENTICATED STATES · DURABLE PLAN 50327B72…0947 · MANIFEST 763951CA…8A47 ·

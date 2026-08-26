@@ -12,7 +12,36 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: V3's first train trial was safely censored; observe failures before V4
+## 2026-08-25: observer recovery is qualified; freeze an overprovisioned V4 curriculum
+
+The ROM-free repair reached main as `c663c3f4ee41ed57faf0fe94de5c1c2d88ae08b5` through PR 48
+and green CI `32913718889/1`. The full local suite passed **4,730 tests**. Seventeen focused tests
+cover normal return, ordinary exception with unchanged/partial/exact ledgers, malformed or failed
+observation, optional-report isolation, and process interruption. Nine of nine targeted mutations
+were killed, including skipped/doubled observation, skipped/doubled/wrong-candidate execution,
+discarded readable state, fabricated state, leaked unverified report, and swallowed interruption.
+See the [path-free qualification](docs/evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
+(SHA-256 `1b4020020e38d51b62c8b7a6e696e296d866a3982bb6ff56b60fef32d4ef1463`).
+
+The generic seam now executes one frozen semantic capability at most once and attempts exactly one
+fresh living-ledger observation after either ordinary return or exception. Readable unchanged and
+partial states settle as `-1`; an exact transition settles as `+1`; observer failure alone is
+censored. Exception text never becomes a feature, and `KeyboardInterrupt`/other `BaseException`
+signals remain visible. The qualification opened no ROM or private context and made no prediction,
+claim, action, frame, teacher query, outcome, fit, authority, or transfer change.
+
+Active `red-living-dex-multifamily-option-value-curriculum-v4` is one action-free freeze session.
+Freeze exactly **12 train trials**—eight required plus four preregistered reserves—and **8 untouched
+development trials**. All 20 physical roots must be distinct and globally unused; train and
+development families and roots must be disjoint; the consumed V3 root must be excluded; every menu
+must contain both executable title-neutral choices. Publish exact source, freeze once, and reorient
+before any prediction, claim, controller input, development outcome opening, fit, sealed Red,
+Crystal, promotion, or replay. V3 stays closed.
+
+Counters remain **development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+authority 0 · transfer 0**. This repair preserved future evidence; it did not train the model.
+
+## Earlier 2026-08-25: V3's first train trial was safely censored; observe failures before V4
 
 The one-shot V3 collector was published through PR 45 as main
 `7ebea63cbc8dc18a7047a9db57262563237115b3` under green CI `32900424741/1`.

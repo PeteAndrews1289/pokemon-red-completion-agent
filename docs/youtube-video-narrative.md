@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: spend the first lesson, then discover the observer looked away
+## August 25 scene: repair the observer, then freeze spare lessons before play
+
+Open on **MAIN C663C3F4 · CI 32913718889/1 GREEN · 4,730 TESTS**. Replay the three unknown endings
+from the failed lesson, then resolve them one by one: **SKILL REPORTS FAILURE → ONE FRESH LEDGER →
+UNCHANGED = -1 · PARTIAL = -1 · EXACT = +1**. Leave **OBSERVER UNREADABLE = CENSORED** as the only
+blank card. Flash **17 FOCUSED TESTS · 9/9 MUTATIONS KILLED · WRONG/SKIPPED/DOUBLED EXECUTION OR
+OBSERVATION REJECTED** and link the
+[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json) with
+**SHA-256 1B402002…F1463**.
+
+Keep the honesty bar visible: **ROM 0 · PRIVATE CONTEXT 0 · MODEL 0 · TEACHER 0 · ACTIONS 0 ·
+FRAMES 0 · TARGETS +0 · AUTHORITY 0 · TRANSFER 0**. Then reveal the V4 envelope before anything
+runs: **12 TRAIN = 8 REQUIRED + 4 PREREGISTERED RESERVE · 8 DEVELOPMENT · 20 DISTINCT UNUSED
+ROOTS · FAMILY/ROOT OVERLAP 0 · V3 ROOT EXCLUDED**. Animate **ACTION-FREE FREEZE → DURABLE PLAN →
+STOP AND REORIENT**. End with: **WE DID NOT TEACH THE MODEL THIS SESSION; WE MADE SURE THE NEXT
+EXPENSIVE LESSON CANNOT DISAPPEAR OR CHANGE THE EXAM AFTERWARD**.
+
+## Earlier August 25 scene: spend the first lesson, then discover the observer looked away
 
 Open on **COLLECTOR MAIN 7EBEA63C · CI 32900424741/1 GREEN**, then show the first zero-effect
 attempt stop before claim because the safety wrapper hid a read-only storage port. Stamp
