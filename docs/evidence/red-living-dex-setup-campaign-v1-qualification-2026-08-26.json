@@ -1,0 +1,157 @@
+{
+  "artifacts": {
+    "design": {
+      "path": "docs/red-living-dex-setup-campaign-v1.md",
+      "sha256": "f409874c09cc25599dae6aa9313f00b615217b795d246d50df717398c6f44b9b"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_campaign.py",
+      "sha256": "2b57fd2aefc4ca8cad1e1c7d4c28eb6e73b0cb006a33638ac040e9f770aa93f7"
+    },
+    "tests": {
+      "path": "tests/test_red_living_dex_setup_campaign.py",
+      "sha256": "8d208c957f8a78b4545471c1ccee17f40ca59c78f108b2429d1e86ea9c6dbcac"
+    }
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free source now supplies the exact structural contract and restart-safe whole-slot runner for the frozen Red ten-train plus five-development living-Pokedex setup campaign. It requires all fifteen slots and all forty-five semantic option-provider joins before input, preserves one local and fourteen routed slots, seals the whole plan, durably claims each slot before the setup port, reconciles an independent controller/frame meter, proves the complete menu, and permanently retains complete, failed, or interrupted terminals without retry. Public projections are aggregate and path-free.",
+    "unsupported": [
+      "actionful_red_setup_execution",
+      "actual_private_red_binding_plan",
+      "authentic_red_capture_created",
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "pilot_execution_readiness",
+      "policy_superiority",
+      "runtime_private_binding_authentication",
+      "runtime_private_route_execution",
+      "sealed_red_result",
+      "semantic_trade_execution"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "protected_effects_during_qualification": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "controller_authority_attempts": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_binding_reads": 0,
+    "private_capture_reads": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 32965956178,
+    "main_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32965956178",
+    "merged_main_commit": "1d5cab677dde1197a92ad17e2568dae69a533146",
+    "pull_request": 71,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 32965576726,
+    "pull_request_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32965576726",
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71",
+    "source_bundle_sha256": "ae581af014b0874d7a2921a84041fd04286b2232b38e27fc846aa511109b4e62",
+    "source_commit": "2df5f4b042b5766bf8f2f5e8863ed5966333a713"
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-setup-campaign-qualification.v1",
+  "setup_contract": {
+    "claim_before_controller_input": true,
+    "complete_menu_bindings": 15,
+    "development_slots": 5,
+    "local_option_bindings": 3,
+    "local_slots": 1,
+    "option_provider_bindings": 45,
+    "retry_after_controller_input": false,
+    "routed_option_bindings": 42,
+    "routed_slots": 14,
+    "runtime_private_bindings_authenticated": false,
+    "runtime_private_routes_executed": false,
+    "slot_count": 15,
+    "terminal_states": [
+      "complete",
+      "failed",
+      "interrupted"
+    ],
+    "train_slots": 10
+  },
+  "status": "published_runner_qualified_private_bindings_still_unmaterialized",
+  "verification": {
+    "adversarial_contract_checks": [
+      "canonical_red_plan_substitution_rejected",
+      "claimed_slot_retry_rejected",
+      "complete_artifact_without_exact_claim_rejected",
+      "controller_input_before_claim_rejected",
+      "cross_joined_option_proof_rejected",
+      "cross_joined_slot_rejected",
+      "different_sealed_plan_rejected",
+      "duplicate_slot_rejected",
+      "incomplete_menu_rejected",
+      "local_routed_classification_erasure_rejected",
+      "missing_slot_rejected",
+      "orphan_claim_permanently_interrupted",
+      "over_budget_execution_retained_as_failure",
+      "provider_contract_kind_mismatch_rejected",
+      "public_private_identity_leak_rejected",
+      "reordered_slot_rejected"
+    ],
+    "documentation_check": "passed",
+    "focused_tests_passed": 16,
+    "full_suite": {
+      "passed": 5075,
+      "skipped": 3,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed_at_pull_request_and_exact_merged_main_commit",
+    "mypy_source_files": 274,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "protocol_tests_passed": 49,
+    "public_artifact_check": "passed",
+    "registry_checks": {
+      "battle_registry_sha256": "0ddebe310ac87f9d9512fef8d2a0d69ab74af524f399851c8170e0e5afe2aa20",
+      "battle_teacher_sha256": "85135cc961b4a22688577a3f64210c291e6b6feae6d366d35729a030f18c80e9",
+      "goal_manager_registry_sha256": "4cf1cc8177d5ee59eea4c0ebeb5543f7c1f124f32a4861065647caabc3e88984",
+      "goal_manager_teacher_sha256": "7a47ef9f2c4d931cc91594214aab7b90e23dba3b1ce686dfc043f4af0915ab05",
+      "strategic_navigation_registry_sha256": "acc945bd6c756a3f563ad615477c120c4bb545d218f5075568228eb5bb0ad4fb",
+      "strategic_navigation_teacher_sha256": "200973d9522505c982b3066737ac1127b312afb4620248f3aff70b629a858883"
+    },
+    "related_tests_passed": 199,
+    "ruff_format_status": "passed",
+    "ruff_status": "passed"
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "actionful_setup_execution_allowed": false,
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "outcome_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Build and adversarially qualify the action-free private Red binding materializer, then freeze and validate exactly one complete fifteen-slot binding plan from approved private inputs. It must emit zero controller actions and frames, preserve all forty-five genuine semantic arms and all fourteen route-terminal-provider joins, publish only a path-free aggregate, and stop before setup execution, behavior draw, outcome collection, fitting, sealed Red, Crystal, promotion, or replay."
+  }
+}

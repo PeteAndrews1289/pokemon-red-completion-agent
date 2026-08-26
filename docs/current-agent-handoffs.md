@@ -6,7 +6,29 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns concrete Red setup binding and durability
+## Current override: Codex owns action-free private Red binding materialization
+
+The durable setup campaign is published from source
+`2df5f4b042b5766bf8f2f5e8863ed5966333a713` through PR 71, merged as main
+`1d5cab677dde1197a92ad17e2568dae69a533146`, and green at exact-main CI
+`32965956178/1`. The
+[qualification](evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json) binds
+16 focused, 199 related, 49 protocol, and 5,075 full-suite tests. It used only synthetic ROM-free
+bindings and changed no learner, authority, or transfer counter.
+
+Codex owns only the materializer qualification and one action-free private binding freeze. Require
+the canonical fifteen-slot order, all forty-five genuine semantic provider arms, one local and
+fourteen routed slots, exact route-terminal-provider joins, zero input and frames, and a path-free
+aggregate. Stop and reorient before calling the published setup runner.
+
+Claude is the optional read-only statistics, causal-design, leakage, and semantic-overclaim
+reviewer. Antigravity is the optional read-only architecture, portability, and claim-boundary
+reviewer. Neither executes gameplay, edits the worktree, or delays ordinary work; Codex adjudicates.
+Outcomes, fitting, sealed Red, Crystal, promotion, and replay remain closed. Trade remains a later
+full-mission blocker. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
+4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned concrete Red setup binding and durability
 
 The reusable seam is published from source `c7a9feec54d0194c35829dcda5552ce4d12af3df`
 through PR 68, merged as main `fee453444a7f5789d35979fb06be9fd095f2f8e4`, and green at

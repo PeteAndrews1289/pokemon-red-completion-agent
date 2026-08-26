@@ -5,7 +5,22 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the reusable doorway is published; bind the actual
+> **Current product focus (August 26, 2026): the safe setup runner is published; bind the real Red
+> lesson states without pressing a button.** The campaign shipped through
+> [PR 71](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/71) from source
+> `2df5f4b0`, merged as main `1d5cab67`, and passed exact-main CI `32965956178/1`. Its
+> [qualification](docs/evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json)
+> records **16 focused · 199 related · 49 protocol · 5,075 full-suite tests**.
+>
+> The runner freezes all fifteen slots and forty-five semantic arms before input, durably claims a
+> setup before the controller port, independently reconciles action/frame totals, retains every
+> complete/failed/interrupted terminal, forbids retry, and publishes no private identity. The tests
+> use synthetic ROM-free bindings; actual Red bindings are still absent. Next qualify the
+> action-free private materializer and freeze one exact 10+5 binding plan, then stop before setup
+> execution. Trade remains a later mission requirement. Counters remain **development 15 · verified
+> 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): the reusable doorway is published; bind the actual
 > Red classrooms.** The title-neutral composition seam shipped through
 > [PR 68](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/68) as main
 > `fee45344` under exact-main CI `32959509208/1`. The unchanged Red 10+5 plan was requalified

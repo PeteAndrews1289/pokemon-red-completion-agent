@@ -8,7 +8,38 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: composition is published; qualify concrete setup bindings
+## Current checkpoint: the no-retry runner is published; materialize the real bindings
+
+The durable campaign shipped through PR 71 from source `2df5f4b0`, merged as main `1d5cab67`, and
+passed exact-main CI `32965956178/1`. Its
+[qualification](evidence/red-living-dex-setup-campaign-v1-qualification-2026-08-26.json) records
+16 focused, 199 related, 49 protocol, and 5,075 repository tests. No ROM, private capture,
+controller input, frame, behavior draw, learner label, outcome, fit, authority, or transfer result
+was used.
+
+The campaign contract now freezes all fifteen slots and forty-five option-provider joins before
+input, preserves the one-local/fourteen-routed census, claims durably before its private setup port,
+reconciles independent action/frame totals, retains complete/failed/interrupted terminals, and
+forbids retry. Public reports are aggregate and path-free. This is the final safe runner, not an
+authentic private plan and not training data.
+
+The next gate must:
+
+1. qualify the action-free private Red binding materializer against missing, duplicate,
+   reordered, cross-joined, synthetic, actionful, and identity-leaking inputs;
+2. freeze exactly one canonical 10+5 private plan with all forty-five genuine semantic arms;
+3. authenticate all fourteen route-terminal-provider joins and the one local slot;
+4. prove controller actions and emulator frames remain zero;
+5. publish only aggregate success or finite failure reasons; and
+6. stop and reorient before invoking the setup runner.
+
+Only after that plan passes may a separate gate execute setups and census authentic captures.
+Outcomes and the first train-only calibration fit follow complete captures; sealed Red and Crystal
+remain later. Trade is still required before any full living-Pokédex authority claim. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
+
+## Previous checkpoint: composition is published; qualify concrete setup bindings
 
 The title-neutral composition seam shipped through PR 68 as main `fee45344` under exact-main CI
 `32959509208/1`; the Red plan requalification shipped through PR 69 as main `67d52f86` under
