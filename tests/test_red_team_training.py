@@ -555,6 +555,54 @@ def test_fixed_party_training_dose_runs_exact_battles_without_reselecting(
     assert summaries[0].cleanup_trips == 1
 
 
+def test_targeted_party_development_trains_the_bound_species_not_the_weakest(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (DUX_SPECIES_ID, 20),
+            (BLASTOISE_SPECIES_ID, 50),
+            (DIGLETT_SPECIES_ID, 10),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+
+    def complete_battle(*_args: object, **_kwargs: object) -> None:
+        target = next(member for member in memory.party if member.species == DUX_SPECIES_ID)
+        target.level += 1
+
+    monkeypatch.setattr(
+        red_team_training,
+        "run_adaptive_wild_battle",
+        complete_battle,
+    )
+
+    report, completed, _healing = run(
+        memory,
+        FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]),
+        policy=BalancedTeamPolicy(
+            minimum_level=21,
+            maximum_level_spread=50,
+            required_size=6,
+            max_battles=2,
+            max_steps=100,
+            max_healing_trips=3,
+            max_faints=0,
+        ),
+        development_target_species_id=DUX_SPECIES_ID,
+    )
+
+    levels = {member.species: member.level for member in memory.party}
+    assert report is None
+    assert completed == 1
+    assert levels[DUX_SPECIES_ID] == 21
+    assert levels[DIGLETT_SPECIES_ID] == 10
+
+
 def test_fixed_dose_does_not_exceed_its_recovery_budget_for_cleanup(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

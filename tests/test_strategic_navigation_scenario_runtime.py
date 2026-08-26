@@ -443,6 +443,96 @@ def test_skill_relocation_preserves_the_exact_declared_coordinate(
     assert calls == [(6, (3, 3))]
 
 
+def test_bounded_feasible_relocation_limits_cut_search_to_macro_corridor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    object.__setattr__(world, "macro_graph", MacroGraph({1: (), 4: (), 6: ()}))
+    object.__setattr__(world, "local_graphs", {})
+    expected = cast(RoutePlan, SimpleNamespace())
+    staged_maps: list[frozenset[int] | None] = []
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_scenario_runtime.plan_route",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RoutePlanningError("fixture needs Cut")
+        ),
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_scenario_runtime.find_macro_path",
+        lambda *_args, **_kwargs: SimpleNamespace(maps=(1, 4, 6)),
+    )
+
+    def staged(
+        _self: object,
+        _start: TraversalSnapshot,
+        _goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+        blocked: object = None,
+        candidate_map_ids: frozenset[int] | None = None,
+    ) -> RoutePlan:
+        del goal_at, blocked
+        staged_maps.append(candidate_map_ids)
+        return expected
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "_staged_cut_plan", staged)
+
+    actual = world.plan_feasible_to_map(
+        TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+        6,
+        goal_at=(3, 3),
+    )
+
+    assert actual is expected
+    assert staged_maps == [frozenset({1, 4, 6})]
+
+
+def test_bounded_feasible_relocation_does_not_scan_all_cut_maps(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    object.__setattr__(world, "macro_graph", MacroGraph({1: (), 6: ()}))
+    object.__setattr__(world, "local_graphs", {})
+    full_scan_calls = 0
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_scenario_runtime.plan_route",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RoutePlanningError("fixture needs Cut")
+        ),
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_scenario_runtime.find_macro_path",
+        lambda *_args, **_kwargs: SimpleNamespace(maps=(1, 6)),
+    )
+
+    def staged(
+        _self: object,
+        _start: TraversalSnapshot,
+        _goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+        blocked: object = None,
+        candidate_map_ids: frozenset[int] | None = None,
+    ) -> RoutePlan:
+        del goal_at, blocked
+        nonlocal full_scan_calls
+        if candidate_map_ids is None:
+            full_scan_calls += 1
+        raise RoutePlanningError("bounded corridor has no route")
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "_staged_cut_plan", staged)
+
+    with pytest.raises(RoutePlanningError, match="no bounded feasible route"):
+        world.plan_feasible_to_map(
+            TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+            6,
+        )
+
+    assert full_scan_calls == 0
+
+
 def test_same_destination_pair_selects_the_cheapest_strict_detour(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -842,6 +842,7 @@ def run_red_team_balancing(
     execution_summary_sink: Callable[[TeamTrainingExecutionSummary], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
+    development_target_species_id: int | None = None,
     venues: Sequence[TrainingVenue],
     report_label: str,
     checkpoint_count: int,
@@ -855,8 +856,18 @@ def run_red_team_balancing(
         )
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
         raise RuntimeError("Team training lacks its qualified Blastoise escort.")
-    if fixed_dose is not None and evolution_target is not None:
-        raise RuntimeError("Fixed party-training dose cannot also target one evolution.")
+    if development_target_species_id is not None and (
+        type(development_target_species_id) is not int  # noqa: E721
+        or not 1 <= development_target_species_id <= 0xFF
+    ):
+        raise ValueError("Targeted party development species is invalid.")
+    if sum(
+        item is not None
+        for item in (fixed_dose, evolution_target, development_target_species_id)
+    ) > 1:
+        raise RuntimeError(
+            "Party training can bind only one fixed dose, evolution, or development target."
+        )
     fixed_venue: TrainingVenue | None = None
     if fixed_dose is not None:
         matching_venues = tuple(
@@ -1089,6 +1100,20 @@ def run_red_team_balancing(
             )
         return matches[0]
 
+    def bound_development_trainee(party: PartyObservation) -> PartyMemberObservation:
+        if development_target_species_id is None:
+            raise AssertionError("targeted development trainee requested without a binding")
+        matches = tuple(
+            member
+            for member in party.members
+            if member.species_id == development_target_species_id
+        )
+        if len(matches) != 1:
+            raise RuntimeError(
+                "Targeted party development lost its unique trainee species binding."
+            )
+        return matches[0]
+
     optional_overworld_choices = (
         TrainingControlAction.SEEK,
         TrainingControlAction.HEAL,
@@ -1130,6 +1155,54 @@ def run_red_team_balancing(
             decision = TeamTrainingDecision(
                 directive,
                 "execute the prospectively fixed party-development dose",
+                target_slot=trainee.slot,
+            )
+        elif development_target_species_id is not None:
+            trainee = bound_development_trainee(party)
+            if trainee.level >= policy.minimum_level:
+                break
+            if battles >= policy.max_battles or steps >= policy.max_steps:
+                raise RuntimeError(
+                    "Targeted party development exhausted its bounded training budget."
+                )
+            bands = tuple(venue.band for venue in venues)
+            target_band = choose_grinding_area(bands, trainee, policy)
+            if target_band is None:
+                raise RuntimeError(
+                    f"No provided venue suits targeted trainee at level {trainee.level}."
+                )
+            current_venue = next(v for v in venues if v.band == target_band)
+            venue_projection = project_venue_candidates(
+                party,
+                policy,
+                trainee,
+                bands,
+            )
+            if venue_projection is not None:
+                projected_area, selected_index, observation = venue_projection
+                if len(observation.candidates) > 1 and projected_area == target_band:
+                    authorized_index = emit_candidate_decision(
+                        observation,
+                        selected_index,
+                        "highest-yield safe measured development venue",
+                    )
+                    target_band = bind_venue_candidate(
+                        party,
+                        policy,
+                        trainee,
+                        bands,
+                        authorized_index,
+                    )
+                    current_venue = next(v for v in venues if v.band == target_band)
+            if member_is_unsafe_for_team_training(trainee, policy):
+                directive = TeamTrainingDirective.RESTORE_TEAM
+            elif trainee.slot != 1:
+                directive = TeamTrainingDirective.SWITCH_TRAINEE
+            else:
+                directive = TeamTrainingDirective.TRAIN_MEMBER
+            decision = TeamTrainingDecision(
+                directive,
+                "targeted party development",
                 target_slot=trainee.slot,
             )
         elif evolution_target is None:
@@ -1316,11 +1389,13 @@ def run_red_team_balancing(
             or training_attack_pp(escort) <= training_attack_pp_reserve(escort, policy)
         )
         if raw.battle_state == 1:
-            trainee = (
-                trainee
-                if evolution_target is None
-                else next((m for m in party.members if m.species_id == evolution_target[0]), None)
-            )
+            if evolution_target is not None:
+                trainee = next(
+                    (m for m in party.members if m.species_id == evolution_target[0]),
+                    None,
+                )
+            elif development_target_species_id is not None:
+                trainee = bound_development_trainee(party)
             if trainee is None or trainee.slot != 1:
                 raise RuntimeError("An encounter began without the selected trainee in front.")
             if raw.enemy_species_id in volatile_enemy_species:
@@ -1568,11 +1643,13 @@ def run_red_team_balancing(
             venue_transition_trips += 1
             direct_fight_suppressed_species.clear()
             continue
-        trainee = (
-            trainee
-            if evolution_target is None
-            else next((m for m in party.members if m.species_id == evolution_target[0]), None)
-        )
+        if evolution_target is not None:
+            trainee = next(
+                (m for m in party.members if m.species_id == evolution_target[0]),
+                None,
+            )
+        elif development_target_species_id is not None:
+            trainee = bound_development_trainee(party)
         if trainee is None:
             break
         if trainee.slot != 1:
@@ -1636,7 +1713,9 @@ def run_red_team_balancing(
         cleanup_trips += 1
     prepare_for_recovery()
     report = (
-        summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
+        summarize_team_readiness(party_reader.read(), policy)
+        if evolution_target is None and development_target_species_id is None
+        else None
     )
     if execution_summary_sink is not None:
         instrumented_walkers = tuple(

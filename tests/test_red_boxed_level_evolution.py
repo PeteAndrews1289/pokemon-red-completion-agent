@@ -13,6 +13,7 @@ from pokemon_red_completion.collection import (
     CollectionObservation,
     LivingSpecimen,
 )
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroGraph
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.observation import RawGameState, RedCurrentBoxState
@@ -34,6 +35,10 @@ from pokemon_red_completion.red_dual_capability_curriculum_runtime import (
     SemanticVenueRouteBinding,
     dependency_specimen_ledger,
 )
+from pokemon_red_completion.red_goal_boxed_evolution import (
+    RedGoalBoxedEvolutionExecutor,
+)
+from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
 from pokemon_red_completion.red_living_dex_dependency_curriculum import (
     RedDependencySpeciesBinding,
     red_dual_capability_scenario_specs,
@@ -358,6 +363,49 @@ def test_selected_boxed_evolution_routes_stores_trains_and_proves_exact_transiti
     encoded = json.dumps(report.public_dict(), sort_keys=True).lower()
     assert red_species_ref(11) not in encoded
     assert red_species_ref(12) not in encoded
+
+
+def test_goal_executor_bridge_reuses_the_boxed_engine_without_species_logic(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    _patch_storage(monkeypatch, world)
+    to_pc, to_training = _routes()
+    actions = CountingExecutor(world)
+
+    def train(precursor: int, evolved: int) -> BoundedEvolutionTrainingResult:
+        assert precursor == PRECURSOR and evolved == EVOLVED
+        world.party[world.party.index(precursor)] = evolved
+        return BoundedEvolutionTrainingResult(3, 0)
+
+    bridge = RedGoalBoxedEvolutionExecutor(
+        reset_state_sha256=RESET,
+        route_to_pc=to_pc,
+        route_to_training=to_training,
+        training_binding_sha256="d" * 64,
+        reader=world,  # type: ignore[arg-type]
+        traversal_observer=world,
+        observe_collection=world.collection,
+        train_evolution=train,
+        emulator=SimpleNamespace(frame_count=0),
+    )
+    request = RedBoxedLevelEvolutionGoalRequest(
+        precursor_internal_species_id=PRECURSOR,
+        evolved_internal_species_id=EVOLVED,
+        current_box_index=0,
+        precursor_box_slot=1,
+        deposit_party_slot=6,
+        deposit_internal_species_id=HITMONLEE_SPECIES_ID,
+    )
+
+    report = bridge(request, actions)
+
+    assert report.actions_executed == 2
+    assert report.frames_executed == 0
+    assert report.evidence["exact_evolution_transition"] is True
+    assert report.evidence["required_living_preserved"] is True
+    assert EVOLVED in world.party
+    assert HITMONLEE_SPECIES_ID in world.box
 
 
 def test_exact_pc_start_uses_an_observed_boundary_without_a_fake_route(

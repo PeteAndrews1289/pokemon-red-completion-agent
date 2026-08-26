@@ -18,8 +18,11 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import cast
 
+from pokemon_red_completion.generation_one import GENERATION_ONE_LEVEL_EVOLUTIONS
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.observation import ItemId, MapId
+from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
+from pokemon_red_completion.red_collection import red_species_number
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
 
 RED_GOAL_CONTEXT_PROFILE_SCHEMA = "pokemon-red-goal-manager-context-profile-v1"
@@ -41,6 +44,8 @@ class RedGoalMechanic(StrEnum):
     WILD_CORRIDOR_DEVELOPMENT = "wild_corridor_development"
     BALANCED_TEAM = "balanced_team"
     DIGLETT_EVOLUTION = "diglett_evolution"
+    TARGETED_PARTY_DEVELOPMENT = "targeted_party_development"
+    TARGETED_LEVEL_EVOLUTION = "targeted_level_evolution"
     FIELD_RESTORE = "field_restore"
     CENTER_RESTORE = "center_restore"
     MART_RESUPPLY = "mart_resupply"
@@ -55,6 +60,8 @@ _MECHANIC_KIND = {
     RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.BALANCED_TEAM: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.DIGLETT_EVOLUTION: GoalKind.EVOLVE_SPECIES,
+    RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: GoalKind.DEVELOP_TEAM,
+    RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: GoalKind.EVOLVE_SPECIES,
     RedGoalMechanic.FIELD_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.CENTER_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.MART_RESUPPLY: GoalKind.RESUPPLY,
@@ -387,6 +394,61 @@ def _parse_parameters(
     }:
         _exact_keys(row, set())
         return row
+    if mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
+        _exact_keys(row, {"trainee_species_ref", "level_increment"})
+        trainee_species_ref = _species_ref(
+            row["trainee_species_ref"],
+            "development trainee",
+        )
+        level_increment = _positive_integer(
+            row["level_increment"],
+            "development level increment",
+        )
+        if level_increment != 1:
+            raise RedGoalContextProfileError(
+                "targeted development requires one level of progress"
+            )
+        return {
+            "trainee_species_ref": trainee_species_ref,
+            "level_increment": level_increment,
+        }
+    if mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        _exact_keys(
+            row,
+            {
+                "source_species_ref",
+                "target_species_ref",
+                "evolution_level",
+            },
+        )
+        source_species_ref = _species_ref(
+            row["source_species_ref"],
+            "evolution source",
+        )
+        target_species_ref = _species_ref(
+            row["target_species_ref"],
+            "evolution target",
+        )
+        evolution_level = _positive_integer(
+            row["evolution_level"],
+            "evolution level",
+        )
+        if evolution_level > 100:
+            raise RedGoalContextProfileError("evolution level is outside Red's level range")
+        evolution = (
+            red_species_number(source_species_ref),
+            red_species_number(target_species_ref),
+            evolution_level,
+        )
+        if evolution not in GENERATION_ONE_LEVEL_EVOLUTIONS:
+            raise RedGoalContextProfileError(
+                "targeted evolution is not a canonical Red level evolution"
+            )
+        return {
+            "source_species_ref": source_species_ref,
+            "target_species_ref": target_species_ref,
+            "evolution_level": evolution_level,
+        }
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
@@ -522,6 +584,19 @@ def _bounded_text(value: object, subject: str) -> str:
         or any(ord(character) < 0x20 or ord(character) > 0x7E for character in value)
     ):
         raise RedGoalContextProfileError(f"{subject} is invalid")
+    return value
+
+
+def _species_ref(value: object, subject: str) -> str:
+    if not isinstance(value, str):
+        raise RedGoalContextProfileError(f"{subject} species reference is invalid")
+    try:
+        red_species_number(value)
+        RED_ACQUISITION_CATALOG.method_for(value)
+    except ValueError:
+        raise RedGoalContextProfileError(
+            f"{subject} species reference is outside Red's living collection contract"
+        ) from None
     return value
 
 

@@ -6,6 +6,7 @@ import pytest
 
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.observation import ItemId, MapId
+from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_goal_context_profile import (
     RED_GOAL_CONTEXT_PROFILE_SCHEMA,
     RedGoalContextProfileError,
@@ -167,6 +168,92 @@ def test_profile_requires_a_positive_fixed_dose_for_corridor_development() -> No
                     RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
                     {**corridor, "completed_battles": 0},
                 ),
+                _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            )
+        )
+
+
+def test_profile_accepts_only_real_targeted_level_and_development_contracts() -> None:
+    profile = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(
+                GoalKind.DEVELOP_TEAM,
+                RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
+                {
+                    "trainee_species_ref": red_species_ref(10),
+                    "level_increment": 1,
+                },
+            ),
+            _provider(
+                GoalKind.EVOLVE_SPECIES,
+                RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+                {
+                    "source_species_ref": red_species_ref(11),
+                    "target_species_ref": red_species_ref(12),
+                    "evolution_level": 10,
+                },
+            ),
+        )
+    )
+
+    assert profile.providers[1].parameters == {
+        "trainee_species_ref": red_species_ref(10),
+        "level_increment": 1,
+    }
+    assert profile.providers[2].parameters == {
+        "source_species_ref": red_species_ref(11),
+        "target_species_ref": red_species_ref(12),
+        "evolution_level": 10,
+    }
+
+
+@pytest.mark.parametrize(
+    ("mechanic", "parameters", "message"),
+    (
+        (
+            RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
+            {
+                "trainee_species_ref": red_species_ref(10),
+                "level_increment": 2,
+            },
+            "one level",
+        ),
+        (
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            {
+                "source_species_ref": red_species_ref(10),
+                "target_species_ref": red_species_ref(12),
+                "evolution_level": 10,
+            },
+            "canonical Red level evolution",
+        ),
+        (
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            {
+                "source_species_ref": red_species_ref(35),
+                "target_species_ref": red_species_ref(36),
+                "evolution_level": 10,
+            },
+            "canonical Red level evolution",
+        ),
+    ),
+)
+def test_profile_rejects_synthetic_targeted_team_families(
+    mechanic: RedGoalMechanic,
+    parameters: dict[str, object],
+    message: str,
+) -> None:
+    kind = (
+        GoalKind.DEVELOP_TEAM
+        if mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT
+        else GoalKind.EVOLVE_SPECIES
+    )
+    with pytest.raises(RedGoalContextProfileError, match=message):
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                _provider(kind, mechanic, parameters),
                 _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
             )
         )

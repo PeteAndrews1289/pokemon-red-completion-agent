@@ -26,7 +26,10 @@ from pokemon_red_completion.gen1_cartridge import (
     trade_evolutions,
     verify_evolution_graph,
 )
-from pokemon_red_completion.generation_one import GENERATION_ONE_TRADE_EVOLUTIONS
+from pokemon_red_completion.generation_one import (
+    GENERATION_ONE_LEVEL_EVOLUTIONS,
+    GENERATION_ONE_TRADE_EVOLUTIONS,
+)
 
 RECORD = Path("docs/evidence/evolution-graph-2026-08-10.json")
 
@@ -44,6 +47,23 @@ def test_the_declared_trade_evolutions_are_what_the_cartridge_says(record: dict)
     derived = {int(k): v for k, v in record["trade_evolutions"].items()}
 
     assert derived == GENERATION_ONE_TRADE_EVOLUTIONS
+
+
+def test_the_declared_level_evolutions_are_the_complete_cartridge_graph(record: dict) -> None:
+    """ROM-free profile validation must not collapse evolution into acquisition."""
+
+    derived = frozenset(
+        (
+            int(source),
+            int(step["to"]),
+            int(step["requirement"]),
+        )
+        for source, steps in record["graph"].items()
+        for step in steps
+        if step["method"] == EvolutionMethod.LEVEL.value
+    )
+
+    assert derived == GENERATION_ONE_LEVEL_EVOLUTIONS
 
 
 def test_both_cartridges_carry_the_same_evolution_graph(record: dict) -> None:

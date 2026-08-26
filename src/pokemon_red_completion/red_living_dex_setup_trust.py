@@ -19,6 +19,7 @@ from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_collection import red_species_number
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfile,
     RedGoalMechanic,
@@ -340,6 +341,13 @@ def expected_red_living_dex_binding_core(
         return "pokemon.red:development:one-level-quantum"
     if mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
         return f"pokemon.red:evolution:{values['source']}-to-{values['target']}"
+    if mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
+        target = red_species_number(str(values["trainee_species_ref"]))
+        return f"pokemon.red:development:national-{target:03d}:one-level-quantum"
+    if mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        source = red_species_number(str(values["source_species_ref"]))
+        target = red_species_number(str(values["target_species_ref"]))
+        return f"pokemon.red:evolution:national-{source:03d}-to-national-{target:03d}"
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         target_box_index = values["target_box_index"]
         assert type(target_box_index) is int  # noqa: E721
@@ -401,6 +409,26 @@ def _project_semantic_parameters(
         return {"dose": "one-level-quantum"}
     if mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
         return {"source": "diglett", "target": "dugtrio"}
+    if mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
+        return {
+            "trainee_species_ref": _species_parameter(
+                parameters,
+                "trainee_species_ref",
+            ),
+            "level_increment": _positive_parameter(parameters, "level_increment"),
+        }
+    if mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        return {
+            "source_species_ref": _species_parameter(
+                parameters,
+                "source_species_ref",
+            ),
+            "target_species_ref": _species_parameter(
+                parameters,
+                "target_species_ref",
+            ),
+            "evolution_level": _positive_parameter(parameters, "evolution_level"),
+        }
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         return {"target_box_index": _integer_parameter(parameters, "target_box_index")}
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
@@ -432,9 +460,13 @@ def _normalize_family_parameters(
         raise RedLivingDexSetupTrustError("transformation goal mapping differs")
     expected_mechanics = {
         LivingDexOptionKind.ACQUIRE: {RedGoalMechanic.WILD_CORRIDOR_CAPTURE},
-        LivingDexOptionKind.EVOLVE: {RedGoalMechanic.DIGLETT_EVOLUTION},
+        LivingDexOptionKind.EVOLVE: {
+            RedGoalMechanic.DIGLETT_EVOLUTION,
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        },
         LivingDexOptionKind.DEVELOP: {
             RedGoalMechanic.BALANCED_TEAM,
+            RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
             RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         },
         LivingDexOptionKind.MANAGE_STORAGE: {RedGoalMechanic.BOX_SWITCH},
@@ -451,6 +483,15 @@ def _normalize_family_parameters(
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT: {"source_id"},
         RedGoalMechanic.BALANCED_TEAM: {"dose"},
         RedGoalMechanic.DIGLETT_EVOLUTION: {"source", "target"},
+        RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: {
+            "trainee_species_ref",
+            "level_increment",
+        },
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: {
+            "source_species_ref",
+            "target_species_ref",
+            "evolution_level",
+        },
         RedGoalMechanic.BOX_SWITCH: {"target_box_index"},
         RedGoalMechanic.MART_RESUPPLY: {"purchases"},
     }[mechanic]
@@ -472,6 +513,20 @@ def _normalize_family_parameters(
         target = _safe_value(values["target"], "evolution target")
         if source == target:
             raise RedLivingDexSetupTrustError("evolution family differs")
+    elif mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
+        _species_value(values["trainee_species_ref"], "development trainee")
+        if values["level_increment"] != 1:
+            raise RedLivingDexSetupTrustError("development family dose differs")
+    elif mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        source = _species_value(values["source_species_ref"], "evolution source")
+        target = _species_value(values["target_species_ref"], "evolution target")
+        if source == target:
+            raise RedLivingDexSetupTrustError("evolution family differs")
+        if (
+            type(values["evolution_level"]) is not int  # noqa: E721
+            or not 1 <= int(values["evolution_level"]) <= 100
+        ):
+            raise RedLivingDexSetupTrustError("evolution family level differs")
     elif mechanic is RedGoalMechanic.BOX_SWITCH:
         if (
             type(values["target_box_index"]) is not int
@@ -517,6 +572,20 @@ def _goal_kind(option_kind: LivingDexOptionKind) -> GoalKind:
 
 def _safe_parameter(values: Mapping[str, object], key: str) -> str:
     return _safe_value(values.get(key), key)
+
+
+def _species_parameter(values: Mapping[str, object], key: str) -> str:
+    return _species_value(values.get(key), key)
+
+
+def _species_value(value: object, subject: str) -> str:
+    if not isinstance(value, str):
+        raise RedLivingDexSetupTrustError(f"{subject} differs")
+    try:
+        red_species_number(value)
+    except ValueError:
+        raise RedLivingDexSetupTrustError(f"{subject} differs") from None
+    return value
 
 
 def _safe_value(value: object, subject: str) -> str:

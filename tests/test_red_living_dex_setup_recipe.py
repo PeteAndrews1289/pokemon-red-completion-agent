@@ -53,6 +53,7 @@ from pokemon_red_completion.private_artifacts import (
     initialize_private_root,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_collection import red_internal_species_id
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfile,
@@ -68,7 +69,6 @@ from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedBoxSwitchGoalProvider,
     RedEncounterDiscoveryGoalProvider,
-    RedEncounterSourceDevelopmentGoalProvider,
     RedMartResupplyGoalProvider,
     RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
@@ -79,6 +79,15 @@ from pokemon_red_completion.red_living_dex_capture_plan import (
 )
 from pokemon_red_completion.red_living_dex_option_inventory import (
     red_living_dex_goal_family_ref,
+)
+from pokemon_red_completion.red_living_dex_provider_curriculum import (
+    RedEncounterSourceTarget,
+    RedResupplyTarget,
+    RedStorageTarget,
+    RedStoryTarget,
+    audit_red_living_dex_provider_curriculum,
+    red_living_dex_provider_family_target,
+    red_living_dex_targeted_provider_parameters,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
@@ -194,8 +203,8 @@ _OPTION_TO_GOAL = {
 
 _OPTION_TO_MECHANIC = {
     LivingDexOptionKind.ACQUIRE: RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
-    LivingDexOptionKind.EVOLVE: RedGoalMechanic.DIGLETT_EVOLUTION,
-    LivingDexOptionKind.DEVELOP: RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+    LivingDexOptionKind.EVOLVE: RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+    LivingDexOptionKind.DEVELOP: RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
     LivingDexOptionKind.MANAGE_STORAGE: RedGoalMechanic.BOX_SWITCH,
     LivingDexOptionKind.RESUPPLY: RedGoalMechanic.MART_RESUPPLY,
     LivingDexOptionKind.UNLOCK_ACCESS: RedGoalMechanic.MIDGAME_STORY,
@@ -206,7 +215,7 @@ _OPTION_TO_MECHANIC = {
 _OPTION_TO_PROVIDER = {
     LivingDexOptionKind.ACQUIRE: RedAreaSurveyGoalProvider,
     LivingDexOptionKind.EVOLVE: RedObservedGoalSkillProvider,
-    LivingDexOptionKind.DEVELOP: RedEncounterSourceDevelopmentGoalProvider,
+    LivingDexOptionKind.DEVELOP: RedObservedGoalSkillProvider,
     LivingDexOptionKind.MANAGE_STORAGE: RedBoxSwitchGoalProvider,
     LivingDexOptionKind.RESUPPLY: RedMartResupplyGoalProvider,
     LivingDexOptionKind.UNLOCK_ACCESS: RedStoryGoalBindingProvider,
@@ -366,17 +375,18 @@ def _profile_parameters(
         "wild:SeafoamIslands1F:grass",
         "wild:Route24:grass",
     )
+    if kind is LivingDexOptionKind.EVOLVE:
+        slot = build_red_living_dex_prospective_capture_plan().slots[token_index]
+        return red_living_dex_targeted_provider_parameters(slot, kind)
+    if kind is LivingDexOptionKind.DEVELOP:
+        slot = build_red_living_dex_prospective_capture_plan().slots[token_index]
+        return red_living_dex_targeted_provider_parameters(slot, kind)
     if kind in {
         LivingDexOptionKind.ACQUIRE,
-        LivingDexOptionKind.DEVELOP,
         LivingDexOptionKind.EXPLORE,
     }:
         values: dict[str, object] = {
-            "source_id": (
-                f"wild:PokemonMansion1F:{token}"
-                if kind is LivingDexOptionKind.DEVELOP
-                else wild_sources[token_index]
-            ),
+            "source_id": wild_sources[token_index],
             "label": f"source {token}",
             "map_id": boundary.map_id,
             "player_x": boundary.at[1],
@@ -387,8 +397,6 @@ def _profile_parameters(
             "maximum_seek_steps": 20,
             "maximum_encounters": 4,
         }
-        if kind is LivingDexOptionKind.DEVELOP:
-            values["completed_battles"] = 1
         return values
     if kind is LivingDexOptionKind.MANAGE_STORAGE:
         return {
@@ -447,16 +455,13 @@ def _provider_terminal(
     origin: RedRoutedSemanticBoundary,
     index: int,
 ) -> RedRoutedSemanticBoundary:
-    if kind is LivingDexOptionKind.EVOLVE:
+    if kind in {
+        LivingDexOptionKind.EVOLVE,
+        LivingDexOptionKind.DEVELOP,
+    }:
         return RedRoutedSemanticBoundary(
             int(MapId.CINNABAR_POKECENTER),
             (3, 3),
-            None,
-        )
-    if kind is LivingDexOptionKind.DEVELOP:
-        return RedRoutedSemanticBoundary(
-            int(MapId.POKEMON_MANSION_1F),
-            (1, 1),
             None,
         )
     if kind is LivingDexOptionKind.MANAGE_STORAGE:
@@ -522,16 +527,6 @@ def _recipe(
             profile=profile,
             story_objective_id=(token if kind is LivingDexOptionKind.UNLOCK_ACCESS else None),
         )
-        if kind is LivingDexOptionKind.EVOLVE:
-            family = RedLivingDexTransformationFamily(
-                kind,
-                _OPTION_TO_GOAL[kind],
-                RedGoalMechanic.DIGLETT_EVOLUTION,
-                {
-                    "source": f"precursor-{token}",
-                    "target": f"evolved-{token}",
-                },
-            )
         providers.append(
             RedLivingDexSetupProviderRecipe(
                 option_kind=kind,
@@ -599,14 +594,54 @@ def _cross_protected_effect(meter: _Meter, name: str) -> None:
     recorders[name]()
 
 
+def _recipe_party(
+    recipe: RedLivingDexSetupSlotRecipe,
+) -> tuple[tuple[int, ...], tuple[int, ...]]:
+    development_ref: str | None = None
+    evolution_source_ref: str | None = None
+    evolution_target_ref: str | None = None
+    evolution_level: int | None = None
+    for provider in recipe.providers:
+        spec = provider.provider_spec
+        assert hasattr(spec, "mechanic") and hasattr(spec, "parameters")
+        if spec.mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
+            development_ref = str(spec.parameters["trainee_species_ref"])
+        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+            evolution_source_ref = str(spec.parameters["source_species_ref"])
+            evolution_target_ref = str(spec.parameters["target_species_ref"])
+            evolution_level = int(spec.parameters["evolution_level"])
+
+    species = [BLASTOISE_SPECIES_ID]
+    levels = [60]
+    if development_ref is not None:
+        development_level = (
+            20 if evolution_level is None else max(2, evolution_level - 2)
+        )
+        species.append(red_internal_species_id(int(development_ref[-3:])))
+        levels.append(development_level)
+    excluded = {
+        *(int(value[-3:]) for value in (development_ref, evolution_source_ref) if value),
+        *(() if evolution_target_ref is None else (int(evolution_target_ref[-3:]),)),
+        9,
+    }
+    for national in (25, 50, 64, 72, 100, 104, 120):
+        if national in excluded:
+            continue
+        species.append(red_internal_species_id(national))
+        levels.append(60)
+        if len(species) == 6:
+            break
+    assert len(species) == len(levels) == 6
+    return tuple(species), tuple(levels)
+
+
 class _Reader:
     def __init__(self, arm: _Arm) -> None:
         self.arm = arm
 
     def read(self) -> RawGameState:
         boundary = self.arm.boundary
-        species = (BLASTOISE_SPECIES_ID, 59, 64, 118, 132, 104)
-        levels = (60, 55, 56, 57, 58, 59)
+        species, levels = _recipe_party(self.arm.recipe)
         return RawGameState(
             game_started=True,
             map_id=boundary.map_id,
@@ -640,8 +675,27 @@ class _Reader:
         return RedPokedexState(frozenset(), frozenset())
 
     def read_all_box_states(self) -> RedBoxCollectionState:
+        source_ref: str | None = None
+        source_level: int | None = None
+        for provider in self.arm.recipe.providers:
+            spec = provider.provider_spec
+            if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+                source_ref = str(spec.parameters["source_species_ref"])
+                source_level = int(spec.parameters["evolution_level"]) - 1
+        current = (
+            RedCurrentBoxState(
+                0,
+                (red_internal_species_id(int(source_ref[-3:])),),
+                (source_level,),
+            )
+            if source_ref is not None and source_level is not None
+            else RedCurrentBoxState(0, (), ())
+        )
         return RedBoxCollectionState(
-            tuple(RedCurrentBoxState(index, (), ()) for index in range(12)),
+            (
+                current,
+                *(RedCurrentBoxState(index, (), ()) for index in range(1, 12)),
+            ),
             0,
             False,
         )
@@ -768,6 +822,11 @@ class _Arm:
             capture=self._capture(),
             emulator=self.emulator,
             reader=self.reader,  # type: ignore[arg-type]
+            boxed_level_evolution_executor=lambda _request, _actions: GoalExecutionReport(
+                0,
+                0,
+                {},
+            ),
         )
         observation = context.adapter.observe()
         provisional = FreshRedGoalObservation(
@@ -812,6 +871,11 @@ class _Arm:
             capture=capture,
             emulator=self.emulator,
             reader=self.reader,  # type: ignore[arg-type]
+            boxed_level_evolution_executor=lambda _request, _actions: GoalExecutionReport(
+                0,
+                0,
+                {},
+            ),
         )
         if self.factory.wrong_context_emulator:
             context.emulator = object()  # type: ignore[assignment]
@@ -928,15 +992,125 @@ def test_recipe_plan_requires_ten_real_origin_maps_for_ten_logical_scopes() -> N
         "routed_option_count": 26,
         "same_origin_fork_required": True,
         "schema": "pokemon.red.private-living-dex-setup-recipe-plan.v2",
-        "semantic_family_count": 42,
+        "semantic_family_count": 39,
         "semantic_family_minimum": 33,
         "slot_count": 15,
         "train_slots": 10,
     }
+
+
+def test_complete_recipe_capacity_uses_real_targeted_team_families() -> None:
+    curriculum = audit_red_living_dex_provider_curriculum()
+    plan = build_red_living_dex_setup_recipe_plan(
+        _recipes(),
+        execution_identity=_identity(),
+    )
+    families_by_kind = {
+        kind: {
+            provider.expected_family_sha256
+            for recipe in plan.recipes
+            for provider in recipe.providers
+            if provider.option_kind is kind
+        }
+        for kind in LivingDexOptionKind
+    }
+    mechanics = {
+        provider.family.mechanic
+        for recipe in plan.recipes
+        for provider in recipe.providers
+    }
+
+    assert len(families_by_kind[LivingDexOptionKind.EVOLVE]) == 5
+    assert len(families_by_kind[LivingDexOptionKind.DEVELOP]) == 4
+    assert curriculum.public_dict() == {
+        "development_family_count": 4,
+        "development_offer_count": 6,
+        "evolution_family_count": 5,
+        "evolution_offer_count": 6,
+        "identity_derived_family_count": 0,
+        "offer_count": 45,
+        "private_identity_fields": 0,
+        "private_path_fields": 0,
+        "raw_controller_sequence_steps": 0,
+        "semantic_family_count": 33,
+        "teacher_routes": 0,
+    }
+    assert RedGoalMechanic.TARGETED_LEVEL_EVOLUTION in mechanics
+    assert RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT in mechanics
+    assert RedGoalMechanic.DIGLETT_EVOLUTION not in mechanics
+    assert RedGoalMechanic.BALANCED_TEAM not in mechanics
+    assert all(
+        "profile" not in json.dumps(provider.family.private_dict(), sort_keys=True)
+        and "slot" not in json.dumps(provider.family.private_dict(), sort_keys=True)
+        and "route" not in json.dumps(provider.family.private_dict(), sort_keys=True)
+        for recipe in plan.recipes
+        for provider in recipe.providers
+    )
     with pytest.raises(RedLivingDexSetupRecipeError, match="reused"):
         build_red_living_dex_setup_recipe_plan(
             _recipes(alias_last_location=True), execution_identity=_identity()
         )
+
+
+def test_production_curriculum_binds_every_nontraining_family_without_test_tokens() -> None:
+    plan = build_red_living_dex_prospective_capture_plan()
+    targets = tuple(
+        (
+            slot.family_scope_id,
+            option_kind,
+            red_living_dex_provider_family_target(slot, option_kind),
+        )
+        for slot in plan.slots
+        for option_kind in slot.available_option_kinds
+    )
+
+    encounter_sources = {
+        target.source_id
+        for _scope, _kind, target in targets
+        if isinstance(target, RedEncounterSourceTarget)
+    }
+    storage_boxes = {
+        target.target_box_index
+        for _scope, _kind, target in targets
+        if isinstance(target, RedStorageTarget)
+    }
+    resupply_quantities = {
+        target.quantity
+        for _scope, _kind, target in targets
+        if isinstance(target, RedResupplyTarget)
+    }
+    story_objectives = {
+        target.objective_id
+        for _scope, _kind, target in targets
+        if isinstance(target, RedStoryTarget)
+    }
+
+    assert encounter_sources == {
+        "wild:Route2:grass",
+        "wild:Route11:grass",
+        "wild:Route22:grass",
+        "wild:Route24:grass",
+        "wild:Route16:grass",
+        "wild:Route8:grass",
+        "wild:Route21:grass",
+    }
+    assert storage_boxes == {1, 2, 3, 4, 5}
+    assert resupply_quantities == {1, 2, 3, 4}
+    assert story_objectives == {
+        "cross_victory_road",
+        "defeat_blaine",
+        "defeat_giovanni",
+        "defeat_erika",
+        "obtain_strength",
+    }
+    assert all(
+        all(
+            forbidden not in field_name.lower()
+            for field_name in target.__dataclass_fields__
+            for forbidden in ("slot", "profile", "route", "root")
+        )
+        for _scope, _kind, target in targets
+    )
 
 
 def test_recipe_plan_rejects_expected_family_overlap_before_controller_input() -> None:
