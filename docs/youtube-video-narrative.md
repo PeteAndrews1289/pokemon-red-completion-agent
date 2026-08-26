@@ -1,5 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: make one lesson crash-proof, then count the classroom before play
+
+Open on a frozen **3+ OPTION MENU**. Put the claim envelope on the table **before** a glass lottery
+drum turns. The selected card drops into a sealed slot labelled **SYNCED BEFORE CONTROLLER
+AUTHORITY**. Light exactly one semantic executor; leave every masked and unselected wire dark. A
+fresh observer seals the terminal.
+
+Now pull the power cable halfway through. Restart the process and show the same envelope reappear as
+**INTERRUPTED · RETRY FORBIDDEN**. Repeat with an ordinary executor error and stamp **FAILED · RETRY
+FORBIDDEN**. Change one byte in the menu, selection, capture attestation, and observer binding; each
+gets a red **TAMPERED · FAIL CLOSED** stamp. Finally, push a synthetic rehearsal row toward the fit
+door and show it rejected: **REAL EXECUTION PROVENANCE REQUIRED**.
+
+Flash **24 MATERIALIZER TESTS · 55 RELATED · 4,802 CI TESTS · PR 54 · ANTIGRAVITY P0/P1 0**.
+Keep the honesty bar fixed underneath: **ROM 0 · PRIVATE CAPTURES 0 · ACTIONS 0 · FRAMES 0 ·
+OUTCOMES 0 · CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**. The spoken line is: **“We made the
+experiment survive a crash. We still have not trained the model.”**
+
+Cut to the next board, a silent census rather than gameplay: **AUTHENTIC REPEATABLE RED CAPTURES →
+COMPLETE MENUS → 8 TRAIN / 4 OPTION KINDS / 3 FAMILIES + 4 FAMILY-AND-LOCATION-DISJOINT
+DEVELOPMENT**. Put **CLAIMS · DRAWS · BUTTONS · FRAMES · OUTCOMES · FITS = 0** beside it. Split the
+ending: **COVERAGE PASSES → PUBLISH EXACT PLAN**, or **SHORTFALL → STOP AND REORIENT**. Never show a
+third path that lowers the gate. End with: **“Before paying for twelve real lessons, count whether
+the honest classroom actually exists.”**
+
 ## August 26 scene: build the honest Red classroom, then catch two ways it could cheat
 
 Open with the abstract card from the prior scene, then plug it into a Red state. Fan out **3+

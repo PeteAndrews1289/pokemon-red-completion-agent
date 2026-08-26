@@ -1,28 +1,33 @@
 # Three-agent coordination
 
-> **2026-08-26 Red observed-arm boundary implemented; durable materializer active:** The Red
-> adapter now derives identity-free normalized 3+ row menus with hard masks and private executor
-> bindings. The collector uses one scenario/menu/partition-bound system-random commitment,
-> executes one selected binding once, and settles only its fresh observed outcome. Synthetic
-> callables cannot satisfy the calibration fit gate; counted rows must trace to the established
-> dual-capability or Red goal-skill runtime. Thirty focused tests and a 79-test related slice
-> pass ROM-free. See the
-> [adapter design](docs/red-living-dex-observed-arm-adapter.md),
-> [contract](docs/living-dex-option-value-contract.md), and
-> [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
+> **2026-08-26 durable Red materializer published; authentic curriculum inventory active:** Source
+> `98cfa01096e16b36c3f6b9a829d05ffa7293af36` passed exact-source CI `32933786447/1` with
+> 4,802 tests and merged through PR 54 as main `34a2c920c5e5a95bc4f29eaba18510d329815ed4`.
+> Complete-menu freeze, claim-before-randomization, selection persistence before controller
+> authority, authenticated selected-only execution, bound observation, exact fresh-process reload,
+> tamper rejection, and permanent failed/interrupted terminals are now ROM-free and durable.
+> Rehearsal and direct-collector rows cannot satisfy fit provenance. See the
+> [qualification](docs/evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json),
+> [adapter design](docs/red-living-dex-observed-arm-adapter.md), and
+> [shared contract](docs/living-dex-option-value-contract.md).
 >
-> Codex owns the durable repeatable Red scenario materializer: complete authenticated menus,
-> claim-before-randomization, exactly one persisted commitment, no reissue/retry, genuine semantic
-> executors, one selected action, and fresh outcome settlement. Then collect the minimum 8 train +
-> 4 new disjoint development outcomes and fit/report once. Claude owns read-only causal-design,
-> leakage, calibration, and power review when authenticated. Antigravity owns read-only cross-title
-> schema, mask, propensity, and adversarial-boundary review; Gemini 3.7 Flash Medium remains the
-> routine choice. Antigravity returned `GO`; Claude's pre-fix `GO-WITH-FIXES` findings were repaired,
-> while its later CLI session was logged out. Neither reviewer executes gameplay or blocks ordinary
-> implementation. Codex adjudicates disagreements and records the reason. No agent owns V4 retry,
-> unobserved-arm labels, outcome-balanced selection, sealed/benchmark roots, sealed Red, Crystal
-> execution, promotion, or full replay in this lane. Counters remain **development
-> 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+> Codex owns exactly one action-free private inventory/preflight: authenticate repeatable,
+> nonsealed, unconsumed Red captures; derive complete 3+ row menus and fresh-observer bindings; and
+> freeze a path-free plan only if it proves 8 train scenarios across 4 genuine train option kinds
+> and 3 train families plus 4 development scenarios disjoint by family and location. Claims,
+> random draws, controller inputs, frames, outcomes, and fits remain zero. A shortfall or provenance,
+> uniqueness, completeness, or disjointness failure stops for reorientation rather than lowering
+> the gate. Publish the exact plan before separately opening real collection.
+>
+> Antigravity's exact-commit audit returned `APPROVED WITH NOTES`, P0/P1 zero. Codex accepted the
+> clarification that title-specific adapters/materializers feed a transferable feature, outcome,
+> calibration, and model schema; genericizing the Red boundary is not current work. Claude was
+> unavailable for a final authenticated review, so no verdict is claimed. Both remain read-only,
+> inspect no private captures, execute no gameplay, and do not block ordinary development. Codex
+> adjudicates and publishes. No agent owns V4 retry, unobserved-arm labels, real outcomes before
+> plan publication, sealed/benchmark roots, sealed Red, Crystal execution, promotion, or full replay.
+> Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+> authority 0 · transfer 0**.
 
 > **2026-08-25 V3 train ordinal zero censored; observation recovery active:** Collector main
 > `7ebea63c` passed CI `32900424741/1`; storage-port repair main `14d7bcea` passed CI

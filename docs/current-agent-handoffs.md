@@ -6,42 +6,41 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the durable Red observed-arm materializer
+## Current override: Codex owns one action-free authenticated Red curriculum inventory
 
-The proposed V4 12+8 freeze remains retired without execution. Its counterfactual binary learner is
-replaced by the shared selected-arm option-value contract and the now-implemented Red adapter,
-collector, and calibration gate. Red private bindings project to 3+ row identity-free menus with
-exact normalization provenance, option-specific resource masks, neutral ordering, selected-once
-execution, fresh observed outcomes, and target-free censoring. A realized loss from the living
-collection cannot be laundered by a positive private verifier.
+The durable Red materializer is complete and published. Source `98cfa01096e16b36c3f6b9a829d05ffa7293af36`
+passed exact-source CI `32933786447/1` with 4,802 tests and merged through PR 54 as main
+`34a2c920c5e5a95bc4f29eaba18510d329815ed4`. It durably enforces complete-menu freeze,
+claim-before-randomization, selection persistence before controller authority, one authenticated
+selected arm, one bound fresh observation, exact terminal reload, tamper rejection, and permanent
+failed/interrupted terminals. Synthetic rehearsal and direct-collector rows cannot satisfy fit
+readiness. See the
+[qualification](evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json)
+and [adapter design](red-living-dex-observed-arm-adapter.md).
 
-The review pass also removed two subtle experimental shortcuts. Randomization now starts with one
-CSPRNG commitment bound to the scenario, partition, and complete menu; the authentic materializer
-must claim first, persist it before input, and forbid reissue. Raw synthetic callables cannot open
-fitting; counted examples must use the established dual-capability or Red goal-skill semantic
-wrappers. Thirty focused tests and a 79-test related slice pass. See
-[the qualification](evidence/red-living-dex-observed-arm-adapter-qualification-v1-2026-08-26.json)
-and [the adapter design](red-living-dex-observed-arm-adapter.md). The boundary is published as main
-`0320a5a8` through PR 52 and green CI `32930451851/1`.
+Codex now owns exactly one action-free inventory and plan preflight for
+`repeatable-red-living-dex-option-value-calibration-v1`. Inspect authenticated repeatable,
+nonsealed, unconsumed Red captures; verify the state/envelope/capture/attestation join; derive every
+complete 3+ row menu and independent observer binding; and freeze a path-free plan only if it
+contains at least eight train scenarios spanning four genuine train option kinds and three train
+families plus four development scenarios disjoint from train by family and location. Claims,
+behavior draws, controller inputs, frames, after-observations, outcomes, and fitting remain zero.
+A provenance, uniqueness, menu, disjointness, or coverage failure stops for reorientation rather
+than weakening the plan.
 
-Codex now owns the remaining materializer work for
-`repeatable-red-living-dex-option-value-calibration-v1`: enumerate authentic complete menus from
-repeatable nonsealed Red checkpoints, bind at least four genuine option kinds, durably claim and
-randomize once, execute one selected skill, settle at least eight train and four new disjoint
-development outcomes, then fit exactly once on train and report development descriptively. This is
-calibration for sizing a later benchmark, not authority or transfer evidence.
+Antigravity's exact-commit audit returned `APPROVED WITH NOTES`, P0/P1 zero. Codex accepts its
+title-boundary clarification: Red and Crystal need separate observation/materialization adapters,
+while the learner's feature, outcome, calibration, and model schema remains shared. Genericizing
+the already-safe Red materializer is not current work. Claude remains the read-only causal-design,
+leakage, calibration, and power reviewer when authenticated; it was unavailable for the final
+materializer pass, so no verdict is claimed. Antigravity remains the read-only architecture,
+claim-boundary, and transfer reviewer. Neither reviewer inspects private captures, executes
+gameplay, edits the worktree, or blocks ordinary development. Codex adjudicates and publishes.
 
-Claude reviews causal validity, leakage, outcome definitions, calibration, and sample-power claims
-when authenticated. Its pre-fix `GO-WITH-FIXES` found seed shopping and synthetic coverage; both are
-fixed, but its CLI was logged out for the requested re-review. Antigravity reviews cross-title
-schema invariance, masks, replayable propensities, private-boundary leakage, and adversarial
-fixtures; its post-change audit returned `GO` with no P0. Both remain read-only milestone reviewers.
-Codex is the sole implementer and decision maker, and records why any recommendation is declined.
-Gemini 3.7 Flash Medium is the default Antigravity model for bounded audits. No agent owns V4 retry,
-counterfactual targets, outcome-balanced selection, sealed/benchmark roots, sealed Red, Crystal
-execution, promotion, or full replay.
-Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
-authority 0 · transfer 0**.
+No agent owns V4 retry, counterfactual targets, outcome-balanced selection, real collection before
+the path-free plan is published, sealed/benchmark roots, sealed Red, Crystal execution, promotion,
+or full replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Previous override: Codex owned one ROM-free post-exception observation repair
 

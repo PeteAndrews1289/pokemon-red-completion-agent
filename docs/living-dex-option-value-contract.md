@@ -144,9 +144,9 @@ it cannot support coefficient interpretation, policy-superiority inference, or p
 
 ## Next integration boundary
 
-The Red adapter, selected-arm collector, and calibration coverage gate now implement items 1–4
-below at the ROM-free contract boundary. The next lane must materialize them from authenticated,
-repeatable Red checkpoints and add durable once-only execution:
+The Red adapter, selected-arm collector, calibration coverage gate, and durable materializer now
+implement items 1–4 below at the ROM-free contract boundary. The next lane must inventory their
+authentic repeatable Red inputs without acting, then publish the exact 8+4 plan before collection:
 
 1. enumerate genuine multi-family menus from ledger, dependency, reachability, resource, party, and
    storage state;
@@ -162,6 +162,10 @@ repeatable Red checkpoints and add durable once-only execution:
 
 Raw callable fixtures are explicitly synthetic and cannot satisfy fit readiness. Counted settled
 rows must trace to the existing Red dual-capability or bounded goal-skill semantic runtimes. The
-next materializer must mutation-test claim-before-randomization, single commitment issuance,
+published materializer mutation-tests claim-before-randomization, single commitment issuance,
 commitment-before-input persistence, masked/nonselected exclusion, fresh observation binding, and
-no retry after claim. See the [Red adapter design](red-living-dex-observed-arm-adapter.md).
+no retry after claim. The action-free inventory must now prove 8 train scenarios across 4 genuine
+option kinds and 3 train families plus 4 family-and-location-disjoint development scenarios, or
+stop without lowering that gate. See the
+[Red adapter design](red-living-dex-observed-arm-adapter.md) and
+[materializer qualification](evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json).

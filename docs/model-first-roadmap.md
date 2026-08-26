@@ -8,43 +8,47 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: materialize authentic Red observed-arm decisions durably
+## Current checkpoint: prove the authentic Red 8+4 curriculum without acting
 
-The V4 12+8 freeze is retired **before execution**. Independent Claude and Antigravity audits found
-that its inherited binary ranker could turn a failed selected action into a positive target for the
-alternative action that never ran. Its menus also collapsed to two reachable feature-difference
-shapes, and its fitter required an outcome balance the freezer could not guarantee. More careful
-one-shot ceremony would have protected an invalid learning question.
-
-The replacement shared contract and its Red adapter boundary are now implemented ROM-free. Red
-state projects to variable-size anonymous menus spanning acquisition, evolution, trade, team
-development, storage, resupply, access, and exploration. The adapter proves every normalization,
-hard-masks unavailable work, neutralizes row ordering, and binds only private semantic executors.
-The collector executes one selected binding once and learns only from its independently observed
-consequence. Censored attempts have no target, and a realized loss of a retained living specimen
-forces failure and irreversible-loss evidence. See the
+The V4 12+8 freeze remains retired **before execution** because it could reward an option that never
+ran. Its replacement selected-arm contract, Red adapter, collector, calibration gate, and durable
+outer materializer are now published ROM-free. The materializer claims before randomness, persists
+the exact selected arm before controller authority, executes one authenticated semantic binding,
+binds a fresh independent observation, reloads complete terminals exactly, and treats failed or
+power-loss-interrupted claims as permanently non-retryable. Rehearsal and raw-collector examples
+cannot open fitting. See the
+[materializer qualification](evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json),
 [adapter design](red-living-dex-observed-arm-adapter.md),
-[contract](living-dex-option-value-contract.md), and
+[shared contract](living-dex-option-value-contract.md), and
 [redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md).
 
-Randomization is now one system-random commitment bound to the frozen scenario, partition, and
-complete menu. This replaces independently caller-selected seeds that could be searched until a
-desired arm won. Synthetic test callables are provenance-marked and cannot satisfy fit readiness;
-counted outcomes must trace to the established Red dual-capability or goal-skill runtimes.
-Thirty focused tests and a 79-test related slice are green ROM-free.
+Source `98cfa01096e16b36c3f6b9a829d05ffa7293af36` passed exact-source GitHub CI
+`32933786447/1` with **4,802 passed · 1 skipped · 3 deselected · 1 expected failure** and merged
+through PR 54 as main `34a2c920c5e5a95bc4f29eaba18510d329815ed4`. Antigravity approved the
+exact commit with P0/P1 zero and one accepted clarification: the feature, outcome, calibration, and
+model schema is transferable, while each title owns its observation adapter and materializer.
+Claude was unavailable for a final authenticated pass. No ROM, private capture, action, frame,
+outcome, fit, authority, or transfer counter moved.
 
-Active `repeatable-red-living-dex-option-value-calibration-v1` now builds the durable authentic Red
-scenario materializer. It must enumerate a complete genuine menu with at least three distinct
-available rows, bind at least four real option kinds, claim before randomization, issue and persist
-exactly one commitment before controller input, prohibit reissue/retry, execute only the sampled
-binding, and settle one fresh outcome. Then collect at least eight repeatable train outcomes across
-four option kinds and three transformation families plus four new family/location-disjoint
-development outcomes. Fit once on train only and report descriptive calibration and variance
-against random and cost-only baselines. These minimum counts size the later paired benchmark; they
-do not prove competence.
+Active `repeatable-red-living-dex-option-value-calibration-v1` now performs exactly one action-free
+inventory over authenticated repeatable, nonsealed, unconsumed Red captures. It may read and join
+capture state, envelope, capture identity, and attestation; derive complete 3+ option menus and
+fresh-observer bindings; and construct a path-free plan. It may not claim a scenario, issue or
+inspect a behavior draw, select or execute an arm, send controller input, advance a frame, observe
+an after-state, or fit a model.
 
-Stop before any powered benchmark, sealed Red, Crystal execution, authority promotion, or full
-replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+The plan passes only with at least eight train scenarios spanning four genuine train option kinds
+and three train transformation families, plus four development scenarios disjoint from train by
+both family and location. Roots and scenario identities must be unique, provenance byte-verified,
+menus complete, and executors authentic. Reject sealed, consumed, nonrepeatable, duplicate,
+synthetic, incomplete, or overlapping candidates. A shortfall is a useful falsifier: stop and
+reorient instead of lowering the gate or adding another generic framework layer.
+
+If the inventory passes, publish its exact path-free plan and preflight boundary before a separate
+real-outcome collection step. The later 8+4 batch remains an integration and variance pilot: fit
+once on train only, report development descriptively, and use its variance to power a later paired
+benchmark. Stop before any powered benchmark, sealed Red, Crystal execution, authority promotion,
+or full replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
 comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Previous checkpoint: V3 spent one root without a target; preserve observable failures before V4

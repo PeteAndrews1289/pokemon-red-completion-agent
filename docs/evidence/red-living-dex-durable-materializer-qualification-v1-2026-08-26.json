@@ -1,0 +1,137 @@
+{
+  "artifacts": {
+    "adapter": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_adapter.py",
+      "sha256": "3ca7c6cac827ac4ad63da7711bcca35c495390d392c14b922aa54f560e535771"
+    },
+    "calibration": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_calibration.py",
+      "sha256": "fd0384e4f55a78ae1849ee646d8225da9a5c3babf6f35e5bc834eb0932ddcb41"
+    },
+    "collector": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_collector.py",
+      "sha256": "e4792c2d6ed42c44bfba9b67dce7f4d71646d10871cacf36fc854a6e69576a7c"
+    },
+    "materializer": {
+      "path": "src/pokemon_red_completion/red_living_dex_option_materializer.py",
+      "sha256": "c86be7323e60752bc894c62505b337560c14a0efb7072f5990d882b9b948c8c5"
+    },
+    "tests": [
+      {
+        "path": "tests/test_red_living_dex_option_adapter.py",
+        "sha256": "d140b15a40b27957d1f77625d0559900b7020488fad2f6ceab0bafb80cde36f6"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_collector.py",
+        "sha256": "2de72a07e8cdb5e418b3153ea1cd7cdc1485a6e4d1c499045c156b1597b58347"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_calibration.py",
+        "sha256": "2056485fef5df80f9fe3036e94ff348f4b488d6076e1a6e772d060d321fa7ac0"
+      },
+      {
+        "path": "tests/test_red_living_dex_option_materializer.py",
+        "sha256": "de09e04170f14e59e901701dcdc35d8a467216502ff30a1b80432738d101132e"
+      }
+    ]
+  },
+  "claim_boundary": {
+    "supported": "Published ROM-free source supplies the Red-specific durable outer state machine for the shared observed-arm learner: it validates one complete 3+ option menu per repeatable scenario, claims the scenario before system randomization, synchronizes the exact selected arm before controller authority, executes only that authenticated semantic binding, binds one independent after observation, reloads complete records exactly after a fresh-process restart, permanently skips failed or interrupted claims, and excludes rehearsal or direct-collector examples from fitting.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_adapter",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "policy_superiority",
+      "powered_benchmark",
+      "sealed_red_result",
+      "title_neutral_materializer"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "effects": {
+    "controller_actions": 0,
+    "development_openings": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "private_artifact_reads": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "independent_reviews": {
+    "antigravity": {
+      "model": "Gemini 3.1 Pro High",
+      "p0_defects": 0,
+      "p1_defects": 0,
+      "p2_notes": [
+        "The shared feature and outcome learner is title-neutral, but the materializer and raw observer-provenance payload are intentionally Red-specific. Crystal needs its own title adapter into the shared schema rather than a claim that this Red materializer transfers unchanged."
+      ],
+      "verdict": "approved_with_notes"
+    },
+    "claude": {
+      "reason": "Claude Code was installed but logged out, and the running desktop application did not expose a responsive review surface. No Claude verdict is claimed.",
+      "verdict": "unavailable"
+    }
+  },
+  "next_gate": {
+    "action_free_private_inventory_allowed": true,
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "model_fit_allowed": false,
+    "real_collection_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Perform one action-free private inventory and preflight over authenticated repeatable, nonsealed, unconsumed Red captures. Derive their complete menus and independent observer bindings, prove a path-free 8-train plus 4-family-and-location-disjoint-development plan with at least four genuine train option kinds and three train families, and publish the exact plan boundary before any claim, random draw, controller action, frame, outcome, or fit. A shortfall stops the lane for reorientation rather than lowering the coverage gate."
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32933786447,
+    "ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/32933786447",
+    "merged_main_commit": "34a2c920c5e5a95bc4f29eaba18510d329815ed4",
+    "pull_request": 54,
+    "pull_request_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/54",
+    "source_bundle_sha256": "b35398864049684d00a8b0848e6190ef9e3f86404c1e9e252fd87460d4bfe585",
+    "source_commit": "98cfa01096e16b36c3f6b9a829d05ffa7293af36"
+  },
+  "recorded_on": "2026-08-26",
+  "review_adjudication": {
+    "antigravity_no_retry_summary": "Accepted with a precision correction: an ordinary process-level exception is retained as failed, while an actual orphan partial after power loss is recovered as interrupted. Both are terminal and non-retryable.",
+    "antigravity_title_specificity": "Accepted as a documentation clarification and rejected as a current redesign request. Title-specific observation adapters and materializers are expected; the feature, outcome, calibration, and later model contracts are the portable layer. Crystal must prove an equivalent projection rather than reuse Red memory facts.",
+    "decision": "publish_and_open_action_free_authentic_inventory_preflight"
+  },
+  "schema": "pokemon.red.living-dex-durable-materializer-qualification.v1",
+  "status": "published_rom_free_materializer_qualified_for_action_free_authentic_plan",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_materializer_tests_passed": 24,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 4802,
+      "skipped": 1,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "github_ci": "passed",
+    "mypy_source_files": 266,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "related_tests_passed": 55,
+    "ruff_status": "passed"
+  }
+}
