@@ -21,6 +21,10 @@ Fourteen need a reusable composition seam that can execute an authenticated rout
 semantic skill and then independently verify that skill. That seam does not exist. The pilot is
 therefore **plan-valid but execution-blocked**.
 
+The ROM-free implementation candidate for that seam is specified in
+[routed semantic goal composition V1](routed-semantic-goal-composition-v1.md). It is not credited
+here until its own publication, exact-head CI, and qualification are complete.
+
 Trade is a separate full-product gap. The current `GoalKind`/Red binding layer has no repeatable
 semantic trade executor. The first calibration pilot intentionally excludes trade because its
 frozen minimum is four kinds, not all eight. A passing pilot cannot promote living-Pokédex or
