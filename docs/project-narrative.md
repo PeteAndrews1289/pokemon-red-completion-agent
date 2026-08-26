@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the counter can now finish the room without ignoring a broken card
+
+V3 reached main `1db95546` through PR 61 and passed 4,981 tests in exact-main CI. Every eligible
+context now opens in a fresh emulator, so a failed restore cannot contaminate the next card.
+Restore, observation, enumeration, replay, and projection failures have finite anonymous bins; a
+global authentication, namespace, effect, accounting, integrity, or publication defect still
+stops everything.
+
+The important word is *accounting*. Every authenticated input must resolve exactly once, and that
+equation is checked before coverage and again before a plan can publish. Seventy-one focused tests
+and a 213-test related boundary prove later cards continue, fatal errors cannot masquerade as
+exclusions, a process interruption cannot hide a frame, and no identity/path appears. No cartridge
+or capture was opened while qualifying it; learner progress remains zero.
+
+The next scene is one final classroom count. If all 81 cards supply the unchanged 8+4 curriculum,
+the project can finally collect the first causal observed-arm outcomes. If the full count is short,
+the project stops recycling binary goal-manager captures and builds purpose-made living-Pokédex
+lessons. Either result moves the actual product forward; neither lowers what the model must learn.
+
 ## August 26: one bad context stopped the counter before it saw the classroom
 
 The one V2 reading paid off, though not with a curriculum. It authenticated 81 inputs, reached the

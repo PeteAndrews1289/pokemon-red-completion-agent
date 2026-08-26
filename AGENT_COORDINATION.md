@@ -1,6 +1,24 @@
 # Three-agent coordination
 
-> **2026-08-26 V2 retired at state observation; exhaustive successor qualification active:** The
+> **2026-08-26 exhaustive V3 published; one whole-bank census active:** Source `8decf85d` passed
+> PR CI `32946586301/1`, merged through PR 61 as main `1db95546`, and passed exact-main CI
+> `32946811445/1` with 4,981 tests. Its
+> [qualification](docs/evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)
+> binds every artifact and source registry. It used no ROM/private capture and moved no gameplay,
+> learning, authority, or transfer counter.
+>
+> Codex owns exactly one new-identity V3 action-free census. It must reconcile all 81 contexts as
+> finite anonymous exclusions or complete menus, evaluate coverage once, and either freeze the
+> unchanged 8+4 plan or stop with exact aggregate exclusions/coverage. Stop and reorient at the
+> first terminal; V1/V2/V3 never retry.
+>
+> Claude and Antigravity remain optional read-only milestone reviewers; no review verdict is
+> claimed for V3 qualification. Neither inspects private captures, executes gameplay, edits the
+> worktree, or blocks ordinary work. No agent owns a draw, claim, controller action, frame,
+> outcome, fit, sealed Red, Crystal, promotion, or replay. Counters remain **development 15 ·
+> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-26 V2 retired at state observation; exhaustive successor qualification active:** The
 > sole V2 census ran from main `cca0eb8d` under CI `32942245005/1` after PR 59/main `f20cdd6a`
 > passed CI `32943145668/1`. Its
 > [terminal](docs/evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)

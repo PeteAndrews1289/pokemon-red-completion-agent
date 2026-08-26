@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the exact census found the earliest blocker.** The
+> **Current product focus (August 26, 2026): count the whole authentic classroom once.** Exhaustive
+> V3 shipped through
+> [PR 61](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/61) as main
+> `1db95546`; exact-main CI `32946811445/1` passed 4,981 tests. Its
+> [qualification](docs/evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)
+> proves isolated per-context restores, finite anonymous local exclusions, fatal global stops,
+> whole-bank reconciliation before coverage/publication, hidden-effect retention, and privacy.
+> Qualification opened no ROM or private capture.
+>
+> Exactly one action-free V3 census is open. It must reconcile all 81 contexts and either freeze
+> **8 train / 4 genuine option kinds / 3 families + 4 family-and-location-disjoint development**
+> or stop with exact aggregate exclusions and finite coverage. Stop and reorient at the first
+> terminal; V1/V2/V3 cannot retry. Draws, claims, controller authority/actions, frames, outcomes,
+> predictions, teacher queries, fits, sealed Red, Crystal, promotion, and replay remain closed.
+> Boards stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+> authority 0 · transfer 0**.
+
+> **Previous product focus (August 26, 2026): the exact census found the earliest blocker.** The
 > sole V2 action-free census authenticated all 81 private Red inputs, considered 12 contexts, read
 > 11 states, and failed closed at `state_observation`. Its
 > [path-free terminal](docs/evidence/red-living-dex-authentic-inventory-v2-failure-2026-08-26.json)

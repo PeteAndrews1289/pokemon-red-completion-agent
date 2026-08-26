@@ -6,7 +6,29 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the ROM-free exhaustive successor qualification
+## Current override: Codex owns one exact exhaustive V3 census
+
+V3 source `8decf85d48a3e1cb9ad0940ba63d8a2fee4c13fb` passed PR CI `32946586301/1`,
+merged through PR 61 as main `1db9554624178a570a608cbf136a5d74182deee4`, and passed
+exact-main CI `32946811445/1` with 4,981 tests. Its
+[qualification](evidence/red-living-dex-exhaustive-inventory-v3-qualification-2026-08-26.json)
+binds the exact source, artifacts, and registries. Qualification used no protected input or game
+and changed no learning counter.
+
+Codex owns exactly one new-identity V3 authenticated action-free census. Reconcile all 81
+repeatable, nonsealed, unconsumed contexts as fixed exclusions or complete menus. Publish a private
+plan only if the unchanged 8-train/4-kind/3-family plus 4 family-and-location-disjoint development
+gate passes; otherwise the exact aggregate exclusions and coverage are the result. Stop and
+reorient at the first terminal. No inventory identity may retry.
+
+Claude remains the optional read-only statistics/leakage reviewer; Antigravity the optional
+read-only architecture/transfer reviewer. Neither reads private captures, executes gameplay,
+edits the worktree, or delays ordinary work; no V3 verdict is claimed. Codex adjudicates and
+publishes. No agent owns draws, claims, actions, frames, outcomes, fits, sealed Red, Crystal,
+promotion, or replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
+4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned only the ROM-free exhaustive successor qualification
 
 The sole V2 action-free census ran from main `cca0eb8d` under CI `32942245005/1`, after the
 one-shot reorientation merged through PR 59/main `f20cdd6a` under CI `32943145668/1`. Its
