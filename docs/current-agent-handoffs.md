@@ -6,28 +6,33 @@ Status: active operating assignment as of 2026-08-25. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free V4 12+8 curriculum freeze
+## Current override: Codex owns the observed-arm Red adapter and calibration loop
 
-The observer repair reached main as `c663c3f4` under green CI `32913718889/1`. Its
-[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
-(SHA-256 `1b402002…f1463`) records 4,730 tests, 17 focused observer-contract tests, 9/9 killed
-mutations, and zero ROM/private/gameplay/learning/authority/transfer effects. Readable state after
-ordinary selected-skill failure now settles honestly; only observation failure censors. The repair
-is retired.
+The proposed V4 12+8 freeze is retired without execution. Claude and Antigravity both found that
+its inherited binary learner generated a positive preference for an alternative it never executed
+whenever the selected arm failed. They also found only two reachable feature-difference shapes and
+an outcome-balance requirement the prospective freezer could not enforce. The shared replacement
+is implemented ROM-free with variable-size anonymous menus, hard masks, full-support behavior
+propensities, selected-arm-only multi-outcome targets, censored target exclusion, train-only fitting,
+and held-out selected-arm calibration. Eighteen focused tests and an 84-test related slice pass.
 
-Codex owns `red-living-dex-multifamily-option-value-curriculum-v4`: implement or minimally adapt
-the action-free freezer under new identities; freeze twelve train trials with eight required plus
-four fixed reserves and eight untouched development trials; require twenty distinct globally
-unused physical roots, exclude every consumed root including V3's, keep train/development families
-and roots disjoint, preserve both executable anonymous choices in every menu, and stop after one
-freeze. No model, teacher, claim, controller input, outcome, or fit belongs in this session.
+Codex owns `repeatable-red-living-dex-option-value-calibration-v1`: build the Red adapter and
+bounded repeatable collector around the shared contract, prove three or more genuinely different
+available rows and cross-title schema parity in public fixtures, then collect at least eight train
+outcomes across four option kinds and three transformation families plus four new disjoint
+development outcomes. Fit exactly once on train and report paired descriptive calibration and
+variance against random and cost-only baselines. This is calibration for sizing a later benchmark,
+not authority or transfer evidence.
 
-Claude's next useful review is V4 censoring arithmetic, sample power, and leakage after the plan
-exists. Antigravity's is global-root exclusion, reserve identity, and cross-game abstraction. Both
-are read-only milestone reviewers, not execution owners or standing blockers. No agent owns V3
-retry, V4 trial execution before reorientation, development outcome opening, fit, sealed Red,
-Crystal, replay, promotion, completion, or transfer. Counters remain **development 15 · verified
-5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+Claude reviews causal validity, leakage, outcome definitions, calibration, and sample-power claims.
+Antigravity reviews cross-title schema invariance, masks, replayable propensities, private-boundary
+leakage, and adversarial fixtures. Both are read-only milestone reviewers. Codex is the sole
+implementer and decision maker, and records why any recommendation is declined. Gemini 3.7 Flash
+Medium is the default Antigravity model for these bounded audits; use Pro only for a disputed
+architecture decision. No agent owns V4 execution, counterfactual targets, outcome-balanced
+selection, sealed/benchmark roots, sealed Red, Crystal execution, promotion, or full replay.
+Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+authority 0 · transfer 0**.
 
 ## Previous override: Codex owned one ROM-free post-exception observation repair
 

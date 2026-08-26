@@ -1,6 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 25 scene: repair the observer, then freeze spare lessons before play
+## August 25 scene: the model was being graded on a move it never made
+
+Open on the proposed V4 envelope: **12 TRAIN + 8 DEVELOPMENT · ACTIONS 0**. Before it seals, split
+the screen into two choices. Let the selected choice fail, leave the other untouched, and then show
+the old target flip to **UNEXECUTED ALTERNATIVE = PREFERRED**. Freeze the frame. Say: **“That is not
+a lesson. It is a guess about a world we never observed.”**
+
+Stack the independent findings: **COUNTERFACTUAL LABEL · ONLY TWO REACHABLE FEATURE SHAPES ·
+OUTCOME BALANCE CANNOT BE FROZEN PROSPECTIVELY**. Stamp **V4 RETIRED UNEXECUTED · ROOTS SPENT 0**.
+The point is not that the safety ceremony failed; it is that safety around the wrong experiment
+still produces the wrong experiment.
+
+Build the replacement card on screen: **VARIABLE-SIZE ANONYMOUS MENU → HARD MASKS → LOGGED
+FULL-SUPPORT PROPENSITIES → ONE SELECTED ACTION → ONE OBSERVED MULTI-OUTCOME TARGET**. Fan out the
+outcome heads: **SUCCESS · COLLECTION GAIN · DEPENDENCY UNLOCK · TIME · RESOURCES · PARTY COST ·
+STORAGE COST · IRREVERSIBLE LOSS**. Drop censored cards through a slot marked **NO TARGET**. Flash
+**18 FOCUSED TESTS · 84 RELATED TESTS · ROM 0 · PRIVATE DATA 0 · GAMEPLAY 0**.
+
+End on the new rail: **RED ADAPTER → REPEATABLE SHORT SCENARIOS → 8 TRAIN ACROSS 4 OPTION KINDS /
+3 FAMILIES → 4 NEW HELD-OUT DEVELOPMENT OUTCOMES → ONE TRAIN-ONLY FIT → PAIRED CALIBRATION +
+VARIANCE**. Keep **AUTHORITY 0 · TRANSFER 0 · CRYSTAL CLOSED** visible. Narration: **“We finally
+have a way to teach consequences rather than replay answers. The next job is connecting Red to
+that classroom.”**
+
+## Earlier August 25 scene: repair the observer, then freeze spare lessons before play
 
 Open on **MAIN C663C3F4 · CI 32913718889/1 GREEN · 4,730 TESTS**. Replay the three unknown endings
 from the failed lesson, then resolve them one by one: **SKILL REPORTS FAILURE → ONE FRESH LEDGER →

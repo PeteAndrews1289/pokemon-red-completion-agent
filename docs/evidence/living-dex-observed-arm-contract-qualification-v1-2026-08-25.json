@@ -1,0 +1,102 @@
+{
+  "artifacts": {
+    "contract_document": {
+      "path": "docs/living-dex-option-value-contract.md",
+      "sha256": "9876cdcbbdbfab58a24a89b887b5d27555b3d6dbc60f3060ec912109c7199f9c"
+    },
+    "implementation": {
+      "path": "src/pokemon_red_completion/living_dex_option_value.py",
+      "sha256": "3a8507caf16f60b3339d5b5dde1e5135e87f9de7870eae61dc08946b6ce97693"
+    },
+    "redesign_adjudication": {
+      "path": "docs/living-dex-option-value-redesign-audit-2026-08-25.md",
+      "sha256": "a167a38ff50446e2ccca7b04486b73baa978b9285d44b931838937a062e6c6cc"
+    },
+    "tests": {
+      "path": "tests/test_living_dex_option_value.py",
+      "sha256": "65675a7f7b50e0e422d5eb49116b78d2bc09095b5b05dcbd0191b800dfeb8219"
+    }
+  },
+  "candidate": {
+    "audited_against_commit": "dee52ff2ad6b6561fcecd447db891715b0664b2a",
+    "publication_status": "uncommitted_working_tree",
+    "source_bundle_sha256": "6b61e533e90cda08bca1142f928bcc8e65f1b49a7ec3d90f76e0ce88e2d15c86"
+  },
+  "claim_boundary": {
+    "supported": "A ROM-free title-neutral contract can represent variable-size living-Pokedex option menus, hard-mask unavailable actions, log replayable full-support behavior propensities, learn separate outcomes only from the selected arm, exclude censored targets, fit on train only, and evaluate selected development arms without identity features or fabricated counterfactual labels.",
+    "unsupported": [
+      "autonomous_gameplay",
+      "causal_red_training_example",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_quality",
+      "policy_superiority",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "effects": {
+    "controller_actions": 0,
+    "development_openings": 0,
+    "emulator_frames_advanced": 0,
+    "model_predictions": 0,
+    "private_artifact_reads": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "independent_reviews": {
+    "antigravity": {
+      "model": "Gemini 3.7 Flash Medium",
+      "p0_findings": 0,
+      "verdict": "go",
+      "weighted_normalization_finding_resolved": true
+    },
+    "claude": {
+      "model": "Claude Opus CLI",
+      "p0_findings": 0,
+      "propensity_test_finding_resolved": true,
+      "verdict": "go_with_fixes"
+    }
+  },
+  "next_gate": {
+    "active_lane": "repeatable-red-living-dex-option-value-calibration-v1",
+    "crystal_execution_allowed": false,
+    "full_replay_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Implement the repeatable Red adapter and bounded scenario collector with genuine three-or-more-row menus, exact normalization provenance, invariant masks, neutral replayable ordering, non-uniform full-support propensities, selected-arm settlement, and censoring diagnostics."
+  },
+  "recorded_on": "2026-08-25",
+  "schema": "pokemon.core.living-dex-observed-arm-contract-qualification.v1",
+  "status": "rom_free_contract_qualified_for_red_adapter",
+  "verification": {
+    "documentation_check": "passed",
+    "focused_contract_tests_passed": 18,
+    "full_suite": {
+      "deselected": 3,
+      "passed": 4748,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "mypy_source_files": 262,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "ruff_status": "passed"
+  },
+  "v4_disposition": {
+    "executed": false,
+    "preserve_evidence": true,
+    "retry_allowed": false,
+    "status": "retired"
+  }
+}

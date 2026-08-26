@@ -4,11 +4,14 @@
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
-> post-exception observer repair is published and retired. The only active lane is one action-free
-> V4 freeze: 12 train trials (8 required + 4 fixed reserves), 8 untouched development trials, 20
-> distinct globally unused roots, zero family/root overlap across partitions, and the V3-consumed
-> root excluded. Stop and reorient before prediction, claim, execution, outcome, or fit. Older
-> party and 14/55 campaigns remain historical evidence.
+> proposed V4 12+8 freeze is retired unexecuted because its binary learner fabricated preferences
+> for unexecuted alternatives and lacked meaningful feature diversity. The active lane is
+> `repeatable-red-living-dex-option-value-calibration-v1`: connect Red to the shared observed-arm
+> option-value contract, prove title-neutral variable-size menus and replayable behavior
+> propensities, collect a minimum 8 train + 4 new disjoint development outcomes from repeatable
+> short scenarios, fit once on train, and report paired descriptive calibration/variance. Stop
+> before a powered benchmark, sealed Red, Crystal execution, promotion, or full replay. Older
+> party, V4, and 14/55 campaigns remain historical evidence only.
 
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by

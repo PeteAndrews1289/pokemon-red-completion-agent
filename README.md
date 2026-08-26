@@ -5,7 +5,29 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the generic public reader is qualified; design V2
+> **Current product focus (August 25, 2026): build the repeatable Red observed-arm calibration
+> loop.** The proposed V4 12+8 one-shot curriculum is retired unexecuted after independent Claude
+> and Antigravity audits found counterfactual labels for unexecuted alternatives, degenerate binary
+> feature geometry, and an uncontrollable outcome-balance requirement. Its evidence remains
+> historical and it cannot authorize a freeze or trial.
+>
+> The replacement shared option-value contract is implemented ROM-free with variable-size
+> anonymous menus, eight portable option kinds, invariant hard masks, replayable full-support
+> behavior propensities, selected-arm-only multi-outcome targets, censoring without labels,
+> train-only fitting, and held-out calibration. Eighteen focused tests and an 84-test related slice
+> pass. See the [contract](docs/living-dex-option-value-contract.md) and
+> [redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md). The
+> [ROM-free qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
+> records the 4,748-test repository gate and both independent reviews.
+>
+> Active `repeatable-red-living-dex-option-value-calibration-v1` next builds the Red adapter and
+> bounded repeatable collector, then targets eight settled train outcomes across four option kinds
+> and three transformation families plus four new disjoint development outcomes. One train-only
+> fit and paired descriptive calibration/variance report follow. This pilot sizes a later powered
+> benchmark; it does not claim gameplay authority or transfer. Boards remain **development 15 ·
+> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 21, 2026): the generic public reader is qualified; design V2
 > without reopening V1.** Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI
 > `32475789328/1` with 4618 tests, one skip, three deselections, and one expected failure. The
 > [reader qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)

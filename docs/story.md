@@ -7,7 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the notebook now looks; the next textbook has spare lessons
+## Current checkpoint: the student is graded only on choices it actually makes
+
+The next textbook was stopped before printing. Two independent reviewers noticed that its old
+binary grader made up an answer: when the chosen action failed, it declared the action that never
+ran to be better. The student could have failed both choices, yet the report card invented a
+positive lesson. The choices also looked diverse to a person while collapsing to almost the same
+single bit for the model.
+
+That curriculum is now retired unplayed. In its place is a shared option-value contract. The
+student may see several anonymous things it could do—catch, evolve, trade, train, manage storage,
+restock, unlock access, or explore. Impossible choices stay on the card but are crossed out. Before
+acting, the system records the exact lottery that selected one available choice. Afterward, only
+what happened to that chosen action becomes evidence. If the observer cannot read the ending, the
+lesson stays blank.
+
+The report card keeps progress and cost separate: success, new collection entries, unlocked
+dependencies, time, resources, party wear, storage pressure, and irreversible loss. That matters
+for transfer. Crystal can value the same ideas even though its map, species opportunities, and
+mechanics differ from Red.
+
+The next session builds Red's adapter to this shared language and a short resettable collection
+loop. The first target is eight honest training outcomes and four new held-out development
+outcomes, followed by one calibration fit. Those are enough to debug the learning loop and size a
+real benchmark—not enough to claim that the student can play a game. The board remains **causal
+train 0/8, authority 0, transfer 0**.
+
+## Previous checkpoint: the notebook now looks; the next textbook had spare lessons
 
 The missing rule is fixed. Main `c663c3f4` passed CI `32913718889/1`: after one selected Pokémon
 skill returns or reports an ordinary failure, the system now checks the living collection exactly

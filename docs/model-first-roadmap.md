@@ -8,30 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: observation recovery passed; freeze 12+8 V4 with reserve
+## Current checkpoint: replace counterfactual ranking with observed-arm option value
 
-Main `c663c3f4` passed CI `32913718889/1` with 4,730 tests. The
-[qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
-(SHA-256 `1b402002…f1463`) proves a generic frozen-selection seam: one selected semantic skill runs at
-most once; one fresh ledger is attempted after ordinary return or exception; readable unchanged,
-partial, and exact states derive `-1`, `-1`, and `+1`; only failed/invalid observation remains
-censored. Process interruption propagates, reports stay diagnostic-only, no exception identity
-crosses the policy boundary, and 9/9 targeted mutations died. ROM, private context, model,
-teacher, claim, action, frame, outcome, fit, authority, and transfer effects were all zero.
+The V4 12+8 freeze is retired **before execution**. Independent Claude and Antigravity audits found
+that its inherited binary ranker could turn a failed selected action into a positive target for the
+alternative action that never ran. Its menus also collapsed to two reachable feature-difference
+shapes, and its fitter required an outcome balance the freezer could not guarantee. More careful
+one-shot ceremony would have protected an invalid learning question.
 
-Active `red-living-dex-multifamily-option-value-curriculum-v4` now fixes the arithmetic before
-spending another root. Adapt the existing action-free freezer under new V4 identities to seal
-exactly twelve train trials—eight required and four explicit reserves—plus eight untouched
-development trials. Require twenty distinct globally unused physical roots, exclude the consumed
-V3 root, preserve complete executable two-row menus, and enforce zero family or root overlap
-between train and development. The reserve is frozen before outcomes; it may not be invented after
-a censor.
+The replacement shared contract is now implemented ROM-free. It accepts variable-size anonymous
+menus; represents acquisition, evolution, trade, team development, storage, resupply, access, and
+exploration; hard-masks unavailable actions; records a replayable full-support behavior
+distribution; and learns only from the selected action's independently observed consequence.
+Censored attempts have no target. Settled attempts expose separate success, collection gain,
+dependency unlock, time, resource, party, storage, and irreversible-loss heads, so utility may be
+changed later without fabricating labels. Eighteen focused tests and an 84-test related slice are
+green; the [contract](living-dex-option-value-contract.md) and
+[redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md) define the boundary.
 
-Mutation-test counts, reserve ordinals, global-claim exclusion, candidate balance, family/root
-partitions, and zero effects. Publish exact source, run one action-free freeze, preserve its terminal,
-and reorient immediately. Do not predict, claim a trial/root, execute a skill, inspect development
-outcomes, fit, open sealed Red, run Crystal, promote, or replay. Counters remain **development 15 ·
-verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+Active `repeatable-red-living-dex-option-value-calibration-v1` now builds the smallest real Red
+adapter and bounded scenario collector around that contract. ROM-free fixtures must first prove a
+complete genuine menu with at least three distinct available rows, exact normalization provenance,
+no title/species/map/root identity, hard masks, replayable propensities, and selected-arm-only
+settlement. Then collect at least eight repeatable train outcomes across four option kinds and
+three transformation families plus four new family/location-disjoint development outcomes. Fit
+once on train only and report paired descriptive calibration and variance against random and
+cost-only baselines. These minimum counts size the later benchmark; they do not prove competence.
+
+Stop before any powered benchmark, sealed Red, Crystal execution, authority promotion, or full
+replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Previous checkpoint: V3 spent one root without a target; preserve observable failures before V4
 

@@ -12,34 +12,44 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-25: observer recovery is qualified; freeze an overprovisioned V4 curriculum
+## 2026-08-25: observed-arm redesign implemented; build the repeatable Red adapter
 
-The ROM-free repair reached main as `c663c3f4ee41ed57faf0fe94de5c1c2d88ae08b5` through PR 48
-and green CI `32913718889/1`. The full local suite passed **4,730 tests**. Seventeen focused tests
-cover normal return, ordinary exception with unchanged/partial/exact ledgers, malformed or failed
-observation, optional-report isolation, and process interruption. Nine of nine targeted mutations
-were killed, including skipped/doubled observation, skipped/doubled/wrong-candidate execution,
-discarded readable state, fabricated state, leaked unverified report, and swallowed interruption.
-See the [path-free qualification](docs/evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
-(SHA-256 `1b4020020e38d51b62c8b7a6e696e296d866a3982bb6ff56b60fef32d4ef1463`).
+Do **not** freeze or execute the proposed V4 12+8 curriculum. It is retired unexecuted. Claude and
+Antigravity independently found the same experimental defect: when the selected arm failed, the
+historical binary ranker treated the unexecuted alternative as preferred. Its feature differences
+also had only two reachable shapes, while its fitter required outcome balance that prospective
+selection could not control. The exact findings and disposition are in the
+[redesign audit](docs/living-dex-option-value-redesign-audit-2026-08-25.md).
 
-The generic seam now executes one frozen semantic capability at most once and attempts exactly one
-fresh living-ledger observation after either ordinary return or exception. Readable unchanged and
-partial states settle as `-1`; an exact transition settles as `+1`; observer failure alone is
-censored. Exception text never becomes a feature, and `KeyboardInterrupt`/other `BaseException`
-signals remain visible. The qualification opened no ROM or private context and made no prediction,
-claim, action, frame, teacher query, outcome, fit, authority, or transfer change.
+The local implementation now has a shared, title-neutral observed-arm contract in
+`src/pokemon_red_completion/living_dex_option_value.py`. It supports variable-size menus and eight
+portable option kinds, retains unavailable rows under hard masks, logs a replayable full-support
+behavior distribution, and trains only on the selected arm's settled outcome. Censored attempts
+have no targets. Separate outcome heads preserve completion gain, dependency unlock, success,
+costs, and irreversible loss so later utility changes do not rewrite history. Model fitting is
+train-only, inverse-propensity weighted, deterministic under input ordering, and evaluated on
+selected development arms without opening unobserved counterfactuals. Eighteen focused tests and
+an 84-test related slice pass ROM-free. Read
+[the contract](docs/living-dex-option-value-contract.md) before adapting it. The
+[qualification](docs/evidence/living-dex-observed-arm-contract-qualification-v1-2026-08-25.json)
+records the final **4,748 passed · 3 deselected · 1 expected failure** gate, green Ruff/mypy/docs/
+privacy/registry checks, and both read-only external reviews.
 
-Active `red-living-dex-multifamily-option-value-curriculum-v4` is one action-free freeze session.
-Freeze exactly **12 train trials**—eight required plus four preregistered reserves—and **8 untouched
-development trials**. All 20 physical roots must be distinct and globally unused; train and
-development families and roots must be disjoint; the consumed V3 root must be excluded; every menu
-must contain both executable title-neutral choices. Publish exact source, freeze once, and reorient
-before any prediction, claim, controller input, development outcome opening, fit, sealed Red,
-Crystal, promotion, or replay. V3 stays closed.
+Active `repeatable-red-living-dex-option-value-calibration-v1` is the next two-session lane. Codex
+owns the Red adapter and bounded repeatable collector. First prove with public fixtures that a
+Red-shaped and Crystal-shaped private binding project to the same schema and that a Red fixture can
+produce at least three genuinely different available options, invariant masks, normalized values,
+and replayable propensities. Then collect at least eight settled train outcomes across four option
+kinds and three transformation families plus four new family/location-disjoint development
+outcomes. Fit one train-only model and produce paired descriptive calibration/variance against
+random and cost-only baselines. Do not call that minimum pilot statistically powered.
 
-Counters remain **development 15 · verified 5 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
-authority 0 · transfer 0**. This repair preserved future evidence; it did not train the model.
+Claude is the read-only experimental-design reviewer for leakage, causal validity, calibration,
+and power. Antigravity is the read-only cross-title/adversarial reviewer for schema invariance,
+identity leakage, masks, and replayability. Neither agent implements, executes private gameplay,
+or blocks ordinary work; Codex makes and documents the final decision. Stop before a powered
+benchmark, sealed Red, Crystal execution, promotion, or full replay. Counters remain **development
+15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Earlier 2026-08-25: V3's first train trial was safely censored; observe failures before V4
 

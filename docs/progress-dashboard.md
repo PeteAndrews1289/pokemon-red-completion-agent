@@ -5,20 +5,36 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN C663C3F4 · CI 32913718889/1 GREEN · OBSERVER RECOVERY QUALIFIED ·
+> **Current rail:** Show **OBSERVED-ARM CONTRACT IMPLEMENTED LOCALLY · V4 RETIRED UNEXECUTED ·
+> VARIABLE-SIZE MENUS · 8 PORTABLE OPTION KINDS · TITLE/IDENTITY FEATURES 0 · HARD MASKS ·
+> FULL-SUPPORT PROPENSITIES · SELECTED OUTCOMES ONLY · CENSORED TARGETS 0 · 18 FOCUSED / 84
+> RELATED TESTS GREEN · ROM/PRIVATE/ACTIONS/FRAMES/CLAIMS/TEACHERS 0**. Link the
+> [contract](living-dex-option-value-contract.md) and
+> [redesign audit](living-dex-option-value-redesign-audit-2026-08-25.md).
+>
+> Animate active `repeatable-red-living-dex-option-value-calibration-v1`: **RED ADAPTER → PUBLIC
+> CROSS-TITLE SCHEMA FIXTURES → COMPLETE GENUINE 3+ ROW MENU → REPLAYABLE BEHAVIOR DISTRIBUTION →
+> REPEATABLE SHORT OUTCOMES → 8 TRAIN ACROSS 4 OPTION KINDS / 3 FAMILIES + 4 NEW DISJOINT
+> DEVELOPMENT → TRAIN-ONLY FIT → PAIRED CALIBRATION + VARIANCE → STOP/REORIENT**. Show
+> **POWERED BENCHMARK/SEALED RED/CRYSTAL/PROMOTION/FULL REPLAY 0**. Keep the board at
+> **DEVELOPMENT 15 · VERIFIED 5/9 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 · AUTHORITY 0 ·
+> TRANSFER 0**.
+>
+> **Previous rail:** Show **MAIN C663C3F4 · CI 32913718889/1 GREEN · OBSERVER RECOVERY QUALIFIED ·
 > 4,730 TESTS · FOCUSED 17 · MUTATIONS 9/9 KILLED · UNCHANGED/PARTIAL/EXACT AFTER ORDINARY
 > FAILURE = -1/-1/+1 · OBSERVER FAILURE = CENSORED · ROM/PRIVATE/ACTIONS/FRAMES/CLAIMS/
 > PREDICTIONS/TEACHERS/TARGETS 0**. Link the
 > [qualification](evidence/post-exception-living-ledger-qualification-v1-2026-08-25.json)
 > and show **SHA-256 1B402002…F1463**.
 >
-> Animate active `red-living-dex-multifamily-option-value-curriculum-v4`: **AUTHENTICATE GLOBAL
+> The then-proposed `red-living-dex-multifamily-option-value-curriculum-v4` rail was:
+> **AUTHENTICATE GLOBAL
 > UNUSED ROOTS → EXCLUDE V3-CONSUMED ROOT → FREEZE 12 TRAIN (8 REQUIRED + 4 RESERVE) → FREEZE 8
 > UNTOUCHED DEVELOPMENT → VERIFY 20 DISTINCT ROOTS + FAMILY/ROOT OVERLAP 0 + COMPLETE TWO-ROW
 > MENUS → DURABLE PLAN → STOP/REORIENT**. Show **MODEL/TEACHER/CLAIM/ACTION/FRAME/OUTCOME 0**.
 > Keep the board at **DEVELOPMENT 15 · VERIFIED 5 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS
-> 4/5 · AUTHORITY 0 · TRANSFER 0**. V4 execution, development outcomes, fit, sealed Red, Crystal,
-> promotion, completion, and replay remain closed.
+> 4/5 · AUTHORITY 0 · TRANSFER 0**. It is now retired unexecuted and cannot authorize a freeze or
+> trial.
 >
 > **Previous rail:** Show **MAIN 14D7BCEA · CI 32902297341/1 GREEN · V3 TRAIN ORDINAL 0
 > CONSUMED ONCE · ACTIONS 4,379 · FRAMES 304,680 · DURABLE CLAIM + CENSORED TERMINAL ·

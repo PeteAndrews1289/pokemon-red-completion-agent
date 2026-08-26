@@ -310,11 +310,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 6 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 2 sessions / 12 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == (
-        "red-living-dex-multifamily-option-value-curriculum-v4"
+        "repeatable-red-living-dex-option-value-calibration-v1"
     )
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
@@ -326,7 +326,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         },
         {
             "kind": "verified_outcome_example",
-            "minimum": 13,
+            "minimum": 9,
             "partition": "development",
         },
         {"kind": "model_fit", "minimum": 5, "partition": "train"},
@@ -336,11 +336,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
             "partition": "development",
         },
     ]
-    assert len(state.retired_lanes) == 57
-    assert focus_progress_fraction(state) == pytest.approx(129 / 260)
+    assert len(state.retired_lanes) == 58
+    assert focus_progress_fraction(state) == pytest.approx(97 / 180)
     assert focus_scorecard(state) == (
         ("Causal Train Example · train", 0, 8),
-        ("Verified Outcome Example · development", 5, 13),
+        ("Verified Outcome Example · development", 5, 9),
         ("Model Fit · train", 4, 5),
         ("Unseen Comparison · development", 4, 5),
     )
@@ -1435,7 +1435,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
 
     assert rows == (
         "Causal Train Example · train: 0/8",
-        "Verified Outcome Example · development: 5/13",
+        "Verified Outcome Example · development: 5/9",
         "Model Fit · train: 4/5",
         "Unseen Comparison · development: 4/5",
     )
@@ -1884,20 +1884,21 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(129 / 260)
+    assert public["stage_progress"] == pytest.approx(97 / 180)
     assert public["actions"] == 0
-    assert "Red multi-family living-Dex option-value curriculum V4" in public["stage"]
+    assert "Repeatable Red living-Dex observed-arm calibration V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 13}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 9}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "First authentic option" in encoded
-    assert "post-exception observer repair is qualified" in encoded
-    assert "freeze 12 train + 8 development" in encoded
-    assert "Multi-family option-value curriculum V4" in encoded
+    assert "invalid binary counterfactual curriculum is retired" in encoded
+    assert "adapter" in encoded
+    assert "train-only fit" in encoded
+    assert "Observed-arm living-Dex calibration V1" in encoded
     assert "fresh ledger" in encoded
     assert "Causal Train Example 0/8" in encoded
-    assert "Verified Outcome Example 5/13" in encoded
+    assert "Verified Outcome Example 5/9" in encoded
     assert "Model Fit 4/5" in encoded
     assert "Unseen Comparison 4/5" in encoded
     assert "V3 terminal" in encoded
@@ -1906,6 +1907,8 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "Observer repair" in encoded
     assert "main c663c3f4" in encoded
     assert "mutations 9/9" in encoded
+    assert "selected outcomes only" in encoded
+    assert "V4 retired unexecuted" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
     assert "one authentic settled Red choice" in encoded
