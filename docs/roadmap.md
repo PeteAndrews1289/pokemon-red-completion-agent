@@ -3,6 +3,14 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 execution-reorientation checkpoint:** PR 90 passed, executable commit `6fd2286f`
+> passed exact-main CI `33118840112/1`, and the frozen train campaign remains unconsumed. The
+> [reorientation](evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json) opens
+> one current-main-bound invocation and nothing else. Its terminal must be one authentic settled
+> selected-arm train example or one honest target-free consumed closure. Stop after it. No
+> refreeze, retry, preflight, wrapper, one-row fit, sealed Red, Crystal, promotion, or replay.
+> **Causal train 0/1 · authority 0 · transfer 0.**
+
 > **August 27 direct-consumer checkpoint:** One action-free Red train campaign is frozen and still
 > unconsumed. Its direct isolated consumer now authenticates exact project source, exact successful
 > CI identity, the clean PyBoy/NumPy/SDL runtime closure, the sealed producer's runtime identity,

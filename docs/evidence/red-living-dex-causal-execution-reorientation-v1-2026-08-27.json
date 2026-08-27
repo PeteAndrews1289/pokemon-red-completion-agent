@@ -1,0 +1,79 @@
+{
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "decision": {
+    "campaign_status": "frozen_unconsumed",
+    "current_main_binding": "the_invocation_must_supply_the_then_current_main_commit_and_its_exact_successful_push_ci_attempt",
+    "next_action": "execute_the_one_frozen_red_train_campaign_exactly_once",
+    "next_terminal": "one_authentic_settled_train_example_or_one_honest_target_free_consumed_closure",
+    "one_private_execution_eligible": true,
+    "post_terminal_action": "stop_reorient_and_if_settled_design_a_powered_multi_kind_red_causal_curriculum_before_any_fit",
+    "retry_allowed": false,
+    "this_record_executes_nothing": true
+  },
+  "frozen_input": {
+    "campaign_freeze_result_sha256": "83c3408b0ebe2063072ec412c9b69484a712c247f3d47f1b76606d556bfe0ce5",
+    "private_identity_fields_read": 0,
+    "private_path_fields_published": 0,
+    "refreeze_allowed": false
+  },
+  "mission_check": {
+    "capability": "Produce the first authentic selected-arm Red causal datum through the same identity-free option-value contract intended for later games.",
+    "cheapest_falsifier": "One invocation must settle exactly one authentic row or one target-free terminal; any ambiguity drift unselected construction pre-start effect reroll or post-input recovery closes the campaign without a target or retry.",
+    "learned_authority": "No authority is promoted by readiness. A settled row increments only the causal train counter from zero to one.",
+    "stop_condition": "Stop after the first terminal. Do not refreeze retry fit one row open sealed Red execute Crystal promote authority or replay the full game.",
+    "time_box": "one_private_invocation_one_terminal",
+    "transfer_test": "After a powered Red train set and held-out Red benchmark freeze weights and compare zero-shot Crystal outcomes against preregistered random and cost-only controls before adaptation."
+  },
+  "protected_effects_during_reorientation": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "campaign_executions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_examples": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "observed_game_outcomes": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33118840112,
+    "executable_commit": "6fd2286f3f92145884e1a92c46fcbbd1eb140ebd",
+    "pull_request": 90,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_run": 33117957791,
+    "source_bundle_sha256": "bed8d4a23cf2b0c19565573d484b8ce053d6f4bec14a3859aff6e2ac08e7ebce"
+  },
+  "recorded_on": "2026-08-27",
+  "runtime": {
+    "clean_stage_probe": "passed_with_zero_private_reads_and_zero_rom_accesses",
+    "closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "sealed_producer_identity_check": "required_before_claim"
+  },
+  "schema": "pokemon.red.living-dex-causal-execution-reorientation.v1",
+  "status": "ready_for_exactly_one_private_terminal_after_current_main_exact_ci_binding",
+  "supported_claim": "The direct consumer is published and green on exact main; the frozen Red train campaign is ready for one current-main-bound invocation under its selected-only no-counterfactual no-retry causal contract.",
+  "unsupported_claims": [
+    "authentic_red_causal_train_example_already_exists",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ]
+}

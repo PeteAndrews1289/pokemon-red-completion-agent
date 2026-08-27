@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: no more doors—draw one real sample
+
+Flash **PR 90 GREEN → MAIN 6FD2286F → EXACT-MAIN CI 33118840112/1 GREEN**. Leave the frozen lesson
+behind glass and show every effect at zero. Then remove the workshop scaffolding and put one large
+button on screen: **EXECUTE ONCE**.
+
+Split its only exits: **SETTLED → CAUSAL TRAIN 1/1** and **AMBIGUOUS / INTERRUPTED → TARGET NONE ·
+CONSUMED**. Cross out **REFREEZE · REROLL · RETRY · ONE-ROW FIT · CRYSTAL EARLY**. End on the longer
+learning rail: **POWERED MULTI-KIND RED DATA → RED FIT → UNTOUCHED RED BENCHMARK → FREEZE WEIGHTS →
+ZERO-SHOT CRYSTAL VS CONTROLS**. Keep **AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 27 scene: the first lesson gets a clean-room launch rail
 
 Open on **FROZEN RED TRAIN LESSON · UNCONSUMED**, then sweep every ambient dependency off the

@@ -8,6 +8,30 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: public engineering is closed; execute one authentic Red causal lesson
+
+PR 90 and exact-main push CI `33118840112/1` are green on executable commit `6fd2286f`. The
+[reorientation](evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json) leaves
+the frozen train campaign unconsumed and opens exactly one invocation. At invocation, the runner
+still requires the then-current main commit and its exact successful push-CI attempt, so this
+documentation successor cannot weaken the source gate.
+
+The shortest honest sequence is now:
+
+1. authenticate the current main/CI binding and the existing private root, state, envelope, ROM,
+   frozen plan, sealed producer runtime, and clean dependency closure;
+2. invoke once, with durable claim, behavior commitment, random selection, and construction start
+   before the selected runtime can exist;
+3. publish either one authentic settled train row or one target-free consumed terminal and stop;
+4. if the row settles, design a powered multi-kind Red causal curriculum before fitting anything;
+5. fit Red train only, evaluate untouched Red outcomes, and freeze weights only after powered
+   gates; and
+6. compare zero-shot Crystal outcomes against random and cost-only controls before adaptation.
+
+Do not refreeze, retry, add another preflight or wrapper, fit the one row, open sealed Red or
+Crystal, promote authority, or replay the game. **Causal train remains 0/1; authority 0; transfer
+0.**
+
 ## Current checkpoint: one frozen Red lesson is ready for exact publication, not yet training
 
 The action-free train campaign has already been frozen. Its direct one-shot consumer is now
