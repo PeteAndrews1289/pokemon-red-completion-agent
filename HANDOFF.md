@@ -12,7 +12,39 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: pre-controller bridge succeeded; build the claim-first outer boundary
+## 2026-08-27: claim-first outer boundary qualified; publish, then build the one-slot wrapper
+
+The controller-capable safety core is locally complete and still has not executed an authentic
+setup. A title-neutral pair ledger atomically owns both the catalog's logical root and the exact
+state/envelope physical root; every legacy single-root admission now honors that ledger and the
+pair ledger honors legacy markers. Real subprocess tests cover pair/pair and legacy/pair races.
+One Red slot writes its private episode claim durably while the account lease is held, releases the
+lease, reauthenticates the complete detached producer plan, and only then permits a cold resolver
+scope to construct PyBoy. Complete, failed, interrupted, prelocal-crash, and uncertain-directory-
+durability recovery never reissue a claim or call the resolver.
+
+The production Red adapter rebuilds only the selected claimed recipe from cartridge truth, creates
+one isolated no-save emulator per validation arm, closes every arm on success, `Exception`, and
+`BaseException`, reserves attempted actions before delegation, reconciles actual frames in
+`finally`, and injects a provider executor that always refuses execution. Controller primitives
+remain centralized in the emulator/executor trust boundary. The reusable ledger passes Red-shaped
+and Crystal-shaped ROM-free fixtures and rejects relabelling the same physical state as another
+title.
+
+The [local qualification](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+records **60 focused · 5,347 full-suite tests · 289 typed source files**. Claude and Antigravity
+both returned GO with no P0/P1 blocker. Codex added Claude's uncertain-fsync integration test and
+kept its resolver-local ledger recheck suggestion deferred: durable admission belongs to the one
+shared campaign, not separately to every title adapter.
+
+Publish this exact boundary and require exact-main green CI. Then reorient and build a separate
+current-source one-slot invocation wrapper that authenticates the immutable producer and private
+plan joins and constructs only the production resolver. Its qualification rehearsal must be
+ROM-free and effect-free. Do not execute private setup, collect an outcome, fit, open Crystal or
+sealed Red, or replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
+4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-27: pre-controller bridge succeeded; build the claim-first outer boundary
 
 PR 82 published the runtime-free bridge. Its corrected pull-request run `33050868530/1` passed;
 the rebase merge produced main `506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, and exact-main push

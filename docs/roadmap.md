@@ -3,7 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 27 claim-first outer-boundary checkpoint:** PR 83 passed CI `33058891890/1`, merged as
+> **August 27 claim-first core qualification checkpoint:** The title-neutral atomic pair ledger,
+> deep-plan admission, one-slot Red campaign and production runtime pass **60 focused and 5,347
+> repository tests across 289 typed source files**. Pair/pair and legacy/pair subprocess races,
+> every recovery class, uncertain durability, causal failure metering, BaseException closure,
+> provider refusal, and Red/Crystal-shaped fixtures pass. Claude and Antigravity return GO with no
+> blocking finding. See the [qualification](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json).
+>
+> Publish this exact core and require exact-main CI. Then reorient and build a separately
+> source-bound one-slot wrapper, qualify and rehearse it ROM-free, and stop again before private
+> setup. Causal train remains **0/8**.
+
+> **Previous August 27 claim-first outer-boundary checkpoint:** PR 83 passed CI `33058891890/1`, merged as
 > main `18eea8bd`, and passed exact-main CI `33059506829/1`. The sole V2 read-only rehearsal
 > succeeded. Its [path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
 > authenticates **15 roots · 45 options · 33 families · 10 origins · 37 routed options · 7

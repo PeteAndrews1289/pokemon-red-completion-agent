@@ -1,0 +1,99 @@
+{
+  "artifacts": {
+    "claim_first_admission_sha256": "da9a15938f2a408bfde511472e1d8045a522e480600dabb2442efef68d1c7f8a",
+    "claim_first_campaign_sha256": "fa3ce5667d30bf9eebfe09990baa3139d4f42b30790d351002069c2a9daf20ae",
+    "production_runtime_sha256": "42d9e36ed7d26a26dc22e01369d291ae0aacea662ad1c5462640f37b2cdc6fe9",
+    "setup_admission_sha256": "87742785ef7f0e46cd68693b3aa33a2aecef20209cd7142d528f7f11597d16fd"
+  },
+  "base_source_commit": "544400fa718c158591cb6a8ad11f6b7d7f695c23",
+  "claim_boundary": {
+    "supported": "A title-neutral account ledger atomically consumes one logical and one physical root, legacy and pair ledgers cross-honor either identity, one Red slot writes its private claim durably before a cold resolver can construct an emulator, the complete frozen producer plan is reauthenticated after claim, and complete, failed, interrupted, and uncertain-durability recovery paths never retry or reopen a runtime.",
+    "unsupported": [
+      "authentic_private_red_setup_execution",
+      "authentic_red_outcome_collection",
+      "causal_red_training_example",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_fit",
+      "model_quality",
+      "powered_red_benchmark",
+      "sealed_red_result"
+    ]
+  },
+  "codex_adjudication": {
+    "accepted": [
+      "make_the_pair_ledger_authoritative_to_legacy_availability_checks_without_shadow_markers",
+      "prove_pair_pair_and_legacy_pair_subprocess_races_have_exactly_one_winner",
+      "add_end_to_end_uncertain_directory_fsync_recovery_coverage",
+      "move_frame_primitive_metering_into_the_shared_emulator_trust_boundary",
+      "retain_one_selected_slot_and_rebuild_no_unclaimed_sibling_runtime"
+    ],
+    "deferred": [
+      "duplicate_account_ledger_verification_inside_each_title_specific_resolver"
+    ],
+    "reason": "The campaign is the single durable admission authority shared by title adapters. Rechecking the same immutable pair inside every adapter would duplicate policy and couple the future Crystal adapter to account storage without closing a present execution path."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": "go_for_public_execution_wrapper_engineering;_no_blocking_race_recovery_plan_runtime_metering_or_provider_execution_finding",
+    "claude": "go_for_publication;_no_p0_or_p1;_uncertain_fsync_integration_test_requested_and_added;_resolver_local_recheck_recorded_as_p2",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_check": {
+    "capability": "Safely consume one authentic Red curriculum root and validate its genuine same-state option menu without producing a learner target or executing a candidate provider.",
+    "cheapest_falsifier": "ROM-free cross-process legacy/pair races, deep nested plan mutations, every durable crash cutpoint, failure-frame accounting, BaseException closure, provider-execution traps, and Red-shaped plus Crystal-shaped title-neutral fixtures.",
+    "learned_authority": "none_infrastructure_only",
+    "stop_condition": "Stop on double ownership, reusable claims, recovery runtime construction, postclaim plan drift reaching runtime, unclosed emulator arms, unmetered action or frame effects, provider execution, or a title-specific primitive in the reusable ledger.",
+    "transfer_test": "The shared claim contract accepts both Red-shaped and Crystal-shaped fixtures and rejects cross-title relabelling of one physical state; actual Crystal remains closed until authentic Red causal evidence and a powered Red benchmark exist."
+  },
+  "next_gate": {
+    "private_setup_execution_allowed": false,
+    "target": "Publish this exact boundary under green CI, reorient, then build one separately source-bound public one-slot invocation wrapper and qualify it ROM-free before requesting or using any private setup execution."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "88176d4995491e2748432375983c2ddf64aab67dabadb0675b8ce317019695f4",
+    "goal_manager_registry_sha256": "62d4133c592218a84eadf205271179856b37e972821185a1d586a6d6dfccbd34",
+    "source_bundle_sha256": "2d382c7cb0a10896945d542fc05609cf6a3b72a8dca7d7dae7aca75315baa75b",
+    "strategic_navigation_registry_sha256": "372ea8039993458bd5b59e04326ce937601bcce51da632d5a38a7bb9f81a1e95"
+  },
+  "schema": "pokemon.red.living-dex-claim-first-outer-boundary-local-qualification.v1",
+  "status": "locally_qualified_external_review_go_publication_pending",
+  "verification": {
+    "focused_tests_passed": 60,
+    "full_suite_first_pass_failures_repaired": 7,
+    "full_suite_passed": 5347,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 289,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "registry_checks": "passed",
+    "ruff_status": "passed"
+  }
+}

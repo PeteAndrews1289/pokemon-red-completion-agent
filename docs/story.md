@@ -7,7 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the doorway opened, and nobody crossed it
+## Current checkpoint: the lock now survives two owners and a power cut
+
+The doorway had been authenticated, but the dangerous question remained: what happens when two
+workers reach for the same saved game, or the machine loses power between “claimed” and “started”?
+The new core treats a lesson as two inseparable identities—the logical curriculum root and the
+physical state/envelope bytes—and commits both in one account-wide transaction. Old single-root
+runners and the new pair format see each other, so relabelling the same physical state cannot buy a
+second attempt.
+
+Only after that account claim and the private episode claim are durable does the Red resolver
+exist. It rereads the entire frozen plan, rebuilds only the selected recipe from cartridge truth,
+opens isolated no-save emulators, counts every attempted action and actual frame even through
+failure, closes every arm through a keyboard interrupt, and wires provider execution to an
+unconditional refusal. A restart returns the saved terminal; it never silently tries the lesson
+again.
+
+That boundary passed **60 focused and 5,347 repository tests**. Real subprocesses raced the old and
+new ledgers; injected power cuts covered the uncertain “rename happened, directory sync reported
+failure” case. Red-shaped and Crystal-shaped fixtures used the same core. Claude and Antigravity
+both returned GO. The honest counter strip still reads **causal train 0/8 · authority 0 · transfer
+0**: this made the first lesson safe, but it did not teach one. Next we publish the core, then build
+and rehearse the thin one-slot invocation wrapper before any private setup is allowed.
+
+## Previous checkpoint: the doorway opened, and nobody crossed it
 
 The runtime-free bridge shipped and its exact `main` build passed. The first read-only rehearsal
 then failed before it found the frozen plan. Every meaningful counter stayed at zero. The failure

@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 27 scene: the classroom authenticates, but the controller stays unplugged
+## August 27 scene: two keys turn once, even when the power dies
+
+Show two labels on one saved game: **LOGICAL LESSON ROOT** and **PHYSICAL STATE + ENVELOPE**. Let an
+old runner grab one label while a new runner grabs both; animate the shared account lock and leave
+exactly one **CLAIMED** light on. Repeat with two real processes. Then cut power after the atomic
+rename but before the directory sync reports success. On restart, stamp **INTERRUPTED · RETRY NO ·
+RUNTIME CALLS 0**.
+
+Build the order as a visible rail: **PAIR CLAIM DURABLE → PRIVATE CLAIM DURABLE → LOCK RELEASE →
+FULL PLAN REAUTHENTICATED → COLD RESOLVER → ISOLATED NO-SAVE ARMS**. Throw an ordinary exception
+and a keyboard interrupt through the arms; every window closes and every attempted action/frame
+still lands on the meter. Put a giant stop plate over **PROVIDER EXECUTION**. Reveal **60 FOCUSED ·
+5,347 FULL-SUITE · 289 TYPED · CLAUDE GO · ANTIGRAVITY GO**, then keep **CAUSAL TRAIN 0/8 ·
+AUTHORITY 0 · TRANSFER 0** on screen. End on **PUBLISH CORE → EXACT-MAIN CI → REORIENT → ONE-SLOT
+WRAPPER → ROM-FREE REHEARSAL**, not gameplay.
+
+## Earlier August 27 scene: the classroom authenticates, but the controller stays unplugged
 
 Open on **PR 83 · MAIN 18EEA8BD · CI 33059506829/1 GREEN**. Turn the V2 key once and reveal
 **15 ROOTS · 45 OPTIONS · 33 FAMILIES · 10 ORIGINS · 37 ROUTED · 7 CORRIDORS — AUTHENTICATED**.

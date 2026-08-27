@@ -9,6 +9,7 @@ import pytest
 
 from pokemon_red_completion import red_living_dex_provider_plan as provider_plan
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
+from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
 from pokemon_red_completion.collection import (
     CollectionLocation,
     CollectionObservation,
@@ -37,8 +38,10 @@ from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexActionFreeRootObservation,
+    RedLivingDexClaimedRootObservation,
     RedLivingDexProviderPlanError,
     RedLivingDexProviderRootFacts,
+    build_red_living_dex_provider_recipe_for_claimed_root,
     freeze_red_living_dex_provider_plan,
     red_living_dex_route_terminal_snapshot,
     select_red_living_dex_provider_roots,
@@ -192,6 +195,28 @@ def _facts(index: int) -> RedLivingDexProviderRootFacts:
 
 def _roots() -> tuple[RedLivingDexActionFreeRootObservation, ...]:
     return tuple(_root(index) for index in range(15))
+
+
+def _claimed(index: int) -> RedLivingDexClaimedRootObservation:
+    action_free = _root(index)
+    root = action_free.root
+    pair = ClaimFirstRootPair(
+        logical_root_sha256=root.root_consumption_sha256,
+        physical_root_sha256=root.physical_root_sha256,
+        stage="setup-capture",
+        execution_identity_sha256=_sha(("execution", index)),
+        plan_sha256=_sha(("plan", index)),
+        slot_sha256=_sha(("slot", index)),
+        runner_sha256=_sha(("runner", index)),
+        source_commit="b" * 40,
+    )
+    return RedLivingDexClaimedRootObservation(
+        root=root,
+        traversal=action_free.traversal,
+        facts=action_free.facts,
+        observed_state_sha256=action_free.observed_state_sha256,
+        pair_claim=pair,
+    )
 
 
 def _corridors() -> tuple[RedLivingDexWildCorridor, ...]:
@@ -349,6 +374,51 @@ def test_freezes_complete_authentic_provider_capacity_without_effects() -> None:
         == 33
     )
     assert frozen.effects_before == frozen.effects_after
+
+
+def test_cold_resolver_rebuilds_only_the_claimed_exact_recipe() -> None:
+    frozen = _freeze()
+    observation = _claimed(0)
+
+    resolved = build_red_living_dex_provider_recipe_for_claimed_root(
+        0,
+        observation,
+        world=_RouteWorld(),
+        corridors=_corridors(),
+        expected_rom_sha256=_identity().rom_sha256,
+    )
+
+    assert resolved == frozen.plan.recipes[0]
+    assert resolved.recipe_sha256 == frozen.plan.recipes[0].recipe_sha256
+    assert observation.pair_claim_sha256 == observation.pair_claim.claim_sha256
+
+
+def test_cold_resolver_rejects_unclaimed_cross_joined_or_wrong_cartridge_input() -> None:
+    observation = _claimed(0)
+    with pytest.raises(TypeError, match="claimed observation"):
+        build_red_living_dex_provider_recipe_for_claimed_root(
+            0,
+            _root(0),  # type: ignore[arg-type]
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            expected_rom_sha256=_identity().rom_sha256,
+        )
+    with pytest.raises(RedLivingDexProviderPlanError, match="another root pair"):
+        replace(
+            observation,
+            pair_claim=replace(
+                observation.pair_claim,
+                logical_root_sha256=_sha("other-logical-root"),
+            ),
+        )
+    with pytest.raises(RedLivingDexProviderPlanError, match="another cartridge"):
+        build_red_living_dex_provider_recipe_for_claimed_root(
+            0,
+            observation,
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            expected_rom_sha256="f" * 64,
+        )
 
 
 def test_selector_builds_one_prospectively_partitioned_unique_root_assignment() -> None:
