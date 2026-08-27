@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the authentic Red classroom is frozen—but the student has not entered it
+
+The production gate is complete. PR 80 published the provider-plan freezer and exact path-free
+execution identity; its feature head and rebased main both passed GitHub CI on attempt one. From
+clean main `69a0c707`, the unmodified freezer ran exactly once and persisted one canonical private
+plan. The path-free [result](evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json)
+exposes only the public-safe identifiers: plan `b555dfb6…a2bcc` and manifest
+`3bb93056…b4816`.
+
+The result reproduces the full curriculum: **15 same-root recipes, 45 genuine offers, 33
+mechanics-derived families, 10 physical origins, seven cartridge-derived corridors, and 37 routed
+offers**. Ten slots are prospectively train and five are prospectively development; the old
+catalog's 44 train and 24 validation roots remain provenance only. The selected state paths and
+physical identities stay private.
+
+This is a real artifact, but it is still not a training example. The freeze recorded zero
+controller actions, emulator frames, provider executions, root claims, teacher queries,
+predictions, outcomes, learner effects, or model fits. It chose the classrooms before anyone
+could see an answer; it did not construct them, select an arm, or teach the model.
+
+The next gate is deliberately narrower than “run all fifteen.” A production bridge must load and
+authenticate the exact immutable plan, join every recipe and execution-identity fact into the
+durable same-root campaign, prove that the physical roots are still unused, and survive an
+action-free pre-controller rehearsal. Only after that code is published and reoriented may the
+setup campaign claim roots and create repeatable decision captures. Those captures then enable
+randomized selected-arm outcomes, the first authentic train-only fit, a powered Red benchmark, and
+eventually a frozen-weight Crystal comparison. Trade, version exclusives, events, cross-save
+coordination, and living storage remain required before the living-Pokédex mission is complete.
+
 ## August 26: a historical split nearly became a new experiment's label
 
 The first production-style provider-plan rehearsal failed despite the earlier successful

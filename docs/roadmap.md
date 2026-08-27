@@ -8,14 +8,15 @@
 > trust boundary is repaired at source `539454f3` through PR 78 and CI `33009960617/1`: exact
 > restore readback, authenticated route execution, registry-built offers, comprehensive effect
 > metering, typed families, complete proof joins, account-wide physical-root no-retry, and restart
-> recovery are qualified. The authentic provider inventory, production freezer and exact identity
-> composer now pass one publication-disabled **15-recipe / 45-offer / 33-family / 10-origin**
-> rehearsal from 68 eligible catalog roots plus one explicitly hash-bound open checkpoint, with
-> every protected effect and publication counter zero. Historical catalog partitions are provenance,
-> not the new prospective 10+5 labels. Next publish this exact source and generated registries,
-> require green exact-head CI, freeze one immutable action-free plan, publish aggregate evidence,
-> and reorient before setup execution. After complete captures exist, collect at least 8
-> train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
+> recovery are qualified. PR 80 published the authentic provider inventory, production freezer and
+> exact identity composer as main `69a0c707` under exact-main CI `33031356455/1`. The freezer then
+> ran once and sealed canonical plan `b555dfb6…a2bcc` under manifest `3bb93056…b4816`: **15 recipes
+> / 45 offers / 33 families / 10 origins**, seven cartridge corridors and 37 routed offers, with
+> every gameplay and learner effect zero. Historical catalog partitions are provenance, not the
+> new prospective 10+5 labels. Next implement and attack the exact-plan setup-campaign bridge,
+> rehearse its complete pre-controller boundary without a root claim or runtime, publish under
+> exact-head green CI, and reorient before setup execution. After complete captures exist, collect
+> at least 8 train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
 > calibration/variance. Stop before a powered benchmark, sealed Red, Crystal, promotion, or replay.
 > See [red-living-dex-same-root-setup-recipe-v1.md](red-living-dex-same-root-setup-recipe-v1.md).
 
@@ -23,6 +24,27 @@
 > [model-first-roadmap.md](model-first-roadmap.md), governed by
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
+
+## Current checkpoint (2026-08-26): canonical provider plan frozen; setup bridge next
+
+PR 80 merged as main `69a0c707006c78ae8473544f40e2bdd0a0b23f91`; both PR CI
+`33030916595/1` and exact-main CI `33031356455/1` passed. The unmodified production freezer then
+ran exactly once and persisted canonical private plan `b555dfb6…a2bcc` under manifest
+`3bb93056…b4816`. The path-free
+[result](evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json) records 15 roots,
+45 genuine offers, 33 semantic families, 10 physical origins, seven cartridge-derived corridors,
+37 routed offers and the prospective 10+5 split. Actions, frames, provider executions, claims,
+teacher queries, predictions, outcomes, learner effects and fits were all zero.
+
+Next: build the production adapter/entrypoint that authenticates this exact plan and execution
+identity into the durable same-root setup campaign. Mutation-test replacement, cross-join,
+consumption, recovery and hidden-effect failures; perform only a publication-disabled
+pre-controller rehearsal; publish; require exact-head green CI; then reorient. Do not claim a root,
+construct a runtime, execute setup, collect an outcome or fit a model during this engineering gate.
+Once setup is separately opened, capture all 15 same-root menus; then randomize selected arms,
+collect at least 8 train and 4 disjoint development outcomes, fit train-only, benchmark powered
+Red, and test frozen-weight transfer to Crystal. Trade and cross-version living storage remain
+mission requirements.
 
 ## Current checkpoint (2026-08-16): the exact collector exists; publication is next
 

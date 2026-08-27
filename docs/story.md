@@ -7,7 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the real classroom plan survives the production freezer
+## Current checkpoint: the authentic classroom is sealed once
+
+The rehearsal became a real, immutable artifact. PR 80 and exact-main CI both passed on their
+first attempts. From clean published main, the freezer opened the authentic Red inventory once,
+found the same fifteen rooms and forty-five doors, and sealed them under one private plan. The
+path-free [receipt](evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json) keeps
+only two opaque fingerprints—`b555dfb6…a2bcc` for the plan and `3bb93056…b4816` for its
+manifest—and the aggregate shape: **33 mechanics-derived families, 10 physical origins, seven
+cartridge corridors, and 37 routed choices**.
+
+Nothing moved in the game. No button, frame, provider, claim, teacher, prediction, outcome, or fit
+occurred. The classroom has an address and a locked seating chart; the student has not entered it.
+That distinction keeps **causal train 0/8** honest.
+
+The next scene is the doorway rather than the lesson. A production bridge must prove that this
+exact plan, exact Red execution identity, and all unused physical roots join the durable same-root
+campaign before any emulator runtime exists. After an action-free rehearsal, publication, and one
+more reorientation, setup may create the repeatable three-way decision states. Only then do random
+arm commitments, observed outcomes, a train-only fit, powered Red, and frozen-weight Crystal make
+sense. Trade, versions, events, cross-save coordination, and living storage remain part of the
+actual living-Pokédex ending.
+
+## Previous checkpoint: the real classroom plan survives the production freezer
 
 The first production rehearsal initially said the curriculum was impossible. The problem was not
 Pokémon Red; it was an experimental-label mistake. The 81-state catalog's old train/validation tags

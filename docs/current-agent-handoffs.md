@@ -6,7 +6,36 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and the one action-free provider-plan freeze
+## Current override: Codex owns the exact-plan setup bridge, not setup execution
+
+The provider curriculum is now a canonical artifact rather than a rehearsal. PR 80 published the
+production freezer and path-free execution identity as main `69a0c707006c78ae8473544f40e2bdd0a0b23f91`.
+The pull-request run `33030916595/1` and exact-main run `33031356455/1` both passed. The unmodified
+freezer then ran exactly once and persisted private plan `b555dfb6…a2bcc`, bound by manifest
+`3bb93056…b4816`. Its path-free
+[result](evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json) records **15
+recipes, 45 genuine offers, 33 mechanics-derived families, 10 physical origins, seven
+cartridge-derived corridors, and 37 routed offers**.
+
+This milestone did not play or train. Controller actions, emulator frames, provider executions,
+root claims, teacher queries, predictions, outcomes, learner effects, and model fits were all zero.
+Historical catalog train/validation remains provenance; the canonical plan owns its prospective
+10+5 split. Private paths and identities remain absent from tracked evidence.
+
+Codex now owns an engineering-only bridge: authenticate that exact immutable plan and its complete
+execution identity, join all 15/45/33/10 facts into the already qualified durable same-root setup
+campaign, verify account-wide physical-root availability, and expose a production entrypoint whose
+publication-disabled pre-controller rehearsal cannot create a runtime or claim a root. Attack plan
+replacement, identity drift, cross-joins, consumed roots, partial recovery and hidden effects.
+Publish under exact-head green CI and reorient again before setup execution.
+
+Claude remains the optional read-only causal/statistical auditor and Antigravity the optional
+read-only architecture/transfer challenger at the next milestone; neither should delay ordinary
+engineering. Codex adjudicates. Setup execution, outcome collection, fitting, powered Red, sealed
+Red, Crystal, promotion, trade and replay remain closed. Counters remain **development 15 ·
+verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned publication and the one action-free provider-plan freeze
 
 The production freezer and path-free execution-identity composer now pass a complete
 [publication-disabled authentic rehearsal](evidence/red-living-dex-provider-plan-publication-disabled-rehearsal-2026-08-26.json).

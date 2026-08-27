@@ -1,9 +1,10 @@
 # Red same-root living-Pokédex setup recipes V1
 
-Status: adversarial trust repair and authentic provider curriculum are published; the production
-freezer and exact identity composer pass a complete publication-disabled 15/45/33/10 rehearsal;
-source publication, exact-head CI, and one action-free immutable plan freeze are next. This design
-is subordinate to
+Status: adversarial trust repair and authentic provider curriculum are published; canonical
+private plan `b555dfb6…a2bcc` is frozen once under manifest `3bb93056…b4816` from exact-main CI
+`33031356455/1`, with the complete 15/45/33/10 aggregate and every gameplay/learner effect zero.
+The exact-plan setup bridge and action-free pre-controller rehearsal are next. This design is
+subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
@@ -152,11 +153,18 @@ nine non-overworld captures, pooled 68 eligible roots without inheriting their h
 partitions, and admitted one explicitly hash-bound open post-Giovanni checkpoint. It produced the
 complete **15/45/33/10** aggregate with thirty-seven provider routes.
 
-What does not exist yet is the canonical frozen artifact under a clean published execution
-identity. The next gate publishes the exact implementation, binds the exact supported Red ROM and
-source/runtime registries, reconstructs the same plan once with zero protected effects, persists
-its private identity, publishes only aggregates, and reorients. It does not press a button, execute
-a provider, claim a root, collect an outcome, or fit a model.
+The canonical artifact now exists under clean published main `69a0c707` and exact-main CI
+`33031356455/1`. The unmodified production freezer ran once, persisted private plan
+`b555dfb6…a2bcc`, and published only its path-free
+[aggregate](evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json). It pressed no
+button, advanced no frame, executed no provider, claimed no root, collected no outcome, and fit no
+model.
+
+What does not exist yet is the production bridge from that exact immutable artifact into the
+durable setup campaign. The next gate must authenticate the plan and complete execution identity,
+prove every selected physical root remains unused, join all 15/45/33/10 facts, and rehearse only
+the pre-controller boundary with runtime construction disabled. It must be adversarially tested,
+published, and reoriented before any actionful setup campaign begins.
 
 Trade remains a separate mission-level blocker. This first calibration may exclude trade, but no
 living-Pokédex or cross-version authority claim may.
@@ -170,13 +178,14 @@ Supported by the repair and local provider qualification:
 - prospectively frozen family and physical-location separation;
 - prospective partition assignment independent of historical catalog provenance;
 - durable claim-before-input and no-retry accounting;
-- exact private capture recovery; and
+- exact private capture recovery;
 - aggregate, path-free public reporting with zero learner effects;
-- genuine 15-recipe / 45-offer / 33-family / 10-origin capacity on the selected authentic roots.
+- genuine 15-recipe / 45-offer / 33-family / 10-origin capacity on the selected authentic roots;
+- and a clean-published, execution-identity-bound frozen Red recipe artifact.
 
 Not supported:
 
-- a clean-published, execution-identity-bound frozen Red recipe artifact or setup campaign;
+- a production-qualified exact-plan setup bridge or actionful setup campaign;
 - causal train or new development examples;
 - a new model fit or model-controlled gameplay;
 - a powered Red comparison or authority promotion;
