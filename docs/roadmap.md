@@ -13,6 +13,11 @@
 > exact-head CI, and run one V2 preflight. V2 failure aborts the lane; V2 success reorients directly
 > to setup plus randomized outcome. No V3 or another wrapper-only session. Causal train remains
 > **0/8**.
+>
+> The [V2 local qualification](evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
+> records **44 focused · 5,391 repository · 291 typed source files** and the real checkout's exact
+> 292-file source match. Antigravity approves publication and one preflight with no P0/P1 finding;
+> setup remains closed. Claude's exact-commit review awaits its CLI usage reset before merge.
 
 > **August 27 selected-slot invocation checkpoint:** The claim-first core and its thin
 > current-source Red wrapper pass **67 focused and 5,389 repository tests across 291 typed source

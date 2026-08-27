@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-one-slot-preflight-v1-failed-minimal-v2** · status **active** · evidence [qualification](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+**2026-08-27-one-slot-preflight-v1-failed-minimal-v2** · status **active** · evidence [qualification](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The failed rehearsal exposed a real false-negative at the final public trust boundary rather than a gameplay problem. Repairing the source inventory is necessary to reach the already-frozen same-root lesson and remains the shortest path to causal Red outcomes. The failure produced no learning and does not prove Crystal transfer merely because the tracked Crystal package triggered it. |
+| Product alignment | The V2 repair closes the reproduced public source-inventory false-negative and is the smallest necessary unblock for the already-frozen same-root lesson. Its tracked Red-plus-Crystal regression improves the shared source boundary but produces no learning and proves no Crystal transfer. |
 | Learning output | No new model example. V1 failed closed before private access, so all learning and authority counters remain unchanged: development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. V1 failed during public bootstrap before a private producer record or selected capture was read. No ROM, root claim, resolver, controller, frame, provider, teacher, prediction, outcome, fit, promotion, or transfer ran. |
+| Authority delta | None. The V2 repair and qualification used no private capture, ROM, root claim, resolver, controller, frame, provider, teacher, prediction, outcome, fit, promotion, or transfer. |
 | Transfer result | Not run. A tracked Crystal source package revealed the V1 inventory mismatch, but no Crystal code executed and no model weights or behavior transferred. |
-| Blocker | The exact published V1 preflight rejected the clean tracked Crystal package because its Git inventory covered only the Red package while its filesystem check covered every package under src. V1 is consumed and may not retry. Private setup remains closed. |
-| Decision | Publish one minimal V2 successor that authenticates every tracked source package and rejects untracked siblings. After exact-head push CI, permit exactly one V2 ROM-free selected-root preflight. If it fails, abort this curriculum lane; if it succeeds, reorient immediately to the shortest claim-first setup-to-randomized-outcome sequence. No V3 or additional wrapper session is allowed. |
-| Next session | Complete the minimal tracked-source inventory repair, adversarially qualify it, publish under exact-head green CI, run one V2 selected-root preflight, and reorient immediately. Stop before setup execution. |
-| Next falsifier | A fixture with tracked Red and Crystal sibling packages must pass the same exact Git-versus-filesystem inventory, while an untracked sibling must fail. The published V2 command must then pass exactly once without reading a sibling capture or exposing claim, runtime, controller, learner, or model capability. |
+| Blocker | The consumed V1 preflight exposed one public false-negative: its Git inventory excluded the legitimate tracked Crystal package while its filesystem inventory included it. The minimal V2 repair is locally qualified, but publication, exact-head CI, and the sole V2 preflight remain pending. Private setup remains closed. |
+| Decision | Publish the locally qualified minimal V2 successor that authenticates every tracked source package and rejects untracked siblings. After exact-head push CI, permit exactly one V2 ROM-free selected-root preflight. If it fails, abort this curriculum lane; if it succeeds, reorient immediately to the shortest claim-first setup-to-randomized-outcome sequence. No V3 or additional wrapper session is allowed. |
+| Next session | Publish the qualified minimal V2 repair under exact-head green CI, run one V2 selected-root preflight, and reorient immediately. Stop before setup execution. |
+| Next falsifier | The published V2 command must pass exactly once while authenticating all tracked source packages, reading one selected root pair and no sibling capture, and exposing no claim, runtime, controller, learner, or model capability. |
 | Stop condition | Do not retry V1. Stop and abort this lane on failed V2 publication, CI, or rehearsal; untracked source acceptance; sibling capture access; any claim, resolver, ROM, or controller effect; unauthenticated producer/private join; or identity leakage. After one successful V2 rehearsal, reject V3 and all further wrapper-only work. |
 
 ### Stop conditions

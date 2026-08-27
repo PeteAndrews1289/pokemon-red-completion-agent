@@ -15,6 +15,12 @@
 > succeeds, reorient directly to setup plus randomized outcome. No V3 or another wrapper-only
 > session is permitted.
 >
+> The [V2 local qualification](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
+> records **44 focused · 5,391 full-suite · 291 typed source files** and the real checkout's exact
+> 292-file tracked-source match. Antigravity approves publication plus one V2 preflight with no
+> P0/P1 finding and keeps setup closed. Claude's CLI reached its usage window; retry its exact-head
+> read-only audit after reset before merge, without treating unavailability as approval.
+>
 > **2026-08-27 active override — publish and rehearse one selected-slot preflight, then stop
 > infrastructure work:** The claim-first core and the thin current-source Red invocation wrapper
 > are locally qualified. The wrapper binds clean published source, exact successful push CI, the

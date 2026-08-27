@@ -22,6 +22,12 @@ while the filesystem side enumerated all of `src`. The clean tracked Crystal pac
 rejected. The repair is deliberately one-dimensional: authenticate every tracked source package,
 prove a Red-plus-Crystal tree succeeds, and prove an untracked sibling still fails.
 
+That repair is now [locally qualified](evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json):
+**44 focused · 5,391 repository · 291 typed source files**, with an exact 292-file match in the real
+checkout. Antigravity reports no P0/P1 blocker and approves publication plus one V2 preflight;
+private setup remains closed. Claude's CLI reached its usage window, so its exact-commit review is
+pending a post-reset retry rather than being silently counted as approval.
+
 The shortest honest sequence is now:
 
 1. qualify and publish this minimal V2 source-inventory repair;

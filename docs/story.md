@@ -19,6 +19,10 @@ untracked sibling still cannot enter. It gets one attempt. Failure ends this lan
 scaffolding and opens setup plus a randomized outcome. **Causal train remains 0/8; authority and
 transfer remain zero.**
 
+That V2 repair now passes **44 focused and 5,391 repository tests**, including the real 292-file
+source tree. Antigravity found no blocking issue. Claude's review ran into its usage window, so its
+verdict remains pending rather than being guessed.
+
 ## Previous checkpoint: one sealed lesson can be inspected without touching the controller
 
 The two-key lock was safe, but there was still no narrow public doorway from the frozen curriculum

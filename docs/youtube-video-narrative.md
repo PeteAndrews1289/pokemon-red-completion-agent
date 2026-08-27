@@ -9,7 +9,9 @@ filesystem camera sees both. The guard mistakes Crystal for a shadow.
 
 Stamp **V1 RETRY NO**. Widen the Git flashlight to **ALL TRACKED `src`**, then send a fake untracked
 package into a red stop sign. End on **ONE V2 → FAIL: ABORT / PASS: SETUP + RANDOMIZED OUTCOME** and
-cross out **V3**. Keep **CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0** visible.
+cross out **V3**. Reveal **44 FOCUSED · 5,391 FULL-SUITE · 291 TYPED · 292 REAL SOURCE FILES
+MATCHED · ANTIGRAVITY GO · CLAUDE RETRY AFTER USAGE RESET**. Keep **CAUSAL TRAIN 0/8 · AUTHORITY 0
+· TRANSFER 0** visible.
 
 ## August 27 scene: inspect one lesson, touch nothing
 
