@@ -8,7 +8,14 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: exact namespace successor qualified; publish and rehearse once
+## Current checkpoint: pre-controller proof succeeded; build the claim-first outer boundary
+
+PR 83 passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI
+`33059506829/1`. The one V2 read-only rehearsal succeeded. Its
+[path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+authenticates **15 roots, 45 options, 33 families, 10 origins, 37 routed options, and seven
+cartridge corridors** with every protected effect zero. The namespace lane is closed permanently.
+No model example, authority, or transfer result was produced.
 
 The runtime-free bridge shipped through PR 82, merged as main
 `506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, and passed exact-main CI
@@ -24,10 +31,12 @@ same nearest initialized private store supplied to the bridge and distinguishes 
 record from present-record integrity failure. Its
 [qualification](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
 records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files**. Claude and
-Antigravity returned GO for publication and one rehearsal and NO-GO for setup execution. Publish,
-require exact green CI, rehearse once, and reorient. A failed successor ends the namespace lane; do
-not scan siblings, flatten storage, regenerate the plan, add provenance layers, or start outer
-identity/claim/recovery engineering early. Causal train remains **0/8**.
+Antigravity returned GO for publication and one rehearsal and NO-GO for setup execution. That
+sequence is now complete. Next compose durable execution identity, atomic logical-plus-physical
+claims, authenticated recovery, deep plan reauthentication, and claim-first runtime construction.
+Prove concurrent duplicate and crash-cutpoint behavior ROM-free with Red-shaped and Crystal-shaped
+fixtures, publish under exact green CI, and reorient before private setup. Causal train remains
+**0/8**.
 
 ## Previous checkpoint: exact frozen plan exists; publish the runtime-free bridge
 

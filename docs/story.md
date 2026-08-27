@@ -7,7 +7,7 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the doorway rejected the wrong key
+## Current checkpoint: the doorway opened, and nobody crossed it
 
 The runtime-free bridge shipped and its exact `main` build passed. The first read-only rehearsal
 then failed before it found the frozen plan. Every meaningful counter stayed at zero. The failure
@@ -17,11 +17,15 @@ files live in their own initialized vault one level nearer.
 We preserved the failure and did not retry it. The successor does not search private folders or
 print a path. It requires both context files and the named plan to belong to the exact nearest
 initialized store the caller supplied, and says “record absent” separately from “record invalid.”
-It passes **71 focused, 234 related, and 5,300 full-suite tests**; both independent reviewers approve
-publication and one rehearsal while keeping setup execution closed. After green CI it gets one
-rehearsal, and failure ends this namespace lane without V3. Only success can open the later identity,
-claim, recovery and runtime gate. This is still infrastructure, not learning: **causal train 0/8,
-authority 0, transfer 0**.
+It passed **71 focused, 234 related, and 5,300 full-suite tests**; both independent reviewers approved
+publication and one rehearsal while keeping setup execution closed. PR 83 and exact-main CI passed,
+and that one rehearsal succeeded: fifteen roots, forty-five options, thirty-three families, and ten
+origins all authenticated with every actionful counter at zero. The namespace lane is now closed.
+
+Next comes the claim-first outer gate: durable identity, two claims committed together,
+crash-authenticated recovery, deep-plan reauthentication, and a runtime that cannot exist before
+the claims commit. This is still infrastructure, not learning: **causal train 0/8, authority 0,
+transfer 0**.
 
 ## Previous checkpoint: the doorway is finally only a doorway
 

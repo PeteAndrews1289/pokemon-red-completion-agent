@@ -5,17 +5,16 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **PR 82 → MAIN 506C0C1F → CI 33051433728/1 GREEN → V1 READ-ONLY
-> REHEARSAL → FAILED CLOSED AT IMMUTABLE PLAN AUTH → ACTIONS/FRAMES/CLAIMS/PROVIDERS/TEACHERS/
-> PREDICTIONS/OUTCOMES/FITS/SETUP/RUNTIME 0 → CALLER USED INITIALIZED PARENT STORE → INTENDED
-> NEAREST CHILD STORE CONTAINS MATCHING PLAN → V1 RETRY NO → NAMESPACE-BOUND SUCCESSOR ONCE**.
-> Link the [failed-closed result](evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json).
-> The [qualified successor](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
-> is **71 FOCUSED · 234 RELATED · 5,300 FULL-SUITE · CLAUDE GO · ANTIGRAVITY GO · SETUP NO-GO**.
-> Animate **NEAREST INITIALIZED STORE BINDING → DISTINCT ABSENT RECORD → ROM-FREE NESTED/CROSS-STORE
-> FALSIFIERS → PUBLISH → EXACT CI → ONE REHEARSAL → REORIENT; FAILURE → STOP, NO V3**. Keep the board at
-> **DEVELOPMENT 15 · VERIFIED 5/9 · CAUSAL TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 · AUTHORITY 0 ·
-> TRANSFER 0** and keep outer identity, claims, recovery, runtime, setup, Crystal and replay closed.
+> **Current rail:** Show **PR 83 → MAIN 18EEA8BD → CI 33059506829/1 GREEN → V2 READ-ONLY
+> REHEARSAL SUCCESS → 15 ROOTS · 45 OPTIONS · 33 FAMILIES · 10 ORIGINS · 37 ROUTED · 7 CORRIDORS
+> → ACTIONS/FRAMES/CLAIMS/RUNTIMES/SETUP/PROVIDERS/TEACHERS/PREDICTIONS/OUTCOMES/FITS 0 →
+> NAMESPACE LANE CLOSED**. Link the
+> [path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json).
+> Animate the next gate as **DURABLE EXECUTION ID → ATOMIC LOGICAL + PHYSICAL CLAIM → AUTHENTICATED
+> RECOVERY → DEEP PLAN REAUTH → CLAIM-FIRST RUNTIME**, with **CONCURRENT DUPLICATE + EVERY CRASH
+> CUTPOINT** as the ROM-free falsifiers. Keep the board at **DEVELOPMENT 15 · VERIFIED 5/9 · CAUSAL
+> TRAIN 0/8 · FITS 4/5 · COMPARISONS 4/5 · AUTHORITY 0 · TRANSFER 0** and keep private setup,
+> Crystal and replay closed.
 >
 > **Previous rail:** Show **FIRST BRIDGE NO-GO: EAGER UNBOUND HELPERS · HIDDEN EMULATOR
 > CONSTRUCTION · REAL-CALL KEYWORD FAILURE → REPAIRED RUNTIME-FREE BRIDGE · CANONICAL RECEIPT
