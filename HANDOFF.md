@@ -12,33 +12,32 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: trust boundary repaired; inventory genuine providers and freeze the real plan
+## 2026-08-26: authentic provider curriculum qualified; freeze the published plan next
 
-The adversarial repair is qualified at source `539454f351e3709d2ad912fbb8e5a3d79fc202e0`
-through [PR 78](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/78) and green
-PR CI `33009960617/1`. The
-[qualification](docs/evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
-binds **147 focused · 5,174 repository tests · 279 typed source files** and zero gameplay or
-learner effects.
+Implementation checkpoint `6063cb416e7a1323363fc02072785c98135755b3` closes the genuine-family
+blocker. It adds the complete 52-row Generation I level-evolution graph, five target-specific boxed
+evolution families, four target-specific party-development families, and cartridge-derived wild
+corridors while reusing the existing boxed-evolution and balanced-team engines. Storage, resupply,
+story, acquisition, and exploration retain their existing concrete Red providers. Semantic family
+identity contains no slot, root, profile, route, or candidate rank.
 
-The same-root boundary no longer lets one opaque runtime certify itself. Plan, claim, capture, and
-terminal share a sealed Red title/revision/ROM/source/state/route/provider/runtime identity. A
-concrete executor-owned meter covers every protected authority. Every arm uses a fresh runtime,
-exact load/save readback, an actually executed and independently verified semantic route, a fresh
-destination observation, and an offer built by the real provider registry without invoking its
-executor. Typed families derive from mechanics rather than slot/root/profile identity. Complete
-proof joins, closed failure codes, byte-derived account-wide root claims, and success/failure/
-recovery crash matrices now fail closed.
+One authorized private action-free preflight verified fifteen still-unconsumed roots, canonical
+progress envelopes, coherent party/collection state, resources, storage, and dependency-legal
+story objectives. It constructed **15 recipes · 45 genuine offers · 33 semantic families · 10
+physical origins · 11 construction routes · 37 provider routes**. Wrong cartridge identity,
+consumed/cross-joined roots, missing resources or specimens, ambiguous trainees, exhausted
+storage, unavailable story objectives, and protected effects all fail before execution. See the
+[path-free local qualification](docs/evidence/red-living-dex-authentic-provider-curriculum-local-qualification-2026-08-26.json).
 
-Do not mistake this for training. No authentic fifteen-recipe plan or same-root capture exists;
-causal train is still zero. The active session is action-free provider-family inventory. Reuse the
-existing boxed evolution and party-development engines and add only the smallest reusable target-
-parameterized seams needed to construct **15 complete recipes · 45 real offers · at least 33
-semantic families · 10 physical origins**. Fail on synthetic identities, cross-joined captures,
-teacher routes, provider execution, or incomplete capacity. Freeze one complete authentic plan,
-then stop and reorient before setup execution. Trade, versions, events, cross-save retention, and
-living-storage consolidation remain later mission requirements. Counters remain **development 15
-· verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+Do not mistake this for training. The preflight pressed no button, advanced no frame, executed no
+provider, claimed no root, asked no teacher, observed no outcome, and fit no model; causal train is
+still zero. The active session is now publication plus one canonical plan freeze: require green
+exact-source CI, bind the full clean Red execution identity, reconstruct the same complete plan
+with protected effects zero, publish only aggregates, and reorient. Stop before construction or
+candidate routes execute. Setup, outcomes, fitting, sealed Red, Crystal, promotion, and replay
+remain closed. Trade, versions, events, cross-save retention, and living-storage consolidation
+remain later mission requirements. Counters remain **development 15 · verified 5/9 · causal train
+0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 ## Previous 2026-08-26: adversarial audit blocked publication; repair trust before widening providers
 

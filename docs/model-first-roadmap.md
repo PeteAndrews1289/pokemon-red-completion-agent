@@ -8,39 +8,42 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: trust boundary repaired; build the authentic provider curriculum
+## Current checkpoint: authentic provider curriculum qualifies; freeze the published plan
 
-The repair is qualified at source `539454f3` through PR 78 under green CI `33009960617/1`. Its
-[evidence](evidence/red-living-dex-same-root-trust-boundary-repair-v2-qualification-2026-08-26.json)
-records **147 focused · 5,174 repository tests · 279 typed source files**. Qualification was
-ROM-free and created no capture, action, frame, provider execution, learner label, outcome,
-prediction, teacher query, fit, root claim, authority, or transfer result.
+Implementation checkpoint `6063cb41` closes the genuine-provider breadth blocker. The complete
+Generation I level-evolution graph now supplies target-validated evolution profiles; five real
+boxed precursor families reuse the existing boxed-evolution engine; four unique party members use
+one opt-in target parameter on the existing balanced-team engine; and acquisition, exploration,
+storage, resupply, and story offers bind real Red mechanics rather than slot or route names.
 
-The boundary now seals complete Red execution identity; uses one concrete executor-owned meter for
-all protected effects; restores and reads back exact bytes on a fresh runtime per arm; executes and
-independently verifies a concrete semantic route; constructs the fresh action-free offer through
-the real provider registry; derives typed mechanics-based family identities; joins the entire
-construction/fork/final proof tree; accepts only closed public failures; consumes the byte-derived
-physical root account-wide; and survives a second interruption during recovery without retry.
+One authorized private **action-free** preflight then read fifteen unconsumed roots and their
+canonical progress envelopes, verified coherent party/collection/story/resource prerequisites,
+derived seven reversible grass corridors from cartridge terrain, and planned every construction
+and provider route. The aggregate result is **15 recipes · 45 real offers · 33 semantic families ·
+10 physical origins · 11 construction routes · 37 provider routes**. It advanced zero frames,
+pressed zero buttons, executed zero providers, claimed zero roots, queried no teacher, drew no
+behavior, observed no outcome, and fit no model. The
+[local qualification](evidence/red-living-dex-authentic-provider-curriculum-local-qualification-2026-08-26.json)
+publishes no path, state, root, profile, or route identity.
 
-The active blocker is now genuine curriculum breadth, not trust infrastructure. The next gate must:
+The remaining blocker is now one exact publication-bound artifact, not more family invention. The
+next gate must:
 
-1. inventory every prospective real Red provider family without controller input or provider
-   execution;
-2. reuse the boxed evolution and party-development engines while adding the smallest reusable
-   target-specific parameters required by actual transformations;
-3. construct all **15 recipes · 45 real offers · at least 33 distinct semantic families · 10
-   physical origins** without slot/root/profile/route-derived identity;
-4. freeze exactly one complete authentic action-free plan; and
-5. reorient before private setup execution.
+1. publish the implementation and generated registries under green exact-source CI;
+2. derive the complete clean-source Red execution identity;
+3. rebuild and freeze the canonical private plan against the exact supported ROM, the same fifteen
+   still-unconsumed physical roots, and zero protected-effect deltas;
+4. publish only the path-free 15/45/33/10 aggregate and immutable plan identity; and
+5. reorient before any setup route or provider executes.
 
-Stop on synthetic families, cross-joined captures, a fixed teacher route, a species-specific
-monolith, any protected effect during inventory, or incomplete capacity. Only a complete plan may
-open the separately bounded setup-capture campaign; complete captures then open randomized
-selected-arm outcomes and the next train-only fit. Sealed Red, Crystal, promotion, and replay stay
-closed. Trade, versions, events, cross-save retention, and living-storage consolidation remain
-later mission gates. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
-comparisons 4/5 · authority 0 · transfer 0**.
+Stop on a wrong cartridge, dirty or unpublished source, consumed or cross-joined root, incoherent
+root facts, unavailable provider, protected effect, or incomplete capacity. A successful freeze
+opens the separately bounded same-root setup campaign; completed setup captures then open
+randomized selected-arm outcomes. The train-only fit still waits for the declared causal train
+denominator. Sealed Red, Crystal, promotion, and replay stay closed. Trade, versions, events,
+cross-save retention, and living-storage consolidation remain later mission gates. Counters stay
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
 
 ## Previous checkpoint: adversarial review blocked publication; repair the causal trust boundary
 

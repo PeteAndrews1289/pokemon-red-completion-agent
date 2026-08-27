@@ -1,0 +1,106 @@
+{
+  "authentic_action_free_preflight": {
+    "available_unconsumed_roots": 15,
+    "cartridge_derived_wild_corridors": 7,
+    "coherent_root_fact_sets": 15,
+    "construction_routes": 11,
+    "physical_origins": 10,
+    "provider_offers": 45,
+    "provider_routes": 37,
+    "recipe_slots": 15,
+    "semantic_families": 33
+  },
+  "claim_boundary": {
+    "authentic_provider_curriculum_exists": true,
+    "crystal_execution_allowed": false,
+    "model_fitting_allowed": false,
+    "private_setup_execution_allowed": false,
+    "published_execution_identity_plan_frozen": false,
+    "sealed_red_evaluation_allowed": false,
+    "training_outcome_collection_allowed": false
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "curriculum": {
+    "development_families": 4,
+    "development_offers": 6,
+    "evolution_families": 5,
+    "evolution_offers": 6,
+    "identity_derived_families": 0,
+    "story_objectives": 5,
+    "teacher_routes": 0
+  },
+  "implementation": {
+    "complete_generation_one_level_evolution_rows": 52,
+    "source_checkpoint": "6063cb416e7a1323363fc02072785c98135755b3",
+    "targeted_development_reuses_balanced_team_engine": true,
+    "targeted_evolution_reuses_boxed_evolution_engine": true,
+    "wild_corridors_derived_from_cartridge_terrain": true
+  },
+  "next_gate": {
+    "goal": "Publish the exact source, bind its clean Red execution identity, and freeze one canonical path-free 15/45/33/10 provider plan with protected effects still zero.",
+    "stop_conditions": [
+      "wrong_cartridge_revision",
+      "source_not_clean_and_published",
+      "root_already_consumed",
+      "cross_joined_root_observation",
+      "incoherent_party_or_collection_facts",
+      "unavailable_provider_precondition",
+      "protected_effect_during_freeze",
+      "incomplete_capacity"
+    ],
+    "training_readiness_after_gate": "The frozen plan opens a separately bounded same-root setup campaign. Completed setups then open randomized selected-arm outcomes; model fitting still waits for the declared train denominator."
+  },
+  "protected_effects": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "branch": "feature/red-authentic-provider-curriculum",
+    "github_ci_conclusion": "pending",
+    "source_published": false
+  },
+  "recorded_on": "2026-08-26",
+  "schema": "pokemon.red.living-dex-authentic-provider-curriculum.local-qualification.v1",
+  "status": "qualified_for_publish_bound_plan_freeze",
+  "verification": {
+    "focused_related_tests_passed": 186,
+    "full_suite_final_clean_pass": {
+      "deselected": 3,
+      "passed": 5206,
+      "warnings": 1,
+      "xfailed": 1
+    },
+    "generated_registries": "reproducible",
+    "mypy": "284 source files passed",
+    "public_artifact_check": "passed",
+    "ruff": "passed"
+  },
+  "what_remains_unproved": [
+    "one_clean_published_execution_identity_plan_freeze",
+    "authentic_same_root_setup_captures",
+    "randomized_selected_arm_red_outcomes",
+    "the_first_train_only_model_fit_for_this_curriculum",
+    "model_controlled_red_gameplay",
+    "powered_red_generalization",
+    "frozen_weight_crystal_transfer",
+    "trade_version_event_cross_save_and_living_storage_completion"
+  ]
+}

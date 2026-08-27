@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: the real classroom finally fits on the cartridge
+
+The missing lesson families are now concrete rather than named placeholders. The project decoded
+all 52 automatic level evolutions in Generation I, reused the boxed-evolution engine for five
+different retained precursors, and added an opt-in species target to the existing party trainer for
+four distinct trainees. Wild lessons derive reversible grass lanes from Red's own terrain graph;
+storage, supply, and story lessons retain their real PC, Mart, and dependency-legal objective
+semantics. None of the family identities contains a slot, save, profile, route, or candidate rank.
+
+The decisive check used the authentic private capture bank without moving the game. Fifteen
+unconsumed roots had coherent party, storage, collection, resource, and story prerequisites. From
+those exact states the planner constructed all **15 rooms, 45 doors, 33 semantic families, and 10
+physical origins**, with eleven routes into shared origins and thirty-seven candidate routes. A
+wrong cartridge, missing precursor, ambiguous trainee, empty supply budget, exhausted storage,
+unavailable story goal, consumed root, or cross-joined observation now fails before a button can
+move.
+
+This is progress toward learning, but it is not learning itself. The preflight pressed no button,
+advanced no frame, executed no provider, claimed no root, asked no teacher, produced no outcome,
+and fit no model. The remaining bridge is refreshingly small: publish the exact source, bind its
+complete Red execution identity, and freeze this same path-free plan once. Only then can the
+separate same-root setup campaign manufacture repeatable decision states for randomized causal
+outcomes. Crystal and semantic trade remain the tests that prevent a Red-only classroom from being
+mistaken for the final product.
+
 ## August 26: the classroom stopped signing its own certificates
 
 The repair separated every fact that had previously come from one opaque witness. A sealed

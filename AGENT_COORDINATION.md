@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-26 authentic provider curriculum qualified locally; exact published freeze active:**
+> Implementation checkpoint `6063cb41` reuses the boxed-evolution and balanced-team engines for
+> target-specific mechanics and derives wild corridors from cartridge terrain. One authorized
+> action-free private preflight verified fifteen unconsumed coherent roots and constructed **15
+> recipes · 45 genuine offers · 33 semantic families · 10 physical origins · 11 construction
+> routes · 37 provider routes** with controller actions, frames, provider executions, claims,
+> teachers, learner effects, outcomes, and fits all zero. See the
+> [path-free qualification](docs/evidence/red-living-dex-authentic-provider-curriculum-local-qualification-2026-08-26.json).
+>
+> Codex owns publication, exact Red execution-identity binding, one canonical zero-effect private
+> plan freeze, path-free evidence, and reorientation. Stop on another cartridge, dirty source,
+> consumed/cross-joined roots, incoherent prerequisites, any protected effect, or incomplete
+> 15/45/33/10 capacity. Claude and Antigravity are optional read-only milestone reviewers after the
+> immutable freeze; Codex adjudicates. Setup execution, outcomes, fitting, sealed Red, Crystal,
+> promotion, and replay remain closed. Trade remains a later mission requirement. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
 > **2026-08-26 adversarial audit blocked publication; causal trust-boundary repair active:** PR 78
 > head `0fb3f0f4` passed CI `32990990854/1`, but passing synthetic tests do not make the contract
 > publication-ready. Claude CLI was logged out and the Claude/Antigravity desktop reviewers were

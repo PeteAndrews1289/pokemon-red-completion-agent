@@ -7,25 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the witness has been split into independent authorities
+## Current checkpoint: all fifteen authentic classrooms exist without moving the game
 
-The trust repair is green. The saved-state authority now proves exact byte readback, the route
-authority must actually move the emulator and independently verify arrival, and the provider
-registry builds the fresh semantic offer without executing it. A sealed Red identity follows the
-whole record, one real meter counts every protected effect, and every arm starts in a fresh runtime
-from the same authenticated origin.
+The project can now build the entire first Red curriculum honestly. Five retained boxed precursors
+exercise five real level-evolution families, four different party members exercise target-specific
+development, and the remaining doors use real wild, storage, supply, exploration, and story
+mechanics. Wild corridors come from cartridge terrain. Family names come from transformations,
+never from a slot, save, route, profile, or answer position.
 
-The nastier edges are closed too. A caller cannot rename a family with a slot or route ID, swap a
-fork proof, smuggle a private digest into a public reason, or reopen the same physical save through
-another local database. Power loss at any durable transition—including a second loss during
-recovery—settles safely without retry.
+Fifteen unconsumed authentic roots passed the complete action-free rehearsal: **15 rooms, 45 real
+doors, 33 semantic families, 10 physical origins, 11 construction routes, and 37 provider
+routes**. The rehearsal rejected wrong cartridges, missing Pokémon or resources, full storage,
+unavailable story objectives, ambiguous trainees, consumed roots, and observations borrowed from
+another save. It pressed no button, advanced no frame, executed no skill, claimed no root, asked no
+teacher, observed no outcome, and fit no model.
 
-The proof is **147 focused tests, 5,174 repository tests, 279 typed source files, and green GitHub
-CI 33009960617/1**. The honest counter is still **causal train 0/8** because a safer classroom is
-not a lesson. Next we inventory the real Red mechanics and freeze **15 rooms, 45 honest doors, at
-least 33 semantic families, and 10 physical origins**. Completed same-root captures then open
-randomized outcomes and the next train-only fit. Crystal, trade, versions, events, and a true living
-Pokédex remain later tests of whether the knowledge really transfers.
+That last sentence matters. The honest counter is still **causal train 0/8**. We have proved that
+the real lessons exist, not collected the lessons. The next move is to publish this exact source,
+bind its clean Red execution identity, and freeze the path-free plan once. Then a separate campaign
+may construct the same-root decision states and randomize selected arms. Crystal, trade, versions,
+events, and a true living Pokédex remain the tests of whether the eventual knowledge transfers.
+
+## Previous checkpoint: the witness has been split into independent authorities
 
 ## Previous checkpoint: the witness could sign its own evidence
 

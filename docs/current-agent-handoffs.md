@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns authentic provider inventory and plan freeze
+## Current override: Codex owns publication and the exact authentic plan freeze
+
+Implementation checkpoint `6063cb41` and its
+[local qualification](evidence/red-living-dex-authentic-provider-curriculum-local-qualification-2026-08-26.json)
+close the provider-family inventory. Fifteen unconsumed authentic roots passed coherent
+party/collection/story/resource checks, seven wild corridors derived from cartridge terrain, and
+the action-free planner produced **15 recipes, 45 genuine offers, 33 mechanics-derived families,
+10 physical origins, 11 construction routes, and 37 provider routes**. Controller actions, frames,
+provider executions, root claims, teacher queries, learner effects, outcomes, and fits were all
+zero. No private path or identity is published.
+
+Codex now owns one narrow sequence: publish the exact implementation and registries, bind a clean
+Red execution identity, freeze the same complete action-free private plan, publish its path-free
+aggregate, and reorient. Reject another cartridge, dirty source, a consumed/cross-joined root,
+incoherent root facts, an unavailable provider, any protected effect, or incomplete capacity. Do
+not execute construction, a candidate route, or a provider during this freeze.
+
+Claude remains the optional read-only causal/statistical auditor and Antigravity the optional
+read-only architecture/transfer challenger after the immutable freeze milestone; neither should
+delay publication. Codex adjudicates. Setup execution, outcome collection, fitting, sealed Red,
+Crystal, promotion, and replay remain closed. Trade remains a later full-mission blocker. Counters
+remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority
+0 · transfer 0**.
+
+## Previous override: Codex owned authentic provider inventory and plan freeze
 
 The causal boundary repair is qualified at source `539454f3` through PR 78 under green CI
 `33009960617/1`. Its
