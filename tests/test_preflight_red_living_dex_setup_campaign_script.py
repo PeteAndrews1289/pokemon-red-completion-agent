@@ -1794,6 +1794,16 @@ def test_immutable_record_binds_every_nested_plan_identity() -> None:
     assert summary.manifest_sha256 == args.expected_plan_manifest_sha256
 
 
+def test_absent_immutable_record_is_distinct_from_a_present_invalid_record() -> None:
+    _document, args = _record()
+
+    with pytest.raises(
+        SCRIPT["SetupBridgePreflightError"],
+        match="immutable_plan_record_absent",
+    ):
+        SCRIPT["_authenticate_plan_record"](_Store(None), args)
+
+
 @pytest.mark.parametrize(
     "mutate",
     (
@@ -1946,6 +1956,11 @@ def test_top_level_rehearsal_crosses_every_authentication_guard_without_runtime(
     monkeypatch.setitem(globals_, "_open_store", event("store", store))
     monkeypatch.setitem(
         globals_,
+        "_require_plan_namespace_binding",
+        event("namespace-binding"),
+    )
+    monkeypatch.setitem(
+        globals_,
         "_authenticate_plan_record",
         event("record", (record, summary)),
     )
@@ -2055,6 +2070,7 @@ def test_top_level_rehearsal_crosses_every_authentication_guard_without_runtime(
         "canonical-evidence",
         "support",
         "store",
+        "namespace-binding",
         "record",
         "inputs",
         "supplements",
@@ -2178,6 +2194,187 @@ def test_private_store_reuses_the_hardened_worktree_probe(
     kwargs = observed["kwargs"]
     assert isinstance(kwargs, dict)
     assert kwargs["git_worktree_probe"] is SCRIPT["_hardened_git_worktree_probe"]
+
+
+def test_plan_namespace_requires_the_nearest_initialized_store(
+    tmp_path: Path,
+) -> None:
+    sentinel = b'{"format":"pokemon-red-completion-private-root","schema_version":1}\n'
+    parent = tmp_path / "parent-store"
+    child = parent / "goal-manager-store"
+    child.mkdir(parents=True)
+    (parent / ".pokemon-red-completion-private-root.json").write_bytes(sentinel)
+    (child / ".pokemon-red-completion-private-root.json").write_bytes(sentinel)
+    catalog = child / "catalog.json"
+    plan = child / "plan.json"
+    catalog.write_bytes(b"{}\n")
+    plan.write_bytes(b"{}\n")
+
+    SCRIPT["_require_plan_namespace_binding"](
+        SimpleNamespace(
+            private_root=child,
+            context_catalog=catalog,
+            context_plan=plan,
+        )
+    )
+    with pytest.raises(
+        SCRIPT["SetupBridgePreflightError"],
+        match="private_namespace_authentication",
+    ):
+        SCRIPT["_require_plan_namespace_binding"](
+            SimpleNamespace(
+                private_root=parent,
+                context_catalog=catalog,
+                context_plan=plan,
+            )
+        )
+
+    sibling = parent / "other-store"
+    sibling.mkdir()
+    (sibling / ".pokemon-red-completion-private-root.json").write_bytes(sentinel)
+    foreign_catalog = sibling / "catalog.json"
+    foreign_plan = sibling / "plan.json"
+    foreign_catalog.write_bytes(b"{}\n")
+    foreign_plan.write_bytes(b"{}\n")
+    for catalog_path, plan_path in (
+        (foreign_catalog, plan),
+        (catalog, foreign_plan),
+    ):
+        with pytest.raises(
+            SCRIPT["SetupBridgePreflightError"],
+            match="private_namespace_authentication",
+        ):
+            SCRIPT["_require_plan_namespace_binding"](
+                SimpleNamespace(
+                    private_root=child,
+                    context_catalog=catalog_path,
+                    context_plan=plan_path,
+                )
+            )
+
+
+@pytest.mark.parametrize(
+    "case",
+    (
+        "relative",
+        "lexical-alias",
+        "final-symlink",
+        "symlinked-parent",
+        "hardlink",
+        "directory",
+    ),
+)
+def test_plan_namespace_rejects_noncanonical_or_nonregular_inputs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    case: str,
+) -> None:
+    sentinel = b'{"format":"pokemon-red-completion-private-root","schema_version":1}\n'
+    store = tmp_path / "store"
+    store.mkdir()
+    (store / ".pokemon-red-completion-private-root.json").write_bytes(sentinel)
+    catalog = store / "catalog.json"
+    plan = store / "plan.json"
+    catalog.write_bytes(b"{}\n")
+    plan.write_bytes(b"{}\n")
+    catalog_path = catalog
+
+    if case == "relative":
+        monkeypatch.chdir(tmp_path)
+        catalog_path = Path("store/catalog.json")
+    elif case == "lexical-alias":
+        (store / "nested").mkdir()
+        catalog_path = store / "nested" / ".." / "catalog.json"
+    elif case == "final-symlink":
+        catalog_path = store / "catalog-link.json"
+        catalog_path.symlink_to(catalog)
+    elif case == "symlinked-parent":
+        alias = tmp_path / "store-alias"
+        alias.symlink_to(store, target_is_directory=True)
+        catalog_path = alias / "catalog.json"
+    elif case == "hardlink":
+        catalog_path = store / "catalog-hardlink.json"
+        os.link(catalog, catalog_path)
+    elif case == "directory":
+        catalog_path = store / "catalog-directory"
+        catalog_path.mkdir()
+    else:  # pragma: no cover - the parameter list is closed above
+        raise AssertionError(case)
+
+    with pytest.raises(
+        SCRIPT["SetupBridgePreflightError"],
+        match="private_namespace_authentication",
+    ):
+        SCRIPT["_require_plan_namespace_binding"](
+            SimpleNamespace(
+                private_root=store,
+                context_catalog=catalog_path,
+                context_plan=plan,
+            )
+        )
+
+
+@pytest.mark.parametrize("case", ("directory", "symlink", "hardlink"))
+def test_plan_namespace_rejects_unsafe_nearest_store_markers(
+    tmp_path: Path,
+    case: str,
+) -> None:
+    store = tmp_path / "store"
+    store.mkdir()
+    catalog = store / "catalog.json"
+    plan = store / "plan.json"
+    catalog.write_bytes(b"{}\n")
+    plan.write_bytes(b"{}\n")
+    marker = store / ".pokemon-red-completion-private-root.json"
+
+    if case == "directory":
+        marker.mkdir()
+    elif case == "symlink":
+        target = tmp_path / "marker-target.json"
+        target.write_bytes(b"{}\n")
+        marker.symlink_to(target)
+    elif case == "hardlink":
+        marker.write_bytes(b"{}\n")
+        os.link(marker, tmp_path / "marker-hardlink.json")
+    else:  # pragma: no cover - the parameter list is closed above
+        raise AssertionError(case)
+
+    with pytest.raises(
+        SCRIPT["SetupBridgePreflightError"],
+        match="private_namespace_authentication",
+    ):
+        SCRIPT["_require_plan_namespace_binding"](
+            SimpleNamespace(
+                private_root=store,
+                context_catalog=catalog,
+                context_plan=plan,
+            )
+        )
+
+
+def test_plan_namespace_rejects_a_symlinked_private_root(tmp_path: Path) -> None:
+    sentinel = b'{"format":"pokemon-red-completion-private-root","schema_version":1}\n'
+    store = tmp_path / "store"
+    store.mkdir()
+    (store / ".pokemon-red-completion-private-root.json").write_bytes(sentinel)
+    catalog = store / "catalog.json"
+    plan = store / "plan.json"
+    catalog.write_bytes(b"{}\n")
+    plan.write_bytes(b"{}\n")
+    alias = tmp_path / "store-alias"
+    alias.symlink_to(store, target_is_directory=True)
+
+    with pytest.raises(
+        SCRIPT["SetupBridgePreflightError"],
+        match="private_namespace_authentication",
+    ):
+        SCRIPT["_require_plan_namespace_binding"](
+            SimpleNamespace(
+                private_root=alias,
+                context_catalog=catalog,
+                context_plan=plan,
+            )
+        )
 
 
 def test_exact_input_helper_is_bound_to_the_no_create_read_lease(

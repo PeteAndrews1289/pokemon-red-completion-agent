@@ -12,7 +12,48 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: setup bridge is runtime-free and locally qualified; publish before private rehearsal
+## 2026-08-27: namespace-bound successor qualified; publish and rehearse once
+
+PR 82 published the runtime-free bridge. Its corrected pull-request run `33050868530/1` passed;
+the rebase merge produced main `506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, and exact-main push
+CI `33051433728/1` passed. Four independent read-only audits—Claude, Antigravity, causal trust and
+transfer architecture—returned GO for publication plus one read-only rehearsal and NO-GO for setup
+execution.
+
+The one V1 rehearsal then failed closed at `immutable_plan_authentication`. The path-free
+[receipt](docs/evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json) records
+zero actions, frames, claims, providers, teachers, predictions, outcomes, fits, setup-campaign calls
+and runtime-factory calls, with no private path or identity. Read-only diagnosis found an operator
+namespace error: an initialized parent private store was supplied while the frozen plan and context
+inputs belong to a separately initialized nearest child store. The intended store opens the named
+record and its manifest matches; the bridge was not rerun.
+
+Claude accepted the result as an honest failed-closed qualification but found that an absent named
+record and a present invalid record shared one failure token. Antigravity agreed that a successful
+pre-controller proof must precede outer execution engineering. Codex accepts both findings and
+rejects Antigravity's suggestion to flatten private storage: moving existing private artifacts is
+unnecessary, risky and irrelevant to model authority. The minimal successor instead binds both
+context files to their exact nearest initialized store without scanning siblings, distinguishes an
+absent record, and tests parent/child plus cross-store confusion ROM-free.
+
+The [successor qualification](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
+records **71 focused · 234 related · 5,300 full-suite tests · 285 typed source files**. Fresh
+read-only Claude and Antigravity audits returned GO for publication and one rehearsal, NO-GO for
+controller-capable setup, and no P0 finding. Codex accepted early relative-path rejection, direct
+ancestor iteration, explicit review-provenance wording, and a terminal no-V3 stop rule; it rejected
+storage flattening, sibling scans and broader runtime work inside this maintenance gate.
+The bounded read-only command also treats private namespace path components as quiescent. Exact
+bytes and joins still prevent causal substitution, but hostile same-UID rename/symlink mutation
+would require a later descriptor-coupled ancestry design and is not silently claimed away.
+
+Publish that exact successor, require green push CI, run it once against the unchanged canonical
+plan, and reorient immediately. Stop on any failure; a failed successor ends this namespace lane
+instead of opening V3. Do not regenerate the plan, retry V1, claim a
+root, construct a runtime, execute setup, collect an outcome, fit, open Crystal or sealed Red, or
+replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-27: setup bridge is runtime-free and locally qualified; publish before private rehearsal
 
 The first setup-bridge candidate was green but not trustworthy. Two independent read-only audits
 found that it loaded current helper scripts before authenticating them, constructed `PyBoyAdapter`

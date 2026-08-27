@@ -1,0 +1,82 @@
+{
+  "claim_boundary": {
+    "supported": "The sole V1 rehearsal authenticated the exact merged bridge and successful main push CI, then failed closed before the immutable provider-plan record was found in the caller-supplied private namespace. Every protected effect and every setup entrypoint counter remained zero, and the receipt exposed no private path or identity.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "causal_red_training_example",
+      "claim_first_runtime_factory_ready",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_quality",
+      "powered_red_benchmark",
+      "sealed_red_result",
+      "setup_campaign_execution",
+      "successful_precontroller_rehearsal"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnosis": {
+    "cause": "caller_supplied_an_initialized_parent_store_while_the_authenticated_plan_and_context_inputs_belong_to_a_distinct_nearest_initialized_child_store",
+    "diagnostic_effects": "read_only",
+    "falsifier": "The intended child store opens the named immutable record and its manifest matches the preregistered digest; that check passed without rerunning the bridge.",
+    "private_identity_fields": 0,
+    "private_path_fields": 0
+  },
+  "disposition": {
+    "exact_source_rehearsal_retry_allowed": false,
+    "outer_execution_identity_authorized": false,
+    "root_claim_authorized": false,
+    "setup_execution_authorized": false,
+    "successor_rehearsal_allowed_after_repair_publication_and_exact_green_ci": true
+  },
+  "execution": {
+    "bridge_source_commit": "506c0c1f5b92a0f7fce393abe39195b0a1cf84be",
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 33051433728,
+    "rehearsal_attempts": 1,
+    "runner_exit_code": 1
+  },
+  "external_review": {
+    "antigravity_review_summary_recorded_by_codex": "approve_with_conditions_new_source_bound_explicit_namespace_successor_before_outer_execution_engineering",
+    "claude_review_summary_recorded_by_codex": "approve_with_conditions_distinguish_absent_record_and_bind_the_intended_namespace_before_successor_rehearsal",
+    "codex_adjudication": "accept_distinct_absent_record_failure_and_nearest_initialized_store_binding; reject_flattening_private_storage_as_unnecessary_and_risky; require_new_source_bound_successor",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_an_independently_signed_review_receipt"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_interpretation": "This is an honest failed-closed maintenance result that protects the causal boundary for future selected-arm examples. It is not training and does not increase model authority or transfer evidence.",
+  "next_gate": {
+    "cheapest_falsifier": "A ROM-free nested-store test must reject a valid parent store, accept only the nearest initialized store shared by the context catalog and plan, and distinguish an absent named record from a present invalid record.",
+    "goal": "Publish one minimal source-bound namespace successor, require exact green push CI, and perform one new read-only precontroller rehearsal. Stop on any failure or protected effect; a failed successor may not open a V3 namespace patch.",
+    "outer_identity_and_claim_engineering_waits_for_success": true
+  },
+  "raw_path_free_receipt": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-setup-bridge-precontroller-failure.v1",
+    "setup_campaign_calls": 0,
+    "setup_runtime_factory_calls": 0,
+    "stage": "immutable_plan_authentication",
+    "status": "failed_closed",
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.red.living-dex-setup-bridge-rehearsal-attempt.v1",
+  "status": "failed_closed_without_retry_or_effect"
+}

@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): publish the genuinely runtime-free exact-plan
+> **Current product focus (August 27, 2026): publish one qualified namespace successor and rehearse once.** PR 82
+> merged the runtime-free bridge as main `506c0c1f`; exact-main CI `33051433728/1` passed. Its one
+> V1 read-only rehearsal failed closed before the immutable plan was found because the caller
+> supplied an initialized parent store rather than the nearest initialized store shared by the
+> context catalog and plan. The [path-free receipt](docs/evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
+> reports every gameplay, claim, learner, model, setup and runtime effect at zero. V1 will not
+> retry. The minimal successor binds both context files to the supplied nearest initialized store
+> and distinguishes an absent record from invalid contents. Its
+> [qualification](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
+> records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files**; Claude and
+> Antigravity both returned GO for publication and one rehearsal and NO-GO for setup execution.
+> Publish under exact green CI, rehearse once, and stop the namespace lane rather than create V3 on
+> failure. Outer execution identity, claims, recovery,
+> runtime construction, setup, fitting, sealed Red and Crystal stay closed. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous product focus (August 27, 2026): publish the genuinely runtime-free exact-plan
 > bridge.** Independent read-only audits stopped the first green candidate: it loaded helper code
 > before authentication, secretly constructed emulators inside the no-runtime gate, and contained
 > a live reconstruction-call mismatch hidden by a permissive mock. The repaired bridge now anchors
