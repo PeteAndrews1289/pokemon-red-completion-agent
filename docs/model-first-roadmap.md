@@ -8,7 +8,33 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: selected-slot wrapper qualified; publish, rehearse once, then open the lesson
+## Current checkpoint: V1 failed before private access; repair one source-inventory false-negative
+
+PR 86 passed its first CI attempt, rebased into main `af62c546`, and exact-main push CI passed. The
+sole V1 preflight then failed at `bootstrap_source_authentication`, before any private producer
+record or capture bytes were read. It could not claim, construct a resolver, accept a ROM, press a
+button, produce a label or outcome, or fit a model. The
+[path-free failure](evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+keeps V1 terminal and every mission counter unchanged.
+
+The cause is a directly reproduced public inventory mismatch: Git enumerated only the Red package,
+while the filesystem side enumerated all of `src`. The clean tracked Crystal package was therefore
+rejected. The repair is deliberately one-dimensional: authenticate every tracked source package,
+prove a Red-plus-Crystal tree succeeds, and prove an untracked sibling still fails.
+
+The shortest honest sequence is now:
+
+1. qualify and publish this minimal V2 source-inventory repair;
+2. require successful exact-head push CI;
+3. run exactly one V2 ROM-free selected-root preflight;
+4. abort the lane if V2 fails; otherwise reorient immediately; and
+5. open one bounded claim-first setup followed by a randomized selected-arm outcome, with no V3 or
+   further wrapper-only session.
+
+Causal train remains **0/8**. A tracked Crystal package exposing the bug is not Crystal execution or
+transfer.
+
+## Previous checkpoint: selected-slot wrapper qualified; publish, rehearse once, then open the lesson
 
 The claim-first core is now joined to a thin current-source Red invocation wrapper. Before project
 import it verifies clean published source, exact successful push CI, the expected workflow, and a

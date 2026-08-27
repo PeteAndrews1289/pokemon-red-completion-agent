@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: publish the selected-slot wrapper, rehearse once, then open a lesson
+## Current override: one minimal V2 after V1 failed before private access
+
+PR 86 and exact-main CI passed. The sole V1 preflight failed closed at public bootstrap before it
+read a producer record or selected capture. The
+[failure receipt](evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+records no ROM, claim, resolver, controller, learner, fit, authority, or transfer effect. V1 is
+consumed. Its Git inventory covered only the Red package, but its filesystem inventory covered all
+of `src`; the legitimate tracked Crystal sibling therefore failed as if it were an untracked
+shadow.
+
+Codex owns the minimal all-tracked-`src` repair, its tracked-sibling and untracked-shadow
+falsifiers, publication, exact-head CI, and one V2 ROM-free selected-root preflight. Claude remains
+the read-only causal/trust reviewer; Antigravity remains the read-only architecture/transfer
+reviewer; Codex adjudicates. V2 failure aborts the lane. V2 success forces immediate reorientation
+to setup plus randomized outcome. No V3 or further wrapper-only work.
+
+## Previous override: publish the selected-slot wrapper, rehearse once, then open a lesson
 
 The claim-first core and current-source Red invocation wrapper are locally qualified. The
 [evidence](evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)

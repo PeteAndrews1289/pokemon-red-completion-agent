@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the first real inspection stopped at its own source tree
+
+The wrapper shipped cleanly through PR and exact-main CI, then its single real V1 preflight stopped
+before it touched a private lesson. The source guard asked Git for only the Red package but walked
+every package on disk. That made the repository's own tracked Crystal package look like an
+unauthenticated shadow. The failure was safe—zero private reads, claims, runtimes, buttons, labels,
+outcomes, or fits—but it proved the real host shape had been missing from the synthetic tests.
+
+V1 remains failed rather than being retried. The one allowed successor expands Git authentication
+to every tracked package under `src`, adds the exact Red-plus-Crystal regression, and still rejects
+an untracked sibling. If V2 fails, the lane ends. If it passes, the project must leave wrapper work
+and create a real setup plus randomized outcome. This is a useful trust-boundary correction, not a
+learning result: **causal train 0/8 · authority 0 · transfer 0**.
+
 ## August 27: the wrapper can inspect one lesson without entering the game
 
 The crash-safe claim boundary still needed one public, reproducible way to reach exactly one frozen

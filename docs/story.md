@@ -7,7 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: one sealed lesson can be inspected without touching the controller
+## Current checkpoint: the real doorway noticed Crystal standing beside Red
+
+The wrapper passed thousands of tests and two clean GitHub runs, then its one real V1 inspection
+stopped before the private classroom. Git had authenticated only the Red source folder; the guard
+then looked at every source folder and mistook the repository's tracked Crystal package for a
+shadow. Nothing private was read, no key turned, and no game or model moved.
+
+V1 stays failed. One minimal V2 will authenticate the whole tracked source tree and prove an
+untracked sibling still cannot enter. It gets one attempt. Failure ends this lane; success ends the
+scaffolding and opens setup plus a randomized outcome. **Causal train remains 0/8; authority and
+transfer remain zero.**
+
+## Previous checkpoint: one sealed lesson can be inspected without touching the controller
 
 The two-key lock was safe, but there was still no narrow public doorway from the frozen curriculum
 to one specific lesson. The new wrapper proves the exact published code and its successful CI,

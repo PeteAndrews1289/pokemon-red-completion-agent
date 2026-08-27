@@ -67,6 +67,77 @@ def test_parser_is_preflight_only_and_has_no_runtime_capability() -> None:
     assert "PyBoy" not in source
 
 
+def test_bootstrap_authenticates_every_tracked_source_package(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+    calls: list[tuple[str, ...]] = []
+
+    def git(arguments: tuple[str, ...], **_kwargs: object) -> bytes:
+        calls.append(arguments)
+        return (
+            b"pyproject.toml\0"
+            b"src/pokemon_crystal_completion/__init__.py\0"
+            b"src/pokemon_red_completion/__init__.py\0"
+        )
+
+    monkeypatch.setattr(module, "_git", git)
+
+    inventory = module._tracked_source_inventory("c" * 40)
+
+    assert inventory == {
+        "pyproject.toml",
+        "src/pokemon_crystal_completion/__init__.py",
+        "src/pokemon_red_completion/__init__.py",
+    }
+    assert calls == [
+        (
+            "ls-tree",
+            "-r",
+            "-z",
+            "--name-only",
+            "c" * 40,
+            "--",
+            "pyproject.toml",
+            "src",
+        )
+    ]
+
+
+def test_filesystem_inventory_accepts_an_exact_tracked_sibling_package(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+    project = tmp_path / "project"
+    source = project / "src"
+    red = source / "pokemon_red_completion"
+    crystal = source / "pokemon_crystal_completion"
+    metadata = source / "pokemon_red_completion_agent.egg-info"
+    red.mkdir(parents=True)
+    crystal.mkdir()
+    metadata.mkdir()
+    (project / "pyproject.toml").write_text("[project]\n", encoding="utf-8")
+    (red / "__init__.py").write_text("", encoding="utf-8")
+    (crystal / "__init__.py").write_text("", encoding="utf-8")
+    (metadata / "PKG-INFO").write_text("Metadata-Version: 2.4\n", encoding="utf-8")
+    monkeypatch.setattr(module, "PROJECT_ROOT", project)
+    monkeypatch.setattr(module, "SRC_ROOT", source)
+    expected = {
+        "pyproject.toml",
+        "src/pokemon_crystal_completion/__init__.py",
+        "src/pokemon_red_completion/__init__.py",
+    }
+
+    assert module._filesystem_project_sources(expected) == expected
+
+    untracked = source / "shadow_package"
+    untracked.mkdir()
+    (untracked / "__init__.py").write_text("", encoding="utf-8")
+    with pytest.raises(module._BootstrapError):
+        module._filesystem_project_sources(expected)
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     (
