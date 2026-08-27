@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one sealed lesson can now become one honest observation
+
+The team stopped adding doors and built the final connection. A clean isolated program now proves
+its own source, its exact emulator libraries, and the frozen lesson's producer identity before it
+can touch the lesson. The random choice becomes permanent before the game starts. Only the chosen
+world is constructed, and a completed or interrupted lesson cannot quietly reopen as a second
+attempt.
+
+Red and Crystal also speak through genuinely separate adapters now. They translate typed game
+facts into the same anonymous pressures, costs, risks, and completion gains. That is the grammar a
+future model can carry between games; it is not yet proof that the model understands Crystal.
+
+The gate passes **69 focused and 5,475 repository tests across 299 typed source files**. Claude and
+Antigravity both say the code is ready to publish. Nothing trained, so the board stays **CAUSAL
+TRAIN 0/1 · AUTHORITY 0 · TRANSFER 0**. Publish, verify exact main, reorient, and consume the frozen
+lesson once. If it yields one honest row, the next chapter is breadth: many kinds of Red choices,
+then a real Red model, then a frozen zero-shot Crystal exam on the road to a cross-game living
+Pokédex.
+
 ## Current checkpoint: the lesson gate now opens only after the choice is permanent
 
 The honest learner contract has shipped, but a contract alone cannot touch Red. The new campaign

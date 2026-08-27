@@ -1,0 +1,182 @@
+{
+  "artifacts": {
+    "causal_campaign_sha256": "fd7c2d1a6e5e5698f12ff0205b2243b855ff0c5fefa8a859a34d792bb562864c",
+    "crystal_option_adapter_sha256": "77b983ad5fe970cf6e06fda20b5adbf3c97c256bafbffaa79557dd61d8cfcec6",
+    "direct_invocation_sha256": "ba1a875bbded0f435bffd620969cb7c58f2d1d3949f1463419752a7b6d977823",
+    "direct_runner_sha256": "22fcb9ecba3840af56bbf81fed69bf3ad2fbb48e9ac6c9412814e03c6f7194bd",
+    "frozen_campaign_receipt_sha256": "83c3408b0ebe2063072ec412c9b69484a712c247f3d47f1b76606d556bfe0ce5",
+    "red_option_adapter_sha256": "5138c30e679927e4a56f0990a537a16e3742fcd4b64d5628f37068d760f473ae",
+    "runtime_closure_sha256": "57bee51e95fbb3bd0c98b25315210127183bb2aefa5a9537077c0e1abbd933ed",
+    "shared_option_projection_sha256": "cf351ea75567488ef9c87be6b5d1f6b8582bc8b53adfb81d84da4a2c18b01e3c"
+  },
+  "base_source": {
+    "base_commit": "d0770bcd5e388bf4834b76e3f36d731e93a4a7e7",
+    "publication_commit": null,
+    "source_status": "unpublished_worktree_candidate"
+  },
+  "codex_adjudication": {
+    "accepted": [
+      "consume_the_one_existing_frozen_train_campaign_directly_without_refreezing_or_using_a_retired_wrapper",
+      "authenticate_project_source_and_a_clean_exact_dependency_closure_before_private_access",
+      "bind_the_runtime_to_the_sealed_producer_pyboy_identity_before_claim",
+      "durably_claim_commit_select_and_record_construction_start_before_the_selected_runtime_can_exist",
+      "construct_exactly_zero_unselected_runtimes",
+      "separate_setup_proof_runtime_counts_from_causal_selected_runtime_counts",
+      "make_terminal_recovery_return_without_opening_a_rom_or_constructing_a_runtime",
+      "retain_metered_post_input_effects_and_forbid_retry_after_any_controller_release",
+      "derive_title_neutral_policy_features_from_distinct_red_and_crystal_semantic_adapters",
+      "treat_cross_title_vector_parity_as_contract_portability_not_empirical_transfer"
+    ],
+    "deferred": [
+      "execute_the_frozen_red_campaign_until_the_exact_candidate_is_merged_and_exact_main_ci_is_green",
+      "fit_a_model_until_a_powered_multi_kind_red_causal_train_set_exists",
+      "run_crystal_until_red_weights_are_frozen_and_a_zero_shot_transfer_protocol_is_preregistered",
+      "prove_reader_level_crystal_semantics_with_authentic_crystal_gameplay"
+    ],
+    "reason": "This is the shortest production boundary from the already frozen Red lesson to one honest selected-arm causal example. It removes another wrapper or rehearsal from the roadmap while preserving the one-shot and no-counterfactual data contract needed by a later cross-title living-Pokedex learner.",
+    "rejected": [
+      "load_ambient_site_packages_or_unlisted_wheel_bytes",
+      "accept_preloaded_project_modules_bytecode_caches_shadows_symlinks_hardlinks_or_writable_runtime_files",
+      "use_ambient_git_configuration_tls_proxies_or_dynamic_loader_environment",
+      "construct_an_unselected_runtime_or_emit_a_counterfactual_target",
+      "retry_after_controller_input_or_reroll_behavior",
+      "claim_model_quality_transfer_or_living_pokedex_completion_from_public_engineering_tests"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": {
+      "corrected_findings": [
+        "distinct_red_and_crystal_adapters_are_exercised_so_the_twin_is_not_circular",
+        "pillow_is_optional_for_the_bound_headless_controller_path",
+        "the_sdl_native_path_check_is_host_guarded_and_does_not_break_the_fake_linux_ci_fixture"
+      ],
+      "initial_verdict": "no_go_based_on_three_retracted_findings",
+      "model": "gemini_3_1_pro",
+      "verdict": "go_for_publication_private_execution_conditional_on_exact_main_ci_and_reorientation"
+    },
+    "claude": {
+      "model": "opus_4_8",
+      "p0": 0,
+      "p1": 0,
+      "p2": 4,
+      "p2_disposition": [
+        "dead_stage_label_removed",
+        "behavior_draw_field_renamed_to_distinguish_structural_commitment_from_metered_setup_draws",
+        "hand_matched_cross_title_twin_retained_as_honestly_scoped_contract_consistency",
+        "this_review_supplies_the_previously_missing_second_read_only_audit"
+      ],
+      "verdict": "go_for_publication_private_execution_conditional_on_exact_main_ci_and_reorientation"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Turn one authentic Red living-Pokedex option menu into one crash-safe selected-arm example through the same identity-free policy contract intended for Crystal and later titles.",
+    "cheapest_falsifier": "The production CLI and runtime must fail before private access on source dependency identity or bootstrap drift; ROM-free Red-shaped and Crystal-shaped fixtures must then falsify any unselected construction counterfactual target hidden effect post-input retry or title identity leak.",
+    "learned_authority": "none_public_engineering_only",
+    "stop_condition": "Stop before any private execution until this exact candidate is published on main green CI and a fresh execution reorientation reauthenticates the frozen campaign. Stop after exactly one terminal whether it is one settled train example or an honest target-free closure.",
+    "time_box": "one_session_eight_hours",
+    "transfer_test": "After a powered multi-kind Red dataset model fit and held-out Red benchmark freeze the weights and compare realized zero-shot Crystal outcomes against preregistered random and cost-only controls before any adaptation."
+  },
+  "next_gate": {
+    "crystal_execution_allowed": false,
+    "exact_main_ci_required": true,
+    "fresh_execution_reorientation_required": true,
+    "model_fit_allowed": false,
+    "private_execution_allowed_by_this_record": false,
+    "sealed_red_allowed": false,
+    "target": "Publish the exact direct consumer and documentation, require exact-main green CI, record a fresh execution reorientation, then execute the frozen train campaign exactly once."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "campaign_executions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_examples": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "observed_game_outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "031ab1480ef21d473f3ad1bbec6078ab10981b9a46d5401f4dea9b752e9b3340",
+    "goal_manager_registry_sha256": "927f7a04dadba4ad2766f8d4062c3dc1be8ca814abaa5a71917804dc9f8f6211",
+    "source_bundle_sha256": "bed8d4a23cf2b0c19565573d484b8ce053d6f4bec14a3859aff6e2ac08e7ebce",
+    "strategic_navigation_registry_sha256": "e9af649c8b0eb07caf0584c5de98844d1cde636658f06bab2f5b166e5a93eacf",
+    "strategic_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71"
+  },
+  "runtime_closure": {
+    "closure_identity_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "packages": [
+      "numpy_2_5_1",
+      "pyboy_2_7_0",
+      "pysdl2_0_9_17",
+      "pysdl2_dll_2_32_10"
+    ],
+    "pillow_status": "not_required_by_the_bound_headless_semantic_controller_path"
+  },
+  "schema": "pokemon.red.living-dex-causal-direct-consumer-local-qualification.v1",
+  "status": "locally_qualified_claude_and_antigravity_publication_go_private_execution_pending_exact_main_ci_and_reorientation",
+  "supported_claim": "The public direct consumer can authenticate its own source and exact clean dependency closure then consume the already frozen Red campaign through one claim-first selected-only causal journal whose portable policy rows are produced by distinct Red and Crystal semantic adapters.",
+  "trust_falsifiers": [
+    "non_direct_isolated_bootstrap",
+    "preloaded_project_module_or_bytecode",
+    "source_git_or_ci_drift",
+    "ambient_git_attribute_or_hook",
+    "ambient_tls_proxy_or_dynamic_loader_configuration",
+    "runtime_wheel_record_inventory_or_loaded_origin_drift",
+    "runtime_shadow_cache_link_or_writable_file",
+    "nearest_private_root_or_selected_file_escape",
+    "sealed_producer_runtime_identity_mismatch",
+    "claim_commitment_selection_or_construction_start_reordering",
+    "unselected_runtime_construction",
+    "controller_release_before_durable_execution_start",
+    "post_input_retry_or_behavior_reroll",
+    "terminal_recovery_runtime_construction",
+    "counterfactual_or_interrupted_target",
+    "red_crystal_policy_schema_or_feature_drift",
+    "title_species_map_route_or_private_identity_in_policy_features"
+  ],
+  "unsupported_claims": [
+    "authentic_red_causal_train_example",
+    "authentic_red_outcome_collection",
+    "crystal_execution",
+    "crystal_transfer",
+    "cross_game_story_completion",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ],
+  "verification": {
+    "focused_tests_passed": 69,
+    "full_suite_passed": 5475,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 299,
+    "mypy_status": "passed",
+    "product_focus_check": "passed_causal_train_example_train_zero_of_one",
+    "public_artifact_and_document_checks": "passed",
+    "registry_checks": "passed_battle_goal_manager_strategic_navigation_and_scenarios",
+    "ruff_status": "passed",
+    "runtime_closure_probe": "passed_exact_clean_staged_numpy_pyboy_pysdl2_pysdl2_dll_load_with_zero_private_reads_and_zero_rom_accesses"
+  }
+}

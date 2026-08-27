@@ -5,6 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 27, 2026): publish the direct consumer for the frozen Red
+> lesson.** One action-free Red train campaign is frozen and unconsumed. The locally qualified
+> isolated consumer authenticates exact project source, exact successful CI identity, a clean
+> PyBoy/NumPy/SDL closure, and the sealed producer runtime before it may claim the lesson. The
+> causal journal constructs only the randomly selected arm after durable claim, commitment,
+> selection, and construction start; terminal recovery constructs no runtime.
+>
+> Distinct Red and Crystal typed adapters now produce the same identity-free option-value contract.
+> This is architecture for transfer, not a Crystal result. The
+> [qualification](docs/evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+> records **69 focused · 5,475 full-suite · 299 typed source files**. Claude and Antigravity return
+> publication GO; private execution remains conditional on exact-main green CI and a fresh
+> reorientation. Nothing trained. Next publish, verify exact main, reorient, and execute the frozen
+> train campaign exactly once. **Causal train 0/1; authority 0; transfer 0.**
+
 > **Current product focus (August 27, 2026): publish the freeze-first causal campaign gate.** The
 > shared causal boundary is already on main at `74d7e7e8` under exact-main CI `33098041804/1`.
 > The new Red campaign composes that boundary with the authenticated setup capture while keeping

@@ -30,10 +30,10 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
     LivingDexOptionContext,
-    LivingDexOptionFeatures,
     LivingDexOptionKind,
     LivingDexOptionMenu,
     LivingDexOptionUnavailableReason,
+    living_dex_option_features_from_semantic_facts,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_collection import RED_SOLO_COLLECTION_CONTRACT
@@ -924,38 +924,25 @@ def _candidate(
             "prospective irreversible exposure exceeds observed constraints"
         )
     availability, reason = _availability(option, before)
-    features = LivingDexOptionFeatures(
+    features = living_dex_option_features_from_semantic_facts(
         kind=prospect.kind,
-        completion_gain=_ratio(
-            prospect.completion_units,
-            prospect.maximum_completion_units,
-        ),
-        dependency_unlock_gain=_ratio(
-            prospect.immediate_dependency_unlocks,
-            provenance.incomplete_dependency_frontier,
-        ),
-        travel_effort=_ratio(
-            prospect.travel_action_estimate,
-            provenance.maximum_controller_actions,
-        ),
-        execution_effort=_ratio(
-            prospect.execution_action_estimate,
-            provenance.maximum_controller_actions,
-        ),
-        resource_cost=_ratio(
-            prospect.required_consumable_units,
-            before.resource_units_for(option.resource_pool_ref),
-        ),
-        storage_cost=_ratio(
-            max(0, prospect.net_storage_slots),
-            before.usable_storage_headroom,
-        ),
+        completion_units=prospect.completion_units,
+        maximum_completion_units=prospect.maximum_completion_units,
+        immediate_dependency_unlocks=prospect.immediate_dependency_unlocks,
+        incomplete_dependency_frontier=provenance.incomplete_dependency_frontier,
+        travel_action_estimate=prospect.travel_action_estimate,
+        execution_action_estimate=prospect.execution_action_estimate,
+        maximum_controller_actions=provenance.maximum_controller_actions,
+        required_resource_units=prospect.required_consumable_units,
+        available_resource_units=before.resource_units_for(option.resource_pool_ref),
+        net_storage_slots=prospect.net_storage_slots,
+        storage_headroom=before.usable_storage_headroom,
         party_risk=prospect.party_risk,
-        irreversibility_risk=_ratio(
-            prospect.irreversible_constraints_exposed,
-            prospect.irreversible_constraint_count,
+        irreversible_constraints_exposed=(
+            prospect.irreversible_constraints_exposed
         ),
-        uncertainty=1.0 - prospect.prerequisite_confidence,
+        irreversible_constraint_count=prospect.irreversible_constraint_count,
+        prerequisite_confidence=prospect.prerequisite_confidence,
     )
     return LivingDexOptionCandidate(
         option.binding_ref,

@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the classroom finally has a trustworthy door to one real lesson
+
+The campaign was frozen, but freezing is not learning. The next question was whether the exact
+lesson could reach the learner without quietly trusting whatever Python packages, Git settings,
+cached bytecode, or private path happened to be on the machine. The new direct consumer builds a
+clean room from authenticated PyBoy, NumPy, and SDL wheel bytes, proves every imported origin, and
+matches the emulator identity used by the sealed producer. Only then can the causal journal claim
+the lesson and permanently draw one option. The selected world is the only world constructed.
+
+This session also made the transfer claim more concrete. Red and Crystal no longer meet only in
+two lookalike test dictionaries; separate title adapters derive the same anonymous strategic
+pressures from typed facts. Crystal-specific mechanics such as time, breeding, held-item
+evolution, trading, and storage can change the vector without changing the learner's vocabulary.
+That is a reusable interface, not evidence that a Red-trained model already wins in Crystal.
+
+Claude and Antigravity both approved publication after their findings were either repaired or
+explicitly narrowed. The gate passes **69 focused and 5,475 repository tests across 299 typed
+source files**. The honest scoreboard still says **causal train 0/1, authority 0, transfer 0**.
+The next milestone is deliberately small but finally empirical: publish, pass exact-main CI,
+reorient, and execute the frozen campaign once. One settled row proves the pipe; a useful model
+still requires a powered variety of Red decisions, an untouched Red benchmark, and then a frozen
+zero-shot Crystal test.
+
 ## August 27: the doorway became a one-way lesson gate
 
 Publishing the generic journal was not enough; Red still needed a safe way to carry one authentic

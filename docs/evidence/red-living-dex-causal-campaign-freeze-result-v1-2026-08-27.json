@@ -1,0 +1,120 @@
+{
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "campaign_refreeze_allowed": false,
+    "campaign_retry_allowed": false,
+    "next_gate": "Implement, publish, and independently audit one direct production execution entrypoint that consumes this immutable campaign without another preflight or wrapper-only successor; reorient again before any private execution.",
+    "private_execution_authorized_by_this_record": false
+  },
+  "external_review": {
+    "antigravity": {
+      "model": "gemini-3.1-pro-high",
+      "p0": 0,
+      "p1": 0,
+      "p2": 0,
+      "verdict": "go_for_publication_and_then_one_action_free_freeze"
+    },
+    "claude": {
+      "result": "session_limit_reached_before_a_verdict",
+      "verdict": "not_counted_as_approval"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "freeze_receipt": {
+    "action_free_freeze": true,
+    "causal_examples": 0,
+    "controller_actions": 0,
+    "current_source_bound": true,
+    "emulator_frames": 0,
+    "exact_ci_identity_bound": true,
+    "exact_menu_bound_before_behavior": true,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "partition": "train",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "result_schema": "pokemon.red.living-dex-causal-campaign-freeze-result.v1",
+    "retired_root_exclusions": 1,
+    "root_claims": 0,
+    "schema": "pokemon.red.private-living-dex-causal-campaign-plan.v1",
+    "selected_slots": 1,
+    "status": "one_action_free_train_campaign_frozen",
+    "teacher_queries": 0
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Bind one authenticated repeatable Red state and its complete identity-free option menu into an immutable campaign that can later produce one crash-safe title-neutral selected-arm causal example.",
+    "cheapest_falsifier": "Reopen the frozen campaign canonically and prove exact source, CI, menu, selected-slot, and retired-root bindings while every gameplay, learner, model, claim, and private-disclosure counter remains zero.",
+    "learned_authority": "none_action_free_infrastructure_only",
+    "stop_condition": "Stop after the single successful freeze. Do not refreeze, execute, claim, predict, query a teacher, advance a frame, fit a model, open sealed Red, execute Crystal, or replay the game.",
+    "time_box": "one_bounded_action_free_freeze",
+    "transfer_test": "The frozen campaign feeds the title-neutral causal journal already exercised by Red-shaped and Crystal-shaped ROM-free fixtures; no cartridge-level transfer claim follows from this freeze."
+  },
+  "protected_effects": {
+    "behavior_draws": 0,
+    "causal_examples": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "publication": {
+    "exact_main": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run_id": 33106096107,
+      "commit": "d0770bcd5e388bf4834b76e3f36d731e93a4a7e7"
+    },
+    "initial_pr_ci": {
+      "ci_attempt": 1,
+      "ci_conclusion": "cancelled_by_ten_minute_workflow_timeout_during_tests",
+      "ci_run_id": 33104240718,
+      "test_failure_observed": false
+    },
+    "pull_request": 89,
+    "replacement_pr_ci": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run_id": 33105210204,
+      "head_commit": "16e897107b1367661d9825d0527325d97059714c"
+    },
+    "source_bundle_sha256": "ef7fd627a39c4d04f01ae0e15c702b2025d2c8e8c641b99e2046dfd1bbb08edd",
+    "workflow_timeout_repaired_from_minutes": 10,
+    "workflow_timeout_repaired_to_minutes": 20
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.red.living-dex-causal-campaign-freeze-result-evidence.v1",
+  "status": "one_immutable_action_free_red_train_campaign_frozen",
+  "supported_claim": "Exactly one immutable Red train campaign was frozen from the published source and exact green CI while binding one complete menu before behavior, selecting one slot, and excluding one retired physical root. The freeze performed no gameplay, learning, model, teacher, provider, claim, or private-publication effect.",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "unsupported_claims": [
+    "authentic_red_causal_train_example",
+    "authentic_red_game_outcome",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "private_execution_authority",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ]
+}

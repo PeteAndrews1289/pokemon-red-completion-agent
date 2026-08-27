@@ -8,6 +8,41 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: one frozen Red lesson is ready for exact publication, not yet training
+
+The action-free train campaign has already been frozen. Its direct one-shot consumer is now
+locally qualified without reading private state. The production bootstrap admits only exact
+published source and an authenticated clean dependency closure; it rejects bytecode, preloads,
+shadows, caches, link aliases, writable runtime bytes, ambient Git/TLS configuration, nested
+private-root ambiguity, and a runtime identity that differs from the sealed producer. Once
+admitted, the existing journal makes claim, randomized commitment, selection, and construction
+start durable before it can construct the selected Red arm. The other arms never open.
+
+Red and Crystal now have distinct typed semantic adapters into the same title-neutral option-value
+features. That is the right transfer architecture, but the measured board is deliberately still
+**causal train 0/1 · authority 0 · transfer 0**. One example will prove the end-to-end data pipe;
+it is not enough to fit or judge the model.
+
+The shortest honest sequence is now:
+
+1. publish this exact consumer, cross-title adapter seam, evidence, and regenerated registries;
+2. require successful CI on the exact merged `main` commit;
+3. record a fresh execution reorientation that reauthenticates the frozen campaign, runtime
+   closure, one-shot identity, and no-retry boundary;
+4. consume the frozen Red train campaign exactly once, yielding either one authentic settled
+   selected-arm example or a permanently target-free closure;
+5. if the example settles, design and collect a powered multi-kind Red causal curriculum rather
+   than fitting one row;
+6. fit on Red train only, compare on untouched Red development/benchmark cases, and freeze weights
+   only after the preregistered outcome gates pass; and
+7. run the frozen model zero-shot in Crystal against random and cost-only controls, then measure
+   adaptation before adding Crystal-specific knowledge.
+
+The [local qualification](evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+records **69 focused · 5,475 full-suite · 299 typed source files** and two publication-GO reviews.
+Do not add another preflight or wrapper, refreeze the campaign, retry after input, fit from one
+example, open Crystal early, or confuse feature-contract parity with transfer.
+
 ## Current checkpoint: the first causal campaign can be frozen without touching gameplay
 
 The title-neutral causal boundary is no longer merely local: PR 88 merged as exact main

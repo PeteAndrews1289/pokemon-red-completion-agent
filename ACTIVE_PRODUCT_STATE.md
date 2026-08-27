@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the freeze-first campaign gate and require exact-head CI. Then freeze exactly one action-free Red train campaign only if the selected root and consumed-V2 physical-root exclusion authenticate without private diagnosis. Reorient before execution; the next learning decision remains one authentic settled train example or honest target-free closure.
+- Next decision: Publish the independently reviewed direct one-shot consumer for the already frozen Red train campaign. After exact-main green CI and a fresh execution reorientation, either produce one authentic settled causal train example exactly once or close target-free with the frozen campaign permanently consumed; do not insert another preflight or wrapper-only gate.
 
 ### Mandatory mission check
 
@@ -58,24 +58,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-freeze-first-red-causal-campaign-gate-qualified** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+**2026-08-27-direct-red-causal-consumer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now has the smallest Red composition capable of producing one title-neutral causal learner datum: setup first, durable randomized selection second, and only the selected runtime third. This advances the cross-game living-Pokedex agent without teaching a Red route or claiming transfer from schema parity. |
-| Learning output | No new model example. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The freeze-first campaign gate opened no private capture, ROM, root claim, runtime, controller effect, game outcome, model operation, promotion, or transfer result. |
-| Transfer result | The campaign still terminates at the same title-neutral learner journal used by Red-shaped and Crystal-shaped fixtures. No Crystal cartridge, frozen Red weights, or zero-shot outcome ran, so transfer remains untested. |
-| Blocker | The action-free campaign freezer and selected-only composition are locally qualified but not yet published. After exact-head CI, one eligible train root and the opaque consumed-V2 physical-root exclusion must be authenticated from existing authorized identities without diagnosing or replaying V2; ambiguous identities stop the freeze. |
-| Decision | Publish the exact freeze-first Red campaign composition, action-free freezer, regenerated source registries, focus dashboard, tests, and evidence. Require exact-head green CI, then freeze exactly one bounded development-rigor train campaign only if both selected and retired identities prove. Reorient before execution. |
-| Next session | Commit and publish the qualified freeze-first campaign gate, verify exact-head green CI, then authenticate and freeze exactly one action-free train campaign. Stop if the selected files or consumed-V2 physical root cannot be proven without private diagnosis. Reorient before any execution. |
-| Next falsifier | From a clean exact-head source, the freezer must bind one available train setup and an explicit retired-root inventory with zero claims, gameplay, learner, or model effects. The frozen campaign must reopen canonically, reject the retired selected root, and preserve the exact setup/menu/runner identities. Any ambiguity or private guess aborts. |
-| Stop condition | Do not open private input before this exact gate is clean-published and exact-head CI is green. The only next private action is one action-free freeze with proved selected and retired identities. Stop on a guessed digest, counterfactual target, unselected runtime, identity leak, post-release retry, another wrapper, model fit, benchmark, sealed Red, Crystal execution, promotion, or replay. |
+| Product alignment | The direct consumer closes the last public seam between the frozen Red classroom and one teacher-free causal datum. Its separate Red and Crystal adapters establish the portable feature boundary needed for later titles, while the next measured output remains the first authentic Red train example rather than more infrastructure. |
+| Learning output | No new model example. Causal train remains 0 of 1; development remains 15, verified outcomes 5, model fits 4, unseen comparisons 4, authority promotions 0, and transfer results 0. |
+| Authority delta | None. Qualification read no private capture, opened no ROM, claimed no root, selected no behavior, constructed no gameplay runtime, issued no controller input, advanced no frame, observed no outcome, queried no teacher, and performed no model operation. |
+| Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
+| Blocker | The direct consumer is locally qualified and independently reviewed but remains an unpublished worktree candidate. Its own bootstrap must fail until the exact bytes are merged to main and that exact main commit passes CI; the frozen campaign then needs one fresh execution reorientation before it may be consumed. |
+| Decision | Publish the exact direct consumer, cross-title adapter seam, evidence, and regenerated registries. Require successful CI on the exact merged main commit, record a fresh reorientation over the immutable campaign and runtime joins, then execute the frozen train campaign exactly once without refreeze, reroll, wrapper fallback, or retry. |
+| Next session | Commit and publish the locally qualified candidate, pass exact-main CI, record the required execution reorientation, and leave the frozen campaign ready for exactly one private invocation without adding another preflight or wrapper. |
+| Next falsifier | The first exact-main invocation must reach one and only one terminal: an authentic settled selected-arm train example or an honest target-free consumed closure. Any source, runtime, plan, identity, ordering, effect-meter, or outcome ambiguity must stop before a fabricated target and may not trigger another attempt. |
+| Stop condition | Stop before private execution until publication, exact-main green CI, and a fresh reorientation. During the one allowed invocation stop on ambiguity, disclosure, pre-start effects, unselected construction, teacher fallback, reroll, or post-input retry. After its terminal do not fit one row, open sealed Red or Crystal, promote authority, or replay. |
 
 ### Stop conditions
 
-- Stop this public engineering session before any private state read, campaign freeze, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
-- After clean publication and exact-head CI, permit one action-free freeze with authenticated selected and retired identities, then reorient. Stop on ambiguity, identity leakage, counterfactual or unselected targets, entropy reissue, eager unselected construction, controller effects before durable execution-start, retryable post-input crashes, another wrapper, title-specific learner state, or failure of Red-shaped or Crystal-shaped fixtures.
+- Stop this publication session before any private state read, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
+- Do not execute the immutable campaign until the direct consumer is published, exact-main CI is green, and a new execution reorientation is recorded. Stop on ambiguity, identity leakage, counterfactual or unselected targets, behavior reissue, eager unselected construction, effects before durable execution-start, retryable post-input crashes, another preflight or wrapper, title-specific learner state, or failure of Red-shaped or Crystal-shaped fixtures.
 
 ### Hard boundaries for this lane
 
