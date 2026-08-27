@@ -6,6 +6,31 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish the direct frozen-campaign consumer, then reorient
+
+The one train campaign is frozen and remains unconsumed. Codex has locally qualified the direct
+consumer that can reopen it without refreezing the menu or returning to a retired wrapper. The
+isolated entrypoint authenticates exact project source, CI identity, Git/TLS bootstrap, and a
+clean staged PyBoy/NumPy/SDL closure. The sealed producer's PyBoy runtime identity is matched
+before claim; the causal journal then permits only the selected runtime after durable claim,
+commitment, selection, and construction start. Terminal recovery calls no runtime factory, and a
+post-input interruption cannot retry or silently erase metered effects.
+
+Distinct Red and Crystal adapters now feed the same identity-free option-value projection from
+typed title facts. That is the first real cross-title extraction seam, but it remains contract
+parity rather than an empirical transfer result. See the
+[qualification](evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json):
+**69 focused · 5,475 repository · 299 typed source files**. Claude and Antigravity both approve
+publication and keep private execution conditional on exact-main green CI and a fresh execution
+reorientation.
+
+Codex remains sole implementer, publisher, and operator. Claude remains the read-only
+causal/statistical and trust-boundary reviewer; Antigravity remains the read-only
+transfer/architecture challenger. Publish and verify exact main, then record one reorientation
+before consuming the frozen campaign exactly once. No reviewer executes. No private access,
+refreeze, retry, one-row fit, sealed Red, Crystal run, promotion, or replay is open at this
+checkpoint. **Causal train remains 0/1.**
+
 ## Current override: publish the freeze-first campaign gate, then freeze once
 
 The shared causal journal and Red live adapter are published on exact main

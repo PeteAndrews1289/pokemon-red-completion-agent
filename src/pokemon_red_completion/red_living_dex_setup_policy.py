@@ -12,15 +12,15 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from pokemon_red_completion.goal_manager import GoalKind, GoalSituation
+from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
-    LivingDexOptionContext,
     LivingDexOptionFeatures,
     LivingDexOptionKind,
     LivingDexOptionMenu,
+    living_dex_option_context_from_goal_situation,
 )
 from pokemon_red_completion.living_dex_policy_codec import (
     living_dex_private_menu_dict,
@@ -162,7 +162,7 @@ def project_red_living_dex_setup_policy(
         raise RedLivingDexSetupPolicyError("Red setup policy route actions differ")
 
     situation = observation.situation
-    context = _context(situation)
+    context = living_dex_option_context_from_goal_situation(situation)
     storage_unit = min(1.0, 1.0 / max(1, observation.free_storage_slots))
     candidates = tuple(
         LivingDexOptionCandidate(
@@ -251,30 +251,6 @@ def restore_red_living_dex_setup_policy_projection(
     if projection.private_dict() != dict(document):
         raise RedLivingDexSetupPolicyError("stored Red setup policy does not replay")
     return projection
-
-
-def _context(situation: GoalSituation) -> LivingDexOptionContext:
-    if not isinstance(situation, GoalSituation):
-        raise TypeError("Red setup policy needs a GoalSituation")
-    return LivingDexOptionContext(
-        collection_pressure=situation.collection_pressure,
-        dependency_pressure=max(
-            situation.story_pressure,
-            situation.evolution_pressure,
-        ),
-        access_pressure=max(
-            situation.story_pressure,
-            situation.exploration_pressure,
-        ),
-        resource_pressure=situation.resource_pressure,
-        storage_pressure=situation.storage_pressure,
-        party_pressure=max(
-            situation.team_pressure,
-            situation.safety_pressure,
-            situation.recovery_pressure,
-        ),
-        knowledge_pressure=situation.exploration_pressure,
-    )
 
 
 __all__ = [

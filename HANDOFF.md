@@ -12,6 +12,34 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-27: the frozen lesson has a direct consumer; publish before executing once
+
+One action-free Red train campaign is already frozen. The missing production seam is now locally
+qualified: a direct isolated CLI authenticates the exact published project bytes and a clean,
+read-only PyBoy/NumPy/SDL wheel closure before it may approach private inputs. It then reopens the
+one frozen campaign, binds the sealed producer's runtime identity, and hands it to the existing
+causal journal. Pair claim, behavior commitment, random selection, and construction start are all
+durable before the selected runtime can exist. No unselected runtime is constructed, and terminal
+recovery constructs none.
+
+The transfer seam is concrete but still honestly narrow. Distinct Red and Crystal semantic
+adapters now derive the same title-neutral policy rows from typed game facts; mechanics-sensitive
+tests cover breeding, time, held-item evolution, trade, resources, and storage pressure. This
+proves a reusable learning contract, not that Red knowledge already succeeds in Crystal.
+
+The [local qualification](docs/evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+records **69 focused · 5,475 repository tests · 299 typed source files** plus clean registries,
+lint, type, documentation, and public-artifact gates. Claude and Antigravity both return GO for
+publication; each keeps private execution conditional on exact-main green CI and a fresh
+reorientation. Their review findings and Codex's dispositions are in the evidence record.
+
+Nothing private was read and nothing trained. Counters remain **development 15 · verified 5 ·
+causal train 0/1 · fits 4 · comparisons 4 · authority 0 · transfer 0**. Next: publish this exact
+candidate and regenerated registries, require exact-main green CI, record the execution
+reorientation, and consume the frozen train campaign exactly once. Its only acceptable terminal
+is one authentic settled train example or an honest target-free closure. Do not retry, refreeze,
+fit from one row, open Crystal, or insert another wrapper.
+
 ## 2026-08-27: freeze-first causal campaign gate qualified; publish before touching one lesson
 
 The shared causal boundary has shipped. PR 88 rebased into exact main

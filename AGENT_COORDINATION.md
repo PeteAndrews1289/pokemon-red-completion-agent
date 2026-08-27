@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — publish the direct consumer, reorient, then execute once:** The
+> frozen Red train campaign now has a locally qualified production consumer. Codex owns the code,
+> publication, exact-main CI verification, final execution reorientation, and later one-shot
+> operation. Claude is the read-only causal/statistical and trust-boundary reviewer. Antigravity is
+> the read-only transfer/architecture challenger. Neither reviewer edits, publishes, opens private
+> state, or executes gameplay; Codex adjudicates and records disagreements instead of treating a
+> reviewer as an authority oracle.
+>
+> The [qualification](docs/evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+> records **69 focused · 5,475 full-suite · 299 typed source files**. Claude and Antigravity both
+> return publication GO and private-execution conditional GO after exact-main CI plus a fresh
+> reorientation. No private input or learning effect occurred. Publish, verify exact main, then
+> stop and reauthenticate the frozen joins before one execution. No refreeze, retired-wrapper
+> reuse, preflight, automatic retry, one-row fit, sealed Red, Crystal execution, promotion, or full
+> replay is open. **Causal train 0/1 · authority 0 · transfer 0.**
+
 > **2026-08-27 active override — publish the freeze-first campaign gate, then freeze once:** The
 > shared journal is published on exact main `74d7e7e8` under green CI `33098041804/1`. Codex has
 > locally qualified the missing composition: setup settles first; the journal durably claims,

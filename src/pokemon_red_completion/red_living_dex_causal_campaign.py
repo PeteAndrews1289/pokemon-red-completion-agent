@@ -56,15 +56,9 @@ from pokemon_red_completion.red_living_dex_setup_recipe import (
 RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_SCHEMA = (
     "pokemon.red.private-living-dex-causal-campaign-plan.v1"
 )
-RED_LIVING_DEX_CAUSAL_CAMPAIGN_RECEIPT_SCHEMA = (
-    "pokemon.red.living-dex-causal-campaign-receipt.v1"
-)
-RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_ID = (
-    "red-living-dex-causal-campaign-plan-v1"
-)
-RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_KIND = (
-    "red_living_dex_causal_campaign_plan"
-)
+RED_LIVING_DEX_CAUSAL_CAMPAIGN_RECEIPT_SCHEMA = "pokemon.red.living-dex-causal-campaign-receipt.v1"
+RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_ID = "red-living-dex-causal-campaign-plan-v1"
+RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_KIND = "red_living_dex_causal_campaign_plan"
 RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256 = canonical_sha256(
     {
         "causal_pair_claim_before_behavior": True,
@@ -79,6 +73,18 @@ RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256 = canonical_sha256(
         "title_neutral_learner_example": True,
     }
 )
+RED_LIVING_DEX_CAUSAL_CAMPAIGN_EXECUTION_RUNNER_SHA256 = canonical_sha256(
+    {
+        "direct_immutable_campaign_load": True,
+        "exact_current_consumer_binding": True,
+        "frozen_campaign_runner_rebound": True,
+        "no_preflight_or_refreeze": True,
+        "no_resolver_injection_at_production_boundary": True,
+        "postclaim_late_rom_and_runtime": True,
+        "recovery_without_runtime_construction": True,
+        "schema": "pokemon.red.living-dex-causal-campaign-execution-runner.v1",
+    }
+)
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -86,6 +92,74 @@ _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 class RedLivingDexCausalCampaignError(RuntimeError):
     """One frozen Red causal campaign cannot be authenticated safely."""
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexCausalExecutionIdentity:
+    """Current consumer identity for one immutable frozen campaign.
+
+    The campaign was intentionally frozen before its production entrypoint
+    existed.  This identity binds the later clean, CI-qualified consumer to
+    that exact immutable campaign without mutating or republishing the plan.
+    """
+
+    setup_execution_identity: ClaimFirstExecutionIdentity = field(repr=False)
+    campaign_sha256: str
+    frozen_campaign_runner_sha256: str
+    execution_runner_sha256: str = RED_LIVING_DEX_CAUSAL_CAMPAIGN_EXECUTION_RUNNER_SHA256
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.setup_execution_identity, ClaimFirstExecutionIdentity):
+            raise TypeError("causal execution needs its setup consumer identity")
+        self.setup_execution_identity.__post_init__()
+        for value, subject in (
+            (self.campaign_sha256, "campaign"),
+            (self.frozen_campaign_runner_sha256, "frozen campaign runner"),
+            (self.execution_runner_sha256, "execution runner"),
+        ):
+            _require_sha256(value, subject=subject)
+        if (
+            self.setup_execution_identity.runner_sha256 != RED_LIVING_DEX_CLAIM_FIRST_RUNNER_SHA256
+            or self.frozen_campaign_runner_sha256 != RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256
+            or self.execution_runner_sha256
+            != RED_LIVING_DEX_CAUSAL_CAMPAIGN_EXECUTION_RUNNER_SHA256
+        ):
+            raise RedLivingDexCausalCampaignError("causal execution runner identity differs")
+
+    @property
+    def identity_sha256(self) -> str:
+        return canonical_sha256(self.private_dict())
+
+    @property
+    def causal_runner_sha256(self) -> str:
+        return canonical_sha256(
+            {
+                "execution_identity_sha256": self.identity_sha256,
+                "execution_runner_sha256": self.execution_runner_sha256,
+                "frozen_campaign_runner_sha256": (self.frozen_campaign_runner_sha256),
+                "schema": "pokemon.red.living-dex-causal-effective-runner.v1",
+            }
+        )
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "campaign_sha256": self.campaign_sha256,
+            "execution_runner_sha256": self.execution_runner_sha256,
+            "frozen_campaign_runner_sha256": self.frozen_campaign_runner_sha256,
+            "schema": "pokemon.red.living-dex-causal-execution-identity.v1",
+            "setup_execution_identity": (self.setup_execution_identity.private_dict()),
+            "setup_execution_identity_sha256": (self.setup_execution_identity.identity_sha256),
+        }
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "current_consumer_bound": True,
+            "exact_ci_bound": True,
+            "frozen_campaign_bound": True,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "schema": "pokemon.red.living-dex-causal-execution-identity.v1",
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -132,9 +206,7 @@ class RedLivingDexFrozenCausalCampaign:
         ):
             _require_sha256(value, subject=subject)
         if self.logical_root_sha256 == self.physical_root_sha256:
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign root identities collapse"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign root identities collapse")
         if self.partition != "train":
             raise RedLivingDexCausalCampaignError(
                 "first causal campaign must use the train partition"
@@ -143,9 +215,7 @@ class RedLivingDexFrozenCausalCampaign:
             tuple(sorted(set(self.retired_physical_root_sha256s)))
             != self.retired_physical_root_sha256s
         ):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign retired-root inventory differs"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign retired-root inventory differs")
         for value in self.retired_physical_root_sha256s:
             _require_sha256(value, subject="retired physical root")
         expected_retired_commitment = canonical_sha256(
@@ -156,11 +226,9 @@ class RedLivingDexFrozenCausalCampaign:
         )
         if (
             type(self.retired_physical_root_count) is not int  # noqa: E721
-            or self.retired_physical_root_count
-            != len(self.retired_physical_root_sha256s)
+            or self.retired_physical_root_count != len(self.retired_physical_root_sha256s)
             or self.retired_physical_root_count < 1
-            or self.retired_physical_roots_commitment_sha256
-            != expected_retired_commitment
+            or self.retired_physical_roots_commitment_sha256 != expected_retired_commitment
             or self.physical_root_sha256 in self.retired_physical_root_sha256s
         ):
             raise RedLivingDexCausalCampaignError(
@@ -169,28 +237,21 @@ class RedLivingDexFrozenCausalCampaign:
         if (
             not isinstance(self.causal_source_commit, str)
             or _GIT_COMMIT.fullmatch(self.causal_source_commit) is None
-            or self.causal_source_commit
-            != self.outer_execution_identity.source_commit
-            or self.causal_runner_sha256
-            != RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256
+            or self.causal_source_commit != self.outer_execution_identity.source_commit
+            or self.causal_runner_sha256 != RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256
         ):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign current source differs"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign current source differs")
         outer = self.outer_execution_identity
         if (
             outer.runner_sha256 != RED_LIVING_DEX_CLAIM_FIRST_RUNNER_SHA256
             or outer.producer_plan_sha256 != self.producer_plan_sha256
-            or outer.producer_execution_identity_sha256
-            != self.producer_execution_identity_sha256
+            or outer.producer_execution_identity_sha256 != self.producer_execution_identity_sha256
             or outer.recipe_sha256 != self.recipe_sha256
             or outer.slot_sha256 != self.slot_sha256
             or outer.logical_root_sha256 != self.logical_root_sha256
             or outer.physical_root_sha256 != self.physical_root_sha256
         ):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign setup identity differs"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign setup identity differs")
 
     @property
     def campaign_sha256(self) -> str:
@@ -206,20 +267,14 @@ class RedLivingDexFrozenCausalCampaign:
             "no_retry_after_controller_release": True,
             "ordinal": self.ordinal,
             "outer_execution_identity": self.outer_execution_identity.private_dict(),
-            "outer_execution_identity_sha256": (
-                self.outer_execution_identity.identity_sha256
-            ),
+            "outer_execution_identity_sha256": (self.outer_execution_identity.identity_sha256),
             "partition": self.partition,
             "physical_root_sha256": self.physical_root_sha256,
-            "producer_execution_identity_sha256": (
-                self.producer_execution_identity_sha256
-            ),
+            "producer_execution_identity_sha256": (self.producer_execution_identity_sha256),
             "producer_plan_sha256": self.producer_plan_sha256,
             "recipe_sha256": self.recipe_sha256,
             "retired_physical_root_count": self.retired_physical_root_count,
-            "retired_physical_root_sha256s": list(
-                self.retired_physical_root_sha256s
-            ),
+            "retired_physical_root_sha256s": list(self.retired_physical_root_sha256s),
             "retired_physical_roots_commitment_sha256": (
                 self.retired_physical_roots_commitment_sha256
             ),
@@ -258,6 +313,7 @@ class RedLivingDexCausalCampaignReceipt:
     """Joined setup and selected-arm result for one frozen campaign."""
 
     plan: RedLivingDexFrozenCausalCampaign
+    execution_identity: RedLivingDexCausalExecutionIdentity
     setup: RedLivingDexClaimFirstReceipt
     causal: LivingDexCausalReceipt | None
 
@@ -265,6 +321,12 @@ class RedLivingDexCausalCampaignReceipt:
         if not isinstance(self.plan, RedLivingDexFrozenCausalCampaign):
             raise TypeError("causal campaign receipt needs its plan")
         self.plan.__post_init__()
+        if not isinstance(
+            self.execution_identity,
+            RedLivingDexCausalExecutionIdentity,
+        ):
+            raise TypeError("causal campaign receipt needs its execution identity")
+        self.execution_identity.__post_init__()
         if not isinstance(self.setup, RedLivingDexClaimFirstReceipt):
             raise TypeError("causal campaign receipt needs its setup result")
         if self.causal is not None and not isinstance(self.causal, LivingDexCausalReceipt):
@@ -275,46 +337,50 @@ class RedLivingDexCausalCampaignReceipt:
             or self.setup.frozen.logical_root_sha256 != self.plan.logical_root_sha256
             or self.setup.frozen.physical_root_sha256 != self.plan.physical_root_sha256
         ):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign receipt setup join differs"
-            )
-        setup_complete = (
-            self.setup.terminal.status is LivingDexCaptureSetupStatus.COMPLETE
-        )
+            raise RedLivingDexCausalCampaignError("causal campaign receipt setup join differs")
+        if (
+            self.execution_identity.campaign_sha256 != self.plan.campaign_sha256
+            or self.setup.terminal.outer_execution_identity_sha256
+            != self.execution_identity.setup_execution_identity.identity_sha256
+        ):
+            raise RedLivingDexCausalCampaignError("causal campaign receipt execution join differs")
+        setup_complete = self.setup.terminal.status is LivingDexCaptureSetupStatus.COMPLETE
         if setup_complete != (self.causal is not None):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign receipt completion join differs"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign receipt completion join differs")
         if self.causal is not None and (
             self.causal.scenario.identity.partition != self.plan.partition
             or self.causal.scenario.identity.runner_sha256
-            != self.plan.causal_runner_sha256
+            != self.execution_identity.causal_runner_sha256
             or self.causal.scenario.identity.source_commit
-            != self.plan.causal_source_commit
+            != self.execution_identity.setup_execution_identity.source_commit
         ):
-            raise RedLivingDexCausalCampaignError(
-                "causal campaign learner join differs"
-            )
+            raise RedLivingDexCausalCampaignError("causal campaign learner join differs")
 
     def public_dict(self) -> dict[str, object]:
         causal = None if self.causal is None else self.causal.public_dict()
+        setup_proof_runtimes = (
+            0 if self.setup.capture is None else self.setup.capture.origin_restore_count
+        )
         return {
             "causal_train_example_recorded": bool(
                 causal is not None and causal["causal_train_example_recorded"]
             ),
-            "causal_disposition": (
-                None if self.causal is None else self.causal.disposition.value
+            "causal_disposition": (None if self.causal is None else self.causal.disposition.value),
+            "causal_selected_runtime_constructions": (
+                0 if self.causal is None else self.causal.construction_attempts
             ),
+            "causal_unselected_runtime_constructions": 0,
             "controller_actions_public": False,
+            "current_execution_identity_bound": True,
             "model_fits": 0,
             "model_predictions": 0,
             "private_identity_fields": 0,
             "private_path_fields": 0,
-            "retry_allowed": bool(
-                self.causal is not None and self.causal.retry_allowed
-            ),
+            "retry_allowed": bool(self.causal is not None and self.causal.retry_allowed),
             "schema": RED_LIVING_DEX_CAUSAL_CAMPAIGN_RECEIPT_SCHEMA,
             "setup_status": self.setup.terminal.status.value,
+            "setup_proof_runtimes_constructed": setup_proof_runtimes,
+            "setup_provider_outcomes": 0,
             "teacher_queries": 0,
         }
 
@@ -348,36 +414,26 @@ def freeze_red_living_dex_causal_campaign(
         raise TypeError("causal campaign freeze needs an account claim registry")
     retired = tuple(retired_physical_root_sha256s)
     if not retired or len(retired) != len(set(retired)):
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign retired-root set differs"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign retired-root set differs")
     for value in retired:
         _require_sha256(value, subject="retired physical root")
     if frozen.physical_root_sha256 in retired:
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign selected a retired physical root"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign selected a retired physical root")
     recipe = frozen.recipe_document()
     if recipe.get("partition") != "train":
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign selected a non-train recipe"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign selected a non-train recipe")
     pair = outer_execution_identity.root_pair(stage="setup-capture")
     if not observe_claim_first_pair_availability(
         claim_registry,
         pair.logical_root_sha256,
         pair.physical_root_sha256,
     ):
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign selected an unavailable root pair"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign selected an unavailable root pair")
     plan = RedLivingDexFrozenCausalCampaign(
         outer_execution_identity=outer_execution_identity,
         ordinal=frozen.ordinal,
         producer_plan_sha256=frozen.producer_plan_sha256,
-        producer_execution_identity_sha256=(
-            frozen.producer_execution_identity_sha256
-        ),
+        producer_execution_identity_sha256=(frozen.producer_execution_identity_sha256),
         recipe_sha256=frozen.recipe_sha256,
         slot_sha256=frozen.slot_sha256,
         logical_root_sha256=frozen.logical_root_sha256,
@@ -401,9 +457,7 @@ def freeze_red_living_dex_causal_campaign(
         record=plan.private_dict(),
     )
     if sealed.read() != plan.private_dict():
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign plan publication differs"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign plan publication differs")
     return plan
 
 
@@ -454,9 +508,7 @@ def restore_red_living_dex_causal_campaign(
         "teacher_queries",
     }
     if not isinstance(document, Mapping) or set(document) != expected:
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign fields differ"
-        )
+        raise RedLivingDexCausalCampaignError("stored causal campaign fields differ")
     if (
         document["schema"] != RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_SCHEMA
         or document["complete_menu_bound_before_behavior"] is not True
@@ -465,14 +517,10 @@ def restore_red_living_dex_causal_campaign(
         or document["no_fit_or_promotion"] is not True
         or document["teacher_queries"] != 0
     ):
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign contract differs"
-        )
+        raise RedLivingDexCausalCampaignError("stored causal campaign contract differs")
     outer_document = document["outer_execution_identity"]
     if not isinstance(outer_document, Mapping):
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign setup identity differs"
-        )
+        raise RedLivingDexCausalCampaignError("stored causal campaign setup identity differs")
     outer = _restore_outer_identity(outer_document)
     if outer.identity_sha256 != document["outer_execution_identity_sha256"]:
         raise RedLivingDexCausalCampaignError(
@@ -487,27 +535,17 @@ def restore_red_living_dex_causal_campaign(
         plan = RedLivingDexFrozenCausalCampaign(
             outer_execution_identity=outer,
             ordinal=_integer(document["ordinal"], subject="ordinal"),
-            producer_plan_sha256=_string(
-                document["producer_plan_sha256"], subject="producer plan"
-            ),
+            producer_plan_sha256=_string(document["producer_plan_sha256"], subject="producer plan"),
             producer_execution_identity_sha256=_string(
                 document["producer_execution_identity_sha256"],
                 subject="producer execution",
             ),
             recipe_sha256=_string(document["recipe_sha256"], subject="recipe"),
             slot_sha256=_string(document["slot_sha256"], subject="slot"),
-            logical_root_sha256=_string(
-                document["logical_root_sha256"], subject="logical root"
-            ),
-            physical_root_sha256=_string(
-                document["physical_root_sha256"], subject="physical root"
-            ),
-            root_state_sha256=_string(
-                document["root_state_sha256"], subject="root state"
-            ),
-            root_envelope_sha256=_string(
-                document["root_envelope_sha256"], subject="root envelope"
-            ),
+            logical_root_sha256=_string(document["logical_root_sha256"], subject="logical root"),
+            physical_root_sha256=_string(document["physical_root_sha256"], subject="physical root"),
+            root_state_sha256=_string(document["root_state_sha256"], subject="root state"),
+            root_envelope_sha256=_string(document["root_envelope_sha256"], subject="root envelope"),
             partition=_string(document["partition"], subject="partition"),
             retired_physical_root_sha256s=tuple(retired_raw),
             retired_physical_roots_commitment_sha256=_string(
@@ -518,27 +556,20 @@ def restore_red_living_dex_causal_campaign(
                 document["retired_physical_root_count"],
                 subject="retired-root count",
             ),
-            causal_source_commit=_string(
-                document["causal_source_commit"], subject="causal source"
-            ),
-            causal_runner_sha256=_string(
-                document["causal_runner_sha256"], subject="causal runner"
-            ),
+            causal_source_commit=_string(document["causal_source_commit"], subject="causal source"),
+            causal_runner_sha256=_string(document["causal_runner_sha256"], subject="causal runner"),
         )
     except (TypeError, ValueError):
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign values differ"
-        ) from None
+        raise RedLivingDexCausalCampaignError("stored causal campaign values differ") from None
     if plan.private_dict() != dict(document):
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign does not replay"
-        )
+        raise RedLivingDexCausalCampaignError("stored causal campaign does not replay")
     return plan
 
 
 def run_red_living_dex_causal_campaign(
     plan: RedLivingDexFrozenCausalCampaign,
     *,
+    execution_identity: RedLivingDexCausalExecutionIdentity,
     store: PrivateArtifactRoot,
     plan_loader: RedLivingDexFrozenPlanLoader,
     frozen: FrozenRedLivingDexSetupSlot,
@@ -552,15 +583,16 @@ def run_red_living_dex_causal_campaign(
     if not isinstance(plan, RedLivingDexFrozenCausalCampaign):
         raise TypeError("causal campaign run needs its frozen plan")
     plan.__post_init__()
+    if not isinstance(execution_identity, RedLivingDexCausalExecutionIdentity):
+        raise TypeError("causal campaign run needs its current execution identity")
+    execution_identity.__post_init__()
     if not isinstance(frozen, FrozenRedLivingDexSetupSlot):
         raise TypeError("causal campaign run needs its frozen setup slot")
     frozen.__post_init__()
     if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
         raise TypeError("causal campaign run needs its authenticated root")
     root.__post_init__()
-    if not callable(plan_loader) or not isinstance(
-        resolver, RedLivingDexClaimedSetupResolver
-    ):
+    if not callable(plan_loader) or not isinstance(resolver, RedLivingDexClaimedSetupResolver):
         raise TypeError("causal campaign run needs cold plan and runtime resolvers")
     if type(meter) is not RedLivingDexSetupEffectMeter:
         raise TypeError("causal campaign run needs the comprehensive effect meter")
@@ -571,6 +603,7 @@ def run_red_living_dex_causal_campaign(
             "causal campaign differs from the immutable stored plan"
         )
     _require_frozen_join(plan, frozen, root=root)
+    _require_execution_join(plan, execution_identity, frozen=frozen)
 
     setup = run_red_living_dex_claim_first_setup_slot(
         store,
@@ -578,19 +611,22 @@ def run_red_living_dex_causal_campaign(
         expected_producer_plan_sha256=plan.producer_plan_sha256,
         ordinal=plan.ordinal,
         root=root,
-        outer_execution_identity=plan.outer_execution_identity,
+        outer_execution_identity=execution_identity.setup_execution_identity,
         resolver=resolver,
         meter=meter,
         claim_registry=claim_registry,
     )
     if setup.terminal.status is not LivingDexCaptureSetupStatus.COMPLETE:
-        return RedLivingDexCausalCampaignReceipt(plan, setup, None)
+        return RedLivingDexCausalCampaignReceipt(
+            plan,
+            execution_identity,
+            setup,
+            None,
+        )
     capture = setup.capture
     if capture is None:
-        raise RedLivingDexCausalCampaignError(
-            "complete causal campaign setup lacks its capture"
-        )
-    setup_pair = plan.outer_execution_identity.root_pair(stage="setup-capture")
+        raise RedLivingDexCausalCampaignError("complete causal campaign setup lacks its capture")
+    setup_pair = execution_identity.setup_execution_identity.root_pair(stage="setup-capture")
 
     @contextmanager
     def resolve_runtime():  # type: ignore[no-untyped-def]
@@ -616,15 +652,20 @@ def run_red_living_dex_causal_campaign(
         meter=meter,
         setup_terminal_sha256=canonical_sha256(setup.terminal.private_dict()),
         setup_pair_claim_sha256=setup_pair.claim_sha256,
-        causal_source_commit=plan.causal_source_commit,
-        causal_runner_sha256=plan.causal_runner_sha256,
+        causal_source_commit=(execution_identity.setup_execution_identity.source_commit),
+        causal_runner_sha256=execution_identity.causal_runner_sha256,
     )
     causal = materialize_living_dex_causal_example(
         scenario,
         store=store,
         claim_registry=claim_registry,
     )
-    return RedLivingDexCausalCampaignReceipt(plan, setup, causal)
+    return RedLivingDexCausalCampaignReceipt(
+        plan,
+        execution_identity,
+        setup,
+        causal,
+    )
 
 
 def _require_causal_resolved_slot(
@@ -641,14 +682,36 @@ def _require_causal_resolved_slot(
         or resolved.recipe.slot_sha256 != plan.slot_sha256
         or resolved.producer_execution_identity.identity_sha256
         != plan.producer_execution_identity_sha256
-        or resolved.title_adapter_sha256
-        != plan.outer_execution_identity.title_adapter_sha256
-        or resolved.runtime_factory_sha256
-        != plan.outer_execution_identity.runtime_factory_sha256
+        or resolved.title_adapter_sha256 != plan.outer_execution_identity.title_adapter_sha256
+        or resolved.runtime_factory_sha256 != plan.outer_execution_identity.runtime_factory_sha256
     ):
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign selected runtime identity differs"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign selected runtime identity differs")
+
+
+def _require_execution_join(
+    plan: RedLivingDexFrozenCausalCampaign,
+    execution_identity: RedLivingDexCausalExecutionIdentity,
+    *,
+    frozen: FrozenRedLivingDexSetupSlot,
+) -> None:
+    setup = execution_identity.setup_execution_identity
+    frozen_outer = plan.outer_execution_identity
+    if (
+        execution_identity.campaign_sha256 != plan.campaign_sha256
+        or execution_identity.frozen_campaign_runner_sha256 != plan.causal_runner_sha256
+        or setup.producer_execution_identity_sha256 != plan.producer_execution_identity_sha256
+        or setup.producer_plan_sha256 != plan.producer_plan_sha256
+        or setup.producer_private_plan_sha256 != frozen_outer.producer_private_plan_sha256
+        or setup.producer_manifest_sha256 != frozen_outer.producer_manifest_sha256
+        or setup.slot_sha256 != plan.slot_sha256
+        or setup.recipe_sha256 != plan.recipe_sha256
+        or setup.logical_root_sha256 != plan.logical_root_sha256
+        or setup.physical_root_sha256 != plan.physical_root_sha256
+        or setup.title_adapter_sha256 != frozen_outer.title_adapter_sha256
+        or setup.runtime_factory_sha256 != frozen_outer.runtime_factory_sha256
+        or frozen.producer_execution_identity_sha256 != setup.producer_execution_identity_sha256
+    ):
+        raise RedLivingDexCausalCampaignError("causal campaign current execution identity differs")
 
 
 def _require_frozen_join(
@@ -660,8 +723,7 @@ def _require_frozen_join(
     if (
         frozen.ordinal != plan.ordinal
         or frozen.producer_plan_sha256 != plan.producer_plan_sha256
-        or frozen.producer_execution_identity_sha256
-        != plan.producer_execution_identity_sha256
+        or frozen.producer_execution_identity_sha256 != plan.producer_execution_identity_sha256
         or frozen.recipe_sha256 != plan.recipe_sha256
         or frozen.slot_sha256 != plan.slot_sha256
         or frozen.logical_root_sha256 != plan.logical_root_sha256
@@ -673,9 +735,7 @@ def _require_frozen_join(
         or root.state_sha256 != plan.root_state_sha256
         or root.envelope_sha256 != plan.root_envelope_sha256
     ):
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign frozen setup join differs"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign frozen setup join differs")
     frozen.reauthenticate(
         # Reconstruct from the detached canonical plan bytes without touching
         # the caller's loader; execution reauthenticates the live loader again.
@@ -694,9 +754,7 @@ def _decode_frozen_plan(frozen: FrozenRedLivingDexSetupSlot) -> Mapping[str, obj
             "causal campaign detached plan cannot be decoded"
         ) from None
     if not isinstance(document, dict):
-        raise RedLivingDexCausalCampaignError(
-            "causal campaign detached plan differs"
-        )
+        raise RedLivingDexCausalCampaignError("causal campaign detached plan differs")
     return document
 
 
@@ -727,26 +785,18 @@ def _restore_outer_identity(document: Mapping[str, object]) -> ClaimFirstExecuti
         or document.get("source_published") is not True
         or document.get("worktree_dirty") is not False
     ):
-        raise RedLivingDexCausalCampaignError(
-            "stored causal campaign outer identity fields differ"
-        )
+        raise RedLivingDexCausalCampaignError("stored causal campaign outer identity fields differ")
     try:
         identity = ClaimFirstExecutionIdentity(
             source_commit=_string(document["source_commit"], subject="source commit"),
-            source_bundle_sha256=_string(
-                document["source_bundle_sha256"], subject="source bundle"
-            ),
+            source_bundle_sha256=_string(document["source_bundle_sha256"], subject="source bundle"),
             exact_ci_run=_integer(document["exact_ci_run"], subject="CI run"),
-            exact_ci_attempt=_integer(
-                document["exact_ci_attempt"], subject="CI attempt"
-            ),
+            exact_ci_attempt=_integer(document["exact_ci_attempt"], subject="CI attempt"),
             producer_execution_identity_sha256=_string(
                 document["producer_execution_identity_sha256"],
                 subject="producer execution",
             ),
-            producer_plan_sha256=_string(
-                document["producer_plan_sha256"], subject="producer plan"
-            ),
+            producer_plan_sha256=_string(document["producer_plan_sha256"], subject="producer plan"),
             producer_private_plan_sha256=_string(
                 document["producer_private_plan_sha256"],
                 subject="producer private plan",
@@ -756,15 +806,9 @@ def _restore_outer_identity(document: Mapping[str, object]) -> ClaimFirstExecuti
             ),
             slot_sha256=_string(document["slot_sha256"], subject="slot"),
             recipe_sha256=_string(document["recipe_sha256"], subject="recipe"),
-            logical_root_sha256=_string(
-                document["logical_root_sha256"], subject="logical root"
-            ),
-            physical_root_sha256=_string(
-                document["physical_root_sha256"], subject="physical root"
-            ),
-            title_adapter_sha256=_string(
-                document["title_adapter_sha256"], subject="title adapter"
-            ),
+            logical_root_sha256=_string(document["logical_root_sha256"], subject="logical root"),
+            physical_root_sha256=_string(document["physical_root_sha256"], subject="physical root"),
+            title_adapter_sha256=_string(document["title_adapter_sha256"], subject="title adapter"),
             runtime_factory_sha256=_string(
                 document["runtime_factory_sha256"], subject="runtime factory"
             ),
@@ -795,13 +839,12 @@ def _integer(value: object, *, subject: str) -> int:
 
 def _require_sha256(value: object, *, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedLivingDexCausalCampaignError(
-            f"causal campaign {subject} SHA-256 differs"
-        )
+        raise RedLivingDexCausalCampaignError(f"causal campaign {subject} SHA-256 differs")
     return value
 
 
 __all__ = [
+    "RED_LIVING_DEX_CAUSAL_CAMPAIGN_EXECUTION_RUNNER_SHA256",
     "RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_ID",
     "RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_RECORD_KIND",
     "RED_LIVING_DEX_CAUSAL_CAMPAIGN_PLAN_SCHEMA",
@@ -809,6 +852,7 @@ __all__ = [
     "RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256",
     "RedLivingDexCausalCampaignError",
     "RedLivingDexCausalCampaignReceipt",
+    "RedLivingDexCausalExecutionIdentity",
     "RedLivingDexFrozenCausalCampaign",
     "freeze_red_living_dex_causal_campaign",
     "load_red_living_dex_causal_campaign",

@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: the first lesson gets a clean-room launch rail
+
+Open on **FROZEN RED TRAIN LESSON · UNCONSUMED**, then sweep every ambient dependency off the
+screen. Build a clean chamber labelled **EXACT SOURCE → EXACT GREEN CI → AUTHENTICATED PYBOY /
+NUMPY / SDL → SEALED PRODUCER RUNTIME MATCH**. Throw in cached bytecode, a shadow package, a
+symlink, writable wheel bytes, a Git hook, a proxy, and a nested private root; each hits **FAIL
+CLOSED BEFORE CLAIM**.
+
+Run the one-way rail: **PAIR CLAIM → BEHAVIOR COMMITMENT → RANDOM SELECTION → CONSTRUCTION START →
+SELECTED RED RUNTIME ONLY → CONTROLLER RELEASE → INDEPENDENT OUTCOME → ONE CAUSAL ROW**. Keep every
+unselected arm black. Cut power after input and stamp **CONSUMED · NO RETRY**; recover a finished
+row and show **RUNTIME CONSTRUCTIONS 0**.
+
+Split the next panel into real **RED ADAPTER** and **CRYSTAL ADAPTER** pipes feeding the same
+anonymous vector. Flash **BREEDING · TIME · HELD ITEM · TRADE · STORAGE** as Crystal facts that
+change the vector. Overlay **CONTRACT PORTABLE ≠ TRANSFER PROVEN**. Reveal **69 FOCUSED · 5,475
+FULL-SUITE · 299 TYPED · CLAUDE GO · ANTIGRAVITY GO**. End on **PUBLISH → EXACT-MAIN CI →
+REORIENT → EXECUTE ONCE → POWERED RED DATASET → RED FIT + BENCHMARK → FROZEN ZERO-SHOT CRYSTAL**,
+with **CAUSAL TRAIN 0/1 · AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 27 scene: build one door that cannot open twice
 
 Open on **MAIN 74D7E7E8 · CI 33098041804/1 GREEN**, then connect the published generic journal to

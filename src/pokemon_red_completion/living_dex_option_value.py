@@ -22,6 +22,7 @@ from typing import cast
 import numpy as np
 from numpy.typing import NDArray
 
+from pokemon_red_completion.goal_manager import GoalSituation
 from pokemon_red_completion.provenance import canonical_sha256
 
 LIVING_DEX_OPTION_CONTEXT_SCHEMA = "pokemon.core.living-dex-option-context.v1"
@@ -153,6 +154,18 @@ def _positive_finite(value: object, *, subject: str) -> float:
     return result
 
 
+def _nonnegative_integer(value: object, *, subject: str) -> int:
+    if type(value) is not int or value < 0:  # noqa: E721
+        raise LivingDexOptionValueError(f"{subject} must be a non-negative integer")
+    return value
+
+
+def _semantic_ratio(numerator: int, denominator: int) -> float:
+    if denominator <= 0:
+        return 0.0 if numerator <= 0 else 1.0
+    return min(1.0, max(0.0, numerator / denominator))
+
+
 @dataclass(frozen=True, slots=True)
 class LivingDexOptionContext:
     """Normalized pressures that can change the value of the same option."""
@@ -192,6 +205,40 @@ class LivingDexOptionContext:
             "schema": LIVING_DEX_OPTION_CONTEXT_SCHEMA,
             "storage_pressure": self.storage_pressure,
         }
+
+
+def living_dex_option_context_from_goal_situation(
+    situation: GoalSituation,
+) -> LivingDexOptionContext:
+    """Project the shared nine-need state into the shared option-value state.
+
+    This mapping is deliberately title-neutral.  Red and later-generation
+    adapters may differ in how they measure story, collection, party,
+    resources, storage, and world knowledge, but they must use the same
+    pressure composition once those measurements reach ``GoalSituation``.
+    """
+
+    if not isinstance(situation, GoalSituation):
+        raise TypeError("living-Dex option context needs a GoalSituation")
+    return LivingDexOptionContext(
+        collection_pressure=situation.collection_pressure,
+        dependency_pressure=max(
+            situation.story_pressure,
+            situation.evolution_pressure,
+        ),
+        access_pressure=max(
+            situation.story_pressure,
+            situation.exploration_pressure,
+        ),
+        resource_pressure=situation.resource_pressure,
+        storage_pressure=situation.storage_pressure,
+        party_pressure=max(
+            situation.team_pressure,
+            situation.safety_pressure,
+            situation.recovery_pressure,
+        ),
+        knowledge_pressure=situation.exploration_pressure,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -246,6 +293,100 @@ class LivingDexOptionFeatures:
             "schema": LIVING_DEX_OPTION_FEATURE_SCHEMA,
             "values": list(self.vector(context)),
         }
+
+
+def living_dex_option_features_from_semantic_facts(
+    *,
+    kind: LivingDexOptionKind,
+    completion_units: int,
+    maximum_completion_units: int,
+    immediate_dependency_unlocks: int,
+    incomplete_dependency_frontier: int,
+    travel_action_estimate: int,
+    execution_action_estimate: int,
+    maximum_controller_actions: int,
+    required_resource_units: int,
+    available_resource_units: int,
+    net_storage_slots: int,
+    storage_headroom: int,
+    party_risk: float,
+    irreversible_constraints_exposed: int,
+    irreversible_constraint_count: int,
+    prerequisite_confidence: float,
+) -> LivingDexOptionFeatures:
+    """Normalize title-specific prospective counts through one shared contract."""
+
+    if not isinstance(kind, LivingDexOptionKind):
+        raise LivingDexOptionValueError("semantic option kind differs")
+    values = {
+        name: _nonnegative_integer(value, subject=name.replace("_", " "))
+        for name, value in (
+            ("completion_units", completion_units),
+            ("maximum_completion_units", maximum_completion_units),
+            ("immediate_dependency_unlocks", immediate_dependency_unlocks),
+            ("incomplete_dependency_frontier", incomplete_dependency_frontier),
+            ("travel_action_estimate", travel_action_estimate),
+            ("execution_action_estimate", execution_action_estimate),
+            ("maximum_controller_actions", maximum_controller_actions),
+            ("required_resource_units", required_resource_units),
+            ("available_resource_units", available_resource_units),
+            ("storage_headroom", storage_headroom),
+            (
+                "irreversible_constraints_exposed",
+                irreversible_constraints_exposed,
+            ),
+            ("irreversible_constraint_count", irreversible_constraint_count),
+        )
+    }
+    if type(net_storage_slots) is not int:  # noqa: E721
+        raise LivingDexOptionValueError("net storage slots must be an integer")
+    if (
+        values["maximum_completion_units"] <= 0
+        or values["maximum_controller_actions"] <= 0
+        or values["completion_units"] > values["maximum_completion_units"]
+        or values["immediate_dependency_unlocks"]
+        > values["incomplete_dependency_frontier"]
+        or values["irreversible_constraints_exposed"]
+        > values["irreversible_constraint_count"]
+    ):
+        raise LivingDexOptionValueError("semantic option count bounds differ")
+    return LivingDexOptionFeatures(
+        kind=kind,
+        completion_gain=_semantic_ratio(
+            values["completion_units"],
+            values["maximum_completion_units"],
+        ),
+        dependency_unlock_gain=_semantic_ratio(
+            values["immediate_dependency_unlocks"],
+            values["incomplete_dependency_frontier"],
+        ),
+        travel_effort=_semantic_ratio(
+            values["travel_action_estimate"],
+            values["maximum_controller_actions"],
+        ),
+        execution_effort=_semantic_ratio(
+            values["execution_action_estimate"],
+            values["maximum_controller_actions"],
+        ),
+        resource_cost=_semantic_ratio(
+            values["required_resource_units"],
+            values["available_resource_units"],
+        ),
+        storage_cost=_semantic_ratio(
+            max(0, net_storage_slots),
+            values["storage_headroom"],
+        ),
+        party_risk=_unit_interval(party_risk, subject="party risk"),
+        irreversibility_risk=_semantic_ratio(
+            values["irreversible_constraints_exposed"],
+            values["irreversible_constraint_count"],
+        ),
+        uncertainty=1.0
+        - _unit_interval(
+            prerequisite_confidence,
+            subject="prerequisite confidence",
+        ),
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1008,5 +1149,7 @@ __all__ = [
     "LivingDexPredictedOutcome",
     "evaluate_living_dex_option_value",
     "fit_living_dex_option_value",
+    "living_dex_option_features_from_semantic_facts",
+    "living_dex_option_context_from_goal_situation",
     "uniform_behavior_probabilities",
 ]

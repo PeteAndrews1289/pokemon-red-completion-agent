@@ -25,6 +25,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_campaign import (
     RED_LIVING_DEX_CAUSAL_CAMPAIGN_RUNNER_SHA256,
     RedLivingDexCausalCampaignError,
+    RedLivingDexCausalExecutionIdentity,
     freeze_red_living_dex_causal_campaign,
     load_red_living_dex_causal_campaign,
     run_red_living_dex_causal_campaign,
@@ -87,6 +88,40 @@ def _fixture(tmp_path: Path, ordinal: int = 0):  # type: ignore[no-untyped-def]
     store = _store(tmp_path)
     registry = _registry(tmp_path)
     return recipe_plan, root, frozen, outer, store, registry
+
+
+def _execution_identity(
+    plan: Any,
+    frozen_outer: ClaimFirstExecutionIdentity,
+    *,
+    source_commit: str = "d" * 40,
+) -> RedLivingDexCausalExecutionIdentity:
+    current = ClaimFirstExecutionIdentity(
+        source_commit=source_commit,
+        source_bundle_sha256=_sha("later-current-source"),
+        exact_ci_run=23456,
+        exact_ci_attempt=1,
+        producer_execution_identity_sha256=(
+            frozen_outer.producer_execution_identity_sha256
+        ),
+        producer_plan_sha256=frozen_outer.producer_plan_sha256,
+        producer_private_plan_sha256=(
+            frozen_outer.producer_private_plan_sha256
+        ),
+        producer_manifest_sha256=frozen_outer.producer_manifest_sha256,
+        slot_sha256=frozen_outer.slot_sha256,
+        recipe_sha256=frozen_outer.recipe_sha256,
+        logical_root_sha256=frozen_outer.logical_root_sha256,
+        physical_root_sha256=frozen_outer.physical_root_sha256,
+        title_adapter_sha256=frozen_outer.title_adapter_sha256,
+        runtime_factory_sha256=frozen_outer.runtime_factory_sha256,
+        runner_sha256=RED_LIVING_DEX_CLAIM_FIRST_RUNNER_SHA256,
+    )
+    return RedLivingDexCausalExecutionIdentity(
+        current,
+        plan.campaign_sha256,
+        plan.causal_runner_sha256,
+    )
 
 
 class _Resolver:
@@ -209,10 +244,12 @@ def test_frozen_campaign_runs_setup_then_exactly_one_randomized_arm(
     meter = RedLivingDexSetupEffectMeter()
     factory = _ArmFactory(recipe_plan.execution_identity, meter)
     resolver = _Resolver(recipe_plan, outer, factory)
+    execution_identity = _execution_identity(plan, outer)
     document = recipe_plan.private_dict()
 
     receipt = run_red_living_dex_causal_campaign(
         plan,
+        execution_identity=execution_identity,
         store=store,
         plan_loader=lambda: copy.deepcopy(document),
         frozen=frozen,
@@ -227,12 +264,33 @@ def test_frozen_campaign_runs_setup_then_exactly_one_randomized_arm(
     assert receipt.causal.example is not None
     assert receipt.causal.example.partition == "train"
     assert receipt.public_dict()["causal_train_example_recorded"] is True
+    assert receipt.public_dict()["setup_proof_runtimes_constructed"] == (
+        receipt.setup.capture.origin_restore_count
+    )
+    assert receipt.public_dict()["setup_provider_outcomes"] == 0
+    assert receipt.public_dict()["causal_selected_runtime_constructions"] == (
+        receipt.causal.construction_attempts
+    )
+    assert receipt.public_dict()["causal_unselected_runtime_constructions"] == 0
+    assert receipt.plan.causal_source_commit == "c" * 40
+    assert receipt.causal.scenario.identity.source_commit == "d" * 40
+    assert receipt.causal.scenario.identity.runner_sha256 == (
+        execution_identity.causal_runner_sha256
+    )
     assert resolver.calls == 2
     assert meter.provider_executions == 1
+    assert receipt.setup.capture is not None
+    setup_proof_arms = receipt.setup.capture.origin_restore_count
+    assert len(factory.arms) == setup_proof_arms + 1
+    assert factory.arms[-1].purpose == "candidate"
+    assert factory.arms[-1].ordinal == (
+        receipt.causal.example.selected_candidate_index
+    )
 
     forbidden = _ForbiddenResolver()
     recovered = run_red_living_dex_causal_campaign(
         plan,
+        execution_identity=execution_identity,
         store=store,
         plan_loader=lambda: copy.deepcopy(document),
         frozen=frozen,
@@ -244,6 +302,13 @@ def test_frozen_campaign_runs_setup_then_exactly_one_randomized_arm(
     assert recovered.causal is not None
     assert recovered.causal.example == receipt.causal.example
     assert forbidden.calls == 0
+    assert recovered.public_dict()["setup_proof_runtimes_constructed"] == (
+        receipt.setup.capture.origin_restore_count
+    )
+    assert recovered.public_dict()["causal_selected_runtime_constructions"] == (
+        receipt.causal.construction_attempts
+    )
+    assert recovered.public_dict()["causal_unselected_runtime_constructions"] == 0
 
 
 def test_freeze_rejects_non_train_recipe_before_publication(tmp_path: Path) -> None:
@@ -285,9 +350,11 @@ def test_post_selection_runtime_identity_drift_is_target_free(
         factory,
         second_call_identity_drift=drift,
     )
+    execution_identity = _execution_identity(plan, outer)
 
     receipt = run_red_living_dex_causal_campaign(
         plan,
+        execution_identity=execution_identity,
         store=store,
         plan_loader=lambda: copy.deepcopy(recipe_plan.private_dict()),
         frozen=frozen,
@@ -346,6 +413,7 @@ def test_runner_rejects_a_plan_from_another_private_store_before_claim(
     with pytest.raises(RedLivingDexCausalCampaignError, match="immutable stored plan"):
         run_red_living_dex_causal_campaign(
             second_plan,
+            execution_identity=_execution_identity(second_plan, outer),
             store=first_store,
             plan_loader=lambda: copy.deepcopy(recipe_plan.private_dict()),
             frozen=frozen,
@@ -357,3 +425,44 @@ def test_runner_rejects_a_plan_from_another_private_store_before_claim(
     assert load_red_living_dex_causal_campaign(first_store) == first_plan
     assert resolver.calls == 0
     assert meter.root_claims == 0
+
+
+def test_current_execution_identity_substitution_fails_before_claim_or_behavior(
+    tmp_path: Path,
+) -> None:
+    recipe_plan, root, frozen, outer, store, registry = _fixture(tmp_path)
+    plan = freeze_red_living_dex_causal_campaign(
+        store,
+        frozen=frozen,
+        outer_execution_identity=outer,
+        retired_physical_root_sha256s=(_sha("retired"),),
+        claim_registry=registry,
+    )
+    meter = RedLivingDexSetupEffectMeter()
+    resolver = _Resolver(
+        recipe_plan,
+        outer,
+        _ArmFactory(recipe_plan.execution_identity, meter),
+    )
+    substituted = _execution_identity(plan, outer)
+    object.__setattr__(substituted, "campaign_sha256", _sha("other-campaign"))
+
+    with pytest.raises(
+        RedLivingDexCausalCampaignError,
+        match="current execution identity differs",
+    ):
+        run_red_living_dex_causal_campaign(
+            plan,
+            execution_identity=substituted,
+            store=store,
+            plan_loader=lambda: copy.deepcopy(recipe_plan.private_dict()),
+            frozen=frozen,
+            root=root,
+            resolver=resolver,
+            meter=meter,
+            claim_registry=registry,
+        )
+
+    assert resolver.calls == 0
+    assert meter.root_claims == 0
+    assert tuple(registry.glob("claim-pair-v1-*.json")) == ()

@@ -3,6 +3,22 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 direct-consumer checkpoint:** One action-free Red train campaign is frozen and still
+> unconsumed. Its direct isolated consumer now authenticates exact project source, exact successful
+> CI identity, the clean PyBoy/NumPy/SDL runtime closure, the sealed producer's runtime identity,
+> and the nearest private-root boundary before claim. The causal journal constructs only the
+> randomly selected runtime after durable claim, commitment, selection, and construction start;
+> terminal recovery constructs none. Distinct Red and Crystal semantic adapters share one
+> identity-free feature contract without claiming empirical transfer.
+>
+> The [qualification](evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+> records **69 focused · 5,475 repository · 299 typed source files**. Claude and Antigravity return
+> publication GO; private execution remains conditional on exact-main green CI and fresh
+> reorientation. Publish, verify exact main, reorient, and execute the frozen train campaign once.
+> Then expand to a powered multi-kind Red causal dataset before fitting, benchmark on untouched
+> Red outcomes, and only then freeze weights for a controlled Crystal transfer test. **Causal train
+> remains 0/1; authority 0; transfer 0.**
+
 > **August 27 freeze-first campaign checkpoint:** The shared causal boundary is published at main
 > `74d7e7e8` with exact-main CI `33098041804/1` green. The new composition keeps the Red runtime
 > absent until the generic journal has durably claimed, committed, selected, and recorded
