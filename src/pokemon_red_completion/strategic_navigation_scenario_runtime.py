@@ -35,7 +35,11 @@ from pokemon_red_completion.gen1_traversal import (
     surf_local_graph,
     traversal_rules,
 )
-from pokemon_red_completion.global_router import MacroGraph
+from pokemon_red_completion.global_router import (
+    GlobalRouterError,
+    MacroGraph,
+    find_macro_path,
+)
 from pokemon_red_completion.local_router import LocalGraph, LocalPath, without_coordinates
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.red_trajectory import POKEMON_RED_GAME_ID
@@ -252,6 +256,7 @@ class StrategicScenarioRouteWorld:
         *,
         goal_at: tuple[int, int] | None = None,
         blocked: Mapping[int, frozenset[tuple[int, int]]] | None = None,
+        candidate_map_ids: frozenset[int] | None = None,
     ) -> RoutePlan:
         """Find the cheapest route enabled by exactly one explicit Cut action."""
 
@@ -265,6 +270,8 @@ class StrategicScenarioRouteWorld:
         replacements = {swap.before: swap.after for swap in self.rules.cut_block_swaps}
         candidates: list[tuple[RoutePlan, int, tuple[int, int]]] = []
         for map_id, terrain in self.terrain.items():
+            if candidate_map_ids is not None and map_id not in candidate_map_ids:
+                continue
             if terrain.blocks is None:
                 continue
             eligible_tiles = CUT_PASSAGE_TILES.get(terrain.tileset, frozenset())
@@ -503,6 +510,66 @@ class StrategicScenarioRouteWorld:
         if type(goal_map) is not int or goal_map < 0:  # noqa: E721
             raise TypeError("scenario relocation goal must be a non-negative map ID")
         return self._plan_candidate(start, goal_map, goal_at=goal_at)
+
+    def plan_feasible_to_map(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        """Find one bounded cartridge route without an all-map Cut search.
+
+        ``plan_to_map`` retains the stronger historical behavior: if Cut is
+        required it searches every cartridge Cut block and returns the
+        cheapest complete candidate.  Prospective setup only needs a genuine
+        deterministic transport, not a globally minimal one.  This bounded
+        variant first tries the ordinary composed router, then considers Cut
+        blocks only on the topology-shortest map corridor.  It returns a fully
+        typed executable :class:`RoutePlan` or fails closed; it never falls
+        back to scanning unrelated maps.
+        """
+
+        if not isinstance(start, TraversalSnapshot):
+            raise TypeError("scenario relocation start must be a traversal snapshot")
+        if type(goal_map) is not int or goal_map < 0:  # noqa: E721
+            raise TypeError("scenario relocation goal must be a non-negative map ID")
+        try:
+            return plan_route(
+                self.macro_graph,
+                self.local_graphs,
+                start.map_id,
+                start.at,
+                goal_map,
+                blocked={start.map_id: start.occupied},
+                capabilities=start.capabilities,
+                last_outside=start.last_outside_map,
+                start_mode=start.mode,
+                goal_at=goal_at,
+            )
+        except RoutePlanningError:
+            try:
+                corridor = find_macro_path(
+                    self.macro_graph,
+                    start.map_id,
+                    goal_map,
+                    last_outside=start.last_outside_map,
+                )
+            except GlobalRouterError as error:
+                raise RoutePlanningError(
+                    f"no bounded macro corridor from map {start.map_id} to map {goal_map}"
+                ) from error
+            try:
+                return self._staged_cut_plan(
+                    start,
+                    goal_map,
+                    goal_at=goal_at,
+                    candidate_map_ids=frozenset(corridor.maps),
+                )
+            except RoutePlanningError as error:
+                raise RoutePlanningError(
+                    f"no bounded feasible route from map {start.map_id} to map {goal_map}"
+                ) from error
 
     def plan_same_destination_pair(
         self,

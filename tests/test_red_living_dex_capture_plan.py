@@ -121,6 +121,7 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert capabilities[LivingDexOptionKind.EVOLVE].goal_kind is GoalKind.EVOLVE_SPECIES
     assert capabilities[LivingDexOptionKind.EVOLVE].mechanics == (
         RedGoalMechanic.DIGLETT_EVOLUTION,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
     )
     assert capabilities[LivingDexOptionKind.EVOLVE].executor_types == (
         RedObservedGoalSkillProvider,
@@ -128,10 +129,12 @@ def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None
     assert capabilities[LivingDexOptionKind.DEVELOP].mechanics == (
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         RedGoalMechanic.BALANCED_TEAM,
+        RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
     )
     assert capabilities[LivingDexOptionKind.DEVELOP].executor_types == (
         RedEncounterSourceDevelopmentGoalProvider,
         RedProgressGoalProvider,
+        RedObservedGoalSkillProvider,
     )
     assert capabilities[LivingDexOptionKind.MANAGE_STORAGE].mechanics == (
         RedGoalMechanic.BOX_SWITCH,
@@ -244,7 +247,7 @@ def test_public_feasibility_is_path_free_and_refuses_training_claims() -> None:
 
     assert public["schema"] == RED_LIVING_DEX_CAPTURE_FEASIBILITY_SCHEMA
     assert public["qualification_sha256"] == (
-        "fcd46ac330921e73b620485481d3a7d480bb46d64c92a5e40f5bed594a516345"
+        "800b2d31ce2a93a5d4edb724864394f6ddf6661a0b0dd4851b092f3a837db98a"
     )
     assert public["rom_accesses"] == 0
     assert public["setup_controller_actions"] == 0

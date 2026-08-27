@@ -1,7 +1,8 @@
 # Red same-root living-Pokédex setup recipes V1
 
-Status: adversarial trust repair qualified at source `539454f3` under PR CI `33009960617/1`;
-authentic provider inventory is next. This design is subordinate to
+Status: adversarial trust repair is published; authentic provider curriculum and route preflight
+are locally qualified at implementation checkpoint `6063cb41`; exact published plan freeze is
+next. This design is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
@@ -142,20 +143,24 @@ retry of a claimed failure.
 
 ## Honest remaining blocker
 
-No authentic fifteen-recipe plan exists yet. The present evolution provider exposes one semantic
-family—Diglett to Dugtrio—and the balanced-team provider exposes one generic one-level family.
-Those static families cannot honestly satisfy the frozen train/development family separation when
-the same kinds recur across several scopes. The next engineering gate is therefore not to press
-buttons or fit a model. It is to define genuine target-specific, repeatable evolution and
-development offers (and inventory the other provider families), then freeze a 15-slot recipe plan
-whose expected family and ten-map joins pass before any root is claimed.
+The family and route inventory now exists. Five target-specific level-evolution families reuse the
+boxed engine, four target-specific development families reuse the balanced-team engine, and all
+other scheduled offers bind real Red acquisition, exploration, storage, resupply, or story
+mechanics. An authentic action-free preflight covered fifteen unconsumed roots and produced the
+complete **15/45/33/10** aggregate with eleven construction and thirty-seven provider routes.
+
+What does not exist yet is the canonical frozen artifact under a clean published execution
+identity. The next gate publishes the exact implementation, binds the exact supported Red ROM and
+source/runtime registries, reconstructs the same plan once with zero protected effects, persists
+its private identity, publishes only aggregates, and reorients. It does not press a button, execute
+a provider, claim a root, collect an outcome, or fit a model.
 
 Trade remains a separate mission-level blocker. This first calibration may exclude trade, but no
 living-Pokédex or cross-version authority claim may.
 
 ## Claim boundary
 
-Supported by the qualified repair:
+Supported by the repair and local provider qualification:
 
 - same-root recipe and fork semantics;
 - exact source-root and restored-origin authentication;
@@ -163,10 +168,11 @@ Supported by the qualified repair:
 - durable claim-before-input and no-retry accounting;
 - exact private capture recovery; and
 - aggregate, path-free public reporting with zero learner effects.
+- genuine 15-recipe / 45-offer / 33-family / 10-origin capacity on the selected authentic roots.
 
 Not supported:
 
-- an authentic Red recipe plan or setup campaign;
+- a clean-published, execution-identity-bound frozen Red recipe artifact or setup campaign;
 - causal train or new development examples;
 - a new model fit or model-controlled gameplay;
 - a powered Red comparison or authority promotion;

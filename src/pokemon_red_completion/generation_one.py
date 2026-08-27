@@ -86,6 +86,70 @@ GENERATION_ONE_TRADE_EVOLUTIONS = {
     94: 93,  # Haunter -> Gengar
 }
 
+# Every automatic level evolution in the supported Generation I cartridges,
+# expressed as ``(precursor, evolved species, required level)`` in National
+# Pokédex order.  Unlike the acquisition catalog, this is the complete
+# mechanics graph: a species can be available in the wild and still be a
+# perfectly valid evolution target.  The declaration keeps profile validation
+# ROM-free; ``test_gen1_cartridge`` derives the same 52 rows independently from
+# both Red and Blue and refuses drift.
+GENERATION_ONE_LEVEL_EVOLUTIONS = frozenset(
+    {
+        (1, 2, 16),
+        (2, 3, 32),
+        (4, 5, 16),
+        (5, 6, 36),
+        (7, 8, 16),
+        (8, 9, 36),
+        (10, 11, 7),
+        (11, 12, 10),
+        (13, 14, 7),
+        (14, 15, 10),
+        (16, 17, 18),
+        (17, 18, 36),
+        (19, 20, 20),
+        (21, 22, 20),
+        (23, 24, 22),
+        (27, 28, 22),
+        (29, 30, 16),
+        (32, 33, 16),
+        (41, 42, 22),
+        (43, 44, 21),
+        (46, 47, 24),
+        (48, 49, 31),
+        (50, 51, 26),
+        (52, 53, 28),
+        (54, 55, 33),
+        (56, 57, 28),
+        (60, 61, 25),
+        (63, 64, 16),
+        (66, 67, 28),
+        (69, 70, 21),
+        (72, 73, 30),
+        (74, 75, 25),
+        (77, 78, 40),
+        (79, 80, 37),
+        (81, 82, 30),
+        (84, 85, 31),
+        (86, 87, 34),
+        (88, 89, 38),
+        (92, 93, 25),
+        (96, 97, 26),
+        (98, 99, 28),
+        (100, 101, 30),
+        (104, 105, 28),
+        (109, 110, 35),
+        (111, 112, 42),
+        (116, 117, 32),
+        (118, 119, 33),
+        (129, 130, 20),
+        (138, 139, 40),
+        (140, 141, 40),
+        (147, 148, 30),
+        (148, 149, 55),
+    }
+)
+
 GENERATION_ONE_EVENT_ONLY = frozenset({151})
 
 if len(UNAVAILABLE_IN_RED) != 11 or len(UNAVAILABLE_IN_BLUE) != 11:
@@ -95,6 +159,7 @@ if UNAVAILABLE_IN_RED & UNAVAILABLE_IN_BLUE:
 
 __all__ = [
     "GENERATION_ONE_EVENT_ONLY",
+    "GENERATION_ONE_LEVEL_EVOLUTIONS",
     "GENERATION_ONE_SPECIES_COUNT",
     "GENERATION_ONE_TRADE_EVOLUTIONS",
     "UNAVAILABLE_IN_BLUE",

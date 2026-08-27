@@ -24,7 +24,8 @@
       ],
       "goal_kind": "evolve_species",
       "mechanics": [
-        "diglett_evolution"
+        "diglett_evolution",
+        "targeted_level_evolution"
       ],
       "missing_reason": null,
       "option_kind": "evolve",
@@ -51,12 +52,14 @@
       "boundary_scope_count": 2,
       "executor_contract_ids": [
         "pokemon_red_completion.red_goal_skills.RedEncounterSourceDevelopmentGoalProvider",
-        "pokemon_red_completion.red_goal_skills.RedProgressGoalProvider"
+        "pokemon_red_completion.red_goal_skills.RedProgressGoalProvider",
+        "pokemon_red_completion.red_goal_skills.RedObservedGoalSkillProvider"
       ],
       "goal_kind": "develop_team",
       "mechanics": [
         "wild_corridor_development",
-        "balanced_team"
+        "balanced_team",
+        "targeted_party_development"
       ],
       "missing_reason": null,
       "option_kind": "develop",
@@ -235,7 +238,7 @@
   },
   "private_identity_fields": 0,
   "private_path_fields": 0,
-  "qualification_sha256": "fcd46ac330921e73b620485481d3a7d480bb46d64c92a5e40f5bed594a516345",
+  "qualification_sha256": "800b2d31ce2a93a5d4edb724864394f6ddf6661a0b0dd4851b092f3a837db98a",
   "rom_accesses": 0,
   "routed_slot_count": 14,
   "scheduled_option_kinds": [

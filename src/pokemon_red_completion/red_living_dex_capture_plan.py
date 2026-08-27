@@ -124,6 +124,7 @@ _OPTION_TO_EXECUTOR_TYPES: dict[
     LivingDexOptionKind.DEVELOP: (
         RedEncounterSourceDevelopmentGoalProvider,
         RedProgressGoalProvider,
+        RedObservedGoalSkillProvider,
     ),
     LivingDexOptionKind.MANAGE_STORAGE: (RedBoxSwitchGoalProvider,),
     LivingDexOptionKind.RESUPPLY: (RedMartResupplyGoalProvider,),
@@ -344,7 +345,10 @@ RED_LIVING_DEX_EXECUTOR_CAPABILITIES = (
         LivingDexOptionKind.EVOLVE,
         RedLivingDexExecutorStatus.IMPLEMENTED_LOCAL_CONTRACT,
         GoalKind.EVOLVE_SPECIES,
-        (RedGoalMechanic.DIGLETT_EVOLUTION,),
+        (
+            RedGoalMechanic.DIGLETT_EVOLUTION,
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        ),
         ("pokemon-center",),
         (RedObservedGoalSkillProvider,),
     ),
@@ -364,9 +368,14 @@ RED_LIVING_DEX_EXECUTOR_CAPABILITIES = (
         (
             RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
             RedGoalMechanic.BALANCED_TEAM,
+            RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
         ),
         ("pokemon-center", "wild-corridor"),
-        (RedEncounterSourceDevelopmentGoalProvider, RedProgressGoalProvider),
+        (
+            RedEncounterSourceDevelopmentGoalProvider,
+            RedProgressGoalProvider,
+            RedObservedGoalSkillProvider,
+        ),
     ),
     RedLivingDexExecutorCapability(
         LivingDexOptionKind.MANAGE_STORAGE,

@@ -18,6 +18,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 from pokemon_red_completion.goal_manager_context_catalog import (
     open_goal_manager_context_capture,
 )
+from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
 from pokemon_red_completion.observation import (
     InputReadiness,
     ItemId,
@@ -33,6 +34,10 @@ from pokemon_red_completion.party import (
     PartyObservation,
 )
 from pokemon_red_completion.red_acquisition import RedAreaExecutionPolicy
+from pokemon_red_completion.red_collection import (
+    red_internal_species_id,
+    red_species_ref,
+)
 from pokemon_red_completion.red_goal_context import (
     _targeted_evolution_index,
     _wild_provider,
@@ -42,6 +47,7 @@ from pokemon_red_completion.red_goal_context import (
 from pokemon_red_completion.red_goal_context_profile import (
     RED_GOAL_CONTEXT_PROFILE_SCHEMA,
     RedGoalMechanic,
+    build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
@@ -114,6 +120,32 @@ class _ActionDelegate:
 
 def _canonical(value: object) -> bytes:
     return json.dumps(value, separators=(",", ":"), sort_keys=True).encode("ascii") + b"\n"
+
+
+_VERIFIED_TO_CINNABAR = (
+    "power_on",
+    "begin_adventure",
+    "choose_starter",
+    "receive_pokedex",
+    "reach_pewter",
+    "defeat_brock",
+    "reach_cerulean",
+    "help_bill",
+    "reach_vermilion",
+    "defeat_misty",
+    "obtain_cut",
+    "defeat_surge",
+    "reach_lavender",
+    "reach_celadon",
+    "clear_rocket_hideout",
+    "obtain_silph_scope",
+    "rescue_fuji",
+    "reach_fuchsia",
+    "obtain_surf",
+    "obtain_strength",
+    "defeat_koga",
+    "reach_cinnabar",
+)
 
 
 def _capture(
@@ -226,6 +258,34 @@ def _team_profile(profile_id: str):  # type: ignore[no-untyped-def]
                     },
                 ],
             }
+        )
+    )
+
+
+def _targeted_team_profile(profile_id: str):  # type: ignore[no-untyped-def]
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile_id,
+            providers=(
+                (GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY, {}),
+                (
+                    GoalKind.DEVELOP_TEAM,
+                    RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
+                    {
+                        "trainee_species_ref": red_species_ref(10),
+                        "level_increment": 1,
+                    },
+                ),
+                (
+                    GoalKind.EVOLVE_SPECIES,
+                    RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+                    {
+                        "source_species_ref": red_species_ref(11),
+                        "target_species_ref": red_species_ref(12),
+                        "evolution_level": 10,
+                    },
+                ),
+            ),
         )
     )
 
@@ -579,30 +639,7 @@ def test_targeted_evolution_verifies_living_transform_without_catalog_counter_ch
         profile=_team_profile("evolution-fixture"),
         capture=_capture(
             tmp_path,
-            verified_objective_ids=(
-                "power_on",
-                "begin_adventure",
-                "choose_starter",
-                "receive_pokedex",
-                "reach_pewter",
-                "defeat_brock",
-                "reach_cerulean",
-                "help_bill",
-                "reach_vermilion",
-                "defeat_misty",
-                "obtain_cut",
-                "defeat_surge",
-                "reach_lavender",
-                "reach_celadon",
-                "clear_rocket_hideout",
-                "obtain_silph_scope",
-                "rescue_fuji",
-                "reach_fuchsia",
-                "obtain_surf",
-                "obtain_strength",
-                "defeat_koga",
-                "reach_cinnabar",
-            ),
+            verified_objective_ids=_VERIFIED_TO_CINNABAR,
         ),
         emulator=emulator,
         reader=reader,  # type: ignore[arg-type]
@@ -634,4 +671,267 @@ def test_targeted_evolution_verifies_living_transform_without_catalog_counter_ch
     assert before.evidence.evolution == after.evidence.evolution
     assert after.party.species_ids() == (0x1C, DUGTRIO_SPECIES_ID)
     assert report.actions_executed == 1
+    assert verification.status.value == "succeeded"
+
+
+def test_targeted_team_profiles_offer_real_species_bound_actions_without_acting(
+    tmp_path: Path,
+) -> None:
+    caterpie = red_internal_species_id(10)
+    metapod = red_internal_species_id(11)
+    reader = _Reader()
+    species = (
+        BLASTOISE_SPECIES_ID,
+        caterpie,
+        red_internal_species_id(25),
+        red_internal_species_id(16),
+        red_internal_species_id(19),
+        red_internal_species_id(21),
+    )
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        party_species_ids=species,
+        party_levels=(60, 8, 9, 10, 10, 10),
+        party_hp=(150, 30, 35, 40, 40, 40),
+        party_max_hp=(150, 30, 35, 40, 40, 40),
+        party_status=(0, 0, 0, 0, 0, 0),
+        party_moves=((1, 0, 0, 0),) * 6,
+        party_pp=((10, 0, 0, 0),) * 6,
+    )
+    reader.boxes = RedBoxCollectionState(
+        (
+            RedCurrentBoxState(0, (metapod,), (9,)),
+            *(RedCurrentBoxState(index, (), ()) for index in range(1, 12)),
+        ),
+        0,
+        False,
+    )
+    emulator = _Emulator()
+    runtime = build_red_goal_context_runtime(
+        profile=_targeted_team_profile("targeted-team-fixture"),
+        capture=_capture(tmp_path, verified_objective_ids=_VERIFIED_TO_CINNABAR),
+        emulator=emulator,
+        reader=reader,  # type: ignore[arg-type]
+        boxed_level_evolution_executor=lambda _request, _actions: GoalExecutionReport(
+            0,
+            0,
+            {},
+        ),
+    )
+    actions = CountingExecutor(_ActionDelegate())
+
+    binding_set = runtime.enumerator(actions).enumerate(runtime.adapter.observe())
+    by_kind = {binding.kind: binding for binding in binding_set.bindings}
+
+    assert tuple(by_kind) == (
+        GoalKind.ADVANCE_STORY,
+        GoalKind.DEVELOP_TEAM,
+        GoalKind.EVOLVE_SPECIES,
+    )
+    assert "development:national-010:one-level-quantum" in by_kind[
+        GoalKind.DEVELOP_TEAM
+    ].binding_ref
+    assert "evolution:national-011-to-national-012" in by_kind[
+        GoalKind.EVOLVE_SPECIES
+    ].binding_ref
+    assert actions.actions_executed == 0
+    assert emulator.frame_count == 0
+
+
+def test_targeted_development_verifies_the_bound_species_level_quantum(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    caterpie = red_internal_species_id(10)
+    reader = _Reader()
+    species = (
+        BLASTOISE_SPECIES_ID,
+        caterpie,
+        red_internal_species_id(11),
+        red_internal_species_id(16),
+        red_internal_species_id(19),
+        red_internal_species_id(21),
+    )
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        party_species_ids=species,
+        party_levels=(60, 8, 9, 10, 10, 10),
+        party_hp=(150, 30, 35, 40, 40, 40),
+        party_max_hp=(150, 30, 35, 40, 40, 40),
+        party_status=(0, 0, 0, 0, 0, 0),
+        party_moves=((1, 0, 0, 0),) * 6,
+        party_pp=((10, 0, 0, 0),) * 6,
+    )
+    emulator = _Emulator()
+    runtime = build_red_goal_context_runtime(
+        profile=_targeted_team_profile("targeted-development-fixture"),
+        capture=_capture(tmp_path, verified_objective_ids=_VERIFIED_TO_CINNABAR),
+        emulator=emulator,
+        reader=reader,  # type: ignore[arg-type]
+    )
+    actions = CountingExecutor(_ActionDelegate())
+    received: dict[str, object] = {}
+
+    def develop(*_args: object, **kwargs: object) -> tuple[object, int, int]:
+        received.update(kwargs)
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        emulator.tick(1)
+        reader.raw = replace(
+            reader.raw,
+            party_levels=(60, 9, 9, 10, 10, 10),
+        )
+        return object(), 1, 0
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.run_red_team_balancing",
+        develop,
+    )
+    binding = next(
+        item
+        for item in runtime.enumerator(actions).enumerate(
+            runtime.adapter.observe()
+        ).bindings
+        if item.kind is GoalKind.DEVELOP_TEAM
+    )
+
+    report = binding.execute()
+    verification = binding.verify(report)
+
+    assert received["policy"].minimum_level == 9  # type: ignore[union-attr]
+    assert received["evolution_target"] is None
+    assert received["development_target_species_id"] == caterpie
+    assert reader.raw.party_levels[1] == 9
+    assert verification.status.value == "succeeded"
+
+
+def test_targeted_development_remains_bound_when_another_member_is_lower(
+    tmp_path: Path,
+) -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        party_species_ids=(
+            BLASTOISE_SPECIES_ID,
+            red_internal_species_id(10),
+            red_internal_species_id(11),
+            red_internal_species_id(16),
+            red_internal_species_id(19),
+            red_internal_species_id(21),
+        ),
+        party_levels=(60, 8, 8, 10, 10, 10),
+        party_hp=(150, 30, 35, 40, 40, 40),
+        party_max_hp=(150, 30, 35, 40, 40, 40),
+        party_status=(0, 0, 0, 0, 0, 0),
+        party_moves=((1, 0, 0, 0),) * 6,
+        party_pp=((10, 0, 0, 0),) * 6,
+    )
+    runtime = build_red_goal_context_runtime(
+        profile=_targeted_team_profile("targeted-development-blocked"),
+        capture=_capture(tmp_path, verified_objective_ids=_VERIFIED_TO_CINNABAR),
+        emulator=_Emulator(),
+        reader=reader,  # type: ignore[arg-type]
+    )
+
+    offers = runtime.enumerator(CountingExecutor(_ActionDelegate())).enumerate(
+        runtime.adapter.observe()
+    )
+
+    assert GoalKind.DEVELOP_TEAM in {item.kind for item in offers.bindings}
+
+
+def test_targeted_boxed_evolution_executes_the_state_derived_storage_binding(
+    tmp_path: Path,
+) -> None:
+    caterpie = red_internal_species_id(10)
+    metapod = red_internal_species_id(11)
+    butterfree = red_internal_species_id(12)
+    deposited = red_internal_species_id(21)
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        party_species_ids=(
+            BLASTOISE_SPECIES_ID,
+            caterpie,
+            red_internal_species_id(25),
+            red_internal_species_id(16),
+            red_internal_species_id(19),
+            deposited,
+        ),
+        party_levels=(60, 8, 9, 10, 10, 10),
+        party_hp=(150, 30, 35, 40, 40, 40),
+        party_max_hp=(150, 30, 35, 40, 40, 40),
+        party_status=(0, 0, 0, 0, 0, 0),
+        party_moves=((1, 0, 0, 0),) * 6,
+        party_pp=((10, 0, 0, 0),) * 6,
+    )
+    reader.boxes = RedBoxCollectionState(
+        (
+            RedCurrentBoxState(0, (metapod,), (9,)),
+            *(RedCurrentBoxState(index, (), ()) for index in range(1, 12)),
+        ),
+        0,
+        False,
+    )
+    emulator = _Emulator()
+    received: dict[str, object] = {}
+
+    def execute_boxed(request, actions):  # type: ignore[no-untyped-def]
+        received["request"] = request
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        emulator.tick(1)
+        reader.raw = replace(
+            reader.raw,
+            party_species_ids=(*reader.raw.party_species_ids[:-1], butterfree),
+            party_levels=(*reader.raw.party_levels[:-1], 10),
+        )
+        reader.boxes = RedBoxCollectionState(
+            (
+                RedCurrentBoxState(0, (deposited,), (10,)),
+                *(RedCurrentBoxState(index, (), ()) for index in range(1, 12)),
+            ),
+            0,
+            False,
+        )
+        return GoalExecutionReport(1, 1, {"boxed_level_evolution": True})
+
+    runtime = build_red_goal_context_runtime(
+        profile=_targeted_team_profile("targeted-boxed-evolution-fixture"),
+        capture=_capture(tmp_path, verified_objective_ids=_VERIFIED_TO_CINNABAR),
+        emulator=emulator,
+        reader=reader,  # type: ignore[arg-type]
+        boxed_level_evolution_executor=execute_boxed,
+    )
+    actions = CountingExecutor(_ActionDelegate())
+    binding = next(
+        item
+        for item in runtime.enumerator(actions).enumerate(runtime.adapter.observe()).bindings
+        if item.kind is GoalKind.EVOLVE_SPECIES
+    )
+
+    report = binding.execute()
+    verification = binding.verify(report)
+    request = received["request"]
+
+    assert request.precursor_internal_species_id == metapod  # type: ignore[union-attr]
+    assert request.evolved_internal_species_id == butterfree  # type: ignore[union-attr]
+    assert request.current_box_index == 0  # type: ignore[union-attr]
+    assert request.precursor_box_slot == 1  # type: ignore[union-attr]
+    assert request.deposit_party_slot == 6  # type: ignore[union-attr]
+    assert request.deposit_internal_species_id == deposited  # type: ignore[union-attr]
     assert verification.status.value == "succeeded"

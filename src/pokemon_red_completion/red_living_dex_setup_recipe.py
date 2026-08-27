@@ -134,6 +134,8 @@ _PROVIDER_TYPE_BY_MECHANIC = {
     RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT: (RedEncounterSourceDevelopmentGoalProvider),
     RedGoalMechanic.BALANCED_TEAM: RedProgressGoalProvider,
     RedGoalMechanic.DIGLETT_EVOLUTION: RedObservedGoalSkillProvider,
+    RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: RedObservedGoalSkillProvider,
+    RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: RedObservedGoalSkillProvider,
     RedGoalMechanic.MART_RESUPPLY: RedMartResupplyGoalProvider,
     RedGoalMechanic.BOX_SWITCH: RedBoxSwitchGoalProvider,
     RedGoalMechanic.WILD_CORRIDOR_DISCOVERY: (RedEncounterDiscoveryGoalProvider),
@@ -2526,14 +2528,16 @@ def _profile_terminal_matches(
         assert isinstance(map_id, int)
         assert isinstance(player_x, int)
         assert isinstance(player_y, int)
-        return actual == RedRoutedSemanticBoundary(
-            map_id,
-            (player_y, player_x),
-            None,
-        )
+        # Profiles bind the physical stance.  The authenticated route retains
+        # Red's explicit ``land`` mode, while historical synthetic fixtures
+        # used ``None``; movement mode is not part of any of these provider
+        # boundaries and must not make a real terminal impossible to encode.
+        return actual.map_id == map_id and actual.at == (player_y, player_x)
     if spec.mechanic in {
         RedGoalMechanic.BALANCED_TEAM,
         RedGoalMechanic.DIGLETT_EVOLUTION,
+        RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
     }:
         # The concrete profile runtime admits these mechanics only at the same
         # two tested Pokemon Center terminals.
