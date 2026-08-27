@@ -1,10 +1,48 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-26. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-27. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: Codex owns runtime-free bridge publication and rehearsal
+
+Two independent read-only audits returned **NO-GO** on the first green bridge. The candidate
+executed unbound helper scripts before source authentication, constructed emulator runtimes inside
+the active no-runtime gate, and passed a wrong reconstruction keyword that its mocked test could
+not detect. Codex accepted and repaired the findings. The revised bridge authenticates the tracked
+canonical freeze receipt and exact old code closure before loading support, verifies imports and
+every static join, and rejoins exact state/envelope bytes without restoring them. A
+standard-library-only bootstrap now authenticates the complete `src/` and script search roots
+before project import under
+isolated mode and a random, proved-absent bytecode-cache prefix; the shared
+claim check opens only an existing coordination marker read-only. That lease is injected into the
+exact authenticated old input helper, so neither the bridge nor its nested support can create
+metadata.
+
+The [local qualification](evidence/red-living-dex-setup-bridge-runtime-free-qualification-v1-2026-08-27.json)
+records 156 related and 5,288 full-suite tests. Successive audits found the top-level `src/` shadow,
+`site`/`.pth` startup, repository-controlled Git filesystem monitors and worktree redirection,
+ambient dynamic-loader configuration, replaceable GitHub CLI verification, unbounded metadata
+enumeration, and a mock-hidden canonical source-bundle newline mismatch. The repaired candidate
+requires pinned direct base CPython under `-I -S -B` with no extra flags, exact inert PyBoy
+metadata, direct Command Line Tools Git with worktree/common/index attributes, filters, lazy fetch,
+and submodule descent disabled, pinned two-fetch stdlib HTTPS with
+exact workflow bytes, and a real canonical-history equivalence probe. Its exact CPython executable
+is bound; the base-prefix stdlib/native-loader closure is an explicit host TCB. It is pending
+exact-commit re-audit. Codex must obtain both verdicts, publish the exact bridge, require a
+successful push CI run, perform one read-only path-free private rehearsal, and reorient. It must not
+claim a root, construct an emulator, execute setup, collect an outcome, or fit a model.
+
+Claude's role remains causal/statistical and trust-boundary audit. Its CLI is installed and logged
+in, but its earlier GO covered a superseded commit and missed the later startup boundary; request a
+new exact-commit verdict. Antigravity's role remains architecture, transfer, and mission-drift
+challenge; its `agy` CLI is installed and the repaired-commit review is pending. Codex remains the
+sole implementer, publisher, and adjudicator. The next engineering gate—not this bridge—must bind a durable outer
+execution identity, claim both logical and physical root identities, authenticate initial plus
+power-loss recovery, and deep-freeze or reauthenticate nested plan bytes before a claim-first
+runtime factory may exist.
 
 ## Current override: Codex owns the exact-plan setup bridge, not setup execution
 

@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-26. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-27. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,53 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: authentic provider curriculum qualifies; freeze the published plan
+## Current checkpoint: exact frozen plan exists; publish the runtime-free bridge
+
+The canonical Red curriculum already exists: 15 same-root recipes, 45 genuine offers, 33 semantic
+families, and 10 physical origins. The first bridge to that artifact passed tests but failed
+adversarial review. It loaded helper scripts before authentication, restored roots through hidden
+emulator construction despite a no-runtime gate, and used a wrong live reconstruction keyword that
+its mocked test did not exercise.
+
+The repaired bridge stays entirely on the pre-runtime side. A standard-library-only bootstrap
+proves every package byte before project import. The CLI requires the pinned direct base CPython
+under `-I -S -B` with an exact no-extra-flags profile;
+an absent random cache prefix plus exact whole-`src/` and script-tree inventories prevent startup
+hooks, `.pth` execution, module shadows, and preseeded bytecode. The main
+bridge then anchors the tracked canonical
+receipt, proves the original package and script closure, verifies import origins and static
+cartridge/execution identities, authenticates the immutable private record, and rejoins the exact
+state/envelope bytes for all fifteen roots without restoring them. Its claim-availability lease
+requires an existing coordination marker and opens it read-only; the same lease is injected into
+the authenticated old input helper, so no nested helper can create coordination metadata. The
+exact PyBoy metadata tree is authenticated without a global distribution scan or third-party
+runtime import. Hardened Git binds the direct Command Line Tools implementation and ignores
+repository hooks, filesystem monitors, redirects, content filters/attributes from worktree,
+common-dir, or staged index, lazy fetch, submodule descent, ambient configuration, dynamic-loader
+variables, and private-root repository traps. CI verification uses
+pinned delayed stdlib HTTPS rather than a replaceable CLI, binds the exact workflow path/bytes, and
+re-fetches the exact attempt at final integrity. A real canonical-history golden probe proves the
+hardened historical registry and source bundle equal the original results. The base-prefix
+stdlib/native-loader closure remains an explicit host TCB.
+[local qualification](evidence/red-living-dex-setup-bridge-runtime-free-qualification-v1-2026-08-27.json)
+records **156 related tests, 5,288 full-suite passes, and 285 typed source files** with no claim,
+gameplay, learner, or model effect.
+
+The shortest honest sequence is now:
+
+1. publish this exact bridge and require successful push CI;
+2. perform one read-only private rehearsal and publish only its path-free aggregate;
+3. reorient and define a durable outer execution identity for the controller-capable layer;
+4. repair the combined logical/physical account claim and authenticate both first-run and
+   power-loss recovery entrypoints;
+5. deep-freeze or canonical-byte-reauthenticate the nested plan at the consumer boundary; and
+6. qualify a claim-first runtime factory, then stop again before setup execution.
+
+Do not add more plan provenance or rerun the freezer. Do not construct an emulator in this gate.
+The first authentic causal train outcome is still the next measured product objective after setup
+captures; causal train remains **0/8**.
+
+## Previous checkpoint: authentic provider curriculum qualified; freeze the published plan
 
 Implementation checkpoint `6063cb41` closes the genuine-provider breadth blocker. The complete
 Generation I level-evolution graph now supplies target-validated evolution profiles; five real

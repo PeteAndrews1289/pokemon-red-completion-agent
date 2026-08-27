@@ -1,5 +1,53 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the green bridge was secretly entering the classroom
+
+The first bridge looked safe because its own file had no button presses. The audits followed the
+calls. At import time it executed two helper scripts before proving their identity; later it used
+those helpers to construct emulators and restore every candidate root. That contradicted the
+gate's central promise: authenticate the frozen classroom before any runtime exists. A second bug
+was more ordinary but just as decisive—the production reconstruction call used the wrong keyword,
+while the test replaced the real helper with a lambda that accepted anything.
+
+The repair changed the boundary rather than the wording. The bridge now proves the canonical
+public receipt, original package and script closure, import locations, immutable private record,
+static cartridge corridors, and execution identity. A second audit noticed that these proofs still
+began after importing project code, so the final version adds a standard-library-only bootstrap
+that verifies every package byte first. A third found that `python -I` still admitted startup code;
+the production entrypoint now requires the pinned direct base CPython under `-I -S -B`, rejects
+all extra semantic/debug/cache flags, proves no-site/no-bytecode-write state, and never places
+`site-packages` on the import path. An invocation-random cache prefix proved absent prevents script
+shadows and preseeded bytecode from bypassing that proof. It reads and hashes exact state/envelope bytes for the
+fifteen frozen roots, but never loads those bytes into an emulator. Its coordination lease opens
+only a pre-existing marker read-only. The final audit followed the old input helper and found its
+own create-capable lease, so the bridge now clones that exact authenticated helper with only the
+read lease injected; an absent marker fails closed at every layer instead of being created. It also
+rejects ignored project/dependency/metadata shadows across the complete `src/` search root and
+transitive script import tree.
+
+The attack then moved below Python imports. Repository-local filesystem monitors, worktree
+redirection, content filters, lazy object fetching, submodule descent, ambient loader variables,
+Apple’s Git selector shim, and a replaceable GitHub CLI all crossed the authentication boundary.
+The repaired version exact-binds the root-owned Command Line Tools Git implementation under an
+explicit worktree and minimal environment, rejects attributes from the worktree, linked common
+directory, and staged index, disables hooks, monitors, lazy fetch, and submodule descent, and
+verifies GitHub CI through delayed pinned stdlib
+HTTPS with proxies disabled, exact workflow bytes, and a second final fetch. It authenticates one
+exact PyBoy metadata tree without scanning arbitrary installed distributions or importing a
+runtime. A real canonical-history probe—not another mock—caught a missing newline in the hardened
+source-bundle hash and proved the corrected registry and bundle exactly equal their originals. The
+base-prefix stdlib and native loader are named honestly as host TCB. A full orchestration test
+requires every guard in order, the final evidence recheck is independently distinguishable, and
+the repository passed 5,288 tests across 285 typed source files.
+
+Nothing learned from this. Actions, frames, claims, providers, teachers, predictions, outcomes,
+and fits all remain zero; causal train remains 0/8. The gain is that the next controller-capable
+layer can no longer hide inside an authentication label. After publication and one read-only
+private rehearsal, it must receive its own durable outer identity, claim logical and physical root
+identities before runtime construction, support authenticated recovery after power loss, and
+deep-freeze or reauthenticate the nested plan at the consuming boundary. Only then may it create
+the same-root decision captures that unlock randomized outcomes and the first new train-only model.
+
 ## August 26: the authentic Red classroom is frozen—but the student has not entered it
 
 The production gate is complete. PR 80 published the provider-plan freezer and exact path-free
