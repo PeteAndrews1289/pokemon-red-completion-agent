@@ -1,6 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-27 active override — publish claim-first core, then build the one-slot wrapper:** The
+> **2026-08-27 active override — publish and rehearse one selected-slot preflight, then stop
+> infrastructure work:** The claim-first core and the thin current-source Red invocation wrapper
+> are locally qualified. The wrapper binds clean published source, exact successful push CI, the
+> sealed producer and private-plan joins, one selected root pair, and the sole production Red
+> resolver. Preflight cannot accept a ROM, claim, campaign, resolver, controller, or model
+> capability and reads no sibling root bytes. The
+> [qualification](docs/evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)
+> records **67 focused · 5,389 full-suite · 291 typed source files**. Claude and Antigravity
+> approve publication and one preflight with no P0/P1 finding, and
+> reject private setup at this checkpoint.
+>
+> Codex owns final qualification, publication, exact-head CI, exactly one action-free selected-root
+> preflight, a path-free structural receipt, and immediate reorientation. Claude remains the
+> causal/statistical challenger; Antigravity remains the architecture/transfer challenger. Neither
+> edits, publishes, opens private gameplay, or decides authority; Codex adjudicates. After the one
+> preflight, reject another infrastructure-only session. The next gate must be the shortest
+> setup-to-randomized-outcome sequence or this lane must stop. Counters stay **development 15 ·
+> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+>
+> **Previous 2026-08-27 override — publish claim-first core, then build the one-slot wrapper:** The
 > title-neutral atomic logical-plus-physical ledger, deep frozen-plan admission, one-slot Red
 > campaign, and production runtime are locally qualified. Pair/pair and legacy/pair subprocess
 > races, every crash/recovery class, uncertain post-rename durability, action/frame failures,

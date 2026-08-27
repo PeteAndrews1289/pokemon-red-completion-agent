@@ -8,37 +8,39 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: claim-first boundary qualified; publish, then bind one public slot
+## Current checkpoint: selected-slot wrapper qualified; publish, rehearse once, then open the lesson
 
-The outer safety core is locally complete without touching an authentic ROM or private capture.
-One title-neutral account transaction atomically consumes the logical catalog root and the exact
-physical state/envelope root; legacy and pair ledgers cross-honor both identities. The Red campaign
-writes the local private claim durably before runtime construction, reauthenticates the whole
-detached producer plan after claim, rebuilds only the selected recipe, never executes a provider,
-and makes every terminal non-retryable. Recovery never invokes the resolver. The production
-runtime closes every isolated no-save emulator on ordinary and base exceptions and causally meters
-attempted actions and actual frames, including field-move sub-actions.
+The claim-first core is now joined to a thin current-source Red invocation wrapper. Before project
+import it verifies clean published source, exact successful push CI, the expected workflow, and a
+sealed source bundle. It then authenticates the immutable producer and private-plan joins and opens
+only one explicitly selected state/envelope pair. Preflight cannot accept a ROM, claim registry,
+campaign, resolver, controller, learner, or model capability. Execute mode owns the production Red
+resolver rather than accepting an arbitrary factory, while the title-neutral atomic pair ledger
+remains reusable outside the Red adapter.
 
-The [local qualification](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
-records **60 focused tests, 5,347 repository tests, and 289 typed source files**. Real subprocess
-races cover pair/pair and legacy/pair competition; uncertain post-rename durability is covered end
-to end. Red-shaped and Crystal-shaped fixtures use the same core and the same physical state cannot
-be reclaimed under another title label. Claude and Antigravity returned GO with no P0/P1 blocker.
+The [local qualification](evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)
+records **67 focused tests, 5,389 repository tests, and 291 typed source files**. Claude and
+Antigravity approved publication and exactly one ROM-free preflight
+with no P0/P1 blocker and rejected private setup at this checkpoint. The receipt's zeroes are
+structural declarations—those effects are unreachable from the preflight interface—not empirical
+gameplay measurements. This milestone still creates no learner example.
 
 The shortest honest sequence is now:
 
-1. publish this exact core and require successful exact-main CI;
-2. reorient and build one thin current-source wrapper for one selected frozen slot;
-3. authenticate clean published source, exact CI, immutable producer plan, private-plan/manifest,
-   selected recipe and both root identities without preflighting unselected siblings;
-4. construct only the audited production resolver in execute mode, while default qualification is
-   preflight-only and effect-free;
-5. attack the wrapper ROM-free, publish it under exact green CI, perform one ROM-free rehearsal,
-   and reorient again; and
-6. only then define a separately bound private setup execution gate.
+1. rerun complete qualification and publish the exact wrapper plus regenerated source registries;
+2. require a successful push-CI attempt whose head is the exact published commit;
+3. invoke exactly one ROM-free preflight-only read of one never-claimed selected root and publish
+   only its path-free structural receipt;
+4. reorient immediately and permanently close wrapper-only infrastructure work; and
+5. either open one bounded claim-first setup followed by randomized selected-arm outcome
+   collection, or abort this curriculum lane if that direct sequence cannot be authorized safely.
 
-This milestone is infrastructure, not learning. Causal train remains **0/8**. Private Red setup,
-outcomes, fitting, sealed Red, Crystal, promotion and replay remain closed.
+The setup capture will not itself count as learning. A causal example exists only after one
+preregistered arm is selected and executed from that authenticated same root and its outcome is
+recorded. Causal train remains **0/8**. Private setup, outcomes, fitting, sealed Red, Crystal,
+promotion and replay remain closed until the post-rehearsal reorientation.
+
+## Previous checkpoint: claim-first boundary qualified; bind one public slot
 
 ## Previous checkpoint: pre-controller proof succeeded; build the claim-first outer boundary
 

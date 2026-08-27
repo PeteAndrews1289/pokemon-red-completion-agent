@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the wrapper can inspect one lesson without entering the game
+
+The crash-safe claim boundary still needed one public, reproducible way to reach exactly one frozen
+lesson. The new wrapper first proves its own clean published source and exact successful push CI,
+then rejoins the sealed producer and private records and reads only the selected state/envelope
+pair. Its preflight signature has nowhere to supply a ROM, registry, campaign, resolver,
+controller, learner, or model. Execute mode is separate and owns the audited production Red
+resolver so a caller cannot swap in a weaker runtime.
+
+The [local qualification](evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)
+records **67 focused, 5,389 repository, and 291 typed-source checks**. Claude and Antigravity found
+no blocking issue and approved publication plus one ROM-free
+preflight, while keeping setup closed. Their useful challenge added mutations for every material
+CI field and sharpened the receipt language: its zeroes are structural declarations, not measured
+gameplay effects. Codex retained source/CI checks on both sides of the private read to close a
+mutation window and rejected an injectable resolver that would weaken the runtime boundary.
+
+This is the last infrastructure-only gate for this lane. After exact-head CI and one path-free
+preflight receipt, the project must reorient directly to one claim-first setup and randomized
+selected-arm outcome, or abandon the lane. The honest board still reads **causal train 0/8 ·
+authority 0 · transfer 0**.
+
 ## August 27: the lesson claim became atomic and crash-safe
 
 The next failure mode lived between storage and gameplay. A curriculum slot had both a logical

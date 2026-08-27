@@ -1,0 +1,105 @@
+{
+  "artifacts": {
+    "claim_first_admission_sha256": "371aedcf469c37ca6b8224d05cb69d0d3b722e835a92f925f8f28510dd6700f1",
+    "invocation_preflight_script_sha256": "8369007ff9688ffcec005dc0229eb29400bdd98ff55e42aa249af140b6598f41",
+    "invocation_wrapper_sha256": "00cdfb1a5befd8b8fabb5b7f142f3de71742ab12876c54e4e39dfff8c536dac1",
+    "production_runtime_sha256": "05537c6435269fde7aad7dcd17d50061351b227b97bd43ecf85be8c337e5925c",
+    "runtime_contract_sha256": "a392ecb5d7d1fa0691bdad958b6dce46904910ca8da88914c968abb5508c2787"
+  },
+  "audited_source_commit": "7d4f93fc14ca6e49622aadb2562463cebd87eefe",
+  "base_source_commit": "ec145924cbf5bcdbd27746b4ceb19194dfeb14f8",
+  "codex_adjudication": {
+    "accepted": [
+      "add_missing_status_name_html_url_and_repository_ci_mutation_cases",
+      "describe_preflight_zeroes_as_structural_declarations_not_measured_effects",
+      "treat_literal_record_object_identity_as_supplementary_to_content_reauthentication",
+      "after_one_real_preflight_forbid_another_infrastructure_only_session"
+    ],
+    "deferred": [
+      "generalize_machine_pinned_bootstrap_paths_before_the_local_rehearsal",
+      "factor_a_second_title_adapter_before_any_authentic_red_outcome_exists"
+    ],
+    "rejected": [
+      "collapse_the_before_and_after_current_source_checks_as_redundant",
+      "inject_an_arbitrary_title_resolver_factory_into_the_public_execution_entrypoint",
+      "treat_private_setup_capture_as_a_causal_train_example",
+      "skip_the_required_reorientation_and_execute_setup_immediately_after_preflight"
+    ],
+    "reason": "The two source checks bracket private input loading and close a source-mutation window. The shared claim ledger is title-neutral; the one Red adapter is intentionally title-specific and owns resolver selection so callers cannot substitute a runtime. Crystal will need a thin cartridge adapter, not a duplicate claim system or a separate hand-scripted teacher. A setup capture is an input to a later randomized selected-arm outcome, not itself a learner example."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": "approve_publication;_approve_one_preflight_with_conditions;_reject_private_setup;_one_slot_isolation_accepted;_premature_generic_factory_and_immediate_execution_recommendations_rejected_by_codex",
+    "claude": "approve_publication_no_p0_or_p1;_approve_one_preflight_with_conditions;_reject_private_setup;_missing_ci_mutation_cases_added",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_check": {
+    "capability": "Authenticate one selected repeatable Red living-Pokedex setup lesson under the current clean published consumer without reading sibling root bytes, claiming either root identity, or constructing a runtime during preflight.",
+    "cheapest_falsifier": "A ROM-free selected-slot rehearsal must bind current source and exact push CI, reopen the exact sealed producer record, join one state and envelope to the selected recipe, observe both claim identities available, publish no identity or path, and leave claim, runtime, controller, learner, and model effects structurally unreachable.",
+    "learned_authority": "none_infrastructure_only",
+    "stop_condition": "Stop on source or CI drift, immutable producer cross-join, sibling root access, cached or changed postclaim producer input, claimed selected bytes, resolver substitution, identity disclosure, or any preflight claim/runtime/controller effect. After one successful real preflight, do not open another infrastructure-only session.",
+    "transfer_test": "The account claim primitive remains title-neutral and already accepts Red-shaped and Crystal-shaped synthetic fixtures. This Red invocation adapter deliberately proves no Crystal model transfer; a Crystal cartridge adapter remains later work after authentic Red outcomes justify the shared seam."
+  },
+  "next_gate": {
+    "private_setup_execution_allowed": false,
+    "target": "Publish the exact wrapper under successful push CI, perform exactly one ROM-free preflight-only rehearsal of one never-claimed selected root, publish only its path-free structural receipt, and reorient immediately. The following decision must open the shortest setup-to-randomized-outcome sequence or abort this lane; it may not create another wrapper gate."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "48e60db03185eeb29428286efd673b3fbba03b00e9f500173f6dd6409ff1e1c3",
+    "goal_manager_registry_sha256": "3f0c6553aeb88c66dce489b53399811f5f8b5af183eb576bcdf8c77e6040bb1e",
+    "source_bundle_sha256": "16214d6e09916ef4bf35242eaddba111d3c043a06391eb10c8ca5ddcf60e24c5",
+    "strategic_navigation_registry_sha256": "24e57e76f2cbcf866cc3cb84ccff0f9ad3935da1aa129907028c4007b57ad7bb"
+  },
+  "schema": "pokemon.red.living-dex-claim-first-one-slot-invocation-local-qualification.v1",
+  "status": "locally_qualified_external_review_go_publication_and_one_preflight_pending",
+  "supported_claim": "One selected producer record and root pair can be authenticated under a current clean published source and exact successful push CI without a ROM, sibling root read, claim, campaign call, resolver construction, controller effect, learner effect, or public private identity.",
+  "unsupported_claims": [
+    "authentic_private_red_setup_execution",
+    "authentic_red_outcome_collection",
+    "causal_red_training_example",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result"
+  ],
+  "verification": {
+    "focused_tests_passed": 67,
+    "full_suite_passed": 5389,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 291,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "ruff_status": "passed"
+  }
+}

@@ -73,9 +73,13 @@ def test_parser_is_preflight_only_and_has_no_runtime_capability() -> None:
         ("head_sha", "e" * 40),
         ("id", 124),
         ("run_attempt", 2),
+        ("status", "queued"),
         ("conclusion", "failure"),
         ("event", "pull_request"),
+        ("name", "Other"),
         ("path", ".github/workflows/other.yml"),
+        ("html_url", "https://example.invalid/run"),
+        ("repository", {"full_name": "other/repository"}),
     ),
 )
 def test_bootstrap_rejects_wrong_ci_before_project_import(

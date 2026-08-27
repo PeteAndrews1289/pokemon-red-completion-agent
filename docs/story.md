@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the lock now survives two owners and a power cut
+## Current checkpoint: one sealed lesson can be inspected without touching the controller
+
+The two-key lock was safe, but there was still no narrow public doorway from the frozen curriculum
+to one specific lesson. The new wrapper proves the exact published code and its successful CI,
+reopens the sealed classroom plan, and inspects only the chosen state/envelope pair. The preflight
+door has no socket for a ROM, claim, runtime, button, learner, or model. A separate execution door
+owns the production Red adapter instead of letting a caller bring an arbitrary one.
+
+It passed **67 focused and 5,389 repository tests**. Claude and Antigravity approved publication
+and one action-free preflight and rejected private setup. The
+zero counter strip is a property of the interface, not a claim that gameplay was measured. After
+exact-head CI, the wrapper gets one real selected-root inspection and emits only a path-free
+receipt. Then the scaffolding ends: the next session must create a setup and randomized outcome or
+drop this lane. **Causal train remains 0/8; authority and transfer remain zero.**
+
+## Previous checkpoint: the lock now survives two owners and a power cut
 
 The doorway had been authenticated, but the dangerous question remained: what happens when two
 workers reach for the same saved game, or the machine loses power between “claimed” and “started”?

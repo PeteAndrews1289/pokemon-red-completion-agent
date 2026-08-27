@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: inspect one lesson, touch nothing
+
+Open on the frozen **15-LESSON CLASSROOM** and spotlight one sealed drawer. Run a visible rail:
+**CLEAN PUBLISHED SOURCE → EXACT PUSH CI → SEALED PRODUCER → ONE SELECTED STATE + ENVELOPE → BOTH
+ROOTS AVAILABLE**. Black out every neighboring drawer. Show the preflight panel with no ports for
+**ROM · CLAIM · RUNTIME · CONTROLLER · LEARNER · MODEL**. The output is a path-free card whose
+zeroes are labelled **STRUCTURALLY UNREACHABLE**, not “measured in gameplay.”
+
+Reveal **67 FOCUSED · 5,389 FULL-SUITE · 291 TYPED · CLAUDE GO · ANTIGRAVITY GO**, then keep
+**CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0** on screen. End with a hard sign:
+**PUBLISH → EXACT-HEAD CI → ONE REAL PREFLIGHT → REORIENT → SETUP + RANDOMIZED OUTCOME OR ABORT**.
+Cross out **ANOTHER INFRASTRUCTURE SESSION**.
+
 ## August 27 scene: two keys turn once, even when the power dies
 
 Show two labels on one saved game: **LOGICAL LESSON ROOT** and **PHYSICAL STATE + ENVELOPE**. Let an
