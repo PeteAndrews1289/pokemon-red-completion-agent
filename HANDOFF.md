@@ -12,7 +12,35 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-26: authentic provider curriculum qualified; freeze the published plan next
+## 2026-08-26: canonical provider plan frozen; qualify the setup bridge next
+
+PR 80 published the production provider-plan freezer and exact path-free execution identity. Its
+feature head passed CI `33030916595/1`; the repository's rebase merge produced main
+`69a0c707006c78ae8473544f40e2bdd0a0b23f91`, which passed exact-main CI `33031356455/1`. From
+that clean head, the unmodified freezer ran exactly once and persisted canonical private plan
+`b555dfb6…a2bcc` under manifest `3bb93056…b4816`.
+
+The [path-free result](docs/evidence/red-living-dex-provider-plan-freeze-result-v1-2026-08-26.json)
+records **15 same-root recipes · 10 train + 5 development · 45 genuine offers · 33
+mechanics-derived families · 10 physical origins · 7 cartridge-derived corridors · 37 routed
+offers**. The old catalog's 44 train and 24 validation roots remain provenance, not prospective
+labels. Private state paths and identities are absent from tracked output.
+
+Do not count this as training. Controller actions, emulator frames, provider executions, root
+claims, teacher queries, predictions, outcomes, learner effects and model fits were all zero. The
+active session is now an engineering-only production bridge from the exact frozen plan into the
+already qualified durable same-root setup campaign. Authenticate the complete plan/execution
+identity, immutable record, 15/45/33/10 joins and account-wide root availability; add a
+publication-disabled pre-controller rehearsal; attack replacement, cross-join, consumption,
+recovery and hidden-effect failures; publish; require exact-head green CI; then reorient.
+
+Stop before a root claim, runtime construction, controller input or setup capture. Setup execution,
+outcomes, fitting, powered/sealed Red, Crystal, promotion and replay remain closed. Trade, versions,
+events, cross-save retention and living-storage consolidation remain later mission requirements.
+Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 ·
+authority 0 · transfer 0**.
+
+## Previous 2026-08-26: authentic provider curriculum qualified; freeze the published plan next
 
 Implementation checkpoint `6063cb416e7a1323363fc02072785c98135755b3` closes the genuine-family
 blocker. It adds the complete 52-row Generation I level-evolution graph, five target-specific boxed

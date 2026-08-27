@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the classroom plan freezes once
+
+Open on **PR 80 → MAIN 69A0C707 → CI 33031356455/1 GREEN**. Put the exact published source,
+authenticated Red inventory, and hash-bound supplemental checkpoint into a freezer whose controller
+port is physically disconnected. Let it run once. Close the door on one envelope labelled
+**PRIVATE PLAN B555DFB6…A2BCC · MANIFEST 3BB93056…B4816 · IMMUTABLE**.
+
+Reveal **15 SAME-ROOT ROOMS · 10 TRAIN + 5 DEVELOPMENT · 45 REAL OFFERS · 33 MECHANICS-DERIVED
+FAMILIES · 10 PHYSICAL ORIGINS · 7 CARTRIDGE CORRIDORS · 37 ROUTED OFFERS**. Keep the counter
+strip at **ACTIONS 0 · FRAMES 0 · CLAIMS 0 · PROVIDERS 0 · TEACHERS 0 · PREDICTIONS 0 · OUTCOMES
+0 · FITS 0**. Stamp **CAUSAL TRAIN 0/8** across the student desk.
+
+The spoken line is: **“We finally froze a real curriculum, not a walkthrough. It tells us which
+honest choices to compare from the same starting states. It has not taught the model anything
+yet.”** End on **AUTHENTICATE EXACT PLAN → ACTION-FREE SETUP-BRIDGE REHEARSAL → PUBLISH + GREEN
+CI → REORIENT → CREATE SAME-ROOT CAPTURES → RANDOMIZE ONE ARM → OBSERVE OUTCOMES → TRAIN-ONLY
+FIT → POWERED RED → FROZEN-WEIGHT CRYSTAL**, with **TRADE · VERSION EXCLUSIVES · EVENTS ·
+CROSS-SAVE LIVING STORAGE** still visible beyond the frame.
+
 ## August 26 scene: the wrong split made one real lesson disappear
 
 Open on **81 AUTHENTICATED STATES** flowing into two old bins: **TRAIN** and **VALIDATION**. Overlay
