@@ -6,22 +6,31 @@ Status: active operating assignment as of 2026-08-26. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and the exact authentic plan freeze
+## Current override: Codex owns publication and the one action-free provider-plan freeze
 
-Implementation checkpoint `6063cb41` and its
-[local qualification](evidence/red-living-dex-authentic-provider-curriculum-local-qualification-2026-08-26.json)
-close the provider-family inventory. Fifteen unconsumed authentic roots passed coherent
-party/collection/story/resource checks, seven wild corridors derived from cartridge terrain, and
-the action-free planner produced **15 recipes, 45 genuine offers, 33 mechanics-derived families,
-10 physical origins, 11 construction routes, and 37 provider routes**. Controller actions, frames,
-provider executions, root claims, teacher queries, learner effects, outcomes, and fits were all
-zero. No private path or identity is published.
+The production freezer and path-free execution-identity composer now pass a complete
+[publication-disabled authentic rehearsal](evidence/red-living-dex-provider-plan-publication-disabled-rehearsal-2026-08-26.json).
+The authenticated catalog contained 81 contexts: four were already consumed, nine were legitimate
+battle/recovery captures rather than ready overworld roots, and 68 were eligible. One explicitly
+hash-bound, still-unclaimed open post-Giovanni checkpoint supplied the otherwise absent
+`cross_victory_road` story prerequisite. The pooled selector correctly treats the old catalog's
+train/validation assignment as provenance—not as the new prospective 10+5 split—and lazily derives
+the unique route-compatible assignment.
 
-Codex now owns one narrow sequence: publish the exact implementation and registries, bind a clean
-Red execution identity, freeze the same complete action-free private plan, publish its path-free
-aggregate, and reorient. Reject another cartridge, dirty source, a consumed/cross-joined root,
-incoherent root facts, an unavailable provider, any protected effect, or incomplete capacity. Do
-not execute construction, a candidate route, or a provider during this freeze.
+The rehearsal produced **15 recipes, 45 genuine offers, 33 mechanics-derived families, 10 physical
+origins, seven cartridge-derived corridors, and 37 provider routes**. It recorded zero controller
+actions, frames, provider executions, root claims, teacher queries, predictions, outcomes, or fits,
+and publication was replaced with an in-memory receipt. The supplemental state path and physical
+identity remain private; the source accepts them only as an exact path/hash pair and binds selected
+bytes into the private recipe plan. Both catalog and byte-derived claim identities must remain
+unused.
+
+Codex now owns one narrow sequence: publish this exact source, generated registries, tests,
+evidence, and narrative; require green CI on the exact published head; invoke the unmodified
+freezer once; publish only its path-free aggregate; and reorient. Reject dirty or unpublished
+source, another cartridge, a supplemental hash mismatch, a consumed/cross-joined root, inherited
+source partitions, incoherent facts, unavailable providers, any protected effect, or incomplete
+15/45/33/10 capacity.
 
 Claude remains the optional read-only causal/statistical auditor and Antigravity the optional
 read-only architecture/transfer challenger after the immutable freeze milestone; neither should

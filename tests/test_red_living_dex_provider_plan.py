@@ -41,6 +41,7 @@ from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexProviderRootFacts,
     freeze_red_living_dex_provider_plan,
     red_living_dex_route_terminal_snapshot,
+    select_red_living_dex_provider_roots,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
@@ -348,6 +349,118 @@ def test_freezes_complete_authentic_provider_capacity_without_effects() -> None:
         == 33
     )
     assert frozen.effects_before == frozen.effects_after
+
+
+def test_selector_builds_one_prospectively_partitioned_unique_root_assignment() -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+    roots = _roots()
+
+    selected = select_red_living_dex_provider_roots(
+        roots,
+        world=_RouteWorld(),
+        corridors=_corridors(),
+        effects_before=checkpoint,
+        effects_after=checkpoint,
+    )
+
+    assert len(selected) == 15
+    assert len({item.root.physical_root_sha256 for item in selected}) == 15
+    assert set(selected) == set(roots)
+
+
+def test_selector_routes_only_candidates_needed_for_the_matching(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+    roots = _roots()
+    calls = 0
+    original = provider_plan._build_slot_recipe
+
+    def build(*args, **kwargs):  # type: ignore[no-untyped-def]
+        nonlocal calls
+        calls += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(provider_plan, "_build_slot_recipe", build)
+
+    selected = select_red_living_dex_provider_roots(
+        roots,
+        world=_RouteWorld(),
+        corridors=_corridors(),
+        effects_before=checkpoint,
+        effects_after=checkpoint,
+    )
+
+    assert len(selected) == 15
+    assert calls < len(roots) * len(roots)
+
+
+def test_selector_rejects_inventory_shortfall_and_uncovered_slot() -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+    roots = _roots()
+    with pytest.raises(RedLivingDexProviderPlanError, match="every prospective slot"):
+        select_red_living_dex_provider_roots(
+            roots[:14],
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            effects_before=checkpoint,
+            effects_after=checkpoint,
+        )
+
+    candidates = list(roots)
+    for index, root in enumerate(candidates):
+        candidates[index] = replace(
+            root,
+            facts=replace(
+                root.facts,
+                available_story_objective_ids=frozenset(
+                    root.facts.available_story_objective_ids.difference(
+                        {"cross_victory_road"}
+                    )
+                ),
+            ),
+        )
+    with pytest.raises(RedLivingDexProviderPlanError, match="uncovered slot"):
+        select_red_living_dex_provider_roots(
+            tuple(candidates),
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            effects_before=checkpoint,
+            effects_after=checkpoint,
+        )
+
+
+def test_selector_backtracks_when_the_first_complete_join_is_invalid(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+    roots = _roots()
+    candidates = (roots[1], roots[0], *roots[2:])
+    first_complete_last = sorted(
+        item.root.physical_root_sha256 for item in candidates
+    )[9]
+    complete_joins = 0
+    original = provider_plan.build_red_living_dex_provider_recipes
+
+    def join(selected, **kwargs):  # type: ignore[no-untyped-def]
+        nonlocal complete_joins
+        complete_joins += 1
+        if selected[9].root.physical_root_sha256 == first_complete_last:
+            raise RedLivingDexProviderPlanError("synthetic cross-slot collision")
+        return original(selected, **kwargs)
+
+    monkeypatch.setattr(provider_plan, "build_red_living_dex_provider_recipes", join)
+
+    selected = select_red_living_dex_provider_roots(
+        candidates,
+        world=_RouteWorld(),
+        corridors=_corridors(),
+        effects_before=checkpoint,
+        effects_after=checkpoint,
+    )
+
+    assert selected[9].root.physical_root_sha256 != first_complete_last
+    assert complete_joins >= 2
 
 
 def test_rejects_cross_joined_consumed_or_repeated_roots_before_planning() -> None:

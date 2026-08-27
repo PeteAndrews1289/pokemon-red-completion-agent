@@ -107,8 +107,11 @@ class RedLivingDexProviderPlanError(RuntimeError):
 class RedLivingDexProviderRouteWorld(Protocol):
     """Small read-only router surface used by the prospective freezer."""
 
-    macro_graph: MacroGraph
-    rom: bytes
+    @property
+    def macro_graph(self) -> MacroGraph: ...
+
+    @property
+    def rom(self) -> bytes: ...
 
     def plan_feasible_to_map(
         self,
@@ -448,6 +451,158 @@ def freeze_red_living_dex_provider_plan(
     )
 
 
+def select_red_living_dex_provider_roots(
+    candidates: tuple[RedLivingDexActionFreeRootObservation, ...],
+    *,
+    world: RedLivingDexProviderRouteWorld,
+    corridors: tuple[RedLivingDexWildCorridor, ...],
+    effects_before: RedLivingDexSetupProtectedEffectCheckpoint,
+    effects_after: RedLivingDexSetupProtectedEffectCheckpoint,
+) -> tuple[RedLivingDexActionFreeRootObservation, ...]:
+    """Choose one unique authentic root per frozen slot without gameplay.
+
+    A source catalog's historical partition is provenance, not a label for
+    this new prospective curriculum.  The selector therefore accepts one
+    pooled inventory, sorts only opaque physical-root digests, and assigns the
+    frozen 10+5 partition from slot order.  Expensive route compatibility is
+    evaluated lazily while solving the complete bipartite assignment.  This
+    avoids both a greedy early choice consuming the only root that can satisfy
+    a later slot and an exhaustive route scan across roots that are never used.
+    """
+
+    if not isinstance(candidates, tuple) or any(
+        not isinstance(item, RedLivingDexActionFreeRootObservation)
+        for item in candidates
+    ):
+        raise TypeError("provider-plan candidates must be a tuple")
+    for item in candidates:
+        item.__post_init__()
+    for value in (effects_before, effects_after):
+        if not isinstance(value, RedLivingDexSetupProtectedEffectCheckpoint):
+            raise TypeError("provider-plan selector needs protected-effect checkpoints")
+        value.__post_init__()
+    if effects_before != effects_after:
+        raise RedLivingDexProviderPlanError("provider-plan inventory crossed a protected effect")
+    _require_route_world(world)
+    corridor_by_source = _validate_corridors(corridors)
+    _require_unique_roots(candidates)
+
+    prospective = build_red_living_dex_prospective_capture_plan()
+    if len(candidates) < len(prospective.slots):
+        raise RedLivingDexProviderPlanError(
+            "provider-plan candidate inventory cannot cover every prospective slot"
+        )
+
+    ordered_candidates = tuple(
+        sorted(candidates, key=lambda item: item.root.physical_root_sha256)
+    )
+    compatible: dict[int, tuple[RedLivingDexActionFreeRootObservation, ...]] = {}
+    for slot_index, slot in enumerate(prospective.slots):
+        options: list[RedLivingDexActionFreeRootObservation] = []
+        for candidate in ordered_candidates:
+            try:
+                _require_slot_root_preconditions(slot, candidate.facts)
+            except RedLivingDexProviderPlanError:
+                continue
+            options.append(candidate)
+        if not options:
+            raise RedLivingDexProviderPlanError(
+                "provider-plan candidate inventory leaves an uncovered slot"
+            )
+        compatible[slot_index] = tuple(options)
+
+    assignments: dict[int, RedLivingDexActionFreeRootObservation] = {}
+    used: set[str] = set()
+    route_compatible: dict[tuple[int, str], bool] = {}
+
+    def can_route(
+        slot_index: int,
+        candidate: RedLivingDexActionFreeRootObservation,
+    ) -> bool:
+        root_sha256 = candidate.root.physical_root_sha256
+        key = (slot_index, root_sha256)
+        cached = route_compatible.get(key)
+        if cached is not None:
+            return cached
+        try:
+            _build_slot_recipe(
+                prospective.slots[slot_index],
+                candidate,
+                world=world,
+                corridor_by_source=corridor_by_source,
+            )
+        except RedLivingDexProviderPlanError:
+            route_compatible[key] = False
+            return False
+        route_compatible[key] = True
+        return True
+
+    def assign() -> bool:
+        if len(assignments) == len(prospective.slots):
+            selected = tuple(
+                assignments[index] for index in range(len(prospective.slots))
+            )
+            try:
+                # Pairwise compatibility is necessary, while the complete join
+                # also enforces cross-slot family/location capacity.  A failed
+                # complete join must backtrack instead of rejecting an
+                # inventory that has another valid matching.
+                build_red_living_dex_provider_recipes(
+                    selected,
+                    world=world,
+                    corridors=corridors,
+                    effects_before=effects_before,
+                    effects_after=effects_after,
+                )
+            except RedLivingDexProviderPlanError:
+                return False
+            return True
+        remaining = tuple(
+            index for index in range(len(prospective.slots)) if index not in assignments
+        )
+        slot_index = min(
+            remaining,
+            key=lambda index: (
+                sum(
+                    item.root.physical_root_sha256 not in used
+                    for item in compatible[index]
+                ),
+                index,
+            ),
+        )
+        for candidate in compatible[slot_index]:
+            root_sha256 = candidate.root.physical_root_sha256
+            if root_sha256 in used or not can_route(slot_index, candidate):
+                continue
+            assignments[slot_index] = candidate
+            used.add(root_sha256)
+            if assign():
+                return True
+            used.remove(root_sha256)
+            del assignments[slot_index]
+        return False
+
+    if not assign():
+        raise RedLivingDexProviderPlanError(
+            "provider-plan candidate inventory has no unique complete assignment"
+        )
+    return tuple(assignments[index] for index in range(len(prospective.slots)))
+
+
+def _require_slot_root_preconditions(
+    slot: LivingDexProspectiveCaptureSlot,
+    facts: RedLivingDexProviderRootFacts,
+) -> None:
+    """Reject an impossible root before invoking the expensive router."""
+
+    for option_kind in slot.available_option_kinds:
+        _require_root_preconditions(
+            red_living_dex_provider_family_target(slot, option_kind),
+            option_kind,
+            facts,
+        )
+
+
 def build_red_living_dex_provider_recipes(
     roots_by_slot: tuple[RedLivingDexActionFreeRootObservation, ...],
     *,
@@ -542,6 +697,7 @@ def _build_slot_recipe(
     world: RedLivingDexProviderRouteWorld,
     corridor_by_source: Mapping[str, RedLivingDexWildCorridor],
 ) -> RedLivingDexSetupSlotRecipe:
+    _require_slot_root_preconditions(slot, root_observation.facts)
     origin_target = _origin_target(slot, corridor_by_source)
     origin, construction_route, origin_snapshot = _route_to_target(
         world,
@@ -934,4 +1090,5 @@ __all__ = [
     "freeze_red_living_dex_provider_plan",
     "observe_red_living_dex_provider_root_facts",
     "red_living_dex_route_terminal_snapshot",
+    "select_red_living_dex_provider_roots",
 ]

@@ -8,10 +8,13 @@
 > trust boundary is repaired at source `539454f3` through PR 78 and CI `33009960617/1`: exact
 > restore readback, authenticated route execution, registry-built offers, comprehensive effect
 > metering, typed families, complete proof joins, account-wide physical-root no-retry, and restart
-> recovery are qualified. No authentic plan exists and causal train remains zero. Next inventory
-> genuine providers action-free, add only reusable target-specific evolution/development seams,
-> and freeze one complete **15-recipe / 45-offer / ≥33-family / 10-origin** plan; publish aggregate
-> evidence and reorient before setup execution. After complete captures exist, collect at least 8
+> recovery are qualified. The authentic provider inventory, production freezer and exact identity
+> composer now pass one publication-disabled **15-recipe / 45-offer / 33-family / 10-origin**
+> rehearsal from 68 eligible catalog roots plus one explicitly hash-bound open checkpoint, with
+> every protected effect and publication counter zero. Historical catalog partitions are provenance,
+> not the new prospective 10+5 labels. Next publish this exact source and generated registries,
+> require green exact-head CI, freeze one immutable action-free plan, publish aggregate evidence,
+> and reorient before setup execution. After complete captures exist, collect at least 8
 > train + 4 disjoint development selected-arm outcomes, fit once on train, and report descriptive
 > calibration/variance. Stop before a powered benchmark, sealed Red, Crystal, promotion, or replay.
 > See [red-living-dex-same-root-setup-recipe-v1.md](red-living-dex-same-root-setup-recipe-v1.md).

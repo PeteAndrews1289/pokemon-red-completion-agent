@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 26 scene: the wrong split made one real lesson disappear
+
+Open on **81 AUTHENTICATED STATES** flowing into two old bins: **TRAIN** and **VALIDATION**. Overlay
+a new 10+5 curriculum and watch one card—**CROSS VICTORY ROAD**—drop to **0 CANDIDATES**. Freeze
+the frame. The spoken line is: **“These labels described an older dataset. We accidentally made
+them decide a new experiment.”**
+
+Erase the wall between the bins. Keep their counts as provenance, then pool **68 READY +
+UNCONSUMED** roots. Bring in one private open post-Giovanni checkpoint through a lock labelled
+**EXPLICIT PATH + EXACT PHYSICAL HASH · PUBLIC PATH/IDENTITY 0**. Show both claim identities green
+and unused. Animate the matcher checking rare prerequisites first and planning routes only for
+candidates it actually needs.
+
+Reveal **15 ROOMS · 10 TRAIN + 5 DEVELOPMENT · 45 REAL OFFERS · 33 SEMANTIC FAMILIES · 10
+ORIGINS · 7 CARTRIDGE CORRIDORS · 37 ROUTED OFFERS**. Keep the lower counter strip at **ACTIONS 0 ·
+FRAMES 0 · CLAIMS 0 · PROVIDERS 0 · TEACHERS 0 · PREDICTIONS 0 · OUTCOMES 0 · FITS 0 ·
+PUBLICATIONS 0**. The spoken line is: **“The production freezer can now find the real classroom,
+but this rehearsal still did not teach the student.”** End on **PUBLISH EXACT SOURCE → GREEN
+EXACT-HEAD CI → ONE ACTION-FREE IMMUTABLE FREEZE → REORIENT → SAME-ROOT SETUP CAPTURES →
+RANDOMIZED OUTCOMES → TRAIN-ONLY FIT → RED BENCHMARK → FROZEN-WEIGHT CRYSTAL**, with **TRADE,
+VERSIONS, EVENTS, AND CROSS-SAVE LIVING-DEX COMPLETION STILL AHEAD**.
+
 ## August 26 scene: eight seals replace one self-signed witness
 
 Reopen the **ONE OPAQUE RUNTIME** shot, then split it into eight locked stations: **RED EXECUTION
