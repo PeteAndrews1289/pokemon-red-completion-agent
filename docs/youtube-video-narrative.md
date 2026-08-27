@@ -1,5 +1,34 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: the bridge crossed the line while the dashboard stayed at zero
+
+Show a green bridge labelled **PRE-RUNTIME**, then follow two hidden wires into
+**RUNPY HELPER → PYBOY → LOAD STATE**. Put the dashboard beside it at **RUNTIME FACTORY 0** and
+freeze the shot. Add a second card: **MOCK ACCEPTS ANY KEYWORD → REAL HELPER REJECTS IT**. Stamp
+the first candidate **NO-GO DESPITE 5,244+ GREEN TESTS**.
+
+Rebuild the bridge as a glass inspection table: **PINNED BASE `PYTHON -I -S -B` + EXACT FLAGS + RANDOM EMPTY CACHE → STDLIB-ONLY
+PRE-IMPORT SOURCE AUTH → DIRECT CLT GIT WITHOUT ATTRIBUTES/FILTERS/LAZY FETCH/SUBMODULE DESCENT → EXACT PYBOY METADATA WITHOUT IMPORT → CANONICAL PUBLIC
+RECEIPT → ORIGINAL PACKAGE + SCRIPT CLOSURE → IMPORT ORIGINS → IMMUTABLE PRIVATE PLAN → STATIC
+CARTRIDGE BINDINGS → EXACT 15 STATE/ENVELOPE BYTE PAIRS**. Keep every state outside the emulator
+silhouette. Show `sitecustomize`, `.pth`, a Git filesystem-monitor hook, worktree redirection, and an
+unrelated metadata FIFO all hitting red stop signs. Replace the GitHub CLI card with **PINNED STDLIB
+HTTPS · PROXIES OFF · EXACT CA IN MEMORY · EXACT WORKFLOW BYTES · FETCH TWICE**. Show an absent
+coordination lock failing closed rather than being created. Follow the old helper's hidden lock call
+too, then replace only that exact authenticated lease with the same existing-file read lock. Reject
+a sourceless shadow package before import. Let the real historical source-bundle probe find one
+missing newline, then turn green only after it exactly matches the original. Attack each guard in
+the orchestration sequence, then reveal **156 RELATED · 5,288 FULL-SUITE · 285 TYPED SOURCE FILES**.
+
+The spoken line is: **“The tests said the bridge was safe because its own file never pressed a
+button. The audit followed the call graph and found the game was already being opened. We moved
+runtime construction back behind a separate claim-first gate.”** Keep **ACTIONS/FRAMES/CLAIMS/
+PROVIDERS/TEACHERS/PREDICTIONS/OUTCOMES/FITS 0 · CAUSAL TRAIN 0/8** on screen. End on **PUBLISH +
+GREEN PUSH CI → READ-ONLY PRIVATE REHEARSAL → OUTER EXECUTION IDENTITY → LOGICAL + PHYSICAL CLAIM
+→ AUTHENTICATED RECOVERY → DEEP PLAN REAUTH → CLAIM-FIRST RUNTIME FACTORY → REORIENT**, then only afterward
+**SAME-ROOT CAPTURES → RANDOMIZED OUTCOMES → TRAIN-ONLY FIT → POWERED RED → FROZEN-WEIGHT
+CRYSTAL**.
+
 ## August 26 scene: the classroom plan freezes once
 
 Open on **PR 80 → MAIN 69A0C707 → CI 33031356455/1 GREEN**. Put the exact published source,

@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-26 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-27 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -11,6 +11,78 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-27: setup bridge is runtime-free and locally qualified; publish before private rehearsal
+
+The first setup-bridge candidate was green but not trustworthy. Two independent read-only audits
+found that it loaded current helper scripts before authenticating them, constructed `PyBoyAdapter`
+runtimes despite the active no-runtime gate, and would deterministically fail its live plan join
+because a mocked test concealed the wrong reconstruction keyword. Codex accepted those findings.
+Claude later reviewed a superseded commit, but its GO did not catch the subsequent `site`/`.pth`
+finding. Antigravity's CLI is now installed but its repaired-commit review is still pending. No
+current external approval is claimed.
+
+The repaired bridge now begins with a standard-library-only source bootstrap **before any project
+import**. A later audit caught that `python -I` still processed `sitecustomize` and virtual-environment
+`.pth` files before line one. The CLI therefore requires the pinned direct base CPython under
+`-I -S -B` with no extra semantic/debug flags, proves isolated/no-site/no-bytecode-write mode,
+keeps `site-packages` off `sys.path`, and moves project imports to an
+invocation-random bytecode-cache prefix proved absent while disabling cache writes. A fail-closed
+in-memory NumPy typing sentinel permits the exact old helper closure to import but rejects any
+numerical access. The Python/PyBoy runtime identity is reconstructed from one exact authenticated
+`pyboy-2.7.0.dist-info` tree without scanning unrelated distribution metadata or importing PyBoy,
+Pillow, PySDL2, or `pysdl2-dll`.
+
+Every Git child now uses the exact root-owned Command Line Tools implementation—not Apple’s
+`/usr/bin/git` selector shim—an explicit authenticated Git
+directory and worktree, a minimal allowlisted environment, and disabled hooks, filesystem monitor,
+replacement objects, lazy fetch, repository attributes/content filters, submodule descent, and
+ambient configuration. Per-worktree, linked common-directory, worktree, and staged-index attribute
+sources are rejected before status. Old package provenance and private-root checks
+that could reach ambient Git configuration are replaced by hardened committed-blob and repository
+probes. CI verification no longer invokes a replaceable GitHub CLI: delayed standard-library HTTPS
+loads one exact in-memory CA bundle with proxies disabled, pins the native/stdlib module identities,
+requires the exact workflow path and committed workflow bytes, and re-fetches the same completed
+successful push attempt at final integrity.
+
+The bridge authenticates its clean published wrapper, the tracked canonical freeze receipt, every
+package source byte, the original package bundle, and the complete pre-existing script closure
+before loading old input-authentication support. It verifies project and script import origins,
+rechecks the immutable plan and all static execution/cartridge joins, and rejoins the exact fifteen
+state/envelope byte pairs directly from authenticated files. A real canonical-commit golden probe
+caught and repaired a missing-newline source-bundle encoding error; the hardened historical
+registry and source-bundle reconstructions now exactly equal the original authenticated results.
+The bridge performs **zero state restores and zero emulator constructions**. Its shared
+claim-availability check opens only an existing coordination marker read-only. The exact old
+input-authenticator is cloned with only its legacy create-capable lease replaced by that
+authenticated read-only lease, so even helper-internal checks and missing coordination metadata
+cannot create a file. The complete `src/` search root and script-tree inventories reject project,
+dependency, metadata, and sourceless shadow packages outside the unused random cache. A top-level
+orchestration rehearsal proves the complete guard order, and the final canonical-evidence check is
+distinguishable.
+
+The first exact PR run then exposed two remaining test-only portability assumptions: Python 3.11
+reports the isolated integer-digit profile as `-1` rather than the pinned production runtime's
+`4300`; under `-S`, its `sysconfig` also reports the base `purelib`, and its virtual environments
+need not process `.pth` hooks under `-I`. The production boundary was already correctly
+fail-closed. The repaired tests now discover the venv directory under ordinary startup, require
+the foreign profile to fail before project import, and prove the cross-version invariant directly:
+ordinary site startup can execute a hook while `-I -S -B` cannot.
+
+Local qualification is [recorded here](docs/evidence/red-living-dex-setup-bridge-runtime-free-qualification-v1-2026-08-27.json):
+**156 related tests · 5,288 full-suite passes · 285 typed source files**, with every controller,
+frame, claim, provider, teacher, prediction, outcome and fit counter zero. The original frozen
+package digest remains exactly `56789cd…1f5df`. The exact CPython executable is bound; its
+base-prefix standard-library and native dynamic-loader closure are explicitly treated as host TCB,
+not falsely presented as a complete recursive file inventory.
+
+This is still not execution-ready. Publish the exact bridge, require successful push CI, perform
+one read-only path-free private rehearsal, and reorient. The following gate must define a durable
+outer execution identity and separately qualify a **claim-first** runtime factory. It must also
+repair logical-plus-physical account claim atomicity, provide an authenticated recovery entrypoint,
+and deep-freeze or reauthenticate the nested plan immediately before consumption. Do not claim a
+root or construct a runtime until those are closed. Causal train remains **0/8**; Crystal, fitting,
+powered/sealed Red, promotion, trade, and replay remain closed.
 
 ## 2026-08-26: canonical provider plan frozen; qualify the setup bridge next
 

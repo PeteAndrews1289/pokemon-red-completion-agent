@@ -3,6 +3,28 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 runtime-free bridge checkpoint:** Two independent audits stopped the first green
+> candidate because it eagerly executed unbound helpers, constructed emulators inside the
+> no-runtime gate, and hid a production keyword mismatch behind a permissive mock. The repaired
+> bridge authenticates every tracked `src/` and script byte through a standard-library-only
+> pinned-base `python -I -S -B` bootstrap with no extra flags before project import, anchors the canonical receipt plus old
+> package/script closure, validates import origins, verifies every static plan/cartridge/execution
+> join, and rejoins fifteen exact state/envelope byte pairs without restoring a state. Its read
+> lease requires pre-existing coordination metadata and is injected into the exact authenticated
+> old input helper, so no nested support can create it. Exact PyBoy metadata is read without a
+> global distribution scan or runtime import; hardened direct Command Line Tools Git ignores hooks,
+> filesystem monitors, worktree redirection, attributes/filters from worktree, linked common dir,
+> or staged index, lazy fetch, submodule descent, and ambient configuration; pinned delayed stdlib HTTPS verifies the exact CI
+> workflow and refetches the final attempt. A real canonical-history probe proves the replacement
+> registry/source readers are equivalent. The stdlib/native-loader closure is an explicit host TCB.
+> The
+> [local qualification](evidence/red-living-dex-setup-bridge-runtime-free-qualification-v1-2026-08-27.json)
+> records **156 related · 5,288 full-suite tests · 285 typed source files**. Publish, require exact
+> successful push CI, perform one read-only private rehearsal, and reorient. Setup stays closed
+> until a separate outer execution identity, dual logical/physical claim boundary, authenticated
+> recovery path, deeply immutable or reauthenticated consumer plan, and claim-first runtime factory
+> are qualified.
+
 > **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The
 > active lane is `repeatable-red-living-dex-option-value-calibration-v1`. The same-root causal
 > trust boundary is repaired at source `539454f3` through PR 78 and CI `33009960617/1`: exact

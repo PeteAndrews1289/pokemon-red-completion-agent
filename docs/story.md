@@ -7,7 +7,38 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the authentic classroom is sealed once
+## Current checkpoint: the doorway is finally only a doorway
+
+The first setup bridge wore a **PRE-RUNTIME** label while quietly opening emulators through old
+helper code. It also contained a real-call keyword error that its mock accepted. Two independent
+audits stopped publication even though the suite was green.
+
+The replacement authenticates every package byte in a standard-library-only bootstrap before it
+imports project code. It requires the pinned direct base CPython under `-I -S -B`, rejects extra
+flags, and uses a random, proved-absent cache prefix so startup hooks, `.pth` files, bytecode writes,
+script shadows, and preseeded bytecode cannot bypass that proof. It binds the
+canonical plan receipt, original package and script closure, and rejects project or dependency
+shadows across the whole `src/` and script import trees,
+cartridge-derived route facts, execution identity, and all fifteen exact state/envelope byte pairs
+without restoring a state. Its shared claim check can only open an already provisioned lock
+read-only. The audit found the old input helper had its own create-capable lease, so the bridge now
+clones that exact authenticated function with only the read lease injected. Coordination metadata
+therefore stays unchanged at every layer. It exact-binds the direct Command Line Tools Git and
+rejects worktree/common/index attributes, filters, lazy fetch, and submodule descent before status,
+then reconstructs runtime
+identity from one authenticated PyBoy metadata tree without importing it, and verifies the exact
+CI workflow twice through pinned delayed stdlib HTTPS rather than a replaceable CLI. A real
+canonical-history probe caught a newline mismatch that mocks had missed. The repository now passes
+**5,288 tests across 285 typed source files**; the base-prefix stdlib/native loader is stated as a
+host trust assumption instead of being silently overclaimed.
+
+That is trustworthy access to the classroom, not a lesson. Buttons, frames, claims, providers,
+teachers, predictions, outcomes, and fits remain zero; causal train remains **0/8**. Publication,
+exact push CI, and one path-free read-only rehearsal come next. The controller-capable layer must
+then receive its own durable identity, atomic logical-plus-physical claims, authenticated recovery,
+and a deeply immutable or freshly reauthenticated plan before it may create one runtime.
+
+## Previous checkpoint: the authentic classroom is sealed once
 
 The rehearsal became a real, immutable artifact. PR 80 and exact-main CI both passed on their
 first attempts. From clean published main, the freezer opened the authentic Red inventory once,

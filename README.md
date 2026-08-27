@@ -5,7 +5,47 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 26, 2026): the same-root trust boundary is repaired; build the
+> **Current product focus (August 27, 2026): publish the genuinely runtime-free exact-plan
+> bridge.** Independent read-only audits stopped the first green candidate: it loaded helper code
+> before authentication, secretly constructed emulators inside the no-runtime gate, and contained
+> a live reconstruction-call mismatch hidden by a permissive mock. The repaired bridge now anchors
+> the canonical freeze receipt, exact old package and script closure, import origins, immutable
+> plan, cartridge-derived bindings, and all fifteen state/envelope byte pairs without restoring a
+> state or constructing an emulator. A standard-library-only bootstrap authenticates every package
+> byte before project import. The CLI requires the pinned direct base CPython under `-I -S -B`
+> with no extra semantic/debug flags: no `site`, `sitecustomize`, `.pth`, or bytecode write runs,
+> and `site-packages` is never admitted to the import path. A fail-closed NumPy typing
+> sentinel supports the exact old helper imports while rejecting numerical use; the frozen
+> Python/PyBoy identity comes from one exact authenticated metadata tree without scanning unrelated
+> distributions or importing PyBoy, Pillow, or SDL. The exact root-owned system Git runs with an
+> explicit Git directory/worktree, disabled hooks, filesystem monitor, attributes/content filters,
+> lazy fetch, and submodule descent, plus an allowlisted
+> environment. GitHub CI is verified by delayed standard-library HTTPS with proxies disabled, one
+> exact in-memory CA bundle, pinned module identities, exact workflow path/bytes, and a second final
+> fetch of the same successful push attempt. A random, proved-absent bytecode-cache prefix excludes
+> source/script shadows and preseeded cached code; an existing-file
+> read lease is injected into the exact old input-authenticator, making both the bridge and its
+> helper-internal claim checks literally non-creating as well as claim-free. The complete `src/`
+> search root and transitive script tree reject project, dependency, metadata, and sourceless
+> shadows, and isolated help exits before importing project code.
+>
+> The [local qualification](docs/evidence/red-living-dex-setup-bridge-runtime-free-qualification-v1-2026-08-27.json)
+> records **156 related · 5,288 full-suite tests · 285 typed source files** and zero gameplay,
+> claim, learner, or model effects. Claude's verdict on the superseded commit did not catch the
+> later `site` finding, and Antigravity's headless review is pending; no current external approval
+> is claimed. The latest causal audit found one ignored top-level
+> `src/` dependency-shadow seam in one prior commit; the next audit caught the `-I`/`site` boundary.
+> Both are repaired; a real canonical-history probe also caught and repaired a source-bundle newline
+> mismatch. The exact CPython executable is bound while its base-prefix stdlib/native-loader closure
+> is an explicit host TCB. The repaired exact commit must pass both internal re-audits before publication.
+> Next obtain those exact-commit verdicts, publish the bridge, require successful push CI, run one read-only private rehearsal,
+> and reorient. A separate claim-first runtime-factory gate must then bind its own durable execution
+> identity, logical-plus-physical claims, recovery path, and a deeply immutable or freshly
+> reauthenticated nested plan before setup can run. Counters remain
+> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+> transfer 0**.
+
+> **Previous product focus (August 26, 2026): the same-root trust boundary is repaired; build the
 > authentic provider curriculum.** The repair is qualified at source `539454f3` through
 > [PR 78](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/78) under green CI
 > `33009960617/1`. Its

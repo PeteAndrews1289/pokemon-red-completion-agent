@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — publish the runtime-free validator, rehearse once, then
+> reorient:** The canonical 15-recipe/45-offer Red plan already exists. Codex owns the repaired
+> CLI-only validator, exact-commit qualification, publication, exact-head push CI, and exactly one
+> read-only path-free private rehearsal. The production command requires the pinned direct base
+> CPython under `-I -S -B`; it authenticates source, inert runtime metadata, repository/CI identity,
+> and all fifteen state/envelope byte joins without restoring a state or constructing an emulator.
+> Claude audits causal/statistical truth and the pre-import trust boundary. Antigravity audits
+> architecture, transfer, CI portability, and mission drift. Codex alone edits, publishes, and
+> adjudicates their findings.
+>
+> Stop and reorient immediately after the one rehearsal. This bridge does **not** authorize a root
+> claim, runtime factory, controller input, setup execution, outcome, fit, powered/sealed Red,
+> Crystal, promotion, trade, or replay. The next gate must define a composable same-process outer
+> execution identity, atomic logical-plus-physical claim, authenticated recovery, deep plan
+> reauthentication, and claim-first runtime construction. Counters remain **development 15 ·
+> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
 > **2026-08-26 authentic provider curriculum qualified locally; exact published freeze active:**
 > Implementation checkpoint `6063cb41` reuses the boxed-evolution and balanced-team engines for
 > target-specific mechanics and derives wild corridors from cartridge terrain. One authorized
