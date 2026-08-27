@@ -3,7 +3,19 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 27 runtime-free bridge checkpoint:** Two independent audits stopped the first green
+> **August 27 namespace-successor checkpoint:** PR 82 merged the runtime-free bridge as main
+> `506c0c1f` and exact-main CI `33051433728/1` passed. Its one V1 rehearsal failed closed before
+> the immutable plan record was found because the caller supplied an initialized parent store
+> instead of the distinct nearest initialized store shared by the context catalog and plan. The
+> [path-free result](evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
+> records every protected effect and setup entrypoint at zero. V1 does not retry. The
+> [qualified successor](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
+> binds both context files to the supplied nearest store, distinguishes an absent record, and passes
+> **71 focused · 234 related · 5,300 full-suite tests** plus Claude and Antigravity review. Publish
+> it and rehearse once under exact green CI; failure ends the namespace lane without V3.
+> Outer identity, claims, recovery, runtime construction and setup remain closed until success.
+
+> **Previous August 27 runtime-free bridge checkpoint:** Two independent audits stopped the first green
 > candidate because it eagerly executed unbound helpers, constructed emulators inside the
 > no-runtime gate, and hid a production keyword mismatch behind a permissive mock. The repaired
 > bridge authenticates every tracked `src/` and script byte through a standard-library-only

@@ -1175,6 +1175,7 @@ from pokemon_red_completion.goal_manager_protocol import (
     load_committed_goal_manager_registry_at_revision as _unsafe_registry_loader,
 )
 from pokemon_red_completion.private_artifacts import (
+    PRIVATE_ROOT_SENTINEL,
     PrivateArtifactRoot,
     SealedRecordSummary,
     open_private_root,
@@ -2102,6 +2103,7 @@ def prepare_red_living_dex_setup_bridge(
     _authenticate_canonical_evidence(args)
     _load_freezer_support(bridge_binding)
     store = _open_store(args)
+    _require_plan_namespace_binding(args)
     record, summary = _authenticate_plan_record(store, args)
     (
         rom_path,
@@ -2749,6 +2751,66 @@ def _open_store(args: argparse.Namespace) -> PrivateArtifactRoot:
         raise SetupBridgePreflightError("private_namespace_authentication") from None
 
 
+def _nearest_initialized_private_root(path: Path) -> Path:
+    """Return the nearest exact private-store ancestor without scanning siblings."""
+
+    try:
+        candidate = Path(path)
+        if not candidate.is_absolute():
+            raise SetupBridgePreflightError("private_namespace_authentication")
+        metadata = candidate.lstat()
+        resolved = candidate.resolve(strict=True)
+        if (
+            candidate.is_symlink()
+            or resolved != candidate
+            or not stat.S_ISREG(metadata.st_mode)
+            or metadata.st_nlink != 1
+        ):
+            raise SetupBridgePreflightError("private_namespace_authentication")
+        for ancestor in resolved.parents:
+            marker = ancestor / PRIVATE_ROOT_SENTINEL
+            try:
+                marker_metadata = marker.lstat()
+            except FileNotFoundError:
+                continue
+            if (
+                marker.is_symlink()
+                or not stat.S_ISREG(marker_metadata.st_mode)
+                or marker_metadata.st_nlink != 1
+            ):
+                raise SetupBridgePreflightError("private_namespace_authentication")
+            return ancestor
+    except SetupBridgePreflightError:
+        raise
+    except BaseException:
+        pass
+    raise SetupBridgePreflightError("private_namespace_authentication") from None
+
+
+def _require_plan_namespace_binding(args: argparse.Namespace) -> None:
+    """Bind the catalog and plan to the exact store that owns the sealed plan."""
+
+    try:
+        private_root = Path(args.private_root)
+        resolved_root = private_root.resolve(strict=True)
+        root_metadata = private_root.lstat()
+        if (
+            not private_root.is_absolute()
+            or private_root.is_symlink()
+            or resolved_root != private_root
+            or not stat.S_ISDIR(root_metadata.st_mode)
+        ):
+            raise SetupBridgePreflightError("private_namespace_authentication")
+        catalog_root = _nearest_initialized_private_root(Path(args.context_catalog))
+        plan_root = _nearest_initialized_private_root(Path(args.context_plan))
+        if catalog_root != resolved_root or plan_root != resolved_root:
+            raise SetupBridgePreflightError("private_namespace_authentication")
+    except SetupBridgePreflightError:
+        raise
+    except BaseException:
+        raise SetupBridgePreflightError("private_namespace_authentication") from None
+
+
 def _hardened_git_worktree_probe(path: Path) -> bool:
     """Check one private root without ambient executables, config, or environment."""
 
@@ -2827,7 +2889,7 @@ def _authenticate_plan_record(
             expected_kind=_PLAN_RECORD_KIND,
         )
         if record is None:
-            raise SetupBridgePreflightError("immutable_plan_authentication")
+            raise SetupBridgePreflightError("immutable_plan_record_absent")
         summary = record.summary
         document = record.read()
         validate_private_record(document)

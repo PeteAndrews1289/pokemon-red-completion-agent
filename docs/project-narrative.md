@@ -1,6 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 27: the green bridge was secretly entering the classroom
+## August 27: the safe bridge was pointed at the wrong vault
+
+The repaired bridge passed review, PR 82, and exact-main CI. Its first real read-only rehearsal then
+stopped at immutable-plan authentication. That was the right safety behavior: no root was claimed,
+no runtime existed, no state was restored, no button or frame moved, and no provider, teacher,
+prediction, outcome, or fit occurred. The public receipt contained no private path or identity.
+
+The plan was not corrupt. The operator had supplied one valid initialized private store, but the
+frozen goal-manager plan and both context files belong to a distinct initialized store nested
+inside it. A read-only check against the intended store found the exact named record and matching
+manifest. The bridge was not retried, so the failure remains an honest V1 terminal rather than
+being edited away.
+
+Claude found that the same failure token covered both a missing record and an invalid record.
+Antigravity argued that outer claim and recovery work must wait for a successful pre-controller
+proof. The successor therefore stays small and generic: bind the catalog and plan to the exact
+nearest initialized store, distinguish absence from corruption, reject either input from another
+store, publish under green CI, and rehearse once. We declined to flatten private storage or add
+more Red provenance. Neither would teach the model anything.
+
+That successor now passes **71 focused, 234 related, and 5,300 full-suite tests** across 285 typed
+source files. Claude and Antigravity independently returned GO for publication and one read-only
+rehearsal, and NO-GO for controller-capable setup. Their useful hardening findings were folded in;
+their verdicts are recorded as Codex transcriptions rather than falsely presented as signed
+artifacts. If the sole successor rehearsal fails, this namespace lane stops instead of producing a
+V3. Causal train remains **0/8**.
+
+## Earlier August 27: the green bridge was secretly entering the classroom
 
 The first bridge looked safe because its own file had no button presses. The audits followed the
 calls. At import time it executed two helper scripts before proving their identity; later it used

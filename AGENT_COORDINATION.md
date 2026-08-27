@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-27 active override — publish the runtime-free validator, rehearse once, then
+> **2026-08-27 active override — publish one namespace-bound successor and rehearse once:** Main
+> `506c0c1f` passed exact push CI `33051433728/1`, then its sole read-only rehearsal failed closed
+> before immutable-plan authentication because the caller supplied an initialized parent store
+> rather than the nearest initialized store shared by the plan inputs. Every protected effect and
+> setup entrypoint remained zero; V1 does not retry. The minimal nearest-store binding and distinct
+> absent-record failure now pass **71 focused · 234 related · 5,300 full-suite tests**, and both
+> read-only reviewers returned GO for publication plus one rehearsal and NO-GO for setup execution.
+> Codex owns exact publication, CI, and that sole rehearsal; Claude and Antigravity remain read-only.
+> A failed successor ends the namespace lane rather than opening V3. Do not
+> flatten private storage, scan siblings, regenerate the plan, start outer identity/claim/recovery,
+> execute setup, fit, open Crystal or sealed Red, or replay. Counters remain **development 15 ·
+> verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+
+> **Previous 2026-08-27 override — publish the runtime-free validator, rehearse once, then
 > reorient:** The canonical 15-recipe/45-offer Red plan already exists. Codex owns the repaired
 > CLI-only validator, exact-commit qualification, publication, exact-head push CI, and exactly one
 > read-only path-free private rehearsal. The production command requires the pinned direct base

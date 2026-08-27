@@ -4,9 +4,10 @@
   "causal_train_examples": 0,
   "controller_actions": 0,
   "external_review": {
-    "antigravity": "cli_available_exact_repaired_commit_review_pending",
-    "claude": "superseded_commit_go_missed_site_boundary_exact_repaired_commit_review_pending",
-    "external_approval_claimed": false
+    "antigravity_review_summary_recorded_by_codex": "go_publication_and_one_read_only_rehearsal_no_go_setup_execution",
+    "claude_review_summary_recorded_by_codex": "go_publication_and_one_read_only_rehearsal_no_go_setup_execution",
+    "external_approval_obtained": true,
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
   },
   "related_tests": 156,
   "full_suite_deselected": 3,
@@ -16,8 +17,8 @@
     "the_exact_direct_base_cpython_executable_is_bound_but_the_base_prefix_standard_library_and_native_dynamic_loader_closure_remain_explicit_trusted_host_components_not_a_complete_file_inventory"
   ],
   "internal_read_only_audits": {
-    "causal_trust": "preliminary_go_after_repairs_exact_commit_verdict_pending",
-    "transfer_architecture": "preliminary_go_after_documentation_repairs_exact_commit_verdict_pending"
+    "causal_trust": "go_publication_and_one_read_only_rehearsal_no_go_setup_execution",
+    "transfer_architecture": "go_publication_and_one_read_only_rehearsal_no_go_setup_execution"
   },
   "model_fits": 0,
   "model_predictions": 0,
@@ -94,7 +95,7 @@
   "schema": "pokemon.red.living-dex-setup-bridge-runtime-free-qualification.v1",
   "setup_campaign_calls": 0,
   "setup_runtime_factory_calls": 0,
-  "status": "locally_qualified_pending_exact_commit_reaudit_and_publication",
+  "status": "published_and_exact_main_ci_green_rehearsal_failed_closed_at_namespace_selection",
   "teacher_queries": 0,
   "typed_source_files": 285,
   "unsupported_claims": [

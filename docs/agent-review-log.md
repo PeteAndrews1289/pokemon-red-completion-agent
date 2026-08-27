@@ -3,6 +3,50 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Namespace-successor audit — publication and one rehearsal GO 2026-08-27
+
+Claude and Antigravity independently audited the locally qualified nearest-store successor without
+opening private inputs or executing the bridge. Both returned **GO for publication**, **GO for
+exactly one read-only successor rehearsal after exact green CI**, and **NO-GO for controller-capable
+setup execution**. The tracked summaries are explicitly Codex-authored transcriptions of their CLI
+outputs, not independently signed review receipts.
+
+Codex accepted Antigravity's two P2 cleanups: reject relative inputs before any filesystem lookup
+and iterate the direct ancestor sequence. Codex accepted Claude's governance condition that a
+failed successor terminates this namespace lane rather than opening V3, and its request to state
+review provenance honestly. Claude's suggestion of a general runtime payload scan is deferred: it
+does not change this bounded namespace falsifier and would extend maintenance without learner
+authority. Storage flattening, sibling scans and plan regeneration remain rejected. The
+[qualification](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
+records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files** with no private or
+protected operation and no learning-counter delta.
+Both exact-commit fallback audits then identified missing direct tests for the existing alias,
+hardlink, non-file and unsafe-marker guards. Codex accepted the cheapest repair and added those
+ROM-free cases before publication. They also made the path-based ancestry host assumption explicit:
+the one bounded command requires a quiescent private namespace; hostile same-UID directory surgery
+would require descriptor-coupled ancestry and remains outside this rehearsal claim.
+
+## Setup-bridge rehearsal failure — conditions accepted, flattening rejected 2026-08-27
+
+Claude and Antigravity reviewed exact main `506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, green
+CI `33051433728/1`, and the single path-free V1 rehearsal failure. Both accepted it as an honest
+failed-closed result: every protected effect and setup entrypoint was zero, and no private path or
+identity escaped. Both also held outer execution identity, claims, recovery and runtime construction
+closed until a successful pre-controller rehearsal.
+
+Claude's P1 finding is accepted. A missing named immutable record used the same finite stage as a
+present record with invalid content, which made caller namespace error indistinguishable from plan
+tampering. The successor emits a distinct absent-record stage. Claude's P2 caller-contract finding
+is also accepted: ROM-free tests now require the context catalog and plan to share the exact nearest
+initialized store supplied to the bridge and reject parent or cross-store confusion.
+
+Antigravity's sequencing recommendation is accepted. Its suggestion to flatten the nested private
+stores is rejected: moving existing immutable evidence would add operational risk, does not improve
+the title-neutral learner, and is unnecessary to falsify the observed error. Directory scanning and
+new provenance layers are likewise rejected. Codex chose one new source-bound successor rehearsal
+after publication and exact green CI; V1 itself does not retry. Learning counters stay unchanged at
+**causal train 0/8, authority 0, transfer 0**.
+
 ## Same-root recipe adversarial audit — publication rejected, repair accepted 2026-08-26
 
 Claude CLI was logged out and the Claude/Antigravity desktop sessions were unavailable during the

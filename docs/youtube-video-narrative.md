@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 27 scene: the bridge crossed the line while the dashboard stayed at zero
+## August 27 scene: the right lock, the wrong vault
+
+Start with **PR 82 · MAIN 506C0C1F · CI 33051433728/1 GREEN**, then turn the key on **READ-ONLY
+REHEARSAL V1**. The door stays shut: **IMMUTABLE PLAN AUTHENTICATION — FAILED CLOSED**. Keep the
+counter strip at **ACTIONS 0 · FRAMES 0 · CLAIMS 0 · RUNTIME 0 · SETUP 0 · OUTCOMES 0 · FITS 0**.
+
+Pull back to reveal two initialized vaults: a parent and the nearer goal-manager vault containing
+the plan. The spoken line is: **“The lock worked. We gave it the address of a real vault, just not
+the vault that owns this plan.”** Stamp **V1 RETRY NO**. Then animate the small repair: **CATALOG +
+PLAN → SAME NEAREST INITIALIZED STORE · ABSENT RECORD ≠ INVALID RECORD · NO SIBLING SCAN · NO PATH
+LEAK → PUBLISH → GREEN CI → ONE SUCCESSOR REHEARSAL**. Freeze before controller-capable work and
+reveal **71 FOCUSED · 234 RELATED · 5,300 FULL-SUITE · CLAUDE GO · ANTIGRAVITY GO · SETUP NO-GO**.
+Add **SUCCESSOR FAILURE → STOP, NO V3**, then leave **CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**
+on screen.
+
+## Earlier August 27 scene: the bridge crossed the line while the dashboard stayed at zero
 
 Show a green bridge labelled **PRE-RUNTIME**, then follow two hidden wires into
 **RUNPY HELPER → PYBOY → LOAD STATE**. Put the dashboard beside it at **RUNTIME FACTORY 0** and

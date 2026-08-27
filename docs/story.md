@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the doorway is finally only a doorway
+## Current checkpoint: the doorway rejected the wrong key
+
+The runtime-free bridge shipped and its exact `main` build passed. The first read-only rehearsal
+then failed before it found the frozen plan. Every meaningful counter stayed at zero. The failure
+was not inside Pokémon: the caller pointed at a valid parent vault while the plan and its context
+files live in their own initialized vault one level nearer.
+
+We preserved the failure and did not retry it. The successor does not search private folders or
+print a path. It requires both context files and the named plan to belong to the exact nearest
+initialized store the caller supplied, and says “record absent” separately from “record invalid.”
+It passes **71 focused, 234 related, and 5,300 full-suite tests**; both independent reviewers approve
+publication and one rehearsal while keeping setup execution closed. After green CI it gets one
+rehearsal, and failure ends this namespace lane without V3. Only success can open the later identity,
+claim, recovery and runtime gate. This is still infrastructure, not learning: **causal train 0/8,
+authority 0, transfer 0**.
+
+## Previous checkpoint: the doorway is finally only a doorway
 
 The first setup bridge wore a **PRE-RUNTIME** label while quietly opening emulators through old
 helper code. It also contained a real-call keyword error that its mock accepted. Two independent

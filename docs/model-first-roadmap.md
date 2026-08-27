@@ -8,7 +8,28 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: exact frozen plan exists; publish the runtime-free bridge
+## Current checkpoint: exact namespace successor qualified; publish and rehearse once
+
+The runtime-free bridge shipped through PR 82, merged as main
+`506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, and passed exact-main CI
+`33051433728/1`. Its sole V1 rehearsal failed closed at `immutable_plan_authentication` with every
+protected effect and setup entrypoint zero. The [path-free result](evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
+contains no private path or identity. Read-only diagnosis proved caller namespace confusion: the
+supplied initialized parent store was not the nearest initialized store shared by the immutable
+plan and context inputs. The correct store contains the named record and matching manifest; V1 was
+not rerun.
+
+The shortest honest successor now requires both context files to resolve without symlinks to the
+same nearest initialized private store supplied to the bridge and distinguishes a missing named
+record from present-record integrity failure. Its
+[qualification](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
+records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files**. Claude and
+Antigravity returned GO for publication and one rehearsal and NO-GO for setup execution. Publish,
+require exact green CI, rehearse once, and reorient. A failed successor ends the namespace lane; do
+not scan siblings, flatten storage, regenerate the plan, add provenance layers, or start outer
+identity/claim/recovery engineering early. Causal train remains **0/8**.
+
+## Previous checkpoint: exact frozen plan exists; publish the runtime-free bridge
 
 The canonical Red curriculum already exists: 15 same-root recipes, 45 genuine offers, 33 semantic
 families, and 10 physical origins. The first bridge to that artifact passed tests but failed

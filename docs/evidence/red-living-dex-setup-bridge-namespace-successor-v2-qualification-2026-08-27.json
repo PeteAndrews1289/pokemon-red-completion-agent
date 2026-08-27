@@ -1,0 +1,113 @@
+{
+  "base_source_commit": "506c0c1f5b92a0f7fce393abe39195b0a1cf84be",
+  "candidate_artifacts": {
+    "preflight_script_sha256": "8ca2686c349da7f41d5e32a5f4810cd11c586eba0a259feffa9f04be122d4f66",
+    "preflight_test_sha256": "ec368e5f0f40aadd4f2705ccea60921386371ea7649e38f51930e01dedf7f91f"
+  },
+  "change_scope": [
+    "require_each_frozen_context_input_to_be_an_absolute_canonical_single_link_regular_file",
+    "bind_both_frozen_context_inputs_to_the_exact_shared_nearest_initialized_private_store",
+    "walk_ancestors_only_without_sibling_scan_or_storage_migration",
+    "distinguish_absent_named_immutable_plan_record_from_present_invalid_record",
+    "run_namespace_binding_before_plan_authentication_and_all_protected_effects"
+  ],
+  "claim_boundary": {
+    "supported": "The source-bound successor is locally qualified to publish. After exact-source green CI it may receive exactly one read-only precontroller rehearsal against the intended namespace.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "causal_red_training_example",
+      "claim_first_runtime_factory_ready",
+      "controller_capable_setup_execution",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_quality",
+      "powered_red_benchmark",
+      "sealed_red_result"
+    ]
+  },
+  "codex_adjudication": {
+    "accepted": [
+      "reject_relative_inputs_before_filesystem_lookup",
+      "use_the_direct_ancestor_sequence",
+      "make_review_summary_provenance_explicit",
+      "make_one_failed_successor_terminal_for_the_namespace_lane"
+    ],
+    "rejected_or_deferred": [
+      "flatten_private_storage",
+      "scan_sibling_stores",
+      "regenerate_the_frozen_plan",
+      "add_a_runtime_output_payload_scanner_inside_this_bounded_namespace_repair",
+      "begin_outer_controller_capable_execution_before_a_successful_rehearsal"
+    ],
+    "reason": "The accepted changes sharpen the exact falsifier without adding a new Red-specific layer. The rejected or deferred work either increases private-storage risk, broadens maintenance without learning value, or belongs after the successful precontroller proof."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity_review_summary_recorded_by_codex": "go_publication_go_one_read_only_successor_rehearsal_no_go_controller_capable_setup_execution_no_p0_or_p1_findings",
+    "claude_review_summary_recorded_by_codex": "go_publication_after_review_provenance_cleanup_go_one_terminal_read_only_successor_rehearsal_no_go_controller_capable_setup_execution",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "host_tcb_assumptions": [
+    "the_private_namespace_path_components_remain_quiescent_during_the_single_bounded_read_only_command;_descriptor_coupled_ancestry_is_required_if_hostile_same_uid_concurrent_rename_or_symlink_mutation_enters_scope"
+  ],
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_check": {
+    "capability": "Authenticate the frozen fifteen-root living-Dex curriculum inside its exact private namespace before any controller-capable layer can claim or execute a root.",
+    "cheapest_falsifier": "ROM-free nested and cross-store cases plus one exact-source read-only rehearsal of the 15/45/33/10 join with every protected effect zero.",
+    "learned_authority": "none_maintenance_only",
+    "stop_condition": "Stop after the sole successor rehearsal or on any ambiguity, invalidity, identity drift, leak, effect, or incomplete capacity. A failed successor does not open V3.",
+    "time_box": "one_bounded_successor_session_inside_the_owner_authorized_eight_hour_cycle",
+    "transfer_test": "Preserve the title-neutral menu family outcome and learner schemas; defer frozen-weight Crystal execution until authentic Red causal evidence and a powered Red benchmark exist."
+  },
+  "predecessor_failure": {
+    "evidence_sha256": "67aa4e0a6675db8e8b3c41e021ede2eecf268ab0c7b81bc152c4e67252ec59b4",
+    "exact_source_retry_allowed": false,
+    "stage": "immutable_plan_authentication",
+    "status": "failed_closed_without_protected_effect",
+    "successor_reason": "The caller supplied an initialized parent store while both frozen context inputs and the named immutable plan belong to their nearest initialized child store."
+  },
+  "protected_effects_during_qualification": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_artifacts_opened": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "setup_campaign_calls": 0,
+    "setup_runtime_factory_calls": 0,
+    "teacher_queries": 0
+  },
+  "publication_gate": {
+    "controller_capable_execution_authorized": false,
+    "exact_source_green_ci_required_before_rehearsal": true,
+    "private_rehearsal_executed": false,
+    "publication_authorized_by_local_gate": true,
+    "successor_rehearsal_limit": 1
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.red.living-dex-setup-bridge-namespace-successor-qualification.v2",
+  "status": "locally_qualified_external_review_go_publication_pending",
+  "validation": {
+    "documentation_and_active_focus": "passed",
+    "focused_tests_passed": 71,
+    "full_suite_deselected": 3,
+    "full_suite_passed": 5300,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 285,
+    "mypy_status": "passed",
+    "public_artifact_check": "passed",
+    "registry_check": "passed",
+    "related_tests_passed": 234,
+    "ruff_status": "passed"
+  }
+}
