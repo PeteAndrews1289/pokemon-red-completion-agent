@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the independently reviewed direct one-shot consumer for the already frozen Red train campaign. After exact-main green CI and a fresh execution reorientation, either produce one authentic settled causal train example exactly once or close target-free with the frozen campaign permanently consumed; do not insert another preflight or wrapper-only gate.
+- Next decision: Invoke the frozen Red train campaign exactly once under the current-main and exact-green-CI binding. Either produce one authentic settled causal train example or close target-free with the campaign permanently consumed, publish the terminal, and stop to reorient; do not insert another preflight or wrapper-only gate.
 
 ### Mandatory mission check
 
@@ -58,24 +58,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-direct-red-causal-consumer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-direct-consumer-local-qualification-v1-2026-08-27.json)
+**2026-08-27-first-red-causal-execution-reoriented** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The direct consumer closes the last public seam between the frozen Red classroom and one teacher-free causal datum. Its separate Red and Crystal adapters establish the portable feature boundary needed for later titles, while the next measured output remains the first authentic Red train example rather than more infrastructure. |
+| Product alignment | The project has left public infrastructure work. Its next measured result is the first authentic teacher-free Red causal example in the same title-neutral journal and adapter contract intended to support a powered Red curriculum and later frozen-weight Crystal transfer. |
 | Learning output | No new model example. Causal train remains 0 of 1; development remains 15, verified outcomes 5, model fits 4, unseen comparisons 4, authority promotions 0, and transfer results 0. |
-| Authority delta | None. Qualification read no private capture, opened no ROM, claimed no root, selected no behavior, constructed no gameplay runtime, issued no controller input, advanced no frame, observed no outcome, queried no teacher, and performed no model operation. |
+| Authority delta | None. Publication and reorientation read no private capture, opened no ROM, claimed no root, selected no behavior, constructed no gameplay runtime, issued no controller input, advanced no frame, observed no outcome, queried no teacher, and performed no model operation. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The direct consumer is locally qualified and independently reviewed but remains an unpublished worktree candidate. Its own bootstrap must fail until the exact bytes are merged to main and that exact main commit passes CI; the frozen campaign then needs one fresh execution reorientation before it may be consumed. |
-| Decision | Publish the exact direct consumer, cross-title adapter seam, evidence, and regenerated registries. Require successful CI on the exact merged main commit, record a fresh reorientation over the immutable campaign and runtime joins, then execute the frozen train campaign exactly once without refreeze, reroll, wrapper fallback, or retry. |
-| Next session | Commit and publish the locally qualified candidate, pass exact-main CI, record the required execution reorientation, and leave the frozen campaign ready for exactly one private invocation without adding another preflight or wrapper. |
-| Next falsifier | The first exact-main invocation must reach one and only one terminal: an authentic settled selected-arm train example or an honest target-free consumed closure. Any source, runtime, plan, identity, ordering, effect-meter, or outcome ambiguity must stop before a fabricated target and may not trigger another attempt. |
-| Stop condition | Stop before private execution until publication, exact-main green CI, and a fresh reorientation. During the one allowed invocation stop on ambiguity, disclosure, pre-start effects, unselected construction, teacher fallback, reroll, or post-input retry. After its terminal do not fit one row, open sealed Red or Crystal, promote authority, or replay. |
+| Blocker | No public engineering blocker remains. At invocation the then-current main commit and its exact successful push CI attempt plus the frozen campaign's authenticated private root state envelope and ROM bindings must all match; stop rather than guess any private argument. |
+| Decision | The next eligible product action is exactly one invocation of the frozen Red train campaign. Bind the current main commit and exact green push CI, execute without refreeze reroll wrapper fallback or retry, publish one terminal, and stop to reorient before any fit or successor collection. |
+| Next session | Execute the one frozen Red train campaign exactly once, publish its path-free terminal, update the causal train counter only if an authentic selected-arm example settles, and immediately reorient before any broader collection or fit. |
+| Next falsifier | The one current-main invocation must reach exactly one terminal: an authentic settled selected-arm train example or an honest target-free consumed closure. Any source runtime plan identity ordering meter or outcome ambiguity must stop before a fabricated target and may not trigger another attempt. |
+| Stop condition | Stop during the one invocation on ambiguity disclosure pre-start effects unselected construction teacher fallback reroll or post-input retry. Stop after its first terminal. Do not refreeze retry fit one row open sealed Red or Crystal promote authority replay the game or insert another wrapper. |
 
 ### Stop conditions
 
-- Stop this publication session before any private state read, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
-- Do not execute the immutable campaign until the direct consumer is published, exact-main CI is green, and a new execution reorientation is recorded. Stop on ambiguity, identity leakage, counterfactual or unselected targets, behavior reissue, eager unselected construction, effects before durable execution-start, retryable post-input crashes, another preflight or wrapper, title-specific learner state, or failure of Red-shaped or Crystal-shaped fixtures.
+- Permit exactly one private invocation of the immutable train campaign after binding the then-current main commit and its exact successful push CI; stop after its first terminal and never retry or refreeze it.
+- Stop on ambiguous private arguments, identity leakage, counterfactual or unselected targets, behavior reissue, eager unselected construction, effects before durable execution-start, retryable post-input crashes, another preflight or wrapper, title-specific learner state, fit, benchmark, sealed Red, Crystal execution, promotion, or full replay.
 
 ### Hard boundaries for this lane
 

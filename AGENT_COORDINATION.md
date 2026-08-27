@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — execute the frozen lesson exactly once:** PR 90 and exact-main CI
+> `33118840112/1` are green on executable commit `6fd2286f`. The
+> [reorientation](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
+> closes public engineering and opens one private terminal only. Codex owns current-main/CI and
+> private-argument authentication, the one invocation, its path-free terminal, counter update, and
+> immediate post-terminal reorientation. Claude remains the read-only causal/statistical
+> challenger; Antigravity remains the read-only transfer/architecture challenger. Neither reviewer
+> edits or executes.
+>
+> Stop rather than infer any private path or identity. No refreeze, retry, preflight, wrapper, fit,
+> sealed Red, Crystal execution, promotion, or replay is open. A settled authentic row may move
+> **causal train 0/1 → 1/1**; a target-free closure leaves it at zero and still permanently
+> consumes the campaign. Authority and transfer remain zero.
+
 > **2026-08-27 active override — publish the direct consumer, reorient, then execute once:** The
 > frozen Red train campaign now has a locally qualified production consumer. Codex owns the code,
 > publication, exact-main CI verification, final execution reorientation, and later one-shot

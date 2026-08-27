@@ -7,6 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the next thing on screen must be one real lesson
+
+The clean-room launch rail shipped. GitHub tested it before merge and tested exact main again. The
+frozen lesson still has not been touched, but there is no public engineering excuse left between
+it and the learner.
+
+The next run gets one ending. If the randomly selected option settles honestly, the project gains
+its first causal train row. If the evidence becomes ambiguous, the lesson closes without a target.
+There is no reroll and no second attempt. Even a good row is a proof of the pipe, not a model; it
+must be followed by a varied Red curriculum, an untouched Red exam, and only then a frozen Crystal
+transfer test.
+
+The board stays **CAUSAL TRAIN 0/1 · AUTHORITY 0 · TRANSFER 0** until the game actually produces
+that observation.
+
 ## Current checkpoint: one sealed lesson can now become one honest observation
 
 The team stopped adding doors and built the final connection. A clean isolated program now proves

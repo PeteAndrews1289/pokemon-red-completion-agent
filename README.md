@@ -5,6 +5,15 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 27, 2026): execute the frozen Red train lesson exactly once.** PR
+> 90 passed and executable commit `6fd2286f` passed exact-main CI `33118840112/1`. The
+> [execution reorientation](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
+> leaves the campaign frozen and unconsumed with every private/gameplay/model counter at zero.
+> Next bind the then-current main commit and exact successful push CI plus the authenticated
+> private arguments, invoke once, publish one settled train row or one target-free consumed
+> closure, and stop. No refreeze, retry, preflight, wrapper, one-row fit, sealed Red, Crystal run,
+> promotion, or replay. **Causal train 0/1; authority 0; transfer 0.**
+
 > **Current product focus (August 27, 2026): publish the direct consumer for the frozen Red
 > lesson.** One action-free Red train campaign is frozen and unconsumed. The locally qualified
 > isolated consumer authenticates exact project source, exact successful CI identity, a clean

@@ -6,6 +6,23 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: one frozen Red train invocation, then immediate reorientation
+
+The direct consumer shipped through PR 90 and exact-main CI `33118840112/1` on executable commit
+`6fd2286f3f92145884e1a92c46fcbbd1eb140ebd`. The
+[execution reorientation](evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
+records zero private and gameplay effects and leaves the one train campaign frozen and
+unconsumed.
+
+Codex is the sole operator. It must bind the then-current main commit and exact successful push
+CI, authenticate the existing private root/state/envelope/ROM arguments without guessing, invoke
+the campaign once, publish its path-free terminal, update the causal counter only for an authentic
+settled row, and stop. Claude and Antigravity remain read-only reviewers and do not execute.
+
+No refreeze, retry, new wrapper or preflight, one-row fit, sealed Red, Crystal run, promotion, or
+full replay is open. A settled row completes the **causal train 0/1** gate; a target-free terminal
+permanently closes this campaign without pretending it produced data.
+
 ## Current override: publish the direct frozen-campaign consumer, then reorient
 
 The one train campaign is frozen and remains unconsumed. Codex has locally qualified the direct

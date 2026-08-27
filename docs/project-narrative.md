@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the last public gate closed; the next event must be data
+
+The direct consumer passed PR CI, landed on exact main as `6fd2286f`, and passed the main build
+again. The campaign is still untouched. A fresh reorientation now says something the project has
+too often postponed: the next event is not another wrapper, rehearsal, or audit. It is exactly one
+authentic randomized Red lesson.
+
+That lesson has two honest endings. A selected arm can settle and become the first causal train
+row, or an ambiguity or interruption can close it target-free. Either way there is no second try.
+Even success does not justify fitting one row; it only proves the production data pipe. The next
+learning phase must add breadth across genuine Red decision kinds, evaluate untouched Red
+outcomes, and only then freeze a model for Crystal.
+
+Nothing private ran during this checkpoint, so the board remains **causal train 0/1, authority 0,
+transfer 0**. The story has finally moved from “can we trust the door?” to “what does the first
+real observation say?”
+
 ## August 27: the classroom finally has a trustworthy door to one real lesson
 
 The campaign was frozen, but freezing is not learning. The next question was whether the exact

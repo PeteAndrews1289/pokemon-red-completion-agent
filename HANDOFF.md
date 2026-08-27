@@ -12,6 +12,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-27: direct consumer published and reoriented; execute the frozen lesson once
+
+PR 90 passed CI `33117957791/1`, rebased to exact main
+`6fd2286f3f92145884e1a92c46fcbbd1eb140ebd`, and passed exact-main push CI
+`33118840112/1`. The [execution reorientation](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
+binds that executable source bundle, the existing frozen-campaign receipt, the clean runtime
+closure, the no-refreeze rule, and the one-terminal stop condition. The direct consumer is no
+longer an engineering candidate.
+
+Nothing private was read during publication or reorientation. The campaign remains frozen and
+unconsumed; **causal train remains 0/1**. At invocation, bind the then-current `main` commit and
+its exact successful push-CI attempt plus the authenticated private root, selected state,
+envelope, and ROM. Stop rather than guess a private argument. Execute exactly once. Publish either
+one authentic settled selected-arm train example or one honest target-free consumed closure, then
+stop and reorient. Do not refreeze, retry, add a preflight, fit one row, open sealed Red or Crystal,
+promote authority, or replay the game.
+
 ## 2026-08-27: the frozen lesson has a direct consumer; publish before executing once
 
 One action-free Red train campaign is already frozen. The missing production seam is now locally
