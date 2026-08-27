@@ -6,7 +6,30 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: publish the qualified causal boundary, then freeze one campaign
+## Current override: publish the freeze-first campaign gate, then freeze once
+
+The shared causal journal and Red live adapter are published on exact main
+`74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2`; exact-main CI `33098041804/1` passed. The locally
+qualified successor composes one authenticated setup capture with that journal. It keeps all Red
+runtime capability absent until the journal has durably recorded the pair claim, behavior
+commitment, behavior selection, and construction start. The controller remains locked during
+construction, and terminal recovery opens no runtime.
+
+The action-free freezer can only bind one train slot, its exact current source/setup identity, and
+an explicit sorted commitment to retired physical roots. It cannot accept a ROM or execute the
+campaign. The [qualification](evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+records **140 focused · 5,441 passed full-suite · 296 typed source files**. Antigravity found no
+P0/P1/P2 issue and returned GO for publication and the later private freeze. Claude hit its
+session limit before a verdict; do not represent that as approval.
+
+Codex remains the sole implementer and publisher. Publish this exact gate, require exact-head green
+CI, then freeze exactly one action-free campaign only if one eligible train root and the opaque
+consumed-V2 physical root exclusion are both authenticated from existing authorized identities.
+Do not diagnose V2 or guess either value. Reorient before execution. No further wrapper, model fit,
+sealed Red, Crystal execution, authority promotion, or replay is authorized. The next measured
+output remains one authentic settled Red causal train example; **causal train is 0/1**.
+
+## Previous override: publish the qualified causal boundary, then freeze one campaign
 
 The V2 selected-root preflight failed closed without disclosing a private cause. It created no
 claim, runtime, action, outcome, or model evidence; V1/V2 are consumed, V3 is forbidden, and the

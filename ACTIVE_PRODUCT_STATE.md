@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After this exact qualified source is published and passes exact-head CI, freeze one bounded development-rigor Red causal campaign that exercises this boundary. Reorient before execution; the next learning decision is one authentic settled train example, not another preflight or model fit.
+- Next decision: Publish the freeze-first campaign gate and require exact-head CI. Then freeze exactly one action-free Red train campaign only if the selected root and consumed-V2 physical-root exclusion authenticate without private diagnosis. Reorient before execution; the next learning decision remains one authentic settled train example or honest target-free closure.
 
 ### Mandatory mission check
 
@@ -58,24 +58,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-title-neutral-causal-boundary-qualified** · status **closed** · evidence [qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+**2026-08-27-freeze-first-red-causal-campaign-gate-qualified** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner now has one reusable contract for menus, propensities, selected-arm execution, independently observed outcomes, and crash-safe examples. This directly advances the cross-game living-Pokedex agent while keeping Red mechanics behind an adapter and reserving transfer claims for realized frozen-weight Crystal outcomes. |
+| Product alignment | The project now has the smallest Red composition capable of producing one title-neutral causal learner datum: setup first, durable randomized selection second, and only the selected runtime third. This advances the cross-game living-Pokedex agent without teaching a Red route or claiming transfer from schema parity. |
 | Learning output | No new model example. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The qualified public boundary opened no ROM, private capture, root claim, runtime, controller effect, game outcome, model operation, promotion, or transfer result. |
-| Transfer result | Synthetic Red-shaped and Crystal-shaped fixtures use the same learner schema and journal. No Crystal cartridge, frozen Red weights, or zero-shot outcome ran, so transfer remains untested. |
-| Blocker | The shared causal boundary is locally qualified but not yet published or bound to one frozen development campaign. Causal train remains zero until a clean exact source identity selects and executes one authentic Red arm and independently settles its outcome. |
-| Decision | Publish this exact title-neutral journal, policy codec, Red live adapter, regenerated source registries, focus dashboard, tests, and evidence. Require exact-head green CI, then freeze exactly one bounded development-rigor Red causal campaign that uses this boundary. Do not insert another preflight or fit from synthetic evidence. |
-| Next session | Commit and publish the qualified causal boundary, verify exact-head green CI, then freeze exactly one bounded development-rigor Red causal campaign. Reorient before executing it; the first execution terminal must be either one authentic settled train example or an honest target-free closure. |
-| Next falsifier | A clean-published campaign freeze must bind one eligible authentic Red setup to the exact policy menu, complete binding roster, observer, effect meter, runner, source commit, partition, and no-retry identities without opening a ROM or granting controller authority. Any ambiguous join, consumed root, unselected runtime capability, or need for another wrapper aborts the freeze. |
-| Stop condition | Do not open private input or gameplay until this exact source is clean-published, exact-head CI is green, and one bounded development campaign is frozen. Stop on a counterfactual target, unselected runtime, identity leak, post-release retry, package-wide refactor, model fit, benchmark, sealed Red, Crystal execution, promotion, or replay. |
+| Authority delta | None. The freeze-first campaign gate opened no private capture, ROM, root claim, runtime, controller effect, game outcome, model operation, promotion, or transfer result. |
+| Transfer result | The campaign still terminates at the same title-neutral learner journal used by Red-shaped and Crystal-shaped fixtures. No Crystal cartridge, frozen Red weights, or zero-shot outcome ran, so transfer remains untested. |
+| Blocker | The action-free campaign freezer and selected-only composition are locally qualified but not yet published. After exact-head CI, one eligible train root and the opaque consumed-V2 physical-root exclusion must be authenticated from existing authorized identities without diagnosing or replaying V2; ambiguous identities stop the freeze. |
+| Decision | Publish the exact freeze-first Red campaign composition, action-free freezer, regenerated source registries, focus dashboard, tests, and evidence. Require exact-head green CI, then freeze exactly one bounded development-rigor train campaign only if both selected and retired identities prove. Reorient before execution. |
+| Next session | Commit and publish the qualified freeze-first campaign gate, verify exact-head green CI, then authenticate and freeze exactly one action-free train campaign. Stop if the selected files or consumed-V2 physical root cannot be proven without private diagnosis. Reorient before any execution. |
+| Next falsifier | From a clean exact-head source, the freezer must bind one available train setup and an explicit retired-root inventory with zero claims, gameplay, learner, or model effects. The frozen campaign must reopen canonically, reject the retired selected root, and preserve the exact setup/menu/runner identities. Any ambiguity or private guess aborts. |
+| Stop condition | Do not open private input before this exact gate is clean-published and exact-head CI is green. The only next private action is one action-free freeze with proved selected and retired identities. Stop on a guessed digest, counterfactual target, unselected runtime, identity leak, post-release retry, another wrapper, model fit, benchmark, sealed Red, Crystal execution, promotion, or replay. |
 
 ### Stop conditions
 
-- Stop this public engineering session before any private state read, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
-- Stop and redesign on identity leakage, counterfactual or unselected targets, entropy reissue, eager unselected construction, a controller effect before durable execution-start, a retryable post-input crash, a title-specific storage primitive, or failure of either Red-shaped or Crystal-shaped contract fixtures.
+- Stop this public engineering session before any private state read, campaign freeze, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
+- After clean publication and exact-head CI, permit one action-free freeze with authenticated selected and retired identities, then reorient. Stop on ambiguity, identity leakage, counterfactual or unselected targets, entropy reissue, eager unselected construction, controller effects before durable execution-start, retryable post-input crashes, another wrapper, title-specific learner state, or failure of Red-shaped or Crystal-shaped fixtures.
 
 ### Hard boundaries for this lane
 

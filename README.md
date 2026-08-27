@@ -5,7 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): publish the shared causal-learning boundary, then
+> **Current product focus (August 27, 2026): publish the freeze-first causal campaign gate.** The
+> shared causal boundary is already on main at `74d7e7e8` under exact-main CI `33098041804/1`.
+> The new Red campaign composes that boundary with the authenticated setup capture while keeping
+> every runtime cold until the journal has durably claimed the lesson, committed its randomized
+> policy, selected one row, and recorded construction start. The separate freezer has no ROM,
+> emulator, controller, teacher, learner, model, or execution mode; it can only bind one train
+> root and an explicit inventory of retired physical roots.
+>
+> The [local qualification](docs/evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+> records **140 focused · 5,441 passed full-suite · 296 typed source files**. Antigravity returned
+> GO with no P0/P1/P2 finding. Claude hit its session limit and is not counted as approval. Nothing
+> private was read, no campaign was frozen, no root was claimed, and no game or model ran. Publish
+> this exact gate, require exact-head green CI, and only then freeze one action-free campaign if
+> the selected root and the consumed V2 physical root can be authenticated without diagnosing or
+> replaying V2. Reorient before execution. **Causal train remains 0/1; authority 0; transfer 0.**
+
+> **Previous product focus (August 27, 2026): publish the shared causal-learning boundary, then
 > freeze one Red campaign.** The learner now has a title-neutral complete-menu, propensity,
 > selected-arm, independent-outcome, and crash-safe example contract. Red-specific routes and
 > provider verification stay behind one live adapter; Red-shaped and Crystal-shaped synthetic

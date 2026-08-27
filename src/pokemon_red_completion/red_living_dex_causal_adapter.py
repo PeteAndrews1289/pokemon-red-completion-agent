@@ -15,8 +15,8 @@ from __future__ import annotations
 
 import hashlib
 import re
-from collections.abc import Iterator
-from contextlib import contextmanager
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome
@@ -44,6 +44,9 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.red_living_dex_claim_first_campaign import (
+    RedLivingDexResolvedSetupSlot,
+)
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexSetupForkRuntime,
     RedLivingDexSetupForkRuntimeFactory,
@@ -122,6 +125,12 @@ class _SelectedRuntimeState:
     provenance_failed: bool = False
 
 
+RedLivingDexCausalRuntimeResolver = Callable[
+    [],
+    AbstractContextManager[RedLivingDexResolvedSetupSlot],
+]
+
+
 def build_red_living_dex_causal_scenario(
     recipe: RedLivingDexSetupSlotRecipe,
     capture: RedLivingDexValidatedSetupCapture,
@@ -134,7 +143,13 @@ def build_red_living_dex_causal_scenario(
     causal_source_commit: str,
     causal_runner_sha256: str,
 ) -> LivingDexCausalScenario:
-    """Bind one validated Red capture to the shared selected-arm journal."""
+    """Bind a currently available Red arm factory to the shared journal.
+
+    This compatibility entrypoint is useful for a setup validator that still
+    owns its resolver scope.  Production recovery should use
+    :func:`build_red_living_dex_causal_scenario_from_capture` so no runtime
+    capability exists until the journal has selected one row.
+    """
 
     if not isinstance(recipe, RedLivingDexSetupSlotRecipe):
         raise TypeError("Red causal adapter needs a setup recipe")
@@ -147,6 +162,73 @@ def build_red_living_dex_causal_scenario(
     setup_execution_identity.__post_init__()
     if not callable(arm_factory):
         raise TypeError("Red causal adapter needs an isolated-arm factory")
+    if (
+        recipe.recipe_sha256 != capture.recipe_sha256
+        or recipe.slot_sha256 != capture.binding.slot_sha256
+        or capture.execution_identity_sha256 != setup_execution_identity.identity_sha256
+        or capture.binding.execution_identity_sha256
+        != setup_execution_identity.identity_sha256
+        or recipe.available_option_kinds != capture.binding.available_option_kinds
+        or tuple(item.recipe_sha256 for item in recipe.providers)
+        != tuple(item.provider_recipe_sha256 for item in capture.binding.option_bindings)
+    ):
+        raise RedLivingDexCausalAdapterError("Red causal setup join differs")
+
+    @contextmanager
+    def resolve_runtime() -> Iterator[RedLivingDexResolvedSetupSlot]:
+        yield RedLivingDexResolvedSetupSlot(
+            recipe=recipe,
+            producer_execution_identity=setup_execution_identity,
+            arm_factory=arm_factory,
+            title_adapter_sha256=canonical_sha256(
+                {
+                    "adapter": RED_LIVING_DEX_CAUSAL_ADAPTER_SCHEMA,
+                    "purpose": "validated-live-factory",
+                }
+            ),
+            runtime_factory_sha256=canonical_sha256(
+                {
+                    "purpose": "validated-live-factory",
+                    "setup_execution_identity_sha256": (
+                        setup_execution_identity.identity_sha256
+                    ),
+                }
+            ),
+        )
+
+    return build_red_living_dex_causal_scenario_from_capture(
+        capture,
+        setup_execution_identity=setup_execution_identity,
+        runtime_resolver=resolve_runtime,
+        meter=meter,
+        setup_terminal_sha256=setup_terminal_sha256,
+        setup_pair_claim_sha256=setup_pair_claim_sha256,
+        causal_source_commit=causal_source_commit,
+        causal_runner_sha256=causal_runner_sha256,
+    )
+
+
+def build_red_living_dex_causal_scenario_from_capture(
+    capture: RedLivingDexValidatedSetupCapture,
+    *,
+    setup_execution_identity: RedLivingDexSetupExecutionIdentity,
+    runtime_resolver: RedLivingDexCausalRuntimeResolver,
+    meter: RedLivingDexSetupEffectMeter,
+    setup_terminal_sha256: str,
+    setup_pair_claim_sha256: str,
+    causal_source_commit: str,
+    causal_runner_sha256: str,
+) -> LivingDexCausalScenario:
+    """Bind one capture while keeping every Red runtime behind selection."""
+
+    if not isinstance(capture, RedLivingDexValidatedSetupCapture):
+        raise TypeError("Red causal adapter needs a validated setup capture")
+    capture.__post_init__()
+    if not isinstance(setup_execution_identity, RedLivingDexSetupExecutionIdentity):
+        raise TypeError("Red causal adapter needs its setup execution identity")
+    setup_execution_identity.__post_init__()
+    if not callable(runtime_resolver):
+        raise TypeError("Red causal adapter needs a cold runtime resolver")
     if type(meter) is not RedLivingDexSetupEffectMeter:
         raise TypeError("Red causal adapter needs the comprehensive setup meter")
     for value, subject in (
@@ -160,16 +242,14 @@ def build_red_living_dex_causal_scenario(
     ) is None:
         raise RedLivingDexCausalAdapterError("causal source commit differs")
     if (
-        recipe.recipe_sha256 != capture.recipe_sha256
-        or recipe.slot_sha256 != capture.binding.slot_sha256
-        or capture.execution_identity_sha256 != setup_execution_identity.identity_sha256
+        capture.execution_identity_sha256 != setup_execution_identity.identity_sha256
         or capture.binding.execution_identity_sha256
         != setup_execution_identity.identity_sha256
-        or recipe.available_option_kinds != capture.binding.available_option_kinds
-        or tuple(item.recipe_sha256 for item in recipe.providers)
-        != tuple(item.provider_recipe_sha256 for item in capture.binding.option_bindings)
+        or capture.binding.menu_sha256 != capture.policy_projection.menu.policy_sha256
+        or len(capture.binding.option_bindings) < 2
+        or len(capture.binding.option_bindings) != len(capture.fork_proofs)
     ):
-        raise RedLivingDexCausalAdapterError("Red causal setup join differs")
+        raise RedLivingDexCausalAdapterError("Red causal capture join differs")
 
     binding_sha256s = tuple(
         item.executable_binding_sha256 for item in capture.fork_proofs
@@ -185,10 +265,10 @@ def build_red_living_dex_causal_scenario(
     causal_meter = RedLivingDexCausalEffectMeter(meter, meter_binding_sha256)
     lineage_sha256 = canonical_sha256(
         {
-            "recipe_sha256": recipe.recipe_sha256,
+            "recipe_sha256": capture.recipe_sha256,
             "schema": "pokemon.red.private-living-dex-causal-lineage.v1",
             "setup_execution_identity_sha256": setup_execution_identity.identity_sha256,
-            "slot_sha256": recipe.slot_sha256,
+            "slot_sha256": capture.binding.slot_sha256,
         }
     )
     origin = capture.policy_projection.origin_policy_observation
@@ -220,69 +300,83 @@ def build_red_living_dex_causal_scenario(
         index: int,
         gate: LivingDexControllerGate,
     ) -> Iterator[LivingDexCausalResolvedArm]:
-        if type(index) is not int or not 0 <= index < len(recipe.providers):  # noqa: E721
+        if type(index) is not int or not 0 <= index < len(capture.fork_proofs):  # noqa: E721
             raise RedLivingDexCausalAdapterError("selected Red row differs")
         if active:
             raise RedLivingDexCausalAdapterError("Red selected runtime is already active")
         used_arm_identities: set[str] = set()
+        before_resolution = meter.checkpoint()
         try:
-            arm = _open_arm(
-                arm_factory,
-                recipe,
-                purpose="candidate",
-                ordinal=index,
-                execution_identity=setup_execution_identity,
-                meter=meter,
-                used_arm_identities=used_arm_identities,
-            )
-            _load_and_read_back(
-                arm,
-                capture.state_bytes,
-                meter=meter,
-                subject="causal selected origin",
-            )
-            before = _observe_arm(
-                arm,
-                meter=meter,
-                subject="causal selected origin",
-            )
+            with runtime_resolver() as resolved:
+                _require_resolved_runtime(
+                    capture,
+                    setup_execution_identity=setup_execution_identity,
+                    resolved=resolved,
+                )
+                if meter.checkpoint() != before_resolution:
+                    raise RedLivingDexCausalAdapterError(
+                        "Red cold runtime resolution changed protected effects"
+                    )
+                recipe = resolved.recipe
+                arm = _open_arm(
+                    resolved.arm_factory,
+                    recipe,
+                    purpose="candidate",
+                    ordinal=index,
+                    execution_identity=setup_execution_identity,
+                    meter=meter,
+                    used_arm_identities=used_arm_identities,
+                )
+                _load_and_read_back(
+                    arm,
+                    capture.state_bytes,
+                    meter=meter,
+                    subject="causal selected origin",
+                )
+                before = _observe_arm(
+                    arm,
+                    meter=meter,
+                    subject="causal selected origin",
+                )
+                if (
+                    gate.released
+                    or before.observation_sha256 != capture.origin_observation_sha256
+                    or before.observation.public_dict() != origin
+                ):
+                    raise RedLivingDexCausalAdapterError("Red selected origin differs")
+                state = _SelectedRuntimeState(arm, before, causal_meter.checkpoint())
+                active.append(state)
+
+                def execute(controller_gate: LivingDexControllerGate) -> None:
+                    controller_gate.require_released()
+                    try:
+                        _execute_selected_provider(
+                            state,
+                            recipe,
+                            capture,
+                            selected_index=index,
+                            meter=meter,
+                        )
+                    except BaseException as error:
+                        state.execution_exception_type = type(error).__name__
+                        if state.binding is None:
+                            state.provenance_failed = True
+                        raise
+
+                def action_trace() -> dict[str, object]:
+                    return _action_trace(state, capture, selected_index=index, meter=meter)
+
+                try:
+                    yield LivingDexCausalResolvedArm(
+                        binding_sha256s[index],
+                        causal_meter,
+                        execute,
+                        action_trace,
+                    )
+                finally:
+                    active.clear()
         except RedLivingDexSetupRecipeError as error:
             raise RedLivingDexCausalAdapterError(str(error)) from None
-        if (
-            gate.released
-            or before.observation_sha256 != capture.origin_observation_sha256
-            or before.observation.public_dict() != origin
-        ):
-            raise RedLivingDexCausalAdapterError("Red selected origin differs")
-        state = _SelectedRuntimeState(arm, before, causal_meter.checkpoint())
-        active.append(state)
-
-        def execute(controller_gate: LivingDexControllerGate) -> None:
-            controller_gate.require_released()
-            try:
-                _execute_selected_provider(
-                    state,
-                    recipe,
-                    capture,
-                    selected_index=index,
-                    meter=meter,
-                )
-            except BaseException as error:
-                state.execution_exception_type = type(error).__name__
-                if state.binding is None:
-                    state.provenance_failed = True
-                raise
-
-        def action_trace() -> dict[str, object]:
-            return _action_trace(state, capture, selected_index=index, meter=meter)
-
-        try:
-            yield LivingDexCausalResolvedArm(
-                binding_sha256s[index],
-                causal_meter,
-                execute,
-                action_trace,
-            )
         finally:
             active.clear()
 
@@ -304,6 +398,29 @@ def build_red_living_dex_causal_scenario(
         resolve_selected,
         observe_after,
     )
+
+
+def _require_resolved_runtime(
+    capture: RedLivingDexValidatedSetupCapture,
+    *,
+    setup_execution_identity: RedLivingDexSetupExecutionIdentity,
+    resolved: RedLivingDexResolvedSetupSlot,
+) -> None:
+    if not isinstance(resolved, RedLivingDexResolvedSetupSlot):
+        raise TypeError("Red causal runtime resolver returned another type")
+    resolved.__post_init__()
+    recipe = resolved.recipe
+    if (
+        recipe.recipe_sha256 != capture.recipe_sha256
+        or recipe.slot_sha256 != capture.binding.slot_sha256
+        or resolved.producer_execution_identity != setup_execution_identity
+        or tuple(item.recipe_sha256 for item in recipe.providers)
+        != tuple(
+            item.provider_recipe_sha256 for item in capture.binding.option_bindings
+        )
+        or recipe.available_option_kinds != capture.binding.available_option_kinds
+    ):
+        raise RedLivingDexCausalAdapterError("Red resolved causal runtime differs")
 
 
 def _execute_selected_provider(
@@ -595,5 +712,7 @@ __all__ = [
     "RED_LIVING_DEX_CAUSAL_ADAPTER_SCHEMA",
     "RedLivingDexCausalAdapterError",
     "RedLivingDexCausalEffectMeter",
+    "RedLivingDexCausalRuntimeResolver",
     "build_red_living_dex_causal_scenario",
+    "build_red_living_dex_causal_scenario_from_capture",
 ]

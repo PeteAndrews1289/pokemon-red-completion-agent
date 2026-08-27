@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 27 scene: one honest lesson, not another doorway
+## August 27 scene: build one door that cannot open twice
+
+Open on **MAIN 74D7E7E8 · CI 33098041804/1 GREEN**, then connect the published generic journal to
+one Red setup capture. Animate the order as a one-way rail: **SETUP COMPLETE → CAUSAL PAIR CLAIM →
+BEHAVIOR COMMITMENT → RANDOM SELECTION → CONSTRUCTION START → ONE RED RUNTIME → EXECUTION START →
+CONTROLLER RELEASE → OBSERVE → ONE DATUM**. Keep every unselected runtime behind a black wall.
+
+Cut power after completion and show **RECOVERY: RUNTIME CALLS 0**. Inject a hidden prediction into
+construction and route it to **PRE-INPUT · TARGET NONE**. Then show the separate freezer with its
+ports visibly crossed out: **NO ROM · NO EMULATOR · NO CONTROLLER · NO TEACHER · NO MODEL · NO
+EXECUTE**. Two keys remain: **ONE TRAIN ROOT** and **RETIRED PHYSICAL ROOTS**, with the consumed V2
+root bouncing off a red stop plate.
+
+Reveal **140 FOCUSED · 5,441 PASSED FULL-SUITE · 296 TYPED · ANTIGRAVITY GO/P0 0/P1 0/P2 0 ·
+CLAUDE LIMIT/NO VERDICT**. End on **PUBLISH → EXACT-HEAD CI → AUTHENTICATE SELECTED + RETIRED
+IDENTITIES → FREEZE ONCE → REORIENT → EXECUTE ONCE**. Keep **CAUSAL TRAIN 0/1 · AUTHORITY 0 ·
+TRANSFER 0** visible; the scene is a trustworthy lesson gate, not training success.
+
+## Earlier August 27 scene: one honest lesson, not another doorway
 
 Open on a stack of green checks labelled **AUTHENTIC CLASSROOM**, **TWO-KEY CLAIM**, and
 **POWER-LOSS SAFE**. Then reveal the missing box: **TRAINING DATUM: 0**. Flash the failed V2

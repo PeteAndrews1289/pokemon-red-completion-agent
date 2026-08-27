@@ -191,6 +191,39 @@ class RedLivingDexLoadedProducerSlot:
 RedLivingDexProducerSlotLoader = Callable[[int], RedLivingDexLoadedProducerSlot]
 
 
+def authenticate_red_living_dex_current_consumer(
+    project_root: Path,
+    consumer: RedLivingDexCurrentConsumerBinding,
+) -> None:
+    """Require one clean published consumer and its exact successful push CI."""
+
+    if not isinstance(project_root, Path):
+        raise TypeError("current-consumer authentication needs a project Path")
+    if not isinstance(consumer, RedLivingDexCurrentConsumerBinding):
+        raise TypeError("current-consumer authentication needs its binding")
+    consumer.__post_init__()
+    _require_current_consumer(project_root, consumer)
+
+
+def authenticate_red_living_dex_producer_slot(
+    producer: RedLivingDexFrozenProducerBinding,
+    loader: RedLivingDexProducerSlotLoader,
+) -> tuple[RedLivingDexLoadedProducerSlot, Mapping[str, object]]:
+    """Reopen one immutable producer slot without invoking the retired wrapper.
+
+    The causal-campaign freezer reuses this exact record/plan join but owns a
+    different terminal artifact: a setup-to-randomized-outcome campaign, not a
+    third invocation preflight.
+    """
+
+    if not isinstance(producer, RedLivingDexFrozenProducerBinding):
+        raise TypeError("producer-slot authentication needs its frozen binding")
+    producer.__post_init__()
+    if not callable(loader):
+        raise TypeError("producer-slot authentication needs its selected loader")
+    return _load_and_authenticate_producer_slot(producer, loader)
+
+
 @dataclass(frozen=True, slots=True)
 class RedLivingDexClaimFirstPreflightReceipt:
     """Path-free proof that one selected slot can reach the atomic claim gate."""
@@ -562,6 +595,8 @@ __all__ = [
     "RedLivingDexFrozenProducerBinding",
     "RedLivingDexLoadedProducerSlot",
     "RedLivingDexProducerSlotLoader",
+    "authenticate_red_living_dex_current_consumer",
+    "authenticate_red_living_dex_producer_slot",
     "execute_red_living_dex_claim_first_invocation",
     "preflight_red_living_dex_claim_first_invocation",
 ]
