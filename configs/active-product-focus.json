@@ -13,22 +13,22 @@
       "id": "repeatable-red-living-dex-option-value-calibration-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. No ROM or private capture was opened, no authentic root was claimed, no controller or frame moved, no provider, teacher, prediction, outcome, fit, promotion, or transfer ran.",
-        "blocker": "The core boundary is not yet published under exact green CI and no current-source public one-slot invocation wrapper exists. Authentic setup must remain closed until those two gates are separately qualified and reoriented.",
-        "decision": "Publish the audited core boundary as one exact milestone. After exact-main green CI, reorient and build a thin current-source wrapper that authenticates the frozen producer plan, selects one never-claimed slot, constructs only the production resolver, and remains preflight-only during qualification.",
+        "authority_delta": "None. No ROM or authentic private capture was opened, no root was claimed, no controller or frame moved, and no provider, teacher, prediction, outcome, fit, promotion, or transfer ran.",
+        "blocker": "The current-source one-slot wrapper is locally qualified but not yet published under exact successful push CI, and its one real selected-root preflight-only rehearsal has not run. Private setup remains closed until publication, that sole structural rehearsal, and an immediate reorientation complete.",
+        "decision": "Publish the audited wrapper and source-bound registries as one exact milestone, require successful exact-head push CI, perform exactly one ROM-free preflight-only rehearsal of one never-claimed selected root, publish only its path-free structural receipt, and reorient immediately. Do not create another infrastructure-only gate: the following decision must open the shortest setup-to-randomized-outcome sequence or abort this lane.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json",
-          "sha256": "23b4c7f1192b08254c00bd9d2c5f178e283724bd687bffc404d22bc4a56ad014"
+          "path": "docs/evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json",
+          "sha256": "f7f5843327f1ebca45e05de97c65305985205c3c1c5ed40b20acff51af8e702b"
         },
-        "learning_output": "No new model example. Sixty focused and 5,347 repository tests qualify infrastructure only. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0.",
-        "next_falsifier": "The wrapper must reject dirty or unpublished source, wrong exact CI, producer-plan or private-plan drift, sibling preflight, claimed roots, resolver substitution, private path disclosure, and any claim/runtime/controller effect in its default rehearsal mode.",
-        "next_session_goal": "Complete publication, then implement and attack the separately source-bound one-slot wrapper. Run only a ROM-free rehearsal and stop again before any private setup execution.",
-        "product_alignment": "The reusable claim-first boundary is locally complete: one logical and one physical root share an atomic account claim, the private claim is durable before runtime construction, recovery never retries, the frozen plan is reauthenticated after claim, and Red-shaped plus Crystal-shaped fixtures share the same core. This is the shortest safe path from the authenticated classroom to genuine selected-arm causal evidence.",
-        "session_id": "2026-08-27-claim-first-boundary-qualified-publication-gate",
+        "learning_output": "No new model example. Sixty-seven focused and 5,389 repository tests qualify infrastructure only. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0.",
+        "next_falsifier": "The exact published command must authenticate current source and exact push CI before project import, reopen the immutable producer record, read only one selected state/envelope pair, observe both roots available, disclose no private identity or path, and leave claims, runtime construction, controller effects, learner effects, and model effects structurally unreachable.",
+        "next_session_goal": "Publish the exact wrapper, require successful push CI, run one ROM-free selected-root preflight-only rehearsal, and reorient in the same session. Stop before setup execution, but do not authorize another infrastructure-only session afterward.",
+        "product_alignment": "The one-slot wrapper is the shortest remaining bridge from the frozen Red classroom to a genuine selected-arm lesson: it binds current clean source and exact CI, authenticates the sealed producer/private joins, reads one root without sibling inventory coupling, owns the only Red resolver selection, and cannot claim or construct runtime in preflight. The reusable ledger remains title-neutral; this Red adapter is not Crystal model transfer.",
+        "session_id": "2026-08-27-one-slot-wrapper-qualified-publication-gate",
         "status": "active",
-        "stop_condition": "Stop on a failed exact-source publication, wrapper access to an unselected sibling, a claim or runtime during preflight, an unauthenticated producer/private join, identity leakage, or any private setup execution before another explicit reorientation.",
-        "transfer_result": "Not run. The title-neutral claim contract passes Red-shaped and Crystal-shaped fixtures and rejects cross-title reuse of one physical state. This is architectural portability, not Crystal model transfer."
+        "stop_condition": "Stop on failed exact-source publication or CI, wrapper access to an unselected sibling, a claim or runtime during preflight, an unauthenticated producer/private join, identity leakage, or any private setup execution before reorientation. After one successful rehearsal, stop this infrastructure gate permanently and reject another wrapper-only session.",
+        "transfer_result": "Not run. The title-neutral account claim primitive still passes Red-shaped and Crystal-shaped fixtures, while this invocation owns a deliberately Red-specific cartridge adapter. That is safe architectural separation, not Crystal model transfer."
       },
       "learned_authority": {
         "current": "The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. The new Red observed-arm boundary grants no action authority until durable authentic outcomes and later evaluation exist.",

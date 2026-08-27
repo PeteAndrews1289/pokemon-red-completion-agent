@@ -6,21 +6,27 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: publish the claim-first core, then bind one selected slot
+## Current override: publish the selected-slot wrapper, rehearse once, then open a lesson
 
-The title-neutral pair ledger, deep frozen-plan admission, one-slot Red campaign and production
-runtime are locally qualified. The [evidence](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
-records **60 focused · 5,347 full-suite · 289 typed source files**. Pair/pair and legacy/pair
-subprocess races have one winner; recovery never retries or opens runtime; postclaim deep-plan
-drift fails before runtime; all isolated arms close through `BaseException`; failure actions and
-frames remain causal; provider execution is forbidden. Red-shaped and Crystal-shaped fixtures use
-the same claim core. Claude and Antigravity both returned GO with no blocking finding.
+The claim-first core and current-source Red invocation wrapper are locally qualified. The
+[evidence](evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)
+records **67 focused · 5,389 full-suite · 291 typed source files**. The wrapper proves clean
+published source and exact successful push CI before project
+import, authenticates the sealed producer/private joins, opens only the selected state/envelope
+pair, observes both root identities through a shared read lease, and exposes no preflight path to a
+ROM, claim, resolver, controller, learner, or model. Its separate execute entrypoint owns the
+production Red resolver and cannot accept a substituted factory.
 
-Codex owns publication and exact-main CI, then must reorient before building the separately
-source-bound one-slot wrapper. Claude remains the causal/recovery reviewer. Antigravity remains the
-architecture/transfer challenger. Neither edits or executes; Codex adjudicates. The wrapper gets a
-ROM-free, effect-free rehearsal only. Private setup, outcomes, fitting, sealed Red, Crystal and
-replay remain closed.
+Claude and Antigravity both approve publication and one ROM-free preflight with no P0/P1 blocker;
+both reject private setup at this checkpoint. Codex accepted stronger CI-field mutation coverage
+and structural-zero wording, retained the deliberate source/CI recheck around the private read,
+and rejected premature resolver injection. Codex owns final qualification, publication,
+exact-head CI, exactly one selected-root preflight, a path-free receipt, and immediate
+reorientation. The reviewers remain read-only challengers. After this rehearsal, another
+infrastructure-only session is forbidden: open the shortest setup-to-randomized-outcome gate or
+abort the lane.
+
+## Previous override: publish the claim-first core, then bind one selected slot
 
 ## Previous override: Codex owns the claim-first outer execution boundary
 

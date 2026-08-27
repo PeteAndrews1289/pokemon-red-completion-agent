@@ -436,9 +436,13 @@ def _ci_document(binding: RedLivingDexCurrentConsumerBinding) -> dict[str, objec
         ("head_sha", "d" * 40),
         ("id", 9999),
         ("run_attempt", 2),
+        ("status", "queued"),
         ("conclusion", "failure"),
         ("event", "pull_request"),
+        ("name", "Other"),
         ("path", ".github/workflows/other.yml"),
+        ("html_url", "https://example.invalid/run"),
+        ("repository", {"full_name": "other/repository"}),
     ),
 )
 def test_exact_ci_document_rejects_every_material_binding_swap(

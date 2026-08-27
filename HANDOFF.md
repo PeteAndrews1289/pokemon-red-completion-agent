@@ -12,37 +12,36 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: claim-first outer boundary qualified; publish, then build the one-slot wrapper
+## 2026-08-27: one-slot invocation qualified; publish, rehearse once, then open the lesson gate
 
-The controller-capable safety core is locally complete and still has not executed an authentic
-setup. A title-neutral pair ledger atomically owns both the catalog's logical root and the exact
-state/envelope physical root; every legacy single-root admission now honors that ledger and the
-pair ledger honors legacy markers. Real subprocess tests cover pair/pair and legacy/pair races.
-One Red slot writes its private episode claim durably while the account lease is held, releases the
-lease, reauthenticates the complete detached producer plan, and only then permits a cold resolver
-scope to construct PyBoy. Complete, failed, interrupted, prelocal-crash, and uncertain-directory-
-durability recovery never reissue a claim or call the resolver.
+The claim-first core and its current-source Red invocation wrapper are locally complete. The
+wrapper proves clean published source and one exact successful push-CI attempt before project
+import, reopens the immutable producer record, authenticates the frozen private joins, and loads
+only one explicitly selected state/envelope pair. Its default preflight has no ROM argument,
+campaign call, resolver construction, claim capability, controller capability, or model
+capability. The execute entrypoint owns the one production Red resolver instead of accepting an
+injectable runtime factory. Current source and CI are deliberately rechecked after the private read
+to bracket that read against source mutation.
 
-The production Red adapter rebuilds only the selected claimed recipe from cartridge truth, creates
-one isolated no-save emulator per validation arm, closes every arm on success, `Exception`, and
-`BaseException`, reserves attempted actions before delegation, reconciles actual frames in
-`finally`, and injects a provider executor that always refuses execution. Controller primitives
-remain centralized in the emulator/executor trust boundary. The reusable ledger passes Red-shaped
-and Crystal-shaped ROM-free fixtures and rejects relabelling the same physical state as another
-title.
+The [local qualification](docs/evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json)
+records **67 focused and 5,389 repository tests across 291 typed source files**. Claude and
+Antigravity approved publication and one ROM-free preflight with no
+P0/P1 blocker; both rejected private setup at this checkpoint. Codex added Claude's missing CI
+field mutations, describes the receipt's zeroes as structural declarations rather than measured
+effects, retained the two source/CI checks as a time-of-check/time-of-use bracket, and rejected an
+injectable generic resolver because it would reopen runtime substitution. The shared pair ledger
+is title-neutral; this cartridge adapter is intentionally Red-specific and proves no Crystal
+transfer.
 
-The [local qualification](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
-records **60 focused · 5,347 full-suite tests · 289 typed source files**. Claude and Antigravity
-both returned GO with no P0/P1 blocker. Codex added Claude's uncertain-fsync integration test and
-kept its resolver-local ledger recheck suggestion deferred: durable admission belongs to the one
-shared campaign, not separately to every title adapter.
+Publish the final exact wrapper and regenerated source-bound registries, require successful
+exact-head push CI, and perform exactly one ROM-free preflight-only read of one never-claimed
+selected root. Publish only its path-free structural receipt and reorient immediately. Do not
+execute setup during that rehearsal. After it succeeds, this infrastructure gate is permanently
+closed: the next decision must authorize the shortest one-slot setup-to-randomized-outcome sequence
+or abort this lane, not create another wrapper. Counters remain **development 15 · verified 5/9 ·
+causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
-Publish this exact boundary and require exact-main green CI. Then reorient and build a separate
-current-source one-slot invocation wrapper that authenticates the immutable producer and private
-plan joins and constructs only the production resolver. Its qualification rehearsal must be
-ROM-free and effect-free. Do not execute private setup, collect an outcome, fit, open Crystal or
-sealed Red, or replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits
-4/5 · comparisons 4/5 · authority 0 · transfer 0**.
+## Previous 2026-08-27: claim-first outer boundary qualified; build the one-slot wrapper
 
 ## Previous 2026-08-27: pre-controller bridge succeeded; build the claim-first outer boundary
 

@@ -3,7 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 27 claim-first core qualification checkpoint:** The title-neutral atomic pair ledger,
+> **August 27 selected-slot invocation checkpoint:** The claim-first core and its thin
+> current-source Red wrapper pass **67 focused and 5,389 repository tests across 291 typed source
+> files**. Preflight proves clean published source, exact push
+> CI, the sealed producer/private joins, one selected state/envelope pair, and both available root
+> identities while leaving ROM, claim, resolver, controller, learner, and model capabilities
+> unreachable. Claude and Antigravity approve publication and one ROM-free preflight with no P0/P1
+> blocker and reject private setup. See the
+> [qualification](evidence/red-living-dex-claim-first-one-slot-invocation-v1-local-qualification-2026-08-27.json).
+>
+> Publish the exact wrapper, require exact-head successful push CI, run exactly one selected-root
+> preflight, publish only a path-free structural receipt, and reorient immediately. Another
+> infrastructure-only session is forbidden; next open the shortest setup-to-randomized-outcome
+> sequence or abort the lane. Causal train remains **0/8**.
+
+> **Previous August 27 claim-first core qualification checkpoint:** The title-neutral atomic pair ledger,
 > deep-plan admission, one-slot Red campaign and production runtime pass **60 focused and 5,347
 > repository tests across 289 typed source files**. Pair/pair and legacy/pair subprocess races,
 > every recovery class, uncertain durability, causal failure metering, BaseException closure,
