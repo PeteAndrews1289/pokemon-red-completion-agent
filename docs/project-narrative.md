@@ -1,6 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 27: the classroom door finally opened without anyone entering
+## August 27: the lesson claim became atomic and crash-safe
+
+The next failure mode lived between storage and gameplay. A curriculum slot had both a logical
+identity and exact physical state/envelope bytes; claiming only one allowed the other to be
+relabelled and reused. The new title-neutral ledger writes both in one no-replace transaction under
+the account lock and makes legacy single-root and new pair claims mutually visible. Real
+subprocess races prove exactly one winner, including an old-format writer competing with a new
+pair.
+
+The Red campaign then keeps the private claim and runtime boundary in strict order: authenticate
+one detached slot, commit the account pair, durably append the local claim while still locked,
+release the lock, reauthenticate the complete producer plan, and only then enter a cold production
+resolver. Recovery branches return before the resolver. The adapter rebuilds only the claimed
+recipe, owns every no-save emulator through one closing scope, meters attempted controller actions
+and actual frames through exceptions and field moves, and makes provider execution impossible
+during setup.
+
+The [qualification](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+records **60 focused · 5,347 repository · 289 typed source files**. Claude and Antigravity found no
+blocking issue. An end-to-end uncertain-directory-sync test was added from Claude's P2; its
+suggestion that every title resolver recheck the account ledger was deferred because the shared
+campaign is the single admission authority. This remains infrastructure: no ROM, private root,
+outcome, fit, authority or transfer result was used. Publication and a separately bound one-slot
+wrapper come next.
+
+## Earlier August 27: the classroom door finally opened without anyone entering
 
 PR 83 and exact-main CI passed, then the one namespace-bound V2 rehearsal succeeded. It
 authenticated all fifteen frozen roots and reproduced forty-five real options, thirty-three

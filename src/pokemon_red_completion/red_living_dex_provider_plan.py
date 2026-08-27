@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.blaine import BLASTOISE_SPECIES_ID
+from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
 from pokemon_red_completion.collection import CollectionLocation, CollectionObservation
 from pokemon_red_completion.global_router import MacroGraph, advance_macro_state
 from pokemon_red_completion.goal_manager_state import headroom_satisfaction
@@ -219,34 +220,76 @@ class RedLivingDexActionFreeRootObservation:
     root_claim_available: bool
 
     def __post_init__(self) -> None:
-        if not isinstance(self.root, RedLivingDexAuthenticatedSetupRoot):
-            raise TypeError("provider-plan observation needs an authenticated root")
-        self.root.__post_init__()
-        if not isinstance(self.traversal, TraversalSnapshot):
-            raise TypeError("provider-plan observation needs a traversal snapshot")
-        if (
-            not self.traversal.ready
-            or self.traversal.interruption is not None
-            or self.traversal.mode != "land"
-        ):
-            raise RedLivingDexProviderPlanError("provider-plan root is not at ready land control")
-        if not isinstance(self.facts, RedLivingDexProviderRootFacts):
-            raise TypeError("provider-plan observation needs Red root facts")
-        self.facts.__post_init__()
-        if (self.facts.map_id, self.facts.at) != (
-            self.traversal.map_id,
-            self.traversal.at,
-        ):
-            raise RedLivingDexProviderPlanError(
-                "provider-plan Red and traversal observations disagree"
-            )
-        _require_sha256(self.observed_state_sha256, "observed root state")
-        if self.observed_state_sha256 != self.root.state_sha256:
-            raise RedLivingDexProviderPlanError(
-                "provider-plan traversal was read from another state"
-            )
+        _validate_root_observation(
+            self.root,
+            self.traversal,
+            self.facts,
+            self.observed_state_sha256,
+        )
         if self.root_claim_available is not True:
             raise RedLivingDexProviderPlanError("provider-plan root is already consumed")
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexClaimedRootObservation:
+    """One coherent Red read joined to an already-durable pair claim."""
+
+    root: RedLivingDexAuthenticatedSetupRoot
+    traversal: TraversalSnapshot
+    facts: RedLivingDexProviderRootFacts
+    observed_state_sha256: str
+    pair_claim: ClaimFirstRootPair
+
+    def __post_init__(self) -> None:
+        _validate_root_observation(
+            self.root,
+            self.traversal,
+            self.facts,
+            self.observed_state_sha256,
+        )
+        if not isinstance(self.pair_claim, ClaimFirstRootPair):
+            raise TypeError("claimed provider observation needs a pair claim")
+        self.pair_claim.__post_init__()
+        if (
+            self.pair_claim.logical_root_sha256
+            != self.root.root_consumption_sha256
+            or self.pair_claim.physical_root_sha256
+            != self.root.physical_root_sha256
+        ):
+            raise RedLivingDexProviderPlanError(
+                "claimed provider observation belongs to another root pair"
+            )
+
+    @property
+    def pair_claim_sha256(self) -> str:
+        return self.pair_claim.claim_sha256
+
+
+def _validate_root_observation(
+    root: RedLivingDexAuthenticatedSetupRoot,
+    traversal: TraversalSnapshot,
+    facts: RedLivingDexProviderRootFacts,
+    observed_state_sha256: str,
+) -> None:
+    if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
+        raise TypeError("provider-plan observation needs an authenticated root")
+    root.__post_init__()
+    if not isinstance(traversal, TraversalSnapshot):
+        raise TypeError("provider-plan observation needs a traversal snapshot")
+    if not traversal.ready or traversal.interruption is not None or traversal.mode != "land":
+        raise RedLivingDexProviderPlanError("provider-plan root is not at ready land control")
+    if not isinstance(facts, RedLivingDexProviderRootFacts):
+        raise TypeError("provider-plan observation needs Red root facts")
+    facts.__post_init__()
+    if (facts.map_id, facts.at) != (traversal.map_id, traversal.at):
+        raise RedLivingDexProviderPlanError(
+            "provider-plan Red and traversal observations disagree"
+        )
+    _require_sha256(observed_state_sha256, "observed root state")
+    if observed_state_sha256 != root.state_sha256:
+        raise RedLivingDexProviderPlanError(
+            "provider-plan traversal was read from another state"
+        )
 
 
 def observe_red_living_dex_provider_root_facts(
@@ -643,6 +686,47 @@ def build_red_living_dex_provider_recipes(
     )
 
 
+def build_red_living_dex_provider_recipe_for_claimed_root(
+    ordinal: int,
+    observation: RedLivingDexClaimedRootObservation,
+    *,
+    world: RedLivingDexProviderRouteWorld,
+    corridors: tuple[RedLivingDexWildCorridor, ...],
+    expected_rom_sha256: str,
+) -> RedLivingDexSetupSlotRecipe:
+    """Cold-resolve exactly one selected recipe after durable admission.
+
+    Unlike the inventory freezer, this path neither asks nor asserts whether a
+    root is available: the supplied observation must prove the authoritative
+    logical-plus-physical pair claim.  It intentionally has no batch API, so a
+    caller cannot construct runtimes or routes for unclaimed siblings.
+    """
+
+    if type(ordinal) is not int:  # noqa: E721
+        raise TypeError("claimed provider ordinal must be an int")
+    prospective = build_red_living_dex_prospective_capture_plan()
+    if not 0 <= ordinal < len(prospective.slots):
+        raise RedLivingDexProviderPlanError("claimed provider ordinal differs")
+    if not isinstance(observation, RedLivingDexClaimedRootObservation):
+        raise TypeError("claimed provider resolver needs a claimed observation")
+    observation.__post_init__()
+    _require_route_world(world)
+    expected_rom = _require_sha256(expected_rom_sha256, "expected route-world ROM")
+    if _route_world_rom_sha256(world) != expected_rom:
+        raise RedLivingDexProviderPlanError(
+            "claimed provider route world uses another cartridge"
+        )
+    corridor_by_source = _validate_corridors(corridors)
+    return _build_slot_recipe_from_components(
+        prospective.slots[ordinal],
+        root=observation.root,
+        traversal=observation.traversal,
+        facts=observation.facts,
+        world=world,
+        corridor_by_source=corridor_by_source,
+    )
+
+
 def red_living_dex_route_terminal_snapshot(
     world: RedLivingDexProviderRouteWorld,
     start: TraversalSnapshot,
@@ -697,11 +781,30 @@ def _build_slot_recipe(
     world: RedLivingDexProviderRouteWorld,
     corridor_by_source: Mapping[str, RedLivingDexWildCorridor],
 ) -> RedLivingDexSetupSlotRecipe:
-    _require_slot_root_preconditions(slot, root_observation.facts)
+    return _build_slot_recipe_from_components(
+        slot,
+        root=root_observation.root,
+        traversal=root_observation.traversal,
+        facts=root_observation.facts,
+        world=world,
+        corridor_by_source=corridor_by_source,
+    )
+
+
+def _build_slot_recipe_from_components(
+    slot: LivingDexProspectiveCaptureSlot,
+    *,
+    root: RedLivingDexAuthenticatedSetupRoot,
+    traversal: TraversalSnapshot,
+    facts: RedLivingDexProviderRootFacts,
+    world: RedLivingDexProviderRouteWorld,
+    corridor_by_source: Mapping[str, RedLivingDexWildCorridor],
+) -> RedLivingDexSetupSlotRecipe:
+    _require_slot_root_preconditions(slot, facts)
     origin_target = _origin_target(slot, corridor_by_source)
     origin, construction_route, origin_snapshot = _route_to_target(
         world,
-        root_observation.traversal,
+        traversal,
         origin_target,
         subject=f"{slot.slot_id} construction",
     )
@@ -710,13 +813,12 @@ def _build_slot_recipe(
             slot,
             option_kind,
             origin_snapshot,
-            root_observation.facts,
+            facts,
             world=world,
             corridor_by_source=corridor_by_source,
         )
         for option_kind in slot.available_option_kinds
     )
-    root = root_observation.root
     return RedLivingDexSetupSlotRecipe(
         slot_sha256=slot.slot_sha256,
         partition=slot.partition,
@@ -724,7 +826,7 @@ def _build_slot_recipe(
         root_consumption_sha256=root.root_consumption_sha256,
         root_state_sha256=root.state_sha256,
         root_envelope_sha256=root.envelope_sha256,
-        base_boundary=_boundary(root_observation.traversal),
+        base_boundary=_boundary(traversal),
         origin_boundary=origin,
         construction_route=construction_route,
         providers=providers,
@@ -1081,11 +1183,13 @@ __all__ = [
     "RED_LIVING_DEX_PROVIDER_PLAN_FREEZE_SCHEMA",
     "RED_LIVING_DEX_PROVIDER_PLANNER_BINDING_SCHEMA",
     "RedLivingDexActionFreeRootObservation",
+    "RedLivingDexClaimedRootObservation",
     "RedLivingDexProviderPlanError",
     "RedLivingDexProviderPlanFreeze",
     "RedLivingDexProviderRootFacts",
     "RedLivingDexProviderRouteWorld",
     "build_red_living_dex_provider_recipes",
+    "build_red_living_dex_provider_recipe_for_claimed_root",
     "derive_red_living_dex_provider_corridors",
     "freeze_red_living_dex_provider_plan",
     "observe_red_living_dex_provider_root_facts",

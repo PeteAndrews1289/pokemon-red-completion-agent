@@ -1,6 +1,22 @@
 # Three-agent coordination
 
-> **2026-08-27 active override — build the claim-first outer execution boundary:** PR 83 passed CI
+> **2026-08-27 active override — publish claim-first core, then build the one-slot wrapper:** The
+> title-neutral atomic logical-plus-physical ledger, deep frozen-plan admission, one-slot Red
+> campaign, and production runtime are locally qualified. Pair/pair and legacy/pair subprocess
+> races, every crash/recovery class, uncertain post-rename durability, action/frame failures,
+> BaseException closure, provider refusal, and Red/Crystal-shaped core fixtures pass. The
+> [qualification](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+> records **60 focused · 5,347 full-suite · 289 typed source files**. Claude and Antigravity return
+> GO with no blocking finding.
+>
+> Codex publishes this exact milestone and reorients after exact-main CI. The next bounded session
+> is a thin current-source one-slot wrapper plus a ROM-free, effect-free rehearsal. Claude audits
+> causal/recovery truth; Antigravity challenges architecture/transfer; Codex adjudicates. Neither
+> reviewer edits or executes. Private setup, outcomes, fitting, sealed Red, Crystal and replay
+> remain closed. Counters stay **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
+> comparisons 4/5 · authority 0 · transfer 0**.
+>
+> **Previous 2026-08-27 override — build the claim-first outer execution boundary:** PR 83 passed CI
 > `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI `33059506829/1`. The sole V2
 > read-only rehearsal authenticated the immutable **15/45/33/10** classroom and rejoined all fifteen
 > roots with every protected effect and setup entrypoint zero. The

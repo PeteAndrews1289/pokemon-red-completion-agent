@@ -73,6 +73,74 @@ PyBoyFactory = Callable[..., PyBoyBackend]
 WindowEventPump = Callable[[], bool]
 
 
+class CausallyMeteredEmulator:
+    """Keep raw controller primitives inside the emulator trust boundary.
+
+    Title adapters may wrap an already-open emulator and supply one durable
+    frame-accounting callback.  Every attempted tick reconciles the delegate's
+    actual frame counter in ``finally``, including a tick that advances and
+    then raises.  Controller-action admission remains the executor's job.
+    """
+
+    __slots__ = ("_delegate", "_record_frames")
+
+    def __init__(
+        self,
+        delegate: Any,
+        *,
+        record_frames: Callable[[int], None],
+    ) -> None:
+        if not callable(record_frames):
+            raise TypeError("metered emulator needs a frame recorder")
+        self._delegate = delegate
+        self._record_frames = record_frames
+
+    @property
+    def frame_count(self) -> int:
+        value = self._delegate.frame_count
+        if type(value) is not int or value < 0:  # noqa: E721
+            raise EmulatorError("metered emulator frame counter differs")
+        return value
+
+    @property
+    def pressed_buttons(self) -> frozenset[str]:
+        value = self._delegate.pressed_buttons
+        if not isinstance(value, frozenset):
+            raise EmulatorError("metered emulator button state differs")
+        return value
+
+    def tick(self, frames: int) -> None:
+        before = self.frame_count
+        try:
+            self._delegate.tick(frames)
+        finally:
+            after = self.frame_count
+            if after < before:
+                raise EmulatorError("metered emulator frame counter moved backwards")
+            self._record_frames(after - before)
+
+    def press(self, button: str) -> None:
+        self._delegate.press(button)
+
+    def release(self, button: str) -> None:
+        self._delegate.release(button)
+
+    def load_state_bytes(self, payload: bytes) -> None:
+        self._delegate.load_state_bytes(payload)
+
+    def save_state_bytes(self) -> bytes:
+        return self._delegate.save_state_bytes()
+
+    def read_u8(self, address: int) -> int:
+        return self._delegate.read_u8(address)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        return self._delegate.read_cartridge_ram_u8(bank, address)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
 def _load_pyboy_factory() -> PyBoyFactory:
     try:
         from pyboy import PyBoy

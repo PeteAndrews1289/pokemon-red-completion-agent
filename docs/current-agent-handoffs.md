@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the claim-first outer execution boundary
+## Current override: publish the claim-first core, then bind one selected slot
+
+The title-neutral pair ledger, deep frozen-plan admission, one-slot Red campaign and production
+runtime are locally qualified. The [evidence](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+records **60 focused · 5,347 full-suite · 289 typed source files**. Pair/pair and legacy/pair
+subprocess races have one winner; recovery never retries or opens runtime; postclaim deep-plan
+drift fails before runtime; all isolated arms close through `BaseException`; failure actions and
+frames remain causal; provider execution is forbidden. Red-shaped and Crystal-shaped fixtures use
+the same claim core. Claude and Antigravity both returned GO with no blocking finding.
+
+Codex owns publication and exact-main CI, then must reorient before building the separately
+source-bound one-slot wrapper. Claude remains the causal/recovery reviewer. Antigravity remains the
+architecture/transfer challenger. Neither edits or executes; Codex adjudicates. The wrapper gets a
+ROM-free, effect-free rehearsal only. Private setup, outcomes, fitting, sealed Red, Crystal and
+replay remain closed.
+
+## Previous override: Codex owns the claim-first outer execution boundary
 
 PR 83 passed CI `33058891890/1`, merged as main
 `18eea8bdabe8fc352d60dd55144efc1c5442e6a0`, and passed exact-main CI `33059506829/1`. Its sole V2

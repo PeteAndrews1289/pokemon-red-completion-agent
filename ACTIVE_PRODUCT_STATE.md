@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-precontroller-success-claim-first-outer-gate** · status **active** · evidence [qualification](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+**2026-08-27-claim-first-boundary-qualified-publication-gate** · status **active** · evidence [qualification](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The successful pre-controller proof closes the doorway to the authentic Red curriculum. The next generic claim-first boundary is the shortest remaining prerequisite for selected-arm causal outcomes and preserves the title-neutral execution semantics needed for later Crystal transfer. |
-| Learning output | No new model example. The exact-main rehearsal authenticated 15 roots, 45 options, 33 families and 10 origins with every protected effect zero. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The successful bridge rehearsal made no gameplay choice, moved no controller or frame, executed no provider, claimed no root, queried no teacher, predicted or observed no outcome, fit no model, and promoted no authority. |
-| Transfer result | Not run. The successful Red doorway proof changes no learner schema or model weights. The next boundary must pass Red-shaped and Crystal-shaped ROM-free fixtures; actual Crystal stays closed until authentic Red causal evidence and a powered Red benchmark exist. |
-| Blocker | The exact immutable classroom is now authenticated and the namespace lane is closed. Authentic causal outcomes remain blocked by the controller-capable outer boundary: durable execution identity, atomic logical-plus-physical claims, authenticated recovery, deep plan reauthentication, and claim-first runtime construction. |
-| Decision | Close V1/V2 namespace rehearsal permanently and begin one bounded ROM-free outer-execution engineering session. Compose the five deferred guards as one claim-first boundary, qualify crash and concurrency cutpoints, publish under exact green CI, and reorient before any private setup execution. Reject another validator replay or Red-specific route patch. |
-| Next session | Implement the smallest composable outer execution identity, atomic dual-claim, authenticated recovery, deep-plan reauthentication, and claim-first runtime boundary. Qualify it with Red-shaped and Crystal-shaped ROM-free fixtures, publish under exact green CI, and reorient before private setup execution. |
-| Next falsifier | ROM-free concurrent duplicate-claim and crash-cutpoint tests must prove both logical and physical claims become durable together, recovery cannot reissue a consumed root, the deep plan is reauthenticated at consumption, and no runtime factory or controller input can occur before the claim transition commits. |
-| Stop condition | Stop on a runtime or input before both claims, partial or reusable claims, unauthenticated recovery, mutable deep-plan drift, identity leakage, Red-specific execution semantics, or any private setup attempt before publication and exact green CI. Reorient after one bounded engineering session even if the outer gate remains incomplete. |
+| Product alignment | The reusable claim-first boundary is locally complete: one logical and one physical root share an atomic account claim, the private claim is durable before runtime construction, recovery never retries, the frozen plan is reauthenticated after claim, and Red-shaped plus Crystal-shaped fixtures share the same core. This is the shortest safe path from the authenticated classroom to genuine selected-arm causal evidence. |
+| Learning output | No new model example. Sixty focused and 5,347 repository tests qualify infrastructure only. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
+| Authority delta | None. No ROM or private capture was opened, no authentic root was claimed, no controller or frame moved, no provider, teacher, prediction, outcome, fit, promotion, or transfer ran. |
+| Transfer result | Not run. The title-neutral claim contract passes Red-shaped and Crystal-shaped fixtures and rejects cross-title reuse of one physical state. This is architectural portability, not Crystal model transfer. |
+| Blocker | The core boundary is not yet published under exact green CI and no current-source public one-slot invocation wrapper exists. Authentic setup must remain closed until those two gates are separately qualified and reoriented. |
+| Decision | Publish the audited core boundary as one exact milestone. After exact-main green CI, reorient and build a thin current-source wrapper that authenticates the frozen producer plan, selects one never-claimed slot, constructs only the production resolver, and remains preflight-only during qualification. |
+| Next session | Complete publication, then implement and attack the separately source-bound one-slot wrapper. Run only a ROM-free rehearsal and stop again before any private setup execution. |
+| Next falsifier | The wrapper must reject dirty or unpublished source, wrong exact CI, producer-plan or private-plan drift, sibling preflight, claimed roots, resolver substitution, private path disclosure, and any claim/runtime/controller effect in its default rehearsal mode. |
+| Stop condition | Stop on a failed exact-source publication, wrapper access to an unselected sibling, a claim or runtime during preflight, an unauthenticated producer/private join, identity leakage, or any private setup execution before another explicit reorientation. |
 
 ### Stop conditions
 

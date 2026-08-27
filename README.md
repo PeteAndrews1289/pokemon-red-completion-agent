@@ -5,20 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): build the claim-first outer execution boundary.** PR 83
-> passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI `33059506829/1`.
-> The sole V2 read-only rehearsal succeeded: the [path-free result](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
-> authenticates **15 roots · 45 options · 33 families · 10 origins · 37 routed options · 7
-> cartridge corridors** with actions, frames, claims, runtimes, setup calls, providers, teachers,
-> predictions, outcomes and fits all zero. The namespace lane is closed permanently.
+> **Current product focus (August 27, 2026): publish the claim-first core, then bind one public
+> slot.** The title-neutral atomic logical-plus-physical ledger, deep plan admission, one-slot Red
+> campaign and production runtime are locally qualified. The
+> [evidence](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+> records **60 focused · 5,347 full-suite · 289 typed source files**. Real pair/pair and legacy/pair
+> process races, every recovery class, uncertain durability, failure metering, BaseException arm
+> closure, provider refusal, and Red/Crystal-shaped core fixtures pass. Claude and Antigravity both
+> return GO with no blocking finding.
 >
-> Next compose durable outer execution identity, atomic logical-plus-physical claims,
-> authenticated recovery, deep plan reauthentication, and claim-first runtime construction. Prove
-> duplicate-claim and crash-cutpoint behavior ROM-free with Red-shaped and Crystal-shaped fixtures,
-> publish under exact green CI, and reorient before private setup execution. Fitting, sealed Red and
+> Publish this exact core under green CI, reorient, then build a thin current-source one-slot
+> invocation wrapper and qualify it ROM-free before any private setup. Fitting, sealed Red and
 > Crystal remain closed. Counters remain
 > **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
 > transfer 0**.
+
+> **Previous product focus (August 27, 2026): build the claim-first outer execution boundary.** PR
+> 83 and exact-main CI passed, and the sole V2 read-only rehearsal authenticated **15 roots · 45
+> options · 33 families · 10 origins · 37 routed options · 7 cartridge corridors** with every
+> protected effect zero. That closed the namespace lane and opened the now-qualified outer-boundary
+> engineering session.
 
 > **Previous product focus (August 27, 2026): publish the genuinely runtime-free exact-plan
 > bridge.** Independent read-only audits stopped the first green candidate: it loaded helper code

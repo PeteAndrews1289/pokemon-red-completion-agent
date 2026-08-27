@@ -370,16 +370,32 @@ def open_fixed_account_claim_registry(path: Path | None = None) -> Path:
 
 
 def root_claim_is_available(registry: Path, root_consumption_sha256: str) -> bool:
-    marker = _root_claim_marker(registry, root_consumption_sha256)
+    identity = _require_sha256(root_consumption_sha256, subject="root consumption")
+    marker = _root_claim_marker(registry, identity)
     try:
         marker.lstat()
     except FileNotFoundError:
-        return True
+        pass
     except OSError as error:
         raise FreshCompositionQualificationError(
             "fresh-composition claim marker cannot be inspected"
         ) from error
-    return False
+    else:
+        return False
+
+    # The title-neutral pair ledger is authoritative for newer claim-first
+    # executions.  Import lazily to keep the foundational lease implementation
+    # independent while making every legacy check honor the same consumed
+    # identities.  A malformed pair marker fails the whole ledger closed.
+    try:
+        from pokemon_red_completion.claim_first_admission import (
+            ClaimFirstAdmissionError,
+            root_identity_is_pair_claimed,
+        )
+
+        return not root_identity_is_pair_claimed(registry, identity)
+    except ClaimFirstAdmissionError as error:
+        raise FreshCompositionQualificationError(str(error)) from None
 
 
 def write_root_claim(
@@ -392,6 +408,10 @@ def write_root_claim(
 ) -> None:
     """Durably consume one root before a local artifact or controller can start."""
 
+    if not root_claim_is_available(registry, root_consumption_sha256):
+        raise FreshCompositionQualificationError(
+            "fresh-composition root is already consumed"
+        )
     marker = _root_claim_marker(registry, root_consumption_sha256)
     payload = (
         json.dumps(

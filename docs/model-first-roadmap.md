@@ -8,7 +8,39 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: pre-controller proof succeeded; build the claim-first outer boundary
+## Current checkpoint: claim-first boundary qualified; publish, then bind one public slot
+
+The outer safety core is locally complete without touching an authentic ROM or private capture.
+One title-neutral account transaction atomically consumes the logical catalog root and the exact
+physical state/envelope root; legacy and pair ledgers cross-honor both identities. The Red campaign
+writes the local private claim durably before runtime construction, reauthenticates the whole
+detached producer plan after claim, rebuilds only the selected recipe, never executes a provider,
+and makes every terminal non-retryable. Recovery never invokes the resolver. The production
+runtime closes every isolated no-save emulator on ordinary and base exceptions and causally meters
+attempted actions and actual frames, including field-move sub-actions.
+
+The [local qualification](evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
+records **60 focused tests, 5,347 repository tests, and 289 typed source files**. Real subprocess
+races cover pair/pair and legacy/pair competition; uncertain post-rename durability is covered end
+to end. Red-shaped and Crystal-shaped fixtures use the same core and the same physical state cannot
+be reclaimed under another title label. Claude and Antigravity returned GO with no P0/P1 blocker.
+
+The shortest honest sequence is now:
+
+1. publish this exact core and require successful exact-main CI;
+2. reorient and build one thin current-source wrapper for one selected frozen slot;
+3. authenticate clean published source, exact CI, immutable producer plan, private-plan/manifest,
+   selected recipe and both root identities without preflighting unselected siblings;
+4. construct only the audited production resolver in execute mode, while default qualification is
+   preflight-only and effect-free;
+5. attack the wrapper ROM-free, publish it under exact green CI, perform one ROM-free rehearsal,
+   and reorient again; and
+6. only then define a separately bound private setup execution gate.
+
+This milestone is infrastructure, not learning. Causal train remains **0/8**. Private Red setup,
+outcomes, fitting, sealed Red, Crystal, promotion and replay remain closed.
+
+## Previous checkpoint: pre-controller proof succeeded; build the claim-first outer boundary
 
 PR 83 passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI
 `33059506829/1`. The one V2 read-only rehearsal succeeded. Its
