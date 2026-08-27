@@ -5,20 +5,22 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): publish the claim-first core, then bind one public
-> slot.** The title-neutral atomic logical-plus-physical ledger, deep plan admission, one-slot Red
-> campaign and production runtime are locally qualified. The
-> [evidence](docs/evidence/red-living-dex-claim-first-outer-boundary-v1-local-qualification-2026-08-27.json)
-> records **60 focused · 5,347 full-suite · 289 typed source files**. Real pair/pair and legacy/pair
-> process races, every recovery class, uncertain durability, failure metering, BaseException arm
-> closure, provider refusal, and Red/Crystal-shaped core fixtures pass. Claude and Antigravity both
-> return GO with no blocking finding.
+> **Current product focus (August 27, 2026): publish the shared causal-learning boundary, then
+> freeze one Red campaign.** The learner now has a title-neutral complete-menu, propensity,
+> selected-arm, independent-outcome, and crash-safe example contract. Red-specific routes and
+> provider verification stay behind one live adapter; Red-shaped and Crystal-shaped synthetic
+> fixtures produce the same learner schema. Logical and physical roots are claimed together,
+> unselected runtimes never open, controller authority has a durable point of no return, and
+> interruption or provenance failure cannot become a target.
 >
-> Publish this exact core under green CI, reorient, then build a thin current-source one-slot
-> invocation wrapper and qualify it ROM-free before any private setup. Fitting, sealed Red and
-> Crystal remain closed. Counters remain
-> **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
-> transfer 0**.
+> The
+> [qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+> records **182 focused · 5,428 full-suite · 295 typed source files**. Antigravity reports GO with
+> no P0/P1; Claude reached its session limit before a verdict and is not counted as approval. No
+> game or model ran. Next publish this exact state, require exact-head green CI, freeze exactly one
+> bounded development Red causal campaign without gameplay, and reorient before executing it.
+> Counters remain **development 15 · verified 5 · causal train 0/1 · fits 4 · comparisons 4 ·
+> authority 0 · transfer 0**.
 
 > **Previous product focus (August 27, 2026): build the claim-first outer execution boundary.** PR
 > 83 and exact-main CI passed, and the sole V2 read-only rehearsal authenticated **15 roots · 45

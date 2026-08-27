@@ -1,0 +1,148 @@
+{
+  "artifacts": {
+    "causal_journal_sha256": "bfd6857ebea6935e451c320d30203756492e3d19ed28c95e25b2d80de1ad3cff",
+    "causal_journal_tests_sha256": "9798fa3d905aeccd403c678b1478d38647551ef9570ea81bdfcef9420424c1b9",
+    "policy_codec_sha256": "108a01dd20261abcfbffd1327cdc4841095bc95e816053abd2d9e56d1d88edac",
+    "policy_codec_tests_sha256": "cf215825e19920ed2a9960788b6f56908f19d0e14082d229adeced4cca302e45",
+    "red_causal_adapter_sha256": "5b3eaaf45107632e0052c320a4ec57958e8b008b16b333d3c7b0e37f213f0494",
+    "red_causal_adapter_tests_sha256": "b58c41318b72572c5e400ce6a2d5de848fe8d4bca432ebfeed801dcf288071e5",
+    "red_setup_policy_projection_sha256": "84eb3eedefdcdd5f7d54f5bb69cef512c7c009657529ea74f8c72a3bdd7af8ee"
+  },
+  "base_source_commit": "79b456ce4da0a5121f61f95ddaf1b939593aeda7",
+  "codex_adjudication": {
+    "accepted": [
+      "bind_the_identity_free_policy_menu_to_the_validated_setup_capture",
+      "claim_domain_separated_logical_and_physical_roots_before_runtime_construction",
+      "bind_the_global_claim_to_one_secret_backed_private_store_anchor",
+      "persist_one_full_support_behavior_commitment_and_exact_propensity_vector_before_input",
+      "construct_only_the_selected_runtime_behind_a_locked_controller_gate",
+      "separate_durable_execution_start_from_controller_release",
+      "forbid_all_reexecution_after_controller_release",
+      "allow_bounded_preinput_retry_only_in_the_same_effect_meter_incarnation",
+      "retain_only_selected_arm_outcomes_and_censor_observer_or_provenance_failures",
+      "use_one_learner_schema_for_red_shaped_and_crystal_shaped_fixtures",
+      "correct_the_dashboard_to_the_active_zero_of_one_causal_example_lane"
+    ],
+    "deferred": [
+      "extract_title_neutral_modules_from_the_historical_pokemon_red_completion_package_when_the_real_crystal_adapter_proves_the_dependency_cut",
+      "expand_policy_features_with_additional_title_neutral_mechanics_after_authentic_outcomes_show_which_descriptors_are_missing"
+    ],
+    "rejected": [
+      "treat_synthetic_crystal_shaped_fixture_parity_as_crystal_execution_or_transfer",
+      "increment_any_learning_or_authority_counter_from_rom_free_qualification",
+      "retry_the_consumed_v1_or_v2_preflight",
+      "open_private_gameplay_before_clean_publication_and_a_new_bounded_campaign_freeze",
+      "move_generic_modules_only_to_satisfy_package_naming_inside_this_gate"
+    ],
+    "reason": "The new boundary produces the exact artifact the learner was missing: one complete title-neutral menu, one replayable randomized selected arm, one independently observed selected-arm outcome, and one durable trainable datum. The package name is historical coupling, not learner-schema coupling; moving it now would widen a completed trust gate without providing an authentic example."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": {
+      "model": "gemini-3.1-pro-high",
+      "p0": 0,
+      "p1": 0,
+      "p2": [
+        "title_neutral_journal_and_codec_remain_physically_under_the_historical_pokemon_red_completion_package"
+      ],
+      "verdict": "go_for_publication_then_one_bounded_development_red_causal_campaign"
+    },
+    "claude": {
+      "result": "session_limit_reached_before_a_verdict",
+      "verdict": "not_counted_as_approval"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Turn one authenticated repeatable game state and its complete identity-free option menu into one crash-safe selected-arm causal example through a title-neutral journal; Red is the first live adapter and later titles reuse the same learner contract.",
+    "cheapest_falsifier": "ROM-free Red-shaped and Crystal-shaped fixtures must share one policy, propensity, claim, journal, outcome, and learner-example schema while concurrent claims, every durable cutpoint, meter replacement, proof drift, observer effects, and identity leakage fail closed without duplicate input or counterfactual targets.",
+    "learned_authority": "none_public_engineering_only",
+    "stop_condition": "Stop before private input, gameplay, fitting, benchmark, sealed Red, Crystal execution, promotion, or replay. Reject any design that constructs an unselected runtime, retries after controller release, leaks title or private identity into policy features, or creates a target from an interrupted or unobserved arm.",
+    "time_box": "one_session_eight_hours",
+    "transfer_test": "Synthetic schema parity is qualified only. Actual transfer requires frozen Red weights and realized zero-shot Crystal outcomes against random and cost-only controls before adaptation."
+  },
+  "next_gate": {
+    "crystal_execution_allowed": false,
+    "model_fit_allowed": false,
+    "private_execution_allowed_before_publication": false,
+    "sealed_red_allowed": false,
+    "target": "Publish the exact qualified boundary under successful exact-head CI, then freeze exactly one bounded development-rigor Red causal campaign whose first evidence-bearing terminal is one authentic settled train example.",
+    "v1_or_v2_preflight_retry_allowed": false
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_examples": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "observed_game_outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "63a8ae20d9eb332f64e8c98caeecc71bee5b433f2383469795917b8e0babc3b6",
+    "goal_manager_registry_sha256": "780c33ecc510f926d5232a98ad491d22a26b8f2674ea09cce6fc74a4785e8171",
+    "source_bundle_sha256": "6d9ee991a5dbd2a1b065236d84fefc566eef3bec9fcf0b338680bdcf6f1bd7b5",
+    "strategic_navigation_registry_sha256": "ddc7021cd3d148105452d52773f77b63bfbf53b42401c6081d6cd32710f61970"
+  },
+  "schema": "pokemon.core.cross-title-living-dex-causal-example-pipeline-local-qualification.v1",
+  "status": "locally_qualified_antigravity_go_claude_unavailable_publication_pending",
+  "supported_claim": "The public title-neutral journal and Red adapter can durably materialize one selected-arm causal datum from a complete identity-free menu without constructing an unselected runtime, retrying after controller release, or turning interruption, observer failure, or proof drift into a learner target.",
+  "trust_falsifiers": [
+    "policy_shape_feature_order_one_hot_interaction_availability_and_digest_mutations",
+    "logical_root_and_physical_state_cross_relabelling",
+    "different_private_store_resume",
+    "concurrent_duplicate_claim",
+    "every_declared_durable_crash_cutpoint",
+    "new_effect_meter_incarnation_after_power_loss",
+    "protected_effect_change_before_release",
+    "controller_use_while_gate_locked",
+    "selected_binding_substitution",
+    "ordinary_executor_exception",
+    "process_interruption_after_input",
+    "action_trace_failure",
+    "observer_failure_or_side_effect",
+    "red_provider_proof_drift",
+    "red_and_crystal_shaped_schema_divergence",
+    "public_title_or_private_binding_leakage"
+  ],
+  "unsupported_claims": [
+    "authentic_red_causal_train_example",
+    "authentic_red_outcome_collection",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ],
+  "verification": {
+    "focused_tests_passed": 182,
+    "full_suite_passed": 5428,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 295,
+    "mypy_status": "passed",
+    "product_focus_check": "passed_causal_train_example_train_zero_of_one",
+    "registry_checks": "passed",
+    "ruff_status": "passed"
+  }
+}

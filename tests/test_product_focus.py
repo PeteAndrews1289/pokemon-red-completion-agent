@@ -310,40 +310,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 6 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == (
-        "repeatable-red-living-dex-option-value-calibration-v1"
-    )
+    assert state.active_lane["id"] == "cross-title-living-dex-causal-example-pipeline-v1"
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
     assert state.active_lane["measurable_outputs"] == [
-        {
-            "kind": "causal_train_example",
-            "minimum": 8,
-            "partition": "train",
-        },
-        {
-            "kind": "verified_outcome_example",
-            "minimum": 9,
-            "partition": "development",
-        },
-        {"kind": "model_fit", "minimum": 5, "partition": "train"},
-        {
-            "kind": "unseen_comparison",
-            "minimum": 5,
-            "partition": "development",
-        },
+        {"kind": "causal_train_example", "minimum": 1, "partition": "train"}
     ]
-    assert len(state.retired_lanes) == 58
-    assert focus_progress_fraction(state) == pytest.approx(97 / 180)
-    assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 0, 8),
-        ("Verified Outcome Example · development", 5, 9),
-        ("Model Fit · train", 4, 5),
-        ("Unseen Comparison · development", 4, 5),
-    )
+    assert len(state.retired_lanes) == 59
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
@@ -1433,12 +1411,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Causal Train Example · train: 0/8",
-        "Verified Outcome Example · development: 5/9",
-        "Model Fit · train: 4/5",
-        "Unseen Comparison · development: 4/5",
-    )
+    assert rows == ("Causal Train Example · train: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1464,7 +1437,9 @@ def test_focus_requires_exactly_one_active_lane() -> None:
     document = _document()
     lanes = document["lanes"]
     assert isinstance(lanes, list)
-    retired = lanes[1]
+    retired = next(
+        lane for lane in lanes if isinstance(lane, dict) and lane.get("status") == "retired"
+    )
     assert isinstance(retired, dict)
     retired["status"] = "active"
 
@@ -1884,23 +1859,21 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(97 / 180)
+    assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Repeatable Red living-Dex observed-arm calibration V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 9}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
+    assert "Cross-title living-Dex causal example pipeline V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "First authentic option" in encoded
-    assert "invalid binary counterfactual curriculum is retired" in encoded
-    assert "adapter" in encoded
-    assert "train-only fit" in encoded
-    assert "Observed-arm living-Dex calibration V1" in encoded
+    assert "title-neutral causal journal" in encoded
+    assert "Cross-title causal example pipeline" in encoded
+    assert "Causal Train Example 0/1" in encoded
+    assert "Authentic causal train example" in encoded
+    assert "Powered Red benchmark" in encoded
+    assert "Zero-shot Crystal result" in encoded
     assert "fresh ledger" in encoded
-    assert "Causal Train Example 0/8" in encoded
-    assert "Verified Outcome Example 5/9" in encoded
-    assert "Model Fit 4/5" in encoded
-    assert "Unseen Comparison 4/5" in encoded
     assert "V3 terminal" in encoded
     assert "main 14d7bcea" in encoded
     assert "causal target +0" in encoded
@@ -1911,7 +1884,6 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "V4 retired unexecuted" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
-    assert "one authentic settled Red choice" in encoded
     assert "a448f5b9" in encoded
     assert "32878889059/1" in encoded
     assert "78.2%" in encoded

@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: one honest lesson, not another doorway
+
+Open on a stack of green checks labelled **AUTHENTIC CLASSROOM**, **TWO-KEY CLAIM**, and
+**POWER-LOSS SAFE**. Then reveal the missing box: **TRAINING DATUM: 0**. Flash the failed V2
+preflight, stamp **NO RETRY · NO V3 · NO PRIVATE CAUSE GUESSED**, and push the old wrapper conveyor
+off screen.
+
+Build the new rail in one shot:
+**COMPLETE IDENTITY-FREE MENU → ONE CSPRNG CHOICE → SELECTED RUNTIME ONLY → EXECUTION START
+DURABLE → CONTROLLER RELEASE DURABLE → INDEPENDENT OBSERVATION → ONE SELECTED-ARM OUTCOME**.
+Branch every interruption into **CENSORED · TARGET NONE · RETRY NO**. Show two extra locks:
+**STORE ANCHOR** stops another journal from resuming the root, and **METER INCARNATION** stops a
+restarted process from pretending reset counters prove safety.
+
+Split the screen into **RED-SHAPED** and **CRYSTAL-SHAPED** fixtures feeding the same
+**POKÉMON.CORE LEARNER SCHEMA**, then place a warning over it:
+**SCHEMA PARITY ≠ TRANSFER RESULT**. Reveal **182 FOCUSED · 5,428 FULL-SUITE · 295 TYPED ·
+ANTIGRAVITY GO/P0 0/P1 0 · CLAUDE LIMIT/NO VERDICT**. End on the corrected dashboard:
+**CAUSAL TRAIN 0/1 → PUBLISH → EXACT-HEAD CI → FREEZE ONE RED CAMPAIGN → REORIENT → EXECUTE
+ONCE**. Keep **AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 27 scene: the guard rejects a teammate
 
 Show **PR 86 GREEN → MAIN CI GREEN → V1 PREFLIGHT**. Before the private drawer appears, flash
