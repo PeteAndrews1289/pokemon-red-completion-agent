@@ -1189,6 +1189,20 @@ def test_same_root_validation_derives_real_menu_without_executing_a_provider() -
     assert result.binding.available_family_sha256s == tuple(
         item.family_sha256 for item in result.fork_proofs
     )
+    assert result.binding.menu_sha256 == result.policy_projection.menu.policy_sha256
+    assert result.policy_projection.maximum_controller_actions == (
+        slot.setup.maximum_controller_actions
+    )
+    assert result.policy_projection.maximum_emulator_frames == (
+        slot.setup.maximum_emulator_frames
+    )
+    assert result.public_dict()["policy_menu"] == (
+        result.policy_projection.menu.policy_dict()
+    )
+    assert all(
+        candidate.binding_ref not in str(result.public_dict()["policy_menu"])
+        for candidate in result.policy_projection.menu.candidates
+    )
     assert result.public_dict()["provider_executions"] == 0
     assert result.public_dict()["learner_labels"] == 0
 

@@ -6,6 +6,30 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish the qualified causal boundary, then freeze one campaign
+
+The V2 selected-root preflight failed closed without disclosing a private cause. It created no
+claim, runtime, action, outcome, or model evidence; V1/V2 are consumed, V3 is forbidden, and the
+wrapper lane is closed. The replacement boundary now joins one complete identity-free menu to one
+randomized selected arm, one independent observed outcome, and one exactly restorable learner
+datum. Domain-separated global claims, a private-store anchor, a locked controller gate, separate
+execution/release records, nonpersistent meter incarnation, and target-free censoring close the
+known duplicate-execution and counterfactual-label paths.
+
+The [qualification](evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+passes **182 focused · 5,428 repository · 295 typed source files**. Antigravity returns GO with no
+P0/P1. Its P2 recommends eventually extracting generic modules from the historical Red package;
+Codex defers that low-value refactor until the real Crystal adapter proves the dependency cut.
+Claude reached its session limit before a verdict, so it supplies no approval at this checkpoint.
+
+Codex is the sole implementer and publisher. It must publish this exact state, require exact-head
+green CI, freeze exactly one bounded development Red causal campaign without gameplay, and
+reorient before execution. Claude, when available, challenges causal/statistical validity;
+Antigravity challenges architecture and transfer; both remain read-only. The next measured product
+output is one authentic settled Red causal train example. Synthetic fixtures, CI, and frozen
+inputs do not increment it. No preflight successor, model fit, sealed Red, Crystal execution,
+promotion, or replay is authorized.
+
 ## Current override: one minimal V2 after V1 failed before private access
 
 PR 86 and exact-main CI passed. The sole V1 preflight failed closed at public bootstrap before it

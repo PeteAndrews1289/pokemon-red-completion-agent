@@ -1,5 +1,24 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — causal boundary qualified; publish, freeze once, reorient:**
+> V1/V2 preflights are consumed, their private cause is intentionally unknown, V3 is forbidden,
+> and the wrapper lane is closed. The
+> [causal-boundary qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+> records **182 focused · 5,428 full-suite · 295 typed source files**. The learner now has one
+> title-neutral complete-menu, propensity, selected-arm, independent-outcome, and crash-safe datum
+> contract; Red supplies only the live adapter. Synthetic Crystal-shaped parity proves schema
+> reuse, not transfer. Learning and authority counters remain unchanged at causal train **0/1**,
+> authority **0**, transfer **0**.
+>
+> Codex owns exact publication, exact-head CI verification, one action-free bounded development
+> campaign freeze, adjudication, evidence, and reorientation before execution. Antigravity remains
+> the read-only architecture/transfer challenger and returned GO with no P0/P1; its generic-package
+> extraction P2 is deferred until the real Crystal adapter establishes the cut. Claude remains the
+> read-only causal/statistical challenger, but its CLI hit the session limit before a verdict and
+> must not be counted as approval. Neither reviewer edits, publishes, opens private gameplay, or
+> decides authority. Do not add another preflight, retry V1/V2, fit synthetic evidence, open
+> Crystal or sealed Red, or replay the game.
+>
 > **2026-08-27 active override — V1 failed before private access; one minimal V2 successor:** PR 86
 > and exact-main CI passed, but the sole V1 preflight failed at public bootstrap. The
 > [failure receipt](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)

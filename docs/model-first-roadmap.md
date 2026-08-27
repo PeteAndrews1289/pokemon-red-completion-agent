@@ -8,6 +8,39 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: one shared causal-datum boundary is ready to publish
+
+The wrapper lane is over. V2 failed closed at a sanitized private-authentication stage with no
+claim, runtime, action, example, or model effect; V1/V2 never retry and V3 is forbidden. The
+project did not infer a private cause.
+
+The learner-facing successor is now concrete. Setup validation projects every genuine Red option
+into one complete identity-free menu. A generic journal commits a full-support behavior policy,
+constructs only the selected arm, durably separates execution start from controller release, and
+stores the chosen row, exact propensity, action/frame trace, independent outcome, and provenance.
+Logical and physical roots are claimed together, the claim is bound to one private-store anchor,
+and a changed meter incarnation after process death forces target-free closure. Failures before
+input may retry only once in the same metered process; anything after release never executes again.
+Red-specific routing and verification stay behind the adapter.
+
+The [qualification](evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+records **182 focused · 5,428 full-suite · 295 typed source files**. Synthetic Red-shaped and
+Crystal-shaped fixtures produce the same learner schema. Antigravity reports GO with P0/P1 zero;
+Claude was unavailable at its session limit and is not counted. This proves contract portability,
+not actual Crystal transfer.
+
+The shortest honest sequence is now:
+
+1. commit and publish the exact qualified boundary and regenerated source registries;
+2. require a successful exact-head push-CI attempt;
+3. freeze exactly one bounded development-rigor Red causal campaign, action-free;
+4. reorient and audit the frozen joins before any private execution; and
+5. execute once to seek one authentic settled train example, accepting target-free terminal
+   closure if the selected arm cannot be observed honestly.
+
+Do not add another preflight, fit one synthetic or authentic row, open a benchmark or sealed case,
+execute Crystal, promote authority, or replay the full game. Causal train remains **0/1**.
+
 ## Current checkpoint: V1 failed before private access; repair one source-inventory false-negative
 
 PR 86 passed its first CI attempt, rebased into main `af62c546`, and exact-main push CI passed. The

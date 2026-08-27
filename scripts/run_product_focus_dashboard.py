@@ -128,22 +128,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The invalid binary counterfactual curriculum is retired. The ROM-free observed-arm "
-            "contract is qualified. Next: a repeatable Red adapter and calibration loop; gameplay "
-            "authority and Crystal transfer remain at zero."
+            "The title-neutral causal journal and Red live adapter are being qualified. No "
+            "authentic causal example exists yet; gameplay authority and Crystal transfer remain "
+            "at zero."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red calibration V1 · adapter → repeatable outcomes → train-only fit → paired report"
+            "Public engineering · policy projection → crash-safe journal → Red adapter → audits"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate=(
-                "Historical dependency ranker · one authentic settled Red choice · no promotion"
+                "No fitted causal living-Dex policy · historical ranker remains unpromoted"
             ),
             choice=(
-                "No active model choice · Red adapter and repeatable collector are not built yet"
+                "No active model choice · next evidence is one settled Red causal train example"
             ),
             confidence=None,
             decisions=1,
@@ -153,18 +153,18 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         experiment=DashboardExperimentState(
             phase="qualification",
             zero_shot_completed=causal_train_examples,
-            zero_shot_total=max(8, causal_train_examples),
-            adaptation_completed=verified_outcomes,
-            adaptation_total=max(9, verified_outcomes),
-            sealed_completed=unseen,
-            sealed_total=max(5, unseen),
+            zero_shot_total=max(1, causal_train_examples),
+            adaptation_completed=0,
+            adaptation_total=1,
+            sealed_completed=0,
+            sealed_total=1,
             predictions_committed=False,
-            heading="Observed-arm living-Dex calibration V1",
-            eyebrow="Red repeatable · selected outcomes only · transfer later",
+            heading="Cross-title causal example pipeline",
+            eyebrow="Red curriculum · powered benchmark · Crystal transfer",
             counter_labels=(
-                "Causal train examples",
-                "Verified development outcomes",
-                "Paired unseen comparisons",
+                "Authentic causal train example",
+                "Powered Red benchmark",
+                "Zero-shot Crystal result",
             ),
         ),
         events=(

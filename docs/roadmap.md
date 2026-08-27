@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 causal-boundary checkpoint:** The V1/V2 wrapper lane is closed without retry or a
+> private-cause claim. The replacement title-neutral journal and Red adapter now bind a complete
+> identity-free menu to one full-support randomized selected arm, one independent outcome, and one
+> crash-safe learner datum. Store substitution, logical/physical relabelling, restart meter reset,
+> every durable cutpoint, early controller use, unselected construction, proof drift, observer
+> effects, and title/private leakage fail closed in ROM-free tests.
+>
+> The [qualification](evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+> records **182 focused · 5,428 repository · 295 typed source files**. Antigravity returns GO with
+> P0/P1 zero; Claude hit its session limit and supplies no verdict. Publish this exact source,
+> require exact-head green CI, freeze one bounded development Red causal campaign without
+> gameplay, and reorient before its one execution. Causal train remains **0/1**; Crystal schema
+> parity is not Crystal transfer.
+
 > **August 27 V1 preflight failure checkpoint:** PR 86 and exact-main CI passed, but the sole V1
 > preflight failed before private access because Git authenticated only the Red package while the
 > filesystem guard inspected all tracked packages. The legitimate Crystal sibling was rejected.

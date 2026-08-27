@@ -76,6 +76,11 @@ from pokemon_red_completion.red_living_dex_setup_campaign import (
     RedLivingDexSetupSlotBinding,
     RedLivingDexSetupTransportKind,
 )
+from pokemon_red_completion.red_living_dex_setup_policy import (
+    RedLivingDexSetupPolicyProjection,
+    project_red_living_dex_setup_policy,
+    restore_red_living_dex_setup_policy_projection,
+)
 from pokemon_red_completion.red_living_dex_setup_source import (
     RED_LIVING_DEX_SETUP_PROVIDER_OFFER_WITNESS_SCHEMA,
     red_living_dex_setup_executable_binding_sha256,
@@ -105,9 +110,8 @@ RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA = "pokemon.red.private-living-dex-setup-
 RED_LIVING_DEX_SETUP_ORIGIN_SCHEMA = "pokemon.red.private-living-dex-constructed-origin.v2"
 RED_LIVING_DEX_SETUP_FORK_PROOF_SCHEMA = "pokemon.red.private-living-dex-setup-fork-proof.v2"
 RED_LIVING_DEX_SETUP_VALIDATED_CAPTURE_SCHEMA = (
-    "pokemon.red.private-living-dex-validated-setup-capture.v2"
+    "pokemon.red.private-living-dex-validated-setup-capture.v3"
 )
-RED_LIVING_DEX_SETUP_MENU_SCHEMA = "pokemon.red.private-living-dex-same-root-menu.v1"
 RED_LIVING_DEX_SETUP_OBSERVER_BINDING_SCHEMA = (
     "pokemon.red.private-living-dex-same-root-observer-binding.v1"
 )
@@ -886,6 +890,7 @@ class RedLivingDexValidatedSetupCapture:
     binding: RedLivingDexSetupSlotBinding
     attestation: LivingDexCaptureAttestation
     fork_proofs: tuple[RedLivingDexSetupForkProof, ...]
+    policy_projection: RedLivingDexSetupPolicyProjection
     origin_observation_sha256: str
     final_origin_observation_sha256: str
     construction_runtime_sha256: str
@@ -941,6 +946,25 @@ class RedLivingDexValidatedSetupCapture:
             raise RedLivingDexSetupRecipeError("validated capture fork census differs")
         for item in self.fork_proofs:
             item.__post_init__()
+        if not isinstance(
+            self.policy_projection,
+            RedLivingDexSetupPolicyProjection,
+        ):
+            raise TypeError("validated capture needs its setup policy projection")
+        self.policy_projection.__post_init__()
+        if (
+            self.policy_projection.menu.policy_sha256 != self.binding.menu_sha256
+            or tuple(
+                candidate.features.kind
+                for candidate in self.policy_projection.menu.candidates
+            )
+            != self.binding.available_option_kinds
+            or self.policy_projection.route_controller_actions
+            != tuple(item.route_controller_actions for item in self.fork_proofs)
+        ):
+            raise RedLivingDexSetupRecipeError(
+                "validated capture policy projection differs from its binding"
+            )
         for value, subject in (
             (self.origin_observation_sha256, "origin observation"),
             (self.final_origin_observation_sha256, "final origin observation"),
@@ -1095,6 +1119,8 @@ class RedLivingDexValidatedSetupCapture:
             "learner_outcomes": 0,
             "model_predictions": 0,
             "origin_restore_count": self.origin_restore_count,
+            "policy_menu": self.policy_projection.menu.policy_dict(),
+            "policy_menu_sha256": self.policy_projection.menu.policy_sha256,
             "private_identity_fields": 0,
             "private_path_fields": 0,
             "provider_executions": 0,
@@ -1134,6 +1160,7 @@ class RedLivingDexValidatedSetupCapture:
             "model_predictions": self.model_predictions,
             "origin_restore_count": self.origin_restore_count,
             "origin_observation_sha256": self.origin_observation_sha256,
+            "policy_projection": self.policy_projection.private_dict(),
             "provider_executions": self.provider_executions,
             "recipe_sha256": self.recipe_sha256,
             "schema": RED_LIVING_DEX_SETUP_VALIDATED_CAPTURE_SCHEMA,
@@ -1172,6 +1199,7 @@ def restore_red_living_dex_validated_setup_capture(
             "model_predictions",
             "origin_restore_count",
             "origin_observation_sha256",
+            "policy_projection",
             "provider_executions",
             "recipe_sha256",
             "schema",
@@ -1235,6 +1263,9 @@ def restore_red_living_dex_validated_setup_capture(
         binding=binding,
         attestation=attestation,
         fork_proofs=proofs,
+        policy_projection=restore_red_living_dex_setup_policy_projection(
+            _mapping(document["policy_projection"], "setup policy projection")
+        ),
         origin_observation_sha256=_string(
             document["origin_observation_sha256"],
             "validated origin observation",
@@ -1973,16 +2004,15 @@ def validate_red_living_dex_setup_recipe(
     _require_within_slot_budget(slot, setup_actions, setup_frames)
     families = tuple(item.family_sha256 for item in provisional_proofs)
     location_sha256 = _location_sha256(recipe.origin_boundary)
-    menu_sha256 = canonical_sha256(
-        {
-            "execution_identity_sha256": execution_identity.identity_sha256,
-            "option_bindings": [item.binding_sha256 for item in option_bindings],
-            "option_kinds": [item.value for item in recipe.available_option_kinds],
-            "origin_state_sha256": origin.state_sha256,
-            "schema": RED_LIVING_DEX_SETUP_MENU_SCHEMA,
-            "slot_sha256": recipe.slot_sha256,
-        }
+    policy_projection = project_red_living_dex_setup_policy(
+        origin.fresh.observation,
+        tuple(item.executable_binding for item in provisional_proofs),
+        option_kinds=recipe.available_option_kinds,
+        route_controller_actions=tuple(item.route_actions for item in provisional_proofs),
+        maximum_controller_actions=slot.setup.maximum_controller_actions,
+        maximum_emulator_frames=slot.setup.maximum_emulator_frames,
     )
+    menu_sha256 = policy_projection.menu.policy_sha256
     fork_proofs = tuple(
         RedLivingDexSetupForkProof(
             provider_recipe_sha256=item.provider_recipe.recipe_sha256,
@@ -2063,6 +2093,7 @@ def validate_red_living_dex_setup_recipe(
         binding=slot_binding,
         attestation=attestation,
         fork_proofs=fork_proofs,
+        policy_projection=policy_projection,
         origin_observation_sha256=origin.fresh.observation_sha256,
         final_origin_observation_sha256=final_fresh.observation_sha256,
         construction_runtime_sha256=origin.construction_runtime_sha256,

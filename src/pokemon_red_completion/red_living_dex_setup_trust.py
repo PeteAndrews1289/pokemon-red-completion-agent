@@ -10,6 +10,7 @@ using a slot, root, profile, route, or candidate identity as a family label.
 from __future__ import annotations
 
 import re
+import secrets
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
@@ -193,12 +194,21 @@ class RedLivingDexSetupEffectMeter:
     isolated arm must share this exact instance.
     """
 
-    __slots__ = ("_counts",)
+    __slots__ = ("_counts", "_recovery_instance_sha256")
 
     def __init__(self) -> None:
         self._counts = {
             name: 0 for name in RedLivingDexSetupProtectedEffectCheckpoint.__dataclass_fields__
         }
+        # This incarnation is intentionally not durable.  A causal journal may
+        # retry action-free construction while this exact meter remains alive,
+        # but a process restart receives a different value and must fail closed
+        # instead of trusting counters that reset to zero.
+        self._recovery_instance_sha256 = secrets.token_hex(32)
+
+    @property
+    def recovery_instance_sha256(self) -> str:
+        return self._recovery_instance_sha256
 
     def checkpoint(self) -> RedLivingDexSetupProtectedEffectCheckpoint:
         return RedLivingDexSetupProtectedEffectCheckpoint(**self._counts)

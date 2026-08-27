@@ -29,31 +29,28 @@ Not the product:
 
 ## One active lane
 
-**Repeatable Red living-Dex observed-arm calibration V1** (`repeatable-red-living-dex-option-value-calibration-v1`)
+**Cross-title living-Dex causal example pipeline V1** (`cross-title-living-dex-causal-example-pipeline-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After at least eight settled causal train examples spanning at least four genuine option kinds and three transformation families, plus four new family/location-disjoint development outcomes, fit exactly one train-only model and produce a paired descriptive calibration report. Use observed variance to power the next benchmark; do not treat these minimum coverage counts as inferential evidence.
+- Next decision: After this exact qualified source is published and passes exact-head CI, freeze one bounded development-rigor Red causal campaign that exercises this boundary. Reorient before execution; the next learning decision is one authentic settled train example, not another preflight or model fit.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Create repeatable same-root Red living-Pokedex decisions as complete variable-size title-neutral menus: freeze genuine provider families and physical origins before input, restore the exact captured state before every candidate, derive each offer only after its own semantic route, then later randomize and execute one authenticated option and learn from its independently observed outcome. |
-| Authority now | The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. The new Red observed-arm boundary grants no action authority until durable authentic outcomes and later evaluation exist. |
-| Authority target | Collect the first repeatable selected-arm Red outcomes across genuine option kinds and transformation families, fit the shared multi-outcome value model on train only, and estimate paired development variance against random and cost-only baselines. Calibration cannot promote authority or claim transfer. |
-| Transfer test | Require Red-shaped and Crystal-shaped private fixtures to produce the identical feature, normalization, outcome, and model schema now. After a powered Red benchmark, freeze the Red weights and compare realized zero-shot Crystal outcomes against random and cost-only controls before any adaptation. |
-| Cheapest falsifier | Under the clean published Red execution identity, the action-free freezer must reproduce fifteen slots, forty-five real offers, thirty-three mechanics-derived families, and ten physical origins from the authenticated pool plus one hash-bound open checkpoint while every protected-effect counter remains zero. Another cartridge, consumed/cross-joined bytes, inherited source partitions, incoherent prerequisites, or incomplete capacity must fail before controller authority. |
-| Time box | 1 session / 6 hours |
+| Reusable capability | Turn one authenticated repeatable game state and its complete identity-free option menu into one crash-safe selected-arm causal example through a title-neutral staged journal. Red supplies the first live adapter; later cartridges reuse the same policy, propensity, claim, execution-start, independent-outcome, and trainable-example contract. |
+| Authority now | The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. Public causal-pipeline engineering grants no gameplay authority. |
+| Authority target | Produce the first durable authentic selected-arm Red causal train example under a contract that can later collect many option kinds and titles without copying a teacher route or retraining a separate game-specific policy seam. |
+| Transfer test | Require Red-shaped and Crystal-shaped synthetic fixtures to use the identical policy document, propensity record, domain-separated claim, staged journal, outcome, and learner-example schema. After causal Red training and a powered Red benchmark, freeze weights and compare realized zero-shot Crystal outcomes against random and cost-only controls before adaptation. |
+| Cheapest falsifier | ROM-free Red-shaped and Crystal-shaped fixtures must survive concurrent claims and every durable crash cutpoint while proving one commitment, one replayable full-support distribution, selected-only lazy construction, zero controller effects before execution-start, no reroll or retry after input, one independent outcome, and an exactly restorable learner datum with no title or private identity in its policy features. |
+| Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 0 | 8 |
-| Verified Outcome Example · development | 5 | 9 |
-| Model Fit · train | 4 | 5 |
-| Unseen Comparison · development | 4 | 5 |
+| Causal Train Example · train | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -61,24 +58,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-one-slot-preflight-v1-failed-minimal-v2** · status **active** · evidence [qualification](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
+**2026-08-27-title-neutral-causal-boundary-qualified** · status **closed** · evidence [qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The V2 repair closes the reproduced public source-inventory false-negative and is the smallest necessary unblock for the already-frozen same-root lesson. Its tracked Red-plus-Crystal regression improves the shared source boundary but produces no learning and proves no Crystal transfer. |
-| Learning output | No new model example. V1 failed closed before private access, so all learning and authority counters remain unchanged: development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
-| Authority delta | None. The V2 repair and qualification used no private capture, ROM, root claim, resolver, controller, frame, provider, teacher, prediction, outcome, fit, promotion, or transfer. |
-| Transfer result | Not run. A tracked Crystal source package revealed the V1 inventory mismatch, but no Crystal code executed and no model weights or behavior transferred. |
-| Blocker | The consumed V1 preflight exposed one public false-negative: its Git inventory excluded the legitimate tracked Crystal package while its filesystem inventory included it. The minimal V2 repair is locally qualified, but publication, exact-head CI, and the sole V2 preflight remain pending. Private setup remains closed. |
-| Decision | Publish the locally qualified minimal V2 successor that authenticates every tracked source package and rejects untracked siblings. After exact-head push CI, permit exactly one V2 ROM-free selected-root preflight. If it fails, abort this curriculum lane; if it succeeds, reorient immediately to the shortest claim-first setup-to-randomized-outcome sequence. No V3 or additional wrapper session is allowed. |
-| Next session | Publish the qualified minimal V2 repair under exact-head green CI, run one V2 selected-root preflight, and reorient immediately. Stop before setup execution. |
-| Next falsifier | The published V2 command must pass exactly once while authenticating all tracked source packages, reading one selected root pair and no sibling capture, and exposing no claim, runtime, controller, learner, or model capability. |
-| Stop condition | Do not retry V1. Stop and abort this lane on failed V2 publication, CI, or rehearsal; untracked source acceptance; sibling capture access; any claim, resolver, ROM, or controller effect; unauthenticated producer/private join; or identity leakage. After one successful V2 rehearsal, reject V3 and all further wrapper-only work. |
+| Product alignment | The learner now has one reusable contract for menus, propensities, selected-arm execution, independently observed outcomes, and crash-safe examples. This directly advances the cross-game living-Pokedex agent while keeping Red mechanics behind an adapter and reserving transfer claims for realized frozen-weight Crystal outcomes. |
+| Learning output | No new model example. Counters remain development 15, verified 5, causal train 0, fits 4, comparisons 4, authority 0, and transfer 0. |
+| Authority delta | None. The qualified public boundary opened no ROM, private capture, root claim, runtime, controller effect, game outcome, model operation, promotion, or transfer result. |
+| Transfer result | Synthetic Red-shaped and Crystal-shaped fixtures use the same learner schema and journal. No Crystal cartridge, frozen Red weights, or zero-shot outcome ran, so transfer remains untested. |
+| Blocker | The shared causal boundary is locally qualified but not yet published or bound to one frozen development campaign. Causal train remains zero until a clean exact source identity selects and executes one authentic Red arm and independently settles its outcome. |
+| Decision | Publish this exact title-neutral journal, policy codec, Red live adapter, regenerated source registries, focus dashboard, tests, and evidence. Require exact-head green CI, then freeze exactly one bounded development-rigor Red causal campaign that uses this boundary. Do not insert another preflight or fit from synthetic evidence. |
+| Next session | Commit and publish the qualified causal boundary, verify exact-head green CI, then freeze exactly one bounded development-rigor Red causal campaign. Reorient before executing it; the first execution terminal must be either one authentic settled train example or an honest target-free closure. |
+| Next falsifier | A clean-published campaign freeze must bind one eligible authentic Red setup to the exact policy menu, complete binding roster, observer, effect meter, runner, source commit, partition, and no-retry identities without opening a ROM or granting controller authority. Any ambiguous join, consumed root, unselected runtime capability, or need for another wrapper aborts the freeze. |
+| Stop condition | Do not open private input or gameplay until this exact source is clean-published, exact-head CI is green, and one bounded development campaign is frozen. Stop on a counterfactual target, unselected runtime, identity leak, post-release retry, package-wide refactor, model fit, benchmark, sealed Red, Crystal execution, promotion, or replay. |
 
 ### Stop conditions
 
-- Stop before gameplay until one clean-published execution identity freezes fifteen slots, forty-five real offers, thirty-three semantic families, and ten physical origin maps from available authentic roots with every protected effect zero. Do not cross-join captures or derive families from slot/root/profile/route identity. A claimed physical root may never retry through another store or plan.
-- Stop after the first train-only calibration fit and descriptive development report, or sooner on identity leakage, counterfactual targets, commitment reissue, synthetic counted executors, outcome-dependent row selection, one-shot-root dependence, or a need for fixed Red route rescue. Do not open a powered benchmark, sealed Red, Crystal, promotion, or full replay in this lane.
+- Stop this public engineering session before any private state read, ROM open, root claim, controller action, advanced frame, outcome collection, fit, benchmark, sealed Red case, Crystal execution, promotion, or full replay.
+- Stop and redesign on identity leakage, counterfactual or unselected targets, entropy reissue, eager unselected construction, a controller effect before durable execution-start, a retryable post-input crash, a title-specific storage primitive, or failure of either Red-shaped or Crystal-shaped contract fixtures.
 
 ### Hard boundaries for this lane
 
@@ -88,9 +85,11 @@ outputs.
 - **Prohibited:** crystal execution
 - **Prohibited:** full game replay
 - **Prohibited:** identity bearing policy feature
+- **Prohibited:** claim first preflight v1 or v2 retry
 - **Prohibited:** model fit on development
 - **Prohibited:** opportunity identity feature
 - **Prohibited:** outcome balanced row selection
+- **Prohibited:** private selected root diagnosis
 - **Prohibited:** sealed or benchmark root use
 - **Prohibited:** synthetic executor fit admission
 - **Prohibited:** promotion from pilot
@@ -101,6 +100,7 @@ outputs.
 - **Prohibited:** unpowered model quality claim
 - **Prohibited:** unselected action target
 - **Prohibited:** v4 freeze or trial execution
+- **Prohibited:** wrapper only successor
 
 ## Rigor belongs to the risk
 
@@ -130,6 +130,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Repeatable Red living-Dex observed-arm calibration V1:** PR 87 merged as main 79b456ce and exact-main CI 33087844777/1 passed. The sole V2 ROM-free preflight failed closed at selected_root_authentication with zero claims, runtimes, gameplay, learner, model, or public-private-field effects. V1/V2 are consumed, V3 is forbidden, and the lane is aborted without inferring a private cause. Its frozen plan and public boundaries remain historical evidence, not training data. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V4:** The proposed action-free 12+8 freeze was retired unexecuted after independent Claude and Antigravity audits at baseline dee52ff2. Its inherited ranker converted selected-arm failures into positive labels for unexecuted alternatives, exposed only two reachable feature-difference shapes, required an outcome balance the freezer could not control, and had no V4, multiway, observed-arm, or Crystal machinery. Freezing it would have bound scarce roots to a contract already known to be invalid. Evidence is preserved; retry is no.
 - **Post-exception living-ledger qualification V1:** Main c663c3f4 passed CI 32913718889/1 with 4730 tests. The frozen-selection seam executes one selected capability at most once, observes one fresh ledger after ordinary return or exception, settles readable unchanged/partial/exact states as -1/-1/+1, censors only observation failure, propagates process interruption, and killed 9/9 targeted mutations. It opened no ROM or private context and changed no learning counter; receipt 1b402002...f1463 closes the repair. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V3:** Collector main 7ebea63c passed CI 32900424741/1; storage-port repair main 14d7bcea passed CI 32902297341/1 and a claim-stubbed preflight reached the boundary with zero effects. Train ordinal zero then interrupted after 4379 actions and 304680 frames. Its durable censored terminal forbids retry; development stayed untouched and no target was added. Seven remaining train trials cannot meet V3's frozen minimum of eight, so receipt aa573cb9...f4b0 closes V3 without replacement. Evidence is preserved; retry is no.

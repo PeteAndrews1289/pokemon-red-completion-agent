@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the lesson finally became something a model can learn from
+
+The project had spent days proving that saved lessons were authentic and could not be reused. That
+was necessary, but it still did not create training data. The last preflight made the distinction
+unavoidable: it failed safely before private access, and even a green result would only have proved
+that a drawer could be opened. V1 and V2 were closed without guessing at the private cause, and the
+team refused to build V3.
+
+The replacement connects the whole causal chain. Red's validated setup now emits a complete menu
+whose rows contain only portable pressures, option kinds, gains, costs, risks, and effort—not
+species, maps, routes, roots, or title identity. One random choice is committed before input. Only
+that runtime is built. A durable controller-release record is the point of no return. Afterwards,
+the same live state is observed independently and only the selected arm receives an outcome.
+Interrupted, unobservable, or provenance-drifted attempts remain evidence but never targets.
+
+Two subtle power-loss problems were caught during the implementation. A global root claim by
+itself could be resumed from an unrelated private journal, so the claim is now bound to a
+secret-backed store anchor. And counters reset when a process dies, so “zero after restart” cannot
+prove that no input happened; a random meter-incarnation identity now makes restart fail closed
+while preserving one bounded same-process retry before input.
+
+The boundary passes **182 focused and 5,428 repository tests across 295 typed source files**.
+Antigravity found no P0/P1 issue. Its suggestion to move generic files out of the historical Red
+package is sensible future cleanup, but doing it before a real Crystal adapter exists would add
+churn without a learning result. Claude hit its session limit and is not represented as an
+approval. Most importantly, the dashboard now says the honest thing: **causal train 0/1**. Next
+comes exact publication, green CI, and one action-free campaign freeze—then reorientation before
+the first authentic causal execution.
+
 ## August 27: the first real inspection stopped at its own source tree
 
 The wrapper shipped cleanly through PR and exact-main CI, then its single real V1 preflight stopped

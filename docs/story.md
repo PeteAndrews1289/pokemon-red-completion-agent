@@ -7,6 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one random choice can finally become one honest lesson
+
+The scaffolding had learned how to authenticate a classroom, lock a saved game, and survive a
+power cut. It still could not hand the model a trustworthy lesson. The last wrapper failed safely,
+and instead of building a third wrapper the project changed the definition of done.
+
+Now the model sees a complete menu with no Pokémon, map, route, title, or private-root names. A
+single random arm is committed, only that arm's world is opened, and the controller stays locked
+until a durable point-of-no-return marker exists. The game is observed again afterwards. Only what
+actually happened can become a target; a power loss, broken observer, changed proof, or missing
+trace produces no pretend answer. A copied label cannot reclaim the same physical state, an
+unrelated private journal cannot resume the claim, and a restarted process cannot call reset
+counters “proof of zero.”
+
+That contract passes **182 focused and 5,428 repository tests**. Red-shaped and Crystal-shaped
+fixtures speak the same learner language, but no Crystal cartridge or transferred model has run.
+Antigravity says GO with no major finding; Claude ran out of its review window, so there is no
+invented second verdict. The board deliberately remains **CAUSAL TRAIN 0/1 · AUTHORITY 0 ·
+TRANSFER 0**. Publish, pass exact-head CI, freeze one bounded Red lesson, and stop to reorient
+before pressing the first button.
+
 ## Current checkpoint: the real doorway noticed Crystal standing beside Red
 
 The wrapper passed thousands of tests and two clean GitHub runs, then its one real V1 inspection

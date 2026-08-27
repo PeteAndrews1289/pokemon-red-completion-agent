@@ -1,0 +1,95 @@
+{
+  "codex_adjudication": {
+    "accepted": [
+      "close_the_consumed_v1_v2_curriculum_lane_without_v3",
+      "treat_failure_zeroes_as_structural_declarations_not_effect_measurements",
+      "make_one_emitted_causal_example_the_successor_definition_of_done",
+      "wire_setup_policy_randomized_selected_execution_independent_outcome_and_trainable_datum",
+      "require_red_shaped_and_crystal_shaped_title_neutral_fixtures"
+    ],
+    "deferred": [
+      "exercise_generic_path_and_permission_mutations_only_if_they_falsify_the_new_causal_pipeline"
+    ],
+    "rejected": [
+      "infer_a_private_file_permission_cause_from_the_sanitized_stage",
+      "repair_or_replay_the_consumed_selected_root",
+      "create_a_v3_or_wrapper_only_successor",
+      "duplicate_the_already_qualified_title_neutral_claim_boundary"
+    ],
+    "reason": "The stage token intentionally conflates multiple private checks and cannot identify a cause. The preflight is structurally incapable of learning even when green, while the repository already contains claim, option-value, collector, emulator, and observer components. The shortest honest successor connects those components through a title-neutral crash-safe journal whose first evidence-bearing terminal is a causal selected-arm example."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnosis": {
+    "category": "selected_root_authentication_failed_closed",
+    "cause": "No private cause is inferred from the intentionally sanitized stage. The public boundary groups selected-path metadata checks, immutable producer-to-slot joins, selected byte reads, and expected digest checks under this stage.",
+    "private_input_required_to_distinguish_cause": true,
+    "repair_scope": "none_in_this_lane"
+  },
+  "external_review": {
+    "antigravity": "close_lane_no_retry_or_v3;_zero_protected_capabilities_confirmed_structurally;_recommended_title_neutral_controller_boundary;_private_permission_cause_inference_rejected_by_codex_as_unsupported",
+    "claude": "close_lane_no_retry_or_v3;_p0_setup_only_machinery_cannot_emit_the_required_example;_failure_zeroes_are_constants_not_measurements;_open_execution_lane_with_one_emitted_living_dex_observed_arm_example_as_definition_of_done",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 33087844777,
+    "merged_main_commit": "79b456ce4da0a5121f61f95ddaf1b939593aeda7",
+    "pull_request": 87,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 33083219117
+  },
+  "raw_path_free_receipt": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_outcomes": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "producer_executions": 0,
+    "resolver_constructions": 0,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-claim-first-invocation-preflight-failure.v1",
+    "setup_campaign_calls": 0,
+    "stage": "selected_root_authentication",
+    "status": "failed_closed",
+    "teacher_queries": 0
+  },
+  "rehearsal": {
+    "attempts": 1,
+    "private_read_census_publicly_exposed": false,
+    "result": "failed_closed",
+    "v2_retries_remaining": 0,
+    "v3_allowed": false
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.red.living-dex-claim-first-one-slot-preflight-failure.v2",
+  "status": "v2_failed_closed_lane_aborted_no_retry_or_v3",
+  "supported_claim": "The exact published V2 source and CI identity reached selected-root authentication and failed closed. This ROM-free preflight command contains no claim, resolver, setup-execution, provider, controller, behavior, learner, model, or teacher capability and disclosed no private identity or path; its zero fields are structural declarations rather than measured counters.",
+  "unsupported_claims": [
+    "authentic_private_red_setup_execution",
+    "authentic_red_outcome_collection",
+    "causal_red_training_example",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_v2_selected_root_preflight",
+    "which_private_selected_root_check_failed"
+  ]
+}

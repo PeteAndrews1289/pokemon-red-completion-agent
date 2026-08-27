@@ -12,6 +12,40 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-27: the title-neutral causal boundary is qualified; publish, then freeze one lesson
+
+The sole V2 preflight also failed closed, at the intentionally broad
+`selected_root_authentication` stage. It disclosed no private cause and produced no claim,
+runtime, controller effect, example, model operation, or transfer result. V1 and V2 are consumed,
+V3 is forbidden, and that wrapper lane is closed. Do not diagnose, repair, or replay its selected
+root.
+
+The successor now implements the artifact the learner actually lacked. A strict policy codec
+restores one complete identity-free menu; the Red setup capture binds that exact menu to genuine
+provider proofs; a title-neutral journal claims domain-separated logical and physical identities,
+commits one full-support behavior distribution, constructs only the selected runtime behind a
+locked gate, separates durable execution start from controller release, and records only the
+selected arm's independently observed outcome. Interrupted, unreadable, provenance-drifted, and
+observer-mutated attempts remain target-free. A secret-backed store anchor blocks a claim from
+resuming in an unrelated private store, and a nonpersistent meter-incarnation identity permits
+bounded same-process pre-input recovery while making process restart fail closed. Red mechanics
+stay in the adapter; the learner schema contains no Red, Crystal, map, species, root, route, or
+private binding identity.
+
+The [local qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)
+records **182 focused · 5,428 repository · 295 typed source files**, plus clean lint, focus, and
+registry checks. Red-shaped and Crystal-shaped synthetic fixtures use the same policy, propensity,
+journal, outcome, and example schema. Antigravity returned GO with no P0/P1; its package-namespace
+P2 is deferred until a real Crystal adapter proves the extraction boundary. Claude reached its
+session limit before a verdict, so no Claude approval is claimed.
+
+Nothing trained. Counters remain **development 15 · verified 5 · causal train 0/1 · fits 4 ·
+comparisons 4 · authority 0 · transfer 0**. The next exact sequence is: publish this qualified
+source and documentation, require exact-head green CI, freeze exactly one bounded
+development-rigor Red causal campaign without opening gameplay, then reorient before execution.
+Its first execution terminal must be one authentic settled train example or an honest target-free
+closure—not another preflight, synthetic fit, sealed test, Crystal run, or full replay.
+
 ## 2026-08-27: V1 preflight failed before private access; one minimal V2, then no more wrappers
 
 PR 86 passed CI `33078088495/1`, rebased onto main as
