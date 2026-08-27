@@ -1,0 +1,158 @@
+{
+  "artifacts": {
+    "causal_adapter_sha256": "e80db4a154a88aa151bc9e6318c7b3f1715173c150e3888a12852f3d49f0b8e8",
+    "causal_adapter_tests_sha256": "9e575b19208a20445bb43e8b896746457cd86671c6e2f1ee6c0f83cddaf7fadd",
+    "campaign_freezer_script_sha256": "6ce78842e78768e9a4dca88b7dff35a38e5e8b36b90ef4542b299f934402f47f",
+    "campaign_freezer_script_tests_sha256": "649a2afce6a81781ccfd72a2cb1979a6e7a2300fa1c8e3865a3ace6b46fd86a8",
+    "campaign_runner_sha256": "ecc972c451068dab33b2eccdd958cacae7dcd134ea60bdb49644c5a164fd6fc5",
+    "campaign_runner_tests_sha256": "3324c75ab48b7a554b77c26601b498bb3fb1ffb592aa9d1fe71aa3cbae386626",
+    "current_consumer_seam_sha256": "3c8269c5fe416b2a6fa1e30c316f1a9da671da2a83e5ee42a86431b772a66bd1"
+  },
+  "base_source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33098041804,
+    "main_commit": "74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2"
+  },
+  "codex_adjudication": {
+    "accepted": [
+      "compose_the_authenticated_setup_capture_directly_with_the_title_neutral_causal_journal",
+      "keep_the_red_runtime_resolver_absent_until_pair_claim_commitment_selection_and_construction_start_are_durable",
+      "construct_only_the_randomly_selected_red_arm_behind_the_locked_controller_gate",
+      "rebind_the_post_selection_title_adapter_and_runtime_factory_to_the_exact_frozen_consumer",
+      "recover_a_terminal_example_without_constructing_any_runtime",
+      "reject_hidden_protected_effects_during_cold_resolution_without_a_learner_target",
+      "freeze_one_train_campaign_action_free_with_an_explicit_retired_physical_root_commitment",
+      "require_execution_to_reopen_the_exact_campaign_plan_from_the_same_private_store",
+      "report_a_durable_freeze_explicitly_if_the_post_freeze_source_check_fails",
+      "reuse_the_existing_current_consumer_and_producer_slot_authentication_without_invoking_the_retired_wrapper",
+      "regenerate_all_source_bound_battle_goal_and_strategic_registries"
+    ],
+    "deferred": [
+      "derive_the_exact_private_selected_state_and_envelope_paths_only_after_publication",
+      "derive_the_opaque_consumed_v2_physical_root_exclusion_without_diagnosing_the_v2_failure",
+      "build_or_authorize_the_one_shot_execution_entrypoint_only_after_the_action_free_campaign_is_frozen_and_reoriented",
+      "extract_the_title_neutral_modules_from_the_historical_red_package_when_the_real_crystal_adapter_proves_the_dependency_cut"
+    ],
+    "rejected": [
+      "guess_a_retired_or_selected_private_identity",
+      "retry_or_diagnose_the_consumed_v1_or_v2_preflight",
+      "create_a_v3_preflight_or_another_wrapper_only_successor",
+      "open_a_rom_or_private_capture_during_public_engineering_qualification",
+      "increment_a_learning_counter_from_freeze_infrastructure",
+      "fit_or_promote_from_zero_authentic_causal_train_examples",
+      "treat_schema_reuse_as_crystal_transfer"
+    ],
+    "reason": "This is the smallest composition that can turn the already authenticated Red classroom into one selected-arm learner datum without reopening the wrapper lane. It moves the project to the action-free freeze gate while keeping every model, gameplay, authority, and transfer claim at zero."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": {
+      "model": "gemini-3.1-pro-high",
+      "p0": 0,
+      "p1": 0,
+      "p2": 0,
+      "verdict": "go_for_publication_and_then_one_private_action_free_freeze"
+    },
+    "claude": {
+      "result": "session_limit_reached_before_a_verdict",
+      "verdict": "not_counted_as_approval"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Compose one authenticated repeatable game state and complete identity-free option menu into one crash-safe selected-arm causal example while keeping the title runtime cold until durable randomized selection.",
+    "cheapest_falsifier": "ROM-free setup-to-journal fixtures must prove exact ordering, selected-only construction, zero resolver calls on terminal recovery, target-free hidden effects, canonical plan restore, explicit retired-root exclusion, and a freeze CLI with no gameplay capability.",
+    "learned_authority": "none_public_engineering_only",
+    "stop_condition": "Stop before private input, campaign freeze, root claim, runtime, gameplay, outcome, fit, benchmark, Crystal execution, promotion, or replay. After publication stop rather than guess any selected or retired private identity.",
+    "time_box": "one_session_eight_hours",
+    "transfer_test": "The learner journal remains title-neutral and already passes Red-shaped and Crystal-shaped schema parity; actual transfer still requires frozen Red weights and realized zero-shot Crystal outcomes against controls."
+  },
+  "next_gate": {
+    "action_free_private_freeze_allowed_after_exact_head_ci": true,
+    "crystal_execution_allowed": false,
+    "model_fit_allowed": false,
+    "private_execution_allowed": false,
+    "sealed_red_allowed": false,
+    "target": "Publish the exact freeze-first campaign composition, require exact-head green CI, authenticate one eligible train root plus the consumed V2 physical-root exclusion, freeze once action-free, and reorient before execution."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "campaign_freezes": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_examples": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "observed_game_outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "689af2620f0695b194dcec20e3d0f8781cb9267a1aede3f72d719629b0437bc0",
+    "goal_manager_registry_sha256": "adffe8bc8b2958151993c6e4b12c5a1ebf7ff7be8f6fe58ed47d22902babdb12",
+    "source_bundle_sha256": "ef7fd627a39c4d04f01ae0e15c702b2025d2c8e8c641b99e2046dfd1bbb08edd",
+    "strategic_navigation_registry_sha256": "fa5cb51dddc336237c310e90ba23906b8f1aeb81114e79c7fde6049d5c946a76"
+  },
+  "schema": "pokemon.red.living-dex-causal-campaign-freeze-gate-local-qualification.v1",
+  "status": "locally_qualified_antigravity_go_claude_unavailable_publication_pending",
+  "supported_claim": "From a validated Red setup capture, the campaign can enter the title-neutral causal journal with exactly one cold selected runtime after durable claim, commitment, selection, and construction-start records; its separate action-free freezer can bind one unretired train campaign without gameplay or model capability.",
+  "trust_falsifiers": [
+    "runtime_before_pair_claim",
+    "runtime_before_behavior_commitment",
+    "runtime_before_behavior_selection",
+    "runtime_before_construction_start",
+    "controller_release_before_runtime_construction_finishes",
+    "unselected_runtime_construction",
+    "terminal_recovery_runtime_reconstruction",
+    "hidden_model_prediction_during_cold_resolution",
+    "setup_or_capture_identity_substitution",
+    "post_selection_title_adapter_or_runtime_factory_substitution",
+    "campaign_plan_substitution_from_another_private_store",
+    "post_freeze_source_check_failure_misreported_as_no_commitment",
+    "selected_root_in_explicit_retired_inventory",
+    "non_train_recipe_freeze",
+    "freeze_interface_rom_runtime_or_execution_capability",
+    "private_path_or_identity_in_public_freeze_output"
+  ],
+  "unsupported_claims": [
+    "action_free_private_campaign_already_frozen",
+    "authentic_red_causal_train_example",
+    "authentic_red_outcome_collection",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ],
+  "verification": {
+    "focused_tests_passed": 140,
+    "full_suite_deselected": 3,
+    "full_suite_passed": 5441,
+    "full_suite_skipped": 0,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 296,
+    "mypy_status": "passed",
+    "product_focus_check": "passed_causal_train_example_train_zero_of_one",
+    "public_artifact_and_document_checks": "passed",
+    "registry_checks": "passed_battle_goal_manager_strategic_navigation_and_scenarios",
+    "ruff_status": "passed"
+  }
+}

@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: one random choice can finally become one honest lesson
+## Current checkpoint: the lesson gate now opens only after the choice is permanent
+
+The honest learner contract has shipped, but a contract alone cannot touch Red. The new campaign
+connects one authenticated setup to it in a strict order: finish setup, claim the lesson, commit
+the random policy, select one option, record construction start, and only then create one Red
+runtime. The other options never get worlds of their own. Recovery of a finished lesson creates
+no runtime at all, and a hidden prediction or other protected effect during construction leaves no
+training target.
+
+The freezer is a separate program with no way to play. It can bind one train root only if it also
+records which physical roots are permanently retired. That prevents the opaque failed V2 lesson
+from being rediscovered under a new name without turning its private failure into an investigation.
+
+The gate passes **140 focused and 5,441 repository tests across 296 typed source files**.
+Antigravity says GO with no P0/P1/P2 finding; Claude is usage-limited, so no verdict is invented.
+Nothing trained. The board remains **CAUSAL TRAIN 0/1 · AUTHORITY 0 · TRANSFER 0**. Publish, pass
+exact-head CI, prove the selected and retired identities, freeze once without gameplay, and
+reorient before the first real choice.
+
+## Previous checkpoint: one random choice can finally become one honest lesson
 
 The scaffolding had learned how to authenticate a classroom, lock a saved game, and survive a
 power cut. It still could not hand the model a trustworthy lesson. The last wrapper failed safely,

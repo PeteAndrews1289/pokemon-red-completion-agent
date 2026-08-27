@@ -12,7 +12,37 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: the title-neutral causal boundary is qualified; publish, then freeze one lesson
+## 2026-08-27: freeze-first causal campaign gate qualified; publish before touching one lesson
+
+The shared causal boundary has shipped. PR 88 rebased into exact main
+`74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2`, and exact-main CI `33098041804/1` passed. The new
+campaign module composes it with the authenticated Red setup capture without weakening the cold
+runtime invariant: setup settles first, then the generic journal durably claims its successor,
+commits one full-support behavior draw, selects one row, and records construction start before the
+Red resolver can exist. Only that selected arm opens. Completed recovery calls no resolver. A
+hidden protected effect during resolution is target-free.
+
+The companion freezer is deliberately action-free. Its interface has no ROM, emulator,
+controller, runtime, teacher, learner, model, or execution mode. It binds one train recipe, exact
+setup/current-source identities, and a sorted commitment to at least one retired physical root;
+selecting a retired root fails before publication. It emits only a path-free aggregate and makes
+no claim. This is a new campaign artifact, not V3 of the retired preflight wrapper.
+
+The [local qualification](docs/evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+records **140 focused · 5,441 passed repository · 296 typed source files**, plus clean lint, type,
+focus, document, public-artifact, and registry gates. Antigravity returned GO with no P0/P1/P2.
+Claude reached its session limit and supplied no verdict. No private capture, ROM, claim, runtime,
+controller action, frame, outcome, fit, authority, or transfer result occurred.
+
+Next: publish this exact source and registries, require exact-head green CI, and then freeze exactly
+one action-free train campaign only if the selected root paths and the consumed V2 physical-root
+exclusion can be authenticated from existing authorized identities without diagnosing V2. Stop
+rather than guess. Reorient before executing the frozen campaign. The first execution terminal
+must be one authentic settled train example or an honest target-free closure. Counters remain
+**development 15 · verified 5 · causal train 0/1 · fits 4 · comparisons 4 · authority 0 · transfer
+0**.
+
+## Previous 2026-08-27: the title-neutral causal boundary is qualified; publish, then freeze one lesson
 
 The sole V2 preflight also failed closed, at the intentionally broad
 `selected_root_authentication` stage. It disclosed no private cause and produced no claim,

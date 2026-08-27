@@ -1,6 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-27 active override — causal boundary qualified; publish, freeze once, reorient:**
+> **2026-08-27 active override — publish the freeze-first campaign gate, then freeze once:** The
+> shared journal is published on exact main `74d7e7e8` under green CI `33098041804/1`. Codex has
+> locally qualified the missing composition: setup settles first; the journal durably claims,
+> commits behavior, selects one row, and records construction start; only then can one Red runtime
+> exist. The action-free freezer binds one train root plus explicit retired physical roots and has
+> no gameplay or model capability. The
+> [qualification](docs/evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+> records **140 focused · 5,441 passed full-suite · 296 typed source files**.
+>
+> Codex owns publication, exact-head CI, operational identity adjudication, exactly one action-free
+> freeze, and immediate reorientation before execution. Antigravity remains the read-only
+> architecture/transfer challenger and returned GO with P0/P1/P2 zero. Claude remains the
+> read-only causal/statistical challenger but reached its usage limit, so no Claude verdict is
+> claimed. Neither reviewer edits or executes. Stop rather than guess the consumed V2 physical
+> root or selected files. No V3, new wrapper, gameplay, fit, sealed Red, Crystal, promotion, or
+> replay is open. **Causal train 0/1 · authority 0 · transfer 0.**
+
+> **Previous 2026-08-27 override — causal boundary qualified; publish, freeze once, reorient:**
 > V1/V2 preflights are consumed, their private cause is intentionally unknown, V3 is forbidden,
 > and the wrapper lane is closed. The
 > [causal-boundary qualification](docs/evidence/cross-title-living-dex-causal-example-pipeline-v1-local-qualification-2026-08-27.json)

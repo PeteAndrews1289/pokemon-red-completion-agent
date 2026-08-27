@@ -3,7 +3,19 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 27 causal-boundary checkpoint:** The V1/V2 wrapper lane is closed without retry or a
+> **August 27 freeze-first campaign checkpoint:** The shared causal boundary is published at main
+> `74d7e7e8` with exact-main CI `33098041804/1` green. The new composition keeps the Red runtime
+> absent until the generic journal has durably claimed, committed, selected, and recorded
+> construction start. The separate freezer binds one eligible train root and explicit retired
+> physical roots without ROM, runtime, controller, teacher, learner, model, or execution access.
+>
+> The [qualification](evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+> records **140 focused · 5,441 passed repository · 296 typed source files**. Antigravity returns
+> GO with P0/P1/P2 zero; Claude is usage-limited and supplies no verdict. Publish this exact gate,
+> require exact-head CI, freeze exactly once only when the selected and retired identities are
+> unambiguous, then reorient before execution. **Causal train remains 0/1.**
+
+> **Previous August 27 causal-boundary checkpoint:** The V1/V2 wrapper lane is closed without retry or a
 > private-cause claim. The replacement title-neutral journal and Red adapter now bind a complete
 > identity-free menu to one full-support randomized selected arm, one independent outcome, and one
 > crash-safe learner datum. Store substitution, logical/physical relabelling, restart meter reset,

@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 27: the lesson finally became something a model can learn from
+## August 27: the doorway became a one-way lesson gate
+
+Publishing the generic journal was not enough; Red still needed a safe way to carry one authentic
+setup into it. The new campaign makes the ordering concrete. The setup capture settles first. The
+journal then claims the lesson, commits a randomized policy, selects one option, and writes that
+construction has begun. Only at that point can Red create a runtime, and it creates only the
+selected one. If the machine restarts after completion, the recorded example comes back without
+opening the emulator again. If runtime construction secretly predicts, teaches, executes a
+provider, moves, or advances a frame, the attempt closes without a training target.
+
+The freezer is intentionally boring: one train slot, one exact source/setup identity, and an
+explicit list of physical roots that may never be selected again. There is no play button in that
+program. This matters because the previous V2 root failed under a deliberately opaque private
+stage; progress cannot come from guessing why or accidentally recycling it.
+
+The gate passes **140 focused and 5,441 repository tests across 296 typed source files**.
+Antigravity found no P0/P1/P2 issue and returned GO. Claude was usage-limited, so no second verdict
+is invented. The honest scoreboard is unchanged: **causal train 0/1, authority 0, transfer 0**.
+Next comes publication and exact-head CI, then one action-free freeze if—and only if—the selected
+and retired identities are already provable. The model still has not learned from this lesson;
+this is the last safe hinge before it can.
+
+## Earlier August 27: the lesson finally became something a model can learn from
 
 The project had spent days proving that saved lessons were authentic and could not be reused. That
 was necessary, but it still did not create training data. The last preflight made the distinction

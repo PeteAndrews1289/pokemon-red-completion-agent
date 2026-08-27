@@ -8,7 +8,40 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: one shared causal-datum boundary is ready to publish
+## Current checkpoint: the first causal campaign can be frozen without touching gameplay
+
+The title-neutral causal boundary is no longer merely local: PR 88 merged as exact main
+`74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2`, and exact-main CI `33098041804/1` passed. The next
+composition seam is now locally qualified. A frozen Red campaign binds one eligible train recipe,
+its exact logical and physical root, the complete setup identity, the current causal runner, and
+an explicit commitment to every retired physical root. The selected root is rejected if it is in
+that inventory.
+
+Execution first settles or recovers the setup capture. Only after the generic causal journal has
+claimed the successor root, committed one full-support behavior draw, selected a row, and written
+construction start may the Red runtime resolver exist. Only the selected arm opens. A fully
+settled recovery calls no resolver; a hidden prediction, teacher, provider, claim, input, or frame
+effect during cold construction fails before release and creates no target. The action-free
+freezer exposes no ROM or execution mode and publishes only a path-free zero-effect aggregate.
+
+The [local qualification](evidence/red-living-dex-causal-campaign-freeze-gate-v1-local-qualification-2026-08-27.json)
+records **140 focused · 5,441 passed full-suite · 296 typed source files**. Antigravity returned GO
+with no P0/P1/P2 finding. Claude was unavailable at its session limit, which is not approval. This
+proves the composition and freeze boundary, not a learner result.
+
+The shortest honest sequence is now:
+
+1. publish this exact freeze-first composition and regenerated source-bound registries;
+2. require a successful exact-head CI attempt;
+3. derive one eligible train root and the opaque consumed-V2 physical-root exclusion from already
+   authorized identities, without investigating V2's private failure;
+4. freeze exactly one action-free campaign, or stop if either identity is ambiguous; and
+5. reorient and audit the frozen joins before one selected-arm execution.
+
+Do not create another wrapper, guess a private digest, retry V1/V2, fit a model, open sealed Red or
+Crystal, or replay the game. Causal train remains **0/1**.
+
+## Previous checkpoint: one shared causal-datum boundary is ready to publish
 
 The wrapper lane is over. V2 failed closed at a sanitized private-authentication stage with no
 claim, runtime, action, example, or model effect; V1/V2 never retry and V3 is forbidden. The
