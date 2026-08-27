@@ -309,6 +309,31 @@ def claim_first_pair_registry(registry: Path) -> ClaimFirstPairRegistry:
     return ClaimFirstPairRegistry(registry)
 
 
+def observe_claim_first_pair_availability(
+    registry: Path,
+    logical_root_sha256: str,
+    physical_root_sha256: str,
+) -> bool:
+    """Observe one pair under a shared lease without claiming either identity.
+
+    This is a non-authoritative preflight observation: another process may
+    claim the pair after the shared lease is released.  The execution path
+    must still use :func:`claim_first_pair_registry` for its atomic
+    check-and-claim transaction.
+    """
+
+    try:
+        opened = open_fixed_account_claim_registry(registry)
+        with fixed_account_claim_registry_lease(opened, exclusive=False):
+            return _root_pair_is_available(
+                opened,
+                logical_root_sha256,
+                physical_root_sha256,
+            )
+    except FreshCompositionQualificationError as error:
+        raise ClaimFirstAdmissionError(str(error)) from None
+
+
 def read_root_pair_claim(registry: Path, claim_sha256: str) -> ClaimFirstRootPair:
     """Read and strictly authenticate one canonical pair claim."""
 
@@ -526,6 +551,7 @@ __all__ = [
     "ClaimFirstPairRegistry",
     "ClaimFirstRootPair",
     "claim_first_pair_registry",
+    "observe_claim_first_pair_availability",
     "read_root_pair_claim",
     "root_identity_is_pair_claimed",
     "root_pair_claims",
