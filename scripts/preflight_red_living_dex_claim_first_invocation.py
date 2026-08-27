@@ -353,7 +353,7 @@ def _tracked_source_inventory(commit: str) -> set[str]:
             commit,
             "--",
             "pyproject.toml",
-            "src/pokemon_red_completion",
+            "src",
         )
     )
     result: set[str] = set()

@@ -1,0 +1,70 @@
+{
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "diagnosis": {
+    "category": "tracked_sibling_source_package_rejected",
+    "cause": "The bootstrap authenticated only the tracked Red package but compared that inventory against every package under src, so the clean tracked Crystal package was rejected before private input loading.",
+    "private_input_required_to_reproduce": false,
+    "repair_scope": "Authenticate every tracked package under src while continuing to reject untracked sibling packages."
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 33079012283,
+    "merged_main_commit": "af62c546bbe49ca32cbbf02e6b1941dca7c7dbbc",
+    "pull_request": 86,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 33078088495
+  },
+  "raw_path_free_receipt": {
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_outcomes": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "producer_executions": 0,
+    "resolver_constructions": 0,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-claim-first-invocation-preflight-failure.v1",
+    "setup_campaign_calls": 0,
+    "stage": "bootstrap_source_authentication",
+    "status": "failed_closed",
+    "teacher_queries": 0
+  },
+  "rehearsal": {
+    "attempts": 1,
+    "private_producer_record_reads": 0,
+    "private_selected_envelope_reads": 0,
+    "private_selected_state_reads": 0,
+    "result": "failed_closed",
+    "v1_retries_remaining": 0
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.red.living-dex-claim-first-one-slot-preflight-failure.v1",
+  "status": "v1_failed_before_private_access_minimal_v2_successor_required",
+  "unsupported_claims": [
+    "authentic_private_red_setup_execution",
+    "authentic_red_outcome_collection",
+    "causal_red_training_example",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_selected_root_preflight"
+  ]
+}

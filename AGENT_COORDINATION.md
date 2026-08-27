@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — V1 failed before private access; one minimal V2 successor:** PR 86
+> and exact-main CI passed, but the sole V1 preflight failed at public bootstrap. The
+> [failure receipt](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+> records zero private reads, claims, runtime/controller effects, learner effects, fits, authority,
+> and transfer. V1 may not retry. The cause is narrow: Git authenticated only the Red package while
+> filesystem validation inspected every package under `src`, so the clean tracked Crystal sibling
+> was rejected.
+>
+> Codex owns one minimal repair: authenticate all tracked `src` packages, still reject an untracked
+> sibling, qualify, publish, require exact-head CI, and run exactly one V2 ROM-free preflight.
+> Claude challenges causal and trust-boundary overclaims; Antigravity challenges source-boundary,
+> transfer, and mission drift. Neither edits or executes. If V2 fails, abort this lane. If V2
+> succeeds, reorient directly to setup plus randomized outcome. No V3 or another wrapper-only
+> session is permitted.
+>
 > **2026-08-27 active override — publish and rehearse one selected-slot preflight, then stop
 > infrastructure work:** The claim-first core and the thin current-source Red invocation wrapper
 > are locally qualified. The wrapper binds clean published source, exact successful push CI, the

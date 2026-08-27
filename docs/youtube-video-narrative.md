@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: the guard rejects a teammate
+
+Show **PR 86 GREEN → MAIN CI GREEN → V1 PREFLIGHT**. Before the private drawer appears, flash
+**BOOTSTRAP SOURCE AUTHENTICATION — FAILED CLOSED** and keep every effect at zero. Pull back to two
+tracked folders: **RED** inside the Git flashlight and **CRYSTAL** just outside it, while the
+filesystem camera sees both. The guard mistakes Crystal for a shadow.
+
+Stamp **V1 RETRY NO**. Widen the Git flashlight to **ALL TRACKED `src`**, then send a fake untracked
+package into a red stop sign. End on **ONE V2 → FAIL: ABORT / PASS: SETUP + RANDOMIZED OUTCOME** and
+cross out **V3**. Keep **CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 27 scene: inspect one lesson, touch nothing
 
 Open on the frozen **15-LESSON CLASSROOM** and spotlight one sealed drawer. Run a visible rail:

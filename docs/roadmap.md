@@ -3,6 +3,17 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 V1 preflight failure checkpoint:** PR 86 and exact-main CI passed, but the sole V1
+> preflight failed before private access because Git authenticated only the Red package while the
+> filesystem guard inspected all tracked packages. The legitimate Crystal sibling was rejected.
+> The [path-free failure](evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+> records every protected effect at zero; V1 never retries.
+>
+> Publish one minimal all-tracked-`src` V2 with tracked-sibling and untracked-shadow tests, require
+> exact-head CI, and run one V2 preflight. V2 failure aborts the lane; V2 success reorients directly
+> to setup plus randomized outcome. No V3 or another wrapper-only session. Causal train remains
+> **0/8**.
+
 > **August 27 selected-slot invocation checkpoint:** The claim-first core and its thin
 > current-source Red wrapper pass **67 focused and 5,389 repository tests across 291 typed source
 > files**. Preflight proves clean published source, exact push

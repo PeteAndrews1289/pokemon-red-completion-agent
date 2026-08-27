@@ -12,7 +12,30 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: one-slot invocation qualified; publish, rehearse once, then open the lesson gate
+## 2026-08-27: V1 preflight failed before private access; one minimal V2, then no more wrappers
+
+PR 86 passed CI `33078088495/1`, rebased onto main as
+`af62c546bbe49ca32cbbf02e6b1941dca7c7dbbc`, and passed exact-main push CI
+`33079012283/1`. The sole V1 preflight then failed closed at
+`bootstrap_source_authentication`. It read no private producer record, selected state, or envelope;
+made no claim; constructed no resolver; and opened no ROM. The
+[path-free failure](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v1-failure-2026-08-27.json)
+records every protected effect at zero. V1 is consumed and must not retry.
+
+Read-only diagnosis found one public false-negative. Git inventory authenticated only
+`src/pokemon_red_completion`, while filesystem inventory intentionally inspected all of `src`.
+The clean tracked `src/pokemon_crystal_completion` directory therefore looked like an unauthenticated
+sibling and failed before network or private access. The minimal V2 changes the Git inventory root
+to all of `src`, adds a tracked Red-plus-Crystal sibling regression, and retains rejection of an
+untracked shadow package.
+
+Publish only that repair under exact-head green CI and permit one V2 ROM-free selected-root
+preflight. If V2 fails, abort this curriculum lane. If it succeeds, reorient immediately to one
+claim-first setup followed by a randomized selected-arm outcome. No V3 and no further wrapper-only
+session are allowed. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5
+· comparisons 4/5 · authority 0 · transfer 0**.
+
+## Previous 2026-08-27: one-slot invocation qualified; publish, rehearse once, then open the lesson gate
 
 The claim-first core and its current-source Red invocation wrapper are locally complete. The
 wrapper proves clean published source and one exact successful push-CI attempt before project
