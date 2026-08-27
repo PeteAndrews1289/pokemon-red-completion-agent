@@ -16,6 +16,12 @@ consumed. Its Git inventory covered only the Red package, but its filesystem inv
 of `src`; the legitimate tracked Crystal sibling therefore failed as if it were an untracked
 shadow.
 
+The [V2 local qualification](evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
+records **44 focused · 5,391 full-suite · 291 typed source files** and an exact 292-file real
+Git/filesystem inventory. Antigravity approved publication and one V2 preflight with no P0/P1
+finding and kept setup closed. Claude's CLI review hit its usage window and must be retried after
+reset before merge; no Claude approval is implied yet.
+
 Codex owns the minimal all-tracked-`src` repair, its tracked-sibling and untracked-shadow
 falsifiers, publication, exact-head CI, and one V2 ROM-free selected-root preflight. Claude remains
 the read-only causal/trust reviewer; Antigravity remains the read-only architecture/transfer

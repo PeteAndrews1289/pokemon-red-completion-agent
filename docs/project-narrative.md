@@ -14,6 +14,12 @@ an untracked sibling. If V2 fails, the lane ends. If it passes, the project must
 and create a real setup plus randomized outcome. This is a useful trust-boundary correction, not a
 learning result: **causal train 0/8 · authority 0 · transfer 0**.
 
+The repair now passes **44 focused and 5,391 repository tests across 291 typed source files**, and
+the real checkout's 292 tracked source files match the filesystem exactly. Antigravity approved
+publication and one V2 preflight with no blocking finding. Claude's review hit its usage window and
+is explicitly pending a post-reset retry; the project does not turn reviewer unavailability into a
+fictional second approval.
+
 ## August 27: the wrapper can inspect one lesson without entering the game
 
 The crash-safe claim boundary still needed one public, reproducible way to reach exactly one frozen

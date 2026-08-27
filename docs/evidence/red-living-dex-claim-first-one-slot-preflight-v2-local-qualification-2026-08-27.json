@@ -1,0 +1,118 @@
+{
+  "artifacts": {
+    "invocation_preflight_script_sha256": "cc72de3349d80c66f4f099ee2da3a856992965ca9288cf2b0366d118b43ffb4f",
+    "preflight_script_tests_sha256": "1748b528021c2bdbe98fd741bb44fedbe641e9f6e03ddb973401da724f0bb19a",
+    "v1_failure_receipt_sha256": "4690160891056899cac7f4858d54b92567bae7cf47147b2b7d7a0e5d05f50eab"
+  },
+  "audited_source_commit": "4f13291814d8f95ef4a029acb49e02ecd8c9d547",
+  "base_source_commit": "af62c546bbe49ca32cbbf02e6b1941dca7c7dbbc",
+  "codex_adjudication": {
+    "accepted": [
+      "authenticate_every_tracked_source_package_under_src",
+      "retain_exact_git_versus_filesystem_inventory_comparison",
+      "prove_tracked_red_and_crystal_siblings_pass_together",
+      "prove_an_untracked_sibling_package_still_fails_closed"
+    ],
+    "deferred": [
+      "reject_ignored_local_bytecode_even_though_the_fresh_random_pycache_prefix_prevents_import_from_it"
+    ],
+    "rejected": [
+      "treat_the_tracked_crystal_package_as_transfer_evidence",
+      "retry_the_consumed_v1_preflight",
+      "open_private_setup_before_the_single_v2_preflight_succeeds",
+      "create_a_v3_successor_if_v2_fails"
+    ],
+    "reason": "The one-line inventory expansion makes the Git and filesystem scopes identical without weakening the byte comparison or shadow rejection. The tracked Crystal package exposed the defect but executed no code and proves no transfer. A fresh randomized pycache prefix is installed before project imports, so ignored local bytecode is not an executable source path in this command; stricter cache rejection remains optional hardening rather than a V2 blocker."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": "approve_publication_no_p0_or_p1;_approve_exactly_one_v2_rom_free_preflight_after_exact_head_ci;_reject_private_setup;_one_optional_pycache_hardening_observation_deferred_by_codex",
+    "claude": "pending_read_only_retry_after_cli_usage_window_reset",
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_check": {
+    "capability": "Authenticate every tracked title package that can participate in the shared living-Pokedex codebase while still rejecting untracked source shadows before one selected Red setup lesson is opened.",
+    "cheapest_falsifier": "A ROM-free fixture containing tracked Red and Crystal packages must produce the exact Git inventory, then the same filesystem with one added untracked sibling package must fail before project import or private access.",
+    "learned_authority": "none_infrastructure_only",
+    "stop_condition": "Stop and abort this lane on failed publication, failed exact-head CI, failed V2 preflight, untracked source acceptance, sibling capture access, any claim/runtime/controller effect, private identity disclosure, or need for a V3 repair. After V2 success, reorient directly to setup and one randomized observed-arm outcome.",
+    "time_box": "one_minimal_successor_inside_the_existing_six_hour_lane_box",
+    "transfer_test": "The repair authenticates both tracked title packages under one source boundary, but no Crystal scenario or frozen Red weight executes here; transfer remains untested."
+  },
+  "next_gate": {
+    "private_setup_execution_allowed": false,
+    "v1_retry_allowed": false,
+    "v2_attempts_allowed": 1,
+    "v3_allowed": false,
+    "target": "Publish the minimal V2 repair, require a fresh successful exact-main push CI run, execute exactly one ROM-free selected-root preflight, publish only a path-free zero-effect result, and reorient immediately."
+  },
+  "protected_effects_during_qualification": {
+    "authentic_private_capture_reads": 0,
+    "behavior_draws": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields": 0,
+    "producer_executions": 0,
+    "resolver_constructions": 0,
+    "rom_accesses": 0,
+    "root_claims": 0,
+    "setup_campaign_calls": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "48e60db03185eeb29428286efd673b3fbba03b00e9f500173f6dd6409ff1e1c3",
+    "goal_manager_registry_sha256": "3f0c6553aeb88c66dce489b53399811f5f8b5af183eb576bcdf8c77e6040bb1e",
+    "source_bundle_sha256": "16214d6e09916ef4bf35242eaddba111d3c043a06391eb10c8ca5ddcf60e24c5",
+    "strategic_navigation_registry_sha256": "24e57e76f2cbcf866cc3cb84ccff0f9ad3935da1aa129907028c4007b57ad7bb"
+  },
+  "repair": {
+    "git_inventory_scope": "pyproject.toml_and_all_tracked_src",
+    "real_checkout_actual_source_files": 292,
+    "real_checkout_exact_inventory_match": true,
+    "real_checkout_tracked_source_files": 292,
+    "tracked_crystal_package_authenticated": true,
+    "untracked_sibling_package_accepted": false
+  },
+  "schema": "pokemon.red.living-dex-claim-first-one-slot-preflight-v2-local-qualification.v1",
+  "status": "locally_qualified_antigravity_go_claude_retry_pending_publication_and_one_preflight_pending",
+  "supported_claim": "The V2 public bootstrap authenticates every tracked package under src, including the legitimate Crystal sibling, while preserving exact source-byte comparison and rejection of an untracked sibling before private access.",
+  "unsupported_claims": [
+    "authentic_private_red_setup_execution",
+    "authentic_red_outcome_collection",
+    "causal_red_training_example",
+    "crystal_execution",
+    "crystal_transfer",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_v2_selected_root_preflight"
+  ],
+  "verification": {
+    "focused_tests_passed": 44,
+    "full_suite_passed": 5391,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 291,
+    "mypy_status": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "ruff_status": "passed"
+  }
+}

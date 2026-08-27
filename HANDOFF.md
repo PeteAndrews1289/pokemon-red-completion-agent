@@ -29,6 +29,13 @@ sibling and failed before network or private access. The minimal V2 changes the 
 to all of `src`, adds a tracked Red-plus-Crystal sibling regression, and retains rejection of an
 untracked shadow package.
 
+The [V2 local qualification](docs/evidence/red-living-dex-claim-first-one-slot-preflight-v2-local-qualification-2026-08-27.json)
+records **44 focused · 5,391 repository · 291 typed source files**. The real checkout has an exact
+292-file Git/filesystem source match. Antigravity found no P0/P1 issue and approved publication
+plus one V2 preflight while rejecting private setup. Claude's read-only CLI reached its usage
+window during this review; retry it after reset before merge rather than representing an approval
+that did not occur.
+
 Publish only that repair under exact-head green CI and permit one V2 ROM-free selected-root
 preflight. If V2 fails, abort this curriculum lane. If it succeeds, reorient immediately to one
 claim-first setup followed by a randomized selected-arm outcome. No V3 and no further wrapper-only
