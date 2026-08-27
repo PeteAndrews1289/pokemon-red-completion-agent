@@ -5,20 +5,18 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): publish one qualified namespace successor and rehearse once.** PR 82
-> merged the runtime-free bridge as main `506c0c1f`; exact-main CI `33051433728/1` passed. Its one
-> V1 read-only rehearsal failed closed before the immutable plan was found because the caller
-> supplied an initialized parent store rather than the nearest initialized store shared by the
-> context catalog and plan. The [path-free receipt](docs/evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
-> reports every gameplay, claim, learner, model, setup and runtime effect at zero. V1 will not
-> retry. The minimal successor binds both context files to the supplied nearest initialized store
-> and distinguishes an absent record from invalid contents. Its
-> [qualification](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
-> records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files**; Claude and
-> Antigravity both returned GO for publication and one rehearsal and NO-GO for setup execution.
-> Publish under exact green CI, rehearse once, and stop the namespace lane rather than create V3 on
-> failure. Outer execution identity, claims, recovery,
-> runtime construction, setup, fitting, sealed Red and Crystal stay closed. Counters remain
+> **Current product focus (August 27, 2026): build the claim-first outer execution boundary.** PR 83
+> passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI `33059506829/1`.
+> The sole V2 read-only rehearsal succeeded: the [path-free result](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+> authenticates **15 roots · 45 options · 33 families · 10 origins · 37 routed options · 7
+> cartridge corridors** with actions, frames, claims, runtimes, setup calls, providers, teachers,
+> predictions, outcomes and fits all zero. The namespace lane is closed permanently.
+>
+> Next compose durable outer execution identity, atomic logical-plus-physical claims,
+> authenticated recovery, deep plan reauthentication, and claim-first runtime construction. Prove
+> duplicate-claim and crash-cutpoint behavior ROM-free with Red-shaped and Crystal-shaped fixtures,
+> publish under exact green CI, and reorient before private setup execution. Fitting, sealed Red and
+> Crystal remain closed. Counters remain
 > **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
 > transfer 0**.
 

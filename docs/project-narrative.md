@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 27: the safe bridge was pointed at the wrong vault
+## August 27: the classroom door finally opened without anyone entering
+
+PR 83 and exact-main CI passed, then the one namespace-bound V2 rehearsal succeeded. It
+authenticated all fifteen frozen roots and reproduced forty-five real options, thirty-three
+mechanics-derived families, ten physical origins, thirty-seven routed choices, and seven
+cartridge-derived corridors. It restored nothing, claimed nothing, constructed no runtime, pressed
+no button, advanced no frame, and produced no prediction, outcome, or fit. The
+[path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+contains no private path or identity.
+
+That closes the namespace lane. The next boundary is the first one allowed to become
+controller-capable, but it is not allowed to improvise its safety: one durable execution identity,
+logical and physical claims committed together, authenticated recovery at every crash cutpoint,
+deep plan reauthentication at consumption, and a runtime factory that cannot run before the claim
+commits. Red-shaped and Crystal-shaped ROM-free fixtures must falsify that design before private
+setup can begin. The learning board honestly remains **causal train 0/8, authority 0, transfer 0**.
+
+## Earlier August 27: the safe bridge was pointed at the wrong vault
 
 The repaired bridge passed review, PR 82, and exact-main CI. Its first real read-only rehearsal then
 stopped at immutable-plan authentication. That was the right safety behavior: no root was claimed,

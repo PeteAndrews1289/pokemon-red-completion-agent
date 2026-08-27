@@ -1,0 +1,106 @@
+{
+  "claim_boundary": {
+    "supported": "The exact published Red setup bridge authenticated the immutable fifteen-root provider plan inside the intended nearest private namespace, rejoined every frozen root byte pair, reproduced the complete 15/45/33/10 capacity, and returned before any protected effect or setup entrypoint.",
+    "unsupported": [
+      "authentic_red_outcome_collection",
+      "causal_red_training_example",
+      "claim_first_runtime_factory_ready",
+      "controller_capable_setup_execution",
+      "crystal_execution",
+      "crystal_transfer",
+      "living_pokedex_completion",
+      "model_quality",
+      "powered_red_benchmark",
+      "sealed_red_result"
+    ]
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "disposition": {
+    "controller_capable_setup_authorized": false,
+    "namespace_lane_closed": true,
+    "namespace_successor_v3_allowed": false,
+    "outer_execution_engineering_allowed": true,
+    "rehearsal_retry_allowed": false,
+    "root_claim_authorized": false
+  },
+  "host_tcb_assumptions": [
+    "the_private_namespace_path_components_were_quiescent_during_the_single_bounded_read_only_command"
+  ],
+  "lane_id": "repeatable-red-living-dex-option-value-calibration-v1",
+  "mission_interpretation": "This closes the doorway proof needed for authentic same-root Red causal examples. It is not a lesson, model fit, authority promotion, or transfer result; the next shortest unblock is the generic claim-first controller-capable boundary.",
+  "next_gate": {
+    "capability": "Create one composable outer execution identity that atomically claims both logical and physical roots, authenticates recovery and the deep frozen plan, and constructs a runtime only after durable claim success.",
+    "cheapest_falsifier": "ROM-free concurrent duplicate-claim and crash-cutpoint tests must prove that no runtime, controller input, retry, or partial reusable root can exist before both claims and recovery state are durably reconciled.",
+    "private_setup_execution_waits_for_publication_and_exact_green_ci": true,
+    "transfer_constraint": "The boundary must remain title-neutral outside the Red observation adapter and accept Red-shaped plus Crystal-shaped fixtures without learner-facing identity fields."
+  },
+  "publication": {
+    "main_ci_attempt": 1,
+    "main_ci_conclusion": "success",
+    "main_ci_run_id": 33059506829,
+    "merged_main_commit": "18eea8bdabe8fc352d60dd55144efc1c5442e6a0",
+    "pull_request": 83,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run_id": 33058891890
+  },
+  "raw_path_free_receipt": {
+    "action_free_root_observations": 0,
+    "authenticated_root_bytes": 15,
+    "authentication_support_script_sha256": "2baa18c96f80e30b87c3c439865a5cb7f07fa127946d51be14af1be3360633df",
+    "bridge_script_sha256": "8ca2686c349da7f41d5e32a5f4810cd11c586eba0a259feffa9f04be122d4f66",
+    "bridge_source_commit": "18eea8bdabe8fc352d60dd55144efc1c5442e6a0",
+    "canonical_evidence_sha256": "c317b258138e703a1afd532e77d3b71fec07bb1f856bb11afbbfd37479ba3ded",
+    "cartridge_derived_corridors": 7,
+    "claim_before_controller_input": true,
+    "controller_actions": 0,
+    "development_slots": 5,
+    "emulator_frames": 0,
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33059506829,
+    "execution_identity_sha256": "fb51669965895cf562371a9a568ca743867228f797a474827be61e907e59165f",
+    "freezer_script_sha256": "305ddefe9101a2a6ba342541334595af26ee358a5f9b41b829ad095c34a508f7",
+    "learner_effects": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "option_count": 45,
+    "origin_boundary_count": 10,
+    "outcomes": 0,
+    "plan_manifest_sha256": "3bb930568edbf47899e362f1904237967837d18fc167e1d95285a46ca06b4816",
+    "plan_source_commit": "69a0c707006c78ae8473544f40e2bdd0a0b23f91",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "private_plan_sha256": "b555dfb61fb90f7741cca9e93bf60a4f98b94ee485e8832ff419359fdb3a2bcc",
+    "provider_executions": 0,
+    "recipe_plan_sha256": "dcf126ed7f1b8d2f602360074f725a2dff5368555e5fa64884960318408918be",
+    "root_claims": 0,
+    "root_inventory_rejoined": 15,
+    "routed_option_count": 37,
+    "same_origin_fork_required": true,
+    "schema": "pokemon.red.living-dex-setup-bridge-precontroller-result.v1",
+    "semantic_family_count": 33,
+    "setup_campaign_calls": 0,
+    "setup_runtime_factory_calls": 0,
+    "source_bundle_sha256": "56789cd96fcad437c25b9706eb390a929fcc04db0ad2b99c2180cb2e5821f5df",
+    "status": "exact_plan_authenticated_precontroller_only",
+    "teacher_queries": 0,
+    "train_slots": 10
+  },
+  "recorded_on": "2026-08-27",
+  "rehearsal": {
+    "attempts": 1,
+    "exit_code": 0,
+    "result": "success",
+    "retries_remaining": 0
+  },
+  "schema": "pokemon.red.living-dex-setup-bridge-namespace-successor-result.v2",
+  "status": "authenticated_precontroller_success_namespace_lane_closed"
+}

@@ -3,6 +3,21 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Namespace-successor result — success closes the lane 2026-08-27
+
+PR 83 passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI
+`33059506829/1`. The sole V2 rehearsal then returned the complete path-free 15/45/33/10 join with
+all fifteen root byte pairs rejoined and every protected effect and setup entrypoint zero. The
+[result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json) closes
+the namespace lane: V1/V2 never retry and V3 is forbidden.
+
+The reviewers' prior sequencing condition is now satisfied, but their setup NO-GO remains. Codex
+opens only one ROM-free outer-boundary engineering session: durable execution identity, atomic
+logical-plus-physical claims, authenticated recovery, deep plan reauthentication, and claim-first
+runtime construction. Concurrent duplicate and crash-cutpoint tests must pass with Red-shaped and
+Crystal-shaped fixtures before publication and another reorientation. No private setup, outcome,
+fit, sealed Red, Crystal execution, promotion, or replay is authorized by this success.
+
 ## Namespace-successor audit — publication and one rehearsal GO 2026-08-27
 
 Claude and Antigravity independently audited the locally qualified nearest-store successor without

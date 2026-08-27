@@ -6,24 +6,22 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one namespace-bound successor rehearsal
+## Current override: Codex owns the claim-first outer execution boundary
 
-Main `506c0c1f5b92a0f7fce393abe39195b0a1cf84be` passed exact push CI
-`33051433728/1`, but its sole read-only rehearsal failed closed before the immutable plan record was
-found in the supplied namespace. The caller selected an initialized parent store rather than the
-nearest initialized child store shared by the frozen catalog and plan. The
-[path-free result](evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
-records every protected effect and setup entrypoint at zero. V1 will not retry.
+PR 83 passed CI `33058891890/1`, merged as main
+`18eea8bdabe8fc352d60dd55144efc1c5442e6a0`, and passed exact-main CI `33059506829/1`. Its sole V2
+read-only rehearsal succeeded. The [path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+authenticated and rejoined **15 roots · 45 options · 33 families · 10 origins**, with every
+controller, frame, claim, runtime, setup, provider, teacher, prediction, outcome and fit counter
+zero. The namespace lane is closed; V1/V2 never retry and V3 is forbidden.
 
-Codex implemented the minimal same-nearest-store binding and distinct finite absent-record stage.
-The [qualification](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
-records **71 focused · 234 related · 5,300 full-suite tests · 285 typed files**. Claude audits causal
-and diagnostic truth; Antigravity challenges architecture and drift. Both returned GO for
-publication and one rehearsal and NO-GO for setup execution. Codex accepted their narrow hardening
-findings and rejected private-storage flattening because it would mutate evidence without advancing
-transfer. Publish under exact green CI and perform one read-only rehearsal. Failure ends this
-namespace lane without V3. Outer identity, atomic claims, recovery, runtime construction, setup
-execution, outcomes, fitting, sealed Red and Crystal wait for success.
+Codex owns the smallest generic outer boundary: bind one durable execution identity, atomically
+claim logical and physical roots, authenticate every recovery state, reauthenticate the deep frozen
+plan at consumption, and construct a runtime only after the claim transition commits. Test
+concurrent duplicates and every crash cutpoint ROM-free with Red-shaped and Crystal-shaped fixtures,
+publish under exact green CI, and reorient before private setup. Claude audits causal/recovery truth;
+Antigravity challenges architecture/transfer; Codex adjudicates. Setup execution, outcomes, fitting,
+sealed Red and Crystal remain closed.
 
 ## Previous override: Codex owned runtime-free bridge publication and rehearsal
 

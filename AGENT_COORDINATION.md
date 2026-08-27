@@ -1,16 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-27 active override — publish one namespace-bound successor and rehearse once:** Main
-> `506c0c1f` passed exact push CI `33051433728/1`, then its sole read-only rehearsal failed closed
-> before immutable-plan authentication because the caller supplied an initialized parent store
-> rather than the nearest initialized store shared by the plan inputs. Every protected effect and
-> setup entrypoint remained zero; V1 does not retry. The minimal nearest-store binding and distinct
-> absent-record failure now pass **71 focused · 234 related · 5,300 full-suite tests**, and both
-> read-only reviewers returned GO for publication plus one rehearsal and NO-GO for setup execution.
-> Codex owns exact publication, CI, and that sole rehearsal; Claude and Antigravity remain read-only.
-> A failed successor ends the namespace lane rather than opening V3. Do not
-> flatten private storage, scan siblings, regenerate the plan, start outer identity/claim/recovery,
-> execute setup, fit, open Crystal or sealed Red, or replay. Counters remain **development 15 ·
+> **2026-08-27 active override — build the claim-first outer execution boundary:** PR 83 passed CI
+> `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI `33059506829/1`. The sole V2
+> read-only rehearsal authenticated the immutable **15/45/33/10** classroom and rejoined all fifteen
+> roots with every protected effect and setup entrypoint zero. The
+> [result](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+> contains no private path or identity. The namespace lane is closed; V1/V2 never retry and V3 is
+> forbidden.
+>
+> Codex owns one ROM-free outer-boundary session: durable execution identity, atomic logical and
+> physical claims, authenticated recovery, deep plan reauthentication, claim-first runtime
+> construction, concurrency/crash tests, publication, and reorientation before private setup.
+> Claude reviews causal and recovery truth; Antigravity challenges architecture, portability and
+> transfer; Codex adjudicates. Do not execute setup, fit, open Crystal or sealed Red, or replay.
+> Counters remain **development 15 ·
 > verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 · transfer 0**.
 
 > **Previous 2026-08-27 override — publish the runtime-free validator, rehearse once, then

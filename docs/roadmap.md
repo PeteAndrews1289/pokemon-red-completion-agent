@@ -3,17 +3,16 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 27 namespace-successor checkpoint:** PR 82 merged the runtime-free bridge as main
-> `506c0c1f` and exact-main CI `33051433728/1` passed. Its one V1 rehearsal failed closed before
-> the immutable plan record was found because the caller supplied an initialized parent store
-> instead of the distinct nearest initialized store shared by the context catalog and plan. The
-> [path-free result](evidence/red-living-dex-setup-bridge-rehearsal-failure-v1-2026-08-27.json)
-> records every protected effect and setup entrypoint at zero. V1 does not retry. The
-> [qualified successor](evidence/red-living-dex-setup-bridge-namespace-successor-v2-qualification-2026-08-27.json)
-> binds both context files to the supplied nearest store, distinguishes an absent record, and passes
-> **71 focused · 234 related · 5,300 full-suite tests** plus Claude and Antigravity review. Publish
-> it and rehearse once under exact green CI; failure ends the namespace lane without V3.
-> Outer identity, claims, recovery, runtime construction and setup remain closed until success.
+> **August 27 claim-first outer-boundary checkpoint:** PR 83 passed CI `33058891890/1`, merged as
+> main `18eea8bd`, and passed exact-main CI `33059506829/1`. The sole V2 read-only rehearsal
+> succeeded. Its [path-free result](evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+> authenticates **15 roots · 45 options · 33 families · 10 origins · 37 routed options · 7
+> cartridge corridors**, with every protected effect zero. The namespace lane is closed.
+>
+> Next implement durable outer execution identity, atomic logical-plus-physical claims,
+> authenticated recovery, deep plan reauthentication, and claim-first runtime construction.
+> Concurrent duplicates and every crash cutpoint must pass ROM-free Red-shaped and Crystal-shaped
+> fixtures. Publish and reorient before private setup execution; causal train remains **0/8**.
 
 > **Previous August 27 runtime-free bridge checkpoint:** Two independent audits stopped the first green
 > candidate because it eagerly executed unbound helpers, constructed emulators inside the

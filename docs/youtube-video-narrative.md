@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 27 scene: the right lock, the wrong vault
+## August 27 scene: the classroom authenticates, but the controller stays unplugged
+
+Open on **PR 83 · MAIN 18EEA8BD · CI 33059506829/1 GREEN**. Turn the V2 key once and reveal
+**15 ROOTS · 45 OPTIONS · 33 FAMILIES · 10 ORIGINS · 37 ROUTED · 7 CORRIDORS — AUTHENTICATED**.
+Keep a separate strip at **ACTIONS 0 · FRAMES 0 · CLAIMS 0 · RUNTIMES 0 · SETUP 0 · PROVIDERS 0 ·
+TEACHERS 0 · PREDICTIONS 0 · OUTCOMES 0 · FITS 0**. Stamp **NAMESPACE LANE CLOSED**.
+
+The spoken line is: **“We proved the classroom is the one we froze. We still have not let the
+student touch it.”** Build the next lock on screen: **DURABLE EXECUTION ID → LOGICAL + PHYSICAL
+CLAIM TOGETHER → AUTHENTICATED CRASH RECOVERY → DEEP PLAN REAUTH → CLAIM-FIRST RUNTIME**. Send a
+duplicate worker and power-loss bolt at every seam. End on **RED-SHAPED + CRYSTAL-SHAPED ROM-FREE
+PROOF → PUBLISH → GREEN CI → REORIENT**, with **CAUSAL TRAIN 0/8 · AUTHORITY 0 · TRANSFER 0**.
+
+## Earlier August 27 scene: the right lock, the wrong vault
 
 Start with **PR 82 · MAIN 506C0C1F · CI 33051433728/1 GREEN**, then turn the key on **READ-ONLY
 REHEARSAL V1**. The door stays shut: **IMMUTABLE PLAN AUTHENTICATION — FAILED CLOSED**. Keep the

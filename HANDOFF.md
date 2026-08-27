@@ -12,7 +12,7 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-27: namespace-bound successor qualified; publish and rehearse once
+## 2026-08-27: pre-controller bridge succeeded; build the claim-first outer boundary
 
 PR 82 published the runtime-free bridge. Its corrected pull-request run `33050868530/1` passed;
 the rebase merge produced main `506c0c1f5b92a0f7fce393abe39195b0a1cf84be`, and exact-main push
@@ -46,12 +46,22 @@ The bounded read-only command also treats private namespace path components as q
 bytes and joins still prevent causal substitution, but hostile same-UID rename/symlink mutation
 would require a later descriptor-coupled ancestry design and is not silently claimed away.
 
-Publish that exact successor, require green push CI, run it once against the unchanged canonical
-plan, and reorient immediately. Stop on any failure; a failed successor ends this namespace lane
-instead of opening V3. Do not regenerate the plan, retry V1, claim a
-root, construct a runtime, execute setup, collect an outcome, fit, open Crystal or sealed Red, or
-replay. Counters remain **development 15 · verified 5/9 · causal train 0/8 · fits 4/5 ·
-comparisons 4/5 · authority 0 · transfer 0**.
+PR 83 passed CI `33058891890/1`, merged as exact main
+`18eea8bdabe8fc352d60dd55144efc1c5442e6a0`, and passed exact-main CI `33059506829/1`. The sole
+V2 rehearsal then succeeded. Its [path-free result](docs/evidence/red-living-dex-setup-bridge-namespace-successor-v2-result-2026-08-27.json)
+authenticated and rejoined **15 roots · 45 options · 33 families · 10 origins · 37 routed options ·
+7 cartridge corridors**. Actions, frames, claims, runtime factories, setup calls, providers,
+teachers, predictions, outcomes and fits were all zero. The namespace lane is closed; V1/V2 never
+retry and V3 is forbidden.
+
+The next bounded gate is the smallest composable controller-capable outer boundary: durable
+execution identity, atomic logical-plus-physical claims, authenticated power-loss recovery, deep
+plan reauthentication at consumption, and runtime construction only after the claim transition
+commits. Qualify concurrent duplicates and every crash cutpoint ROM-free with Red-shaped and
+Crystal-shaped fixtures, publish under exact green CI, and reorient before private setup. Do not
+execute setup, collect an outcome, fit, open Crystal or sealed Red, or replay. Counters remain
+**development 15 · verified 5/9 · causal train 0/8 · fits 4/5 · comparisons 4/5 · authority 0 ·
+transfer 0**.
 
 ## Previous 2026-08-27: setup bridge is runtime-free and locally qualified; publish before private rehearsal
 
