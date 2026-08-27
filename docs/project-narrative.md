@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 26: a historical split nearly became a new experiment's label
+
+The first production-style provider-plan rehearsal failed despite the earlier successful
+15-root prototype. Its inventory was healthy: 81 authenticated contexts, four previously consumed,
+nine intentionally retained battle/recovery states, and 68 ready overworld roots. The false
+assumption was subtler. The catalog's historical `train` and `validation` assignments were being
+treated as the new living-Pokédex curriculum's `train` and `development` labels. That artificial
+barrier gave the `cross_victory_road` development slot zero candidates.
+
+The repair makes the new experiment prospective again. It pools authenticated available roots,
+sorts only byte-derived opaque identities, assigns the 10+5 split from the new frozen slot order,
+and evaluates expensive route compatibility lazily during unique matching. It also checks both the
+catalog claim and byte-derived physical-root claim so the same state cannot reappear under a new
+name. Historical partition counts remain aggregate provenance, never learner features or labels.
+
+One required post-Giovanni state was not in the 81-entry catalog but remained as an open canonical
+checkpoint. A generic supplemental seam now accepts an explicit private state only when its exact
+physical-root hash matches; no path or state identity enters tracked source or public output. The
+checkpoint was still unclaimed and supplied the otherwise absent Victory Road prerequisite.
+
+The publication-disabled rehearsal then succeeded: **69 eligible roots considered, 15 selected,
+45 real offers, 33 semantic families, 10 physical origins, seven cartridge-derived corridors, and
+37 routed offers**. Controller actions, frames, claims, provider executions, teacher queries,
+predictions, outcomes, fits, and publications all remained zero. This is still infrastructure, not
+training. The next gate is clean publication, exact-head CI, and one immutable action-free plan
+freeze before any setup route or provider may execute.
+
 ## August 26: the real classroom finally fits on the cartridge
 
 The missing lesson families are now concrete rather than named placeholders. The project decoded

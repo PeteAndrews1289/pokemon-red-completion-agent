@@ -7,26 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: all fifteen authentic classrooms exist without moving the game
+## Current checkpoint: the real classroom plan survives the production freezer
 
-The project can now build the entire first Red curriculum honestly. Five retained boxed precursors
-exercise five real level-evolution families, four different party members exercise target-specific
-development, and the remaining doors use real wild, storage, supply, exploration, and story
-mechanics. Wild corridors come from cartridge terrain. Family names come from transformations,
-never from a slot, save, route, profile, or answer position.
+The first production rehearsal initially said the curriculum was impossible. The problem was not
+Pokémon Red; it was an experimental-label mistake. The 81-state catalog's old train/validation tags
+recorded where those saves came from. They were being reused as labels for a new prospective 10+5
+curriculum, which left the `cross_victory_road` lesson with no candidate at all. A dataset's history
+had quietly become the next experiment's answer key.
 
-Fifteen unconsumed authentic roots passed the complete action-free rehearsal: **15 rooms, 45 real
-doors, 33 semantic families, 10 physical origins, 11 construction routes, and 37 provider
-routes**. The rehearsal rejected wrong cartridges, missing Pokémon or resources, full storage,
-unavailable story objectives, ambiguous trainees, consumed roots, and observations borrowed from
-another save. It pressed no button, advanced no frame, executed no skill, claimed no root, asked no
-teacher, observed no outcome, and fit no model.
+The repair pools all eligible roots, assigns train/development only from the new frozen slot order,
+and route-checks candidates lazily. The catalog supplied 68 ready, unconsumed roots. One exact open
+post-Giovanni checkpoint—authenticated by its state and envelope hash, absent from every public
+path—supplied the missing story prerequisite. The production freezer then constructed **15 rooms,
+45 real doors, 33 semantic families, 10 physical origins, seven cartridge-derived corridors, and
+37 provider routes**.
 
-That last sentence matters. The honest counter is still **causal train 0/8**. We have proved that
-the real lessons exist, not collected the lessons. The next move is to publish this exact source,
-bind its clean Red execution identity, and freeze the path-free plan once. Then a separate campaign
-may construct the same-root decision states and randomize selected arms. Crystal, trade, versions,
-events, and a true living Pokédex remain the tests of whether the eventual knowledge transfers.
+This was a publication-disabled rehearsal. It pressed no button, advanced no frame, executed no
+provider, claimed no root, asked no teacher, produced no prediction or outcome, fit no model, and
+wrote no plan. The honest counter is still **causal train 0/8**. The next move is to publish the
+exact freezer and identity code, require green exact-head CI, and run one immutable action-free
+freeze. Only after reorientation may the separate campaign construct same-root decision states and
+randomize selected arms. Crystal, trade, versions, events, cross-save completion, and a true living
+Pokédex remain the tests of whether the eventual knowledge transfers.
 
 ## Previous checkpoint: the witness has been split into independent authorities
 

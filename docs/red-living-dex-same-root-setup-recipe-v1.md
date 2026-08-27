@@ -1,8 +1,9 @@
 # Red same-root living-Pokédex setup recipes V1
 
-Status: adversarial trust repair is published; authentic provider curriculum and route preflight
-are locally qualified at implementation checkpoint `6063cb41`; exact published plan freeze is
-next. This design is subordinate to
+Status: adversarial trust repair and authentic provider curriculum are published; the production
+freezer and exact identity composer pass a complete publication-disabled 15/45/33/10 rehearsal;
+source publication, exact-head CI, and one action-free immutable plan freeze are next. This design
+is subordinate to
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md).
 
@@ -146,8 +147,10 @@ retry of a claimed failure.
 The family and route inventory now exists. Five target-specific level-evolution families reuse the
 boxed engine, four target-specific development families reuse the balanced-team engine, and all
 other scheduled offers bind real Red acquisition, exploration, storage, resupply, or story
-mechanics. An authentic action-free preflight covered fifteen unconsumed roots and produced the
-complete **15/45/33/10** aggregate with eleven construction and thirty-seven provider routes.
+mechanics. The production rehearsal authenticated 81 catalog contexts, excluded four consumed and
+nine non-overworld captures, pooled 68 eligible roots without inheriting their historical
+partitions, and admitted one explicitly hash-bound open post-Giovanni checkpoint. It produced the
+complete **15/45/33/10** aggregate with thirty-seven provider routes.
 
 What does not exist yet is the canonical frozen artifact under a clean published execution
 identity. The next gate publishes the exact implementation, binds the exact supported Red ROM and
@@ -165,9 +168,10 @@ Supported by the repair and local provider qualification:
 - same-root recipe and fork semantics;
 - exact source-root and restored-origin authentication;
 - prospectively frozen family and physical-location separation;
+- prospective partition assignment independent of historical catalog provenance;
 - durable claim-before-input and no-retry accounting;
 - exact private capture recovery; and
-- aggregate, path-free public reporting with zero learner effects.
+- aggregate, path-free public reporting with zero learner effects;
 - genuine 15-recipe / 45-offer / 33-family / 10-origin capacity on the selected authentic roots.
 
 Not supported:
