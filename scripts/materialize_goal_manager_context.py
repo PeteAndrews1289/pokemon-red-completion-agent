@@ -139,11 +139,12 @@ _ACTIVE_SAFETY_PRESSURE = 0.55
 _ACQUISITION_GREAT_BALL_PURCHASE = 12
 _CINNABAR_HYPER_POTION_INDEX = 2
 _HYPER_POTION_PRICE = 1_500
-# With the fixed desired headroom of eight, an active box count of eighteen
-# leaves two slots and therefore creates exactly 0.75 storage pressure: the
-# completion-first teacher's hard storage gate.  Setup reaches that boundary
-# through genuine catches rather than editing box memory.
+# The historical context materializer retains eighteen as its default.  The
+# clean-power lineage generator may explicitly target 17, 18, or 19 so the
+# causal curriculum observes three genuine pressure values rather than cloned
+# states or memory edits.
 _STORAGE_TARGET_ACTIVE_BOX_COUNT = 18
+_STORAGE_QUALIFIED_ACTIVE_BOX_COUNTS = frozenset({17, 18, 19})
 _STORAGE_GREAT_BALL_PURCHASE = 48
 _STORAGE_MAX_SEEK_STEPS = 4_096
 _STORAGE_MAX_ENCOUNTERS = 128
@@ -279,13 +280,15 @@ def _story_resource_scarce_boundary(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
 ) -> None:
-    """Discard one real Poké Ball while preserving an exact story boundary.
+    """Discard the final real Poké Ball while preserving a story boundary.
 
     The midgame story skills are available only at their source Pokémon
     Centers.  Relocating those captures to Cinnabar destroys the executable
     story option, while copying a save would duplicate its policy context.
-    This bounded cartridge interaction creates one honest resource variant at
-    the same frontier without changing story, party, collection, or money.
+    This bounded cartridge interaction creates an honest zero-ball resource
+    shortage at the same frontier without changing story, party, collection,
+    or money.  Its frozen menu is resupply/unlock/explore, not acquire; no
+    capture is attempted from the terminal root during this capacity gate.
     """
 
     before = reader.read()
@@ -951,8 +954,19 @@ def _storage_ready_boundary(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
     adapter: PokemonRedGoalStateAdapter,
+    *,
+    target_active_box_count: int = _STORAGE_TARGET_ACTIVE_BOX_COUNT,
 ) -> None:
     """Create real storage pressure, heal, and present the Cinnabar PC."""
+
+    if (
+        type(target_active_box_count) is not int  # noqa: E721
+        or target_active_box_count
+        not in _STORAGE_QUALIFIED_ACTIVE_BOX_COUNTS
+    ):
+        raise GoalManagerContextMaterializationError(
+            "storage setup active-box target is outside the qualified range"
+        )
 
     before = reader.read()
     before_party = tuple(before.party_species_ids or ())
@@ -981,11 +995,11 @@ def _storage_ready_boundary(
         raise GoalManagerContextMaterializationError(
             "storage setup missed the south endpoint of its Mansion lane"
         )
-    while reader.read_all_box_states().counts[active_index] < (_STORAGE_TARGET_ACTIVE_BOX_COUNT):
+    while reader.read_all_box_states().counts[active_index] < target_active_box_count:
         batch_start = reader.read_all_box_states().counts[active_index]
         batch_target = min(
             batch_start + _STORAGE_CAPTURE_BATCH,
-            _STORAGE_TARGET_ACTIVE_BOX_COUNT,
+            target_active_box_count,
         )
         area = LiveWildCorridorSurveyExecutor(
             emulator,
@@ -1021,7 +1035,7 @@ def _storage_ready_boundary(
             raise GoalManagerContextMaterializationError(
                 "storage setup changed its party or lost its living Dig holder"
             )
-        if batch_target < _STORAGE_TARGET_ACTIVE_BOX_COUNT:
+        if batch_target < target_active_box_count:
             MANSION_TRAINING_VENUE.heal_and_return(actions, reader, emulator)
             _settle_mansion_boundary(actions, reader, emulator)
             returned = reader.read()
@@ -1032,7 +1046,7 @@ def _storage_ready_boundary(
     captured = reader.read_all_box_states()
     if (
         captured.current_box_index != active_index
-        or captured.counts[active_index] != _STORAGE_TARGET_ACTIVE_BOX_COUNT
+        or captured.counts[active_index] != target_active_box_count
     ):
         raise GoalManagerContextMaterializationError("storage setup missed its active-box target")
     _training_dig_to_cinnabar(actions, reader, emulator)
@@ -1061,7 +1075,7 @@ def _storage_ready_boundary(
         or tuple(final.party_species_ids or ()) != before_party
         or final_boxes != captured
         or final_boxes.current_box_index != active_index
-        or final_boxes.counts[active_index] != _STORAGE_TARGET_ACTIVE_BOX_COUNT
+        or final_boxes.counts[active_index] != target_active_box_count
         or not reader.read_input_readiness().ready
     ):
         raise GoalManagerContextMaterializationError(
@@ -1436,6 +1450,7 @@ def _apply_mode(
     target_safety_pressure: float | None,
     maximum_safety_pressure: float | None,
     blocked_direction: str | None = None,
+    target_active_box_count: int | None = None,
 ) -> None:
     if great_ball_quantity is not None and (
         mode not in {"acquisition-ready", "acquisition-damaged"} or great_ball_quantity <= 0
@@ -1461,6 +1476,10 @@ def _apply_mode(
     ):
         raise GoalManagerContextMaterializationError(
             "blocked direction is valid only for blocked-movement mode"
+        )
+    if target_active_box_count is not None and mode != "storage-ready":
+        raise GoalManagerContextMaterializationError(
+            "active-box target is valid only for storage-ready mode"
         )
     damage_target = (
         _ACTIVE_SAFETY_PRESSURE if target_safety_pressure is None else target_safety_pressure
@@ -1540,7 +1559,17 @@ def _apply_mode(
         )
         return
     if mode == "storage-ready":
-        _storage_ready_boundary(actions, reader, emulator, adapter)
+        _storage_ready_boundary(
+            actions,
+            reader,
+            emulator,
+            adapter,
+            target_active_box_count=(
+                _STORAGE_TARGET_ACTIVE_BOX_COUNT
+                if target_active_box_count is None
+                else target_active_box_count
+            ),
+        )
         return
     if mode == "mart":
         _move(actions, reader, CENTER_TO_MART, "goal-manager Cinnabar Mart")

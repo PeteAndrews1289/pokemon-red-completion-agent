@@ -762,3 +762,37 @@ Mission check for this planning task:
 - **Time box:** one Codex planning session plus one memo from each reviewer.
 - **Stop condition:** do not implement a disputed expensive lane or run a cartridge until critical
   roadmap findings are adjudicated.
+
+## Fresh-root generator review — 2026-08-28
+
+- Antigravity first verdict: NO-GO to publish. Accepted finding: requiring all 13 roots to succeed
+  made one permanently consumed crash poison the tranche and encouraged successor seed selection.
+- Repair: admission now requires exactly one success or terminal failure disposition for every
+  frozen assignment, retains valid sibling roots, prohibits retry, and defers all successor targets
+  to an action-free recensus.
+- Rejected finding: discarding the final Poké Ball invalidated template 5. Template 5 contains
+  resupply/unlock/explore and deliberately excludes acquire; zero balls create the intended resource
+  pressure. Antigravity rechecked the canonical menu and retracted the objection.
+- Antigravity second verdict: GO to publish. Codex accepted the verdict but did not accept its broad
+  “zero vulnerabilities” wording as proof; independent focused tests, mutation probes, repository
+  checks and Claude review remain required.
+- Antigravity later found a second valid P0: generic attribute forwarding exposed the lower-level
+  frame/button port around the clean-power meter. The repair removed both forwarding fallbacks,
+  whitelisted only semantic reads, independently meters every lower-level effect, and reconciles
+  the two accounting layers after setup, conditioning, capture and verification. Frame, button and
+  capture bypass probes now fail. Antigravity re-audited this repair and returned GO to publish.
+- Claude independently audited the stabilized diff read-only and returned GO to publish with no P0
+  or confirmed P1. Codex accepted its ROM double-read hardening and its warning that Python private
+  names cannot sandbox deliberately introspective trusted callbacks. Exact executable-byte binding
+  remains the real boundary and is now explicit in the port documentation. Codex rejected further
+  name-mangling as false assurance, deferred a pid lock because durable episode and assignment
+  claims already enforce no-retry, and retained the small CLI absence test as a future authority-
+  surface regression guard.
+- Codex final verification: 119 focused and 5,596 repository-wide tests passed; three tests were
+  intentionally deselected and one remained an expected xfail. Ruff, the configured 308-source
+  type gate, privacy/public-artifact checks, documentation checks and exact regeneration of the
+  battle, goal-manager and strategic-navigation registries all passed. Protected effects remained
+  zero throughout.
+- Mission check: this is a causal-curriculum capacity gate. Root generation, outcome collection,
+  fitting, sealed Red evaluation, Crystal execution and full-game replay all remain unauthorized by
+  the implementation itself.

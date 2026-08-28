@@ -1,0 +1,63 @@
+{
+  "authorization": {
+    "crystal_execution": false,
+    "full_game_replay": false,
+    "model_fit": false,
+    "outcome_collection": false,
+    "red_root_generation": false,
+    "sealed_red_evaluation": false
+  },
+  "checkpoint": "local_repository_gate_passed_publication_pending",
+  "mission": "transferable_story_completion_and_living_pokedex_across_titles",
+  "protected_effects": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "learner_outcomes": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_generation_executions": 0,
+    "teacher_queries": 0
+  },
+  "review": {
+    "accepted_findings": [
+      "complete_tranche_poisoned_by_one_permanently_consumed_failure",
+      "generic_attribute_forwarding_exposed_unmetered_low_level_emulator_effects",
+      "python_private_names_do_not_sandbox_deliberately_introspective_bound_callbacks",
+      "rom_verification_and_world_projection_should_share_one_byte_snapshot"
+    ],
+    "antigravity_final_publish_verdict": "go",
+    "antigravity_initial_publish_verdict": "no_go",
+    "claude_confirmed_p0_or_p1": 0,
+    "claude_publish_verdict": "go",
+    "claude_review_mode": "read_only_static_no_private_or_cartridge_access",
+    "deferred_nonblocking_findings": [
+      "pid_scoped_process_lock_is_redundant_with_two_durable_no_retry_claims",
+      "cli_authority_absence_test_is_small_but_guards_future_surface_growth"
+    ],
+    "rejected_then_retracted_finding": "zero_ball_resource_root_cannot_support_an_acquisition_menu",
+    "repairs": [
+      "all_thirteen_frozen_assignments_require_success_or_terminal_failure_dispositions_and_valid_sibling_roots_survive",
+      "explicit_read_only_proxy_plus_independent_low_level_effect_meter_and_phase_reconciliation",
+      "trusted_same_process_callbacks_remain_exactly_source_bound_instead_of_claiming_name_mangling_is_a_sandbox",
+      "red_rom_bytes_are_read_once_then_verified_and_reused_for_world_projection"
+    ],
+    "review_authority": "advisory_codex_adjudicates"
+  },
+  "schema": "pokemon.red.living-dex-fresh-episode-generator-audit.v1",
+  "status": "fresh_episode_generator_implementation_audited_not_executed",
+  "verification": {
+    "configured_typed_source_files": 308,
+    "focused_tests_passed": 119,
+    "full_suite_deselected": 3,
+    "full_suite_expected_xfail": 1,
+    "full_suite_failures": 0,
+    "full_suite_tests_passed": 5596,
+    "generated_registries_reproduced": [
+      "red_battle_collection_v95",
+      "red_goal_manager_collection_v1",
+      "red_strategic_navigation_collection_v1"
+    ],
+    "public_artifact_check": "passed",
+    "static_checks": "passed"
+  }
+}

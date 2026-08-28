@@ -4345,3 +4345,22 @@ version has to prove the model learned something worth carrying into a game it h
 - Label future architecture and Crystal footage as planned until receipts exist.
 - Put source hashes, manifests, and full receipts in the description rather than crowding the edit.
 - Do not present defeating Lorelei as passing the learned-team curriculum; the verifier rejected it.
+
+## New sequence: “67 roots were not 67 lessons”
+
+- Open on the capacity graph: **67 independent historical roots**, but only **54/90 train** and
+  **63/105 development** matches. Explain that screenshots and save files are not independent
+  learning situations when they descend from the same run.
+- Show the clean-power rail as five beats: **claim → boot → teacher frontier → real cartridge
+  conditioning → one save**. Keep “MODEL FITS: 0” visible throughout.
+- Contrast the three storage roots at 17/20, 18/20 and 19/20 with a memory editor crossed out; the
+  boxes were filled through real encounters and catches.
+- Include the audit disagreement honestly. Antigravity first called the zero-ball root invalid;
+  the menu was resupply/unlock/explore, so zero balls were the point and the objection was retracted.
+  Its separate crash-poisoning finding was correct and changed the design.
+- Show the second audit result without inflating it: Claude returned GO for publication, while also
+  documenting that exact source authentication—not Python private-name syntax—is the real boundary
+  for later Crystal adapters. Put the 5,596-test local gate on screen, but label it engineering
+  qualification rather than evidence that a model learned.
+- End on the real next gate: publish, exact-main CI, freeze the plan, generate, recensus. Do not jump
+  from “root generator exists” to “the model is training.”
