@@ -18,6 +18,9 @@ from pokemon_red_completion.red_living_dex_episode_lineage import (
     compose_red_living_dex_fresh_episode_generator_execution_sha256,
     compose_red_living_dex_fresh_episode_teacher_execution_sha256,
 )
+from pokemon_red_completion.red_living_dex_fresh_episode_runtime import (
+    RedLivingDexFreshEpisodeExecutionFailure,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT_PATH = (
@@ -243,6 +246,23 @@ def test_runtime_failure_does_not_falsely_report_zero_effects(
     assert failure["effects_unknown"] is True
     assert failure["controller_actions"] is None
     assert failure["model_fits"] is None
+
+
+def test_generator_preserves_only_reconciled_runtime_effect_counters() -> None:
+    known = RedLivingDexFreshEpisodeExecutionFailure(
+        "private diagnostic omitted",
+        execution_phase="setup_teacher",
+        effects_known=True,
+        controller_actions=17,
+        emulator_frames=2_417,
+    )
+
+    assert SCRIPT["_known_runtime_effects"](known) == (True, 17, 2_417)
+    assert SCRIPT["_known_runtime_effects"](RuntimeError("unknown")) == (
+        False,
+        None,
+        None,
+    )
 
 
 def test_consumed_runtime_failure_emits_a_terminal_nonretry_disposition(

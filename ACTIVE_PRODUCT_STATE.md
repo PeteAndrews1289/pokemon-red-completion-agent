@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify a fresh Red episode-lineage generator, create at least the measured 36 compatible train roots while targeting scarce menu templates and storage-pressure diversity, then rerun the action-free census before collecting train outcomes.
+- Next decision: Publish the repaired Red fresh-episode teacher, measure exact-commit cross-seed yield, freeze a new one-shot train-root successor only if yield passes, then materialize roots and rerun the action-free census before collecting train outcomes.
 
 ### Mandatory mission check
 
@@ -58,19 +58,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-28-causal-capacity-census** · status **active** · evidence [qualification](docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
+**2026-08-28-fresh-teacher-development-qualification** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-development-qualification-v1-2026-08-28.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This replaces an optimistic root-count assumption with the exact classroom capacity needed to teach a title-neutral living-Dex policy. Red remains the first curriculum; Crystal remains the later frozen-weight transfer and adaptation test with abstention for unsupported mechanics. |
-| Learning output | The immutable historical count remains one authentic settled negative Red causal train example. The new measured output is an exact path-free capacity graph: 67 independent lineages, 414 root-template edges, train matching 54 of 90, development matching 63 of 105 in isolation, and disjoint combined matching 63 of 195. This is capacity evidence, not a model outcome. |
-| Authority delta | None. The powered design was published and its exact action-free capacity census completed with every protected effect zero. No outcome was collected, no model was fit, no sealed Red or Crystal case opened, and no authority was promoted. |
+| Product alignment | The repairs make Red a reliable source of genuinely new episode lineages for the title-neutral living-Dex curriculum. They do not teach the learner arrow sequences or grant game-playing authority; Red remains the first data curriculum and Crystal remains the later frozen-weight transfer test. |
+| Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
+| Authority delta | None. Twenty-one one-use development-only teacher diagnostics produced eighteen failure-localization terminals and three consecutive mansion-returned terminals. They created no official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The exact observed compatibility graph can fill only 54 of 90 train contexts, 63 of 105 development contexts in isolation, and 63 of 195 disjoint combined contexts. At least 36 new compatible train roots and at least 132 new combined roots are required. One development evolve-plus-storage-plus-access menu has zero historic compatible roots, and storage pressure has only two observed values where the gate requires at least three. |
-| Decision | Build and qualify a train-first fresh episode-lineage generator. Start every root as a genuinely new emulator episode, target the train templates with only 3, 3, and 8 compatible historic roots plus a third storage-pressure value, create at least 36 compatible train roots, and rerun the action-free census before collecting any outcome. Do not manufacture independence by cloning or rehashing a state. |
-| Next session | Implement and qualify the train-first fresh episode-lineage generator, then create at least the measured 36 compatible train roots and rerun the action-free census. Do not materialize development, fit, open sealed Red or Crystal, or replay the full game as an evaluation. |
-| Next falsifier | Prove that the fresh-root generator starts new prospectively assigned emulator-run lineages rather than clones, can construct the scarce authentic train menus, and introduces a third storage-pressure value. Its first new-root tranche must increase the exact train matching above 54 without controller, teacher, outcome, or model effects during the follow-up census. |
-| Stop condition | Stop on cloned or rehashed root independence, failure to cover scarce authentic menus or pressure diversity, fewer than the preregistered information or power thresholds, development leakage into fit, unsupported-feature scoring, identity-bearing policy input, teacher fallback during outcome collection, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
+| Blocker | The repaired teacher has three consecutive successful clean-power development runs, but subsequent source cleanup means they do not authenticate the final publishable bundle, and three runs do not measure population yield. The previously frozen V1 plan remains bound to old source; its consumed first assignment never retries and its twelve untouched assignments may not be reused under changed source. |
+| Decision | Publish the repaired source and require exact-head green CI. Then measure a bounded cross-seed sample with the non-promotable diagnostic on that exact committed bundle. Freeze a new successor train-root plan only if the measured yield supports its declared root target with margin; retain every success or failure disposition and recensus before any selected-arm outcome collection. |
+| Next session | Publish and green the exact candidate, run the bounded exact-commit cross-seed yield sample, and freeze the new one-shot train-root successor only if that evidence passes. Then materialize its train roots and rerun the action-free capacity census; do not materialize development or fit. |
+| Next falsifier | On the final committed source, distinct prospectively chosen diagnostic seeds must reach mansion-returned often enough to support a one-shot successor tranche with margin. Any post-input failure remains consumed; any exact-source regression, low yield, cloned lineage, target mismatch, or private-path leakage stops the freeze. |
+| Stop condition | Stop on an exact-source teacher regression, insufficient measured yield, retry of any consumed assignment, reuse of the old V1 plan under changed source, cloned or rehashed independence, private leakage, development leakage into fit, teacher labels entering the learner, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
 
 ### Stop conditions
 

@@ -14,9 +14,9 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.economy import (
-    CERULEAN_RIVAL_POTION_RESERVE,
     PEWTER_LOSS_POTION_PURCHASE_QUANTITY,
     PEWTER_POKE_BALL_PRICE,
+    PEWTER_POKE_BALL_PURCHASE_QUANTITY,
     PEWTER_POTION_PRICE,
     PEWTER_POTION_PURCHASE_QUANTITY,
     PEWTER_SUPPLY_LOSS_STARTING_MONEY,
@@ -66,9 +66,7 @@ GYM_EXIT_TRANSITION_DIRECTIONS = ("down",)
 PEWTER_TO_CENTER_DIRECTIONS = _directions(
     "L" * 6 + "U" * 2 + "R" + "U" * 3 + "R" * 8 + "D" * 13 + "L" * 6 + "U"
 )
-PEWTER_TO_MART_PREFIX_DIRECTIONS = _directions(
-    "L" * 6 + "U" * 2 + "R" + "U" * 3 + "R" * 8
-)
+PEWTER_TO_MART_PREFIX_DIRECTIONS = _directions("L" * 6 + "U" * 2 + "R" + "U" * 3 + "R" * 8)
 PEWTER_MART_ENTRY_DIRECTIONS = _directions("D" * 5 + "R" * 4 + "U")
 PEWTER_MART_CLERK_DIRECTIONS = _directions("UUL")
 PEWTER_MART_EXIT_DIRECTIONS = _directions("RDDD")
@@ -79,14 +77,22 @@ CENTER_HEAL_TO_PC_DIRECTIONS = ("down",) + ("right",) * 10
 CENTER_PC_TO_HEAL_DIRECTIONS = ("left",) * 10 + ("up",)
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
 ROUTE_3_BATTLE_RECOVERY_HP = 13
+ROUTE_3_BATTLE_POTION_FLOOR = 11
 ROUTE_3_PROTECTED_POTION_FLOOR = 12
+MT_MOON_ROCKET_RECOVERY_HP = 20
 ROUTE_3_MAX_WILD_FLEES = 4
 ROUTE_3_MAX_STEP_ATTEMPTS = 8
 ROUTE_3_STEP_RETRY_WAIT_FRAMES = 24
 ROUTE_3_WILD_STABILIZATION_FRAMES = 120
-MT_MOON_ZUBAT_SEARCH_CYCLES = 64
+MT_MOON_ZUBAT_SEARCH_CYCLES = 128
 MT_MOON_ZUBAT_SEARCH_MAX_FLEES = 32
 MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES = 1
+MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS = PEWTER_POKE_BALL_PURCHASE_QUANTITY
+MT_MOON_1F_ZUBAT_LEVELS = frozenset(range(6, 12))
+MT_MOON_CAPTURE_ZUBAT_LEVELS = frozenset(range(9, 12))
+MT_MOON_ZUBAT_MAX_WEAKENING_ATTEMPTS = 4
+MT_MOON_ZUBAT_TARGET_WEAKENING_HITS = 2
+GEN1_BUBBLE_POWER = 20
 MT_MOON_MAX_WILD_FLEES = 64
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
@@ -264,6 +270,9 @@ class CeruleanChapterReport:
     mt_moon_zubat_search_flees: tuple[Route1WildFleeEvidence, ...]
     mt_moon_zubat_search_attempts: int
     mt_moon_zubat_movement_retries: int
+    mt_moon_zubat_capture_attempts: int
+    mt_moon_zubat_balls_used: int
+    mt_moon_zubat_balls_remaining: int
     mt_moon_wild_flees: tuple[Route1WildFleeEvidence, ...]
     mt_moon_movement_retries: int
     rocket_battle_evidence: CeruleanChapterState
@@ -294,12 +303,15 @@ class CeruleanChapterReport:
             and all(evidence.verified for evidence in self.mt_moon_zubat_search_flees)
             and 1 <= self.mt_moon_zubat_search_attempts <= MT_MOON_ZUBAT_SEARCH_CYCLES
             and self.mt_moon_zubat_movement_retries >= 0
+            and 1 <= self.mt_moon_zubat_capture_attempts <= MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS
+            and self.mt_moon_zubat_balls_used == self.mt_moon_zubat_capture_attempts
+            and self.mt_moon_zubat_balls_remaining
+            == PEWTER_POKE_BALL_PURCHASE_QUANTITY - self.mt_moon_zubat_balls_used
             and all(evidence.verified for evidence in self.mt_moon_wild_flees)
             and len(self.mt_moon_wild_flees) <= MT_MOON_MAX_WILD_FLEES
             and len(self.mt_moon_wild_flees) >= len(self.mt_moon_zubat_search_flees)
             and all(
-                evidence in self.mt_moon_wild_flees
-                for evidence in self.mt_moon_zubat_search_flees
+                evidence in self.mt_moon_wild_flees for evidence in self.mt_moon_zubat_search_flees
             )
             and self.mt_moon_movement_retries >= self.mt_moon_zubat_movement_retries
             and self.saw_required_rocket_battle
@@ -391,6 +403,9 @@ class CeruleanChapterReport:
                 and self.fossil_evidence.got_helix_fossil,
                 "zubat_search_attempts": self.mt_moon_zubat_search_attempts,
                 "zubat_movement_retries": self.mt_moon_zubat_movement_retries,
+                "zubat_capture_attempts": self.mt_moon_zubat_capture_attempts,
+                "zubat_balls_used": self.mt_moon_zubat_balls_used,
+                "zubat_balls_remaining": self.mt_moon_zubat_balls_remaining,
                 "zubat_search_flees": [
                     evidence.public_dict() for evidence in self.mt_moon_zubat_search_flees
                 ],
@@ -565,10 +580,8 @@ def run_cerulean_chapter(
             MapId.ROUTE_3,
             f"Route 3 trainer {trainer_index}",
             emulator=emulator if position == 1 else None,
-            recovery_hp_threshold=(
-                ROUTE_3_BATTLE_RECOVERY_HP if position == 1 else None
-            ),
-            recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
+            recovery_hp_threshold=(ROUTE_3_BATTLE_RECOVERY_HP if position == 1 else None),
+            recovery_potion_floor=ROUTE_3_BATTLE_POTION_FLOOR,
         )
         victory_evidence = reader.read_cerulean_chapter_state(victory)
         _expect_route_3_victory(victory_evidence, position)
@@ -581,13 +594,13 @@ def run_cerulean_chapter(
             f"Verified required Route 3 trainer {trainer_index}",
             position + 2,
         )
-        if position == 0:
-            _use_route_3_recovery_potion(
-                chapter_executor,
-                reader,
-                emulator,
-                timing,
-            )
+        _cure_route_3_poison_if_needed(
+            chapter_executor,
+            reader,
+            emulator,
+            timing,
+            label=f"Route 3 trainer {trainer_index}",
+        )
         _recover_at_pewter_center(
             chapter_executor,
             reader,
@@ -668,6 +681,9 @@ def run_cerulean_chapter(
         mt_moon_zubat_search_flees,
         mt_moon_zubat_search_attempts,
         mt_moon_zubat_movement_retries,
+        mt_moon_zubat_capture_attempts,
+        mt_moon_zubat_balls_used,
+        mt_moon_zubat_balls_remaining,
     ) = _capture_mt_moon_zubat(
         chapter_executor,
         reader,
@@ -809,12 +825,14 @@ def run_cerulean_chapter(
         timing,
         MapId.MT_MOON_B2F,
         "Mt. Moon required Rocket",
+        emulator=emulator,
+        recovery_hp_threshold=MT_MOON_ROCKET_RECOVERY_HP,
+        recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
     )
     rocket_victory_evidence = reader.read_cerulean_chapter_state(rocket_defeated)
     if (
         not rocket_victory_evidence.beat_required_rocket
-        or rocket_defeated.party_species_ids
-        != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or rocket_defeated.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
         or rocket_defeated.first_party_level != 16
     ):
         raise CeruleanChapterError(
@@ -994,6 +1012,12 @@ def run_cerulean_chapter(
         tracker,
         CeruleanBoundary.CERULEAN_WEST_ENTRY,
     )
+    _normalize_cerulean_antidotes(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+    )
     _wait(chapter_executor, timing.final_stability_wait_frames)
     stable_cerulean = reader.read()
     stable_cerulean_evidence = reader.read_cerulean_chapter_state(stable_cerulean)
@@ -1027,6 +1051,9 @@ def run_cerulean_chapter(
         mt_moon_zubat_search_flees=mt_moon_zubat_search_flees,
         mt_moon_zubat_search_attempts=mt_moon_zubat_search_attempts,
         mt_moon_zubat_movement_retries=mt_moon_zubat_movement_retries,
+        mt_moon_zubat_capture_attempts=mt_moon_zubat_capture_attempts,
+        mt_moon_zubat_balls_used=mt_moon_zubat_balls_used,
+        mt_moon_zubat_balls_remaining=mt_moon_zubat_balls_remaining,
         mt_moon_wild_flees=tuple(mt_moon_ledger.flees),
         mt_moon_movement_retries=mt_moon_ledger.movement_retries,
         rocket_battle_evidence=rocket_battle_evidence,
@@ -1048,6 +1075,211 @@ def run_cerulean_chapter(
             "The Brock-to-Cerulean chapter failed its public evidence contract."
         )
     return report
+
+
+def _cure_route_3_poison_if_needed(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    label: str,
+) -> None:
+    """Cure observed trainer poison before the finite Center return walk."""
+
+    before = reader.read()
+    quantity = _bag_quantity(emulator, ItemId.ANTIDOTE)
+    if (
+        before.map_id != MapId.ROUTE_3
+        or before.battle_state != 0
+        or before.first_party_status not in {0, 0x08}
+        or not 0 <= quantity <= 2
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError(f"{label} Antidote has an invalid recovery gate.")
+    if before.first_party_status == 0:
+        return
+    if quantity == 0:
+        raise CeruleanChapterError(f"{label} poison exhausted the free Antidote reserve.")
+    position = (before.player_x, before.player_y)
+    _open_field_antidote_action_menu(executor, reader, emulator, timing)
+    _use_open_field_antidote(
+        executor,
+        reader,
+        emulator,
+        timing,
+        expected_quantity=quantity - 1,
+    )
+    _close_field_item_menu(executor, reader, timing, label=f"{label} Antidote")
+    final = reader.read()
+    if (
+        final.map_id != MapId.ROUTE_3
+        or (final.player_x, final.player_y) != position
+        or final.battle_state != 0
+        or final.first_party_status != 0
+        or _bag_quantity(emulator, ItemId.ANTIDOTE) != quantity - 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError(f"{label} Antidote failed its persistent cure gate.")
+
+
+def _normalize_cerulean_antidotes(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+) -> None:
+    """Cure cave poison, then remove any unused free contingency items."""
+
+    before = reader.read()
+    quantity = _bag_quantity(emulator, ItemId.ANTIDOTE)
+    if (
+        before.map_id != MapId.CERULEAN_CITY
+        or (before.player_x, before.player_y) != (0, 18)
+        or before.battle_state != 0
+        or before.first_party_status not in {0, 0x08}
+        or not 0 <= quantity <= 2
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError("Cerulean Antidote has an invalid normalization gate.")
+    if before.first_party_status == 0x08:
+        if quantity == 0:
+            raise CeruleanChapterError("Cerulean poison exhausted the free Antidote reserve.")
+        _open_field_antidote_action_menu(executor, reader, emulator, timing)
+        _use_open_field_antidote(
+            executor,
+            reader,
+            emulator,
+            timing,
+            expected_quantity=quantity - 1,
+        )
+        _close_field_item_menu(executor, reader, timing, label="Cerulean Antidote")
+        quantity -= 1
+    if quantity:
+        _open_field_antidote_action_menu(executor, reader, emulator, timing)
+        _toss_open_cerulean_antidotes(
+            executor,
+            reader,
+            emulator,
+            timing,
+            quantity=quantity,
+        )
+        _close_field_item_menu(executor, reader, timing, label="Cerulean Antidote")
+    final = reader.read()
+    if (
+        final.map_id != MapId.CERULEAN_CITY
+        or (final.player_x, final.player_y) != (0, 18)
+        or final.battle_state != 0
+        or final.first_party_status != 0
+        or _bag_quantity(emulator, ItemId.ANTIDOTE) != 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError("Cerulean Antidote normalization failed its persistent gate.")
+
+
+def _open_field_antidote_action_menu(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+) -> None:
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.dialogue_wait_frames)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < 2 else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError("Cerulean Antidote could not select ITEM.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        if ItemId.ANTIDOTE not in items:
+            raise CeruleanChapterError("Cerulean Antidote disappeared before selection.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(ItemId.ANTIDOTE)
+        if absolute == target:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError("Cerulean Antidote could not select its bag entry.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+
+def _use_open_field_antidote(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    expected_quantity: int,
+) -> None:
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(24):
+        current = reader.read()
+        if (
+            current.first_party_status == 0
+            and _bag_quantity(emulator, ItemId.ANTIDOTE) == expected_quantity
+        ):
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    raise CeruleanChapterError("Cerulean Antidote missed its exact cure gate.")
+
+
+def _toss_open_cerulean_antidotes(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    quantity: int,
+) -> None:
+    if quantity not in {1, 2}:
+        raise CeruleanChapterError("Cerulean Antidote toss has an invalid quantity.")
+    _pulse(executor, MacroActionKind.MOVE, "down", timing.move_cursor_wait_frames)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise CeruleanChapterError("Cerulean Antidote could not select TOSS.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(quantity - 1):
+        _pulse(executor, MacroActionKind.MOVE, "up", timing.move_cursor_wait_frames)
+    if emulator.read_u8(RamAddress.SHOP_QUANTITY) != quantity:
+        raise CeruleanChapterError("Cerulean Antidote toss quantity gate failed.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(12):
+        if _bag_quantity(emulator, ItemId.ANTIDOTE) == 0:
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    raise CeruleanChapterError("Cerulean Antidote toss did not persist.")
+
+
+def _close_field_item_menu(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CeruleanTiming,
+    *,
+    label: str,
+) -> None:
+    for _ in range(FIELD_ITEM_MENU_CLOSE_PULSES):
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.dialogue_wait_frames)
+    for _ in range(8):
+        if reader.read_input_readiness().ready:
+            return
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.dialogue_wait_frames)
+    raise CeruleanChapterError(f"{label} item menu did not restore field control.")
 
 
 def _move(
@@ -1077,6 +1309,36 @@ def _move(
                 f"status={state.first_party_status!r}."
             )
     return state
+
+
+def _move_without_battles_with_retries(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    expected_map_id: MapId,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+) -> tuple[RawGameState, int]:
+    """Cross an NPC-sensitive corridor without silently dropping blocked steps."""
+
+    state, unexpected_flees, movement_retries = move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=expected_map_id,
+        route_name=expected_map_id.name.replace("_", " ").title(),
+        maximum_flees=0,
+        stabilization_frames=step_retry_wait_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
+        error_type=CeruleanChapterError,
+    )
+    if unexpected_flees:
+        raise CeruleanChapterError(f"Unexpected wild battle interrupted {label}.")
+    return state, movement_retries
 
 
 def _move_with_seed_waits(
@@ -1168,8 +1430,8 @@ def _capture_mt_moon_zubat(
     emulator: EmulatorState,
     timing: CeruleanTiming,
     ledger: _MtMoonTraversalLedger,
-) -> tuple[tuple[Route1WildFleeEvidence, ...], int, int]:
-    """Catch the pinned level-seven Zubat with the sole Poké Ball."""
+) -> tuple[tuple[Route1WildFleeEvidence, ...], int, int, int, int, int]:
+    """Catch any cartridge-valid Mt. Moon 1F Zubat in one live encounter."""
 
     _wait(executor, MT_MOON_ZUBAT_SEED_WAIT)
     _move_mt_moon(
@@ -1192,12 +1454,12 @@ def _capture_mt_moon_zubat(
         encounter.map_id != MapId.MT_MOON_1F
         or encounter.battle_state != 1
         or encounter.enemy_species_id != ZUBAT_SPECIES_ID
-        or encounter.enemy_level != 7
+        or encounter.enemy_level not in MT_MOON_1F_ZUBAT_LEVELS
         or encounter.enemy_hp is None
         or encounter.enemy_hp != encounter.enemy_max_hp
-        or not 20 <= encounter.enemy_hp <= 30
+        or encounter.enemy_hp <= 0
         or encounter.party_species_ids != (SQUIRTLE_SPECIES_ID,)
-        or _bag_quantity(emulator, ItemId.POKE_BALL) != 1
+        or _bag_quantity(emulator, ItemId.POKE_BALL) != PEWTER_POKE_BALL_PURCHASE_QUANTITY
     ):
         raise CeruleanChapterError(
             "Mt. Moon capture missed the qualified Zubat encounter: "
@@ -1209,66 +1471,40 @@ def _capture_mt_moon_zubat(
         )
 
     _wait(executor, MT_MOON_ZUBAT_PRE_THROW_WAIT)
-    _select_battle_move(
+    weakened = _weaken_mt_moon_zubat(
         executor,
         reader,
+        emulator,
         timing,
-        slot=3,
-        label="Mt. Moon Zubat Bubble weakening",
-        expected_battle_state=1,
+        encounter,
     )
-    weakened = reader.read()
-    if (
-        weakened.map_id != MapId.MT_MOON_1F
-        or weakened.battle_state != 1
-        or weakened.enemy_species_id != ZUBAT_SPECIES_ID
-        or weakened.enemy_level != 7
-        or weakened.enemy_hp is None
-        or not 0 < weakened.enemy_hp < encounter.enemy_hp
-        or weakened.party_species_ids != (SQUIRTLE_SPECIES_ID,)
-        or _bag_quantity(emulator, ItemId.POKE_BALL) != 1
-    ):
-        raise CeruleanChapterError("Mt. Moon Zubat weakening failed its living target gate.")
-    _navigate_wild_main_command(executor, reader, timing, target=1)
-    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
-    for _ in range(20):
-        items = _bag_item_ids(emulator)
-        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
-            RamAddress.LIST_SCROLL_OFFSET
-        )
-        target = items.index(ItemId.POKE_BALL) if ItemId.POKE_BALL in items else -1
-        if absolute == target >= 0:
-            break
-        if target < 0:
-            raise CeruleanChapterError("Mt. Moon capture lost its sole Poké Ball.")
-        _pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if absolute < target else "up",
-            120,
-        )
-    else:
-        raise CeruleanChapterError("Mt. Moon capture could not select the Poké Ball.")
-
-    _pulse(executor, MacroActionKind.CONFIRM, frames=360)
-    for _ in range(9):
-        _pulse(executor, MacroActionKind.CANCEL, frames=180)
-    settled = reader.read()
+    (
+        settled,
+        capture_attempts,
+        balls_used,
+        balls_remaining,
+        captured_enemy_hp,
+    ) = _capture_weakened_mt_moon_zubat(
+        executor,
+        reader,
+        emulator,
+        timing,
+        weakened,
+    )
     captured_hp = _read_u16(emulator, RamAddress.PARTY_MON_2_HP)
     captured_max_hp = _read_u16(emulator, RamAddress.PARTY_MON_2_MAX_HP)
     if (
         settled.map_id != MapId.MT_MOON_1F
         or (settled.player_x, settled.player_y) not in {(14, 31), (14, 32)}
         or settled.battle_state != 0
-        or settled.party_species_ids
-        != (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
-        or emulator.read_u8(RamAddress.PARTY_MON_2_LEVEL) != 7
+        or settled.party_species_ids != (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or emulator.read_u8(RamAddress.PARTY_MON_2_LEVEL) != encounter.enemy_level
         or not _is_persistent_weakened_capture_hp(
             captured_hp,
             captured_max_hp,
-            weakened.enemy_hp,
+            captured_enemy_hp,
         )
-        or _bag_quantity(emulator, ItemId.POKE_BALL) != 0
+        or _bag_quantity(emulator, ItemId.POKE_BALL) != balls_remaining
         or not reader.read_input_readiness().ready
     ):
         raise CeruleanChapterError("Mt. Moon Zubat capture failed its persistent gate.")
@@ -1294,7 +1530,225 @@ def _capture_mt_moon_zubat(
         ledger.flees.extend(return_flees)
         ledger.movement_retries += return_retries
     _expect_position(reader.read(), MapId.MT_MOON_1F, 14, 31, "Mt. Moon Zubat route rejoin")
-    return search_flees, search_attempts, movement_retries
+    return (
+        search_flees,
+        search_attempts,
+        movement_retries,
+        capture_attempts,
+        balls_used,
+        balls_remaining,
+    )
+
+
+def _capture_weakened_mt_moon_zubat(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    weakened: RawGameState,
+) -> tuple[RawGameState, int, int, int, int]:
+    """Throw from one battle until capture or the fixed Ball reserve is exhausted."""
+
+    starting_balls = _bag_quantity(emulator, ItemId.POKE_BALL)
+    if (
+        weakened.map_id != MapId.MT_MOON_1F
+        or weakened.battle_state != 1
+        or weakened.enemy_species_id != ZUBAT_SPECIES_ID
+        or weakened.enemy_level not in MT_MOON_1F_ZUBAT_LEVELS
+        or weakened.enemy_hp is None
+        or weakened.enemy_hp <= 0
+        or weakened.party_species_ids != (SQUIRTLE_SPECIES_ID,)
+        or starting_balls != PEWTER_POKE_BALL_PURCHASE_QUANTITY
+    ):
+        raise CeruleanChapterError("Mt. Moon capture retry policy has an invalid starting gate.")
+
+    for attempt in range(1, MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS + 1):
+        throw_target = reader.read()
+        if (
+            throw_target.map_id != MapId.MT_MOON_1F
+            or throw_target.battle_state != 1
+            or throw_target.enemy_species_id != ZUBAT_SPECIES_ID
+            or throw_target.enemy_level != weakened.enemy_level
+            or throw_target.enemy_hp is None
+            or throw_target.enemy_max_hp != weakened.enemy_max_hp
+            or not 0 < throw_target.enemy_hp <= (throw_target.enemy_max_hp or 0)
+            or throw_target.party_species_ids != (SQUIRTLE_SPECIES_ID,)
+            or (throw_target.first_party_hp or 0) <= 0
+        ):
+            raise CeruleanChapterError("Mt. Moon capture lost its live target before a throw.")
+        before_balls = _bag_quantity(emulator, ItemId.POKE_BALL)
+        expected_balls = starting_balls - attempt
+        if before_balls != expected_balls + 1:
+            raise CeruleanChapterError("Mt. Moon capture Ball ledger drifted before a throw.")
+
+        _navigate_wild_main_command(executor, reader, timing, target=1)
+        _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+        for _ in range(20):
+            items = _bag_item_ids(emulator)
+            absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+                RamAddress.LIST_SCROLL_OFFSET
+            )
+            target = items.index(ItemId.POKE_BALL) if ItemId.POKE_BALL in items else -1
+            if absolute == target >= 0:
+                break
+            if target < 0:
+                raise CeruleanChapterError("Mt. Moon capture lost its Ball reserve.")
+            _pulse(
+                executor,
+                MacroActionKind.MOVE,
+                "down" if absolute < target else "up",
+                120,
+            )
+        else:
+            raise CeruleanChapterError("Mt. Moon capture could not select a Poké Ball.")
+
+        _pulse(executor, MacroActionKind.CONFIRM, frames=360)
+        settled, captured = _settle_mt_moon_capture_throw(
+            executor,
+            reader,
+            emulator,
+            expected_balls=expected_balls,
+        )
+        remaining = _bag_quantity(emulator, ItemId.POKE_BALL)
+        if remaining != expected_balls:
+            raise CeruleanChapterError("Mt. Moon capture throw missed its Ball decrement gate.")
+        if captured:
+            return settled, attempt, attempt, remaining, throw_target.enemy_hp
+        if (
+            settled.map_id != MapId.MT_MOON_1F
+            or settled.battle_state != 1
+            or settled.enemy_species_id != ZUBAT_SPECIES_ID
+            or settled.enemy_level != weakened.enemy_level
+            or settled.enemy_hp is None
+            or settled.enemy_max_hp != weakened.enemy_max_hp
+            or not 0 < settled.enemy_hp <= (settled.enemy_max_hp or 0)
+            or settled.party_species_ids != (SQUIRTLE_SPECIES_ID,)
+            or (settled.first_party_hp or 0) <= 0
+        ):
+            raise CeruleanChapterError(
+                "Mt. Moon failed throw did not preserve the qualified encounter."
+            )
+
+    raise CeruleanChapterError(
+        "Mt. Moon Zubat capture exhausted its bounded same-encounter Ball reserve."
+    )
+
+
+def _weaken_mt_moon_zubat(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    encounter: RawGameState,
+) -> RawGameState:
+    """Land up to two provably nonlethal Bubbles before the first throw."""
+
+    current = encounter
+    landed_hits = 0
+    for _ in range(MT_MOON_ZUBAT_MAX_WEAKENING_ATTEMPTS):
+        if landed_hits >= MT_MOON_ZUBAT_TARGET_WEAKENING_HITS:
+            break
+        maximum_damage = _maximum_bubble_damage(emulator, current)
+        if current.enemy_hp is None or current.enemy_hp <= maximum_damage:
+            break
+        before_hp = current.enemy_hp
+        _select_battle_move(
+            executor,
+            reader,
+            timing,
+            slot=3,
+            label="Mt. Moon Zubat Bubble weakening",
+            expected_battle_state=1,
+        )
+        current = reader.read()
+        if (
+            current.map_id != MapId.MT_MOON_1F
+            or current.battle_state != 1
+            or current.enemy_species_id != ZUBAT_SPECIES_ID
+            or current.enemy_level != encounter.enemy_level
+            or current.enemy_max_hp != encounter.enemy_max_hp
+            or current.enemy_hp is None
+            or not 0 < current.enemy_hp <= (current.enemy_max_hp or 0)
+            or current.party_species_ids != (SQUIRTLE_SPECIES_ID,)
+            or (current.first_party_hp or 0) <= 0
+            or _bag_quantity(emulator, ItemId.POKE_BALL) != PEWTER_POKE_BALL_PURCHASE_QUANTITY
+        ):
+            raise CeruleanChapterError("Mt. Moon Zubat weakening lost its live target gate.")
+        if current.enemy_hp < before_hp:
+            landed_hits += 1
+
+    if (
+        landed_hits == 0
+        or current.enemy_hp is None
+        or current.enemy_max_hp is None
+        or not 0 < current.enemy_hp < current.enemy_max_hp
+    ):
+        raise CeruleanChapterError(
+            "Mt. Moon Zubat weakening exhausted its bounded nonlethal policy."
+        )
+    return current
+
+
+def _maximum_bubble_damage(emulator: EmulatorState, raw: RawGameState) -> int:
+    """Return RED's exact worst normal-or-critical neutral Bubble damage."""
+
+    level = raw.first_party_level
+    normal_attack = _read_u16(emulator, RamAddress.BATTLE_MON_SPECIAL)
+    critical_attack = _read_u16(emulator, RamAddress.PARTY_MON_1_SPECIAL)
+    defense = _read_u16(emulator, RamAddress.ENEMY_SPECIAL)
+    if (
+        raw.battle_state != 1
+        or raw.enemy_species_id != ZUBAT_SPECIES_ID
+        or raw.enemy_level not in MT_MOON_CAPTURE_ZUBAT_LEVELS
+        or type(level) is not int  # noqa: E721
+        or not 1 <= level <= 100
+        or not 1 <= normal_attack <= 0xFFFF
+        or not 1 <= critical_attack <= 0xFFFF
+        or not 1 <= defense <= 0xFFFF
+    ):
+        raise CeruleanChapterError("Mt. Moon Zubat lacks bounded Bubble damage evidence.")
+
+    def damage(*, effective_level: int, attack: int) -> int:
+        neutral = (
+            ((2 * effective_level) // 5 + 2) * GEN1_BUBBLE_POWER * attack
+        ) // defense // 50 + 2
+        return neutral + neutral // 2
+
+    return max(
+        damage(effective_level=level, attack=normal_attack),
+        damage(effective_level=level * 2, attack=critical_attack),
+    )
+
+
+def _settle_mt_moon_capture_throw(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    expected_balls: int,
+) -> tuple[RawGameState, bool]:
+    """Resolve either a captured field state or a stable retryable battle menu."""
+
+    for _ in range(20):
+        raw = reader.read()
+        if (
+            raw.map_id == MapId.MT_MOON_1F
+            and raw.battle_state == 0
+            and raw.party_species_ids == (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+            and _bag_quantity(emulator, ItemId.POKE_BALL) == expected_balls
+            and reader.read_input_readiness().ready
+        ):
+            return raw, True
+        if (
+            raw.map_id == MapId.MT_MOON_1F
+            and raw.battle_state == 1
+            and raw.party_species_ids == (SQUIRTLE_SPECIES_ID,)
+            and _bag_quantity(emulator, ItemId.POKE_BALL) == expected_balls
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return raw, False
+        _pulse(executor, MacroActionKind.CANCEL, frames=180)
+    raise CeruleanChapterError("Mt. Moon capture throw did not reach a bounded outcome.")
 
 
 def _seek_mt_moon_zubat(
@@ -1318,36 +1772,39 @@ def _seek_mt_moon_zubat(
     flees: tuple[Route1WildFleeEvidence, ...] = ()
     movement_retries = 0
     for search_attempt in range(1, MT_MOON_ZUBAT_SEARCH_CYCLES + 1):
-        observed, outbound_flees, outbound_retries, target_found = (
-            _probe_mt_moon_zubat_step(
-                executor,
-                reader,
-                direction="up",
-                starting_position=(14, 32),
-                destination=(14, 31),
-                used_flees=len(flees),
-            )
+        observed, outbound_flees, outbound_retries, target_found = _probe_mt_moon_zubat_step(
+            executor,
+            reader,
+            direction="up",
+            starting_position=(14, 32),
+            destination=(14, 31),
+            used_flees=len(flees),
         )
         flees += outbound_flees
         movement_retries += outbound_retries
         if target_found:
             return observed, flees, movement_retries, search_attempt
 
-        observed, return_flees, return_retries, target_found = (
-            _probe_mt_moon_zubat_step(
-                executor,
-                reader,
-                direction="down",
-                starting_position=(14, 31),
-                destination=(14, 32),
-                used_flees=len(flees),
-            )
+        observed, return_flees, return_retries, target_found = _probe_mt_moon_zubat_step(
+            executor,
+            reader,
+            direction="down",
+            starting_position=(14, 31),
+            destination=(14, 32),
+            used_flees=len(flees),
         )
         flees += return_flees
         movement_retries += return_retries
         if target_found:
             return observed, flees, movement_retries, search_attempt
-    raise CeruleanChapterError("Mt. Moon Zubat search exhausted its bounded semantic search.")
+    misses: dict[tuple[int, int], int] = {}
+    for evidence in flees:
+        key = (evidence.enemy_species_id, evidence.enemy_level)
+        misses[key] = misses.get(key, 0) + 1
+    raise CeruleanChapterError(
+        "Mt. Moon Zubat search exhausted its bounded semantic search: "
+        f"cycles={MT_MOON_ZUBAT_SEARCH_CYCLES}, misses={tuple(sorted(misses.items()))!r}."
+    )
 
 
 def _probe_mt_moon_zubat_step(
@@ -1387,7 +1844,10 @@ def _probe_mt_moon_zubat_step(
                 or position not in {starting_position, destination}
             ):
                 raise CeruleanChapterError("Mt. Moon Zubat search met a drifting battle.")
-            if observed.enemy_species_id == ZUBAT_SPECIES_ID and observed.enemy_level == 7:
+            if (
+                observed.enemy_species_id == ZUBAT_SPECIES_ID
+                and observed.enemy_level in MT_MOON_CAPTURE_ZUBAT_LEVELS
+            ):
                 return observed, flees, movement_attempt - 1, True
             if used_flees + len(flees) >= MT_MOON_ZUBAT_SEARCH_MAX_FLEES:
                 raise CeruleanChapterError("Mt. Moon Zubat search exhausted its flee budget.")
@@ -1491,9 +1951,8 @@ def _collect_mt_moon_tm01(
         _pulse(executor, MacroActionKind.CONFIRM, frames=240)
     else:
         raise CeruleanChapterError("TM01 pickup did not restore input readiness.")
-    if (
-        _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 1
-        or not _toggleable_object_flag(emulator, 0x70)
+    if _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 1 or not _toggleable_object_flag(
+        emulator, 0x70
     ):
         raise CeruleanChapterError("TM01 pickup failed its item-and-toggle gate.")
     _move_mt_moon(
@@ -1560,10 +2019,11 @@ def _collect_mt_moon_recovery_potion(
         *MT_MOON_POTION_DETOUR_ORIGIN,
         "Mt. Moon recovery Potion detour origin",
     )
-    if (
-        _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
-        or _bag_quantity(emulator, ItemId.POTION) != ROUTE_3_PROTECTED_POTION_FLOOR
-    ):
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX) or starting_quantity not in {
+        ROUTE_3_BATTLE_POTION_FLOOR,
+        ROUTE_3_PROTECTED_POTION_FLOOR,
+    }:
         raise CeruleanChapterError("Mt. Moon recovery Potion has an invalid starting gate.")
 
     _move_mt_moon(
@@ -1592,9 +2052,8 @@ def _collect_mt_moon_recovery_potion(
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
     else:
         raise CeruleanChapterError("Mt. Moon recovery Potion did not restore field control.")
-    if (
-        _bag_quantity(emulator, ItemId.POTION) != ROUTE_3_PROTECTED_POTION_FLOOR + 1
-        or not _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
+    if _bag_quantity(emulator, ItemId.POTION) != starting_quantity + 1 or not (
+        _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
     ):
         raise CeruleanChapterError("Mt. Moon recovery Potion failed its item-and-toggle gate.")
 
@@ -1774,17 +2233,11 @@ def _bag_item_ids(emulator: EmulatorState) -> tuple[int, ...]:
     count = emulator.read_u8(RamAddress.NUM_BAG_ITEMS)
     if not 0 <= count <= 20:
         raise CeruleanChapterError("Bag item count is outside the supported bound.")
-    return tuple(
-        emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2)
-        for index in range(count)
-    )
+    return tuple(emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2) for index in range(count))
 
 
 def _read_u16(emulator: EmulatorState, address: RamAddress) -> int:
-    return (
-        emulator.read_u8(int(address)) * 0x100
-        + emulator.read_u8(int(address) + 1)
-    )
+    return emulator.read_u8(int(address)) * 0x100 + emulator.read_u8(int(address) + 1)
 
 
 def _is_persistent_weakened_capture_hp(
@@ -1792,10 +2245,7 @@ def _is_persistent_weakened_capture_hp(
     captured_max_hp: int,
     weakened_enemy_hp: int,
 ) -> bool:
-    return (
-        0 < captured_hp < captured_max_hp
-        and abs(captured_hp - weakened_enemy_hp) <= 1
-    )
+    return 0 < captured_hp < captured_max_hp and abs(captured_hp - weakened_enemy_hp) <= 1
 
 
 def _toggleable_object_flag(emulator: EmulatorState, index: int) -> bool:
@@ -1869,8 +2319,8 @@ def _withdraw_pewter_pc_potion(
         or not 0 <= before_count < 20
         or before_quantity
         not in {
-            PEWTER_POTION_PURCHASE_QUANTITY,
-            PEWTER_LOSS_POTION_PURCHASE_QUANTITY,
+            PEWTER_POTION_PURCHASE_QUANTITY + 1,
+            PEWTER_LOSS_POTION_PURCHASE_QUANTITY + 1,
         }
     ):
         raise CeruleanChapterError("Pewter PC Potion withdrawal has an invalid starting gate.")
@@ -1934,10 +2384,9 @@ def _approach_center_pc(
         raise CeruleanChapterError("Pewter PC approach exhausted its movement bound.")
     _pulse(executor, MacroActionKind.MOVE, "up", timing.dialogue_wait_frames)
     faced = reader.read()
-    if (
-        (faced.player_x, faced.player_y) != target
-        or emulator.read_u8(RamAddress.PLAYER_FACING_DIRECTION) != 0x04
-    ):
+    if (faced.player_x, faced.player_y) != target or emulator.read_u8(
+        RamAddress.PLAYER_FACING_DIRECTION
+    ) != 0x04:
         raise CeruleanChapterError("Pewter PC approach missed its interaction gate.")
 
 
@@ -1973,131 +2422,65 @@ def _return_from_center_pc(
     raise CeruleanChapterError("Pewter PC return exhausted its movement bound.")
 
 
-def _use_route_3_recovery_potion(
-    executor: _CountingChapterExecutor,
-    reader: PokemonRedStateReader,
-    emulator: EmulatorState,
-    timing: CeruleanTiming,
-) -> None:
-    """Spend only RED's PC Potion to survive the first Route 3 recovery walk."""
-
-    before = reader.read()
-    before_quantity = _bag_quantity(emulator, ItemId.POTION)
-    expected_quantity = before_quantity - 1
-    if (
-        before.map_id != MapId.ROUTE_3
-        or before.battle_state != 0
-        or before.first_party_hp is None
-        or before.first_party_max_hp is None
-        or not 0 < before.first_party_hp < before.first_party_max_hp
-        or before_quantity
-        not in {
-            CERULEAN_RIVAL_POTION_RESERVE,
-            CERULEAN_RIVAL_POTION_RESERVE + 1,
-        }
-        or not reader.read_input_readiness().ready
-    ):
-        raise CeruleanChapterError("Route 3 recovery Potion has an invalid starting gate.")
-    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
-    _wait(executor, 180)
-    for _ in range(8):
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == 2:
-            break
-        _pulse(executor, MacroActionKind.MOVE, "down" if cursor < 2 else "up", 120)
-    else:
-        raise CeruleanChapterError("Route 3 recovery could not select ITEM.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    for _ in range(24):
-        items = _bag_item_ids(emulator)
-        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
-            RamAddress.LIST_SCROLL_OFFSET
-        )
-        if ItemId.POTION not in items:
-            raise CeruleanChapterError("Route 3 recovery lost its PC Potion.")
-        target = items.index(ItemId.POTION)
-        if absolute == target:
-            break
-        _pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if absolute < target else "up",
-            120,
-        )
-    else:
-        raise CeruleanChapterError("Route 3 recovery could not select its PC Potion.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    expected_hp = min(before.first_party_max_hp, before.first_party_hp + 20)
-    for _ in range(24):
-        current = reader.read()
-        if (
-            current.first_party_hp == expected_hp
-            and _bag_quantity(emulator, ItemId.POTION) == expected_quantity
-        ):
-            break
-        _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    else:
-        raise CeruleanChapterError("Route 3 recovery Potion missed its exact heal gate.")
-    for _ in range(FIELD_ITEM_MENU_CLOSE_PULSES):
-        _pulse(executor, MacroActionKind.CANCEL, frames=180)
-    for _ in range(6):
-        if reader.read_input_readiness().ready:
-            break
-        _pulse(executor, MacroActionKind.CANCEL, frames=180)
-    else:
-        raise CeruleanChapterError("Route 3 recovery Potion did not restore field control.")
-    final = reader.read()
-    if (
-        final.map_id != MapId.ROUTE_3
-        or final.battle_state != 0
-        or final.first_party_hp != expected_hp
-        or _bag_quantity(emulator, ItemId.POTION) != expected_quantity
-        or not reader.read_input_readiness().ready
-    ):
-        raise CeruleanChapterError("Route 3 recovery Potion failed its persistent gate.")
-
-
 def _purchase_early_supplies(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: CeruleanTiming,
 ) -> None:
-    """Buy one Ball and the outcome-specific Potion reserve for the northbound route."""
+    """Buy four Balls and the protected Potion reserve for the northbound route."""
 
     _expect_position(reader.read(), MapId.PEWTER_MART, 3, 7, "Pewter Mart")
     starting_money = _money(emulator)
+    starting_potions = _bag_quantity(emulator, ItemId.POTION)
+    starting_antidotes = _bag_quantity(emulator, ItemId.ANTIDOTE)
     purchase_quantity = (
         PEWTER_LOSS_POTION_PURCHASE_QUANTITY
         if starting_money == PEWTER_SUPPLY_LOSS_STARTING_MONEY
         else PEWTER_POTION_PURCHASE_QUANTITY
     )
-    expected_cost = PEWTER_POKE_BALL_PRICE + PEWTER_POTION_PRICE * purchase_quantity
+    expected_potions = starting_potions + purchase_quantity
+    expected_cost = (
+        PEWTER_POKE_BALL_PRICE * PEWTER_POKE_BALL_PURCHASE_QUANTITY
+        + PEWTER_POTION_PRICE * purchase_quantity
+    )
     if (
         starting_money not in PEWTER_SUPPLY_STARTING_MONEY
         or _bag_quantity(emulator, ItemId.POKE_BALL) != 0
-        or _bag_quantity(emulator, ItemId.POTION) != 0
+        or starting_potions != 1
+        or starting_antidotes not in {1, 2}
     ):
         raise CeruleanChapterError("Pewter supply purchase has an invalid economy gate.")
 
-    _move(executor, reader, PEWTER_MART_CLERK_DIRECTIONS, "Pewter Mart clerk")
+    _move_without_battles_with_retries(
+        executor,
+        reader,
+        PEWTER_MART_CLERK_DIRECTIONS,
+        "Pewter Mart clerk",
+        expected_map_id=MapId.PEWTER_MART,
+        maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+        step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+    )
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
     faced = reader.read()
-    if (
-        faced.map_id != MapId.PEWTER_MART
-        or (faced.player_x, faced.player_y) != (2, 5)
-    ):
+    if faced.map_id != MapId.PEWTER_MART or (faced.player_x, faced.player_y) != (2, 5):
         raise CeruleanChapterError("Pewter Mart clerk approach missed its pinned gate.")
 
-    # This exact sequence is the live-qualified product-zero purchase. It
-    # returns to the product list with one Poké Ball in the bag.
-    for _ in range(4):
-        _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    for _ in range(2):
+    _open_pewter_ball_quantity_menu(executor, emulator)
+    _select_pewter_shop_quantity(
+        executor,
+        emulator,
+        item=ItemId.POKE_BALL,
+        quantity=PEWTER_POKE_BALL_PURCHASE_QUANTITY,
+        label="Ball reserve",
+    )
+
+    for _ in range(8):
+        if _bag_quantity(emulator, ItemId.POKE_BALL) == PEWTER_POKE_BALL_PURCHASE_QUANTITY:
+            break
         _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    if _bag_quantity(emulator, ItemId.POKE_BALL) != 1:
-        raise CeruleanChapterError("Pewter Mart did not purchase exactly one Poké Ball.")
+    else:
+        raise CeruleanChapterError("Pewter Mart did not purchase the Ball reserve.")
 
     for _ in range(4):
         _pulse(executor, MacroActionKind.CANCEL, frames=180)
@@ -2110,21 +2493,16 @@ def _purchase_early_supplies(
     _pulse(executor, MacroActionKind.CONFIRM, frames=180)
     _pulse(executor, MacroActionKind.MOVE, "down", 180)
     _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    for _ in range(purchase_quantity + 1):
-        selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
-        quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
-        if selected == ItemId.POTION and quantity == purchase_quantity:
-            break
-        if selected != ItemId.POTION:
-            raise CeruleanChapterError(
-                f"Pewter Mart selected {selected:#04x} instead of Potion."
-            )
-        _pulse(executor, MacroActionKind.MOVE, "up", 120)
-    else:
-        raise CeruleanChapterError("Pewter Mart Potion quantity selector missed its fixed reserve.")
+    _select_pewter_shop_quantity(
+        executor,
+        emulator,
+        item=ItemId.POTION,
+        quantity=purchase_quantity,
+        label="Potion reserve",
+    )
 
     for _ in range(8):
-        if _bag_quantity(emulator, ItemId.POTION) == purchase_quantity:
+        if _bag_quantity(emulator, ItemId.POTION) == expected_potions:
             break
         _pulse(executor, MacroActionKind.CONFIRM, frames=240)
     else:
@@ -2137,12 +2515,67 @@ def _purchase_early_supplies(
         final.map_id != MapId.PEWTER_MART
         or (final.player_x, final.player_y) != (2, 5)
         or not reader.read_input_readiness().ready
-        or _bag_quantity(emulator, ItemId.POKE_BALL) != 1
-        or _bag_quantity(emulator, ItemId.POTION)
-        != purchase_quantity
+        or _bag_quantity(emulator, ItemId.POKE_BALL) != PEWTER_POKE_BALL_PURCHASE_QUANTITY
+        or _bag_quantity(emulator, ItemId.POTION) != expected_potions
+        or _bag_quantity(emulator, ItemId.ANTIDOTE) != starting_antidotes
         or _money(emulator) != starting_money - expected_cost
     ):
         raise CeruleanChapterError("Pewter Mart supply purchase failed its persistent gate.")
+
+
+def _open_pewter_ball_quantity_menu(
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Enter BUY, select Poké Ball, and stop before confirming its quantity.
+
+    The three transitions mirror ``DisplayPokemartDialogue_`` in pret/pokered:
+    dismiss the clerk greeting, choose BUY, and choose the first product.  That
+    last choice enters ``DisplayChooseQuantityMenu``, which initializes the
+    quantity to one.  A fourth confirmation would accept one Ball and leave
+    this menu, which is why the phase is checked before quantity adjustment.
+    """
+
+    for _ in range(3):
+        _pulse(executor, MacroActionKind.CONFIRM, frames=180)
+    selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+    quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+    if selected != ItemId.POKE_BALL or quantity != 1:
+        raise CeruleanChapterError(
+            "Pewter Mart did not enter the Ball quantity menu: "
+            f"selected={selected:#04x}, quantity={quantity}."
+        )
+
+
+def _select_pewter_shop_quantity(
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    *,
+    item: ItemId,
+    quantity: int,
+    label: str,
+) -> None:
+    """Select a semantic quantity with room for swallowed menu inputs."""
+
+    if type(quantity) is not int or quantity <= 0:  # noqa: E721
+        raise CeruleanChapterError(f"Pewter Mart {label} quantity is invalid.")
+    selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+    current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+    for _ in range(max(12, quantity + 1)):
+        selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+        current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+        if selected == item and current_quantity == quantity:
+            break
+        if selected != item:
+            raise CeruleanChapterError(
+                f"Pewter Mart selected {selected:#04x} instead of {int(item):#04x}."
+            )
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise CeruleanChapterError(
+            f"Pewter Mart {label} quantity selector missed {quantity}: "
+            f"selected={selected:#04x}, quantity={current_quantity}."
+        )
 
 
 def _leave_pewter_mart(
@@ -2208,9 +2641,7 @@ def _money(emulator: EmulatorState) -> int:
         packed = emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset)
         high, low = packed >> 4, packed & 0x0F
         if high > 9 or low > 9:
-            raise CeruleanChapterError(
-                f"Player money contains invalid BCD byte {packed:#04x}."
-            )
+            raise CeruleanChapterError(f"Player money contains invalid BCD byte {packed:#04x}.")
         value = value * 100 + high * 10 + low
     return value
 
@@ -2371,11 +2802,7 @@ def _finish_battle(
         if before.battle_state not in {0, 2}:
             raise CeruleanChapterError(f"{label} changed to an unexpected battle type.")
         saw_battle = saw_battle or before.battle_state == 2
-        before_menu = (
-            reader.read_battle_menu_state(before)
-            if before.battle_state == 2
-            else None
-        )
+        before_menu = reader.read_battle_menu_state(before) if before.battle_state == 2 else None
         decline_switch = reader.trainer_switch_prompt_visible(before)
         should_recover = (
             emulator is not None
@@ -2512,9 +2939,7 @@ def _use_battle_potion(
                 return
             restore_direction = {1: "up", 2: "left", 3: "up"}.get(selected_main)
             if restore_direction is None:
-                raise CeruleanChapterError(
-                    f"{label} exposed an invalid post-recovery MAIN cursor."
-                )
+                raise CeruleanChapterError(f"{label} exposed an invalid post-recovery MAIN cursor.")
             _pulse(
                 executor,
                 MacroActionKind.MOVE,

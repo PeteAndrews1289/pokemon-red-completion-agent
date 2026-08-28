@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 28: the classroom finally survives fresh worlds—but it still has to prove its yield
+
+The matching census said the model needed new worlds. Building them exposed why a completed scripted
+run was never enough: a new seed can shift an NPC, change an encounter, poison a party member, drain
+a resource, or leave the route one recovery step short. Eighteen one-use development runs failed
+while those assumptions were turned into explicit capabilities. Route 1 now prepares the party on
+every outcome, Forest items and poison are planned resources, Pewter buys for the whole cave, Zubat
+capture refuses unsafe hits, and Route 3 and Mt. Moon recover at the boundaries that actually fail.
+
+Then three different seeds reached the mansion-returned boundary in a row—roughly seven million
+emulator frames each. That is the first evidence that the teacher can manufacture independent Red
+classrooms instead of replaying one lucky save. It is deliberately not called training. None of the
+teacher's arrows enters the learner, none of these diagnostics becomes an official root, and the
+scoreboard remains **causal train 1/60, powered fit 0, authority 0, transfer 0**.
+
+The project also refused an easy victory lap. Small source cleanups followed those runs, and three
+successes cannot estimate the generator's yield. Before seeing the next result, the team fixed the
+rule: publish the exact source, pass exact-main CI, then run twelve new one-use seeds and require at
+least ten successes with no repeated deterministic failure or private leak. Claude's review caused
+that stronger gate. Antigravity's no-go was preserved but overruled only after its concrete claims
+were falsified against the code. Reviewers are challengers, not votes.
+
+If the gate passes, a new one-shot train-root plan can finally turn fresh worlds into capacity for
+the title-neutral causal curriculum. If it fails, the failure distribution—not another optimistic
+percentage—decides what gets repaired. That is how Red moves the actual mission forward: not by
+becoming a perfect walkthrough, but by becoming a reliable source of independent experiences from
+which a reusable living-Pokedex policy can learn.
+
 ## August 28: the compatibility graph turns an estimate into a generation brief
 
 The powered curriculum shipped through PR 93 and exact-main CI, then the action-free census read

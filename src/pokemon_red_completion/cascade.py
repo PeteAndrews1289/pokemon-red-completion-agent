@@ -125,9 +125,6 @@ CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_MART_DIRECTIONS = _directions("D" * 5 + "L" * 2 + "D" * 3 + "R" * 8 + "U" * 3)
 MART_CLERK_DIRECTIONS = _directions("U")
 MART_REPEAT_CLERK_DIRECTIONS = _directions("RUULL")
-MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
-    "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
-)
 MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "DDRD" + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
 )
@@ -1973,12 +1970,7 @@ def _purchase_cerulean_supplies(
         _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
     if not reader.read_input_readiness().ready:
         raise CascadeChapterError("Cerulean Mart purchase did not restore field control.")
-    _move(
-        executor,
-        reader,
-        MART_TO_CENTER_STAGING_DIRECTIONS,
-        "Cerulean Center staging return",
-    )
+    _return_from_cerulean_repeat_clerk(executor, reader, timing)
     _wait(executor, timing.transition_wait_frames)
     returned = reader.read()
     if (

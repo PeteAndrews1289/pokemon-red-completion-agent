@@ -57,7 +57,13 @@ from pokemon_red_completion.play import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
-from pokemon_red_completion.route_1_wild import move_with_wild_flees
+from pokemon_red_completion.route_1_wild import (
+    ROUTE_1_WALKER_SOUTH_APPROACH,
+    ROUTE_1_WALKER_SOUTH_YIELD,
+    _same_post_flee_boundary,
+    _same_route_boundary,
+    move_with_wild_flees,
+)
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
 from pokemon_red_completion.strategic_navigation_protocol import (
     STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
@@ -2311,6 +2317,78 @@ def test_route_1_traversal_yields_to_the_exact_northbound_walker_gate() -> None:
     assert not flees
     assert movement_retries == 1
     assert executor.directions == ["up", "right", "left", "up"]
+
+
+def test_route_1_traversal_yields_to_the_exact_southbound_walker_gate() -> None:
+    approach = _raw(MapId.ROUTE_1, *ROUTE_1_WALKER_SOUTH_APPROACH)
+    yielded = replace(
+        approach,
+        player_x=ROUTE_1_WALKER_SOUTH_YIELD[0],
+        player_y=ROUTE_1_WALKER_SOUTH_YIELD[1],
+    )
+    crossed = replace(approach, player_y=13)
+
+    class _Reader:
+        state = approach
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        directions: list[str] = []
+        first_down = True
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is not MacroActionKind.MOVE:
+                return object()
+            assert isinstance(action.value, str)
+            self.directions.append(action.value)
+            if action.value == "down" and self.first_down:
+                self.first_down = False
+            elif action.value == "right":
+                reader.state = yielded
+            elif action.value == "left":
+                reader.state = approach
+            elif action.value == "down":
+                reader.state = crossed
+            return object()
+
+    executor = _Executor()
+    terminal, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        ("down",),
+        "Route 1 southbound walker unit route",
+        maximum_flees=0,
+        stabilization_frames=120,
+        maximum_step_attempts=8,
+        step_retry_wait_frames=24,
+    )
+
+    assert terminal is crossed
+    assert not flees
+    assert movement_retries == 1
+    assert executor.directions == ["down", "right", "left", "down"]
+
+
+def test_route_1_walker_accepts_only_authenticated_post_flee_hp_loss() -> None:
+    before = _raw(MapId.ROUTE_1, 15, 14)
+    after = replace(before, first_party_hp=(before.first_party_hp or 1) - 1)
+
+    assert not _same_route_boundary(before, after, MapId.ROUTE_1)
+    assert _same_post_flee_boundary(before, after, MapId.ROUTE_1)
+    assert not _same_post_flee_boundary(
+        before,
+        replace(after, player_x=14),
+        MapId.ROUTE_1,
+    )
+    assert not _same_post_flee_boundary(
+        before,
+        replace(after, first_party_pp=(34, 30, 0, 0)),
+        MapId.ROUTE_1,
+    )
 
 
 def test_route_1_traversal_flees_then_retries_an_unconsumed_encounter_step() -> None:
