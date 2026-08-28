@@ -1,22 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-28 active override — exact-source yield before a successor root plan:** Codex owns
-> publication, exact-head CI verification, the prospectively fixed twelve-seed diagnostic, reviewer
-> adjudication, and any later one-shot train-root freeze. Claude remains the read-only
-> causal/statistical and leakage challenger; its conditional GO contributes two accepted gates:
-> prepublication success cannot authenticate the final bundle, and final-source cross-seed yield
-> must be measured. Antigravity remains the read-only architecture/independence challenger. Its
-> no-go verdict is recorded, but its five concrete blockers were rejected after source-level
-> falsification; reviewer verdicts do not replace Codex's evidence-backed decision.
+> **2026-08-28 active override — publish the measured repair, then rerun yield prospectively:**
+> Exact main `eac8e745` passed CI `33167842692/1`, but its one-shot seeds 9900037–9900048 failed
+> the declared yield gate at **1/12**. Every seed is consumed and the successor freeze remains
+> closed. Codex owns the bounded capability repair, qualification, publication, exact-head CI,
+> prospective seeds 9900049–9900060, adjudication, and any later train-root freeze. Antigravity is
+> the current read-only architecture, independence, and claim-boundary challenger. Claude's earlier
+> exact-source/yield cautions remain accepted; no new Claude review is required while its usage is
+> constrained. Reviewers challenge evidence but do not edit, execute, publish, or vote authority.
 >
-> The repaired teacher has **3/3 consecutive mansion-returned terminals after 18 one-use
-> failure-localization terminals**, but those runs are engineering evidence only. Publish, require
-> exact-head green CI, then run diagnostic seeds **9900037–9900048** once each. A new successor may
-> freeze only at **≥10/12 successes**, ≤2 failures, no repeated deterministic failure stage, and no
-> leak. The old V1 plan remains forbidden; assignment 1 is consumed and the other twelve are bound
-> to old source. Do not promote diagnostics, materialize development, fit, open sealed Red or
-> Crystal, or count teacher actions as learning. **Causal train 1/60 · powered fit 0 · authority 0
-> · transfer 0.**
+> Final working source `5285cce4` has **3/3 consecutive mansion-returned development terminals**
+> across seeds 9910035–9910037, totaling 115,696 actions and 21,246,875 frames. Earlier diagnostics
+> used changing source and are failure-localization history, not a pooled yield sample. The repair
+> passes **5,657 tests · Ruff · Mypy 309 · registries · docs · public artifacts**. Antigravity
+> returned publication GO and future-gate conditional GO with P0/P1/P2 all zero. Publish, require
+> exact-head green CI, then execute each future seed once. A successor may freeze only at
+> **≥10/12 successes**, ≤2 failures, no repeated
+> deterministic failure stage, and no leak. The old V1 plan and all consumed diagnostics remain
+> forbidden. Do not promote diagnostics, materialize development, fit, open sealed Red or Crystal,
+> or count teacher actions as learning. **Causal train 1/60 · powered fit 0 · authority 0 ·
+> transfer 0.**
 
 > **2026-08-28 active override — fresh train lineages before collection:** Exact main `cb18a8b5`
 > passed CI `33140010028/1`; the

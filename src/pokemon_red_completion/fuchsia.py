@@ -87,6 +87,8 @@ SNORLAX_POTION_SALE_PROCEEDS = 150
 SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
 SNORLAX_POKE_BALL_SALE_PROCEEDS = 100
 SNORLAX_SUPER_POTION_SALE_PROCEEDS = 350
+SNORLAX_AWAKENING_SALE_PROCEEDS = 100
+SNORLAX_PARLYZ_HEAL_SALE_PROCEEDS = 100
 SNORLAX_POKE_BALL_RESERVE = 1
 FUCHSIA_FISHER_PLAN = RedBattlePlanId.FUCHSIA_ROUTE_12_FISHER
 ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
@@ -308,6 +310,8 @@ class FuchsiaChapterReport:
     funding_super_potions_sold: int
     funding_potions_sold: int
     funding_antidotes_sold: int
+    funding_awakenings_sold: int
+    funding_parlyz_heals_sold: int
     party_hp: tuple[int, ...]
     party_max_hp: tuple[int, ...]
     party_status: tuple[int, ...]
@@ -361,6 +365,12 @@ class FuchsiaChapterReport:
             and _bag_quantity(self.initial_bag, ItemId.ANTIDOTE)
             - _bag_quantity(self.final_bag, ItemId.ANTIDOTE)
             == self.funding_antidotes_sold
+            and _bag_quantity(self.initial_bag, ItemId.AWAKENING)
+            - _bag_quantity(self.final_bag, ItemId.AWAKENING)
+            == self.funding_awakenings_sold
+            and _bag_quantity(self.initial_bag, ItemId.PARLYZ_HEAL)
+            - _bag_quantity(self.final_bag, ItemId.PARLYZ_HEAL)
+            == self.funding_parlyz_heals_sold
             and _bag_quantity(self.initial_bag, ItemId.POKE_BALL)
             - _bag_quantity(self.final_bag, ItemId.POKE_BALL)
             == max(0, self.battles[1].balls_used - self.great_balls_purchased)
@@ -373,6 +383,8 @@ class FuchsiaChapterReport:
                     ItemId.TM34_BIDE,
                     ItemId.POTION,
                     ItemId.ANTIDOTE,
+                    ItemId.AWAKENING,
+                    ItemId.PARLYZ_HEAL,
                 ),
             )
             == _without_bag_items(
@@ -384,6 +396,8 @@ class FuchsiaChapterReport:
                     ItemId.TM34_BIDE,
                     ItemId.POTION,
                     ItemId.ANTIDOTE,
+                    ItemId.AWAKENING,
+                    ItemId.PARLYZ_HEAL,
                 ),
             )
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
@@ -430,6 +444,8 @@ class FuchsiaChapterReport:
                 "funding_super_potions_sold": self.funding_super_potions_sold,
                 "funding_potions_sold": self.funding_potions_sold,
                 "funding_antidotes_sold": self.funding_antidotes_sold,
+                "funding_awakenings_sold": self.funding_awakenings_sold,
+                "funding_parlyz_heals_sold": self.funding_parlyz_heals_sold,
                 "party_before": list(self.battles[1].party_before),
                 "party_after": list(self.battles[1].party_after),
             },
@@ -663,6 +679,8 @@ def run_fuchsia_chapter(
         funding_super_potions_sold,
         funding_potions_sold,
         funding_antidotes_sold,
+        funding_awakenings_sold,
+        funding_parlyz_heals_sold,
     ) = _purchase_snorlax_capture_reserve(
         actions,
         reader,
@@ -817,6 +835,8 @@ def run_fuchsia_chapter(
         funding_super_potions_sold,
         funding_potions_sold,
         funding_antidotes_sold,
+        funding_awakenings_sold,
+        funding_parlyz_heals_sold,
         _party_hp(emulator),
         _party_max_hp(emulator),
         _party_status(emulator),
@@ -1043,7 +1063,7 @@ def _purchase_snorlax_capture_reserve(
     emulator: EmulatorState,
     run: _RunState,
     timing: FuchsiaTiming,
-) -> tuple[int, int, int, int]:
+) -> tuple[int, int, int, int, int, int]:
     """Buy a bounded reliable-ball reserve before the static encounter."""
 
     before_money = _money(emulator)
@@ -1057,6 +1077,14 @@ def _purchase_snorlax_capture_reserve(
         _bag(emulator).get(ItemId.POKE_BALL, 0)
     )
     poke_ball_sale_proceeds = poke_ball_sale_quantity * SNORLAX_POKE_BALL_SALE_PROCEEDS
+    awakening_sale_quantity = _bag(emulator).get(ItemId.AWAKENING, 0)
+    awakening_sale_proceeds = (
+        awakening_sale_quantity * SNORLAX_AWAKENING_SALE_PROCEEDS
+    )
+    parlyz_heal_sale_quantity = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
+    parlyz_heal_sale_proceeds = (
+        parlyz_heal_sale_quantity * SNORLAX_PARLYZ_HEAL_SALE_PROCEEDS
+    )
     potion_purchase_quantity = max(0, SNORLAX_SUPER_POTION_RESERVE - before_potions)
     if before_balls:
         raise FuchsiaChapterError("Fuchsia input unexpectedly already carries Great Balls.")
@@ -1098,6 +1126,8 @@ def _purchase_snorlax_capture_reserve(
         + tm34_sale_proceeds
         + poke_ball_sale_proceeds
         + super_potion_sale_proceeds
+        + awakening_sale_proceeds
+        + parlyz_heal_sale_proceeds
         + _bag(emulator).get(ItemId.POTION, 0) * SNORLAX_POTION_SALE_PROCEEDS
         + _bag(emulator).get(ItemId.ANTIDOTE, 0) * SNORLAX_ANTIDOTE_SALE_PROCEEDS
     )
@@ -1121,6 +1151,8 @@ def _purchase_snorlax_capture_reserve(
             + tm34_sale_proceeds
             + poke_ball_sale_proceeds
             + super_potion_sale_proceeds
+            + awakening_sale_proceeds
+            + parlyz_heal_sale_proceeds
         ),
         potions=_bag(emulator).get(ItemId.POTION, 0),
         antidotes=_bag(emulator).get(ItemId.ANTIDOTE, 0),
@@ -1149,6 +1181,30 @@ def _purchase_snorlax_capture_reserve(
             expected_proceeds=super_potion_sale_proceeds,
         )
         funding_sale_proceeds += super_potion_sale_proceeds
+    # Pokémon Tower is complete, so its narrow status cures can fund the
+    # one-time capture without sacrificing later evolution or battle assets.
+    if awakening_sale_quantity:
+        _sell_mart_item_stack(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.AWAKENING,
+            quantity=awakening_sale_quantity,
+            expected_proceeds=awakening_sale_proceeds,
+        )
+        funding_sale_proceeds += awakening_sale_proceeds
+    if parlyz_heal_sale_quantity:
+        _sell_mart_item_stack(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.PARLYZ_HEAL,
+            quantity=parlyz_heal_sale_quantity,
+            expected_proceeds=parlyz_heal_sale_proceeds,
+        )
+        funding_sale_proceeds += parlyz_heal_sale_proceeds
     if potion_sale_quantity:
         proceeds = potion_sale_quantity * SNORLAX_POTION_SALE_PROCEEDS
         _sell_mart_item_stack(
@@ -1240,6 +1296,8 @@ def _purchase_snorlax_capture_reserve(
         super_potion_sale_quantity,
         potion_sale_quantity,
         antidote_sale_quantity,
+        awakening_sale_quantity,
+        parlyz_heal_sale_quantity,
     )
 
 

@@ -295,6 +295,8 @@ def _report() -> FuchsiaChapterReport:
         funding_super_potions_sold=0,
         funding_potions_sold=0,
         funding_antidotes_sold=0,
+        funding_awakenings_sold=0,
+        funding_parlyz_heals_sold=0,
         party_hp=(114, 52, 37, 135),
         party_max_hp=(114, 52, 37, 135),
         party_status=(0, 0, 0, 0),
@@ -354,6 +356,24 @@ def test_fuchsia_report_accepts_bounded_live_capture_budget_and_early_bide_sale(
 
     assert replace(report, great_balls_purchased=29).passed
     assert replace(report, initial_bag=without_bide).passed
+
+
+def test_fuchsia_report_accounts_for_obsolete_tower_cure_funding() -> None:
+    report = _report()
+    initial = (
+        *report.initial_bag,
+        (int(ItemId.AWAKENING), 4),
+        (int(ItemId.PARLYZ_HEAL), 3),
+    )
+
+    funded = replace(
+        report,
+        initial_bag=initial,
+        funding_awakenings_sold=4,
+        funding_parlyz_heals_sold=3,
+    )
+    assert funded.passed
+    assert not replace(funded, funding_awakenings_sold=3).passed
 
 
 def test_fuchsia_report_requires_bounded_battle_receipts() -> None:
@@ -433,6 +453,8 @@ def test_fuchsia_public_report_discloses_assistance_and_optionals() -> None:
         "funding_super_potions_sold": 0,
         "funding_potions_sold": 0,
         "funding_antidotes_sold": 0,
+        "funding_awakenings_sold": 0,
+        "funding_parlyz_heals_sold": 0,
         "party_before": [0x1C, 0x40, 0x3B],
         "party_after": [0x1C, 0x40, 0x3B, 0x84],
     }

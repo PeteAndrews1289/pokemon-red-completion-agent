@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-27 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-28 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -12,7 +12,7 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-28: fresh teacher qualified locally; exact-commit yield is the publication gate
+## 2026-08-28: failed exact yield retained; repaired bundle is 3/3 locally
 
 The active mission is unchanged: build a transferable hierarchical agent that can complete
 mainline games and maintain a living Pokedex. Red is the first causal curriculum and Crystal is the
@@ -20,30 +20,34 @@ first transfer test. The deterministic Red teacher is data-generation infrastruc
 train on its button sequence, count a diagnostic run as a learner example, or confuse completing a
 teacher route with learned game authority.
 
-The fresh-episode teacher has three consecutive clean-power development terminals at
-`mansion_returned` after eighteen one-use failure-localization terminals. The repair set includes
-always-on Route 1 capability preparation, moving-NPC retries, Forest item and poison policy,
-Pewter supplies, safe level-9-through-11 Zubat capture, Route 3 healing, required Mt. Moon recovery,
-and a Cerulean Mart return retry. The non-promotable diagnostic records path-free public summaries
-and private ledgers, but cannot create an official root. The full suite passes **5,612 tests**;
-Ruff, Mypy over **308** source files, public-artifact checks, and regenerated source registries are
-green locally.
+Published main `eac8e745454fcc96ee940fa14c28486cc4bb0c91` passed exact-main CI
+`33167842692/1`, then failed the prospectively fixed yield gate honestly: only one of seeds
+9900037–9900048 reached `mansion_returned`. All twelve are consumed and may never retry. The eleven
+failures clustered around Mt. Moon Potion reserves, Super Nerd completion, one moving Pewter NPC,
+one Zubat capture, and one Hideout active-battler state. That result closed the successor-plan
+freeze and is retained in the
+[exact-source evidence](docs/evidence/red-living-dex-fresh-teacher-exact-source-yield-v1-2026-08-28.json).
 
-The three successful runs preceded final source cleanup. They therefore qualify behavior, not the
-publishable bundle or its population yield. The old V1 plan is forever closed: assignment 1 is
-consumed/no-retry, and its remaining twelve assignments are bound to old source and may not be
-used. The prospective successor gate is now fixed: publish exact main, require exact-head green CI,
-then run seeds 9900037–9900048 once each with the diagnostic. Require at least 10/12 successes, at
-most two failures, no repeated deterministic failure stage, and no leak before freezing any new
-official train-root plan.
+The bounded repair replaces those assumptions with reusable capabilities: semantic move
+reselection, safe party switching and ordering, poison-aware return planning, state-aware healing,
+dynamic NPC routing, post-victory cleanup, resource arbitration, and explicit funding without
+selling protected collection assets. Earlier one-use diagnostics localized later boundaries; they
+must not be pooled as a yield estimate because source changed between attempts. On the final
+unchanged source bundle `5285cce43beebb26237c72bd8946b6168556d48f09340df8b53c31a473196434`,
+seeds 9910035–9910037 all reached `mansion_returned`: **3/3**, 115,696 controller actions and
+21,246,875 emulator frames. These are non-promotable development diagnostics, not official roots
+or learner examples.
 
-Claude returned conditional GO and supplied the accepted exact-source/yield cautions. Antigravity
-returned no-go, but each stated blocker was contradicted by the traced behavior; see the
-[qualification evidence](docs/evidence/red-living-dex-fresh-teacher-development-qualification-v1-2026-08-28.json)
-for the adjudication. No consensus is claimed. After a passing yield gate, freeze a new plan,
-materialize train only, and rerun the action-free capacity census. Do not materialize development,
-fit, open sealed Red or Crystal, replay the full game as evaluation, or promote teacher diagnostics.
-**Causal train remains 1/60 · powered fit 0 · authority 0 · transfer 0.**
+The old V1 plan remains forever closed: assignment 1 is consumed/no-retry and the other twelve are
+bound to superseded source. The repair passes **5,657 repository tests**, Ruff, Mypy over **309**
+source files, every regenerated registry, documentation validation, and the public-artifact scan.
+Antigravity returned publication GO and future-gate conditional GO with no P0/P1/P2 finding.
+Publish the repair and require exact-head green CI. Only then run the already prospective seeds
+9900049–9900060 once each, requiring at least 10/12 successes, at most two failures, no repeated
+deterministic failure stage, and no leak. A passing gate opens a new train-only plan freeze and an
+action-free capacity recensus; it does not itself train a model. Do not materialize development,
+fit, open sealed Red or Crystal, replay the full game as evaluation, or promote teacher
+diagnostics. **Causal train remains 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## 2026-08-28: exact capacity measured; fresh train episode generation is the next gate
 

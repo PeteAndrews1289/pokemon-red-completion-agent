@@ -149,6 +149,54 @@ def test_stone_clerk_route_yields_at_west_fourth_floor_gate(
     assert executor.left_attempts == 2
 
 
+def test_stone_clerk_route_yields_at_middle_fourth_floor_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=3, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        return_attempts = 0
+        crossing_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (3, 2):
+                reader.state = replace(reader.state, player_x=4)
+            elif action.value == "left" and position == (4, 2):
+                self.return_attempts += 1
+                if self.return_attempts >= 2:
+                    reader.state = replace(reader.state, player_x=3)
+            elif action.value == "left" and position == (3, 2):
+                self.crossing_attempts += 1
+                if self.crossing_attempts >= 2:
+                    reader.state = replace(reader.state, player_x=2)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "evolution-stone clerk",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (2, 2)
+    assert executor.return_attempts == 2
+    assert executor.crossing_attempts == 2
+
+
 def test_mart_roof_route_yields_to_fifth_floor_customer(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

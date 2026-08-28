@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the repaired Red fresh-episode teacher, measure exact-commit cross-seed yield, freeze a new one-shot train-root successor only if yield passes, then materialize roots and rerun the action-free census before collecting train outcomes.
+- Next decision: Publish the locally qualified fresh-teacher repair, require exact-main green CI, pass the prospective 10-of-12 yield gate, and only then freeze a train-only successor and rerun the action-free capacity census.
 
 ### Mandatory mission check
 
@@ -58,19 +58,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-28-fresh-teacher-development-qualification** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-development-qualification-v1-2026-08-28.json)
+**2026-08-28-fresh-teacher-repair-local-qualification** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-repair-local-qualification-v1-2026-08-28.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The repairs make Red a reliable source of genuinely new episode lineages for the title-neutral living-Dex curriculum. They do not teach the learner arrow sequences or grant game-playing authority; Red remains the first data curriculum and Crystal remains the later frozen-weight transfer test. |
+| Product alignment | The 1/12 gate stopped an unreliable teacher before it could manufacture mostly unusable classrooms. The final repair adds reusable battle, party, navigation, poison, economy, and resource capabilities, qualifies 3/3 locally, and still keeps teacher buttons outside the learner. |
 | Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
-| Authority delta | None. Twenty-one one-use development-only teacher diagnostics produced eighteen failure-localization terminals and three consecutive mansion-returned terminals. They created no official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
+| Authority delta | None. Thirty-seven one-use repair diagnostics used changing source; the final unchanged bundle reached mansion-returned on 3/3 new seeds. No diagnostic created an official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The repaired teacher has three consecutive successful clean-power development runs, but subsequent source cleanup means they do not authenticate the final publishable bundle, and three runs do not measure population yield. The previously frozen V1 plan remains bound to old source; its consumed first assignment never retries and its twelve untouched assignments may not be reused under changed source. |
-| Decision | Publish the repaired source and require exact-head green CI. Then measure a bounded cross-seed sample with the non-promotable diagnostic on that exact committed bundle. Freeze a new successor train-root plan only if the measured yield supports its declared root target with margin; retain every success or failure disposition and recensus before any selected-arm outcome collection. |
-| Next session | Publish and green the exact candidate, run the bounded exact-commit cross-seed yield sample, and freeze the new one-shot train-root successor only if that evidence passes. Then materialize its train roots and rerun the action-free capacity census; do not materialize development or fit. |
-| Next falsifier | On the final committed source, distinct prospectively chosen diagnostic seeds must reach mansion-returned often enough to support a one-shot successor tranche with margin. Any post-input failure remains consumed; any exact-source regression, low yield, cloned lineage, target mismatch, or private-path leakage stops the freeze. |
-| Stop condition | Stop on an exact-source teacher regression, insufficient measured yield, retry of any consumed assignment, reuse of the old V1 plan under changed source, cloned or rehashed independence, private leakage, development leakage into fit, teacher labels entering the learner, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
+| Blocker | Published source eac8e745 passed exact-main CI but failed its fixed fresh-world yield gate at 1/12; every seed 9900037 through 9900048 is consumed. Repair bundle 5285cce4 is locally qualified but unpublished. The successor freeze and future diagnostics remain closed until exact-main green CI. |
+| Decision | Publish the locally qualified repair, require exact-head green CI, then run seeds 9900049 through 9900060 once each. Require at least 10/12 successes, at most two failures, no repeated deterministic failure stage, and no leak before freezing a train-only successor and rerunning the action-free census. |
+| Next session | Publish and green the exact qualified candidate, then run the prospective twelve-seed yield gate. Freeze and materialize a train-only successor only if the gate passes; otherwise retain the denominator and repair the newly measured cluster. |
+| Next falsifier | After exact publication and green CI, seeds 9900049 through 9900060 must run once each and produce at least ten mansion-returned terminals with no repeated deterministic failure stage. Any early execution, consumed-seed retry, low yield, leak, or new systematic boundary closes the successor freeze. |
+| Stop condition | Stop on future-seed execution before exact-main green CI, retry of any consumed diagnostic or assignment, reuse of the old V1 plan, insufficient new yield, cloned or rehashed independence, private leakage, development leakage into fit, teacher labels entering the learner, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
 
 ### Stop conditions
 

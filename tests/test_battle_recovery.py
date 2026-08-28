@@ -71,6 +71,14 @@ class _SwitchSimulation:
             self.command = 0
 
 
+def test_sole_living_switch_target_refuses_to_make_a_strategic_choice() -> None:
+    assert battle_recovery.sole_living_switch_target((0, 17), 0) == 1
+    assert battle_recovery.sole_living_switch_target((0, 17, 9), 0) is None
+    assert battle_recovery.sole_living_switch_target((12, 0), 0) is None
+    assert battle_recovery.sole_living_switch_target((0, 17), None) is None
+    assert battle_recovery.sole_living_switch_target((0, 17), 2) is None
+
+
 def test_switch_active_battler_observes_party_menu_and_returns_to_main(monkeypatch) -> None:
     simulation = _SwitchSimulation()
     monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (50, 30, 20))

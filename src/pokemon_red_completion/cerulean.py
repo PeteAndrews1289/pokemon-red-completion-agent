@@ -13,6 +13,24 @@ from dataclasses import dataclass, field
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    sole_living_switch_target,
+    switch_active_battler,
+)
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
+    BattleRuntimeError,
+    BattleSwitchCapability,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.economy import (
     PEWTER_LOSS_POTION_PURCHASE_QUANTITY,
     PEWTER_POKE_BALL_PRICE,
@@ -22,6 +40,11 @@ from pokemon_red_completion.economy import (
     PEWTER_SUPPLY_LOSS_STARTING_MONEY,
     PEWTER_SUPPLY_STARTING_MONEY,
 )
+from pokemon_red_completion.gen1_party_menu import (
+    Gen1PartyMenuError,
+    promote_sole_living_party_member,
+)
+from pokemon_red_completion.gen1_route_runtime import strongest_usable_move_slot
 from pokemon_red_completion.observation import (
     BUBBLE_MOVE_ID,
     MEGA_PUNCH_MOVE_ID,
@@ -51,6 +74,7 @@ from pokemon_red_completion.route_1_wild import (
 CERULEAN_CHECKPOINT_COUNT = 15
 ROUTE_3_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_3_REQUIRED_TRAINER_SPECS)
 ROUTE_3_BUBBLE_TRAINER_INDEXES = frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES)
+ROUTE_3_RECOVERY_TRAINER_INDEXES = frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES)
 CERULEAN_QUALIFICATION_BOUNDARIES = tuple(
     boundary for boundary in CeruleanBoundary if boundary is not CeruleanBoundary.UNKNOWN
 )
@@ -68,7 +92,14 @@ PEWTER_TO_CENTER_DIRECTIONS = _directions(
 )
 PEWTER_TO_MART_PREFIX_DIRECTIONS = _directions("L" * 6 + "U" * 2 + "R" + "U" * 3 + "R" * 8)
 PEWTER_MART_ENTRY_DIRECTIONS = _directions("D" * 5 + "R" * 4 + "U")
-PEWTER_MART_CLERK_DIRECTIONS = _directions("UUL")
+PEWTER_MART_CLERK_TARGET = (2, 5)
+PEWTER_MART_CLERK_SAFE_DIRECTIONS: Mapping[tuple[int, int], tuple[str, ...]] = {
+    (3, 7): ("up",),
+    (3, 6): ("left", "up"),
+    (2, 6): ("up", "right"),
+    (3, 5): ("left", "down"),
+}
+PEWTER_MART_CLERK_MAX_ATTEMPTS = 24
 PEWTER_MART_EXIT_DIRECTIONS = _directions("RDDD")
 PEWTER_MART_TO_CENTER_DIRECTIONS = _directions("L" * 4 + "D" * 8 + "L" * 6 + "U")
 CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
@@ -76,9 +107,15 @@ CENTER_EXIT_DIRECTIONS = ("down",) * 5
 CENTER_HEAL_TO_PC_DIRECTIONS = ("down",) + ("right",) * 10
 CENTER_PC_TO_HEAL_DIRECTIONS = ("left",) * 10 + ("up",)
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
-ROUTE_3_BATTLE_RECOVERY_HP = 13
-ROUTE_3_BATTLE_POTION_FLOOR = 11
+GEN1_FIELD_POISON_STEP_PERIOD = 4
+POTION_HEAL_AMOUNT = 20
+ROUTE_3_BATTLE_RECOVERY_HP = 20
+ROUTE_3_BATTLE_POTION_FLOOR = 9
 ROUTE_3_PROTECTED_POTION_FLOOR = 12
+ROUTE_3_POISON_RETURN_POTION_FLOOR = 9
+ROUTE_3_CAVE_ANTIDOTE_RESERVE = 1
+MT_MOON_BATTLE_POTION_FLOOR = 9
+MT_MOON_POTION_STARTING_QUANTITIES = frozenset(range(MT_MOON_BATTLE_POTION_FLOOR, 14))
 MT_MOON_ROCKET_RECOVERY_HP = 20
 ROUTE_3_MAX_WILD_FLEES = 4
 ROUTE_3_MAX_STEP_ATTEMPTS = 8
@@ -151,6 +188,9 @@ MT_MOON_POTION_RETURN_DIRECTIONS = _directions("R" * 13 + "U" * 24 + "L" * 3)
 MT_MOON_POTION_PICKUP_POSITION = (21, 33)
 MT_MOON_POTION_TOGGLE_INDEX = 0x6B
 MT_MOON_SUPER_NERD_RECOVERY_HP = 25
+SUPER_NERD_TRIGGER_ORIGIN = (13, 9)
+SUPER_NERD_TRIGGER_DESTINATION = (13, 8)
+SUPER_NERD_TRIGGER_MAX_WILD_FLEES = 4
 MT_MOON_B1F_DIRECTIONS = _directions("R" * 2 + "D" * 11 + "R" * 14 + "D")
 MT_MOON_B1F_SEED_WAITS = ((1, 2), (14, 1))
 MT_MOON_B2F_TO_ROCKET_DIRECTIONS = _directions(
@@ -190,6 +230,10 @@ class CeruleanChapterError(RuntimeError):
     """Raised when the bounded Brock-to-Cerulean chapter misses a gate."""
 
 
+class _PauseForCeruleanChapterPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
 class ActionExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
 
@@ -216,6 +260,7 @@ class CeruleanTiming:
     final_stability_wait_frames: int = 1
     heal_dialogue_pulses: int = 9
     rocket_cleanup_pulses: int = 2
+    super_nerd_cleanup_pulses: int = 4
     fossil_dialogue_pulses: int = 4
     max_trainer_intro_pulses: int = 12
     max_main_menu_pulses: int = 12
@@ -579,8 +624,16 @@ def run_cerulean_chapter(
             timing,
             MapId.ROUTE_3,
             f"Route 3 trainer {trainer_index}",
-            emulator=emulator if position == 1 else None,
-            recovery_hp_threshold=(ROUTE_3_BATTLE_RECOVERY_HP if position == 1 else None),
+            move_slot=3 if trainer_index in ROUTE_3_BUBBLE_TRAINER_INDEXES else 1,
+            battle_plan_id=f"cerulean-route-3-trainer-{trainer_index}",
+            emulator=(
+                emulator if trainer_index in ROUTE_3_RECOVERY_TRAINER_INDEXES else None
+            ),
+            recovery_hp_threshold=(
+                ROUTE_3_BATTLE_RECOVERY_HP
+                if trainer_index in ROUTE_3_RECOVERY_TRAINER_INDEXES
+                else None
+            ),
             recovery_potion_floor=ROUTE_3_BATTLE_POTION_FLOOR,
         )
         victory_evidence = reader.read_cerulean_chapter_state(victory)
@@ -594,12 +647,20 @@ def run_cerulean_chapter(
             f"Verified required Route 3 trainer {trainer_index}",
             position + 2,
         )
-        _cure_route_3_poison_if_needed(
+        _cure_field_poison_if_needed(
             chapter_executor,
             reader,
             emulator,
             timing,
+            expected_map=MapId.ROUTE_3,
             label=f"Route 3 trainer {trainer_index}",
+            healing_route_steps=(
+                len(route_prefix)
+                + 1
+                + len(ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS)
+            ),
+            minimum_antidote_reserve=ROUTE_3_CAVE_ANTIDOTE_RESERVE,
+            potion_floor=ROUTE_3_POISON_RETURN_POTION_FLOOR,
         )
         _recover_at_pewter_center(
             chapter_executor,
@@ -825,9 +886,11 @@ def run_cerulean_chapter(
         timing,
         MapId.MT_MOON_B2F,
         "Mt. Moon required Rocket",
+        move_slot=3,
+        battle_plan_id="cerulean-mt-moon-required-rocket",
         emulator=emulator,
         recovery_hp_threshold=MT_MOON_ROCKET_RECOVERY_HP,
-        recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
+        recovery_potion_floor=MT_MOON_BATTLE_POTION_FLOOR,
     )
     rocket_victory_evidence = reader.read_cerulean_chapter_state(rocket_defeated)
     if (
@@ -838,6 +901,21 @@ def run_cerulean_chapter(
         raise CeruleanChapterError(
             "The required Rocket victory or Squirtle evolution did not persist."
         )
+    rocket_defeated = _restore_field_survival_lead(
+        emulator,
+        chapter_executor,
+        reader,
+        rocket_defeated,
+        label="Mt. Moon required Rocket survival lead",
+    )
+    _cure_field_poison_if_needed(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+        expected_map=MapId.MT_MOON_B2F,
+        label="Mt. Moon required Rocket",
+    )
     for _ in range(timing.rocket_cleanup_pulses):
         chapter_executor.execute(MacroAction(MacroActionKind.CANCEL))
         _wait(chapter_executor, timing.dialogue_wait_frames)
@@ -850,19 +928,15 @@ def run_cerulean_chapter(
         expected_map_id=MapId.MT_MOON_B2F,
         ledger=mt_moon_ledger,
     )
-    _move(
-        chapter_executor,
-        reader,
-        ROCKET_TO_SUPER_NERD_DIRECTIONS[-1:],
-        "Super Nerd sight trigger",
-        allow_trainer_trigger=True,
-    )
-    super_nerd_battle = _enter_trainer_battle(
+    super_nerd_battle = _trigger_trainer_through_wild_encounters(
         chapter_executor,
         reader,
         timing,
-        MapId.MT_MOON_B2F,
-        "Mt. Moon Super Nerd",
+        direction=ROCKET_TO_SUPER_NERD_DIRECTIONS[-1],
+        origin=SUPER_NERD_TRIGGER_ORIGIN,
+        destination=SUPER_NERD_TRIGGER_DESTINATION,
+        expected_map=MapId.MT_MOON_B2F,
+        label="Mt. Moon Super Nerd",
     )
     super_nerd_battle_evidence = reader.read_cerulean_chapter_state(super_nerd_battle)
     _observe_semantic(
@@ -892,13 +966,35 @@ def run_cerulean_chapter(
         timing,
         MapId.MT_MOON_B2F,
         "Mt. Moon Super Nerd",
+        move_slot=4,
+        battle_plan_id="cerulean-mt-moon-super-nerd",
         emulator=emulator,
         recovery_hp_threshold=MT_MOON_SUPER_NERD_RECOVERY_HP,
-        recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
+        recovery_potion_floor=MT_MOON_BATTLE_POTION_FLOOR,
     )
     super_nerd_victory_evidence = reader.read_cerulean_chapter_state(super_nerd_defeated)
     if not super_nerd_victory_evidence.beat_super_nerd:
         raise CeruleanChapterError("The Super Nerd event did not persist.")
+    super_nerd_defeated = _restore_field_survival_lead(
+        emulator,
+        chapter_executor,
+        reader,
+        super_nerd_defeated,
+        label="Mt. Moon Super Nerd survival lead",
+    )
+    _cure_field_poison_if_needed(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+        expected_map=MapId.MT_MOON_B2F,
+        label="Mt. Moon Super Nerd",
+    )
+    super_nerd_defeated = _settle_super_nerd_field_control(
+        chapter_executor,
+        reader,
+        timing,
+    )
 
     _move_mt_moon(
         chapter_executor,
@@ -959,6 +1055,13 @@ def run_cerulean_chapter(
         reader,
         tracker,
         CeruleanBoundary.ROUTE_4_MT_MOON_EXIT,
+    )
+    mt_moon_exited = _restore_field_survival_lead(
+        emulator,
+        chapter_executor,
+        reader,
+        mt_moon_exited,
+        label="Route 4 cave-exit survival lead",
     )
     _emit(
         progress,
@@ -1077,29 +1180,123 @@ def run_cerulean_chapter(
     return report
 
 
-def _cure_route_3_poison_if_needed(
+def _restore_field_survival_lead(
+    emulator: EmulatorState,
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    state: RawGameState,
+    *,
+    label: str,
+) -> RawGameState:
+    """Restore field slot zero only when survival leaves exactly one choice."""
+
+    if state.first_party_hp != 0:
+        return state
+    try:
+        return promote_sole_living_party_member(
+            emulator,
+            executor,
+            reader,
+            label=label,
+        )
+    except Gen1PartyMenuError as error:
+        raise CeruleanChapterError(str(error)) from error
+
+
+def _settle_super_nerd_field_control(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CeruleanTiming,
+) -> RawGameState:
+    """Clear the defeated trainer's bounded terminal text before fossil movement."""
+
+    for _ in range(timing.super_nerd_cleanup_pulses):
+        executor.execute(MacroAction(MacroActionKind.CANCEL))
+        _wait(executor, timing.dialogue_wait_frames)
+    final = reader.read()
+    if (
+        final.map_id != MapId.MT_MOON_B2F
+        or final.battle_state != 0
+        or final.first_party_hp is None
+        or final.first_party_hp <= 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError(
+            "Mt. Moon Super Nerd cleanup did not restore safe field control."
+        )
+    return final
+
+
+def _cure_field_poison_if_needed(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: CeruleanTiming,
     *,
+    expected_map: MapId,
     label: str,
+    healing_route_steps: int | None = None,
+    minimum_antidote_reserve: int = 0,
+    potion_floor: int = 0,
 ) -> None:
-    """Cure observed trainer poison before the finite Center return walk."""
+    """Cure poison or prove the lead can reach a known healing boundary."""
 
     before = reader.read()
     quantity = _bag_quantity(emulator, ItemId.ANTIDOTE)
     if (
-        before.map_id != MapId.ROUTE_3
+        before.map_id != expected_map
         or before.battle_state != 0
         or before.first_party_status not in {0, 0x08}
         or not 0 <= quantity <= 2
+        or type(minimum_antidote_reserve) is not int  # noqa: E721
+        or not 0 <= minimum_antidote_reserve <= 2
+        or type(potion_floor) is not int  # noqa: E721
+        or potion_floor < 0
+        or (
+            healing_route_steps is not None
+            and (type(healing_route_steps) is not int or healing_route_steps <= 0)  # noqa: E721
+        )
         or not reader.read_input_readiness().ready
     ):
         raise CeruleanChapterError(f"{label} Antidote has an invalid recovery gate.")
     if before.first_party_status == 0:
         return
-    if quantity == 0:
+    if quantity <= minimum_antidote_reserve and healing_route_steps is not None:
+        if before.first_party_hp is None or before.first_party_max_hp is None:
+            raise CeruleanChapterError(f"{label} poison lacks route-survival HP evidence.")
+        potions_required = _poison_return_potions_required(
+            hp=before.first_party_hp,
+            max_hp=before.first_party_max_hp,
+            route_steps=healing_route_steps,
+        )
+        potion_quantity = _bag_quantity(emulator, ItemId.POTION)
+        if potion_quantity - potions_required < potion_floor:
+            raise CeruleanChapterError(
+                f"{label} poison cannot preserve its healing-route reserves."
+            )
+        for _ in range(potions_required):
+            _use_field_poison_survival_potion(
+                executor,
+                reader,
+                emulator,
+                timing,
+                expected_map=expected_map,
+                quantity_floor=potion_floor,
+                label=label,
+            )
+        prepared = reader.read()
+        poison_damage = (
+            healing_route_steps + GEN1_FIELD_POISON_STEP_PERIOD - 1
+        ) // GEN1_FIELD_POISON_STEP_PERIOD
+        if (
+            prepared.first_party_status != 0x08
+            or prepared.first_party_hp is None
+            or prepared.first_party_hp <= poison_damage
+            or _bag_quantity(emulator, ItemId.ANTIDOTE) != quantity
+        ):
+            raise CeruleanChapterError(f"{label} poison missed its healing-route proof.")
+        return
+    if quantity <= minimum_antidote_reserve:
         raise CeruleanChapterError(f"{label} poison exhausted the free Antidote reserve.")
     position = (before.player_x, before.player_y)
     _open_field_antidote_action_menu(executor, reader, emulator, timing)
@@ -1113,7 +1310,7 @@ def _cure_route_3_poison_if_needed(
     _close_field_item_menu(executor, reader, timing, label=f"{label} Antidote")
     final = reader.read()
     if (
-        final.map_id != MapId.ROUTE_3
+        final.map_id != expected_map
         or (final.player_x, final.player_y) != position
         or final.battle_state != 0
         or final.first_party_status != 0
@@ -1121,6 +1318,26 @@ def _cure_route_3_poison_if_needed(
         or not reader.read_input_readiness().ready
     ):
         raise CeruleanChapterError(f"{label} Antidote failed its persistent cure gate.")
+
+
+def _poison_return_potions_required(*, hp: int, max_hp: int, route_steps: int) -> int:
+    """Return the minimum Potions needed to survive Gen I field poison."""
+
+    if (
+        type(hp) is not int  # noqa: E721
+        or type(max_hp) is not int  # noqa: E721
+        or type(route_steps) is not int  # noqa: E721
+        or not 0 < hp <= max_hp
+        or route_steps <= 0
+    ):
+        raise CeruleanChapterError("Poison return planning lacks bounded HP or distance.")
+    poison_damage = (
+        route_steps + GEN1_FIELD_POISON_STEP_PERIOD - 1
+    ) // GEN1_FIELD_POISON_STEP_PERIOD
+    if max_hp <= poison_damage:
+        raise CeruleanChapterError("Poison return exceeds the lead's maximum survivable HP.")
+    missing_survival_hp = max(0, poison_damage + 1 - hp)
+    return (missing_survival_hp + POTION_HEAL_AMOUNT - 1) // POTION_HEAL_AMOUNT
 
 
 def _normalize_cerulean_antidotes(
@@ -1183,6 +1400,27 @@ def _open_field_antidote_action_menu(
     emulator: EmulatorState,
     timing: CeruleanTiming,
 ) -> None:
+    _open_field_item_action_menu(
+        executor,
+        reader,
+        emulator,
+        timing,
+        item=ItemId.ANTIDOTE,
+        label="Cerulean Antidote",
+    )
+
+
+def _open_field_item_action_menu(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    item: ItemId,
+    label: str,
+) -> None:
+    """Open one observed bag item without depending on cursor history."""
+
     executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(executor, timing.dialogue_wait_frames)
     for _ in range(8):
@@ -1196,16 +1434,16 @@ def _open_field_antidote_action_menu(
             timing.move_cursor_wait_frames,
         )
     else:
-        raise CeruleanChapterError("Cerulean Antidote could not select ITEM.")
+        raise CeruleanChapterError(f"{label} could not select ITEM.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
     for _ in range(24):
         items = _bag_item_ids(emulator)
-        if ItemId.ANTIDOTE not in items:
-            raise CeruleanChapterError("Cerulean Antidote disappeared before selection.")
+        if item not in items:
+            raise CeruleanChapterError(f"{label} disappeared before selection.")
         absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
             RamAddress.LIST_SCROLL_OFFSET
         )
-        target = items.index(ItemId.ANTIDOTE)
+        target = items.index(item)
         if absolute == target:
             break
         _pulse(
@@ -1215,7 +1453,7 @@ def _open_field_antidote_action_menu(
             timing.move_cursor_wait_frames,
         )
     else:
-        raise CeruleanChapterError("Cerulean Antidote could not select its bag entry.")
+        raise CeruleanChapterError(f"{label} could not select its bag entry.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
 
 
@@ -1237,6 +1475,74 @@ def _use_open_field_antidote(
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
     raise CeruleanChapterError("Cerulean Antidote missed its exact cure gate.")
+
+
+def _use_field_poison_survival_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    expected_map: MapId,
+    quantity_floor: int,
+    label: str,
+) -> None:
+    """Use one surplus field Potion while preserving poison for Center healing."""
+
+    before = reader.read()
+    before_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if (
+        before.map_id != expected_map
+        or before.battle_state != 0
+        or before.first_party_status != 0x08
+        or before.first_party_hp is None
+        or before.first_party_max_hp is None
+        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or before_quantity <= quantity_floor
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError(f"{label} poison-survival Potion has an invalid gate.")
+    position = (before.player_x, before.player_y)
+    expected_hp = min(before.first_party_max_hp, before.first_party_hp + POTION_HEAL_AMOUNT)
+    _open_field_item_action_menu(
+        executor,
+        reader,
+        emulator,
+        timing,
+        item=ItemId.POTION,
+        label=f"{label} poison-survival Potion",
+    )
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(24):
+        current = reader.read()
+        if (
+            current.first_party_hp == expected_hp
+            and current.first_party_status == 0x08
+            and _bag_quantity(emulator, ItemId.POTION) == before_quantity - 1
+        ):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError(f"{label} poison-survival Potion missed its heal gate.")
+    _close_field_item_menu(
+        executor,
+        reader,
+        timing,
+        label=f"{label} poison-survival Potion",
+    )
+    final = reader.read()
+    if (
+        final.map_id != expected_map
+        or (final.player_x, final.player_y) != position
+        or final.battle_state != 0
+        or final.first_party_hp != expected_hp
+        or final.first_party_status != 0x08
+        or _bag_quantity(emulator, ItemId.POTION) != before_quantity - 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError(
+            f"{label} poison-survival Potion failed its persistent gate."
+        )
 
 
 def _toss_open_cerulean_antidotes(
@@ -1658,6 +1964,7 @@ def _weaken_mt_moon_zubat(
             timing,
             slot=3,
             label="Mt. Moon Zubat Bubble weakening",
+            allow_resolved_turn_without_pp=True,
             expected_battle_state=1,
         )
         current = reader.read()
@@ -2020,10 +2327,10 @@ def _collect_mt_moon_recovery_potion(
         "Mt. Moon recovery Potion detour origin",
     )
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX) or starting_quantity not in {
-        ROUTE_3_BATTLE_POTION_FLOOR,
-        ROUTE_3_PROTECTED_POTION_FLOOR,
-    }:
+    if (
+        _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
+        or starting_quantity not in MT_MOON_POTION_STARTING_QUANTITIES
+    ):
         raise CeruleanChapterError("Mt. Moon recovery Potion has an invalid starting gate.")
 
     _move_mt_moon(
@@ -2422,6 +2729,42 @@ def _return_from_center_pc(
     raise CeruleanChapterError("Pewter PC return exhausted its movement bound.")
 
 
+def _approach_pewter_mart_clerk(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+) -> RawGameState:
+    """Reach the clerk through either safe aisle when the customer moves."""
+
+    state = reader.read()
+    blocked_attempts: dict[tuple[int, int], int] = {}
+    for _ in range(PEWTER_MART_CLERK_MAX_ATTEMPTS):
+        position = (state.player_x, state.player_y)
+        if position == PEWTER_MART_CLERK_TARGET:
+            return state
+        if state.map_id != MapId.PEWTER_MART or state.battle_state != 0:
+            raise CeruleanChapterError("Pewter Mart clerk approach left the safe Mart map.")
+        if state.first_party_hp == 0:
+            raise CeruleanChapterError("Pewter Mart clerk approach lost the living lead.")
+        directions = PEWTER_MART_CLERK_SAFE_DIRECTIONS.get(position)
+        if directions is None:
+            raise CeruleanChapterError(
+                f"Pewter Mart clerk approach left its bounded aisle at {position!r}."
+            )
+        blocked = blocked_attempts.get(position, 0)
+        direction = directions[blocked % len(directions)]
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        moved = reader.read()
+        if (moved.player_x, moved.player_y) == position:
+            blocked_attempts[position] = blocked + 1
+            _wait(
+                executor,
+                ROUTE_3_STEP_RETRY_WAIT_FRAMES * min(blocked + 1, 8),
+            )
+        else:
+            state = moved
+    raise CeruleanChapterError("Pewter Mart clerk approach exhausted its bounded aisle search.")
+
+
 def _purchase_early_supplies(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -2452,15 +2795,7 @@ def _purchase_early_supplies(
     ):
         raise CeruleanChapterError("Pewter supply purchase has an invalid economy gate.")
 
-    _move_without_battles_with_retries(
-        executor,
-        reader,
-        PEWTER_MART_CLERK_DIRECTIONS,
-        "Pewter Mart clerk",
-        expected_map_id=MapId.PEWTER_MART,
-        maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
-        step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
-    )
+    _approach_pewter_mart_clerk(executor, reader)
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
     faced = reader.read()
     if faced.map_id != MapId.PEWTER_MART or (faced.player_x, faced.player_y) != (2, 5):
@@ -2704,6 +3039,92 @@ def _enter_trainer_battle(
     raise CeruleanChapterError(f"{label} failed its bounded trainer-battle gate.")
 
 
+def _trigger_trainer_through_wild_encounters(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CeruleanTiming,
+    *,
+    direction: str,
+    origin: tuple[int, int],
+    destination: tuple[int, int],
+    expected_map: MapId,
+    label: str,
+) -> RawGameState:
+    """Retry one sight line when an ordinary wild wins the trigger frame."""
+
+    reverse = _reverse_directions((direction,))[0]
+    wild_flees = 0
+    for attempt in range(1, ROUTE_3_MAX_STEP_ATTEMPTS + 1):
+        before = reader.read()
+        if (
+            before.map_id != expected_map
+            or before.battle_state != 0
+            or (before.player_x, before.player_y) != origin
+            or before.first_party_hp == 0
+        ):
+            raise CeruleanChapterError(f"{label} lost its observed sight-line origin.")
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        moved = reader.read()
+        position = (moved.player_x, moved.player_y)
+        if (
+            moved.map_id == expected_map
+            and moved.battle_state == 2
+            and position == destination
+        ):
+            return moved
+        if moved.map_id != expected_map or position not in {origin, destination}:
+            raise CeruleanChapterError(f"{label} drifted off its observed sight line.")
+        if moved.battle_state == 0 and position == destination:
+            return _enter_trainer_battle(executor, reader, timing, expected_map, label)
+        if moved.battle_state != 1:
+            if moved.battle_state != 0:
+                raise CeruleanChapterError(f"{label} changed to an unexpected battle type.")
+            _wait(executor, ROUTE_3_STEP_RETRY_WAIT_FRAMES * attempt)
+            continue
+        if wild_flees >= SUPER_NERD_TRIGGER_MAX_WILD_FLEES:
+            raise CeruleanChapterError(f"{label} exceeded its bounded wild-flee allowance.")
+
+        flee_wild(
+            executor,
+            reader,
+            moved,
+            expected_map_id=expected_map,
+            route_name=expected_map.name.replace("_", " ").title(),
+            stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+            error_type=CeruleanChapterError,
+        )
+        wild_flees += 1
+        settled = reader.read()
+        settled_position = (settled.player_x, settled.player_y)
+        if (
+            settled.map_id != expected_map
+            or settled.battle_state != 0
+            or settled_position not in {origin, destination}
+            or settled.first_party_hp == 0
+        ):
+            raise CeruleanChapterError(f"{label} wild flee did not restore its sight line.")
+        if settled_position == destination:
+            returned, return_flees, _ = move_with_wild_flees(
+                executor,
+                reader,
+                (reverse,),
+                f"{label} sight-line reset",
+                expected_map_id=expected_map,
+                route_name=expected_map.name.replace("_", " ").title(),
+                maximum_flees=SUPER_NERD_TRIGGER_MAX_WILD_FLEES - wild_flees,
+                stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+                maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+                step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+                error_type=CeruleanChapterError,
+            )
+            wild_flees += len(return_flees)
+            if (returned.player_x, returned.player_y) != origin:
+                raise CeruleanChapterError(f"{label} could not reset its sight line.")
+        _wait(executor, ROUTE_3_STEP_RETRY_WAIT_FRAMES * attempt)
+    raise CeruleanChapterError(f"{label} exhausted its bounded sight-line retries.")
+
+
 def _select_battle_move(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -2787,12 +3208,32 @@ def _finish_battle(
     expected_map: MapId,
     label: str,
     *,
+    move_slot: int | None = None,
+    battle_plan_id: str | None = None,
     emulator: EmulatorState | None = None,
     recovery_hp_threshold: int | None = None,
     recovery_potion_floor: int = 0,
 ) -> RawGameState:
     if (emulator is None) != (recovery_hp_threshold is None):
         raise CeruleanChapterError(f"{label} has an incomplete recovery policy.")
+    if move_slot is not None and move_slot not in {1, 2, 3, 4}:
+        raise CeruleanChapterError(f"{label} has an invalid repeatable move slot.")
+    if move_slot is not None and battle_plan_id is None:
+        raise CeruleanChapterError(f"{label} lacks a semantic battle-plan identity.")
+    if move_slot is not None and reader.read().battle_state == 2:
+        assert battle_plan_id is not None
+        return _finish_adaptive_battle(
+            executor,
+            reader,
+            timing,
+            expected_map,
+            label,
+            demonstrated_move_slot=move_slot,
+            battle_plan_id=battle_plan_id,
+            emulator=emulator,
+            recovery_hp_threshold=recovery_hp_threshold,
+            recovery_potion_floor=recovery_potion_floor,
+        )
     saw_battle = False
     stable_reads = 0
     for _ in range(timing.max_battle_pulses):
@@ -2845,6 +3286,135 @@ def _finish_battle(
         else:
             stable_reads = 0
     raise CeruleanChapterError(f"{label} failed its bounded battle-completion gate.")
+
+
+def _finish_adaptive_battle(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CeruleanTiming,
+    expected_map: MapId,
+    label: str,
+    *,
+    demonstrated_move_slot: int,
+    battle_plan_id: str,
+    emulator: EmulatorState | None,
+    recovery_hp_threshold: int | None,
+    recovery_potion_floor: int,
+) -> RawGameState:
+    """Finish after one PP-proved curriculum move using live mechanics ranking."""
+
+    if demonstrated_move_slot not in {1, 2, 3, 4}:
+        raise CeruleanChapterError(f"{label} lacks its demonstrated move slot.")
+
+    starting_quantity = (
+        _bag_quantity(emulator, ItemId.POTION) if emulator is not None else 0
+    )
+    if emulator is not None and starting_quantity < recovery_potion_floor:
+        raise CeruleanChapterError(f"{label} began below its protected Potion floor.")
+    recoveries = 0
+    intent = BattleIntent(
+        "reach_cerulean",
+        battle_plan_id=battle_plan_id,
+        resource_policy=(
+            BattleResourcePolicy.BOUNDED_RECOVERY
+            if recovery_hp_threshold is not None
+            else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+        ),
+        recovery_capabilities=(
+            frozenset({BattleRecoveryCapability.RESTORE_HP})
+            if recovery_hp_threshold is not None
+            else frozenset()
+        ),
+        switch_capabilities=(
+            frozenset({BattleSwitchCapability.DIRECT})
+            if emulator is not None
+            else frozenset()
+        ),
+        switch_limit=1 if emulator is not None else None,
+    )
+
+    def recovery_guard(raw: RawGameState) -> None:
+        if (
+            emulator is not None
+            and recovery_hp_threshold is not None
+            and raw.battler_hp is not None
+            and 0 < raw.battler_hp <= recovery_hp_threshold
+            and _bag_quantity(emulator, ItemId.POTION) > recovery_potion_floor
+        ):
+            raise _PauseForCeruleanChapterPotion
+
+    forced_switches = 0
+    while True:
+        try:
+            final = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                strongest_usable_move_slot,
+                expected_map=int(expected_map),
+                intent=intent,
+                label=label,
+                # Explicit switch-prompt evidence owns B.  A periodic blind B
+                # could cancel Squirtle's post-battle evolution.
+                unknown_cancel_interval=10_000,
+                transient_zero_pp_main_is_dialogue=True,
+                consume_battle_start_schedule=False,
+                move_decision_guard=(
+                    recovery_guard if recovery_hp_threshold is not None else None
+                ),
+            )
+        except BattleRuntimeError as error:
+            recovery_requested = recovery_request_matches(
+                error.__cause__,
+                _PauseForCeruleanChapterPotion,
+            )
+            if not recovery_requested:
+                failed = reader.read()
+                target = sole_living_switch_target(
+                    failed.party_hp or (),
+                    failed.active_party_index,
+                )
+                if (
+                    emulator is None
+                    or failed.battle_state != 2
+                    or failed.battler_hp != 0
+                    or target is None
+                    or forced_switches >= 1
+                ):
+                    raise CeruleanChapterError(str(error)) from error
+                try:
+                    switch_active_battler(
+                        executor,
+                        reader,
+                        emulator,
+                        target,
+                        label=f"{label} sole living forced switch",
+                        wait_frames=timing.battle_wait_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise CeruleanChapterError(str(switch_error)) from switch_error
+                forced_switches += 1
+                continue
+        else:
+            if emulator is not None and (
+                _bag_quantity(emulator, ItemId.POTION) != starting_quantity - recoveries
+            ):
+                raise CeruleanChapterError(
+                    f"{label} changed its protected Potion reserve unexpectedly."
+                )
+            return final
+
+        assert emulator is not None
+        _use_battle_potion(
+            executor,
+            reader,
+            emulator,
+            timing,
+            quantity_floor=recovery_potion_floor,
+            label=label,
+        )
+        recoveries += 1
+        if recoveries > starting_quantity - recovery_potion_floor:
+            raise CeruleanChapterError(f"{label} exceeded its bounded Potion surplus.")
 
 
 def _use_battle_potion(

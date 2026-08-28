@@ -261,6 +261,29 @@ def test_route_battle_policy_prefers_effective_damaging_move_evidence() -> None:
     )
 
 
+def test_route_battle_policy_prefers_a_credible_accurate_finisher() -> None:
+    state = replace(
+        raw(battle_state=2),
+        party_species_ids=(179,),
+        active_party_index=0,
+        active_party_species_id=179,
+        active_party_moves=(33, 39, 145, 0),
+        active_party_pp=(18, 30, 29, 0),
+        enemy_species_id=124,
+        enemy_hp=9,
+        enemy_max_hp=29,
+    )
+
+    assert strongest_usable_move_slot(state) == 3
+    assert strongest_usable_move_slot(replace(state, enemy_hp=10)) == 1
+    assert (
+        strongest_usable_move_slot(
+            replace(state, player_disabled_move_slot=3, player_disable_turns=2)
+        )
+        == 1
+    )
+
+
 def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

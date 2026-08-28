@@ -6,7 +6,6 @@ from dataclasses import asdict
 from pathlib import Path
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
-from pokemon_red_completion.cerulean import DEFAULT_CERULEAN_TIMING
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.navigation import path_to_directions
 from pokemon_red_completion.observation import ItemId, MapId
@@ -132,6 +131,25 @@ JULY_28_PEWTER_TIMING = {
     "second_kakuna_seed_wait_frames": 420,
     "selected_move_wait_frames": 600,
     "third_kakuna_seed_wait_frames": 2,
+    "transition_wait_frames": 120,
+}
+JULY_28_CERULEAN_TIMING = {
+    "b1f_exit_seed_wait_frames": 2,
+    "battle_wait_frames": 180,
+    "dialogue_wait_frames": 240,
+    "fight_menu_wait_frames": 120,
+    "final_stability_wait_frames": 1,
+    "fossil_dialogue_pulses": 4,
+    "heal_dialogue_pulses": 9,
+    "max_attack_start_pulses": 6,
+    "max_battle_pulses": 180,
+    "max_main_menu_pulses": 12,
+    "max_move_cursor_pulses": 5,
+    "max_trainer_intro_pulses": 12,
+    "move_cursor_wait_frames": 120,
+    "rocket_cleanup_pulses": 2,
+    "selected_move_wait_frames": 180,
+    "super_nerd_preselect_wait_frames": 1,
     "transition_wait_frames": 120,
 }
 
@@ -547,7 +565,6 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    cerulean = DEFAULT_CERULEAN_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -572,9 +589,7 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
         "new_game_names": "built_in_red_blue",
         "opening_timing": JULY_28_OPENING_TIMING,
         "pewter_timing": JULY_28_PEWTER_TIMING,
-        "cerulean_timing": {
-            name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__
-        },
+        "cerulean_timing": JULY_28_CERULEAN_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": (

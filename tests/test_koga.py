@@ -21,6 +21,7 @@ from pokemon_red_completion.koga import (
     JUGGLER_4_PIVOT_HP_THRESHOLD,
     KOGA_CHECKPOINT_COUNT,
     KOGA_OPPONENT,
+    KOGA_PP_BOUNDS,
     KOGA_TRAINER_CLASS,
     KOGA_TRAINER_NUMBER,
     MANDATORY_TRAINER_EVENTS,
@@ -286,6 +287,7 @@ def test_koga_routes_and_minimum_trainer_set_are_pinned() -> None:
         EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
     )
     assert len(OPTIONAL_TRAINER_EVENTS) == 3
+    assert KOGA_PP_BOUNDS == ((0, 15), (1, 15), (0, 15), (0, 15))
 
 
 def test_koga_nurse_approach_normalizes_the_adjacent_ready_tile() -> None:

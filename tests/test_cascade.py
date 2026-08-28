@@ -28,6 +28,7 @@ from pokemon_red_completion.cascade import (
     CERULEAN_GYM_START_POTION_RESERVE,
     CERULEAN_GYM_TRAINER_MOVE_SLOT,
     CERULEAN_GYM_TRAINER_RECOVERY_HP,
+    CERULEAN_MINIMUM_STARTING_POTION_RESERVE,
     CERULEAN_RIVAL_MAX_POTION_RESERVE,
     CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS,
     CERULEAN_TO_CENTER_DIRECTIONS,
@@ -47,6 +48,7 @@ from pokemon_red_completion.cascade import (
     ROUTE_24_ACCURACY_RECOVERY_POSITION,
     ROUTE_24_AFTER_NPC_DIRECTIONS,
     ROUTE_24_CENTER_RECOVERY_POSITION,
+    ROUTE_24_LONG_TEAM_RECOVERY_HP,
     ROUTE_24_RECOVERY_POTION_RESERVE,
     ROUTE_24_REQUIRED_TRAINER_INDEXES,
     ROUTE_24_TRAINER_SEGMENTS,
@@ -61,6 +63,7 @@ from pokemon_red_completion.cascade import (
     CascadeProgress,
     CascadeTiming,
     _cerulean_antidote_topup_quantity,
+    _cerulean_initial_supply_plan,
     _cerulean_return_blocked_detour,
     _cerulean_return_direction,
     _choose_preferred_usable_move_slot,
@@ -93,6 +96,36 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+
+
+@pytest.mark.parametrize(
+    ("starting", "top_up", "ending", "cost"),
+    (
+        (9, 7, 16, 2_600),
+        (10, 6, 16, 2_300),
+        (11, 5, 16, 2_000),
+        (12, 4, 16, 1_700),
+        (13, 4, 17, 1_700),
+        (14, 4, 18, 1_700),
+    ),
+)
+def test_cerulean_supply_plan_replenishes_cave_recovery_spend(
+    starting: int,
+    top_up: int,
+    ending: int,
+    cost: int,
+) -> None:
+    assert _cerulean_initial_supply_plan(starting) == (top_up, ending, cost)
+
+
+@pytest.mark.parametrize("invalid", (8, 15, True))
+def test_cerulean_supply_plan_rejects_an_unbounded_handoff(invalid: int) -> None:
+    with pytest.raises(CascadeChapterError, match="invalid Potion handoff"):
+        _cerulean_initial_supply_plan(invalid)
+
+
+def test_cerulean_minimum_starting_reserve_matches_the_cave_floor() -> None:
+    assert CERULEAN_MINIMUM_STARTING_POTION_RESERVE == 9
 
 
 class _StartingEvidence:
@@ -1103,6 +1136,61 @@ def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
     assert ROUTE_24_ACCURACY_RECOVERY_POSITION > ROUTE_24_CENTER_RECOVERY_POSITION
 
 
+def test_route_24_accuracy_battle_preserves_potion_spent_by_prior_long_team(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=ROUTE_25_RECOVERY_POTION_RESERVE)
+
+    class Reader:
+        state = replace(
+            _raw(),
+            map_id=MapId.ROUTE_24,
+            battle_state=2,
+            first_party_hp=ROUTE_24_ACCURACY_RECOVERY_HP,
+            first_party_max_hp=56,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.MAIN, 0, None)
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": self.state.battle_state == 0})()
+
+    reader = Reader()
+    selections = 0
+
+    def select(*args: object, **kwargs: object) -> None:
+        nonlocal selections
+        del args, kwargs
+        selections += 1
+        if selections == 2:
+            reader.state = replace(reader.state, battle_state=0)
+
+    monkeypatch.setattr(cascade_module, "_select_battle_move", select)
+    monkeypatch.setattr(
+        cascade_module,
+        "_use_cerulean_rival_potion",
+        lambda *_args: pytest.fail("the protected downstream Potion was spent"),
+    )
+    monkeypatch.setattr(cascade_module, "_wait", lambda *args: None)
+
+    result = _run_route_24_accuracy_battle_with_potion(
+        cast(object, reader),
+        cast(object, object()),
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+        "Route 24 trainer 2",
+    )
+
+    assert result.battle_state == 0
+    assert selections == 2
+    assert _bag_quantity_for_test(emulator) == ROUTE_25_RECOVERY_POTION_RESERVE
+
+
 def test_route_24_antidote_uses_the_immediate_field_boundary(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -1193,6 +1281,7 @@ def test_route_24_long_team_uses_unscheduled_pp_aware_runtime(
     result = _run_route_24_usable_move_battle(
         cast(object, object()),
         cast(object, object()),
+        _MemoryEmulator(ROUTE_24_RECOVERY_POTION_RESERVE),
         trainer_index=3,
         timing=DEFAULT_CASCADE_TIMING,
     )
@@ -1233,11 +1322,84 @@ def test_route_24_long_team_uses_accurate_move_to_finish_low_hp_enemy(
     _run_route_24_usable_move_battle(
         cast(object, object()),
         cast(object, object()),
+        _MemoryEmulator(ROUTE_24_RECOVERY_POTION_RESERVE),
         trainer_index=3,
         timing=DEFAULT_CASCADE_TIMING,
     )
 
     assert observed["slot"] == 4
+
+
+def test_route_24_long_team_spends_the_shared_potion_before_fainting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(ROUTE_24_RECOVERY_POTION_RESERVE)
+
+    class Reader:
+        state = RawGameState(
+            True,
+            MapId.ROUTE_24,
+            10,
+            8,
+            1,
+            2,
+            first_party_hp=ROUTE_24_LONG_TEAM_RECOVERY_HP,
+            first_party_max_hp=58,
+            first_party_moves=(33, 39, 5, 55),
+            first_party_pp=(35, 30, 16, 23),
+            active_party_moves=(33, 39, 5, 55),
+            active_party_pp=(35, 30, 16, 23),
+            enemy_hp=7,
+            enemy_max_hp=37,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    runtime_calls = 0
+    recoveries = 0
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal runtime_calls
+        runtime_calls += 1
+        policy = args[2]
+        assert callable(policy)
+        assert kwargs["intent"].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
+        if runtime_calls == 1:
+            try:
+                policy(reader.state)
+            except Exception as cause:
+                raise BattleRuntimeError("unit shared recovery") from cause
+            raise AssertionError("low HP did not request the shared Potion")
+        assert policy(reader.state) == 4
+        reader.state = replace(reader.state, battle_state=0, enemy_hp=0)
+        return reader.state
+
+    def recover(*args: object) -> None:
+        nonlocal recoveries
+        del args
+        recoveries += 1
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
+        reader.state = replace(reader.state, first_party_hp=50)
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(cascade_module, "_use_cerulean_rival_potion", recover)
+
+    final = _run_route_24_usable_move_battle(
+        cast(object, reader),
+        cast(object, object()),
+        emulator,
+        trainer_index=3,
+        timing=DEFAULT_CASCADE_TIMING,
+    )
+
+    assert final.battle_state == 0
+    assert runtime_calls == 2
+    assert recoveries == 1
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == (
+        ROUTE_25_RECOVERY_POTION_RESERVE
+    )
 
 
 @pytest.mark.parametrize(

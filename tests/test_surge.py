@@ -96,6 +96,92 @@ def test_ball_throw_dialogue_uses_non_selecting_settle_action() -> None:
     assert BALL_THROW_SETTLE_ACTION is MacroActionKind.CANCEL
 
 
+def test_spearow_capture_can_use_full_budget_without_spending_diglett_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bag = {ItemId.POKE_BALL: COLLECTION_POKE_BALL_TARGET}
+    throws = 0
+
+    def throw_ball(*_args: object) -> bool:
+        nonlocal throws
+        throws += 1
+        bag[ItemId.POKE_BALL] -= 1
+        return throws == SPEAROW_CAPTURE_THROW_LIMIT
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: bag)
+    monkeypatch.setattr(surge_module, "_throw_ball", throw_ball)
+
+    used = surge_module._capture_spearow_with_diglett_reserve(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+    )
+
+    assert used == SPEAROW_CAPTURE_THROW_LIMIT
+    assert throws == SPEAROW_CAPTURE_THROW_LIMIT
+    assert bag[ItemId.POKE_BALL] == surge_module.DIGLETT_CAPTURE_BALL_RESERVE
+
+
+def test_failed_spearow_capture_stops_at_intact_diglett_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bag = {ItemId.POKE_BALL: COLLECTION_POKE_BALL_TARGET}
+    throws = 0
+
+    def throw_ball(*_args: object) -> bool:
+        nonlocal throws
+        throws += 1
+        bag[ItemId.POKE_BALL] -= 1
+        return False
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: bag)
+    monkeypatch.setattr(surge_module, "_throw_ball", throw_ball)
+
+    with pytest.raises(
+        surge_module.SurgeChapterError,
+        match=r"30 bounded throws.*preserved_reserve=15",
+    ):
+        surge_module._capture_spearow_with_diglett_reserve(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+        )
+
+    assert throws == SPEAROW_CAPTURE_THROW_LIMIT
+    assert bag[ItemId.POKE_BALL] == surge_module.DIGLETT_CAPTURE_BALL_RESERVE
+
+
+def test_capture_lessons_fail_closed_below_diglett_ball_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bag = {ItemId.POKE_BALL: surge_module.DIGLETT_CAPTURE_BALL_RESERVE - 1}
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: bag)
+    monkeypatch.setattr(
+        surge_module,
+        "_throw_ball",
+        lambda *_args: pytest.fail("no throw is allowed below the reserve"),
+    )
+
+    with pytest.raises(
+        surge_module.SurgeChapterError,
+        match="no Poké Balls beyond the protected Diglett reserve",
+    ):
+        surge_module._capture_spearow_with_diglett_reserve(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+        )
+    with pytest.raises(
+        surge_module.SurgeChapterError,
+        match="Diglett capture started below its protected Poké Ball reserve",
+    ):
+        surge_module._throw_until_caught_diglett(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+        )
+
+
 def test_ordinary_wild_capture_uses_late_game_balls_but_reserves_master_ball() -> None:
     inventory = {
         ItemId.MASTER_BALL: 1,
@@ -190,6 +276,17 @@ def test_mart_buy_list_waits_for_variable_purchase_dialogue(
     surge_module._open_mart_buy_list(object(), emulator, 240)  # type: ignore[arg-type]
 
     assert emulator.confirmations == 3
+
+
+def test_single_purchase_budget_scales_with_earlier_capture_spend() -> None:
+    assert surge_module._single_purchase_confirmation_budget(0) == 1
+    assert surge_module._single_purchase_confirmation_budget(15) == 241
+    assert surge_module._single_purchase_confirmation_budget(21) == 337
+    with pytest.raises(
+        surge_module.SurgeChapterError,
+        match="non-negative integer",
+    ):
+        surge_module._single_purchase_confirmation_budget(-1)
 
 
 def test_exact_mart_purchase_selects_super_potion_and_existing_top_up(
@@ -988,18 +1085,25 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert LT_SURGE_TRAINER_SET == 1
     assert DIG_MOVE_ID == 0x5B
     assert frozenset({21, 22}) == DIGLETT_CAPTURE_LEVELS
-    assert DIGLETT_CAPTURE_THROW_LIMIT == COLLECTION_POKE_BALL_TARGET
+    assert DIGLETT_CAPTURE_THROW_LIMIT == 15
     assert surge_module.DIGLETT_CAPTURE_HELPER_PARTY_INDEX == 1
     assert surge_module.DIGLETT_CAPTURE_HELPER_MOVE_INDEX == 0
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
     assert SPEAROW_DIRECT_THROW_LEVEL_FLOOR == 30
-    assert SPEAROW_CAPTURE_THROW_LIMIT == 15
+    assert SPEAROW_CAPTURE_THROW_LIMIT == 30
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
-    assert COLLECTION_POKE_BALL_TARGET == 30
-    assert surge_module.FOREST_POKE_BALL_RESERVE == COLLECTION_POKE_BALL_TARGET
+    assert COLLECTION_POKE_BALL_TARGET == 45
+    assert surge_module.DIGLETT_CAPTURE_BALL_RESERVE == DIGLETT_CAPTURE_THROW_LIMIT
+    assert (
+        SPEAROW_CAPTURE_THROW_LIMIT + surge_module.DIGLETT_CAPTURE_BALL_RESERVE
+        == COLLECTION_POKE_BALL_TARGET
+    )
+    assert surge_module.FOREST_POKE_BALL_RESERVE == 30
     assert surge_module.POKE_BALL_PRICE == 200
+    assert surge_module.SUPER_POTION_PRICE == 700
+    assert surge_module.MART_SINGLE_PURCHASE_CONFIRMATIONS_PER_ITEM == 16
     assert (
         surge_module._directions("D" + "R" * 24 + "U" * 3 + "R" + "U" * 4)
         == surge_module.SHIP_1F_RETURN

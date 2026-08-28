@@ -1,0 +1,196 @@
+{
+  "authorization": {
+    "development_diagnostics": true,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "successor_plan_freeze": false,
+    "transfer_execution": false
+  },
+  "exact_source": {
+    "ci_attempt": 1,
+    "ci_run": 33167842692,
+    "ci_status": "success",
+    "commit": "eac8e745454fcc96ee940fa14c28486cc4bb0c91",
+    "source_bundle_sha256": "7994e57017190655137ad0eba35606805da4d0a332c19839a9849a9e44bdba26"
+  },
+  "failure_clusters": [
+    {
+      "count": 6,
+      "failure_message_sha256": "1f857068655873520e944ab8c66fc5d1404b549d0e2d83fce8456cdef799e395",
+      "last_checkpoint_id": "mt_moon_entered",
+      "public_category": "mt_moon_recovery_potion_starting_gate"
+    },
+    {
+      "count": 2,
+      "failure_message_sha256": "4b241ec40caf7aade503160c0d11c15d750e51fdbd9d5e557a931240405508ff",
+      "last_checkpoint_id": "super_nerd",
+      "public_category": "mt_moon_super_nerd_battle_completion"
+    },
+    {
+      "count": 1,
+      "failure_message_sha256": "546409da1a4f8a469ceeacdd89da5b1aad71c3631ba2d243c79f74c0dfd2b9a1",
+      "last_checkpoint_id": "b4_key_wing",
+      "public_category": "hideout_active_battler_pp_state"
+    },
+    {
+      "count": 1,
+      "failure_message_sha256": "54efbd56eb780dfcfd1478d9bb12116e44efba2f82af1adc633d096fdc91bd8d",
+      "last_checkpoint_id": "mt_moon_entered",
+      "public_category": "mt_moon_zubat_persistent_capture"
+    },
+    {
+      "count": 1,
+      "failure_message_sha256": "784396a62a49694a33d948fcbcdc5277f195c328116ac2ddc21a869916a6f522",
+      "last_checkpoint_id": "brock_defeated",
+      "public_category": "pewter_mart_moving_npc"
+    }
+  ],
+  "gate": {
+    "attempts_required": 12,
+    "maximum_failures": 2,
+    "minimum_mansion_returned_successes": 10,
+    "no_private_path_or_identity_leak": true,
+    "no_repeated_deterministic_failure_stage": true,
+    "one_use_per_seed": true
+  },
+  "interpretation": {
+    "gate_passed": false,
+    "learning_counter_changed": false,
+    "official_lineage_created": false,
+    "repair_scope": [
+      "Accept the legal unspent thirteen-Potion Mt. Moon reserve.",
+      "Navigate the Pewter Mart clerk through either safe aisle around its moving customer.",
+      "Reselect the declared move semantically across multi-opponent trainer turns.",
+      "Recover a low living lead before the first mandatory Rocket Hideout B4 fight."
+    ],
+    "successor_plan_freeze_allowed": false
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "recorded_on": "2026-08-28",
+  "runs": [
+    {
+      "actions": 3496,
+      "frames": 355937,
+      "harness_seed": 9900037,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "269ce6685f0ab9b85410bd04505dc594940cc81de99e85f2ada020043b2d90f3",
+      "status": "failed"
+    },
+    {
+      "actions": 3801,
+      "frames": 389022,
+      "harness_seed": 9900038,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "ef5418b766be0477c156ad36d867759a33876598718c6ec957859129314c3d1e",
+      "status": "failed"
+    },
+    {
+      "actions": 3400,
+      "frames": 350353,
+      "harness_seed": 9900039,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "223db7e13faa9b8700b4d7723dda045978666cd8da483350d4882dfc943df8e6",
+      "status": "failed"
+    },
+    {
+      "actions": 4110,
+      "frames": 430258,
+      "harness_seed": 9900040,
+      "last_checkpoint_id": "super_nerd",
+      "private_ledger_sha256": "92185d4d413b1dddea390957b0f0f5361d396ccb26e8050181ae626f20bec785",
+      "status": "failed"
+    },
+    {
+      "actions": 25841,
+      "frames": 2521647,
+      "harness_seed": 9900041,
+      "last_checkpoint_id": "b4_key_wing",
+      "private_ledger_sha256": "60d711e277006babd858d2888b0dde0e516a4e28d2714562f05535deef6e4b26",
+      "status": "failed"
+    },
+    {
+      "actions": 3622,
+      "frames": 372056,
+      "harness_seed": 9900042,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "ffdeb30e3731310cb72a881cff2227ba5060d27cac86d5eb5cb2ad116777cec0",
+      "status": "failed"
+    },
+    {
+      "actions": 4022,
+      "frames": 418468,
+      "harness_seed": 9900043,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "5e544e196dc6ae024e7df702aabf6435ec4d37026d14efc9ff67b6e5ed907c3d",
+      "status": "failed"
+    },
+    {
+      "actions": 4253,
+      "frames": 455703,
+      "harness_seed": 9900044,
+      "last_checkpoint_id": "super_nerd",
+      "private_ledger_sha256": "235cc1b3bcf40fa15bcb6c620afad803e3de75618890ce8d17a57f56cee41936",
+      "status": "failed"
+    },
+    {
+      "actions": 37145,
+      "checkpoint_completed": 275,
+      "checkpoint_id": "mansion_returned",
+      "checkpoint_total": 312,
+      "frames": 7199833,
+      "harness_seed": 9900045,
+      "private_ledger_sha256": "aeeada09536ceddad47e1b7265cd636e8e86c16ea3f8b0caf266baf94535bb88",
+      "status": "mansion_returned"
+    },
+    {
+      "actions": 3585,
+      "frames": 366464,
+      "harness_seed": 9900046,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "9e6640f7805b78930e4d6d966681f41e2f7677da9a860e70844fe5824a68c98c",
+      "status": "failed"
+    },
+    {
+      "actions": 2282,
+      "frames": 237033,
+      "harness_seed": 9900047,
+      "last_checkpoint_id": "brock_defeated",
+      "private_ledger_sha256": "2fb9f7d7a0b33d760cde1466522c491fbffe5f4039362de810c9d05fe7b732a2",
+      "status": "failed"
+    },
+    {
+      "actions": 3527,
+      "frames": 352291,
+      "harness_seed": 9900048,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "d400f1d5236d61e74a8715d919cfe4b48c04186de7718e662eb0512c088e4e61",
+      "status": "failed"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-fresh-teacher-exact-source-yield.v1",
+  "summary": {
+    "attempts": 12,
+    "failures": 11,
+    "mansion_returned_successes": 1,
+    "success_rate_millionths": 83333
+  },
+  "unsupported_claims": [
+    "model_training_began",
+    "official_fresh_root_created",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_policy_labels",
+    "teacher_population_yield_qualified"
+  ]
+}

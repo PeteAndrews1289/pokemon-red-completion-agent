@@ -6,6 +6,34 @@ Status: active operating assignment as of 2026-08-28. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: qualify and publish the measured teacher repair; future yield remains closed
+
+Published exact source `eac8e745` passed CI `33167842692/1` but failed its fixed fresh-world gate
+at 1/12. Seeds 9900037–9900048 are consumed and may never retry, the old plan remains forbidden,
+and no successor plan may freeze. Codex owns the bounded capability repair, complete qualification,
+publication, exact-main CI check, future diagnostic operation, and evidence-backed adjudication.
+
+The final unchanged source bundle `5285cce4` reaches `mansion_returned` on development seeds
+9910035–9910037: 3/3 across 115,696 controller actions and 21,246,875 frames. Those runs are
+non-promotable teacher diagnostics. Earlier seeds 9910001–9910034 used changing source and remain
+failure-localization history, not a population estimate or official capacity.
+
+Antigravity is the current read-only architecture, independence, code-correctness, and overclaim
+challenger. Claude's prior exact-source and prospective-yield requirements remain accepted; a new
+Claude review is unnecessary while its usage is constrained. Neither reviewer edits, publishes,
+opens private state, executes gameplay, fits, or grants authority. Codex records acceptance,
+rejection, or deferral for every material finding.
+
+The repair passes 5,657 repository tests, Ruff, Mypy over 309 source files, registry, documentation,
+and public-artifact checks. Antigravity returned publication GO and future-gate conditional GO
+with P0/P1/P2 all zero. Publish and require exact-main green CI. Only then run seeds
+9900049–9900060 exactly once. Require at least ten mansion-returned terminals, at most two
+failures, no repeated deterministic failure stage, and no leak. Pass opens a new train-only root
+plan and action-free recensus; failure keeps the freeze closed. Do not retry consumed seeds, reuse
+the old plan, promote diagnostics, materialize development, fit, open sealed Red or Crystal, or
+count teacher actions as model learning. **Causal train 1/60 · powered fit 0 · authority 0 ·
+transfer 0.**
+
 ## Current override: fresh train episode lineages; recensus before outcome collection
 
 Codex owns the fresh-root generator, qualification, publication, train-first generation, and the
