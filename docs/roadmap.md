@@ -2865,3 +2865,32 @@ test at 0/12, but do not spend the active lane manufacturing its missing capture
 Exit gate: the learned manager makes genuine multi-need decisions under changed Red states and the
 same frozen representation provides measurable sample-efficiency value on a held-out title. A
 complete Red route alone does not satisfy this gate.
+
+## Independent-root capacity gate — active 2026-08-28
+
+- [x] Census the authenticated root inventory without opening a cartridge or learner.
+- [x] Prove the current curriculum is under-capacity: train 54/90, development 63/105, combined
+  63/195 with a 132-root lower-bound deficit.
+- [x] Implement a train-first 6/6/1 scarce-template plan with three genuine storage pressures.
+- [x] Enforce clean power, pre-input durable assignment claims, no restores, one terminal save,
+  actual-event prefix sealing before conditioning, and action-free menu verification.
+- [x] Preserve every frozen success/failure disposition so a crash cannot erase valid sibling roots
+  or justify rerolling a seed.
+- [x] Bind the exact generator, materializer bytes, source bundle, teacher configuration, capacity
+  evidence and assignment claim into the execution/receipt chain.
+- [x] Add an effect-free external plan freezer with one source-frozen seed schedule and no caller
+  seed, ROM, teacher, outcome or model surface.
+- [x] Obtain a second independent reviewer: Claude returned GO with no P0 or confirmed P1; its
+  trusted-source limitation is recorded and its ROM single-read hardening is implemented.
+- [x] Pass the complete repository gate after final source-bound registry regeneration: 119 focused
+  and 5,596 repository-wide tests passed, with zero failures; static, privacy and documentation
+  gates are green.
+- [ ] Publish the generator and wait for exact-main green CI.
+- [ ] Freeze and preflight a new external exact-main plan while leaving the executable checkout on
+  the exact commit named by the plan.
+- [ ] Only then decide whether to execute the first clean-power root; generation remains separate
+  from outcome collection, fitting, sealed Red evaluation and Crystal transfer.
+
+Reorientation: this gate manufactures independent Red training situations for the shared semantic
+option model. It advances the living-Pokédex mission only if later action-free recensus shows more
+genuine multi-option capacity; the 6/6/1 arithmetic is not itself a training-readiness claim.

@@ -2482,3 +2482,27 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - let a verifier choose or replace the actor's action;
 - describe a source-qualified prior as a trained model;
 - promote authority from teacher agreement, lower training loss, one root or one successful run.
+
+## Current review assignments — 2026-08-28
+
+### Codex workhorse lane
+
+- Capability: publish an auditable clean-power generator for independent Red train roots.
+- Learned authority: none; no model is fitted, queried or executed in this lane.
+- Transfer relevance: the root menus and pressure features are identity-free, while Red-specific
+  boot, route and cartridge conditioning remain in the adapter.
+- Stop condition: any retry path, unbound executable byte, hidden failed assignment, private leak,
+  or claim that 6/6/1 guarantees matching capacity.
+
+### Antigravity audit lane
+
+- Review first and after material repairs; current verdict is GO to publish, not execute.
+- Attack durable ordering, exact dependency bytes, success/failure completeness and causal
+  independence. Report exact counterexamples; do not create plans or touch private data.
+
+### Claude audit lane
+
+- Completed read-only against the stable diff: GO to publish, no P0 or confirmed P1.
+- Its same-process introspection limitation is accepted and recorded as a source-binding requirement
+  for Crystal; its ROM single-read hardening is implemented. No reviewer verdict authorizes roots,
+  outcomes, fitting, sealed Red, Crystal execution or a full replay.

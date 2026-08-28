@@ -7542,3 +7542,53 @@ files say so.
 
 That is the standard. This project's whole value is that its numbers can be trusted, and the only
 way that stays true is if being wrong in public is cheaper than being vague.
+
+---
+
+## 11. Active handoff — independent Red curriculum roots (2026-08-28)
+
+The action-free capacity census proved that the historical private inventory cannot support the
+living-Pokédex causal curriculum: train matching is 54/90, development matching is 63/105, and the
+joint deficit is 132. The active branch therefore implements a clean-power generator for a first
+train-only capacity tranche. This is infrastructure before model fitting, not training.
+
+Each assignment is frozen before play, durably consumed before the emulator opens, starts from
+clean power, forbids state restoration, records the actual frame/controller prefix, seals that
+prefix before target conditioning, saves once, and verifies its terminal three-option menu without
+input. Storage variants reach 17/18/19 specimens through real catches. Template 5 deliberately
+discards the final Poké Ball because its menu is resupply/unlock/explore; it is not an acquisition
+root.
+
+A first Antigravity audit correctly found that requiring 13/13 successful roots made one crash
+poison the entire tranche. The repair now requires a terminal success or permanently consumed
+failure disposition for every frozen assignment, retains every valid sibling root, forbids retry,
+and requires an action-free recensus before any successor targets. Antigravity's zero-ball finding
+was rejected as a category error and retracted on re-audit; the repaired implementation received a
+publish GO. Codex still owns the decision and is running independent mutation and full-suite checks.
+
+A later Antigravity pass found a second valid P0 before publication: generic attribute forwarding
+on the fresh-episode port made low-level emulator effects reachable around the transcript meter.
+That fallback is gone from this rail. The clean-power guard exposes only explicit read operations,
+and the emulator port independently counts frames, button-down/up events and state captures. The
+two meters reconcile after every phase; injected frame, button and capture bypasses now consume the
+assignment as a failure. The repaired boundary received a second GO to publish, not execute.
+
+Claude then independently reviewed the stabilized diff and returned GO to publish with no P0 or
+confirmed P1. Its central P2 is accepted as a transfer constraint: Python private names are not a
+sandbox against deliberately introspective same-process code. The exact runner, teacher and
+conditioner byte bindings are therefore the security boundary; Crystal must preserve that boundary.
+Codex rejected more name-mangling as false assurance and accepted Claude's concrete ROM single-read
+hardening. Claude's process-global and low-value CLI-test notes remain non-blocking because the two
+durable filesystem claims enforce no-retry and the CLI test guards against future authority creep.
+
+Final local qualification passed 119 focused tests and 5,596 repository-wide tests, with three
+intentional deselections, one expected xfail and zero failures. Ruff, the configured 308-file type
+gate, public-artifact/privacy checks, documentation checks and all three source-bound registry
+reproducers passed. No ROM, emulator, root, teacher, outcome, prediction or model fit was executed
+to obtain those results.
+
+Immediate order: publish the implementation, wait for exact-main green CI, then freeze the
+source-bound plan as a new external file while the checkout remains on that exact commit. Committing
+the plan would move HEAD and invalidate its source-commit binding. Preflight and any later generation
+must therefore use the unchanged green implementation checkout. Do not generate a cartridge root
+from an unpublished or non-green source, and do not call this model training.

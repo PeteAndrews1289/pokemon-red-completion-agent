@@ -141,6 +141,127 @@ class CausallyMeteredEmulator:
         return getattr(self._delegate, name)
 
 
+class OneWayEmulatorPort:
+    """Keep raw frame, controller, and state-capture calls in this module.
+
+    Higher-level one-shot runtimes may impose stricter ordering and accounting
+    while this port preserves the repository rule that raw emulator primitives
+    never spread into experiment or campaign modules.  It deliberately exposes
+    no restore operation.
+
+    This is a narrow capability surface, not a sandbox against deliberately
+    introspective Python running in the same process.  A caller that supplies
+    callbacks must bind their exact executable source; private-name syntax
+    cannot replace that provenance boundary.  The independent counters below
+    detect ordinary or accidental low-level bypasses inside authenticated code.
+    """
+
+    __slots__ = (
+        "__advanced_frames",
+        "__capture_token",
+        "__controller_actions",
+        "__controller_events",
+        "__delegate",
+        "__state_captures",
+    )
+
+    def __init__(self, delegate: Any, *, capture_token: object) -> None:
+        self.__advanced_frames = 0
+        self.__capture_token = capture_token
+        self.__controller_actions = 0
+        self.__controller_events = 0
+        self.__delegate = delegate
+        self.__state_captures = 0
+
+    @property
+    def advanced_frames(self) -> int:
+        return self.__advanced_frames
+
+    @property
+    def controller_actions(self) -> int:
+        return self.__controller_actions
+
+    @property
+    def controller_events(self) -> int:
+        return self.__controller_events
+
+    @property
+    def state_captures(self) -> int:
+        return self.__state_captures
+
+    @property
+    def frame_count(self) -> int:
+        return self.__delegate.frame_count
+
+    @property
+    def pressed_buttons(self) -> frozenset[str]:
+        return self.__delegate.pressed_buttons
+
+    @property
+    def fingerprint(self) -> RomFingerprint:
+        return self.__delegate.fingerprint
+
+    @property
+    def window_name(self) -> str:
+        return self.__delegate.window_name
+
+    @property
+    def speed(self) -> int:
+        return self.__delegate.speed
+
+    @property
+    def pyboy_version(self) -> str:
+        return self.__delegate.pyboy_version
+
+    def advance(self, frames: int) -> None:
+        before = self.frame_count
+        try:
+            self.__delegate.tick(frames)
+        finally:
+            after = self.frame_count
+            if after < before:
+                raise EmulatorError(
+                    "one-way emulator frame counter moved backwards"
+                )
+            self.__advanced_frames += after - before
+
+    def button_down(self, button: str) -> None:
+        self.__delegate.press(button)
+        self.__controller_actions += 1
+        self.__controller_events += 1
+
+    def button_up(self, button: str) -> None:
+        self.__delegate.release(button)
+        self.__controller_events += 1
+
+    def capture_state_bytes(self, *, token: object) -> bytes:
+        if token is not self.__capture_token:
+            raise EmulatorError("one-way emulator capture authority differs")
+        payload = self.__delegate.save_state_bytes()
+        self.__state_captures += 1
+        return payload
+
+    def close(self) -> None:
+        self.__delegate.close()
+
+    def read_u8(self, address: int) -> int:
+        return self.__delegate.read_u8(address)
+
+    def read_wram(self, bank: int, address: int, length: int) -> bytes:
+        return self.__delegate.read_wram(bank, address, length)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        return self.__delegate.read_cartridge_ram_u8(bank, address)
+
+    def read_cartridge_ram(
+        self,
+        bank: int,
+        address: int,
+        length: int,
+    ) -> bytes:
+        return self.__delegate.read_cartridge_ram(bank, address, length)
+
+
 def _load_pyboy_factory() -> PyBoyFactory:
     try:
         from pyboy import PyBoy

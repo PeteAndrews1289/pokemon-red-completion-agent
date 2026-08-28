@@ -1441,3 +1441,17 @@ The same observer boundary is intended for live qualification, demonstration col
 fitting, zero-shot evaluation and later causal runs. A counter advances only when the corresponding
 authenticated workflow publishes real progress. Crystal V3 remains at zero and private-context
 access remains false until the published plan passes both external reviews.
+
+## Fresh-root generator dashboard semantics
+
+The next dashboard update must distinguish capacity generation from learning. One card should show
+the 13 frozen train assignments as `unclaimed`, `root generated`, `failed consumed`, or
+`interrupted consumed`; another should show action-free matching before and after recensus. The
+training counter, prediction counter, outcome counter and Crystal counter remain zero during every
+generator episode.
+
+The live game view may display the clean-power teacher episode, but it must also show the current
+phase—boot jitter, deterministic setup, target conditioning, terminal verification—and whether the
+durable assignment claim already exists. A failed episode stays visible and cannot acquire a retry
+button. The current local dashboard is historical until this exact-main generator is published and
+a separately authorized execution begins.

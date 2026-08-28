@@ -143,6 +143,36 @@ def test_stable_context_uses_one_semantic_wait_without_relocation() -> None:
     assert "actions.execute(MacroAction(MacroActionKind.WAIT))" in source
 
 
+def test_active_box_target_is_narrow_and_storage_only() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    error = module["GoalManagerContextMaterializationError"]
+
+    with pytest.raises(error, match="only for storage-ready"):
+        module["_apply_mode"](
+            "stable",
+            object(),
+            object(),
+            object(),
+            object(),
+            great_ball_quantity=None,
+            hyper_potion_quantity=None,
+            target_safety_pressure=None,
+            maximum_safety_pressure=None,
+            target_active_box_count=17,
+        )
+
+    with pytest.raises(error, match="outside the qualified range"):
+        module["_storage_ready_boundary"](
+            object(),
+            object(),
+            object(),
+            object(),
+            target_active_box_count=16,
+        )
+
+    assert module["_STORAGE_QUALIFIED_ACTIVE_BOX_COUNTS"] == {17, 18, 19}
+
+
 def test_story_resource_variant_discards_exactly_one_ball_at_the_same_center(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

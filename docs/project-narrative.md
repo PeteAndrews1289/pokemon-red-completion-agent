@@ -7204,3 +7204,25 @@ A concise interview description is:
 - [Collection Protocol](collection-protocol.md)
 - [Completion Contract](completion-contract.md)
 - [Assistance Policy](assistance-policy.md)
+
+## Narrative checkpoint — from completed route to causal curriculum capacity
+
+The project reached a useful negative result: a large archive of authenticated Red checkpoints was
+not automatically a viable learning curriculum. A graph census found only 54 independent matches
+for 90 planned train menus and 63 for 105 development menus. Many visually different captures were
+the same causal lineage, and two critical option templates had only three compatible roots each.
+
+The response was not another full-game replay. The new generator commits a target before play,
+boots a fresh cartridge episode, varies the pre-controller timing, runs the deterministic teacher
+only to the post-Mansion frontier, then creates one real in-game pressure variant. The resulting
+state is accepted only if the complete semantic menu is observable without another action. Failed
+attempts are retained alongside successes, so reliability failures cannot be hidden by replacing a
+seed. This turns a routing achievement into a defensible causal-data pipeline and creates the
+capacity needed to ask the real question: whether one identity-free option model can improve on Red
+and transfer its representation to Crystal.
+
+Two outside reviews materially improved the boundary before publication. Antigravity found both a
+failure policy that would have discarded valid sibling roots and an emulator-port forwarding hole;
+Claude then independently verified the repairs and made the trusted-source boundary explicit for
+future Crystal reuse. The finished local gate passed 5,596 tests without opening a cartridge or
+incrementing a learning counter.

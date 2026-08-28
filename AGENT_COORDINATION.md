@@ -3010,3 +3010,19 @@ Earlier highlights:
 - `9c2fc60` Training target derived from the League (55) rather than an internal spread that
   anchored to an overlevelled escort and cost 4,570 battles to overshoot parity by nineteen levels.
 - `c5882c4`, `510a478` Pokédex contract, and the target made a function of a run's choices.
+
+## Active roles — independent-root capacity gate (2026-08-28)
+
+- **Codex:** implementation owner and final decision maker. It writes code, adjudicates audit
+  findings, runs verification, publishes, and keeps the mission/handoff/narrative aligned.
+- **Antigravity:** early adversarial reviewer with plentiful current usage. It attacks claim order,
+  nonretry semantics, executable binding, private/public isolation and statistical overclaim. Its
+  findings are advice, not authority; the zero-ball objection was rejected and later retracted.
+- **Claude:** completed a later independent read-only review of the stable diff and returned GO to
+  publish with no P0 or confirmed P1. Its same-process introspection warning is accepted as a
+  source-binding requirement for Crystal, and its ROM single-read hardening is implemented. It did
+  not open ROMs or private artifacts and its verdict grants no execution authority.
+
+Every session closes with: mission statement, newly earned capability, authority still withheld,
+cheapest falsifier, exact next gate, and documentation update. External reviewers may disagree;
+Codex records the disagreement and its evidence instead of silently averaging opinions.
