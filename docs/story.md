@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: sixty-three old classrooms, one hundred thirty-two new worlds
+
+The estimate said at most 67 old saves might help. The cartridge-bound census asked the harder
+question: which of those saves can actually present each authentic three-way lesson without
+sharing a lineage? It restored 68 eligible roots, accepted 67 as prospectively independent, built
+414 honest compatibility edges, and found that only 63 could coexist in one train-plus-exam
+assignment. Train reaches 54 of 90. The full 195-context classroom is short by at least 132 worlds.
+
+The holes are informative. Two train menu templates have only three compatible old roots, another
+has eight, and one future exam menu—evolve, manage storage, or unlock access—has none. Storage
+pressure varies only twice when the syllabus requires at least three distinct levels. This is no
+longer “collect more saves.” It is a precise generation brief.
+
+So the next agent does not duplicate a checkpoint or jiggle its random number generator. It starts
+new Red episodes, prospectively names their lineages, deliberately reaches the scarce menus and
+missing pressure states, and builds the train partition first. The census itself pressed no button
+and fit no model. The board remains **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER
+0**, but the distance to honest training is finally measured rather than guessed.
+
 ## Current checkpoint: build a real classroom, not 195 photocopies
 
 One honest lesson was never going to teach Pokémon. The next classroom now has a real syllabus:

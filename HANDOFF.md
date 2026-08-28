@@ -12,6 +12,30 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-28: exact capacity measured; fresh train episode generation is the next gate
+
+Published main `cb18a8b5ffcc256707ee3cafa94f419565f17ab6` passed exact-main CI
+`33140010028/1`. The sole action-free census then authenticated 81 historic contexts plus one
+supplemental checkpoint and produced one aggregate path-free result with controller actions,
+frames, claims, provider executions, behavior commitments, teacher queries, predictions, outcomes,
+and fits all zero.
+
+The [result](docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json) is stricter
+than the public upper bound: **67 prospectively qualified lineages, 414 compatibility edges, train
+matching 54/90, development matching 63/105 in isolation, and disjoint combined matching 63/195**.
+At least 36 new compatible train roots and at least 132 new combined roots are required. Those are
+still lower bounds because new episodes can fail menu compatibility. Do not add the separate train
+and development matchings; they reuse the same physical roots and cannot coexist.
+
+Development menu `red-capture-development-semantic-menu-01`—evolve, manage storage, and unlock
+access—has zero compatible historic root. Historic storage pressure has only two values where the
+gate requires three. The next work is not fitting and not another census of the same inventory:
+qualify a fresh episode-lineage generator, begin every root as a new prospectively assigned
+emulator episode, target the train templates with only 3, 3, and 8 compatible historic roots plus
+the missing storage-pressure value, create at least 36 compatible train roots, and recensus. A
+clone, copied save, local RNG nudge, or new hash inherits its parent lineage and adds no capacity.
+Keep development unmaterialized until the train partition is populated and collected.
+
 ## 2026-08-27: powered causal curriculum designed; exact independent capacity is the next gate
 
 The active successor is no longer the consumed one-row campaign. It is a preregistered Red

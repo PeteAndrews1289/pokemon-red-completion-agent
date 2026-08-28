@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 28 exact-capacity checkpoint:** Published main `cb18a8b5` passed CI `33140010028/1`.
+> The [action-free census](evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
+> authenticated 67 independent lineages and 414 compatibility edges, then measured **train 54/90,
+> development 63/105 in isolation, and disjoint combined 63/195**. At least 36 new compatible train
+> roots and 132 new combined roots are required. One development evolve/storage/access menu has
+> zero historic compatible roots, and storage pressure has only two of the required three values.
+>
+> Next qualify a fresh episode-lineage generator, target the scarce train templates and missing
+> storage pressure, create at least 36 compatible train roots, and recensus before collecting an
+> outcome. Keep development unmaterialized until train is populated and collected. A clone, copied
+> save, RNG nudge, or rehash inherits its parent lineage. The census had actions, frames, claims,
+> teachers, predictions, outcomes, and fits all zero. **Causal train 1/60 · powered fit 0 · authority
+> 0 · transfer 0.**
+
 > **August 27 powered-curriculum checkpoint:** The next Red learner is preregistered at **90 train
 > contexts / at least 60 settled outcomes** and **105 untouched development contexts / at least 102
 > complete paired comparisons**. Every incomplete comparison is scored as a candidate loss; the

@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 28 scene: the old saves face the real matching test
+
+Open on the optimistic **67 ROOT UPPER BOUND**, then turn it into a bipartite graph: **68 ELIGIBLE
+ROOTS · 67 INDEPENDENT LINEAGES · 15 AUTHENTIC MENUS · 414 EDGES**. Run maximum matching and stop
+the counter at **TRAIN 54/90 · DEVELOPMENT 63/105 IN ISOLATION · DISJOINT COMBINED 63/195**. Stamp
+**FRESH TRAIN DEFICIT ≥36 · FRESH COMBINED DEFICIT ≥132**.
+
+Highlight two scarce train menus at **3 ROOTS**, another at **8**, then make one exam card fall
+through the graph: **EVOLVE · MANAGE STORAGE · UNLOCK ACCESS — 0 COMPATIBLE ROOTS**. Put a second
+warning beside it: **STORAGE PRESSURE 2/3 VALUES**. Cross out the tempting arithmetic
+**54 + 63** because both partitions would be reusing the same worlds.
+
+Show every protected counter at zero while the census runs: **ACTIONS · FRAMES · CLAIMS · TEACHER
+· PREDICTIONS · OUTCOMES · FITS = 0**. End on the new rail: **NEW EPISODE LINEAGE FROM START →
+SCARCE TRAIN MENUS + THIRD STORAGE PRESSURE → ≥36 COMPATIBLE TRAIN ROOTS → RECENSUS → COLLECT TRAIN
+FIRST → GUARDED FIT → BUILD UNTOUCHED EXAM → CRYSTAL TRANSFER**. Keep **CAUSAL TRAIN 1/60 ·
+POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 27 scene: the denominator becomes honest
 
 Start on **CAUSAL TRAIN 1/1**, then pull the camera back and reveal that the denominator meant

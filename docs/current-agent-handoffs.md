@@ -1,10 +1,32 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-27. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-28. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: fresh train episode lineages; recensus before outcome collection
+
+Codex owns the fresh-root generator, qualification, publication, train-first generation, and the
+follow-up action-free census. The exact
+[capacity result](evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json) measured 67
+independent lineages, 414 compatibility edges, train matching 54/90, development matching 63/105
+in isolation, and disjoint combined matching 63/195. At least 36 new compatible train roots and 132
+new combined roots are required. The generator must begin each root as a new prospectively assigned
+emulator episode and target the train templates with only 3, 3, and 8 historic roots plus a third
+storage-pressure value. A copied state, RNG perturbation, or rehash adds no capacity.
+
+Antigravity challenges architecture, clone independence, menu targeting, and cross-title value.
+Claude challenges episode-level statistical independence, partition leakage, selection effects,
+and whether the generator can feed the guarded fit without creating teacher labels. Both are
+read-only reviewers; neither edits, publishes, executes, or decides. Codex adjudicates their
+findings against tests and the mission.
+
+Do not materialize development, collect outcomes, fit, execute sealed Red or Crystal, or treat a
+teacher-completed episode as evaluation. The immediate falsifier is whether at least 36 fresh
+compatible train roots increase the exact train matching above 54 while every follow-up census
+effect remains zero. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## Current override: powered Red capacity first; no fitting until the gate passes
 

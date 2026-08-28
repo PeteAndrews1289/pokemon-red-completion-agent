@@ -5,28 +5,22 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 27, 2026): qualify a powered Red causal curriculum, then
-> measure its real capacity.** The one authentic negative row remains useful plumbing evidence,
-> not a trainable model. The successor preregisters 90 independent Red train contexts, at least
-> 60 settled train outcomes, and 105 untouched same-reset development contexts with at least 102
-> complete comparisons against random, cost-only, and myopic controls. Every incomplete exam
-> context is scored as a candidate loss; the design retains 83.2% prospective power even with all
-> three allowed incomplete contexts. It covers seven direct
-> living-Dex option kinds and admits only the exact 16-dimensional feature support Red can
-> actually identify. Development outcomes can never become training targets, and the guarded fit
-> entry fails closed before fitting when capacity, information, feature support, success, or
-> separation is inadequate.
+> **Current product focus (August 28, 2026): generate genuinely new Red classroom episodes.** The
+> powered curriculum is published: 90 train contexts with at least 60 settled outcomes and 105
+> untouched development contexts with at least 102 complete comparisons. Every incomplete exam
+> is a candidate loss, preserving 83.2% power under all three allowed incompletes. The guarded fit
+> admits only Red's exact 16-dimensional supported feature projection and excludes development
+> outcomes structurally.
 >
-> The [public capacity bound](docs/evidence/living-dex-causal-public-capacity-bound-v1-2026-08-27.json)
-> proves that the historic pool can supply at most 67 qualified roots before menu compatibility is
-> checked. Therefore at least 23 new independent roots are needed for train and at least 128 for
-> the combined train-plus-development design; the exact deficit may be larger. Byte clones, local
-> RNG changes, and rehashed states inherit their parent episode lineage. Next publish this design,
-> run its action-free maximum-matching census, and create fresh prospectively assigned Red harness
-> episodes for the measured deficit. **Causal train 1/60 · authority 0 · transfer 0.**
-> The [local qualification](docs/evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
-> records **190 focused · 5,531 full-suite · 306 typed source files** and the Claude/Antigravity
-> adjudication. It authorizes publication and the action-free census only, not collection or fit.
+> The [exact action-free census](docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
+> measured **67 independent lineages · 414 compatibility edges · train 54/90 · development 63/105
+> in isolation · disjoint combined 63/195**. The real lower bounds are therefore **36 new compatible
+> train roots and 132 new combined roots**. One development menu—evolve, manage storage, and unlock
+> access—has no compatible historic root, and storage pressure has only two values where the gate
+> requires three. Next qualify a train-first fresh-episode generator, target the scarce templates
+> and missing pressure diversity, create at least 36 compatible train lineages, and recensus before
+> collecting an outcome. Byte clones, local RNG changes, and rehashed states do not count.
+> **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 > **Current product focus (August 27, 2026): the first causal Red lesson settled; build breadth
 > before fitting.** The one-shot campaign is permanently consumed. Its selected skill raised a

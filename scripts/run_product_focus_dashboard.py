@@ -127,23 +127,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Powered Red curriculum · action-free capacity gate",
+        stage="Powered Red curriculum · fresh episode capacity",
         message=(
-            "One negative row proves the causal pipe, not a model. The powered design needs at "
-            "least 60 train examples and 102 untouched paired development comparisons. Next: an "
-            "exact action-free root-to-menu capacity census."
+            "The exact census found train capacity 54/90 and disjoint combined capacity 63/195. "
+            "Next: create genuinely new train-first episode lineages for the measured deficit."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=(
-            "Red causal curriculum · publish → maximum matching → fresh episode lineages → "
-            "train first"
-        ),
+        location="Red causal curriculum · fresh lineages → recensus → collect train first",
         collection_target=90,
         model=DashboardModelState(
             mode="waiting",
             candidate="Unfitted powered causal living-Dex policy · actual Red feature rank 16",
             choice=(
-                "No active choice · next: independent-root census, then fresh Red train outcomes"
+                "No active choice · next: fresh compatible Red roots, then train outcomes"
             ),
             confidence=None,
             decisions=1,
@@ -191,8 +187,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "worst-case power 83.2% · kinds 7 · candidates 3"
             ),
             (
-                "Public capacity · qualified-root upper bound 67 · train deficit at least 23 · "
-                "combined deficit at least 128 · exact menu matching pending"
+                "Exact capacity · lineages 67 · train 54/90 (deficit 36) · development 63/105 "
+                "· combined 63/195 (deficit 132) · uncovered menus 1 · storage pressure 2/3"
             ),
             (
                 "Fit guard · actual Red feature rank 16 · distinct rows minimum 50 · candidate "

@@ -56,6 +56,37 @@ evaluation campaign must bind to the guarded powered-fit receipt. The
 [local qualification](evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
 records the full adjudication and **190 focused · 5,531 full-suite · 306 typed source files**.
 
+## Powered causal curriculum — post-census review and reorientation 2026-08-28
+
+The single action-free census at exact published main `cb18a8b5` found **67 independence-qualified
+historical roots**, of which **63** match at least one frozen menu. The observed compatibility graph
+can fill only **54/90 train**, **63/105 development in isolation**, and **63/195 disjoint combined**
+slots. The resulting deficits are respectively **36**, **42**, and **132**. The isolated partition
+deficits are not additive because both matchings draw from the same roots. Every protected-effect
+counter remained zero; this was inventory measurement, not gameplay, collection, prediction, or
+fit.
+
+Antigravity independently reproduced the repaired worst-case power and accepted the train-first
+direction, while retaining two later-gate cautions: upstream episode lineage must establish causal
+independence, and evaluation must bind to the guarded fit receipt. Claude then audited the complete
+post-census evidence and returned **CONDITIONAL GO with no P0**. It confirmed all three deficits and
+the development-versus-combined interpretation, and agreed that development should remain untouched
+until the train partition is populated and collected.
+
+Codex accepts Claude's two generator conditions. First, a fresh lineage identifier is evidence only
+when assigned before controller input to a distinct emulator episode; rehashing, RNG-nudging, or
+forking a shared checkpoint must fail closed. Second, the first tranche must raise matching capacity
+for the scarce train templates—historically only **3, 3, and 8** compatible roots—and introduce a
+third storage-pressure value. A bare count of 36 generated roots is insufficient. The next gate is
+therefore an action-free generator-qualification preflight with clone-rejection and per-template
+coverage tests, followed by recensus before any outcome collection.
+
+Claude's P2 provenance observation is also accepted: the curated public census receipt must be
+cryptographically and mechanically tied to the machine result rather than tested only against its
+own literals. That binding belongs in the publication repair before the generator is allowed to
+produce a tranche. No reviewer recommendation grants generation, model fitting, sealed Red access,
+Crystal execution, or learned authority.
+
 ## Namespace-successor result — success closes the lane 2026-08-27
 
 PR 83 passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI
