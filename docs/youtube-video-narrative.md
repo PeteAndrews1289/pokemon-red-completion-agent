@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: the first real lesson is a negative
+
+Open on the live counter climbing to **945 ACTIONS · 42,001 FRAMES**, then freeze on
+**PRODUCTION RUNTIME ERROR**. Do not cut to a retry. Show the independent observer stamping
+**ZERO GAIN · SETTLED NEGATIVE · SELECTED ARM ONLY · RETRY NO**, and move the board from
+**CAUSAL TRAIN 0/1 → 1/1**.
+
+Then reveal why the command still ended red. Animate authenticated `pysdl2-dll` writing its own
+staged library path, followed by the outer guard rejecting every nonempty path. Label it
+**TRUSTED SELF-INITIALIZATION MISREAD AS HOSTILE OVERRIDE**. Replay the same import without the ROM,
+then show **CLAUDE: ADMIT AT DEVELOPMENT RIGOR · ANTIGRAVITY: ADMIT AT DEVELOPMENT RIGOR**. Keep a
+warning visible: **OLD FINAL ORIGIN CHECK DID NOT RUN → NOT BENCHMARK EVIDENCE**.
+
+Replace the rule with a narrow gate: **PRE-RUN OVERRIDE: REJECT ALL**; **POST-RUN: ACCEPT EXACT
+AUTHENTICATED STAGED SDL PATH ONLY → REHASH CLOSURE → VERIFY LOADED ORIGIN**. Throw parent paths,
+prefix-poison paths, and symlink aliases at it; all bounce off.
+
+End by crossing out **RETRY · REFREEZE · FIT ONE ROW · CRYSTAL NOW**. Draw the next rail:
+**POWER ANALYSIS → MULTI-KIND / FAMILY / LOCATION / ROOT-DISJOINT RED DATA → TRAIN-ONLY FIT →
+UNTOUCHED PAIRED RED TEST → FREEZE WEIGHTS → ZERO-SHOT CRYSTAL**. Leave **AUTHORITY 0 · TRANSFER
+0** on screen.
+
 ## August 27 scene: no more doors—draw one real sample
 
 Flash **PR 90 GREEN → MAIN 6FD2286F → EXACT-MAIN CI 33118840112/1 GREEN**. Leave the frozen lesson

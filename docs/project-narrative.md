@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: the first authentic causal row is a measured failure
+
+The one-shot campaign finally crossed the line from infrastructure to data. Exact published Red
+source ran once, committed one random option, constructed only that runtime, and retained an
+independent observation after the selected skill raised a production-runtime error. The result is
+a settled negative train example: 945 selected-skill actions, 42,001 frames, zero verified gain,
+no teacher, no counterfactual target, and no retry. Its durable terminal and example hash join.
+
+The command still ended red because its outer guard reapplied a pre-run rule after SDL had loaded.
+The authenticated `pysdl2-dll` package sets its own staged library directory; the guard rejected
+that expected mutation before reaching the final origin check. The mechanism reproduces without
+a ROM. Claude and Antigravity agree that the row is valid for development and the exact-path
+repair preserves the trust boundary, while also agreeing that the missing old postcheck keeps this
+datum below benchmark rigor.
+
+This is the project's most important kind of progress: not a green demo, but an honest result that
+changes the board without changing the claim. **Causal train is now 1/1. Authority and transfer
+remain zero.** One row cannot teach a policy. The next phase must calculate power, collect varied
+Red decisions across disjoint families, locations, and roots, fit on train only, and beat controls
+on untouched Red outcomes before Crystal is allowed to test frozen knowledge.
+
 ## August 27: the last public gate closed; the next event must be data
 
 The direct consumer passed PR CI, landed on exact main as `6fd2286f`, and passed the main build

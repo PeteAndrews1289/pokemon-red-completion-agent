@@ -1,0 +1,132 @@
+{
+  "adjudication": {
+    "causal_train_example_admitted": true,
+    "development_rigor_only": true,
+    "reason": "The inner one-shot invocation returned after durably sealing a complete selected-arm-only settled negative example and its no-retry terminal. The outer failure was a reproduced false positive: authenticated pysdl2-dll initialized its own staged DLL path, which the wrapper's pre-runtime environment rule incorrectly reapplied after runtime import.",
+    "sealed_or_benchmark_eligible": false,
+    "terminal_example_hash_join_verified": true
+  },
+  "campaign_execution": {
+    "automatic_retry_allowed": false,
+    "controller_actions_total": 4803,
+    "durable_result_unknown": false,
+    "emulator_frames_total": 213341,
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33120953568,
+    "execution_commit": "76856ae1376266db5608217544b6f8a0908e6979",
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_invocations": 1,
+    "provider_executions": 1,
+    "root_claims": 1,
+    "source_bundle_sha256": "bed8d4a23cf2b0c19565573d484b8ce053d6f4bec14a3859aff6e2ac08e7ebce",
+    "teacher_queries": 0
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 1,
+    "development_episode_attempts": 0,
+    "model_fits": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcome_examples": 0
+  },
+  "external_review": {
+    "antigravity": {
+      "model": "gemini_3_1_pro_high",
+      "residual_risk": "same_uid_runtime_file_swap_is_outside_the_completed_postcheck_and_requires_stronger_loaded_binary_identity_for_a_higher_rigor_claim",
+      "verdict": "admit_as_one_development_rigor_settled_negative_and_accept_the_exact_path_repair"
+    },
+    "claude": {
+      "model": "opus",
+      "residual_risk": "the_failed_wrapper_did_not_reach_its_postruntime_loaded_origin_check_so_the_row_must_not_support_a_benchmark_or_sealed_claim",
+      "verdict": "admit_as_one_development_rigor_settled_negative_and_accept_the_exact_path_repair"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Prove that one authentic Red selected-arm option can traverse the title-neutral crash-safe journal and become a learner-facing causal datum.",
+    "cheapest_falsifier": "The durable terminal and example must replay exactly, contain only the selected target, settle from an independent post-action observation, and remain no-retry; any missing join censor or unselected target would make the row inadmissible.",
+    "learned_authority": "none_one_negative_pipeline_datum_does_not_fit_or_promote_a_policy",
+    "stop_condition": "The consumed campaign may never run again. Do not fit one row, open sealed Red, execute Crystal, promote authority, or claim game or living-Pokedex completion.",
+    "time_box": "one_private_invocation_one_terminal_complete",
+    "transfer_test": "After a powered family-disjoint Red causal curriculum and untouched Red comparison freeze the weights and compare zero-shot Crystal outcomes against preregistered random and cost-only controls before adaptation."
+  },
+  "next_gate": {
+    "campaign_retry_allowed": false,
+    "crystal_execution_allowed": false,
+    "model_fit_allowed_from_this_row_alone": false,
+    "next_action": "Publish the post-runtime trust-check repair, then design a powered multi-kind Red causal curriculum with train and untouched development coverage before any fit.",
+    "sealed_red_allowed": false
+  },
+  "outer_wrapper_failure": {
+    "cause_reproduced_without_rom": true,
+    "invocation_returned": true,
+    "postruntime_loaded_origin_check_completed_in_consumed_process": false,
+    "stage": "runtime_postauthentication",
+    "status": "consumed_postcheck_failed_no_retry"
+  },
+  "recorded_on": "2026-08-27",
+  "repair": {
+    "arbitrary_preexisting_pysdl2_dll_path_remains_forbidden": true,
+    "candidate_status": "local_unpublished",
+    "postruntime_allowance": "exact_authenticated_stage_sdl2dll_directory_only",
+    "postruntime_closure_rehash_and_loaded_sdl_binary_path_check_retained": true,
+    "regressions": [
+      "preexisting_path_rejected",
+      "exact_authenticated_self_initialization_accepted",
+      "parent_path_rejected",
+      "prefix_poison_rejected",
+      "symlink_alias_rejected",
+      "runtime_postcheck_exercises_finder_and_loaded_origin_checks"
+    ]
+  },
+  "result": {
+    "construction_attempts": 1,
+    "controller_action_delta": 945,
+    "emulator_frame_delta": 42001,
+    "execution_exception_type": "RedLivingDexProductionRuntimeError",
+    "execution_status": "raised_exception",
+    "outcome": {
+      "completion_gain": 0.0,
+      "dependency_unlock_gain": 0.0,
+      "status": "settled",
+      "verified_success": false
+    },
+    "partition": "train",
+    "retry_allowed": false,
+    "selected_candidate_target_only": true,
+    "terminal_status": "complete",
+    "unselected_action_targets": 0
+  },
+  "schema": "pokemon.red.living-dex-causal-campaign-terminal-evidence.v1",
+  "status": "one_authentic_development_rigor_settled_negative_train_example_campaign_consumed_no_retry",
+  "supported_claim": "One authentic Red randomized selected arm executed once and durably produced the first title-neutral settled causal train example. The row is a negative production-runtime outcome and proves the end-to-end data pipe, not policy quality.",
+  "tracked_private_identity_fields": 0,
+  "tracked_private_paths": 0,
+  "unsupported_claims": [
+    "crystal_execution",
+    "crystal_transfer",
+    "cross_game_story_completion",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark",
+    "sealed_red_result",
+    "successful_full_game_replay"
+  ],
+  "verification": {
+    "combined_wrapper_and_runtime_closure_tests_passed": 26,
+    "documentation_and_product_focus": "passed",
+    "full_suite_passed": 5478,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 299,
+    "mypy_status": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed",
+    "rom_free_same_version_sdl_self_initialization_reproduced": true,
+    "ruff": "passed_repository_wide"
+  }
+}

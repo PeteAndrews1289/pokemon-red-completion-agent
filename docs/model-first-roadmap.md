@@ -8,6 +8,38 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: one real negative lesson exists; scale evidence before fitting
+
+The one authorized Red invocation is complete and permanently consumed. Exact source `76856ae1`
+ran under green CI `33120953568/1`. Its randomly selected skill raised a production-runtime error,
+and the independent observer settled the resulting zero-gain outcome after 945 selected-skill
+actions and 42,001 frames. The durable journal contains exactly one selected-arm train target, no
+unselected target, one complete hash-joined terminal, and no retry.
+
+The outer command subsequently failed its post-runtime environment check. This was not a second
+game outcome: authenticated `pysdl2-dll` deterministically initialized its own staged DLL path,
+and the wrapper incorrectly treated that trusted runtime initialization like a hostile pre-run
+override. A ROM-free reproduction and independent Claude and Antigravity reviews agree that the
+row is admissible at development rigor. Because the old process short-circuited before its final
+loaded-origin check, it is explicitly ineligible for a benchmark or sealed claim. The repair
+accepts only the exact authenticated staged directory after import, then retains closure rehash
+and loaded-SDL-origin verification.
+
+The shortest honest sequence is now:
+
+1. publish the terminal evidence and exact post-runtime verifier repair;
+2. inventory action-free causal capacity across genuinely different Red option kinds, families,
+   locations, and physical roots;
+3. preregister a paired evaluation and calculate the sample size needed for its intended effect,
+   distinguishing the existing 8-train/4-development integration floor from statistical power;
+4. freeze and collect the powered Red train and untouched-development curriculum with full-support
+   propensities, selected-only targets, and explicit censoring diagnostics;
+5. fit Red train only and compare against random and cost-only controls on untouched Red cases;
+6. freeze weights only after that Red gate passes, then run zero-shot Crystal before adaptation.
+
+Do not rerun or refreeze the consumed campaign, fit one row, open sealed Red or Crystal, promote
+authority, or replay the game. **Causal train is 1/1; authority 0; transfer 0.**
+
 ## Current checkpoint: public engineering is closed; execute one authentic Red causal lesson
 
 PR 90 and exact-main push CI `33118840112/1` are green on executable commit `6fd2286f`. The
