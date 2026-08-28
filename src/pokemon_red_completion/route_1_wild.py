@@ -18,7 +18,19 @@ from pokemon_red_completion.observation import (
 ROUTE_1_WALKER_APPROACH = (14, 14)
 ROUTE_1_WALKER_YIELD = (15, 14)
 ROUTE_1_WALKER_CROSSED = (14, 13)
+ROUTE_1_WALKER_SOUTH_APPROACH = (14, 12)
+ROUTE_1_WALKER_SOUTH_YIELD = (15, 12)
 ROUTE_1_WALKER_CLEAR_ATTEMPTS = 24
+ROUTE_1_WALKER_GATES = {
+    (ROUTE_1_WALKER_APPROACH, "up"): (
+        ROUTE_1_WALKER_YIELD,
+        ROUTE_1_WALKER_CROSSED,
+    ),
+    (ROUTE_1_WALKER_SOUTH_APPROACH, "down"): (
+        ROUTE_1_WALKER_SOUTH_YIELD,
+        ROUTE_1_WALKER_CROSSED,
+    ),
+}
 
 
 class ActionExecutor(Protocol):
@@ -185,6 +197,7 @@ def move_with_wild_flees(
                 crossed, walker_flees, walker_retries = _yield_to_route_1_walker(
                     executor,
                     reader,
+                    crossing_direction=direction,
                     maximum_flees=maximum_flees - len(flees),
                     stabilization_frames=stabilization_frames,
                     maximum_step_attempts=maximum_step_attempts,
@@ -217,8 +230,7 @@ def _is_route_1_walker_gate(
         expected_map_id == MapId.ROUTE_1
         and state.map_id == MapId.ROUTE_1
         and state.battle_state == 0
-        and (state.player_x, state.player_y) == ROUTE_1_WALKER_APPROACH
-        and direction == "up"
+        and ((state.player_x, state.player_y), direction) in ROUTE_1_WALKER_GATES
     )
 
 
@@ -226,13 +238,14 @@ def _yield_to_route_1_walker(
     executor: ActionExecutor,
     reader: PokemonRedStateReader,
     *,
+    crossing_direction: str,
     maximum_flees: int,
     stabilization_frames: int,
     maximum_step_attempts: int,
     step_retry_wait_frames: int,
     error_type: type[Exception],
 ) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
-    """Create space for Route 1's horizontal youngster at one exact crossing."""
+    """Create space for Route 1's horizontal youngster from either side."""
 
     flees: tuple[Route1WildFleeEvidence, ...] = ()
     movement_retries = 0
@@ -241,15 +254,21 @@ def _yield_to_route_1_walker(
         if (
             state.map_id != MapId.ROUTE_1
             or state.battle_state != 0
-            or (state.player_x, state.player_y) != ROUTE_1_WALKER_APPROACH
+            or state.player_x is None
+            or state.player_y is None
         ):
             raise error_type("Route 1 walker recovery left its exact approach gate.")
+        approach_position = (state.player_x, state.player_y)
+        gate = ROUTE_1_WALKER_GATES.get((approach_position, crossing_direction))
+        if gate is None:
+            raise error_type("Route 1 walker recovery left its exact approach gate.")
+        yield_position, crossed_position = gate
 
         _, new_flees, retries, progressed = _move_walker_step(
             executor,
             reader,
             "right",
-            ROUTE_1_WALKER_YIELD,
+            yield_position,
             maximum_flees=maximum_flees - len(flees),
             stabilization_frames=stabilization_frames,
             maximum_step_attempts=maximum_step_attempts,
@@ -267,7 +286,7 @@ def _yield_to_route_1_walker(
             executor,
             reader,
             "left",
-            ROUTE_1_WALKER_APPROACH,
+            approach_position,
             maximum_flees=maximum_flees - len(flees),
             stabilization_frames=stabilization_frames,
             maximum_step_attempts=maximum_step_attempts,
@@ -283,8 +302,8 @@ def _yield_to_route_1_walker(
         crossed, new_flees, retries, progressed = _move_walker_step(
             executor,
             reader,
-            "up",
-            ROUTE_1_WALKER_CROSSED,
+            crossing_direction,
+            crossed_position,
             maximum_flees=maximum_flees - len(flees),
             stabilization_frames=stabilization_frames,
             maximum_step_attempts=1,
@@ -320,6 +339,7 @@ def _move_walker_step(
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         moved = reader.read()
         consumed = _direction_was_consumed(before, moved, direction)
+        fled_on_step = False
         if moved.battle_state:
             if moved.battle_state != 1 or moved.map_id != MapId.ROUTE_1:
                 raise error_type("Route 1 walker recovery entered a non-wild battle.")
@@ -339,11 +359,17 @@ def _move_walker_step(
                 ),
             )
             moved = reader.read()
+            fled_on_step = True
         if consumed:
             if (moved.player_x, moved.player_y) != expected_position:
                 raise error_type("Route 1 walker recovery crossed to an unexpected tile.")
             return moved, flees, retries, True
-        if not _same_route_boundary(before, moved, MapId.ROUTE_1):
+        boundary_preserved = (
+            _same_post_flee_boundary(before, moved, MapId.ROUTE_1)
+            if fled_on_step
+            else _same_route_boundary(before, moved, MapId.ROUTE_1)
+        )
+        if not boundary_preserved:
             raise error_type("Route 1 walker recovery drifted from its protected corridor.")
         if allow_blocked:
             return moved, flees, retries, False
@@ -443,6 +469,29 @@ def _same_encounter_boundary(
         and before.first_party_max_hp == encounter.first_party_max_hp
         and before.first_party_pp == encounter.first_party_pp
         and before.first_party_status == encounter.first_party_status
+    )
+
+
+def _same_post_flee_boundary(
+    before: RawGameState,
+    after: RawGameState,
+    expected_map_id: MapId,
+) -> bool:
+    """Accept only the HP loss already authenticated by one verified flee."""
+
+    return (
+        before.map_id == after.map_id == expected_map_id
+        and before.player_x == after.player_x
+        and before.player_y == after.player_y
+        and after.battle_state == 0
+        and before.party_species_ids == after.party_species_ids
+        and before.first_party_level == after.first_party_level
+        and before.first_party_max_hp == after.first_party_max_hp
+        and before.first_party_pp == after.first_party_pp
+        and before.first_party_status == after.first_party_status
+        and before.first_party_hp is not None
+        and after.first_party_hp is not None
+        and 0 < after.first_party_hp <= before.first_party_hp
     )
 
 

@@ -22,6 +22,7 @@ from pokemon_red_completion.red_living_dex_episode_lineage import (
 from pokemon_red_completion.red_living_dex_fresh_episode_runtime import (
     CleanPowerFreshEpisodeEmulator,
     RedLivingDexFreshEpisodeCheckpoint,
+    RedLivingDexFreshEpisodeExecutionFailure,
     RedLivingDexFreshEpisodeRuntimeError,
     RedLivingDexFreshEpisodeTargetVerification,
     decode_red_living_dex_fresh_episode_private_root,
@@ -580,7 +581,10 @@ def test_private_episode_namespace_blocks_restart_retry(tmp_path: Path) -> None:
     ) -> None:
         raise RuntimeError("power loss")
 
-    with pytest.raises(RuntimeError, match="power loss"):
+    with pytest.raises(
+        RedLivingDexFreshEpisodeExecutionFailure,
+        match="power loss",
+    ) as caught:
         execute_red_living_dex_fresh_episode(
             plan,
             assignment.assignment_id,
@@ -599,6 +603,31 @@ def test_private_episode_namespace_blocks_restart_retry(tmp_path: Path) -> None:
             verify_target=_verifier,
             post_close_verify=lambda: None,
         )
+    assert caught.value.execution_phase == "target_conditioning"
+    assert caught.value.effects_known is True
+    assert caught.value.controller_actions == 1
+    assert caught.value.emulator_frames == (
+        assignment.initial_wait_frames
+        + DEFAULT_NEW_GAME_TIMING.boot_frames
+        + 8
+        + 100
+    )
+    diagnostic_path = (
+        tmp_path
+        / "private"
+        / f"{assignment.episode_id}.failed.partial"
+        / "failure_diagnostic.jsonl"
+    )
+    diagnostic_text = diagnostic_path.read_text(encoding="ascii")
+    diagnostic = json.loads(diagnostic_text)
+    assert diagnostic["execution_phase"] == "target_conditioning"
+    assert diagnostic["effects_known"] is True
+    assert diagnostic["controller_actions"] == 1
+    assert diagnostic["pressed_button_count"] == 0
+    assert diagnostic["terminal_root_generated"] is False
+    assert diagnostic["exception_chain"][0]["exception_name"] == "RuntimeError"
+    assert "power loss" not in diagnostic_text
+    assert "/" not in diagnostic_text
     runtime._PROCESS_AUTHORITY_ISSUED = False
 
     with pytest.raises(PrivateArtifactError, match="already present"):

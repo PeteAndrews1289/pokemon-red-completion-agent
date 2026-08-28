@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-27. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-28. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,49 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: generate fresh independent Red train capacity
+## Current checkpoint: publish the repaired teacher, then measure exact-source yield
+
+The mission remains a transferable hierarchical agent that can finish stories and build living
+Pokedexes across versions and generations. Red is the first curriculum, not the product. The
+deterministic teacher exists only to create genuinely new episode lineages and independently
+observable choice contexts; its arrow presses are never learner labels and its diagnostic runs do
+not increment a learning counter.
+
+The fresh-episode teacher now reaches the `mansion_returned` boundary on three consecutive
+development-only seeds after eighteen consumed failure-localization attempts. The repairs cover
+the problems that actually prevented fresh worlds from surviving: Route 1 capability preparation,
+moving-NPC navigation, Forest supplies and poison handling, Pewter economy, level-gated Zubat
+capture, Route 3 recovery, Mt. Moon recovery, and the Cerulean return boundary. The candidate passes
+**5,612 repository tests, Ruff, Mypy over 308 source files, and source-bound registry checks**.
+
+This is still an engineering result, not model training. Source cleanup followed the three
+successful runs, so they do not authenticate the final commit; three successes also do not measure
+population yield. The old V1 root plan is permanently unusable: its first assignment is consumed
+and no-retry, while its twelve untouched assignments are bound to superseded source.
+
+The next gate is prospective and fixed before publication:
+
+1. publish the candidate and require green CI on the exact `main` commit;
+2. run the non-promotable diagnostic once on each of seeds **9900037 through 9900048**;
+3. require at least **10 of 12** `mansion_returned` terminals, at most two failures, no repeated
+   deterministic failure stage, and no private path or identity leak;
+4. freeze a new one-shot train-root successor only if that gate passes;
+5. materialize only its train roots, retain every terminal disposition, and rerun the action-free
+   maximum-matching census; and
+6. continue fresh train tranches until the 90-context assignment and 60-settled-outcome gate can
+   be met, then fit through the existing guarded entry.
+
+Claude returned conditional publication GO and correctly required exact-commit yield measurement.
+Antigravity returned no-go, but its concrete blockers were rejected after source traces showed the
+registries are deliberately commit-bound, unsafe Zubat hits fail closed, Forest items are retained,
+every Route 3 trainer is followed by a Center heal, and canonical JSON remains ASCII-safe. Codex
+owns the adjudication; reviewer disagreement is evidence to inspect, not a vote.
+
+Do not reuse the old V1 plan, retry a consumed seed, promote a diagnostic capture into an official
+root, materialize development, fit, open sealed Red or Crystal, or count teacher behavior as learned
+authority. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Previous checkpoint: generate fresh independent Red train capacity
 
 The project now has a concrete statistical target instead of the old 8+4 integration floor:
 

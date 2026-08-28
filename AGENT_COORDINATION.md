@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-28 active override — exact-source yield before a successor root plan:** Codex owns
+> publication, exact-head CI verification, the prospectively fixed twelve-seed diagnostic, reviewer
+> adjudication, and any later one-shot train-root freeze. Claude remains the read-only
+> causal/statistical and leakage challenger; its conditional GO contributes two accepted gates:
+> prepublication success cannot authenticate the final bundle, and final-source cross-seed yield
+> must be measured. Antigravity remains the read-only architecture/independence challenger. Its
+> no-go verdict is recorded, but its five concrete blockers were rejected after source-level
+> falsification; reviewer verdicts do not replace Codex's evidence-backed decision.
+>
+> The repaired teacher has **3/3 consecutive mansion-returned terminals after 18 one-use
+> failure-localization terminals**, but those runs are engineering evidence only. Publish, require
+> exact-head green CI, then run diagnostic seeds **9900037–9900048** once each. A new successor may
+> freeze only at **≥10/12 successes**, ≤2 failures, no repeated deterministic failure stage, and no
+> leak. The old V1 plan remains forbidden; assignment 1 is consumed and the other twelve are bound
+> to old source. Do not promote diagnostics, materialize development, fit, open sealed Red or
+> Crystal, or count teacher actions as learning. **Causal train 1/60 · powered fit 0 · authority 0
+> · transfer 0.**
+
 > **2026-08-28 active override — fresh train lineages before collection:** Exact main `cb18a8b5`
 > passed CI `33140010028/1`; the
 > [action-free capacity result](docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)

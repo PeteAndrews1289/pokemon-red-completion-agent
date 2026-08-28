@@ -7,6 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: three fresh worlds worked; twelve exact-source worlds decide what happens next
+
+The classroom generator had to learn the difference between one completed route and a repeatable
+capability. Eighteen one-use development episodes exposed moving people, poison, inventory,
+recovery, capture safety, and boundary assumptions. After those repairs, three different seeds
+reached the mansion-returned boundary in a row. The teacher can now survive more than one lucky
+world.
+
+That still is not the model learning Pokémon. Teacher buttons are not labels, diagnostic captures
+are not official roots, and the learner board stays **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY
+0 · TRANSFER 0**. Red is being made into a reliable source of independent strategic situations so
+the title-neutral learner can later discover which acquisition, evolution, development, storage,
+resupply, access, and exploration choices pay off.
+
+The next rule was written before the next result: publish the exact source, pass exact-main CI,
+then run twelve new seeds once each. At least ten must reach the same boundary, with no repeated
+deterministic failure and no leak. Only then can a new official train-root plan exist. The old plan
+cannot be rescued or reused. This is the project's anti-drift promise in operational form: when a
+teacher fix stops creating measurable learning capacity, the gate stops the work instead of letting
+another week disappear into a prettier walkthrough.
+
 ## Current checkpoint: sixty-three old classrooms, one hundred thirty-two new worlds
 
 The estimate said at most 67 old saves might help. The cartridge-bound census asked the harder

@@ -1,0 +1,147 @@
+{
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false
+  },
+  "development_runtime": {
+    "attempts_failed": 18,
+    "attempts_total": 21,
+    "checkpoint_id": "mansion_returned",
+    "consecutive_terminal_successes": 3,
+    "promotion_eligible": false,
+    "root_generated": false,
+    "successful_runs": [
+      {
+        "actions": 34978,
+        "checkpoint_completed": 275,
+        "checkpoint_total": 312,
+        "frames": 6983954,
+        "harness_seed": 9900034,
+        "initial_wait_frames": 206,
+        "private_ledger_sha256": "97b3c0db84ed1df364f82a7019a965f828f32905bdf96549b8ac2f43d44ffaec"
+      },
+      {
+        "actions": 38325,
+        "checkpoint_completed": 275,
+        "checkpoint_total": 312,
+        "frames": 7109182,
+        "harness_seed": 9900035,
+        "initial_wait_frames": 165,
+        "private_ledger_sha256": "fa140eabd8e02814a49e66e114214f2590a98a57b852c67dfbce24665771990c"
+      },
+      {
+        "actions": 34742,
+        "checkpoint_completed": 275,
+        "checkpoint_total": 312,
+        "frames": 6891466,
+        "harness_seed": 9900036,
+        "initial_wait_frames": 83,
+        "private_ledger_sha256": "1744c330619555841efd4e7463a4029e93d9a47dc4651edd64db9398e618c351"
+      }
+    ]
+  },
+  "external_review": {
+    "antigravity": {
+      "accepted_findings": [],
+      "adjudication": "The registry objection conflicts with the repository's deliberate commit-bound regeneration contract; the Zubat objection ignores the full-HP and level-9-through-11 gates; Forest items are collected rather than depleted; every Route 3 trainer is followed by a Center heal; and JSON ensure_ascii output makes the UTF-8 ledger ASCII-readable.",
+      "reported_verdict": "no_go"
+    },
+    "claude": {
+      "accepted_findings": [
+        "Do not count prepublication diagnostic success as evidence for the final committed source bundle.",
+        "Measure cross-seed yield on the final committed source before freezing a successor root plan."
+      ],
+      "reported_verdict": "conditional_go"
+    },
+    "codex": {
+      "publication_verdict": "go_after_local_checks",
+      "successor_plan_verdict": "blocked_until_exact_commit_cross_seed_yield"
+    }
+  },
+  "interpretation": {
+    "learning_counter_changed": false,
+    "official_lineage_created": false,
+    "teacher_behavior_engineering_gate_passed": true,
+    "teacher_runs_are_model_targets": false,
+    "three_successes_establish_population_yield": false
+  },
+  "prospective_exact_commit_yield_gate": {
+    "attempts": 12,
+    "diagnostic_only": true,
+    "freeze_successor_only_if": {
+      "maximum_failures": 2,
+      "minimum_mansion_returned_successes": 10,
+      "no_private_path_or_identity_leak": true,
+      "no_repeated_deterministic_failure_stage": true,
+      "source_commit_and_ci_are_exact": true
+    },
+    "harness_seeds": [
+      9900037,
+      9900038,
+      9900039,
+      9900040,
+      9900041,
+      9900042,
+      9900043,
+      9900044,
+      9900045,
+      9900046,
+      9900047,
+      9900048
+    ],
+    "lineage_promotion_allowed": false,
+    "one_use_per_seed": true,
+    "purpose": "Measure whether the exact published teacher can support a new one-shot official root tranche with margin before any successor plan is frozen.",
+    "retry_after_controller_input": false
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "qualification": {
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5612,
+      "warning": 1,
+      "xfailed": 1
+    },
+    "mypy_source_files": 308,
+    "registry_protocol_tests": 49,
+    "ruff": "passed"
+  },
+  "recorded_on": "2026-08-28",
+  "schema": "pokemon.red.living-dex-fresh-teacher-development-qualification.v1",
+  "source": {
+    "base_commit": "ffbc7e3aadb78a1e21feb7bcfa58fe681cb13fed",
+    "current_source_bundle_sha256": "7994e57017190655137ad0eba35606805da4d0a332c19839a9849a9e44bdba26",
+    "post_runtime_changes": [
+      "Removed the retired unreachable Forest training curriculum.",
+      "Renamed loss-only Route 1 evidence to the always-on capability curriculum.",
+      "Added an explicit poisoned-with-zero-Antidote fail-closed Cerulean gate.",
+      "Regenerated every current source-bound registry and public golden identity."
+    ],
+    "successful_runtime_is_exact_current_source": false
+  },
+  "status": "development_teacher_behavior_qualified_pending_exact_commit_yield",
+  "unsupported_claims": [
+    "cross_seed_success_probability_known",
+    "final_committed_source_runtime_qualified",
+    "model_training_data_created",
+    "official_fresh_root_created",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_transferable_policy_labels"
+  ]
+}

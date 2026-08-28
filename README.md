@@ -5,6 +5,19 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 28, 2026): prove the repaired fresh-world teacher on the exact
+> published source.** Three consecutive development-only episodes now reach `mansion_returned`
+> after repairs to early capability preparation, navigation, supplies, poison, recovery, economy,
+> and Zubat capture. The candidate passes **5,612 tests, Ruff, and Mypy over 308 source files**.
+> These runs are not learner examples: the teacher creates independent classrooms, while the model
+> will learn title-neutral strategic choices from selected-arm outcomes—not arrow sequences.
+>
+> Final cleanup happened after those runs, so the next evidence gate is fixed before publication:
+> exact-main green CI followed by twelve one-use non-promotable seeds, requiring at least 10/12
+> successes and no repeated failure or leak. Only then may a new train-root plan freeze. The old V1
+> plan is permanently unusable, development remains untouched, and no fit or Crystal run is open.
+> **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **Current product focus (August 28, 2026): generate genuinely new Red classroom episodes.** The
 > powered curriculum is published: 90 train contexts with at least 60 settled outcomes and 105
 > untouched development contexts with at least 102 complete comparisons. Every incomplete exam

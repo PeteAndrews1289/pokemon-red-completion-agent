@@ -12,6 +12,39 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-28: fresh teacher qualified locally; exact-commit yield is the publication gate
+
+The active mission is unchanged: build a transferable hierarchical agent that can complete
+mainline games and maintain a living Pokedex. Red is the first causal curriculum and Crystal is the
+first transfer test. The deterministic Red teacher is data-generation infrastructure only; never
+train on its button sequence, count a diagnostic run as a learner example, or confuse completing a
+teacher route with learned game authority.
+
+The fresh-episode teacher has three consecutive clean-power development terminals at
+`mansion_returned` after eighteen one-use failure-localization terminals. The repair set includes
+always-on Route 1 capability preparation, moving-NPC retries, Forest item and poison policy,
+Pewter supplies, safe level-9-through-11 Zubat capture, Route 3 healing, required Mt. Moon recovery,
+and a Cerulean Mart return retry. The non-promotable diagnostic records path-free public summaries
+and private ledgers, but cannot create an official root. The full suite passes **5,612 tests**;
+Ruff, Mypy over **308** source files, public-artifact checks, and regenerated source registries are
+green locally.
+
+The three successful runs preceded final source cleanup. They therefore qualify behavior, not the
+publishable bundle or its population yield. The old V1 plan is forever closed: assignment 1 is
+consumed/no-retry, and its remaining twelve assignments are bound to old source and may not be
+used. The prospective successor gate is now fixed: publish exact main, require exact-head green CI,
+then run seeds 9900037–9900048 once each with the diagnostic. Require at least 10/12 successes, at
+most two failures, no repeated deterministic failure stage, and no leak before freezing any new
+official train-root plan.
+
+Claude returned conditional GO and supplied the accepted exact-source/yield cautions. Antigravity
+returned no-go, but each stated blocker was contradicted by the traced behavior; see the
+[qualification evidence](docs/evidence/red-living-dex-fresh-teacher-development-qualification-v1-2026-08-28.json)
+for the adjudication. No consensus is claimed. After a passing yield gate, freeze a new plan,
+materialize train only, and rerun the action-free capacity census. Do not materialize development,
+fit, open sealed Red or Crystal, replay the full game as evaluation, or promote teacher diagnostics.
+**Causal train remains 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 ## 2026-08-28: exact capacity measured; fresh train episode generation is the next gate
 
 Published main `cb18a8b5ffcc256707ee3cafa94f419565f17ab6` passed exact-main CI

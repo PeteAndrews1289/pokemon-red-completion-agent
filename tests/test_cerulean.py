@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import FrozenInstanceError, fields, replace
+from typing import Any
 
 import pytest
 
@@ -31,8 +32,11 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_POTION_RETURN_DIRECTIONS,
     MT_MOON_POTION_TOGGLE_INDEX,
     MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES,
+    MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS,
+    MT_MOON_ZUBAT_MAX_WEAKENING_ATTEMPTS,
     MT_MOON_ZUBAT_PRE_THROW_WAIT,
     MT_MOON_ZUBAT_SEED_WAIT,
+    MT_MOON_ZUBAT_TARGET_WEAKENING_HITS,
     PEWTER_TO_CENTER_DIRECTIONS,
     ROCKET_TO_SUPER_NERD_DIRECTIONS,
     ROUTE_3_BUBBLE_TRAINER_INDEXES,
@@ -47,21 +51,27 @@ from pokemon_red_completion.cerulean import (
     CeruleanChapterReport,
     CeruleanProgress,
     CeruleanTiming,
+    _capture_weakened_mt_moon_zubat,
     _CountingChapterExecutor,
+    _cure_route_3_poison_if_needed,
     _finish_battle,
     _is_persistent_weakened_capture_hp,
+    _maximum_bubble_damage,
     _move_with_seed_waits,
+    _move_without_battles_with_retries,
+    _normalize_cerulean_antidotes,
+    _open_pewter_ball_quantity_menu,
     _pp_at,
     _reverse_directions,
     _route_3_victory_sequence,
     _seek_mt_moon_zubat,
     _select_battle_move,
+    _select_pewter_shop_quantity,
     _use_battle_potion,
-    _use_route_3_recovery_potion,
+    _weaken_mt_moon_zubat,
 )
 from pokemon_red_completion.economy import (
-    CERULEAN_RIVAL_POTION_RESERVE,
-    PEWTER_POTION_PURCHASE_QUANTITY,
+    PEWTER_POKE_BALL_PURCHASE_QUANTITY,
 )
 from pokemon_red_completion.observation import (
     MT_MOON_SUPER_NERD_OPPONENT_ID,
@@ -97,6 +107,80 @@ ROUTE_3_EVENT_FIELDS = (
 )
 
 
+def test_pewter_shop_opener_stops_in_ball_quantity_menu() -> None:
+    class Emulator:
+        selected = 0
+        quantity = 0
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.SHOP_SELECTED_ITEM:
+                return self.selected
+            if address == RamAddress.SHOP_QUANTITY:
+                return self.quantity
+            return 0
+
+    emulator = Emulator()
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.WAIT:
+                return object()
+            assert action.kind is MacroActionKind.CONFIRM
+            self.confirmations += 1
+            if self.confirmations == 3:
+                emulator.selected = int(ItemId.POKE_BALL)
+                emulator.quantity = 1
+            elif self.confirmations > 3:
+                raise AssertionError("quantity was accepted instead of left open")
+            return object()
+
+    executor = _CountingChapterExecutor(Executor())  # type: ignore[arg-type]
+    _open_pewter_ball_quantity_menu(executor, emulator)  # type: ignore[arg-type]
+
+    assert executor.actions_executed == 6
+    assert emulator.selected == ItemId.POKE_BALL
+    assert emulator.quantity == 1
+
+
+def test_pewter_shop_quantity_tolerates_swallowed_menu_inputs() -> None:
+    class Emulator:
+        quantity = 1
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.SHOP_SELECTED_ITEM:
+                return int(ItemId.POKE_BALL)
+            if address == RamAddress.SHOP_QUANTITY:
+                return self.quantity
+            return 0
+
+    emulator = Emulator()
+
+    class Executor:
+        up_requests = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.MOVE:
+                assert action.value == "up"
+                self.up_requests += 1
+                if self.up_requests >= 3:
+                    emulator.quantity += 1
+            return object()
+
+    executor = _CountingChapterExecutor(Executor())  # type: ignore[arg-type]
+    _select_pewter_shop_quantity(
+        executor,
+        emulator,  # type: ignore[arg-type]
+        item=ItemId.POKE_BALL,
+        quantity=PEWTER_POKE_BALL_PURCHASE_QUANTITY,
+        label="unit Ball reserve",
+    )
+
+    assert emulator.quantity == PEWTER_POKE_BALL_PURCHASE_QUANTITY
+    assert executor.actions_executed == 10
+
+
 def _raw(
     map_id: MapId,
     x: int,
@@ -128,6 +212,110 @@ def _raw(
     )
 
 
+def test_route_3_antidote_policy_is_a_noop_when_healthy() -> None:
+    state = _raw(MapId.ROUTE_3, 31, 9)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.NUM_BAG_ITEMS
+            return 0
+
+    class Executor:
+        def execute(self, action: MacroAction) -> object:
+            raise AssertionError(f"healthy party unexpectedly used {action!r}")
+
+    _cure_route_3_poison_if_needed(
+        _CountingChapterExecutor(Executor()),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        label="unit Route 3",
+    )
+
+
+def test_route_3_antidote_policy_fails_closed_when_poisoned_without_a_reserve() -> None:
+    state = replace(_raw(MapId.ROUTE_3, 31, 9), first_party_status=0x08)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.NUM_BAG_ITEMS
+            return 0
+
+    with pytest.raises(CeruleanChapterError, match="exhausted the free Antidote reserve"):
+        _cure_route_3_poison_if_needed(
+            _CountingChapterExecutor(object()),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            Emulator(),  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+            label="unit Route 3",
+        )
+
+
+def test_cerulean_antidote_normalization_accepts_an_already_clean_boundary() -> None:
+    state = _raw(MapId.CERULEAN_CITY, 0, 18)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.NUM_BAG_ITEMS
+            return 0
+
+    class Executor:
+        def execute(self, action: MacroAction) -> object:
+            raise AssertionError(f"clean boundary unexpectedly used {action!r}")
+
+    _normalize_cerulean_antidotes(
+        _CountingChapterExecutor(Executor()),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+    )
+
+
+def test_cerulean_antidote_normalization_rejects_poison_without_a_reserve() -> None:
+    state = replace(_raw(MapId.CERULEAN_CITY, 0, 18), first_party_status=0x08)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.NUM_BAG_ITEMS
+            return 0
+
+    with pytest.raises(CeruleanChapterError, match="exhausted the free Antidote reserve"):
+        _normalize_cerulean_antidotes(
+            _CountingChapterExecutor(object()),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            Emulator(),  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+        )
+
+
 def test_mt_moon_zubat_search_observes_a_delayed_target_on_the_return_step() -> None:
     origin = _raw(MapId.MT_MOON_1F, 14, 32)
     upper = replace(origin, player_y=31)
@@ -135,7 +323,7 @@ def test_mt_moon_zubat_search_observes_a_delayed_target_on_the_return_step() -> 
         origin,
         battle_state=1,
         enemy_species_id=ZUBAT_SPECIES_ID,
-        enemy_level=7,
+        enemy_level=9,
         enemy_hp=23,
         enemy_max_hp=23,
     )
@@ -173,13 +361,234 @@ def test_mt_moon_zubat_search_observes_a_delayed_target_on_the_return_step() -> 
     assert flees == ()
     assert retries == 0
     assert attempts == 1
-    assert [
-        action.value for action in executor.actions if action.kind is MacroActionKind.MOVE
-    ] == ["up", "down"]
+    assert [action.value for action in executor.actions if action.kind is MacroActionKind.MOVE] == [
+        "up",
+        "down",
+    ]
     assert executor.actions[-1] == MacroAction(
         MacroActionKind.WAIT,
         repeat=MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES,
     )
+
+
+def _capture_retry_harness(
+    *,
+    success_attempt: int | None,
+) -> tuple[RawGameState, Any, Any, Any]:
+    weakened = replace(
+        _raw(MapId.MT_MOON_1F, 14, 32, battle_state=1, level=15, hp=35, max_hp=40),
+        party_species_ids=(SQUIRTLE_SPECIES_ID,),
+        enemy_species_id=ZUBAT_SPECIES_ID,
+        enemy_level=7,
+        enemy_hp=13,
+        enemy_max_hp=23,
+    )
+
+    class Emulator:
+        frame_count = 0
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POKE_BALL),
+            int(RamAddress.BAG_ITEMS) + 1: PEWTER_POKE_BALL_PURCHASE_QUANTITY,
+            int(RamAddress.CURRENT_MENU_ITEM): 0,
+            int(RamAddress.LIST_SCROLL_OFFSET): 0,
+        }
+
+        @property
+        def pressed_buttons(self) -> frozenset[str]:
+            return frozenset()
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = weakened
+        menu_phase = BattleMenuPhase.MAIN
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(self.menu_phase, selected_main_command=1)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    reader = Reader()
+
+    class Executor:
+        confirm_count = 0
+        throw_count = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirm_count += 1
+                if self.confirm_count % 2 == 0:
+                    self.throw_count += 1
+                    emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
+                    if self.throw_count == success_attempt:
+                        reader.state = replace(
+                            weakened,
+                            player_y=31,
+                            battle_state=0,
+                            party_count=2,
+                            party_species_ids=(SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+                        )
+                    else:
+                        reader.state = replace(reader.state, enemy_hp=14)
+                        reader.menu_phase = BattleMenuPhase.UNKNOWN
+            elif action.kind is MacroActionKind.CANCEL:
+                reader.menu_phase = BattleMenuPhase.MAIN
+            return object()
+
+    return weakened, emulator, reader, Executor()
+
+
+def test_mt_moon_capture_retries_the_same_encounter_after_one_failed_ball() -> None:
+    weakened, emulator, reader, executor = _capture_retry_harness(success_attempt=2)
+
+    settled, attempts, balls_used, balls_remaining, captured_enemy_hp = (
+        _capture_weakened_mt_moon_zubat(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            emulator,  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+            weakened,
+        )
+    )
+
+    assert settled.party_species_ids == (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+    assert (attempts, balls_used, balls_remaining) == (2, 2, 2)
+    assert captured_enemy_hp == 14
+    assert executor.throw_count == 2
+
+
+def test_mt_moon_capture_fails_closed_after_the_fixed_ball_reserve() -> None:
+    weakened, emulator, reader, executor = _capture_retry_harness(success_attempt=None)
+
+    with pytest.raises(CeruleanChapterError, match="bounded same-encounter Ball reserve"):
+        _capture_weakened_mt_moon_zubat(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            emulator,  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+            weakened,
+        )
+
+    assert executor.throw_count == MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 0
+
+
+def test_mt_moon_zubat_weakening_retries_a_miss_and_lands_two_safe_hits(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_1F, 14, 32, battle_state=1, level=15, hp=41, max_hp=43),
+        party_species_ids=(SQUIRTLE_SPECIES_ID,),
+        enemy_species_id=ZUBAT_SPECIES_ID,
+        enemy_level=11,
+        enemy_hp=33,
+        enemy_max_hp=33,
+    )
+
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POKE_BALL),
+            int(RamAddress.BAG_ITEMS) + 1: PEWTER_POKE_BALL_PURCHASE_QUANTITY,
+            int(RamAddress.BATTLE_MON_SPECIAL): 0,
+            int(RamAddress.BATTLE_MON_SPECIAL) + 1: 32,
+            int(RamAddress.PARTY_MON_1_SPECIAL): 0,
+            int(RamAddress.PARTY_MON_1_SPECIAL) + 1: 31,
+            int(RamAddress.ENEMY_SPECIAL): 0,
+            int(RamAddress.ENEMY_SPECIAL) + 1: 14,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = encounter
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    observed_hps = iter((33, 25, 17))
+    selections = 0
+
+    def select(*args: object, **kwargs: object) -> bool:
+        nonlocal selections
+        del args, kwargs
+        selections += 1
+        reader.state = replace(reader.state, enemy_hp=next(observed_hps))
+        return True
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean._select_battle_move", select)
+    weakened = _weaken_mt_moon_zubat(
+        _CountingChapterExecutor(object()),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        encounter,
+    )
+
+    assert _maximum_bubble_damage(emulator, encounter) == 21  # type: ignore[arg-type]
+    assert selections == 3
+    assert weakened.enemy_hp == 17
+    assert MT_MOON_ZUBAT_MAX_WEAKENING_ATTEMPTS == 4
+    assert MT_MOON_ZUBAT_TARGET_WEAKENING_HITS == 2
+
+
+def test_mt_moon_zubat_weakening_refuses_a_potentially_lethal_hit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_1F, 14, 32, battle_state=1, level=15, hp=41, max_hp=43),
+        party_species_ids=(SQUIRTLE_SPECIES_ID,),
+        enemy_species_id=ZUBAT_SPECIES_ID,
+        enemy_level=9,
+        enemy_hp=21,
+        enemy_max_hp=27,
+    )
+
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POKE_BALL),
+            int(RamAddress.BAG_ITEMS) + 1: PEWTER_POKE_BALL_PURCHASE_QUANTITY,
+            int(RamAddress.BATTLE_MON_SPECIAL): 0,
+            int(RamAddress.BATTLE_MON_SPECIAL) + 1: 32,
+            int(RamAddress.PARTY_MON_1_SPECIAL): 0,
+            int(RamAddress.PARTY_MON_1_SPECIAL) + 1: 31,
+            int(RamAddress.ENEMY_SPECIAL): 0,
+            int(RamAddress.ENEMY_SPECIAL) + 1: 14,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    def should_not_select(*args: object, **kwargs: object) -> bool:
+        del args, kwargs
+        raise AssertionError("unsafe Bubble was selected")
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.cerulean._select_battle_move",
+        should_not_select,
+    )
+    with pytest.raises(CeruleanChapterError, match="bounded nonlethal policy"):
+        _weaken_mt_moon_zubat(
+            _CountingChapterExecutor(object()),  # type: ignore[arg-type]
+            type("Reader", (), {"read": lambda self: encounter})(),  # type: ignore[arg-type]
+            Emulator(),  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+            encounter,
+        )
 
 
 def _brock_victory() -> PewterChapterState:
@@ -383,6 +792,9 @@ def _report() -> CeruleanChapterReport:
         mt_moon_zubat_search_flees=(),
         mt_moon_zubat_search_attempts=1,
         mt_moon_zubat_movement_retries=0,
+        mt_moon_zubat_capture_attempts=1,
+        mt_moon_zubat_balls_used=1,
+        mt_moon_zubat_balls_remaining=3,
         mt_moon_wild_flees=(),
         mt_moon_movement_retries=0,
         rocket_battle_evidence=rocket_battle_evidence,
@@ -399,6 +811,48 @@ def _report() -> CeruleanChapterReport:
         actions_executed=2_031,
         controller_released=True,
     )
+
+
+def test_npc_sensitive_mart_corridor_retries_a_blocked_step() -> None:
+    origin = _raw(MapId.PEWTER_MART, 3, 7)
+
+    class Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        movement_requests = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.WAIT:
+                return object()
+            assert action.kind is MacroActionKind.MOVE
+            self.movement_requests += 1
+            if self.movement_requests > 1:
+                reader.state = replace(
+                    reader.state,
+                    player_y=(reader.state.player_y or 0) - 1,
+                )
+            return object()
+
+    executor = Executor()
+    final, retries = _move_without_battles_with_retries(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("up", "up"),
+        "unit Pewter Mart customer",
+        expected_map_id=MapId.PEWTER_MART,
+        maximum_step_attempts=3,
+        step_retry_wait_frames=1,
+    )
+
+    assert (final.player_x, final.player_y) == (3, 5)
+    assert retries == 1
+    assert executor.movement_requests == 3
 
 
 class _ScriptedBattleReader:
@@ -673,9 +1127,7 @@ def test_deterministic_seed_wait_rejects_duplicate_step_entries() -> None:
 
 
 def test_cerulean_route_is_pinned_at_critical_segments() -> None:
-    assert _reverse_directions(CENTER_HEAL_TO_PC_DIRECTIONS) == (
-        CENTER_PC_TO_HEAL_DIRECTIONS
-    )
+    assert _reverse_directions(CENTER_HEAL_TO_PC_DIRECTIONS) == (CENTER_PC_TO_HEAL_DIRECTIONS)
     assert len(GYM_EXIT_APPROACH_DIRECTIONS) == 16
     assert len(PEWTER_TO_CENTER_DIRECTIONS) == 40
     assert len(CENTER_TO_ROUTE_3_DIRECTIONS) == 35
@@ -711,66 +1163,6 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert len(ROUTE_4_FIRST_LEDGE_APPROACH_DIRECTIONS) == 20
     assert len(ROUTE_4_MIDDLE_DIRECTIONS) == 39
     assert len(ROUTE_4_FINAL_APPROACH_DIRECTIONS) == 10
-
-
-def test_route_3_recovery_consumes_only_the_guaranteed_pc_potion() -> None:
-    class Emulator:
-        memory = {
-            int(RamAddress.NUM_BAG_ITEMS): 1,
-            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
-            int(RamAddress.BAG_ITEMS) + 1: CERULEAN_RIVAL_POTION_RESERVE,
-            int(RamAddress.CURRENT_MENU_ITEM): 2,
-        }
-
-        def read_u8(self, address: int) -> int:
-            return self.memory.get(int(address), 0)
-
-    emulator = Emulator()
-
-    class Reader:
-        state = replace(
-            _raw(MapId.ROUTE_3, 11, 6, level=13, hp=10, max_hp=35),
-            first_party_status=8,
-        )
-
-        def read(self) -> RawGameState:
-            return self.state
-
-        def read_input_readiness(self) -> InputReadiness:
-            return READY
-
-    reader = Reader()
-
-    class Executor:
-        actions: list[MacroAction] = []
-        confirms = 0
-
-        def execute(self, action: MacroAction) -> None:
-            self.actions.append(action)
-            if action.kind is not MacroActionKind.CONFIRM:
-                return
-            self.confirms += 1
-            if self.confirms == 1:
-                emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 0
-            elif self.confirms == 3:
-                reader.state = replace(reader.state, first_party_hp=30)
-                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = (
-                    PEWTER_POTION_PURCHASE_QUANTITY
-                )
-
-    executor = Executor()
-    _use_route_3_recovery_potion(
-        _CountingChapterExecutor(executor),  # type: ignore[arg-type]
-        reader,  # type: ignore[arg-type]
-        emulator,  # type: ignore[arg-type]
-        DEFAULT_CERULEAN_TIMING,
-    )
-
-    assert reader.state.first_party_hp == 30
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 13
-    assert sum(
-        action.kind is MacroActionKind.CANCEL for action in executor.actions
-    ) == 4
 
 
 @pytest.mark.parametrize(
@@ -844,9 +1236,7 @@ def test_route_3_battle_recovery_consumes_one_potion_above_the_floor(
 
 
 def test_mt_moon_free_potion_detour_is_exactly_reversible() -> None:
-    def endpoint(
-        start: tuple[int, int], directions: tuple[str, ...]
-    ) -> tuple[int, int]:
+    def endpoint(start: tuple[int, int], directions: tuple[str, ...]) -> tuple[int, int]:
         x, y = start
         for direction in directions:
             if direction == "left":
@@ -859,17 +1249,23 @@ def test_mt_moon_free_potion_detour_is_exactly_reversible() -> None:
                 y += 1
         return x, y
 
-    assert endpoint(
-        MT_MOON_POTION_DETOUR_ORIGIN,
-        MT_MOON_POTION_APPROACH_DIRECTIONS,
-    ) == MT_MOON_POTION_PICKUP_POSITION
-    assert endpoint(
-        MT_MOON_POTION_PICKUP_POSITION,
-        MT_MOON_POTION_RETURN_DIRECTIONS,
-    ) == MT_MOON_POTION_DETOUR_ORIGIN
-    assert _reverse_directions(
-        MT_MOON_POTION_APPROACH_DIRECTIONS
-    ) == MT_MOON_POTION_RETURN_DIRECTIONS
+    assert (
+        endpoint(
+            MT_MOON_POTION_DETOUR_ORIGIN,
+            MT_MOON_POTION_APPROACH_DIRECTIONS,
+        )
+        == MT_MOON_POTION_PICKUP_POSITION
+    )
+    assert (
+        endpoint(
+            MT_MOON_POTION_PICKUP_POSITION,
+            MT_MOON_POTION_RETURN_DIRECTIONS,
+        )
+        == MT_MOON_POTION_DETOUR_ORIGIN
+    )
+    assert (
+        _reverse_directions(MT_MOON_POTION_APPROACH_DIRECTIONS) == MT_MOON_POTION_RETURN_DIRECTIONS
+    )
     assert MT_MOON_POTION_TOGGLE_INDEX == 0x6B
 
 
@@ -983,11 +1379,7 @@ def test_battle_completion_declines_switch_without_cancelling_evolution() -> Non
         "evolution regression",
     )
 
-    inputs = [
-        action.kind
-        for action in executor.actions
-        if action.kind is not MacroActionKind.WAIT
-    ]
+    inputs = [action.kind for action in executor.actions if action.kind is not MacroActionKind.WAIT]
     assert inputs.count(MacroActionKind.CANCEL) == 1
     assert inputs[:4] == [
         MacroActionKind.CONFIRM,
@@ -1193,9 +1585,7 @@ def test_battle_completion_does_not_decline_a_nonexistent_single_party_switch() 
         "single-party regression",
     )
 
-    assert MacroActionKind.CANCEL not in {
-        action.kind for action in executor.actions
-    }
+    assert MacroActionKind.CANCEL not in {action.kind for action in executor.actions}
 
 
 def test_route_3_victory_sequence_rejects_skips() -> None:
@@ -1244,6 +1634,9 @@ def test_cerulean_report_is_complete_honest_and_privacy_safe() -> None:
         "helix_fossil_verified": True,
         "zubat_search_attempts": 1,
         "zubat_movement_retries": 0,
+        "zubat_capture_attempts": 1,
+        "zubat_balls_used": 1,
+        "zubat_balls_remaining": 3,
         "zubat_search_flees": [],
         "wild_flees": [],
         "movement_retries": 0,

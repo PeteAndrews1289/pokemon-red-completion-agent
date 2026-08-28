@@ -1,5 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 28 scene: three clean worlds are a gate, not training
+
+Open on eighteen fast failure cards, each stamped **ONE USE · NO RETRY**, and group them by what
+they taught the engineer: **MOVING NPC · POISON · SUPPLIES · ZUBAT · ROUTE 3 · MT. MOON · CERULEAN**.
+Replace brittle route patches with capability cards: **PREPARE · RECOVER · CAPTURE SAFELY · RETAIN
+RESOURCES**.
+
+Then run three seed counters side by side. Each passes roughly seven million frames and lands on
+**MANSION RETURNED 275/312**. Put a large label over them: **TEACHER DIAGNOSTIC—NOT MODEL DATA**.
+Keep the learner board unchanged at **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER
+0**. Draw a hard wall between **TEACHER BUTTONS** and **TITLE-NEUTRAL SELECTED-ARM OUTCOMES**.
+
+Show the candidate passing **5,612 TESTS · RUFF · MYPY 308**, then refuse to promote it. Stamp
+**FINAL CLEANUP HAPPENED AFTER THESE RUNS** and **3/3 ≠ POPULATION YIELD**. Reveal the prospective
+gate before any result appears: **PUBLISH EXACT MAIN → GREEN CI → 12 NEW ONE-USE SEEDS → REQUIRE
+≥10 SUCCESSES · ≤2 FAILURES · NO REPEATED STAGE · NO LEAK**.
+
+Put Claude and Antigravity on challenger screens. Accept Claude's exact-source and yield caution;
+show Antigravity's no-go claims being tested and crossed out individually rather than by vote. End
+on the rail **PASS → FREEZE NEW TRAIN-ROOT PLAN → MATERIALIZE TRAIN ONLY → RECENSUS → COLLECT
+CAUSAL OUTCOMES → GUARDED FIT**. Lock **OLD V1 PLAN · DEVELOPMENT · SEALED RED · CRYSTAL** behind
+closed gates.
+
 ## August 28 scene: the old saves face the real matching test
 
 Open on the optimistic **67 ROOT UPPER BOUND**, then turn it into a bipartite graph: **68 ELIGIBLE

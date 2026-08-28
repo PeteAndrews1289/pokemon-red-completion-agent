@@ -83,6 +83,7 @@ from pokemon_red_completion.red_living_dex_episode_lineage import (
 from pokemon_red_completion.red_living_dex_fresh_episode_runtime import (
     CleanPowerFreshEpisodeEmulator,
     RedLivingDexFreshEpisodeCheckpoint,
+    RedLivingDexFreshEpisodeExecutionFailure,
     RedLivingDexFreshEpisodeTargetVerification,
     execute_red_living_dex_fresh_episode,
     issue_red_living_dex_fresh_episode_process_authority,
@@ -173,6 +174,18 @@ def _read_bounded(path: Path, maximum_bytes: int) -> bytes:
 
 def _sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _known_runtime_effects(
+    error: BaseException,
+) -> tuple[bool, int | None, int | None]:
+    if not isinstance(error, RedLivingDexFreshEpisodeExecutionFailure):
+        return False, None, None
+    return (
+        error.effects_known,
+        error.controller_actions,
+        error.emulator_frames,
+    )
 
 
 def _generator_execution_sha256(source_bundle_sha256: str) -> str:
@@ -513,7 +526,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             verify_target=verify_target,
             post_close_verify=post_close_verify,
         )
-    except BaseException:
+    except BaseException as error:
         assignment_claim_sha256: str | None = None
         try:
             claim = read_red_living_dex_fresh_episode_assignment_claim(
@@ -529,6 +542,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 assignment_claim_sha256 = canonical_sha256(claim)
         except BaseException:
             assignment_claim_sha256 = None
+        effects_known, controller_actions, emulator_frames = (
+            _known_runtime_effects(error)
+        )
         raise FreshEpisodeGeneratorError(
             stage,
             RedLivingDexFreshEpisodeFailureReceipt(
@@ -543,9 +559,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 ),
                 assignment_claim_sha256=assignment_claim_sha256,
                 failure_stage=stage,
-                effects_known=False,
-                controller_actions=None,
-                emulator_frames=None,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
             ),
         ) from None
     require_pyboy_import_origins(runtime_identity)

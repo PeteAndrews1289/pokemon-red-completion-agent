@@ -21,6 +21,7 @@ import os
 import re
 import stat
 from collections.abc import Callable, Mapping
+from contextlib import suppress
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
@@ -71,6 +72,27 @@ _TRAJECTORY_DOMAIN = b"pokemon-red-living-dex-fresh-trajectory-v1\0"
 
 class RedLivingDexFreshEpisodeRuntimeError(RuntimeError):
     """One fresh episode crossed its one-shot clean-power boundary."""
+
+
+class RedLivingDexFreshEpisodeExecutionFailure(
+    RedLivingDexFreshEpisodeRuntimeError
+):
+    """Retain reconciled failure metering without publishing private diagnostics."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        execution_phase: str,
+        effects_known: bool,
+        controller_actions: int | None,
+        emulator_frames: int | None,
+    ) -> None:
+        self.execution_phase = execution_phase
+        self.effects_known = effects_known
+        self.controller_actions = controller_actions
+        self.emulator_frames = emulator_frames
+        super().__init__(message)
 
 
 class FreshEpisodeEmulatorDelegate(Protocol):
@@ -671,17 +693,26 @@ def execute_red_living_dex_fresh_episode(
         writer.append("claim", claim, durable=True)
         delegate = emulator_factory()
         guarded = CleanPowerFreshEpisodeEmulator(delegate, assignment)
+        execution_phase = "initial_wait"
         try:
             guarded.perform_initial_wait()
+            execution_phase = "setup_teacher"
             checkpoint = setup_teacher(guarded, assignment)
+            execution_phase = "teacher_accounting"
             guarded.reconcile_runtime_accounting()
+            execution_phase = "teacher_seal"
             guarded.seal_teacher_prefix(checkpoint)
+            execution_phase = "checkpoint_retention"
             writer.append("checkpoint", checkpoint.private_dict(), durable=True)
+            execution_phase = "target_conditioning"
             condition_target(guarded, assignment)
+            execution_phase = "target_accounting"
             guarded.reconcile_runtime_accounting()
+            execution_phase = "terminal_capture"
             state_bytes = guarded.capture_terminal_state(
                 _token=_TERMINAL_SAVE_TOKEN
             )
+            execution_phase = "root_construction"
             envelope = CapturedProgressEnvelope(
                 state_sha256=hashlib.sha256(state_bytes).hexdigest(),
                 checkpoint_id=checkpoint.checkpoint_id,
@@ -710,6 +741,7 @@ def execute_red_living_dex_fresh_episode(
             )
             receipt_frame_before = guarded.frame_count
             receipt_actions_before = guarded.controller_actions
+            execution_phase = "target_verification"
             verification = verify_target(
                 guarded,
                 assignment,
@@ -733,8 +765,9 @@ def execute_red_living_dex_fresh_episode(
             ):
                 raise RedLivingDexFreshEpisodeRuntimeError(
                     "fresh-episode target verifier returned another type"
-                )
+            )
             verification.verify(assignment)
+            execution_phase = "receipt_construction"
             receipt = RedLivingDexFreshEpisodeReceipt(
                 assignment_id=assignment.assignment_id,
                 plan_sha256=plan.plan_sha256,
@@ -776,6 +809,7 @@ def execute_red_living_dex_fresh_episode(
                 model_predictions=0,
                 model_fits=0,
             )
+            execution_phase = "root_retention"
             writer.append(
                 "root",
                 {
@@ -790,6 +824,40 @@ def execute_red_living_dex_fresh_episode(
                 },
                 durable=True,
             )
+        except BaseException as error:
+            effects_known = False
+            controller_actions: int | None = None
+            emulator_frames: int | None = None
+            try:
+                guarded.reconcile_runtime_accounting()
+                controller_actions = guarded.controller_actions
+                emulator_frames = guarded.frame_count
+                effects_known = True
+            except BaseException:
+                effects_known = False
+                controller_actions = None
+                emulator_frames = None
+            diagnostic = _fresh_episode_failure_diagnostic(
+                error,
+                execution_phase=execution_phase,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
+                pressed_button_count=len(guarded.pressed_buttons),
+                save_state_loads=guarded.save_state_loads,
+                terminal_state_saves=guarded.terminal_state_saves,
+            )
+            with suppress(BaseException):
+                writer.append("failure_diagnostic", diagnostic, durable=True)
+            # Diagnostic retention is subordinate to the original one-shot
+            # failure.  The assignment remains consumed either way.
+            raise RedLivingDexFreshEpisodeExecutionFailure(
+                str(error) or type(error).__name__,
+                execution_phase=execution_phase,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
+            ) from error
         finally:
             if guarded is not None:
                 guarded.close()
@@ -804,6 +872,60 @@ def execute_red_living_dex_fresh_episode(
         root=root,
         artifact_summary=writer.summary,
     )
+
+
+def _fresh_episode_failure_diagnostic(
+    error: BaseException,
+    *,
+    execution_phase: str,
+    effects_known: bool,
+    controller_actions: int | None,
+    emulator_frames: int | None,
+    pressed_button_count: int,
+    save_state_loads: int,
+    terminal_state_saves: int,
+) -> dict[str, object]:
+    """Build a bounded path-free private record for a consumed live failure."""
+
+    chain: list[dict[str, object]] = []
+    seen: set[int] = set()
+    current: BaseException | None = error
+    while current is not None and len(chain) < 4 and id(current) not in seen:
+        seen.add(id(current))
+        frames: list[dict[str, object]] = []
+        traceback_cursor = current.__traceback__
+        while traceback_cursor is not None:
+            code = traceback_cursor.tb_frame.f_code
+            frames.append(
+                {
+                    "function_name": code.co_name,
+                    "line_number": traceback_cursor.tb_lineno,
+                    "source_name": Path(code.co_filename).name,
+                }
+            )
+            traceback_cursor = traceback_cursor.tb_next
+        rendered = str(current).encode("utf-8", errors="replace")
+        chain.append(
+            {
+                "exception_module": type(current).__module__,
+                "exception_name": type(current).__name__,
+                "message_sha256": hashlib.sha256(rendered).hexdigest(),
+                "traceback_frames": frames[-12:],
+            }
+        )
+        current = current.__cause__ or current.__context__
+    return {
+        "controller_actions": controller_actions,
+        "effects_known": effects_known,
+        "emulator_frames": emulator_frames,
+        "exception_chain": chain,
+        "execution_phase": execution_phase,
+        "pressed_button_count": pressed_button_count,
+        "save_state_loads": save_state_loads,
+        "schema": "pokemon.red.private-living-dex-fresh-failure-diagnostic.v1",
+        "terminal_root_generated": False,
+        "terminal_state_saves": terminal_state_saves,
+    }
 
 
 def durably_claim_red_living_dex_fresh_episode_assignment(
@@ -1068,6 +1190,7 @@ def _text(value: object, subject: str) -> str:
 __all__ = [
     "CleanPowerFreshEpisodeEmulator",
     "RedLivingDexFreshEpisodeCheckpoint",
+    "RedLivingDexFreshEpisodeExecutionFailure",
     "RedLivingDexFreshEpisodeProcessAuthority",
     "RedLivingDexFreshEpisodeRuntimeError",
     "RedLivingDexFreshEpisodeRuntimeResult",
