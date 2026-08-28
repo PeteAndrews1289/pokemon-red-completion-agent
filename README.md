@@ -5,6 +5,20 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 27, 2026): the first causal Red lesson settled; build breadth
+> before fitting.** The one-shot campaign is permanently consumed. Its selected skill raised a
+> production-runtime error after 945 actions and 42,001 frames, and the independent observer
+> settled that exact result as a negative train outcome. The journal terminal is complete,
+> selected-only, hash-joined, and no-retry. The outer command then rejected authenticated
+> `pysdl2-dll` for setting its own staged DLL path. A ROM-free reproduction plus Claude and
+> Antigravity review identifies that as a wrapper false positive, so the datum counts at
+> development rigor but not as benchmark evidence. The
+> [terminal record](docs/evidence/red-living-dex-causal-campaign-terminal-v1-2026-08-27.json)
+> preserves the caveat and the exact-path repair. Do not fit one row. Next design a statistically
+> powered, multi-kind, family/location/root-disjoint Red curriculum, then fit Red train only and
+> compare on untouched Red cases before frozen-weight Crystal transfer. **Causal train 1/1;
+> authority 0; transfer 0.**
+
 > **Current product focus (August 27, 2026): execute the frozen Red train lesson exactly once.** PR
 > 90 passed and executable commit `6fd2286f` passed exact-main CI `33118840112/1`. The
 > [execution reorientation](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)

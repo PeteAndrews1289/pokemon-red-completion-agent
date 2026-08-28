@@ -7,6 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the first real lesson was failure—and that is useful data
+
+The button was pressed once. The randomly chosen Red skill ran for 945 actions and 42,001 frames,
+then hit a production-runtime error. The learner did not receive a comforting teacher answer or a
+made-up result for the options it never tried. A fresh observer looked at what actually happened,
+recorded zero gain, and sealed one honest negative row. The lesson is consumed forever.
+
+Then the launch rail itself flashed red. The bundled SDL package had done what it is designed to
+do—point itself at its own authenticated library—and the wrapper mistook that trusted
+self-configuration for a hostile environment override. Reproducing the behavior without the game
+made the distinction clear. Claude and Antigravity both agree: keep the negative row for
+development, fix the wrapper, but do not pretend the missing final post-run origin check meets a
+benchmark bar.
+
+So the scoreboard finally moves to **CAUSAL TRAIN 1/1**, while **AUTHORITY 0 · TRANSFER 0** stays
+put. One failure proves the data pipe, not intelligence. The next chapter is not another door and
+not a one-row model fit. It is breadth: enough different Red decisions, families, places, and
+saved-game roots to power an untouched comparison. Only a model that survives that Red exam gets
+frozen for Crystal on the longer road to a cross-game living Pokédex.
+
 ## Current checkpoint: the next thing on screen must be one real lesson
 
 The clean-room launch rail shipped. GitHub tested it before merge and tested exact main again. The

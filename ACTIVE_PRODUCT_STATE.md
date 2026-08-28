@@ -33,15 +33,15 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Invoke the frozen Red train campaign exactly once under the current-main and exact-green-CI binding. Either produce one authentic settled causal train example or close target-free with the campaign permanently consumed, publish the terminal, and stop to reorient; do not insert another preflight or wrapper-only gate.
+- Next decision: Publish the consumed terminal and exact post-runtime verifier repair, then design and capacity-check a statistically powered multi-kind Red causal curriculum before collecting another row or fitting a model.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Turn one authenticated repeatable game state and its complete identity-free option menu into one crash-safe selected-arm causal example through a title-neutral staged journal. Red supplies the first live adapter; later cartridges reuse the same policy, propensity, claim, execution-start, independent-outcome, and trainable-example contract. |
-| Authority now | The historical living-Dex ranker made one authentic settled Red acquisition choice but learned from no authentic causal train outcomes and has no promoted authority. Public causal-pipeline engineering grants no gameplay authority. |
-| Authority target | Produce the first durable authentic selected-arm Red causal train example under a contract that can later collect many option kinds and titles without copying a teacher route or retraining a separate game-specific policy seam. |
+| Authority now | The pipeline now holds one authentic settled negative Red causal train row. No causal model has been fit, the historical ranker remains unpromoted, and no gameplay or collection authority follows from a single datum. |
+| Authority target | Fit and beat preregistered controls on a powered family and root disjoint Red curriculum under the title-neutral contract, then freeze weights for a zero-shot Crystal comparison before adaptation. |
 | Transfer test | Require Red-shaped and Crystal-shaped synthetic fixtures to use the identical policy document, propensity record, domain-separated claim, staged journal, outcome, and learner-example schema. After causal Red training and a powered Red benchmark, freeze weights and compare realized zero-shot Crystal outcomes against random and cost-only controls before adaptation. |
 | Cheapest falsifier | ROM-free Red-shaped and Crystal-shaped fixtures must survive concurrent claims and every durable crash cutpoint while proving one commitment, one replayable full-support distribution, selected-only lazy construction, zero controller effects before execution-start, no reroll or retry after input, one independent outcome, and an exactly restorable learner datum with no title or private identity in its policy features. |
 | Time box | 1 session / 8 hours |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 0 | 1 |
+| Causal Train Example · train | 1 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,24 +58,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-first-red-causal-execution-reoriented** · status **closed** · evidence [qualification](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)
+**2026-08-27-first-red-causal-terminal-adjudicated** · status **closed** · evidence [causal train example](docs/evidence/red-living-dex-causal-campaign-terminal-v1-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project has left public infrastructure work. Its next measured result is the first authentic teacher-free Red causal example in the same title-neutral journal and adapter contract intended to support a powered Red curriculum and later frozen-weight Crystal transfer. |
-| Learning output | No new model example. Causal train remains 0 of 1; development remains 15, verified outcomes 5, model fits 4, unseen comparisons 4, authority promotions 0, and transfer results 0. |
-| Authority delta | None. Publication and reorientation read no private capture, opened no ROM, claimed no root, selected no behavior, constructed no gameplay runtime, issued no controller input, advanced no frame, observed no outcome, queried no teacher, and performed no model operation. |
+| Product alignment | The first authentic teacher-free Red causal datum now uses the same title-neutral journal and option representation intended for later games. The project must scale varied Red evidence and demonstrate a real Red model before freezing weights for Crystal. |
+| Learning output | One authentic selected-arm Red train example settled negative after 945 selected-skill actions and 42,001 frames. Causal train is 1 of 1; development remains 15, verified outcomes 5, model fits 4, unseen comparisons 4, authority promotions 0, and transfer results 0. |
+| Authority delta | None. The campaign added one authentic settled negative train datum but performed no fit, comparison, promotion, teacher query, counterfactual execution, Crystal run, or transfer test. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | No public engineering blocker remains. At invocation the then-current main commit and its exact successful push CI attempt plus the frozen campaign's authenticated private root state envelope and ROM bindings must all match; stop rather than guess any private argument. |
-| Decision | The next eligible product action is exactly one invocation of the frozen Red train campaign. Bind the current main commit and exact green push CI, execute without refreeze reroll wrapper fallback or retry, publish one terminal, and stop to reorient before any fit or successor collection. |
-| Next session | Execute the one frozen Red train campaign exactly once, publish its path-free terminal, update the causal train counter only if an authentic selected-arm example settles, and immediately reorient before any broader collection or fit. |
-| Next falsifier | The one current-main invocation must reach exactly one terminal: an authentic settled selected-arm train example or an honest target-free consumed closure. Any source runtime plan identity ordering meter or outcome ambiguity must stop before a fabricated target and may not trigger another attempt. |
-| Stop condition | Stop during the one invocation on ambiguity disclosure pre-start effects unselected construction teacher fallback reroll or post-input retry. Stop after its first terminal. Do not refreeze retry fit one row open sealed Red or Crystal promote authority replay the game or insert another wrapper. |
+| Blocker | Coverage, not plumbing. One negative row proves the selected-arm data pipe but cannot identify a useful policy, support a powered comparison, or justify authority. The next curriculum needs an explicit power calculation plus multi-kind family location and physical-root separation before any private collection or fit. |
+| Decision | Count the immutable settled negative as causal train 1 of 1 at development rigor, permanently close the consumed campaign, publish the exact post-runtime trust-check repair, and design a statistically powered multi-kind Red successor before any fit. |
+| Next session | Publish the exact trust-check repair and terminal evidence, then design one powered multi-kind Red causal curriculum with preregistered coverage, censoring, propensity, train-only fit, and untouched paired-comparison gates; do not open another root during design. |
+| Next falsifier | Before freezing a successor, prove from action-free capacity and an explicit paired evaluation power calculation that the curriculum can supply diverse train and untouched development contexts across multiple option kinds families locations and physical roots. Abort rather than call an 8+4 integration floor statistically powered. |
+| Stop condition | Never invoke refreeze or rescue the consumed campaign. Do not fit one row, open sealed Red or Crystal, promote authority, replay the game, or spend another session on a wrapper that produces no additional causal capacity. |
 
 ### Stop conditions
 
-- Permit exactly one private invocation of the immutable train campaign after binding the then-current main commit and its exact successful push CI; stop after its first terminal and never retry or refreeze it.
-- Stop on ambiguous private arguments, identity leakage, counterfactual or unselected targets, behavior reissue, eager unselected construction, effects before durable execution-start, retryable post-input crashes, another preflight or wrapper, title-specific learner state, fit, benchmark, sealed Red, Crystal execution, promotion, or full replay.
+- The first causal campaign is complete and permanently consumed; never refreeze retry recover through execution or substitute another root under its identity.
+- Stop on a successor without explicit statistical power and multi-kind family location and root separation, or on identity leakage counterfactual targets teacher fallback one-row fit sealed Red Crystal execution promotion or full replay.
 
 ### Hard boundaries for this lane
 
@@ -115,9 +115,9 @@ claims that justify their cost; they must not be copied into routine data genera
 
 ## Session allocation and alarms
 
-- **10%** data and scenarios
-- **75%** model and evaluation
-- **15%** maintenance and documentation
+- **70%** data and scenarios
+- **20%** model and evaluation
+- **10%** maintenance and documentation
 
 Stop and reassess after **1** session without a measured learning output, after **1** consecutive CI-only repair, or before any full replay. Repeated fixed-route patches
 and unmeasured teacher-label copying are also hard alarms.
@@ -207,4 +207,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **10**.
+Current evidence entries: **11**.

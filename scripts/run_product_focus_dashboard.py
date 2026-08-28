@@ -59,6 +59,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     verified_outcomes = _count(progress, "verified_outcome_examples")
     atomic_episodes = _count(progress, "atomic_goal_episodes")
     causal_train_examples = _count(progress, "causal_train_examples")
+    first_causal_example_settled = causal_train_examples > 0
     synthetic_train_outcomes = _count(progress, "synthetic_rootless_train_outcomes")
     synthetic_atomic_episodes = _count(progress, "synthetic_rootless_atomic_goal_episodes")
     synthetic_model_fits = _count(progress, "synthetic_rootless_model_fits")
@@ -126,24 +127,46 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage=f"Active lane · {_text(lane, 'name')}",
+        stage=(
+            "Campaign terminal · first authentic Red causal example settled"
+            if first_causal_example_settled
+            else f"Active lane · {_text(lane, 'name')}"
+        ),
         message=(
-            "The title-neutral causal journal and Red live adapter are being qualified. No "
-            "authentic causal example exists yet; gameplay authority and Crystal transfer remain "
-            "at zero."
+            "The one-shot Red campaign settled a valid negative selected-arm train example. "
+            "The policy is still unfitted; the next gate is a powered multi-kind Red curriculum, "
+            "and Crystal transfer remains untested."
+            if first_causal_example_settled
+            else (
+                "The title-neutral causal journal and Red live adapter are being qualified. No "
+                "authentic causal example exists yet; gameplay authority and Crystal transfer "
+                "remain at zero."
+            )
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Public engineering · policy projection → crash-safe journal → Red adapter → audits"
+            "Red causal collection · one settled example → powered curriculum design"
+            if first_causal_example_settled
+            else (
+                "Public engineering · policy projection → crash-safe journal → Red adapter → "
+                "audits"
+            )
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate=(
-                "No fitted causal living-Dex policy · historical ranker remains unpromoted"
+                "Unfitted causal living-Dex policy · first authentic row retained"
+                if first_causal_example_settled
+                else "No fitted causal living-Dex policy · historical ranker remains unpromoted"
             ),
             choice=(
-                "No active model choice · next evidence is one settled Red causal train example"
+                "No active model choice · next evidence is a powered multi-kind Red train set"
+                if first_causal_example_settled
+                else (
+                    "No active model choice · next evidence is one settled Red causal train "
+                    "example"
+                )
             ),
             confidence=None,
             decisions=1,
@@ -186,6 +209,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "V1 retry 0 · synthetic support is descriptive, not authentic authority"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
+            (
+                "First causal terminal · settled negative train example · selected-only target · "
+                "actions 945 · frames 42,001 · teacher 0 · model fit 0 · retry 0"
+                if first_causal_example_settled
+                else "First causal terminal · pending"
+            ),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),
             _event("Next falsifier", _text(reorientation, "next_falsifier")),
@@ -226,10 +255,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "
                 "CE 0.206/0.693 · rows disclosed 0 · no retry"
-            ),
-            (
-                "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "
-                "decision · actions 244/244 · frames 16,296/16,296"
             ),
         ),
     )

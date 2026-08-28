@@ -186,6 +186,89 @@ def test_bootstrap_rejects_source_bundle_substitution_before_source_state(
     assert source_state_calls == []
 
 
+def test_environment_accepts_only_the_authenticated_pysdl2_self_initialization(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+    dll_path = (tmp_path / "stage/venv/lib/python3.14/site-packages/sdl2dll/dll").resolve()
+    dll_path.mkdir(parents=True, mode=0o700)
+
+    monkeypatch.setattr(module.os, "environ", {"OPENSSL_CONF": module.os.devnull})
+    module._require_environment(authenticated_pysdl2_dll_path=dll_path)
+
+    module.os.environ["PYSDL2_DLL_PATH"] = str(dll_path)
+    module._require_environment(authenticated_pysdl2_dll_path=dll_path)
+
+    with pytest.raises(module._BootstrapError):
+        module._require_environment()
+
+    for substituted_path in (dll_path.parent, Path(f"{dll_path}-poison")):
+        module.os.environ["PYSDL2_DLL_PATH"] = str(substituted_path)
+        with pytest.raises(module._BootstrapError):
+            module._require_environment(authenticated_pysdl2_dll_path=dll_path)
+
+
+def test_environment_rejects_an_alias_for_the_authenticated_pysdl2_directory(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+    dll_path = (tmp_path / "stage/venv/lib/python3.14/site-packages/sdl2dll/dll").resolve()
+    dll_path.mkdir(parents=True, mode=0o700)
+    alias = tmp_path / "sdl-alias"
+    alias.symlink_to(dll_path, target_is_directory=True)
+    monkeypatch.setattr(
+        module.os,
+        "environ",
+        {
+            "OPENSSL_CONF": module.os.devnull,
+            "PYSDL2_DLL_PATH": str(alias),
+        },
+    )
+
+    with pytest.raises(module._BootstrapError):
+        module._require_environment(authenticated_pysdl2_dll_path=dll_path)
+
+
+def test_runtime_postcheck_accepts_only_the_staged_pysdl2_self_initialization(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+    site_packages = (tmp_path / "stage/venv/lib/python3.14/site-packages").resolve()
+    dll_path = site_packages / "sdl2dll/dll"
+    dll_path.mkdir(parents=True, mode=0o700)
+    closure = module.ExecutionRuntimeClosure((), site_packages)
+    finder = module.AuthenticatedRuntimeFinder(closure)
+    calls: list[str] = []
+    monkeypatch.setattr(module, "__name__", "__main__")
+    monkeypatch.setattr(module, "_RUNTIME_STAGE", SimpleNamespace(closure=closure))
+    monkeypatch.setattr(module, "_RUNTIME_FINDER", finder)
+    monkeypatch.setattr(
+        module,
+        "require_authenticated_runtime_finder",
+        lambda value: calls.append("finder") if value is closure else pytest.fail(),
+    )
+    monkeypatch.setattr(
+        module,
+        "require_loaded_runtime_origins",
+        lambda value: calls.append("origins") if value is closure else pytest.fail(),
+    )
+    monkeypatch.setattr(
+        module.os,
+        "environ",
+        {
+            "OPENSSL_CONF": module.os.devnull,
+            "PYSDL2_DLL_PATH": str(dll_path),
+        },
+    )
+
+    module._require_runtime_postcheck()
+
+    assert calls == ["finder", "origins"]
+
+
 def test_bootstrap_rejects_project_bytecode_cache_from_filesystem_inventory(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

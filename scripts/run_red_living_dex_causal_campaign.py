@@ -416,11 +416,38 @@ def _require_interpreter() -> None:
             raise _BootstrapError
 
 
-def _require_environment() -> None:
+def _require_environment(
+    *,
+    authenticated_pysdl2_dll_path: Path | None = None,
+) -> None:
+    allowed_pysdl2_dll_path: str | None = None
+    if authenticated_pysdl2_dll_path is not None:
+        try:
+            resolved = authenticated_pysdl2_dll_path.resolve(strict=True)
+            metadata = authenticated_pysdl2_dll_path.lstat()
+            if (
+                not authenticated_pysdl2_dll_path.is_absolute()
+                or resolved != authenticated_pysdl2_dll_path
+                or authenticated_pysdl2_dll_path.is_symlink()
+                or not stat.S_ISDIR(metadata.st_mode)
+                or metadata.st_uid != os.getuid()
+                or stat.S_IMODE(metadata.st_mode) & 0o022
+            ):
+                raise OSError("authenticated SDL directory differs")
+        except (OSError, TypeError, ValueError):
+            raise _BootstrapError from None
+        allowed_pysdl2_dll_path = str(authenticated_pysdl2_dll_path)
     if any(
         value.strip()
         and (
-            key in _EARLY_FORBIDDEN_ENVIRONMENT
+            (
+                key in _EARLY_FORBIDDEN_ENVIRONMENT
+                and not (
+                    key == "PYSDL2_DLL_PATH"
+                    and allowed_pysdl2_dll_path is not None
+                    and value == allowed_pysdl2_dll_path
+                )
+            )
             or key.startswith("DYLD_")
             or (key.startswith("OPENSSL_") and not (key == "OPENSSL_CONF" and value == os.devnull))
         )
@@ -1108,7 +1135,11 @@ def _require_runtime_postcheck() -> None:
         or not isinstance(_RUNTIME_FINDER, AuthenticatedRuntimeFinder)
     ):
         raise CausalCampaignExecutionError("runtime_postauthentication")
-    _require_environment()
+    _require_environment(
+        authenticated_pysdl2_dll_path=(
+            _RUNTIME_STAGE.closure.site_packages / "sdl2dll/dll"
+        )
+    )
     require_authenticated_runtime_finder(_RUNTIME_STAGE.closure)
     require_loaded_runtime_origins(_RUNTIME_STAGE.closure)
 

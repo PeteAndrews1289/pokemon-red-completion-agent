@@ -12,6 +12,36 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-27: first authentic causal train row settled negative; campaign permanently closed
+
+The sole private invocation ran from exact source `76856ae1376266db5608217544b6f8a0908e6979`
+under green CI `33120953568/1`. The selected runtime executed once. It raised
+`RedLivingDexProductionRuntimeError`; the independent post-action observer still settled the
+honest zero-gain result after 945 selected-skill actions and 42,001 frames. The private journal
+sealed one selected-only train example and a complete terminal whose record hash joins exactly.
+Retry is false. **Never invoke, refreeze, rescue, or substitute this campaign again.**
+
+The public wrapper then returned `runtime_postauthentication` because authenticated
+`pysdl2-dll` changes `PYSDL2_DLL_PATH` from unset to its own staged DLL directory on import, while
+the wrapper reapplied the pre-runtime “must be unset” rule after the inner invocation returned.
+The same-version behavior reproduces without a ROM. Claude and Antigravity independently agree
+that this is a wrapper false positive and that the immutable settled negative counts as causal
+train example 1/1 at **development rigor only**. The consumed process did not reach its final
+loaded-origin check, so this row cannot support a benchmark or sealed claim.
+
+The repair keeps every preexisting DLL override forbidden and permits post-runtime only the exact
+canonical, nonsymlinked, owner-controlled staged `sdl2dll/dll` directory before rehashing the
+closure and checking the loaded SDL origin. Parent, prefix-poison, and symlink aliases fail tests.
+The [path-free terminal evidence](docs/evidence/red-living-dex-causal-campaign-terminal-v1-2026-08-27.json)
+records the disposition with zero private identities or paths.
+
+The board is now **causal train 1/1 · authority 0 · transfer 0**. Do not fit one negative row. The
+next session must capacity-check and preregister a statistically powered multi-kind Red causal
+curriculum with train/untouched-development separation across option kinds, families, locations,
+and physical roots. Only after a powered Red fit and paired untouched Red comparison may weights
+freeze for zero-shot Crystal. Do not spend another session on a wrapper that adds no causal
+capacity.
+
 ## 2026-08-27: direct consumer published and reoriented; execute the frozen lesson once
 
 PR 90 passed CI `33117957791/1`, rebased to exact main

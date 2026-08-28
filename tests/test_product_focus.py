@@ -320,15 +320,15 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         {"kind": "causal_train_example", "minimum": 1, "partition": "train"}
     ]
     assert len(state.retired_lanes) == 59
-    assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
+    assert focus_progress_fraction(state) == 1.0
+    assert focus_scorecard(state) == (("Causal Train Example · train", 1, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
     assert state.progress["development_episode_attempts"] == 15
     assert state.progress["verified_outcome_examples"] == 5
     assert state.progress["verified_composition_episodes"] == 1
-    assert state.progress["causal_train_examples"] == 0
+    assert state.progress["causal_train_examples"] == 1
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1411,7 +1411,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Causal Train Example · train: 0/1",)
+    assert rows == ("Causal Train Example · train: 1/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1499,7 +1499,7 @@ def test_learning_lane_accepts_one_honest_causal_train_example() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 1, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -1859,17 +1859,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 0.0
+    assert public["stage_progress"] == 1.0
     assert public["actions"] == 0
-    assert "Cross-title living-Dex causal example pipeline V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert "first authentic Red causal example settled" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 0, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "First authentic option" in encoded
-    assert "title-neutral causal journal" in encoded
+    assert "selected-arm train example" in encoded
     assert "Cross-title causal example pipeline" in encoded
-    assert "Causal Train Example 0/1" in encoded
+    assert "Causal Train Example 1/1" in encoded
     assert "Authentic causal train example" in encoded
     assert "Powered Red benchmark" in encoded
     assert "Zero-shot Crystal result" in encoded
@@ -1894,6 +1894,8 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "comparison 1" in encoded
     assert "Rootless" in encoded
     assert "logical atomic 0" in encoded
+    assert "actions 945" in encoded
+    assert "frames 42,001" in encoded
     assert public["model"]["teacher_queries"] == 0  # type: ignore[index]
     assert public["model"]["fallbacks"] == 0  # type: ignore[index]
     assert "/Users/" not in encoded
