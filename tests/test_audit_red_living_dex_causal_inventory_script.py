@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import runpy
 import sys
@@ -23,6 +24,14 @@ while str(SCRIPTS_ROOT) in sys.path:
 sys.path.insert(0, str(SCRIPTS_ROOT))
 
 SCRIPT_PATH = PROJECT_ROOT / "scripts/audit_red_living_dex_causal_inventory.py"
+EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json"
+)
+MACHINE_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-causal-capacity-census-machine-result-v1-2026-08-28.json"
+)
 SCRIPT = runpy.run_path(
     str(SCRIPT_PATH),
     run_name="audit_red_living_dex_causal_inventory_test",
@@ -201,3 +210,89 @@ def test_failure_receipt_sanitizes_an_exception_and_retains_zero_effects(
     assert result["root_claims"] == 0
     assert result["outcomes"] == 0
     assert "/private" not in str(result)
+
+
+def test_published_capacity_result_is_path_free_and_keeps_effects_zero() -> None:
+    result = json.loads(EVIDENCE_PATH.read_text(encoding="utf-8"))
+    machine_bytes = MACHINE_RESULT_PATH.read_bytes()
+    machine = json.loads(machine_bytes)
+
+    assert result["status"] == (
+        "authenticated_action_free_inventory_censused_capacity_insufficient"
+    )
+    assert result["source"]["commit"] == (
+        "cb18a8b5ffcc256707ee3cafa94f419565f17ab6"
+    )
+    assert result["source"]["ci_run"] == 33140010028
+    assert result["source"]["machine_result_sha256"] == hashlib.sha256(
+        machine_bytes
+    ).hexdigest()
+    assert result["source"]["machine_result_schema"] == machine["schema"]
+    assert result["source"]["machine_result_status"] == machine["status"]
+    assert result["audit"]["train_maximum_matching"] == 54
+    assert result["audit"]["development_maximum_matching"] == 63
+    assert result["audit"]["combined_maximum_matching"] == 63
+    assert result["audit"]["combined_context_deficit"] == 132
+    assert result["audit"]["development_template_compatible_root_counts"] == [
+        44,
+        0,
+        5,
+        34,
+        45,
+    ]
+    assert set(result["protected_effects"].values()) <= {0}
+    direct_audit_fields = {
+        "authenticated_contexts",
+        "authenticated_supplemental_roots",
+        "capacity_schedule_sha256",
+        "combined_context_deficit",
+        "combined_maximum_matching",
+        "compatibility_edges",
+        "consumed_contexts",
+        "consumed_supplemental_roots",
+        "development_context_deficit",
+        "development_maximum_matching",
+        "development_template_compatible_root_counts",
+        "distinct_independence_lineages",
+        "distinct_physical_roots",
+        "eligible_root_pool",
+        "eligible_supplemental_roots",
+        "ineligible_control_contexts",
+        "independence_qualified_roots",
+        "inventory_sufficient",
+        "reasons",
+        "roots_observed",
+        "roots_with_any_compatible_template",
+        "roots_without_compatible_template",
+        "source_catalog_partition_reused_as_prospective_label",
+        "source_train_roots",
+        "source_validation_roots",
+        "train_context_deficit",
+        "train_maximum_matching",
+        "train_template_compatible_root_counts",
+        "unqualified_lineage_roots",
+    }
+    for field in direct_audit_fields:
+        assert result["audit"][field] == machine[field]
+    for field in result["protected_effects"]:
+        assert result["protected_effects"][field] == machine[field]
+    pressure_axes = (
+        "collection_pressure",
+        "dependency_pressure",
+        "access_pressure",
+        "resource_pressure",
+        "storage_pressure",
+        "party_pressure",
+        "knowledge_pressure",
+    )
+    assert result["audit"]["pressure_value_counts"] == dict(
+        zip(pressure_axes, machine["pressure_value_counts"], strict=True)
+    )
+    assert result["design_sha256"] == machine["design_sha256"]
+    assert (
+        result["interpretation"]["combined_new_independent_root_lower_bound"]
+        == machine["minimum_new_independent_roots_lower_bound"]
+    )
+    encoded = json.dumps(result, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded

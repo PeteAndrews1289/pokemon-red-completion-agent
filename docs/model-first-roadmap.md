@@ -8,7 +8,7 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: publish the powered curriculum and measure independent capacity
+## Current checkpoint: generate fresh independent Red train capacity
 
 The project now has a concrete statistical target instead of the old 8+4 integration floor:
 
@@ -31,23 +31,30 @@ The exact Red setup feature matrix has rank **16** over 2,100 authentic helper r
 rejects unsupported rows rather than pretending unused dimensions were learned. Development
 outcomes never become learner targets.
 
-Capacity is the immediate falsifier. The
-[public bound](evidence/living-dex-causal-public-capacity-bound-v1-2026-08-27.json) leaves at most
-67 qualified historic roots. That forces at least 23 fresh train roots and at least 128 fresh
-combined roots, and authentic-menu compatibility may increase both deficits. Publish the design,
-then run one action-free maximum-bipartite-matching census over the authorized inventory. Each
-logical context must receive a different prospectively assigned harness-episode lineage. A clone,
-local RNG change, or rehash inherits its parent and adds no capacity.
-
 The
-[local qualification](evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
-records **190 focused · 5,531 full-suite · 306 typed source files** and the reviewer adjudication.
-It qualifies publication and the action-free census, not collection or fitting.
+[exact action-free census](evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
+found **67 qualified lineages and 414 compatibility edges**, but only **54/90 train**, **63/105
+development in isolation**, and **63/195 disjoint combined** maximum matchings. The resulting lower
+bounds are 36 new compatible train roots and 132 new combined roots. One development menu combining
+evolution, storage management, and access unlocking has no compatible historic root. Storage
+pressure also exposes only two values where the curriculum gate requires three.
 
-After the census, create only the measured fresh Red episodes, populate train first, collect
-selected-arm outcomes without a teacher, fit through the guarded entry, and leave development
-untouched until evaluation. Do not fit now, execute sealed Red or Crystal, replay the game, or
-promote authority. **Causal train 1/60 · authority 0 · transfer 0.**
+The next sequence is train-first:
+
+1. qualify a fresh episode-lineage generator that starts from a new prospectively assigned
+   emulator episode rather than a copied state;
+2. target the three scarce train templates with only 3, 3, and 8 compatible historic roots, plus a
+   third storage-pressure value;
+3. create at least 36 new compatible train lineages and rerun the action-free census;
+4. populate all 90 train contexts, then collect selected-arm outcomes without a teacher until at
+   least 60 settle and every information gate passes;
+5. fit only through the guarded entry;
+6. materialize the untouched development partition later, with explicit coverage of the currently
+   uncovered menu, then evaluate once against the frozen best-of-three controls.
+
+Do not add the separate train and development matchings: they compete for the same physical roots.
+Do not fit now, execute sealed Red or Crystal, or treat a full-game teacher episode as evaluation.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## Current checkpoint: one real negative lesson exists; scale evidence before fitting
 

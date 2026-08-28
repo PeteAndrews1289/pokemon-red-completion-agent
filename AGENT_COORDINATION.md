@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-28 active override — fresh train lineages before collection:** Exact main `cb18a8b5`
+> passed CI `33140010028/1`; the
+> [action-free capacity result](docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
+> measured **67 independent lineages · 414 edges · train 54/90 · development 63/105 alone ·
+> disjoint combined 63/195**. Codex owns the new episode-lineage generator, qualification,
+> publication, train-first root generation, and recensus. Antigravity is the read-only
+> architecture/independence challenger; Claude is the read-only causal/statistical and leakage
+> challenger. Codex decides and records disagreements.
+>
+> Target the scarce train templates with only 3, 3, and 8 historic compatible roots and introduce
+> a third storage-pressure value. Create at least 36 genuinely new compatible train lineages, then
+> recensus before collecting an outcome. Do not add the separate train and development matchings,
+> clone a save, materialize development, fit, open sealed Red or Crystal, or treat teacher gameplay
+> as evaluation. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **2026-08-27 active override — powered capacity before fitting:** Codex owns the powered Red
 > curriculum, qualification, publication, action-free root-to-context census, and final
 > adjudication. Antigravity begins as the read-only architecture/transfer challenger; Claude joins

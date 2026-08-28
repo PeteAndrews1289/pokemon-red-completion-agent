@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 28: the compatibility graph turns an estimate into a generation brief
+
+The powered curriculum shipped through PR 93 and exact-main CI, then the action-free census read
+the old classroom without pressing a button. It authenticated 67 independent episode lineages and
+found 414 valid root-to-menu edges. That sounds close to the old upper bound until the one-root-per-
+context matching is applied: train reaches 54 of 90, development reaches 63 of 105 only when it
+gets the whole old pool to itself, and the disjoint train-plus-development assignment reaches just
+63 of 195. The combined deficit is at least 132 genuinely new worlds.
+
+The graph also says what kind of worlds are missing. Two train templates have only three compatible
+historic roots, another has eight, one future exam menu has none, and storage pressure varies only
+twice instead of the required three levels. Those are generation targets, not excuses to clone a
+save. The next harness must start each episode anew, establish its lineage before play, reach the
+scarce menus, and build train first. Only after at least 36 new compatible train roots raise the
+matching can outcome collection begin.
+
+Every protected census counter remained zero. No controller action, emulator frame, claim,
+teacher query, prediction, outcome, or fit occurred. The project is still at **causal train 1/60,
+powered fit 0, authority 0, transfer 0**, but the remaining pre-training work is finally a measured
+data-generation problem rather than another vague readiness gate.
+
 ## August 27: turning one honest failure into an experiment that can answer the question
 
 The first causal row proved the pipe, but it could not prove a model. The new design starts with

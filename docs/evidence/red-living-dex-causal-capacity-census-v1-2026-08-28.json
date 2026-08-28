@@ -1,0 +1,128 @@
+{
+  "audit": {
+    "authenticated_contexts": 81,
+    "authenticated_supplemental_roots": 1,
+    "capacity_schedule_sha256": "cbc6dae3d43d773980a3b099fd163e2a7880fc77d51ab78ee5fbfa8dea3c42d8",
+    "combined_context_deficit": 132,
+    "combined_maximum_matching": 63,
+    "compatibility_edges": 414,
+    "consumed_contexts": 5,
+    "consumed_supplemental_roots": 0,
+    "development_context_deficit": 42,
+    "development_maximum_matching": 63,
+    "development_template_compatible_root_counts": [
+      44,
+      0,
+      5,
+      34,
+      45
+    ],
+    "distinct_independence_lineages": 67,
+    "distinct_physical_roots": 68,
+    "eligible_root_pool": 68,
+    "eligible_supplemental_roots": 1,
+    "independence_qualified_roots": 67,
+    "ineligible_control_contexts": 9,
+    "inventory_sufficient": false,
+    "pressure_value_counts": {
+      "access_pressure": 13,
+      "collection_pressure": 6,
+      "dependency_pressure": 3,
+      "knowledge_pressure": 13,
+      "party_pressure": 16,
+      "resource_pressure": 10,
+      "storage_pressure": 2
+    },
+    "reasons": [
+      "insufficient_development_root_compatibility",
+      "insufficient_disjoint_combined_root_compatibility",
+      "insufficient_observed_pressure_variation",
+      "insufficient_train_root_compatibility",
+      "uncovered_menu_template"
+    ],
+    "roots_observed": 68,
+    "roots_with_any_compatible_template": 63,
+    "roots_without_compatible_template": 4,
+    "source_catalog_partition_reused_as_prospective_label": false,
+    "source_train_roots": 44,
+    "source_validation_roots": 23,
+    "train_context_deficit": 36,
+    "train_maximum_matching": 54,
+    "train_template_compatible_root_counts": [
+      42,
+      45,
+      3,
+      3,
+      34,
+      8,
+      42,
+      44,
+      31,
+      34
+    ],
+    "unqualified_lineage_roots": 1
+  },
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "full_game_replay": false,
+    "model_fit": false,
+    "root_generation": false,
+    "sealed_red": false
+  },
+  "design_sha256": "3646390858ccfb2357c2c35548c72a4f6be216d563eab3215fced8c49b9a5c31",
+  "interpretation": {
+    "combined_new_independent_root_lower_bound": 132,
+    "development_only_deficit_if_every_compatible_existing_root_were_reserved_for_development": 42,
+    "development_template_without_historic_compatible_root": {
+      "available_option_kinds": [
+        "evolve",
+        "manage_storage",
+        "unlock_access"
+      ],
+      "slot_id": "red-capture-development-semantic-menu-01"
+    },
+    "exact_for_observed_graph_only": true,
+    "fresh_root_requirement_can_exceed_lower_bound": true,
+    "next_gate": "qualify_a_fresh_episode_lineage_generator_then_create_train_first_roots_targeting_scarce_templates_and_storage_pressure",
+    "separate_partition_matchings_cannot_be_added_because_roots_may_not_cross_partitions": true,
+    "train_first_minimum_new_compatible_roots": 36
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "full_capacity_audits": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-28",
+  "schema": "pokemon.red.living-dex-causal-capacity-census-public-result.v1",
+  "source": {
+    "ci_attempt": 1,
+    "ci_run": 33140010028,
+    "commit": "cb18a8b5ffcc256707ee3cafa94f419565f17ab6",
+    "machine_result_path": "docs/evidence/red-living-dex-causal-capacity-census-machine-result-v1-2026-08-28.json",
+    "machine_result_schema": "pokemon.red.living-dex-causal-action-free-inventory-result.v1",
+    "machine_result_sha256": "3baff182b0c7fedbfa0913e26b2d5c2e80030c05c2ef8ea8c1b903f2092f5473",
+    "machine_result_status": "authenticated_action_free_inventory_censused",
+    "source_bundle_sha256": "a7017fd112e128ae8c068cee26b303b54f47dad78854c4cc7c4ac54a4e262ef7"
+  },
+  "status": "authenticated_action_free_inventory_censused_capacity_insufficient",
+  "unsupported_claims": [
+    "all_63_matched_roots_can_fill_train_and_development_simultaneously",
+    "collection_ready",
+    "development_capacity_ready",
+    "fresh_root_count_exactly_132_will_be_sufficient",
+    "model_training_ready",
+    "root_generation_already_qualified",
+    "train_capacity_ready"
+  ]
+}
