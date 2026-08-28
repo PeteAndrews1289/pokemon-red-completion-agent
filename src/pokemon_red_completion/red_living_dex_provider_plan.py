@@ -30,7 +30,10 @@ from pokemon_red_completion.goal_manager_state import headroom_satisfaction
 from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexProspectiveCaptureSlot,
 )
-from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
+from pokemon_red_completion.living_dex_option_value import (
+    LivingDexOptionContext,
+    LivingDexOptionKind,
+)
 from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.provenance import canonical_sha256
@@ -218,6 +221,9 @@ class RedLivingDexActionFreeRootObservation:
     facts: RedLivingDexProviderRootFacts
     observed_state_sha256: str
     root_claim_available: bool
+    option_context: LivingDexOptionContext | None = None
+    independence_lineage_sha256: str | None = None
+    prospective_independence_authenticated: bool = False
 
     def __post_init__(self) -> None:
         _validate_root_observation(
@@ -228,6 +234,24 @@ class RedLivingDexActionFreeRootObservation:
         )
         if self.root_claim_available is not True:
             raise RedLivingDexProviderPlanError("provider-plan root is already consumed")
+        if self.option_context is not None:
+            if not isinstance(self.option_context, LivingDexOptionContext):
+                raise TypeError("provider-plan option context differs")
+            self.option_context.__post_init__()
+        if self.independence_lineage_sha256 is not None:
+            _require_sha256(
+                self.independence_lineage_sha256,
+                "provider-plan independence lineage",
+            )
+        if type(self.prospective_independence_authenticated) is not bool:  # noqa: E721
+            raise TypeError("provider-plan independence authentication differs")
+        if (
+            self.prospective_independence_authenticated
+            and self.independence_lineage_sha256 is None
+        ):
+            raise RedLivingDexProviderPlanError(
+                "authenticated provider root lacks an episode lineage"
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -644,6 +668,44 @@ def _require_slot_root_preconditions(
             option_kind,
             facts,
         )
+
+
+def build_red_living_dex_provider_recipe_for_action_free_root(
+    slot: LivingDexProspectiveCaptureSlot,
+    observation: RedLivingDexActionFreeRootObservation,
+    *,
+    world: RedLivingDexProviderRouteWorld,
+    corridors: tuple[RedLivingDexWildCorridor, ...],
+) -> RedLivingDexSetupSlotRecipe:
+    """Resolve one genuine menu for an available root without claiming it.
+
+    This is the narrow inventory surface used by the powered-capacity census.
+    It accepts only one of the fifteen frozen Red templates, reads no bytes,
+    and performs no behavior draw, controller action, provider execution, or
+    outcome observation.  An incompatible root raises instead of being
+    relabelled or partially counted.
+    """
+
+    if not isinstance(slot, LivingDexProspectiveCaptureSlot):
+        raise TypeError("action-free provider census needs a prospective slot")
+    if not isinstance(observation, RedLivingDexActionFreeRootObservation):
+        raise TypeError("action-free provider census needs a root observation")
+    slot.__post_init__()
+    observation.__post_init__()
+    canonical_slots = build_red_living_dex_prospective_capture_plan().slots
+    if slot.slot_sha256 not in {item.slot_sha256 for item in canonical_slots}:
+        raise RedLivingDexProviderPlanError(
+            "action-free provider census received a noncanonical Red template"
+        )
+    _require_route_world(world)
+    corridor_by_source = _validate_corridors(corridors)
+    _require_slot_root_preconditions(slot, observation.facts)
+    return _build_slot_recipe(
+        slot,
+        observation,
+        world=world,
+        corridor_by_source=corridor_by_source,
+    )
 
 
 def build_red_living_dex_provider_recipes(
@@ -1189,6 +1251,7 @@ __all__ = [
     "RedLivingDexProviderRootFacts",
     "RedLivingDexProviderRouteWorld",
     "build_red_living_dex_provider_recipes",
+    "build_red_living_dex_provider_recipe_for_action_free_root",
     "build_red_living_dex_provider_recipe_for_claimed_root",
     "derive_red_living_dex_provider_corridors",
     "freeze_red_living_dex_provider_plan",

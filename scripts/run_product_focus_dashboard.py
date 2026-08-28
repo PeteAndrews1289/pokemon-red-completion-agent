@@ -127,46 +127,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage=(
-            "Campaign terminal · first authentic Red causal example settled"
-            if first_causal_example_settled
-            else f"Active lane · {_text(lane, 'name')}"
-        ),
+        stage="Powered Red curriculum · action-free capacity gate",
         message=(
-            "The one-shot Red campaign settled a valid negative selected-arm train example. "
-            "The policy is still unfitted; the next gate is a powered multi-kind Red curriculum, "
-            "and Crystal transfer remains untested."
-            if first_causal_example_settled
-            else (
-                "The title-neutral causal journal and Red live adapter are being qualified. No "
-                "authentic causal example exists yet; gameplay authority and Crystal transfer "
-                "remain at zero."
-            )
+            "One negative row proves the causal pipe, not a model. The powered design needs at "
+            "least 60 train examples and 102 untouched paired development comparisons. Next: an "
+            "exact action-free root-to-menu capacity census."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red causal collection · one settled example → powered curriculum design"
-            if first_causal_example_settled
-            else (
-                "Public engineering · policy projection → crash-safe journal → Red adapter → "
-                "audits"
-            )
+            "Red causal curriculum · publish → maximum matching → fresh episode lineages → "
+            "train first"
         ),
-        collection_target=150,
+        collection_target=90,
         model=DashboardModelState(
             mode="waiting",
-            candidate=(
-                "Unfitted causal living-Dex policy · first authentic row retained"
-                if first_causal_example_settled
-                else "No fitted causal living-Dex policy · historical ranker remains unpromoted"
-            ),
+            candidate="Unfitted powered causal living-Dex policy · actual Red feature rank 16",
             choice=(
-                "No active model choice · next evidence is a powered multi-kind Red train set"
-                if first_causal_example_settled
-                else (
-                    "No active model choice · next evidence is one settled Red causal train "
-                    "example"
-                )
+                "No active choice · next: independent-root census, then fresh Red train outcomes"
             ),
             confidence=None,
             decisions=1,
@@ -174,19 +151,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="catalog",
             zero_shot_completed=causal_train_examples,
-            zero_shot_total=max(1, causal_train_examples),
+            zero_shot_total=60,
             adaptation_completed=0,
-            adaptation_total=1,
+            adaptation_total=102,
             sealed_completed=0,
             sealed_total=1,
             predictions_committed=False,
-            heading="Cross-title causal example pipeline",
-            eyebrow="Red curriculum · powered benchmark · Crystal transfer",
+            heading="Powered cross-title causal curriculum",
+            eyebrow="Red capacity · train-only fit · untouched exam · Crystal",
             counter_labels=(
-                "Authentic causal train example",
-                "Powered Red benchmark",
+                "Settled Red causal train examples",
+                "Untouched Red paired comparisons",
                 "Zero-shot Crystal result",
             ),
         ),
@@ -209,6 +186,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "V1 retry 0 · synthetic support is descriptive, not authentic authority"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
+            (
+                "Curriculum · train 90/min 60 · development 105/min 102 · censored=loss · "
+                "worst-case power 83.2% · kinds 7 · candidates 3"
+            ),
+            (
+                "Public capacity · qualified-root upper bound 67 · train deficit at least 23 · "
+                "combined deficit at least 128 · exact menu matching pending"
+            ),
+            (
+                "Fit guard · actual Red feature rank 16 · distinct rows minimum 50 · candidate "
+                "success minimum 50% · development targets excluded"
+            ),
+            (
+                "Evaluation · same-reset frozen scorer vs random + cost-only + myopic · primary "
+                "best-of-three envelope · exact one-sided paired sign test"
+            ),
             (
                 "First causal terminal · settled negative train example · selected-only target · "
                 "actions 945 · frames 42,001 · teacher 0 · model fit 0 · retry 0"
@@ -233,28 +226,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 1", stop_conditions[0]),
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
-            _event(
-                "First authentic option",
-                "main a448f5b9 · CI 32878889059/1 green · acquisition selected 78.2% · "
-                "actions 665 · frames 33672 · dependency 2→1 · fresh ledger settled · "
-                "teacher/fallback 0 · retry 0",
-            ),
-            (
-                "V3 terminal · main 14d7bcea · CI 32902297341/1 green · train ordinal 0 "
-                "consumed · actions 4379 · frames 304680 · censored · causal target +0 · "
-                "development untouched · retry 0"
-            ),
-            (
-                "Observer repair · main c663c3f4 · CI 32913718889/1 green · tests 4730 · "
-                "mutations 9/9 · ROM/private/action/frame/claim/prediction/teacher 0"
-            ),
             (
                 "Observed-arm redesign · variable-size menus · full-support propensities · "
                 "hard masks · selected outcomes only · censored targets 0 · V4 retired unexecuted"
-            ),
-            (
-                "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "
-                "CE 0.206/0.693 · rows disclosed 0 · no retry"
             ),
         ),
     )

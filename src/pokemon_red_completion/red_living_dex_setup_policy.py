@@ -60,6 +60,40 @@ class RedLivingDexSetupPolicyError(ValueError):
     """Validated Red setup evidence cannot produce one honest policy menu."""
 
 
+def red_living_dex_setup_candidate_features(
+    kind: LivingDexOptionKind,
+    *,
+    route_controller_actions: int,
+    maximum_controller_actions: int,
+    estimated_effort: float,
+    estimated_risk: float,
+    storage_unit: float,
+) -> LivingDexOptionFeatures:
+    """Return the exact first-title feature projection for one setup offer."""
+
+    if not isinstance(kind, LivingDexOptionKind):
+        raise RedLivingDexSetupPolicyError("Red setup feature kind differs")
+    if (
+        type(route_controller_actions) is not int  # noqa: E721
+        or type(maximum_controller_actions) is not int  # noqa: E721
+        or maximum_controller_actions <= 0
+        or not 0 <= route_controller_actions <= maximum_controller_actions
+    ):
+        raise RedLivingDexSetupPolicyError("Red setup feature action budget differs")
+    return LivingDexOptionFeatures(
+        kind=kind,
+        completion_gain=_COMPLETION_PRIOR.get(kind, 0.0),
+        dependency_unlock_gain=_DEPENDENCY_PRIOR.get(kind, 0.0),
+        travel_effort=route_controller_actions / maximum_controller_actions,
+        execution_effort=estimated_effort,
+        resource_cost=0.0,
+        storage_cost=(storage_unit if kind is LivingDexOptionKind.ACQUIRE else 0.0),
+        party_risk=estimated_risk,
+        irreversibility_risk=(1.0 if kind is LivingDexOptionKind.TRADE else 0.0),
+        uncertainty=0.0,
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class RedLivingDexSetupPolicyProjection:
     """Exact private provenance beside one identity-free learner menu."""
@@ -87,8 +121,7 @@ class RedLivingDexSetupPolicyProjection:
             type(self.maximum_controller_actions) is not int  # noqa: E721
             or self.maximum_controller_actions <= 0
             or any(
-                value > self.maximum_controller_actions
-                for value in self.route_controller_actions
+                value > self.maximum_controller_actions for value in self.route_controller_actions
             )
         ):
             raise RedLivingDexSetupPolicyError("Red setup policy action budget differs")
@@ -167,23 +200,17 @@ def project_red_living_dex_setup_policy(
     candidates = tuple(
         LivingDexOptionCandidate(
             binding.binding_ref,
-            LivingDexOptionFeatures(
-                kind=kind,
-                completion_gain=_COMPLETION_PRIOR.get(kind, 0.0),
-                dependency_unlock_gain=_DEPENDENCY_PRIOR.get(kind, 0.0),
-                travel_effort=route_actions[index] / maximum_controller_actions,
-                execution_effort=binding.estimated_effort,
-                resource_cost=0.0,
-                storage_cost=(storage_unit if kind is LivingDexOptionKind.ACQUIRE else 0.0),
-                party_risk=binding.estimated_risk,
-                irreversibility_risk=(1.0 if kind is LivingDexOptionKind.TRADE else 0.0),
-                uncertainty=0.0,
+            red_living_dex_setup_candidate_features(
+                kind,
+                route_controller_actions=route_actions[index],
+                maximum_controller_actions=maximum_controller_actions,
+                estimated_effort=binding.estimated_effort,
+                estimated_risk=binding.estimated_risk,
+                storage_unit=storage_unit,
             ),
             LivingDexOptionAvailability.AVAILABLE,
         )
-        for index, (kind, binding) in enumerate(
-            zip(typed_kinds, typed_bindings, strict=True)
-        )
+        for index, (kind, binding) in enumerate(zip(typed_kinds, typed_bindings, strict=True))
     )
     try:
         menu = LivingDexOptionMenu(context, candidates)
@@ -192,9 +219,7 @@ def project_red_living_dex_setup_policy(
     if len({menu.candidate_vector(index) for index in menu.available_indices}) != len(
         menu.available_indices
     ):
-        raise RedLivingDexSetupPolicyError(
-            "Red setup policy candidates are not distinguishable"
-        )
+        raise RedLivingDexSetupPolicyError("Red setup policy candidates are not distinguishable")
     return RedLivingDexSetupPolicyProjection(
         menu,
         observation.public_dict(),
@@ -231,7 +256,8 @@ def restore_red_living_dex_setup_policy_projection(
     if not isinstance(origin_document, dict):
         raise RedLivingDexSetupPolicyError("stored Red setup policy origin differs")
     if not isinstance(route_values, list) or any(
-        type(item) is not int for item in route_values  # noqa: E721
+        type(item) is not int
+        for item in route_values  # noqa: E721
     ):
         raise RedLivingDexSetupPolicyError("stored Red setup route census differs")
     if type(maximum) is not int:  # noqa: E721
@@ -258,5 +284,6 @@ __all__ = [
     "RedLivingDexSetupPolicyError",
     "RedLivingDexSetupPolicyProjection",
     "project_red_living_dex_setup_policy",
+    "red_living_dex_setup_candidate_features",
     "restore_red_living_dex_setup_policy_projection",
 ]

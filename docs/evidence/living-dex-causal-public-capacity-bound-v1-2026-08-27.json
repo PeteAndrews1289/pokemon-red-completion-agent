@@ -1,0 +1,55 @@
+{
+  "authorization": {
+    "crystal_execution": false,
+    "model_fit": false,
+    "private_context_access": false,
+    "red_controller_execution": false,
+    "root_generation": false,
+    "sealed_red": false
+  },
+  "capacity": {
+    "combined_new_root_minimum": 128,
+    "combined_required_contexts": 195,
+    "development_required_contexts": 105,
+    "historical_eligible_root_pool": 69,
+    "later_claimed_roots": 1,
+    "later_retired_root_exclusions": 1,
+    "remaining_root_upper_bound": 67,
+    "train_new_root_minimum_if_all_remaining_qualify": 23,
+    "train_required_contexts": 90
+  },
+  "counter_deltas": {
+    "causal_train_examples": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "design_sha256": "3646390858ccfb2357c2c35548c72a4f6be216d563eab3215fced8c49b9a5c31",
+  "interpretation": {
+    "capacity_ready": false,
+    "independence_rule": "one_unique_physical_root_and_authenticated_prospective_harness_episode_lineage_per_context_clones_inherit_parent_lineage",
+    "next_gate": "action_free_exact_capacity_census_then_prospective_root_expansion",
+    "root_reuse_allowed": false,
+    "stage_order": "populate_and_collect_train_before_materializing_untouched_evaluation",
+    "upper_bound_caveat": "actual_compatible_capacity_can_only_be_lower_after_menu_pressure_family_location_lineage_and_feature_checks"
+  },
+  "recorded_on": "2026-08-27",
+  "schema": "pokemon.core.living-dex-causal-public-capacity-bound.v1",
+  "source_receipts": {
+    "causal_freeze": "83c3408b0ebe2063072ec412c9b69484a712c247f3d47f1b76606d556bfe0ce5",
+    "causal_terminal": "adc0f92888faac01d6ad5030ec3379e7d9e0829f429b9c6fc9775a4adb92125e",
+    "curriculum_config": "ff997af2f9a8fca08b56e616c922db6c576699a10ef7fd2ca04188d10df26fd4",
+    "provider_inventory": "c317b258138e703a1afd532e77d3b71fec07bb1f856bb11afbbfd37479ba3ded"
+  },
+  "status": "insufficient_public_upper_bound_requires_new_roots",
+  "unsupported_claims": [
+    "all_remaining_roots_are_compatible",
+    "causal_curriculum_capacity_ready",
+    "model_training_ready",
+    "powered_red_benchmark_ready",
+    "statistical_independence_already_proven"
+  ]
+}

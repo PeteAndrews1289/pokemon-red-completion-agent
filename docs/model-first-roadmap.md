@@ -8,6 +8,47 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: publish the powered curriculum and measure independent capacity
+
+The project now has a concrete statistical target instead of the old 8+4 integration floor:
+
+1. assign **90 independent Red train contexts** across seven direct living-Dex option kinds and
+   retain at least 60 settled outcomes;
+2. keep **105 independent development contexts untouched**, with fifteen focus contexts per direct
+   kind and at least 102 completed same-reset comparisons; score every incomplete context as a
+   candidate loss rather than removing it;
+3. fit Red train only after the guarded readiness check proves train/development separation,
+   unique prospectively authenticated episode lineages, at least 50 distinct feature rows, exact
+   Red feature support, kind coverage, and at least 50% selected-candidate success;
+4. compare the frozen scorer against random, cost-only, and myopic controls on the same resets,
+   using the best-of-three envelope as the primary paired comparator;
+5. require the preregistered exact one-sided sign-test gate before any authority claim;
+6. freeze a passing Red representation for Crystal only on shared supported option kinds; require
+   abstention and later adaptation for trade, time, breeding, held-item, and other unsupported
+   mechanics.
+
+The exact Red setup feature matrix has rank **16** over 2,100 authentic helper rows. The fit gate
+rejects unsupported rows rather than pretending unused dimensions were learned. Development
+outcomes never become learner targets.
+
+Capacity is the immediate falsifier. The
+[public bound](evidence/living-dex-causal-public-capacity-bound-v1-2026-08-27.json) leaves at most
+67 qualified historic roots. That forces at least 23 fresh train roots and at least 128 fresh
+combined roots, and authentic-menu compatibility may increase both deficits. Publish the design,
+then run one action-free maximum-bipartite-matching census over the authorized inventory. Each
+logical context must receive a different prospectively assigned harness-episode lineage. A clone,
+local RNG change, or rehash inherits its parent and adds no capacity.
+
+The
+[local qualification](evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
+records **190 focused · 5,531 full-suite · 306 typed source files** and the reviewer adjudication.
+It qualifies publication and the action-free census, not collection or fitting.
+
+After the census, create only the measured fresh Red episodes, populate train first, collect
+selected-arm outcomes without a teacher, fit through the guarded entry, and leave development
+untouched until evaluation. Do not fit now, execute sealed Red or Crystal, replay the game, or
+promote authority. **Causal train 1/60 · authority 0 · transfer 0.**
+
 ## Current checkpoint: one real negative lesson exists; scale evidence before fitting
 
 The one authorized Red invocation is complete and permanently consumed. Exact source `76856ae1`

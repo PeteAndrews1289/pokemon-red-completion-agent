@@ -29,28 +29,28 @@ Not the product:
 
 ## One active lane
 
-**Cross-title living-Dex causal example pipeline V1** (`cross-title-living-dex-causal-example-pipeline-v1`)
+**Powered cross-title living-Dex causal curriculum V1** (`cross-title-living-dex-causal-example-pipeline-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the consumed terminal and exact post-runtime verifier repair, then design and capacity-check a statistically powered multi-kind Red causal curriculum before collecting another row or fitting a model.
+- Next decision: Publish the powered design, run the exact action-free root-to-context matching census, and use its measured deficit to create fresh prospectively independent Red episodes before any outcome collection or fit.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Turn one authenticated repeatable game state and its complete identity-free option menu into one crash-safe selected-arm causal example through a title-neutral staged journal. Red supplies the first live adapter; later cartridges reuse the same policy, propensity, claim, execution-start, independent-outcome, and trainable-example contract. |
-| Authority now | The pipeline now holds one authentic settled negative Red causal train row. No causal model has been fit, the historical ranker remains unpromoted, and no gameplay or collection authority follows from a single datum. |
-| Authority target | Fit and beat preregistered controls on a powered family and root disjoint Red curriculum under the title-neutral contract, then freeze weights for a zero-shot Crystal comparison before adaptation. |
-| Transfer test | Require Red-shaped and Crystal-shaped synthetic fixtures to use the identical policy document, propensity record, domain-separated claim, staged journal, outcome, and learner-example schema. After causal Red training and a powered Red benchmark, freeze weights and compare realized zero-shot Crystal outcomes against random and cost-only controls before adaptation. |
-| Cheapest falsifier | ROM-free Red-shaped and Crystal-shaped fixtures must survive concurrent claims and every durable crash cutpoint while proving one commitment, one replayable full-support distribution, selected-only lazy construction, zero controller effects before execution-start, no reroll or retry after input, one independent outcome, and an exactly restorable learner datum with no title or private identity in its policy features. |
+| Reusable capability | Collect a statistically powered set of title-neutral selected-arm causal examples across seven Red living-Dex option kinds, fit only after information and feature-support gates pass, compare on untouched same-reset development contexts against random, cost-only, and myopic controls, then freeze the qualified representation for an abstention-aware Crystal transfer test. |
+| Authority now | The pipeline holds one authentic settled negative Red causal train row plus a qualified powered curriculum design. No powered causal model has been fit, no development outcome may train it, the historical ranker remains unpromoted, and no gameplay or collection authority follows yet. |
+| Authority target | Collect at least 60 informative outcomes from 90 independent Red train contexts, pass exact feature-support and information gates, fit through the guarded entry point, and beat the preregistered best-of-three control envelope on at least 102 of 105 untouched development contexts with every incomplete pair scored against the candidate before freezing weights for Crystal. |
+| Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
+| Cheapest falsifier | An action-free bipartite census must prove that unique prospectively authenticated harness-episode lineages can populate 90 train and 105 untouched development contexts under the frozen authentic-menu constraints. A byte-cloned save, local RNG perturbation, or rehashed state inherits its parent lineage and cannot create capacity. Abort before collection or fit if the census, information thresholds, actual Red feature support, conservative-censoring power, or paired requirements fail. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 1 | 1 |
+| Causal Train Example · train | 1 | 60 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,24 +58,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-27-first-red-causal-terminal-adjudicated** · status **closed** · evidence [causal train example](docs/evidence/red-living-dex-causal-campaign-terminal-v1-2026-08-27.json)
+**2026-08-27-powered-causal-capacity-design** · status **active** · evidence [qualification](docs/evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The first authentic teacher-free Red causal datum now uses the same title-neutral journal and option representation intended for later games. The project must scale varied Red evidence and demonstrate a real Red model before freezing weights for Crystal. |
-| Learning output | One authentic selected-arm Red train example settled negative after 945 selected-skill actions and 42,001 frames. Causal train is 1 of 1; development remains 15, verified outcomes 5, model fits 4, unseen comparisons 4, authority promotions 0, and transfer results 0. |
-| Authority delta | None. The campaign added one authentic settled negative train datum but performed no fit, comparison, promotion, teacher query, counterfactual execution, Crystal run, or transfer test. |
+| Product alignment | This converts the one-row plumbing proof into the first curriculum capable of testing whether a title-neutral living-Dex policy actually learns. Red remains the training environment; Crystal remains a later frozen-weight transfer and adaptation test with explicit abstention for unsupported mechanics. |
+| Learning output | The immutable historical count remains one authentic settled negative Red causal train example. The new output is a powered, preregistered collection and evaluation contract: 90 train contexts with at least 60 settled, 105 untouched development contexts with at least 102 complete, every incomplete context scored as a candidate loss, seven direct option kinds, exact actual Red feature rank 16, and a guarded fit entry that fails closed before the low-level fitter. |
+| Authority delta | None. This session designed and qualified the powered causal curriculum and its fit/evaluation gates but collected no new outcome, fit no model, opened no sealed Red or Crystal case, and promoted no authority. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | Coverage, not plumbing. One negative row proves the selected-arm data pipe but cannot identify a useful policy, support a powered comparison, or justify authority. The next curriculum needs an explicit power calculation plus multi-kind family location and physical-root separation before any private collection or fit. |
-| Decision | Count the immutable settled negative as causal train 1 of 1 at development rigor, permanently close the consumed campaign, publish the exact post-runtime trust-check repair, and design a statistically powered multi-kind Red successor before any fit. |
-| Next session | Publish the exact trust-check repair and terminal evidence, then design one powered multi-kind Red causal curriculum with preregistered coverage, censoring, propensity, train-only fit, and untouched paired-comparison gates; do not open another root during design. |
-| Next falsifier | Before freezing a successor, prove from action-free capacity and an explicit paired evaluation power calculation that the curriculum can supply diverse train and untouched development contexts across multiple option kinds families locations and physical roots. Abort rather than call an 8+4 integration floor statistically powered. |
-| Stop condition | Never invoke refreeze or rescue the consumed campaign. Do not fit one row, open sealed Red or Crystal, promote authority, replay the game, or spend another session on a wrapper that produces no additional causal capacity. |
+| Blocker | Independent compatible capacity is not yet measured. The public historical pool has a conservative upper bound of 67 qualified roots, below the 90-train requirement and far below the 195 unique train-plus-development contexts. At least 23 new train roots and at least 128 new combined roots are required even in the best public case; the exact action-free census may show a larger deficit. |
+| Decision | Publish the powered curriculum and guarded fit/evaluation design, then run the exact action-free compatibility census from the clean published head. Create fresh prospectively assigned harness episodes for the measured deficit; collect train before development and never manufacture independence by cloning or rehashing a state. |
+| Next session | Publish and qualify the powered causal design, run the exact action-free capacity census from that clean head, then freeze only the root-expansion work required by the measured deficit. Do not fit, open sealed Red or Crystal, or replay the full game. |
+| Next falsifier | Run the published action-free maximum-matching census over prospectively authenticated roots and all 15 authentic menu templates. Report only aggregate path-free counts. If train 90, development 105, and combined 195 cannot all be assigned one physical root per logical context, quantify the deficit and create fresh independent harness episodes before collection. |
+| Stop condition | Stop on cloned-root independence, fewer than the preregistered information or power thresholds, development leakage into fit, unsupported-feature scoring, identity-bearing policy input, teacher fallback, sealed Red or Crystal execution, authority promotion, or full-game replay. |
 
 ### Stop conditions
 
 - The first causal campaign is complete and permanently consumed; never refreeze retry recover through execution or substitute another root under its identity.
-- Stop on a successor without explicit statistical power and multi-kind family location and root separation, or on identity leakage counterfactual targets teacher fallback one-row fit sealed Red Crystal execution promotion or full replay.
+- Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
+- Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
 
 ### Hard boundaries for this lane
 
@@ -86,6 +87,7 @@ outputs.
 - **Prohibited:** full game replay
 - **Prohibited:** identity bearing policy feature
 - **Prohibited:** claim first preflight v1 or v2 retry
+- **Prohibited:** cloned or rehashed root independence
 - **Prohibited:** model fit on development
 - **Prohibited:** opportunity identity feature
 - **Prohibited:** outcome balanced row selection

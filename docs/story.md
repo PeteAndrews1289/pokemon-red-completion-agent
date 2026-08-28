@@ -7,6 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: build a real classroom, not 195 photocopies
+
+One honest lesson was never going to teach Pokémon. The next classroom now has a real syllabus:
+90 Red training situations and 105 untouched exam situations, spread across acquiring, evolving,
+developing, storing, resupplying, unlocking access, and exploring. On every exam reset, the frozen
+model faces the same choice as three cheap opponents—random, cheapest-first, and a short-sighted
+completion heuristic. It has to beat the strongest of them. An incomplete exam is a loss for the
+model, not a row that disappears; all three allowed incompletes still leave 83.2% planned power.
+
+Then the inventory check found the hard limit. At most 67 old saves may qualify, before checking
+whether each save even offers the required menu. The full design needs 195 independent situations.
+So the next instrument does no gameplay at all: it builds the exact compatibility graph, finds the
+largest honest matching, and tells us how many genuinely new Red episodes to generate.
+
+Copying a save does not count. Neither does changing its RNG or giving it a new hash. Those worlds
+share one parent experience. New capacity requires a new prospectively assigned episode lineage.
+The model also stays inside the 16 feature directions Red can actually teach; it must say “I don't
+know yet” when Crystal introduces mechanics outside that support.
+
+The board is **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**. That may look like a
+step backward from “1/1,” but it is the opposite: the denominator now represents an experiment
+large enough to learn something and test whether it is real.
+
 ## Current checkpoint: the first real lesson was failure—and that is useful data
 
 The button was pressed once. The randomly chosen Red skill ran for 945 actions and 42,001 frames,

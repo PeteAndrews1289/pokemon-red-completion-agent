@@ -3,6 +3,59 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Powered causal curriculum — initial Antigravity audit and Codex adjudication 2026-08-27
+
+Antigravity reviewed the local powered curriculum, capacity schedule, matching census, actual Red
+feature support, guarded fit boundary, evaluation design, and Crystal abstention contract without
+editing or executing gameplay. Its final verdict was **GO with no required fix**. It found no
+reuse of the public 69/67-root pool as if it could satisfy the full independent context demand, accepted the
+maximum-matching implementation and action-free boundary, found the fit-readiness checks blocked
+development leakage and low-information data, and found no decorative test among the targeted
+guards.
+
+Codex accepts the GO but narrows three phrasings. Maximum matching is exact for the observed
+root-to-menu compatibility graph, not proof that the inventory is representative. The public
+figure of 128 new combined roots is a lower bound, not the final exact deficit. Finally, hashes and
+physical location do not prove independence: only a prospectively assigned harness-episode
+lineage does. The implementation now records that authentication explicitly; the supplemental
+legacy checkpoint remains available for provider integration but is excluded from powered
+capacity.
+
+Antigravity's earlier conditional review correctly rejected the old 8+4 floor as statistical
+evidence, warned that physical location alone did not create pressure diversity, and requested a
+myopic control. All three conditions are incorporated. One earlier P0 claim—that the design reused
+69 roots to fill every context—was rejected because the code fails closed and requires a distinct
+root assignment for every logical context. Its separate rank-18 concern was accepted and resolved
+by exact enumeration: actual Red feature rank is 16.
+
+Claude's later read-only audit returned **CONDITIONAL GO**. Codex accepted its conditions that the
+upstream harness—not caller-supplied hashes—must prove clone-inheriting episode lineage, that a
+null result must be described as underpowered rather than equivalence, that censor reason and arm
+counts must be reported, that the future evaluation producer must authenticate control choices,
+that only the guarded powered-fit entry may be used, and that train/development template ordering
+must be asserted. Censor diagnostics and template ordering are implemented here; lineage producer,
+control derivation, and exclusive consumer wiring remain explicit later execution gates.
+
+Codex rejected Claude's statement that complete-case exact testing retained Type-I validity under
+arbitrary censoring. With 70 null discordant pairs, removing at most three observed losses before
+the sign test raises the exact rejection probability from 3.61% to 9.41%. The repaired primary
+endpoint never removes an incomplete context: each is a candidate loss. The development denominator
+is consequently 105 with at least 102 complete, yielding 83.2% prospective power even when all
+three allowed incompletes are forced losses. This raises the public combined-root lower bound from
+93 to 128 before compatibility census. Reviewer outputs are advisory; this disagreement and its
+exact falsifier are part of the evidence record.
+
+Antigravity's post-repair challenge independently reproduced the new exact worst-case power as
+`0.832146870145596...` and returned **CONDITIONAL GO**. Its extracted-diff workspace incorrectly
+still showed the superseded 70/67 constants, so it listed the already-completed 105/102,
+censored-as-loss, and 128-root-bound changes as P0 work. Codex rejects those as live findings: the
+generated config, source, public receipt, focused tests, and full suite all contain the repair.
+Antigravity's remaining P1 cautions are accepted as later gates: new supplemental capacity must be
+authenticated to prospectively independent emulator-run lineages upstream, and the future
+evaluation campaign must bind to the guarded powered-fit receipt. The
+[local qualification](evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
+records the full adjudication and **190 focused · 5,531 full-suite · 306 typed source files**.
+
 ## Namespace-successor result — success closes the lane 2026-08-27
 
 PR 83 passed CI `33058891890/1`, merged as main `18eea8bd`, and passed exact-main CI

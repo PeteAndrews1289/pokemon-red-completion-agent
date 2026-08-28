@@ -12,6 +12,47 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-27: powered causal curriculum designed; exact independent capacity is the next gate
+
+The active successor is no longer the consumed one-row campaign. It is a preregistered Red
+curriculum with **90 train contexts, a minimum of 60 settled train outcomes, 105 untouched
+development contexts, and a minimum of 102 complete paired comparisons**. Train uses a
+block-balanced three-candidate exploration schedule across seven direct living-Dex option kinds.
+Development compares the frozen scorer on the same reset against random, cost-only, and myopic
+controls; the primary result is the best-of-three envelope under an exact one-sided paired sign
+test. Every incomplete development context is scored as a candidate loss, never dropped. The
+105-context denominator retains 83.2% power under the allowed worst case of three such losses.
+Development targets are structurally excluded from fitting.
+
+Do not describe the feature vector as rank 18 or 24. Exact enumeration of 2,100 authentic Red
+candidate rows gives **rank 16**. Trade, resource cost, irreversibility, uncertainty, and their
+pressure interactions are structurally unsupported in this Red setup curriculum; Crystal trade,
+time, breeding, held-item, and other new mechanics require abstention and later adaptation rather
+than zero-shot authority.
+
+The current blocker is capacity, not another runtime wrapper. The historic public inventory has a
+conservative upper bound of 67 qualified roots, so it cannot fill 90 train contexts and cannot
+fill 195 unique train-plus-development contexts. At least 23 new train roots and at least 128 new
+combined roots are required even before authentic-menu compatibility is measured. Those are lower
+bounds. Run the action-free maximum-matching census from a clean published head to obtain the
+exact deficit. It may read the authorized captures solely to compute aggregate compatibility and
+must not execute a case, construct a controller, query a teacher, predict an outcome, or expose an
+identity or path.
+
+The
+[local qualification](docs/evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
+records 190 focused and 5,531 full-suite tests, 306 typed source files, the conservative-censoring
+repair, and Codex's Claude/Antigravity adjudication. It opens publication and the action-free
+capacity census only; it does not open outcome collection or model fitting.
+
+Independence means a **prospectively assigned harness-episode lineage**. A byte clone, local RNG
+perturbation, save-state copy, or rehashed physical state inherits its parent lineage and cannot
+mint another train or development context. The guarded powered-fit entry must remain the only
+route to the new model; it verifies capacity assignment, train/development separation, minimum
+information, actual Red feature support, kind coverage, and candidate success before calling the
+low-level fitter. **Causal train remains 1/60; no powered fit exists; authority and transfer are
+zero.**
+
 ## 2026-08-27: first authentic causal train row settled negative; campaign permanently closed
 
 The sole private invocation ran from exact source `76856ae1376266db5608217544b6f8a0908e6979`

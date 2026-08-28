@@ -317,11 +317,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 1, "partition": "train"}
+        {"kind": "causal_train_example", "minimum": 60, "partition": "train"}
     ]
     assert len(state.retired_lanes) == 59
-    assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Causal Train Example · train", 1, 1),)
+    assert focus_progress_fraction(state) == pytest.approx(1 / 60)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 1, 60),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
@@ -1411,7 +1411,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Causal Train Example · train: 1/1",)
+    assert rows == ("Causal Train Example · train: 1/60",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1859,34 +1859,28 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 1.0
+    assert public["stage_progress"] == pytest.approx(1 / 60)
     assert public["actions"] == 0
-    assert "first authentic Red causal example settled" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 1, "total": 1}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert "action-free capacity gate" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 1, "total": 60}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 102}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "First authentic option" in encoded
-    assert "selected-arm train example" in encoded
-    assert "Cross-title causal example pipeline" in encoded
-    assert "Causal Train Example 1/1" in encoded
-    assert "Authentic causal train example" in encoded
-    assert "Powered Red benchmark" in encoded
+    assert "causal pipe, not a model" in encoded
+    assert "Powered cross-title causal curriculum" in encoded
+    assert "Causal Train Example 1/60" in encoded
+    assert "Settled Red causal train examples" in encoded
+    assert "Untouched Red paired comparisons" in encoded
     assert "Zero-shot Crystal result" in encoded
-    assert "fresh ledger" in encoded
-    assert "V3 terminal" in encoded
-    assert "main 14d7bcea" in encoded
-    assert "causal target +0" in encoded
-    assert "Observer repair" in encoded
-    assert "main c663c3f4" in encoded
-    assert "mutations 9/9" in encoded
+    assert "qualified-root upper bound 67" in encoded
+    assert "combined deficit at least 128" in encoded
+    assert "worst-case power 83.2%" in encoded
+    assert "actual Red feature rank 16" in encoded
+    assert "best-of-three envelope" in encoded
     assert "selected outcomes only" in encoded
     assert "V4 retired unexecuted" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
-    assert "a448f5b9" in encoded
-    assert "32878889059/1" in encoded
-    assert "78.2%" in encoded
     assert "reader ecb93c44 qualified" in encoded
     assert "V1 retry 0" in encoded
     assert "synthetic support is descriptive" in encoded

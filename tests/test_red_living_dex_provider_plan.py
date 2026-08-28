@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion import red_living_dex_causal_inventory as causal_inventory
 from pokemon_red_completion import red_living_dex_provider_plan as provider_plan
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
@@ -21,6 +22,13 @@ from pokemon_red_completion.global_router import (
     MacroPath,
     MacroTransition,
 )
+from pokemon_red_completion.living_dex_capture_curriculum import (
+    LivingDexCapturePartition,
+)
+from pokemon_red_completion.living_dex_causal_capacity_schedule import (
+    build_living_dex_causal_capacity_schedule,
+)
+from pokemon_red_completion.living_dex_option_value import LivingDexOptionContext
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.party import (
@@ -32,6 +40,20 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_species_ref,
+)
+from pokemon_red_completion.red_living_dex_capture_plan import (
+    build_red_living_dex_prospective_capture_plan,
+)
+from pokemon_red_completion.red_living_dex_causal_capacity import (
+    RedLivingDexCausalCapacityAssignment,
+    RedLivingDexCausalCapacityError,
+    audit_red_living_dex_causal_capacity,
+)
+from pokemon_red_completion.red_living_dex_causal_inventory import (
+    RedLivingDexCausalInventoryError,
+    RedLivingDexCausalRootCapability,
+    audit_red_living_dex_causal_inventory,
+    census_red_living_dex_causal_inventory,
 )
 from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
     map_id_for_wild_source,
@@ -119,6 +141,17 @@ def _root(index: int) -> RedLivingDexActionFreeRootObservation:
         facts=_facts(index),
         observed_state_sha256=authenticated.state_sha256,
         root_claim_available=True,
+        option_context=LivingDexOptionContext(
+            (index % 3) / 2,
+            ((index + 1) % 3) / 2,
+            ((index + 2) % 3) / 2,
+            ((index + 3) % 3) / 2,
+            ((index + 4) % 3) / 2,
+            ((index + 5) % 3) / 2,
+            ((index + 6) % 3) / 2,
+        ),
+        independence_lineage_sha256=_sha(("lineage", index)),
+        prospective_independence_authenticated=True,
     )
 
 
@@ -374,6 +407,229 @@ def test_freezes_complete_authentic_provider_capacity_without_effects() -> None:
         == 33
     )
     assert frozen.effects_before == frozen.effects_after
+
+
+def test_current_provider_plan_is_truthfully_only_an_integration_floor() -> None:
+    frozen = _freeze()
+    slots = build_red_living_dex_prospective_capture_plan().slots
+    roots = _roots()
+    assignments = tuple(
+        RedLivingDexCausalCapacityAssignment(
+            slot=slot,
+            recipe=recipe,
+            root=root,
+            focus_kind=slot.available_option_kinds[0],
+            assigned_candidate_index=(
+                0 if slot.partition is LivingDexCapturePartition.TRAIN else None
+            ),
+        )
+        for slot, recipe, root in zip(
+            slots,
+            frozen.plan.recipes,
+            roots,
+            strict=True,
+        )
+    )
+
+    audit = audit_red_living_dex_causal_capacity(assignments)
+
+    assert not audit.ready
+    assert audit.train_contexts == 10
+    assert audit.development_contexts == 5
+    assert audit.distinct_physical_roots == 15
+    assert audit.distinct_independence_lineages == 15
+    assert "insufficient_train_contexts" in audit.reasons
+    assert "insufficient_development_contexts" in audit.reasons
+    assert audit.public_dict()["private_identity_fields"] == 0
+
+
+def test_action_free_inventory_computes_exact_powered_root_deficits() -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+
+    audit = census_red_living_dex_causal_inventory(
+        _roots(),
+        world=_RouteWorld(),
+        corridors=_corridors(),
+        effects_before=checkpoint,
+        effects_after=checkpoint,
+    )
+
+    assert not audit.inventory_sufficient
+    assert audit.roots_observed == 15
+    assert audit.distinct_physical_roots == 15
+    assert audit.distinct_independence_lineages == 15
+    assert audit.independence_qualified_roots == 15
+    assert audit.unqualified_lineage_roots == 0
+    assert audit.train_maximum_matching == 15
+    assert audit.development_maximum_matching == 15
+    assert audit.combined_maximum_matching == 15
+    assert audit.train_context_deficit == 75
+    assert audit.development_context_deficit == 90
+    assert audit.combined_context_deficit == 180
+    assert all(count == 15 for count in audit.train_template_compatible_root_counts)
+    assert all(
+        count == 15 for count in audit.development_template_compatible_root_counts
+    )
+    public = audit.public_dict()
+    assert public["minimum_new_independent_roots_lower_bound"] == 180
+    assert public["collection_authorized"] is False
+    assert public["controller_actions"] == 0
+    assert public["emulator_frames"] == 0
+    assert public["root_claims"] == 0
+    assert public["provider_executions"] == 0
+
+
+def test_action_free_inventory_rejects_duplicate_lineage_or_protected_effect() -> None:
+    checkpoint = RedLivingDexSetupProtectedEffectCheckpoint()
+    roots = list(_roots())
+    roots[1] = replace(
+        roots[1],
+        independence_lineage_sha256=roots[0].independence_lineage_sha256,
+    )
+    with pytest.raises(RedLivingDexCausalInventoryError, match="independence lineage"):
+        census_red_living_dex_causal_inventory(
+            tuple(roots),
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            effects_before=checkpoint,
+            effects_after=checkpoint,
+        )
+
+    with pytest.raises(RedLivingDexCausalInventoryError, match="protected effect"):
+        census_red_living_dex_causal_inventory(
+            _roots(),
+            world=_RouteWorld(),
+            corridors=_corridors(),
+            effects_before=checkpoint,
+            effects_after=replace(checkpoint, emulator_frames=1),
+        )
+
+
+def test_action_free_inventory_rejects_interleaved_template_partitions(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = build_red_living_dex_prospective_capture_plan()
+    train = tuple(
+        slot for slot in plan.slots if slot.partition is LivingDexCapturePartition.TRAIN
+    )
+    development = tuple(
+        slot
+        for slot in plan.slots
+        if slot.partition is LivingDexCapturePartition.DEVELOPMENT
+    )
+    interleaved = replace(
+        plan,
+        slots=(train[0], development[0], *train[1:], *development[1:]),
+    )
+    monkeypatch.setattr(
+        causal_inventory,
+        "build_red_living_dex_prospective_capture_plan",
+        lambda: interleaved,
+    )
+
+    with pytest.raises(RedLivingDexCausalInventoryError, match="not contiguous"):
+        audit_red_living_dex_causal_inventory(_roots(), ())
+
+
+def test_action_free_inventory_matching_reassigns_an_earlier_greedy_root() -> None:
+    plan = build_red_living_dex_prospective_capture_plan()
+    train_slots = tuple(
+        slot
+        for slot in plan.slots
+        if slot.partition is LivingDexCapturePartition.TRAIN
+    )
+    schedule = build_living_dex_causal_capacity_schedule(
+        tuple(slot.available_option_kinds for slot in train_slots),
+        tuple(
+            slot.available_option_kinds
+            for slot in plan.slots
+            if slot.partition is LivingDexCapturePartition.DEVELOPMENT
+        ),
+    )
+    one_per_template = tuple(
+        next(
+            item
+            for item in schedule.slots
+            if item.partition == "train" and item.template_ordinal == template
+        )
+        for template in range(3)
+    )
+    roots = ("a" * 64, "b" * 64, "c" * 64)
+    compatible = {index: set() for index in range(15)}
+    compatible[0] = {roots[0], roots[1]}
+    compatible[1] = {roots[0], roots[2]}
+    compatible[2] = {roots[0], roots[2]}
+
+    assert (
+        causal_inventory._maximum_matching(
+            one_per_template,
+            compatible,
+            roots,
+            development_template_offset=0,
+        )
+        == 3
+    )
+
+
+def test_legacy_physical_digest_does_not_mint_an_independent_capacity_root() -> None:
+    roots = list(_roots())
+    roots[0] = replace(roots[0], prospective_independence_authenticated=False)
+    frozen = _freeze()
+    slots = build_red_living_dex_prospective_capture_plan().slots
+    capabilities = tuple(
+        RedLivingDexCausalRootCapability(
+            root=roots[index],
+            template_ordinal=index,
+            slot=slots[index],
+            recipe=frozen.plan.recipes[index],
+        )
+        for index in range(1, len(roots))
+    )
+
+    audit = audit_red_living_dex_causal_inventory(
+        tuple(roots),
+        capabilities,
+    )
+
+    assert audit.roots_observed == 15
+    assert audit.independence_qualified_roots == 14
+    assert audit.unqualified_lineage_roots == 1
+    assert audit.distinct_independence_lineages == 14
+    assert audit.combined_maximum_matching <= 14
+
+
+def test_red_capacity_rejects_missing_pressure_or_lineage_truth() -> None:
+    frozen = _freeze()
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    root = _root(0)
+    with pytest.raises(RedLivingDexCausalCapacityError, match="pressure"):
+        RedLivingDexCausalCapacityAssignment(
+            slot,
+            frozen.plan.recipes[0],
+            replace(root, option_context=None),
+            slot.available_option_kinds[0],
+            0,
+        )
+    with pytest.raises(RedLivingDexCausalCapacityError, match="lineage"):
+        RedLivingDexCausalCapacityAssignment(
+            slot,
+            frozen.plan.recipes[0],
+            replace(
+                root,
+                independence_lineage_sha256=None,
+                prospective_independence_authenticated=False,
+            ),
+            slot.available_option_kinds[0],
+            0,
+        )
+    with pytest.raises(RedLivingDexCausalCapacityError, match="prospectively"):
+        RedLivingDexCausalCapacityAssignment(
+            slot,
+            frozen.plan.recipes[0],
+            replace(root, prospective_independence_authenticated=False),
+            slot.available_option_kinds[0],
+            0,
+        )
 
 
 def test_cold_resolver_rebuilds_only_the_claimed_exact_recipe() -> None:

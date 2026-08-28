@@ -58,6 +58,9 @@ from pokemon_red_completion.goal_manager_context_catalog import (
 from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexCapturePartition,
 )
+from pokemon_red_completion.living_dex_option_value import (
+    living_dex_option_context_from_goal_situation,
+)
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactRoot,
@@ -553,6 +556,15 @@ def _observe_candidates(
             runtime=runtime,
             state=state,
             observe_goal=observe_catalog_goal,
+            independence_lineage_sha256=canonical_sha256(
+                {
+                    "root_lineage_id": assignment.root_lineage_id,
+                    "schema": (
+                        "pokemon.red.private-provider-capacity-lineage.v1"
+                    ),
+                }
+            ),
+            prospective_independence_authenticated=True,
         )
         if observation is None:
             state.ineligible_control_contexts += 1
@@ -610,6 +622,15 @@ def _observe_supplemental_candidates(
             runtime=runtime,
             state=state,
             observe_goal=observe_supplemental_goal,
+            independence_lineage_sha256=canonical_sha256(
+                {
+                    "physical_root_sha256": root.physical_root_sha256,
+                    "schema": (
+                        "pokemon.red.private-supplemental-capacity-lineage.v1"
+                    ),
+                }
+            ),
+            prospective_independence_authenticated=False,
         )
         if observation is None:
             state.ineligible_control_contexts += 1
@@ -631,6 +652,8 @@ def _observe_root(
         [PokemonRedStateReader, PyBoyAdapter],
         RedGoalObservation,
     ],
+    independence_lineage_sha256: str,
+    prospective_independence_authenticated: bool,
 ) -> RedLivingDexActionFreeRootObservation | None:
     emulator: PyBoyAdapter | None = None
     frame_before = 0
@@ -676,6 +699,13 @@ def _observe_root(
                 facts=facts,
                 observed_state_sha256=root.state_sha256,
                 root_claim_available=True,
+                option_context=living_dex_option_context_from_goal_situation(
+                    goal_observation.situation
+                ),
+                independence_lineage_sha256=independence_lineage_sha256,
+                prospective_independence_authenticated=(
+                    prospective_independence_authenticated
+                ),
             )
     except ProviderPlanFreezeError:
         if emulator is not None:

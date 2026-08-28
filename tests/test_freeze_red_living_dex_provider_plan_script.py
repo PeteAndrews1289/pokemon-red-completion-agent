@@ -92,7 +92,10 @@ def _capture(index: int):
 def _private_context(index: int, partition: str = "train") -> object:
     capture = _capture(index)
     return SimpleNamespace(
-        assignment=SimpleNamespace(partition=partition),
+        assignment=SimpleNamespace(
+            partition=partition,
+            root_lineage_id=f"provider-freezer-lineage-{index:02d}",
+        ),
         capture=capture,
         profile=_profile(capture.capture_id),
         root_consumption_sha256=root_consumption_sha256(
@@ -211,6 +214,7 @@ def test_candidate_observation_isolates_roots_and_remains_zero_effect(
                 observe=lambda: SimpleNamespace(
                     input_ready=True,
                     raw=SimpleNamespace(battle_state=0),
+                    situation=object(),
                 )
             )
         ),
@@ -229,6 +233,11 @@ def test_candidate_observation_isolates_roots_and_remains_zero_effect(
         globals_,
         "observe_red_living_dex_provider_root_facts",
         lambda _observation: expected.facts,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "living_dex_option_context_from_goal_situation",
+        lambda _situation: expected.option_context,
     )
     state = SCRIPT["_DiagnosticState"]()
     contexts = (_private_context(1, "train"), _private_context(2, "validation"))
@@ -252,6 +261,7 @@ def test_candidate_observation_isolates_roots_and_remains_zero_effect(
     assert state.source_validation_roots == 1
     assert state.controller_actions == 0
     assert state.emulator_frames == 0
+    assert all(item.prospective_independence_authenticated for item in candidates)
 
 
 def test_candidate_observation_fails_closed_on_frame_drift(
@@ -273,6 +283,7 @@ def test_candidate_observation_fails_closed_on_frame_drift(
                 observe=lambda: SimpleNamespace(
                     input_ready=True,
                     raw=SimpleNamespace(battle_state=0),
+                    situation=object(),
                 )
             )
         ),
@@ -287,6 +298,11 @@ def test_candidate_observation_fails_closed_on_frame_drift(
         globals_,
         "observe_red_living_dex_provider_root_facts",
         lambda _observation: expected.facts,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "living_dex_option_context_from_goal_situation",
+        lambda _situation: expected.option_context,
     )
     state = SCRIPT["_DiagnosticState"]()
 
@@ -373,6 +389,7 @@ def test_supplemental_observation_uses_the_captured_progress_adapter(
     goal_observation = SimpleNamespace(
         input_ready=True,
         raw=SimpleNamespace(battle_state=0),
+        situation=object(),
     )
     monkeypatch.setitem(globals_, "PyBoyAdapter", _Emulator)
     monkeypatch.setitem(globals_, "require_pyboy_import_origins", lambda _runtime: None)
@@ -399,6 +416,11 @@ def test_supplemental_observation_uses_the_captured_progress_adapter(
         "observe_red_living_dex_provider_root_facts",
         lambda _observation: expected.facts,
     )
+    monkeypatch.setitem(
+        globals_,
+        "living_dex_option_context_from_goal_situation",
+        lambda _situation: expected.option_context,
+    )
     state = SCRIPT["_DiagnosticState"]()
 
     candidates = SCRIPT["_observe_supplemental_candidates"](
@@ -410,7 +432,13 @@ def test_supplemental_observation_uses_the_captured_progress_adapter(
         state=state,
     )
 
-    assert candidates == (expected,)
+    assert len(candidates) == 1
+    assert candidates[0].root == expected.root
+    assert candidates[0].traversal == expected.traversal
+    assert candidates[0].facts == expected.facts
+    assert candidates[0].option_context == expected.option_context
+    assert candidates[0].independence_lineage_sha256 is not None
+    assert not candidates[0].prospective_independence_authenticated
     assert state.eligible_supplemental_roots == 1
     assert state.eligible_root_pool == 1
     assert state.controller_actions == 0

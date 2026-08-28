@@ -6,6 +6,40 @@ Status: active operating assignment as of 2026-08-27. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: powered Red capacity first; no fitting until the gate passes
+
+Codex owns implementation, qualification, publication, the later action-free capacity census, and
+adjudication. The powered curriculum requires 90 train contexts with at least 60 settled outcomes
+and 105 untouched development contexts with at least 102 complete same-reset comparisons. Every
+incomplete comparison is a candidate loss, leaving 83.2% power with the maximum three incomplete
+contexts. The historic public inventory can supply at most 67 qualified roots before menu compatibility, so the
+next evidence is an aggregate maximum-matching census followed by fresh prospectively independent
+Red harness episodes for the exact deficit.
+
+Antigravity was the initial read-only architecture/transfer challenger. It attacked false root
+capacity, clone independence, candidate-menu matching, title-neutral feature claims, Crystal
+abstention, and decorative tests. Claude completed the later read-only causal/statistical/trust-boundary
+review. It attacked paired power, censoring, propensity, candidate success, train/development
+leakage, feature rank, best-of-three control construction, and fit-entry bypass. Neither reviewer
+edits, publishes, reads private identities, runs a teacher, or executes gameplay. Codex records
+accepted and rejected findings with reasons.
+
+No reviewer verdict overrides evidence. Antigravity's initial pass returned GO; Claude and
+Antigravity's post-repair pass returned conditional GO. Codex rejected the permissive
+complete-case censoring interpretation after an exact null
+counterexample and repaired the design conservatively. It also narrows the reviews with three
+explicit caveats: maximum matching is exact only for the
+observed compatibility graph, 128 fresh roots is a public lower bound rather than an exact final
+count, and hashes do not establish independence—prospectively assigned harness lineages do.
+
+The
+[local qualification](evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
+records the full adjudication and **190 focused · 5,531 full-suite · 306 typed source files**.
+
+Do not fit, use development targets, execute sealed Red or Crystal, replay the full game, or
+promote authority. A clone, state copy, local RNG perturbation, or rehash inherits the parent
+lineage. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 ## Current override: one frozen Red train invocation, then immediate reorientation
 
 The direct consumer shipped through PR 90 and exact-main CI `33118840112/1` on executable commit
