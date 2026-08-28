@@ -29,6 +29,7 @@ from pokemon_red_completion.cascade import (
     CERULEAN_GYM_TRAINER_MOVE_SLOT,
     CERULEAN_GYM_TRAINER_RECOVERY_HP,
     CERULEAN_MINIMUM_STARTING_POTION_RESERVE,
+    CERULEAN_RARE_CANDY_SALE_PROCEEDS,
     CERULEAN_RIVAL_MAX_POTION_RESERVE,
     CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS,
     CERULEAN_TO_CENTER_DIRECTIONS,
@@ -77,6 +78,7 @@ from pokemon_red_completion.cascade import (
     _run_misty_with_potion,
     _run_route_24_accuracy_battle_with_potion,
     _run_route_24_usable_move_battle,
+    _sell_cerulean_funding_rare_candy,
     _should_use_cerulean_rival_potion,
     _use_cerulean_rival_potion,
     _use_route_24_antidote_if_needed,
@@ -128,6 +130,107 @@ def test_cerulean_minimum_starting_reserve_matches_the_cave_floor() -> None:
     assert CERULEAN_MINIMUM_STARTING_POTION_RESERVE == 9
 
 
+def test_cerulean_rare_candy_sale_replaces_bide_funding_exactly() -> None:
+    class Emulator:
+        items = [ItemId.POTION, ItemId.POKE_BALL, ItemId.RARE_CANDY, ItemId.HELIX_FOSSIL]
+        quantities = [10, 8, 1, 1]
+        money = 1_706
+        current_menu_item = 0
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.NUM_BAG_ITEMS:
+                return len(self.items)
+            if int(RamAddress.BAG_ITEMS) <= address < int(RamAddress.BAG_ITEMS) + 40:
+                offset = address - int(RamAddress.BAG_ITEMS)
+                index, field = divmod(offset, 2)
+                if index >= len(self.items):
+                    return 0
+                return int(self.items[index]) if field == 0 else self.quantities[index]
+            if int(RamAddress.PLAYER_MONEY) <= address < int(RamAddress.PLAYER_MONEY) + 3:
+                digits = f"{self.money:06d}"
+                offset = address - int(RamAddress.PLAYER_MONEY)
+                return int(digits[offset * 2]) * 16 + int(digits[offset * 2 + 1])
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return self.current_menu_item
+            if address == RamAddress.LIST_SCROLL_OFFSET:
+                return 0
+            return 0
+
+    emulator = Emulator()
+
+    class Executor:
+        phase = "field"
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.WAIT:
+                return object()
+            if action.kind is MacroActionKind.INTERACT:
+                assert self.phase == "field"
+                self.phase = "shop_menu"
+            elif action.kind is MacroActionKind.MOVE:
+                assert action.value == "down"
+                if self.phase == "shop_menu":
+                    emulator.current_menu_item = 1
+                elif self.phase == "sell_list":
+                    emulator.current_menu_item += 1
+                else:
+                    raise AssertionError(f"unexpected movement phase {self.phase!r}")
+            elif action.kind is MacroActionKind.CONFIRM:
+                if self.phase == "shop_menu":
+                    assert emulator.current_menu_item == 1
+                    emulator.current_menu_item = 0
+                    self.phase = "sell_list"
+                elif self.phase == "sell_list":
+                    assert emulator.items[emulator.current_menu_item] == ItemId.RARE_CANDY
+                    self.phase = "sale_confirmation"
+                elif self.phase == "sale_confirmation":
+                    index = emulator.items.index(ItemId.RARE_CANDY)
+                    emulator.items.pop(index)
+                    emulator.quantities.pop(index)
+                    # This literal is intentionally independent from the production
+                    # constant so a mutated sell value cannot self-confirm.
+                    emulator.money += 2_400
+                    self.phase = "sale_complete"
+                else:
+                    raise AssertionError(f"unexpected confirmation phase {self.phase!r}")
+            elif action.kind is MacroActionKind.CANCEL:
+                assert self.phase in {"sale_complete", "field"}
+                self.phase = "field"
+            else:
+                raise AssertionError(f"unexpected sale action {action!r}")
+            return object()
+
+    executor = Executor()
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=MapId.CERULEAN_MART,
+                player_x=2,
+                player_y=5,
+            )
+
+        def read_input_readiness(self) -> object:
+            class Readiness:
+                ready = executor.phase == "field"
+
+            return Readiness()
+
+    proceeds = _sell_cerulean_funding_rare_candy(
+        Reader(),  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        DEFAULT_CASCADE_TIMING,
+        required_cost=2_300,
+    )
+
+    assert CERULEAN_RARE_CANDY_SALE_PROCEEDS == 2_400
+    assert proceeds == 2_400
+    assert emulator.money == 4_106
+    assert ItemId.RARE_CANDY not in emulator.items
+
+
 class _StartingEvidence:
     cerulean_snapshot = True
 
@@ -175,11 +278,15 @@ def test_verified_cerulean_route_retries_a_swallowed_pedestrian_step() -> None:
     reader = Reader()
 
     class Executor:
-        actions = 0
+        move_actions = 0
+        waits = 0
 
         def execute(self, action: MacroAction) -> MacroAction:
-            self.actions += 1
-            if self.actions > 1:
+            if action.kind is MacroActionKind.WAIT:
+                self.waits += 1
+                return action
+            self.move_actions += 1
+            if self.move_actions > 1:
                 reader.state = replace(reader.state, player_x=(reader.state.player_x or 0) + 1)
             return action
 
@@ -192,7 +299,74 @@ def test_verified_cerulean_route_retries_a_swallowed_pedestrian_step() -> None:
     )
 
     assert (final.player_x, final.player_y) == (2, 0)
-    assert executor.actions == 3
+    assert executor.move_actions == 3
+    assert executor.waits == 1
+
+
+def test_verified_cerulean_route_outwaits_a_long_pedestrian_block() -> None:
+    class Reader:
+        state = RawGameState(True, MapId.CERULEAN_CITY, 14, 19, 1, 0, first_party_hp=10)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        move_actions = 0
+        waits = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is MacroActionKind.WAIT:
+                self.waits += 1
+                return action
+            self.move_actions += 1
+            if self.move_actions > 12:
+                reader.state = replace(reader.state, player_x=15)
+            return action
+
+    executor = Executor()
+    final = _move_verified(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("right",),
+        "Cerulean Center",
+    )
+
+    assert (final.player_x, final.player_y) == (15, 19)
+    assert executor.move_actions == 13
+    assert executor.waits == 12
+
+
+def test_verified_cerulean_route_fails_closed_after_its_pedestrian_bound() -> None:
+    state = RawGameState(True, MapId.CERULEAN_CITY, 14, 19, 1, 0, first_party_hp=10)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+    class Executor:
+        move_actions = 0
+        waits = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is MacroActionKind.WAIT:
+                self.waits += 1
+            else:
+                self.move_actions += 1
+            return action
+
+    executor = Executor()
+    with pytest.raises(CascadeChapterError, match="blocked at step 1"):
+        _move_verified(
+            executor,  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            ("right",),
+            "Cerulean Center",
+        )
+
+    assert executor.move_actions == 32
+    assert executor.waits == 31
 
 
 class _MemoryEmulator:
@@ -244,7 +418,7 @@ def _report() -> CascadeChapterReport:
             CeruleanChapterState,
             _StartingEvidence(),
         ),
-        cerulean_tm34_sale_proceeds=0,
+        cerulean_rare_candy_sale_proceeds=2_400,
         records=records,
         final_raw=raw,
         final_evidence=evidence,
@@ -1452,6 +1626,7 @@ def test_report_is_complete_honest_and_json_safe() -> None:
     report = _report()
 
     assert report.passed
+    assert replace(report, cerulean_rare_candy_sale_proceeds=0).passed
     assert len(report.checkpoints()) == CASCADE_CHECKPOINT_COUNT
     assert report.checkpoints()[-1][2] is report.final_raw
     payload = report.public_dict()
@@ -1465,7 +1640,7 @@ def test_report_is_complete_honest_and_json_safe() -> None:
         "gym_trainer_battle_observed": True,
         "misty_battle_observed": True,
     }
-    assert payload["economy"] == {"early_tm34_sale_proceeds": 0}
+    assert payload["economy"] == {"cerulean_rare_candy_sale_proceeds": 2_400}
     assert payload["cascade"] == {
         "victory_verified": True,
         "badge_verified": True,
@@ -1483,7 +1658,7 @@ def test_report_is_complete_honest_and_json_safe() -> None:
     "change",
     (
         {"records": ()},
-        {"cerulean_tm34_sale_proceeds": 999},
+        {"cerulean_rare_candy_sale_proceeds": 2_399},
         {"observed_route_24_trainers": (5, 4, 3, 2)},
         {"observed_route_25_trainers": (8, 3, 2)},
         {"saw_cerulean_gym_trainer_battle": False},

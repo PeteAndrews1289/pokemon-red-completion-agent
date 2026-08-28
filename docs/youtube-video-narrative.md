@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 28 scene: three late failures become observable contracts
+
+Open on exact main `BE6A03A4 · CI GREEN`, then stop its successor counter after three failures make
+**10/12 IMPOSSIBLE**. Stamp **CONSUMED** on 9900049–9900051 and gray out the remaining cards as
+**BOUND TO OLD SOURCE**. Stack four development failures beside them: **WRONG SALE VALUE · LAST
+PULSE MISREAD · FALSE HEAL · WILD→TRAINER HANDOFF**.
+
+Replace each with an evidence card: **CARTRIDGE PRICE · OBSERVE AFTER FINAL ACTION · PARTY HP/STATUS
++ LEAD PP · AUTHENTICATED TRAINER SNAPSHOT**. Run three fresh counters on fingerprint
+`A3B18F34`; all stop at **LATE CINNABAR · MANSION RETURNED · 275/312**. Total the rail at
+**112,486 ACTIONS · 21,072,636 FRAMES**, then overlay **ENGINEERING DIAGNOSTIC—NOT TRAINING, NOT
+HALL OF FAME, NOT LIVING DEX**.
+
+Show **5,694 TESTS · RUFF · MYPY 295 · REGISTRIES GREEN** and the path-free receipt binding three
+private ledger hashes. Leave the learner board unchanged: **CAUSAL TRAIN 1/60 · POWERED FIT 0 ·
+AUTHORITY 0 · TRANSFER 0**. End on **PUBLISH EXACT SOURCE → GREEN MAIN CI → FREEZE NEW 12-WORLD
+PLAN → REQUIRE ≥10/12 → TRAIN ROOTS → RECENSUS → CAUSAL OUTCOMES → GUARDED FIT**.
+
 ## August 28 scene: the exact gate fails before the repair earns 3/3
 
 Open on the exact published-source gate: **GREEN CI**, then twelve one-use counters. Stop at

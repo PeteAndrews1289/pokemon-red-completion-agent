@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Protocol, overload
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import note_observed_battle_exit
@@ -21,6 +21,8 @@ ROUTE_1_WALKER_CROSSED = (14, 13)
 ROUTE_1_WALKER_SOUTH_APPROACH = (14, 12)
 ROUTE_1_WALKER_SOUTH_YIELD = (15, 12)
 ROUTE_1_WALKER_CLEAR_ATTEMPTS = 24
+WILD_FLEE_MAX_EXIT_DISMISSALS = 16
+WILD_FLEE_MAX_TRAINER_HANDOFF_PULSES = 16
 ROUTE_1_WALKER_GATES = {
     (ROUTE_1_WALKER_APPROACH, "up"): (
         ROUTE_1_WALKER_YIELD,
@@ -495,6 +497,7 @@ def _same_post_flee_boundary(
     )
 
 
+@overload
 def flee_wild(
     executor: ActionExecutor,
     reader: PokemonRedStateReader,
@@ -504,8 +507,35 @@ def flee_wild(
     route_name: str,
     stabilization_frames: int,
     error_type: type[Exception],
-) -> Route1WildFleeEvidence:
-    """Select RUN, wait out the handoff, and verify a position-preserving exit."""
+) -> Route1WildFleeEvidence: ...
+
+
+@overload
+def flee_wild(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    encounter: RawGameState,
+    *,
+    expected_map_id: int,
+    route_name: str,
+    stabilization_frames: int,
+    error_type: type[Exception],
+    trainer_handoff: Callable[[RawGameState], bool],
+) -> Route1WildFleeEvidence | None: ...
+
+
+def flee_wild(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    encounter: RawGameState,
+    *,
+    expected_map_id: int,
+    route_name: str,
+    stabilization_frames: int,
+    error_type: type[Exception],
+    trainer_handoff: Callable[[RawGameState], bool] | None = None,
+) -> Route1WildFleeEvidence | None:
+    """Select RUN and prove either a field exit or an authorized trainer handoff."""
 
     if encounter.battle_state != 1 or encounter.map_id != expected_map_id:
         raise error_type(f"{route_name} flee requires an active wild battle on its route.")
@@ -517,11 +547,20 @@ def flee_wild(
     expected_status = encounter.first_party_status
     initial_hp = encounter.first_party_hp or 0
     run_attempts = 0
+    exit_dismissals = 0
+    trainer_handoff_pulses = 0
     for _ in range(128):
         raw = reader.read()
         if raw.battle_state == 0:
             if not reader.read_input_readiness().ready:
+                if exit_dismissals >= WILD_FLEE_MAX_EXIT_DISMISSALS:
+                    raise error_type(
+                        f"{route_name} flee exceeded its bounded post-RUN control "
+                        "settlement."
+                    )
+                executor.execute(MacroAction(MacroActionKind.CANCEL))
                 _wait(executor, 24)
+                exit_dismissals += 1
                 continue
             _wait(executor, stabilization_frames)
             raw = reader.read()
@@ -551,8 +590,17 @@ def flee_wild(
                 raise error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
             note_observed_battle_exit()
             return evidence
+        if raw.battle_state == 2 and trainer_handoff is not None:
+            if trainer_handoff(raw):
+                note_observed_battle_exit()
+                return None
+            if trainer_handoff_pulses >= WILD_FLEE_MAX_TRAINER_HANDOFF_PULSES:
+                raise error_type(
+                    f"{route_name} flee did not settle its authorized trainer handoff."
+                )
+            trainer_handoff_pulses += 1
         if (
-            raw.battle_state != 1
+            raw.battle_state not in ({1, 2} if trainer_handoff is not None else {1})
             or raw.map_id != expected_map_id
             or expected_position != (raw.player_x, raw.player_y)
             or raw.party_species_ids != expected_party
@@ -570,11 +618,12 @@ def flee_wild(
             continue
         command = menu.selected_main_command
         if command == 3:
-            if run_attempts >= 16:
+            if raw.battle_state == 1 and run_attempts >= 16:
                 raise error_type(f"{route_name} flee exceeded its bounded RUN attempts.")
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
             _wait(executor, 240)
-            run_attempts += 1
+            if raw.battle_state == 1:
+                run_attempts += 1
             continue
         direction = (
             {0: "right", 1: "right", 2: "down"}.get(command) if command is not None else None

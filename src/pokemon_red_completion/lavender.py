@@ -81,9 +81,12 @@ TUNNEL_AWAKENING_RESERVE = 7
 TUNNEL_PARLYZ_HEALS_PURCHASED = 7
 LAVENDER_PARLYZ_HEAL_RESERVE = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
+GEN1_FIELD_POISON_STEP_PERIOD = 4
+GEN1_BATTLE_POISON_HP_DIVISOR = 16
 TM28_SALE_PROCEEDS = 1_000
 TM24_SALE_PROCEEDS = 1_000
 TM34_SALE_PROCEEDS = 1_000
+TM12_SALE_PROCEEDS = 500
 ROUTE_11_GAMBLER_PAYOUT = 1_260
 ROUTE_11_SUPPLY_INCOME = 4 * ROUTE_11_GAMBLER_PAYOUT
 
@@ -147,6 +150,17 @@ LAVENDER_CENTER_TO_MART = _directions("RRRRRRRRRDDDDDDDDRRRU")
 LAVENDER_MART_TO_CLERK = _directions("UUL")
 LAVENDER_MART_TO_TOWN = _directions("RDDD")
 LAVENDER_MART_TO_CENTER = _directions("LLLUUUUUUUULLLLLLLLLU")
+
+# Once the final mandatory Rock Tunnel trainer has resolved, a poisoned DUX
+# remains exposed to field poison even after Wartortle is restored as the lead.
+# Bind the survival proof to every remaining movement tile through the first
+# Lavender nurse interaction, rather than only to the route into that battle.
+POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS = (
+    len(ONE_F_TO_SOUTH_EXIT)
+    + len(ROUTE_10_TO_LAVENDER)
+    + len(LAVENDER_TO_CENTER)
+    + 4  # Center entrance to the nurse.
+)
 
 
 class EmulatorState(Protocol):
@@ -887,7 +901,17 @@ def run_lavender_chapter(
         0,
         FINAL_TUNNEL_RECOVERY_THRESHOLD,
     )
-    _cure_tunnel_status_if_present(actions, reader, emulator, run, timing)
+    _cure_tunnel_status_if_present(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
+        maximum_uncured_poison_field_steps=len(ONE_F_TO_TRAINER_5),
+        # The protected-status battle policy spends its required DUX move,
+        # then pivots to the healthy story lead before another poison tick.
+        maximum_uncured_poison_battle_turns=1,
+    )
     _trainer(
         actions,
         reader,
@@ -906,6 +930,13 @@ def run_lavender_chapter(
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_5,
         finish_with_bubblebeam=True,
         protect_dux_status=True,
+    )
+    _prepare_final_tunnel_status_traversal(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
     )
     _swap(actions, reader, emulator, WARTORTLE, "final tunnel Wartortle restoration")
     _heal_if_below(actions, reader, emulator, run, timing, 0, TRAVERSAL_RECOVERY_THRESHOLD)
@@ -2046,10 +2077,13 @@ def _cure_tunnel_status_if_present(
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
-) -> None:
+    *,
+    maximum_uncured_poison_field_steps: int | None = None,
+    maximum_uncured_poison_battle_turns: int | None = None,
+) -> bool:
     before_status = _party_status(emulator)[0]
     if before_status == 0:
-        return
+        return True
     if before_status & 0x40:
         item = ItemId.PARLYZ_HEAL
         label = "Parlyz Heal"
@@ -2065,6 +2099,27 @@ def _cure_tunnel_status_if_present(
         )
     before_qty = _bag(emulator).get(item, 0)
     if before_qty < 1:
+        if (
+            item is ItemId.ANTIDOTE
+            and type(maximum_uncured_poison_field_steps) is int  # noqa: E721
+            and type(maximum_uncured_poison_battle_turns) is int  # noqa: E721
+            and maximum_uncured_poison_field_steps > 0
+            and maximum_uncured_poison_battle_turns >= 0
+        ):
+            hp = _party_hp(emulator)[0]
+            max_hp = _party_max_hp(emulator)[0]
+            field_damage = (
+                maximum_uncured_poison_field_steps + GEN1_FIELD_POISON_STEP_PERIOD - 1
+            ) // GEN1_FIELD_POISON_STEP_PERIOD
+            battle_damage = (
+                max(1, max_hp // GEN1_BATTLE_POISON_HP_DIVISOR)
+                * maximum_uncured_poison_battle_turns
+            )
+            if hp > field_damage + battle_damage:
+                return False
+            raise LavenderChapterError(
+                "Antidote-free poison continuation lacks its bounded survival proof."
+            )
         raise LavenderChapterError(
             f"{label} gate requires its supported status and a carried item."
         )
@@ -2075,6 +2130,43 @@ def _cure_tunnel_status_if_present(
         run.parlyz_heals_used += 1
     elif item is ItemId.AWAKENING:
         run.awakenings_used += 1
+    return True
+
+
+def _prepare_final_tunnel_status_traversal(
+    executor: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> bool:
+    """Cure the final DUX status or prove survival through Lavender's nurse."""
+
+    status = _party_status(emulator)[0]
+    if status & 0x08 and _bag(emulator).get(ItemId.ANTIDOTE, 0) < 1:
+        field_damage = (
+            POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS
+            + GEN1_FIELD_POISON_STEP_PERIOD
+            - 1
+        ) // GEN1_FIELD_POISON_STEP_PERIOD
+        _heal_if_below(
+            executor,
+            reader,
+            emulator,
+            run,
+            timing,
+            0,
+            field_damage,
+        )
+    return _cure_tunnel_status_if_present(
+        executor,
+        reader,
+        emulator,
+        run,
+        timing,
+        maximum_uncured_poison_field_steps=POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS,
+        maximum_uncured_poison_battle_turns=0,
+    )
 
 
 def _use_bag_item(
@@ -2559,27 +2651,27 @@ def _purchase_supplies(
         )
         tm28_sale_proceeds = TM28_SALE_PROCEEDS
         projected_money += tm28_sale_proceeds
-    tm34_sale_proceeds = 0
-    if ItemId.TM34_BIDE in _bag(emulator) and _needs_early_obsolete_tm_sale(
+    obsolete_tm_sale_proceeds = 0
+    obsolete_tm_item = _obsolete_funding_tm(_bag(emulator))
+    if obsolete_tm_item is not None and _needs_early_obsolete_tm_sale(
         available_potions=available_potions,
         projected_money=projected_money,
         required_cost=expected_cost,
     ):
-        # A lower-level Diglett can consume TM28 before Surge.  When that
-        # lineage also spends enough of the bounded capture budget, liquidate
-        # the already-supported Bide capacity token instead of weakening the
-        # fixed healing/status/repel reserve.  Cinnabar already replaces the
-        # missing unique slot before its delayed-TM38 capacity lesson.
+        # An unusually clean Cerulean reserve can retain the redundant TM12;
+        # older compatible roots retain Bide instead. Liquidate whichever
+        # obsolete funding asset is present rather than weakening the fixed
+        # healing/status/repel reserve.
+        obsolete_tm_sale_proceeds = _obsolete_funding_tm_sale_proceeds(obsolete_tm_item)
         _sell_single_mart_item(
             executor,
             reader,
             emulator,
             timing,
-            ItemId.TM34_BIDE,
-            expected_proceeds=TM34_SALE_PROCEEDS,
+            obsolete_tm_item,
+            expected_proceeds=obsolete_tm_sale_proceeds,
         )
-        tm34_sale_proceeds = TM34_SALE_PROCEEDS
-        projected_money += tm34_sale_proceeds
+        projected_money += obsolete_tm_sale_proceeds
     potion_sale_quantity = _required_potion_sale_quantity(
         available=available_potions,
         projected_money=projected_money,
@@ -2645,7 +2737,7 @@ def _purchase_supplies(
         + tm24_sale_proceeds
         + poke_ball_sale_proceeds
         + tm28_sale_proceeds
-        + tm34_sale_proceeds
+        + obsolete_tm_sale_proceeds
         + potion_sale_proceeds
     )
     if money_before + total_sale_proceeds - money_after != expected_cost:
@@ -2732,6 +2824,25 @@ def _needs_early_obsolete_tm_sale(
     """Use a qualified obsolete-TM fallback before reducing the safety reserve."""
 
     return projected_money + available_potions * POTION_SALE_PRICE < required_cost
+
+
+def _obsolete_funding_tm(bag: Mapping[int, int]) -> ItemId | None:
+    """Prefer the current fresh-root asset while retaining old-root compatibility."""
+
+    return next(
+        (item for item in (ItemId.TM12_WATER_GUN, ItemId.TM34_BIDE) if bag.get(item, 0)),
+        None,
+    )
+
+
+def _obsolete_funding_tm_sale_proceeds(item: ItemId) -> int:
+    """Return the cartridge's exact sell value for either compatible asset."""
+
+    if item is ItemId.TM12_WATER_GUN:
+        return TM12_SALE_PROCEEDS
+    if item is ItemId.TM34_BIDE:
+        return TM34_SALE_PROCEEDS
+    raise LavenderChapterError(f"Unsupported obsolete funding TM: {item!r}.")
 
 
 def _sell_single_mart_item(

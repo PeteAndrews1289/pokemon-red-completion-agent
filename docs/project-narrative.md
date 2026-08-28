@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 28: the second repair closes four late, real-cartridge gaps
+
+The first repaired source was good enough to publish but not good enough to generate classrooms.
+Its exact-source successor gate failed three times and stopped as soon as 10/12 became impossible.
+The next development probes uncovered why seemingly small assumptions kept surfacing late: TM12
+sells for 500 rather than 1,000; the last allowed movement pulse can itself complete a doorway;
+blind nurse confirmations can leave three party members fainted; and fleeing a wild battle can
+hand control directly to the trainer standing on the same sight line.
+
+Each became an observed contract rather than a seed patch. The route collects and sells assets at
+their cartridge values, observes the state after the last bounded pulse, proves whole-party
+HP/status plus lead-PP recovery before leaving Silph, and permits a direct trainer transition only
+when an opt-in predicate authenticates the complete battle snapshot. The unchanged final bundle
+then reached the late-Cinnabar `mansion_returned` boundary three times in a row: **112,486 actions,
+21,072,636 frames**. The scope is 275/312, after the Mansion Secret Key return—not the League or a
+living Pokédex.
+
+That distinction is the point of the project. A path-free public receipt binds the three private
+ledgers without turning them into learner rows. The scoreboard therefore remains **causal train
+1/60, powered fit 0, authority 0, transfer 0**. The next work is no longer another route tweak:
+publish the source, green exact main, freeze a genuinely new source-bound twelve-world yield plan,
+and demand 10/12 before the generator is allowed to create train roots.
+
 ## August 28: an exact 1/12 failure became a reusable capability repair
 
 The matching census said the model needed new worlds. The first exact published attempt to make them

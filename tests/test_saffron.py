@@ -197,6 +197,64 @@ def test_stone_clerk_route_yields_at_middle_fourth_floor_gate(
     assert executor.crossing_attempts == 2
 
 
+@pytest.mark.parametrize("block_x", (6, 11))
+def test_stone_clerk_route_yields_across_the_full_safe_corridor(
+    monkeypatch: pytest.MonkeyPatch,
+    block_x: int,
+) -> None:
+    class Reader:
+        state = replace(
+            _terminal(),
+            map_id=MapId.CELADON_MART_4F,
+            player_x=block_x,
+            player_y=2,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        yielded = False
+        returned = False
+        blocked_left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (block_x, 2):
+                reader.state = replace(reader.state, player_x=block_x + 1)
+                self.yielded = True
+            elif action.value == "left" and position == (block_x + 1, 2):
+                reader.state = replace(reader.state, player_x=block_x)
+                self.returned = True
+            elif action.value == "left" and position == (block_x, 2):
+                if self.yielded and self.returned:
+                    reader.state = replace(reader.state, player_x=block_x - 1)
+                else:
+                    self.blocked_left_attempts += 1
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "evolution-stone clerk",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (block_x - 1, 2)
+    assert executor.yielded
+    assert executor.returned
+    assert executor.blocked_left_attempts == 1
+
+
 def test_mart_roof_route_yields_to_fifth_floor_customer(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -3,6 +3,35 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Post-yield fresh-teacher repair — Claude review and Codex adjudication 2026-08-28
+
+Claude inspected the exact uncommitted diff read-only, made no edits, opened no private diagnostic
+input, and executed no ROM or teacher. It found no P0 code-correctness defect. It confirmed the
+cartridge economy balance, authenticated trainer-state predicate, conservative poison arithmetic,
+mutation-sensitive capture/heal/movement tests, and consistent source-bundle regeneration.
+
+Codex accepts Claude's P1 in its narrow form: the three successful private diagnostics require a
+tracked, path-free, hash-bound artifact before publication can cite them. The
+[V2 qualification](evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+provides that artifact while retaining `population_yield_qualified=false` and every learner,
+authority, sealed, and transfer counter at zero. Claude could not see the runs because its audit
+was explicitly denied private access; that is a review boundary, not contrary evidence.
+
+Codex accepts the caution that the poison survival bound depends on one DUX battle tick. The
+protected policy withholds the pivot until the required move's PP is observed spent, then switches
+to the healthy story lead before another DUX tick; tests distinguish the before/after condition and
+the strict survival thresholds. Codex rejects two findings as factual misreads. First,
+`mansion_returned` is checkpoint 275/312 after the late-Cinnabar Secret Key route, not early Mt.
+Moon egress. Second, the unauthenticated trainer-state fallthrough is intentional: it emits a
+bounded intro-advancing input and tests require that first transition before the full Super Nerd
+snapshot authenticates. A `continue` would stall the handoff rather than repair it.
+
+The three fresh-root item requirements are accepted as explicit generator preconditions, not
+claims of title-neutral world tolerance. Silph wording is narrowed to what is observed directly:
+whole-party HP/status restoration plus expected lead PP and field readiness. Verdict: **GO for
+publication as local engineering qualification; NO-GO for population yield, successor freeze,
+model fit, authority, or transfer until a newly frozen exact-source 10/12 gate passes.**
+
 ## Powered causal curriculum — initial Antigravity audit and Codex adjudication 2026-08-27
 
 Antigravity reviewed the local powered curriculum, capacity schedule, matching census, actual Red

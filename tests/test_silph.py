@@ -116,6 +116,91 @@ def test_x_accuracy_resource_heals_only_a_damaged_or_statused_party() -> None:
     assert _party_needs_healing((10, 20), (10, 20), (0, 1))
 
 
+def test_silph_verified_heal_waits_for_full_party_pp_and_field_control(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    timing = replace(DEFAULT_SILPH_TIMING, heal_pulses=1, menu_frames=1)
+    expected_pp = (15, 15, 10, 15)
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+            return object()
+
+    executor = Executor()
+
+    class Reader:
+        def read(self) -> RawGameState:
+            healed = executor.confirmations >= 3
+            return replace(
+                _terminal(),
+                first_party_hp=139 if healed else 0,
+                first_party_pp=expected_pp if healed else (0, 0, 0, 0),
+            )
+
+        def read_input_readiness(self) -> object:
+            return SimpleNamespace(ready=executor.confirmations >= 3)
+
+    monkeypatch.setattr(
+        silph_module,
+        "_party_hp",
+        lambda _emulator: (139,) if executor.confirmations >= 3 else (0,),
+    )
+    monkeypatch.setattr(silph_module, "_party_max_hp", lambda _emulator: (139,))
+    monkeypatch.setattr(silph_module, "_party_status", lambda _emulator: (0,))
+
+    state = silph_module._heal_party_to_verified_boundary(
+        silph_module.CountingExecutor(executor),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        SimpleNamespace(),  # type: ignore[arg-type]
+        timing,
+        label="unit post-rival heal",
+        expected_first_party_pp=expected_pp,
+    )
+
+    assert executor.confirmations == 3
+    assert state.first_party_hp == 139
+    assert state.first_party_pp == expected_pp
+
+
+def test_silph_verified_heal_rejects_an_unsettled_party(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    timing = replace(DEFAULT_SILPH_TIMING, heal_pulses=1, menu_frames=1)
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+            return object()
+
+    executor = Executor()
+    reader = SimpleNamespace(
+        read=lambda: replace(_terminal(), first_party_hp=0, first_party_pp=(0, 0, 0, 0)),
+        read_input_readiness=lambda: SimpleNamespace(ready=True),
+    )
+    monkeypatch.setattr(silph_module, "_party_hp", lambda _emulator: (0,))
+    monkeypatch.setattr(silph_module, "_party_max_hp", lambda _emulator: (139,))
+    monkeypatch.setattr(silph_module, "_party_status", lambda _emulator: (0,))
+
+    with pytest.raises(SilphChapterError, match="did not settle"):
+        silph_module._heal_party_to_verified_boundary(
+            silph_module.CountingExecutor(executor),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            SimpleNamespace(),  # type: ignore[arg-type]
+            timing,
+            label="unit failed heal",
+            expected_first_party_pp=(15, 15, 10, 15),
+        )
+
+    assert executor.confirmations == 1 + silph_module.SILPH_HEAL_SETTLE_PULSES
+
+
 def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_BLOCK_POSITION == (15, 2)
     assert MART_5F_GENTLEMAN_YIELD_POSITION == (15, 3)

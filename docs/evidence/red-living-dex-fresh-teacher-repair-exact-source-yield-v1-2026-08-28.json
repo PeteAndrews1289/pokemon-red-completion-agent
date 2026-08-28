@@ -1,0 +1,125 @@
+{
+  "authorization": {
+    "diagnostic_gate_execution": true,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "successor_plan_freeze": false,
+    "transfer_execution": false
+  },
+  "early_stop": {
+    "maximum_possible_mansion_returned_successes": 9,
+    "reason": "minimum_success_threshold_became_mathematically_impossible",
+    "remaining_seed_count": 9,
+    "remaining_seed_end": 9900060,
+    "remaining_seed_start": 9900052,
+    "remaining_seeds_claimed": 0,
+    "remaining_seeds_reuse_authorized": false
+  },
+  "exact_source": {
+    "ci_attempt": 1,
+    "ci_event": "push",
+    "ci_run": 33189656179,
+    "ci_status": "success",
+    "commit": "be6a03a4af38b230e4c910f48d2b1aecd785d45f",
+    "source_bundle_sha256": "5285cce43beebb26237c72bd8946b6168556d48f09340df8b53c31a473196434"
+  },
+  "failure_clusters": [
+    {
+      "count": 1,
+      "failure_message_sha256": "2fc5d06b7efcaad4411e9172479da677d31a0ff81207e980dae4b3ffb143c06d",
+      "last_checkpoint_id": "eevee_received",
+      "public_category": "dynamic_department_store_clerk_collision"
+    },
+    {
+      "count": 1,
+      "failure_message_sha256": "30170aa9d5297234ccae2e03abf36bf2788e52e0e789673c8f16f8e223c1c0eb",
+      "last_checkpoint_id": "mt_moon_entered",
+      "public_category": "bounded_zubat_search_exhaustion"
+    },
+    {
+      "count": 1,
+      "failure_message_sha256": "9fb06590c65769066fe4b774b5b4a6b2506c68ac89d9f92ed01a0f732205e0ac",
+      "last_checkpoint_id": "tunnel_entered",
+      "public_category": "antidote_status_inventory_mismatch"
+    }
+  ],
+  "gate": {
+    "attempts_planned": 12,
+    "maximum_failures": 2,
+    "minimum_mansion_returned_successes": 10,
+    "no_private_path_or_identity_leak": true,
+    "no_repeated_deterministic_failure_stage": true,
+    "one_use_per_seed": true
+  },
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "gate_failed": true,
+    "learning_counter_changed": false,
+    "no_repeated_failure_stage_observed": true,
+    "official_lineage_created": false,
+    "repair_scope": [
+      "Route around or reacquire a moving department-store clerk instead of replaying a fixed aisle step.",
+      "Make bounded target-species search distinguish non-target encounters and recover without assuming a Zubat appears in one fixed cycle budget.",
+      "Arbitrate poison status, carried Antidote inventory, and safe fallback recovery without asserting that an absent item exists."
+    ],
+    "successor_plan_freeze_allowed": false
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "recorded_on": "2026-08-28",
+  "runs": [
+    {
+      "actions": 27242,
+      "frames": 3754184,
+      "harness_seed": 9900049,
+      "last_checkpoint_id": "eevee_received",
+      "private_ledger_sha256": "517cde5bf1ac2c55cc87e03a0c8037f9684111a9351053e9d9c6f79ab4f7721c",
+      "root_generated": false,
+      "status": "failed"
+    },
+    {
+      "actions": 3686,
+      "frames": 364078,
+      "harness_seed": 9900050,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_sha256": "a85d85f8247e8b3ff9114fc9931c93146e22f2bbee85551aa776f4611b1f7794",
+      "root_generated": false,
+      "status": "failed"
+    },
+    {
+      "actions": 24639,
+      "frames": 2328300,
+      "harness_seed": 9900051,
+      "last_checkpoint_id": "tunnel_entered",
+      "private_ledger_sha256": "f1df44e32e47c59976446034ccfa77f80d72db3caf481dbe074d1a832a446bd1",
+      "root_generated": false,
+      "status": "failed"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-fresh-teacher-repair-exact-source-yield.v1",
+  "summary": {
+    "attempts_claimed": 3,
+    "attempts_planned": 12,
+    "failures": 3,
+    "mansion_returned_successes": 0,
+    "unclaimed_after_early_stop": 9
+  },
+  "unsupported_claims": [
+    "model_training_began",
+    "official_fresh_root_created",
+    "repair_population_yield_qualified",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_policy_labels"
+  ]
+}
