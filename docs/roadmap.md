@@ -3,6 +3,23 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 27 powered-curriculum checkpoint:** The next Red learner is preregistered at **90 train
+> contexts / at least 60 settled outcomes** and **105 untouched development contexts / at least 102
+> complete paired comparisons**. Every incomplete comparison is scored as a candidate loss; the
+> maximum-three-incomplete design retains 83.2% power. It spans seven direct living-Dex option kinds, uses a
+> block-balanced three-candidate exploration schedule, and compares on the same reset against
+> random, cost-only, and myopic controls. The actual Red setup feature support is rank 16; the
+> guarded fit path rejects unsupported features, train/development overlap, low information, low
+> success, or inadequate kind coverage before the fitter is called.
+>
+> The [public capacity bound](evidence/living-dex-causal-public-capacity-bound-v1-2026-08-27.json)
+> is at most 67 usable historic roots. At least 23 new train roots and 128 new combined roots are
+> therefore necessary, but not necessarily sufficient. Publish, run the action-free exact
+> root-to-menu maximum matching, then create fresh prospectively assigned harness episodes for the
+> measured deficit. Clones and RNG perturbations inherit lineage. No new outcome, fit, sealed Red,
+> Crystal run, replay, authority, or transfer result exists yet. **Causal train 1/60 · authority 0
+> · transfer 0.**
+
 > **August 27 execution-reorientation checkpoint:** PR 90 passed, executable commit `6fd2286f`
 > passed exact-main CI `33118840112/1`, and the frozen train campaign remains unconsumed. The
 > [reorientation](evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json) opens

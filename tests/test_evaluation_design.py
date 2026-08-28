@@ -8,6 +8,7 @@ from pokemon_red_completion.evaluation_design import (
     minimum_paired_contexts,
     paired_one_sided_exact_p,
     paired_one_sided_exact_power,
+    paired_one_sided_exact_power_with_forced_losses,
     zero_loss_conjunction_power,
 )
 
@@ -63,6 +64,21 @@ def test_minimum_sample_size_and_design_are_computed_not_asserted() -> None:
     assert design.minimum_contexts == minimum
     assert design.adequately_powered
     assert design.public_dict()["decision_rule"].startswith("promote only")
+
+
+def test_worst_case_censoring_power_counts_missing_pairs_as_losses() -> None:
+    assert paired_one_sided_exact_power_with_forced_losses(
+        105,
+        forced_losses=3,
+        win_probability=0.30,
+        loss_probability=0.10,
+    ) == pytest.approx(0.8321468701455965)
+    assert paired_one_sided_exact_power_with_forced_losses(
+        98,
+        forced_losses=3,
+        win_probability=0.30,
+        loss_probability=0.10,
+    ) < 0.80
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,26 @@
 # Three-agent coordination
 
+> **2026-08-27 active override — powered capacity before fitting:** Codex owns the powered Red
+> curriculum, qualification, publication, action-free root-to-context census, and final
+> adjudication. Antigravity begins as the read-only architecture/transfer challenger; Claude joins
+> later as the read-only causal/statistical/trust-boundary reviewer. Neither reviewer edits,
+> publishes, opens private identities, queries a teacher, or executes gameplay.
+>
+> The target is 90 train contexts with at least 60 settled outcomes and 105 untouched development
+> contexts with at least 102 complete same-reset comparisons against random, cost-only, and myopic
+> controls. Every incomplete context is a candidate loss; the maximum-three-incomplete design
+> retains 83.2% power. The public root upper bound is only 67, so publish the design, run the exact action-free
+> maximum matching, and create fresh prospectively assigned Red harness episodes for the measured
+> deficit. Byte clones, state copies, local RNG changes, and rehashes inherit their parent lineage.
+> Antigravity's initial pass returned GO; Claude and Antigravity's post-repair pass returned
+> conditional GO. Codex records their conditions but rejects the complete-case censoring claim
+> after an exact null counterexample; the repaired
+> endpoint scores every incomplete as a loss. Do not fit, leak development outcomes into train, open sealed Red
+> or Crystal, replay, or promote authority. **Causal train 1/60 · authority 0 · transfer 0.**
+> The
+> [local qualification](docs/evidence/living-dex-powered-causal-curriculum-local-qualification-v1-2026-08-27.json)
+> records **190 focused · 5,531 full-suite · 306 typed source files**.
+
 > **2026-08-27 active override — execute the frozen lesson exactly once:** PR 90 and exact-main CI
 > `33118840112/1` are green on executable commit `6fd2286f`. The
 > [reorientation](docs/evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json)

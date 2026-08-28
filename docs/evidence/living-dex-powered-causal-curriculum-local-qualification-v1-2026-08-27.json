@@ -1,0 +1,167 @@
+{
+  "artifacts": {
+    "capacity_inventory_auditor_sha256": "1e69543762ffe627e595eaa81084e6cc0ae4a11b71f9be7b9e5b77a8f4bdcbab",
+    "curriculum_config_sha256": "ff997af2f9a8fca08b56e616c922db6c576699a10ef7fd2ca04188d10df26fd4",
+    "curriculum_design_sha256": "3646390858ccfb2357c2c35548c72a4f6be216d563eab3215fced8c49b9a5c31",
+    "curriculum_source_sha256": "5897d955e834d35b3fddf738d2141b75a64879dfe7092908b26989e6cc6a5f50",
+    "fit_readiness_source_sha256": "66d8178920881b8da54bf3f727664f7c2ab3cd2751bc769ad6c132a9109ee559",
+    "inventory_source_sha256": "ccbc0dd91bfbb3d70310acedeaedc825b177b2e82d9908b764d3747790da48ab",
+    "policy_evaluation_source_sha256": "12c4ec053726b7c0671b88b902ae807e50fa882dce36fb63e38d852a2898ca27",
+    "public_capacity_bound_sha256": "7f8204d7acb9b7f1fedc087d0057d7e1c62c63eeeabcd795fe868ec5f63fc781"
+  },
+  "base_source": {
+    "base_commit": "9f5e45b1c25eb43d2b2b130d16f003c0dfe226f5",
+    "publication_commit": null,
+    "source_status": "unpublished_worktree_candidate"
+  },
+  "capacity": {
+    "combined_contexts": 195,
+    "development_contexts": 105,
+    "historical_qualified_root_upper_bound": 67,
+    "minimum_new_combined_roots_before_compatibility": 128,
+    "minimum_new_train_roots_before_compatibility": 23,
+    "train_contexts": 90
+  },
+  "codex_adjudication": {
+    "accepted": [
+      "score_every_incomplete_development_context_as_a_candidate_loss",
+      "size_the_development_partition_for_power_after_all_three_allowed_incompletes",
+      "report_censor_counts_by_reason_option_kind_and_candidate_index",
+      "assert_train_then_development_template_contiguity_before_offset_matching",
+      "require_upstream_proof_of_prospective_harness_episode_lineage",
+      "authenticate_control_derivation_before_any_evaluation_campaign",
+      "route_future_campaign_fitting_only_through_the_guarded_powered_fit_entry"
+    ],
+    "deferred_gates": [
+      "prove_new_episode_lineages_at_the_harness_producer_before_collection",
+      "bind_the_future_evaluation_consumer_to_the_guarded_fit_receipt",
+      "authenticate_random_cost_only_and_myopic_control_indices_upstream",
+      "run_the_exact_private_capacity_census_only_after_clean_published_source"
+    ],
+    "rejected": [
+      "drop_incomplete_contexts_under_an_unproved_ignorability_assumption",
+      "treat_hashes_rehashed_saves_or_local_rng_changes_as_new_independent_roots",
+      "describe_the_public_67_root_figure_as_exact_compatible_capacity",
+      "fit_or_evaluate_before_capacity_information_and_feature_support_gates_pass",
+      "accept_antigravity_stale_snapshot_p0s_as_live_source_findings"
+    ],
+    "reviewer_disagreement": "Claude stated that complete-case exact testing controlled Type-I error under arbitrary censoring. Codex rejected that claim with an exact null counterexample and changed the endpoint. Antigravity later reproduced the repaired power exactly, but its extracted-diff snapshot still displayed the superseded 70-context constants; the live generated config, source, evidence, and tests already contain the requested 105-context repair."
+  },
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "red_gameplay_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  },
+  "evaluation_design": {
+    "alpha": 0.05,
+    "baseline_envelope": [
+      "frozen_random",
+      "cost_only",
+      "myopic_completion_greedy"
+    ],
+    "candidate_loss_probability": 0.1,
+    "candidate_win_probability": 0.3,
+    "complete_context_minimum": 102,
+    "development_contexts": 105,
+    "every_incomplete_context_is_a_candidate_loss": true,
+    "maximum_incomplete_contexts": 3,
+    "power_no_incomplete_contexts": 0.9438267911243665,
+    "power_with_three_forced_losses": 0.8321468701455996,
+    "target_power": 0.8,
+    "test": "one_sided_exact_sign_test_on_discordant_candidate_wins_and_losses",
+    "tie_probability": 0.6
+  },
+  "external_review": {
+    "antigravity": {
+      "live_conditions_already_satisfied": [
+        "development_105_complete_102",
+        "incomplete_context_forced_to_candidate_loss",
+        "combined_root_lower_bound_128"
+      ],
+      "math_verdict": "verified_exact_power_0_8321468701456",
+      "model": "gemini_3_7_flash_high_after_gemini_3_1_pro_headless_timeout",
+      "remaining_p1": [
+        "authenticate_supplemental_lineage_at_the_episode_producer",
+        "bind_future_evaluation_to_the_guarded_fit_receipt"
+      ],
+      "verdict": "conditional_go_with_stale_extracted_diff_p0s_adjudicated_satisfied"
+    },
+    "claude": {
+      "accepted_conditions": [
+        "lineage_truth_must_come_from_the_harness",
+        "effect_assumption_dependent_power_must_not_be_overstated",
+        "censor_diagnostics_by_arm_and_reason",
+        "authenticated_control_derivation",
+        "guarded_fitter_only",
+        "template_partition_contiguity"
+      ],
+      "model": "opus",
+      "rejected_finding": "arbitrary_censoring_preserves_complete_case_exact_test_type_i_error",
+      "verdict": "conditional_go"
+    },
+    "provenance": "codex_transcription_of_read_only_cli_outputs_not_independently_signed_review_receipts"
+  },
+  "lane_id": "cross-title-living-dex-causal-example-pipeline-v1",
+  "mission_check": {
+    "capability": "Collect enough independent title-neutral Red living-Dex option outcomes to fit a policy that can be tested honestly before freezing its supported representation for Crystal.",
+    "learned_authority": "none_design_and_capacity_gate_only",
+    "product": "cross_game_story_completion_and_living_pokedex_construction",
+    "stop_condition": "Stop before collection or fit if unique prospective episode lineages cannot populate all contexts or if information feature support separation success control authenticity or conservative power fails.",
+    "transfer_test": "After a powered Red fit beats the untouched best-of-three Red control envelope freeze only its supported title-neutral representation and test zero-shot Crystal with abstention on unsupported mechanics before adaptation."
+  },
+  "next_gate": {
+    "action": "publish_then_run_one_action_free_exact_root_to_menu_capacity_census",
+    "collection_allowed": false,
+    "crystal_execution_allowed": false,
+    "full_game_replay_allowed": false,
+    "model_fit_allowed": false,
+    "sealed_red_allowed": false
+  },
+  "recorded_on": "2026-08-27",
+  "registry_requalification": {
+    "battle_registry_sha256": "6b6dc3bb2c50c3fcdd5c4ca97fe636575bf60b26ebb77518e6d283eed963b012",
+    "goal_manager_registry_sha256": "39ca20595fca02f78ed50c111db1e6fb4998510161c5727b1f4b7f7588acf104",
+    "source_bundle_sha256": "a7017fd112e128ae8c068cee26b303b54f47dad78854c4cc7c4ac54a4e262ef7",
+    "strategic_navigation_registry_sha256": "2981d404c856ad205ee96812bebdc3d73a3505b1f5baf6547ed7ef5079998675",
+    "strategic_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71"
+  },
+  "schema": "pokemon.core.living-dex-powered-causal-curriculum-local-qualification.v1",
+  "statistical_repair": {
+    "new_endpoint": "all_105_contexts_enter_primary_inference_and_each_incomplete_context_is_a_candidate_loss",
+    "old_endpoint": "complete_case_test_over_at_least_67_of_70_contexts",
+    "old_endpoint_disposition": "rejected_before_publication",
+    "reason": "under_the_null_selectively_removing_up_to_three_observed_losses_can_raise_the_exact_rejection_probability_above_alpha"
+  },
+  "status": "locally_qualified_for_publication_and_action_free_capacity_census_only",
+  "unsupported_claims": [
+    "capacity_ready",
+    "collection_ready",
+    "crystal_transfer",
+    "cross_game_story_completion",
+    "living_pokedex_completion",
+    "model_fit",
+    "model_quality",
+    "powered_red_benchmark_result",
+    "statistical_independence_of_future_roots_already_proven"
+  ],
+  "verification": {
+    "documentation_and_active_focus": "passed",
+    "focused_tests_passed": 190,
+    "full_suite_passed": 5531,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 306,
+    "mypy_status": "passed",
+    "public_artifact_check": "passed",
+    "registry_checks": "passed_battle_goal_manager_strategic_navigation_and_scenarios",
+    "ruff_status": "passed"
+  }
+}

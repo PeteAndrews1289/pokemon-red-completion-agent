@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 27: turning one honest failure into an experiment that can answer the question
+
+The first causal row proved the pipe, but it could not prove a model. The new design starts with
+the question that matters: how much independent evidence would let us tell learned strategy from
+cheap heuristics? The answer became a 90-context Red training curriculum and a 105-context untouched
+exam. Each exam decision is replayed from the same reset for the frozen scorer, random choice,
+cost-only choice, and a myopic completion heuristic. The model must beat the strongest control
+envelope, not merely a coin flip. An incomplete exam counts against the model rather than quietly
+disappearing; even three such losses leave 83.2% prospective power.
+
+That statistical clarity exposed a physical constraint. The historic library holds at most 67
+qualified independent roots, while the design needs 195 unique train and exam contexts. Even in
+the most favorable case it needs 128 more. The real number may be higher after each save is checked
+against the authentic choice menus. The next run is therefore an action-free matching census, not
+gameplay and not training.
+
+There is an important anti-cheat rule: copying a save, nudging its random number generator, or
+rehashing it does not create a new experience. Independence comes from a prospectively assigned
+harness episode lineage. That rule is what keeps 195 rows from secretly being a handful of worlds
+photocopied many times.
+
+Red can identify only 16 independent directions in its current feature representation. The model
+will train only on those supported directions, and it must abstain when Crystal introduces trade,
+time, breeding, held-item, or other mechanics it has not learned. This is slower than claiming
+transfer from matching schemas, but it is the first route that can eventually support the actual
+mission: a model that completes games and builds living Pokédexes because it learned reusable
+choices. **Causal train remains 1/60; powered fit, authority, and transfer remain zero.**
+
 ## August 27: the first authentic causal row is a measured failure
 
 The one-shot campaign finally crossed the line from infrastructure to data. Exact published Red

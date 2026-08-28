@@ -156,6 +156,61 @@ def paired_one_sided_exact_power(
     return min(max(probability, 0.0), 1.0)
 
 
+def paired_one_sided_exact_power_with_forced_losses(
+    independent_contexts: int,
+    *,
+    forced_losses: int,
+    win_probability: float,
+    loss_probability: float,
+    alpha: float = 0.05,
+) -> float:
+    """Return power when up to ``forced_losses`` are scored against the candidate.
+
+    An incomplete paired context cannot be removed without an ignorability
+    assumption.  The promotion endpoint instead treats every allowed incomplete
+    context as a candidate loss.  This prospective calculation sizes the full
+    denominator under that least-favorable censoring rule.
+    """
+
+    _positive_count(independent_contexts, subject="independent contexts")
+    _count(forced_losses, subject="forced losses")
+    if forced_losses > independent_contexts:
+        raise EvaluationDesignError("forced losses exceed independent contexts")
+    _closed_unit(win_probability, subject="win probability")
+    _closed_unit(loss_probability, subject="loss probability")
+    _open_unit(alpha, subject="alpha")
+    discordance_probability = win_probability + loss_probability
+    if discordance_probability > 1.0:
+        raise EvaluationDesignError("paired alternative probabilities exceed one")
+    remaining = independent_contexts - forced_losses
+    if remaining == 0 or discordance_probability == 0.0:
+        return 0.0
+    conditional_win_probability = win_probability / discordance_probability
+    probability = 0.0
+    for discordant in range(remaining + 1):
+        discordant_probability = _binomial_probability(
+            remaining,
+            discordant,
+            discordance_probability,
+        )
+        rejecting_probability = math.fsum(
+            _binomial_probability(
+                discordant,
+                wins,
+                conditional_win_probability,
+            )
+            for wins in range(discordant + 1)
+            if wins > discordant - wins + forced_losses
+            and paired_one_sided_exact_p(
+                wins,
+                discordant - wins + forced_losses,
+            )
+            <= alpha
+        )
+        probability += discordant_probability * rejecting_probability
+    return min(max(probability, 0.0), 1.0)
+
+
 def minimum_paired_contexts(
     *,
     win_probability: float,
@@ -264,5 +319,6 @@ __all__ = [
     "minimum_paired_contexts",
     "paired_one_sided_exact_p",
     "paired_one_sided_exact_power",
+    "paired_one_sided_exact_power_with_forced_losses",
     "zero_loss_conjunction_power",
 ]

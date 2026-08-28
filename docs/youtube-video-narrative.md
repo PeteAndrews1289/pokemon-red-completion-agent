@@ -1,5 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 27 scene: the denominator becomes honest
+
+Start on **CAUSAL TRAIN 1/1**, then pull the camera back and reveal that the denominator meant
+“pipeline proof,” not “enough to learn.” Replace it with **90 TRAIN CONTEXTS · ≥60 SETTLED** and
+**105 UNTOUCHED EXAM CONTEXTS · ≥102 COMPLETE**. Stamp **INCOMPLETE = CANDIDATE LOSS · WORST-CASE
+POWER 83.2%**. Fan out seven cards: **ACQUIRE · EVOLVE · DEVELOP ·
+STORE · RESUPPLY · UNLOCK · EXPLORE**.
+
+On one exam reset, split the screen four ways: **FROZEN MODEL · RANDOM · COST-ONLY · MYOPIC**.
+Rejoin them under **BEAT THE BEST CONTROL ENVELOPE · EXACT PAIRED TEST**. Show the model gate
+rejecting development leakage, insufficient information, unsupported features, and low candidate
+success before any fit begins.
+
+Now roll 195 empty slots onto the screen and pour in the old save inventory. It stops at
+**PUBLIC UPPER BOUND: 67**. Stamp **TRAIN DEFICIT ≥23 · COMBINED DEFICIT ≥128**, then add the honest
+footnote **MENU COMPATIBILITY MAY MAKE IT LARGER**. Try duplicating one save, nudging its RNG, and
+changing its hash; each copy snaps back to the same lineage and the counter does not move.
+
+End on the next rail: **PUBLISH → ACTION-FREE MAXIMUM MATCHING → GENERATE FRESH PROSPECTIVE RED
+EPISODES → COLLECT TRAIN FIRST → GUARDED FIT → UNTOUCHED EXAM → FREEZE SUPPORTED KNOWLEDGE →
+CRYSTAL WITH ABSTENTION**. Leave **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**
+visible.
+
 ## August 27 scene: the first real lesson is a negative
 
 Open on the live counter climbing to **945 ACTIONS · 42,001 FRAMES**, then freeze on
