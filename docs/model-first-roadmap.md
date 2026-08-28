@@ -8,7 +8,56 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the first exact yield failed; publish the measured repair and try once more
+## Current checkpoint: publish the post-yield repair, then freeze a genuinely new yield gate
+
+The mission is unchanged: build a transferable hierarchical agent that finishes stories and builds
+living Pokedexes across versions and generations. Red is the first causal curriculum, not the
+product. Deterministic teacher actions may create independent worlds and observable decision
+contexts, but those button sequences never become learner targets.
+
+Exact main `be6a03a4` passed CI `33189656179/1`, then its source-bound successor gate failed three
+times in three distinct places and stopped because 10/12 had become mathematically impossible.
+Seeds 9900049–9900051 are consumed; the remaining assignments are bound to the superseded source
+and cannot be repurposed. The failures exposed a moving Saffron clerk, a bounded Zubat search, and
+an Antidote/status mismatch. Subsequent one-use development probes also exposed cartridge sale
+values, a final-pulse Mart boundary, a false Silph healing checkpoint, and a direct post-RUN
+trainer transition.
+
+The repair addresses those as explicit capabilities: cartridge-exact funding assets, a broader
+safe capture policy, poison survival budgets, dynamic obstacle waits, post-action boundary
+observation, whole-party HP/status plus lead-PP healing evidence, and an opt-in authenticated
+trainer handoff. The final unchanged source bundle `a3b18f34` reached the late-Cinnabar
+`mansion_returned` boundary on seeds 9910051–9910053: **3/3, 112,486 actions, 21,072,636 frames**.
+The scope is checkpoint **275/312**, after the Pokémon Mansion Secret Key route returns to the
+Center; it intentionally stops before Blaine, Viridian Gym, the League, Hall of Fame, and living-
+Pokedex completion.
+
+The [path-free qualification](evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+binds all three private ledgers by hash and preserves every protected counter at zero. The source
+passes **5,694 repository tests**, Ruff, Mypy over **295** source files, all three generated
+registries, and diff checks. Claude found no P0 code defect; Codex accepted its evidence-publication
+requirement and rejected two misreadings: Mansion return is late Cinnabar, and the bounded
+post-RUN fallthrough intentionally advances the trainer intro until the predicate authenticates
+the full snapshot.
+
+The shortest honest next sequence is:
+
+1. publish this exact candidate and require green CI on the resulting `main` commit;
+2. freeze a new versioned prospective twelve-world plan bound to that exact source, without
+   opening a ROM;
+3. execute every new assignment once and require at least **10/12** late-Cinnabar
+   `mansion_returned` terminals, at most two failures, no repeated deterministic stage, and no
+   private leak;
+4. only on a pass, freeze and materialize train roots, then rerun the action-free maximum-matching
+   census; and
+5. collect selected-arm train outcomes until the 90-context/60-settled gate permits the guarded
+   fit.
+
+Do not reuse an old-source plan, retry a consumed assignment, promote any diagnostic into a root,
+materialize development, fit, open sealed Red or Crystal, or call teacher motion learned authority.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Previous checkpoint: the first exact yield failed; publish the measured repair and try once more
 
 The mission remains a transferable hierarchical agent that can finish stories and build living
 Pokedexes across versions and generations. Red is the first curriculum, not the product. The

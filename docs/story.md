@@ -7,6 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: three clean late-Cinnabar runs, still zero invented learning
+
+The first published repair met the discipline test and failed the reliability test. Three new
+official worlds failed in three different places, making the required ten successes impossible;
+the gate stopped immediately. No seed was retried and the untouched assignments could not follow
+the source after it changed.
+
+Four more development failures exposed the kind of assumptions that make long automation brittle:
+an incorrect item sale value, a doorway completed by the final allowed pulse, a nurse dialogue that
+looked finished while half the party remained fainted, and a wild battle that flowed straight into
+the trainer behind it. The fixes turned each assumption into evidence read from the cartridge.
+
+On the final unchanged build, three new worlds now reach the late-Cinnabar Mansion return in a row:
+**112,486 actions and 21,072,636 frames**. That checkpoint is 275 of 312—after finding the Secret
+Key, but before Blaine, the final Gym, the League, or a living Pokédex. Calling it what it is keeps
+the story honest.
+
+The model has still not learned from those runs. Their private ledgers are bound into a path-free
+engineering receipt, while the learner stays at **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0
+· TRANSFER 0**. The next gate is simple enough to say in one breath: publish the exact source,
+green main CI, freeze twelve genuinely new one-use worlds, and demand ten late-Cinnabar successes
+before any of them can become training capacity.
+
 ## Current checkpoint: the first twelve worlds failed, and the failure map improved the teacher
 
 The first exact test did what a real test is supposed to do: it broke the optimistic story. The

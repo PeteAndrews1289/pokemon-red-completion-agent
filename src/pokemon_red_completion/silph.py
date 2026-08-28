@@ -97,6 +97,7 @@ SILPH_RIVAL_RECOVERY_HP = 80
 # pre-HM Koga lineage reaches Silph with four members and may legitimately use
 # the complete seven-potion supply it bought for this bounded rival battle.
 SILPH_RIVAL_MAX_POTIONS = HYPER_POTION_PURCHASE_QUANTITY
+SILPH_HEAL_SETTLE_PULSES = 24
 SILPH_PC_DEPOSIT_ITEMS = (
     ItemId.SS_TICKET,
     ItemId.LIFT_KEY,
@@ -685,7 +686,13 @@ def run_silph_chapter(
 
     _move(actions, reader, THIRD_FLOOR_TO_7F, timing)
     _move(actions, reader, ("down",), timing)
-    _heal_detour_from_seventh(actions, reader, emulator, timing)
+    _heal_detour_from_seventh(
+        actions,
+        reader,
+        emulator,
+        timing,
+        expected_first_party_pp=expected_upgraded[1],
+    )
     _return_center_to_seventh(actions, reader, emulator, timing)
     _checkpoint(records, progress, emulator, reader.read(), "rival_ready", "Healed before rival")
 
@@ -704,7 +711,13 @@ def run_silph_chapter(
         )
     _checkpoint(records, progress, emulator, reader.read(), "silph_rival", "Defeated Silph rival")
 
-    _heal_detour_after_rival(actions, reader, emulator, timing)
+    _heal_detour_after_rival(
+        actions,
+        reader,
+        emulator,
+        timing,
+        expected_first_party_pp=expected_upgraded[1],
+    )
     _return_center_to_seventh(actions, reader, emulator, timing)
     _move(actions, reader, SEVENT_TO_11F, timing)
     _require(reader.read(), MapId.SILPH_CO_11F, (3, 2), "Silph 11F")
@@ -810,8 +823,14 @@ def run_silph_chapter(
     _move(actions, reader, ("down",), timing)
     _move(actions, reader, CITY_TO_CENTER, timing)
     _move(actions, reader, ("up",), timing)
-    _heal(actions, timing)
-    final = reader.read()
+    final = _heal_party_to_verified_boundary(
+        actions,
+        reader,
+        emulator,
+        timing,
+        label="Silph terminal",
+        expected_first_party_pp=expected_upgraded[1],
+    )
     _require(final, MapId.SAFFRON_POKECENTER, (3, 3), "Silph terminal")
     _checkpoint(
         records,
@@ -2649,6 +2668,8 @@ def _heal_detour_from_seventh(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    expected_first_party_pp: tuple[int, int, int, int],
 ) -> None:
     _move(actions, reader, ("up", "down"), timing)
     _move(actions, reader, SEVENT_TO_THIRD, timing)
@@ -2659,7 +2680,14 @@ def _heal_detour_from_seventh(
     _move(actions, reader, ("down",), timing)
     _move(actions, reader, CITY_TO_CENTER, timing)
     _move(actions, reader, ("up",), timing)
-    _heal(actions, timing)
+    _heal_party_to_verified_boundary(
+        actions,
+        reader,
+        emulator,
+        timing,
+        label="pre-rival Silph healing",
+        expected_first_party_pp=expected_first_party_pp,
+    )
 
 
 def _heal_detour_after_rival(
@@ -2667,6 +2695,8 @@ def _heal_detour_after_rival(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    expected_first_party_pp: tuple[int, int, int, int],
 ) -> None:
     _move(actions, reader, _directions("RRD"), timing)
     _move(actions, reader, SEVENT_TO_THIRD, timing)
@@ -2677,7 +2707,14 @@ def _heal_detour_after_rival(
     _move(actions, reader, ("down",), timing)
     _move(actions, reader, CITY_TO_CENTER, timing)
     _move(actions, reader, ("up",), timing)
-    _heal(actions, timing)
+    _heal_party_to_verified_boundary(
+        actions,
+        reader,
+        emulator,
+        timing,
+        label="post-rival Silph healing",
+        expected_first_party_pp=expected_first_party_pp,
+    )
 
 
 def _return_center_to_seventh(
@@ -2715,6 +2752,32 @@ def _await_trainer_battle(
 
 def _heal(actions: CountingExecutor, timing: SilphTiming) -> None:
     _confirm_many(actions, timing.heal_pulses, timing.menu_frames)
+
+
+def _heal_party_to_verified_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+    *,
+    label: str,
+    expected_first_party_pp: tuple[int, int, int, int],
+) -> RawGameState:
+    """Prove the nurse restored the complete party before leaving the Center."""
+
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), label)
+    _heal(actions, timing)
+    for _ in range(SILPH_HEAL_SETTLE_PULSES):
+        state = reader.read()
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and all(status == 0 for status in _party_status(emulator))
+            and state.first_party_pp == expected_first_party_pp
+            and reader.read_input_readiness().ready
+        ):
+            return state
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    raise SilphChapterError(f"{label} did not settle at a fully healed party boundary.")
 
 
 def _confirm_many(actions: CountingExecutor, count: int, frames: int) -> None:

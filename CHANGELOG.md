@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Qualified the post-yield fresh-Red repair on exact working source bundle `a3b18f34…c0c7a9`.
+  Three new one-use development seeds reached the late-Cinnabar `mansion_returned` boundary on
+  unchanged source: 3/3 across 112,486 controller actions and 21,072,636 emulator frames. The
+  [path-free V2 receipt](docs/evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+  binds the private ledgers by digest and explicitly withholds population yield, learner, full-game,
+  living-Pokedex, and transfer claims. The repair adds cartridge-exact funding, broader safe Zubat
+  capture, bounded poison survival, dynamic-obstacle handling, last-pulse observation, semantic
+  Silph healing, and an authenticated direct wild-to-trainer handoff. Local gates pass 5,694 tests,
+  Ruff, Mypy over 295 source files, all registries, and diff checks. Next is publication, exact-main
+  CI, and a newly frozen source-bound 10/12 yield gate; no old assignment may be reused.
+
 - Published the generic tracked-public-evidence reader on main
   `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` under green CI `32475789328/1` with 4618
   tests. The

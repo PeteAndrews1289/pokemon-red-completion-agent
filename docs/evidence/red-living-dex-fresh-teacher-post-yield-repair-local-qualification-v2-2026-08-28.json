@@ -1,0 +1,179 @@
+{
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "successor_plan_freeze": false
+  },
+  "base_exact_source_gate": {
+    "ci_attempt": 1,
+    "ci_run": 33189656179,
+    "commit": "be6a03a4af38b230e4c910f48d2b1aecd785d45f",
+    "evidence_path": "docs/evidence/red-living-dex-fresh-teacher-repair-exact-source-yield-v1-2026-08-28.json",
+    "failures_before_early_stop": 3,
+    "gate_passed": false,
+    "mansion_returned_successes": 0,
+    "source_bundle_sha256": "5285cce43beebb26237c72bd8946b6168556d48f09340df8b53c31a473196434"
+  },
+  "diagnostic_scope": {
+    "checkpoint_completed": 275,
+    "checkpoint_id": "mansion_returned",
+    "checkpoint_total": 312,
+    "meaning": "Late Cinnabar checkpoint after the Pokemon Mansion Secret Key route returns to the Pokemon Center.",
+    "stops_before": [
+      "Blaine",
+      "Viridian Gym",
+      "Victory Road",
+      "Elite Four",
+      "Hall of Fame",
+      "living Pokedex completion"
+    ]
+  },
+  "external_review": {
+    "claude": {
+      "accepted_findings": [
+        "The repository needs this path-free measured artifact before the three private diagnostics can support any publication claim.",
+        "The poison survival allowance depends on the protected DUX policy spending its required move and pivoting before a second DUX poison tick.",
+        "Fresh-root item gates should be described as generator preconditions rather than general cross-title tolerance."
+      ],
+      "adjudication": [
+        "The requested audit was intentionally denied private-ledger access, so its missing-evidence NO-GO is resolved by this hash-bound public artifact rather than by exposing private files.",
+        "The reviewer misidentified mansion_returned as early Mt. Moon egress; it is the late Cinnabar checkpoint described in diagnostic_scope.",
+        "The apparent trainer-handoff fallthrough is intentional bounded intro advancement: tests require the first post-RUN confirmation to turn a stale trainer state into the authenticated snapshot."
+      ],
+      "code_verdict": "no_p0_code_correctness_defect",
+      "edits": 0,
+      "status": "complete_read_only_audit"
+    }
+  },
+  "final_unchanged_source_sample": {
+    "actions_total": 112486,
+    "attempts": 3,
+    "frames_total": 21072636,
+    "mansion_returned_successes": 3,
+    "one_use_per_seed": true,
+    "population_yield_claimed": false,
+    "promotion_eligible": false,
+    "runs": [
+      {
+        "actions": 32706,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 6734514,
+        "harness_seed": 9910051,
+        "initial_wait_frames": 67,
+        "private_ledger_sha256": "1a619e1731709ca23d525c63334af0b32a532a95d0ed04eadadb9165a0732596",
+        "root_generated": false,
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 38412,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7064148,
+        "harness_seed": 9910052,
+        "initial_wait_frames": 238,
+        "private_ledger_sha256": "c231f763637a5bd8df9f238347bc1147b7f5ff3f215cb15aed633103a4dfc1cf",
+        "root_generated": false,
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 41368,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7273974,
+        "harness_seed": 9910053,
+        "initial_wait_frames": 68,
+        "private_ledger_sha256": "cbb8bf3167e7f7cf879ba74c678363153b657694666396d713462c9a3cb12b6c",
+        "root_generated": false,
+        "status": "mansion_returned"
+      }
+    ],
+    "source_unchanged_across_sample": true
+  },
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "learner_training_began": false,
+    "local_repair_behavior_qualified": true,
+    "official_lineage_created": false,
+    "publication_allowed_after_final_checks": true,
+    "successor_plan_freeze_allowed": false,
+    "teacher_actions_are_model_labels": false
+  },
+  "next_gate": {
+    "decision": "Publish this exact candidate, require green CI on the resulting main commit, then freeze a new versioned prospective one-use yield plan bound to that exact source.",
+    "minimum_mansion_returned_successes": 10,
+    "minimum_population_attempts": 12,
+    "no_private_path_or_identity_leak": true,
+    "no_repeated_deterministic_failure_stage": true,
+    "one_use_per_seed": true,
+    "old_assignments_reusable": false,
+    "retry_after_controller_input": false,
+    "train_root_freeze_on_pass_only": true
+  },
+  "post_yield_repairs": [
+    "Use cartridge-exact asset values: Bide funds Pewter, a collected Rare Candy funds Cerulean only when needed, and retained Water Gun sells for its lower value only when Lavender remains underfunded.",
+    "Observe the final bounded Pewter Mart aisle and doorway pulses before declaring exhaustion.",
+    "Require complete-party HP and status recovery, expected lead PP, and field readiness at every Silph nurse boundary.",
+    "Allow a direct post-RUN trainer transition only through an opt-in predicate that authenticates the full Super Nerd battle snapshot.",
+    "Broaden the Mt. Moon Zubat target to the cartridge's valid 1F level range and permit a full-health capture only when weakening would not be provably safe.",
+    "Prove antidote-free poison survival against bounded field steps and the one required pre-pivot battle tick.",
+    "Treat moving NPCs as bounded dynamic obstacles rather than assuming one fixed position."
+  ],
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "qualification": {
+    "full_suite": {
+      "passed": 5694,
+      "skipped": 3,
+      "xfailed": 1
+    },
+    "git_diff_check": "passed",
+    "mypy_source_files": 295,
+    "registry_checks": "passed",
+    "ruff": "passed"
+  },
+  "recorded_on": "2026-08-28",
+  "registries": {
+    "battle_collection_sha256": "fa33b1e3013ef98f44969e22e4023f1d20dd54c0a4875a31dc3c2643a676172c",
+    "battle_teacher_execution_sha256": "39b8faf3122656aafc3c257b167d018ce9ec46051ea8b9fd424daf8ac4263ef9",
+    "goal_collection_sha256": "cc46bd1067142e7c9be6b96b6d125f1e9d940a4486962460b66ac82835784509",
+    "goal_teacher_execution_sha256": "c315e37373e655d07430a947a16e15c12bb596044e94007d24cca16b48593bd5",
+    "strategic_collection_sha256": "77215b8219ed71fedc90f004642c18dfe93ca97bb9c8e7926b1303f696d202d0",
+    "strategic_teacher_execution_sha256": "e7f8655385cd8689d8775a4aab3ab8d460c22327ce7de939f246d8e5d229ac87"
+  },
+  "schema": "pokemon.red.living-dex-fresh-teacher-post-yield-repair-local-qualification.v2",
+  "source": {
+    "base_commit": "be6a03a4af38b230e4c910f48d2b1aecd785d45f",
+    "source_bundle_sha256": "a3b18f341c0aa9ba7af12fd2309a5ba1758e408134da5b9737ddb77b1ec0c7a9",
+    "successful_runtime_matches_current_source_bundle": true
+  },
+  "status": "local_repair_qualified_pending_publication_exact_main_ci_and_new_prospective_yield_plan",
+  "unsupported_claims": [
+    "full_game_completion",
+    "living_pokedex_completion",
+    "model_training_began",
+    "official_fresh_root_created",
+    "population_yield_qualified",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_transferable_policy_labels",
+    "transfer_to_crystal_demonstrated"
+  ]
+}

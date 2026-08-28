@@ -5,7 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 28, 2026): publish the measured fresh-world repair, then prove
+> **Current product focus (August 28, 2026): publish the post-yield repair, then measure it on a
+> new prospective population.** Exact main `be6a03a4` passed CI `33189656179/1`, but its successor
+> gate stopped after three failures made the required 10/12 result impossible. Those assignments
+> are consumed; the remaining old-source assignments are unusable. The resulting repairs cover
+> cartridge-exact funding, bounded poison survival, semantic party healing, broader safe capture,
+> moving obstacles, last-pulse observation, and an authenticated direct wild-to-trainer handoff.
+>
+> The final unchanged bundle `a3b18f34` reached the late-Cinnabar `mansion_returned` checkpoint on
+> **3/3** new development seeds—**112,486 actions and 21,072,636 frames**—and passes **5,694 tests,
+> Ruff, Mypy over 295 source files, all registries, and diff checks**. The
+> [path-free qualification](docs/evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+> records the exact scope and protected zeroes. This is engineering evidence through checkpoint
+> 275/312, not model training, a Hall-of-Fame run, population yield, or transfer.
+>
+> Next: publish the exact bundle, require green CI on the resulting main commit, freeze a new
+> source-bound twelve-world one-use yield plan, and require at least 10/12 late-Cinnabar successes
+> with no repeated deterministic failure or leak. Only a pass may open a train-root successor and
+> action-free recensus. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+> **Previous product focus (August 28, 2026): publish the measured fresh-world repair, then prove
 > its yield.** Exact published source `eac8e745` passed CI but failed its declared twelve-world gate
 > at **1/12**; those seeds are permanently consumed. The failure distribution drove capability
 > repairs to party switching, adaptive battle choices, poison-aware recovery, moving-NPC routing,

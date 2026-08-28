@@ -60,8 +60,11 @@ from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_1_wild import (
     ROUTE_1_WALKER_SOUTH_APPROACH,
     ROUTE_1_WALKER_SOUTH_YIELD,
+    WILD_FLEE_MAX_EXIT_DISMISSALS,
+    WILD_FLEE_MAX_TRAINER_HANDOFF_PULSES,
     _same_post_flee_boundary,
     _same_route_boundary,
+    flee_wild,
     move_with_wild_flees,
 )
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
@@ -2449,6 +2452,209 @@ def test_route_1_traversal_flees_then_retries_an_unconsumed_encounter_step() -> 
     assert flees[0].verified
     assert movement_retries == 1
     assert executor.move_attempts == 2
+
+
+def test_wild_flee_dismisses_a_bounded_post_run_text_box() -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_B2F, 13, 8),
+        battle_state=1,
+        enemy_species_id=109,
+        enemy_level=10,
+        first_party_hp=28,
+        first_party_max_hp=47,
+        first_party_pp=(35, 30, 15, 25),
+    )
+    exited = replace(encounter, battle_state=0, battle_result=2)
+
+    class Reader:
+        state = encounter
+        ready = False
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0 if self.ready else 1, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        exit_dismissals = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM and reader.state is encounter:
+                reader.state = exited
+            elif action.kind is MacroActionKind.CANCEL and reader.state is exited:
+                self.exit_dismissals += 1
+                reader.ready = True
+            return object()
+
+    executor = Executor()
+    evidence = flee_wild(
+        executor,
+        reader,  # type: ignore[arg-type]
+        encounter,
+        expected_map_id=MapId.MT_MOON_B2F,
+        route_name="Mt Moon B2F",
+        stabilization_frames=120,
+        error_type=QualifiedPlayError,
+    )
+
+    assert evidence.verified
+    assert evidence.run_attempts == 1
+    assert executor.exit_dismissals == 1
+
+
+def test_wild_flee_fails_closed_when_post_run_control_never_returns() -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_B2F, 13, 8),
+        battle_state=1,
+        enemy_species_id=109,
+        enemy_level=10,
+    )
+    exited = replace(encounter, battle_state=0, battle_result=2)
+
+    class Reader:
+        state = encounter
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(1, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        exit_dismissals = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM and reader.state is encounter:
+                reader.state = exited
+            elif action.kind is MacroActionKind.CANCEL:
+                self.exit_dismissals += 1
+            return object()
+
+    executor = Executor()
+    with pytest.raises(QualifiedPlayError, match="post-RUN control settlement"):
+        flee_wild(
+            executor,
+            reader,  # type: ignore[arg-type]
+            encounter,
+            expected_map_id=MapId.MT_MOON_B2F,
+            route_name="Mt Moon B2F",
+            stabilization_frames=120,
+            error_type=QualifiedPlayError,
+        )
+
+    assert executor.exit_dismissals == WILD_FLEE_MAX_EXIT_DISMISSALS
+
+
+def test_wild_flee_accepts_only_an_authenticated_direct_trainer_handoff() -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_B2F, 13, 8),
+        battle_state=1,
+        enemy_species_id=109,
+        enemy_level=10,
+        first_party_hp=28,
+    )
+    stale_handoff = replace(encounter, battle_state=2)
+    authenticated_handoff = replace(stale_handoff, enemy_species_id=38)
+
+    class Reader:
+        state = encounter
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+                reader.state = (
+                    stale_handoff if self.confirmations == 1 else authenticated_handoff
+                )
+            return object()
+
+    executor = Executor()
+    evidence = flee_wild(
+        executor,
+        reader,  # type: ignore[arg-type]
+        encounter,
+        expected_map_id=MapId.MT_MOON_B2F,
+        route_name="Mt Moon B2F",
+        stabilization_frames=120,
+        error_type=QualifiedPlayError,
+        trainer_handoff=lambda raw: raw.enemy_species_id == 38,
+    )
+
+    assert evidence is None
+    assert executor.confirmations == 2
+
+
+def test_wild_flee_bounds_an_unauthenticated_trainer_handoff() -> None:
+    encounter = replace(
+        _raw(MapId.MT_MOON_B2F, 13, 8),
+        battle_state=1,
+        enemy_species_id=109,
+        enemy_level=10,
+        first_party_hp=28,
+    )
+    stale_handoff = replace(encounter, battle_state=2)
+
+    class Reader:
+        state = encounter
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+                reader.state = stale_handoff
+            return object()
+
+    executor = Executor()
+    with pytest.raises(QualifiedPlayError, match="authorized trainer handoff"):
+        flee_wild(
+            executor,
+            reader,  # type: ignore[arg-type]
+            encounter,
+            expected_map_id=MapId.MT_MOON_B2F,
+            route_name="Mt Moon B2F",
+            stabilization_frames=120,
+            error_type=QualifiedPlayError,
+            trainer_handoff=lambda _raw: False,
+        )
+
+    assert executor.confirmations == 1 + WILD_FLEE_MAX_TRAINER_HANDOFF_PULSES
 
 
 def test_route_1_traversal_retries_one_unconsumed_direction() -> None:

@@ -280,11 +280,32 @@ def test_tm28_sale_moves_forward_only_when_obsolete_potions_cannot_fund_supplies
     )
 
 
-def test_bide_sale_covers_the_consumed_tm28_capture_branch() -> None:
+def test_obsolete_tm_sale_covers_the_consumed_tm28_capture_branch() -> None:
+    assert lavender_module._obsolete_funding_tm({ItemId.TM12_WATER_GUN: 1}) is (
+        ItemId.TM12_WATER_GUN
+    )
+    assert lavender_module._obsolete_funding_tm({ItemId.TM34_BIDE: 1}) is ItemId.TM34_BIDE
+    assert lavender_module._obsolete_funding_tm({}) is None
     assert lavender_module._needs_early_obsolete_tm_sale(
         available_potions=3,
         projected_money=9_751,
         required_cost=10_500,
+    )
+    assert lavender_module.TM12_SALE_PROCEEDS == 500
+    assert lavender_module.TM34_SALE_PROCEEDS == 1_000
+    assert (
+        lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.TM12_WATER_GUN)
+        == 500
+    )
+    assert lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.TM34_BIDE) == 1_000
+    assert (
+        lavender_module._required_potion_sale_quantity(
+            available=3,
+            projected_money=9_751 + lavender_module.TM12_SALE_PROCEEDS,
+            required_cost=10_500,
+            preserve_existing_sale=False,
+        )
+        == 2
     )
     assert (
         lavender_module._required_potion_sale_quantity(
@@ -295,6 +316,8 @@ def test_bide_sale_covers_the_consumed_tm28_capture_branch() -> None:
         )
         == 0
     )
+    with pytest.raises(lavender_module.LavenderChapterError, match="Unsupported"):
+        lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.POTION)
 
 
 def test_supply_income_detour_is_source_stable_and_reversible() -> None:
@@ -786,6 +809,119 @@ def test_income_return_cures_paralysis_before_crossing_grass(
 
     assert used == [ItemId.PARLYZ_HEAL]
     assert run.parlyz_heals_used == 1
+
+
+@pytest.mark.parametrize(("hp", "survives"), ((11, True), (10, False)))
+def test_tunnel_poison_without_an_antidote_requires_explicit_route_and_battle_survival(
+    monkeypatch: pytest.MonkeyPatch,
+    hp: int,
+    survives: bool,
+) -> None:
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (0x08, 0, 0))
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (hp, 46, 36))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+
+    def call() -> bool:
+        return lavender_module._cure_tunnel_status_if_present(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            lavender_module._RunState([], []),
+            DEFAULT_LAVENDER_TIMING,
+            maximum_uncured_poison_field_steps=len(lavender_module.ONE_F_TO_TRAINER_5),
+            maximum_uncured_poison_battle_turns=1,
+        )
+
+    if survives:
+        assert call() is False
+    else:
+        with pytest.raises(lavender_module.LavenderChapterError, match="survival proof"):
+            call()
+
+
+def test_final_tunnel_poison_bound_reaches_the_lavender_nurse() -> None:
+    assert (
+        len(lavender_module.ONE_F_TO_SOUTH_EXIT)
+        + len(lavender_module.ROUTE_10_TO_LAVENDER)
+        + len(lavender_module.LAVENDER_TO_CENTER)
+        + 4
+    ) == lavender_module.POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS
+    assert lavender_module.POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS == 62
+
+
+@pytest.mark.parametrize(("starting_hp", "expected_heals"), ((16, 1), (17, 0)))
+def test_final_tunnel_poison_traversal_heals_only_when_the_full_route_requires_it(
+    monkeypatch: pytest.MonkeyPatch,
+    starting_hp: int,
+    expected_heals: int,
+) -> None:
+    hp = starting_hp
+    heal_thresholds: list[int] = []
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (0x08, 0, 0))
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (hp, 46, 36))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+
+    def fake_heal(*args: object, **_kwargs: object) -> bool:
+        nonlocal hp
+        heal_thresholds.append(args[6])  # type: ignore[arg-type]
+        if hp <= args[6]:  # type: ignore[operator]
+            hp = 51
+            return True
+        return False
+
+    monkeypatch.setattr(lavender_module, "_heal_if_below", fake_heal)
+
+    assert not lavender_module._prepare_final_tunnel_status_traversal(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        lavender_module._RunState([], []),
+        DEFAULT_LAVENDER_TIMING,
+    )
+    assert heal_thresholds == [16]
+    assert int(hp == 51) == expected_heals
+
+
+def test_tunnel_poison_without_an_antidote_rejects_an_implicit_no_op(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (0x08, 0, 0))
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+
+    with pytest.raises(lavender_module.LavenderChapterError, match="carried item"):
+        lavender_module._cure_tunnel_status_if_present(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            lavender_module._RunState([], []),
+            DEFAULT_LAVENDER_TIMING,
+        )
+
+
+@pytest.mark.parametrize("status", (0x40, 0x01))
+def test_tunnel_nonpoison_status_cannot_borrow_the_poison_survival_contract(
+    monkeypatch: pytest.MonkeyPatch,
+    status: int,
+) -> None:
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (status, 0, 0))
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (51, 46, 36))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+
+    with pytest.raises(lavender_module.LavenderChapterError, match="carried item"):
+        lavender_module._cure_tunnel_status_if_present(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            lavender_module._RunState([], []),
+            DEFAULT_LAVENDER_TIMING,
+            maximum_uncured_poison_field_steps=len(lavender_module.ONE_F_TO_TRAINER_5),
+            maximum_uncured_poison_battle_turns=1,
+        )
 
 
 def test_income_return_pivots_to_healthy_diglett_when_no_cure_survives(

@@ -91,7 +91,7 @@ CERULEAN_INITIAL_SUPPLY_COST = 1_700
 CERULEAN_MINIMUM_STARTING_POTION_RESERVE = 9
 CERULEAN_POTION_PRICE = 300
 CERULEAN_STATUS_SUPPLY_COST = 500
-CERULEAN_TM34_SALE_PROCEEDS = 1_000
+CERULEAN_RARE_CANDY_SALE_PROCEEDS = 2_400
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
 ROUTE_24_RECOVERY_POTION_RESERVE = 6
@@ -126,6 +126,8 @@ def _directions(compact: str) -> tuple[str, ...]:
 # lane; a second down collides with the map edge and must not be used as an
 # implicit timing wait.
 CERULEAN_TO_CENTER_DIRECTIONS = _directions("D" + "R" * 19 + "UUU")
+CERULEAN_VERIFIED_MOVE_MAX_ATTEMPTS = 32
+CERULEAN_VERIFIED_MOVE_BLOCK_WAIT_FRAMES = 30
 CENTER_HEAL_APPROACH_DIRECTIONS = _directions("UUUU")
 CENTER_HEAL_TO_PC_DIRECTIONS = _directions("D" + "R" * 10)
 CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
@@ -282,7 +284,7 @@ class CascadeCheckpoint:
 @dataclass(frozen=True, slots=True)
 class CascadeChapterReport:
     starting_cerulean_evidence: CeruleanChapterState
-    cerulean_tm34_sale_proceeds: int
+    cerulean_rare_candy_sale_proceeds: int
     records: tuple[CascadeCheckpoint, ...]
     final_raw: RawGameState
     final_evidence: CascadeState
@@ -305,7 +307,8 @@ class CascadeChapterReport:
     def passed(self) -> bool:
         return (
             self.starting_cerulean_evidence.cerulean_snapshot
-            and self.cerulean_tm34_sale_proceeds in {0, CERULEAN_TM34_SALE_PROCEEDS}
+            and self.cerulean_rare_candy_sale_proceeds
+            in {0, CERULEAN_RARE_CANDY_SALE_PROCEEDS}
             and len(self.records) == CASCADE_CHECKPOINT_COUNT
             and self.observed_route_24_trainers == ROUTE_24_REQUIRED_TRAINER_INDEXES
             and self.observed_route_25_trainers == ROUTE_25_REQUIRED_TRAINER_INDEXES
@@ -340,7 +343,7 @@ class CascadeChapterReport:
                 "misty_battle_observed": self.saw_misty_battle,
             },
             "economy": {
-                "early_tm34_sale_proceeds": self.cerulean_tm34_sale_proceeds,
+                "cerulean_rare_candy_sale_proceeds": self.cerulean_rare_candy_sale_proceeds,
             },
             "cascade": {
                 "victory_verified": self.final_evidence.misty_victory_snapshot,
@@ -430,7 +433,7 @@ def run_cascade_chapter(
         emulator,
         timing,
     )
-    cerulean_tm34_sale_proceeds = _purchase_cerulean_supplies(
+    cerulean_rare_candy_sale_proceeds = _purchase_cerulean_supplies(
         reader,
         chapter_executor,
         emulator,
@@ -952,7 +955,7 @@ def run_cascade_chapter(
 
     report = CascadeChapterReport(
         starting_cerulean_evidence=starting_evidence,
-        cerulean_tm34_sale_proceeds=cerulean_tm34_sale_proceeds,
+        cerulean_rare_candy_sale_proceeds=cerulean_rare_candy_sale_proceeds,
         records=tuple(records),
         final_raw=final_raw,
         final_evidence=final_evidence,
@@ -1012,7 +1015,7 @@ def _move_verified(
     state = reader.read()
     for step, direction in enumerate(directions, start=1):
         before = state
-        for _ in range(8):
+        for attempt in range(CERULEAN_VERIFIED_MOVE_MAX_ATTEMPTS):
             if state.battle_state:
                 raise CascadeChapterError(
                     f"Unexpected battle interrupted {label} before step {step}."
@@ -1031,6 +1034,11 @@ def _move_verified(
                 or state.player_y != before.player_y
             ):
                 break
+            if attempt + 1 < CERULEAN_VERIFIED_MOVE_MAX_ATTEMPTS:
+                _wait(
+                    executor,
+                    CERULEAN_VERIFIED_MOVE_BLOCK_WAIT_FRAMES * min(attempt + 1, 8),
+                )
         else:
             raise CascadeChapterError(
                 f"{label} blocked at step {step}: {direction}; "
@@ -1911,9 +1919,9 @@ def _purchase_cerulean_supplies(
         )
 
     _approach_cerulean_mart_clerk(executor, reader, timing)
-    tm34_sale_proceeds = 0
+    rare_candy_sale_proceeds = 0
     if starting_money < supply_cost:
-        tm34_sale_proceeds = _sell_cerulean_funding_tm34(
+        rare_candy_sale_proceeds = _sell_cerulean_funding_rare_candy(
             reader,
             executor,
             emulator,
@@ -2005,7 +2013,7 @@ def _purchase_cerulean_supplies(
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 1
         or _money(emulator)
-        != starting_money + tm34_sale_proceeds - supply_cost
+        != starting_money + rare_candy_sale_proceeds - supply_cost
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
@@ -2015,7 +2023,7 @@ def _purchase_cerulean_supplies(
             f"antidotes={_bag_quantity(emulator, ItemId.ANTIDOTE)}, "
             f"awakenings={_bag_quantity(emulator, ItemId.AWAKENING)}."
         )
-    return tm34_sale_proceeds
+    return rare_candy_sale_proceeds
 
 
 def _cerulean_initial_supply_plan(starting_potions: int) -> tuple[int, int, int]:
@@ -2039,7 +2047,7 @@ def _cerulean_initial_supply_plan(starting_potions: int) -> tuple[int, int, int]
     return top_up, ending, cost
 
 
-def _sell_cerulean_funding_tm34(
+def _sell_cerulean_funding_rare_candy(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
     emulator: EmulatorState,
@@ -2047,7 +2055,7 @@ def _sell_cerulean_funding_tm34(
     *,
     required_cost: int,
 ) -> int:
-    """Liquidate the unused Bide token only when the computed reserve is underfunded."""
+    """Liquidate an optional Rare Candy when the computed reserve is underfunded."""
 
     before = reader.read()
     money_before = _money(emulator)
@@ -2055,45 +2063,46 @@ def _sell_cerulean_funding_tm34(
         before.map_id != MapId.CERULEAN_MART
         or (before.player_x, before.player_y) != (2, 5)
         or before.battle_state != 0
-        or _bag_quantity(emulator, ItemId.TM34_BIDE) != 1
+        or _bag_quantity(emulator, ItemId.RARE_CANDY) != 1
+        or _bag_quantity(emulator, ItemId.TM34_BIDE) != 0
         or type(required_cost) is not int  # noqa: E721
         or required_cost < CERULEAN_INITIAL_SUPPLY_COST
         or money_before >= required_cost
-        or money_before + CERULEAN_TM34_SALE_PROCEEDS
+        or money_before + CERULEAN_RARE_CANDY_SALE_PROCEEDS
         < required_cost
         or not reader.read_input_readiness().ready
     ):
-        raise CascadeChapterError("Cerulean TM34 funding sale has an invalid starting gate.")
+        raise CascadeChapterError("Cerulean Rare Candy funding sale has an invalid starting gate.")
 
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
-        raise CascadeChapterError("Cerulean Mart did not select SELL for TM34.")
+        raise CascadeChapterError("Cerulean Mart did not select SELL for Rare Candy.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     for _ in range(24):
         absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
             RamAddress.LIST_SCROLL_OFFSET
         )
         items = _bag_item_ids(emulator)
-        if absolute < len(items) and items[absolute] == ItemId.TM34_BIDE:
+        if absolute < len(items) and items[absolute] == ItemId.RARE_CANDY:
             break
         _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
     else:
-        raise CascadeChapterError("Cerulean Mart could not select TM34 for sale.")
+        raise CascadeChapterError("Cerulean Mart could not select Rare Candy for sale.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     for _ in range(12):
-        if _bag_quantity(emulator, ItemId.TM34_BIDE) == 0:
+        if _bag_quantity(emulator, ItemId.RARE_CANDY) == 0:
             break
         _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=240)
     else:
-        raise CascadeChapterError("Cerulean Mart did not sell TM34.")
-    if _money(emulator) - money_before != CERULEAN_TM34_SALE_PROCEEDS:
-        raise CascadeChapterError("Cerulean TM34 sale missed its exact ₽1,000 ledger.")
+        raise CascadeChapterError("Cerulean Mart did not sell Rare Candy.")
+    if _money(emulator) - money_before != CERULEAN_RARE_CANDY_SALE_PROCEEDS:
+        raise CascadeChapterError("Cerulean Rare Candy sale missed its exact ₽2,400 ledger.")
     for _ in range(4):
         _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
     if not reader.read_input_readiness().ready:
-        raise CascadeChapterError("Cerulean TM34 sale did not restore field control.")
-    return CERULEAN_TM34_SALE_PROCEEDS
+        raise CascadeChapterError("Cerulean Rare Candy sale did not restore field control.")
+    return CERULEAN_RARE_CANDY_SALE_PROCEEDS
 
 
 def _settle_mart_repeat_clerk_stance(

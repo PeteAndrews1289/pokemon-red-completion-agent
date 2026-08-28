@@ -12,7 +12,43 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-28: failed exact yield retained; repaired bundle is 3/3 locally
+## 2026-08-28: post-yield repair is 3/3 locally; publish before a new population gate
+
+The mission remains a transferable hierarchical agent that completes mainline games and maintains
+a living Pokedex. Red is the first causal curriculum, Crystal the first transfer test, and teacher
+buttons are never learner targets.
+
+Published main `be6a03a4af38b230e4c910f48d2b1aecd785d45f` passed exact-main CI
+`33189656179/1`. Its exact-source successor gate then failed three times and stopped when 10/12
+became impossible. Seeds 9900049–9900051 are permanently consumed; the remaining assignments are
+bound to the old source and unusable. The failures and later development probes drove cartridge-
+exact item funding, broader safe Zubat capture, bounded poison survival, moving-obstacle handling,
+post-action Mart checks, a semantic Silph heal boundary, and an authenticated direct wild-to-
+trainer handoff.
+
+The final unchanged source bundle
+`a3b18f341c0aa9ba7af12fd2309a5ba1758e408134da5b9737ddb77b1ec0c7a9` reached late-Cinnabar
+`mansion_returned` on development seeds 9910051–9910053: **3/3, 112,486 actions, 21,072,636
+frames**. That is checkpoint 275/312 after the Mansion Secret Key return; it stops before Blaine,
+Viridian Gym, the League, Hall of Fame, and living-Pokedex completion. The
+[path-free V2 qualification](docs/evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+binds the private ledgers by hash and keeps every learner, authority, sealed, and transfer effect
+at zero.
+
+Local gates are **5,694 passed, 3 skipped, 1 xfailed**, Ruff, Mypy over **295** source files, all
+three registries, and diff checks. Claude made no edits and found no P0 code defect. Its evidence-
+publication concern is resolved by the V2 receipt; its Mt. Moon interpretation of
+`mansion_returned` and proposed trainer-handoff `continue` are rejected for the reasons recorded in
+[the adjudication log](docs/agent-review-log.md).
+
+Next publish this exact bundle and require green CI on the resulting main commit. Then freeze a new
+versioned, source-bound twelve-world one-use yield plan without gameplay. Require at least 10/12
+late-Cinnabar successes, at most two failures, no repeated deterministic stage, and no leak. Only
+a pass opens a train-only root successor and action-free recensus. Do not reuse old assignments,
+promote diagnostics, materialize development, fit, open sealed Red or Crystal, or call the teacher
+a model. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## 2026-08-28: failed exact yield retained; earlier repaired bundle was 3/3 locally
 
 The active mission is unchanged: build a transferable hierarchical agent that can complete
 mainline games and maintain a living Pokedex. Red is the first causal curriculum and Crystal is the

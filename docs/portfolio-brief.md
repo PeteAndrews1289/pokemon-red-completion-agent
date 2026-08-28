@@ -2,6 +2,17 @@
 
 ## August 28 update
 
+The post-yield repair now has a tighter measured boundary. Exact main `be6a03a4` passed CI, but its
+successor gate stopped after three failures made 10/12 impossible. Cartridge-exact funding, final-
+pulse observation, semantic Silph healing, and an authenticated wild-to-trainer handoff repaired
+the newly observed gaps. One unchanged source bundle then reached the late-Cinnabar Mansion return
+on 3/3 new development seeds—112,486 actions and 21,072,636 frames—and passes 5,694 tests plus
+lint, typing, registry, and diff gates. A path-free receipt binds the private runs while explicitly
+withholding population, training, completion, and transfer claims. The next decision is an exact-
+main, newly frozen 10/12 yield gate; only a pass may create train roots.
+
+## August 28 earlier update
+
 The project is now building a statistically powered causal curriculum for a transferable
 living-Pokédex agent rather than treating a completed Red walkthrough as intelligence. The design
 requires 90 independent Red training contexts with at least 60 settled selected-arm outcomes, then

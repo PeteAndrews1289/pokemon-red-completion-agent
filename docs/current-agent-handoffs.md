@@ -6,6 +6,31 @@ Status: active operating assignment as of 2026-08-28. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish the post-yield repair; no old assignment may be reused
+
+Codex owns the exact working bundle `a3b18f34`, its publication, exact-main CI verification, and
+the later action-free freeze of a new prospective yield plan. Three new one-use development seeds
+reached the late-Cinnabar `mansion_returned` checkpoint on unchanged source: **3/3, 112,486 actions,
+21,072,636 frames**. The public
+[qualification](evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+binds each private ledger by digest and states the 275/312 scope. It is engineering evidence only;
+it creates no root, label, outcome, fit, authority, completion, or transfer result.
+
+The source passes **5,694 tests**, Ruff, Mypy over **295** files, every regenerated registry, and
+diff checks. Claude's read-only audit found no P0 code defect. Codex accepts its demand for a public
+measured artifact and the need to make the one-tick poison assumption explicit; code and tests show
+the protected DUX policy spends exactly one required move before pivoting. Codex rejects its
+`mansion_returned` interpretation—it is late Cinnabar, not Mt. Moon—and its proposed `continue` in
+the handoff loop because the bounded fallthrough is the tested mechanism that advances stale
+trainer-intro state into an authenticated snapshot.
+
+Exact main `be6a03a4` and CI `33189656179/1` remain the published base, not the new candidate. Its
+three failed official seeds 9900049–9900051 are consumed; its other source-bound assignments are
+unusable. After publication and exact-main green CI, freeze a new versioned twelve-world plan with
+fresh one-use assignments. Require at least 10/12 late-Cinnabar successes and no repeated stage or
+leak. Only a pass opens a train-only root plan and recensus. **Causal train 1/60 · powered fit 0 ·
+authority 0 · transfer 0.**
+
 ## Current override: qualify and publish the measured teacher repair; future yield remains closed
 
 Published exact source `eac8e745` passed CI `33167842692/1` but failed its fixed fresh-world gate
