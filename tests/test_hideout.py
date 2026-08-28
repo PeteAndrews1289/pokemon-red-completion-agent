@@ -5,19 +5,29 @@ from dataclasses import fields, replace
 import pytest
 
 from pokemon_red_completion.battle_recovery import first_living_reserve
+from pokemon_red_completion.economy import HIDEOUT_SUPER_POTION_RESERVE
 from pokemon_red_completion.hideout import (
     DEFAULT_HIDEOUT_TIMING,
     HIDEOUT_CHECKPOINT_COUNT,
+    LIFT_KEY_ROCKET_RECOVERY_HP,
     OPTIONAL_EVENTS,
     REQUIRED_EVENTS,
+    HideoutChapterError,
     HideoutChapterReport,
     HideoutCheckpoint,
     HideoutTiming,
     HideoutTrainerEvidence,
+    _lead_needs_key_rocket_recovery,
     _lead_needs_recovery,
     _protected_party_can_continue,
+    _recover_lead_before_key_rocket,
 )
-from pokemon_red_completion.observation import BLASTOISE_SPECIES_ID, MapId, RawGameState
+from pokemon_red_completion.observation import (
+    BLASTOISE_SPECIES_ID,
+    ItemId,
+    MapId,
+    RawGameState,
+)
 
 
 def _raw() -> RawGameState:
@@ -115,14 +125,95 @@ def test_hideout_only_recovers_a_damaged_lead(
     maximum_hp: int,
     expected: bool,
 ) -> None:
-    monkeypatch.setattr(
-        "pokemon_red_completion.hideout._party_hp", lambda _emulator: (current_hp,)
-    )
+    monkeypatch.setattr("pokemon_red_completion.hideout._party_hp", lambda _emulator: (current_hp,))
     monkeypatch.setattr(
         "pokemon_red_completion.hideout._party_max_hp", lambda _emulator: (maximum_hp,)
     )
 
     assert _lead_needs_recovery(object()) is expected  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("current_hp", "maximum_hp", "expected"),
+    (
+        (0, 100, False),
+        (LIFT_KEY_ROCKET_RECOVERY_HP, 100, True),
+        (LIFT_KEY_ROCKET_RECOVERY_HP + 1, 100, False),
+        (64, 65, False),
+        (43, 65, True),
+        (44, 65, False),
+        (100, 100, False),
+    ),
+)
+def test_hideout_recovers_only_a_low_living_lead_before_the_lift_key_rocket(
+    monkeypatch: pytest.MonkeyPatch,
+    current_hp: int,
+    maximum_hp: int,
+    expected: bool,
+) -> None:
+    monkeypatch.setattr("pokemon_red_completion.hideout._party_hp", lambda _emulator: (current_hp,))
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._party_max_hp", lambda _emulator: (maximum_hp,)
+    )
+
+    assert _lead_needs_key_rocket_recovery(object()) is expected  # type: ignore[arg-type]
+
+
+def test_key_rocket_field_recovery_targets_lead_and_preserves_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    inventory = {ItemId.SUPER_POTION: HIDEOUT_SUPER_POTION_RESERVE + 3}
+    selected_party_indexes: list[int] = []
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._lead_needs_key_rocket_recovery",
+        lambda _emulator: True,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._bag",
+        lambda _emulator: inventory,
+    )
+
+    def use_super_potion(*args: object) -> None:
+        selected_party_indexes.append(args[-1])  # type: ignore[arg-type]
+        inventory[ItemId.SUPER_POTION] -= 1
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._use_super_potion",
+        use_super_potion,
+    )
+
+    assert _recover_lead_before_key_rocket(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        DEFAULT_HIDEOUT_TIMING,
+    )
+    assert selected_party_indexes == [0]
+    assert inventory[ItemId.SUPER_POTION] == HIDEOUT_SUPER_POTION_RESERVE + 2
+
+
+def test_key_rocket_field_recovery_refuses_to_spend_the_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._lead_needs_key_rocket_recovery",
+        lambda _emulator: True,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._bag",
+        lambda _emulator: {ItemId.SUPER_POTION: HIDEOUT_SUPER_POTION_RESERVE},
+    )
+
+    with pytest.raises(HideoutChapterError, match="above its protected reserve"):
+        _recover_lead_before_key_rocket(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            DEFAULT_HIDEOUT_TIMING,
+        )
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

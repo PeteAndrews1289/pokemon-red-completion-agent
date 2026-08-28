@@ -1,0 +1,181 @@
+{
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "successor_plan_freeze": false
+  },
+  "base_exact_gate": {
+    "ci_attempt": 1,
+    "ci_run": 33167842692,
+    "commit": "eac8e745454fcc96ee940fa14c28486cc4bb0c91",
+    "evidence_path": "docs/evidence/red-living-dex-fresh-teacher-exact-source-yield-v1-2026-08-28.json",
+    "evidence_sha256": "5c724ee9b1837bc021d914de9166822b66a61725008c011b87b8e6af5e6444e7",
+    "failures": 11,
+    "gate_passed": false,
+    "mansion_returned_successes": 1,
+    "one_use_attempts": 12
+  },
+  "capability_repair": [
+    "Reselect a declared curriculum move semantically, then finish multi-opponent battles from live mechanics and PP rather than repeating one cursor slot.",
+    "Prefer a perfect-accuracy finisher near the end of an opponent's HP bar when it retains at least three quarters of the strongest effective power.",
+    "Switch only an unambiguous sole living reserve in battle and restore the declared field lead after a healing boundary through observed party menus.",
+    "Plan Route 3 poison returns from exact distance and worst-case field damage, preserve one cave Antidote, and spend only the minimum surplus Potions.",
+    "Route around a moving Pewter Mart customer through either bounded safe aisle and tolerate the additional Saffron clerk walker position.",
+    "Treat a wild encounter on the Super Nerd sight line as a bounded retry and clean up only after independently verified trainer victory.",
+    "Partition Spearow and Diglett capture-ball budgets, compute Mart purchase bounds from actual deficits, and arbitrate one shared Route 24 Potion.",
+    "Fund the Fuchsia capture reserve by explicitly accounting for obsolete status-cure stacks while retaining protected collection, evolution, key, and battle assets."
+  ],
+  "development_history": {
+    "attempts": 34,
+    "failures": 25,
+    "harness_seed_end": 9910034,
+    "harness_seed_start": 9910001,
+    "interpretation": "These one-use runs localized successive failure boundaries under changing source and cannot be pooled as a final-source yield estimate.",
+    "mansion_returned_terminals": 9,
+    "retry_allowed": false
+  },
+  "external_review": {
+    "antigravity": {
+      "accepted_observations": [
+        "The historical July 28 Cerulean timing fixture correctly omits the later Super Nerd cleanup field to preserve exact receipt parity.",
+        "The future seeds, threshold, leak rule, and exact-main CI prerequisite remain prospective and adequate."
+      ],
+      "future_exact_gate_verdict": "conditional_go",
+      "mission_alignment": "aligned",
+      "p0_findings": 0,
+      "p1_findings": 0,
+      "p2_findings": 0,
+      "publication_verdict": "go",
+      "status": "complete_read_only_audit"
+    },
+    "claude": {
+      "accepted_prior_findings": [
+        "Prepublication diagnostic success cannot authenticate a final committed source bundle.",
+        "A successor plan requires prospective cross-seed yield measured on exact published source."
+      ],
+      "status": "prior_review_retained_no_new_review_requested"
+    }
+  },
+  "final_local_sample": {
+    "actions_total": 115696,
+    "attempts": 3,
+    "frames_total": 21246875,
+    "mansion_returned_successes": 3,
+    "one_use_per_seed": true,
+    "population_yield_claimed": false,
+    "promotion_eligible": false,
+    "runs": [
+      {
+        "actions": 36645,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7016495,
+        "harness_seed": 9910035,
+        "private_ledger_sha256": "4af7a1bb3732432320c91b3715acd8209a989ae4a2ab199d5596c71fa8a2ca80",
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 44470,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7407404,
+        "harness_seed": 9910036,
+        "private_ledger_sha256": "56a0fe3fa7bdd922e46deb920c56f4ae89e10af8ae602cc76b5ca1b08b215cd8",
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 34581,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 6822976,
+        "harness_seed": 9910037,
+        "private_ledger_sha256": "0665a119d847475cad38d8fdb3f9599a448cf5569484a42f0fe7399038ad9485",
+        "status": "mansion_returned"
+      }
+    ],
+    "source_unchanged_across_sample": true
+  },
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "learner_training_began": false,
+    "local_repair_behavior_qualified": true,
+    "official_lineage_created": false,
+    "publication_allowed_after_final_review": true,
+    "successor_plan_freeze_allowed": false,
+    "teacher_actions_are_model_labels": false
+  },
+  "next_prospective_gate": {
+    "attempts": 12,
+    "diagnostic_only": true,
+    "harness_seed_end": 9900060,
+    "harness_seed_start": 9900049,
+    "maximum_failures": 2,
+    "minimum_mansion_returned_successes": 10,
+    "no_private_path_or_identity_leak": true,
+    "no_repeated_deterministic_failure_stage": true,
+    "one_use_per_seed": true,
+    "prerequisites": [
+      "The complete repair bundle is published on main.",
+      "GitHub CI succeeds on that exact main commit.",
+      "The source-bound registries match that exact bundle."
+    ],
+    "retry_after_controller_input": false
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "qualification": {
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5657,
+      "warning": 1,
+      "xfailed": 1
+    },
+    "mypy_source_files": 309,
+    "public_artifact_checks": "passed",
+    "registry_checks": "passed",
+    "ruff": "passed"
+  },
+  "recorded_on": "2026-08-28",
+  "registries": {
+    "battle_collection_sha256": "63b2fceb0d0d7e398d77f1ee8689bb510ad1ebfef7bffb95b927308d4d8b71cd",
+    "battle_teacher_execution_sha256": "5e50382e58c59768fbfdcb383ff187d4fe6344d5b5a6bf3500e09d494c430a58",
+    "goal_collection_sha256": "c84661e8467b13efc92946d9cf8c9f61a39f10e195f7eb3129fcc09a7d9729cc",
+    "goal_teacher_execution_sha256": "c5830ffadb9827969c35af87b71b571f13ded3ffd55c458c31d2de89eaaee5f4",
+    "strategic_collection_sha256": "573a320f44a397780b505bc0d09e8f7980f0f95148648582662a82a3df88b568",
+    "strategic_decision_contract_sha256": "d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6",
+    "strategic_teacher_execution_sha256": "1ac7d0cc7a7a80f3d042cf8c9954b0a8db0e219ca8c552a0aef0c9ffe1b4cc79"
+  },
+  "schema": "pokemon.red.living-dex-fresh-teacher-repair-local-qualification.v1",
+  "source": {
+    "base_commit": "eac8e745454fcc96ee940fa14c28486cc4bb0c91",
+    "source_bundle_sha256": "5285cce43beebb26237c72bd8946b6168556d48f09340df8b53c31a473196434",
+    "successful_runtime_matches_current_source_bundle": true
+  },
+  "status": "local_repair_qualified_pending_publication_and_exact_source_yield",
+  "unsupported_claims": [
+    "final_exact_source_population_yield_passed",
+    "model_training_began",
+    "official_fresh_root_created",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_transferable_policy_labels",
+    "transfer_to_crystal_demonstrated"
+  ]
+}

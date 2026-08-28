@@ -1,27 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 28 scene: three clean worlds are a gate, not training
+## August 28 scene: the exact gate fails before the repair earns 3/3
 
-Open on eighteen fast failure cards, each stamped **ONE USE · NO RETRY**, and group them by what
-they taught the engineer: **MOVING NPC · POISON · SUPPLIES · ZUBAT · ROUTE 3 · MT. MOON · CERULEAN**.
-Replace brittle route patches with capability cards: **PREPARE · RECOVER · CAPTURE SAFELY · RETAIN
-RESOURCES**.
+Open on the exact published-source gate: **GREEN CI**, then twelve one-use counters. Stop at
+**1/12 MANSION RETURNED**. Stack six failures under **MT. MOON POTIONS**, two under **SUPER NERD**,
+and one each under **PEWTER NPC · ZUBAT · HIDEOUT PARTY**. Stamp every card **CONSUMED · NO RETRY**
+and lock the successor plan.
 
-Then run three seed counters side by side. Each passes roughly seven million frames and lands on
-**MANSION RETURNED 275/312**. Put a large label over them: **TEACHER DIAGNOSTIC—NOT MODEL DATA**.
+Turn the stack into capability cards: **MECHANICS-RANKED BATTLE · SEMANTIC MOVE RESELECT · SAFE
+SWITCH · POISON RETURN BUDGET · MOVING NPC · POST-VICTORY CLEANUP · PROTECTED-ASSET FUNDING**.
+Then run three new seed counters side by side on one unchanged source fingerprint. Each lands on
+**MANSION RETURNED 275/312**; total them at **115,696 ACTIONS · 21,246,875 FRAMES**. Put a large
+label over them: **TEACHER DIAGNOSTIC—NOT MODEL DATA**.
 Keep the learner board unchanged at **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER
 0**. Draw a hard wall between **TEACHER BUTTONS** and **TITLE-NEUTRAL SELECTED-ARM OUTCOMES**.
 
-Show the candidate passing **5,612 TESTS · RUFF · MYPY 308**, then refuse to promote it. Stamp
-**FINAL CLEANUP HAPPENED AFTER THESE RUNS** and **3/3 ≠ POPULATION YIELD**. Reveal the prospective
-gate before any result appears: **PUBLISH EXACT MAIN → GREEN CI → 12 NEW ONE-USE SEEDS → REQUIRE
-≥10 SUCCESSES · ≤2 FAILURES · NO REPEATED STAGE · NO LEAK**.
+Show **5,657 TESTS · RUFF · MYPY 309 · REGISTRIES · PUBLIC ARTIFACTS · ANTIGRAVITY P0/P1/P2 0**,
+then refuse to promote the candidate. Stamp
+**3/3 ≠ POPULATION YIELD**. Reveal the prospective gate before any result appears: **PUBLISH EXACT
+MAIN → GREEN CI → SEEDS 9900049–9900060 ONCE → REQUIRE ≥10 SUCCESSES · ≤2 FAILURES · NO
+REPEATED STAGE · NO LEAK**.
 
-Put Claude and Antigravity on challenger screens. Accept Claude's exact-source and yield caution;
-show Antigravity's no-go claims being tested and crossed out individually rather than by vote. End
-on the rail **PASS → FREEZE NEW TRAIN-ROOT PLAN → MATERIALIZE TRAIN ONLY → RECENSUS → COLLECT
-CAUSAL OUTCOMES → GUARDED FIT**. Lock **OLD V1 PLAN · DEVELOPMENT · SEALED RED · CRYSTAL** behind
-closed gates.
+Put Antigravity on the challenger screen for the finished repair and preserve Claude's earlier
+exact-source caution. End on the rail **PASS → FREEZE NEW TRAIN-ROOT PLAN → MATERIALIZE TRAIN ONLY
+→ RECENSUS → COLLECT CAUSAL OUTCOMES → GUARDED FIT**. Lock **OLD V1 PLAN · ALL CONSUMED SEEDS
+· DEVELOPMENT · SEALED RED · CRYSTAL** behind closed gates.
 
 ## August 28 scene: the old saves face the real matching test
 

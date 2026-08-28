@@ -88,7 +88,7 @@ DIGLETT_SPECIES_ID = 0x3B
 # available upper level band so the same capture teaches matchup preparation
 # without adding a brittle sacrifice or a trainer-specific menu exception.
 DIGLETT_CAPTURE_LEVELS = frozenset({21, 22})
-DIGLETT_CAPTURE_THROW_LIMIT = 30
+DIGLETT_CAPTURE_THROW_LIMIT = 15
 DIGLETT_CAPTURE_HELPER_PARTY_INDEX = 1
 DIGLETT_CAPTURE_HELPER_MOVE_INDEX = 0
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
@@ -99,12 +99,17 @@ CATERPIE_SPECIES_ID = 0x7B
 METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
-COLLECTION_POKE_BALL_TARGET = 30
+COLLECTION_POKE_BALL_TARGET = 45
 # The Forest lesson retains six specimens and permits five throws per live
 # encounter.  Keep the full predeclared Poké Ball budget instead of treating
 # an empirically successful smaller reserve as a resource invariant.
-FOREST_POKE_BALL_RESERVE = COLLECTION_POKE_BALL_TARGET
+FOREST_POKE_BALL_RESERVE = 30
 POKE_BALL_PRICE = 200
+SUPER_POTION_PRICE = 700
+# A single-item Gen-I Mart purchase traverses several confirmation/dialogue
+# states before the bag quantity changes.  Budget per required item so earlier
+# capture spend cannot silently inherit the former fifteen-purchase ceiling.
+MART_SINGLE_PURCHASE_CONFIRMATIONS_PER_ITEM = 16
 SURGE_ITEM_SETTLE_PULSES = 720
 # Diglett is deliberately the lesson lead here, but it is still a fragile new
 # capture.  Restore any missing HP at a stable MAIN boundary so damage carried
@@ -155,7 +160,12 @@ WILD_CAPTURE_PASSIVE_POLICY = CapturePolicy(
 WILD_CAPTURE_MAX_WEAKENING_ATTACKS = 8
 WILD_CAPTURE_ADAPTIVE_WEAKENING_CAP = 32
 SPEAROW_DIRECT_THROW_LEVEL_FLOOR = 30
-SPEAROW_CAPTURE_THROW_LIMIT = 15
+SPEAROW_CAPTURE_THROW_LIMIT = 30
+# Wartortle is the only party member at the Route 11 lesson and every damaging
+# move can critically knock out the level-17 target.  Direct throws therefore
+# own a larger bounded budget, but they may never consume the separate reserve
+# for the already weakened Diglett lesson that follows.
+DIGLETT_CAPTURE_BALL_RESERVE = DIGLETT_CAPTURE_THROW_LIMIT
 CUT_MOVE_ID = 0x0F
 DIG_MOVE_ID = 0x5B
 LT_SURGE_OPPONENT_ID = 0xEC
@@ -394,11 +404,30 @@ def run_surge_chapter(
             f"{starting_surge_super_potions}."
         )
     surge_super_potion_target = max(2, starting_surge_super_potions)
+    starting_surge_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    if not 1 <= starting_surge_balls <= COLLECTION_POKE_BALL_TARGET:
+        raise SurgeChapterError(
+            f"Unexpected Poké Ball quantity {starting_surge_balls}."
+        )
+    surge_preparation_cost = (
+        (COLLECTION_POKE_BALL_TARGET - starting_surge_balls) * POKE_BALL_PRICE
+        + (surge_super_potion_target - starting_surge_super_potions)
+        * SUPER_POTION_PRICE
+    )
+    surge_preparation_money = _money(emulator)
+    if surge_preparation_money < surge_preparation_cost:
+        raise SurgeChapterError(
+            "Vermilion capture and recovery preparation is not funded: "
+            f"money={surge_preparation_money}, cost={surge_preparation_cost}."
+        )
     _move(actions, reader, _directions("UUL"), timing, "Mart clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 60)
     _confirm(actions, 4, 180)
     _confirm(actions, 2, 240)
-    for _ in range(180):
+    ball_purchase_confirmations = _single_purchase_confirmation_budget(
+        COLLECTION_POKE_BALL_TARGET - starting_surge_balls
+    )
+    for _ in range(ball_purchase_confirmations):
         quantity = _bag(emulator).get(ItemId.POKE_BALL, 0)
         if quantity == COLLECTION_POKE_BALL_TARGET:
             break
@@ -431,7 +460,8 @@ def run_surge_chapter(
     _gate(
         raw,
         _bag(emulator).get(ItemId.POKE_BALL) == COLLECTION_POKE_BALL_TARGET
-        and _bag(emulator).get(ItemId.SUPER_POTION) == surge_super_potion_target,
+        and _bag(emulator).get(ItemId.SUPER_POTION) == surge_super_potion_target
+        and _money(emulator) == surge_preparation_money - surge_preparation_cost,
         tracker,
         SurgePhase.BALLS_PURCHASED,
         "balls_purchased",
@@ -469,20 +499,18 @@ def run_surge_chapter(
         raise SurgeChapterError(
             "Spearow direct-throw lesson requires the staged-development level floor."
         )
-    spearow_balls_before = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    for _ in range(SPEAROW_CAPTURE_THROW_LIMIT):
-        if _throw_ball(emulator, actions, reader):
-            break
-    else:
-        raise SurgeChapterError(
-            f"{SPEAROW_CAPTURE_THROW_LIMIT} bounded throws did not capture Spearow."
-        )
+    spearow_balls_used = _capture_spearow_with_diglett_reserve(
+        emulator,
+        actions,
+        reader,
+    )
     raw = reader.read()
-    spearow_balls_used = spearow_balls_before - _bag(emulator).get(ItemId.POKE_BALL, 0)
     _gate(
         raw,
         raw.party_species_ids == (WARTORTLE_SPECIES_ID, SPEAROW_SPECIES_ID)
-        and 1 <= spearow_balls_used <= SPEAROW_CAPTURE_THROW_LIMIT,
+        and 1 <= spearow_balls_used <= SPEAROW_CAPTURE_THROW_LIMIT
+        and _bag(emulator).get(ItemId.POKE_BALL, 0)
+        >= DIGLETT_CAPTURE_BALL_RESERVE,
         tracker,
         SurgePhase.SPEAROW_CAPTURED,
         "spearow_captured",
@@ -820,6 +848,12 @@ def _open_mart_buy_list(
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
     raise SurgeChapterError("Vermilion Mart dialogue did not return to the priced item list.")
+
+
+def _single_purchase_confirmation_budget(required_items: int) -> int:
+    if type(required_items) is not int or required_items < 0:  # noqa: E721
+        raise SurgeChapterError("Mart replacement quantity must be a non-negative integer.")
+    return 1 + required_items * MART_SINGLE_PURCHASE_CONFIRMATIONS_PER_ITEM
 
 
 def _buy_mart_item(
@@ -1187,6 +1221,42 @@ def _throw_ball(
         # first throw's persistent bag update is observed.
         _pulse(executor, BALL_THROW_SETTLE_ACTION)
     raise SurgeChapterError("Poké Ball throw did not reach a capture or retry boundary.")
+
+
+def _capture_spearow_with_diglett_reserve(
+    emulator: EmulatorState,
+    executor: CountingExecutor,
+    reader: PokemonRedStateReader,
+) -> int:
+    """Capture Spearow without spending the independent Diglett lesson budget."""
+
+    starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    available_throws = starting_balls - DIGLETT_CAPTURE_BALL_RESERVE
+    throw_limit = min(SPEAROW_CAPTURE_THROW_LIMIT, available_throws)
+    if throw_limit <= 0:
+        raise SurgeChapterError(
+            "Spearow capture has no Poké Balls beyond the protected Diglett reserve: "
+            f"balls={starting_balls}, reserve={DIGLETT_CAPTURE_BALL_RESERVE}."
+        )
+    for _ in range(throw_limit):
+        if _throw_ball(emulator, executor, reader):
+            balls_used = starting_balls - _bag(emulator).get(ItemId.POKE_BALL, 0)
+            if (
+                not 1 <= balls_used <= throw_limit
+                or _bag(emulator).get(ItemId.POKE_BALL, 0)
+                < DIGLETT_CAPTURE_BALL_RESERVE
+            ):
+                raise SurgeChapterError(
+                    "Spearow capture violated its bounded resource partition."
+                )
+            return balls_used
+    remaining = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    if remaining < DIGLETT_CAPTURE_BALL_RESERVE:
+        raise SurgeChapterError("Failed Spearow throws consumed the Diglett reserve.")
+    raise SurgeChapterError(
+        f"{throw_limit} bounded throws did not capture Spearow; "
+        f"preserved_reserve={remaining}."
+    )
 
 
 def _await_exact_ball_decrement(
@@ -3603,6 +3673,11 @@ def _throw_until_caught_diglett(
     reader: PokemonRedStateReader,
 ) -> None:
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    if starting_balls < DIGLETT_CAPTURE_BALL_RESERVE:
+        raise SurgeChapterError(
+            "Diglett capture started below its protected Poké Ball reserve: "
+            f"balls={starting_balls}, reserve={DIGLETT_CAPTURE_BALL_RESERVE}."
+        )
     throw_limit = min(starting_balls, DIGLETT_CAPTURE_THROW_LIMIT)
     for _ in range(throw_limit):
         if _settle_caught_diglett(emulator, executor, reader, starting_balls, throw_limit):

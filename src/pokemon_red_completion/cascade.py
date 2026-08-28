@@ -38,6 +38,10 @@ from pokemon_red_completion.cerulean import (
     _select_battle_move,
 )
 from pokemon_red_completion.economy import CERULEAN_RIVAL_POTION_RESERVE
+from pokemon_red_completion.gen1_party_menu import (
+    Gen1PartyMenuError,
+    promote_species_to_lead,
+)
 from pokemon_red_completion.misty_policy import choose_misty_move_slot
 from pokemon_red_completion.observation import (
     ABRA_SPECIES_ID,
@@ -84,6 +88,9 @@ CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
 CERULEAN_ANTIDOTE_RESERVE = 3
 CERULEAN_INITIAL_POTION_TOP_UP = 4
 CERULEAN_INITIAL_SUPPLY_COST = 1_700
+CERULEAN_MINIMUM_STARTING_POTION_RESERVE = 9
+CERULEAN_POTION_PRICE = 300
+CERULEAN_STATUS_SUPPLY_COST = 500
 CERULEAN_TM34_SALE_PROCEEDS = 1_000
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
@@ -92,6 +99,7 @@ ROUTE_24_SECOND_RECOVERY_POSITION = 1
 ROUTE_24_CENTER_RECOVERY_POSITION = 2
 ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
 ROUTE_24_FINAL_RECOVERY_POSITION = 4
+ROUTE_24_LONG_TEAM_RECOVERY_HP = 30
 ROUTE_24_ACCURACY_RECOVERY_HP = 40
 ROUTE_24_ACCURATE_FINISH_HP = 12
 ROUTE_25_RECOVERY_POTION_RESERVE = 5
@@ -406,6 +414,16 @@ def run_cascade_chapter(
         emulator=emulator,
         withdraw_pc_potion=False,
     )
+    try:
+        promote_species_to_lead(
+            emulator,
+            chapter_executor,
+            reader,
+            WARTORTLE_SPECIES_ID,
+            label="Cerulean restored battle lead",
+        )
+    except Gen1PartyMenuError as error:
+        raise CascadeChapterError(str(error)) from error
     _teach_cerulean_rival_mega_punch(
         reader,
         chapter_executor,
@@ -572,6 +590,7 @@ def run_cascade_chapter(
             _run_route_24_usable_move_battle(
                 reader,
                 chapter_executor,
+                emulator,
                 trainer_index=trainer_index,
                 timing=timing,
             )
@@ -1860,12 +1879,18 @@ def _purchase_cerulean_supplies(
 
     before = reader.read()
     starting_money = _money(emulator)
+    starting_potions = _bag_quantity(emulator, ItemId.POTION)
+    (
+        potion_top_up,
+        expected_potion_quantity,
+        supply_cost,
+    ) = _cerulean_initial_supply_plan(starting_potions)
     if (
         before.map_id != MapId.CERULEAN_CITY
         or (before.player_x, before.player_y) != (19, 18)
         or before.battle_state != 0
-        or not CERULEAN_RIVAL_POTION_RESERVE - 2
-        <= _bag_quantity(emulator, ItemId.POTION)
+        or not CERULEAN_MINIMUM_STARTING_POTION_RESERVE
+        <= starting_potions
         <= CERULEAN_RIVAL_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != 0
         or _bag_quantity(emulator, ItemId.AWAKENING) != 0
@@ -1887,14 +1912,15 @@ def _purchase_cerulean_supplies(
 
     _approach_cerulean_mart_clerk(executor, reader, timing)
     tm34_sale_proceeds = 0
-    if starting_money < CERULEAN_INITIAL_SUPPLY_COST:
+    if starting_money < supply_cost:
         tm34_sale_proceeds = _sell_cerulean_funding_tm34(
             reader,
             executor,
             emulator,
             timing,
+            required_cost=supply_cost,
         )
-    if _money(emulator) < CERULEAN_INITIAL_SUPPLY_COST:
+    if _money(emulator) < supply_cost:
         raise CascadeChapterError("Cerulean supplies remain underfunded after bounded recovery.")
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
@@ -1941,13 +1967,10 @@ def _purchase_cerulean_supplies(
             )
         _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
 
-    expected_potion_quantity = (
-        _bag_quantity(emulator, ItemId.POTION) + CERULEAN_INITIAL_POTION_TOP_UP
-    )
     buy_one(
         shop_index=1,
         item=ItemId.POTION,
-        purchase_quantity=CERULEAN_INITIAL_POTION_TOP_UP,
+        purchase_quantity=potion_top_up,
         expected_quantity=expected_potion_quantity,
         label="Potions",
     )
@@ -1982,7 +2005,7 @@ def _purchase_cerulean_supplies(
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 1
         or _money(emulator)
-        != starting_money + tm34_sale_proceeds - CERULEAN_INITIAL_SUPPLY_COST
+        != starting_money + tm34_sale_proceeds - supply_cost
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
@@ -1995,13 +2018,36 @@ def _purchase_cerulean_supplies(
     return tm34_sale_proceeds
 
 
+def _cerulean_initial_supply_plan(starting_potions: int) -> tuple[int, int, int]:
+    """Top up a cave-depleted bag to the existing 16–18 rival reserve."""
+
+    if (
+        type(starting_potions) is not int  # noqa: E721
+        or not CERULEAN_MINIMUM_STARTING_POTION_RESERVE
+        <= starting_potions
+        <= CERULEAN_RIVAL_POTION_RESERVE
+    ):
+        raise CascadeChapterError("Cerulean supply plan has an invalid Potion handoff.")
+    top_up = CERULEAN_INITIAL_POTION_TOP_UP + max(
+        0,
+        CERULEAN_RIVAL_POTION_RESERVE - 2 - starting_potions,
+    )
+    ending = starting_potions + top_up
+    if not CERULEAN_RIVAL_MIN_POTION_RESERVE <= ending <= CERULEAN_RIVAL_MAX_POTION_RESERVE:
+        raise CascadeChapterError("Cerulean supply plan missed its rival reserve.")
+    cost = top_up * CERULEAN_POTION_PRICE + CERULEAN_STATUS_SUPPLY_COST
+    return top_up, ending, cost
+
+
 def _sell_cerulean_funding_tm34(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
     emulator: EmulatorState,
     timing: CascadeTiming,
+    *,
+    required_cost: int,
 ) -> int:
-    """Liquidate the unused Bide token only when the fixed reserve is underfunded."""
+    """Liquidate the unused Bide token only when the computed reserve is underfunded."""
 
     before = reader.read()
     money_before = _money(emulator)
@@ -2010,9 +2056,11 @@ def _sell_cerulean_funding_tm34(
         or (before.player_x, before.player_y) != (2, 5)
         or before.battle_state != 0
         or _bag_quantity(emulator, ItemId.TM34_BIDE) != 1
-        or money_before >= CERULEAN_INITIAL_SUPPLY_COST
+        or type(required_cost) is not int  # noqa: E721
+        or required_cost < CERULEAN_INITIAL_SUPPLY_COST
+        or money_before >= required_cost
         or money_before + CERULEAN_TM34_SALE_PROCEEDS
-        < CERULEAN_INITIAL_SUPPLY_COST
+        < required_cost
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError("Cerulean TM34 funding sale has an invalid starting gate.")
@@ -2679,16 +2727,24 @@ def _run_route_25_usable_move_battle(
 def _run_route_24_usable_move_battle(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
     *,
     trainer_index: int,
     timing: CascadeTiming,
 ) -> RawGameState:
-    """Clear the long Bug/Poison team with a live PP-aware move policy."""
+    """Clear the long team while arbitrating one shared bridge Potion."""
 
     label = f"Route 24 trainer {trainer_index}"
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if starting_quantity != ROUTE_24_RECOVERY_POTION_RESERVE:
+        raise CascadeChapterError(
+            "Route 24 long-team recovery lacks its shared Potion reserve."
+        )
     intent = BattleIntent(
         objective_id="help_bill",
         battle_plan_id=f"unscheduled-route24-trainer-{trainer_index}",
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
 
     def policy(state: RawGameState) -> int:
@@ -2696,21 +2752,55 @@ def _run_route_24_usable_move_battle(
         # compounding poison and Wrap damage. Once the final opponent is in
         # guaranteed Water Gun range, prefer its perfect accuracy rather than
         # risking another damaging reply on a Mega Punch miss.
+        if (
+            state.first_party_hp is not None
+            and 0 < state.first_party_hp <= ROUTE_24_LONG_TEAM_RECOVERY_HP
+            and _bag_quantity(emulator, ItemId.POTION)
+            > ROUTE_25_RECOVERY_POTION_RESERVE
+        ):
+            raise _PauseForRoute24SharedPotion
         return _choose_route_24_long_team_move_slot(state)
 
-    try:
-        return run_adaptive_trainer_battle(
-            reader,
-            executor,
-            policy,
-            expected_map=MapId.ROUTE_24,
-            intent=intent,
-            timing=timing.battle_runtime,
-            label=label,
-            consume_battle_start_schedule=False,
-        )
-    except BattleRuntimeError as error:
-        raise CascadeChapterError(str(error)) from error
+    recoveries = 0
+    while True:
+        try:
+            final = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                policy,
+                expected_map=MapId.ROUTE_24,
+                intent=intent,
+                timing=timing.battle_runtime,
+                label=label,
+                consume_battle_start_schedule=False,
+            )
+        except BattleRuntimeError as error:
+            if not recovery_request_matches(
+                error.__cause__,
+                _PauseForRoute24SharedPotion,
+            ):
+                raise CascadeChapterError(str(error)) from error
+            _use_cerulean_rival_potion(reader, executor, emulator, timing)
+            recoveries += 1
+            if recoveries > 1:
+                raise CascadeChapterError(
+                    "Route 24 long-team battle exceeded its shared Potion allowance."
+                ) from error
+        else:
+            if (
+                _bag_quantity(emulator, ItemId.POTION)
+                != starting_quantity - recoveries
+                or _bag_quantity(emulator, ItemId.POTION)
+                < ROUTE_25_RECOVERY_POTION_RESERVE
+            ):
+                raise CascadeChapterError(
+                    "Route 24 long-team battle changed its protected Potion handoff."
+                )
+            return final
+
+
+class _PauseForRoute24SharedPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_route_24_accuracy_battle_with_potion(
@@ -2732,9 +2822,11 @@ def _run_route_24_accuracy_battle_with_potion(
     """
 
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if starting_quantity != ROUTE_24_RECOVERY_POTION_RESERVE:
+    if not ROUTE_25_RECOVERY_POTION_RESERVE <= starting_quantity <= (
+        ROUTE_24_RECOVERY_POTION_RESERVE
+    ):
         raise CascadeChapterError(
-            "Route 24 accuracy recovery lacks its five-Potion starting reserve."
+            "Route 24 accuracy recovery lacks its shared Potion handoff."
         )
     try:
         _select_battle_move(
@@ -2774,6 +2866,7 @@ def _run_route_24_accuracy_battle_with_potion(
             menu = reader.read_battle_menu_state(before)
             should_recover = (
                 not recovery_used
+                and starting_quantity > ROUTE_25_RECOVERY_POTION_RESERVE
                 and menu.phase is BattleMenuPhase.MAIN
                 and before.first_party_hp is not None
                 and 0 < before.first_party_hp <= ROUTE_24_ACCURACY_RECOVERY_HP

@@ -62,6 +62,7 @@ HIDEOUT_TRAINER_REWARD_TOTAL = 5_481
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
 DIG = 0x5B
+LIFT_KEY_ROCKET_RECOVERY_HP = 65
 ROCKET = (0xE6, 0x1E)
 GIOVANNI = (0xE5, 0x1D)
 PROTECTED_PARTIES = frozenset(
@@ -348,6 +349,13 @@ def run_hideout_chapter(
         records, progress, emulator, reader.read(), "b4_key_wing", "Crossed B3 spinner maze"
     )
 
+    _recover_lead_before_key_rocket(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
+    )
     _move(actions, reader, emulator, run, B4_TO_KEY_ROCKET, timing, "Lift Key Rocket")
     _face(actions, "up", timing)
     trainers.append(
@@ -578,6 +586,8 @@ def _fight(
             label=label,
             unknown_cancel_interval=2,
         )
+    if final.first_party_hp == 0:
+        raise HideoutChapterError(f"{label} fainted the protected field lead.")
     if before_pp is None or final.first_party_pp is None or before_moves is None:
         raise HideoutChapterError(f"{label} lacks PP evidence.")
     if final.first_party_moves != before_moves:
@@ -585,6 +595,8 @@ def _fight(
             f"{label} changed the protected move set: {before_moves!r} -> "
             f"{final.first_party_moves!r}."
         )
+    # ``first_party_pp`` always names field party slot zero; unlike
+    # ``battler_pp`` it does not silently follow a forced active-battler switch.
     spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
     if spent <= 0:
         raise HideoutChapterError(f"{label} did not spend required-move PP.")
@@ -614,6 +626,54 @@ def _lead_needs_recovery(emulator: EmulatorState) -> bool:
     """Return whether the lead can validly receive an HP recovery item."""
 
     return _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
+
+
+def _lead_needs_key_rocket_recovery(emulator: EmulatorState) -> bool:
+    """Protect a low but living lead before the first mandatory B4 fight."""
+
+    current = _party_hp(emulator)[0]
+    maximum = _party_max_hp(emulator)[0]
+    return (
+        0 < current < maximum
+        and current <= LIFT_KEY_ROCKET_RECOVERY_HP
+        and current * 3 <= maximum * 2
+    )
+
+
+def _recover_lead_before_key_rocket(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: HideoutTiming,
+) -> bool:
+    """Spend one verified surplus Potion on party slot zero, never the reserve."""
+
+    if not _lead_needs_key_rocket_recovery(emulator):
+        return False
+    before_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if before_quantity <= HIDEOUT_SUPER_POTION_RESERVE:
+        raise HideoutChapterError(
+            "Lift Key Rocket recovery has no Super Potion above its protected reserve: "
+            f"quantity={before_quantity}, reserve={HIDEOUT_SUPER_POTION_RESERVE}."
+        )
+    _use_super_potion(
+        actions,
+        reader,
+        emulator,
+        run,  # type: ignore[arg-type]
+        timing,  # type: ignore[arg-type]
+        0,
+    )
+    after_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if (
+        after_quantity != before_quantity - 1
+        or after_quantity < HIDEOUT_SUPER_POTION_RESERVE
+    ):
+        raise HideoutChapterError(
+            "Lift Key Rocket recovery violated its one-item protected reserve."
+        )
+    return True
 
 
 def _run_hideout_giovanni_with_recovery(
@@ -678,9 +738,7 @@ def _run_hideout_giovanni_with_recovery(
                 unknown_cancel_interval=2,
             )
         except BattleRuntimeError as error:
-            if not recovery_request_matches(
-                error.__cause__, _PauseForGiovanniSuperPotion
-            ):
+            if not recovery_request_matches(error.__cause__, _PauseForGiovanniSuperPotion):
                 failed = reader.read()
                 raise HideoutChapterError(
                     f"{error} Recovery evidence: starting_reserve={starting_reserve}, "
@@ -847,10 +905,7 @@ def _cure_giovanni_poison_if_present(
             f"Giovanni recovery lacks its poison reserve: status={status}, quantity={quantity}."
         )
     _use_bag_item(actions, reader, emulator, timing, ItemId.ANTIDOTE)  # type: ignore[arg-type]
-    if (
-        _party_status(emulator)[0] != 0
-        or _bag(emulator).get(ItemId.ANTIDOTE, 0) != quantity - 1
-    ):
+    if _party_status(emulator)[0] != 0 or _bag(emulator).get(ItemId.ANTIDOTE, 0) != quantity - 1:
         raise HideoutChapterError("Giovanni Antidote did not prove its exact status cure.")
 
 

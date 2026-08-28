@@ -44,6 +44,26 @@ def first_living_reserve(party_hp: tuple[int, ...]) -> int | None:
     return next((index for index, hp in enumerate(party_hp[1:], start=1) if hp > 0), None)
 
 
+def sole_living_switch_target(
+    party_hp: tuple[int, ...],
+    active_party_index: int | None,
+) -> int | None:
+    """Return the only legal living replacement, never a hidden strategic choice."""
+
+    if (
+        active_party_index is None
+        or not 0 <= active_party_index < len(party_hp)
+        or party_hp[active_party_index] > 0
+    ):
+        return None
+    candidates = tuple(
+        index
+        for index, hp in enumerate(party_hp)
+        if index != active_party_index and hp > 0
+    )
+    return candidates[0] if len(candidates) == 1 else None
+
+
 def switch_active_battler(
     actions: ActionExecutor,
     reader: PokemonRedStateReader,

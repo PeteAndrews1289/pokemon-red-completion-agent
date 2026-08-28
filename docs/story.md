@@ -7,13 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: three fresh worlds worked; twelve exact-source worlds decide what happens next
+## Current checkpoint: the first twelve worlds failed, and the failure map improved the teacher
 
-The classroom generator had to learn the difference between one completed route and a repeatable
-capability. Eighteen one-use development episodes exposed moving people, poison, inventory,
-recovery, capture safety, and boundary assumptions. After those repairs, three different seeds
-reached the mansion-returned boundary in a row. The teacher can now survive more than one lucky
-world.
+The first exact test did what a real test is supposed to do: it broke the optimistic story. The
+published source passed CI, but only one of twelve fresh worlds reached the mansion-returned
+boundary. Six ran out of the expected Potion reserve in Mt. Moon, two failed at Super Nerd, and
+three more exposed a moving person, a capture battle, and an active-party assumption. Every world
+was retained and none could be rerun.
+
+Those failures became a capability map instead of eleven route patches. Battles now reselect moves
+from live mechanics, switch and reorder living party members, and finish weakened opponents without
+burning the only viable attack. Poison recovery budgets the walk home. Navigation reacts to moving
+people. Cleanup happens only after victory. Resource logic can fund later captures without selling
+protected collection assets. The final unchanged repair then took three new worlds to the same
+boundary in a row: 115,696 actions and 21,246,875 frames.
 
 That still is not the model learning Pokémon. Teacher buttons are not labels, diagnostic captures
 are not official roots, and the learner board stays **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY
@@ -21,12 +28,13 @@ are not official roots, and the learner board stays **CAUSAL TRAIN 1/60 · POWER
 the title-neutral learner can later discover which acquisition, evolution, development, storage,
 resupply, access, and exploration choices pay off.
 
-The next rule was written before the next result: publish the exact source, pass exact-main CI,
-then run twelve new seeds once each. At least ten must reach the same boundary, with no repeated
-deterministic failure and no leak. Only then can a new official train-root plan exist. The old plan
-cannot be rescued or reused. This is the project's anti-drift promise in operational form: when a
-teacher fix stops creating measurable learning capacity, the gate stops the work instead of letting
-another week disappear into a prettier walkthrough.
+The three successes qualify a repair candidate, not its population yield. The repair passes 5,657
+tests, static analysis, registry and public-artifact checks; Antigravity found no P0/P1/P2 issue.
+The next rule is again written before seeing its outcomes: publish exact source, pass exact-main
+CI, then run twelve untouched seeds once each. At least ten must reach the
+boundary, with no repeated deterministic failure or leak. Only then can a new official train-root
+plan exist. The old plan and all previous diagnostics remain closed. This is the anti-drift promise
+in operational form: teacher work continues only when it creates measured capacity for the learner.
 
 ## Current checkpoint: sixty-three old classrooms, one hundred thirty-two new worlds
 

@@ -1,5 +1,37 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 28 update
+
+The project is now building a statistically powered causal curriculum for a transferable
+living-Pokédex agent rather than treating a completed Red walkthrough as intelligence. The design
+requires 90 independent Red training contexts with at least 60 settled selected-arm outcomes, then
+105 untouched same-reset comparisons against random, cheapest-first, and myopic controls. Red can
+currently identify 16 supported feature directions; unsupported Crystal mechanics must trigger
+abstention and later adaptation rather than an invented zero-shot claim.
+
+An exact action-free matching census made the data deficit concrete: 67 independent historical
+lineages support only 54/90 training contexts and 63/195 disjoint train-plus-development contexts.
+That opened a fresh-world classroom generator—and its first real test failed. The published source
+passed CI but reached the mansion-returned boundary on only 1/12 prospectively fixed worlds. All
+twelve outcomes were retained, none could retry, and no official root or model target was created.
+
+The failure distribution drove reusable Gen-I capabilities instead of eleven seed-specific route
+patches: live-mechanics battle selection, safe party switching and ordering, poison-aware return
+planning, dynamic NPC routing, verified post-victory cleanup, capture-resource partitioning, and
+protected-asset funding. One unchanged repaired source bundle then completed three new development
+worlds in a row—115,696 controller actions and 21,246,875 emulator frames. That is engineering
+qualification, not population yield or training. The exact candidate passes 5,657 repository
+tests, Ruff, Mypy across 309 source files, every regenerated registry, documentation validation,
+and the public-artifact scan; Antigravity returned publication GO with no P0/P1/P2 finding. After
+publication and exact-main CI, twelve untouched seeds will run once against a fixed 10/12 gate
+before any train-root plan can exist.
+
+The interview story is the discipline around autonomy: deterministic tools generate safe,
+independent classrooms; the learner sees anonymous strategic menus and selected-arm outcomes, never
+teacher button sequences; negative and interrupted results stay in the denominator; and no model
+earns Red or Crystal authority until it beats preregistered controls. The honest scoreboard remains
+**causal train 1/60 · powered fit 0 · authority 0 · transfer 0**.
+
 ## August 13 update
 
 The first strategic destination model is now frozen without spending the final test. An independent

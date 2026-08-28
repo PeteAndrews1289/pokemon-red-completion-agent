@@ -153,10 +153,20 @@ class Gen1WildFleeHandler:
 
 
 _BATTLE_CATALOG = PokemonRedBattleCatalog()
+_RELIABLE_FINISH_HP_NUMERATOR = 1
+_RELIABLE_FINISH_HP_DENOMINATOR = 3
+_RELIABLE_FINISH_POWER_FLOOR = 0.75
+_PERFECT_MOVE_ACCURACY = 1.0
 
 
 def strongest_usable_move_slot(raw: RawGameState) -> int:
-    """Choose a damaging move from live mechanics, without chapter identity."""
+    """Choose a damaging move from live mechanics, without chapter identity.
+
+    Expected effective power remains the default.  Near the end of an opponent's
+    HP bar, prefer a perfectly accurate move when it retains enough effective
+    power to be a credible finisher.  This avoids spending scarce party HP on a
+    slightly stronger move's miss risk without teaching a route-specific move.
+    """
 
     moves = raw.battler_moves
     pp = raw.battler_pp
@@ -170,7 +180,13 @@ def strongest_usable_move_slot(raw: RawGameState) -> int:
 
     attacker = _BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(attacker_id))
     defender = _BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(raw.enemy_species_id))
-    usable: list[tuple[tuple[bool, float, float, int, int, int], int]] = []
+    usable: list[
+        tuple[
+            tuple[bool, float, float, int, int, int],
+            tuple[bool, float, float, int, int],
+            int,
+        ]
+    ] = []
     for index, (move_id, packed_pp) in enumerate(zip(moves, pp, strict=False)):
         slot = index + 1
         current_pp = packed_pp & 0x3F
@@ -187,13 +203,21 @@ def strongest_usable_move_slot(raw: RawGameState) -> int:
             defender.types,
         )
         stab = STAB_MULTIPLIER if move.type_name in attacker.types else 1.0
+        effective_power = move.power * effectiveness * stab
         usable.append(
             (
                 (
                     damaging,
-                    move.power * move.accuracy * effectiveness * stab,
+                    effective_power * move.accuracy,
                     effectiveness,
                     move.power,
+                    current_pp,
+                    -slot,
+                ),
+                (
+                    damaging,
+                    effective_power,
+                    move.accuracy,
                     current_pp,
                     -slot,
                 ),
@@ -202,7 +226,29 @@ def strongest_usable_move_slot(raw: RawGameState) -> int:
         )
     if not usable:
         raise RouteExecutionError("route battle has no usable move")
-    return max(usable)[1]
+    ordinary_choice = max(usable, key=lambda row: row[0])
+    strongest_effective_power = max(
+        (row[1][1] for row in usable if row[1][0]),
+        default=0.0,
+    )
+    low_hp = (
+        raw.enemy_hp is not None
+        and raw.enemy_max_hp is not None
+        and 0 < raw.enemy_hp <= raw.enemy_max_hp
+        and raw.enemy_hp * _RELIABLE_FINISH_HP_DENOMINATOR
+        <= raw.enemy_max_hp * _RELIABLE_FINISH_HP_NUMERATOR
+    )
+    if low_hp and strongest_effective_power > 0:
+        reliable = tuple(
+            row
+            for row in usable
+            if row[1][0]
+            and row[1][2] == _PERFECT_MOVE_ACCURACY
+            and row[1][1] >= strongest_effective_power * _RELIABLE_FINISH_POWER_FLOOR
+        )
+        if reliable:
+            return max(reliable, key=lambda row: row[1])[2]
+    return ordinary_choice[2]
 
 
 @dataclass(slots=True)

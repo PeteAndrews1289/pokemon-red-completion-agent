@@ -5,18 +5,20 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 28, 2026): prove the repaired fresh-world teacher on the exact
-> published source.** Three consecutive development-only episodes now reach `mansion_returned`
-> after repairs to early capability preparation, navigation, supplies, poison, recovery, economy,
-> and Zubat capture. The candidate passes **5,612 tests, Ruff, and Mypy over 308 source files**.
-> These runs are not learner examples: the teacher creates independent classrooms, while the model
-> will learn title-neutral strategic choices from selected-arm outcomes—not arrow sequences.
+> **Current product focus (August 28, 2026): publish the measured fresh-world repair, then prove
+> its yield.** Exact published source `eac8e745` passed CI but failed its declared twelve-world gate
+> at **1/12**; those seeds are permanently consumed. The failure distribution drove capability
+> repairs to party switching, adaptive battle choices, poison-aware recovery, moving-NPC routing,
+> post-battle cleanup, and resource funding. The final unchanged source bundle then reached
+> `mansion_returned` on **3/3** new development seeds—115,696 actions and 21,246,875 frames.
 >
-> Final cleanup happened after those runs, so the next evidence gate is fixed before publication:
-> exact-main green CI followed by twelve one-use non-promotable seeds, requiring at least 10/12
-> successes and no repeated failure or leak. Only then may a new train-root plan freeze. The old V1
-> plan is permanently unusable, development remains untouched, and no fit or Crystal run is open.
-> **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+> Those runs are engineering evidence, not learner examples or official roots. The candidate passes
+> **5,657 tests, Ruff, Mypy over 309 source files, all registry/doc/public-artifact checks**, and an
+> Antigravity audit with P0/P1/P2 all zero. Publish the exact candidate, require green exact-main CI,
+> and run twelve already prospective one-use seeds (9900049–9900060). Require at least 10/12
+> successes with no repeated failure stage or leak before freezing a train-only successor. The old
+> plan and every consumed diagnostic remain unusable; development, fitting, sealed Red, and Crystal
+> stay closed. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 > **Current product focus (August 28, 2026): generate genuinely new Red classroom episodes.** The
 > powered curriculum is published: 90 train contexts with at least 60 settled outcomes and 105

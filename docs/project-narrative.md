@@ -1,26 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 28: the classroom finally survives fresh worlds—but it still has to prove its yield
+## August 28: an exact 1/12 failure became a reusable capability repair
 
-The matching census said the model needed new worlds. Building them exposed why a completed scripted
-run was never enough: a new seed can shift an NPC, change an encounter, poison a party member, drain
-a resource, or leave the route one recovery step short. Eighteen one-use development runs failed
-while those assumptions were turned into explicit capabilities. Route 1 now prepares the party on
-every outcome, Forest items and poison are planned resources, Pewter buys for the whole cave, Zubat
-capture refuses unsafe hits, and Route 3 and Mt. Moon recover at the boundaries that actually fail.
+The matching census said the model needed new worlds. The first exact published attempt to make them
+failed its preregistered test: only one of twelve seeds reached `mansion_returned`. Six failures
+shared the Mt. Moon Potion boundary, two shared Super Nerd, and the remaining three exposed Pewter
+navigation, Zubat capture, and Hideout party state. The denominator stayed twelve, every seed became
+permanently consumed, and no successor plan was frozen.
 
-Then three different seeds reached the mansion-returned boundary in a row—roughly seven million
-emulator frames each. That is the first evidence that the teacher can manufacture independent Red
-classrooms instead of replaying one lucky save. It is deliberately not called training. None of the
-teacher's arrows enters the learner, none of these diagnostics becomes an official root, and the
-scoreboard remains **causal train 1/60, powered fit 0, authority 0, transfer 0**.
+The repair followed the distribution rather than polishing a single replay. It added mechanics-
+ranked battle decisions, semantic move reselection, safe switching and party ordering, poison-aware
+return budgets, moving-NPC routing, verified post-victory cleanup, resource arbitration, and
+explicit capture funding that protects collection-critical assets. Thirty-four one-use development
+attempts localized successive boundaries under changing source. They are engineering history, not a
+pooled success estimate. The final unchanged bundle then completed seeds 9910035–9910037 in a row:
+**3/3, 115,696 actions, 21,246,875 frames**.
 
-The project also refused an easy victory lap. Small source cleanups followed those runs, and three
-successes cannot estimate the generator's yield. Before seeing the next result, the team fixed the
-rule: publish the exact source, pass exact-main CI, then run twelve new one-use seeds and require at
-least ten successes with no repeated deterministic failure or private leak. Claude's review caused
-that stronger gate. Antigravity's no-go was preserved but overruled only after its concrete claims
-were falsified against the code. Reviewers are challengers, not votes.
+That is deliberately not called training. None of the teacher's arrows enters the learner, none of
+these diagnostics becomes an official root, and the scoreboard remains **causal train 1/60,
+powered fit 0, authority 0, transfer 0**. Three successes also cannot estimate population yield.
+The candidate passes 5,657 repository tests, Ruff, Mypy across 309 source files, every registry,
+documentation, and public-artifact check. Antigravity returned publication GO and future-gate
+conditional GO with no P0/P1/P2 finding. The next rule is fixed before the next result: publish
+exact source, pass exact-main CI, then run seeds 9900049–9900060 once each and require at
+least ten successes with no repeated deterministic failure or private leak. Reviewers are
+challengers, not votes.
 
 If the gate passes, a new one-shot train-root plan can finally turn fresh worlds into capacity for
 the title-neutral causal curriculum. If it fails, the failure distribution—not another optimistic

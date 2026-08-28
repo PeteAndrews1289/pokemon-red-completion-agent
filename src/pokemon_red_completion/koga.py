@@ -63,10 +63,10 @@ KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
 MUK_SPECIES_ID = 0x88
-# Disable can legally force Juggler 3 onto reserve moves and extend the battle.
-# Bound its Surf consumption by the carried 15-PP pool rather than one historical
-# eight-turn outcome; the remaining fights retain their tighter qualified limits.
-KOGA_PP_BOUNDS = ((0, 15), (1, 8), (1, 8), (1, 15))
+# Bind every upper limit to the carried 15-PP pool rather than one historical
+# turn count.  Disable-fallback battles may validly spend zero primary PP; Tamer
+# 2 still requires at least one use of the declared primary move.
+KOGA_PP_BOUNDS = ((0, 15), (1, 15), (0, 15), (0, 15))
 JUGGLER_4_PIVOT_HP_THRESHOLD = 50
 
 
@@ -447,7 +447,7 @@ def run_koga_chapter(
             "Tamer 2",
             (0xDE, 0x16, 2),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
-            8,
+            KOGA_PP_BOUNDS[1][1],
             RedBattlePlanId.KOGA_TAMER_2,
             attack_move_id=attack_move_id,
             attack_move_slot=attack_move_slot,
@@ -483,7 +483,7 @@ def run_koga_chapter(
             "Juggler 4",
             (0xDD, 0x15, 4),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
-            8,
+            KOGA_PP_BOUNDS[2][1],
             RedBattlePlanId.KOGA_JUGGLER_4,
             attack_move_id=attack_move_id,
             attack_move_slot=attack_move_slot,
@@ -532,7 +532,7 @@ def run_koga_chapter(
             "Koga",
             (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
             EventFlag.BEAT_KOGA,
-            15,
+            KOGA_PP_BOUNDS[3][1],
             RedBattlePlanId.KOGA_LEADER,
             attack_move_id=attack_move_id,
             attack_move_slot=attack_move_slot,
