@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 terminal repair — Claude/Antigravity review and Codex adjudication 2026-08-29
+
+Claude returned publication GO with no P0. Codex accepted its request for explicit tests of the
+delayed-battle type/map guard, cumulative flee budget, party-safe stance, and pickup collision;
+all four are now direct branches. Codex also accepted its wording finding and renamed the receipt
+field so the two late-Cinnabar successes are explicitly pre-repair observations.
+
+Antigravity's exact P0/P1 descriptions overstated the implementation: the encounter helper is not
+Zubat-specific and neither controller boundary enters learner features or targets. Those labels
+are rejected. Its strategic finding is accepted: another fixed-route 10/12 teacher-yield cycle
+conflicts with MISSION.md and the active anti-drift alarms. The new Vermilion reroute and proposed
+V3 yield gate are removed. The successor is lineage-clustered short-scenario training with
+lineage-disjoint evaluation. Both audits were read-only and changed no learner counter.
+
 ## World-variance repair — Claude/Antigravity review and Codex adjudication 2026-08-28
 
 Both reviewers inspected the working-tree diff from base `05ae3cce` read-only. Neither opened a

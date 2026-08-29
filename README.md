@@ -5,6 +5,36 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): freeze the passed clustered curriculum, then collect
+> real outcomes.** The exact zero-controller census found **8 train scenarios from 8 lineages**
+> and **4 untouched development scenarios from 4 lineages**, with all seven portable option
+> kinds in both partitions, one scenario per lineage, and zero overlap. It used 67 qualified
+> upstream lineages and 414 compatibility edges without executing gameplay, querying a teacher,
+> observing an outcome, or fitting a model.
+>
+> Capacity is therefore no longer the blocker. The next gate is an action-free private freezer
+> that must reproduce schedule `35c00f38…`, persist the exact 8+4 assignments, and reopen under an
+> independent validator. Only then may the eight train selected arms run, followed by a clearly
+> non-authoritative integration fit. No V3 teacher-yield gate or routine full-game replay is
+> allowed. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+> [path-free census result](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
+
+> **Current product focus (August 29, 2026): the exact-main population gate failed; repair only
+> what it measured.** PR 99 merged as main `624325cf`, and exact-main CI `33232635929/1` passed.
+> A genuinely new twelve-world plan then stopped exactly as preregistered at **2/5** after a third
+> distinct failure made 10/12 impossible. Five worlds are consumed, seven unopened identities are
+> retired unused, and no root, learner example, fit, authority, or transfer result was created.
+> The [path-free terminal](docs/evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+> records **90,565 actions and 15,824,793 frames**.
+>
+> The bounded repair addresses only the observed seams: rearm a dropped fossil interaction only
+> on an authenticated ready field, settle and ledger a one-frame-late cave encounter before
+> facing a pickup, and move the post-ship Vermilion route onto a cartridge-walkable lane that
+> avoids both measured roaming-NPC tiles. Its focused suite is **155/155** green. Next: finish the
+> full local gate, obtain read-only review, publish and green the exact candidate, then freeze one
+> genuinely new V3 12-world plan. Only a 10/12 pass may reopen train-root generation. **Causal
+> train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **Current product focus (August 28, 2026): publish the world-variance repair, then measure it on a
 > genuinely new prospective population.** Exact main `05ae3cce` passed CI `33221693432/1`, but its
 > successor gate stopped at **2/5** after three distinct failures made the required 10/12 result

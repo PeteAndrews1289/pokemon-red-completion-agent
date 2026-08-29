@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Census powered Red causal root capacity without controller input.
+"""Census Red causal compatibility and clustered integration capacity action-free.
 
 This read-only command reuses the authenticated provider-plan input boundary,
 observes every still-available nonsealed root in an isolated emulator, tests
-each root against all fifteen genuine Red menu templates, and emits only an
-aggregate path-free matching bound.  It publishes no private plan and has no
+each root against all fifteen genuine Red menu templates, preserves immutable
+upstream train/development ownership, and emits an aggregate path-free legacy
+bound plus the first 8+4 clustered schedule summary.  It publishes no private plan and has no
 claim writer, controller executor, teacher, behavior randomizer, outcome
 collector, model scorer, or fitter.
 """
@@ -38,7 +39,9 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     open_fixed_account_claim_registry,
 )
 from pokemon_red_completion.red_living_dex_causal_inventory import (
-    census_red_living_dex_causal_inventory,
+    audit_red_living_dex_causal_inventory,
+    enumerate_red_living_dex_causal_capabilities,
+    schedule_red_living_dex_clustered_integration,
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
     derive_red_living_dex_provider_corridors,
@@ -57,8 +60,8 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
     load_strategic_navigation_scenario_registry,
 )
 
-RESULT_SCHEMA = "pokemon.red.living-dex-causal-action-free-inventory-result.v1"
-FAILURE_SCHEMA = "pokemon.red.living-dex-causal-action-free-inventory-failure.v1"
+RESULT_SCHEMA = "pokemon.red.living-dex-clustered-action-free-inventory-result.v2"
+FAILURE_SCHEMA = "pokemon.red.living-dex-clustered-action-free-inventory-failure.v2"
 
 
 class CausalInventoryCensusError(RuntimeError):
@@ -152,12 +155,19 @@ def main(argv: list[str] | None = None) -> int:
             )
             effects_after = meter.checkpoint()
             stage = "complete_template_compatibility_census"
-            audit = census_red_living_dex_causal_inventory(
+            capabilities = enumerate_red_living_dex_causal_capabilities(
                 candidates,
                 world=world,
                 corridors=corridors,
                 effects_before=effects_before,
                 effects_after=effects_after,
+            )
+            audit = audit_red_living_dex_causal_inventory(
+                candidates,
+                capabilities,
+            )
+            clustered = schedule_red_living_dex_clustered_integration(
+                capabilities
             )
             stage = "protected_input_integrity"
             _support("_require_integrity")(
@@ -174,6 +184,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         result = {
             **audit.public_dict(),
+            "clustered_integration": clustered.public_dict(),
             "authenticated_contexts": state.authenticated_contexts,
             "authenticated_supplemental_roots": (
                 state.authenticated_supplemental_roots
@@ -187,7 +198,7 @@ def main(argv: list[str] | None = None) -> int:
             "source_catalog_partition_reused_as_prospective_label": False,
             "source_train_roots": state.source_train_roots,
             "source_validation_roots": state.source_validation_roots,
-            "status": "authenticated_action_free_inventory_censused",
+            "status": "authenticated_action_free_clustered_inventory_censused",
         }
         print(json.dumps(result, allow_nan=False, separators=(",", ":"), sort_keys=True))
         return 0

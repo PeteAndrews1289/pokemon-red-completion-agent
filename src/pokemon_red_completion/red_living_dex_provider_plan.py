@@ -224,6 +224,7 @@ class RedLivingDexActionFreeRootObservation:
     option_context: LivingDexOptionContext | None = None
     independence_lineage_sha256: str | None = None
     prospective_independence_authenticated: bool = False
+    cluster_partition: str | None = None
 
     def __post_init__(self) -> None:
         _validate_root_observation(
@@ -245,6 +246,10 @@ class RedLivingDexActionFreeRootObservation:
             )
         if type(self.prospective_independence_authenticated) is not bool:  # noqa: E721
             raise TypeError("provider-plan independence authentication differs")
+        if self.cluster_partition not in {None, "train", "development"}:
+            raise RedLivingDexProviderPlanError(
+                "provider-plan cluster partition differs"
+            )
         if (
             self.prospective_independence_authenticated
             and self.independence_lineage_sha256 is None

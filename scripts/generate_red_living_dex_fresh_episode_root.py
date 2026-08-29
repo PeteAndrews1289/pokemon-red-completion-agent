@@ -473,6 +473,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 }
             ),
             prospective_independence_authenticated=True,
+            cluster_partition="train",
         )
         compatible: list[int] = []
         slots = build_red_living_dex_prospective_capture_plan().slots[:10]

@@ -37,6 +37,8 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_B2F_SEED_WAITS,
     MT_MOON_B2F_TO_ROCKET_DIRECTIONS,
     MT_MOON_BATTLE_POTION_FLOOR,
+    MT_MOON_MAX_WILD_FLEES,
+    MT_MOON_PICKUP_ENCOUNTER_WAIT_FRAMES,
     MT_MOON_POTION_APPROACH_DIRECTIONS,
     MT_MOON_POTION_DETOUR_ORIGIN,
     MT_MOON_POTION_PICKUP_POSITION,
@@ -82,6 +84,7 @@ from pokemon_red_completion.cerulean import (
     _collect_mt_moon_tm12,
     _CountingChapterExecutor,
     _cure_field_poison_if_needed,
+    _face_mt_moon_pickup_after_encounter_settle,
     _finish_battle,
     _is_persistent_capture_hp,
     _leave_pewter_mart,
@@ -90,6 +93,7 @@ from pokemon_red_completion.cerulean import (
     _move_without_battles_with_retries,
     _MtMoonTraversalLedger,
     _normalize_cerulean_antidotes,
+    _obtain_helix_fossil,
     _open_pewter_ball_quantity_menu,
     _poison_return_potions_required,
     _pp_at,
@@ -1042,6 +1046,293 @@ def _chapter(**changes: object) -> CeruleanChapterState:
     }
     defaults.update(changes)
     return CeruleanChapterState(**defaults)  # type: ignore[arg-type]
+
+
+def test_helix_fossil_rearms_one_dropped_ready_field_interaction() -> None:
+    class Reader:
+        obtained = False
+
+        def read(self) -> RawGameState:
+            return _raw(MapId.MT_MOON_B2F, 13, 7)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+        def read_cerulean_chapter_state(self, raw: RawGameState) -> CeruleanChapterState:
+            del raw
+            if not self.obtained:
+                return _chapter()
+            return _chapter(
+                phase=CeruleanPhase.FOSSIL_OBTAINED,
+                got_helix_fossil=True,
+                helix_fossil_in_bag=True,
+            )
+
+    reader = Reader()
+
+    class Executor:
+        interactions = 0
+        facing_pulses = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE:
+                assert action.value == "up"
+                self.facing_pulses += 1
+            elif action.kind is MacroActionKind.INTERACT:
+                self.interactions += 1
+                if self.interactions == 2:
+                    reader.obtained = True
+
+    class Tracker:
+        def observe(self, evidence: CeruleanChapterState) -> CeruleanPhase:
+            assert evidence.fossil_snapshot
+            return CeruleanPhase.FOSSIL_OBTAINED
+
+    executor = Executor()
+    raw, evidence = _obtain_helix_fossil(
+        _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        Tracker(),  # type: ignore[arg-type]
+        replace(DEFAULT_CERULEAN_TIMING, fossil_dialogue_pulses=3),
+    )
+
+    assert raw.map_id == MapId.MT_MOON_B2F
+    assert evidence.fossil_snapshot
+    assert executor.interactions == 2
+    assert executor.facing_pulses == 2
+
+
+def test_helix_fossil_does_not_rearm_inside_an_active_script() -> None:
+    class Reader:
+        obtained = False
+
+        def read(self) -> RawGameState:
+            return _raw(MapId.MT_MOON_B2F, 13, 7)
+
+        def read_cerulean_chapter_state(self, raw: RawGameState) -> CeruleanChapterState:
+            del raw
+            if not self.obtained:
+                return _chapter(local_script=1, current_map_script=1)
+            return _chapter(
+                phase=CeruleanPhase.FOSSIL_OBTAINED,
+                got_helix_fossil=True,
+                helix_fossil_in_bag=True,
+            )
+
+    reader = Reader()
+
+    class Executor:
+        confirmations = 0
+        interactions = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+                reader.obtained = True
+            elif action.kind is MacroActionKind.INTERACT:
+                self.interactions += 1
+
+    class Tracker:
+        def observe(self, evidence: CeruleanChapterState) -> CeruleanPhase:
+            assert evidence.fossil_snapshot
+            return CeruleanPhase.FOSSIL_OBTAINED
+
+    executor = Executor()
+    _, evidence = _obtain_helix_fossil(
+        _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        Tracker(),  # type: ignore[arg-type]
+        replace(DEFAULT_CERULEAN_TIMING, fossil_dialogue_pulses=2),
+    )
+
+    assert evidence.fossil_snapshot
+    assert executor.confirmations == 1
+    assert executor.interactions == 0
+
+
+def test_mt_moon_pickup_faces_only_after_delayed_wild_is_settled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = _raw(MapId.MT_MOON_B2F, 28, 5)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    reader = Reader()
+
+    class Executor:
+        exposed_transition = False
+        directions: list[str] = []
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.WAIT and not self.exposed_transition:
+                self.exposed_transition = True
+                reader.state = replace(reader.state, battle_state=1)
+            elif action.kind is MacroActionKind.MOVE:
+                self.directions.append(str(action.value))
+
+    def flee_wild(*args: object, **kwargs: object) -> object:
+        del args, kwargs
+        assert reader.state.battle_state == 1
+        reader.state = replace(reader.state, battle_state=0, battle_result=2)
+        return object()
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean.flee_wild", flee_wild)
+    executor = Executor()
+    ledger = _MtMoonTraversalLedger()
+    faced = _face_mt_moon_pickup_after_encounter_settle(
+        _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        direction="right",
+        expected_map_id=MapId.MT_MOON_B2F,
+        expected_position=(28, 5),
+        label="unit delayed pickup",
+        ledger=ledger,
+    )
+
+    assert MT_MOON_PICKUP_ENCOUNTER_WAIT_FRAMES == 1
+    assert executor.exposed_transition
+    assert executor.directions == ["right"]
+    assert (faced.player_x, faced.player_y, faced.battle_state) == (28, 5, 0)
+    assert len(ledger.flees) == 1
+
+
+@pytest.mark.parametrize(
+    "delayed_state",
+    (
+        _raw(MapId.MT_MOON_B2F, 28, 5, battle_state=2),
+        _raw(MapId.MT_MOON_1F, 28, 5, battle_state=1),
+    ),
+)
+def test_mt_moon_pickup_rejects_an_unexpected_delayed_battle(
+    delayed_state: RawGameState,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        def read(self) -> RawGameState:
+            return delayed_state
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    def forbidden_flee(*args: object, **kwargs: object) -> object:
+        del args, kwargs
+        raise AssertionError("unexpected battle must fail before attempting to flee")
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean.flee_wild", forbidden_flee)
+    executor = Executor()
+    with pytest.raises(CeruleanChapterError, match="unexpected delayed battle"):
+        _face_mt_moon_pickup_after_encounter_settle(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            direction="right",
+            expected_map_id=MapId.MT_MOON_B2F,
+            expected_position=(28, 5),
+            label="unit delayed pickup",
+            ledger=_MtMoonTraversalLedger(),
+        )
+
+    assert [action.kind for action in executor.actions] == [MacroActionKind.WAIT]
+
+
+def test_mt_moon_pickup_rejects_a_delayed_wild_after_the_flee_budget() -> None:
+    state = _raw(MapId.MT_MOON_B2F, 28, 5, battle_state=1)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    ledger = _MtMoonTraversalLedger()
+    ledger.flees.extend(  # type: ignore[arg-type]
+        [object()] * MT_MOON_MAX_WILD_FLEES
+    )
+    executor = Executor()
+    with pytest.raises(CeruleanChapterError, match="exhausted.*flee budget"):
+        _face_mt_moon_pickup_after_encounter_settle(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            direction="right",
+            expected_map_id=MapId.MT_MOON_B2F,
+            expected_position=(28, 5),
+            label="unit delayed pickup",
+            ledger=ledger,
+        )
+
+    assert ledger.remaining_flees == 0
+    assert [action.kind for action in executor.actions] == [MacroActionKind.WAIT]
+
+
+def test_mt_moon_pickup_rejects_a_lost_party_safe_stance() -> None:
+    state = _raw(MapId.MT_MOON_B2F, 28, 5, hp=0)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+    with pytest.raises(CeruleanChapterError, match="lost.*pickup stance"):
+        _face_mt_moon_pickup_after_encounter_settle(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            direction="right",
+            expected_map_id=MapId.MT_MOON_B2F,
+            expected_position=(28, 5),
+            label="unit delayed pickup",
+            ledger=_MtMoonTraversalLedger(),
+        )
+
+    assert [action.kind for action in executor.actions] == [MacroActionKind.WAIT]
+
+
+def test_mt_moon_pickup_rejects_a_facing_pulse_that_moves() -> None:
+    class Reader:
+        state = _raw(MapId.MT_MOON_B2F, 28, 5)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        directions: list[str] = []
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE:
+                self.directions.append(str(action.value))
+                reader.state = replace(reader.state, player_x=29)
+
+    executor = Executor()
+    with pytest.raises(CeruleanChapterError, match="did not collide"):
+        _face_mt_moon_pickup_after_encounter_settle(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            direction="right",
+            expected_map_id=MapId.MT_MOON_B2F,
+            expected_position=(28, 5),
+            label="unit delayed pickup",
+            ledger=_MtMoonTraversalLedger(),
+        )
+
+    assert executor.directions == ["right"]
 
 
 def _route_3_evidence() -> tuple[

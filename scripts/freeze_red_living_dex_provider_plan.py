@@ -565,6 +565,9 @@ def _observe_candidates(
                 }
             ),
             prospective_independence_authenticated=True,
+            cluster_partition=(
+                "train" if assignment.partition == "train" else "development"
+            ),
         )
         if observation is None:
             state.ineligible_control_contexts += 1
@@ -631,6 +634,7 @@ def _observe_supplemental_candidates(
                 }
             ),
             prospective_independence_authenticated=False,
+            cluster_partition=None,
         )
         if observation is None:
             state.ineligible_control_contexts += 1
@@ -654,6 +658,7 @@ def _observe_root(
     ],
     independence_lineage_sha256: str,
     prospective_independence_authenticated: bool,
+    cluster_partition: str | None,
 ) -> RedLivingDexActionFreeRootObservation | None:
     emulator: PyBoyAdapter | None = None
     frame_before = 0
@@ -706,6 +711,7 @@ def _observe_root(
                 prospective_independence_authenticated=(
                     prospective_independence_authenticated
                 ),
+                cluster_partition=cluster_partition,
             )
     except ProviderPlanFreezeError:
         if emulator is not None:

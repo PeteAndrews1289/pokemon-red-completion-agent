@@ -1,5 +1,50 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 clustered-capacity result
+
+An exact action-free census transformed the historical Red bank into a leakage-resistant
+integration curriculum: eight train scenarios from eight upstream lineages and four untouched
+development scenarios from four different lineages. Both partitions cover all seven title-neutral
+living-Dex option kinds, observed cluster multiplicity is one, and train/development overlap is
+zero. The census executed no gameplay, teacher, prediction, outcome, or fit.
+
+The next engineering gate is a private schedule freezer and independent validator, not another
+full-game teacher campaign. Once the exact 8+4 identities reopen unchanged, the project can collect
+eight selected-arm outcomes and fit a non-authoritative integration model before scaling toward 60
+outcomes and a held-out Red comparison. This is concrete progress from route automation toward a
+transferable decision learner.
+
+## August 29 reorientation
+
+The latest engineering decision corrected the experiment rather than adding another route patch.
+The prior design required every causal row to consume a separate full-game Red teacher lineage;
+the 2/5 prospective gate showed that this made deterministic-route reliability the bottleneck.
+The successor instead uses lineage-clustered short scenarios: all descendants of one episode stay
+in one partition, training may use bounded multiple scenarios per lineage, and evaluation remains
+wholly lineage-disjoint and cluster-scored.
+
+The fixed Vermilion reroute was removed, while authenticated interaction and delayed-encounter
+boundaries were retained and strengthened. Existing capacity is 67 qualified lineages and 414
+root-template edges. The next milestone is eight authentic selected-arm outcomes across four or
+more lineages and four or more portable option kinds, followed by a clearly non-authoritative
+integration fit. This moves the work from teacher throughput to measurable learner behavior.
+
+## August 29 latest update
+
+The latest milestone is a failed reliability claim preserved correctly. Exact main `624325cf`
+passed CI, but its prospectively fixed twelve-world teacher trial stopped at 2/5 after a third
+distinct failure made the required 10/12 impossible. Two worlds reached late Cinnabar; three found
+a dropped fossil interaction, a moving Vermilion object, and a one-frame-late cave encounter.
+Five worlds are permanently consumed, seven were never opened, and none became a training row.
+
+The repair converts those observations into bounded capabilities: distinguish active dialogue
+from an authenticated ready field before reinteraction, reuse the evidence-bearing wild-flee
+primitive at item boundaries, and select a cartridge-walkable lane around dynamic obstacles. The
+focused suite is 155/155. This is still teacher infrastructure, not the AI playing Pokémon; the
+scoreboard remains causal train 1/60, powered fit 0, authority 0, transfer 0. The next falsifier is
+unchanged: after publication and exact-main CI, one new 12-world population must reach at least
+10/12 before independent Red classrooms can be generated for the learner.
+
 ## August 28 latest update
 
 The newest reliability pass illustrates the project's core discipline: a cartridge can report a

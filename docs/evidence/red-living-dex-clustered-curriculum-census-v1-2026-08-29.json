@@ -1,0 +1,100 @@
+{
+  "claim_boundary": {
+    "supported": "One exact published, zero-controller Red inventory constructed the declared 8-train plus 4-development lineage-clustered integration schedule from existing authenticated upstream lineages.",
+    "unsupported": [
+      "authentic_outcome_collected",
+      "development_outcome_opened",
+      "learner_training_began",
+      "model_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "clustered_gate": {
+    "cluster_weighting": "equal_total_weight_per_lineage",
+    "development_lineages": 4,
+    "development_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ],
+    "development_scenarios": 4,
+    "gate_passed": true,
+    "lineage_overlap": 0,
+    "maximum_observed_scenarios_per_lineage": 1,
+    "policy_sha256": "dc72fb9449f7279c12b673b266e0973d01b62577f99d22ec7fdb14fceb8589be",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "schedule_sha256": "35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905",
+    "train_lineages": 8,
+    "train_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ],
+    "train_scenarios": 8,
+    "unselected_action_targets": 0
+  },
+  "historical_inventory": {
+    "authenticated_contexts": 81,
+    "compatibility_edges": 414,
+    "consumed_contexts": 5,
+    "eligible_root_pool": 68,
+    "independence_qualified_roots": 67,
+    "source_train_roots": 44,
+    "source_validation_roots": 23
+  },
+  "interpretation": {
+    "authentic_causal_train_examples_after": 1,
+    "authentic_causal_train_examples_before": 1,
+    "clustered_curriculum_capacity_ready": true,
+    "legacy_independent_root_capacity_ready": false,
+    "legacy_independent_root_shortfall_is_blocking": false,
+    "model_authority_changed": false,
+    "model_fit_executed": false,
+    "next_gate": "qualify_and_publish_a_private_identity_bearing_clustered_schedule_freezer_then_freeze_the_exact_8_plus_4_schedule_before_any_gameplay",
+    "teacher_yield_gate_required": false,
+    "transfer_to_crystal_demonstrated": false
+  },
+  "legacy_diagnostic": {
+    "combined_context_deficit": 132,
+    "combined_maximum_matching": 63,
+    "inventory_sufficient": false,
+    "role": "retired_one_independent_full_game_root_per_row_diagnostic_only"
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-29",
+  "schema": "pokemon.red.living-dex-clustered-curriculum-census-result.v1",
+  "source": {
+    "ci_attempt": 1,
+    "ci_run": 33263228797,
+    "commit": "f26be2a10936784abaf95c9a441626948d3fc162",
+    "machine_result_path": "docs/evidence/red-living-dex-clustered-curriculum-census-machine-result-v1-2026-08-29.json",
+    "machine_result_sha256": "cb7b5998a99b04249b35c351dd6e5571042614f84aeb10d29965db5be8081944",
+    "pull_request": 100,
+    "source_bundle_sha256": "51f009e3eeef7dbaedf5b44d735a05eafdd8a21b2569a974aa452b7e9f1225c0"
+  },
+  "status": "clustered_integration_capacity_passed_private_schedule_freeze_pending"
+}

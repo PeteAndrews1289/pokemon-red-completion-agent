@@ -1,5 +1,33 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — clustered capacity passed; freeze it before gameplay:** Codex
+> owns the zero-controller private schedule freezer, independent reopen validator, first eight
+> authentic selected-arm outcomes, and non-authoritative integration fit. The public census found
+> 8 train scenarios from 8 lineages plus 4 untouched development scenarios from 4 lineages, all
+> seven portable kinds in both partitions, one scenario per lineage, and zero overlap. The fixed
+> Vermilion reroute and proposed V3 10/12 population gate remain retired.
+>
+> Reviewers remain read-only milestone challengers. They may test leakage, cluster dominance,
+> statistical power, transfer scope, and overclaiming, but they do not edit, execute gameplay,
+> publish, or grant authority. Every upstream lineage must remain entirely in train or
+> development; teacher choices and button sequences remain prohibited learner targets. The next
+> falsifier is exact schedule reproduction and independent private reopen with every protected
+> effect at zero. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+> **2026-08-29 active override — V2 failed honestly; review the bounded repair before
+> publication:** PR 99 merged as main `624325cf` and CI `33232635929/1` passed. Its newly frozen
+> prospective population gate stopped at **2/5** after three distinct failures made 10/12
+> impossible. Five worlds are consumed and seven unopened V2 identities are retired. The public
+> terminal records **90,565 actions · 15,824,793 frames · roots/labels/outcomes/fits/authority/
+> transfer all zero**.
+>
+> Codex owns the three-cluster repair, tests, evidence, publication, exact-main CI, and any later
+> V3 freeze. Claude is the read-only causal/evidence challenger; Antigravity is the read-only
+> architecture/transfer/overclaim challenger. Reviewers inspect the stable diff and do not edit,
+> execute gameplay, see private identities, publish, or vote authority. No new world may run until
+> the candidate is published, exact-main green, and bound into a genuinely new plan. **Causal train
+> 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **2026-08-28 active override — publish the world-variance repair, then measure a new
 > population:** Published main `05ae3cce` passed CI `33221693432/1`, but its prospective gate
 > stopped at **2/5** after three distinct failures made 10/12 impossible. Five assignments are

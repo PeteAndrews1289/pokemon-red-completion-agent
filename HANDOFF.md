@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-28 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-29 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -11,6 +11,55 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-29: clustered capacity passed — freeze exact private assignments next
+
+The product is still a transferable hierarchical agent that completes stories and builds living
+Pokedexes across games. Red is the first causal classroom and Crystal is the first transfer
+falsifier. The failed 2/5 V2 teacher population changed no learner counter and retired the rule
+that every training row must consume a separate full-game run.
+
+The exact action-free census now passes: **8 train scenarios / 8 lineages**, **4 development
+scenarios / 4 untouched lineages**, all seven portable option kinds in both partitions, maximum
+one scenario per lineage, and zero lineage overlap. It recorded no controller action, frame,
+teacher query, prediction, outcome, claim, or fit. The old 132-root deficit remains only a retired
+diagnostic for the discarded one-full-run-per-row design.
+
+The aggregate census intentionally discarded private identities. Next implement and qualify a
+zero-controller private freezer that reproduces schedule `35c00f38…`, stores the exact 8+4
+assignments, and reopens them under an independent validator. Any hash drift, lineage crossing,
+identity leak, or outcome access fails closed. Only a successful freeze opens the eight short
+train selected-arm executions and a non-authoritative integration fit; teacher buttons never
+become labels. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+[census receipt](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
+
+## 2026-08-29: V2 yield failed at 2/5; the bounded successor repair is local only
+
+The mission remains a transferable hierarchical agent that completes stories and builds living
+Pokedexes across versions and generations. Red is the first causal curriculum; Crystal is the
+first transfer falsifier. The deterministic teacher creates independent classrooms, but its
+buttons never become learner labels.
+
+PR 99 merged as exact main `624325cf7cbd95fcad02430f786b4b24eb98e6b7`, and push CI
+`33232635929/1` passed. Private V2 plan `bc657863...` fixed twelve genuinely new one-use worlds
+before gameplay. It produced two late-Cinnabar `mansion_returned` terminals and three distinct
+failures, then stopped immediately because 10/12 was impossible. The five claimed worlds are
+consumed; seven unclaimed V2 identities are retired unused. The
+[path-free terminal](docs/evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+binds **90,565 actions and 15,824,793 frames** plus every private ledger digest. It created no
+official lineage, root, label, outcome, fit, authority, sealed result, or transfer result.
+
+The measured clusters were a dropped Helix interaction at an otherwise valid stance, a roaming
+Vermilion object blocking the post-ship row, and a wild transition becoming visible one frame
+after the final TM01 approach movement. Working source bundle `c44d14a8` repairs exactly those
+seams with authenticated field rearming, delayed-encounter flee evidence in the cumulative cave
+ledger, and a cartridge-walkable parallel city lane. The focused Cerulean/Surge suite is 155/155;
+full qualification, read-only review, publication, and exact-main CI remain pending.
+
+Do not run another world, reuse V1/V2 identities, call the teacher a model, or create a V3 plan
+before the repair is exact-main green. After that, freeze twelve new identities and retain the
+same 10/12 rule. Only a pass opens a train-only root successor and action-free capacity recensus.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## 2026-08-28: world-variance repair is 3/3; publish before any new teacher population
 

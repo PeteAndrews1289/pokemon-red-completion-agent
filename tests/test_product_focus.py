@@ -1861,25 +1861,29 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(1 / 60)
     assert public["actions"] == 0
-    assert "fresh episode capacity" in public["stage"]
+    assert "Clustered Red curriculum" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 1, "total": 60}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 102}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "exact census found train capacity 54/90" in encoded
-    assert "Powered cross-title causal curriculum" in encoded
+    assert "Capacity passed: 8 train lineages plus 4 untouched development lineages" in encoded
+    assert "Lineage-clustered causal curriculum" in encoded
     assert "Causal Train Example 1/60" in encoded
     assert "Settled Red causal train examples" in encoded
-    assert "Untouched Red paired comparisons" in encoded
+    assert "Held-out Red lineage result" in encoded
     assert "Zero-shot Crystal result" in encoded
-    assert "train 54/90 (deficit 36)" in encoded
-    assert "combined 63/195 (deficit 132)" in encoded
-    assert "uncovered menus 1" in encoded
-    assert "worst-case power 83.2%" in encoded
+    assert "train 8/8 lineages" in encoded
+    assert "development 4/4 untouched lineages" in encoded
+    assert "all 7 option kinds in both" in encoded
+    assert "overlap 0" in encoded
+    assert "schedule 35c00f38" in encoded
+    assert "integration 8 outcomes" in encoded
+    assert "at least 4 train lineages" in encoded
     assert "actual Red feature rank 16" in encoded
-    assert "best-of-three envelope" in encoded
+    assert "bounded cluster weights" in encoded
+    assert "random + cost-only + myopic" in encoded
     assert "selected outcomes only" in encoded
-    assert "V4 retired unexecuted" in encoded
+    assert "teacher labels 0" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
     assert "reader ecb93c44 qualified" in encoded

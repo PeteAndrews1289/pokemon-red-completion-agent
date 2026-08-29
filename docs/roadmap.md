@@ -3,6 +3,32 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 clustered-capacity result:** The exact action-free census passed with **8 train
+> scenarios / 8 lineages** and **4 development scenarios / 4 untouched lineages**. Both sides
+> cover all seven portable option kinds, maximum observed scenarios per lineage is one, overlap is
+> zero, and controller/teacher/outcome/fit effects are all zero. The old 132-root deficit is a
+> retired diagnostic for the discarded one-full-game-run-per-row design.
+>
+> Next: qualify a private freezer that reproduces schedule `35c00f38…`, persist and independently
+> reopen the exact 8+4 assignments, then execute only the eight train selected arms and make the
+> first non-authoritative fit. No V3 yield gate or routine replay. **Causal train 1/60 · powered
+> fit 0 · authority 0 · transfer 0.** The
+> [census result](evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json) records
+> the passed gate.
+
+> **August 29 V2-yield checkpoint:** Main `624325cf` passed CI `33232635929/1`, then its freshly
+> frozen twelve-world gate stopped at **2/5** after three distinct failures made 10/12 impossible.
+> Five worlds are consumed; seven unopened V2 identities are retired. The
+> [terminal](evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+> records 90,565 actions, 15,824,793 frames, and zero new roots, labels, outcomes, fits, authority,
+> or transfer.
+>
+> The bounded repair authenticates fossil reinteraction, settles delayed cave encounters before
+> item facing, and avoids both observed Vermilion NPC lanes. Finish qualification and reviewer
+> challenge, publish and green exact main, then freeze one genuinely new V3 12-world plan. Only a
+> 10/12 pass opens train-root generation and recensus. **Causal train 1/60 · powered fit 0 ·
+> authority 0 · transfer 0.**
+
 > **August 28 world-variance checkpoint:** Published main `05ae3cce` and CI `33221693432/1`
 > failed the frozen successor gate honestly at **2/5**; the third distinct failure made 10/12
 > impossible, so five assignments are consumed and seven old-source assignments are unusable.

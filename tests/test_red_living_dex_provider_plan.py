@@ -54,6 +54,7 @@ from pokemon_red_completion.red_living_dex_causal_inventory import (
     RedLivingDexCausalRootCapability,
     audit_red_living_dex_causal_inventory,
     census_red_living_dex_causal_inventory,
+    schedule_red_living_dex_clustered_integration,
 )
 from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
     map_id_for_wild_source,
@@ -63,6 +64,7 @@ from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexClaimedRootObservation,
     RedLivingDexProviderPlanError,
     RedLivingDexProviderRootFacts,
+    build_red_living_dex_provider_recipe_for_action_free_root,
     build_red_living_dex_provider_recipe_for_claimed_root,
     freeze_red_living_dex_provider_plan,
     red_living_dex_route_terminal_snapshot,
@@ -504,6 +506,64 @@ def test_action_free_inventory_rejects_duplicate_lineage_or_protected_effect() -
             effects_after=replace(checkpoint, emulator_frames=1),
         )
 
+
+def test_red_clustered_integration_reuses_roots_without_crossing_partitions() -> None:
+    plan = build_red_living_dex_prospective_capture_plan()
+    roots = tuple(
+        replace(
+            root,
+            cluster_partition=(
+                "train" if index < 4 else "development" if index < 6 else None
+            ),
+        )
+        for index, root in enumerate(_roots())
+    )
+    capabilities: list[RedLivingDexCausalRootCapability] = []
+    for root in roots[:6]:
+        for template_ordinal, slot in enumerate(plan.slots):
+            expected_partition = (
+                "train"
+                if slot.partition is LivingDexCapturePartition.TRAIN
+                else "development"
+            )
+            if root.cluster_partition != expected_partition:
+                continue
+            recipe = build_red_living_dex_provider_recipe_for_action_free_root(
+                slot,
+                root,
+                world=_RouteWorld(),
+                corridors=_corridors(),
+            )
+            capabilities.append(
+                RedLivingDexCausalRootCapability(
+                    root=root,
+                    template_ordinal=template_ordinal,
+                    slot=slot,
+                    recipe=recipe,
+                )
+            )
+
+    schedule = schedule_red_living_dex_clustered_integration(
+        tuple(capabilities)
+    )
+    public = schedule.public_dict()
+
+    assert public["train_scenarios"] == 8
+    assert public["development_scenarios"] == 4
+    assert public["train_lineages"] == 4
+    assert public["development_lineages"] == 2
+    assert public["lineage_overlap"] == 0
+    assert public["maximum_observed_scenarios_per_lineage"] == 2
+    assert all(
+        assignment.capability.partition
+        == (
+            "train"
+            if assignment.capability.lineage_sha256
+            in {root.independence_lineage_sha256 for root in roots[:4]}
+            else "development"
+        )
+        for assignment in schedule.assignments
+    )
 
 def test_action_free_inventory_rejects_interleaved_template_partitions(
     monkeypatch: pytest.MonkeyPatch,

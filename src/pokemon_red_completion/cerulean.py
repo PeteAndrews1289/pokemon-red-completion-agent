@@ -130,6 +130,7 @@ ROUTE_3_WILD_STABILIZATION_FRAMES = 120
 MT_MOON_ZUBAT_SEARCH_CYCLES = 128
 MT_MOON_ZUBAT_SEARCH_MAX_FLEES = 32
 MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES = 1
+MT_MOON_PICKUP_ENCOUNTER_WAIT_FRAMES = 1
 MT_MOON_ZUBAT_MAX_CAPTURE_ATTEMPTS = PEWTER_POKE_BALL_PURCHASE_QUANTITY
 MT_MOON_1F_ZUBAT_LEVELS = frozenset(range(6, 12))
 MT_MOON_CAPTURE_ZUBAT_LEVELS = MT_MOON_1F_ZUBAT_LEVELS
@@ -275,7 +276,7 @@ class CeruleanTiming:
     heal_dialogue_pulses: int = 9
     rocket_cleanup_pulses: int = 2
     super_nerd_cleanup_pulses: int = 4
-    fossil_dialogue_pulses: int = 4
+    fossil_dialogue_pulses: int = 12
     max_trainer_intro_pulses: int = 12
     max_main_menu_pulses: int = 12
     max_move_cursor_pulses: int = 5
@@ -1037,7 +1038,6 @@ def run_cerulean_chapter(
         expected_map_id=MapId.MT_MOON_B2F,
         ledger=mt_moon_ledger,
     )
-    chapter_executor.execute(MacroAction(MacroActionKind.INTERACT))
     fossil_obtained, fossil_evidence = _obtain_helix_fossil(
         chapter_executor,
         reader,
@@ -1732,6 +1732,65 @@ def _move_mt_moon(
     return state
 
 
+def _face_mt_moon_pickup_after_encounter_settle(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    direction: str,
+    expected_map_id: MapId,
+    expected_position: tuple[int, int],
+    label: str,
+    ledger: _MtMoonTraversalLedger,
+) -> RawGameState:
+    """Face a cave pickup after admitting a one-frame-late wild transition.
+
+    Gen I can expose a wild battle one frame after the movement receipt that
+    reached the pickup stance.  A facing pulse issued in that gap becomes the
+    first battle input instead of an overworld direction.  Settle that single
+    transition, retain its ordinary authenticated flee evidence in the shared
+    cave ledger, and only then prove that facing the object did not move.
+    """
+
+    _wait(executor, MT_MOON_PICKUP_ENCOUNTER_WAIT_FRAMES)
+    state = reader.read()
+    if state.battle_state:
+        if state.battle_state != 1 or state.map_id != expected_map_id:
+            raise CeruleanChapterError(f"{label} met an unexpected delayed battle.")
+        if ledger.remaining_flees <= 0:
+            raise CeruleanChapterError(f"{label} exhausted the cumulative cave flee budget.")
+        evidence = flee_wild(
+            executor,
+            reader,
+            state,
+            expected_map_id=expected_map_id,
+            route_name="Mt. Moon",
+            stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+            error_type=CeruleanChapterError,
+        )
+        if evidence is None:  # pragma: no cover - no trainer handoff is supplied
+            raise CeruleanChapterError(f"{label} produced an impossible trainer handoff.")
+        ledger.flees.append(evidence)
+        state = reader.read()
+
+    if (
+        state.map_id != expected_map_id
+        or state.battle_state != 0
+        or (state.player_x, state.player_y) != expected_position
+        or (state.first_party_hp or 0) <= 0
+    ):
+        raise CeruleanChapterError(f"{label} lost its authenticated pickup stance.")
+
+    _pulse(executor, MacroActionKind.MOVE, direction, 60)
+    faced = reader.read()
+    if (
+        faced.map_id != expected_map_id
+        or faced.battle_state != 0
+        or (faced.player_x, faced.player_y) != expected_position
+    ):
+        raise CeruleanChapterError(f"{label} did not collide with the pickup object.")
+    return faced
+
+
 def _move_mt_moon_with_seed_waits(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -2283,10 +2342,15 @@ def _collect_mt_moon_tm12(
         *MT_MOON_TM12_PICKUP_POSITION,
         "Mt. Moon TM12 pickup stance",
     )
-    _pulse(executor, MacroActionKind.MOVE, "left", 60)
-    faced = reader.read()
-    if (faced.player_x, faced.player_y) != MT_MOON_TM12_PICKUP_POSITION:
-        raise CeruleanChapterError("Mt. Moon TM12 facing missed the funding item.")
+    _face_mt_moon_pickup_after_encounter_settle(
+        executor,
+        reader,
+        direction="left",
+        expected_map_id=MapId.MT_MOON_1F,
+        expected_position=MT_MOON_TM12_PICKUP_POSITION,
+        label="Mt. Moon TM12 facing",
+        ledger=ledger,
+    )
     executor.execute(MacroAction(MacroActionKind.INTERACT))
     _wait(executor, timing.dialogue_wait_frames)
     for _ in range(12):
@@ -2381,10 +2445,15 @@ def _collect_mt_moon_tm01(
         ledger=ledger,
     )
     _expect_position(reader.read(), MapId.MT_MOON_B2F, 28, 5, "TM01 pickup stance")
-    _move(executor, reader, ("right",), "TM01 pickup facing")
-    chapter_faced = reader.read()
-    if (chapter_faced.player_x, chapter_faced.player_y) != (28, 5):
-        raise CeruleanChapterError("TM01 pickup facing did not collide with the item.")
+    _face_mt_moon_pickup_after_encounter_settle(
+        executor,
+        reader,
+        direction="right",
+        expected_map_id=MapId.MT_MOON_B2F,
+        expected_position=(28, 5),
+        label="TM01 pickup facing",
+        ledger=ledger,
+    )
     executor.execute(MacroAction(MacroActionKind.INTERACT))
     _wait(executor, 240)
     for _ in range(12):
@@ -2482,10 +2551,15 @@ def _collect_mt_moon_recovery_potion(
         *MT_MOON_POTION_PICKUP_POSITION,
         "Mt. Moon recovery Potion pickup",
     )
-    _pulse(executor, MacroActionKind.MOVE, "left", 60)
-    faced = reader.read()
-    if (faced.player_x, faced.player_y) != MT_MOON_POTION_PICKUP_POSITION:
-        raise CeruleanChapterError("Mt. Moon recovery Potion facing missed the item.")
+    _face_mt_moon_pickup_after_encounter_settle(
+        executor,
+        reader,
+        direction="left",
+        expected_map_id=MapId.MT_MOON_1F,
+        expected_position=MT_MOON_POTION_PICKUP_POSITION,
+        label="Mt. Moon recovery Potion facing",
+        ledger=ledger,
+    )
     executor.execute(MacroAction(MacroActionKind.INTERACT))
     _wait(executor, timing.dialogue_wait_frames)
     for _ in range(12):
@@ -2558,10 +2632,15 @@ def _collect_mt_moon_rare_candy_funding(
         *MT_MOON_RARE_CANDY_PICKUP_POSITION,
         "Mt. Moon Rare Candy pickup",
     )
-    _pulse(executor, MacroActionKind.MOVE, "right", 60)
-    faced = reader.read()
-    if (faced.player_x, faced.player_y) != MT_MOON_RARE_CANDY_PICKUP_POSITION:
-        raise CeruleanChapterError("Mt. Moon Rare Candy facing missed the item.")
+    _face_mt_moon_pickup_after_encounter_settle(
+        executor,
+        reader,
+        direction="right",
+        expected_map_id=MapId.MT_MOON_1F,
+        expected_position=MT_MOON_RARE_CANDY_PICKUP_POSITION,
+        label="Mt. Moon Rare Candy facing",
+        ledger=ledger,
+    )
     executor.execute(MacroAction(MacroActionKind.INTERACT))
     _wait(executor, timing.dialogue_wait_frames)
     for _ in range(12):
@@ -3829,9 +3908,16 @@ def _obtain_helix_fossil(
     tracker: CeruleanProgressTracker,
     timing: CeruleanTiming,
 ) -> tuple[RawGameState, CeruleanChapterState]:
+    """Acquire Helix while rearming a dropped ready-field interaction.
+
+    The pickup dialogue is not the only state in this bounded loop.  On rare
+    timing histories the first interaction pulse is ignored while the player
+    remains on the exact Helix stance with field controls restored.  Distinguish
+    that state from an open dialogue: face and interact again only on the
+    authenticated ready field; otherwise advance the existing dialogue.
+    """
+
     for _ in range(timing.fossil_dialogue_pulses):
-        executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        _wait(executor, timing.dialogue_wait_frames)
         raw = reader.read()
         evidence = reader.read_cerulean_chapter_state(raw)
         if evidence.fossil_snapshot:
@@ -3849,6 +3935,30 @@ def _obtain_helix_fossil(
                 "Helix Fossil",
             )
             return raw, evidence
+        if (
+            raw.map_id != MapId.MT_MOON_B2F
+            or raw.battle_state != 0
+            or (raw.player_x, raw.player_y) != (13, 7)
+            or (raw.first_party_hp or 0) <= 0
+        ):
+            raise CeruleanChapterError("Helix Fossil lost its authenticated pickup stance.")
+        if (
+            evidence.stable_overworld_snapshot
+            and not evidence.got_dome_fossil
+            and not evidence.got_helix_fossil
+        ):
+            _pulse(executor, MacroActionKind.MOVE, "up", 24)
+            faced = reader.read()
+            if (
+                faced.map_id != MapId.MT_MOON_B2F
+                or faced.battle_state != 0
+                or (faced.player_x, faced.player_y) != (13, 7)
+            ):
+                raise CeruleanChapterError("Helix Fossil facing missed its object gate.")
+            executor.execute(MacroAction(MacroActionKind.INTERACT))
+            _wait(executor, timing.dialogue_wait_frames)
+            continue
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
     raise CeruleanChapterError("Helix Fossil failed its bounded semantic gate.")
 
 

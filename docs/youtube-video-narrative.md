@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: the classroom census passes
+
+Run the graph without showing the emulator: **67 QUALIFIED LINEAGES · 414 EDGES**. Twelve cards
+snap into place: **TRAIN 8/8 LINEAGES** on the left, **DEVELOPMENT 4/4 UNTOUCHED LINEAGES** on the
+right. Illuminate all seven option-kind icons on both sides and stamp the dividing wall **OVERLAP
+0**. Underneath, keep **ACTIONS 0 · FRAMES 0 · TEACHER 0 · OUTCOMES 0 · FITS 0**.
+
+Replace the old **132 NEW FULL RUNS** alarm with **RETIRED DIAGNOSTIC**. Move one lock over the
+twelve private cards: **FREEZE EXACT SCHEDULE 35C00F38… → INDEPENDENT REOPEN → 8 SELECTED-ARM
+OUTCOMES → FIRST NON-AUTHORITATIVE FIT**. End on the unchanged long rail: **60 OUTCOMES →
+UNTOUCHED RED CLUSTERS → FROZEN SUPPORTED REPRESENTATION → CRYSTAL TRANSFER → CROSS-GAME LIVING
+POKEDEX**.
+
+## August 29 scene: change the unit of learning
+
+Open on the honest **2/5** teacher result, then zoom out from the three route failures to the real
+diagram: **ONE FULL RED RUN → ONE TRAINING ROW**. Stamp it **WRONG BOTTLENECK**. Replace it with
+clusters: **67 UPSTREAM LINEAGES · 414 COMPATIBILITY EDGES**, each lineage locked entirely to
+train or development, with several short scenario cards inside each training cluster.
+
+Delete the proposed **V3 10/12 TEACHER GATE** and the new fixed Vermilion route. Keep two small
+cards—**AUTHENTICATED REINTERACTION** and **DELAYED ENCOUNTER SETTLEMENT**—as bounded controller
+maintenance. Move the camera to the learner rail: **ACTION-FREE CLUSTER CENSUS → 8 AUTHENTIC
+SELECTED-ARM OUTCOMES → FIRST NON-AUTHORITATIVE FIT → 60 OUTCOMES → UNTOUCHED RED CLUSTERS →
+CRYSTAL TRANSFER**. End with **TEACHER BUTTONS ARE NEVER LABELS**.
+
 ## August 28 scene: three late failures become observable contracts
 
 Open on exact main `BE6A03A4 · CI GREEN`, then stop its successor counter after three failures make
