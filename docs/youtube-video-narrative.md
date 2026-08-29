@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: the key cannot open the exam room
+
+Return to the sealed **8 TRAIN + 4 DEVELOPMENT** box. Add a keypad that accepts **0–7** and flashes
+red for **8–11**. Split each accepted card into **SCHEDULE ORDINAL** and **RED TEMPLATE ORDINAL**,
+then lock both to **UPSTREAM LINEAGE · LOGICAL ROOT · PHYSICAL SAVE · EXACT RECIPE**.
+
+Animate the safety sequence: **CLAIM BOTH ROOTS → COMMIT ONE RANDOM ARM → RELEASE CONTROLLER → OPEN
+SELECTED ARM ONLY → INDEPENDENT OUTCOME ONLY**. Cut power at **SETUP PAIR CLAIM · LOCAL CLAIM ·
+COMMITMENT · SELECTION · CONSTRUCTION · RELEASE · PUBLICATION**. Before release, the same arm
+returns; after release, no second input and no target can appear. Cross out **TEACHER LABEL ·
+COUNTERFACTUAL · DEVELOPMENT · RETRY**.
+
+Now remove the cartridge and show **ROM-FREE PREFLIGHT** checking **SOURCE + CI · PLAN · ROOT ·
+RUNTIME IDENTITY · PAIR AVAILABLE**. Keep **CLAIMS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · FITS
+0** visible. End on the rail **PUBLISH → EXACT CI → ONE PREFLIGHT → REORIENT → 8 REAL OUTCOMES →
+NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED → CRYSTAL → CROSS-GAME LIVING POKEDEX**.
+
 ## August 29 scene: freeze the classroom, then build the key
 
 Start with **PR 101 → MAIN 4190B92B → EXACT CI GREEN**. Run one timer to **~48 MINUTES** while every

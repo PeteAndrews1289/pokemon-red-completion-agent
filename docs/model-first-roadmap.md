@@ -8,6 +8,29 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: the train-only consumer is local GO; publish and preflight
+
+The frozen 8+4 classroom now has a bounded production consumer. It accepts only train ordinals
+0–7, authenticates the exact private plan and selected root, keeps schedule ordinal separate from
+Red template ordinal, and carries the frozen upstream episode lineage into the learner record. It
+reuses the already-qualified atomic setup claim and causal journal, so one random arm is durable
+before controller release, only that runtime can open, and only its independent observed outcome
+can become a target. Development and counterfactual targets have no execution surface.
+
+The next product-aligned sequence is:
+
+1. finish the full local gate and publish this exact source;
+2. require green pull-request CI and exact-main CI;
+3. invoke one ROM-free preflight for one available train ordinal, proving exact source, plan, root,
+   runtime identity, and pair availability with all effects zero;
+4. publish the path-free preflight receipt and reorient before gameplay;
+5. execute the eight frozen train scenarios once each under the durable recovery rules;
+6. fit one explicitly non-authoritative integration model, then scale toward 60 informative train
+   outcomes and untouched lineage-level Red evaluation before frozen-weight Crystal transfer.
+
+The preflight must not accept a ROM and must not claim a root. A preflight pass is readiness, not a
+training example. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 ## Current checkpoint: exact private schedule frozen; engineer the train-only consumer
 
 PR 101 merged as main `4190b92b` and exact-main CI `33268744819/1` passed. The unchanged action-free

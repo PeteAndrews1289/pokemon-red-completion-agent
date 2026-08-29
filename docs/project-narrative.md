@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the classroom finally has a key that cannot open the exam
+
+The frozen schedule could name twelve classrooms, but it could not safely enter one. The new
+consumer supplies that missing boundary. Its public handle has only eight values—train ordinals
+zero through seven. The four untouched development classrooms are not hidden behind a flag; they
+are absent from the execution interface. A schedule row can no longer be confused with the Red
+template it uses, and the learner inherits the upstream episode lineage rather than inventing a
+new identity from the recipe.
+
+Under the hood, two old safety mechanisms finally meet. The setup journal claims the logical
+lesson and the physical save together. The causal journal then writes a random arm commitment
+before releasing controller authority, constructs only that arm, and records only what an
+independent observer sees afterward. A crash before input can resume only the committed arm. A
+crash after authority is released can never silently run again or become a positive label. The
+teacher's buttons and every unplayed alternative remain outside the dataset.
+
+The most useful new command does not play the game at all. Its ROM-free preflight authenticates
+the published source and CI, sealed plan, selected root, runtime identity, and claim availability,
+then stops with every effect at zero. That is the next gate after publication. It is deliberately
+separate from the first real outcome, because “the door is safe to open” is not “the model learned
+something.” The board therefore remains **causal train 1/60, powered fit 0, authority 0, transfer
+0**. Once the exact source is green and one path-free preflight passes, the project reorients one
+last time before entering the first of the eight short Red classrooms.
+
 ## August 29: the classroom addresses are finally locked
 
 The exact candidate merged, GitHub reproduced its checks on main, and the freezer opened the

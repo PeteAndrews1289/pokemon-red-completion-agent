@@ -87,6 +87,21 @@ class _Receipt:
         }
 
 
+class _PreflightReceipt:
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "controller_actions": 0,
+            "development_outcomes_opened": 0,
+            "emulator_frames": 0,
+            "model_fits": 0,
+            "model_predictions": 0,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "root_claims": 0,
+            "teacher_queries": 0,
+        }
+
+
 def test_cli_is_one_direct_consumer_with_bootstrap_before_project_imports() -> None:
     module = _load_script()
     actions = {action.dest for action in module._parser()._actions}
@@ -100,6 +115,8 @@ def test_cli_is_one_direct_consumer_with_bootstrap_before_project_imports() -> N
         "selected_state",
         "selected_envelope",
         "rom",
+        "clustered_train_ordinal",
+        "clustered_preflight_only",
     }
     source = SCRIPT_PATH.read_text(encoding="utf-8")
     bootstrap = source.index("_BOOTSTRAP_IDENTITY = _authenticate_current_source")
@@ -120,6 +137,27 @@ def test_cli_is_one_direct_consumer_with_bootstrap_before_project_imports() -> N
     assert "ordinal" not in actions
     assert "expected_selected_physical_root_sha256" not in actions
     assert "resolver" not in actions
+
+
+def test_cli_accepts_only_the_eight_clustered_train_ordinals(
+    tmp_path: Path,
+) -> None:
+    module = _load_script()
+    _plan, _store, _producer, root, _outer, _registry, _campaign = (
+        _frozen_fixture(tmp_path)
+    )
+    arguments = _arguments(tmp_path, root)
+
+    for ordinal in range(8):
+        parsed = module._parser().parse_args(
+            [*arguments, "--clustered-train-ordinal", str(ordinal)]
+        )
+        assert parsed.clustered_train_ordinal == ordinal
+    for ordinal in (-1, 8, 11):
+        with pytest.raises(module.CausalCampaignExecutionError):
+            module._parser().parse_args(
+                [*arguments, "--clustered-train-ordinal", str(ordinal)]
+            )
 
 
 def test_bootstrap_source_bundle_matches_the_canonical_committed_digest(
@@ -405,6 +443,134 @@ def test_main_calls_direct_consumer_once_and_emits_metered_path_free_result(
     assert public["model_predictions"] == 0
     assert len(postchecks) == 1
     assert str(tmp_path) not in json.dumps(public)
+
+
+def test_main_clustered_mode_calls_only_the_train_consumer(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = _load_script()
+    _plan, store, _producer, root, _outer, _registry, _campaign = (
+        _frozen_fixture(tmp_path)
+    )
+    selection = module.RedLivingDexClusteredTrainSelection(
+        ordinal=0,
+        template_ordinal=3,
+        private_plan_sha256="1" * 64,
+        recipe_sha256="2" * 64,
+        slot_sha256="3" * 64,
+        logical_root_sha256=root.root_consumption_sha256,
+        physical_root_sha256=root.physical_root_sha256,
+        root_state_sha256=root.state_sha256,
+        root_envelope_sha256=root.envelope_sha256,
+        context_identity_sha256="4" * 64,
+        upstream_lineage_sha256="5" * 64,
+    )
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr(module, "_BOOTSTRAP_IDENTITY", _bootstrap_identity())
+    monkeypatch.setattr(module, "open_private_root", lambda *_args, **_kwargs: store)
+    monkeypatch.setattr(module, "_require_source_state", lambda **_kwargs: None)
+    monkeypatch.setattr(
+        module,
+        "load_red_living_dex_clustered_train_selection",
+        lambda _store, ordinal: selection if ordinal == 0 else pytest.fail(),
+    )
+    monkeypatch.setattr(
+        module,
+        "execute_red_living_dex_causal_campaign",
+        lambda *_args, **_kwargs: pytest.fail("historical consumer was called"),
+    )
+
+    def execute(*_args: object, **kwargs: object) -> _Receipt:
+        calls.append(kwargs)
+        assert kwargs["ordinal"] == 0
+        loaded = kwargs["root_loader"](selection)  # type: ignore[operator]
+        assert loaded == root
+        meter = kwargs["meter"]
+        meter.record_root_claim()  # type: ignore[union-attr]
+        return _Receipt(retry_allowed=False, recorded=True)
+
+    monkeypatch.setattr(
+        module,
+        "execute_red_living_dex_clustered_train_assignment",
+        execute,
+    )
+    arguments = [*_arguments(tmp_path, root), "--clustered-train-ordinal", "0"]
+
+    assert module.main(arguments) == 0
+    public = json.loads(capsys.readouterr().out)
+    assert len(calls) == 1
+    assert public["campaign_kind"] == "clustered_train"
+    assert public["causal_train_example_recorded"] is True
+    assert public["root_claims_metered_setup_only"] == 1
+    assert public["automatic_retry_allowed"] is False
+
+
+def test_clustered_preflight_is_rom_free_and_cannot_call_execution(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = _load_script()
+    _plan, store, _producer, root, _outer, _registry, _campaign = (
+        _frozen_fixture(tmp_path)
+    )
+    selection = module.RedLivingDexClusteredTrainSelection(
+        ordinal=0,
+        template_ordinal=3,
+        private_plan_sha256="1" * 64,
+        recipe_sha256="2" * 64,
+        slot_sha256="3" * 64,
+        logical_root_sha256=root.root_consumption_sha256,
+        physical_root_sha256=root.physical_root_sha256,
+        root_state_sha256=root.state_sha256,
+        root_envelope_sha256=root.envelope_sha256,
+        context_identity_sha256="4" * 64,
+        upstream_lineage_sha256="5" * 64,
+    )
+    calls = 0
+    monkeypatch.setattr(module, "_BOOTSTRAP_IDENTITY", _bootstrap_identity())
+    monkeypatch.setattr(module, "open_private_root", lambda *_args, **_kwargs: store)
+    monkeypatch.setattr(module, "_require_source_state", lambda **_kwargs: None)
+    monkeypatch.setattr(
+        module,
+        "load_red_living_dex_clustered_train_selection",
+        lambda _store, ordinal: selection if ordinal == 0 else pytest.fail(),
+    )
+    monkeypatch.setattr(
+        module,
+        "execute_red_living_dex_clustered_train_assignment",
+        lambda *_args, **_kwargs: pytest.fail("execution was called from preflight"),
+    )
+
+    def preflight(*_args: object, **kwargs: object) -> _PreflightReceipt:
+        nonlocal calls
+        calls += 1
+        assert kwargs["ordinal"] == 0
+        assert kwargs["root_loader"](selection) == root  # type: ignore[operator]
+        return _PreflightReceipt()
+
+    monkeypatch.setattr(
+        module,
+        "preflight_red_living_dex_clustered_train_assignment",
+        preflight,
+    )
+    arguments = _arguments(tmp_path, root)
+    rom_index = arguments.index("--rom")
+    del arguments[rom_index : rom_index + 2]
+    arguments.extend(
+        ["--clustered-train-ordinal", "0", "--clustered-preflight-only"]
+    )
+
+    assert module.main(arguments) == 0
+    public = json.loads(capsys.readouterr().out)
+    assert calls == 1
+    assert public["status"] == "one_clustered_train_assignment_ready"
+    assert public["automatic_retry_allowed"] is False
+    assert public["root_claims"] == 0
+    assert public["controller_actions"] == 0
+    assert public["emulator_frames"] == 0
 
 
 def test_selected_loader_revalidates_private_namespace_on_every_reopen(

@@ -3,6 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 train-consumer qualification:** The frozen 8+4 plan now has a locally qualified
+> train-only consumer. Only ordinals 0–7 are parseable; schedule and Red-template ordinals are
+> separately bound; the frozen upstream lineage is retained; logical and physical roots are
+> atomically protected; one random arm is durable before input; and only its observed outcome can
+> become a target. Setup-claim and causal-journal crash tests reject retries, changed arms, and
+> duplicate input. A ROM-free preflight authenticates one exact row while every effect remains
+> zero.
+>
+> Next: finish the full gate, publish, require green PR and exact-main CI, run exactly one ROM-free
+> preflight, publish its path-free receipt, and reorient. Do not execute gameplay in the preflight
+> gate. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **August 29 private-schedule result:** PR 101 merged as main `4190b92b` and exact-main CI
 > `33268744819/1` passed. The one permitted zero-controller freezer reproduced schedule
 > `35c00f38…`, sealed private plan `2a0462b8…`, and passed both immediate and independent ROM-free

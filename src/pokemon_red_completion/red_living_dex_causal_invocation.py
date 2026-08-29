@@ -80,7 +80,10 @@ from pokemon_red_completion.red_living_dex_setup_recipe import (
 from pokemon_red_completion.red_living_dex_setup_trust import (
     RedLivingDexSetupExecutionIdentity,
 )
-from pokemon_red_completion.runtime_identity import build_runtime_identity_from
+from pokemon_red_completion.runtime_identity import (
+    RuntimeIdentity,
+    build_runtime_identity_from,
+)
 
 _AUTHENTICATED_CONSUMER_AUTHORITY = object()
 
@@ -168,6 +171,9 @@ class _LateProductionResolver:
             pair_claim,
             meter=meter,
         )
+
+
+RedLivingDexLateProductionResolver = _LateProductionResolver
 
 
 def execute_red_living_dex_causal_campaign(
@@ -274,7 +280,20 @@ def _authenticate_current_execution_runtime(
 ) -> str:
     """Bind the clean staged closure to the producer's frozen PyBoy identity."""
 
+    return authenticate_red_living_dex_execution_runtime(
+        project_root,
+        _sealed_runtime_identity_sha256(record),
+    ).sha256
+
+
+def authenticate_red_living_dex_execution_runtime(
+    project_root: Path,
+    expected_runtime_identity_sha256: str,
+) -> RuntimeIdentity:
+    """Return the staged runtime after matching one frozen path-free digest."""
+
     try:
+        expected = require_sha256(expected_runtime_identity_sha256)
         original_site = (project_root / ".venv/lib/python3.14/site-packages").resolve(strict=True)
         candidates = tuple(
             Path(item).resolve(strict=True)
@@ -297,10 +316,9 @@ def _authenticate_current_execution_runtime(
             python_version=platform.python_version(),
             pyboy_distribution=distribution,
         )
-        expected = _sealed_runtime_identity_sha256(record)
         if identity.sha256 != expected:
             raise ExecutionRuntimeClosureError("staged PyBoy identity differs from sealed producer")
-        return expected
+        return identity
     except RedLivingDexCausalInvocationError:
         raise
     except BaseException:
@@ -427,6 +445,10 @@ def _read_stable_red_rom(path: Path) -> bytes:
 
 
 __all__ = [
+    "RedLivingDexAuthenticatedConsumer",
     "RedLivingDexCausalInvocationError",
+    "RedLivingDexLateProductionResolver",
+    "authenticate_red_living_dex_execution_runtime",
+    "bind_red_living_dex_authenticated_consumer",
     "execute_red_living_dex_causal_campaign",
 ]

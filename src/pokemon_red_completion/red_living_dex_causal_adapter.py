@@ -142,6 +142,7 @@ def build_red_living_dex_causal_scenario(
     setup_pair_claim_sha256: str,
     causal_source_commit: str,
     causal_runner_sha256: str,
+    upstream_lineage_sha256: str | None = None,
 ) -> LivingDexCausalScenario:
     """Bind a currently available Red arm factory to the shared journal.
 
@@ -205,6 +206,7 @@ def build_red_living_dex_causal_scenario(
         setup_pair_claim_sha256=setup_pair_claim_sha256,
         causal_source_commit=causal_source_commit,
         causal_runner_sha256=causal_runner_sha256,
+        upstream_lineage_sha256=upstream_lineage_sha256,
     )
 
 
@@ -218,6 +220,7 @@ def build_red_living_dex_causal_scenario_from_capture(
     setup_pair_claim_sha256: str,
     causal_source_commit: str,
     causal_runner_sha256: str,
+    upstream_lineage_sha256: str | None = None,
 ) -> LivingDexCausalScenario:
     """Bind one capture while keeping every Red runtime behind selection."""
 
@@ -263,13 +266,22 @@ def build_red_living_dex_causal_scenario_from_capture(
         }
     )
     causal_meter = RedLivingDexCausalEffectMeter(meter, meter_binding_sha256)
-    lineage_sha256 = canonical_sha256(
-        {
-            "recipe_sha256": capture.recipe_sha256,
-            "schema": "pokemon.red.private-living-dex-causal-lineage.v1",
-            "setup_execution_identity_sha256": setup_execution_identity.identity_sha256,
-            "slot_sha256": capture.binding.slot_sha256,
-        }
+    lineage_sha256 = (
+        canonical_sha256(
+            {
+                "recipe_sha256": capture.recipe_sha256,
+                "schema": "pokemon.red.private-living-dex-causal-lineage.v1",
+                "setup_execution_identity_sha256": (
+                    setup_execution_identity.identity_sha256
+                ),
+                "slot_sha256": capture.binding.slot_sha256,
+            }
+        )
+        if upstream_lineage_sha256 is None
+        else _require_sha256(
+            upstream_lineage_sha256,
+            subject="upstream causal lineage",
+        )
     )
     origin = capture.policy_projection.origin_policy_observation
     identity = LivingDexCausalIdentity(

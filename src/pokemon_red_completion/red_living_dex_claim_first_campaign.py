@@ -46,6 +46,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_setup_admission import (
     FrozenRedLivingDexSetupSlot,
     RedLivingDexSetupAdmissionError,
+    authenticate_frozen_red_living_dex_clustered_train_slot,
     authenticate_frozen_red_living_dex_setup_slot,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
@@ -311,6 +312,7 @@ def run_red_living_dex_claim_first_setup_slot(
     resolver: RedLivingDexClaimedSetupResolver,
     meter: RedLivingDexSetupEffectMeter,
     claim_registry: Path,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity | None = None,
     failpoint: RedLivingDexClaimFirstFailpoint | None = None,
 ) -> RedLivingDexClaimFirstReceipt:
     """Execute or recover exactly one frozen slot without sibling preflight."""
@@ -338,12 +340,29 @@ def run_red_living_dex_claim_first_setup_slot(
     except FreshCompositionQualificationError as error:
         raise RedLivingDexClaimFirstCampaignError(str(error)) from None
 
-    frozen = authenticate_frozen_red_living_dex_setup_slot(
-        plan_loader(),
-        expected_plan_sha256=expected_producer_plan_sha256,
-        ordinal=ordinal,
-        root=root,
-    )
+    plan_document = plan_loader()
+    if producer_execution_identity is None:
+        frozen = authenticate_frozen_red_living_dex_setup_slot(
+            plan_document,
+            expected_plan_sha256=expected_producer_plan_sha256,
+            ordinal=ordinal,
+            root=root,
+        )
+    else:
+        producer_execution_identity.__post_init__()
+        runtime_identity_sha256 = plan_document.get("runtime_identity_sha256")
+        frozen = authenticate_frozen_red_living_dex_clustered_train_slot(
+            plan_document,
+            expected_private_plan_sha256=expected_producer_plan_sha256,
+            ordinal=ordinal,
+            root=root,
+            producer_execution_identity=producer_execution_identity,
+            expected_runtime_identity_sha256=(
+                runtime_identity_sha256
+                if isinstance(runtime_identity_sha256, str)
+                else None
+            ),
+        )
     _require_outer_identity(frozen, outer_execution_identity)
     pair = outer_execution_identity.root_pair(stage="setup-capture")
     local_claim = _local_claim_record(frozen, pair, outer_execution_identity)
@@ -507,7 +526,7 @@ def _claim_and_execute(
                     outer_execution_identity,
                 )
                 _trip_failpoint(failpoint, "after_runtime_scope_open", frozen)
-                slot = _prospective_slot(frozen.ordinal)
+                slot = _prospective_slot(frozen.template_ordinal)
                 capture = validate_red_living_dex_setup_recipe(
                     slot,
                     resolved.recipe,

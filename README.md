@@ -5,6 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): publish the qualified train-only consumer, then run
+> one zero-action preflight.** The frozen private 8+4 schedule now has a locally qualified consumer
+> that exposes only train ordinals 0–7, keeps schedule and Red-template ordinals distinct, preserves
+> the upstream episode lineage, atomically protects logical and physical roots, commits one random
+> arm before controller input, and records only the selected arm's independently observed outcome.
+> Development, teacher labels, counterfactual targets, model fitting, sealed Red, and Crystal are
+> structurally absent from this command.
+>
+> A separate `--clustered-preflight-only` mode requires no ROM and leaves claims, actions, frames,
+> commitments, outcomes, predictions, and fits at zero. Recovery tests cover both setup-claim
+> cutpoints and every causal-journal durable boundary without duplicate input or arm substitution.
+> No authentic scenario ran, so **causal train 1/60 · powered fit 0 · authority 0 · transfer 0**.
+> Next: publish, require green PR and exact-main CI, run one ROM-free preflight, publish its path-free
+> receipt, and reorient before the first authentic train execution.
+
 > **Current product focus (August 29, 2026): the exact 8+4 schedule is frozen; build the safe
 > train consumer.** PR 101 merged as main `4190b92b`, exact-main CI `33268744819/1` passed, and
 > the zero-controller freezer then reproduced schedule `35c00f38…`: **8 train scenarios from 8

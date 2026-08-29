@@ -7,6 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the safe key exists; prove it fits before turning it
+
+The twelve classrooms now have a key, and the key cannot open the exam room. Its dial stops at
+training choices zero through seven; the four untouched development choices do not exist on the
+command. Before any movement, it checks the exact classroom, save, Red setup, and upstream
+lineage. Then it claims the lesson and save together, writes down one random action, and only then
+allows that action to touch the controller. It can record only what really happened afterward.
+
+Power-loss tests cut the process at both setup claims and at every later durable seam. Before
+input, recovery keeps the same choice. After input becomes possible, recovery cannot press the
+buttons again or manufacture a target. A new ROM-free preflight can prove the published key fits
+one still-unused classroom while actions, frames, claims, outcomes, and fits all remain zero.
+
+No classroom has been entered in this engineering session. Next comes publication, exact-main CI,
+one zero-action preflight, and another mission check. Only then does the first of eight short Red
+outcomes run. The board remains **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
 ## Current checkpoint: the classroom is locked; build a safe key
 
 The lock was published, GitHub rebuilt it, and it turned once. The freezer found the same twelve
