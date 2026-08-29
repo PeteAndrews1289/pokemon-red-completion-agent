@@ -88,7 +88,9 @@ from pokemon_red_completion.economy import CERULEAN_RIVAL_POTION_RESERVE
 from pokemon_red_completion.observation import (
     ABRA_SPECIES_ID,
     PIDGEOTTO_SPECIES_ID,
+    RATTATA_SPECIES_ID,
     WARTORTLE_SPECIES_ID,
+    ZUBAT_SPECIES_ID,
     BattleMenuPhase,
     BattleMenuState,
     CascadeState,
@@ -393,12 +395,151 @@ def _raw() -> RawGameState:
         party_count=1,
         battle_state=0,
         party_species_ids=(WARTORTLE_SPECIES_ID,),
-    first_party_level=24,
-    first_party_hp=18,
-    first_party_max_hp=66,
-    first_party_status=0,
-    battle_result=0,
+        first_party_level=24,
+        first_party_hp=18,
+        first_party_max_hp=66,
+        first_party_status=0,
+        battle_result=0,
     )
+
+
+class _Ready:
+    ready = True
+
+
+class _ReadyReader:
+    def read_input_readiness(self) -> _Ready:
+        return _Ready()
+
+
+def test_reserve_led_rival_victory_promotes_only_the_sole_survivor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        20,
+        6,
+        2,
+        0,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        party_hp=(0, 30),
+        first_party_hp=0,
+    )
+    promoted = replace(
+        terminal,
+        party_species_ids=(ZUBAT_SPECIES_ID, WARTORTLE_SPECIES_ID),
+        party_hp=(30, 0),
+        first_party_hp=30,
+    )
+    observed: dict[str, object] = {}
+
+    def fake_promote(*args: object, **kwargs: object) -> RawGameState:
+        observed["args"] = args
+        observed["label"] = kwargs["label"]
+        return promoted
+
+    monkeypatch.setattr(cascade_module, "promote_sole_living_party_member", fake_promote)
+
+    result = cascade_module._promote_cerulean_rival_survivor(
+        cast(object, object()),
+        cast(object, object()),
+        cast(object, _ReadyReader()),
+        terminal,
+    )
+
+    assert result is promoted
+    assert observed["label"] == "Cerulean rival sole-survivor lead"
+    assert len(cast(tuple[object, ...], observed["args"])) == 3
+
+
+def test_rival_survivor_promotion_is_skipped_when_the_lead_survives(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = replace(_raw(), first_party_hp=1)
+    monkeypatch.setattr(
+        cascade_module,
+        "promote_sole_living_party_member",
+        lambda *_args, **_kwargs: pytest.fail("unexpected party reorder"),
+    )
+
+    result = cascade_module._promote_cerulean_rival_survivor(
+        cast(object, object()),
+        cast(object, object()),
+        cast(object, _ReadyReader()),
+        terminal,
+    )
+
+    assert result is terminal
+
+
+def test_rival_role_restoration_proves_both_healed_roles(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    restored = RawGameState(
+        True,
+        MapId.CERULEAN_POKECENTER,
+        3,
+        3,
+        2,
+        0,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        party_hp=(50, 30),
+        party_max_hp=(50, 30),
+        party_status=(0, 0),
+        first_party_hp=50,
+        first_party_max_hp=50,
+        first_party_status=0,
+    )
+    observed: dict[str, object] = {}
+
+    def fake_promote(*args: object, **kwargs: object) -> RawGameState:
+        observed["species"] = args[3]
+        observed["label"] = kwargs["label"]
+        return restored
+
+    monkeypatch.setattr(cascade_module, "promote_species_to_lead", fake_promote)
+
+    result = cascade_module._restore_cerulean_rival_roles_after_healing(
+        cast(object, object()),
+        cast(object, object()),
+        cast(object, _ReadyReader()),
+    )
+
+    assert result is restored
+    assert observed == {
+        "species": WARTORTLE_SPECIES_ID,
+        "label": "Cerulean rival restored battle lead",
+    }
+
+
+def test_rival_role_restoration_rejects_an_unhealed_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    incomplete = RawGameState(
+        True,
+        MapId.CERULEAN_POKECENTER,
+        3,
+        3,
+        2,
+        0,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        party_hp=(50, 29),
+        party_max_hp=(50, 30),
+        party_status=(0, 0),
+    )
+    monkeypatch.setattr(
+        cascade_module,
+        "promote_species_to_lead",
+        lambda *_args, **_kwargs: incomplete,
+    )
+
+    with pytest.raises(CascadeChapterError, match="role restoration"):
+        cascade_module._restore_cerulean_rival_roles_after_healing(
+            cast(object, object()),
+            cast(object, object()),
+            cast(object, _ReadyReader()),
+        )
 
 
 def _report() -> CascadeChapterReport:
@@ -465,9 +606,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         "down",
     )
     assert MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS == 32
-    assert _reverse_directions(
-        CENTER_HEAL_TO_PC_DIRECTIONS
-    ) == CENTER_PC_TO_HEAL_DIRECTIONS
+    assert _reverse_directions(CENTER_HEAL_TO_PC_DIRECTIONS) == CENTER_PC_TO_HEAL_DIRECTIONS
     assert CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS == ("left",)
     assert (
         *("up" for _ in range(4)),
@@ -479,12 +618,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     assert CERULEAN_RIVAL_MAX_POTION_RESERVE == CERULEAN_RIVAL_POTION_RESERVE + 4
     assert ROUTE_24_RECOVERY_POTION_RESERVE == 6
     assert cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION == 1
-    assert (
-        ROUTE_24_REQUIRED_TRAINER_INDEXES[
-            cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION
-        ]
-        == 4
-    )
+    assert ROUTE_24_REQUIRED_TRAINER_INDEXES[cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION] == 4
     assert cascade_module.ROUTE_24_FINAL_RECOVERY_POSITION == 4
     assert ROUTE_25_RECOVERY_POTION_RESERVE == 5
     assert CERULEAN_GYM_POTION_RESERVE == 8
@@ -839,9 +973,7 @@ def test_cascade_timing_rejects_a_non_runtime_battle_controller() -> None:
 
 
 def test_cerulean_rival_recovery_waits_for_a_semantic_risk_gate() -> None:
-    pidgeotto_threshold = CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[
-        PIDGEOTTO_SPECIES_ID
-    ]
+    pidgeotto_threshold = CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[PIDGEOTTO_SPECIES_ID]
     pidgeotto = replace(
         _raw(),
         battle_state=2,
@@ -851,9 +983,7 @@ def test_cerulean_rival_recovery_waits_for_a_semantic_risk_gate() -> None:
     )
 
     assert not _should_use_cerulean_rival_potion(pidgeotto)
-    assert _should_use_cerulean_rival_potion(
-        replace(pidgeotto, first_party_hp=pidgeotto_threshold)
-    )
+    assert _should_use_cerulean_rival_potion(replace(pidgeotto, first_party_hp=pidgeotto_threshold))
     assert not _should_use_cerulean_rival_potion(
         replace(
             pidgeotto,
@@ -865,11 +995,36 @@ def test_cerulean_rival_recovery_waits_for_a_semantic_risk_gate() -> None:
         replace(
             pidgeotto,
             enemy_species_id=ABRA_SPECIES_ID,
-            first_party_hp=CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[
-                ABRA_SPECIES_ID
-            ],
+            first_party_hp=CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[ABRA_SPECIES_ID],
         )
     )
+
+
+def test_cerulean_rival_accuracy_reset_uses_a_bounded_pidgeotto_stage() -> None:
+    pidgeotto = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=PIDGEOTTO_SPECIES_ID,
+        player_accuracy_stage=cascade_module.CERULEAN_RIVAL_ACCURACY_RESET_STAGE + 1,
+    )
+
+    assert not cascade_module._should_reset_cerulean_rival_accuracy(pidgeotto)
+    assert cascade_module._should_reset_cerulean_rival_accuracy(
+        replace(
+            pidgeotto,
+            player_accuracy_stage=cascade_module.CERULEAN_RIVAL_ACCURACY_RESET_STAGE,
+        )
+    )
+    assert cascade_module._should_reset_cerulean_rival_accuracy(
+        replace(pidgeotto, enemy_species_id=ABRA_SPECIES_ID)
+    )
+    assert not cascade_module._should_reset_cerulean_rival_accuracy(
+        replace(pidgeotto, enemy_species_id=RATTATA_SPECIES_ID)
+    )
+    with pytest.raises(ValueError, match="valid live stage"):
+        cascade_module._should_reset_cerulean_rival_accuracy(
+            replace(pidgeotto, player_accuracy_stage=None)
+        )
 
 
 @pytest.mark.parametrize(
@@ -953,10 +1108,187 @@ def test_cerulean_rival_recovery_reuses_one_bounded_intent_across_consecutive_he
     assert calls == 3
     assert intents[0] is intents[1] is intents[2]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
-    assert (
-        emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
-        == ROUTE_24_RECOVERY_POTION_RESERVE
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == ROUTE_24_RECOVERY_POTION_RESERVE
+
+
+def test_cerulean_rival_resets_pidgeotto_accuracy_before_spending_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=CERULEAN_RIVAL_MAX_POTION_RESERVE)
+    low_accuracy = replace(
+        _raw(),
+        map_id=MapId.CERULEAN_CITY,
+        battle_state=2,
+        party_count=2,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        active_party_index=0,
+        active_party_hp=40,
+        active_party_max_hp=52,
+        first_party_hp=40,
+        first_party_max_hp=52,
+        first_party_moves=(33, 39, 5, 55),
+        first_party_pp=(35, 30, 20, 10),
+        enemy_species_id=PIDGEOTTO_SPECIES_ID,
+        enemy_hp=53,
+        enemy_max_hp=53,
+        player_accuracy_stage=cascade_module.CERULEAN_RIVAL_ACCURACY_RESET_STAGE,
     )
+    final = replace(low_accuracy, battle_state=0, enemy_hp=0)
+
+    class Reader:
+        state = low_accuracy
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    runtime_calls = 0
+    reset_calls = 0
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal runtime_calls
+        runtime_calls += 1
+        policy = args[2]
+        assert callable(policy)
+        if runtime_calls == 1:
+            try:
+                policy(reader.state)
+            except cascade_module._PauseForCeruleanRivalAccuracyReset as pause:
+                raise BattleRuntimeError("unit accuracy reset") from pause
+            raise AssertionError("low Pidgeotto accuracy did not request a reset")
+        return final
+
+    def fake_reset(*args: object) -> None:
+        nonlocal reset_calls
+        del args
+        reset_calls += 1
+        reader.state = replace(reader.state, player_accuracy_stage=7)
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(cascade_module, "_reset_cerulean_rival_accuracy", fake_reset)
+    monkeypatch.setattr(
+        cascade_module,
+        "_use_cerulean_rival_potion",
+        lambda *_args: pytest.fail("the downstream Potion reserve was spent"),
+    )
+
+    assert (
+        _run_cerulean_rival_with_potion(
+            cast(object, reader),
+            cast(object, object()),
+            emulator,
+            DEFAULT_CASCADE_TIMING,
+        )
+        is final
+    )
+    assert runtime_calls == 2
+    assert reset_calls == 1
+    assert _bag_quantity_for_test(emulator) == CERULEAN_RIVAL_MAX_POTION_RESERVE
+
+
+@pytest.mark.parametrize(
+    ("enemy_changed", "post_switch_stage", "accepted"),
+    ((False, 6, True), (False, 5, False), (True, 6, False)),
+)
+def test_cerulean_rival_pidgeotto_reset_bounds_switch_damage(
+    monkeypatch: pytest.MonkeyPatch,
+    enemy_changed: bool,
+    post_switch_stage: int,
+    accepted: bool,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=CERULEAN_RIVAL_MAX_POTION_RESERVE)
+
+    def write_u16(address: RamAddress, value: int) -> None:
+        emulator.memory[int(address)] = value >> 8
+        emulator.memory[int(address) + 1] = value & 0xFF
+
+    write_u16(RamAddress.PARTY_MON_1_HP, 52)
+    write_u16(RamAddress.PARTY_MON_2_HP, 30)
+    emulator.memory[int(RamAddress.PLAYER_MON_NUMBER)] = 0
+    starting = replace(
+        _raw(),
+        map_id=MapId.CERULEAN_CITY,
+        battle_state=2,
+        party_count=2,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        party_hp=(52, 30),
+        party_max_hp=(52, 30),
+        active_party_index=0,
+        active_party_hp=52,
+        active_party_max_hp=52,
+        first_party_hp=52,
+        first_party_max_hp=52,
+        first_party_pp=(29, 30, 20, 10),
+        enemy_species_id=PIDGEOTTO_SPECIES_ID,
+        enemy_hp=31,
+        enemy_max_hp=53,
+        player_accuracy_stage=3,
+    )
+
+    class Reader:
+        state = starting
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    reader = Reader()
+    targets: list[int] = []
+
+    def fake_switch(*args: object, target_index: int, **kwargs: object) -> None:
+        del args, kwargs
+        targets.append(target_index)
+        emulator.memory[int(RamAddress.PLAYER_MON_NUMBER)] = target_index
+        if target_index == 1:
+            write_u16(RamAddress.PARTY_MON_2_HP, 20)
+            reader.state = replace(
+                reader.state,
+                party_hp=(52, 20),
+                active_party_index=1,
+                active_party_hp=20,
+                active_party_max_hp=30,
+                player_accuracy_stage=post_switch_stage,
+                enemy_hp=30 if enemy_changed else 31,
+            )
+        else:
+            write_u16(RamAddress.PARTY_MON_1_HP, 44)
+            reader.state = replace(
+                reader.state,
+                party_hp=(44, 20),
+                active_party_index=0,
+                active_party_hp=44,
+                active_party_max_hp=52,
+                first_party_hp=44,
+                player_accuracy_stage=post_switch_stage,
+            )
+
+    monkeypatch.setattr(
+        cascade_module,
+        "_switch_cerulean_rival_party_slot",
+        fake_switch,
+    )
+
+    if not accepted:
+        with pytest.raises(CascadeChapterError, match="changed protected battle state"):
+            cascade_module._reset_cerulean_rival_accuracy(
+                cast(object, reader),
+                cast(object, object()),
+                emulator,
+                DEFAULT_CASCADE_TIMING,
+            )
+        assert targets == [1]
+    else:
+        cascade_module._reset_cerulean_rival_accuracy(
+            cast(object, reader),
+            cast(object, object()),
+            emulator,
+            DEFAULT_CASCADE_TIMING,
+        )
+        assert targets == [1, 0]
+        assert cascade_module._rival_party_hp(emulator) == (44, 20)
 
 
 def test_misty_spends_only_two_surplus_potions_and_reuses_intent(
@@ -1039,9 +1371,7 @@ def test_cerulean_rival_recovery_latches_the_transient_exact_heal(
             del raw
             return BattleMenuState(
                 self.phase,
-                selected_main_command=1
-                if self.phase is BattleMenuPhase.MAIN
-                else None,
+                selected_main_command=1 if self.phase is BattleMenuPhase.MAIN else None,
             )
 
     reader = Reader()
@@ -1121,9 +1451,7 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
                 emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 0
             elif self.confirms == 3:
                 reader.state = replace(reader.state, first_party_hp=27)
-                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = (
-                    ROUTE_25_RECOVERY_POTION_RESERVE
-                )
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = ROUTE_25_RECOVERY_POTION_RESERVE
 
     executor = Executor()
     _use_route_24_recovery_potion(
@@ -1133,13 +1461,11 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
     )
 
     assert reader.state.first_party_hp == 27
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == ROUTE_25_RECOVERY_POTION_RESERVE
     assert (
-        emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
-        == ROUTE_25_RECOVERY_POTION_RESERVE
+        sum(action.kind is MacroActionKind.CANCEL for action in executor.actions)
+        == FIELD_ITEM_MENU_CLOSE_PULSES
     )
-    assert sum(
-        action.kind is MacroActionKind.CANCEL for action in executor.actions
-    ) == FIELD_ITEM_MENU_CLOSE_PULSES
 
 
 @pytest.mark.parametrize(
@@ -1571,9 +1897,7 @@ def test_route_24_long_team_spends_the_shared_potion_before_fainting(
     assert final.battle_state == 0
     assert runtime_calls == 2
     assert recoveries == 1
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == (
-        ROUTE_25_RECOVERY_POTION_RESERVE
-    )
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == (ROUTE_25_RECOVERY_POTION_RESERVE)
 
 
 @pytest.mark.parametrize(

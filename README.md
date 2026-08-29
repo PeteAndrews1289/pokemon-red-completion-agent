@@ -5,17 +5,19 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 28, 2026): publish the post-yield repair, then measure it on a
-> new prospective population.** Exact main `be6a03a4` passed CI `33189656179/1`, but its successor
-> gate stopped after three failures made the required 10/12 result impossible. Those assignments
-> are consumed; the remaining old-source assignments are unusable. The resulting repairs cover
-> cartridge-exact funding, bounded poison survival, semantic party healing, broader safe capture,
-> moving obstacles, last-pulse observation, and an authenticated direct wild-to-trainer handoff.
+> **Current product focus (August 28, 2026): publish the world-variance repair, then measure it on a
+> genuinely new prospective population.** Exact main `05ae3cce` passed CI `33221693432/1`, but its
+> successor gate stopped at **2/5** after three distinct failures made the required 10/12 result
+> impossible. Five assignments are consumed; seven unclaimed old-source assignments are unusable.
+> The repair now observes live battlers and capture targets, verifies blocked movement, proves
+> poison budgets, performs one authenticated accuracy reset, accepts an exact reserve-led victory,
+> and closes both Generation-I field-menu layers instead of trusting misleading movement flags.
 >
-> The final unchanged bundle `a3b18f34` reached the late-Cinnabar `mansion_returned` checkpoint on
-> **3/3** new development seeds—**112,486 actions and 21,072,636 frames**—and passes **5,694 tests,
-> Ruff, Mypy over 295 source files, all registries, and diff checks**. The
-> [path-free qualification](docs/evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+> The final unchanged bundle `7c2974ab` reached late-Cinnabar `mansion_returned` on **3/3** new
+> development seeds across initial waits 197, 58, and 123—**125,932 actions and 22,345,994
+> frames**—and passes **5,718 tests, Ruff, Mypy over 309 source files, all registries,
+> documentation, public-artifact, and diff checks**. The
+> [path-free qualification](docs/evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
 > records the exact scope and protected zeroes. This is engineering evidence through checkpoint
 > 275/312, not model training, a Hall-of-Fame run, population yield, or transfer.
 >

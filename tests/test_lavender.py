@@ -293,10 +293,7 @@ def test_obsolete_tm_sale_covers_the_consumed_tm28_capture_branch() -> None:
     )
     assert lavender_module.TM12_SALE_PROCEEDS == 500
     assert lavender_module.TM34_SALE_PROCEEDS == 1_000
-    assert (
-        lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.TM12_WATER_GUN)
-        == 500
-    )
+    assert lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.TM12_WATER_GUN) == 500
     assert lavender_module._obsolete_funding_tm_sale_proceeds(ItemId.TM34_BIDE) == 1_000
     assert (
         lavender_module._required_potion_sale_quantity(
@@ -721,7 +718,7 @@ def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
     monkeypatch.setattr(
         lavender_module,
         "_cure_tunnel_status_if_present",
-        lambda *_args, **_kwargs: calls.append(("cure", None)),
+        lambda *_args, **kwargs: calls.append(("cure", kwargs)),
     )
 
     lavender_module._prepare_dux_sleep_pivot(
@@ -735,7 +732,13 @@ def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
     assert calls == [
         ("swap", lavender_module.DUX),
         ("heal", (0, lavender_module.TRAVERSAL_RECOVERY_THRESHOLD)),
-        ("cure", None),
+        (
+            "cure",
+            {
+                "maximum_uncured_poison_field_steps": len(lavender_module.ONE_F_TO_TRAINER_4),
+                "maximum_uncured_poison_battle_turns": 1,
+            },
+        ),
         ("swap", lavender_module.WARTORTLE),
     ]
 
@@ -1188,11 +1191,14 @@ def test_lavender_recovery_capabilities_follow_live_reserves_and_hp_limit(
     }
     monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: bag)
 
-    assert lavender_module._lavender_recovery_capabilities(
-        object(),  # type: ignore[arg-type]
-        hp_recoveries=0,
-        hp_recovery_limit=0,
-    ) == frozenset()
+    assert (
+        lavender_module._lavender_recovery_capabilities(
+            object(),  # type: ignore[arg-type]
+            hp_recoveries=0,
+            hp_recovery_limit=0,
+        )
+        == frozenset()
+    )
 
     bag[ItemId.AWAKENING] = 2
     bag[ItemId.PARLYZ_HEAL] = 3
@@ -1220,14 +1226,15 @@ def test_lavender_recovery_capabilities_follow_live_reserves_and_hp_limit(
 
 
 def test_protected_dux_masks_only_attacks_below_the_recoverable_hp_floor() -> None:
-    hp_recovery = frozenset(
-        {lavender_module.BattleRecoveryCapability.RESTORE_HP}
-    )
+    hp_recovery = frozenset({lavender_module.BattleRecoveryCapability.RESTORE_HP})
 
-    assert lavender_module._protected_dux_minimum_hp_before_move(
-        hp_recovery,
-        enabled=True,
-    ) == DUX_BATTLE_RECOVERY_THRESHOLD + 1
+    assert (
+        lavender_module._protected_dux_minimum_hp_before_move(
+            hp_recovery,
+            enabled=True,
+        )
+        == DUX_BATTLE_RECOVERY_THRESHOLD + 1
+    )
     assert (
         lavender_module._protected_dux_minimum_hp_before_move(
             hp_recovery,
@@ -1242,6 +1249,8 @@ def test_protected_dux_masks_only_attacks_below_the_recoverable_hp_floor() -> No
         )
         is None
     )
+
+
 def test_move_retries_the_same_step_after_a_no_movement_wild_flee(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -6,6 +6,37 @@ Status: active operating assignment as of 2026-08-28. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish the world-variance repair; training is still gated
+
+Codex owns the exact working bundle `7c2974ab`, publication, exact-main CI verification, and the
+later action-free freeze of a new prospective yield plan. Published main `05ae3cce` passed CI
+`33221693432/1`, but its one-use gate stopped at 2/5 after the third distinct failure made 10/12
+impossible. Five assignments are consumed; seven old-source assignments are unclaimed but
+unusable. Do not retry, reuse, or reinterpret them.
+
+Three one-use development diagnostics on unchanged repaired source reached late-Cinnabar
+`mansion_returned`: **3/3, 125,932 actions, 22,345,994 frames**, across initial waits 197, 58, and
+123. The public
+[qualification](evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
+binds each private ledger by digest and states the 275/312 scope. The source passes **5,718 tests**,
+Ruff, Mypy over **309** files, every generated registry, documentation, public-artifact, and diff
+checks. No run generated a root, label, outcome, fit, completion claim, authority, or transfer.
+
+Claude's durable role is read-only causal/statistical, leakage, and trust-boundary review.
+Antigravity's durable role is read-only architecture, transfer, portability, and overclaim
+challenge. Codex is the implementer, operator, publisher, and final adjudicator; neither reviewer
+edits, executes gameplay, publishes, or grants authority. The next gate is publication plus exact-
+main green CI, then a new versioned twelve-world one-use plan requiring at least 10/12 successes
+with no repeated stage or leak. Only a pass opens train-only root generation and recensus.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+Post-gate review is complete. Antigravity returned GO with P0/P1/P2 zero. Claude returned
+conditional GO with no P0; Codex accepted its demand to describe the 3/3 sample as integration
+non-regression rather than per-repair or population qualification, and strengthened the wild
+forced-switch test to exercise the real live-cursor predicate. Codex rejected the broader claim
+that reusable switch/move primitives lack direct tests; their direct mutation-sensitive suites are
+separate from Erika/Silph orchestration tests. See [the adjudication log](agent-review-log.md).
+
 ## Current override: publish the post-yield repair; no old assignment may be reused
 
 Codex owns the exact working bundle `a3b18f34`, its publication, exact-main CI verification, and
@@ -2540,22 +2571,40 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 
 ### Codex workhorse lane
 
-- Capability: publish an auditable clean-power generator for independent Red train roots.
-- Learned authority: none; no model is fitted, queried or executed in this lane.
-- Transfer relevance: the root menus and pressure features are identity-free, while Red-specific
-  boot, route and cartridge conditioning remain in the adapter.
-- Stop condition: any retry path, unbound executable byte, hidden failed assignment, private leak,
-  or claim that 6/6/1 guarantees matching capacity.
+- Capability: publish the exact world-variance repair bundle that reached the late-Cinnabar
+  `mansion_returned` checkpoint on three independent diagnostic worlds, require exact-main green
+  CI, and then freeze a new source-bound twelve-world prospective teacher-yield plan.
+- Learned authority: none. The three diagnostics are teacher-maintenance evidence, not roots,
+  labels, outcomes, a fit, model play, or transfer. The scoreboard remains causal train 1/60,
+  powered fit 0, authority 0, transfer 0.
+- Transfer relevance: the repairs keep title-specific controller behavior behind the Red adapter;
+  they unblock generation of identity-free strategic menus rather than teaching Red button paths.
+- Stop condition: execution before exact-main green CI and a new immutable plan, reuse of any
+  consumed world, fewer than ten late-Cinnabar terminals from twelve one-use worlds, a repeated
+  deterministic failure stage, private leakage, or any claim that 3/3 retrospective diagnostics
+  establish population yield.
 
 ### Antigravity audit lane
 
-- Review first and after material repairs; current verdict is GO to publish, not execute.
-- Attack durable ordering, exact dependency bytes, success/failure completeness and causal
-  independence. Report exact counterexamples; do not create plans or touch private data.
+- Completed a read-only architecture/transfer challenge of the stable diff and returned GO for
+  publication with no P0, P1, or P2 finding. It attempted to falsify Silph terminal propagation,
+  Diglett living-catcher enforcement, two-layer field-menu closure, and finite forced-switch
+  recovery. It explicitly classified the work as teacher engineering, not model training or
+  Crystal transfer.
+- Next assignment begins only if the prospective 10/12 yield gate passes and a real train-root
+  catalog exists: challenge whether the resulting strategic menus are genuine, title-neutral,
+  living-Pokédex-relevant choices. It remains read-only and receives no ROM, private ledger, or
+  sealed context.
 
 ### Claude audit lane
 
-- Completed read-only against the stable diff: GO to publish, no P0 or confirmed P1.
-- Its same-process introspection limitation is accepted and recorded as a source-binding requirement
-  for Crystal; its ROM single-read hardening is implemented. No reviewer verdict authorizes roots,
-  outcomes, fitting, sealed Red, Crystal execution or a full replay.
+- Completed a read-only causal/statistical audit of the stable diff and returned conditional GO
+  with no P0. Codex accepted its warning that 3/3 integration runs do not qualify every rare branch
+  or estimate population yield, and the public claims now say so. Codex also strengthened the wild
+  forced-switch simulation to exercise the real cursor predicate; the focused 113-test suite passes.
+- Codex rejected the broader claim that switch and move-selection primitives lack direct tests:
+  those primitives have separate mutation-sensitive tests, while higher-level tests intentionally
+  stub them to isolate orchestration. This adjudication is recorded in `agent-review-log.md`.
+- Next assignment is the immutable prospective yield plan or its terminal receipt. No reviewer
+  verdict authorizes roots, fitting, sealed Red, Crystal execution, a full-game replay, authority,
+  or transfer.

@@ -138,6 +138,12 @@ def swap_party_slots(
     _select_cursor(executor, emulator, destination_index, label=f"{label} destination")
     _pulse(executor, MacroActionKind.CONFIRM)
 
+    # The switch returns to the party screen, then CANCEL returns to the
+    # field-menu screen, and a second CANCEL restores overworld control.
+    # Gen I's movement flags can look field-ready while either menu is still
+    # open, so these two structural exits cannot be inferred from readiness.
+    for _ in range(2):
+        _pulse(executor, MacroActionKind.CANCEL)
     for _ in range(8):
         if reader.read_input_readiness().ready:
             break

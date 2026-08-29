@@ -141,12 +141,11 @@ def _switch_forced_fainted_battler(
 ) -> None:
     """Advance faint dialogue, select the live forced-party cursor, and prove MAIN."""
 
-    # Gen I leaves the party cursor bytes stale while the faint text is still
-    # visible. Do not require a particular cursor-tile address before acting:
-    # movement is harmless during text, while periodic confirmation advances
-    # that text. Once the forced party screen is live, the same observed cursor
-    # movement selects the requested member. This is the proven pattern used by
-    # the Silph rival recovery and it also covers six-member parties.
+    # Gen I leaves the party cursor bytes stale while faint text is visible.
+    # Never interpret those bytes until the live cursor tile authenticates the
+    # party screen.  This matters especially in wild battles: moving or
+    # confirming against a transient ordinary battle menu can select RUN and
+    # destroy the protected encounter.
     for pulse_index in range(64):
         settled = reader.read()
         party = settled.party_hp or _party_hp(emulator)
@@ -160,16 +159,21 @@ def _switch_forced_fainted_battler(
             and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
         ):
             return
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if (settled.battler_hp or 0) <= 0:
+            menu_phase = reader.read_battle_menu_state(settled).phase
+            if menu_phase is not BattleMenuPhase.UNKNOWN:
+                actions.execute(MacroAction(MacroActionKind.WAIT, repeat=wait_frames))
+                continue
+            if not _forced_party_menu_ready(emulator, len(party)):
+                _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+                continue
+            cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
             _pulse(
                 actions,
                 MacroActionKind.CONFIRM if cursor == party_index else MacroActionKind.MOVE,
                 None if cursor == party_index else ("down" if cursor < party_index else "up"),
                 wait_frames=wait_frames,
             )
-            if pulse_index % 5 == 4:
-                _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
             continue
         _pulse(
             actions,

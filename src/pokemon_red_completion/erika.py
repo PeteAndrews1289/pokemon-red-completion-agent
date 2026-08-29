@@ -8,11 +8,13 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
@@ -28,6 +30,7 @@ from pokemon_red_completion.celadon import (
     _RunState,
 )
 from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.gen1_route_runtime import strongest_usable_move_slot
 from pokemon_red_completion.lavender import (
     LavenderTiming,
     _close_menus,
@@ -431,12 +434,13 @@ class EarlyErikaChapterReport:
             and 0 <= self.x_special_before_supply <= X_SPECIAL_PURCHASE_QUANTITY
             and 0 <= self.x_accuracy_before_supply <= 1
             and self.money_after
-            == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - EARLY_ERIKA_BATTLE_PREPARATION_COST
+            == self.money_before
+            + ERIKA_TRAINER_REWARD_TOTAL
+            - EARLY_ERIKA_BATTLE_PREPARATION_COST
             + self.x_special_before_supply * X_SPECIAL_PRICE
             + self.x_accuracy_before_supply * X_ACCURACY_REPLACEMENT_PRICE
             and self.badge_bits_before in {0x07, 0x17}
-            and self.badge_bits_after
-            == self.badge_bits_before | int(Badge.RAINBOW)
+            and self.badge_bits_after == self.badge_bits_before | int(Badge.RAINBOW)
             and self.gym_events_before == (False,) * 7
             and self.gym_events_after == (True,) * 7
             and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
@@ -564,6 +568,7 @@ def run_early_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Lass",
@@ -582,6 +587,7 @@ def run_early_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Cooltrainer",
@@ -638,6 +644,7 @@ def run_early_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Erika",
@@ -896,6 +903,7 @@ def run_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Lass",
@@ -919,6 +927,7 @@ def run_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Cooltrainer",
@@ -986,6 +995,7 @@ def run_erika_chapter(
     _battle(
         reader,
         actions,
+        emulator,
         MapId.CELADON_GYM,
         timing,
         "Erika",
@@ -1533,6 +1543,7 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
 def _battle(
     reader,
     actions,
+    emulator,
     map_id,
     timing,
     label,
@@ -1542,18 +1553,33 @@ def _battle(
 ) -> None:
     last_error: BattleRuntimeError | None = None
     selected_move = move_selector or _erika_move_slot
+    initial_party = reader.read().party_hp or _party_hp(emulator)
+    switch_limit = len(initial_party) - 1 if len(initial_party) > 1 else None
+    forced_switches = 0
+
+    def active_move(raw: RawGameState) -> int:
+        if raw.active_party_index in {None, 0}:
+            return selected_move(raw)
+        return strongest_usable_move_slot(raw)
+
     for _ in range(timing.battle_recoveries):
         try:
             run_adaptive_trainer_battle(
                 reader,
                 actions,
-                selected_move,
+                active_move,
                 expected_map=int(map_id),
                 intent=BattleIntent(
                     "defeat_erika",
                     battle_plan_id=battle_plan_id,
                     required_move_policy=RequiredMovePolicy.ANY_USABLE,
                     required_move_ref=None,
+                    switch_capabilities=(
+                        frozenset({BattleSwitchCapability.DIRECT})
+                        if switch_limit is not None
+                        else frozenset()
+                    ),
+                    switch_limit=switch_limit,
                 ),
                 required_move_id=None,
                 timing=BattleRuntimeTiming(max_runtime_pulses=1600 if label == "Erika" else 960),
@@ -1563,8 +1589,36 @@ def _battle(
             return
         except BattleRuntimeError as error:
             last_error = error
-            if reader.read().battle_state == 0:
+            failed = reader.read()
+            if failed.battle_state == 0:
                 return
+            if failed.battle_state == 2 and failed.battler_hp == 0:
+                party_hp = failed.party_hp or _party_hp(emulator)
+                target = next(
+                    (
+                        index
+                        for index, hp in enumerate(party_hp)
+                        if index != failed.active_party_index and hp > 0
+                    ),
+                    None,
+                )
+                if target is None or switch_limit is None or forced_switches >= switch_limit:
+                    raise ErikaChapterError(f"{label} left no bounded living reserve.") from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        target,
+                        label=f"{label} forced living-reserve continuation",
+                        wait_frames=timing.movement_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise ErikaChapterError(
+                        f"{label} forced reserve switch failed: {switch_error}"
+                    ) from switch_error
+                forced_switches += 1
+                continue
     raise ErikaChapterError(f"{label} exceeded bounded battle recoveries: {last_error}.")
 
 

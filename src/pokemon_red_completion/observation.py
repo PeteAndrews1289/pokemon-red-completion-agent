@@ -2213,10 +2213,22 @@ class CascadeState:
 
     @property
     def rival_victory_snapshot(self) -> bool:
+        species = self.party_species_ids or ()
+        reserve_led_terminal = (
+            self.prior_chapter_complete
+            and self.party_count == 2
+            and species == (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+            and self.first_party_hp == 0
+            and (self.first_party_max_hp or 0) > 0
+        )
         return (
             self.phase is CascadePhase.RIVAL_DEFEATED
             and self.map_id == MapId.CERULEAN_CITY
-            and self.stable_snapshot
+            and (self.foundation_invariants or reserve_led_terminal)
+            and self.battle_state == 0
+            and self.local_script == 0
+            and self.current_map_script == 0
+            and self.controls.ready
             and self.battle_result == 0
             and self.beat_cerulean_rival
         )

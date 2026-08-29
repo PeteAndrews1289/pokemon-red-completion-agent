@@ -40,6 +40,7 @@ from pokemon_red_completion.cerulean import (
 from pokemon_red_completion.economy import CERULEAN_RIVAL_POTION_RESERVE
 from pokemon_red_completion.gen1_party_menu import (
     Gen1PartyMenuError,
+    promote_sole_living_party_member,
     promote_species_to_lead,
 )
 from pokemon_red_completion.misty_policy import choose_misty_move_slot
@@ -83,6 +84,8 @@ CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
     RATTATA_SPECIES_ID: 25,
     BULBASAUR_SPECIES_ID: 30,
 }
+CERULEAN_RIVAL_ACCURACY_RESET_STAGE = 4
+CERULEAN_RIVAL_POST_SWITCH_MIN_ACCURACY_STAGE = 6
 CERULEAN_RIVAL_MIN_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 2
 CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
 CERULEAN_ANTIDOTE_RESERVE = 3
@@ -307,8 +310,7 @@ class CascadeChapterReport:
     def passed(self) -> bool:
         return (
             self.starting_cerulean_evidence.cerulean_snapshot
-            and self.cerulean_rare_candy_sale_proceeds
-            in {0, CERULEAN_RARE_CANDY_SALE_PROCEEDS}
+            and self.cerulean_rare_candy_sale_proceeds in {0, CERULEAN_RARE_CANDY_SALE_PROCEEDS}
             and len(self.records) == CASCADE_CHECKPOINT_COUNT
             and self.observed_route_24_trainers == ROUTE_24_REQUIRED_TRAINER_INDEXES
             and self.observed_route_25_trainers == ROUTE_25_REQUIRED_TRAINER_INDEXES
@@ -502,7 +504,7 @@ def run_cascade_chapter(
         timing.post_battle_cleanup_pulses,
         timing.dialogue_wait_frames,
     )
-    _checkpoint(
+    rival_terminal, _ = _checkpoint(
         reader,
         tracker,
         CascadePhase.RIVAL_DEFEATED,
@@ -511,6 +513,12 @@ def run_cascade_chapter(
         records,
         progress,
         emulator,
+    )
+    _promote_cerulean_rival_survivor(
+        emulator,
+        chapter_executor,
+        reader,
+        rival_terminal,
     )
 
     _move(chapter_executor, reader, RIVAL_TO_CENTER_DIRECTIONS, "rival recovery")
@@ -647,9 +655,7 @@ def run_cascade_chapter(
             route_24_prefix,
         )
     else:
-        raise CascadeChapterError(
-            "Route 24 bridge recovery changed its protected Potion handoff."
-        )
+        raise CascadeChapterError("Route 24 bridge recovery changed its protected Potion handoff.")
     _move(
         chapter_executor,
         reader,
@@ -1023,9 +1029,7 @@ def _move_verified(
             executor.execute(MacroAction(MacroActionKind.MOVE, direction))
             state = reader.read()
             if state.battle_state:
-                raise CascadeChapterError(
-                    f"Unexpected battle interrupted {label} at step {step}."
-                )
+                raise CascadeChapterError(f"Unexpected battle interrupted {label} at step {step}.")
             if state.first_party_hp == 0:
                 raise CascadeChapterError(f"Squirtle's lineage fainted during {label}.")
             if (
@@ -1091,9 +1095,82 @@ def _heal(
     if cleanup_rival_resources:
         if emulator is None:
             raise CascadeChapterError("Cerulean rival cleanup requires emulator evidence.")
+        _restore_cerulean_rival_roles_after_healing(
+            emulator,
+            executor,
+            reader,
+        )
         _store_cerulean_rival_resources(executor, reader, emulator, timing)
     _move(executor, reader, CENTER_EXIT_DIRECTIONS, "Cerulean Center exit")
     _wait(executor, timing.transition_wait_frames)
+
+
+def _promote_cerulean_rival_survivor(
+    emulator: EmulatorState,
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    terminal: RawGameState,
+) -> RawGameState:
+    """Restore a traversable lead after a reserve-led rival victory."""
+
+    if terminal.first_party_hp is None:
+        raise CascadeChapterError("Cerulean rival victory lacks lead-HP evidence.")
+    if terminal.first_party_hp > 0:
+        return terminal
+    try:
+        promoted = promote_sole_living_party_member(
+            emulator,
+            executor,
+            reader,
+            label="Cerulean rival sole-survivor lead",
+        )
+    except Gen1PartyMenuError as error:
+        raise CascadeChapterError(str(error)) from error
+    hp = promoted.party_hp or ()
+    if (
+        promoted.party_species_ids != (ZUBAT_SPECIES_ID, WARTORTLE_SPECIES_ID)
+        or len(hp) != 2
+        or hp[0] <= 0
+        or hp[1] != 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean rival survivor promotion failed its persistent gate.")
+    return promoted
+
+
+def _restore_cerulean_rival_roles_after_healing(
+    emulator: EmulatorState,
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+) -> RawGameState:
+    """Restore Wartortle as lead after healing a reserve-led victory."""
+
+    try:
+        restored = promote_species_to_lead(
+            emulator,
+            executor,
+            reader,
+            WARTORTLE_SPECIES_ID,
+            label="Cerulean rival restored battle lead",
+        )
+    except Gen1PartyMenuError as error:
+        raise CascadeChapterError(str(error)) from error
+    hp = restored.party_hp or ()
+    max_hp = restored.party_max_hp or ()
+    status = restored.party_status or ()
+    if (
+        restored.map_id != MapId.CERULEAN_POKECENTER
+        or (restored.player_x, restored.player_y) != (3, 3)
+        or restored.battle_state != 0
+        or restored.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or len(hp) != 2
+        or hp != max_hp
+        or not all(value > 0 for value in hp)
+        or status != (0, 0)
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean rival role restoration failed its persistent gate.")
+    return restored
 
 
 def _withdraw_cerulean_rival_potion(
@@ -2012,8 +2089,7 @@ def _purchase_cerulean_supplies(
         <= CERULEAN_RIVAL_MAX_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 1
-        or _money(emulator)
-        != starting_money + rare_candy_sale_proceeds - supply_cost
+        or _money(emulator) != starting_money + rare_candy_sale_proceeds - supply_cost
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
@@ -2068,8 +2144,7 @@ def _sell_cerulean_funding_rare_candy(
         or type(required_cost) is not int  # noqa: E721
         or required_cost < CERULEAN_INITIAL_SUPPLY_COST
         or money_before >= required_cost
-        or money_before + CERULEAN_RARE_CANDY_SALE_PROCEEDS
-        < required_cost
+        or money_before + CERULEAN_RARE_CANDY_SALE_PROCEEDS < required_cost
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError("Cerulean Rare Candy funding sale has an invalid starting gate.")
@@ -2186,9 +2261,7 @@ def _approach_cerulean_mart_clerk(
         or faced.battle_state != 0
         or not reader.read_input_readiness().ready
     ):
-        raise CascadeChapterError(
-            "Cerulean Mart clerk facing pulse left its interaction tile."
-        )
+        raise CascadeChapterError("Cerulean Mart clerk facing pulse left its interaction tile.")
     return faced
 
 
@@ -2204,11 +2277,7 @@ def _settle_mart_clerk_northbound_stance(
         position = (before.player_x, before.player_y)
         if position == (3, 5):
             return before
-        if (
-            before.map_id != MapId.CERULEAN_MART
-            or before.battle_state != 0
-            or position != (3, 6)
-        ):
+        if before.map_id != MapId.CERULEAN_MART or before.battle_state != 0 or position != (3, 6):
             raise CascadeChapterError(
                 "Cerulean Mart clerk northbound wait left its safe tile: "
                 f"position={(before.map_id, before.player_x, before.player_y)!r}."
@@ -2373,9 +2442,7 @@ def _purchase_cerulean_awakening_topup(
         purchase_quantity=potion_topup,
         expected_quantity=CERULEAN_GYM_POTION_RESERVE,
     )
-    antidote_topup = _cerulean_antidote_topup_quantity(
-        _bag_quantity(emulator, ItemId.ANTIDOTE)
-    )
+    antidote_topup = _cerulean_antidote_topup_quantity(_bag_quantity(emulator, ItemId.ANTIDOTE))
     if antidote_topup:
         buy_topup(
             shop_index=3,
@@ -2431,10 +2498,14 @@ def _return_from_cerulean_repeat_clerk(
     for direction, expected in zip(("down", "down"), expected_positions, strict=True):
         _move(executor, reader, (direction,), "Cerulean Mart repeat-clerk return")
         state = reader.read()
-        if state.map_id != MapId.CERULEAN_MART or (
-            state.player_x,
-            state.player_y,
-        ) != expected:
+        if (
+            state.map_id != MapId.CERULEAN_MART
+            or (
+                state.player_x,
+                state.player_y,
+            )
+            != expected
+        ):
             raise CascadeChapterError(
                 "Cerulean Mart return missed its verified south corridor: "
                 f"expected={expected}, actual={(state.map_id, state.player_x, state.player_y)!r}."
@@ -2676,8 +2747,7 @@ def _choose_preferred_usable_move_slot(
             moves[index]
             and (pp[index] & 0x3F) > 0
             and not (
-                state.player_disabled_move_slot == slot
-                and (state.player_disable_turns or 0) > 0
+                state.player_disabled_move_slot == slot and (state.player_disable_turns or 0) > 0
             )
         ):
             return slot
@@ -2688,10 +2758,7 @@ def _choose_route_24_long_team_move_slot(state: RawGameState) -> int:
     """Prefer the accurate finisher once the last opponent is nearly down."""
 
     preferred_slot = (
-        4
-        if state.enemy_hp is not None
-        and 0 < state.enemy_hp <= ROUTE_24_ACCURATE_FINISH_HP
-        else 3
+        4 if state.enemy_hp is not None and 0 < state.enemy_hp <= ROUTE_24_ACCURATE_FINISH_HP else 3
     )
     return _choose_preferred_usable_move_slot(state, preferred_slot=preferred_slot)
 
@@ -2746,9 +2813,7 @@ def _run_route_24_usable_move_battle(
     label = f"Route 24 trainer {trainer_index}"
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
     if starting_quantity != ROUTE_24_RECOVERY_POTION_RESERVE:
-        raise CascadeChapterError(
-            "Route 24 long-team recovery lacks its shared Potion reserve."
-        )
+        raise CascadeChapterError("Route 24 long-team recovery lacks its shared Potion reserve.")
     intent = BattleIntent(
         objective_id="help_bill",
         battle_plan_id=f"unscheduled-route24-trainer-{trainer_index}",
@@ -2764,8 +2829,7 @@ def _run_route_24_usable_move_battle(
         if (
             state.first_party_hp is not None
             and 0 < state.first_party_hp <= ROUTE_24_LONG_TEAM_RECOVERY_HP
-            and _bag_quantity(emulator, ItemId.POTION)
-            > ROUTE_25_RECOVERY_POTION_RESERVE
+            and _bag_quantity(emulator, ItemId.POTION) > ROUTE_25_RECOVERY_POTION_RESERVE
         ):
             raise _PauseForRoute24SharedPotion
         return _choose_route_24_long_team_move_slot(state)
@@ -2797,10 +2861,8 @@ def _run_route_24_usable_move_battle(
                 ) from error
         else:
             if (
-                _bag_quantity(emulator, ItemId.POTION)
-                != starting_quantity - recoveries
-                or _bag_quantity(emulator, ItemId.POTION)
-                < ROUTE_25_RECOVERY_POTION_RESERVE
+                _bag_quantity(emulator, ItemId.POTION) != starting_quantity - recoveries
+                or _bag_quantity(emulator, ItemId.POTION) < ROUTE_25_RECOVERY_POTION_RESERVE
             ):
                 raise CascadeChapterError(
                     "Route 24 long-team battle changed its protected Potion handoff."
@@ -2831,12 +2893,12 @@ def _run_route_24_accuracy_battle_with_potion(
     """
 
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if not ROUTE_25_RECOVERY_POTION_RESERVE <= starting_quantity <= (
-        ROUTE_24_RECOVERY_POTION_RESERVE
+    if (
+        not ROUTE_25_RECOVERY_POTION_RESERVE
+        <= starting_quantity
+        <= (ROUTE_24_RECOVERY_POTION_RESERVE)
     ):
-        raise CascadeChapterError(
-            "Route 24 accuracy recovery lacks its shared Potion handoff."
-        )
+        raise CascadeChapterError("Route 24 accuracy recovery lacks its shared Potion handoff.")
     try:
         _select_battle_move(
             executor,
@@ -3122,21 +3184,19 @@ def _run_cerulean_rival_with_potion(
         battle_plan_id=CERULEAN_RIVAL_BATTLE_PLAN_ID,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
         recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
-        switch_capabilities=frozenset(
-            {BattleSwitchCapability.RESET_STAT_STAGES}
-        ),
+        switch_capabilities=frozenset({BattleSwitchCapability.RESET_STAT_STAGES}),
     )
     accuracy_reset_complete = False
     forced_switches = 0
+
     def guarded_policy(raw: RawGameState) -> int:
         if raw.active_party_index not in {None, 0}:
             return _cerulean_rival_reserve_move_slot(raw)
-        if (
-            _bag_quantity(emulator, ItemId.POTION) > ROUTE_24_RECOVERY_POTION_RESERVE
-            and _should_use_cerulean_rival_potion(raw)
-        ):
+        if _bag_quantity(
+            emulator, ItemId.POTION
+        ) > ROUTE_24_RECOVERY_POTION_RESERVE and _should_use_cerulean_rival_potion(raw):
             raise _PauseForCeruleanRivalPotion
-        if raw.enemy_species_id == ABRA_SPECIES_ID and not accuracy_reset_complete:
+        if not accuracy_reset_complete and _should_reset_cerulean_rival_accuracy(raw):
             raise _PauseForCeruleanRivalAccuracyReset
         return choose_cerulean_rival_move_slot(raw)
 
@@ -3154,9 +3214,10 @@ def _run_cerulean_rival_with_potion(
             )
         except BattleRuntimeError as error:
             learned_switch = learned_switch_party_index(error.__cause__)
-            if isinstance(
-                error.__cause__, _PauseForCeruleanRivalAccuracyReset
-            ) or learned_switch == 1:
+            if (
+                isinstance(error.__cause__, _PauseForCeruleanRivalAccuracyReset)
+                or learned_switch == 1
+            ):
                 _reset_cerulean_rival_accuracy(reader, executor, emulator, timing)
                 accuracy_reset_complete = True
                 continue
@@ -3164,9 +3225,7 @@ def _run_cerulean_rival_with_potion(
                 raise CascadeChapterError(
                     "Cerulean rival learned accuracy reset selected an invalid helper."
                 ) from error
-            if not recovery_request_matches(
-                error.__cause__, _PauseForCeruleanRivalPotion
-            ):
+            if not recovery_request_matches(error.__cause__, _PauseForCeruleanRivalPotion):
                 raw = reader.read()
                 party_hp = _rival_party_hp(emulator)
                 if (
@@ -3203,6 +3262,19 @@ def _cerulean_rival_reserve_move_slot(raw: RawGameState) -> int:
         if move and pp & 0x3F and raw.player_disabled_move_slot != slot:
             return slot
     raise CascadeChapterError("Cerulean rival reserve has no legal attack.")
+
+
+def _should_reset_cerulean_rival_accuracy(raw: RawGameState) -> bool:
+    """Reset severe Pidgeotto drops early; retain the safe Abra reset fallback."""
+
+    if raw.enemy_species_id == ABRA_SPECIES_ID:
+        return True
+    if raw.enemy_species_id != PIDGEOTTO_SPECIES_ID:
+        return False
+    stage = raw.player_accuracy_stage
+    if type(stage) is not int or not 1 <= stage <= 7:  # noqa: E721
+        raise ValueError("Cerulean rival accuracy reset lacks a valid live stage.")
+    return stage <= CERULEAN_RIVAL_ACCURACY_RESET_STAGE
 
 
 def _settle_cerulean_rival_forced_switch(
@@ -3268,7 +3340,7 @@ def _reset_cerulean_rival_accuracy(
     emulator: EmulatorState,
     timing: CascadeTiming,
 ) -> None:
-    """Switch out and back during Abra to clear Pidgeotto's accuracy drops."""
+    """Switch out and back once, proving the bounded opponent-specific cost."""
 
     before = reader.read()
     before_menu = reader.read_battle_menu_state(before)
@@ -3277,7 +3349,7 @@ def _reset_cerulean_rival_accuracy(
     before_enemy_hp = before.enemy_hp
     if (
         before.battle_state != 2
-        or before.enemy_species_id != ABRA_SPECIES_ID
+        or before.enemy_species_id not in {ABRA_SPECIES_ID, PIDGEOTTO_SPECIES_ID}
         or before_menu.phase is not BattleMenuPhase.MAIN
         or before.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
         or emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 0
@@ -3287,6 +3359,7 @@ def _reset_cerulean_rival_accuracy(
         or not 1 <= before.player_accuracy_stage <= 7
     ):
         raise CascadeChapterError("Cerulean rival accuracy reset has an invalid starting gate.")
+    opponent = before.enemy_species_id
 
     _switch_cerulean_rival_party_slot(
         reader,
@@ -3296,12 +3369,29 @@ def _reset_cerulean_rival_accuracy(
         target_index=1,
     )
     helper = reader.read()
+    helper_party_hp = _rival_party_hp(emulator)
+    helper_accuracy_safe = (
+        helper.player_accuracy_stage == 7
+        if opponent == ABRA_SPECIES_ID
+        else (
+            type(helper.player_accuracy_stage) is int  # noqa: E721
+            and CERULEAN_RIVAL_POST_SWITCH_MIN_ACCURACY_STAGE <= helper.player_accuracy_stage <= 7
+        )
+    )
+    helper_hp_safe = (
+        helper_party_hp == before_party_hp
+        if opponent == ABRA_SPECIES_ID
+        else (
+            helper_party_hp[0] == before_party_hp[0]
+            and 0 < helper_party_hp[1] <= before_party_hp[1]
+        )
+    )
     if (
         emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 1
-        or helper.player_accuracy_stage != 7
-        or helper.enemy_species_id != ABRA_SPECIES_ID
+        or not helper_accuracy_safe
+        or helper.enemy_species_id != opponent
         or helper.enemy_hp != before_enemy_hp
-        or _rival_party_hp(emulator) != before_party_hp
+        or not helper_hp_safe
         or helper.first_party_pp != before_pp
     ):
         raise CascadeChapterError("Cerulean rival helper switch changed protected battle state.")
@@ -3314,12 +3404,29 @@ def _reset_cerulean_rival_accuracy(
         target_index=0,
     )
     returned = reader.read()
+    returned_party_hp = _rival_party_hp(emulator)
+    returned_accuracy_safe = (
+        returned.player_accuracy_stage == 7
+        if opponent == ABRA_SPECIES_ID
+        else (
+            type(returned.player_accuracy_stage) is int  # noqa: E721
+            and CERULEAN_RIVAL_POST_SWITCH_MIN_ACCURACY_STAGE <= returned.player_accuracy_stage <= 7
+        )
+    )
+    returned_hp_safe = (
+        returned_party_hp == before_party_hp
+        if opponent == ABRA_SPECIES_ID
+        else (
+            0 < returned_party_hp[0] <= before_party_hp[0]
+            and returned_party_hp[1] == helper_party_hp[1]
+        )
+    )
     if (
         emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 0
-        or returned.player_accuracy_stage != 7
-        or returned.enemy_species_id != ABRA_SPECIES_ID
+        or not returned_accuracy_safe
+        or returned.enemy_species_id != opponent
         or returned.enemy_hp != before_enemy_hp
-        or _rival_party_hp(emulator) != before_party_hp
+        or not returned_hp_safe
         or returned.first_party_pp != before_pp
     ):
         raise CascadeChapterError("Cerulean rival accuracy reset changed protected battle state.")
@@ -3335,10 +3442,11 @@ def _switch_cerulean_rival_party_slot(
 ) -> None:
     raw = reader.read()
     menu = reader.read_battle_menu_state(raw)
+    opponent = raw.enemy_species_id
     if (
         target_index not in {0, 1}
         or raw.battle_state != 2
-        or raw.enemy_species_id != ABRA_SPECIES_ID
+        or opponent not in {ABRA_SPECIES_ID, PIDGEOTTO_SPECIES_ID}
         or menu.phase is not BattleMenuPhase.MAIN
     ):
         raise CascadeChapterError("Cerulean rival party switch lacks a stable MAIN-menu gate.")
@@ -3373,7 +3481,7 @@ def _switch_cerulean_rival_party_slot(
         settled_menu = reader.read_battle_menu_state(settled)
         if (
             settled.battle_state == 2
-            and settled.enemy_species_id == ABRA_SPECIES_ID
+            and settled.enemy_species_id == opponent
             and settled_menu.phase is BattleMenuPhase.MAIN
             and emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index
         ):
@@ -3520,9 +3628,7 @@ def _use_battle_recovery_item(
                 f"{label} recovery lost the active living battle before returning to MAIN."
             )
         executor.execute(MacroAction(MacroActionKind.CANCEL))
-    raise CascadeChapterError(
-        f"{label} missed its bounded heal, quantity, or MAIN-menu proof."
-    )
+    raise CascadeChapterError(f"{label} missed its bounded heal, quantity, or MAIN-menu proof.")
 
 
 def _select_bag_item(

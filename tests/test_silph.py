@@ -7,7 +7,7 @@ import pytest
 import pokemon_red_completion.silph as silph_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
-from pokemon_red_completion.battle_runtime import BattleResourcePolicy
+from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
     BATTLE_ITEM_SETTLE_PULSES,
@@ -318,14 +318,20 @@ def test_celadon_ice_beam_capacity_reserves_supply_and_roof_slots() -> None:
         full,
         buy_silph_battle_items=True,
     ) == (ItemId.SS_TICKET, ItemId.LIFT_KEY)
-    assert _celadon_ice_beam_capacity_deposit_items(
-        {item: 1 for item in range(18)},
-        buy_silph_battle_items=True,
-    ) == ()
-    assert _celadon_ice_beam_capacity_deposit_items(
-        {item: 1 for item in range(20)},
-        buy_silph_battle_items=True,
-    ) is None
+    assert (
+        _celadon_ice_beam_capacity_deposit_items(
+            {item: 1 for item in range(18)},
+            buy_silph_battle_items=True,
+        )
+        == ()
+    )
+    assert (
+        _celadon_ice_beam_capacity_deposit_items(
+            {item: 1 for item in range(20)},
+            buy_silph_battle_items=True,
+        )
+        is None
+    )
 
 
 def test_x_accuracy_resource_report_proves_one_item_and_no_party_change() -> None:
@@ -369,9 +375,9 @@ def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:
         "used_by_rival_policy": 0,
         "x_special_used_by_rival_policy": 1,
         "x_special_used_by_giovanni_policy": 1,
-            "remaining": 7,
-            "max_repel_carried_in": 0,
-            "max_repel_bought": 0,
+        "remaining": 7,
+        "max_repel_carried_in": 0,
+        "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
 
@@ -415,9 +421,7 @@ def test_silph_report_accepts_qualified_post_surf_strength_lineage() -> None:
     )
 
     assert POST_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM in silph_module.SILPH_ICE_BEAM_LINEAGES
-    assert silph_module.SILPH_ICE_BEAM_LINEAGES[
-        POST_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM
-    ] == (
+    assert silph_module.SILPH_ICE_BEAM_LINEAGES[POST_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM] == (
         POST_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
         POST_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
     )
@@ -439,9 +443,7 @@ def test_silph_report_accepts_qualified_early_pre_surf_lineage() -> None:
         expected_upgraded_pp=EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     )
 
-    assert silph_module.SILPH_ICE_BEAM_LINEAGES[
-        EARLY_PRE_SURF_MOVES_BEFORE_ICE_BEAM
-    ] == (
+    assert silph_module.SILPH_ICE_BEAM_LINEAGES[EARLY_PRE_SURF_MOVES_BEFORE_ICE_BEAM] == (
         EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
         EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     )
@@ -449,9 +451,7 @@ def test_silph_report_accepts_qualified_early_pre_surf_lineage() -> None:
 
 
 def test_silph_accepts_the_post_erika_no_strength_lineage() -> None:
-    assert silph_module.SILPH_ICE_BEAM_LINEAGES[
-        POST_SURF_NO_STRENGTH_MOVES_BEFORE_ICE_BEAM
-    ] == (
+    assert silph_module.SILPH_ICE_BEAM_LINEAGES[POST_SURF_NO_STRENGTH_MOVES_BEFORE_ICE_BEAM] == (
         POST_SURF_NO_STRENGTH_MOVES_AFTER_ICE_BEAM,
         POST_SURF_NO_STRENGTH_PP_AFTER_ICE_BEAM,
     )
@@ -546,11 +546,155 @@ def test_battle_healing_can_target_a_nonlead_party_member() -> None:
     )
 
 
+def test_silph_hyper_potion_forwards_the_active_party_target(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: list[tuple[ItemId, int]] = []
+
+    def heal(
+        _reader: object,
+        _actions: object,
+        _emulator: object,
+        _timing: object,
+        item: ItemId,
+        *,
+        party_index: int = 0,
+    ) -> bool:
+        observed.append((item, party_index))
+        return False
+
+    monkeypatch.setattr(silph_module, "_battle_healing_item", heal)
+
+    assert not silph_module._battle_hyper_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        DEFAULT_SILPH_TIMING,
+        party_index=4,
+    )
+    assert observed == [(ItemId.HYPER_POTION, 4)]
+
+
 def test_silph_rival_exits_lead_only_recovery_after_target_ko() -> None:
     source = getsource(_run_rival_with_potions)
 
     assert "except _HealingTargetFaintedBeforeItem:" in source
-    assert "recovery = rival_recovery_limit" in source
+    assert "recovery = rival_recovery_limit" not in source
+
+
+def test_silph_rival_recovery_requires_damage_even_for_a_low_max_hp_reserve() -> None:
+    full = RawGameState(
+        game_started=True,
+        map_id=MapId.SILPH_CO_7F,
+        player_x=3,
+        player_y=2,
+        party_count=5,
+        battle_state=2,
+        active_party_index=3,
+        active_party_hp=57,
+        active_party_max_hp=57,
+    )
+
+    assert not silph_module._silph_rival_needs_recovery(full)
+    assert silph_module._silph_rival_needs_recovery(replace(full, active_party_hp=40))
+    assert not silph_module._silph_rival_needs_recovery(replace(full, active_party_hp=0))
+    with pytest.raises(SilphChapterError, match="lacks active maximum HP"):
+        silph_module._silph_rival_needs_recovery(replace(full, active_party_max_hp=None))
+
+
+def test_silph_rival_recovery_target_never_guesses_slot_one() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.SILPH_CO_7F,
+        player_x=3,
+        player_y=2,
+        party_count=2,
+        battle_state=2,
+        party_hp=(80, 35),
+        active_party_index=1,
+        active_party_hp=35,
+        active_party_max_hp=57,
+    )
+
+    assert silph_module._silph_rival_recovery_target(raw, (80, 35)) == 1
+    with pytest.raises(SilphChapterError, match="lacks an active party index"):
+        silph_module._silph_rival_recovery_target(
+            replace(raw, active_party_index=None),
+            (80, 35),
+        )
+
+
+def test_silph_rival_keeps_recovery_budget_after_lead_ko(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    lead_ko = RawGameState(
+        game_started=True,
+        map_id=MapId.SILPH_CO_7F,
+        player_x=3,
+        player_y=2,
+        party_count=2,
+        battle_state=2,
+        party_hp=(0, 35),
+        active_party_index=0,
+        active_party_hp=0,
+        active_party_max_hp=120,
+    )
+    reserve = replace(
+        lead_ko,
+        active_party_index=1,
+        active_party_hp=35,
+        active_party_max_hp=57,
+    )
+
+    class Reader:
+        state = lead_ko
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    bag = {ItemId.HYPER_POTION: 2}
+    outcomes: list[object] = [BattleRuntimeError("lead fainted"), False, True]
+
+    def run_until(*_args: object, **_kwargs: object) -> bool:
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return bool(outcome)
+
+    def settle(*_args: object, **_kwargs: object) -> bool:
+        reader.state = reserve
+        return False
+
+    healed_targets: list[int] = []
+
+    def heal(*_args: object, party_index: int = 0, **_kwargs: object) -> bool:
+        healed_targets.append(party_index)
+        bag[ItemId.HYPER_POTION] -= 1
+        return False
+
+    monkeypatch.setattr(silph_module, "_bag", lambda _emulator: bag)
+    monkeypatch.setattr(silph_module, "_party_hp", lambda _emulator: reader.state.party_hp)
+    monkeypatch.setattr(silph_module, "_battle_x_special", lambda *_args: None)
+    monkeypatch.setattr(silph_module, "_run_until", run_until)
+    monkeypatch.setattr(silph_module, "_settle_silph_rival_forced_switch", settle)
+    monkeypatch.setattr(silph_module, "_battle_hyper_potion", heal)
+    monkeypatch.setattr(
+        silph_module,
+        "_run_battle",
+        lambda *_args, **_kwargs: pytest.fail("recovery budget was discarded after the KO"),
+    )
+
+    _run_rival_with_potions(
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        DEFAULT_SILPH_TIMING,
+    )
+
+    assert healed_targets == [1]
+    assert bag[ItemId.HYPER_POTION] == 1
+    assert outcomes == []
 
 
 def test_silph_rival_reentry_preserves_the_exact_bounded_recovery_intent(
@@ -671,9 +815,7 @@ def test_silph_capacity_accepts_the_early_erika_completed_route_items() -> None:
     }
 
     assert len(nineteen_slots) == 19
-    assert _silph_capacity_deposit_items(nineteen_slots) == tuple(
-        completed_route_items
-    )
+    assert _silph_capacity_deposit_items(nineteen_slots) == tuple(completed_route_items)
     assert _silph_capacity_ready(nineteen_slots)
 
 
@@ -936,6 +1078,55 @@ def test_mart_2f_ascent_yield_retries_when_customer_blocks_return() -> None:
     assert executor.return_attempts == 2
 
 
+def test_ice_beam_roof_approach_yields_to_mart_5f_customer() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_5F,
+        player_x=15,
+        player_y=2,
+    )
+
+    class Reader:
+        state = blocked
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    class Executor:
+        yielded = False
+
+        def __init__(self, reader: Reader) -> None:
+            self.reader = reader
+
+        def execute(self, action: object) -> None:
+            assert isinstance(action, MacroAction)
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            coordinate = (self.reader.state.player_x, self.reader.state.player_y)
+            if action.value == "down" and coordinate == (15, 2):
+                self.reader.state = replace(self.reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and coordinate == (15, 3):
+                self.reader.state = replace(self.reader.state, player_y=2)
+            elif action.value == "left" and coordinate == (15, 2) and self.yielded:
+                self.reader.state = replace(self.reader.state, player_x=14)
+
+    reader = Reader()
+    final = _move_verified(
+        Executor(reader),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("left",),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "Celadon Ice Beam roof approach",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (
+        MapId.CELADON_MART_5F,
+        14,
+        2,
+    )
+
+
 def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
     blocked = replace(
         _terminal(),
@@ -1072,8 +1263,7 @@ def test_silph_clerk_approach_uses_verified_steps() -> None:
     source = getsource(run_silph_chapter)
 
     assert (
-        '_move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")'
-        in source
+        '_move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")' in source
     )
 
 
@@ -1322,9 +1512,9 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
         "used_by_rival_policy": 0,
         "x_special_used_by_rival_policy": 1,
         "x_special_used_by_giovanni_policy": 1,
-            "remaining": 7,
-            "max_repel_carried_in": 0,
-            "max_repel_bought": 0,
+        "remaining": 7,
+        "max_repel_carried_in": 0,
+        "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
     assert THIRD_FLOOR_GUARD == (

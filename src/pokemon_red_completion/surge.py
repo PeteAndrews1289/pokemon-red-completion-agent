@@ -193,8 +193,19 @@ SHIP_2F_RETURN = _directions("D" * 6 + "L" * 2 + "D" * 2 + "L" * 31 + "UL" + "U"
 # the preceding rival battle; the parallel lane reaches the same x=26 turn
 # without racing that moving object.
 SHIP_1F_RETURN = _directions("D" + "R" * 24 + "U" * 3 + "R" + "U" * 4)
+# The failure state left the player at (12, 7) after LEFT could not enter the
+# moving NPC's (11, 7) destination.  Turn upward from that still-proven player
+# tile, use the cartridge-walkable parallel x=12 lane, and merge only at the
+# door row.  This keeps the same route length and endpoint without racing it.
 CITY_TO_CENTER = _directions(
-    "RUURRRRRURRRRRR" + "U" * 12 + "L" * 12 + "U" * 5 + "LLUU" + "L" * 5 + "U" * 5
+    "RUURRRRRURRRRRR"
+    + "U" * 12
+    + "L" * 12
+    + "U" * 5
+    + "LLUU"
+    + "L" * 4
+    + "U" * 3
+    + "LUU"
 )
 CENTER_TO_MART = _directions("DDDD" + "R" * 5 + "DDRR" + "D" * 5 + "R" * 5 + "UU")
 VIRIDIAN_TO_MART_DIRECTIONS = _directions("UUUUULUULUUUUUUUURRRRRRRRRRU")
@@ -1525,6 +1536,20 @@ def _prepare_diglett_capture_target(
         or (encounter.enemy_hp or 0) <= 0
     ):
         raise SurgeChapterError("Diglett weakening received an invalid encounter.")
+    helper_hp = (
+        encounter.party_hp[DIGLETT_CAPTURE_HELPER_PARTY_INDEX]
+        if encounter.party_hp is not None
+        and len(encounter.party_hp) > DIGLETT_CAPTURE_HELPER_PARTY_INDEX
+        else None
+    )
+    if helper_hp is not None and helper_hp <= 0:
+        # The preceding Spearow lesson can legitimately end with the helper
+        # fainted.  Diglett's cartridge catch rate and the separately reserved
+        # fifteen-ball budget make the intact full-health encounter the only
+        # coherent bounded line; it remains probabilistic and may exhaust.
+        if (encounter.battler_hp or 0) <= 0:
+            raise SurgeChapterError("Diglett full-health capture lacks a living catcher.")
+        return encounter
     weakened = _weaken_wild_capture_once(
         emulator,
         executor,

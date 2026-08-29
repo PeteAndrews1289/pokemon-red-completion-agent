@@ -3,6 +3,39 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## World-variance repair — Claude/Antigravity review and Codex adjudication 2026-08-28
+
+Both reviewers inspected the working-tree diff from base `05ae3cce` read-only. Neither opened a
+ROM, private ledger, sealed input, or model; neither executed gameplay, fit, published, or granted
+authority. Antigravity's architecture/transfer audit returned publication GO with P0/P1/P2 all
+zero after attempting to falsify Silph terminal propagation, Diglett living-catcher enforcement,
+two-layer field-menu closure, and finite forced-switch recovery. It explicitly classified the work
+as teacher engineering, not model training or Crystal transfer.
+
+Claude's causal/statistical audit returned conditional GO with no P0 and two P1 objections. Codex
+accepts the first: the prose credited the 3/3 unchanged-source runs with qualifying every rare
+branch. The active product state now says the targeted tests distinguish individual repairs while
+the three runs establish only unchanged-source integration non-regression. The work is explicitly
+bounded teacher maintenance that unblocks the named fresh-root causal curriculum; population yield
+remains unqualified until the new prospective 10/12 gate.
+
+Codex accepts the useful core of Claude's second objection and strengthened the wild forced-switch
+simulation to exercise the real `_forced_party_menu_ready` cursor predicate instead of stubbing it.
+The resulting 113-test repair-focused suite passes. Codex rejects the broader claim that the switch
+and move-selection primitives are merely assumed: `tests/test_battle_recovery.py` directly drives
+the real switch primitive and live cursor predicate, while `tests/test_gen1_route_runtime.py`
+directly distinguishes strongest-usable-move behavior under HP, PP, and Disable mutations.
+Higher-level Erika and Silph tests stub those separately tested primitives to isolate orchestration;
+that is intentional test layering, not a missing trust boundary.
+
+Claude's P2 cautions are retained without code change. Mt. Moon readiness moved into the bounded
+settle helper rather than disappearing; the reserve-led terminal is narrow and the subsequent
+sole-survivor proof authenticates live HP; and the retrospective 3/3 sample cannot estimate yield.
+Verdict: **GO for publication plus exact-main CI; GO only for a newly frozen source-bound 10/12
+teacher-yield gate; NO-GO for population claims, official roots, fitting, model authority, sealed
+Red, Crystal execution, or transfer.** The scoreboard remains **causal train 1/60 · powered fit 0
+· authority 0 · transfer 0**.
+
 ## Post-yield fresh-teacher repair — Claude review and Codex adjudication 2026-08-28
 
 Claude inspected the exact uncommitted diff read-only, made no edits, opened no private diagnostic

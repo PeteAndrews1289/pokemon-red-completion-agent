@@ -3,6 +3,22 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 28 world-variance checkpoint:** Published main `05ae3cce` and CI `33221693432/1`
+> failed the frozen successor gate honestly at **2/5**; the third distinct failure made 10/12
+> impossible, so five assignments are consumed and seven old-source assignments are unusable.
+> Repairs now authenticate live battlers and captures, verify blocked steps, bound poison and
+> accuracy recovery, normalize an exact reserve-led rival victory, and structurally close both
+> Generation-I field-menu layers.
+>
+> One unchanged source bundle `7c2974ab` then reached late-Cinnabar `mansion_returned` on initial
+> waits 197, 58, and 123: **3/3 · 125,932 actions · 22,345,994 frames**. The
+> [V3 qualification](evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
+> records **5,718 tests · Mypy 309 · Ruff · registries · docs · public artifacts · diff** and zero
+> learner, root, fit, authority, or transfer effects. Publish and require exact-main green CI;
+> then freeze a new twelve-world one-use plan and require at least 10/12 with no repeated stage or
+> leak. Only a pass opens train-only roots and recensus. **Causal train 1/60 · powered fit 0 ·
+> authority 0 · transfer 0.**
+
 > **August 28 exact-capacity checkpoint:** Published main `cb18a8b5` passed CI `33140010028/1`.
 > The [action-free census](evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json)
 > authenticated 67 independent lineages and 414 compatibility edges, then measured **train 54/90,

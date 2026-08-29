@@ -45,6 +45,13 @@ class _SwitchSimulation:
     def read_u8(self, address: int) -> int:
         if address == RamAddress.CURRENT_MENU_ITEM:
             return self.cursor
+        cursor_address = int(RamAddress.TILE_MAP)
+        if address == RamAddress.MENU_CURSOR_LOCATION:
+            return cursor_address & 0xFF if self.stage == "party" else 0
+        if address == int(RamAddress.MENU_CURSOR_LOCATION) + 1:
+            return cursor_address >> 8 if self.stage == "party" else 0
+        if address == cursor_address:
+            return 0xED if self.stage == "party" else 0
         raise AssertionError(f"unexpected memory read {address:#x}")
 
     def execute(self, action: MacroAction) -> None:
@@ -197,6 +204,11 @@ def test_forced_switch_ignores_stale_cursor_until_delayed_party_menu(monkeypatch
 
     simulation.execute = execute  # type: ignore[method-assign]
     monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (0, 30, 20))
+    monkeypatch.setattr(
+        battle_recovery,
+        "_forced_party_menu_ready",
+        lambda _emulator, _party_size: simulation.stage == "party",
+    )
 
     battle_recovery.switch_active_battler(
         simulation,
@@ -209,3 +221,77 @@ def test_forced_switch_ignores_stale_cursor_until_delayed_party_menu(monkeypatch
     assert confirmations == 3
     assert simulation.active == 1
     assert simulation.stage == "main"
+
+
+def test_wild_forced_switch_never_steers_a_transient_run_command(monkeypatch) -> None:
+    simulation = _SwitchSimulation()
+    simulation.stage = "transient_main"
+    simulation.command = 3
+    simulation.cursor = 1
+    battle_state = 1
+    transient_waits = 0
+
+    def read() -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=MapId.DIGLETTS_CAVE,
+            player_x=37,
+            player_y=30,
+            party_count=2,
+            battle_state=battle_state,
+            party_species_ids=(0xB3, 0x05),
+            party_hp=(0, 16),
+            active_party_index=0 if simulation.active == 0 else 1,
+            active_party_hp=0 if simulation.active == 0 else 16,
+            enemy_species_id=0x3B,
+            enemy_hp=25,
+        )
+
+    simulation.read = read  # type: ignore[method-assign]
+
+    def menu(_raw: RawGameState) -> BattleMenuState:
+        if simulation.stage in {"transient_main", "main"}:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=simulation.command)
+        return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    simulation.read_battle_menu_state = menu  # type: ignore[method-assign]
+
+    def execute(action: MacroAction) -> None:
+        nonlocal battle_state, transient_waits
+        simulation.actions.append(action)
+        if simulation.stage == "transient_main":
+            if action.kind in {MacroActionKind.MOVE, MacroActionKind.CONFIRM}:
+                battle_state = 0
+                return
+            if action.kind is MacroActionKind.WAIT:
+                transient_waits += 1
+                simulation.stage = "party"
+                simulation.cursor = 0
+                return
+        if simulation.stage == "party":
+            if action.kind is MacroActionKind.MOVE and action.value == "down":
+                simulation.cursor = 1
+            elif action.kind is MacroActionKind.CONFIRM and simulation.cursor == 1:
+                simulation.stage = "switching"
+            return
+        if simulation.stage == "switching" and action.kind is MacroActionKind.WAIT:
+            simulation.active = 1
+            simulation.stage = "main"
+            simulation.command = 0
+
+    simulation.execute = execute  # type: ignore[method-assign]
+    monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (0, 16))
+
+    battle_recovery.switch_active_battler(
+        simulation,
+        simulation,
+        simulation,
+        1,
+        expected_battle_state=1,
+        label="Diglett capture",
+        wait_frames=120,
+    )
+
+    assert battle_state == 1
+    assert transient_waits == 1
+    assert simulation.active == 1

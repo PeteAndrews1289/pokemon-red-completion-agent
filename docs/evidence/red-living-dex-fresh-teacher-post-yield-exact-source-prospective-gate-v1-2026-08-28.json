@@ -1,0 +1,152 @@
+{
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false
+  },
+  "decision_rule": {
+    "maximum_failures": 2,
+    "minimum_mansion_returned_successes": 10,
+    "planned_worlds": 12,
+    "repeated_deterministic_failure_stage_allowed": false,
+    "retry_after_controller_input": false,
+    "stop_immediately_on_failure_number": 3
+  },
+  "execution": {
+    "claimed_worlds": 5,
+    "failures": 3,
+    "gate_passed": false,
+    "mansion_returned_successes": 2,
+    "no_source_change_during_gate": true,
+    "one_use_per_seed": true,
+    "plan_sha256": "847076c5cb382a088ead2f5be043e0a35d0e4f77f4013b81e2842784526e5e8d",
+    "stopped_as_preregistered": true,
+    "unclaimed_worlds": 7
+  },
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "learner_training_began": false,
+    "official_lineage_created": false,
+    "repair_candidate_reaches_late_cinnabar": true,
+    "successor_train_root_freeze_allowed": false,
+    "teacher_actions_are_model_labels": false
+  },
+  "next_gate": {
+    "decision": "Repair and test the three distinct observed robustness gaps, publish and qualify the changed source, then freeze a new prospective one-use denominator over untouched seeds.",
+    "failure_clusters": [
+      "Silph rival can exhaust every living party member while five Hyper Potions remain.",
+      "The post-ship Vermilion Center route can leave the player at coordinate 12,7 when a moving NPC blocks the attempted left step into 11,7.",
+      "Diglett weakening can attempt to select a helper that already fainted instead of taking the bounded full-health capture line."
+    ],
+    "old_claimed_seeds_reusable": false,
+    "unclaimed_seeds_remain_unconsumed": true
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "recorded_on": "2026-08-28",
+  "runs": [
+    {
+      "actions": 39125,
+      "failure_exception": "BattleRuntimeError",
+      "failure_message_sha256": "9fa994898681f5153f6b1dec51c8311b0df3f59dcfa35ba01fd026cb96d01ffa",
+      "frames": 5624368,
+      "harness_seed": 9900061,
+      "last_checkpoint_id": "rival_ready",
+      "private_ledger_sha256": "6362cd63e50e23c460a21b9c5fb359d0e8c5adbe6556ae25a20f1b9c327bf555",
+      "status": "failed"
+    },
+    {
+      "actions": 34760,
+      "checkpoint_completed": 275,
+      "checkpoint_id": "mansion_returned",
+      "checkpoint_total": 312,
+      "frames": 6951733,
+      "harness_seed": 9900062,
+      "initial_wait_frames": 38,
+      "private_ledger_sha256": "808f021fc93b52e99a70beb289edd11778e484473b380e72b397a0fd1eef264f",
+      "status": "mansion_returned"
+    },
+    {
+      "actions": 10259,
+      "failure_exception": "QualifiedPlayError",
+      "failure_message_sha256": "8952d1af7dab0ae5ddc186cbb5c0a8ef8462fc9e0c67694b38d2a44d4c71abf8",
+      "frames": 1069560,
+      "harness_seed": 9900063,
+      "last_checkpoint_id": "hm01_ready",
+      "private_ledger_sha256": "db9c4481bfb8f1b38afd825e959385c53f274c6ff3642a193c17af66869cbe7a",
+      "status": "failed"
+    },
+    {
+      "actions": 42335,
+      "checkpoint_completed": 275,
+      "checkpoint_id": "mansion_returned",
+      "checkpoint_total": 312,
+      "frames": 7312053,
+      "harness_seed": 9900064,
+      "initial_wait_frames": 102,
+      "private_ledger_sha256": "91915db96f9ab5e2609952f8090506a9ee4c7571b19227bcfeada0d0dcffd8a7",
+      "status": "mansion_returned"
+    },
+    {
+      "actions": 11256,
+      "failure_exception": "QualifiedPlayError",
+      "failure_message_sha256": "43be3a4ef7d2949516777946f45cc0a3896ff779d73a42c357aac54c61ac5047",
+      "frames": 1214909,
+      "harness_seed": 9900065,
+      "last_checkpoint_id": "spearow_captured",
+      "private_ledger_sha256": "3a38de961c17cd3dcb25eac503b3640b492bf7f27b036a6b30c382466cfbaa83",
+      "status": "failed"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-fresh-teacher-post-yield-exact-source-prospective-gate.v1",
+  "source": {
+    "battle_registry_sha256": "fa33b1e3013ef98f44969e22e4023f1d20dd54c0a4875a31dc3c2643a676172c",
+    "battle_teacher_execution_sha256": "39b8faf3122656aafc3c257b167d018ce9ec46051ea8b9fd424daf8ac4263ef9",
+    "diagnostic_script_sha256": "60712f0e63ede5e0f0863bbe0077702cd511b26142399246777ac6dfc9109c91",
+    "git_commit": "05ae3cce876e268d006a5433d4fe071d9fc6b938",
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 33221693432,
+    "goal_registry_sha256": "cc46bd1067142e7c9be6b96b6d125f1e9d940a4486962460b66ac82835784509",
+    "goal_teacher_execution_sha256": "c315e37373e655d07430a947a16e15c12bb596044e94007d24cca16b48593bd5",
+    "source_bundle_sha256": "a3b18f341c0aa9ba7af12fd2309a5ba1758e408134da5b9737ddb77b1ec0c7a9",
+    "strategic_registry_sha256": "77215b8219ed71fedc90f004642c18dfe93ca97bb9c8e7926b1303f696d202d0",
+    "strategic_teacher_execution_sha256": "e7f8655385cd8689d8775a4aab3ab8d460c22327ce7de939f246d8e5d229ac87"
+  },
+  "status": "failed_after_third_distinct_failure_and_stopped_before_seven_unclaimed_worlds",
+  "totals": {
+    "actions": 137735,
+    "frames": 22172623
+  },
+  "unclaimed_harness_seeds": [
+    9900066,
+    9900067,
+    9900068,
+    9900069,
+    9900070,
+    9900071,
+    9900072
+  ],
+  "unsupported_claims": [
+    "full_game_completion",
+    "living_pokedex_completion",
+    "model_training_began",
+    "official_fresh_root_created",
+    "population_yield_qualified",
+    "successor_train_root_ready",
+    "transfer_to_crystal_demonstrated"
+  ]
+}
