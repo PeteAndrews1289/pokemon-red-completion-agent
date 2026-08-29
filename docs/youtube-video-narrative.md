@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: five lessons, three honest empty desks
+
+Show eight face-down **TRAIN** cards entering the one-shot machine. Turn over the results:
+**ACQUIRE ✓ · EVOLVE ✗ · SETUP EMPTY · EXPLORE ✗ · SETUP EMPTY · RESUPPLY ✓ · SETUP EMPTY ·
+EVOLVE ✗**. Stamp every card **CONSUMED · NO RETRY**. On the five real rows, animate **THREE EQUAL
+CHOICES → ONE RANDOM COMMITMENT → ONE EXECUTION → ONE OBSERVED OUTCOME**. Keep the unplayed arms
+blank.
+
+Put the totals on screen: **5 CAUSAL EXAMPLES · 2 SUCCESS · 3 FAILURE · 3 NO-TARGET SETUP
+TERMINALS · 10,313 ACTIONS · 527,045 FRAMES · ALL 7 KINDS IN MENUS · 4 KINDS SELECTED**. Then
+show the scoreboard moving **1/60 → 6/60**, while **POWERED FIT · AUTHORITY · TRANSFER** stay at
+zero. Cross out **FIT 5 ROWS** and point to **8-EXAMPLE INTEGRATION GATE**.
+
+End with the next rail: **PUBLISH → EXACT CI → UNUSED TRAIN-LINEAGE CENSUS → ATTRITION-AWARE
+SUCCESSOR → 8+ REAL EXAMPLES → FIRST NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED → CRYSTAL →
+CROSS-GAME LIVING POKEDEX**. Keep four unopened development cards visibly sealed.
+
 ## August 29 scene: the key cannot open the exam room
 
 Return to the sealed **8 TRAIN + 4 DEVELOPMENT** box. Add a keypad that accepts **0–7** and flashes

@@ -1,0 +1,349 @@
+{
+  "campaign": {
+    "assignments_consumed": 8,
+    "assignments_planned": 8,
+    "candidate_option_kinds_observed": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ],
+    "causal_behavior_commitments": 5,
+    "causal_train_examples_recorded": 5,
+    "controller_actions": 10313,
+    "development_assignments_opened": 0,
+    "development_assignments_remaining_unopened": 4,
+    "emulator_frames": 527045,
+    "failed_observed_arms": 3,
+    "fit_gate_minimum_examples": 8,
+    "fit_gate_passed": false,
+    "lineages_consumed": 8,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "provider_executions": 5,
+    "selected_option_kind_counts": {
+      "acquire": 1,
+      "evolve": 2,
+      "explore": 1,
+      "resupply": 1
+    },
+    "setup_terminals_without_example": 3,
+    "settled_observed_arms": 5,
+    "successful_observed_arms": 2,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0,
+    "usable_example_lineages": 5
+  },
+  "claim_boundary": {
+    "supported": "Eight frozen train assignments from eight immutable Red episode lineages were each consumed at most once. Five produced randomized, selected-arm-only, independently observed causal examples; three failed during setup before behavior commitment and produced no target. Development stayed unopened.",
+    "unsupported": [
+      "eight_usable_clustered_train_examples",
+      "integration_fit_gate_passed",
+      "powered_model_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "fit_decision": {
+    "decision": "do_not_fit",
+    "reason": "The preregistered integration gate requires at least eight authentic settled selected-arm examples. This schedule yielded five. Fitting now would exercise code but would not satisfy the declared information gate or justify learned authority.",
+    "required_successor": "Freeze a train-only successor from genuinely unused, development-disjoint lineages with enough assignments to add at least three settled examples after expected setup attrition. Preserve random arm commitment, selected-arm-only outcomes, and all existing no-retry and leakage guards."
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after_campaign": 6,
+    "authentic_causal_train_examples_before_campaign": 1,
+    "authority_promotions": 0,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "mission_reorientation": {
+    "authority_delta": "none",
+    "blocker": "The frozen eight-assignment schedule yielded only five usable examples because three setup recipes failed before arm selection. Six authentic causal Red examples now exist in total, below both the eight-example integration gate and the sixty-example powered-fit minimum.",
+    "next_falsifier": "An action-free successor census must prove that genuinely unused train-only lineages can supply enough new short scenarios to reach at least eight settled examples without touching the four frozen development lineages. If capacity exists, freeze a new source-bound successor and consume only its train assignments.",
+    "next_session": "Publish this result, exact-CI qualify it, then audit unused lineage capacity and setup-yield risk. Do not fit five clustered rows, reuse consumed roots, open development, run Crystal, or replay the full game.",
+    "product_alignment": "The campaign created real decision-outcome supervision for acquisition, evolution, exploration, and resupply while honestly exposing setup attrition. The next work remains data collection for a title-neutral living-Dex option-value policy, not Red walkthrough repair."
+  },
+  "privacy": {
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "randomization_seed_fields": 0
+  },
+  "publication": {
+    "consumer_pull_request": 103,
+    "preflight_result_pull_request": 104,
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-29",
+  "rows": [
+    {
+      "behavior": {
+        "candidate_kinds": [
+          "acquire",
+          "develop",
+          "explore"
+        ],
+        "controller_actions": 266,
+        "emulator_frames": 19332,
+        "selected_candidate_index": 0,
+        "selected_kind": "acquire",
+        "selected_probability": 0.3333333333333333
+      },
+      "execution": {
+        "controller_actions_total": 2278,
+        "emulator_frames_total": 114554,
+        "exception_type": null,
+        "status": "returned"
+      },
+      "observation_delta": {
+        "capture_items": -2,
+        "free_storage_slots": -1,
+        "living": 1,
+        "registered": 1,
+        "story": 0
+      },
+      "ordinal": 0,
+      "outcome": {
+        "action_cost": 0.00266,
+        "censor_reason": null,
+        "completion_gain": 0.008333333333333333,
+        "dependency_unlock_gain": 0.0,
+        "frame_cost": 0.0003222,
+        "irreversible_loss": 0.0,
+        "party_cost": 0.004780114722753415,
+        "resource_cost": 0.0625,
+        "status": "settled",
+        "storage_cost": 0.004329004329004329,
+        "verified_success": true
+      },
+      "status": "causal_train_example_recorded"
+    },
+    {
+      "behavior": {
+        "candidate_kinds": [
+          "evolve",
+          "manage_storage",
+          "unlock_access"
+        ],
+        "controller_actions": 16,
+        "emulator_frames": 696,
+        "selected_candidate_index": 0,
+        "selected_kind": "evolve",
+        "selected_probability": 0.3333333333333333
+      },
+      "execution": {
+        "controller_actions_total": 88,
+        "emulator_frames_total": 3672,
+        "exception_type": "RedLivingDexProductionRuntimeError",
+        "status": "raised_exception"
+      },
+      "observation_delta": {
+        "capture_items": 0,
+        "free_storage_slots": 0,
+        "living": 0,
+        "registered": 0,
+        "story": 0
+      },
+      "ordinal": 1,
+      "outcome": {
+        "action_cost": 0.00016,
+        "censor_reason": null,
+        "completion_gain": 0.0,
+        "dependency_unlock_gain": 0.0,
+        "frame_cost": 0.0000116,
+        "irreversible_loss": 0.0,
+        "party_cost": 0.005576208178438624,
+        "resource_cost": 0.0,
+        "status": "settled",
+        "storage_cost": 0.0,
+        "verified_success": false
+      },
+      "status": "causal_train_example_recorded"
+    },
+    {
+      "behavior": null,
+      "execution": {
+        "controller_actions_total": 941,
+        "emulator_frames_total": 48960,
+        "reason_code": "recipe_execution_failed",
+        "retry_allowed": false,
+        "status": "setup_failed"
+      },
+      "observation_delta": null,
+      "ordinal": 2,
+      "outcome": null,
+      "status": "terminal_without_train_example"
+    },
+    {
+      "behavior": {
+        "candidate_kinds": [
+          "acquire",
+          "evolve",
+          "explore"
+        ],
+        "controller_actions": 675,
+        "emulator_frames": 33744,
+        "selected_candidate_index": 2,
+        "selected_kind": "explore",
+        "selected_probability": 0.3333333333333333
+      },
+      "execution": {
+        "controller_actions_total": 2102,
+        "emulator_frames_total": 103260,
+        "exception_type": "RedAreaExecutionError",
+        "status": "raised_exception"
+      },
+      "observation_delta": {
+        "capture_items": 0,
+        "free_storage_slots": 0,
+        "living": 0,
+        "registered": 0,
+        "story": 0
+      },
+      "ordinal": 3,
+      "outcome": {
+        "action_cost": 0.00675,
+        "censor_reason": null,
+        "completion_gain": 0.0,
+        "dependency_unlock_gain": 0.0,
+        "frame_cost": 0.0005624,
+        "irreversible_loss": 0.0,
+        "party_cost": 0.0,
+        "resource_cost": 0.0,
+        "status": "settled",
+        "storage_cost": 0.0,
+        "verified_success": false
+      },
+      "status": "causal_train_example_recorded"
+    },
+    {
+      "behavior": null,
+      "execution": {
+        "controller_actions_total": 158,
+        "emulator_frames_total": 8304,
+        "reason_code": "recipe_execution_failed",
+        "retry_allowed": false,
+        "status": "setup_failed"
+      },
+      "observation_delta": null,
+      "ordinal": 4,
+      "outcome": null,
+      "status": "terminal_without_train_example"
+    },
+    {
+      "behavior": {
+        "candidate_kinds": [
+          "evolve",
+          "resupply",
+          "explore"
+        ],
+        "controller_actions": 442,
+        "emulator_frames": 26629,
+        "selected_candidate_index": 1,
+        "selected_kind": "resupply",
+        "selected_probability": 0.3333333333333333
+      },
+      "execution": {
+        "controller_actions_total": 1990,
+        "emulator_frames_total": 112742,
+        "exception_type": null,
+        "status": "returned"
+      },
+      "observation_delta": {
+        "capture_items": 1,
+        "free_storage_slots": 0,
+        "living": 0,
+        "registered": 0,
+        "story": 0
+      },
+      "ordinal": 5,
+      "outcome": {
+        "action_cost": 0.00442,
+        "censor_reason": null,
+        "completion_gain": 0.0,
+        "dependency_unlock_gain": 0.0,
+        "frame_cost": 0.0004438166666666667,
+        "irreversible_loss": 0.0,
+        "party_cost": 0.0,
+        "resource_cost": 0.0,
+        "status": "settled",
+        "storage_cost": 0.0,
+        "verified_success": true
+      },
+      "status": "causal_train_example_recorded"
+    },
+    {
+      "behavior": null,
+      "execution": {
+        "controller_actions_total": 1044,
+        "emulator_frames_total": 51324,
+        "reason_code": "recipe_execution_failed",
+        "retry_allowed": false,
+        "status": "setup_failed"
+      },
+      "observation_delta": null,
+      "ordinal": 6,
+      "outcome": null,
+      "status": "terminal_without_train_example"
+    },
+    {
+      "behavior": {
+        "candidate_kinds": [
+          "evolve",
+          "resupply",
+          "explore"
+        ],
+        "controller_actions": 318,
+        "emulator_frames": 14976,
+        "selected_candidate_index": 0,
+        "selected_kind": "evolve",
+        "selected_probability": 0.3333333333333333
+      },
+      "execution": {
+        "controller_actions_total": 1712,
+        "emulator_frames_total": 84229,
+        "exception_type": "RedLivingDexProductionRuntimeError",
+        "status": "raised_exception"
+      },
+      "observation_delta": {
+        "capture_items": 0,
+        "free_storage_slots": 0,
+        "living": 0,
+        "registered": 0,
+        "story": 0
+      },
+      "ordinal": 7,
+      "outcome": {
+        "action_cost": 0.00318,
+        "censor_reason": null,
+        "completion_gain": 0.0,
+        "dependency_unlock_gain": 0.0,
+        "frame_cost": 0.0002496,
+        "irreversible_loss": 0.0,
+        "party_cost": 0.0,
+        "resource_cost": 0.0,
+        "status": "settled",
+        "storage_cost": 0.0,
+        "verified_success": false
+      },
+      "status": "causal_train_example_recorded"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-clustered-train-batch-result.v1",
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33277598103,
+    "exact_main_commit": "5656bd63302db1aef0737186bd973bd26ba332b2",
+    "private_plan_sha256": "2a0462b8ff6f5ec6504a68bf6f801c644583bd6cf7620287cb0bcfdbeb5b567d",
+    "runtime_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "schedule_sha256": "35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905",
+    "source_bundle_sha256": "0ea7e3dee9bc8a8ebbdb69ec27dbd8e5bfad18b86be3897d781b26404ce91c69"
+  },
+  "status": "clustered_train_schedule_consumed_five_examples_recorded_three_setup_failures_fit_gate_not_met"
+}

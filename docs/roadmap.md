@@ -3,6 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 clustered-train result:** Exact main `5656bd63` and CI `33277598103/1` consumed the
+> frozen eight-row train schedule exactly once. Five assignments produced valid settled causal
+> examples—two successes and three failures—from five independent lineages; three setup recipes
+> failed before randomization and produced no target. The five menus collectively exposed all
+> seven portable kinds, while random selection exercised acquire, evolve, explore, and resupply.
+> Development, teacher, prediction, counterfactual, fit, sealed Red, and Crystal effects were zero.
+>
+> The board is **causal train 6/60 · powered fit 0 · authority 0 · transfer 0**. Do not fit below
+> the declared eight-example integration gate. Next: publish the
+> [path-free result](evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json),
+> require exact-main CI, then (1) census only genuinely unused train lineages, (2) exclude all
+> consumed roots and the four untouched development lineages, (3) model the measured 5/8 setup
+> yield, and (4) freeze a successor only if it can add at least three settled examples without
+> outcome-aware selection. No retries, full replay, Crystal run, or route-hardening campaign.
+
 > **August 29 train-consumer qualification:** The frozen 8+4 plan now has a locally qualified
 > train-only consumer. Only ordinals 0–7 are parseable; schedule and Red-template ordinals are
 > separately bound; the frozen upstream lineage is retained; logical and physical roots are
