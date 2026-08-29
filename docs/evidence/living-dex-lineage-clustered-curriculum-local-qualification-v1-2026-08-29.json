@@ -108,9 +108,9 @@
   "source": {
     "base_commit": "624325cf7cbd95fcad02430f786b4b24eb98e6b7",
     "base_ci_run": 33232635929,
-    "publication_commit": null,
-    "publication_ci_run": null,
+    "publication_commit": "21e9b1e339459f1636fe699e77e2393f071bec8e",
+    "publication_ci_run": 33262528933,
     "working_source_bundle_sha256": "51f009e3eeef7dbaedf5b44d735a05eafdd8a21b2569a974aa452b7e9f1225c0"
   },
-  "status": "local_contract_qualified_publication_and_action_free_census_pending"
+  "status": "published_contract_qualified_action_free_census_pending"
 }
