@@ -49,6 +49,20 @@ def test_authenticates_whole_plan_and_detaches_one_exact_recipe() -> None:
     frozen.require_resolved_recipe(recipe)
 
 
+def test_json_round_trip_preserves_tuple_valued_recipe_semantics() -> None:
+    plan, _root_value, _document, frozen = _fixture(4)
+    purchases = plan.recipes[4].providers[1].family.semantic_parameters["purchases"]
+
+    assert isinstance(purchases, tuple)
+    assert isinstance(
+        frozen.recipe_document()["providers"][1]["family"]["semantic_parameters"][
+            "purchases"
+        ],
+        list,
+    )
+    frozen.require_resolved_recipe(plan.recipes[4])
+
+
 def test_caller_nested_mutation_cannot_change_the_detached_descriptor() -> None:
     _plan, root, document, frozen = _fixture(2)
     original_payload = frozen.plan_payload

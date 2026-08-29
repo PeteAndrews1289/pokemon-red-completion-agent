@@ -1,0 +1,148 @@
+{
+  "claim_boundary": {
+    "supported": "The train-only consumer and ROM-free preflight are locally qualified to reopen one row of the exact frozen Red clustered schedule, preserve its upstream lineage, protect logical and physical roots, and delegate one selected-arm outcome to the existing durable causal journal.",
+    "unsupported": [
+      "published_train_consumer",
+      "authentic_clustered_preflight",
+      "train_scenario_executed",
+      "authentic_outcome_collected",
+      "learner_training_began",
+      "model_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "execution_contract": {
+    "behavior_commitment": "durable_before_controller_release",
+    "counterfactual_targets": 0,
+    "development_ordinals_addressable": 0,
+    "development_outcome_access": false,
+    "exact_private_plan_sha256": "2a0462b8ff6f5ec6504a68bf6f801c644583bd6cf7620287cb0bcfdbeb5b567d",
+    "logical_and_physical_root_claim": "atomic",
+    "schedule_and_template_ordinals_bound_separately": true,
+    "selected_arm_runtime_only": true,
+    "selected_arm_observed_outcome_only": true,
+    "teacher_action_targets": 0,
+    "train_ordinals": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "upstream_episode_lineage_preserved": true
+  },
+  "implementation": {
+    "production_command": "scripts/run_red_living_dex_causal_campaign.py",
+    "runner_contract": "src/pokemon_red_completion/red_living_dex_clustered_train_runner.py",
+    "runner_sha256": "049285527051197dfdb9406b9dae8c718764a03279e919db6e312de59018deec",
+    "setup_admission": "src/pokemon_red_completion/red_living_dex_setup_admission.py",
+    "source_bundle_sha256": "0ea7e3dee9bc8a8ebbdb69ec27dbd8e5bfad18b86be3897d781b26404ce91c69"
+  },
+  "local_gate": {
+    "adversarial_classes_rejected": [
+      "development_ordinal_projection",
+      "schedule_template_ordinal_collapse",
+      "outer_execution_substitution",
+      "selected_root_substitution",
+      "upstream_lineage_relabelling",
+      "changed_behavior_after_recovery",
+      "duplicate_controller_input_after_recovery",
+      "rom_argument_in_preflight",
+      "execution_call_from_preflight",
+      "private_identity_in_public_receipt",
+      "tuple_list_recipe_round_trip_drift"
+    ],
+    "documentation_links": "passed",
+    "focused_runner_journal_setup_and_invocation_tests": {
+      "passed": 85,
+      "seconds": 131.36
+    },
+    "full_nonintegration_suite": {
+      "deselected": 3,
+      "expected_failures": 1,
+      "passed": 5765,
+      "warnings": 1
+    },
+    "mypy": {
+      "source_files": 312,
+      "status": "passed"
+    },
+    "product_focus": "passed",
+    "public_artifacts": "passed",
+    "ruff": "passed",
+    "source_bound_registries": "passed"
+  },
+  "preflight_contract": {
+    "claim_pair_availability_observed_under_shared_lease": true,
+    "collection_authorized": false,
+    "rom_argument_accepted": false,
+    "selected_root_reads": 1,
+    "status": "one_train_assignment_ready_before_claim_or_emulator"
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "publication": {
+    "exact_candidate_commit": null,
+    "exact_candidate_ci": null,
+    "status": "pending"
+  },
+  "recorded_on": "2026-08-29",
+  "recovery_contract": {
+    "causal_durable_cutpoints": [
+      "after_store_anchor",
+      "after_pair_claim",
+      "after_local_claim",
+      "after_behavior_commitment",
+      "after_behavior_selection",
+      "after_construction_start",
+      "after_construction_ready",
+      "after_execution_start",
+      "after_controller_release",
+      "after_example_publish",
+      "after_terminal_publish"
+    ],
+    "controller_release_crash_reexecutes": false,
+    "preinput_recovery_reuses_committed_arm": true,
+    "setup_claim_cutpoints": [
+      "after_pair_claim",
+      "after_local_claim"
+    ],
+    "setup_claim_crash_opens_runtime": false,
+    "setup_claim_crash_retry_allowed": false,
+    "terminal_recovery_constructs_runtime": false
+  },
+  "registries": {
+    "battle_collection_sha256": "9d42f289ef33b09a0417dc8301696d1dbbc559b7402e9004e7e518a3eb0996de",
+    "goal_manager_sha256": "3be242f48b587db83eda48ac4ba745f0da3089aa8c33c9898173902f3f77b4c9",
+    "strategic_navigation_scenarios_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "strategic_navigation_sha256": "a85d501047bb2547627ed8bcd4a368f75ebcb8dffc4158d0bc5d3294b559e151"
+  },
+  "schema": "pokemon.red.living-dex-clustered-train-runner-local-qualification.v1",
+  "source": {
+    "base_main_commit": "d0c07bee8593a9b6d2113012a7eeac537b70811d",
+    "base_main_ci_attempt": 1,
+    "base_main_ci_run": 33272755489,
+    "base_pull_request": 102,
+    "working_source_bundle_sha256": "0ea7e3dee9bc8a8ebbdb69ec27dbd8e5bfad18b86be3897d781b26404ce91c69"
+  },
+  "status": "locally_qualified_publication_and_exact_ci_then_one_rom_free_preflight_pending"
+}

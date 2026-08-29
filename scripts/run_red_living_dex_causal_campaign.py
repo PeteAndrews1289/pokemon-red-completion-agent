@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Execute or recover the one already frozen Red causal train campaign.
+"""Execute or recover one admitted Red causal train assignment.
 
-This command does not choose a slot, accept private identity digests, refreeze a
-campaign, run a preflight, query a teacher, fit a model, execute Crystal, or
-replay the game.  The immutable private campaign supplies every identity and
-the account-wide claim registry is fixed by the application.  The command-line
-surface contains only the current public source/CI binding and private resource
-paths.  Red remains unopened on terminal recovery.  A fresh run first builds
-the setup capture's isolated proof runtimes without provider outcomes; only the
-causal runtime is selected-only and opens behind its durable journal.
+The default mode preserves the historical one-campaign recovery surface.  The
+clustered mode accepts only train ordinals 0 through 7 from the exact frozen
+8+4 schedule; no development ordinal is parseable.  Neither mode accepts a
+behavior choice, private identity digest, teacher, model, Crystal cartridge, or
+full-game replay.  Red remains unopened on terminal recovery, and the selected
+causal runtime opens only after its behavior commitment is durable.
 """
 
 # ruff: noqa: E402 -- authenticate the project before importing it.
@@ -940,6 +938,15 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     RedLivingDexCurrentConsumerBinding,
     RedLivingDexLoadedProducerSlot,
 )
+from pokemon_red_completion.red_living_dex_clustered_train_runner import (
+    RED_LIVING_DEX_CLUSTERED_TRAIN_PREFLIGHT_SCHEMA,
+    RED_LIVING_DEX_CLUSTERED_TRAIN_RECEIPT_SCHEMA,
+    RedLivingDexClusteredTrainRunnerError,
+    RedLivingDexClusteredTrainSelection,
+    execute_red_living_dex_clustered_train_assignment,
+    load_red_living_dex_clustered_train_selection,
+    preflight_red_living_dex_clustered_train_assignment,
+)
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
     RedLivingDexSetupEffectMeter,
@@ -988,13 +995,20 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--exact-ci-attempt", required=True, type=int)
     parser.add_argument("--selected-state", required=True, type=Path)
     parser.add_argument("--selected-envelope", required=True, type=Path)
-    parser.add_argument("--rom", required=True, type=Path)
+    parser.add_argument("--rom", type=Path)
+    parser.add_argument(
+        "--clustered-train-ordinal",
+        choices=range(8),
+        type=int,
+    )
+    parser.add_argument("--clustered-preflight-only", action="store_true")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     stage = "argument_authentication"
     invocation_returned = False
+    preflight = False
     meter = RedLivingDexSetupEffectMeter()
     try:
         args = _parser().parse_args(argv)
@@ -1024,7 +1038,6 @@ def main(argv: list[str] | None = None) -> int:
             repository_root=PROJECT_ROOT,
             git_worktree_probe=_filesystem_git_worktree_probe,
         )
-        campaign = load_red_living_dex_causal_campaign(store)
         state_path = _require_private_regular_path(
             args.selected_state,
             private_root=args.private_root,
@@ -1035,23 +1048,59 @@ def main(argv: list[str] | None = None) -> int:
         )
         if state_path == envelope_path:
             raise CausalCampaignExecutionError("selected_root_authentication")
-        loader = _selected_loader(
-            store,
-            logical_root_sha256=campaign.logical_root_sha256,
-            physical_root_sha256=campaign.physical_root_sha256,
-            private_root=args.private_root,
-            state_path=state_path,
-            envelope_path=envelope_path,
-        )
-        stage = "campaign_execution"
-        receipt = execute_red_living_dex_causal_campaign(
-            PROJECT_ROOT,
-            store,
-            consumer=consumer,
-            producer_slot_loader=loader,
-            rom_path=args.rom,
-            meter=meter,
-        )
+        clustered = args.clustered_train_ordinal is not None
+        if clustered:
+            selection = load_red_living_dex_clustered_train_selection(
+                store,
+                args.clustered_train_ordinal,
+            )
+            clustered_loader = _clustered_selected_loader(
+                selection,
+                private_root=args.private_root,
+                state_path=state_path,
+                envelope_path=envelope_path,
+            )
+            preflight = args.clustered_preflight_only
+            if preflight:
+                stage = "clustered_train_preflight"
+                receipt = preflight_red_living_dex_clustered_train_assignment(
+                    PROJECT_ROOT,
+                    store,
+                    consumer=consumer,
+                    ordinal=args.clustered_train_ordinal,
+                    root_loader=clustered_loader,
+                    meter=meter,
+                )
+            else:
+                stage = "clustered_train_execution"
+                receipt = execute_red_living_dex_clustered_train_assignment(
+                    PROJECT_ROOT,
+                    store,
+                    consumer=consumer,
+                    ordinal=args.clustered_train_ordinal,
+                    root_loader=clustered_loader,
+                    rom_path=args.rom,
+                    meter=meter,
+                )
+        else:
+            campaign = load_red_living_dex_causal_campaign(store)
+            loader = _selected_loader(
+                store,
+                logical_root_sha256=campaign.logical_root_sha256,
+                physical_root_sha256=campaign.physical_root_sha256,
+                private_root=args.private_root,
+                state_path=state_path,
+                envelope_path=envelope_path,
+            )
+            stage = "campaign_execution"
+            receipt = execute_red_living_dex_causal_campaign(
+                PROJECT_ROOT,
+                store,
+                consumer=consumer,
+                producer_slot_loader=loader,
+                rom_path=args.rom,
+                meter=meter,
+            )
         invocation_returned = True
         stage = "post_execution_source_authentication"
         _require_runtime_postcheck()
@@ -1075,22 +1124,44 @@ def main(argv: list[str] | None = None) -> int:
         stage = error.stage
     except RedLivingDexCausalInvocationError as error:
         stage = error.stage
+    except RedLivingDexClusteredTrainRunnerError:
+        stage = "clustered_train_authentication"
     except BaseException:
         stage = "unexpected_failure"
     else:
         public = receipt.public_dict()
-        causal = receipt.causal
         checkpoint = meter.checkpoint()
+        if preflight:
+            public.update(
+                {
+                    "automatic_retry_allowed": False,
+                    "result_schema": RED_LIVING_DEX_CLUSTERED_TRAIN_PREFLIGHT_SCHEMA,
+                    "retry_allowed": False,
+                    "status": "one_clustered_train_assignment_ready",
+                }
+            )
+            print(_encoded(public))
+            return 0
+        causal = receipt.causal
         public.update(
             {
                 "automatic_retry_allowed": False,
+                "campaign_kind": (
+                    "clustered_train"
+                    if clustered
+                    else "historical_single_campaign"
+                ),
                 "causal_behavior_commitments": 0 if causal is None else 1,
                 "controller_actions": checkpoint.controller_actions,
                 "emulator_frames": checkpoint.emulator_frames,
                 "model_fits": checkpoint.model_fits,
                 "model_predictions": checkpoint.model_predictions,
                 "provider_executions": checkpoint.provider_executions,
-                "result_schema": RESULT_SCHEMA,
+                "result_schema": (
+                    RED_LIVING_DEX_CLUSTERED_TRAIN_RECEIPT_SCHEMA
+                    if clustered
+                    else RESULT_SCHEMA
+                ),
                 "retry_allowed": False,
                 "root_claims_metered_setup_only": checkpoint.root_claims,
                 "status": (
@@ -1164,6 +1235,21 @@ def _require_arguments(args: argparse.Namespace) -> None:
         or args.exact_ci_run <= 0
         or type(args.exact_ci_attempt) is not int  # noqa: E721
         or args.exact_ci_attempt <= 0
+        or (
+            args.clustered_train_ordinal is not None
+            and (
+                type(args.clustered_train_ordinal) is not int  # noqa: E721
+                or not 0 <= args.clustered_train_ordinal < 8
+            )
+        )
+        or (
+            args.clustered_preflight_only
+            and (
+                args.clustered_train_ordinal is None
+                or args.rom is not None
+            )
+        )
+        or (not args.clustered_preflight_only and not isinstance(args.rom, Path))
     ):
         raise CausalCampaignExecutionError("argument_authentication")
 
@@ -1222,6 +1308,55 @@ def _selected_loader(
             return RedLivingDexLoadedProducerSlot(record, root)
         except BaseException:
             raise RedLivingDexCausalInvocationError("selected_root_authentication") from None
+
+    return load
+
+
+def _clustered_selected_loader(
+    expected: RedLivingDexClusteredTrainSelection,
+    *,
+    private_root: Path,
+    state_path: Path,
+    envelope_path: Path,
+):  # type: ignore[no-untyped-def]
+    def load(
+        selection: RedLivingDexClusteredTrainSelection,
+    ) -> RedLivingDexAuthenticatedSetupRoot:
+        try:
+            if selection != expected:
+                raise ValueError("selected clustered assignment differs")
+            current_state_path = _require_private_regular_path(
+                state_path,
+                private_root=private_root,
+            )
+            current_envelope_path = _require_private_regular_path(
+                envelope_path,
+                private_root=private_root,
+            )
+            if current_state_path == current_envelope_path:
+                raise ValueError("selected files alias")
+            root = RedLivingDexAuthenticatedSetupRoot(
+                root_consumption_sha256=selection.logical_root_sha256,
+                state_bytes=_read_private_regular(
+                    current_state_path,
+                    maximum_bytes=_MAXIMUM_STATE_BYTES,
+                ),
+                envelope_bytes=_read_private_regular(
+                    current_envelope_path,
+                    maximum_bytes=_MAXIMUM_ENVELOPE_BYTES,
+                ),
+            )
+            if (
+                root.physical_root_sha256 != selection.physical_root_sha256
+                or root.state_sha256 != selection.root_state_sha256
+                or root.envelope_sha256 != selection.root_envelope_sha256
+            ):
+                raise ValueError("selected clustered root differs")
+            return root
+        except BaseException:
+            raise RedLivingDexClusteredTrainRunnerError(
+                "clustered selected root authentication failed"
+            ) from None
 
     return load
 

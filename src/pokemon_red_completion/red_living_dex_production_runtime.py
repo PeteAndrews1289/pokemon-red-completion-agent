@@ -197,7 +197,7 @@ class _ProductionResolverScope(AbstractContextManager[RedLivingDexResolvedSetupS
             corridors = derive_red_living_dex_provider_corridors(world)
             observation = self._observe_claimed_root()
             recipe = build_red_living_dex_provider_recipe_for_claimed_root(
-                self.frozen.ordinal,
+                self.frozen.template_ordinal,
                 observation,
                 world=world,
                 corridors=corridors,

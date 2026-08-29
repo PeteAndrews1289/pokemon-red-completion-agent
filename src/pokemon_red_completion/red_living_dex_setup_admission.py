@@ -16,6 +16,10 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
+    RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA,
+    validate_red_living_dex_clustered_private_plan,
+)
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA,
     RED_LIVING_DEX_SETUP_SLOT_RECIPE_SCHEMA,
@@ -81,8 +85,11 @@ class FrozenRedLivingDexSetupSlot:
     """Canonical whole-plan proof plus one detached selected recipe."""
 
     ordinal: int
+    template_ordinal: int
     producer_plan_sha256: str
     producer_execution_identity_sha256: str
+    producer_plan_schema: str
+    producer_runtime_identity_sha256: str | None
     recipe_sha256: str
     slot_sha256: str
     logical_root_sha256: str
@@ -91,10 +98,18 @@ class FrozenRedLivingDexSetupSlot:
     root_envelope_sha256: str
     _plan_payload: bytes = field(repr=False)
     _recipe_payload: bytes = field(repr=False)
+    _producer_execution_payload: bytes = field(repr=False)
 
     def __post_init__(self) -> None:
         if type(self.ordinal) is not int or not 0 <= self.ordinal < 15:  # noqa: E721
             raise RedLivingDexSetupAdmissionError("frozen setup ordinal differs")
+        if (
+            type(self.template_ordinal) is not int  # noqa: E721
+            or not 0 <= self.template_ordinal < 15
+        ):
+            raise RedLivingDexSetupAdmissionError(
+                "frozen setup template ordinal differs"
+            )
         for value, subject in (
             (self.producer_plan_sha256, "producer plan"),
             (self.producer_execution_identity_sha256, "producer execution identity"),
@@ -110,9 +125,51 @@ class FrozenRedLivingDexSetupSlot:
             raise RedLivingDexSetupAdmissionError("frozen setup root identities collapse")
         plan = _decode_canonical(self._plan_payload, "producer plan")
         recipe = _decode_canonical(self._recipe_payload, "recipe")
+        execution = _decode_canonical(
+            self._producer_execution_payload,
+            "producer execution identity",
+        )
+        if self.producer_plan_schema not in {
+            RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA,
+            RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA,
+        }:
+            raise RedLivingDexSetupAdmissionError(
+                "frozen setup producer schema differs"
+            )
+        if plan.get("schema") != self.producer_plan_schema:
+            raise RedLivingDexSetupAdmissionError(
+                "frozen setup producer schema differs"
+            )
+        plan_commitment: object
+        if self.producer_plan_schema == RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA:
+            plan_commitment = canonical_sha256(plan)
+            if self.producer_runtime_identity_sha256 is not None:
+                raise RedLivingDexSetupAdmissionError(
+                    "legacy frozen setup gained a runtime identity field"
+                )
+        else:
+            payload = {
+                key: value
+                for key, value in plan.items()
+                if key != "private_plan_sha256"
+            }
+            plan_commitment = plan.get("private_plan_sha256")
+            if (
+                plan_commitment != canonical_sha256(payload)
+                or not isinstance(self.producer_runtime_identity_sha256, str)
+            ):
+                raise RedLivingDexSetupAdmissionError(
+                    "clustered frozen setup plan commitment differs"
+                )
+            _require_sha256(
+                self.producer_runtime_identity_sha256,
+                "producer runtime identity",
+            )
         if (
-            canonical_sha256(plan) != self.producer_plan_sha256
+            plan_commitment != self.producer_plan_sha256
             or canonical_sha256(recipe) != self.recipe_sha256
+            or canonical_sha256(execution)
+            != self.producer_execution_identity_sha256
         ):
             raise RedLivingDexSetupAdmissionError("frozen setup payload digest differs")
 
@@ -132,8 +189,10 @@ class FrozenRedLivingDexSetupSlot:
     def producer_execution_identity(self) -> RedLivingDexSetupExecutionIdentity:
         """Restore the exact typed producer identity from detached plan bytes."""
 
-        plan = _decode_canonical(self._plan_payload, "producer plan")
-        document = plan.get("execution_identity")
+        document = _decode_canonical(
+            self._producer_execution_payload,
+            "producer execution identity",
+        )
         if (
             not isinstance(document, dict)
             or set(document) != _EXECUTION_KEYS
@@ -203,12 +262,22 @@ class FrozenRedLivingDexSetupSlot:
         *,
         root: RedLivingDexAuthenticatedSetupRoot,
     ) -> None:
-        current = authenticate_frozen_red_living_dex_setup_slot(
-            plan_document,
-            expected_plan_sha256=self.producer_plan_sha256,
-            ordinal=self.ordinal,
-            root=root,
-        )
+        if self.producer_plan_schema == RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA:
+            current = authenticate_frozen_red_living_dex_setup_slot(
+                plan_document,
+                expected_plan_sha256=self.producer_plan_sha256,
+                ordinal=self.ordinal,
+                root=root,
+            )
+        else:
+            current = authenticate_frozen_red_living_dex_clustered_train_slot(
+                plan_document,
+                expected_private_plan_sha256=self.producer_plan_sha256,
+                ordinal=self.ordinal,
+                root=root,
+                producer_execution_identity=self.producer_execution_identity(),
+                expected_runtime_identity_sha256=self.producer_runtime_identity_sha256,
+            )
         if current != self:
             raise RedLivingDexSetupAdmissionError("frozen setup plan changed after admission")
 
@@ -222,7 +291,7 @@ class FrozenRedLivingDexSetupSlot:
             or recipe.root_consumption_sha256 != self.logical_root_sha256
             or recipe.root_state_sha256 != self.root_state_sha256
             or recipe.root_envelope_sha256 != self.root_envelope_sha256
-            or recipe.private_dict() != self.recipe_document()
+            or _canonical_payload(recipe.private_dict()) != self._recipe_payload
         ):
             raise RedLivingDexSetupAdmissionError(
                 "postclaim resolved recipe differs from the frozen producer recipe"
@@ -284,11 +353,14 @@ def authenticate_frozen_red_living_dex_setup_slot(
     recipe_payload = _canonical_payload(recipe)
     return FrozenRedLivingDexSetupSlot(
         ordinal=ordinal,
+        template_ordinal=ordinal,
         producer_plan_sha256=expected,
         producer_execution_identity_sha256=_require_sha256(
             detached_plan["execution_identity_sha256"],
             "producer execution identity",
         ),
+        producer_plan_schema=RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA,
+        producer_runtime_identity_sha256=None,
         recipe_sha256=canonical_sha256(recipe),
         slot_sha256=_require_sha256(recipe["slot_sha256"], "slot"),
         logical_root_sha256=root.root_consumption_sha256,
@@ -297,6 +369,138 @@ def authenticate_frozen_red_living_dex_setup_slot(
         root_envelope_sha256=root.envelope_sha256,
         _plan_payload=plan_payload,
         _recipe_payload=recipe_payload,
+        _producer_execution_payload=_canonical_payload(execution),
+    )
+
+
+def authenticate_frozen_red_living_dex_clustered_train_slot(
+    plan_document: Mapping[str, object],
+    *,
+    expected_private_plan_sha256: str,
+    ordinal: int,
+    root: RedLivingDexAuthenticatedSetupRoot,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity,
+    expected_runtime_identity_sha256: str | None,
+) -> FrozenRedLivingDexSetupSlot:
+    """Detach one train assignment from the immutable clustered schedule.
+
+    The schedule ordinal and Red template ordinal are intentionally distinct.
+    Only the first eight schedule rows are addressable, and the selected row
+    must independently attest that it belongs to the train partition.
+    """
+
+    if not isinstance(plan_document, Mapping):
+        raise TypeError("clustered setup admission needs a plan mapping")
+    expected = _require_sha256(
+        expected_private_plan_sha256,
+        "expected clustered private plan",
+    )
+    if type(ordinal) is not int or not 0 <= ordinal < 8:  # noqa: E721
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup selected a non-train ordinal"
+        )
+    if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
+        raise TypeError("clustered setup admission needs an authenticated root")
+    root.__post_init__()
+    if not isinstance(
+        producer_execution_identity,
+        RedLivingDexSetupExecutionIdentity,
+    ):
+        raise TypeError("clustered setup admission needs its producer identity")
+    producer_execution_identity.__post_init__()
+    runtime_identity = _require_sha256(
+        expected_runtime_identity_sha256,
+        "expected producer runtime identity",
+    )
+    try:
+        plan_payload = _canonical_payload(dict(plan_document))
+        detached_plan = _decode_canonical(plan_payload, "clustered producer plan")
+    except (TypeError, ValueError, OverflowError):
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup plan is not canonical JSON"
+        ) from None
+    try:
+        validate_red_living_dex_clustered_private_plan(detached_plan)
+    except (TypeError, ValueError):
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup producer plan differs"
+        ) from None
+    payload = {
+        key: value
+        for key, value in detached_plan.items()
+        if key != "private_plan_sha256"
+    }
+    assignments = detached_plan.get("assignments")
+    if (
+        detached_plan.get("private_plan_sha256") != expected
+        or canonical_sha256(payload) != expected
+        or detached_plan.get("source_commit")
+        != producer_execution_identity.source_commit
+        or detached_plan.get("source_bundle_sha256")
+        != producer_execution_identity.source_bundle_sha256
+        or detached_plan.get("route_registry_sha256")
+        != producer_execution_identity.route_registry_sha256
+        or detached_plan.get("rom_sha256") != producer_execution_identity.rom_sha256
+        or detached_plan.get("runtime_identity_sha256") != runtime_identity
+        or not isinstance(assignments, list)
+        or len(assignments) != 12
+    ):
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup producer binding differs"
+        )
+    selected = assignments[ordinal]
+    if not isinstance(selected, dict):
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup selected assignment differs"
+        )
+    recipe = selected.get("recipe")
+    template_ordinal = selected.get("template_ordinal")
+    if (
+        selected.get("ordinal") != ordinal
+        or selected.get("partition") != "train"
+        or type(template_ordinal) is not int  # noqa: E721
+        or not 0 <= template_ordinal < 15
+        or not isinstance(recipe, dict)
+        or recipe.get("schema") != RED_LIVING_DEX_SETUP_SLOT_RECIPE_SCHEMA
+        or canonical_sha256(recipe) != selected.get("recipe_sha256")
+        or recipe.get("partition") != "train"
+        or recipe.get("root_consumption_sha256")
+        != root.root_consumption_sha256
+        or recipe.get("root_state_sha256") != root.state_sha256
+        or recipe.get("root_envelope_sha256") != root.envelope_sha256
+        or selected.get("physical_root_sha256")
+        != root.physical_root_sha256
+    ):
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup selected recipe differs"
+        )
+    execution_payload = _canonical_payload(
+        producer_execution_identity.private_dict()
+    )
+    return FrozenRedLivingDexSetupSlot(
+        ordinal=ordinal,
+        template_ordinal=template_ordinal,
+        producer_plan_sha256=expected,
+        producer_execution_identity_sha256=(
+            producer_execution_identity.identity_sha256
+        ),
+        producer_plan_schema=RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA,
+        producer_runtime_identity_sha256=runtime_identity,
+        recipe_sha256=_require_sha256(
+            selected.get("recipe_sha256"),
+            "clustered recipe",
+        ),
+        slot_sha256=_require_sha256(
+            selected.get("template_sha256"),
+            "clustered template",
+        ),
+        logical_root_sha256=root.root_consumption_sha256,
+        physical_root_sha256=root.physical_root_sha256,
+        root_state_sha256=root.state_sha256,
+        root_envelope_sha256=root.envelope_sha256,
+        _plan_payload=plan_payload,
+        _recipe_payload=_canonical_payload(recipe),
+        _producer_execution_payload=execution_payload,
     )
 
 
@@ -342,5 +546,6 @@ def _string(value: object, subject: str) -> str:
 __all__ = [
     "FrozenRedLivingDexSetupSlot",
     "RedLivingDexSetupAdmissionError",
+    "authenticate_frozen_red_living_dex_clustered_train_slot",
     "authenticate_frozen_red_living_dex_setup_slot",
 ]

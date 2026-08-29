@@ -6,6 +6,22 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish the train consumer; preflight only before reorientation
+
+Codex owns the locally qualified consumer for private plan `2a0462b8…`, its publication, exact-main
+CI, one ROM-free selected-train preflight, the path-free receipt, and the next reorientation. The
+consumer exposes only ordinals 0–7, preserves the frozen upstream lineage, binds the selected Red
+template independently of schedule order, composes the existing logical-plus-physical setup claim
+with the causal journal's durable selected-arm commitment, and has no development, teacher,
+counterfactual, model-fit, sealed, Crystal, or full-replay surface.
+
+Claude's next useful role is a read-only leakage and causal-label audit after publication.
+Antigravity's next useful role is a read-only exactly-once, portability, and cross-title-boundary
+audit. Neither reviewer edits, sees private identities, runs gameplay, publishes, or grants
+authority. The immediate gate is publication plus one zero-effect preflight; gameplay remains
+closed until the following reorientation. **Causal train 1/60 · powered fit 0 · authority 0 ·
+transfer 0.**
+
 ## Current override: exact private plan frozen; claim-first runner engineering next
 
 Codex owns the train-only consumer for private plan `2a0462b8…`, the logical-plus-physical atomic

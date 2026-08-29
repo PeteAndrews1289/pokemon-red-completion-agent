@@ -12,6 +12,34 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-29: train-only consumer locally qualified — publish, preflight, reorient
+
+The mission remains a transferable hierarchical agent that completes stories and builds living
+Pokedexes across games. Red is the first causal classroom; Crystal is the first transfer
+falsifier. The frozen 8+4 schedule is an intermediate curriculum, not the product.
+
+The new consumer reopens only private plan `2a0462b8…` and exposes only train ordinals 0–7.
+Schedule ordinal and Red template ordinal are joined separately, the frozen upstream episode
+lineage becomes the learner lineage, and the exact context remains committed by the whole-plan
+identity. The existing claim-first journal atomically protects logical and physical roots. The
+existing causal journal commits a random arm before controller release, opens only that arm,
+records only its independently observed outcome, and exposes neither a teacher target nor an
+unplayed counterfactual.
+
+The production command now has a ROM-free preflight mode. It authenticates current source and CI,
+the sealed plan, one selected root, the staged runtime identity, and pair availability while
+leaving claims, controller actions, frames, behavior commitments, outcomes, predictions, and fits
+at zero. Development ordinals are unparseable. Clustered setup crashes after either durable claim
+close without runtime construction or retry; causal recovery preserves one committed arm across
+all existing durable cutpoints and never duplicates controller input. A JSON tuple/list regression
+also closes the only latent recipe-reopen defect found during integration.
+
+No authentic scenario ran and the board is unchanged: **causal train 1/60 · powered fit 0 ·
+authority 0 · transfer 0**. Next publish this exact candidate, require green PR and exact-main CI,
+run exactly one ROM-free preflight for one still-available train ordinal, publish only its path-free
+zero-effect receipt, and reorient. Do not combine preflight with gameplay. Only that reorientation
+may open the first authentic short Red selected-arm execution.
+
 ## 2026-08-29: exact 8+4 schedule frozen — build the train-only claim-first runner
 
 PR 101 merged as exact main `4190b92bd0637d31daa03c95b07c0917dfc62903`; PR CI
