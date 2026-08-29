@@ -8,7 +8,31 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: replace full-run row independence with lineage-clustered scenarios
+## Current checkpoint: clustered capacity passed; freeze exact private assignments
+
+The exact action-free census converted the authenticated bank into an integration curriculum:
+**8 train scenarios from 8 lineages** and **4 development scenarios from 4 untouched lineages**.
+Both partitions cover all seven portable option kinds, maximum observed multiplicity is one, and
+lineage overlap is zero. Controller actions, frames, claims, teachers, predictions, outcomes, and
+fits all remained zero. The historical 132-root shortfall measures only the retired one-full-run-
+per-row design and no longer blocks training.
+
+The shortest product-aligned sequence is now:
+
+1. qualify and publish a zero-controller private freezer that deterministically reproduces
+   schedule `35c00f38…` from the exact authenticated bank;
+2. persist the exact 8+4 identity-bearing assignments and reopen them under an independent
+   validator without revealing private identities publicly;
+3. execute only the eight train selected arms through claim-first, crash-safe boundaries;
+4. fit one explicitly non-authoritative integration model after eight settled outcomes;
+5. scale toward 60 outcomes and judge it against frozen controls on untouched lineage clusters;
+6. freeze only the supported Red representation for an abstention-aware Crystal transfer test.
+
+The [path-free census result](evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json)
+binds the passed capacity gate and every protected zero. **Causal train 1/60 · powered fit 0 ·
+authority 0 · transfer 0.**
+
+## Previous checkpoint: replace full-run row independence with lineage-clustered scenarios
 
 The V2 2/5 result is terminal and no V3 teacher-yield gate will replace it. Requiring one new
 clean-power Red playthrough for every training row confused evaluation independence with training

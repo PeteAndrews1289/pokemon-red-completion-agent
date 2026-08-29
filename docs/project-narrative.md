@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the old bank is enough to start the first honest curriculum
+
+The zero-controller census answered the capacity question without playing a frame. From 67
+qualified upstream lineages and 414 compatible root-template edges, it constructed eight train
+scenarios on eight lineages and four development scenarios on four untouched lineages. Both
+partitions cover all seven title-neutral option kinds; no lineage crosses the boundary and no
+scenario is duplicated within a lineage.
+
+That result retires the apparent 132-root emergency. The deficit was real for the old design—one
+independent full-game run for every row—but that design was the wrong unit of learning. The next
+step is deliberately narrower than gameplay: freeze the exact private identities behind the
+published schedule hash and prove an independent process can reopen them unchanged. Then the
+project can collect eight selected-arm outcomes and fit its first non-authoritative integration
+model. The teacher's route and buttons still never become labels.
+
 ## August 29: the failed teacher gate changes the unit of learning
 
 The important result was not another route repair. It was recognizing that the experiment had

@@ -3,19 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 29 clustered-curriculum override:** The 2/5 V2 terminal is preserved, but its proposed
-> V3 10/12 successor is retired. One-full-run-per-row independence was the wrong constraint: train
-> scenarios may share an upstream lineage when the entire lineage stays in one partition, while
-> development is evaluated on untouched lineage clusters. The fixed Vermilion reroute was removed;
-> only reusable interaction/encounter boundaries remain.
+> **August 29 clustered-capacity result:** The exact action-free census passed with **8 train
+> scenarios / 8 lineages** and **4 development scenarios / 4 untouched lineages**. Both sides
+> cover all seven portable option kinds, maximum observed scenarios per lineage is one, overlap is
+> zero, and controller/teacher/outcome/fit effects are all zero. The old 132-root deficit is a
+> retired diagnostic for the discarded one-full-game-run-per-row design.
 >
-> Next: publish the minimal repair, implement an action-free clustered scheduler over **67
-> lineages / 414 compatibility edges**, freeze eight short train scenarios across at least four
-> lineages and four portable option kinds, collect selected-arm outcomes, and make the first
-> non-authoritative fit. No V3 yield gate or routine replay. **Causal train 1/60 · powered fit 0 ·
-> authority 0 · transfer 0.** The
-> [clustered qualification](evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
-> records the exact local gate.
+> Next: qualify a private freezer that reproduces schedule `35c00f38…`, persist and independently
+> reopen the exact 8+4 assignments, then execute only the eight train selected arms and make the
+> first non-authoritative fit. No V3 yield gate or routine replay. **Causal train 1/60 · powered
+> fit 0 · authority 0 · transfer 0.** The
+> [census result](evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json) records
+> the passed gate.
 
 > **August 29 V2-yield checkpoint:** Main `624325cf` passed CI `33232635929/1`, then its freshly
 > frozen twelve-world gate stopped at **2/5** after three distinct failures made 10/12 impossible.

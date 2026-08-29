@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: twelve short classrooms exist; lock them before entering
+
+The census finished without pressing a button. It found eight Red training classrooms from eight
+different upstream runs and four untouched development classrooms from four more. Every portable
+decision family—acquire, develop, evolve, explore, manage storage, resupply, and unlock access—
+appears on both sides. No lineage crosses the evaluation wall, and the run created no outcome or
+model fit.
+
+This is the first clean answer to “are we ready to train?” Capacity is ready; execution is not yet.
+The exact private classroom identities must now be frozen and reopened independently so a later
+failure cannot tempt the system to swap in an easier scenario. After that come eight real selected-
+arm outcomes and the first explicitly non-authoritative fit. The honest board is still **CAUSAL
+TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
 ## Current checkpoint: stop making the teacher perfect and start making the learner learn
 
 The 2/5 test exposed a deeper mistake. We had required every training example to begin with a

@@ -127,19 +127,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Clustered Red curriculum · action-free scenario census",
+        stage="Clustered Red curriculum · private schedule freeze",
         message=(
-            "The authenticated inventory already has 67 upstream lineages and 414 compatible "
-            "root-template edges. Next: lock lineages to partitions and schedule short scenarios."
+            "Capacity passed: 8 train lineages plus 4 untouched development lineages, all seven "
+            "portable option kinds, and zero overlap. Next: freeze and independently reopen it."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red causal curriculum · lineage lock → census → 8 outcomes → first fit",
+        location="Red causal curriculum · census passed → private freeze → 8 outcomes → first fit",
         collection_target=60,
         model=DashboardModelState(
             mode="waiting",
             candidate="Unfitted powered causal living-Dex policy · actual Red feature rank 16",
             choice=(
-                "No active choice · next: clustered short-scenario schedule, then train outcomes"
+                "No active choice · next: exact private schedule freeze, then train outcomes"
             ),
             confidence=None,
             decisions=1,
@@ -187,8 +187,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "portable kinds · scale minimum 60 · selected arms only"
             ),
             (
-                "Existing inventory · qualified lineages 67 · compatibility edges 414 · source "
-                "train roots 44 · source validation roots 23 · one-row-per-root bound retired"
+                "Passed census · train 8/8 lineages · development 4/4 untouched lineages · all "
+                "7 option kinds in both · overlap 0 · schedule 35c00f38… · effects 0"
             ),
             (
                 "Fit guard · actual Red feature rank 16 · distinct rows minimum 50 · candidate "
@@ -223,8 +223,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Clustered redesign · immutable lineage partitions · bounded within-lineage "
-                "multiplicity · variable-size menus · selected outcomes only · teacher labels 0"
+                "Clustered contract · immutable lineage partitions · private schedule reopens "
+                "exactly · variable-size menus · selected outcomes only · teacher labels 0"
             ),
         ),
     )

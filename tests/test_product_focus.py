@@ -1866,17 +1866,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "authenticated inventory already has 67 upstream lineages" in encoded
+    assert "Capacity passed: 8 train lineages plus 4 untouched development lineages" in encoded
     assert "Lineage-clustered causal curriculum" in encoded
     assert "Causal Train Example 1/60" in encoded
     assert "Settled Red causal train examples" in encoded
     assert "Held-out Red lineage result" in encoded
     assert "Zero-shot Crystal result" in encoded
-    assert "qualified lineages 67" in encoded
-    assert "compatibility edges 414" in encoded
-    assert "source train roots 44" in encoded
-    assert "source validation roots 23" in encoded
-    assert "one-row-per-root bound retired" in encoded
+    assert "train 8/8 lineages" in encoded
+    assert "development 4/4 untouched lineages" in encoded
+    assert "all 7 option kinds in both" in encoded
+    assert "overlap 0" in encoded
+    assert "schedule 35c00f38" in encoded
     assert "integration 8 outcomes" in encoded
     assert "at least 4 train lineages" in encoded
     assert "actual Red feature rank 16" in encoded

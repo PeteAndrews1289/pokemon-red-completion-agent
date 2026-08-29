@@ -33,6 +33,14 @@ MACHINE_RESULT_PATH = (
     PROJECT_ROOT
     / "docs/evidence/red-living-dex-causal-capacity-census-machine-result-v1-2026-08-28.json"
 )
+CLUSTERED_EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json"
+)
+CLUSTERED_MACHINE_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-clustered-curriculum-census-machine-result-v1-2026-08-29.json"
+)
 SCRIPT = runpy.run_path(
     str(SCRIPT_PATH),
     run_name="audit_red_living_dex_causal_inventory_test",
@@ -323,6 +331,55 @@ def test_published_capacity_result_is_path_free_and_keeps_effects_zero() -> None
         result["interpretation"]["combined_new_independent_root_lower_bound"]
         == machine["minimum_new_independent_roots_lower_bound"]
     )
+    encoded = json.dumps(result, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_published_clustered_census_passes_without_learning_or_private_leak() -> None:
+    result = json.loads(CLUSTERED_EVIDENCE_PATH.read_text(encoding="utf-8"))
+    machine_bytes = CLUSTERED_MACHINE_RESULT_PATH.read_bytes()
+    machine = json.loads(machine_bytes)
+
+    assert result["status"] == (
+        "clustered_integration_capacity_passed_private_schedule_freeze_pending"
+    )
+    assert result["source"]["commit"] == (
+        "f26be2a10936784abaf95c9a441626948d3fc162"
+    )
+    assert result["source"]["ci_run"] == 33263228797
+    assert result["source"]["machine_result_sha256"] == hashlib.sha256(
+        machine_bytes
+    ).hexdigest()
+    clustered = result["clustered_gate"]
+    assert clustered["gate_passed"] is True
+    assert clustered["train_scenarios"] == clustered["train_lineages"] == 8
+    assert clustered["development_scenarios"] == clustered["development_lineages"] == 4
+    assert clustered["train_option_kinds"] == clustered["development_option_kinds"]
+    assert len(clustered["train_option_kinds"]) == 7
+    assert clustered["lineage_overlap"] == 0
+    assert clustered["maximum_observed_scenarios_per_lineage"] == 1
+    assert clustered["schedule_sha256"] == (
+        machine["clustered_integration"]["schedule_sha256"]
+    )
+    assert clustered["policy_sha256"] == (
+        machine["clustered_integration"]["policy_sha256"]
+    )
+    protected = result["protected_effects"]
+    assert protected["collection_authorized"] is False
+    assert set(protected) == {
+        "behavior_commitments",
+        "collection_authorized",
+        "controller_actions",
+        "emulator_frames",
+        "model_fits",
+        "model_predictions",
+        "outcomes",
+        "provider_executions",
+        "root_claims",
+        "teacher_queries",
+    }
+    assert all(value == 0 for key, value in protected.items() if key != "collection_authorized")
     encoded = json.dumps(result, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

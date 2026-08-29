@@ -1,18 +1,18 @@
 # Three-agent coordination
 
-> **2026-08-29 active override — stop optimizing teacher yield; build clustered causal
-> scenarios:** Codex owns the minimal reusable controller repair, lineage-clustered scheduler,
-> action-free census, first eight authentic selected-arm outcomes, and integration fit. The fixed
-> Vermilion reroute and proposed V3 10/12 population gate are retired. Claude's publication review
-> is accepted with added guard tests. Antigravity's exact claims that the delayed encounter was
-> species-specific were rejected, but its strategic finding—that another route-yield cycle
-> violates the mission—was accepted.
+> **2026-08-29 active override — clustered capacity passed; freeze it before gameplay:** Codex
+> owns the zero-controller private schedule freezer, independent reopen validator, first eight
+> authentic selected-arm outcomes, and non-authoritative integration fit. The public census found
+> 8 train scenarios from 8 lineages plus 4 untouched development scenarios from 4 lineages, all
+> seven portable kinds in both partitions, one scenario per lineage, and zero overlap. The fixed
+> Vermilion reroute and proposed V3 10/12 population gate remain retired.
 >
 > Reviewers remain read-only milestone challengers. They may test leakage, cluster dominance,
 > statistical power, transfer scope, and overclaiming, but they do not edit, execute gameplay,
 > publish, or grant authority. Every upstream lineage must remain entirely in train or
-> development; teacher choices and button sequences remain prohibited learner targets. **Causal
-> train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+> development; teacher choices and button sequences remain prohibited learner targets. The next
+> falsifier is exact schedule reproduction and independent private reopen with every protected
+> effect at zero. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 > **2026-08-29 active override — V2 failed honestly; review the bounded repair before
 > publication:** PR 99 merged as main `624325cf` and CI `33232635929/1` passed. Its newly frozen

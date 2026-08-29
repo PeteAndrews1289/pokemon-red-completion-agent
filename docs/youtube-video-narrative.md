@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: the classroom census passes
+
+Run the graph without showing the emulator: **67 QUALIFIED LINEAGES · 414 EDGES**. Twelve cards
+snap into place: **TRAIN 8/8 LINEAGES** on the left, **DEVELOPMENT 4/4 UNTOUCHED LINEAGES** on the
+right. Illuminate all seven option-kind icons on both sides and stamp the dividing wall **OVERLAP
+0**. Underneath, keep **ACTIONS 0 · FRAMES 0 · TEACHER 0 · OUTCOMES 0 · FITS 0**.
+
+Replace the old **132 NEW FULL RUNS** alarm with **RETIRED DIAGNOSTIC**. Move one lock over the
+twelve private cards: **FREEZE EXACT SCHEDULE 35C00F38… → INDEPENDENT REOPEN → 8 SELECTED-ARM
+OUTCOMES → FIRST NON-AUTHORITATIVE FIT**. End on the unchanged long rail: **60 OUTCOMES →
+UNTOUCHED RED CLUSTERS → FROZEN SUPPORTED REPRESENTATION → CRYSTAL TRANSFER → CROSS-GAME LIVING
+POKEDEX**.
+
 ## August 29 scene: change the unit of learning
 
 Open on the honest **2/5** teacher result, then zoom out from the three route failures to the real

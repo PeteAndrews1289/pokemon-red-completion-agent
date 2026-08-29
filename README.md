@@ -5,22 +5,19 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 29, 2026): retire teacher-yield gating and begin a
-> lineage-clustered causal curriculum.** The V2 diagnostic remains an honest 2/5 failure with
-> every learning counter unchanged. It proved that demanding one full Red teacher run per
-> training row turns the project into fixed-route maintenance. That requirement is now retired.
-> The working repair keeps only authenticated fossil reinteraction and delayed-encounter
-> settlement; the new Vermilion route patch was removed.
+> **Current product focus (August 29, 2026): freeze the passed clustered curriculum, then collect
+> real outcomes.** The exact zero-controller census found **8 train scenarios from 8 lineages**
+> and **4 untouched development scenarios from 4 lineages**, with all seven portable option
+> kinds in both partitions, one scenario per lineage, and zero overlap. It used 67 qualified
+> upstream lineages and 414 compatibility edges without executing gameplay, querying a teacher,
+> observing an outcome, or fitting a model.
 >
-> Existing evidence already contains **67 qualified upstream lineages and 414 compatible
-> root-template edges**. The next design keeps every lineage wholly in train or development,
-> permits bounded multiple short scenarios inside a training lineage, and scores evaluation at
-> the untouched lineage-cluster level. Next milestone: an action-free clustered census followed
-> by the first **8 authentic selected-arm outcomes** and a non-authoritative integration fit. No
-> V3 teacher-yield gate or routine full-game replay is allowed. **Causal train 1/60 · powered fit
-> 0 · authority 0 · transfer 0.** The
-> [local qualification](docs/evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
-> binds the new contract and all protected zeroes.
+> Capacity is therefore no longer the blocker. The next gate is an action-free private freezer
+> that must reproduce schedule `35c00f38…`, persist the exact 8+4 assignments, and reopen under an
+> independent validator. Only then may the eight train selected arms run, followed by a clearly
+> non-authoritative integration fit. No V3 teacher-yield gate or routine full-game replay is
+> allowed. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+> [path-free census result](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
 
 > **Current product focus (August 29, 2026): the exact-main population gate failed; repair only
 > what it measured.** PR 99 merged as main `624325cf`, and exact-main CI `33232635929/1` passed.

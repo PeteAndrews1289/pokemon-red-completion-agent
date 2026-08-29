@@ -6,19 +6,22 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: implement clustered short-scenario training; V3 teacher yield is retired
+## Current override: clustered capacity passed; private schedule freeze is next
 
-Codex owns the minimal repair, clustered scheduler, zero-controller census, first eight authentic
+Codex owns the zero-controller private freezer, independent reopen validator, first eight authentic
 selected-arm outcomes, provisional integration fit, documentation, publication, and final
-adjudication. The working diff no longer contains the new fixed Vermilion route. It retains only
-authenticated fossil reinteraction and delayed encounter settlement, with explicit safety-bound
-tests. No V3 teacher-yield plan may be frozen or executed.
+adjudication. The census passed with 8 train scenarios from 8 lineages and 4 development scenarios
+from 4 untouched lineages; all seven portable option kinds appear in both partitions, observed
+multiplicity is one, and overlap and protected effects are zero. No V3 teacher-yield plan may be
+frozen or executed.
 
 Claude remains the read-only statistics, leakage, and evidence challenger. Antigravity remains the
 read-only architecture, transfer, and overclaim challenger. The accepted strategic constraint is
 that every upstream episode lineage belongs wholly to train or development, while bounded multiple
-short scenarios may train within one lineage. Reviewers do not edit, execute gameplay, publish, or
-grant authority. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+short scenarios may train within one lineage. The next gate must reproduce schedule `35c00f38…`,
+store the exact private 8+4 assignments, and independently reopen them with no outcome access.
+Reviewers do not edit, execute gameplay, publish, or grant authority. **Causal train 1/60 · powered
+fit 0 · authority 0 · transfer 0.**
 
 ## Current override: V2 yield failed; publish no repair until review and full qualification
 

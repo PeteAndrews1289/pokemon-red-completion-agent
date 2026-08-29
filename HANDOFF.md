@@ -12,24 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-29: active reorientation — cluster short scenarios; do not run a V3 yield gate
+## 2026-08-29: clustered capacity passed — freeze exact private assignments next
 
 The product is still a transferable hierarchical agent that completes stories and builds living
-Pokedexes across games. The failed 2/5 V2 teacher population changed no learner counter, but it
-did trigger the repository's anti-drift rule. Requiring each training row to come from a separate
-full-game run is retired: statistical separation belongs between evaluation lineages, while
-training may contain bounded correlated scenarios whose entire upstream lineage remains in one
-partition.
+Pokedexes across games. Red is the first causal classroom and Crystal is the first transfer
+falsifier. The failed 2/5 V2 teacher population changed no learner counter and retired the rule
+that every training row must consume a separate full-game run.
 
-Current work keeps only the reusable Helix ready-field and delayed-encounter item-boundary fixes.
-The proposed fixed Vermilion reroute has been removed. Do not freeze or execute V3 teacher-yield
-identities. Instead implement an action-free clustered scheduler over the 67 authenticated
-lineages and 414 compatibility edges, prove zero train/development lineage overlap and bounded
-cluster multiplicity, then freeze eight short train scenarios across at least four lineages and
-four portable option kinds. Those eight selected-arm outcomes open a non-authoritative integration
-fit; teacher buttons never become labels. **Causal train 1/60 · powered fit 0 · authority 0 ·
-transfer 0.** See the
-[clustered local qualification](docs/evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json).
+The exact action-free census now passes: **8 train scenarios / 8 lineages**, **4 development
+scenarios / 4 untouched lineages**, all seven portable option kinds in both partitions, maximum
+one scenario per lineage, and zero lineage overlap. It recorded no controller action, frame,
+teacher query, prediction, outcome, claim, or fit. The old 132-root deficit remains only a retired
+diagnostic for the discarded one-full-run-per-row design.
+
+The aggregate census intentionally discarded private identities. Next implement and qualify a
+zero-controller private freezer that reproduces schedule `35c00f38…`, stores the exact 8+4
+assignments, and reopens them under an independent validator. Any hash drift, lineage crossing,
+identity leak, or outcome access fails closed. Only a successful freeze opens the eight short
+train selected-arm executions and a non-authoritative integration fit; teacher buttons never
+become labels. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+[census receipt](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
 
 ## 2026-08-29: V2 yield failed at 2/5; the bounded successor repair is local only
 

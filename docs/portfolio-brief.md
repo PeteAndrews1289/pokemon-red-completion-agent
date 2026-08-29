@@ -1,5 +1,19 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 clustered-capacity result
+
+An exact action-free census transformed the historical Red bank into a leakage-resistant
+integration curriculum: eight train scenarios from eight upstream lineages and four untouched
+development scenarios from four different lineages. Both partitions cover all seven title-neutral
+living-Dex option kinds, observed cluster multiplicity is one, and train/development overlap is
+zero. The census executed no gameplay, teacher, prediction, outcome, or fit.
+
+The next engineering gate is a private schedule freezer and independent validator, not another
+full-game teacher campaign. Once the exact 8+4 identities reopen unchanged, the project can collect
+eight selected-arm outcomes and fit a non-authoritative integration model before scaling toward 60
+outcomes and a held-out Red comparison. This is concrete progress from route automation toward a
+transferable decision learner.
+
 ## August 29 reorientation
 
 The latest engineering decision corrected the experiment rather than adding another route patch.
