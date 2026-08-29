@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-28 active override — publish the world-variance repair, then measure a new
+> population:** Published main `05ae3cce` passed CI `33221693432/1`, but its prospective gate
+> stopped at **2/5** after three distinct failures made 10/12 impossible. Five assignments are
+> consumed and seven old-source assignments remain unusable. Working bundle `7c2974ab` then
+> reached late-Cinnabar `mansion_returned` on **3/3 unchanged-source diagnostics · 125,932 actions
+> · 22,345,994 frames**, and passes **5,718 tests · Ruff · Mypy 309 · registries · docs · public
+> artifacts · diff**.
+>
+> Codex owns implementation, operation, evidence, publication, exact-main CI, later plan freeze,
+> and final adjudication. Claude is the read-only causal/statistical, leakage, and trust-boundary
+> challenger. Antigravity is the read-only architecture, transfer, portability, and overclaim
+> challenger. Reviewers do not edit, execute gameplay, publish, inspect private identities, or
+> vote authority. Publish first; then freeze a genuinely new twelve-world one-use plan and require
+> ≥10/12 successes, ≤2 failures, no repeated deterministic stage, and no leak. Only a pass opens
+> train-only roots and recensus. Diagnostics are not training. **Causal train 1/60 · powered fit 0
+> · authority 0 · transfer 0.**
+
 > **2026-08-28 active override — publish the measured repair, then rerun yield prospectively:**
 > Exact main `eac8e745` passed CI `33167842692/1`, but its one-shot seeds 9900037–9900048 failed
 > the declared yield gate at **1/12**. Every seed is consumed and the successor freeze remains

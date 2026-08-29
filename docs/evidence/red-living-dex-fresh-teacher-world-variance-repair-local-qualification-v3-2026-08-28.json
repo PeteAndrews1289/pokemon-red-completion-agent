@@ -1,0 +1,173 @@
+{
+  "authorization": {
+    "collection": false,
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "successor_plan_freeze": false
+  },
+  "diagnostic_scope": {
+    "checkpoint_completed": 275,
+    "checkpoint_id": "mansion_returned",
+    "checkpoint_total": 312,
+    "meaning": "Late Cinnabar checkpoint after the Pokemon Mansion Secret Key route returns to the Pokemon Center.",
+    "stops_before": [
+      "Blaine",
+      "Viridian Gym",
+      "Victory Road",
+      "Elite Four",
+      "Hall of Fame",
+      "living Pokedex completion"
+    ]
+  },
+  "failed_exact_source_gate": {
+    "ci_attempt": 1,
+    "ci_run": 33221693432,
+    "commit": "05ae3cce876e268d006a5433d4fe071d9fc6b938",
+    "evidence_path": "docs/evidence/red-living-dex-fresh-teacher-post-yield-exact-source-prospective-gate-v1-2026-08-28.json",
+    "failures_before_early_stop": 3,
+    "gate_passed": false,
+    "mansion_returned_successes": 2,
+    "plan_sha256": "847076c5cb382a088ead2f5be043e0a35d0e4f77f4013b81e2842784526e5e8d",
+    "planned_worlds": 12,
+    "source_bundle_sha256": "a3b18f341c0aa9ba7af12fd2309a5ba1758e408134da5b9737ddb77b1ec0c7a9",
+    "worlds_claimed": 5,
+    "worlds_unclaimed": 7
+  },
+  "final_unchanged_source_sample": {
+    "actions_total": 125932,
+    "attempts": 3,
+    "frames_total": 22345994,
+    "mansion_returned_successes": 3,
+    "one_use_per_seed": true,
+    "population_yield_claimed": false,
+    "promotion_eligible": false,
+    "runs": [
+      {
+        "actions": 41010,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7327694,
+        "harness_seed": 9911644,
+        "initial_wait_frames": 197,
+        "private_ledger_bytes": 68355,
+        "private_ledger_sha256": "86b2a782ca421d03970dd6af9a5da48dfb183f51db0da2962780d4bda645b832",
+        "root_generated": false,
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 38452,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7281689,
+        "harness_seed": 9911457,
+        "initial_wait_frames": 58,
+        "private_ledger_bytes": 68346,
+        "private_ledger_sha256": "c4f357d19cf618955a3c8d556d91b6ba44fbe305d0aafd104c9af534872a6e5f",
+        "root_generated": false,
+        "status": "mansion_returned"
+      },
+      {
+        "actions": 46470,
+        "checkpoint_completed": 275,
+        "checkpoint_id": "mansion_returned",
+        "checkpoint_total": 312,
+        "frames": 7736611,
+        "harness_seed": 9911645,
+        "initial_wait_frames": 123,
+        "private_ledger_bytes": 68348,
+        "private_ledger_sha256": "e692eaac64527c5654f2961e25a638b6ddb2dd1ea9e2b53b653c0e442b1fc3a7",
+        "root_generated": false,
+        "status": "mansion_returned"
+      }
+    ],
+    "source_unchanged_across_sample": true
+  },
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "learner_training_began": false,
+    "local_repair_behavior_qualified": true,
+    "official_lineage_created": false,
+    "publication_allowed_after_final_checks": true,
+    "successor_plan_freeze_allowed": false,
+    "teacher_actions_are_model_labels": false
+  },
+  "next_gate": {
+    "decision": "Publish this exact candidate, require green CI on the resulting main commit, then freeze a new versioned prospective one-use yield plan bound to that exact source.",
+    "minimum_mansion_returned_successes": 10,
+    "minimum_population_attempts": 12,
+    "no_private_path_or_identity_leak": true,
+    "no_repeated_deterministic_failure_stage": true,
+    "one_use_per_seed": true,
+    "old_assignments_reusable": false,
+    "retry_after_controller_input": false,
+    "train_root_freeze_on_pass_only": true
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "development_outcomes": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "qualification": {
+    "documentation_and_product_focus": "passed",
+    "full_suite": {
+      "deselected": 3,
+      "passed": 5718,
+      "xfailed": 1
+    },
+    "git_diff_check": "passed",
+    "mypy_source_files": 309,
+    "public_artifact_scan": "passed",
+    "registry_checks": "passed",
+    "ruff": "passed"
+  },
+  "recorded_on": "2026-08-28",
+  "registries": {
+    "battle_collection_sha256": "cd5e337be78b276b26ae2bd90172e6abe4e89d13d1b46f2b3fd83b149f556f2b",
+    "battle_teacher_execution_sha256": "0ee1a10dd20c6e76978eaeb60053adf0b4be7ca5034a27d311086817e24e6803",
+    "goal_collection_sha256": "d2476a0a6d4d48e085b3739ed1ffcf1072c062f5e6729bc934bc04baf67af02e",
+    "goal_teacher_execution_sha256": "55e3c18750edd810acb5664fbbd1055fbb71c6bffc27bf4ccf64b816f6cb414e",
+    "strategic_collection_sha256": "e5bfc582bbe80f851f9c20eafed4e551e3d3b7bd55db9ad7628ada2dc5efb1f3",
+    "strategic_teacher_execution_sha256": "a6b938b2865bf4432ea6104a92e61219140c2848892f21ad5994896b991179d8"
+  },
+  "repairs_qualified": [
+    "Verify blocked Vermilion movement instead of consuming a fixed direction string behind a moving NPC.",
+    "Authenticate the live active battler before Silph rival healing and retain bounded party recovery reserves.",
+    "Authenticate Diglett capture and forced-switch targets against the current living party rather than stale slot assumptions.",
+    "Re-read the armed Mt. Moon capture target after selecting the Poke Ball so the persistent HP gate describes the Pokemon actually caught.",
+    "Prove the antidote-free Rock Tunnel DUX poison allowance against the exact remaining field steps and one protected pre-pivot battle tick.",
+    "Use one bounded Pidgeotto switch-out and return to reset damaging accuracy loss without changing the opponent or teaching a hidden choice.",
+    "Accept the exact event-authenticated Wartortle-and-Zubat reserve-led rival terminal, promote only a sole living survivor, heal both roles, and restore Wartortle before helper storage.",
+    "Close both Generation-I field-menu layers after a party swap instead of trusting movement flags that can report ready while the menu remains open.",
+    "Retain bounded Route 3, Erika reserve-switch, and Celadon moving-customer recovery rather than relying on swallowed inputs or one active-party slot."
+  ],
+  "schema": "pokemon.red.living-dex-fresh-teacher-world-variance-repair-local-qualification.v3",
+  "source": {
+    "base_commit": "05ae3cce876e268d006a5433d4fe071d9fc6b938",
+    "source_bundle_sha256": "7c2974ab12ce468b2c80db1b5116af342442cc1514512d7ead892e89a50e5c34",
+    "successful_runtime_matches_current_source_bundle": true
+  },
+  "status": "local_repair_qualified_pending_publication_exact_main_ci_and_new_prospective_yield_plan",
+  "unsupported_claims": [
+    "full_game_completion",
+    "living_pokedex_completion",
+    "model_training_began",
+    "official_fresh_root_created",
+    "population_yield_qualified",
+    "successor_plan_ready_to_freeze",
+    "teacher_actions_are_transferable_policy_labels",
+    "transfer_to_crystal_demonstrated"
+  ]
+}

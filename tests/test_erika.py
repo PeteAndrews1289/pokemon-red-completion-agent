@@ -181,6 +181,130 @@ def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
     assert erika_module._erika_move_slot(raw) == 3
 
 
+def test_erika_battle_continues_with_first_living_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fainted = RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_GYM,
+        player_x=4,
+        player_y=4,
+        party_count=4,
+        battle_state=2,
+        party_species_ids=(28, 64, 59, 132),
+        party_hp=(0, 54, 43, 142),
+        active_party_index=0,
+        active_party_hp=0,
+        enemy_species_id=190,
+        enemy_hp=90,
+    )
+    reserve = replace(
+        fainted,
+        active_party_index=1,
+        active_party_hp=54,
+        active_party_moves=(64, 28, 15, 31),
+        active_party_pp=(35, 15, 30, 20),
+    )
+
+    class Reader:
+        state = fainted
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    runtime_calls = 0
+    strongest_calls: list[RawGameState] = []
+
+    def run_battle(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal runtime_calls
+        runtime_calls += 1
+        policy = args[2]
+        assert callable(policy)
+        intent = kwargs["intent"]
+        assert intent.switch_capabilities == frozenset({erika_module.BattleSwitchCapability.DIRECT})
+        assert intent.switch_limit == 3
+        if runtime_calls == 1:
+            raise erika_module.BattleRuntimeError("unit lead fainted")
+        assert policy(reader.state) == 1
+        reader.state = replace(reader.state, battle_state=0, enemy_hp=0)
+        return reader.state
+
+    def switch(*args: object, **kwargs: object) -> None:
+        assert args[3] == 1
+        assert kwargs["label"] == "Erika forced living-reserve continuation"
+        reader.state = reserve
+
+    def strongest(raw: RawGameState) -> int:
+        strongest_calls.append(raw)
+        return 1
+
+    monkeypatch.setattr(erika_module, "run_adaptive_trainer_battle", run_battle)
+    monkeypatch.setattr(erika_module, "switch_active_battler", switch)
+    monkeypatch.setattr(erika_module, "strongest_usable_move_slot", strongest)
+
+    erika_module._battle(
+        reader,
+        object(),
+        object(),
+        MapId.CELADON_GYM,
+        DEFAULT_ERIKA_TIMING,
+        "Erika",
+        "unit-erika-reserve",
+    )
+
+    assert runtime_calls == 2
+    assert strongest_calls == [reserve]
+    assert reader.state.battle_state == 0
+
+
+def test_erika_battle_fails_closed_after_a_party_wipe(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    wiped = RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_GYM,
+        player_x=4,
+        player_y=4,
+        party_count=2,
+        battle_state=2,
+        party_species_ids=(28, 64),
+        party_hp=(0, 0),
+        active_party_index=0,
+        active_party_hp=0,
+        enemy_species_id=190,
+        enemy_hp=90,
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return wiped
+
+    monkeypatch.setattr(
+        erika_module,
+        "run_adaptive_trainer_battle",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            erika_module.BattleRuntimeError("unit party wipe")
+        ),
+    )
+    monkeypatch.setattr(
+        erika_module,
+        "switch_active_battler",
+        lambda *args, **kwargs: pytest.fail("a wiped party must not attempt a switch"),
+    )
+
+    with pytest.raises(erika_module.ErikaChapterError, match="no bounded living reserve"):
+        erika_module._battle(
+            Reader(),
+            object(),
+            object(),
+            MapId.CELADON_GYM,
+            DEFAULT_ERIKA_TIMING,
+            "Erika",
+            "unit-erika-wipe",
+        )
+
+
 def test_early_erika_report_requires_exact_badge_transition() -> None:
     initial = replace(
         _terminal(),
@@ -292,9 +416,10 @@ def test_early_erika_report_accepts_the_exact_post_surf_lineage() -> None:
     )
 
     assert initial.party_species_ids in EARLY_ERIKA_PARTIES
-    assert EARLY_ERIKA_ICE_BEAM_LINEAGES[
-        (initial.first_party_moves, initial.first_party_pp)
-    ] == (final.first_party_moves, final.first_party_pp)
+    assert EARLY_ERIKA_ICE_BEAM_LINEAGES[(initial.first_party_moves, initial.first_party_pp)] == (
+        final.first_party_moves,
+        final.first_party_pp,
+    )
     assert report.passed
     assert not replace(
         report,

@@ -204,6 +204,8 @@ class XAccuracyResourceReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
+
+
 ROOF_GIRL_Y = 0xC224
 ROOF_GIRL_X = 0xC225
 ROOF_NERD_Y = 0xC214
@@ -1015,9 +1017,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         buy_silph_battle_items=buy_silph_battle_items,
     )
     if capacity_items is None:
-        raise SilphChapterError(
-            "Celadon Ice Beam boundary cannot establish safe bag capacity."
-        )
+        raise SilphChapterError("Celadon Ice Beam boundary cannot establish safe bag capacity.")
     if capacity_items:
         _move(actions, reader, ("down",) + ("right",) * 10, timing)
         _require(reader.read(), MapId.CELADON_POKECENTER, (13, 4), "Celadon PC approach")
@@ -1053,9 +1053,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
             reader,
             emulator,
             timing,
-            x_special_target=_celadon_ice_beam_x_special_target(
-                buy_silph_battle_items
-            ),
+            x_special_target=_celadon_ice_beam_x_special_target(buy_silph_battle_items),
         )
     roof_money_before = _money(emulator)
     _move_verified(
@@ -1120,9 +1118,7 @@ def _celadon_ice_beam_capacity_deposit_items(
 ) -> tuple[ItemId, ...] | None:
     """Reserve slots for the optional X Special stack and roof item exchange."""
 
-    x_special_stack = int(
-        buy_silph_battle_items and not bag.get(ItemId.X_SPECIAL, 0)
-    )
+    x_special_stack = int(buy_silph_battle_items and not bag.get(ItemId.X_SPECIAL, 0))
     slots_to_free = max(0, len(bag) + x_special_stack + 1 - 20)
     available = tuple(item for item in SILPH_PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
     if len(available) < slots_to_free:
@@ -1346,9 +1342,7 @@ def run_x_accuracy_resource_chapter(
         controller_released=not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise SilphChapterError(
-            f"X Accuracy resource evidence failed: {report.public_dict()!r}."
-        )
+        raise SilphChapterError(f"X Accuracy resource evidence failed: {report.public_dict()!r}.")
     return report
 
 
@@ -2144,6 +2138,29 @@ def _run_until(
     return True
 
 
+def _silph_rival_needs_recovery(raw: RawGameState) -> bool:
+    """Pause only for a damaged living battler inside the bounded HP gate."""
+
+    hp = raw.battler_hp
+    maximum = raw.battler_max_hp
+    if hp is None or hp <= 0:
+        return False
+    if maximum is None:
+        raise SilphChapterError("Silph rival recovery lacks active maximum HP.")
+    return hp < maximum and hp <= SILPH_RIVAL_RECOVERY_HP
+
+
+def _silph_rival_recovery_target(raw: RawGameState, party_hp: tuple[int, ...]) -> int:
+    """Authenticate the active living party slot before selecting an item target."""
+
+    target = raw.active_party_index
+    if target is None:
+        raise SilphChapterError("Silph rival recovery lacks an active party index.")
+    if not 0 <= target < len(party_hp) or party_hp[target] <= 0:
+        raise SilphChapterError("Silph rival recovery lacks a living active target.")
+    return target
+
+
 def _run_rival_with_potions(
     reader: PokemonRedStateReader,
     actions: CountingExecutor,
@@ -2161,7 +2178,7 @@ def _run_rival_with_potions(
                 reader,
                 actions,
                 _silph_rival_move_slot,
-                lambda raw: 0 < (raw.battler_hp or 0) <= SILPH_RIVAL_RECOVERY_HP,
+                _silph_rival_needs_recovery,
                 f"Silph rival bounded recovery {recovery + 1}",
                 RedBattlePlanId.SILPH_7F_RIVAL,
             )
@@ -2175,7 +2192,7 @@ def _run_rival_with_potions(
             if (
                 raw.battle_state != 2
                 or raw.battler_hp != 0
-                or forced_switches >= 4
+                or forced_switches >= max(0, len(party_hp) - 1)
                 or not any(hp > 0 for hp in party_hp)
             ):
                 raise
@@ -2185,22 +2202,29 @@ def _run_rival_with_potions(
                 _settle_silph_rival_field_control(reader, actions, timing)
                 return
             forced_switches += 1
-            # Healing-item targeting is intentionally fixed to party slot one.
-            # Once that lead has fainted, re-entering this recovery loop would
-            # repeatedly select the same invalid target. Move immediately to
-            # the bounded living-reserve policy below instead.
-            recovery = rival_recovery_limit
+            # A lead KO does not discard the unspent recovery allocation.  The
+            # newly authenticated living reserve becomes the next item target.
             continue
         if completed:
             return
+        current = reader.read()
+        party_hp = current.party_hp or _party_hp(emulator)
+        target = _silph_rival_recovery_target(current, party_hp)
         try:
-            _battle_hyper_potion(reader, actions, emulator, timing)
+            terminal = _battle_hyper_potion(
+                reader,
+                actions,
+                emulator,
+                timing,
+                party_index=target,
+            )
         except _HealingTargetFaintedBeforeItem:
             current = reader.read()
             current_menu = reader.read_battle_menu_state(current)
             switched_to_healthy_reserve = (
                 current.battle_state == 2
-                and current.active_party_index not in {None, 0}
+                and current.active_party_index is not None
+                and current.active_party_index != target
                 and (current.battler_hp or 0) > 0
                 and current_menu.phase is BattleMenuPhase.MAIN
             )
@@ -2218,6 +2242,10 @@ def _run_rival_with_potions(
                 return
             forced_switches += 1
             continue
+        if terminal:
+            note_observed_trainer_battle_exit(_silph_rival_intent())
+            _settle_silph_rival_field_control(reader, actions, timing)
+            return
         recovery += 1
     # Exhausting the healing allocation does not revoke the balanced-party
     # contract.  Continue with living reserves through the same verified
@@ -2246,7 +2274,7 @@ def _run_rival_with_potions(
             if (
                 raw.battle_state != 2
                 or raw.battler_hp != 0
-                or forced_switches >= 4
+                or forced_switches >= max(0, len(party_hp) - 1)
                 or not any(hp > 0 for hp in party_hp)
             ):
                 raise
@@ -2375,13 +2403,16 @@ def _battle_hyper_potion(
     actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
-) -> None:
-    _battle_healing_item(
+    *,
+    party_index: int = 0,
+) -> bool:
+    return _battle_healing_item(
         reader,
         actions,
         emulator,
         timing,
         ItemId.HYPER_POTION,
+        party_index=party_index,
     )
 
 
@@ -2883,7 +2914,12 @@ def _move_verified(
                 state = _yield_to_mart_2f_ascent_customer(actions, reader, timing)
                 continue
             if (
-                label in {"X Special clerk approach", "X Accuracy clerk approach"}
+                label
+                in {
+                    "X Special clerk approach",
+                    "X Accuracy clerk approach",
+                    "Celadon Ice Beam roof approach",
+                }
                 and before.map_id == MapId.CELADON_MART_5F
                 and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION
                 and direction == "left"

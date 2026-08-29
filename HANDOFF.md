@@ -12,6 +12,37 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-28: world-variance repair is 3/3; publish before any new teacher population
+
+The product remains a transferable hierarchical agent that finishes mainline stories and builds a
+living Pokedex across versions and generations. Red is the first causal curriculum and Crystal is
+the first transfer test. The deterministic teacher supplies independent classrooms and outcome
+verification; its buttons are never learner labels.
+
+Published main `05ae3cce876e268d006a5433d4fe071d9fc6b938` passed exact-main CI
+`33221693432/1`. Its prospectively frozen twelve-world yield gate stopped at **2/5** when three
+distinct failures made 10/12 impossible. Those five assignments are consumed; the seven unclaimed
+assignments remain bound to the old source and are unusable. The public failure receipt preserves
+the denominator and failure clusters.
+
+The smallest reusable repair addressed live battler identity, blocked overworld steps, current
+capture state, bounded poison survival, Pidgeotto accuracy recovery, reserve-led victory, and the
+Generation-I menu signal that reports movement-ready while two field-menu layers remain open. One
+unchanged working source bundle `7c2974ab12ce468b2c80db1b5116af342442cc1514512d7ead892e89a50e5c34`
+then reached late-Cinnabar `mansion_returned` on three one-use development diagnostics with initial
+waits 197, 58, and 123: **3/3, 125,932 actions, 22,345,994 frames**. The
+[path-free V3 qualification](docs/evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
+binds the private ledgers by hash. The final gate is **5,718 passed, 3 deselected, 1 xfailed**,
+Ruff, Mypy over **309** source files, all three registries, public-artifact, documentation, and
+diff checks.
+
+This is engineering evidence through checkpoint 275/312. It is not a Hall-of-Fame run, living-Dex
+completion, population yield, model fit, official root, authority, or transfer. Next publish the
+exact candidate and require green CI on the resulting main commit. Then freeze a genuinely new
+twelve-world one-use plan without gameplay and require at least 10/12 successes, at most two
+failures, no repeated deterministic stage, and no leak. Only a pass opens a train-only successor
+and action-free recensus. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 ## 2026-08-28: post-yield repair is 3/3 locally; publish before a new population gate
 
 The mission remains a transferable hierarchical agent that completes mainline games and maintains

@@ -1151,6 +1151,24 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     ) == (0x7B, 0x7C, 0x71, 0x54)
 
 
+def test_post_ship_center_route_avoids_the_roaming_npc_lane() -> None:
+    position = (18, 29)
+    trail = [position]
+    offsets = {"left": (-1, 0), "right": (1, 0), "up": (0, -1), "down": (0, 1)}
+    for direction in surge_module.CITY_TO_CENTER:
+        dx, dy = offsets[direction]
+        position = (position[0] + dx, position[1] + dy)
+        trail.append(position)
+
+    assert position == (11, 2)
+    assert (11, 7) not in trail
+    assert tuple(
+        coordinate
+        for coordinate in trail
+        if coordinate in {(12, 7), (12, 6), (12, 5), (12, 4), (11, 4)}
+    ) == ((12, 7), (12, 6), (12, 5), (12, 4), (11, 4))
+
+
 def test_diglett_capture_preparation_uses_spearow_peck_and_requires_damage(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -1191,6 +1209,69 @@ def test_diglett_capture_preparation_uses_spearow_peck_and_requires_damage(
 
     assert result is weakened
     assert calls == [(1, 0, "Diglett capture")]
+
+
+def test_diglett_capture_uses_full_health_target_when_spearow_has_fainted(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    encounter = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=surge_module.DIGLETT_SPECIES_ID,
+        enemy_level=22,
+        enemy_hp=43,
+        enemy_max_hp=43,
+        party_species_ids=(0xB3, SPEAROW_SPECIES_ID),
+        party_hp=(42, 0),
+        active_party_index=0,
+        active_party_hp=42,
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return encounter
+
+    monkeypatch.setattr(
+        surge_module,
+        "_weaken_wild_capture_once",
+        lambda *_args: pytest.fail("a fainted helper must never be selected"),
+    )
+
+    result = surge_module._prepare_diglett_capture_target(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        encounter,
+    )
+
+    assert result is encounter
+
+
+def test_diglett_full_health_fallback_requires_a_living_catcher() -> None:
+    encounter = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=surge_module.DIGLETT_SPECIES_ID,
+        enemy_level=22,
+        enemy_hp=43,
+        party_species_ids=(0xB3, SPEAROW_SPECIES_ID),
+        party_hp=(0, 0),
+        active_party_index=0,
+        active_party_hp=0,
+        first_party_hp=0,
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return encounter
+
+    with pytest.raises(surge_module.SurgeChapterError, match="lacks a living catcher"):
+        surge_module._prepare_diglett_capture_target(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+            encounter,
+        )
 
 
 def test_surge_money_decodes_exact_bcd_ledger() -> None:

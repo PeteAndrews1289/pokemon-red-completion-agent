@@ -1,5 +1,25 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 28 latest update
+
+The newest reliability pass illustrates the project's core discipline: a cartridge can report a
+valid result that the automation still misunderstands. A difficult Cerulean rival schedule first
+exhausted accuracy and recovery. A one-time authenticated switch fixed the battle; the next run
+then **won** with Zubat as the sole survivor, but the checkpoint rejected the win because the
+original lead had fainted. After accepting only the exact event-authenticated terminal, the helper
+still could not walk—the Generation-I movement flags said “ready” while the party and field menus
+were visibly open. The final repair closes both menu layers structurally, promotes only a provable
+sole survivor, heals both roles, and restores Wartortle before storage.
+
+That work sits beside reusable fixes to live battler identity, capture timing, blocked steps, and
+bounded poison survival. One unchanged source bundle then reached late-Cinnabar
+`mansion_returned` on **3/3** fresh one-use diagnostics at initial waits 197, 58, and 123:
+**125,932 controller actions and 22,345,994 emulator frames**. It passes **5,718 tests**, lint,
+typing across **309** source files, all source-bound registries, documentation, public-artifact,
+and diff gates. The result is deliberately scoped as teacher engineering, not learned gameplay.
+The honest scoreboard is still **causal train 1/60 · powered fit 0 · authority 0 · transfer 0**;
+the next decision is a newly frozen 10-of-12 population gate before train-root generation resumes.
+
 ## August 28 update
 
 The post-yield repair now has a tighter measured boundary. Exact main `be6a03a4` passed CI, but its

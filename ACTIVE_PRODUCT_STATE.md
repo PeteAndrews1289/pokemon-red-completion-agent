@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the locally qualified post-yield repair, require exact-main green CI, freeze and pass a new prospective 10-of-12 yield gate, and only then freeze a train-only successor and rerun the action-free capacity census.
+- Next decision: Publish the locally qualified world-variance repair, require exact-main green CI, freeze and pass a new prospective 10-of-12 yield gate, and only then freeze a train-only successor and rerun the action-free capacity census.
 
 ### Mandatory mission check
 
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-28-fresh-teacher-post-yield-repair-local-qualification-v2** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+**2026-08-28-fresh-teacher-world-variance-repair-local-qualification-v3** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The failed exact-source gate stopped an unreliable generator before it could manufacture mostly unusable classrooms. The post-yield repair adds cartridge-exact funding, verified healing, bounded poison survival, robust post-RUN handoff, broader capture, and dynamic-obstacle handling; it qualifies 3/3 locally while keeping every teacher button outside the learner. |
+| Product alignment | The failed gate stopped an unreliable generator before it could manufacture unusable classrooms. This bounded teacher maintenance unblocks the named fresh-root causal curriculum. Targeted tests distinguish each repair; 3/3 unchanged-source diagnostics establish integration non-regression only. Teacher buttons remain outside the learner. |
 | Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
-| Authority delta | None. The final unchanged post-yield repair reached the late Cinnabar mansion-returned boundary on 3/3 new development seeds across 112486 actions and 21072636 frames. No diagnostic created an official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
+| Authority delta | None. One unchanged repair bundle reached late-Cinnabar mansion_returned on 3/3 new development seeds across 125932 actions and 22345994 frames. No diagnostic created an official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | Published source be6a03a4 passed exact-main CI 33189656179/1 but its exact-source successor gate stopped after three failures made 10/12 impossible; seeds 9900049 through 9900051 are consumed and the remaining old-source assignments are unusable. Repair bundle a3b18f34 is locally qualified but unpublished. No new prospective yield plan exists yet. |
-| Decision | Publish the exact locally qualified repair and require green CI on the resulting main commit. Then freeze a new versioned twelve-world one-use yield plan bound to that exact source. Require at least 10/12 late-Cinnabar mansion-returned terminals, at most two failures, no repeated deterministic stage, and no leak before freezing any train-only root successor and rerunning the action-free census. |
-| Next session | Publish and green the exact qualified candidate, freeze the new prospective diagnostic plan without gameplay, then execute its twelve one-use worlds. Freeze and materialize a train-only successor only if the yield gate passes; otherwise retain the denominator and repair the measured cluster. |
-| Next falsifier | After exact publication and green CI, a newly frozen source-bound set of twelve prospective one-use worlds must produce at least ten late-Cinnabar mansion-returned terminals with no repeated deterministic failure stage. Any early execution, consumed assignment reuse, low yield, leak, or new systematic boundary closes the successor freeze. |
+| Blocker | Published main 05ae3cce passed CI 33221693432/1, but its prospective successor gate stopped at 2/5 after three distinct failures made 10/12 impossible. Those five assignments are consumed and seven old-source assignments remain unclaimed but unusable. Repair bundle 7c2974ab is locally qualified but unpublished; no new prospective plan exists. |
+| Decision | Publish the exact locally qualified repair and require green CI on the resulting main commit. Then freeze a new versioned twelve-world one-use yield plan bound to that exact source. Require at least 10/12 late-Cinnabar mansion_returned terminals, at most two failures, no repeated deterministic stage, and no leak before freezing any train-only root successor and rerunning the action-free census. |
+| Next session | Publish and green the exact qualified candidate, freeze a new prospective diagnostic plan without gameplay, then execute its twelve one-use worlds. Freeze and materialize a train-only successor only if the yield gate passes; otherwise retain the denominator and repair the measured cluster. |
+| Next falsifier | After exact publication and green CI, a newly frozen source-bound set of twelve prospective one-use worlds must produce at least ten late-Cinnabar mansion_returned terminals with no repeated deterministic failure stage. Any early execution, consumed assignment reuse, low yield, leak, or new systematic boundary closes the successor freeze. |
 | Stop condition | Stop on future-world execution before exact-main green CI and a new prospective source-bound plan, retry of any consumed diagnostic or assignment, reuse of an old-source plan, insufficient new yield, cloned or rehashed independence, private leakage, development leakage into fit, teacher labels entering the learner, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
 
 ### Stop conditions

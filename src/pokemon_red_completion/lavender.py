@@ -470,9 +470,7 @@ def run_lavender_chapter(
         tunnel_super_potions_purchased,
         tunnel_parlyz_heals_purchased,
         tunnel_awakenings_purchased,
-    ) = _purchase_supplies(
-        actions, reader, emulator, timing, starting_super_potions=initial_sp
-    )
+    ) = _purchase_supplies(actions, reader, emulator, timing, starting_super_potions=initial_sp)
     # Restore the qualified Route 9 battle lineage after the bounded quantity menu.
     _wait(actions, POST_MART_RNG_ALIGNMENT_FRAMES)
     supplies = reader.read()
@@ -1278,9 +1276,8 @@ def _lavender_recovery_capabilities(
 
     bag = _bag(emulator)
     capabilities: set[BattleRecoveryCapability] = set()
-    if (
-        bag.get(ItemId.SUPER_POTION, 0) > 0
-        and (hp_recovery_limit is None or hp_recoveries < hp_recovery_limit)
+    if bag.get(ItemId.SUPER_POTION, 0) > 0 and (
+        hp_recovery_limit is None or hp_recoveries < hp_recovery_limit
     ):
         capabilities.add(BattleRecoveryCapability.RESTORE_HP)
     if bag.get(ItemId.AWAKENING, 0) > 1:
@@ -1570,7 +1567,18 @@ def _prepare_dux_sleep_pivot(
         0,
         TRAVERSAL_RECOVERY_THRESHOLD,
     )
-    _cure_tunnel_status_if_present(executor, reader, emulator, run, timing)
+    _cure_tunnel_status_if_present(
+        executor,
+        reader,
+        emulator,
+        run,
+        timing,
+        # If the sole Antidote was needed earlier, DUX only has this short
+        # approach plus one protected status turn before the healthy story
+        # lead takes over.  The shared helper proves that exact poison budget.
+        maximum_uncured_poison_field_steps=len(ONE_F_TO_TRAINER_4),
+        maximum_uncured_poison_battle_turns=1,
+    )
     _swap(executor, reader, emulator, WARTORTLE, "final tunnel Wartortle restoration")
 
 
@@ -2145,9 +2153,7 @@ def _prepare_final_tunnel_status_traversal(
     status = _party_status(emulator)[0]
     if status & 0x08 and _bag(emulator).get(ItemId.ANTIDOTE, 0) < 1:
         field_damage = (
-            POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS
-            + GEN1_FIELD_POISON_STEP_PERIOD
-            - 1
+            POST_FINAL_TUNNEL_TRAINER_POISON_FIELD_STEPS + GEN1_FIELD_POISON_STEP_PERIOD - 1
         ) // GEN1_FIELD_POISON_STEP_PERIOD
         _heal_if_below(
             executor,
@@ -2569,11 +2575,9 @@ def _purchase_supplies(
         starting=starting_super_potions,
         current=_bag(emulator).get(ItemId.SUPER_POTION, 0),
     )
-    parlyz_heal_purchase_quantity, awakening_purchase_quantity = (
-        _status_supply_purchase_quantities(
-            parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
-            awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
-        )
+    parlyz_heal_purchase_quantity, awakening_purchase_quantity = _status_supply_purchase_quantities(
+        parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
+        awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
     )
     expected_cost = (
         super_potion_purchase_quantity * SUPER_POTION_PRICE
@@ -2765,9 +2769,7 @@ def _tunnel_super_potion_purchase_quantity(*, starting: int, current: int) -> in
     return TUNNEL_SUPER_POTION_TARGET - current
 
 
-def _status_supply_purchase_quantities(
-    *, parlyz_heals: int, awakenings: int
-) -> tuple[int, int]:
+def _status_supply_purchase_quantities(*, parlyz_heals: int, awakenings: int) -> tuple[int, int]:
     """Top up from observed inventory instead of assuming earlier cures were exhausted."""
 
     if (

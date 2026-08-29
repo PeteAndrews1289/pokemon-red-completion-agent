@@ -7,28 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: three clean late-Cinnabar runs, still zero invented learning
+## Current checkpoint: the teacher won—and the automation still called it failure
 
-The first published repair met the discipline test and failed the reliability test. Three new
-official worlds failed in three different places, making the required ten successes impossible;
-the gate stopped immediately. No seed was retried and the untouched assignments could not follow
-the source after it changed.
+The latest published repair met the discipline test and again failed the reliability test. Its
+prospective gate reached late Cinnabar twice, then stopped after three different failures made the
+required ten of twelve impossible. Five assignments were consumed and seven untouched assignments
+became unusable when the source changed. No world was replaced.
 
-Four more development failures exposed the kind of assumptions that make long automation brittle:
-an incorrect item sale value, a doorway completed by the final allowed pulse, a nurse dialogue that
-looked finished while half the party remained fainted, and a wild battle that flowed straight into
-the trainer behind it. The fixes turned each assumption into evidence read from the cartridge.
+The most useful later failure happened after a victory. One hard Cerulean schedule exhausted
+accuracy and healing, so the teacher learned one bounded, authenticated switch to reset Sand
+Attack. On the next world that worked: the rival lost, the event flag flipped, and Zubat survived.
+The run still stopped because the checkpoint assumed Wartortle had to remain alive in slot one.
+After accepting only that exact reserve-led terminal, Zubat still could not walk to the Center.
+Generation I said movement was ready while the party and field menus were both still open; every
+direction moved a cursor instead of the player. The final reusable fix closes both menu layers,
+promotes only a provable sole survivor, heals the party, and restores roles.
 
-On the final unchanged build, three new worlds now reach the late-Cinnabar Mansion return in a row:
-**112,486 actions and 21,072,636 frames**. That checkpoint is 275 of 312—after finding the Secret
-Key, but before Blaine, the final Gym, the League, or a living Pokédex. Calling it what it is keeps
-the story honest.
+That repair joined live-battler healing, armed-target capture checks, blocked-step verification,
+and explicit poison budgets. On the final unchanged build, three new worlds with initial waits
+197, 58, and 123 reached the late-Cinnabar Mansion return: **125,932 actions and 22,345,994
+frames**. The boundary is still checkpoint 275 of 312—after finding the Secret Key, before Blaine,
+the final Gym, the League, or a living Pokedex.
 
-The model has still not learned from those runs. Their private ledgers are bound into a path-free
+The model did not learn from those runs. Their private ledgers are bound into a path-free
 engineering receipt, while the learner stays at **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0
-· TRANSFER 0**. The next gate is simple enough to say in one breath: publish the exact source,
-green main CI, freeze twelve genuinely new one-use worlds, and demand ten late-Cinnabar successes
-before any of them can become training capacity.
+· TRANSFER 0**. The next gate fits in one sentence: publish the exact source, green main CI,
+freeze twelve genuinely new one-use worlds, and demand ten late-Cinnabar successes before any can
+become training capacity.
 
 ## Current checkpoint: the first twelve worlds failed, and the failure map improved the teacher
 

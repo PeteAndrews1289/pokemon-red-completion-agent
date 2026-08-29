@@ -60,6 +60,7 @@ from pokemon_red_completion.cerulean import (
     PEWTER_TO_CENTER_DIRECTIONS,
     ROCKET_TO_SUPER_NERD_DIRECTIONS,
     ROUTE_3_BATTLE_POTION_FLOOR,
+    ROUTE_3_BATTLE_RECOVERY_HP,
     ROUTE_3_BUBBLE_TRAINER_INDEXES,
     ROUTE_3_RECOVERY_TRAINER_INDEXES,
     ROUTE_3_REJOIN_SEED_WAIT,
@@ -633,6 +634,7 @@ def test_mt_moon_zubat_search_observes_every_valid_level_on_the_return_step(
 def _capture_retry_harness(
     *,
     success_attempt: int | None,
+    pre_throw_enemy_hp: int | None = None,
 ) -> tuple[RawGameState, Any, Any, Any]:
     weakened = replace(
         _raw(MapId.MT_MOON_1F, 14, 32, battle_state=1, level=15, hp=35, max_hp=40),
@@ -685,6 +687,8 @@ def _capture_retry_harness(
         def execute(self, action: MacroAction) -> object:
             if action.kind is MacroActionKind.CONFIRM:
                 self.confirm_count += 1
+                if self.confirm_count % 2 == 1 and pre_throw_enemy_hp is not None:
+                    reader.state = replace(reader.state, enemy_hp=pre_throw_enemy_hp)
                 if self.confirm_count % 2 == 0:
                     self.throw_count += 1
                     emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
@@ -729,6 +733,33 @@ def test_mt_moon_capture_retries_the_same_encounter_after_one_failed_ball() -> N
     assert executor.throw_count == 2
 
 
+def test_mt_moon_capture_binds_persistence_to_the_armed_throw_state() -> None:
+    weakened, emulator, reader, executor = _capture_retry_harness(
+        success_attempt=1,
+        pre_throw_enemy_hp=2,
+    )
+
+    settled, attempts, balls_used, balls_remaining, captured_enemy_hp = (
+        _capture_weakened_mt_moon_zubat(
+            _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            emulator,  # type: ignore[arg-type]
+            DEFAULT_CERULEAN_TIMING,
+            weakened,
+        )
+    )
+
+    assert settled.party_species_ids == (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+    assert (attempts, balls_used, balls_remaining) == (
+        1,
+        1,
+        PEWTER_POKE_BALL_PURCHASE_QUANTITY - 1,
+    )
+    assert weakened.enemy_hp == 13
+    assert captured_enemy_hp == 2
+    assert executor.throw_count == 1
+
+
 def test_mt_moon_capture_persistent_gate_accepts_a_full_health_low_level_target(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -768,7 +799,7 @@ def test_mt_moon_capture_persistent_gate_accepts_a_full_health_low_level_target(
             return settled
 
         def read_input_readiness(self) -> InputReadiness:
-            return READY
+            raise AssertionError("the capture helper already authenticated field readiness")
 
     monkeypatch.setattr(
         "pokemon_red_completion.cerulean._move_mt_moon",
@@ -1505,7 +1536,7 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert MT_MOON_ZUBAT_SEED_WAIT == 155
     assert MT_MOON_ZUBAT_PRE_THROW_WAIT == 3
     assert MT_MOON_BATTLE_POTION_FLOOR == 9
-    assert ROUTE_3_BATTLE_POTION_FLOOR == MT_MOON_BATTLE_POTION_FLOOR
+    assert ROUTE_3_BATTLE_POTION_FLOOR + 1 == MT_MOON_BATTLE_POTION_FLOOR
     assert ROUTE_3_REQUIRED_TRAINER_INDEXES == (0, 1, 3, 6)
     assert frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES) == ROUTE_3_BUBBLE_TRAINER_INDEXES
     assert frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES) == ROUTE_3_RECOVERY_TRAINER_INDEXES
@@ -1637,9 +1668,7 @@ def test_mt_moon_tm12_funding_detour_is_exactly_reversible() -> None:
 
     assert endpoint(origin, MT_MOON_TM12_APPROACH_DIRECTIONS) == MT_MOON_TM12_PICKUP_POSITION
     assert endpoint(MT_MOON_TM12_PICKUP_POSITION, MT_MOON_TM12_RETURN_DIRECTIONS) == origin
-    assert _reverse_directions(MT_MOON_TM12_APPROACH_DIRECTIONS) == (
-        MT_MOON_TM12_RETURN_DIRECTIONS
-    )
+    assert _reverse_directions(MT_MOON_TM12_APPROACH_DIRECTIONS) == (MT_MOON_TM12_RETURN_DIRECTIONS)
     assert MT_MOON_TM12_TOGGLE_INDEX == 0x6C
     assert ItemId.TM12_WATER_GUN == 0xD4
 
@@ -1679,8 +1708,7 @@ def test_mt_moon_rare_candy_funding_asset_is_collected_and_route_rejoined(
     class Emulator:
         memory = {
             int(RamAddress.NUM_BAG_ITEMS): 0,
-            int(RamAddress.TOGGLEABLE_OBJECT_FLAGS)
-            + MT_MOON_RARE_CANDY_TOGGLE_INDEX // 8: 0,
+            int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + MT_MOON_RARE_CANDY_TOGGLE_INDEX // 8: 0,
         }
 
         def read_u8(self, address: int) -> int:
@@ -1706,8 +1734,7 @@ def test_mt_moon_rare_candy_funding_asset_is_collected_and_route_rejoined(
                 emulator.memory[int(RamAddress.BAG_ITEMS)] = int(ItemId.RARE_CANDY)
                 emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 1
                 flag_address = (
-                    int(RamAddress.TOGGLEABLE_OBJECT_FLAGS)
-                    + MT_MOON_RARE_CANDY_TOGGLE_INDEX // 8
+                    int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + MT_MOON_RARE_CANDY_TOGGLE_INDEX // 8
                 )
                 emulator.memory[flag_address] |= 1 << (MT_MOON_RARE_CANDY_TOGGLE_INDEX % 8)
 
@@ -1805,14 +1832,20 @@ def test_mt_moon_tm12_funding_asset_is_collected_and_route_rejoined(
     assert (reader.state.player_x, reader.state.player_y) == (14, 35)
 
 
-def test_mt_moon_free_potion_accepts_the_unspent_thirteen_potion_reserve(
+@pytest.mark.parametrize(
+    ("starting_quantity", "expected_quantity"),
+    ((ROUTE_3_BATTLE_POTION_FLOOR, MT_MOON_BATTLE_POTION_FLOOR), (13, 14)),
+)
+def test_mt_moon_free_potion_bridges_route_3_and_accepts_unspent_reserve(
     monkeypatch: pytest.MonkeyPatch,
+    starting_quantity: int,
+    expected_quantity: int,
 ) -> None:
     class Emulator:
         memory = {
             int(RamAddress.NUM_BAG_ITEMS): 1,
             int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
-            int(RamAddress.BAG_ITEMS) + 1: 13,
+            int(RamAddress.BAG_ITEMS) + 1: starting_quantity,
             int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + MT_MOON_POTION_TOGGLE_INDEX // 8: 0,
         }
 
@@ -1835,7 +1868,7 @@ def test_mt_moon_free_potion_accepts_the_unspent_thirteen_potion_reserve(
     class Executor:
         def execute(self, action: MacroAction) -> None:
             if action.kind is MacroActionKind.INTERACT:
-                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 14
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = expected_quantity
                 flag_address = (
                     int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + MT_MOON_POTION_TOGGLE_INDEX // 8
                 )
@@ -1875,8 +1908,8 @@ def test_mt_moon_free_potion_accepts_the_unspent_thirteen_potion_reserve(
         _MtMoonTraversalLedger(),
     )
 
-    assert frozenset(range(9, 14)) == MT_MOON_POTION_STARTING_QUANTITIES
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 14
+    assert frozenset(range(8, 14)) == MT_MOON_POTION_STARTING_QUANTITIES
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == expected_quantity
     assert (reader.state.player_x, reader.state.player_y) == MT_MOON_POTION_DETOUR_ORIGIN
 
 
@@ -1982,9 +2015,7 @@ def test_super_nerd_sight_line_accepts_an_authenticated_direct_handoff(
 
         def read_cerulean_chapter_state(self, raw: RawGameState) -> object:
             class Evidence:
-                super_nerd_battle_snapshot = (
-                    raw.battle_state == 2 and raw.enemy_species_id == 38
-                )
+                super_nerd_battle_snapshot = raw.battle_state == 2 and raw.enemy_species_id == 38
 
             return Evidence()
 
@@ -2408,9 +2439,7 @@ def test_battle_completion_uses_one_surplus_potion_at_threshold(
         assert intent.objective_id == "reach_cerulean"
         assert intent.battle_plan_id == "unit-super-nerd-recovery"
         assert intent.resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
-        assert intent.recovery_capabilities == frozenset(
-            {BattleRecoveryCapability.RESTORE_HP}
-        )
+        assert intent.recovery_capabilities == frozenset({BattleRecoveryCapability.RESTORE_HP})
         reader.state = replace(reader.state, battle_state=0)
         return reader.state
 
@@ -2440,6 +2469,85 @@ def test_battle_completion_uses_one_surplus_potion_at_threshold(
     assert runtime_calls == 2
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
     assert final.first_party_hp == 41
+
+
+def test_route_3_adaptive_battle_can_spend_fourth_surplus_before_cave_bridge(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: 12,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = replace(
+            _raw(MapId.ROUTE_3, 14, 6),
+            battle_state=2,
+            enemy_hp=6,
+            first_party_hp=20,
+            first_party_max_hp=36,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    recovery_calls: list[int] = []
+
+    def recover(*args: object, quantity_floor: int, **kwargs: object) -> None:
+        del args, kwargs
+        recovery_calls.append(quantity_floor)
+        remaining = emulator.memory[int(RamAddress.BAG_ITEMS) + 1] - 1
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = remaining
+        reader.state = replace(
+            reader.state,
+            first_party_hp=20 if remaining > quantity_floor else 36,
+        )
+
+    def run_adaptive(*args: object, **kwargs: object) -> RawGameState:
+        del args
+        guard = kwargs["move_decision_guard"]
+        assert callable(guard)
+        try:
+            guard(reader.state)
+        except Exception as cause:
+            raise BattleRuntimeError("unit recovery request") from cause
+        reader.state = replace(reader.state, battle_state=0, enemy_hp=0)
+        return reader.state
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean._use_battle_potion", recover)
+    monkeypatch.setattr(
+        "pokemon_red_completion.cerulean.run_adaptive_trainer_battle",
+        run_adaptive,
+    )
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            del action
+
+    final = _finish_battle(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        MapId.ROUTE_3,
+        "Route 3 trainer 1",
+        move_slot=3,
+        battle_plan_id="cerulean-route-3-trainer-1",
+        emulator=emulator,  # type: ignore[arg-type]
+        recovery_hp_threshold=ROUTE_3_BATTLE_RECOVERY_HP,
+        recovery_potion_floor=ROUTE_3_BATTLE_POTION_FLOOR,
+    )
+
+    assert recovery_calls == [ROUTE_3_BATTLE_POTION_FLOOR] * 4
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 8
+    assert final.battle_state == 0
 
 
 def test_battle_completion_continues_with_the_sole_living_forced_switch(
@@ -2498,9 +2606,7 @@ def test_battle_completion_continues_with_the_sole_living_forced_switch(
         runtime_calls += 1
         intent = kwargs["intent"]
         assert isinstance(intent, BattleIntent)
-        assert intent.switch_capabilities == frozenset(
-            {BattleSwitchCapability.DIRECT}
-        )
+        assert intent.switch_capabilities == frozenset({BattleSwitchCapability.DIRECT})
         assert intent.switch_limit == 1
         if runtime_calls == 1:
             raise BattleRuntimeError("unit forced switch")

@@ -8,37 +8,37 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: publish the post-yield repair, then freeze a genuinely new yield gate
+## Current checkpoint: publish the world-variance repair, then freeze a genuinely new yield gate
 
 The mission is unchanged: build a transferable hierarchical agent that finishes stories and builds
 living Pokedexes across versions and generations. Red is the first causal curriculum, not the
 product. Deterministic teacher actions may create independent worlds and observable decision
 contexts, but those button sequences never become learner targets.
 
-Exact main `be6a03a4` passed CI `33189656179/1`, then its source-bound successor gate failed three
-times in three distinct places and stopped because 10/12 had become mathematically impossible.
-Seeds 9900049–9900051 are consumed; the remaining assignments are bound to the superseded source
-and cannot be repurposed. The failures exposed a moving Saffron clerk, a bounded Zubat search, and
-an Antidote/status mismatch. Subsequent one-use development probes also exposed cartridge sale
-values, a final-pulse Mart boundary, a false Silph healing checkpoint, and a direct post-RUN
-trainer transition.
+Exact main `05ae3cce` passed CI `33221693432/1`, then its prospectively frozen twelve-world gate
+stopped at **2/5** because three distinct failures made 10/12 mathematically impossible. The five
+claimed assignments are consumed; the seven unclaimed assignments remain bound to superseded
+source and cannot be repurposed. The preserved failures exposed Silph active-battler recovery,
+one blocked post-ship Vermilion step, and a Diglett capture decision aimed at a fainted helper.
+Fresh one-use diagnostics then exposed an armed-target HP race in Mt. Moon, an exact Rock Tunnel
+poison budget, Pidgeotto accuracy exhaustion, and a legal reserve-led Cerulean rival victory that
+left field menus open after party normalization.
 
-The repair addresses those as explicit capabilities: cartridge-exact funding assets, a broader
-safe capture policy, poison survival budgets, dynamic obstacle waits, post-action boundary
-observation, whole-party HP/status plus lead-PP healing evidence, and an opt-in authenticated
-trainer handoff. The final unchanged source bundle `a3b18f34` reached the late-Cinnabar
-`mansion_returned` boundary on seeds 9910051–9910053: **3/3, 112,486 actions, 21,072,636 frames**.
-The scope is checkpoint **275/312**, after the Pokémon Mansion Secret Key route returns to the
-Center; it intentionally stops before Blaine, Viridian Gym, the League, Hall of Fame, and living-
-Pokedex completion.
+The bounded teacher-maintenance repair treats those as reusable Generation-I mechanisms: observe the live battler and
+capture target at the decision boundary, verify coordinate changes around moving obstacles, prove
+poison against explicit steps and turns, reset accuracy once through an authenticated switch,
+accept only the exact event-authenticated reserve-led terminal, promote only a sole survivor, and
+close both party/menu layers structurally instead of trusting misleading movement flags. One
+unchanged source bundle `7c2974ab` reached the late-Cinnabar `mansion_returned` boundary on initial
+waits 197, 58, and 123: **3/3, 125,932 actions, 22,345,994 frames**. The scope remains checkpoint
+**275/312**, after the Mansion Secret Key return and before Blaine, Viridian Gym, the League, Hall
+of Fame, or living-Pokedex completion.
 
-The [path-free qualification](evidence/red-living-dex-fresh-teacher-post-yield-repair-local-qualification-v2-2026-08-28.json)
+The [path-free qualification](evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
 binds all three private ledgers by hash and preserves every protected counter at zero. The source
-passes **5,694 repository tests**, Ruff, Mypy over **295** source files, all three generated
-registries, and diff checks. Claude found no P0 code defect; Codex accepted its evidence-publication
-requirement and rejected two misreadings: Mansion return is late Cinnabar, and the bounded
-post-RUN fallthrough intentionally advances the trainer intro until the predicate authenticates
-the full snapshot.
+passes **5,718 repository tests**, Ruff, Mypy over **309** source files, all three generated
+registries, documentation, public-artifact, and diff checks. This is the final local engineering
+gate, not a population estimate or learner result.
 
 The shortest honest next sequence is:
 

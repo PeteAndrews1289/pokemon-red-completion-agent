@@ -33,11 +33,9 @@ class _PartyMenuSimulation:
         )
 
     def read_input_readiness(self) -> InputReadiness:
-        return (
-            InputReadiness(0, 0, 0, 0, 0)
-            if self.stage == "field"
-            else InputReadiness(1, 0, 0, 0, 0)
-        )
+        # Red's movement flags can read as ready while a field menu remains
+        # open. The implementation must close both menu layers structurally.
+        return InputReadiness(0, 0, 0, 0, 0)
 
     def read_u8(self, address: int) -> int:
         if address == RamAddress.CURRENT_MENU_ITEM:
@@ -75,9 +73,12 @@ class _PartyMenuSimulation:
                     self.moves[destination],
                     self.moves[self.source],
                 )
-                self.stage = "closing"
-        elif action.kind is MacroActionKind.CANCEL and self.stage == "closing":
-            self.stage = "field"
+                self.stage = "party_after_switch"
+        elif action.kind is MacroActionKind.CANCEL:
+            if self.stage == "party_after_switch":
+                self.stage = "start"
+            elif self.stage == "start":
+                self.stage = "field"
         return object()
 
 

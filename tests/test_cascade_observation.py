@@ -23,6 +23,7 @@ from pokemon_red_completion.observation import (
     ROUTE_24_ROCKET_TRAINER_NUMBER,
     ROUTE_25_REQUIRED_TRAINER_SPECS,
     WARTORTLE_SPECIES_ID,
+    ZUBAT_SPECIES_ID,
     Badge,
     CascadePhase,
     CascadeProgressError,
@@ -187,9 +188,7 @@ def _route_24_battle(position: int) -> CascadeState:
         player_x,
         player_y,
     ) = ROUTE_24_REQUIRED_TRAINER_SPECS[position]
-    events = tuple(
-        index < position for index in range(len(ROUTE_24_REQUIRED_TRAINER_SPECS))
-    )
+    events = tuple(index < position for index in range(len(ROUTE_24_REQUIRED_TRAINER_SPECS)))
     return _cascade(
         phase=CascadePhase.ROUTE_24_TRAINER_BATTLE,
         beat_cerulean_rival=True,
@@ -253,9 +252,7 @@ def _route_25_battle(position: int) -> CascadeState:
         player_x,
         player_y,
     ) = ROUTE_25_REQUIRED_TRAINER_SPECS[position]
-    events = tuple(
-        index < position for index in range(len(ROUTE_25_REQUIRED_TRAINER_SPECS))
-    )
+    events = tuple(index < position for index in range(len(ROUTE_25_REQUIRED_TRAINER_SPECS)))
     return _cascade(
         phase=CascadePhase.ROUTE_25_TRAINER_BATTLE,
         beat_cerulean_rival=True,
@@ -453,8 +450,7 @@ def test_bill_and_cascade_symbols_match_the_pinned_pokered_revision() -> None:
     assert EventFlag.GOT_NUGGET == 0x540
     assert EventFlag.BEAT_ROUTE_24_ROCKET == 0x541
     assert tuple(
-        EventFlag(int(EventFlag.BEAT_ROUTE_24_TRAINER_0) + index)
-        for index in range(6)
+        EventFlag(int(EventFlag.BEAT_ROUTE_24_TRAINER_0) + index) for index in range(6)
     ) == (
         EventFlag.BEAT_ROUTE_24_TRAINER_0,
         EventFlag.BEAT_ROUTE_24_TRAINER_1,
@@ -466,8 +462,7 @@ def test_bill_and_cascade_symbols_match_the_pinned_pokered_revision() -> None:
     assert EventFlag.NUGGET_REWARD_AVAILABLE == 0x549
     assert EventFlag.MET_BILL == 0x550
     assert tuple(
-        EventFlag(int(EventFlag.BEAT_ROUTE_25_TRAINER_0) + index)
-        for index in range(9)
+        EventFlag(int(EventFlag.BEAT_ROUTE_25_TRAINER_0) + index) for index in range(9)
     ) == (
         EventFlag.BEAT_ROUTE_25_TRAINER_0,
         EventFlag.BEAT_ROUTE_25_TRAINER_1,
@@ -569,52 +564,24 @@ def test_cascade_tracker_qualifies_the_complete_ordered_evidence_chain() -> None
     assert tracker.observe(_rival_victory()) is CascadePhase.RIVAL_DEFEATED
 
     for position in range(len(ROUTE_24_REQUIRED_TRAINER_SPECS)):
-        assert (
-            tracker.observe(_route_24_battle(position))
-            is CascadePhase.ROUTE_24_TRAINER_BATTLE
-        )
+        assert tracker.observe(_route_24_battle(position)) is CascadePhase.ROUTE_24_TRAINER_BATTLE
     assert tracker.observed_route_24_trainers == (5, 4, 3, 2, 1)
 
-    assert (
-        tracker.observe(_nugget_rocket_battle())
-        is CascadePhase.NUGGET_ROCKET_BATTLE
-    )
-    assert (
-        tracker.observe(_nugget_rocket_victory())
-        is CascadePhase.NUGGET_ROCKET_DEFEATED
-    )
+    assert tracker.observe(_nugget_rocket_battle()) is CascadePhase.NUGGET_ROCKET_BATTLE
+    assert tracker.observe(_nugget_rocket_victory()) is CascadePhase.NUGGET_ROCKET_DEFEATED
 
     for position in range(len(ROUTE_25_REQUIRED_TRAINER_SPECS)):
-        assert (
-            tracker.observe(_route_25_battle(position))
-            is CascadePhase.ROUTE_25_TRAINER_BATTLE
-        )
+        assert tracker.observe(_route_25_battle(position)) is CascadePhase.ROUTE_25_TRAINER_BATTLE
     assert tracker.observed_route_25_trainers == (8, 3, 2, 5)
 
-    assert (
-        tracker.observe(_bill_requested())
-        is CascadePhase.BILL_REQUESTED_HELP
-    )
-    assert (
-        tracker.observe(_bill_separator_used())
-        is CascadePhase.BILL_CELL_SEPARATOR_USED
-    )
-    assert (
-        tracker.observe(_bill_separator_used())
-        is CascadePhase.BILL_CELL_SEPARATOR_USED
-    )
+    assert tracker.observe(_bill_requested()) is CascadePhase.BILL_REQUESTED_HELP
+    assert tracker.observe(_bill_separator_used()) is CascadePhase.BILL_CELL_SEPARATOR_USED
+    assert tracker.observe(_bill_separator_used()) is CascadePhase.BILL_CELL_SEPARATOR_USED
     assert tracker.observe(_bill_restored()) is CascadePhase.BILL_RESTORED
+    assert tracker.observe(_ticket_obtained()) is CascadePhase.SS_TICKET_OBTAINED
+    assert tracker.observe(_bills_house_left()) is CascadePhase.BILLS_HOUSE_LEFT
     assert (
-        tracker.observe(_ticket_obtained())
-        is CascadePhase.SS_TICKET_OBTAINED
-    )
-    assert (
-        tracker.observe(_bills_house_left())
-        is CascadePhase.BILLS_HOUSE_LEFT
-    )
-    assert (
-        tracker.observe(_cerulean_gym_trainer_battle())
-        is CascadePhase.CERULEAN_GYM_TRAINER_BATTLE
+        tracker.observe(_cerulean_gym_trainer_battle()) is CascadePhase.CERULEAN_GYM_TRAINER_BATTLE
     )
     assert (
         tracker.observe(_cerulean_gym_trainer_victory())
@@ -654,6 +621,26 @@ def test_rival_victory_cannot_qualify_without_live_identity() -> None:
     wrong_rival = replace(_rival_battle(), current_opponent=0xD9)
     with pytest.raises(CascadeProgressError, match="source-pinned"):
         tracker.observe(wrong_rival)
+
+
+def test_rival_victory_accepts_only_the_exact_reserve_led_terminal() -> None:
+    reserve_led = replace(
+        _rival_victory(),
+        party_count=2,
+        party_species_ids=(WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID),
+        first_party_hp=0,
+    )
+
+    assert not reserve_led.stable_snapshot
+    assert reserve_led.rival_victory_snapshot
+    assert not replace(
+        reserve_led,
+        party_species_ids=(ZUBAT_SPECIES_ID, WARTORTLE_SPECIES_ID),
+    ).rival_victory_snapshot
+    assert not replace(reserve_led, party_count=1).rival_victory_snapshot
+    assert not replace(reserve_led, first_party_max_hp=0).rival_victory_snapshot
+    assert not replace(reserve_led, beat_cerulean_rival=False).rival_victory_snapshot
+    assert not replace(reserve_led, battle_result=1).rival_victory_snapshot
 
 
 def test_route_24_battles_fail_closed_on_reordering_and_unflipped_events() -> None:
@@ -878,8 +865,7 @@ def test_reader_requires_all_misty_rewards_and_both_badge_mirrors() -> None:
         ),
     )
     assert (
-        PokemonRedStateReader(memory).read_cascade_state(missing_tm).phase
-        is CascadePhase.UNKNOWN
+        PokemonRedStateReader(memory).read_cascade_state(missing_tm).phase is CascadePhase.UNKNOWN
     )
 
     one_badge_mirror = Memory(

@@ -7281,3 +7281,32 @@ failure policy that would have discarded valid sibling roots and an emulator-por
 Claude then independently verified the repairs and made the trusted-source boundary explicit for
 future Crystal reuse. The finished local gate passed 5,596 tests without opening a cartridge or
 incrementing a learning counter.
+
+## The teacher won the battle and still failed the test
+
+The most revealing failure in the next fresh-world repair was not a loss. One 197-frame timing
+schedule drove the Cerulean rival battle into repeated Sand Attack, exhausted Water Gun, and spent
+twelve Potions before the party fainted. A single early, authenticated switch-out and return reset
+accuracy without changing the declared objective. On the next world the same strategic repair
+worked: the rival was defeated, the event flag flipped, the battle result was zero, and Zubat
+stood at full health. The run still stopped because the semantic checkpoint assumed Wartortle had
+to remain alive in slot one.
+
+The narrow repair accepted only the exact Wartortle/Zubat reserve-led terminal after an observed
+live battle, promoted Zubat only when it was provably the sole survivor, and planned to restore
+roles after healing. The first live validation exposed one more layer: Generation I's movement
+flags can report field readiness while the party and field menus remain open. Every recovery
+direction changed a menu cursor instead of the player's coordinates. The reusable party helper
+now exits both menu layers structurally and then checks readiness. That distinction—semantic
+readiness versus actual UI mode—is exactly the kind of game knowledge a transferable system must
+represent explicitly.
+
+The final unchanged source crossed all earlier repair sites on three one-use worlds with initial
+waits 197, 58, and 123. All three reached the late-Cinnabar Mansion return at checkpoint 275/312,
+totalling 125,932 controller actions and 22,345,994 emulator frames. The 58-frame world exercised
+the Mt. Moon armed-capture and Rock Tunnel poison path; the 197-frame world exercised the rival
+accuracy and reserve-led recovery; the third supplied an independent timing. None was promoted to
+a root or label. The lesson is not that the teacher now “plays Pokémon.” It is that independent
+classroom generation finally has a locally qualified chance to survive world variance, so the
+project can return to the actual experiment: causal Red options, a powered learned scorer, and
+abstention-aware Crystal transfer.

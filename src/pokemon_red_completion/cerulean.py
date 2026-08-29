@@ -113,12 +113,15 @@ FIELD_ITEM_MENU_CLOSE_PULSES = 4
 GEN1_FIELD_POISON_STEP_PERIOD = 4
 POTION_HEAL_AMOUNT = 20
 ROUTE_3_BATTLE_RECOVERY_HP = 20
-ROUTE_3_BATTLE_POTION_FLOOR = 9
+ROUTE_3_BATTLE_POTION_FLOOR = 8
 ROUTE_3_PROTECTED_POTION_FLOOR = 12
-ROUTE_3_POISON_RETURN_POTION_FLOOR = 9
+ROUTE_3_POISON_RETURN_POTION_FLOOR = ROUTE_3_BATTLE_POTION_FLOOR
 ROUTE_3_CAVE_ANTIDOTE_RESERVE = 1
 MT_MOON_BATTLE_POTION_FLOOR = 9
-MT_MOON_POTION_STARTING_QUANTITIES = frozenset(range(MT_MOON_BATTLE_POTION_FLOOR, 14))
+# Route 3 may spend one fourth surplus Potion under live low-HP evidence.  The
+# free 1F pickup occurs before either required cave trainer and must bridge an
+# eight-Potion arrival back to the independently protected nine-Potion floor.
+MT_MOON_POTION_STARTING_QUANTITIES = frozenset(range(ROUTE_3_BATTLE_POTION_FLOOR, 14))
 MT_MOON_ROCKET_RECOVERY_HP = 20
 ROUTE_3_MAX_WILD_FLEES = 4
 ROUTE_3_MAX_STEP_ATTEMPTS = 8
@@ -456,9 +459,7 @@ class CeruleanChapterReport:
             "economy": {
                 "pewter_tm34_sale_proceeds": self.pewter_tm34_sale_proceeds,
                 "mt_moon_tm12_funding_asset_collected": self.mt_moon_tm12_in_bag,
-                "mt_moon_rare_candy_funding_asset_collected": (
-                    self.mt_moon_rare_candy_in_bag
-                ),
+                "mt_moon_rare_candy_funding_asset_collected": (self.mt_moon_rare_candy_in_bag),
                 "pewter_supply_gross_cost": PEWTER_SUPPLY_COST,
                 "pewter_supply_net_cost": PEWTER_NET_SUPPLY_COST,
             },
@@ -657,9 +658,7 @@ def run_cerulean_chapter(
             f"Route 3 trainer {trainer_index}",
             move_slot=3 if trainer_index in ROUTE_3_BUBBLE_TRAINER_INDEXES else 1,
             battle_plan_id=f"cerulean-route-3-trainer-{trainer_index}",
-            emulator=(
-                emulator if trainer_index in ROUTE_3_RECOVERY_TRAINER_INDEXES else None
-            ),
+            emulator=(emulator if trainer_index in ROUTE_3_RECOVERY_TRAINER_INDEXES else None),
             recovery_hp_threshold=(
                 ROUTE_3_BATTLE_RECOVERY_HP
                 if trainer_index in ROUTE_3_RECOVERY_TRAINER_INDEXES
@@ -685,11 +684,7 @@ def run_cerulean_chapter(
             timing,
             expected_map=MapId.ROUTE_3,
             label=f"Route 3 trainer {trainer_index}",
-            healing_route_steps=(
-                len(route_prefix)
-                + 1
-                + len(ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS)
-            ),
+            healing_route_steps=(len(route_prefix) + 1 + len(ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS)),
             minimum_antidote_reserve=ROUTE_3_CAVE_ANTIDOTE_RESERVE,
             potion_floor=ROUTE_3_POISON_RETURN_POTION_FLOOR,
         )
@@ -1581,9 +1576,7 @@ def _use_field_poison_survival_potion(
         or _bag_quantity(emulator, ItemId.POTION) != before_quantity - 1
         or not reader.read_input_readiness().ready
     ):
-        raise CeruleanChapterError(
-            f"{label} poison-survival Potion failed its persistent gate."
-        )
+        raise CeruleanChapterError(f"{label} poison-survival Potion failed its persistent gate.")
 
 
 def _toss_open_cerulean_antidotes(
@@ -1853,7 +1846,6 @@ def _capture_mt_moon_zubat(
             encounter.enemy_max_hp or 0,
         )
         or _bag_quantity(emulator, ItemId.POKE_BALL) != balls_remaining
-        or not reader.read_input_readiness().ready
     ):
         raise CeruleanChapterError("Mt. Moon Zubat capture failed its persistent gate.")
     if (settled.player_x, settled.player_y) == (14, 32):
@@ -1895,7 +1887,7 @@ def _capture_weakened_mt_moon_zubat(
     timing: CeruleanTiming,
     weakened: RawGameState,
 ) -> tuple[RawGameState, int, int, int, int]:
-    """Throw from one battle until capture or the fixed Ball reserve is exhausted."""
+    """Throw until capture reaches ready field control or the reserve is exhausted."""
 
     starting_balls = _bag_quantity(emulator, ItemId.POKE_BALL)
     if (
@@ -1950,6 +1942,26 @@ def _capture_weakened_mt_moon_zubat(
         else:
             raise CeruleanChapterError("Mt. Moon capture could not select a Poké Ball.")
 
+        # Menu settling can finish a previously selected weakening turn before
+        # the item list owns input.  Bind HP persistence to the cartridge state
+        # immediately before the throw, not to the earlier main-menu snapshot.
+        armed_target = reader.read()
+        if (
+            armed_target.map_id != MapId.MT_MOON_1F
+            or armed_target.battle_state != 1
+            or armed_target.enemy_species_id != ZUBAT_SPECIES_ID
+            or armed_target.enemy_level != weakened.enemy_level
+            or armed_target.enemy_hp is None
+            or armed_target.enemy_max_hp != weakened.enemy_max_hp
+            or not 0 < armed_target.enemy_hp <= (armed_target.enemy_max_hp or 0)
+            or armed_target.party_species_ids != (SQUIRTLE_SPECIES_ID,)
+            or (armed_target.first_party_hp or 0) <= 0
+            or _bag_quantity(emulator, ItemId.POKE_BALL) != before_balls
+        ):
+            raise CeruleanChapterError(
+                "Mt. Moon capture lost its live target while selecting a Poké Ball."
+            )
+
         _pulse(executor, MacroActionKind.CONFIRM, frames=360)
         settled, captured = _settle_mt_moon_capture_throw(
             executor,
@@ -1961,7 +1973,7 @@ def _capture_weakened_mt_moon_zubat(
         if remaining != expected_balls:
             raise CeruleanChapterError("Mt. Moon capture throw missed its Ball decrement gate.")
         if captured:
-            return settled, attempt, attempt, remaining, throw_target.enemy_hp
+            return settled, attempt, attempt, remaining, armed_target.enemy_hp
         if (
             settled.map_id != MapId.MT_MOON_1F
             or settled.battle_state != 1
@@ -2036,8 +2048,7 @@ def _weaken_mt_moon_zubat(
         or not 0 < current.enemy_hp <= current.enemy_max_hp
         or current.party_species_ids != (SQUIRTLE_SPECIES_ID,)
         or (current.first_party_hp or 0) <= 0
-        or _bag_quantity(emulator, ItemId.POKE_BALL)
-        != PEWTER_POKE_BALL_PURCHASE_QUANTITY
+        or _bag_quantity(emulator, ItemId.POKE_BALL) != PEWTER_POKE_BALL_PURCHASE_QUANTITY
     ):
         raise CeruleanChapterError("Mt. Moon Zubat preparation lost its live target gate.")
     if landed_hits and current.enemy_hp >= current.enemy_max_hp:
@@ -2083,7 +2094,7 @@ def _settle_mt_moon_capture_throw(
     *,
     expected_balls: int,
 ) -> tuple[RawGameState, bool]:
-    """Resolve either a captured field state or a stable retryable battle menu."""
+    """Resolve ready captured field control or a stable retryable battle menu."""
 
     for _ in range(20):
         raw = reader.read()
@@ -2770,17 +2781,11 @@ def _is_persistent_capture_hp(
     target_enemy_hp: int,
     target_enemy_max_hp: int,
 ) -> bool:
-    if not (
-        0 < captured_hp <= captured_max_hp
-        and 0 < target_enemy_hp <= target_enemy_max_hp
-    ):
+    if not (0 < captured_hp <= captured_max_hp and 0 < target_enemy_hp <= target_enemy_max_hp):
         return False
     if target_enemy_hp == target_enemy_max_hp:
         return captured_hp == captured_max_hp
-    return (
-        captured_hp < captured_max_hp
-        and abs(captured_hp - target_enemy_hp) <= 1
-    )
+    return captured_hp < captured_max_hp and abs(captured_hp - target_enemy_hp) <= 1
 
 
 def _toggleable_object_flag(emulator: EmulatorState, index: int) -> bool:
@@ -3224,10 +3229,7 @@ def _leave_pewter_mart(
         # As with the door warp below, the last bounded pulse is allowed to
         # establish the target column and must be observed before rejection.
         raw = reader.read()
-        if (
-            raw.map_id != MapId.PEWTER_MART
-            or (raw.player_x, raw.player_y) != (3, 5)
-        ):
+        if raw.map_id != MapId.PEWTER_MART or (raw.player_x, raw.player_y) != (3, 5):
             raise CeruleanChapterError("Pewter Mart customer blocked the exit column.")
     raw = reader.read()
     if raw.map_id != MapId.PEWTER_MART or (raw.player_x, raw.player_y) != (3, 5):
@@ -3365,11 +3367,7 @@ def _trigger_trainer_through_wild_encounters(
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         moved = reader.read()
         position = (moved.player_x, moved.player_y)
-        if (
-            moved.map_id == expected_map
-            and moved.battle_state == 2
-            and position == destination
-        ):
+        if moved.map_id == expected_map and moved.battle_state == 2 and position == destination:
             return moved
         if moved.map_id != expected_map or position not in {origin, destination}:
             raise CeruleanChapterError(f"{label} drifted off its observed sight line.")
@@ -3614,9 +3612,7 @@ def _finish_adaptive_battle(
     if demonstrated_move_slot not in {1, 2, 3, 4}:
         raise CeruleanChapterError(f"{label} lacks its demonstrated move slot.")
 
-    starting_quantity = (
-        _bag_quantity(emulator, ItemId.POTION) if emulator is not None else 0
-    )
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION) if emulator is not None else 0
     if emulator is not None and starting_quantity < recovery_potion_floor:
         raise CeruleanChapterError(f"{label} began below its protected Potion floor.")
     recoveries = 0
@@ -3634,9 +3630,7 @@ def _finish_adaptive_battle(
             else frozenset()
         ),
         switch_capabilities=(
-            frozenset({BattleSwitchCapability.DIRECT})
-            if emulator is not None
-            else frozenset()
+            frozenset({BattleSwitchCapability.DIRECT}) if emulator is not None else frozenset()
         ),
         switch_limit=1 if emulator is not None else None,
     )
@@ -3666,9 +3660,7 @@ def _finish_adaptive_battle(
                 unknown_cancel_interval=10_000,
                 transient_zero_pp_main_is_dialogue=True,
                 consume_battle_start_schedule=False,
-                move_decision_guard=(
-                    recovery_guard if recovery_hp_threshold is not None else None
-                ),
+                move_decision_guard=(recovery_guard if recovery_hp_threshold is not None else None),
             )
         except BattleRuntimeError as error:
             recovery_requested = recovery_request_matches(
