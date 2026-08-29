@@ -1,5 +1,19 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 private-schedule integrity gate
+
+The project locally qualified a zero-controller private schedule freezer and a separate reopen
+validator for its first lineage-clustered causal curriculum. The contract binds eight Red training
+scenarios and four untouched development scenarios to exact private contexts, episode lineages,
+physical roots, templates, and setup recipes while deliberately omitting arm choice and outcome
+access. Seven mutation classes fail closed, and the candidate passes 5,751 tests, Ruff, Mypy over
+313 source files, source-bound registries, documentation, and public-artifact checks.
+
+This is an integrity milestone, not a training claim: the authentic schedule has not yet been
+frozen, no gameplay occurred, and no model was fit. The next bounded step is exact publication and
+CI, followed by one action-free freeze/reopen and reorientation before a crash-safe selected-arm
+runner can collect the first eight authentic outcomes.
+
 ## August 29 clustered-capacity result
 
 An exact action-free census transformed the historical Red bank into a leakage-resistant

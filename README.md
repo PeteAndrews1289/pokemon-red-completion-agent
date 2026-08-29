@@ -5,19 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 29, 2026): freeze the passed clustered curriculum, then collect
-> real outcomes.** The exact zero-controller census found **8 train scenarios from 8 lineages**
+> **Current product focus (August 29, 2026): publish the locally qualified private freezer, then
+> freeze once.** The exact zero-controller census found **8 train scenarios from 8 lineages**
 > and **4 untouched development scenarios from 4 lineages**, with all seven portable option
 > kinds in both partitions, one scenario per lineage, and zero overlap. It used 67 qualified
 > upstream lineages and 414 compatibility edges without executing gameplay, querying a teacher,
 > observing an outcome, or fitting a model.
 >
-> Capacity is therefore no longer the blocker. The next gate is an action-free private freezer
-> that must reproduce schedule `35c00f38…`, persist the exact 8+4 assignments, and reopen under an
-> independent validator. Only then may the eight train selected arms run, followed by a clearly
-> non-authoritative integration fit. No V3 teacher-yield gate or routine full-game replay is
-> allowed. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
-> [path-free census result](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
+> Capacity is no longer the blocker. The action-free freezer and a separate reopen validator now
+> pass **5,751 tests**, Ruff, Mypy over **313 source files**, source-bound registries, documentation,
+> public-artifact checks, and seven adversarial mutation classes. They bind each private context,
+> lineage, physical root, template, and exact Red setup recipe while exposing no arm-selection,
+> teacher, controller, outcome, or fit authority.
+>
+> This is a local engineering result, not training: **no real private schedule has been frozen**.
+> Next publish the exact source, require green CI, then run one action-free freeze and independent
+> reopen only. Reorient before building or executing the claim-first selected-arm runner. No V3
+> teacher-yield gate or routine full-game replay is allowed. **Causal train 1/60 · powered fit 0
+> · authority 0 · transfer 0.** See the
+> [freezer qualification](docs/evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
+> and [path-free census](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
 
 > **Current product focus (August 29, 2026): the exact-main population gate failed; repair only
 > what it measured.** PR 99 merged as main `624325cf`, and exact-main CI `33232635929/1` passed.

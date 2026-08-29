@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze and independently reopen the exact private 8+4 clustered schedule with zero protected effects, then collect the eight short train selected-arm outcomes without another teacher-yield gate or full-game replay.
+- Next decision: Publish and green the locally qualified private freezer, freeze and independently reopen the exact 8+4 schedule once with zero protected effects, then reorient before any selected-arm execution.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The pipeline holds one authentic settled negative Red causal train row plus a passed action-free 8-train/4-development clustered capacity gate over 12 distinct lineages and all seven portable option kinds. The private assignment plan is not yet frozen, no powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | Before gameplay, a private schedule freezer must reproduce public clustered schedule SHA-256 35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905 from the exact authenticated bank, retain whole-lineage partition ownership, and publish one integrity-verifiable private 8+4 plan with zero protected effects. Any schedule drift, identity leak, or second inventory redesign stops the lane. |
+| Cheapest falsifier | Publish the locally qualified action-free freezer, require green exact-source CI, then run it once against the authenticated bank. It must reproduce schedule SHA-256 35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905, persist exactly 8+4 assignments, and reopen under the independent validator with zero protected effects. Any schedule drift, identity leak, or second inventory redesign stops the lane. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,17 +58,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-29-clustered-capacity-passed-private-freeze-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json)
+**2026-08-29-private-clustered-freezer-local-go-publication-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The action-free census converted the historical bank into a practical causal classroom: 8 train lineages and 4 untouched development lineages, all seven portable option kinds, maximum one selected scenario per lineage, and zero protected effects. The old 132-root deficit belongs only to the retired one-independent-full-game-root-per-row assumption. |
+| Product alignment | The project now has both practical clustered capacity and a locally qualified integrity boundary for retaining it privately. This converts the next step from another inventory redesign into one publish-green-freeze decision directly upstream of eight authentic outcomes and the first non-authoritative fit. |
 | Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
-| Authority delta | None. The exact action-free clustered census created no learner label, outcome, fit, sealed case, transfer result, or authority promotion. The immutable authentic causal-train count remains 1/60. |
+| Authority delta | None. The private freezer and independent reopen validator are locally qualified, but no private schedule has been frozen and no learner label, outcome, fit, sealed case, transfer result, or authority promotion was created. The immutable authentic causal-train count remains 1/60. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | Capacity is no longer the blocker: the existing bank produced 8 train scenarios from 8 lineages and 4 untouched development scenarios from 4 lineages with all seven portable option kinds and zero overlap. The remaining blocker is durable private identity: the census intentionally published only a path-free aggregate and did not retain the private scenario assignments needed for later selected-arm execution. |
-| Decision | Accept the lineage-clustered redesign. Preserve the legacy 195-independent-root shortfall only as a retired diagnostic, not a training gate. Next qualify one action-free private schedule freezer that deterministically reproduces the recorded clustered schedule hash and stores the exact 8+4 assignments without outcomes; after that, execute only the eight train scenarios before the first non-authoritative integration fit. |
-| Next session | Implement, mutation-test, publish, and run one action-free private clustered-schedule freezer against the exact authenticated bank. If it reproduces and reopens the recorded 8+4 schedule, build the claim-first selected-arm outcome boundary and begin the eight short train scenarios; do not query a teacher or run a full-game replay. |
+| Blocker | The durable-identity implementation is complete locally: it binds context, root, lineage, template, and Red recipe commitments and rejects reordered schedules, altered joins, nonzero effects, or a hidden arm choice. It is not yet published or exact-CI green, so the one action-free private freeze remains closed. |
+| Decision | Publish the locally qualified freezer and independent validator, require green CI on the exact executable source, then run one action-free freeze/reopen against the authenticated bank. Only a reproduced 8+4 private plan opens construction of the claim-first selected-arm runner; do not execute a scenario in the same gate. |
+| Next session | Publish the exact locally qualified freezer, obtain green CI, then execute one action-free private freeze and independent reopen only. If and only if the schedule hash and all 8+4 assignments validate, reorient and build the claim-first selected-arm runner; do not query a teacher, execute a scenario, or run a full-game replay in the freeze gate. |
 | Next falsifier | A zero-controller private freeze must reproduce schedule SHA-256 35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905, persist exactly 8 train plus 4 development assignments with whole-lineage ownership, and reopen byte-for-byte under an independent validator. Any hash drift, partition overlap, identity disclosure, outcome access, or protected effect rejects the freezer before gameplay. |
 | Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
