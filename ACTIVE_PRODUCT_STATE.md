@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the locally qualified private freezer, freeze and independently reopen the exact 8+4 schedule once with zero protected effects, then reorient before any selected-arm execution.
+- Next decision: Build and exact-CI qualify a train-only claim-first selected-arm runner against the frozen 8+4 plan, prove every crash cutpoint ROM-free, then reorient before the first authentic train execution.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds one authentic settled negative Red causal train row plus a passed action-free 8-train/4-development clustered capacity gate over 12 distinct lineages and all seven portable option kinds. The private assignment plan is not yet frozen, no powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet. |
+| Authority now | The pipeline holds one authentic settled negative Red causal train row plus one frozen and independently validated private schedule containing 8 train scenarios from 8 lineages and 4 untouched development scenarios from 4 lineages across all seven portable option kinds. No selected arm has run, no powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | Publish the locally qualified action-free freezer, require green exact-source CI, then run it once against the authenticated bank. It must reproduce schedule SHA-256 35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905, persist exactly 8+4 assignments, and reopen under the independent validator with zero protected effects. Any schedule drift, identity leak, or second inventory redesign stops the lane. |
+| Cheapest falsifier | Before gameplay, a train-only claim-first runner must reopen frozen private plan 2a0462b8, accept only ordinals 0 through 7, bind the exact context and recipe, atomically protect logical and physical root identity, durably commit exactly one arm before controller input, and reject development, counterfactual labels, duplicate execution, or crash recovery that changes the commitment. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-29-private-clustered-freezer-local-go-publication-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
+**2026-08-29-private-clustered-schedule-frozen-runner-engineering-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now has both practical clustered capacity and a locally qualified integrity boundary for retaining it privately. This converts the next step from another inventory redesign into one publish-green-freeze decision directly upstream of eight authentic outcomes and the first non-authoritative fit. |
+| Product alignment | The exact 8+4 classroom is now privately locked and independently recoverable, so the project can stop recensus and full-game teacher work. The shortest path to measured learning is a reusable crash-safe selected-arm outcome boundary, the eight already frozen short Red train scenarios, and one explicitly non-authoritative integration fit. |
 | Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
-| Authority delta | None. The private freezer and independent reopen validator are locally qualified, but no private schedule has been frozen and no learner label, outcome, fit, sealed case, transfer result, or authority promotion was created. The immutable authentic causal-train count remains 1/60. |
+| Authority delta | None. The exact 8+4 private schedule is frozen and independently validated, but no selected arm ran and no learner label, outcome, fit, sealed case, transfer result, or authority promotion was created. The immutable authentic causal-train count remains 1/60. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The durable-identity implementation is complete locally: it binds context, root, lineage, template, and Red recipe commitments and rejects reordered schedules, altered joins, nonzero effects, or a hidden arm choice. It is not yet published or exact-CI green, so the one action-free private freeze remains closed. |
-| Decision | Publish the locally qualified freezer and independent validator, require green CI on the exact executable source, then run one action-free freeze/reopen against the authenticated bank. Only a reproduced 8+4 private plan opens construction of the claim-first selected-arm runner; do not execute a scenario in the same gate. |
-| Next session | Publish the exact locally qualified freezer, obtain green CI, then execute one action-free private freeze and independent reopen only. If and only if the schedule hash and all 8+4 assignments validate, reorient and build the claim-first selected-arm runner; do not query a teacher, execute a scenario, or run a full-game replay in the freeze gate. |
-| Next falsifier | A zero-controller private freeze must reproduce schedule SHA-256 35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905, persist exactly 8 train plus 4 development assignments with whole-lineage ownership, and reopen byte-for-byte under an independent validator. Any hash drift, partition overlap, identity disclosure, outcome access, or protected effect rejects the freezer before gameplay. |
+| Blocker | Capacity and durable private identity are no longer blockers. The frozen plan cannot execute itself: no published train-only consumer yet turns one assignment into a durable logical-plus-physical claim, pre-input selected-arm commitment, exact setup execution, and settled observed outcome without exposing development or counterfactual targets. |
+| Decision | Accept the one-shot freeze and close inventory redesign. Next implement and falsify a claim-first selected-arm runner against the frozen plan using ROM-free crash-cutpoint tests, then publish and exact-CI qualify it. Do not execute a scenario in the same engineering gate; reorient again before the first authentic train run. |
+| Next session | Implement, mutation-test, document, publish, and exact-CI qualify the train-only claim-first selected-arm runner against the frozen plan. Execute no scenario during the engineering gate. After a clean ROM-free rehearsal and exact-source CI, reorient before authorizing the first authentic train assignment. |
+| Next falsifier | A ROM-free train-only consumer must reopen private plan 2a0462b8, select exactly one of ordinals 0 through 7, bind its exact context and recipe, atomically claim logical and physical root identity, durably commit one selected arm before input, and prove every crash cutpoint cannot duplicate execution or change the committed arm. Development access, teacher targets, or counterfactual labels fail the gate. |
 | Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
 ### Stop conditions

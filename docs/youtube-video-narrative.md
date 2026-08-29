@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: freeze the classroom, then build the key
+
+Start with **PR 101 → MAIN 4190B92B → EXACT CI GREEN**. Run one timer to **~48 MINUTES** while every
+effect counter stays at zero. Then snap twelve face-down cards into a sealed box: **8 TRAIN / 8
+LINEAGES · 4 DEVELOPMENT / 4 UNTOUCHED LINEAGES · ALL 7 KINDS · OVERLAP 0**. Stamp the box
+**SCHEDULE 35C00F38 · PRIVATE PLAN 2A0462B8**.
+
+Move the box to a second machine labeled **ROM-FREE INDEPENDENT VALIDATOR**. Feed it external
+commitments—**SOURCE · ROM · REGISTRIES · CATALOG · RUNTIME · CENSUS**—and show **REOPEN ✓**.
+Keep **ACTIONS 0 · FRAMES 0 · CLAIMS 0 · TEACHERS 0 · OUTCOMES 0 · FITS 0** on screen.
+
+Now draw a key with four teeth: **TRAIN ONLY · LOGICAL+PHYSICAL CLAIM · ARM COMMITTED BEFORE INPUT ·
+CRASH-SAFE EXACTLY ONCE**. Animate the next rail: **BUILD + MUTATION TEST → PUBLISH → EXACT CI →
+REORIENT → FIRST REAL OUTCOME → 8 OUTCOMES → NON-AUTHORITATIVE FIT → 60 → RED HELD-OUT → CRYSTAL**.
+Cross out **REFREEZE · RECENSUS · FULL REPLAY · TEACHER LABELS**.
+
 ## August 29 scene: build the lock before entering the classroom
 
 Return to the twelve face-down classroom cards: **8 TRAIN / 8 LINEAGES** and **4 DEVELOPMENT / 4

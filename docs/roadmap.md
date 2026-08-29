@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 private-schedule result:** PR 101 merged as main `4190b92b` and exact-main CI
+> `33268744819/1` passed. The one permitted zero-controller freezer reproduced schedule
+> `35c00f38…`, sealed private plan `2a0462b8…`, and passed both immediate and independent ROM-free
+> reopen validation. The plan contains 8 train lineages and 4 untouched development lineages with
+> all seven portable option kinds and zero overlap. Actions, frames, claims, teachers, outcomes,
+> and fits remained zero.
+>
+> Next: engineer and falsify a train-only claim-first selected-arm runner against that immutable
+> plan. Require logical-plus-physical root protection, a durable pre-input arm commitment,
+> development exclusion, no counterfactual target, and every crash cutpoint. Publish and exact-CI
+> qualify it, then reorient before gameplay. Do not refreeze, recensus, or execute a scenario in
+> the engineering gate. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+> [freeze result](evidence/red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json).
+
 > **August 29 private-freezer qualification:** The zero-controller freezer and independent reopen
 > validator are locally GO. They bind the passed 8+4 clustered schedule to exact private context,
 > root, lineage, template, and Red recipe commitments, reject seven mutation classes, and pass

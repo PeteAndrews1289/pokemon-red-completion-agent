@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: private freezer locally GO; publish and freeze once
+## Current override: exact private plan frozen; claim-first runner engineering next
+
+Codex owns the train-only consumer for private plan `2a0462b8…`, the logical-plus-physical atomic
+claim, durable pre-input selected-arm commitment, crash-cutpoint matrix, documentation,
+publication, and final adjudication. PR 101 merged as main `4190b92b`; exact-main CI
+`33268744819/1`, the one-shot freezer, and the independent ROM-free validator all passed. The
+schedule is immutable and must not be refrozen or replaced.
+
+Claude challenges causal design, leakage, and whether the observed-arm record can accidentally
+contain teacher or counterfactual targets. Antigravity challenges the execution boundary,
+portability, and whether recovery can duplicate a root or change a committed arm. Both remain
+read-only and receive only path-free material. Neither edits, views private identities, executes
+gameplay, publishes, or grants authority. The next gate is runner engineering and ROM-free
+rehearsal only; reorient again before the first train ordinal runs. **Causal train 1/60 · powered
+fit 0 · authority 0 · transfer 0.**
+
+## Previous override: private freezer locally GO; publish and freeze once
 
 Codex owns the locally qualified freezer/validator candidate, exact-source publication, CI, one
 action-free private freeze, independent reopen, public path-free receipt, and the reorientation

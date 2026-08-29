@@ -5,26 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 29, 2026): publish the locally qualified private freezer, then
-> freeze once.** The exact zero-controller census found **8 train scenarios from 8 lineages**
-> and **4 untouched development scenarios from 4 lineages**, with all seven portable option
-> kinds in both partitions, one scenario per lineage, and zero overlap. It used 67 qualified
-> upstream lineages and 414 compatibility edges without executing gameplay, querying a teacher,
-> observing an outcome, or fitting a model.
+> **Current product focus (August 29, 2026): the exact 8+4 schedule is frozen; build the safe
+> train consumer.** PR 101 merged as main `4190b92b`, exact-main CI `33268744819/1` passed, and
+> the zero-controller freezer then reproduced schedule `35c00f38…`: **8 train scenarios from 8
+> lineages** plus **4 untouched development scenarios from 4 lineages**, all seven portable
+> option kinds on both sides, one scenario per lineage, and zero overlap.
 >
-> Capacity is no longer the blocker. The action-free freezer and a separate reopen validator now
-> pass **5,751 tests**, Ruff, Mypy over **313 source files**, source-bound registries, documentation,
-> public-artifact checks, and seven adversarial mutation classes. They bind each private context,
-> lineage, physical root, template, and exact Red setup recipe while exposing no arm-selection,
-> teacher, controller, outcome, or fit authority.
+> The freezer sealed private plan `2a0462b8…`, reopened it immediately, and a separate ROM-free
+> validator reopened it again using independently supplied source, ROM, registry, catalog, plan,
+> runtime, and census commitments. The operation recorded **controller actions 0 · frames 0 ·
+> claims 0 · teacher queries 0 · outcomes 0 · fits 0**.
 >
-> This is a local engineering result, not training: **no real private schedule has been frozen**.
-> Next publish the exact source, require green CI, then run one action-free freeze and independent
-> reopen only. Reorient before building or executing the claim-first selected-arm runner. No V3
-> teacher-yield gate or routine full-game replay is allowed. **Causal train 1/60 · powered fit 0
-> · authority 0 · transfer 0.** See the
-> [freezer qualification](docs/evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
-> and [path-free census](docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json).
+> Capacity and identity preservation are therefore closed. Training has still not begun. Next
+> build and falsify a train-only claim-first runner that accepts ordinals 0–7, protects logical and
+> physical root identity, commits one arm before controller input, rejects development and
+> counterfactual labels, and survives every crash cutpoint. Publish and exact-CI qualify it, then
+> reorient before the first authentic run. **Causal train 1/60 · powered fit 0 · authority 0 ·
+> transfer 0.** See the
+> [freeze result](docs/evidence/red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json).
 
 > **Current product focus (August 29, 2026): the exact-main population gate failed; repair only
 > what it measured.** PR 99 merged as main `624325cf`, and exact-main CI `33232635929/1` passed.

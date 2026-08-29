@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the classroom addresses are finally locked
+
+The exact candidate merged, GitHub reproduced its checks on main, and the freezer opened the
+authenticated bank once. Forty-eight minutes later it returned the same twelve classrooms the
+action-free census had promised: eight train lineages, four untouched development lineages, all
+seven portable decision kinds on both sides, and no overlap. It sealed the private addresses and
+exact Red setup recipes as plan `2a0462b8…` without pressing a button or advancing a frame.
+
+The freezer did not get to grade its own work. A second ROM-free program reopened the sealed plan
+using source, cartridge, registry, catalog, runtime, and census commitments supplied independently.
+It agreed byte-for-byte. That closes two recurring sources of drift—recounting capacity and losing
+the identity of the examples—but it still does not create a training row.
+
+The next problem is now the right size. A train-only consumer must claim one logical and physical
+root, commit one arm before any input, execute the exact recipe, and record only the observed arm's
+outcome. It must survive a power loss at every boundary without running twice or changing the
+choice. Once that runner is published and qualified, the project can finally enter the eight
+already locked classrooms instead of generating another full-game teacher population.
+
 ## August 29: the classroom lock is built, but it has not been turned
 
 The project now has the integrity boundary needed to retain the twelve classrooms found by the

@@ -8,7 +8,33 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: freezer locally qualified; publish, green, and freeze once
+## Current checkpoint: exact private schedule frozen; engineer the train-only consumer
+
+PR 101 merged as main `4190b92b` and exact-main CI `33268744819/1` passed. The unchanged action-free
+freezer then ran once and reproduced the recorded 8-train/4-development schedule and policy. It
+sealed private plan `2a0462b8…`, reopened it, and a separate ROM-free validator independently
+reopened the same plan from externally supplied commitments. Controller actions, frames, claims,
+teacher queries, outcomes, predictions, and fits all remained zero.
+
+The shortest product-aligned sequence is now:
+
+1. implement a train-only consumer for frozen ordinals 0–7; development must be structurally
+   inaccessible;
+2. atomically protect logical and physical root identity and durably commit exactly one selected
+   arm before controller input;
+3. prove ROM-free that every crash cutpoint resumes or rejects without duplicate execution or arm
+   substitution, and that teacher/counterfactual targets cannot enter the record;
+4. publish and exact-CI qualify the runner, then reorient before any gameplay;
+5. collect the eight frozen train selected-arm outcomes and make one explicitly non-authoritative
+   integration fit;
+6. scale toward 60 outcomes, evaluate on untouched Red lineages, and freeze only supported
+   features for an abstention-aware Crystal transfer test.
+
+The [path-free freeze result](evidence/red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json)
+closes capacity and private identity preservation. It does not claim training began. **Causal train
+1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Previous checkpoint: freezer locally qualified; publish, green, and freeze once
 
 The zero-controller private freezer and separate reopen validator now pass the full local gate:
 **5,751 tests**, Ruff, Mypy over **313 source files**, all source-bound registries, documentation,

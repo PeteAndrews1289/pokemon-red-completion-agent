@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — 8+4 plan frozen; claim-first runner engineering next:** Codex
+> owns the train-only private-plan consumer, logical-plus-physical claim boundary, durable pre-input
+> arm commitment, crash-cutpoint matrix, documentation, publication, and final adjudication. PR
+> 101 is main `4190b92b`; exact-main CI `33268744819/1`, the one-shot freeze, and the independent
+> validator all passed. Private plan `2a0462b8…` is immutable. Do not refreeze or recensus it.
+>
+> Claude remains the read-only causal/statistical and leakage challenger; Antigravity remains the
+> read-only architecture, portability, and overclaim challenger. Reviewers may inspect stable code
+> and path-free evidence but may not edit, see private identities, execute gameplay, publish, or
+> grant authority. The next gate is ROM-free runner falsification only. No train assignment runs
+> until the runner is published, exact-CI green, and a new reorientation explicitly opens one.
+> **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **2026-08-29 active override — freezer locally qualified; publication is the only open gate:**
 > Codex owns exact-source publication, CI, one action-free private freeze, the independent reopen,
 > the public path-free receipt, and the mandatory reorientation before any gameplay. The freezer
