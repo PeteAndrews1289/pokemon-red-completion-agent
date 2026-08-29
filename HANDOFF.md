@@ -12,6 +12,30 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-29: exact 8+4 schedule frozen — build the train-only claim-first runner
+
+PR 101 merged as exact main `4190b92bd0637d31daa03c95b07c0917dfc62903`; PR CI
+`33268147222/1` and exact-main CI `33268744819/1` passed. From a clean detached checkout, the
+unchanged zero-controller freezer ran once against the same authenticated bank and supplemental
+root as the census. It reproduced schedule `35c00f38…` and policy `dc72fb94…`, privately sealed
+**8 train assignments from 8 lineages** plus **4 development assignments from 4 untouched
+lineages**, and reopened plan `2a0462b8…` under manifest `03d6802f…`.
+
+A separate ROM-free validator then reopened that record using independently supplied source,
+source-bundle, ROM, registry, catalog, context-plan, runtime, and census commitments. Both receipts
+report all seven portable option kinds on both sides, maximum lineage multiplicity one, overlap
+zero, controller actions zero, frames zero, root claims zero, teacher queries zero, outcomes zero,
+and fits zero. No retry or substitute schedule exists.
+
+Capacity and durable identity are no longer blockers. The next blocker is deliberately narrower:
+the frozen plan cannot execute itself. Implement and mutation-test a train-only claim-first runner
+that accepts only ordinals 0–7, binds the exact context and Red recipe, atomically protects logical
+and physical roots, durably commits exactly one arm before input, excludes development and
+counterfactual targets, and survives every crash cutpoint without duplicate execution. Publish and
+exact-CI qualify that engineering gate, then reorient again before gameplay. Do not execute a
+scenario while building it. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See
+the [freeze result](docs/evidence/red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json).
+
 ## 2026-08-29: private freezer is locally GO — publish, green, then freeze once
 
 The product remains a transferable hierarchical agent that completes stories and builds living

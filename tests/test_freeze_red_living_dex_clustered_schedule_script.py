@@ -42,6 +42,12 @@ QUALIFICATION_PATH = (
     / "red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json"
 )
 QUALIFICATION_SHA256 = "873d2317755705637a9405cd3c82451592019d275ff0cab316df33d295351e4f"
+RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-clustered-schedule-freeze-result-v1-2026-08-29.json"
+)
+RESULT_SHA256 = "e67bdeebe1530a80cd58aa0cf93f483662d455e41570fea735a1718b2725acf1"
 
 
 def _args() -> list[str]:
@@ -141,6 +147,34 @@ def test_local_qualification_receipt_is_bound_and_does_not_overclaim() -> None:
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
     assert "Pokemon Roms" not in encoded
+
+
+def test_published_freeze_result_is_path_free_and_does_not_claim_training() -> None:
+    payload = RESULT_PATH.read_bytes()
+    receipt = json.loads(payload)
+
+    assert hashlib.sha256(payload).hexdigest() == RESULT_SHA256
+    assert receipt["status"] == (
+        "private_clustered_schedule_frozen_and_independently_validated_"
+        "selected_arm_runner_engineering_next"
+    )
+    assert receipt["freeze"]["train_scenarios"] == 8
+    assert receipt["freeze"]["development_scenarios"] == 4
+    assert receipt["freeze"]["lineage_overlap"] == 0
+    assert receipt["freeze"]["private_plan_reopened"] is True
+    assert receipt["independent_validation"]["private_plan_reopened"] is True
+    assert "learner_training_began" in receipt["claim_boundary"]["unsupported"]
+    assert "authentic_outcome_collected" in receipt["claim_boundary"]["unsupported"]
+    assert receipt["protected_effects"]["collection_authorized"] is False
+    assert all(
+        value == 0
+        for key, value in receipt["protected_effects"].items()
+        if key != "collection_authorized"
+    )
+    encoded = payload.decode("utf-8")
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+    assert "PokemonRoms" not in encoded
 
 
 def test_selected_capabilities_join_back_to_exact_private_contexts() -> None:

@@ -1,5 +1,20 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 authenticated private-schedule result
+
+Published main `4190b92b` passed exact CI, then a single zero-controller run reproduced and sealed
+the preregistered lineage-clustered curriculum: eight Red training scenarios from eight lineages
+and four untouched development scenarios from four lineages, with all seven title-neutral option
+kinds in both partitions and zero overlap. A separate ROM-free validator reopened private plan
+`2a0462b8…` from independently supplied source, ROM, registry, catalog, runtime, and census
+commitments. Controller actions, frames, claims, outcomes, and fits were all zero.
+
+This closes capacity and identity preservation without overclaiming model progress. The next
+portfolio milestone is a reusable train-only claim-first runner with atomic logical/physical root
+protection, durable pre-input arm commitment, development exclusion, and crash-safe exactly-once
+semantics. Only after that boundary is published and verified can the eight authentic outcomes
+feed the first non-authoritative integration fit.
+
 ## August 29 private-schedule integrity gate
 
 The project locally qualified a zero-controller private schedule freezer and a separate reopen

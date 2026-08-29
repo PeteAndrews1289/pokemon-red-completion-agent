@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom lock works locally; publish it before turning the key
+## Current checkpoint: the classroom is locked; build a safe key
+
+The lock was published, GitHub rebuilt it, and it turned once. The freezer found the same twelve
+classrooms—eight for training and four untouched for development—then sealed their private
+addresses and exact Red setup recipes. A second program reopened the record without loading the
+game and confirmed every commitment. The whole operation pressed zero buttons, advanced zero
+frames, claimed zero roots, observed zero outcomes, and fit zero models.
+
+So the next obstacle is no longer “do the classrooms exist?” It is “can we enter one exactly once?”
+The new key must accept only a training classroom, protect both its logical lesson and physical
+save, write down one arm before movement, survive a crash at every seam, and never smuggle in the
+teacher's answer or an unplayed alternative. It must be tested and published before it touches the
+game. The honest board remains **CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
+## Previous checkpoint: the classroom lock works locally; publish it before turning the key
 
 The lock is now built and tested. It can find the same eight training classrooms and four untouched
 development classrooms, then seal their private addresses together with the exact Red setup
