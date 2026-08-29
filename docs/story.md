@@ -7,7 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: twelve short classrooms exist; lock them before entering
+## Current checkpoint: the classroom lock works locally; publish it before turning the key
+
+The lock is now built and tested. It can find the same eight training classrooms and four untouched
+development classrooms, then seal their private addresses together with the exact Red setup
+recipe for each one. A different program can reopen the record and prove that no classroom moved,
+no recipe was swapped, and no action was secretly chosen. Seven deliberate corruptions all fail.
+
+But the key has not been turned. The 5,751-test local qualification created no real private plan,
+pressed no button, observed no outcome, and fit no model. The honest next scene is: publish this
+exact lock, let GitHub reproduce the checks, freeze and reopen the schedule once, and pause to
+reorient before entering any classroom. The board is still **CAUSAL TRAIN 1/60 · POWERED FIT 0 ·
+AUTHORITY 0 · TRANSFER 0**.
+
+## Previous checkpoint: twelve short classrooms exist; lock them before entering
 
 The census finished without pressing a button. It found eight Red training classrooms from eight
 different upstream runs and four untouched development classrooms from four more. Every portable

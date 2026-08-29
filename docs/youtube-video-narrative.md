@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: build the lock before entering the classroom
+
+Return to the twelve face-down classroom cards: **8 TRAIN / 8 LINEAGES** and **4 DEVELOPMENT / 4
+UNTOUCHED LINEAGES**. Draw a lock around their private addresses. Feed into it **CONTEXT · LINEAGE
+· ROOT · TEMPLATE · RED SETUP RECIPE**, then attack the lock with seven red cards: **HASH
+DRIFT · BINDING DRIFT · SCHEDULE DRIFT · RECIPE SWAP · NONZERO EFFECT · REORDER · HIDDEN
+ARM**. Every card bounces away.
+
+Put **5,751 TESTS · MYPY 313 · RUFF · REGISTRIES · DOCS · PUBLIC ARTIFACTS** above it, but
+stamp the cartridge view **REAL PLAN NOT FROZEN · ACTIONS 0 · OUTCOMES 0 · FITS 0**. Animate
+the next rail slowly: **PUBLISH EXACT SOURCE → GREEN CI → FREEZE ONCE → INDEPENDENT REOPEN →
+REORIENT → CLAIM-FIRST RUNNER → 8 REAL OUTCOMES → FIRST NON-AUTHORITATIVE FIT**. End on the
+longer destination: **60 OUTCOMES → UNTOUCHED RED LINEAGES → CRYSTAL TRANSFER → CROSS-GAME
+LIVING POKEDEX**.
+
 ## August 29 scene: the classroom census passes
 
 Run the graph without showing the emulator: **67 QUALIFIED LINEAGES · 414 EDGES**. Twelve cards

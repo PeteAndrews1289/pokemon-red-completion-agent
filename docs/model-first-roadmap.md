@@ -8,7 +8,30 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: clustered capacity passed; freeze exact private assignments
+## Current checkpoint: freezer locally qualified; publish, green, and freeze once
+
+The zero-controller private freezer and separate reopen validator now pass the full local gate:
+**5,751 tests**, Ruff, Mypy over **313 source files**, all source-bound registries, documentation,
+public-artifact checks, and seven explicit mutation classes. The private plan contract binds each
+of the census's 8 train and 4 untouched development assignments to its context, upstream lineage,
+physical/root-consumption identity, Red template, and exact setup recipe. It contains no selected
+arm and exposes no teacher, controller, outcome, prediction, fit, or collection authority.
+
+The shortest product-aligned sequence is now:
+
+1. publish the unchanged freezer and validator and require green CI on that exact source;
+2. run exactly one action-free private freeze from a clean checkout and reopen it independently;
+3. publish only the path-free aggregate receipt and reorient before authorizing gameplay;
+4. qualify a claim-first, crash-safe selected-arm runner against the frozen plan;
+5. collect only the eight train outcomes, then make one explicitly non-authoritative fit;
+6. scale toward 60 outcomes, evaluate on untouched Red lineages, and freeze only supported
+   features for an abstention-aware Crystal transfer test.
+
+The [local qualification](evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
+does **not** say that the real plan is frozen or that training began. The exact schedule freeze is
+the next falsifier. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Previous checkpoint: clustered capacity passed; freeze exact private assignments
 
 The exact action-free census converted the authenticated bank into an integration curriculum:
 **8 train scenarios from 8 lineages** and **4 development scenarios from 4 untouched lineages**.

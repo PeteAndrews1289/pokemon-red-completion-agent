@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — freezer locally qualified; publication is the only open gate:**
+> Codex owns exact-source publication, CI, one action-free private freeze, the independent reopen,
+> the public path-free receipt, and the mandatory reorientation before any gameplay. The freezer
+> binds the 8+4 schedule to private contexts, roots, lineages, templates, and recipes and passes
+> 5,751 tests plus static, registry, documentation, and public-artifact gates. No real plan has
+> been frozen and no learner outcome or fit exists.
+>
+> Claude remains the read-only causal/statistical and leakage challenger; Antigravity remains the
+> read-only architecture, transfer, and overclaim challenger. They may review a stable published
+> diff and evidence but may not edit, view private identities, run gameplay, publish, or grant
+> authority. The next operation is exactly one zero-controller freeze/reopen after exact-source CI,
+> followed by reorientation. Selected-arm execution is a later, separately qualified gate.
+> **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **2026-08-29 active override — clustered capacity passed; freeze it before gameplay:** Codex
 > owns the zero-controller private schedule freezer, independent reopen validator, first eight
 > authentic selected-arm outcomes, and non-authoritative integration fit. The public census found

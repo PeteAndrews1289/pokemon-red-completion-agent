@@ -3,6 +3,19 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 private-freezer qualification:** The zero-controller freezer and independent reopen
+> validator are locally GO. They bind the passed 8+4 clustered schedule to exact private context,
+> root, lineage, template, and Red recipe commitments, reject seven mutation classes, and pass
+> **5,751 tests**, Ruff, Mypy over **313 source files**, all registries, docs, and public-artifact
+> checks. No authentic plan, controller input, outcome, or fit was created.
+>
+> Next: publish the exact source, require green CI, run one action-free freeze and independent
+> reopen, publish only the path-free aggregate, and reorient. Only then build the claim-first
+> selected-arm runner; do not execute a scenario in the freeze gate. **Causal train 1/60 · powered
+> fit 0 · authority 0 · transfer 0.** The
+> [qualification](evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json)
+> records the exact supported and unsupported claims.
+
 > **August 29 clustered-capacity result:** The exact action-free census passed with **8 train
 > scenarios / 8 lineages** and **4 development scenarios / 4 untouched lineages**. Both sides
 > cover all seven portable option kinds, maximum observed scenarios per lineage is one, overlap is

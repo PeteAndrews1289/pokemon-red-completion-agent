@@ -1,0 +1,103 @@
+{
+  "claim_boundary": {
+    "supported": "The Red clustered-schedule freezer and independent reopen validator are locally qualified to reproduce, privately persist, and integrity-check the published 8-train plus 4-development schedule without controller input or learning effects.",
+    "unsupported": [
+      "private_schedule_frozen",
+      "train_scenario_executed",
+      "authentic_outcome_collected",
+      "learner_training_began",
+      "model_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "implementation": {
+    "action_free_freezer": "scripts/freeze_red_living_dex_clustered_schedule.py",
+    "expected_policy_sha256": "dc72fb9449f7279c12b673b266e0973d01b62577f99d22ec7fdb14fceb8589be",
+    "expected_schedule_sha256": "35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905",
+    "independent_validator": "scripts/validate_red_living_dex_clustered_schedule.py",
+    "private_plan_contract": "src/pokemon_red_completion/red_living_dex_clustered_schedule_plan.py",
+    "private_record_id": "red-living-dex-clustered-schedule-plan-v1",
+    "source_bundle_sha256": "557e3c716eb809bd77f0110372f50f49263df3002ef8280275c2defcdc2066a3"
+  },
+  "integrity_contract": {
+    "arm_selected_during_freeze": false,
+    "context_identity_retained_privately": true,
+    "development_outcome_access": false,
+    "lineage_and_partition_cross_checked": true,
+    "private_plan_canonical_and_hash_bound": true,
+    "recipe_and_root_commitments_cross_checked": true,
+    "schedule_reproduction_required": true,
+    "sealed_record_immutable": true,
+    "teacher_actions_are_labels": false
+  },
+  "local_gate": {
+    "documentation_links": "passed",
+    "focused_red_curriculum_and_provider_tests": {
+      "passed": 52,
+      "seconds": 100.99
+    },
+    "full_nonintegration_suite": {
+      "deselected": 3,
+      "expected_failures": 1,
+      "passed": 5751,
+      "seconds": 628.84,
+      "warnings": 1
+    },
+    "mypy": {
+      "source_files": 313,
+      "status": "passed"
+    },
+    "private_plan_mutation_classes_rejected": [
+      "private_plan_hash_drift",
+      "expected_binding_drift",
+      "clustered_schedule_hash_drift",
+      "recipe_to_template_cross_join",
+      "nonzero_protected_effect",
+      "schedule_reordering",
+      "hidden_selected_arm_field"
+    ],
+    "product_focus": "passed",
+    "public_artifacts": "passed",
+    "ruff": "passed"
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "publication": {
+    "exact_candidate_commit": null,
+    "exact_candidate_ci": null,
+    "status": "pending"
+  },
+  "recorded_on": "2026-08-29",
+  "registries": {
+    "battle_collection_sha256": "4ed306cf80019dfbc1f2d22326c6daee454b1d7c16db45aa051bf2ebc4996c3b",
+    "goal_manager_sha256": "29d0c11216712b4cd89c39787e09023aa919cbd23174b8d7ae74fc2c342e8441",
+    "strategic_navigation_scenarios_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "strategic_navigation_sha256": "54005d48bfb99b4c3f4598c5769e85ff149429ceed3d8aa7827d49f749e6140f"
+  },
+  "schema": "pokemon.red.living-dex-clustered-schedule-freezer-local-qualification.v1",
+  "source": {
+    "base_main_commit": "67dded4c178ab3287a09f114597bef723a2570ab",
+    "base_pull_request": 100,
+    "base_pull_request_ci_attempt": 1,
+    "base_pull_request_ci_run": 33266373443,
+    "census_receipt_sha256": "f55d54101b89fb440495d87cfc78e8c7a32cf386271ce81dc8ce7fa922c296f7",
+    "working_source_bundle_sha256": "557e3c716eb809bd77f0110372f50f49263df3002ef8280275c2defcdc2066a3"
+  },
+  "status": "locally_qualified_publication_and_exact_ci_pending"
+}

@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the classroom lock is built, but it has not been turned
+
+The project now has the integrity boundary needed to retain the twelve classrooms found by the
+action-free census. The freezer repeats that census, demands the exact published schedule, and
+binds each private assignment to its context, upstream lineage, physical root, Red template, and
+setup recipe. A separate process can reopen the sealed record and recompute those joins without a
+ROM. Mutation tests prove that schedule reordering, swapped recipes, changed bindings, nonzero
+effects, and a smuggled-in arm selection are all rejected.
+
+That distinction matters: building the lock did not enter a classroom. The full local gate passes
+5,751 tests and static, registry, documentation, and public-artifact checks, but no authentic plan
+has been frozen and no outcome or model fit exists. The next evidence-bearing sequence is exact
+publication, green CI, one action-free freeze/reopen, and a deliberate reorientation. Only then
+does the project build the crash-safe runner that can collect eight real Red outcomes for its first
+non-authoritative learner fit.
+
 ## August 29: the old bank is enough to start the first honest curriculum
 
 The zero-controller census answered the capacity question without playing a frame. From 67

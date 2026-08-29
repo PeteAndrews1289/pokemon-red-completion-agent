@@ -12,6 +12,29 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-29: private freezer is locally GO — publish, green, then freeze once
+
+The product remains a transferable hierarchical agent that completes stories and builds living
+Pokedexes across games. Red is the first causal classroom; Crystal is the first transfer
+falsifier. The immediate milestone is eight authentic short-horizon Red outcomes and one clearly
+non-authoritative fit, not another attempt to perfect a deterministic full-game route.
+
+The private clustered-schedule freezer and a separate ROM-free reopen validator are now locally
+qualified. The freezer repeats the action-free census, requires schedule `35c00f38…` and policy
+`dc72fb94…`, and privately binds every selected context identity, lineage, physical root,
+root-consumption commitment, state/envelope hash, Red template, and exact provider recipe. The
+validator rejects binding drift, schedule drift, recipe cross-joins, nonzero protected effects,
+assignment reordering, and any hidden selected arm. The gate passes **5,751 tests**, Ruff, Mypy
+over **313 source files**, all source-bound registries, documentation, and public-artifact checks.
+
+No authentic plan was frozen during qualification. No controller, teacher, root claim, selected
+arm, outcome, prediction, fit, sealed case, Crystal run, or authority promotion occurred. Next:
+commit and publish the exact candidate, require green CI, then invoke the unchanged freezer once
+from a clean checkout and independently reopen its sealed private plan. Publish only a path-free
+aggregate and reorient before any gameplay. Do not combine the freeze and execution gates.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.** See the
+[local qualification](docs/evidence/red-living-dex-clustered-schedule-freezer-local-qualification-v1-2026-08-29.json).
+
 ## 2026-08-29: clustered capacity passed — freeze exact private assignments next
 
 The product is still a transferable hierarchical agent that completes stories and builds living

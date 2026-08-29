@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: clustered capacity passed; private schedule freeze is next
+## Current override: private freezer locally GO; publish and freeze once
+
+Codex owns the locally qualified freezer/validator candidate, exact-source publication, CI, one
+action-free private freeze, independent reopen, public path-free receipt, and the reorientation
+that must happen before any selected-arm execution. The contract binds all 8 train and 4 untouched
+development assignments to exact private contexts, roots, lineages, templates, and recipes. It
+passes 5,751 tests plus Ruff, Mypy over 313 source files, registry, docs, and public-artifact gates.
+No authentic schedule has yet been frozen and no learning counter changed.
+
+Claude may challenge causal/statistical design, leakage, and evidence. Antigravity may challenge
+architecture, cross-title portability, and overclaiming. Both remain read-only and receive only
+path-free material; neither edits, executes gameplay, publishes, sees private identities, or grants
+authority. After exact-source CI, Codex may run the freezer and independent validator once. A
+successful reopen opens engineering of a separate claim-first runner, not immediate gameplay.
+**Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Previous override: clustered capacity passed; private schedule freeze is next
 
 Codex owns the zero-controller private freezer, independent reopen validator, first eight authentic
 selected-arm outcomes, provisional integration fit, documentation, publication, and final
