@@ -2694,3 +2694,27 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Next assignment is the immutable prospective yield plan or its terminal receipt. No reviewer
   verdict authorizes roots, fitting, sealed Red, Crystal execution, a full-game replay, authority,
   or transfer.
+
+## Current assignments — clustered causal collection (2026-08-29)
+
+### Codex workhorse lane
+
+- Own the published train-only consumer, the path-free preflight receipt, and exactly one next
+  ordinal-zero authentic selected-arm outcome.
+- Stop at the durable terminal and reorient before another row or any fit. Keep development rows,
+  teacher actions, alternate-arm targets, sealed Red, Crystal, and full replay inaccessible.
+- Preserve the scoreboard at causal train 1/60 until a tracked authentic terminal actually adds a
+  learner example.
+
+### Claude read-only lane
+
+- The CLI was logged out during this checkpoint, so no Claude verdict exists. When available, next
+  review the eight-row integration dataset for cluster weighting, support, leakage, and statistical
+  overclaiming. Do not duplicate implementation or inspect private captures.
+
+### Antigravity read-only lane
+
+- The CLI was not discoverable during this checkpoint. At the first eight-row fit decision, review
+  title-neutral architecture, abstention boundaries, and whether the selected options genuinely
+  advance living-Pokédex completion rather than Red-route imitation. Do not block ordinary outcome
+  collection while no milestone review is pending.

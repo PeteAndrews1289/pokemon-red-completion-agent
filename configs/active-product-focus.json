@@ -19,29 +19,29 @@
     },
     {
       "capability": "Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test.",
-      "cheapest_falsifier": "After exact-source publication and green CI, one ROM-free preflight must authenticate one available train ordinal, its frozen plan, upstream lineage, exact root bytes, runtime identity, and pair availability while claims, actions, frames, commitments, outcomes, predictions, and fits remain zero.",
+      "cheapest_falsifier": "One authentic selected-arm Red train execution must atomically claim the preflighted logical and physical roots, durably commit its random arm before controller input, execute only that arm, and publish only its observed settled outcome without a teacher, counterfactual target, development access, or retry.",
       "id": "cross-title-living-dex-causal-example-pipeline-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The train-only consumer and ROM-free preflight are locally qualified, but no authentic selected arm ran and no learner example, model fit, sealed case, transfer result, or authority promotion was created. The immutable authentic causal-train count remains 1/60.",
-        "blocker": "The safe consumer exists locally but is not yet published or bound to green exact-main CI. No authentic train execution should occur until one published-source ROM-free preflight proves an available frozen train row reaches the claim boundary with every effect zero.",
-        "decision": "Accept the train-only runner engineering gate. Publish the exact candidate, require green pull-request and exact-main CI, run one ROM-free preflight for one available train ordinal, publish only its path-free zero-effect receipt, and reorient before gameplay.",
+        "authority_delta": "None. The train-only consumer is published and its exact-main ROM-free preflight passed, but no authentic selected arm ran and no learner example, model fit, sealed case, transfer result, or authority promotion was created. The immutable authentic causal-train count remains 1/60.",
+        "blocker": "No clustered selected-arm outcome exists yet. The ordinal-zero train pair remains unclaimed and its exact plan, root bytes, lineage, runtime identity, and pair availability passed the published zero-effect preflight; the next useful evidence requires one bounded authentic Red execution, not more runner engineering.",
+        "decision": "Accept the published consumer and successful zero-effect preflight. Publish this path-free receipt with exact-main CI, then execute exactly one authentic ordinal-zero selected-arm Red train assignment, stop at its durable terminal, and reorient before another row or any model fit.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-living-dex-clustered-train-runner-local-qualification-v1-2026-08-29.json",
-          "sha256": "4db766d3678a7c8a211c46ce43f801d8f02c2bb13566beca3fb2cb6a466d9387"
+          "path": "docs/evidence/red-living-dex-clustered-train-preflight-result-v1-2026-08-29.json",
+          "sha256": "b2f64f6ce8464c5ff370ccf9671c2ab74bede7360c3a853de1eca74b0d05d433"
         },
         "learning_output": "The session created execution infrastructure only. The immutable historical count remains one authentic settled negative Red causal train example; preflights, crash tests, teacher diagnostics, and CI do not increment learner, fit, authority, or transfer counters.",
-        "next_falsifier": "From published exact-main source, a ROM-free preflight must accept one train ordinal in 0 through 7, reject every development ordinal and ROM argument, authenticate its plan, root, lineage, runtime identity, and pair availability, and return a path-free receipt with every protected effect zero.",
-        "next_session_goal": "Publish the locally qualified train-only consumer, require green pull-request and exact-main CI, run exactly one ROM-free preflight for one still-available train ordinal, publish the path-free zero-effect result, and stop for mission reorientation before authentic gameplay.",
-        "product_alignment": "The project now has the reusable crash-safe boundary needed to turn the eight frozen short Red scenarios into honest observed-arm data without exposing development or teacher labels. Publication and one zero-action preflight are the shortest remaining checks before measured learning resumes.",
-        "session_id": "2026-08-29-clustered-train-runner-local-go-publication-next",
+        "next_falsifier": "From the next published exact-main source, ordinal zero must atomically claim its still-available pair, durably record one random arm before any controller input, execute only that selected title-neutral option, and settle one observed outcome with no teacher, alternate-arm target, development access, or retry.",
+        "next_session_goal": "Publish the path-free clustered preflight result, require green pull-request and exact-main CI, execute exactly one authentic ordinal-zero selected-arm Red train assignment, and stop at its durable terminal for mission reorientation before opening another row or fitting a model.",
+        "product_alignment": "The reusable crash-safe consumer is now published and has crossed the real private boundary once without a ROM or protected effect. The shortest remaining work is measured learning: one bounded authentic selected-arm Red outcome, followed by reorientation and then the other frozen train lineages toward the first eight-row integration fit.",
+        "session_id": "2026-08-29-clustered-train-preflight-go-first-authentic-outcome-next",
         "status": "active",
         "stop_condition": "Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation.",
         "transfer_result": "Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested."
       },
       "learned_authority": {
-        "current": "The pipeline holds one authentic settled negative Red causal train row, one frozen 8-train plus 4-development schedule, and a locally qualified train-only exactly-once consumer with a zero-action preflight. No frozen selected arm has run, no powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet.",
+        "current": "The pipeline holds one authentic settled negative Red causal train row, one frozen 8-train plus 4-development schedule, a published train-only exactly-once consumer, and one successful published-source ROM-free preflight for an available train pair. No frozen selected arm has run, no powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet.",
         "target": "First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal."
       },
       "maintenance_unblocks": null,
@@ -53,7 +53,7 @@
         }
       ],
       "name": "Lineage-clustered cross-title living-Dex causal curriculum V2",
-      "next_decision": "Publish and exact-CI qualify the train-only consumer, run one ROM-free zero-effect preflight for an available frozen train row, then reorient before the first authentic selected-arm execution.",
+      "next_decision": "Publish and exact-CI qualify the path-free preflight result, then execute exactly one authentic ordinal-zero selected-arm Red train assignment and reorient at its durable terminal before another row or any model fit.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -2975,3 +2975,20 @@ complete Red route alone does not satisfy this gate.
 Reorientation: this gate manufactures independent Red training situations for the shared semantic
 option model. It advances the living-Pokédex mission only if later action-free recensus shows more
 genuine multi-option capacity; the 6/6/1 arithmetic is not itself a training-readiness claim.
+
+## Clustered causal collection gate — active 2026-08-29
+
+- [x] Freeze 8 train lineages and 4 untouched development lineages with all seven portable option
+  kinds on both sides and zero lineage overlap.
+- [x] Publish the train-only exactly-once consumer through PR 103 and green exact-main CI
+  33275740732/1.
+- [x] Authenticate one available train row without a ROM: root reads 1; every protected effect 0.
+- [ ] Publish the path-free preflight receipt and require exact-main green CI.
+- [ ] Execute exactly one ordinal-zero selected arm and stop at its durable terminal.
+- [ ] Reorient before another row; never use development outcomes, teacher actions, or unselected
+  arms as training targets.
+- [ ] Reach eight authentic train outcomes for a non-authoritative integration fit, then scale toward
+  at least 60 informative outcomes before untouched Red development and Crystal transfer.
+
+Mission check: this lane teaches a shared living-Pokédex option-value policy from short causal
+choices. It is not a fixed Red walkthrough, and the preflight did not increment training.

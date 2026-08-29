@@ -1,0 +1,81 @@
+{
+  "claim_boundary": {
+    "supported": "Published exact-main source authenticated one still-available frozen Red train assignment, its exact state and envelope bytes, immutable upstream lineage, reviewed runtime closure, and logical-plus-physical claim-pair availability without a ROM or emulator instance.",
+    "unsupported": [
+      "authentic_selected_arm_executed",
+      "causal_train_example_added",
+      "learner_training_began",
+      "model_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "execution": {
+    "authenticated_preflight_invocations": 1,
+    "automatic_retry_allowed": false,
+    "bootstrap_miss": {
+      "authenticated_source_reached": false,
+      "cause": "launch_locale_enabled_python_utf8_mode",
+      "private_root_opened": false,
+      "production_process_invocations": 1,
+      "protected_effects_reachable": false,
+      "stage": "bootstrap_source_authentication",
+      "status": "failed_closed"
+    },
+    "production_process_invocations_total": 2,
+    "retry_allowed": false,
+    "successful_preflight_seconds": 18.75
+  },
+  "learning_state": {
+    "authentic_causal_train_examples": 1,
+    "authority_promotions": 0,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this path-free receipt and require green exact-main CI. Then execute exactly one authentic selected-arm Red train assignment from the still-available ordinal-zero pair, stop at its durable terminal, and reorient before opening another row or fitting a model.",
+  "preflight": {
+    "automatic_retry_allowed": false,
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "ordinal": 0,
+    "partition": "train",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "result_schema": "pokemon.red.living-dex-clustered-train-preflight.v1",
+    "retry_allowed": false,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-clustered-train-preflight.v1",
+    "selected_root_reads": 1,
+    "status": "one_clustered_train_assignment_ready",
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "privacy": {
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_capture_permissions": "owner_only_before_authenticated_preflight"
+  },
+  "publication": {
+    "consumer_pull_request": 103,
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-29",
+  "schema": "pokemon.red.living-dex-clustered-train-preflight-result.v1",
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33275740732,
+    "exact_main_commit": "bedcc0bbc3d9c24f86691a6b3aabe504a4e3d9be",
+    "source_bundle_sha256": "0ea7e3dee9bc8a8ebbdb69ec27dbd8e5bfad18b86be3897d781b26404ce91c69"
+  },
+  "status": "one_rom_free_clustered_train_preflight_passed_reorientation_complete_first_authentic_outcome_pending"
+}

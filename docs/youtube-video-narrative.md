@@ -4482,3 +4482,16 @@ version has to prove the model learned something worth carrying into a game it h
   qualification rather than evidence that a model learned.
 - End on the real next gate: publish, exact-main CI, freeze the plan, generate, recensus. Do not jump
   from “root generator exists” to “the model is training.”
+
+## New sequence: “The preflight that did nothing”
+
+- Show PR 103, exact main `bedcc0bb`, and green CI `33275740732/1`, then the frozen 8-train/4-dev
+  board with development crossed out.
+- Let the first terminal flash `bootstrap_source_authentication: failed_closed`. Explain that a
+  stripped `C` locale changed Python's UTF-8-mode flag before source or private data could open.
+- Show the corrected path-free receipt: **ROOT READS 1 · CLAIMS 0 · ACTIONS 0 · FRAMES 0 ·
+  TEACHERS 0 · OUTCOMES 0 · FITS 0**. Never show the private filename, path, or identity digest.
+- Say plainly: “This is not training. It proves the next run can become training data without
+  leaking the answer.”
+- End on the next rail: **ONE RANDOM ARM DURABLE BEFORE INPUT → SELECTED SKILL ONLY → FRESH
+  OBSERVED OUTCOME → STOP/REORIENT → 8-ROW INTEGRATION FIT → 60+ POWERED RED → CRYSTAL**.
