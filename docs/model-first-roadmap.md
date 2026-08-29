@@ -3777,3 +3777,23 @@ one hours-long replay per change. An integrated learned Red player remains subst
 multi-generation, living-Pokédex agent is a longer research program. Roadmap estimates are revised
 from measured scenario throughput, never from optimism or the fact that a teacher route already
 works.
+
+## Current checkpoint — first clustered observed-arm outcome
+
+The train-only consumer is published at `bedcc0bb`, exact-main CI `33275740732/1` is green, and one
+ROM-free authenticated preflight accepted ordinal zero while every protected effect remained zero.
+This closes the last infrastructure-only gate before measured learning resumes.
+
+Next sequence:
+
+1. Publish the path-free preflight receipt and green its exact main commit.
+2. Execute ordinal zero once: atomic logical/physical claim, durable random arm, selected skill only,
+   fresh observed terminal, no teacher or alternate-arm target.
+3. Reorient at the terminal before opening ordinal one.
+4. Collect the remaining frozen train rows only while lineage and option-kind coverage remain valid.
+5. At eight authentic rows, run one non-authoritative integration fit and compare frozen controls.
+6. Scale toward at least 60 informative train outcomes before untouched Red development evaluation;
+   freeze only supported title-neutral features for Crystal.
+
+The eight-row fit is a wiring and information check, not gameplay authority. A full Red run, sealed
+evaluation, Crystal execution, and living-Pokédex completion remain downstream gates.

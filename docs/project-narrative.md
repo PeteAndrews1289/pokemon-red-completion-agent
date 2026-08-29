@@ -7421,3 +7421,19 @@ a root or label. The lesson is not that the teacher now “plays Pokémon.” It
 classroom generation finally has a locally qualified chance to survive world variance, so the
 project can return to the actual experiment: causal Red options, a powered learned scorer, and
 abstention-aware Crystal transfer.
+
+## The door opened without starting the game
+
+The clustered train consumer finally moved from a local safety argument to published main. Its
+5,765-test gate, pull-request CI, and exact-main CI all passed. The first launch of the real
+preflight then failed for an almost comically small reason: stripping the environment down to a
+`C` locale changed one Python interpreter flag. The failure happened before source or private data
+could be reached. Rather than relabeling it as success, the project recorded the miss, identified
+the precise flag, and changed only the locale.
+
+The authenticated preflight then opened the door exactly once. It matched one frozen Red training
+row to its original state, envelope, lineage, runtime, and still-available claim pair—with no ROM,
+no emulator, and no action. That is valuable because the next process is no longer another teacher
+replay or wrapper test. It is the first new selected-arm causal outcome in this clustered curriculum.
+The model has still not trained; the honest counter remains 1/60. But for the first time in this
+sequence, the next unit of work is measured learning rather than infrastructure.

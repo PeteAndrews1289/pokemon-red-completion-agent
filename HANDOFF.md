@@ -7820,3 +7820,33 @@ source-bound plan as a new external file while the checkout remains on that exac
 the plan would move HEAD and invalidate its source-commit binding. Preflight and any later generation
 must therefore use the unchanged green implementation checkout. Do not generate a cartridge root
 from an unpublished or non-green source, and do not call this model training.
+
+---
+
+## 12. Active handoff — clustered train preflight passed (2026-08-29)
+
+PR 103 merged the train-only clustered consumer as exact main `bedcc0bbc3d9c24f86691a6b3aabe504a4e3d9be`;
+CI run `33275740732/1` passed. The isolated execution checkout reproduced source bundle
+`0ea7e3de…91c69` and the frozen 1,477-file runtime closure. All eight frozen train root pairs were
+still available. Ordinal zero's exact state and envelope were located by their frozen hashes and
+their permissions were tightened from `0644` to owner-only `0600`; bytes did not change.
+
+The first operating-system process stopped at `bootstrap_source_authentication` because a minimal
+`C` locale enabled Python UTF-8 mode. It could not reach source authentication, runtime staging,
+the private root, or any protected effect. After the cause was isolated without another production
+call, the normal macOS UTF-8 locale launched the authenticated preflight once. It returned
+`one_clustered_train_assignment_ready` with one selected-root read and zero claims, actions,
+frames, commitments, teachers, predictions, outcomes, labels, fits, private paths, or private
+identities. Do not erase either launch from the record.
+
+This was not training. The scoreboard remains **causal train 1/60 · powered fit 0 · authority 0 ·
+transfer 0**. Publish the path-free receipt and require exact-main CI. Then execute exactly one
+authentic ordinal-zero selected arm from that new exact source, stop at the durable terminal, and
+reorient before opening another row or fitting. The eight-row integration fit remains
+non-authoritative; the powered target remains at least 60 informative train outcomes across bounded
+lineage clusters before untouched Red development and frozen Crystal transfer.
+
+Claude did not provide a verdict in this session because its CLI was logged out. Antigravity's CLI
+was not discoverable. Neither review is required for this ordinary development transition; Codex
+retains implementation and adjudication ownership. Request their read-only statistical and
+cross-title reviews again at the eight-row integration-fit decision or any promotion boundary.

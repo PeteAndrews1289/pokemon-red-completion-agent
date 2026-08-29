@@ -3501,3 +3501,17 @@ Being precise about this matters more than the story sounding finished.
 
 The interesting part of this project is not that software beat Pokémon Red. It is everything that
 went wrong on the way to noticing that beating Pokémon Red was never the point.
+
+### Where the project is now
+
+The frozen clustered curriculum has a published train-only consumer and a successful real
+ROM-free preflight. One exact Red training state was authenticated against its envelope, original
+episode lineage, runtime, and unclaimed logical/physical root pair. Nothing moved on screen; no
+choice was made; no model learned. That zero is the point: it proves the next run can create one
+honest observed-arm lesson without quietly opening development labels or replaying a teacher's
+buttons.
+
+The next chapter is one bounded causal outcome, then seven more independent train lineages for the
+first non-authoritative integration fit. Only after a larger, powered Red dataset beats frozen
+controls on untouched lineages will the shared representation be frozen for Crystal. The living
+Pokédex remains the product; Red remains the first classroom.
