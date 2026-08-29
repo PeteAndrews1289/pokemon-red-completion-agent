@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: five lessons survived the classroom door
+
+The eight Red classrooms have all been attempted once. Five opened. The random student action
+caught a species, failed two evolutions, failed one exploration, and successfully restocked a
+capture item. Those are five honest decision-and-consequence lessons—not copied teacher buttons.
+Three other doors jammed during setup, before a choice was drawn, so they produced no lesson and
+can never be retried.
+
+That leaves an honest scoreboard: **CAUSAL TRAIN 6/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER
+0**. The learner still does not control the game. The next gate is not another Red playthrough and
+not Crystal. It is a zero-action inventory of new, independent training classrooms, excluding the
+four exam lineages, with enough spare capacity to reach eight usable lessons despite the measured
+5/8 yield. Only then may the first deliberately non-authoritative model fit run.
+
 ## Current checkpoint: the safe key exists; prove it fits before turning it
 
 The twelve classrooms now have a key, and the key cannot open the exam room. Its dial stops at

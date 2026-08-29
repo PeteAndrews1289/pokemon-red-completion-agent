@@ -8,6 +8,31 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: five clustered examples are real; the integration fit stays closed
+
+All eight frozen Red train assignments are now consumed. Five yielded authentic, independently
+observed selected-arm examples from five lineages: acquisition and resupply succeeded; two
+evolution attempts and one exploration attempt failed. Three setup recipes terminated before a
+behavior commitment and correctly emitted no target. Every committed menu used three equal-
+probability choices, the union covered all seven title-neutral option kinds, and no teacher,
+alternate-arm target, development outcome, prediction, or fit appeared.
+
+The next product-aligned sequence is:
+
+1. publish the path-free five-example/three-attrition result and require exact-main green CI;
+2. keep the four development lineages unopened and every consumed train root permanently closed;
+3. run an action-free census over genuinely unused train lineages and quantify setup-yield risk;
+4. freeze a new train-only successor only if it can add at least three settled examples after the
+   observed attrition rate without outcome-aware admission;
+5. reach eight authentic examples before the first explicitly non-authoritative integration fit;
+6. continue toward 60 informative train outcomes, then evaluate on untouched Red lineages and
+   freeze only the supported title-neutral representation for Crystal.
+
+This batch moves the real learner counter from 1 to **6/60**. It grants no authority and proves no
+transfer. A five-row fit, retry, development reuse, full-game teacher campaign, or Crystal run is
+out of scope. See the
+[batch result](evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json).
+
 ## Current checkpoint: the train-only consumer is local GO; publish and preflight
 
 The frozen 8+4 classroom now has a bounded production consumer. It accepts only train ordinals

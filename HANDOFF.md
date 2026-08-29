@@ -12,6 +12,33 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-29: clustered train schedule consumed — five examples; successor capacity next
+
+The mission is still a transferable hierarchical player that completes stories and builds living
+Pokedexes across games. Red is the causal classroom; Crystal is the first transfer falsifier. The
+frozen 8+4 schedule was an intermediate data collection instrument, not the product.
+
+PR 103 merged the train-only consumer, PR 104 published its zero-effect preflight, and exact main
+`5656bd63302db1aef0737186bd973bd26ba332b2` passed CI `33277598103/1`. All eight frozen train
+assignments then ran at most once. Five yielded authentic settled selected-arm examples: an
+acquisition success, an evolution failure, an exploration failure, a resupply success, and a
+second evolution failure. Every menu had three equally probable candidates; the union covered all
+seven portable option kinds. Three other assignments terminated during setup before behavior
+commitment, provider execution, or target creation. They are consumed and may not retry.
+
+The batch used 10,313 controller actions and 527,045 frames. It opened zero development outcomes,
+queried zero teachers, made zero predictions, fit zero models, retained zero counterfactual
+targets, and published zero private path or identity fields. The immutable total is now **causal
+train 6/60 · powered fit 0 · authority 0 · transfer 0**.
+
+Do not fit this batch. The declared integration gate requires at least eight authentic settled
+examples and this schedule produced five. Next publish the
+[path-free result](docs/evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json),
+require exact-main green CI, then run an action-free census over genuinely unused train lineages
+while excluding every consumed root and all four frozen development lineages. A successor must
+have enough capacity to add at least three settled examples after measured setup attrition. If it
+does not, close this collection route rather than returning to full-game teacher hardening.
+
 ## 2026-08-29: train-only consumer locally qualified — publish, preflight, reorient
 
 The mission remains a transferable hierarchical agent that completes stories and builds living

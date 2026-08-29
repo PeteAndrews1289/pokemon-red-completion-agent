@@ -5,6 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): five real clustered lessons exist; do not fit
+> early.** Exact main `5656bd63` passed CI `33277598103/1`, then all eight frozen Red train
+> assignments were consumed once. Five produced valid randomized selected-arm examples: two
+> successes and three observed failures across acquisition, evolution, exploration, and resupply.
+> Three setup recipes failed before arm commitment and correctly produced no target. Candidate
+> menus covered all seven portable option kinds; development, teachers, counterfactuals,
+> predictions, and fits stayed closed.
+>
+> The authentic board is now **causal train 6/60 · powered fit 0 · authority 0 · transfer 0**.
+> The [path-free batch result](docs/evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json)
+> records 10,313 actions and 527,045 frames without exposing a private identity or path. Five
+> clustered examples do not meet the declared eight-example integration gate, so the next step is
+> an action-free census of genuinely unused, development-disjoint lineages—not a premature fit,
+> retry, Red route patch, Crystal run, or full replay.
+
 > **Current product focus (August 29, 2026): collect the first clustered causal Red outcome.** PR
 > [#103](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/103) merged the
 > train-only consumer as `bedcc0bb`; exact-main CI `33275740732/1` passed. The published consumer

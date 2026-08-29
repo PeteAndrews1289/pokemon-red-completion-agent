@@ -6,6 +6,22 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish five clustered examples; audit unused train capacity next
+
+Codex owns the path-free batch receipt, mission reorientation, publication, exact-main CI, and the
+next action-free successor-capacity audit. The frozen eight train assignments are all consumed:
+five produced selected-arm causal examples, two positive and three negative, while three failed
+setup before randomization and produced no target. The four development lineages remain unopened.
+The board is **causal train 6/60 · powered fit 0 · authority 0 · transfer 0**.
+
+Claude's next useful role is a read-only statistical and leakage challenge of the stable successor
+design. Antigravity's is a read-only architecture, exactly-once, and cross-title portability
+challenge. Neither reviewer edits, executes gameplay, opens private identities, publishes, or
+grants authority; neither blocks ordinary action-free work. Codex decides after explaining any
+disagreement. Do not ask either reviewer to bless a five-row fit: the eight-example integration
+gate failed and fitting is closed. Next find genuinely unused, development-disjoint train capacity
+with enough margin to add at least three settled examples after observed setup attrition.
+
 ## Current override: publish the train consumer; preflight only before reorientation
 
 Codex owns the locally qualified consumer for private plan `2a0462b8…`, its publication, exact-main

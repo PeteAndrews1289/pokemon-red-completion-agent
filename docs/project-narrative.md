@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the first classroom batch taught five lessons—and refused to fake three
+
+All eight frozen Red training cards have now been turned over exactly once. Five became real
+causal examples. Acquisition caught and retained a new species. Resupply restored capture
+capacity. Two evolution choices and one exploration choice failed, and those failures remained
+negative evidence instead of being rewritten as a teacher preference for an unplayed alternative.
+
+The other three cards exposed a different truth: their setup recipes could not construct the
+promised classroom. They stopped before random choice, before a skill ran, and before any target
+existed. The system consumed them without retry. That lowered yield, but it protected the dataset
+from a much worse lie. Across the five usable menus, all seven portable option kinds appeared;
+the random draw exercised acquisition, evolution, exploration, and resupply. In total the batch
+used 10,313 actions and 527,045 frames with development, teachers, predictions, fits, and private
+publication all at zero.
+
+This is training data, not yet a trained player. The historical example plus these five moves the
+board to **causal train 6/60, powered fit 0, authority 0, transfer 0**. The declared integration
+gate needs eight examples, so fitting five clustered rows would turn motion into theater. The next
+chapter is an action-free search for genuinely unused train lineages with enough margin to survive
+the measured setup attrition, while the four development lineages remain sealed for evaluation.
+
 ## August 29: the classroom finally has a key that cannot open the exam
 
 The frozen schedule could name twelve classrooms, but it could not safely enter one. The new

@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — five clustered examples recorded; successor capacity next:**
+> Codex owns the path-free batch receipt, publication, exact-main CI, mission reorientation, and
+> the next action-free census of unused train lineages. All eight frozen train assignments are
+> consumed: five yielded causal examples and three failed setup before behavior commitment. Four
+> development lineages remain unopened. **Causal train 6/60 · powered fit 0 · authority 0 ·
+> transfer 0.** Do not fit below the eight-example integration gate.
+>
+> Claude reviews statistical power, leakage, and overclaiming on stable milestone artifacts.
+> Antigravity reviews architecture, exactly-once boundaries, and cross-title portability. Both are
+> read-only; neither opens private identities, executes gameplay, edits, publishes, or grants
+> authority. Codex adjudicates disagreements. The next admissible work is path-free publication
+> and zero-action successor capacity analysis—not retry, development reuse, route hardening, full
+> replay, sealed Red, or Crystal execution.
+
 > **2026-08-29 active override — 8+4 plan frozen; claim-first runner engineering next:** Codex
 > owns the train-only private-plan consumer, logical-plus-physical claim boundary, durable pre-input
 > arm commitment, crash-cutpoint matrix, documentation, publication, and final adjudication. PR

@@ -1,5 +1,20 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 selected-arm training result
+
+From exact main `5656bd63` under green CI, the project consumed an immutable eight-lineage Red
+training schedule exactly once. Five assignments produced valid randomized, selected-arm-only
+causal examples: two successful outcomes and three failures across acquisition, evolution,
+exploration, and resupply. Three setup recipes failed before randomization and emitted no target.
+The batch retained no teacher or counterfactual labels, opened no development outcome, and exposed
+no private path or identity.
+
+The result is useful precisely because it fails its next claim honestly. The authentic corpus is
+now 6/60, but the clustered batch supplied only five of the eight examples required for an
+integration fit. No model was fit and no authority was promoted. The next milestone is an
+action-free, attrition-aware successor census over new development-disjoint lineages, preserving
+the four untouched evaluation lineages for later Red comparison and eventual Crystal transfer.
+
 ## August 29 authenticated private-schedule result
 
 Published main `4190b92b` passed exact CI, then a single zero-controller run reproduced and sealed
