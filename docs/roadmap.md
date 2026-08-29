@@ -3,6 +3,33 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 clustered-curriculum override:** The 2/5 V2 terminal is preserved, but its proposed
+> V3 10/12 successor is retired. One-full-run-per-row independence was the wrong constraint: train
+> scenarios may share an upstream lineage when the entire lineage stays in one partition, while
+> development is evaluated on untouched lineage clusters. The fixed Vermilion reroute was removed;
+> only reusable interaction/encounter boundaries remain.
+>
+> Next: publish the minimal repair, implement an action-free clustered scheduler over **67
+> lineages / 414 compatibility edges**, freeze eight short train scenarios across at least four
+> lineages and four portable option kinds, collect selected-arm outcomes, and make the first
+> non-authoritative fit. No V3 yield gate or routine replay. **Causal train 1/60 · powered fit 0 ·
+> authority 0 · transfer 0.** The
+> [clustered qualification](evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
+> records the exact local gate.
+
+> **August 29 V2-yield checkpoint:** Main `624325cf` passed CI `33232635929/1`, then its freshly
+> frozen twelve-world gate stopped at **2/5** after three distinct failures made 10/12 impossible.
+> Five worlds are consumed; seven unopened V2 identities are retired. The
+> [terminal](evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+> records 90,565 actions, 15,824,793 frames, and zero new roots, labels, outcomes, fits, authority,
+> or transfer.
+>
+> The bounded repair authenticates fossil reinteraction, settles delayed cave encounters before
+> item facing, and avoids both observed Vermilion NPC lanes. Finish qualification and reviewer
+> challenge, publish and green exact main, then freeze one genuinely new V3 12-world plan. Only a
+> 10/12 pass opens train-root generation and recensus. **Causal train 1/60 · powered fit 0 ·
+> authority 0 · transfer 0.**
+
 > **August 28 world-variance checkpoint:** Published main `05ae3cce` and CI `33221693432/1`
 > failed the frozen successor gate honestly at **2/5**; the third distinct failure made 10/12
 > impossible, so five assignments are consumed and seven old-source assignments are unusable.

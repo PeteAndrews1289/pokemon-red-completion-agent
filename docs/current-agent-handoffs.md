@@ -1,10 +1,45 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-28. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-29. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: implement clustered short-scenario training; V3 teacher yield is retired
+
+Codex owns the minimal repair, clustered scheduler, zero-controller census, first eight authentic
+selected-arm outcomes, provisional integration fit, documentation, publication, and final
+adjudication. The working diff no longer contains the new fixed Vermilion route. It retains only
+authenticated fossil reinteraction and delayed encounter settlement, with explicit safety-bound
+tests. No V3 teacher-yield plan may be frozen or executed.
+
+Claude remains the read-only statistics, leakage, and evidence challenger. Antigravity remains the
+read-only architecture, transfer, and overclaim challenger. The accepted strategic constraint is
+that every upstream episode lineage belongs wholly to train or development, while bounded multiple
+short scenarios may train within one lineage. Reviewers do not edit, execute gameplay, publish, or
+grant authority. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
+## Current override: V2 yield failed; publish no repair until review and full qualification
+
+Codex owns working source bundle `c44d14a8`, the public V2 terminal, full qualification,
+publication, exact-main CI, and only then a possible action-free V3 freeze. Exact main `624325cf`
+passed CI `33232635929/1`; its new prospective plan stopped at **2/5** after three distinct
+failures made 10/12 impossible. Five worlds are consumed and seven unclaimed V2 identities are
+retired unused. The [terminal](evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+records 90,565 actions and 15,824,793 frames with every learning and authority counter unchanged.
+
+The repair has three bounded claims: an authenticated ready-field fossil interaction may rearm
+after a dropped pulse; a one-frame-late cave wild must settle through the ordinary evidence-bearing
+flee before object facing; and the post-ship Vermilion route avoids both measured roaming-object
+lanes while remaining cartridge-walkable. The focused suite is 155/155. Codex must still run the
+full gate and adjudicate Claude/Antigravity review against the stable diff.
+
+Claude attacks the exact failure-to-repair mapping, evidence sufficiency, retry boundaries, and
+whether tests distinguish ready-field rearming from active dialogue. Antigravity attacks whether
+this remains bounded classroom-generator maintenance rather than another Red walkthrough project.
+Both are read-only. Neither may execute a ROM, open private identities, edit, publish, freeze V3,
+or grant model authority. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## Current override: publish the world-variance repair; training is still gated
 

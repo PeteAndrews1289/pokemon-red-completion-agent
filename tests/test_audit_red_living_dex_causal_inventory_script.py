@@ -8,6 +8,7 @@ import runpy
 import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -104,7 +105,13 @@ def test_main_emits_only_the_path_free_aggregate_bound(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     globals_ = SCRIPT["main"].__globals__
-    roots = _roots()
+    roots = tuple(
+        replace(
+            root,
+            cluster_partition="train" if index < 10 else "development",
+        )
+        for index, root in enumerate(_roots())
+    )
     runtime = _runtime()
     integrity_checks = 0
 
@@ -151,6 +158,16 @@ def test_main_emits_only_the_path_free_aggregate_bound(
             "model_fits": 0,
         }
     )
+    clustered = SimpleNamespace(
+        public_dict=lambda: {
+            "train_scenarios": 8,
+            "development_scenarios": 4,
+            "lineage_overlap": 0,
+            "controller_actions": 0,
+            "emulator_frames": 0,
+            "outcomes_observed": 0,
+        }
+    )
     monkeypatch.setitem(globals_, "_support", support)
     monkeypatch.setitem(globals_, "build_runtime_identity", lambda: runtime)
     monkeypatch.setitem(globals_, "require_pyboy_import_origins", lambda _runtime: None)
@@ -171,19 +188,32 @@ def test_main_emits_only_the_path_free_aggregate_bound(
     monkeypatch.setitem(globals_, "fixed_account_claim_registry_lease", lease)
     monkeypatch.setitem(
         globals_,
-        "census_red_living_dex_causal_inventory",
+        "enumerate_red_living_dex_causal_capabilities",
+        lambda *_args, **_kwargs: (object(),),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "audit_red_living_dex_causal_inventory",
         lambda *_args, **_kwargs: audit,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "schedule_red_living_dex_clustered_integration",
+        lambda *_args, **_kwargs: clustered,
     )
 
     assert SCRIPT["main"](_args()) == 0
     result = json.loads(capsys.readouterr().out)
     assert integrity_checks == 1
-    assert result["status"] == "authenticated_action_free_inventory_censused"
+    assert result["status"] == (
+        "authenticated_action_free_clustered_inventory_censused"
+    )
     assert result["inventory_sufficient"] is False
     assert result["combined_context_deficit"] == 180
     assert result["private_identity_fields"] == 0
     assert result["private_path_fields"] == 0
     assert result["root_claims"] == 0
+    assert result["clustered_integration"] == clustered.public_dict()
     assert "/private" not in str(result)
 
 

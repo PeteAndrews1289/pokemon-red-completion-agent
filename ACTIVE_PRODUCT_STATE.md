@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Powered cross-title living-Dex causal curriculum V1** (`cross-title-living-dex-causal-example-pipeline-v1`)
+**Lineage-clustered cross-title living-Dex causal curriculum V2** (`cross-title-living-dex-causal-example-pipeline-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the locally qualified world-variance repair, require exact-main green CI, freeze and pass a new prospective 10-of-12 yield gate, and only then freeze a train-only successor and rerun the action-free capacity census.
+- Next decision: Publish and green the minimal reusable controller repair, then pass one action-free lineage-clustered scenario census and freeze the first eight authentic short train scenarios without another teacher-yield gate.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Collect a statistically powered set of title-neutral selected-arm causal examples across seven Red living-Dex option kinds, fit only after information and feature-support gates pass, compare on untouched same-reset development contexts against random, cost-only, and myopic controls, then freeze the qualified representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds one authentic settled negative Red causal train row, a qualified powered curriculum, and an exact action-free capacity census. Existing independent capacity reaches only 54 of 90 train contexts and 63 of 195 disjoint combined contexts. No powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet. |
-| Authority target | Collect at least 60 informative outcomes from 90 independent Red train contexts, pass exact feature-support and information gates, fit through the guarded entry point, and beat the preregistered best-of-three control envelope on at least 102 of 105 untouched development contexts with every incomplete pair scored against the candidate before freezing weights for Crystal. |
+| Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
+| Authority now | The pipeline holds one authentic settled negative Red causal train row, 67 qualified upstream lineages, and 414 action-free root-template compatibility edges. No powered causal model has been fit, no development outcome may train it, and no gameplay or collection authority follows yet. |
+| Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | A fresh-episode generator must start each root from a new prospectively assigned emulator-run lineage, target the scarce authentic Red menu templates and at least three values on every pressure axis, and then raise the train maximum matching above 54 without cloning or rehashing an old state. Abort before collection or fit if it cannot produce compatible independent roots. |
+| Cheapest falsifier | Before gameplay, a clustered scheduler over the authenticated Red inventory must construct at least eight train scenarios across at least four upstream lineages and four option kinds plus an untouched development tranche, with zero lineage overlap and bounded within-lineage multiplicity. Abort the redesign if it still requires a new full-game root for every row. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,19 +58,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-28-fresh-teacher-world-variance-repair-local-qualification-v3** · status **active** · evidence [qualification](docs/evidence/red-living-dex-fresh-teacher-world-variance-repair-local-qualification-v3-2026-08-28.json)
+**2026-08-29-lineage-clustered-curriculum-reorientation** · status **active** · evidence [qualification](docs/evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The failed gate stopped an unreliable generator before it could manufacture unusable classrooms. This bounded teacher maintenance unblocks the named fresh-root causal curriculum. Targeted tests distinguish each repair; 3/3 unchanged-source diagnostics establish integration non-regression only. Teacher buttons remain outside the learner. |
+| Product alignment | The failed V2 diagnostic was useful only because it triggered the anti-drift alarm: two late-Cinnabar successes and three distinct failures across 90565 actions and 15824793 frames changed no learning counter. The successor now converts existing authentic lineages into short causal classrooms instead of optimizing a Red walkthrough. |
 | Learning output | The immutable historical count remains one authentic settled negative Red causal train example. Teacher diagnostics are engineering evidence only: they do not create model targets or increment causal train, outcome, fit, authority, or transfer counters. |
-| Authority delta | None. One unchanged repair bundle reached late-Cinnabar mansion_returned on 3/3 new development seeds across 125932 actions and 22345994 frames. No diagnostic created an official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. |
+| Authority delta | None. The V2 teacher diagnostic stopped honestly at 2/5 and created no official root, learner label, outcome, fit, sealed case, transfer result, or authority promotion. The immutable authentic causal-train count remains 1/60. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | Published main 05ae3cce passed CI 33221693432/1, but its prospective successor gate stopped at 2/5 after three distinct failures made 10/12 impossible. Those five assignments are consumed and seven old-source assignments remain unclaimed but unusable. Repair bundle 7c2974ab is locally qualified but unpublished; no new prospective plan exists. |
-| Decision | Publish the exact locally qualified repair and require green CI on the resulting main commit. Then freeze a new versioned twelve-world one-use yield plan bound to that exact source. Require at least 10/12 late-Cinnabar mansion_returned terminals, at most two failures, no repeated deterministic stage, and no leak before freezing any train-only root successor and rerunning the action-free census. |
-| Next session | Publish and green the exact qualified candidate, freeze a new prospective diagnostic plan without gameplay, then execute its twelve one-use worlds. Freeze and materialize a train-only successor only if the yield gate passes; otherwise retain the denominator and repair the measured cluster. |
-| Next falsifier | After exact publication and green CI, a newly frozen source-bound set of twelve prospective one-use worlds must produce at least ten late-Cinnabar mansion_returned terminals with no repeated deterministic failure stage. Any early execution, consumed assignment reuse, low yield, leak, or new systematic boundary closes the successor freeze. |
-| Stop condition | Stop on future-world execution before exact-main green CI and a new prospective source-bound plan, retry of any consumed diagnostic or assignment, reuse of an old-source plan, insufficient new yield, cloned or rehashed independence, private leakage, development leakage into fit, teacher labels entering the learner, sealed Red or Crystal execution, authority promotion, or full-game replay as evaluation. |
+| Blocker | The powered contract incorrectly made every training row consume a distinct full-game teacher lineage. That is stricter than learner fitting requires, turns correlated sequential data into a root-manufacturing problem, and has already pulled the work into prohibited fixed-route hardening. The authenticated inventory already contains 67 qualified lineages and 414 root-template compatibility edges. |
+| Decision | Publish only the reusable Helix interaction and delayed-encounter boundary repairs, explicitly remove the new Vermilion fixed-route patch, and retire any V3 teacher-yield gate. Then implement a lineage-clustered scheduler: descendants of one upstream episode remain in exactly one partition, training may use bounded multiple short scenarios per lineage, and evaluation is scored at the untouched lineage-cluster level. |
+| Next session | Close and publish the minimal reusable controller repair, implement and mutation-test the lineage-clustered curriculum contract, then run one action-free clustered census. If it passes, freeze the first eight authentic short train scenarios; do not run another teacher-yield gate or full-game replay. |
+| Next falsifier | A zero-controller clustered census must produce an eight-scenario train integration tranche spanning at least four immutable lineages and four portable option kinds, together with lineage-disjoint development clusters. Any cross-partition lineage, outcome-aware selection, teacher label, unbounded cluster dominance, or continued one-full-run-per-row requirement rejects the redesign before gameplay. |
+| Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
 ### Stop conditions
 

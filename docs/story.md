@@ -7,6 +7,39 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: stop making the teacher perfect and start making the learner learn
+
+The 2/5 test exposed a deeper mistake. We had required every training example to begin with a
+brand-new full Red playthrough. That sounds rigorous, but independence is needed between the
+groups used to judge generalization—not between every observation used to fit a model. The rule
+turned an AI project into days of fossil timing and moving-person routes.
+
+So the next twelve-world teacher test is cancelled. The new Vermilion route patch is removed.
+Existing runs become clusters: every scenario descended from one run stays on one side of the
+train/test wall, but the learner may face several short, varied decisions inside a training
+cluster. The next visible milestone is no longer “ten teachers finished”; it is **eight authentic
+outcomes, then the first real fit**. The scoreboard remains **CAUSAL TRAIN 1/60 · POWERED FIT 0 ·
+AUTHORITY 0 · TRANSFER 0** until those outcomes actually exist.
+
+## Current checkpoint: five new worlds were enough to reject the teacher again
+
+The last repair really was better, and it still was not reliable enough. After the code merged and
+GitHub passed it on main, twelve brand-new worlds were written down before the first button press.
+The rule was simple: ten had to reach late Cinnabar; a third failure ended the test.
+
+World one stopped at the Helix Fossil even though the character stood on the correct square.
+Worlds two and three reached the Mansion return. World four found another moving person in
+Vermilion. World five revealed that a cave battle can appear one frame after movement seems
+finished. That was the third failure. The remaining seven worlds were never opened. The score is
+therefore 2/5—not “two successful examples,” not “almost ready,” and not a reason to rerun.
+
+The fixes teach the controller to distinguish a dropped field interaction from an open dialogue,
+to settle and record a delayed wild encounter before touching an item, and to walk a parallel city
+lane around both measured roamers. They do not teach the model Pokémon. The learner remains at
+**CAUSAL TRAIN 1/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**. The next honest milestone is
+still a ten-of-twelve teacher population; only then can Red create enough independent classrooms
+for strategic training.
+
 ## Current checkpoint: the teacher won—and the automation still called it failure
 
 The latest published repair met the discipline test and again failed the reliability test. Its

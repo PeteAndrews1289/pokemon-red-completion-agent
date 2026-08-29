@@ -5,6 +5,39 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): retire teacher-yield gating and begin a
+> lineage-clustered causal curriculum.** The V2 diagnostic remains an honest 2/5 failure with
+> every learning counter unchanged. It proved that demanding one full Red teacher run per
+> training row turns the project into fixed-route maintenance. That requirement is now retired.
+> The working repair keeps only authenticated fossil reinteraction and delayed-encounter
+> settlement; the new Vermilion route patch was removed.
+>
+> Existing evidence already contains **67 qualified upstream lineages and 414 compatible
+> root-template edges**. The next design keeps every lineage wholly in train or development,
+> permits bounded multiple short scenarios inside a training lineage, and scores evaluation at
+> the untouched lineage-cluster level. Next milestone: an action-free clustered census followed
+> by the first **8 authentic selected-arm outcomes** and a non-authoritative integration fit. No
+> V3 teacher-yield gate or routine full-game replay is allowed. **Causal train 1/60 · powered fit
+> 0 · authority 0 · transfer 0.** The
+> [local qualification](docs/evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
+> binds the new contract and all protected zeroes.
+
+> **Current product focus (August 29, 2026): the exact-main population gate failed; repair only
+> what it measured.** PR 99 merged as main `624325cf`, and exact-main CI `33232635929/1` passed.
+> A genuinely new twelve-world plan then stopped exactly as preregistered at **2/5** after a third
+> distinct failure made 10/12 impossible. Five worlds are consumed, seven unopened identities are
+> retired unused, and no root, learner example, fit, authority, or transfer result was created.
+> The [path-free terminal](docs/evidence/red-living-dex-fresh-teacher-world-variance-yield-gate-v2-2026-08-29.json)
+> records **90,565 actions and 15,824,793 frames**.
+>
+> The bounded repair addresses only the observed seams: rearm a dropped fossil interaction only
+> on an authenticated ready field, settle and ledger a one-frame-late cave encounter before
+> facing a pickup, and move the post-ship Vermilion route onto a cartridge-walkable lane that
+> avoids both measured roaming-NPC tiles. Its focused suite is **155/155** green. Next: finish the
+> full local gate, obtain read-only review, publish and green the exact candidate, then freeze one
+> genuinely new V3 12-world plan. Only a 10/12 pass may reopen train-root generation. **Causal
+> train 1/60 · powered fit 0 · authority 0 · transfer 0.**
+
 > **Current product focus (August 28, 2026): publish the world-variance repair, then measure it on a
 > genuinely new prospective population.** Exact main `05ae3cce` passed CI `33221693432/1`, but its
 > successor gate stopped at **2/5** after three distinct failures made the required 10/12 result

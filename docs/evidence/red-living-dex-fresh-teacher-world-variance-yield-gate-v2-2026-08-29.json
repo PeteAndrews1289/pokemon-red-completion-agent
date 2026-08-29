@@ -1,0 +1,172 @@
+{
+  "authorization": {
+    "crystal_execution": false,
+    "development_diagnostics": true,
+    "full_game_replay_as_evaluation": false,
+    "model_fit": false,
+    "official_root_generation": false,
+    "sealed_red": false,
+    "training_materialization": false
+  },
+  "decision_rule": {
+    "maximum_failures": 2,
+    "minimum_mansion_returned_successes": 10,
+    "planned_worlds": 12,
+    "repeated_deterministic_failure_stage_allowed": false,
+    "retry_after_controller_input": false,
+    "stop_immediately_on_failure_number": 3
+  },
+  "execution": {
+    "claimed_worlds": 5,
+    "failures": 3,
+    "gate_passed": false,
+    "mansion_returned_successes": 2,
+    "no_source_change_during_gate": true,
+    "one_use_per_seed": true,
+    "plan_sha256": "bc6578635dec55e9594fd15dfba19540e93aacb53445701972a6ba129f575b0e",
+    "stopped_as_preregistered": true,
+    "unclaimed_worlds": 7
+  },
+  "failure_clusters": [
+    {
+      "harness_seed": 9920001,
+      "last_checkpoint_id": "super_nerd",
+      "message_sha256": "d9abe12c9dad8d44d1dddab22f1a099efe7fbdd81b3aae6a0607b7388e5980bc",
+      "stage": "helix_fossil_bounded_semantic_gate"
+    },
+    {
+      "harness_seed": 9920004,
+      "last_checkpoint_id": "hm01_ready",
+      "message_sha256": "e71345bee28b588b36928dd3cd7358c5c1396b85da69e5c2caaa26716a7c8d7b",
+      "stage": "post_ship_vermilion_center_moving_object_at_23_27"
+    },
+    {
+      "harness_seed": 9920005,
+      "last_checkpoint_id": "mt_moon_entered",
+      "message_sha256": "0008b96ab8e355aa87fbe8ef8b777ddbc2c9c59e376bf4ea2ca2aeec49dec3e5",
+      "stage": "delayed_wild_transition_at_tm01_pickup_facing"
+    }
+  ],
+  "interpretation": {
+    "exact_source_population_yield_qualified": false,
+    "learner_training_began": false,
+    "official_lineage_created": false,
+    "pre_repair_source_reached_late_cinnabar_in_two_worlds": true,
+    "successor_train_root_freeze_allowed": false,
+    "teacher_actions_are_model_labels": false
+  },
+  "next_gate": {
+    "decision": "Repair and distinguish only the three observed failure clusters, publish and qualify the changed source, then freeze a new prospective one-use denominator over identities not claimed or reserved by either failed gate.",
+    "old_claimed_worlds_reusable": false,
+    "old_unclaimed_worlds_reusable": false
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "causal_train_examples": 0,
+    "learner_labels": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "official_root_claims": 0,
+    "official_roots": 0,
+    "sealed_cases_opened": 0,
+    "transfer_results": 0
+  },
+  "recorded_on": "2026-08-29",
+  "runs": [
+    {
+      "actions": 4232,
+      "failure_exception": "QualifiedPlayError",
+      "failure_message_sha256": "d9abe12c9dad8d44d1dddab22f1a099efe7fbdd81b3aae6a0607b7388e5980bc",
+      "frames": 457950,
+      "harness_seed": 9920001,
+      "last_checkpoint_id": "super_nerd",
+      "private_ledger_bytes": 10027,
+      "private_ledger_sha256": "a33be76e006b234417d0abd3fabe4f9f311521e84747ca4f3b4feac84eb55408",
+      "status": "failed"
+    },
+    {
+      "actions": 37785,
+      "checkpoint_completed": 275,
+      "checkpoint_id": "mansion_returned",
+      "checkpoint_total": 312,
+      "frames": 7092173,
+      "harness_seed": 9920002,
+      "initial_wait_frames": 89,
+      "private_ledger_bytes": 68348,
+      "private_ledger_sha256": "799170c53fab35da05193d89b8dca3c6be544dc6700d3f49839cc1df5e330acc",
+      "status": "mansion_returned"
+    },
+    {
+      "actions": 34662,
+      "checkpoint_completed": 275,
+      "checkpoint_id": "mansion_returned",
+      "checkpoint_total": 312,
+      "frames": 6830719,
+      "harness_seed": 9920003,
+      "initial_wait_frames": 214,
+      "private_ledger_bytes": 68351,
+      "private_ledger_sha256": "dda28bd1da5ed44ecf59dbdd157ece61e5265fbcf4010e0d79dc0afebc2b3456",
+      "status": "mansion_returned"
+    },
+    {
+      "actions": 10157,
+      "failure_exception": "QualifiedPlayError",
+      "failure_message_sha256": "e71345bee28b588b36928dd3cd7358c5c1396b85da69e5c2caaa26716a7c8d7b",
+      "frames": 1070416,
+      "harness_seed": 9920004,
+      "last_checkpoint_id": "hm01_ready",
+      "private_ledger_bytes": 22761,
+      "private_ledger_sha256": "8bf3ccf611ecc11064318f78ce61ee3a770e5bf5d531c46cf045c1b64644acd5",
+      "status": "failed"
+    },
+    {
+      "actions": 3729,
+      "failure_exception": "QualifiedPlayError",
+      "failure_message_sha256": "0008b96ab8e355aa87fbe8ef8b777ddbc2c9c59e376bf4ea2ca2aeec49dec3e5",
+      "frames": 373535,
+      "harness_seed": 9920005,
+      "last_checkpoint_id": "mt_moon_entered",
+      "private_ledger_bytes": 9161,
+      "private_ledger_sha256": "19eae04bae3ac23948f6db646fdb57194e02072c0c7a40e3a33c6ae97329fb7c",
+      "status": "failed"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-fresh-teacher-world-variance-yield-gate.v2",
+  "source": {
+    "battle_registry_sha256": "cd5e337be78b276b26ae2bd90172e6abe4e89d13d1b46f2b3fd83b149f556f2b",
+    "battle_teacher_execution_sha256": "0ee1a10dd20c6e76978eaeb60053adf0b4be7ca5034a27d311086817e24e6803",
+    "diagnostic_script_sha256": "60712f0e63ede5e0f0863bbe0077702cd511b26142399246777ac6dfc9109c91",
+    "git_commit": "624325cf7cbd95fcad02430f786b4b24eb98e6b7",
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 33232635929,
+    "goal_registry_sha256": "d2476a0a6d4d48e085b3739ed1ffcf1072c062f5e6729bc934bc04baf67af02e",
+    "goal_teacher_execution_sha256": "55e3c18750edd810acb5664fbbd1055fbb71c6bffc27bf4ccf64b816f6cb414e",
+    "source_bundle_sha256": "7c2974ab12ce468b2c80db1b5116af342442cc1514512d7ead892e89a50e5c34",
+    "strategic_registry_sha256": "e5bfc582bbe80f851f9c20eafed4e551e3d3b7bd55db9ad7628ada2dc5efb1f3",
+    "strategic_teacher_execution_sha256": "a6b938b2865bf4432ea6104a92e61219140c2848892f21ad5994896b991179d8"
+  },
+  "status": "failed_after_third_distinct_failure_and_stopped_before_seven_unclaimed_worlds",
+  "totals": {
+    "actions": 90565,
+    "frames": 15824793
+  },
+  "unclaimed_harness_seeds": [
+    9920006,
+    9920007,
+    9920008,
+    9920009,
+    9920010,
+    9920011,
+    9920012
+  ],
+  "unsupported_claims": [
+    "full_game_completion",
+    "living_pokedex_completion",
+    "model_training_began",
+    "official_fresh_root_created",
+    "population_yield_qualified",
+    "successor_train_root_ready",
+    "transfer_to_crystal_demonstrated"
+  ]
+}

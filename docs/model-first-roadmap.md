@@ -1,12 +1,65 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-28. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-29. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
+
+## Current checkpoint: replace full-run row independence with lineage-clustered scenarios
+
+The V2 2/5 result is terminal and no V3 teacher-yield gate will replace it. Requiring one new
+clean-power Red playthrough for every training row confused evaluation independence with training
+sampling. Sequential learner rows may be correlated; the honest boundary is to keep all
+descendants of an upstream episode in one partition and evaluate on wholly untouched lineages.
+
+The shortest product-aligned sequence is now:
+
+1. publish only the reusable Helix interaction and delayed-encounter boundary repairs; the new
+   fixed Vermilion reroute stays removed;
+2. build a zero-controller scheduler over the 67 authenticated lineages and 414 compatibility
+   edges, with immutable train/development lineage ownership and bounded cluster weights;
+3. require an eight-scenario integration tranche spanning at least four train lineages and four
+   portable option kinds, plus an untouched development tranche;
+4. collect only selected-arm outcomes from short scenarios and fit a non-authoritative model after
+   eight settled rows;
+5. scale toward 60 settled outcomes and use lineage-level held-out comparisons against frozen
+   random, cost-only, and myopic controls; and
+6. freeze the supported Red representation for an abstention-aware Crystal zero-shot test.
+
+No routine full replay, V3 yield plan, teacher choice label, or fixed-route patch belongs in this
+sequence. The
+[local qualification](evidence/living-dex-lineage-clustered-curriculum-local-qualification-v1-2026-08-29.json)
+binds the implementation and protected zeroes. **Causal train 1/60 · powered fit 0 · authority 0
+· transfer 0.**
+
+## Current checkpoint: the exact population gate failed again; finish one bounded repair
+
+Exact main `624325cf` passed CI `33232635929/1`. Its genuinely new, source-bound twelve-world V2
+plan then produced two `mansion_returned` terminals and three distinct failures before stopping as
+preregistered. The claimed denominator is 2/5; the other seven identities were never opened and
+are retired with the plan. The public terminal binds 90,565 teacher actions and 15,824,793 frames.
+It creates no training capacity or learned authority.
+
+The three measured repairs are locally focused-test green: distinguish a dropped ready-field
+Helix interaction from an active script, admit a one-frame-late cave wild through the ordinary
+flee ledger before facing an object, and route around both measured post-ship Vermilion moving
+objects on cartridge terrain. This is the final allowed V2-derived maintenance bundle.
+
+The shortest honest sequence is now:
+
+1. finish full local qualification and read-only adversarial review of the stable diff;
+2. publish the exact candidate and require exact-main green CI;
+3. freeze one new V3 twelve-world plan using no V1/V2 identity;
+4. execute sequentially once per world, stopping on failure three, and require 10/12 with no
+   repeated deterministic stage or leak;
+5. only on a pass, freeze train-only roots and rerun the action-free maximum-matching census; and
+6. collect toward 90 train contexts / at least 60 settled outcomes before guarded fitting.
+
+No additional world, V3 plan, fit, sealed Red, Crystal execution, replay, or authority promotion
+is allowed before steps 1–2. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
 ## Current checkpoint: publish the world-variance repair, then freeze a genuinely new yield gate
 

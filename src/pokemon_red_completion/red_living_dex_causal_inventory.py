@@ -1,16 +1,18 @@
-"""Exact action-free Red inventory bound for the powered causal curriculum.
+"""Action-free Red compatibility inventory and clustered integration adapter.
 
 The historical provider freezer proved fifteen genuine three-option menus.  A
 powered fit and paired policy test require many more independent contexts.  A
 raw root count is not enough: a root may be unable to reach a particular
 origin or satisfy that menu's mechanical preconditions.  This module tests
-every available root against every frozen Red template and computes maximum
-one-root-per-context matchings without claiming a root or running the game.
+every available root against every frozen Red template.  The historical
+one-root-per-context matching remains available as a diagnostic, but it is no
+longer the training-capacity rule.  The clustered adapter locks each upstream
+lineage to one partition and permits a bounded number of short scenarios
+inside that lineage.
 
-The result is deliberately only an inventory bound.  It does not freeze the
-eventual behavior permutations, prove train/development family separation,
-fit a model, or authorize collection.  Those remain later gates even if all
-195 logical slots can be matched.
+The result is deliberately action-free.  It does not freeze behavior
+permutations, execute a provider, observe an outcome, fit a model, or authorize
+collection.
 """
 
 from __future__ import annotations
@@ -27,6 +29,13 @@ from pokemon_red_completion.living_dex_causal_capacity_schedule import (
 )
 from pokemon_red_completion.living_dex_causal_curriculum import (
     LivingDexCausalCurriculumDesign,
+)
+from pokemon_red_completion.living_dex_clustered_curriculum import (
+    LivingDexClusteredCurriculumPolicy,
+    LivingDexClusteredCurriculumSchedule,
+    LivingDexClusteredScenarioCapability,
+    LivingDexClusterPartition,
+    schedule_living_dex_clustered_curriculum,
 )
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
@@ -180,6 +189,30 @@ def census_red_living_dex_causal_inventory(
 ) -> RedLivingDexCausalInventoryAudit:
     """Read no new bytes; enumerate exact menu compatibility and match capacity."""
 
+    capabilities = enumerate_red_living_dex_causal_capabilities(
+        roots,
+        world=world,
+        corridors=corridors,
+        effects_before=effects_before,
+        effects_after=effects_after,
+    )
+    return audit_red_living_dex_causal_inventory(
+        roots,
+        capabilities,
+        design=design,
+    )
+
+
+def enumerate_red_living_dex_causal_capabilities(
+    roots: tuple[RedLivingDexActionFreeRootObservation, ...],
+    *,
+    world: RedLivingDexProviderRouteWorld,
+    corridors: tuple[RedLivingDexWildCorridor, ...],
+    effects_before: RedLivingDexSetupProtectedEffectCheckpoint,
+    effects_after: RedLivingDexSetupProtectedEffectCheckpoint,
+) -> tuple[RedLivingDexCausalRootCapability, ...]:
+    """Return exact root-template edges without action, claim, or partition choice."""
+
     if not isinstance(roots, tuple) or any(
         not isinstance(item, RedLivingDexActionFreeRootObservation) for item in roots
     ):
@@ -222,10 +255,56 @@ def census_red_living_dex_causal_inventory(
                     recipe=recipe,
                 )
             )
-    return audit_red_living_dex_causal_inventory(
-        roots,
-        tuple(capabilities),
-        design=design,
+    return tuple(capabilities)
+
+
+def schedule_red_living_dex_clustered_integration(
+    capabilities: tuple[RedLivingDexCausalRootCapability, ...],
+    *,
+    policy: LivingDexClusteredCurriculumPolicy | None = None,
+) -> LivingDexClusteredCurriculumSchedule:
+    """Adapt Red root-template edges into the title-neutral cluster contract.
+
+    The root's upstream catalog partition is immutable provenance.  Train
+    roots may expose only train templates and development roots only
+    development templates; unmatched edges remain inventory information but
+    cannot cross the generalization wall.
+    """
+
+    if not isinstance(capabilities, tuple) or any(
+        not isinstance(item, RedLivingDexCausalRootCapability)
+        for item in capabilities
+    ):
+        raise TypeError("Red clustered integration needs capability tuples")
+    adapted: list[LivingDexClusteredScenarioCapability] = []
+    for capability in capabilities:
+        capability.__post_init__()
+        root = capability.root
+        if (
+            root.cluster_partition is None
+            or root.independence_lineage_sha256 is None
+            or not root.prospective_independence_authenticated
+        ):
+            continue
+        slot_partition: LivingDexClusterPartition = (
+            "train"
+            if capability.slot.partition is LivingDexCapturePartition.TRAIN
+            else "development"
+        )
+        if root.cluster_partition != slot_partition:
+            continue
+        adapted.append(
+            LivingDexClusteredScenarioCapability(
+                lineage_sha256=root.independence_lineage_sha256,
+                physical_root_sha256=root.root.physical_root_sha256,
+                partition=slot_partition,
+                template_sha256=capability.slot.slot_sha256,
+                available_option_kinds=capability.slot.available_option_kinds,
+            )
+        )
+    return schedule_living_dex_clustered_curriculum(
+        tuple(adapted),
+        policy=policy,
     )
 
 

@@ -1,5 +1,42 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: the failed teacher gate changes the unit of learning
+
+The important result was not another route repair. It was recognizing that the experiment had
+made a full Red playthrough the unit of every training example. That is unnecessary for fitting a
+model and directly caused days of route hardening. Correlated observations are normal in
+sequential learning; leakage is controlled by keeping every descendant of an upstream run in one
+partition and judging generalization on untouched runs.
+
+The project therefore retires the proposed V3 teacher-yield gate. It removes the new fixed
+Vermilion reroute, keeps two reusable controller boundaries, and turns the existing 67 qualified
+lineages and 414 compatibility edges into bounded short scenarios. The first honest learning
+milestone is eight selected-arm outcomes across at least four lineages and four option kinds,
+followed by a non-authoritative integration fit. This is a methodological correction, not a lower
+standard: Red evaluation remains lineage-disjoint and Crystal remains the transfer falsifier.
+
+## August 29: a second prospective population says the teacher is still not a classroom factory
+
+The repaired source passed every local and GitHub gate, merged as `624325cf`, and received a new
+twelve-world plan whose identities and 10/12 rule were frozen before play. The first world lost a
+Helix interaction while standing on the correct tile. The next two reached the late-Cinnabar
+boundary. The fourth met a roaming Vermilion object on a route that had already avoided a different
+roamer. The fifth exposed a wild battle one frame after the movement receipt that reached TM01.
+That was failure three, so the campaign stopped at 2/5 and never opened the remaining seven worlds.
+
+This is the project behaving correctly even though the result is negative. No seed was replaced,
+no old assignment retried, and no teacher motion became a model target. The public terminal binds
+90,565 actions and 15,824,793 frames while every learner and authority counter remains fixed.
+
+The repair is deliberately smaller than another walkthrough pass. A fossil interaction can rearm
+only when map, position, party survival, script state, controls, and pre-fossil events prove a ready
+field; active dialogue receives only its next confirmation. Cave item pickups wait the cartridge's
+one-frame encounter boundary and use the existing authenticated flee receipt before facing. The
+Vermilion path moves to a statically walkable lane that avoids both observed moving-object rows.
+These are reusable controller semantics, but they are still teacher maintenance. The model-first
+decision remains: publish and green the exact repair, then demand 10/12 from one genuinely new
+population before allowing train-root generation to resume.
+
 ## August 28: the second repair closes four late, real-cartridge gaps
 
 The first repaired source was good enough to publish but not good enough to generate classrooms.

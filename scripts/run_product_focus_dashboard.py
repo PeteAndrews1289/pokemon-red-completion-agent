@@ -127,19 +127,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Powered Red curriculum · fresh episode capacity",
+        stage="Clustered Red curriculum · action-free scenario census",
         message=(
-            "The exact census found train capacity 54/90 and disjoint combined capacity 63/195. "
-            "Next: create genuinely new train-first episode lineages for the measured deficit."
+            "The authenticated inventory already has 67 upstream lineages and 414 compatible "
+            "root-template edges. Next: lock lineages to partitions and schedule short scenarios."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red causal curriculum · fresh lineages → recensus → collect train first",
-        collection_target=90,
+        location="Red causal curriculum · lineage lock → census → 8 outcomes → first fit",
+        collection_target=60,
         model=DashboardModelState(
             mode="waiting",
             candidate="Unfitted powered causal living-Dex policy · actual Red feature rank 16",
             choice=(
-                "No active choice · next: fresh compatible Red roots, then train outcomes"
+                "No active choice · next: clustered short-scenario schedule, then train outcomes"
             ),
             confidence=None,
             decisions=1,
@@ -151,15 +151,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             zero_shot_completed=causal_train_examples,
             zero_shot_total=60,
             adaptation_completed=0,
-            adaptation_total=102,
+            adaptation_total=0,
             sealed_completed=0,
             sealed_total=1,
             predictions_committed=False,
-            heading="Powered cross-title causal curriculum",
-            eyebrow="Red capacity · train-only fit · untouched exam · Crystal",
+            heading="Lineage-clustered causal curriculum",
+            eyebrow="Red short scenarios · cluster split · Crystal",
             counter_labels=(
                 "Settled Red causal train examples",
-                "Untouched Red paired comparisons",
+                "Held-out Red lineage result",
                 "Zero-shot Crystal result",
             ),
         ),
@@ -183,20 +183,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             (
-                "Curriculum · train 90/min 60 · development 105/min 102 · censored=loss · "
-                "worst-case power 83.2% · kinds 7 · candidates 3"
+                "Curriculum · integration 8 outcomes · at least 4 train lineages · at least 4 "
+                "portable kinds · scale minimum 60 · selected arms only"
             ),
             (
-                "Exact capacity · lineages 67 · train 54/90 (deficit 36) · development 63/105 "
-                "· combined 63/195 (deficit 132) · uncovered menus 1 · storage pressure 2/3"
+                "Existing inventory · qualified lineages 67 · compatibility edges 414 · source "
+                "train roots 44 · source validation roots 23 · one-row-per-root bound retired"
             ),
             (
                 "Fit guard · actual Red feature rank 16 · distinct rows minimum 50 · candidate "
                 "success minimum 50% · development targets excluded"
             ),
             (
-                "Evaluation · same-reset frozen scorer vs random + cost-only + myopic · primary "
-                "best-of-three envelope · exact one-sided paired sign test"
+                "Evaluation · untouched upstream lineages · bounded cluster weights · frozen "
+                "random + cost-only + myopic controls · cluster-level endpoint"
             ),
             (
                 "First causal terminal · settled negative train example · selected-only target · "
@@ -223,8 +223,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Observed-arm redesign · variable-size menus · full-support propensities · "
-                "hard masks · selected outcomes only · censored targets 0 · V4 retired unexecuted"
+                "Clustered redesign · immutable lineage partitions · bounded within-lineage "
+                "multiplicity · variable-size menus · selected outcomes only · teacher labels 0"
             ),
         ),
     )
