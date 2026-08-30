@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: six cards separate speed from information
+
+Open on six face-down cards labeled **SUCCESSOR 2–7 · FIXED ORDER · ONE ATTEMPT EACH**. Turn four
+into sealed lesson cards and leave two visibly marked **SETUP TERMINAL — NO TARGET**. Race the
+counters to **12,209 ACTIONS · 609,272 FRAMES · 600.789 SECONDS**, then land on **4/6 YIELD ·
+23.97 EXAMPLES/HOUR**. Stamp every slot **CONSUMED—NO RETRY**.
+
+Pull back to the corpus board: **12/60 · 12 LINEAGES · ALL 7 OPTION KINDS · 36/36 SUPPORTED
+CANDIDATES · SELECTED RANK 10/16 · SUCCESS 2 / FAILURE 10 · POWERED-VARIATION HEADS 1/5**. Let
+all four new outcomes flip to failure and keep them on screen. Cross out **SHOP FOR BETTER ROWS**.
+Replace the old question **CAN THE CLASSROOM RUN?** with the answer **YES**; leave **IS THE
+CURRICULUM INFORMATIVE ENOUGH?** unresolved.
+
+End on **PUBLISH → GREEN EXACT MAIN → ORDINALS 8–15 ONCE → COMPLETE-SUCCESSOR AUDIT → FREEZE
+CLUSTERED POWERED V2 → 60 → UNTOUCHED RED → TEACHER-FREE SKILLS → LIVING POKEDEX → FROZEN
+PORTABLE BUNDLE → CRYSTAL**. Keep **POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 30 scene: the bridge from eight Red lessons to Crystal
 
 Start tight on **8/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**, then pull back to reveal the

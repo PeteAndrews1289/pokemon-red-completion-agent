@@ -3,7 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 30 integration-fit result:** PR 114 merged the claim-first fitter as exact main
+> **August 30 R1 six-card result:** Exact published main `72f57d0a` passed CI
+> `33322464644/1`, then untouched successor train ordinals 2–7 were attempted once each. Four
+> recorded authentic selected-arm examples and two ended during setup: **4/6 yield · 12,209
+> actions · 609,272 frames · 600.789 seconds · ~23.97 examples/hour**. All six claims are consumed.
+>
+> The corpus is now **12/60 train examples · 12 lineages · all 7 supported kinds · 36/36
+> supported candidate rows · selected-feature rank 10/16 · successes 2 · failures 10**. This
+> clears the throughput question but not the powered-information gate. Publish the
+> [path-free result](evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json),
+> require green exact-main CI, then attempt untouched ordinals 8–15 once each in fixed order. Stop
+> after the complete successor audit and freeze clustered powered V2 before generating more data
+> or fitting again. **Integration fit 1/1 · powered fit 0 · authority 0 · transfer 0.**
+
+> **Previous August 30 integration-fit result:** PR 114 merged the claim-first fitter as exact main
 > `f5097982`; push CI `33320429925/1` passed. One learner invocation fit the complete eight-row
 > authentic Red causal denominator and published one immutable non-authoritative model. The result
 > retained **24/24 supported candidate feature rows · 7 varying target heads · 225/225 finite

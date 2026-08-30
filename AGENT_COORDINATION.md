@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-30 R1 six-card override — publish, then finish ordinals 8–15:** From exact published
+> main `72f57d0a` under green CI `33322464644/1`, untouched successor ordinals 2–7 ran once each.
+> Four settled and two ended during setup: **4/6 yield · 12,209 actions · 609,272 frames ·
+> 600.789 seconds · ~23.97 examples/hour**. The corpus is now **12/60**, one lineage per example,
+> all seven supported kinds, rank 10/16, two successes and ten failures. Powered fit, gameplay
+> authority, and transfer remain zero.
+>
+> Codex owns path-free publication, exact-main CI verification, and the fixed completion batch
+> over untouched train ordinals 8–15. Each runs at most once in ordinal order; every terminal
+> counts. Claude's next useful review is the complete-denominator cluster-power and leakage
+> challenge. Antigravity's is the title-neutral hierarchy and Crystal-boundary challenge. Both are
+> optional, read-only milestone reviewers and do not see private rows or block the qualified
+> batch. No retry, substitution, outcome balancing, development access, R0 refit, model-controlled
+> gameplay, teacher target, sealed Red, Crystal execution, or full replay is open.
+
 > **2026-08-30 R0-complete override — publish the fit receipt, then measure R1 throughput:** PR
 > 114 is exact main `f5097982`; push CI `33320429925/1` passed. One authentic fit consumed all
 > eight causal train rows and byte-reopened one immutable non-authoritative model with finite

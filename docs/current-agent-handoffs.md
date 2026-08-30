@@ -33,9 +33,32 @@ conditions were accepted. Antigravity's capability and full-denominator gaps wer
 its global “missing prediction is correct” repair was replaced with separate supported-performance
 and unsupported-abstention endpoints. Details are in the
 [review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
-assignments begin at the next named milestone; no standing audit blocks ordinary R0 engineering.
+assignments begin at the next named milestone; no standing audit blocks ordinary current-lane work.
 
-## Current override: R0 is complete; Codex owns the six-card R1 throughput pilot
+## Current override: six-card R1 passed throughput; Codex owns successor completion
+
+Exact published main `72f57d0a` passed CI `33322464644/1`. Codex then attempted untouched
+successor train ordinals 2–7 once each in their frozen order. Four settled authentic selected-arm
+causal examples and two terminated during setup, for **4/6 yield**, 12,209 actions, 609,272 frames,
+and about 23.97 examples per measured outer hour. All six claim pairs are consumed. The corpus is
+now **12/60 train examples from 12 lineages**, all seven supported option kinds, 36/36 supported
+candidate rows, selected-feature rank 10/16, two successes, and ten failures. Integration fit
+remains 1/1; powered fit, gameplay authority, and transfer remain zero.
+
+Codex owns publication of the
+[six-card result](evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json), green
+exact-main verification, then one fixed batch over untouched train ordinals 8–15. Every row runs
+at most once in ordinal order and every terminal remains in the denominator. Stop after the batch
+for a complete-successor audit; only then design the clustered powered V2 experiment. No R0 refit,
+development read, outcome-aware selection, teacher target, model-controlled gameplay, sealed Red,
+Crystal, authority promotion, or full replay is permitted.
+
+Claude may next challenge independent-unit power, attrition, censoring, and leakage on the stable
+complete-successor receipt. Antigravity may challenge hierarchy, feature portability, recovery,
+and the Crystal entry boundary. Both are read-only and optional; Codex adjudicates their advice
+against the mission and measured evidence.
+
+## Previous override: R0 is complete; Codex owns the six-card R1 throughput pilot
 
 PR 114 merged the claim-first fitter as exact main `f5097982`; push CI `33320429925/1` passed.
 One authentic learner invocation consumed the complete eight-row train denominator, published one

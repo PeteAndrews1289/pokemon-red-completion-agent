@@ -14,10 +14,45 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-30: R1 produced four of six lessons — finish the frozen successor next
+
+Published main `72f57d0a0fc6d68000ab4cfd75b8e0f4dde450fc` passed CI
+`33322464644/1`. From that exact source, successor train ordinals 2 through 7 were each claimed
+and attempted once in their prospective order. Ordinals 2, 4, 5, and 7 settled authentic
+randomized selected-arm examples. Ordinals 3 and 6 ended during setup before behavior commitment
+and correctly emitted no target. The batch therefore produced **4/6 examples** after 12,209
+controller actions, 609,272 emulator frames, and 600.789 seconds of outer wall time—about 23.97
+examples per hour. All six claim pairs are consumed and none may retry.
+
+Three preparatory failures remain part of the record but not the six-card gameplay denominator.
+Two failed at source/runtime bootstrap before private access; one rejected insecure selected-root
+file modes before reading private bytes. Each had zero claims, actions, frames, commitments, or
+outcomes. An exact dependency closure and byte-identical mode-0600 staging copies then passed one
+authenticated zero-effect preflight. These were operational boundary corrections, not gameplay
+retries or grounds to replace a card.
+
+The complete private corpus now holds **12 train-only examples from 12 causal identities,
+decisions, and lineages**, maximum lineage multiplicity one. It covers all seven supported Red
+option kinds and 36/36 supported candidate rows, but only twelve selected feature rows, rank 10/16,
+two successful and ten unsuccessful examples, and one outcome head at the powered variation
+floor. The four new outcomes were all failures. Keep them; do not select later rows to repair class
+balance. The board is **causal train 12/60 · integration fit 1/1 · powered fit 0 · authority 0 ·
+transfer 0**.
+
+This result answers the R1 question: short-scenario collection is productive enough to finish the
+already-frozen successor, while information diversity remains the limiting gate. Next publish the
+[path-free result](docs/evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json),
+require green exact-main CI, and attempt untouched successor train ordinals **8 through 15** once
+each in fixed order. Preserve every terminal and stop after the eight-card aggregate. Do not refit
+R0, open development, query teacher or counterfactual targets, substitute a root, patch a route
+inside the batch, grant model authority, run sealed Red or Crystal, or replay the full game. After
+that stop, freeze a clustered powered V2 design before generating any additional scenarios.
+
 ## 2026-08-30: the mission horizon is frozen through Crystal entry
 
-The immediate gate remains one non-authoritative fit over all eight authentic Red examples. The
-longer sequence is now explicit in the
+At this planning checkpoint, the immediate gate was one non-authoritative fit over eight authentic
+Red examples; that R0 gate and the later six-card R1 pilot are now complete as documented above.
+The longer sequence remains explicit in the
 [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md): prove the fit
 boundary, freeze a cluster-aware powered Red experiment, beat frozen controls on untouched Red
 lineage clusters, promote only bounded teacher-free gameplay skills, compose story and living-Dex

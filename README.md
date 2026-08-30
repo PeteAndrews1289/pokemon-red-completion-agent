@@ -6,7 +6,25 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the first authentic Red causal model now exists; R1
+> **Current product focus (August 30, 2026): the R1 throughput pilot is complete; finish the
+> frozen successor before designing the powered curriculum.** From published main `72f57d0a`
+> under green CI `33322464644/1`, untouched train ordinals **2–7** were attempted once each. Four
+> produced authentic randomized selected-arm examples and two ended during setup, for **4/6
+> yield** in **600.789 seconds**: 12,209 controller actions, 609,272 emulator frames, and about
+> **23.97 examples per outer wall-clock hour**. Every terminal remains in the denominator.
+>
+> The authentic board is now **causal train 12/60 · integration fit 1/1 · powered fit 0 ·
+> authority 0 · transfer 0**. The corpus spans twelve distinct lineages and all seven supported
+> option kinds, with 36/36 supported candidate rows, twelve selected rows, and feature rank 10/16.
+> It is still sparse and imbalanced—two successes and ten failures, with only one outcome head at
+> the powered variation floor—so another fit would be premature. Publish the
+> [path-free six-card result](docs/evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json),
+> require green exact-main CI, then attempt untouched successor ordinals **8–15** once each in fixed
+> order. Do not retry, substitute, outcome-balance, open development, use the R0 model for
+> gameplay, or run Crystal. Stop after that eight-card batch and freeze the clustered powered V2
+> design from the complete measured denominator.
+
+> **Previous product checkpoint (August 30, 2026): the first authentic Red causal model now exists; R1
 > measures whether data collection can scale.** PR [#114](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/114)
 > merged the claim-first fitter as exact main `f5097982`; push CI `33320429925/1` passed. The one
 > learner invocation consumed the complete **8/8 settled train denominator**, retained **24/24
