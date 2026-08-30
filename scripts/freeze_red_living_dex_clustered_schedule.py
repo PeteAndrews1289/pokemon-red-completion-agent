@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Freeze the exact Red 8+4 clustered curriculum without controller input.
+"""Freeze one exact Red clustered curriculum without controller input.
 
 This command repeats the authenticated, action-free root observation used by
-the public capacity census, reproduces its exact clustered schedule, joins the
-twelve selected scenarios to their private Red contexts and setup recipes, and
-publishes one immutable sealed plan.  It has no behavior selector, claim writer,
-controller executor, teacher, outcome reader, model scorer, or fitter.
+the public capacity census, reproduces the original 8+4 schedule by default,
+or applies the fixed attrition-aware 16+4 successor policy when explicitly
+requested.  It joins selected scenarios to their private Red contexts and
+setup recipes and publishes one immutable sealed plan.  It has no behavior
+selector, claim writer, controller executor, teacher, outcome reader, model
+scorer, or fitter.
 """
 
 # ruff: noqa: E402 -- pin reviewed script/package roots before project imports.
@@ -50,10 +52,16 @@ from pokemon_red_completion.red_living_dex_causal_inventory import (
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
     RedLivingDexClusteredFrozenScenario,
     RedLivingDexClusteredPrivatePlan,
     RedLivingDexClusteredScheduleBindings,
     validate_red_living_dex_clustered_private_plan,
+)
+from pokemon_red_completion.red_living_dex_clustered_successor import (
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY,
+    RedLivingDexClusteredSuccessorDesign,
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexActionFreeRootObservation,
@@ -74,6 +82,9 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 )
 
 RESULT_SCHEMA = "pokemon.red.living-dex-clustered-schedule-freeze-result.v1"
+SUCCESSOR_RESULT_SCHEMA = (
+    "pokemon.red.living-dex-clustered-successor-freeze-result.v1"
+)
 FAILURE_SCHEMA = "pokemon.red.living-dex-clustered-schedule-freeze-failure.v1"
 CENSUS_RECEIPT_PATH = (
     PROJECT_ROOT / "docs/evidence/red-living-dex-clustered-curriculum-census-v1-2026-08-29.json"
@@ -81,6 +92,13 @@ CENSUS_RECEIPT_PATH = (
 CENSUS_RECEIPT_SHA256 = "f55d54101b89fb440495d87cfc78e8c7a32cf386271ce81dc8ce7fa922c296f7"
 EXPECTED_SCHEDULE_SHA256 = "35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905"
 EXPECTED_POLICY_SHA256 = "dc72fb9449f7279c12b673b266e0973d01b62577f99d22ec7fdb14fceb8589be"
+SUCCESSOR_CENSUS_RECEIPT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json"
+)
+SUCCESSOR_CENSUS_RECEIPT_SHA256 = (
+    "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4"
+)
 
 
 class ClusteredScheduleFreezeError(RuntimeError):
@@ -109,6 +127,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-context-plan-sha256", required=True)
     parser.add_argument("--private-root", type=Path, required=True)
     parser.add_argument("--rom", type=Path)
+    parser.add_argument("--successor", action="store_true")
     parser.add_argument("--supplemental-state", action="append", default=[], type=Path)
     parser.add_argument(
         "--expected-supplemental-physical-root-sha256",
@@ -124,8 +143,19 @@ def main(argv: list[str] | None = None) -> int:
     stage = "arguments"
     try:
         args = _parser().parse_args(argv)
+        successor = args.successor
+        if successor and (
+            args.supplemental_state
+            or args.expected_supplemental_physical_root_sha256
+        ):
+            raise ClusteredScheduleFreezeError("arguments")
         stage = "census_evidence_authentication"
-        _authenticate_census_receipt()
+        if successor:
+            _authenticate_successor_census_receipt()
+            census_receipt_sha256 = SUCCESSOR_CENSUS_RECEIPT_SHA256
+        else:
+            _authenticate_census_receipt()
+            census_receipt_sha256 = CENSUS_RECEIPT_SHA256
         stage = "source_authentication"
         source_commit, source_bundle = _support("_authenticate_source")(args)
         stage = "private_input_authentication"
@@ -186,10 +216,29 @@ def main(argv: list[str] | None = None) -> int:
                 effects_before=effects_before,
                 effects_after=effects_after,
             )
-            schedule = schedule_red_living_dex_clustered_integration(capabilities)
+            schedule = (
+                schedule_red_living_dex_clustered_integration(
+                    capabilities,
+                    policy=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY,
+                )
+                if successor
+                else schedule_red_living_dex_clustered_integration(
+                    capabilities
+                )
+            )
+            expected_schedule_sha256 = (
+                schedule.schedule_sha256
+                if successor
+                else EXPECTED_SCHEDULE_SHA256
+            )
+            expected_policy_sha256 = (
+                RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY.policy_sha256
+                if successor
+                else EXPECTED_POLICY_SHA256
+            )
             if (
-                schedule.schedule_sha256 != EXPECTED_SCHEDULE_SHA256
-                or schedule.policy.policy_sha256 != EXPECTED_POLICY_SHA256
+                schedule.schedule_sha256 != expected_schedule_sha256
+                or schedule.policy.policy_sha256 != expected_policy_sha256
             ):
                 raise ClusteredScheduleFreezeError("clustered_schedule_reproduction")
             stage = "private_assignment_join"
@@ -223,7 +272,7 @@ def main(argv: list[str] | None = None) -> int:
                 context_catalog_sha256=catalog_sha256,
                 context_plan_sha256=context_plan_sha256,
                 runtime_identity_sha256=runtime.sha256,
-                census_receipt_sha256=CENSUS_RECEIPT_SHA256,
+                census_receipt_sha256=census_receipt_sha256,
             )
             plan = RedLivingDexClusteredPrivatePlan(
                 bindings=bindings,
@@ -235,17 +284,40 @@ def main(argv: list[str] | None = None) -> int:
             validate_red_living_dex_clustered_private_plan(
                 document,
                 expected_bindings=bindings,
-                expected_schedule_sha256=EXPECTED_SCHEDULE_SHA256,
-                expected_policy_sha256=EXPECTED_POLICY_SHA256,
+                expected_schedule_sha256=expected_schedule_sha256,
+                expected_policy_sha256=expected_policy_sha256,
             )
             stage = "private_plan_publication"
             result = _publish_and_reopen(
                 store,
                 plan=plan,
                 bindings=bindings,
-                expected_schedule_sha256=EXPECTED_SCHEDULE_SHA256,
-                expected_policy_sha256=EXPECTED_POLICY_SHA256,
+                expected_schedule_sha256=expected_schedule_sha256,
+                expected_policy_sha256=expected_policy_sha256,
+                record_id=(
+                    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID
+                    if successor
+                    else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID
+                ),
+                record_kind=(
+                    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+                    if successor
+                    else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND
+                ),
+                result_schema=(
+                    SUCCESSOR_RESULT_SCHEMA if successor else RESULT_SCHEMA
+                ),
             )
+            if successor:
+                result = {
+                    **result,
+                    "status": (
+                        "authenticated_action_free_clustered_successor_frozen"
+                    ),
+                    "successor_design_sha256": (
+                        RedLivingDexClusteredSuccessorDesign().design_sha256
+                    ),
+                }
         print(json.dumps(result, allow_nan=False, separators=(",", ":"), sort_keys=True))
         return 0
     except ClusteredScheduleFreezeError as error:
@@ -283,6 +355,48 @@ def _authenticate_census_receipt() -> None:
         or clustered.get("lineage_overlap") != 0
         or protected.get("collection_authorized") is not False
         or any(value != 0 for key, value in protected.items() if key != "collection_authorized")
+    ):
+        raise ClusteredScheduleFreezeError("census_evidence_authentication")
+
+
+def _authenticate_successor_census_receipt() -> None:
+    design = RedLivingDexClusteredSuccessorDesign()
+    expected_design = {
+        **design.public_dict(),
+        "design_sha256": design.design_sha256,
+    }
+    try:
+        payload = SUCCESSOR_CENSUS_RECEIPT_PATH.read_bytes()
+        receipt = json.loads(payload)
+        capacity = receipt["capacity_gate"]
+        protected = receipt["protected_effects"]
+    except BaseException:
+        raise ClusteredScheduleFreezeError(
+            "census_evidence_authentication"
+        ) from None
+    if (
+        hashlib.sha256(payload).hexdigest()
+        != SUCCESSOR_CENSUS_RECEIPT_SHA256
+        or receipt.get("status")
+        != "action_free_successor_capacity_passed_private_freeze_pending"
+        or receipt.get("successor_design") != expected_design
+        or capacity.get("gate_passed") is not True
+        or capacity.get("fixed_successor_schedule_materialized") is not False
+        or capacity.get("stronger_policy_capacity_falsifier_pending") is not True
+        or capacity.get("source_train_roots", 0)
+        < design.policy.train_scenarios
+        or capacity.get("source_development_roots", 0)
+        < design.policy.development_scenarios
+        or capacity.get("successor_train_lineages_required")
+        != design.policy.minimum_train_lineages
+        or capacity.get("successor_development_lineages_required")
+        != design.policy.minimum_development_lineages
+        or protected.get("collection_authorized") is not False
+        or any(
+            value != 0
+            for key, value in protected.items()
+            if key != "collection_authorized"
+        )
     ):
         raise ClusteredScheduleFreezeError("census_evidence_authentication")
 
@@ -375,15 +489,18 @@ def _publish_and_reopen(
     bindings: RedLivingDexClusteredScheduleBindings,
     expected_schedule_sha256: str = EXPECTED_SCHEDULE_SHA256,
     expected_policy_sha256: str = EXPECTED_POLICY_SHA256,
+    record_id: str = RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
+    record_kind: str = RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+    result_schema: str = RESULT_SCHEMA,
 ) -> dict[str, object]:
     record = store.publish_sealed_record(
-        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
-        kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+        record_id,
+        kind=record_kind,
         record=plan.private_dict(),
     )
     reopened = store.find_sealed_record(
-        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
-        expected_kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+        record_id,
+        expected_kind=record_kind,
     )
     if reopened is None or reopened.summary != record.summary:
         raise ClusteredScheduleFreezeError("private_plan_reopen")
@@ -400,7 +517,7 @@ def _publish_and_reopen(
         "plan_manifest_sha256": reopened.summary.manifest_sha256,
         "plan_record_sha256": reopened.summary.record_sha256,
         "private_plan_reopened": True,
-        "schema": RESULT_SCHEMA,
+        "schema": result_schema,
     }
 
 

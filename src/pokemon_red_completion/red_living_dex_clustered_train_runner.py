@@ -1,10 +1,10 @@
-"""Train-only consumer for the frozen Red clustered living-Dex schedule.
+"""Train-only consumer for exact frozen Red clustered living-Dex schedules.
 
-The private schedule contains eight train and four untouched development
-assignments.  This module makes only train ordinals addressable, joins one
-selected root to its exact Red template, reuses the durable setup pair claim,
-and delegates behavior commitment and selected-arm outcome collection to the
-title-neutral causal journal.  Development rows are never accepted by the
+Each admitted plan has a fixed train prefix plus untouched development
+assignments.  This module makes only the plan-bound train ordinals addressable,
+joins one selected root to its exact Red template, reuses the durable setup pair
+claim, and delegates behavior commitment and selected-arm outcome collection to
+the title-neutral causal journal.  Development rows are never accepted by the
 execution API, and no teacher or counterfactual outcome is available here.
 """
 
@@ -55,6 +55,8 @@ from pokemon_red_completion.red_living_dex_claim_first_campaign import (
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
     validate_red_living_dex_clustered_private_plan,
 )
 from pokemon_red_completion.red_living_dex_runtime_contract import (
@@ -97,8 +99,25 @@ RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256 = canonical_sha256(
         "train_ordinals": list(range(8)),
     }
 )
+RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256 = canonical_sha256(
+    {
+        "behavior_commitment": "durable-before-controller-release",
+        "counterfactual_targets": 0,
+        "development_ordinals_addressable": 0,
+        "lineage_identity": "frozen-upstream-episode-lineage",
+        "logical_and_physical_claim": "atomic",
+        "plan_record_id": RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        "plan_record_kind": (
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+        ),
+        "schema": "pokemon.red.living-dex-clustered-successor-train-runner.v1",
+        "selected_arm_outcome_only": True,
+        "train_ordinals": list(range(16)),
+    }
+)
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_RECORD_NAME = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 
 
 def _digest(value: object, subject: str) -> str:
@@ -124,6 +143,11 @@ class RedLivingDexClusteredTrainPlanBinding:
     plan_record_sha256: str
     schedule_sha256: str
     policy_sha256: str
+    record_id: str = RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID
+    record_kind: str = RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND
+    train_scenarios: int = 8
+    development_scenarios: int = 4
+    causal_runner_sha256: str = RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256
 
     def __post_init__(self) -> None:
         for value, subject in (
@@ -132,8 +156,22 @@ class RedLivingDexClusteredTrainPlanBinding:
             (self.plan_record_sha256, "plan record"),
             (self.schedule_sha256, "schedule"),
             (self.policy_sha256, "policy"),
+            (self.causal_runner_sha256, "causal runner"),
         ):
             _require_sha256(value, subject)
+        if (
+            not isinstance(self.record_id, str)
+            or _RECORD_NAME.fullmatch(self.record_id) is None
+            or not isinstance(self.record_kind, str)
+            or _RECORD_NAME.fullmatch(self.record_kind) is None
+            or type(self.train_scenarios) is not int  # noqa: E721
+            or self.train_scenarios <= 0
+            or type(self.development_scenarios) is not int  # noqa: E721
+            or self.development_scenarios <= 0
+        ):
+            raise RedLivingDexClusteredTrainRunnerError(
+                "clustered train plan bounds differ"
+            )
 
 
 FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN = (
@@ -155,6 +193,32 @@ FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN = (
         ),
     )
 )
+FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN = (
+    RedLivingDexClusteredTrainPlanBinding(
+        private_plan_sha256=(
+            "93562084be4dc65cd87c7edf6df97db7b040109e98475eda78085c0e9e56609e"
+        ),
+        plan_manifest_sha256=(
+            "b9fe8ea6e8f4bf93f5f8c62bee91d090414eac42f401b57ab85c0684950712fa"
+        ),
+        plan_record_sha256=(
+            "fd6114c96daf0881eb39f2e990b0d9fb595fba1e18b0f0556444288800b135f8"
+        ),
+        schedule_sha256=(
+            "94b1330d968b9fd4ac91cd046e177d5178262815dd667bd073db5cc2a44f6e2a"
+        ),
+        policy_sha256=(
+            "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171"
+        ),
+        record_id=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        record_kind=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+        train_scenarios=16,
+        development_scenarios=4,
+        causal_runner_sha256=(
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256
+        ),
+    )
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -172,9 +236,19 @@ class RedLivingDexClusteredTrainSelection:
     root_envelope_sha256: str = field(repr=False)
     context_identity_sha256: str = field(repr=False)
     upstream_lineage_sha256: str = field(repr=False)
+    train_scenarios: int = field(default=8, repr=False)
+    causal_runner_sha256: str = field(
+        default=RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256,
+        repr=False,
+    )
 
     def __post_init__(self) -> None:
-        if type(self.ordinal) is not int or not 0 <= self.ordinal < 8:  # noqa: E721
+        if (
+            type(self.train_scenarios) is not int  # noqa: E721
+            or self.train_scenarios <= 0
+            or type(self.ordinal) is not int  # noqa: E721
+            or not 0 <= self.ordinal < self.train_scenarios
+        ):
             raise RedLivingDexClusteredTrainRunnerError(
                 "development assignment is structurally inaccessible"
             )
@@ -195,6 +269,7 @@ class RedLivingDexClusteredTrainSelection:
             (self.root_envelope_sha256, "selected root envelope"),
             (self.context_identity_sha256, "selected context"),
             (self.upstream_lineage_sha256, "selected upstream lineage"),
+            (self.causal_runner_sha256, "selected causal runner"),
         ):
             _require_sha256(value, subject)
 
@@ -340,12 +415,15 @@ def authenticate_red_living_dex_clustered_train_selection(
     if not isinstance(binding, RedLivingDexClusteredTrainPlanBinding):
         raise TypeError("clustered train selection needs its plan binding")
     binding.__post_init__()
-    if type(ordinal) is not int or not 0 <= ordinal < 8:  # noqa: E721
+    if (
+        type(ordinal) is not int  # noqa: E721
+        or not 0 <= ordinal < binding.train_scenarios
+    ):
         raise RedLivingDexClusteredTrainRunnerError(
             "development assignment is structurally inaccessible"
         )
     try:
-        validate_red_living_dex_clustered_private_plan(
+        schedule = validate_red_living_dex_clustered_private_plan(
             document,
             expected_schedule_sha256=binding.schedule_sha256,
             expected_policy_sha256=binding.policy_sha256,
@@ -353,7 +431,14 @@ def authenticate_red_living_dex_clustered_train_selection(
         if document.get("private_plan_sha256") != binding.private_plan_sha256:
             raise ValueError("private plan differs")
         assignments = document.get("assignments")
-        if not isinstance(assignments, list) or len(assignments) != 12:
+        if (
+            schedule.policy.train_scenarios != binding.train_scenarios
+            or schedule.policy.development_scenarios
+            != binding.development_scenarios
+            or not isinstance(assignments, list)
+            or len(assignments)
+            != binding.train_scenarios + binding.development_scenarios
+        ):
             raise ValueError("assignments differ")
         selected = assignments[ordinal]
         if not isinstance(selected, Mapping):
@@ -393,6 +478,8 @@ def authenticate_red_living_dex_clustered_train_selection(
                 selected.get("lineage_sha256"),
                 "selected upstream lineage",
             ),
+            train_scenarios=binding.train_scenarios,
+            causal_runner_sha256=binding.causal_runner_sha256,
         )
     except RedLivingDexClusteredTrainRunnerError:
         raise
@@ -510,7 +597,7 @@ def run_red_living_dex_clustered_train_assignment(
         setup_terminal_sha256=canonical_sha256(setup.terminal.private_dict()),
         setup_pair_claim_sha256=setup_pair.claim_sha256,
         causal_source_commit=outer_execution_identity.source_commit,
-        causal_runner_sha256=RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256,
+        causal_runner_sha256=selection.causal_runner_sha256,
         upstream_lineage_sha256=selection.upstream_lineage_sha256,
     )
     causal = materialize_living_dex_causal_example(
@@ -751,8 +838,8 @@ def _reopen_clustered_train_plan(
         raise TypeError("clustered train plan reopen needs its binding")
     binding.__post_init__()
     record = store.find_sealed_record(
-        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
-        expected_kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+        binding.record_id,
+        expected_kind=binding.record_kind,
     )
     if (
         record is None
@@ -850,11 +937,13 @@ def _string(value: object, subject: str) -> str:
 
 
 __all__ = [
+    "FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN",
     "FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_RECEIPT_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_PREFLIGHT_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256",
+    "RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256",
     "RedLivingDexClusteredRootLoader",
     "RedLivingDexClusteredTrainPlanBinding",
     "RedLivingDexClusteredTrainPreflightReceipt",

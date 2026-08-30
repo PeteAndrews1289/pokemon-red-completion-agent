@@ -12,12 +12,24 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from test_red_living_dex_clustered_schedule_plan import _bindings, _plan
+from test_red_living_dex_clustered_schedule_plan import (
+    _bindings,
+    _nondefault_policy_plan,
+    _plan,
+)
+from test_red_living_dex_clustered_train_runner import (
+    _successor_clustered_fixture,
+)
 
 from pokemon_red_completion.private_artifacts import initialize_private_root
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
     RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+)
+from pokemon_red_completion.red_living_dex_clustered_successor import (
+    RedLivingDexClusteredSuccessorDesign,
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -116,6 +128,20 @@ def test_freezer_reproduces_the_tracked_census_binding() -> None:
         "35c00f382b5cd0f52b5231f0114eee7f423beb49c9fe4235ffe840fcc51dc905"
     )
     assert _plan().schedule.policy.policy_sha256 == FREEZER["EXPECTED_POLICY_SHA256"]
+
+
+def test_successor_capacity_receipt_binds_the_fixed_attrition_design() -> None:
+    FREEZER["_authenticate_successor_census_receipt"]()
+
+    receipt = json.loads(FREEZER["SUCCESSOR_CENSUS_RECEIPT_PATH"].read_text())
+    design = RedLivingDexClusteredSuccessorDesign()
+    assert receipt["successor_design"] == {
+        **design.public_dict(),
+        "design_sha256": design.design_sha256,
+    }
+    assert receipt["capacity_gate"]["fixed_successor_schedule_materialized"] is False
+    assert receipt["protected_effects"]["controller_actions"] == 0
+    assert receipt["protected_effects"]["outcomes"] == 0
 
 
 def test_local_qualification_receipt_is_bound_and_does_not_overclaim() -> None:
@@ -228,26 +254,89 @@ def test_freezer_publishes_and_reopens_one_immutable_plan(tmp_path: Path) -> Non
     assert str(tmp_path) not in encoded
 
 
+def test_freezer_can_publish_a_nondefault_policy_in_a_distinct_namespace(
+    tmp_path: Path,
+) -> None:
+    store = _store(tmp_path)
+    plan = _nondefault_policy_plan()
+
+    result = FREEZER["_publish_and_reopen"](
+        store,
+        plan=plan,
+        bindings=plan.bindings,
+        expected_schedule_sha256=plan.schedule.schedule_sha256,
+        expected_policy_sha256=plan.schedule.policy.policy_sha256,
+        record_id=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        record_kind=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+        result_schema=FREEZER["SUCCESSOR_RESULT_SCHEMA"],
+    )
+
+    assert result["schema"] == FREEZER["SUCCESSOR_RESULT_SCHEMA"]
+    assert result["train_scenarios"] == 4
+    assert result["development_scenarios"] == 2
+    assert store.find_sealed_record(
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        expected_kind=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+    ) is not None
+    assert store.find_sealed_record(
+        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
+        expected_kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+    ) is None
+
+
+def test_successor_mode_rejects_supplemental_roots_before_private_reads(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    args = [
+        *_args(),
+        "--successor",
+        "--supplemental-state",
+        "/private/supplement.state",
+        "--expected-supplemental-physical-root-sha256",
+        "f" * 64,
+    ]
+
+    assert FREEZER["main"](args) == 1
+    result = json.loads(capsys.readouterr().out)
+    assert result["stage"] == "arguments"
+    assert result["controller_actions"] == 0
+    assert result["root_claims"] == 0
+
+
+@pytest.mark.parametrize("successor", [False, True])
 def test_independent_validator_reopens_the_published_plan(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
+    successor: bool,
 ) -> None:
     store = _store(tmp_path)
-    plan = _plan()
+    plan = _successor_clustered_fixture()[0] if successor else _plan()
+    record_id = (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID
+        if successor
+        else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID
+    )
+    record_kind = (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+        if successor
+        else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND
+    )
     FREEZER["_publish_and_reopen"](
         store,
         plan=plan,
-        bindings=_bindings(),
+        bindings=plan.bindings,
         expected_schedule_sha256=plan.schedule.schedule_sha256,
         expected_policy_sha256=plan.schedule.policy.policy_sha256,
+        record_id=record_id,
+        record_kind=record_kind,
     )
     record = store.find_sealed_record(
-        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
-        expected_kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+        record_id,
+        expected_kind=record_kind,
     )
     assert record is not None
-    bindings = _bindings()
+    bindings = plan.bindings
     args = [
         "--private-root",
         "/private/artifacts",
@@ -273,26 +362,41 @@ def test_independent_validator_reopens_the_published_plan(
         bindings.runtime_identity_sha256,
         "--expected-census-receipt-sha256",
         bindings.census_receipt_sha256,
+        *(["--successor"] if successor else []),
     ]
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
         "open_private_root",
         lambda *_args, **_kwargs: store,
     )
+    schedule_constant = (
+        "SUCCESSOR_EXPECTED_SCHEDULE_SHA256"
+        if successor
+        else "EXPECTED_SCHEDULE_SHA256"
+    )
+    policy_constant = (
+        "SUCCESSOR_EXPECTED_POLICY_SHA256"
+        if successor
+        else "EXPECTED_POLICY_SHA256"
+    )
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
-        "EXPECTED_SCHEDULE_SHA256",
+        schedule_constant,
         plan.schedule.schedule_sha256,
     )
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
-        "EXPECTED_POLICY_SHA256",
+        policy_constant,
         plan.schedule.policy.policy_sha256,
     )
 
     assert VALIDATOR["main"](args) == 0
     result = json.loads(capsys.readouterr().out)
-    assert result["status"] == "private_clustered_schedule_independently_validated"
+    assert result["status"] == (
+        "private_clustered_successor_independently_validated"
+        if successor
+        else "private_clustered_schedule_independently_validated"
+    )
     assert result["private_plan_reopened"] is True
     assert result["lineage_overlap"] == 0
     assert result["controller_actions"] == 0
@@ -300,13 +404,15 @@ def test_independent_validator_reopens_the_published_plan(
     assert str(tmp_path) not in json.dumps(result, sort_keys=True)
 
 
+@pytest.mark.parametrize("successor", [False, True])
 def test_main_rehearses_the_complete_zero_effect_freeze_path(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
+    successor: bool,
 ) -> None:
     store = _store(tmp_path)
-    plan = _plan()
+    plan = _successor_clustered_fixture()[0] if successor else _plan()
     bindings = _bindings()
     capabilities = tuple(item.capability for item in plan.assignments)
     roots_by_sha = {item.root.root.physical_root_sha256: item.root for item in capabilities}
@@ -368,7 +474,17 @@ def test_main_rehearses_the_complete_zero_effect_freeze_path(
         teacher_queries=0,
     )
     globals_ = FREEZER["main"].__globals__
-    monkeypatch.setitem(globals_, "_authenticate_census_receipt", lambda: None)
+    authenticated_receipts: list[str] = []
+    monkeypatch.setitem(
+        globals_,
+        "_authenticate_census_receipt",
+        lambda: authenticated_receipts.append("original"),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_authenticate_successor_census_receipt",
+        lambda: authenticated_receipts.append("successor"),
+    )
     monkeypatch.setitem(globals_, "_support", support)
     monkeypatch.setitem(
         globals_["_PROVIDER_SUPPORT"],
@@ -409,10 +525,17 @@ def test_main_rehearses_the_complete_zero_effect_freeze_path(
         "enumerate_red_living_dex_causal_capabilities",
         lambda *_args, **_kwargs: capabilities,
     )
+    def schedule(_capabilities: object, *, policy: object = None):
+        if successor:
+            assert policy == RedLivingDexClusteredSuccessorDesign().policy
+        else:
+            assert policy is None
+        return plan.schedule
+
     monkeypatch.setitem(
         globals_,
         "schedule_red_living_dex_clustered_integration",
-        lambda _capabilities: plan.schedule,
+        schedule,
     )
     monkeypatch.setitem(
         globals_,
@@ -425,15 +548,33 @@ def test_main_rehearses_the_complete_zero_effect_freeze_path(
         plan.schedule.policy.policy_sha256,
     )
 
-    assert FREEZER["main"](_args()) == 0
+    invocation = [*_args(), *(["--successor"] if successor else [])]
+    assert FREEZER["main"](invocation) == 0
     result = json.loads(capsys.readouterr().out)
+    assert authenticated_receipts == ["successor" if successor else "original"]
     assert integrity_calls == 1
-    assert result["status"] == "authenticated_action_free_clustered_schedule_frozen"
+    assert result["status"] == (
+        "authenticated_action_free_clustered_successor_frozen"
+        if successor
+        else "authenticated_action_free_clustered_schedule_frozen"
+    )
     assert result["private_plan_reopened"] is True
-    assert result["train_scenarios"] == 8
+    assert result["train_scenarios"] == (16 if successor else 8)
     assert result["development_scenarios"] == 4
     assert result["controller_actions"] == 0
     assert result["outcomes_observed"] == 0
+    assert store.find_sealed_record(
+        (
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID
+            if successor
+            else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID
+        ),
+        expected_kind=(
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+            if successor
+            else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND
+        ),
+    ) is not None
     assert "/private" not in json.dumps(result, sort_keys=True)
 
 

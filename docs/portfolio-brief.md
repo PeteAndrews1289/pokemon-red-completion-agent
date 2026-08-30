@@ -1,5 +1,39 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 frozen causal-syllabus boundary
+
+After exact-source CI, the project ran one action-free production freeze that sealed 16 Red
+training scenarios from 16 lineages and four read-only development scenarios from four distinct
+lineages. Both partitions cover all seven supported title-neutral option kinds; lineage
+multiplicity is one and partition overlap is zero. Independent validation reopened the exact
+schedule, private plan, manifest, and record while controller actions, frames, claims, behavior
+commitments, outcomes, predictions, and fits all remained zero.
+
+The follow-on consumer is bound to that exact plan and uses a distinct identity from the consumed
+eight-row pilot. Its public interface makes only successor train ordinals 0–15 addressable and
+fails closed on ordinal 16 or development. This is a reproducible causal-data trust boundary, not
+a model-quality claim: the authentic corpus remains 6/60 and no gameplay authority or transfer
+result exists. The next evidence is a green exact-source build and one ROM-free, zero-effect
+production preflight before one-shot outcome collection resumes.
+
+## August 29 attrition-aware successor design
+
+After the first eight-row clustered batch yielded five usable causal examples, the project ran a
+zero-action census rather than patching failed routes or fitting too early. It authenticated 81
+Red contexts, excluded 13 consumed roots, and found 59 unused independence-qualified roots: 36
+train and 23 development, with 55 supporting at least one genuine collection-oriented menu. A
+fresh deterministic 8+4 schedule retained all seven Red-supported option kinds, one lineage per
+row, and zero train/development overlap. No controller, frame, claim, outcome, prediction, or fit
+effect occurred.
+
+The successor prospectively freezes 16 train lineages and four read-only development lineages,
+maximum one scenario per lineage. This turns the measured 5/8 setup yield into an engineering
+margin—ten expected settled examples—without outcome-aware root selection or a guarantee. The
+implementation also separates schedule ordinal from the cartridge's 15 menu templates and gives
+the successor a distinct record namespace and runner identity, preserving exactly-once semantics
+for the consumed pilot. This is experiment design and trustworthy data infrastructure; the honest
+scoreboard remains 6/60 with no powered fit, gameplay authority, or cross-title transfer claim.
+
 ## August 29 selected-arm training result
 
 From exact main `5656bd63` under green CI, the project consumed an immutable eight-lineage Red

@@ -1,5 +1,36 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 29 scene: the semester is sealed; build a key that cannot open the exam
+
+Open on **PR 106 · D4DA25BE · CI GREEN**. Drop twenty face-down cards into a transparent box:
+**16 TRAIN / 16 LINEAGES + 4 READ-ONLY DEVELOPMENT / 4 LINEAGES · ALL 7 RED KINDS BOTH SIDES ·
+MAX 1/LINEAGE · OVERLAP 0**. Stamp **SCHEDULE 94B1330D · PLAN 93562084 · INDEPENDENT REOPEN ✓**.
+Keep a dead controller beside it and show **ACTIONS · FRAMES · CLAIMS · BEHAVIORS · TEACHERS ·
+OUTCOMES · PREDICTIONS · FITS = 0**. Add the caption: **A SYLLABUS IS NOT A TRAINED MODEL**.
+
+Draw a new key marked **SUCCESSOR 0–15**. Try **16** and each development card; flash **REJECTED**.
+Place the old **PILOT 0–7 · CONSUMED** key in a separate locked case. Animate the gate:
+**LOCAL FULL SUITE → PUBLISH EXACT SOURCE → GREEN CI → ROM-FREE PREFLIGHT → EFFECTS 0 → REORIENT
+→ ONE-SHOT TRAIN ROWS → 8+ REAL LESSONS → NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED → CRYSTAL
+→ CROSS-GAME LIVING POKEDEX**. Leave **6/60 · FIT 0 · AUTHORITY 0 · TRANSFER 0** on screen.
+
+## August 29 scene: inventory the classroom bank, then amortize the next gate
+
+Start on **6/60** and keep **FIT · AUTHORITY · TRANSFER = 0**. Feed **81 AUTHENTICATED CONTEXTS**
+through a machine labeled **ACTION-FREE CENSUS**. Divert **13 CONSUMED** cards into a locked bin.
+The remaining counter lands on **59 UNUSED LINEAGES · 36 TRAIN · 23 DEVELOPMENT · 55 MENU-
+COMPATIBLE**. Keep the controller disconnected and show **ACTIONS 0 · FRAMES 0 · CLAIMS 0 ·
+OUTCOMES 0 · PREDICTIONS 0 · FITS 0**.
+
+Now contrast two designs. Cross out **TINY 3-ROW PATCH**. Build a new sealed box labeled **16 TRAIN
+/ 16 LINEAGES + 4 READ-ONLY DEVELOPMENT / 4 LINEAGES · ALL 7 RED KINDS · MAX 1 PER LINEAGE**.
+Overlay **OBSERVED SETUP YIELD 5/8 → EXPECTED 10 SETTLED, NOT GUARANTEED**. Split the lock into
+**SCHEDULE ORDINAL 0–19** and **CARTRIDGE TEMPLATE 0–14** so viewers can see that more lessons do
+not mean invented game actions. Stamp the box **NEW NAMESPACE · OLD PILOT CANNOT RETRY**.
+
+End on **PUBLISH FREEZER → EXACT CI → FREEZE ONCE → BIND EXACT PLAN → TRAIN ROWS ONLY → 8+ REAL
+LESSONS → NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED → CRYSTAL → CROSS-GAME LIVING POKEDEX**.
+
 ## August 29 scene: five lessons, three honest empty desks
 
 Show eight face-down **TRAIN** cards entering the one-shot machine. Turn over the results:

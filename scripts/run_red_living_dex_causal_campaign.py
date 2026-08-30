@@ -2,11 +2,13 @@
 """Execute or recover one admitted Red causal train assignment.
 
 The default mode preserves the historical one-campaign recovery surface.  The
-clustered mode accepts only train ordinals 0 through 7 from the exact frozen
-8+4 schedule; no development ordinal is parseable.  Neither mode accepts a
-behavior choice, private identity digest, teacher, model, Crystal cartridge, or
-full-game replay.  Red remains unopened on terminal recovery, and the selected
-causal runtime opens only after its behavior commitment is durable.
+original clustered mode accepts only train ordinals 0 through 7 from its exact
+frozen 8+4 schedule; the successor mode accepts only train ordinals 0 through
+15 from its exact frozen 16+4 schedule.  No development ordinal is parseable.
+Neither mode accepts a behavior choice, private identity digest, teacher,
+model, Crystal cartridge, or full-game replay.  Red remains unopened on
+terminal recovery, and the selected causal runtime opens only after its
+behavior commitment is durable.
 """
 
 # ruff: noqa: E402 -- authenticate the project before importing it.
@@ -939,6 +941,8 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     RedLivingDexLoadedProducerSlot,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
+    FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN,
+    FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN,
     RED_LIVING_DEX_CLUSTERED_TRAIN_PREFLIGHT_SCHEMA,
     RED_LIVING_DEX_CLUSTERED_TRAIN_RECEIPT_SCHEMA,
     RedLivingDexClusteredTrainRunnerError,
@@ -1001,6 +1005,11 @@ def _parser() -> argparse.ArgumentParser:
         choices=range(8),
         type=int,
     )
+    parser.add_argument(
+        "--clustered-successor-train-ordinal",
+        choices=range(16),
+        type=int,
+    )
     parser.add_argument("--clustered-preflight-only", action="store_true")
     return parser
 
@@ -1048,11 +1057,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         if state_path == envelope_path:
             raise CausalCampaignExecutionError("selected_root_authentication")
-        clustered = args.clustered_train_ordinal is not None
-        if clustered:
+        clustered_ordinal = (
+            args.clustered_successor_train_ordinal
+            if args.clustered_successor_train_ordinal is not None
+            else args.clustered_train_ordinal
+        )
+        clustered_successor = (
+            args.clustered_successor_train_ordinal is not None
+        )
+        clustered = clustered_ordinal is not None
+        if clustered_ordinal is not None:
+            plan_binding = (
+                FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN
+                if clustered_successor
+                else FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN
+            )
             selection = load_red_living_dex_clustered_train_selection(
                 store,
-                args.clustered_train_ordinal,
+                clustered_ordinal,
+                binding=plan_binding,
             )
             clustered_loader = _clustered_selected_loader(
                 selection,
@@ -1067,9 +1090,10 @@ def main(argv: list[str] | None = None) -> int:
                     PROJECT_ROOT,
                     store,
                     consumer=consumer,
-                    ordinal=args.clustered_train_ordinal,
+                    ordinal=clustered_ordinal,
                     root_loader=clustered_loader,
                     meter=meter,
+                    binding=plan_binding,
                 )
             else:
                 stage = "clustered_train_execution"
@@ -1077,10 +1101,11 @@ def main(argv: list[str] | None = None) -> int:
                     PROJECT_ROOT,
                     store,
                     consumer=consumer,
-                    ordinal=args.clustered_train_ordinal,
+                    ordinal=clustered_ordinal,
                     root_loader=clustered_loader,
                     rom_path=args.rom,
                     meter=meter,
+                    binding=plan_binding,
                 )
         else:
             campaign = load_red_living_dex_causal_campaign(store)
@@ -1147,9 +1172,13 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "automatic_retry_allowed": False,
                 "campaign_kind": (
-                    "clustered_train"
-                    if clustered
-                    else "historical_single_campaign"
+                    "clustered_successor_train"
+                    if clustered_successor
+                    else (
+                        "clustered_train"
+                        if clustered
+                        else "historical_single_campaign"
+                    )
                 ),
                 "causal_behavior_commitments": 0 if causal is None else 1,
                 "controller_actions": checkpoint.controller_actions,
@@ -1243,9 +1272,23 @@ def _require_arguments(args: argparse.Namespace) -> None:
             )
         )
         or (
+            args.clustered_successor_train_ordinal is not None
+            and (
+                type(args.clustered_successor_train_ordinal) is not int  # noqa: E721
+                or not 0 <= args.clustered_successor_train_ordinal < 16
+            )
+        )
+        or (
+            args.clustered_train_ordinal is not None
+            and args.clustered_successor_train_ordinal is not None
+        )
+        or (
             args.clustered_preflight_only
             and (
-                args.clustered_train_ordinal is None
+                (
+                    args.clustered_train_ordinal is None
+                    and args.clustered_successor_train_ordinal is None
+                )
                 or args.rom is not None
             )
         )

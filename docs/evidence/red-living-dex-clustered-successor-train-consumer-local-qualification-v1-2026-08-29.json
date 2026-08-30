@@ -1,0 +1,123 @@
+{
+  "claim_boundary": {
+    "supported": "The distinct Red clustered-successor train consumer is locally qualified against the exact frozen 16-train plus 4-read-only-development plan. It preserves the consumed eight-row interface, exposes only successor train ordinals 0 through 15, rejects ordinal 16 and development, and reopens all 16 real train rows without a controller, claim, outcome, prediction, or fit.",
+    "unsupported": [
+      "published_successor_consumer_source",
+      "green_successor_consumer_exact_source_ci",
+      "production_successor_consumer_preflight",
+      "successor_train_scenario_executed",
+      "successor_outcome_collected",
+      "development_outcome_opened",
+      "integration_fit_executed",
+      "powered_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "consumer_contract": {
+    "development_accessible": false,
+    "development_ordinal_16_rejected": true,
+    "development_scenarios": 4,
+    "distinct_causal_runner_identity": true,
+    "legacy_and_successor_flags_mutually_exclusive": true,
+    "legacy_train_interface_preserved": true,
+    "real_plan_distinct_train_lineages_reopened": 16,
+    "real_plan_template_ordinals_used": 7,
+    "real_plan_train_rows_reopened": 16,
+    "successor_cli_flag": "--clustered-successor-train-ordinal",
+    "successor_train_ordinal_maximum": 15,
+    "successor_train_ordinal_minimum": 0,
+    "template_ordinal_maximum": 14,
+    "train_scenarios": 16
+  },
+  "exact_plan_binding": {
+    "causal_runner_sha256": "eb52ceae6e610693fe6f7d5d09383b9805be4522f77777f02ef1503ff596469b",
+    "freeze_result_sha256": "a58e6a2dfa2741a340cc23e4cab098ff952c620421f8fa835a5412bc09102925",
+    "plan_manifest_sha256": "b9fe8ea6e8f4bf93f5f8c62bee91d090414eac42f401b57ab85c0684950712fa",
+    "plan_record_sha256": "fd6114c96daf0881eb39f2e990b0d9fb595fba1e18b0f0556444288800b135f8",
+    "policy_sha256": "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171",
+    "private_plan_sha256": "93562084be4dc65cd87c7edf6df97db7b040109e98475eda78085c0e9e56609e",
+    "record_id": "red-living-dex-clustered-successor-plan-v1",
+    "record_kind": "red-living-dex-clustered-successor-plan-v1",
+    "schedule_sha256": "94b1330d968b9fd4ac91cd046e177d5178262815dd667bd073db5cc2a44f6e2a"
+  },
+  "implementation": {
+    "execution_cli": {
+      "path": "scripts/run_red_living_dex_causal_campaign.py",
+      "sha256": "70664fac80a89663e54e68e9cd18b0424a893ef2734ddaf967c586188ced23ed"
+    },
+    "independent_validator": {
+      "path": "scripts/validate_red_living_dex_clustered_schedule.py",
+      "sha256": "6108ba4068f29c372e9928ac7ced3f07d87650b21808e0ed07311869b8852506"
+    },
+    "train_only_consumer": {
+      "path": "src/pokemon_red_completion/red_living_dex_clustered_train_runner.py",
+      "sha256": "1e8de23e3cb42aa99b3fe1bdc96c47cf33b2246c486dadef8add93fc86748973"
+    },
+    "working_source_bundle_sha256": "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435"
+  },
+  "local_gate": {
+    "documentation_links_and_active_state": "passed",
+    "focused_successor_boundary_suite": {
+      "passed": 73,
+      "seconds": 154.89
+    },
+    "full_repository_suite": {
+      "expected_failures": 1,
+      "passed": 5787,
+      "seconds": 782.27,
+      "skipped": 3,
+      "warnings": 1
+    },
+    "mypy": {
+      "source_files": 313,
+      "status": "passed"
+    },
+    "product_focus": "passed_at_6_of_60",
+    "public_artifacts": "passed",
+    "ruff": "passed"
+  },
+  "production_preflight": {
+    "protected_effects": 0,
+    "status": "pending_exact_source_publication_and_ci"
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "publication": {
+    "exact_candidate_ci": null,
+    "exact_candidate_commit": null,
+    "status": "pending"
+  },
+  "recorded_on": "2026-08-29",
+  "registries": {
+    "battle_collection_sha256": "8b800aed347030dfd16dc53fc8275a9574c004e5d00853d01718839f8f73e2b5",
+    "goal_manager_sha256": "067cb7109315cc4a33c7806ebb9cab0ce68e523c0c9f5805d74a42e9bba12ec4",
+    "source_bundle_sha256": "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435",
+    "strategic_navigation_scenarios_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "strategic_navigation_sha256": "bd557648f5d8203348759260e4dc83b7dfc3e47b6ebee412a48cf99749cc74ed"
+  },
+  "schema": "pokemon.red.living-dex-clustered-successor-train-consumer-local-qualification.v1",
+  "source": {
+    "frozen_plan_exact_source_ci_attempt": 1,
+    "frozen_plan_exact_source_ci_run": 33284967875,
+    "frozen_plan_source_bundle_sha256": "2c1ee588bcd37393e28a8115e10f2a93983420f2f9586d727970f8c511240901",
+    "frozen_plan_source_commit": "d4da25be4c412946ee4d26d138249232219da6a1",
+    "pull_request": 106
+  },
+  "status": "locally_qualified_exact_source_publication_pending"
+}

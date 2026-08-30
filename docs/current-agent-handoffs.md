@@ -6,6 +6,42 @@ Status: active operating assignment as of 2026-08-29. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex publishes and preflights the exact frozen-successor consumer
+
+The one permitted successor freeze is complete and must not retry. Published source `d4da25be`
+passed exact-source CI `33284967875/1`, then sealed 16 train lineages plus four distinct read-only
+development lineages with all seven Red-supported portable kinds on both sides and zero protected
+effects. The private plan and all external commitments independently reopen. The board remains
+**causal train 6/60 · powered fit 0 · authority 0 · transfer 0**.
+
+Codex owns the exact-plan consumer binding, regression isolation from the consumed eight-row
+pilot, full local qualification, publication, exact-source CI, one ROM-free zero-effect preflight,
+and the reorientation before gameplay. The consumer may expose only successor train ordinals
+0–15; ordinal 16 and development must fail closed. Claude's useful future role is a read-only
+statistics/leakage challenge once model fitting is proposed. Antigravity's is a read-only
+exactly-once/portability challenge before transfer. Neither review blocks this ordinary
+engineering gate, and neither reviewer sees private identities, edits, executes gameplay, or
+grants authority.
+
+## Current override: Codex owns the fixed 16+4 successor freeze and exact binding
+
+The action-free recensus is complete: 59 unused qualified roots remain, split 36 train and 23
+development, and 55 expose at least one genuine Red menu. Codex owns the generalized sealed-plan
+validator, the fixed 16-train/4-read-only-development freezer, its tests and mutation challenge,
+publication, exact-source CI, one private freeze, and the later exact-plan consumer binding. The
+successor must use one lineage per row and its own private namespace and runner identity. It may
+not retry or rewrite the consumed pilot. The board remains **causal train 6/60 · powered fit 0 ·
+authority 0 · transfer 0**.
+
+Claude's next useful role, once available, is a read-only challenge of schedule determinism,
+statistical claims, selected-arm-only targets, and public leakage. Antigravity's is a read-only
+challenge of namespace isolation, ordinal/template separation, exactly-once recovery, and whether
+the resulting option-value records remain title-neutral enough for Crystal. Neither reviewer
+edits, opens private identities, executes gameplay, publishes, or grants authority; their absence
+does not block ordinary engineering or the zero-effect freeze. Codex adjudicates disagreements
+against the mission and evidence. No development outcome, fit, sealed Red, Crystal, or full replay
+opens in this gate.
+
 ## Current override: publish five clustered examples; audit unused train capacity next
 
 Codex owns the path-free batch receipt, mission reorientation, publication, exact-main CI, and the

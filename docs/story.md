@@ -7,6 +7,41 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the semester is sealed; build the key that cannot open the exam
+
+After counting the remaining classrooms, the project did exactly one careful administrative act:
+it sealed a semester. Sixteen training cards and four exam cards were selected without playing the
+game, peeking at an outcome, or rehearsing which doors would open. Each card came from a different
+lineage and both piles covered the same seven kinds of collection decision. A separate reader
+opened the manifest and confirmed the box was the box we intended. No lesson happened; the score
+remained six of sixty.
+
+Now we are making the key. It can address sixteen training cards and literally cannot name an exam
+card. It is bound to the frozen box and distinct from the key that consumed the first eight-card
+pilot. It still must be published, rebuilt by CI, and inserted once with the cartridge absent. If
+that zero-action preflight passes, the next movement finally returns to data: short, one-shot,
+randomized decisions whose real consequences can teach a title-neutral option-value model. That
+model is one layer of the eventual player—not the destination. The destination remains completing
+stories and constructing living Pokedexes across multiple games with less title-specific help
+each time.
+
+## Current checkpoint: there are enough classrooms; build one larger semester
+
+The model still has six honest lessons, not a license to play. But root scarcity is no longer the
+immediate blocker. A zero-action census looked at every authenticated Red context, excluded the 13
+already consumed, and found 59 unused independent classrooms. Thirty-six belong to training,
+twenty-three remain on the development side, and fifty-five can host at least one genuine
+collection decision. A fresh small schedule still spans all seven Red-supported decision kinds
+without sharing a lineage across train and development.
+
+The next box will therefore hold **16 TRAIN** cards and **4 READ-ONLY DEVELOPMENT** cards, each
+from its own lineage. Sixteen is not magic; it is an honest response to the first box's 5/8 setup
+yield. If that yield repeated, about ten lessons would survive, but no card is selected after a
+setup rehearsal and no success is guaranteed. The larger box gets a new lock and identity, so it
+cannot reopen the eight old cards. First publish and test the lock, then freeze the exact cards,
+then publish a key bound only to that box. Until those steps finish, the scoreboard remains
+**CAUSAL TRAIN 6/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
 ## Current checkpoint: five lessons survived the classroom door
 
 The eight Red classrooms have all been attempted once. Five opened. The random student action

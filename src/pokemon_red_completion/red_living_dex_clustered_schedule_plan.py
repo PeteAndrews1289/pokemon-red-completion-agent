@@ -19,6 +19,7 @@ from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexCapturePartition,
 )
 from pokemon_red_completion.living_dex_clustered_curriculum import (
+    LIVING_DEX_CLUSTERED_CURRICULUM_SCHEMA,
     LIVING_DEX_CLUSTERED_PRIVATE_SCHEDULE_SCHEMA,
     LivingDexClusteredCurriculumPolicy,
     LivingDexClusteredCurriculumSchedule,
@@ -42,6 +43,12 @@ RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_STATUS = (
 )
 RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID = "red-living-dex-clustered-schedule-plan-v1"
 RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND = "red-living-dex-clustered-schedule-plan-v1"
+RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID = (
+    "red-living-dex-clustered-successor-plan-v1"
+)
+RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND = (
+    "red-living-dex-clustered-successor-plan-v1"
+)
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -117,6 +124,18 @@ _RECIPE_KEYS = {
     "root_state_sha256",
     "schema",
     "slot_sha256",
+}
+_POLICY_KEYS = {
+    "cluster_weighting",
+    "development_scenarios",
+    "eventual_minimum_train_outcomes",
+    "maximum_scenarios_per_lineage",
+    "minimum_development_lineages",
+    "minimum_development_option_kinds",
+    "minimum_train_lineages",
+    "minimum_train_option_kinds",
+    "schema",
+    "train_scenarios",
 }
 
 
@@ -396,7 +415,7 @@ def _parse_schedule(value: object) -> LivingDexClusteredCurriculumSchedule:
         "teacher_queries",
     }:
         raise RedLivingDexClusteredSchedulePlanError("clustered private schedule fields differ")
-    policy = LivingDexClusteredCurriculumPolicy()
+    policy = _parse_policy(value.get("policy"))
     if (
         value.get("schema") != LIVING_DEX_CLUSTERED_PRIVATE_SCHEDULE_SCHEMA
         or value.get("outcomes_observed") != 0
@@ -424,6 +443,50 @@ def _parse_schedule(value: object) -> LivingDexClusteredCurriculumSchedule:
             "clustered private schedule canonical form differs"
         )
     return schedule
+
+
+def _parse_policy(value: object) -> LivingDexClusteredCurriculumPolicy:
+    """Restore the exact frozen policy instead of assuming the V1 pilot size."""
+
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != _POLICY_KEYS
+        or value.get("schema") != LIVING_DEX_CLUSTERED_CURRICULUM_SCHEMA
+        or value.get("cluster_weighting") != "equal_total_weight_per_lineage"
+    ):
+        raise RedLivingDexClusteredSchedulePlanError(
+            "clustered private schedule policy differs"
+        )
+    try:
+        return LivingDexClusteredCurriculumPolicy(
+            train_scenarios=cast(int, value["train_scenarios"]),
+            development_scenarios=cast(int, value["development_scenarios"]),
+            minimum_train_lineages=cast(int, value["minimum_train_lineages"]),
+            minimum_development_lineages=cast(
+                int,
+                value["minimum_development_lineages"],
+            ),
+            minimum_train_option_kinds=cast(
+                int,
+                value["minimum_train_option_kinds"],
+            ),
+            minimum_development_option_kinds=cast(
+                int,
+                value["minimum_development_option_kinds"],
+            ),
+            maximum_scenarios_per_lineage=cast(
+                int,
+                value["maximum_scenarios_per_lineage"],
+            ),
+            eventual_minimum_train_outcomes=cast(
+                int,
+                value["eventual_minimum_train_outcomes"],
+            ),
+        )
+    except (KeyError, TypeError, ValueError):
+        raise RedLivingDexClusteredSchedulePlanError(
+            "clustered private schedule policy differs"
+        ) from None
 
 
 def _parse_cluster_assignment(value: object) -> LivingDexClusteredScenarioAssignment:
@@ -552,6 +615,8 @@ __all__ = [
     "RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND",
     "RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_STATUS",
+    "RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID",
+    "RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND",
     "RedLivingDexClusteredFrozenScenario",
     "RedLivingDexClusteredPrivatePlan",
     "RedLivingDexClusteredScheduleBindings",
