@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and exact-CI qualify the five-example clustered result, then prove unused train-lineage capacity and setup yield sufficient to reach the eight-example integration gate. Do not fit early or touch development.
+- Next decision: Publish and exact-CI qualify the fixed 16+4 successor freezer, materialize one outcome-blind private plan, then bind and consume only its train rows. Fit only after at least eight authentic settled examples exist; never touch development during fitting.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The pipeline holds six authentic settled Red causal train examples in total. The frozen clustered schedule contributed five examples from five lineages, with two successes, three selected-arm failures, all seven kinds present in menus, and four selected kinds exercised; three other train assignments failed setup without targets. No powered fit or gameplay authority exists. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | An action-free successor census must find enough genuinely unused, development-disjoint Red lineages to add at least three settled selected-arm examples after measured setup attrition. Any successor must preserve random pre-input commitment, selected-arm-only outcomes, and no retry. |
+| Cheapest falsifier | The published successor freezer must deterministically form the fixed 16-train plus 4-read-only-development schedule from the 59 unused authenticated roots. It must use 20 distinct lineages, cover all seven Red-supported portable kinds on both sides, and remain at zero controller, claim, outcome, prediction, and fit effects. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-29-clustered-train-batch-five-of-eight-successor-capacity-next** · status **active** · evidence [causal train example](docs/evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json)
+**2026-08-29-successor-capacity-passed-sixteen-row-freeze-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session produced real outcome supervision for acquisition, evolution, exploration, and resupply, the decision layer that must transfer beyond Red. Honest setup attrition prevents a premature fit and redirects the next session toward new short train scenarios rather than full-game teacher reliability. |
-| Learning output | Five new authentic settled Red causal train examples were recorded across five independent lineages: two successes and three observed-arm failures. Candidate menus covered all seven portable kinds; random selection exercised acquire, evolve, explore, and resupply. Three other assignments failed setup before behavior commitment and added no target. |
-| Authority delta | None. The frozen eight-row Red train schedule is consumed and five selected-arm causal examples were recorded, bringing the authentic total to 6/60. Three setup recipes failed before randomization. No fit, development outcome, sealed case, Crystal run, transfer result, or authority promotion occurred. |
+| Product alignment | The census removed root scarcity as the immediate blocker and the 16-row design amortizes process overhead while collecting portable selected-arm outcomes rather than more full-game route demonstrations. Development remains an untouched generalization wall. |
+| Learning output | No new learning output was counted. The action-free audit found 59 unused independence-qualified roots: 36 train, 23 development, and 55 with at least one compatible genuine menu. A fresh 8+4 schedule still covers all seven Red-supported kinds with one lineage per row and zero overlap. |
+| Authority delta | None. The action-free census changed no learning counter: causal train remains 6/60, powered fit 0, authority 0, transfer 0. It opened no development outcome and made no prediction, fit, claim, controller action, or emulator frame. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | Only five of eight frozen assignments yielded examples, below the declared eight-example integration-fit gate. The three setup failures are no-retry terminals, all eight train roots are consumed, and the four development lineages remain untouched. New train data must come from genuinely unused lineages. |
-| Decision | Do not fit the five-row clustered batch. Publish its path-free result, preserve the three setup failures as attrition evidence, then run an action-free successor capacity and setup-yield audit over unused train-only lineages before freezing any new assignments. |
-| Next session | Publish and exact-CI qualify the clustered batch result, then audit unused train-lineage capacity and setup-yield failure modes without controller input. Freeze a new train-only successor only if it can reach the eight-example integration gate without development reuse or outcome-aware selection. |
-| Next falsifier | An action-free audit must show enough genuinely unused, development-disjoint Red lineages to add at least three settled examples despite the observed 5/8 setup yield. A successor that cannot meet that bound closes this collection route instead of triggering more Red route patching. |
+| Blocker | The stronger 16+4 successor schedule has not yet been materialized and no controller-capable consumer is bound to it. The eight-example integration gate therefore remains closed despite sufficient unused-root capacity. |
+| Decision | Use one fixed attrition-aware successor with 16 distinct train lineages and four read-only development lineages. Publish and exact-CI qualify the generalized plan boundary and zero-effect freezer, freeze once from unused roots, then bind a distinct successor consumer. Do not select roots by setup rehearsal or outcome. |
+| Next session | Finish and falsify the generalized sealed-plan boundary and fixed 16+4 successor freezer, publish under green exact-source CI, materialize exactly one private successor plan, then add the exact plan binding to the train-only consumer before any gameplay. |
+| Next falsifier | From published exact source, the zero-effect freezer must satisfy the stronger 16+4 policy and seal one distinct successor record. Failure closes or redesigns the tranche before any controller input; success permits only a separately bound train consumer. |
 | Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
 ### Stop conditions

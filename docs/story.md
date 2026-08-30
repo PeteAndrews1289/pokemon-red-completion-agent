@@ -7,6 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: there are enough classrooms; build one larger semester
+
+The model still has six honest lessons, not a license to play. But root scarcity is no longer the
+immediate blocker. A zero-action census looked at every authenticated Red context, excluded the 13
+already consumed, and found 59 unused independent classrooms. Thirty-six belong to training,
+twenty-three remain on the development side, and fifty-five can host at least one genuine
+collection decision. A fresh small schedule still spans all seven Red-supported decision kinds
+without sharing a lineage across train and development.
+
+The next box will therefore hold **16 TRAIN** cards and **4 READ-ONLY DEVELOPMENT** cards, each
+from its own lineage. Sixteen is not magic; it is an honest response to the first box's 5/8 setup
+yield. If that yield repeated, about ten lessons would survive, but no card is selected after a
+setup rehearsal and no success is guaranteed. The larger box gets a new lock and identity, so it
+cannot reopen the eight old cards. First publish and test the lock, then freeze the exact cards,
+then publish a key bound only to that box. Until those steps finish, the scoreboard remains
+**CAUSAL TRAIN 6/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
 ## Current checkpoint: five lessons survived the classroom door
 
 The eight Red classrooms have all been attempted once. Five opened. The random student action

@@ -8,6 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: successor capacity passed; freeze one fixed 16-row train tranche
+
+The exact-main, action-free recensus found 59 unused authenticated Red roots: 36 upstream-train
+and 23 upstream-development lineages, with 55 roots supporting at least one genuine menu. The
+default scheduler still finds an 8+4, all-seven-kind, one-lineage-per-row schedule with zero
+overlap. It changed no learning counter and performed no controller action, frame, claim, behavior
+commitment, teacher query, outcome read, prediction, or fit.
+
+The next product-aligned sequence is:
+
+1. **Complete:** generalize and locally qualify the sealed-plan and setup-admission boundary
+   without changing the consumed 8+4 pilot contract; 5,777 full-suite and 49 focused tests passed;
+2. publish that exact source, require green CI, then freeze the successor design at 16 train
+   lineages, 4 read-only development lineages,
+   all seven Red-supported kinds, and maximum lineage multiplicity one;
+3. require the zero-effect freezer to fail closed if that stronger policy cannot be scheduled from
+   unused roots; do not rehearse setup to choose replacements;
+4. publish the resulting path-free plan commitments, then bind a distinct successor consumer to
+   that exact plan in a later green commit;
+5. execute each frozen train row at most once, retain every setup terminal honestly, and never open
+   development during fitting;
+6. run the non-authoritative integration fit only after at least eight authentic settled examples
+   exist, then continue toward 60 before lineage-disjoint Red comparison and Crystal transfer.
+
+The 16-row size amortizes the trust-boundary cycle: the observed 5/8 setup yield implies ten
+settled examples in expectation, while remaining explicitly non-guaranteed. The board stays
+**causal train 6/60 · powered fit 0 · authority 0 · transfer 0**. See the
+[capacity result](evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json) and
+[local qualification](evidence/red-living-dex-clustered-successor-freezer-local-qualification-v1-2026-08-29.json).
+
 ## Current checkpoint: five clustered examples are real; the integration fit stays closed
 
 All eight frozen Red train assignments are now consumed. Five yielded authentic, independently

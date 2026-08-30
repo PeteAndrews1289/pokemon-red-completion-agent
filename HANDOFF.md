@@ -12,6 +12,41 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-29: successor capacity passed — fixed 16+4 freezer engineering is active
+
+The end product remains a transferable hierarchical player that completes stories and builds
+living Pokedexes across games. Red supplies causal curriculum; Crystal is the first transfer
+falsifier. This successor is a bounded data-collection instrument, not the product or authority.
+
+PR 105 merged the first clustered result as exact main
+`2adc893cf139ccaf70e4bd64fc4013c724eab5ce`; exact-main CI `33279928951/1` passed. From that clean
+source, one action-free census reopened the 81 authenticated contexts and excluded all 13 consumed
+ones. It found **59 unused, independence-qualified roots: 36 train and 23 development**. Fifty-five
+support at least one real Red menu. The deterministic default scheduler can still form 8 fresh
+train plus 4 development scenarios with all seven Red-supported portable option kinds, one
+lineage per row, and zero overlap. Actions, frames, claims, behaviors, teachers, outcomes,
+predictions, and fits were all zero. The
+[path-free capacity result](docs/evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json)
+is `db8a5b38…b5f4`; its raw machine result is `871c1d5c…fbf2`.
+
+Do not aim another schedule at exactly three successes. The fixed successor policy asks for **16
+train scenarios from 16 lineages** and **4 read-only development scenarios from 4 lineages**, all
+seven supported kinds on both sides, and maximum lineage multiplicity one. At the observed 5/8
+setup yield that is ten settled examples in expectation, not a guarantee. No root may be admitted
+after setup rehearsal or outcome inspection.
+
+Engineering has now generalized and locally qualified the sealed-plan validator and setup
+admission boundary without inventing Red templates: schedule ordinal 15 becomes legal under the
+frozen policy, while template ordinals remain 0–14. The successor uses a distinct private record
+namespace and causal-runner identity, so it cannot overwrite or retry the consumed eight-row
+pilot. The full suite passed 5,777 tests, the focused boundary suite passed 49, and the
+[path-free local qualification](docs/evidence/red-living-dex-clustered-successor-freezer-local-qualification-v1-2026-08-29.json)
+records zero protected effects and no claim that a private plan or model exists. Next publish this
+exact boundary, require green exact-source CI, materialize one successor plan, then add that exact
+plan's hashes to the consumer in a later published commit. Until then the board stays **causal
+train 6/60 · powered fit 0 · authority 0 · transfer 0**; development, model fit, sealed Red,
+Crystal, and full replay remain closed.
+
 ## 2026-08-29: clustered train schedule consumed — five examples; successor capacity next
 
 The mission is still a transferable hierarchical player that completes stories and builds living

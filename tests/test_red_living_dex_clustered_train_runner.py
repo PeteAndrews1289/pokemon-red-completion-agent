@@ -45,10 +45,16 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     RedLivingDexCurrentConsumerBinding,
 )
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
     RedLivingDexClusteredFrozenScenario,
     RedLivingDexClusteredPrivatePlan,
 )
+from pokemon_red_completion.red_living_dex_clustered_successor import (
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY,
+)
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
+    RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256,
     RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256,
     RedLivingDexClusteredTrainPlanBinding,
     RedLivingDexClusteredTrainRunnerError,
@@ -59,6 +65,9 @@ from pokemon_red_completion.red_living_dex_clustered_train_runner import (
 from pokemon_red_completion.red_living_dex_runtime_contract import (
     RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
     RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
+)
+from pokemon_red_completion.red_living_dex_setup_admission import (
+    authenticate_frozen_red_living_dex_clustered_train_slot,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexSetupEffectMeter,
@@ -143,6 +152,92 @@ def _clustered_fixture() -> tuple[
     return plan, binding
 
 
+def _successor_clustered_fixture() -> tuple[
+    RedLivingDexClusteredPrivatePlan,
+    RedLivingDexClusteredTrainPlanBinding,
+]:
+    identity = _identity()
+    slots = build_red_living_dex_prospective_capture_plan().slots
+    base_recipes = _recipes()
+    capabilities: list[RedLivingDexCausalRootCapability] = []
+    for ordinal in range(20):
+        partition = "train" if ordinal < 16 else "development"
+        template_ordinal = (
+            ordinal % 10
+            if partition == "train"
+            else 10 + (ordinal - 16) % 5
+        )
+        root = _setup_root(ordinal)
+        recipe = replace(
+            base_recipes[template_ordinal],
+            root_consumption_sha256=root.root_consumption_sha256,
+            root_state_sha256=root.state_sha256,
+            root_envelope_sha256=root.envelope_sha256,
+        )
+        observation = replace(
+            _provider_root(ordinal),
+            root=root,
+            observed_state_sha256=root.state_sha256,
+            independence_lineage_sha256=_sha(("successor-lineage", ordinal)),
+            cluster_partition=partition,
+        )
+        capabilities.append(
+            RedLivingDexCausalRootCapability(
+                root=observation,
+                template_ordinal=template_ordinal,
+                slot=slots[template_ordinal],
+                recipe=recipe,
+            )
+        )
+    schedule = schedule_red_living_dex_clustered_integration(
+        tuple(capabilities),
+        policy=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY,
+    )
+    by_scenario = {
+        item.root.root.physical_root_sha256: item for item in capabilities
+    }
+    frozen = tuple(
+        RedLivingDexClusteredFrozenScenario(
+            assignment=assignment,
+            capability=by_scenario[
+                assignment.capability.physical_root_sha256
+            ],
+            context_identity_sha256=_sha(
+                ("successor-context", assignment.ordinal)
+            ),
+        )
+        for assignment in schedule.assignments
+    )
+    bindings = replace(
+        _bindings(),
+        source_commit=identity.source_commit,
+        source_bundle_sha256=identity.source_bundle_sha256,
+        rom_sha256=identity.rom_sha256,
+        route_registry_sha256=identity.route_registry_sha256,
+        runtime_identity_sha256=_sha("successor-runtime-identity"),
+    )
+    plan = RedLivingDexClusteredPrivatePlan(
+        bindings=bindings,
+        schedule=schedule,
+        assignments=frozen,
+    )
+    binding = RedLivingDexClusteredTrainPlanBinding(
+        private_plan_sha256=plan.private_plan_sha256,
+        plan_manifest_sha256=_sha("successor-manifest"),
+        plan_record_sha256=_sha("successor-record"),
+        schedule_sha256=plan.schedule.schedule_sha256,
+        policy_sha256=plan.schedule.policy.policy_sha256,
+        record_id=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        record_kind=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+        train_scenarios=16,
+        development_scenarios=4,
+        causal_runner_sha256=(
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256
+        ),
+    )
+    return plan, binding
+
+
 def _outer(selection: Any, identity: Any, binding: Any) -> ClaimFirstExecutionIdentity:
     return ClaimFirstExecutionIdentity(
         source_commit="d" * 40,
@@ -212,6 +307,44 @@ def test_selection_rejects_every_development_ordinal_before_projection() -> None
                 ordinal,
                 binding=binding,
             )
+
+
+def test_successor_policy_addresses_ordinal_fifteen_but_not_development() -> None:
+    plan, binding = _successor_clustered_fixture()
+    selection = authenticate_red_living_dex_clustered_train_selection(
+        plan.private_dict(),
+        15,
+        binding=binding,
+    )
+    capability = plan.assignments[15].capability
+    identity = _identity()
+
+    frozen = authenticate_frozen_red_living_dex_clustered_train_slot(
+        plan.private_dict(),
+        expected_private_plan_sha256=plan.private_plan_sha256,
+        ordinal=15,
+        root=capability.root.root,
+        producer_execution_identity=identity,
+        expected_runtime_identity_sha256=plan.bindings.runtime_identity_sha256,
+    )
+
+    assert selection.ordinal == 15
+    assert selection.train_scenarios == 16
+    assert selection.causal_runner_sha256 == (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256
+    )
+    assert frozen.ordinal == 15
+    assert 0 <= frozen.template_ordinal < 15
+    frozen.reauthenticate(plan.private_dict(), root=capability.root.root)
+    with pytest.raises(
+        RedLivingDexClusteredTrainRunnerError,
+        match="structurally inaccessible",
+    ):
+        authenticate_red_living_dex_clustered_train_selection(
+            plan.private_dict(),
+            16,
+            binding=binding,
+        )
 
 
 def test_selection_binds_distinct_schedule_and_template_ordinals() -> None:

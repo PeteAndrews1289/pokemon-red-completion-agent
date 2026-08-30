@@ -1,0 +1,147 @@
+{
+  "claim_boundary": {
+    "supported": "The fixed Red clustered successor design, generalized zero-effect freezer, variable-policy sealed-plan validator, and train-only consumer boundary are locally qualified to publish one 16-train plus 4-read-only-development schedule under a distinct immutable namespace. No private successor plan has yet been materialized and no gameplay or learning effect occurred.",
+    "unsupported": [
+      "published_successor_source",
+      "green_exact_source_ci",
+      "private_successor_plan_frozen",
+      "successor_train_scenario_executed",
+      "successor_outcome_collected",
+      "development_outcome_opened",
+      "integration_fit_executed",
+      "powered_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "implementation": {
+    "action_free_freezer": {
+      "path": "scripts/freeze_red_living_dex_clustered_schedule.py",
+      "sha256": "13e47acda4e160f2931263cb927b0747384da2893398408fa57e60dacaa0c1ff"
+    },
+    "capacity_receipt_sha256": "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4",
+    "private_plan_contract": {
+      "path": "src/pokemon_red_completion/red_living_dex_clustered_schedule_plan.py",
+      "sha256": "bf4fbfa6544d0360d51fe7129a9bfc89eae48c47a7f9a1b2027eb14342788ae2"
+    },
+    "setup_admission": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_admission.py",
+      "sha256": "4a61e33d0fd196cb18eeebf8cba477e8693d57b0f37f0c06be676a0c9e695cbf"
+    },
+    "source_bundle_sha256": "2c1ee588bcd37393e28a8115e10f2a93983420f2f9586d727970f8c511240901",
+    "successor_design": {
+      "design_sha256": "461e41524d8ad5b1992b80699e8bdd042686674df5ee9749e1ce8baea4b22914",
+      "path": "src/pokemon_red_completion/red_living_dex_clustered_successor.py",
+      "policy_sha256": "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171",
+      "sha256": "05f21a2eabc8cfb9f658959df6f20429179fd35b5dda261b010f6d001bba5d2d"
+    },
+    "train_only_consumer": {
+      "path": "src/pokemon_red_completion/red_living_dex_clustered_train_runner.py",
+      "sha256": "b37faccfa79de2a0f04991410aa968a42d07fadc2f4d03895f45748cfdc8c54e"
+    }
+  },
+  "local_gate": {
+    "documentation_links_and_active_state": "passed",
+    "focused_successor_and_boundary_tests": {
+      "passed": 49
+    },
+    "full_nonintegration_suite": {
+      "expected_failures": 1,
+      "passed": 5777,
+      "seconds": 771.49,
+      "skipped": 3,
+      "warnings": 1
+    },
+    "mypy": {
+      "source_files": 313,
+      "status": "passed"
+    },
+    "product_focus": "passed_at_6_of_60",
+    "public_artifacts": "passed",
+    "regenerated_source_bound_registries": "passed",
+    "ruff": "passed"
+  },
+  "plan_and_consumer_contract": {
+    "development_outcome_access": false,
+    "development_scenarios": 4,
+    "distinct_lineages": 20,
+    "exact_private_plan_binding_exists": false,
+    "maximum_scenarios_per_lineage": 1,
+    "minimum_development_option_kinds": 7,
+    "minimum_train_option_kinds": 7,
+    "outcome_aware_admission": false,
+    "private_record_id": "red-living-dex-clustered-successor-plan-v1",
+    "private_record_kind": "red-living-dex-clustered-successor-plan-v1",
+    "supplemental_roots_allowed": false,
+    "template_ordinals": 15,
+    "train_ordinals_addressable": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "train_scenarios": 16
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "publication": {
+    "exact_candidate_commit": null,
+    "exact_candidate_ci": null,
+    "status": "pending"
+  },
+  "recorded_on": "2026-08-29",
+  "registries": {
+    "battle_collection_sha256": "2706bd593801bd505675d4c75fecd9533b18dd77ce8f4fac957e2952c8db45cd",
+    "goal_manager_sha256": "730ea3d9c0cff7811553cf2f8a3e539cb23d0bf429373e5e1a30072aa9c4cd04",
+    "strategic_navigation_scenarios_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "strategic_navigation_sha256": "b7110e1fc33258a4a0823352b238627f957554d4e04016855ef05f573aae81ff"
+  },
+  "rejected_mutation_classes": [
+    "capacity_receipt_substitution",
+    "successor_policy_attrition_drift",
+    "missing_train_lineage",
+    "private_record_namespace_substitution",
+    "supplemental_root_injection",
+    "plan_policy_recommitment",
+    "plan_assignment_reordering",
+    "hidden_selected_arm_field",
+    "schedule_template_ordinal_collapse",
+    "development_ordinal_projection",
+    "causal_runner_identity_substitution"
+  ],
+  "schema": "pokemon.red.living-dex-clustered-successor-freezer-local-qualification.v1",
+  "source": {
+    "base_main_ci_attempt": 1,
+    "base_main_ci_run": 33279928951,
+    "base_main_commit": "2adc893cf139ccaf70e4bd64fc4013c724eab5ce",
+    "working_source_bundle_sha256": "2c1ee588bcd37393e28a8115e10f2a93983420f2f9586d727970f8c511240901"
+  },
+  "status": "locally_qualified_publication_and_exact_ci_pending"
+}

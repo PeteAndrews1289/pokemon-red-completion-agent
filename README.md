@@ -5,6 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): unused-root capacity passed; build one 16-row
+> successor.** Exact main `2adc893c` passed CI `33279928951/1`. A fresh action-free census then
+> reopened all 81 authenticated Red contexts and found **59 unused independence-qualified roots:
+> 36 train and 23 development; 55 support at least one genuine menu**. The default scheduler still
+> forms eight fresh train lineages plus four development lineages with all seven Red-supported
+> portable kinds, one lineage per row, and zero overlap. The census performed zero actions,
+> frames, claims, outcomes, predictions, or fits.
+>
+> The fixed successor is deliberately larger than the minimum repair: **16 distinct train
+> lineages plus 4 read-only development lineages**, maximum one scenario per lineage. At the
+> observed 5/8 setup yield it would produce ten settled examples in expectation, without treating
+> that rate as a guarantee or selecting roots after rehearsal. The sealed-plan validator and
+> train boundary have now been generalized and locally qualified so schedule ordinal 15 is legal
+> while Red template ordinals remain cartridge-bound to 0–14. The successor has a new private
+> namespace and runner identity; it cannot retry or overwrite the consumed pilot. The full suite
+> passed 5,777 tests and the focused boundary suite passed 49, with zero protected effects.
+> **Causal train 6/60 · powered fit 0 · authority 0 · transfer 0.** See the
+> [capacity result](docs/evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json)
+> and [local qualification](docs/evidence/red-living-dex-clustered-successor-freezer-local-qualification-v1-2026-08-29.json).
+
 > **Current product focus (August 29, 2026): five real clustered lessons exist; do not fit
 > early.** Exact main `5656bd63` passed CI `33277598103/1`, then all eight frozen Red train
 > assignments were consumed once. Five produced valid randomized selected-arm examples: two

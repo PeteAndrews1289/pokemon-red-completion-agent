@@ -3,6 +3,23 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 successor-capacity result:** Exact main `2adc893c` and CI `33279928951/1` supported
+> one fresh action-free census. It found **59 unused independence-qualified roots—36 train and 23
+> development—with 55 supporting at least one genuine Red menu**. A fresh default 8+4 schedule
+> still covers all seven Red-supported portable kinds on both sides, uses one lineage per row, and
+> has zero overlap. Controller, frame, claim, behavior, teacher, outcome, prediction, and fit
+> effects were zero.
+>
+> The fixed **16-train + 4-read-only-development** successor boundary is now locally qualified:
+> 5,777 full-suite tests and 49 focused tests passed with zero protected effects. Next publish that
+> exact source, require green CI, and materialize one deterministic private plan. The plan must use
+> 20 distinct lineages and a new namespace, and must fail before publication if the stronger policy
+> cannot be scheduled. Only a later exact-plan-bound consumer commit may open train rows. No setup
+> rehearsal, outcome-aware admission, pilot retry, development outcome, fit, sealed Red, Crystal,
+> or full replay. **Causal train 6/60 · powered fit 0 · authority 0 · transfer 0.** See the
+> [capacity result](evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json) and
+> [local qualification](evidence/red-living-dex-clustered-successor-freezer-local-qualification-v1-2026-08-29.json).
+
 > **August 29 clustered-train result:** Exact main `5656bd63` and CI `33277598103/1` consumed the
 > frozen eight-row train schedule exactly once. Five assignments produced valid settled causal
 > examples—two successes and three failures—from five independent lineages; three setup recipes

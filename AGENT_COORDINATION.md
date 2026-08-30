@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — 59 unused roots verified; fixed 16+4 successor next:** Codex owns
+> the generalized sealed-plan boundary, fixed 16-train/4-read-only-development freezer, tests,
+> publication, exact-source CI, one private freeze, and later exact-plan consumer binding. The
+> action-free census found 36 unused train and 23 development lineages; a fresh default schedule
+> still covers all seven Red-supported option kinds with one lineage per row. Protected effects
+> were zero. **Causal train 6/60 · powered fit 0 · authority 0 · transfer 0.**
+>
+> Claude challenges statistical and causal-label claims when available. Antigravity challenges
+> architecture, namespace isolation, exactly-once behavior, and cross-title portability. Both are
+> read-only and see only stable source plus path-free evidence; neither edits, opens private
+> identities, executes gameplay, publishes, or grants authority. Their availability does not block
+> the zero-effect engineering/freeze lane. Stop on setup-rehearsal selection, lineage overlap,
+> pilot retry, development outcome, premature fit, sealed Red, Crystal, or full replay.
+
 > **2026-08-29 active override — five clustered examples recorded; successor capacity next:**
 > Codex owns the path-free batch receipt, publication, exact-main CI, mission reorientation, and
 > the next action-free census of unused train lineages. All eight frozen train assignments are

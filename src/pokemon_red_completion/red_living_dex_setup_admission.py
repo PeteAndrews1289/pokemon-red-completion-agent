@@ -101,7 +101,7 @@ class FrozenRedLivingDexSetupSlot:
     _producer_execution_payload: bytes = field(repr=False)
 
     def __post_init__(self) -> None:
-        if type(self.ordinal) is not int or not 0 <= self.ordinal < 15:  # noqa: E721
+        if type(self.ordinal) is not int or self.ordinal < 0:  # noqa: E721
             raise RedLivingDexSetupAdmissionError("frozen setup ordinal differs")
         if (
             type(self.template_ordinal) is not int  # noqa: E721
@@ -143,9 +143,12 @@ class FrozenRedLivingDexSetupSlot:
         plan_commitment: object
         if self.producer_plan_schema == RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA:
             plan_commitment = canonical_sha256(plan)
-            if self.producer_runtime_identity_sha256 is not None:
+            if (
+                self.ordinal >= 15
+                or self.producer_runtime_identity_sha256 is not None
+            ):
                 raise RedLivingDexSetupAdmissionError(
-                    "legacy frozen setup gained a runtime identity field"
+                    "legacy frozen setup bounds or runtime identity differ"
                 )
         else:
             payload = {
@@ -165,6 +168,18 @@ class FrozenRedLivingDexSetupSlot:
                 self.producer_runtime_identity_sha256,
                 "producer runtime identity",
             )
+            try:
+                clustered_schedule = (
+                    validate_red_living_dex_clustered_private_plan(plan)
+                )
+            except (TypeError, ValueError):
+                raise RedLivingDexSetupAdmissionError(
+                    "clustered frozen setup schedule differs"
+                ) from None
+            if self.ordinal >= clustered_schedule.policy.train_scenarios:
+                raise RedLivingDexSetupAdmissionError(
+                    "clustered frozen setup selected a non-train ordinal"
+                )
         if (
             plan_commitment != self.producer_plan_sha256
             or canonical_sha256(recipe) != self.recipe_sha256
@@ -385,8 +400,8 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
     """Detach one train assignment from the immutable clustered schedule.
 
     The schedule ordinal and Red template ordinal are intentionally distinct.
-    Only the first eight schedule rows are addressable, and the selected row
-    must independently attest that it belongs to the train partition.
+    Only the policy-declared leading train rows are addressable, and the
+    selected row must independently attest that it belongs to that partition.
     """
 
     if not isinstance(plan_document, Mapping):
@@ -395,7 +410,7 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
         expected_private_plan_sha256,
         "expected clustered private plan",
     )
-    if type(ordinal) is not int or not 0 <= ordinal < 8:  # noqa: E721
+    if type(ordinal) is not int or ordinal < 0:  # noqa: E721
         raise RedLivingDexSetupAdmissionError(
             "clustered setup selected a non-train ordinal"
         )
@@ -420,7 +435,9 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
             "clustered setup plan is not canonical JSON"
         ) from None
     try:
-        validate_red_living_dex_clustered_private_plan(detached_plan)
+        clustered_schedule = validate_red_living_dex_clustered_private_plan(
+            detached_plan
+        )
     except (TypeError, ValueError):
         raise RedLivingDexSetupAdmissionError(
             "clustered setup producer plan differs"
@@ -431,8 +448,13 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
         if key != "private_plan_sha256"
     }
     assignments = detached_plan.get("assignments")
+    train_scenarios = clustered_schedule.policy.train_scenarios
+    total_scenarios = (
+        train_scenarios + clustered_schedule.policy.development_scenarios
+    )
     if (
-        detached_plan.get("private_plan_sha256") != expected
+        ordinal >= train_scenarios
+        or detached_plan.get("private_plan_sha256") != expected
         or canonical_sha256(payload) != expected
         or detached_plan.get("source_commit")
         != producer_execution_identity.source_commit
@@ -443,7 +465,7 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
         or detached_plan.get("rom_sha256") != producer_execution_identity.rom_sha256
         or detached_plan.get("runtime_identity_sha256") != runtime_identity
         or not isinstance(assignments, list)
-        or len(assignments) != 12
+        or len(assignments) != total_scenarios
     ):
         raise RedLivingDexSetupAdmissionError(
             "clustered setup producer binding differs"

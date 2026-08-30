@@ -11,6 +11,9 @@ from test_red_living_dex_provider_plan import _corridors, _root, _RouteWorld, _s
 from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexCapturePartition,
 )
+from pokemon_red_completion.living_dex_clustered_curriculum import (
+    LivingDexClusteredCurriculumPolicy,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
@@ -105,6 +108,46 @@ def _recommit(document: dict[str, object]) -> None:
     document["private_plan_sha256"] = canonical_sha256(payload)
 
 
+def _nondefault_policy_plan() -> RedLivingDexClusteredPrivatePlan:
+    base = _plan()
+    policy = replace(
+        LivingDexClusteredCurriculumPolicy(),
+        train_scenarios=4,
+        development_scenarios=2,
+        minimum_train_lineages=4,
+        minimum_development_lineages=2,
+        minimum_train_option_kinds=3,
+        minimum_development_option_kinds=2,
+        maximum_scenarios_per_lineage=1,
+    )
+    capabilities = tuple(item.capability for item in base.assignments)
+    schedule = schedule_red_living_dex_clustered_integration(
+        capabilities,
+        policy=policy,
+    )
+    frozen_by_scenario = {
+        item.assignment.capability.scenario_sha256: item
+        for item in base.assignments
+    }
+    frozen = tuple(
+        RedLivingDexClusteredFrozenScenario(
+            assignment=assignment,
+            capability=frozen_by_scenario[
+                assignment.capability.scenario_sha256
+            ].capability,
+            context_identity_sha256=frozen_by_scenario[
+                assignment.capability.scenario_sha256
+            ].context_identity_sha256,
+        )
+        for assignment in schedule.assignments
+    )
+    return RedLivingDexClusteredPrivatePlan(
+        bindings=base.bindings,
+        schedule=schedule,
+        assignments=frozen,
+    )
+
+
 def test_private_plan_round_trips_with_all_effects_closed() -> None:
     plan = _plan()
     document = plan.private_dict()
@@ -126,6 +169,22 @@ def test_private_plan_round_trips_with_all_effects_closed() -> None:
         row["recipe_sha256"] == canonical_sha256(row["recipe"])
         for row in document["assignments"]  # type: ignore[union-attr]
     )
+
+
+def test_private_plan_round_trips_a_prospectively_frozen_nondefault_policy() -> None:
+    plan = _nondefault_policy_plan()
+
+    reopened = validate_red_living_dex_clustered_private_plan(
+        plan.private_dict(),
+        expected_bindings=plan.bindings,
+        expected_schedule_sha256=plan.schedule.schedule_sha256,
+        expected_policy_sha256=plan.schedule.policy.policy_sha256,
+    )
+
+    assert reopened == plan.schedule
+    assert reopened.policy.train_scenarios == 4
+    assert reopened.policy.development_scenarios == 2
+    assert reopened.policy.maximum_scenarios_per_lineage == 1
 
 
 def test_public_plan_summary_discloses_no_private_identity() -> None:

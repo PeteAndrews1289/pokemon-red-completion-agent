@@ -1,0 +1,130 @@
+{
+  "claim_boundary": {
+    "supported": "One exact-main, action-free census proved a large unused Red root bank remains after the first clustered train batch and that the deterministic clustered scheduler can still form a fresh 8+4 all-kind schedule. A fixed 16-train successor may now be attempted prospectively and must fail closed if its stronger policy cannot be scheduled.",
+    "unsupported": [
+      "sixteen_train_schedule_materialized",
+      "private_successor_plan_frozen",
+      "successor_root_claimed",
+      "successor_outcome_collected",
+      "development_outcome_opened",
+      "integration_fit_executed",
+      "powered_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "capacity_gate": {
+    "authenticated_contexts": 81,
+    "compatibility_edges": 342,
+    "consumed_contexts": 13,
+    "default_clustered_schedule": {
+      "development_lineages": 4,
+      "development_option_kinds": [
+        "acquire",
+        "develop",
+        "evolve",
+        "explore",
+        "manage_storage",
+        "resupply",
+        "unlock_access"
+      ],
+      "development_scenarios": 4,
+      "lineage_overlap": 0,
+      "maximum_observed_scenarios_per_lineage": 1,
+      "schedule_sha256": "675a44bc55b87041e490c4a14284f0cd594cd05c3916be652f85c534a531ae07",
+      "train_lineages": 8,
+      "train_option_kinds": [
+        "acquire",
+        "develop",
+        "evolve",
+        "explore",
+        "manage_storage",
+        "resupply",
+        "unlock_access"
+      ],
+      "train_scenarios": 8
+    },
+    "eligible_root_pool": 59,
+    "fixed_successor_schedule_materialized": false,
+    "gate_passed": true,
+    "independence_qualified_roots": 59,
+    "roots_with_any_compatible_template": 55,
+    "source_development_roots": 23,
+    "source_train_roots": 36,
+    "stronger_policy_capacity_falsifier_pending": true,
+    "successor_development_lineages_required": 4,
+    "successor_train_lineages_required": 16
+  },
+  "interpretation": {
+    "authentic_causal_train_examples_after": 6,
+    "authentic_causal_train_examples_before": 6,
+    "development_remains_read_only": true,
+    "integration_fit_allowed_now": false,
+    "legacy_full_game_independent_root_diagnostic_is_blocking": false,
+    "model_authority_changed": false,
+    "model_fit_executed": false,
+    "next_gate": "Publish the fixed 16-train plus 4-read-only-development successor policy and generalized sealed-plan boundary, require green exact-source CI, then materialize one deterministic private successor plan before any controller input.",
+    "outcome_aware_root_admission_allowed": false,
+    "transfer_to_crystal_demonstrated": false
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-29",
+  "schema": "pokemon.red.living-dex-clustered-successor-capacity-result.v1",
+  "source": {
+    "batch_result_path": "docs/evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json",
+    "batch_result_sha256": "d34e59025fabc4a06ccb971ca919fb44a4cede9464113a43e9ff36db09b76a0a",
+    "ci_attempt": 1,
+    "ci_run": 33279928951,
+    "commit": "2adc893cf139ccaf70e4bd64fc4013c724eab5ce",
+    "machine_result_path": "docs/evidence/red-living-dex-clustered-successor-capacity-machine-result-v1-2026-08-29.json",
+    "machine_result_sha256": "871c1d5ca12592b4ede506b877b04b8175c61bddb9338fcf5a683d8a0512fbf2",
+    "source_bundle_sha256": "0ea7e3dee9bc8a8ebbdb69ec27dbd8e5bfad18b86be3897d781b26404ce91c69"
+  },
+  "successor_design": {
+    "authentic_examples_before": 6,
+    "development_is_read_only": true,
+    "design_sha256": "461e41524d8ad5b1992b80699e8bdd042686674df5ee9749e1ce8baea4b22914",
+    "expected_settled_examples_at_observed_yield": {
+      "denominator": 1,
+      "numerator": 10
+    },
+    "integration_minimum_examples": 8,
+    "minimum_new_settled_examples": 3,
+    "observed_setup_yield": {
+      "denominator": 8,
+      "numerator": 5
+    },
+    "outcome_aware_admission": false,
+    "policy": {
+      "cluster_weighting": "equal_total_weight_per_lineage",
+      "development_scenarios": 4,
+      "eventual_minimum_train_outcomes": 60,
+      "maximum_scenarios_per_lineage": 1,
+      "minimum_development_lineages": 4,
+      "minimum_development_option_kinds": 7,
+      "minimum_train_lineages": 16,
+      "minimum_train_option_kinds": 7,
+      "schema": "pokemon.core.living-dex-clustered-curriculum.v1",
+      "train_scenarios": 16
+    },
+    "policy_sha256": "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171",
+    "prior_assignments": 8,
+    "prior_settled_examples": 5,
+    "schema": "pokemon.red.living-dex-clustered-successor-design.v1"
+  },
+  "status": "action_free_successor_capacity_passed_private_freeze_pending"
+}

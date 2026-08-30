@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: count the empty classrooms, then build a larger semester once
+
+The five real lessons exposed a process problem as well as a learning signal: three of eight
+classrooms failed before the choice existed. Building another tiny schedule for exactly the two or
+three missing examples would spend another publication and trust-boundary cycle only to risk the
+same attrition again. So the next operation did not play Red. It counted what remained.
+
+From exact green main, the emulator reopened 81 authenticated contexts without advancing a frame.
+Thirteen consumed roots were excluded. Fifty-nine unused independent roots remained—36 train and
+23 development—and 55 could construct at least one genuine three-option menu. Even after the
+first batch, the deterministic scheduler could still form a fresh eight-train/four-development
+schedule spanning all seven Red-supported portable decision kinds with one lineage per row.
+
+That evidence supports a larger prospective successor: sixteen train lineages and four read-only
+development lineages, maximum one scenario per lineage. The old 5/8 yield implies ten settled
+examples in expectation, but the system does not use that estimate to pick individual roots and
+does not promise the result. The plan must be frozen before any setup rehearsal, random arm, or
+outcome. Its namespace and runner identity differ from the consumed pilot, while Red's menu
+templates remain the same fifteen cartridge-grounded choices. This is how the project converts a
+failure rate into better experimental design without converting failure knowledge into labels.
+
 ## August 29: the first classroom batch taught five lessons—and refused to fake three
 
 All eight frozen Red training cards have now been turned over exactly once. Five became real
