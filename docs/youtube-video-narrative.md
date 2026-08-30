@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: the first eight lessons clear the training gate
+
+Open on **PR 111 → MAIN ED6066E0 → CI 33298743000/1 ✓**. Feed one sealed stack marked **ALL 8
+AUTHENTIC TRAIN ROWS** into a machine with the controller cable visibly disconnected. Light the
+audit board: **8 LINEAGES · 8 DECISIONS · 6 SELECTED KINDS · 8 SELECTED FEATURE ROWS · 24/24
+SUPPORTED CANDIDATES · 7 VARYING TARGET HEADS · 8/8 FULL SUPPORT · CENSORED 0 · DEVELOPMENT 0**.
+
+Keep **FITS · PREDICTIONS · TEACHERS · ACTIONS · FRAMES · CLAIMS = 0** on screen, then stamp
+**READINESS PASS — NOT GAMEPLAY AUTHORITY**. Move the stack intact—no card dropped—to a small
+transparent trainer labeled **ONE NON-AUTHORITATIVE RIDGE FIT**. Show the next sequence:
+**ALL 8 IN → PRIVATE MODEL → BYTE-IDENTICAL REOPEN → PATH-FREE DIAGNOSTIC → STOP + REORIENT**.
+
+End by zooming out. The small trainer is one station on the longer rail: **BOUNDED UNTOUCHED DATA
+BATCH → 60 → UNTOUCHED RED CONTROLS → FREEZE SUPPORTED TITLE-NEUTRAL REPRESENTATION → CRYSTAL
+TRANSFER FALSIFIER → CROSS-GAME LIVING POKEDEX**. Keep **8/60 · POWERED FIT 0 · AUTHORITY 0 ·
+TRANSFER 0** visible and cross out **TRAINING ERROR = SKILL · DEVELOPMENT LEAK · FULL REPLAY**.
+
 ## August 30 scene: card one makes eight lessons
 
 Open on **PR 109 → MAIN 2EA86BCC → CI 33294371591/1 ✓**. Slide **SUCCESSOR TRAIN 1** into the

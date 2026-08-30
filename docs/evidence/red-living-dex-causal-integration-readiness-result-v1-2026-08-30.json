@@ -1,0 +1,87 @@
+{
+  "audit": {
+    "authentic_examples": 8,
+    "candidate_feature_rows": 24,
+    "censored_examples": 0,
+    "complete_denominator_included": true,
+    "development_examples": 0,
+    "distinct_causal_identities": 8,
+    "distinct_decision_identities": 8,
+    "distinct_lineages": 8,
+    "distinct_selected_feature_rows": 8,
+    "distinct_selected_option_kinds": 6,
+    "full_support_examples": 8,
+    "integration_fit_allowed": true,
+    "maximum_lineage_multiplicity": 1,
+    "reason_codes": [],
+    "settled_examples": 8,
+    "supported_candidate_feature_rows": 24,
+    "train_examples": 8,
+    "variable_target_heads": 7,
+    "verified_success_varies": true
+  },
+  "claim_boundary": {
+    "supported": "One exact-main, train-only, action-free audit authenticated the complete eight-example Red causal denominator and proved enough lineage, portable-kind, supported-feature, and selected-outcome variation to exercise one explicitly non-authoritative integration fit without dropping any row or opening development.",
+    "unsupported": [
+      "integration_model_fit_executed",
+      "powered_model_fit_executed",
+      "model_quality_or_generalization",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "execution": {
+    "audit_invocations": 1,
+    "automatic_retry_allowed": false,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "development_schedule_reads": 0,
+    "emulator_frames": 0,
+    "fit_executions": 0,
+    "model_predictions": 0,
+    "outcome_aware_row_selection": false,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 8,
+    "authentic_causal_train_examples_before": 8,
+    "authority_promotions": 0,
+    "integration_model_fits": 0,
+    "integration_support_and_information_gate_passed": true,
+    "non_authoritative_integration_fit_allowed_now": true,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this path-free pass and reorientation. Then implement and execute exactly one deterministic train-only integration fit over all eight authenticated rows, privately retain the model, and publish only path-free fit diagnostics. The fit grants no gameplay authority. After that plumbing proof, collect a bounded batch of never-claimed successor train rows toward the powered 60-example gate while development, sealed Red, and Crystal remain untouched.",
+  "privacy": {
+    "candidate_or_selected_identity_published": false,
+    "lineage_identity_published": false,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "readiness_implementation_pull_request": 111,
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "schema": "pokemon.red.living-dex-causal-integration-readiness-public-result.v1",
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33298743000,
+    "exact_main_commit": "ed6066e0bd6b6d6140aeb90935a76e26678b2b68",
+    "machine_result_path": "docs/evidence/red-living-dex-causal-integration-readiness-machine-result-v1-2026-08-30.json",
+    "machine_result_sha256": "0a6ad9c6d051b345223d4e230b269c288befdfefc0ef843c8d2ba03f068d7ee8",
+    "source_bundle_sha256": "b02b44e4b2c5dd8cfab2b02edb5ca7fb8920ef111e76aee2e0b8162e9ae66401"
+  },
+  "status": "eight_example_train_only_integration_readiness_passed_non_authoritative_fit_next"
+}

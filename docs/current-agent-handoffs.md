@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-30. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex publishes ordinal one and audits the eight train examples
+## Current override: Codex owns one non-authoritative eight-row integration fit
+
+Exact main `ed6066e0` passed push CI `33298743000/1`, then the action-free readiness audit ran
+once over the complete authenticated causal family. All eight rows are settled train examples
+with eight distinct lineages and decisions, six selected portable kinds, eight selected feature
+rows, 24/24 supported candidate rows, seven varying target heads, full-support behavior, and no
+censoring or development row. The audit made zero fits, predictions, teacher queries, controller
+actions, frames, or claims. The board remains **causal train 8/60 · powered fit 0 · authority 0 ·
+transfer 0**.
+
+Codex owns publication of the [readiness result](evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json),
+then the smallest deterministic train-only integration-fit boundary. It must reload the complete
+eight-row denominator, require the passed readiness proof, fit the existing interpretable ridge
+model exactly once, publish the model only to the immutable private store, reopen it byte-for-byte,
+and expose only path-free training diagnostics. Stop and reorient at the fit result before any
+successor gameplay. Development, policy-driven gameplay, sealed Red, Crystal, quality claims, and
+authority promotion remain closed.
+
+Claude's next useful role is a read-only statistical/leakage review of the fit result and the
+powered-data plan. Antigravity's is a read-only artifact-boundary and cross-game representation
+review at the same milestone. Neither reviewer edits, sees private rows, executes gameplay,
+publishes, or blocks ordinary fit engineering. Their milestone reviews inform Codex; Codex remains
+the implementation and adjudication owner.
+
+## Previous override: Codex publishes ordinal one and audits the eight train examples
 
 Exact main `2ea86bcc` passed push CI `33294371591/1`, then successor ordinal 1 settled exactly
 once: one durable randomized commitment, one independently observed selected-arm target, 3,322

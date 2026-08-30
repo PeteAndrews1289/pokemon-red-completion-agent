@@ -8,7 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: eight authentic lessons exist; audit train information before fitting
+## Current checkpoint: eight lessons passed readiness; fit the model once
+
+PR 111 merged the train-only audit as exact main `ed6066e0`; push CI `33298743000/1` passed.
+The audit then ran once over the complete causal-example family. It authenticated eight settled
+train rows from eight distinct lineages and decisions, six selected portable kinds, eight selected
+feature rows, 24 supported candidate rows, seven varying outcome heads, and full-support behavior.
+Censoring, development reads, fits, predictions, teachers, actions, frames, claims, and private
+disclosure were zero.
+
+The next product-aligned sequence is:
+
+1. publish the [path-free readiness pass](evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json)
+   and this reorientation;
+2. implement a deterministic train-only integration-fit command that can load only the complete
+   authenticated causal family and requires the passed readiness contract;
+3. fit the existing interpretable ridge option-value model exactly once over all eight rows,
+   privately publish it with create-only semantics, and reload identical bytes;
+4. publish only path-free training diagnostics and state plainly that training error is not a
+   quality, gameplay, or transfer result;
+5. stop and reorient at that fit receipt, then collect a bounded batch of never-claimed successor
+   rows rather than paying one publication cycle per example;
+6. continue toward 60, beat frozen controls on untouched Red lineages, freeze only the supported
+   title-neutral representation, and then run the abstention-aware Crystal transfer falsifier.
+
+Do not rerun the readiness audit, omit an awkward row, open development, execute ordinal 2 in the
+fit gate, use the model for gameplay, promote authority from in-sample error, run sealed Red or
+Crystal, or resume full-game teacher hardening. **Causal train 8/60 · powered fit 0 · authority 0 ·
+transfer 0.**
+
+## Previous checkpoint: eight authentic lessons exist; audit train information before fitting
 
 PR 109 published ordinal 0 as exact main `2ea86bcc`; push CI `33294371591/1` passed. From that
 exact source, untouched ordinal 1 was claimed and executed once. It made one durable randomized

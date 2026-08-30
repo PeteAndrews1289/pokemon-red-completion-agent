@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: card one makes eight honest lessons
+## Current checkpoint: the classroom data can finally enter a model
+
+The audit opened all eight lesson cards together without opening the game. None was discarded.
+They came from eight independent lineages and eight distinct choices, exercised six portable
+collection intents, supplied eight distinct feature rows, and varied across seven observed
+consequences. All twenty-four offered choices were representable by the same Red-to-shared policy
+contract. There were no censored cards and no exam card slipped into training.
+
+That is a readiness result, not a victory screen. The audit pressed no button and fit no model, so
+the scoreboard remains **CAUSAL TRAIN 8/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**. It does,
+however, clear the first real training operation: one transparent model fit on the whole stack,
+stored privately and reopened exactly. The fit will prove the learning machinery works end to end;
+its in-sample error will not prove the model can play.
+
+After that small proof, the story moves back to evidence rather than plumbing. The remaining
+untouched lesson cards should run in a bounded batch toward sixty. Only a model that later beats
+frozen controls on untouched Red lineages earns the right to freeze its shared knowledge for a
+zero-shot Crystal test. The eventual destination is still the same: finish stories and construct
+living Pokedexes across games with less game-specific teaching each time.
+
+## Previous checkpoint: card one makes eight honest lessons
 
 Card zero was published, rebuilt on main, and followed by untouched card one. The second card was
 claimed before movement, one random collection strategy was written down durably, and only that
