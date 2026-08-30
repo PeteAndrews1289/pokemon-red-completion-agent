@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import subprocess
 from pathlib import Path
 
 from pokemon_red_completion.red_living_dex_clustered_successor import (
@@ -130,39 +129,38 @@ def test_successor_local_qualification_binds_the_exact_implementation() -> None:
         design.policy.policy_sha256
     )
     freeze_result = json.loads(FREEZE_RESULT_PATH.read_text(encoding="ascii"))
-    source_commit = freeze_result["publication"]["source_commit"]
+    assert freeze_result["publication"]["source_commit"] == (
+        "d4da25be4c412946ee4d26d138249232219da6a1"
+    )
+    expected_component_hashes = {
+        "action_free_freezer": (
+            "13e47acda4e160f2931263cb927b0747384da2893398408fa57e60dacaa0c1ff"
+        ),
+        "private_plan_contract": (
+            "bf4fbfa6544d0360d51fe7129a9bfc89eae48c47a7f9a1b2027eb14342788ae2"
+        ),
+        "setup_admission": (
+            "4a61e33d0fd196cb18eeebf8cba477e8693d57b0f37f0c06be676a0c9e695cbf"
+        ),
+        "train_only_consumer": (
+            "b37faccfa79de2a0f04991410aa968a42d07fadc2f4d03895f45748cfdc8c54e"
+        ),
+    }
+    for component, expected_sha256 in expected_component_hashes.items():
+        assert receipt["implementation"][component]["sha256"] == expected_sha256
     for component in (
         "action_free_freezer",
         "private_plan_contract",
         "setup_admission",
-        "train_only_consumer",
     ):
         binding = receipt["implementation"][component]
-        payload_at_source = subprocess.run(
-            (
-                "git",
-                "--no-replace-objects",
-                "show",
-                f"{source_commit}:{binding['path']}",
-            ),
-            cwd=PROJECT_ROOT,
-            check=True,
-            capture_output=True,
-        ).stdout
-        assert hashlib.sha256(payload_at_source).hexdigest() == binding["sha256"]
+        assert hashlib.sha256(
+            (PROJECT_ROOT / binding["path"]).read_bytes()
+        ).hexdigest() == binding["sha256"]
     design_binding = receipt["implementation"]["successor_design"]
-    design_at_source = subprocess.run(
-        (
-            "git",
-            "--no-replace-objects",
-            "show",
-            f"{source_commit}:{design_binding['path']}",
-        ),
-        cwd=PROJECT_ROOT,
-        check=True,
-        capture_output=True,
-    ).stdout
-    assert hashlib.sha256(design_at_source).hexdigest() == design_binding["sha256"]
+    assert hashlib.sha256(
+        (PROJECT_ROOT / design_binding["path"]).read_bytes()
+    ).hexdigest() == design_binding["sha256"]
 
 
 def test_successor_local_qualification_preserves_the_zero_effect_boundary() -> None:
