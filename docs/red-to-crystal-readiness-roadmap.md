@@ -32,18 +32,22 @@ answer source for a supposedly learned decision.
 
 ## Honest starting point
 
-Published main `f50979827a0faa62adf66c4ca828fd3cdb42a1c6` is green under GitHub CI run
-`33320429925/1`. The one-shot readiness audit authenticated eight settled Red causal train examples
-from eight lineages and decisions, six selected portable kinds, eight selected feature rows,
-24/24 supported candidates, seven varying outcome heads, and no censoring or development access.
-The subsequent R0 learner invocation consumed that complete denominator and byte-reopened one
-immutable non-authoritative model with finite conditioning and 225/225 finite coefficients.
+Published main `72f57d0a0fc6d68000ab4cfd75b8e0f4dde450fc` is green under GitHub CI run
+`33322464644/1`. From that exact source, the prospective six-card R1 pilot attempted untouched
+successor train ordinals 2–7 exactly once each. Four settled causal examples and two ended during
+setup, producing 4/6 yield in 600.789 seconds. Combined with R0, the private train corpus now has
+twelve examples from twelve distinct lineages, all seven supported portable kinds, 36/36 supported
+candidate rows, selected-feature rank 10/16, two successes, and ten failures.
+
+The earlier R0 learner invocation remains the sole integration fit: one immutable
+non-authoritative model over the original eight-row denominator, reopened byte-identically with
+finite conditioning and 225/225 finite coefficients. It has not been refit or used for gameplay.
 
 The board is therefore:
 
 | Evidence level | Current state |
 | --- | --- |
-| Authentic causal Red train examples | 8/60 minimum |
+| Authentic causal Red train examples | 12/60 minimum |
 | Non-authoritative integration fit | 1/1 |
 | Powered Red candidate | 0 |
 | Untouched Red development pass | 0 |
@@ -51,8 +55,8 @@ The board is therefore:
 | Crystal realized contexts or predictions | 0 |
 | Demonstrated cross-title transfer | 0 |
 
-Eight examples are enough to exercise the training machinery once. They are not enough to support
-a model-quality, gameplay, completion, or transfer claim.
+Twelve examples and a measured collection rate are enough to finish the already-frozen successor.
+They are not enough to support a powered model-quality, gameplay, completion, or transfer claim.
 
 ## Evidence ladder
 
@@ -118,12 +122,12 @@ checks remain useful; its independence and power schedule is not silently active
 
 Work:
 
-1. Execute the prospectively fixed six-card batch of untouched frozen successor train ordinals
-   2–7. Ordinals zero and one are consumed; no consumed identity may retry.
-2. Measure setup yield, settled yield, option-kind coverage, selected-feature rank, outcome
-   variation, censoring, controller cost, and wall-clock throughput before forecasting the rest.
-3. Use the remaining frozen batch only as far as its prospective schedule permits. Do not select
-   roots after seeing outcomes and do not open its development rows.
+1. **Complete:** the prospectively fixed batch attempted untouched successor train ordinals 2–7
+   once each. Four settled and two ended during setup; no consumed identity may retry.
+2. **Complete:** the batch measured 4/6 yield, 23.97 examples per outer hour, all-seven-kind corpus
+   coverage, rank 10/16, two successes versus ten failures, 12,209 actions, and 609,272 frames.
+3. **Next:** attempt remaining untouched successor train ordinals 8–15 once each in fixed order.
+   Do not select roots after seeing outcomes and do not open development rows.
 4. Before scaling beyond the bounded successor, freeze a versioned clustered powered design. It
    must define the independent unit, maximum scenarios and influence per lineage, cluster weights,
    complete attempted denominator, attrition treatment, train/development ownership, and a fixed

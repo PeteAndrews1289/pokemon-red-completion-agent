@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: eight honest lessons became the first real model
+## Current checkpoint: six new cards show that speed is not the bottleneck
+
+The project locked six untouched lesson cards before play and promised not to retry or replace any
+of them. Four produced real selected-choice consequences. Two failed during setup and stayed in the
+denominator. The whole batch took 600.789 measured seconds, 12,209 controller actions, and 609,272
+emulator frames—roughly 23.97 usable lessons per hour.
+
+The classroom now holds twelve lessons from twelve independent lineages and covers all seven
+shared collection intents. Yet the information board is still honest red: rank 10/16, two
+successes, ten failures, and only one consequence varying strongly enough for the powered design.
+Every new outcome happened to be a failure. None will be discarded or counterbalanced by choosing
+which card runs next.
+
+So the next move is neither another model nor another teacher rewrite. It is to consume the eight
+remaining frozen cards once, audit the entire successor, and only then lock the cluster-aware
+powered experiment. The score is **CAUSAL TRAIN 12/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 ·
+AUTHORITY 0 · TRANSFER 0**. A real cross-game player still has to win on unseen Red, earn bounded
+teacher-free control, compose the living Pokedex, and cross a frozen boundary into Crystal.
+
+## Previous checkpoint: eight honest lessons became the first real model
 
 For the first time in this project, “training” is no longer shorthand for a scripted playthrough or
 a rehearsal with synthetic data. The published learner opened all eight authentic Red lesson

@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: six sealed lesson cards reveal the real bottleneck
+
+The first model proved the plumbing worked, but eight lessons could not tell us whether the
+classroom could scale. The next experiment therefore fixed six untouched Red lesson cards before
+play, ran them in order, and allowed no retry or replacement. Four became authentic randomized
+selected-arm examples. Two stopped during setup and remained visible empty seats. In just over ten
+minutes of measured outer time, the batch used 12,209 controller actions and 609,272 emulator
+frames—about 23.97 usable lessons per hour.
+
+That result changes the engineering priority. Emulator throughput is not the current problem, so
+another route-generator repair would be drift. The corpus now contains twelve lessons from twelve
+lineages and covers all seven shared collection intents, with every offered candidate representable.
+But the information is still thin: twelve selected feature rows, rank ten of sixteen, two successes
+against ten failures, and only one consequence at the powered variation floor. All four new
+lessons were failures; keeping them instead of shopping for prettier outcomes is part of the
+experiment.
+
+The scoreboard is now **12/60 causal examples, integration fit 1/1, powered fit 0, authority 0,
+transfer 0**. The remaining eight frozen successor cards run next, once each and in order. Then the
+project stops again and freezes the clustered powered experiment before creating more classrooms.
+That sequence serves the larger mission: a model must first beat non-learning controls on unseen
+Red lineages, then earn bounded teacher-free skills, compose the story and living-Pokedex graph,
+and only then carry a frozen title-neutral policy into Crystal.
+
 ## August 30: the first authentic Red causal model is real
 
 PR 114 published the claim-first integration fitter as exact main `f5097982`, and GitHub rebuilt

@@ -1,0 +1,172 @@
+{
+  "batch": {
+    "attempts": 6,
+    "attempts_per_outer_wall_clock_hour": 35.952722,
+    "behavior_commitments": 4,
+    "causal_train_examples_recorded": 4,
+    "claim_pairs_consumed": 6,
+    "controller_actions": 12209,
+    "emulator_frames": 609272,
+    "examples_per_outer_wall_clock_hour": 23.968481,
+    "outer_observed_complete_at_utc": "2026-08-30T18:09:25.071Z",
+    "outer_started_at_utc": "2026-08-30T17:59:24.282Z",
+    "outer_wall_clock_seconds": 600.789,
+    "provider_executions": 4,
+    "selected_arm_settled_yield": 0.6666666666666666,
+    "setup_terminals_without_example": 2,
+    "train_ordinal_maximum": 7,
+    "train_ordinal_minimum": 2
+  },
+  "claim_boundary": {
+    "supported": "Six prospectively fixed untouched Red successor train cards were attempted sequentially and at most once. Four produced randomized selected-arm-only causal train examples and two ended during setup before behavior commitment. The complete twelve-example causal family remains train-only, lineage-unique, fully supported by the Red portable feature projection, and untouched by teachers, development, predictions, fitting, authority, sealed Red, or Crystal.",
+    "unsupported": [
+      "model_quality_or_generalization",
+      "powered_red_fit_readiness",
+      "outcome_balance_repair_by_row_selection",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "corpus_audit": {
+    "all_six_claim_pairs_consumed": true,
+    "authenticated_causal_train_examples": 12,
+    "batch_authenticated_examples": 4,
+    "batch_distinct_selected_option_kinds": 4,
+    "batch_successful_examples": 0,
+    "batch_unsuccessful_examples": 4,
+    "candidate_feature_rows": 36,
+    "development_examples": 0,
+    "distinct_causal_identities": 12,
+    "distinct_decision_identities": 12,
+    "distinct_lineages": 12,
+    "distinct_selected_feature_rows": 12,
+    "maximum_lineage_multiplicity": 1,
+    "selected_feature_rank": 10,
+    "selected_option_kind_counts": {
+      "acquire": 1,
+      "develop": 1,
+      "evolve": 4,
+      "explore": 2,
+      "manage_storage": 2,
+      "resupply": 1,
+      "unlock_access": 1
+    },
+    "significantly_variable_outcome_heads": [
+      "verified_success"
+    ],
+    "successful_examples": 2,
+    "supported_candidate_feature_rows": 36,
+    "train_examples": 12,
+    "unsuccessful_examples": 10,
+    "variable_target_heads_at_any_observed_difference": 7
+  },
+  "execution_history": {
+    "authenticated_zero_effect_preflights": 1,
+    "gameplay_invocations": 6,
+    "local_runtime_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "selected_root_path_failures_before_private_byte_read": 1,
+    "source_or_runtime_bootstrap_failures_before_private_access": 2,
+    "zero_effect_failures_changed_the_attempt_denominator": false
+  },
+  "interpretation": {
+    "bottleneck_decision": "The measured short-scenario path is productive enough to consume the remaining prospectively frozen successor cards before redesigning setup generation. Four examples in 600.789 seconds of outer wall time does not justify route patching or another model fit.",
+    "outcome_balance_decision": "All four new selected arms failed, moving the complete corpus to two successes and ten failures. This is retained as evidence rather than repaired by selecting later rows. The remaining frozen cards must stay in ordinal order and every outcome must count.",
+    "powered_design_decision": "The corpus now covers all seven Red-supported option kinds and all 36 candidate rows are supported, but 12 examples, 12 distinct selected rows, rank 10, two successes, and one significantly varying outcome head remain below the powered information floors. Powered fitting stays closed.",
+    "throughput_decision": "At the measured outer rate, controller runtime is not the dominant uncertainty. The next bounded operation is the untouched successor completion batch, after which the project must freeze the clustered powered V2 design before generating additional scenarios."
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 12,
+    "authentic_causal_train_examples_before": 8,
+    "authority_promotions": 0,
+    "integration_fits": 1,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this path-free denominator under green exact-main CI. Then attempt untouched successor train ordinals 8 through 15 sequentially and at most once each as one fixed eight-card completion batch. Preserve every terminal, keep development and the R0 model closed, and stop again for aggregate information and clustered-power reorientation before any new scenario freeze or powered fit.",
+  "privacy": {
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_arm_identity_published": false,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "rows": [
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 3200,
+      "emulator_frames": 165099,
+      "ordinal": 2,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 0,
+      "causal_train_example_recorded": false,
+      "controller_actions": 995,
+      "emulator_frames": 48132,
+      "ordinal": 3,
+      "provider_executions": 0,
+      "root_claims": 1,
+      "status": "one_causal_campaign_terminal_without_train_example"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 5043,
+      "emulator_frames": 243065,
+      "ordinal": 4,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 107,
+      "emulator_frames": 4560,
+      "ordinal": 5,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 0,
+      "causal_train_example_recorded": false,
+      "controller_actions": 787,
+      "emulator_frames": 46140,
+      "ordinal": 6,
+      "provider_executions": 0,
+      "root_claims": 1,
+      "status": "one_causal_campaign_terminal_without_train_example"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 2077,
+      "emulator_frames": 102276,
+      "ordinal": 7,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-r1-six-card-throughput-result.v1",
+  "source": {
+    "cartridge_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33322464644,
+    "exact_main_commit": "72f57d0a0fc6d68000ab4cfd75b8e0f4dde450fc",
+    "source_bundle_sha256": "f6502562b0711e81efc67bafdd26e523b6782627ef376afb18d543011d6bdea8"
+  },
+  "status": "r1_six_card_throughput_complete_four_examples_recorded_remaining_successor_batch_next"
+}
