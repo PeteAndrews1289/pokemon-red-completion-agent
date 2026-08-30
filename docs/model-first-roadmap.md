@@ -7,6 +7,9 @@ to harden or replay the full deterministic route do not.
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
+The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defines how this lane
+must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
+composition, and a frozen portable contract before Crystal execution opens.
 
 ## Current checkpoint: eight lessons passed readiness; fit the model once
 

@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: the bridge from eight Red lessons to Crystal
+
+Start tight on **8/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**, then pull back to reveal the
+full rail: **FIT BOUNDARY → CLUSTERED RED CURRICULUM → UNTOUCHED RED CONTROLS → TEACHER-FREE
+SKILLS → LIVING-DEX COMPOSITION → FREEZE PORTABLE BUNDLE → ZERO-SHOT CRYSTAL → ADAPTATION →
+CRYSTAL LIVING-DEX COMPLETION**. Keep every future station translucent until evidence fills it.
+
+Split the architecture into five layers: a Red or Crystal observer/mechanics adapter; a shared
+semantic state, capability set, collection ledger, and memory; a dependency planner; learned
+option, battle, navigation, and party policies; and independent verifiers with abstention and
+recovery. Let Red-specific map IDs, addresses, species names, and route arrows bounce off the
+portable-bundle boundary.
+
+Then expose the planning correction. Put **195 PLANNED ROWS** on screen, erase the equals sign in
+**195 ROWS = 195 INDEPENDENT LESSONS**, and regroup sibling scenarios under shared lineage braces.
+Caption it **POWER LIVES AT THE INDEPENDENT UNIT**. Add the exact audit card: **67 INDEPENDENT
+LINEAGES WITH NO CENSORING · 100 WITH THREE FORCED LOSSES**. Then split the future Crystal screen:
+**SUPPORTED + ABSTAIN = FAILURE** on one side, **DECLARED UNSUPPORTED + ABSTAIN = CORRECT BOUNDARY**
+on the other. Show frozen Red beating **BEST OF RANDOM / COST / MYOPIC** and **ZERO-INIT** before a
+transfer badge can light. End on the real next action—one eight-row plumbing fit—and label it **THE
+FIRST TRAINING ARTIFACT, NOT YET A PLAYER**.
+
 ## August 30 scene: the first eight lessons clear the training gate
 
 Open on **PR 111 → MAIN ED6066E0 → CI 33298743000/1 ✓**. Feed one sealed stack marked **ALL 8

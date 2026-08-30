@@ -3,6 +3,24 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Red-to-Crystal mission roadmap — conditional reviews resolved 2026-08-30
+
+Claude and Antigravity independently returned `CONDITIONAL GO` on the complete mission horizon.
+Claude found that the clustered pivot needed a numeric independent-lineage power certificate, the
+Crystal test needed both the Red best-of-three envelope and zero initialization, and replacement
+candidates needed a finite lineage budget. Antigravity found that the historical Crystal V3
+protocol conflated supported failures with correct unsupported-mechanic abstention, that the
+Crystal capability vocabulary omitted several Gen-II boundaries, and that the 124-target solo Red
+acquisition graph could not serve as the full 151-species mission denominator.
+
+Codex accepted the statistical findings, accepted Antigravity's capability gap, modified its Red
+catalog recommendation to preserve the existing executable solo subgraph beneath a new 151-target
+blocker catalog, and rejected globally treating missing Crystal predictions as correct. The old
+Crystal V3 protocol is retired unopened for this mission; its replacement separates supported
+performance from unsupported-mechanic abstention. The corrected roadmap is GO for adoption, not
+execution. Full evidence and disposition are in the
+[review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
+
 ## V2 terminal repair — Claude/Antigravity review and Codex adjudication 2026-08-29
 
 Claude returned publication GO with no P0. Codex accepted its request for explicit tests of the

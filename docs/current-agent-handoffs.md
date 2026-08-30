@@ -6,6 +6,35 @@ Status: active operating assignment as of 2026-08-30. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Mission horizon: Red evidence to an honest Crystal transfer test
+
+All agents must also read the
+[Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md). It defines the complete
+sequence from the current eight-row integration fit through clustered powered Red evidence,
+untouched Red evaluation, bounded teacher-free authority, living-Pokedex dependency composition,
+portable-bundle freeze, and the first Crystal transfer falsifier. It does not expand the current
+execution authority.
+
+- Codex is the workhorse and final decision maker: implementation, tests, evidence, integration,
+  publication, session reorientation, and explicit adjudication of reviewer advice.
+- Claude is the statistics and leakage challenger: independent unit, cluster power, denominator,
+  censoring, untouched evaluation, baselines, and claim calibration.
+- Antigravity is the architecture and transfer challenger: hierarchy, portable contracts,
+  unsupported-state handling, recovery, Gen-II mechanics, and living-Dex dependency coverage.
+
+The next scale design must replace or explicitly reconcile the old 195-distinct-root assumption.
+Related short scenarios remain one lineage cluster; raw row count cannot be promoted into
+independent power. Reviewers are read-only and cannot open private identities, execute gameplay,
+fit, edit, publish, or grant authority. Codex may reject advice, but must record the evidence-based
+reason.
+
+The roadmap review is complete. Claude's cluster-power, control-envelope, and finite-lineage-budget
+conditions were accepted. Antigravity's capability and full-denominator gaps were accepted, while
+its global “missing prediction is correct” repair was replaced with separate supported-performance
+and unsupported-abstention endpoints. Details are in the
+[review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
+assignments begin at the next named milestone; no standing audit blocks ordinary R0 engineering.
+
 ## Current override: Codex owns one non-authoritative eight-row integration fit
 
 Exact main `ed6066e0` passed push CI `33298743000/1`, then the action-free readiness audit ran

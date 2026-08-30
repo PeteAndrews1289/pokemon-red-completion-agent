@@ -1,5 +1,24 @@
 # Three-agent coordination
 
+> **2026-08-30 mission-horizon override — plan through Crystal, execute only the current gate:**
+> The [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md) is the shared
+> long-range contract. Codex remains implementation, integration, publication, and adjudication
+> owner. Claude challenges statistical power, leakage, independence, and claim language.
+> Antigravity challenges hierarchy, title-neutral boundaries, abstention, recovery, and Gen-II
+> transfer assumptions. Both reviewers are read-only, receive only public source and path-free
+> evidence, and cannot execute a cartridge, fit a model, edit, publish, or grant authority.
+>
+> Every work session begins from the board and ends by restating mission capability, evidence rung,
+> learned authority, transfer state, cheapest falsifier, next gate, and forbidden shortcuts. The
+> immediate gate is still the one eight-row integration fit. The long horizon does not authorize
+> successor outcomes, development reads, gameplay authority, sealed Red, or Crystal early. Before
+> powered collection scales, the stale 195-distinct-root schedule must be prospectively reconciled
+> with a cluster-aware lineage-level power design. Claude and Antigravity completed this roadmap
+> audit with conditional GO; Codex resolved the conditions in the
+> [review adjudication](docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md). The old
+> Crystal V3 protocol is retired unopened for this bundle. These horizon decisions do not block or
+> broaden the current R0 fit-engineering lane.
+
 > **2026-08-30 active override — eight-example readiness passed; one integration fit next:** Codex
 > owns publication of the readiness result and one deterministic train-only fit over the complete
 > eight-row denominator. Exact main `ed6066e0` passed CI `33298743000/1`; the single audit found
