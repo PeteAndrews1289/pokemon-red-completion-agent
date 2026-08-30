@@ -1,15 +1,15 @@
 # Three-agent coordination
 
-> **2026-08-30 active override — ordinal zero settled; publish, then ordinal one once:** Codex owns
-> publication of the path-free successor ordinal-zero terminal, exact-main CI, exactly one
-> execution of untouched successor train ordinal 1, its durable terminal, and immediate mission
-> reorientation. Exact main `00334dec` passed CI `33292350018/1`; ordinal 0 then recorded one
-> selected-arm causal target after 5,178 actions and 257,093 frames with zero teachers,
-> counterfactual or unselected targets, predictions, fits, development access, or retry.
-> **Causal train 7/60 · powered fit 0 · authority 0 · transfer 0.** Ordinal 0 is permanently
-> consumed. No wrapper, preflight, census, route repair, teacher-yield gate, outcome-aware row
-> selection, development access, fit, Crystal run, or full replay is admissible before ordinal 1
-> reaches a durable terminal and the project reorients.
+> **2026-08-30 active override — eight-example floor reached; train-only readiness next:** Codex
+> owns publication of the path-free ordinal-one terminal, exact-main CI, and one action-free
+> train-only integration-readiness audit over the complete eight-example denominator. Exact main
+> `2ea86bcc` passed CI `33294371591/1`; ordinal 1 then recorded one selected-arm causal target after
+> 3,322 actions and 146,341 frames with zero teachers, counterfactual or unselected targets,
+> predictions, fits, development access, or retry. **Causal train 8/60 · powered fit 0 · authority
+> 0 · transfer 0.** Ordinals 0 and 1 are permanently consumed. The audit may expose aggregates
+> only and must fit nothing. No ordinal 2, wrapper, preflight, census, route repair, teacher gate,
+> development access, fit, Crystal run, or full replay is admissible before its result and
+> reorientation.
 >
 > Claude remains the optional read-only statistical/leakage challenger at model-fit milestones.
 > Antigravity remains the optional read-only architecture/exactly-once/transfer challenger.

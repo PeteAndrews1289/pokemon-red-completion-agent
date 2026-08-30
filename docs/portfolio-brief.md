@@ -1,19 +1,19 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
-## August 30 first-successor causal result
+## August 30 eight-example causal integration floor
 
-Published exact main `00334dec` passed every CI gate, then the project consumed successor train
-ordinal zero exactly once. The runner claimed the logical and physical root before controller
-input, durably committed one randomized collection option, executed only that option, and recorded
-only its independently observed consequence. It produced one authentic causal training example
-after 5,178 controller actions and 257,093 emulator frames.
+Published exact main `2ea86bcc` passed every CI gate, then the project consumed untouched successor
+train ordinal one exactly once. The runner claimed the logical and physical root before input,
+durably committed one randomized collection option, executed only that option, and recorded only
+its independently observed consequence. It produced one authentic causal example after 3,322
+controller actions and 146,341 emulator frames, moving the corpus from 7/60 to 8/60.
 
 The trust boundary stayed narrow: teacher queries, counterfactual and unselected targets,
 development access, predictions, model fits, retries, and private identity publication were all
-zero. The corpus advanced from 6/60 to 7/60, while powered fit, gameplay authority, and transfer
-remained zero. The next milestone is publication under exact-main CI followed by one untouched
-successor row; reaching eight examples opens only a support-and-information check, not automatic
-authority.
+zero. Reaching eight opens only an action-free, train-only support-and-information audit. The next
+portfolio milestone is a path-free aggregate proof of lineage, portable-kind, reachable-feature,
+target-variation, and censoring sufficiency; only a pass can open one non-authoritative plumbing
+fit. Gameplay authority and transfer remain zero.
 
 ## August 29 frozen causal-syllabus boundary
 

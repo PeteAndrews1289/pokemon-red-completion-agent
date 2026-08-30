@@ -5,20 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the successor produced its first authentic lesson;
-> publish it, then collect one more.** PR [#108](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/108)
-> published the passed preflight as exact main `00334dec`; push CI `33292350018/1` passed every
-> gate. From that exact source, successor train ordinal 0 was claimed and executed once. It made
-> one durable randomized behavior commitment and recorded one independently observed selected-arm
-> target after **5,178 controller actions and 257,093 emulator frames**.
+> **Current product focus (August 30, 2026): the authentic corpus reached its first integration
+> floor; audit information before fitting.** PR [#109](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/109)
+> published ordinal 0 as exact main `2ea86bcc`; push CI `33294371591/1` passed every gate. From
+> that exact source, untouched successor ordinal 1 was claimed and executed once. It recorded one
+> independently observed selected-arm causal target after **3,322 controller actions and 146,341
+> emulator frames**, with one durable randomized commitment.
 >
 > Teacher queries, counterfactual and unselected targets, development access, predictions, fits,
-> retries, and private publication all remained zero. This is one real causal lesson, not a
-> trained player: **causal train 7/60 · powered fit 0 · authority 0 · transfer 0**. Next publish
-> the [path-free ordinal-0 terminal](docs/evidence/red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json),
-> require green exact-main CI, execute untouched successor ordinal 1 exactly once, and reorient at
-> its durable terminal. If it supplies the eighth example, test the frozen support and information
-> gates before any explicitly non-authoritative fit; never retry ordinal 0 or open development.
+> retries, and private publication all remained zero. The board is now **causal train 8/60 ·
+> powered fit 0 · authority 0 · transfer 0**. Eight is a plumbing floor, not proof of information
+> or gameplay ability. Next publish the
+> [path-free ordinal-1 terminal](docs/evidence/red-living-dex-clustered-successor-train-ordinal-1-result-v1-2026-08-30.json),
+> require green exact-main CI, and run one action-free train-only readiness audit over the complete
+> denominator. Only a pass may open one explicitly non-authoritative integration fit; a failure
+> returns to untouched ordinal 2 after reorientation. Development remains sealed.
 
 > **Previous product checkpoint (August 29, 2026): the 16+4 successor is frozen; publish its exact
 > train-only consumer.** PR [#106](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/106)

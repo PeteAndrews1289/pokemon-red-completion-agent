@@ -1,22 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 30 scene: card zero becomes lesson seven
+## August 30 scene: card one makes eight lessons
 
-Open on **PR 108 → MAIN 00334DEC → CI 33292350018/1 ✓**. Slide one face-down card labeled
-**SUCCESSOR TRAIN 0** into the emulator. Stamp the sequence in order: **CLAIM ONCE → RANDOM ARM
-DURABLE BEFORE INPUT → SELECTED ARM ONLY → OBSERVE CONSEQUENCE → SETTLE**. Let the counters race
-to **5,178 CONTROLLER ACTIONS · 257,093 FRAMES**, then light **CAUSAL TARGET +1** and move the
-scoreboard **6/60 → 7/60**.
+Open on **PR 109 → MAIN 2EA86BCC → CI 33294371591/1 ✓**. Slide **SUCCESSOR TRAIN 1** into the
+emulator and stamp **CLAIM ONCE → RANDOM ARM DURABLE BEFORE INPUT → SELECTED ARM ONLY → OBSERVE
+CONSEQUENCE → SETTLE**. Let the counters race to **3,322 CONTROLLER ACTIONS · 146,341 FRAMES**,
+then light **CAUSAL TARGET +1** and move the scoreboard **7/60 → 8/60**.
 
-Keep the exclusions visible: **TEACHERS 0 · COUNTERFACTUALS 0 · UNSELECTED TARGETS 0 ·
-DEVELOPMENT 0 · PREDICTIONS 0 · FITS 0 · RETRIES 0**. Lock card zero in a consumed box. Add the
-caption **A REAL LESSON IS NOT YET A PLAYER**.
+Keep **TEACHERS 0 · COUNTERFACTUALS 0 · UNSELECTED TARGETS 0 · DEVELOPMENT 0 · PREDICTIONS 0 ·
+FITS 0 · RETRIES 0** visible. Lock cards zero and one in the consumed box. Add **EIGHT LESSONS ARE
+AN INTEGRATION FLOOR, NOT A PLAYER**.
 
-End on **PUBLISH TERMINAL → EXACT-MAIN CI → ORDINAL 1 ONCE → STOP + REORIENT**. Branch after its
-terminal: **IF 8+, TEST SUPPORT + INFORMATION → NON-AUTHORITATIVE FIT; OTHERWISE CONTINUE
-ONE-SHOT ROWS**. Keep the distant rail **60 → UNTOUCHED RED → FROZEN TITLE-NEUTRAL POLICY →
-CRYSTAL → CROSS-GAME LIVING POKEDEX** and cross out **ORDINAL 0 RETRY · NEW WRAPPER · TEACHER
-ROUTE · DEVELOPMENT LEAK · FULL RED REPLAY**.
+End on a cartridge-free audit table: **ALL 8 ROWS → LINEAGES · KINDS · SUPPORTED FEATURES ·
+TARGET VARIATION · CENSORING**. Branch **PASS → ONE NON-AUTHORITATIVE FIT; FAIL → REORIENT →
+UNTOUCHED ORDINAL 2**. Keep the distant rail **60 → UNTOUCHED RED → FROZEN TITLE-NEUTRAL POLICY
+→ CRYSTAL → CROSS-GAME LIVING POKEDEX** and cross out **ROW DROPPING · FIT BEFORE AUDIT ·
+DEVELOPMENT LEAK · FULL RED REPLAY**.
 
 ## August 29 scene: the semester is sealed; build a key that cannot open the exam
 
