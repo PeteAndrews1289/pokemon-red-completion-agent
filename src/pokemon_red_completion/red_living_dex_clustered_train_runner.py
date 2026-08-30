@@ -1,10 +1,10 @@
-"""Train-only consumer for the frozen Red clustered living-Dex schedule.
+"""Train-only consumer for exact frozen Red clustered living-Dex schedules.
 
-The private schedule contains eight train and four untouched development
-assignments.  This module makes only train ordinals addressable, joins one
-selected root to its exact Red template, reuses the durable setup pair claim,
-and delegates behavior commitment and selected-arm outcome collection to the
-title-neutral causal journal.  Development rows are never accepted by the
+Each admitted plan has a fixed train prefix plus untouched development
+assignments.  This module makes only the plan-bound train ordinals addressable,
+joins one selected root to its exact Red template, reuses the durable setup pair
+claim, and delegates behavior commitment and selected-arm outcome collection to
+the title-neutral causal journal.  Development rows are never accepted by the
 execution API, and no teacher or counterfactual outcome is available here.
 """
 
@@ -190,6 +190,32 @@ FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN = (
         ),
         policy_sha256=(
             "dc72fb9449f7279c12b673b266e0973d01b62577f99d22ec7fdb14fceb8589be"
+        ),
+    )
+)
+FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN = (
+    RedLivingDexClusteredTrainPlanBinding(
+        private_plan_sha256=(
+            "93562084be4dc65cd87c7edf6df97db7b040109e98475eda78085c0e9e56609e"
+        ),
+        plan_manifest_sha256=(
+            "b9fe8ea6e8f4bf93f5f8c62bee91d090414eac42f401b57ab85c0684950712fa"
+        ),
+        plan_record_sha256=(
+            "fd6114c96daf0881eb39f2e990b0d9fb595fba1e18b0f0556444288800b135f8"
+        ),
+        schedule_sha256=(
+            "94b1330d968b9fd4ac91cd046e177d5178262815dd667bd073db5cc2a44f6e2a"
+        ),
+        policy_sha256=(
+            "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171"
+        ),
+        record_id=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID,
+        record_kind=RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND,
+        train_scenarios=16,
+        development_scenarios=4,
+        causal_runner_sha256=(
+            RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256
         ),
     )
 )
@@ -911,6 +937,7 @@ def _string(value: object, subject: str) -> str:
 
 
 __all__ = [
+    "FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN",
     "FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_RECEIPT_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_TRAIN_PREFLIGHT_SCHEMA",

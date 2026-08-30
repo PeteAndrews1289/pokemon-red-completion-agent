@@ -5,6 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 29, 2026): the 16+4 successor is frozen; publish its exact
+> train-only consumer.** PR [#106](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/106)
+> published freezer source `d4da25be`; exact-source CI `33284967875/1` passed. The single
+> authorized action-free freeze then sealed **16 train scenarios from 16 lineages** and **4
+> read-only development scenarios from 4 different lineages**, with all seven Red-supported
+> portable kinds on both sides, maximum lineage multiplicity one, and zero overlap. Schedule
+> `94b1330d…`, private plan `93562084…`, and independent reopen all agree.
+>
+> The freeze performed **actions/frames/claims/behaviors/teachers/outcomes/predictions/fits 0**.
+> It is a causal syllabus, not training. A distinct exact-plan-bound consumer is now locally
+> implemented: successor ordinals 0–15 reopen, ordinal 16 and every development row fail closed,
+> and the consumed eight-row interface remains separate. Next: finish local qualification,
+> publish this exact consumer, require green exact-source CI, and pass one ROM-free zero-effect
+> production preflight before any train row runs. **Causal train 6/60 · powered fit 0 · authority
+> 0 · transfer 0.** See the
+> [freeze result](docs/evidence/red-living-dex-clustered-successor-freeze-result-v1-2026-08-29.json)
+> and [consumer qualification](docs/evidence/red-living-dex-clustered-successor-train-consumer-local-qualification-v1-2026-08-29.json).
+
 > **Current product focus (August 29, 2026): unused-root capacity passed; build one 16-row
 > successor.** Exact main `2adc893c` passed CI `33279928951/1`. A fresh action-free census then
 > reopened all 81 authenticated Red contexts and found **59 unused independence-qualified roots:

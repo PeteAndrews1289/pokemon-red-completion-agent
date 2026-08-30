@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-29 active override — frozen successor, exact consumer next:** The single successor
+> freeze is complete and must not retry. Published source `d4da25be` passed exact-source CI
+> `33284967875/1`, then sealed 16 train lineages and four distinct read-only development lineages
+> with all seven Red-supported option kinds and zero protected effects. Codex owns the distinct
+> exact-plan-bound train consumer, qualification, publication, one ROM-free zero-effect preflight,
+> and the following mission reorientation. Successor ordinals 0–15 are the only new executable
+> surface; ordinal 16 and development must fail closed. **Causal train 6/60 · powered fit 0 ·
+> authority 0 · transfer 0.**
+>
+> Claude remains the optional read-only statistical/leakage challenger at model-fit milestones.
+> Antigravity remains the optional read-only architecture/exactly-once/transfer challenger.
+> Reviewer absence does not block ordinary engineering, and reviewer opinions do not override
+> evidence or the mission. Neither reviewer edits, sees private identities, executes gameplay,
+> publishes, or grants authority.
+
 > **2026-08-29 active override — 59 unused roots verified; fixed 16+4 successor next:** Codex owns
 > the generalized sealed-plan boundary, fixed 16-train/4-read-only-development freezer, tests,
 > publication, exact-source CI, one private freeze, and later exact-plan consumer binding. The

@@ -3,6 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 29 frozen-successor result:** PR 106 published freezer source `d4da25be` and exact-source
+> CI `33284967875/1` passed. The single action-free production freeze sealed **16 train lineages +
+> 4 distinct read-only development lineages**, all seven Red-supported portable kinds on both
+> sides, maximum one row per lineage, and zero overlap. Schedule `94b1330d…`, private plan
+> `93562084…`, manifest `b9fe8ea6…`, and record `fd6114c9…` independently reopen. Every controller,
+> frame, claim, behavior, teacher, outcome, prediction, and fit counter remained zero.
+>
+> A distinct exact-plan-bound successor consumer is locally implemented. It exposes train ordinals
+> 0–15, rejects 16 and development, and leaves the consumed eight-row interface unchanged. Next:
+> finish full qualification, publish, require green exact-source CI, pass one ROM-free zero-effect
+> preflight, and reorient. Only then consume train rows once each; fit only after the cumulative
+> authentic corpus reaches eight. **Causal train 6/60 · powered fit 0 · authority 0 · transfer 0.**
+> See the [freeze result](evidence/red-living-dex-clustered-successor-freeze-result-v1-2026-08-29.json)
+> and [5,787-test consumer qualification](evidence/red-living-dex-clustered-successor-train-consumer-local-qualification-v1-2026-08-29.json).
+
 > **August 29 successor-capacity result:** Exact main `2adc893c` and CI `33279928951/1` supported
 > one fresh action-free census. It found **59 unused independence-qualified roots—36 train and 23
 > development—with 55 supporting at least one genuine Red menu**. A fresh default 8+4 schedule

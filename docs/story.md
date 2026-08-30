@@ -7,6 +7,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the semester is sealed; build the key that cannot open the exam
+
+After counting the remaining classrooms, the project did exactly one careful administrative act:
+it sealed a semester. Sixteen training cards and four exam cards were selected without playing the
+game, peeking at an outcome, or rehearsing which doors would open. Each card came from a different
+lineage and both piles covered the same seven kinds of collection decision. A separate reader
+opened the manifest and confirmed the box was the box we intended. No lesson happened; the score
+remained six of sixty.
+
+Now we are making the key. It can address sixteen training cards and literally cannot name an exam
+card. It is bound to the frozen box and distinct from the key that consumed the first eight-card
+pilot. It still must be published, rebuilt by CI, and inserted once with the cartridge absent. If
+that zero-action preflight passes, the next movement finally returns to data: short, one-shot,
+randomized decisions whose real consequences can teach a title-neutral option-value model. That
+model is one layer of the eventual player—not the destination. The destination remains completing
+stories and constructing living Pokedexes across multiple games with less title-specific help
+each time.
+
 ## Current checkpoint: there are enough classrooms; build one larger semester
 
 The model still has six honest lessons, not a license to play. But root scarcity is no longer the

@@ -303,26 +303,40 @@ def test_successor_mode_rejects_supplemental_roots_before_private_reads(
     assert result["root_claims"] == 0
 
 
+@pytest.mark.parametrize("successor", [False, True])
 def test_independent_validator_reopens_the_published_plan(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
+    successor: bool,
 ) -> None:
     store = _store(tmp_path)
-    plan = _plan()
+    plan = _successor_clustered_fixture()[0] if successor else _plan()
+    record_id = (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID
+        if successor
+        else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID
+    )
+    record_kind = (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+        if successor
+        else RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND
+    )
     FREEZER["_publish_and_reopen"](
         store,
         plan=plan,
-        bindings=_bindings(),
+        bindings=plan.bindings,
         expected_schedule_sha256=plan.schedule.schedule_sha256,
         expected_policy_sha256=plan.schedule.policy.policy_sha256,
+        record_id=record_id,
+        record_kind=record_kind,
     )
     record = store.find_sealed_record(
-        RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_ID,
-        expected_kind=RED_LIVING_DEX_CLUSTERED_PLAN_RECORD_KIND,
+        record_id,
+        expected_kind=record_kind,
     )
     assert record is not None
-    bindings = _bindings()
+    bindings = plan.bindings
     args = [
         "--private-root",
         "/private/artifacts",
@@ -348,26 +362,41 @@ def test_independent_validator_reopens_the_published_plan(
         bindings.runtime_identity_sha256,
         "--expected-census-receipt-sha256",
         bindings.census_receipt_sha256,
+        *(["--successor"] if successor else []),
     ]
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
         "open_private_root",
         lambda *_args, **_kwargs: store,
     )
+    schedule_constant = (
+        "SUCCESSOR_EXPECTED_SCHEDULE_SHA256"
+        if successor
+        else "EXPECTED_SCHEDULE_SHA256"
+    )
+    policy_constant = (
+        "SUCCESSOR_EXPECTED_POLICY_SHA256"
+        if successor
+        else "EXPECTED_POLICY_SHA256"
+    )
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
-        "EXPECTED_SCHEDULE_SHA256",
+        schedule_constant,
         plan.schedule.schedule_sha256,
     )
     monkeypatch.setitem(
         VALIDATOR["main"].__globals__,
-        "EXPECTED_POLICY_SHA256",
+        policy_constant,
         plan.schedule.policy.policy_sha256,
     )
 
     assert VALIDATOR["main"](args) == 0
     result = json.loads(capsys.readouterr().out)
-    assert result["status"] == "private_clustered_schedule_independently_validated"
+    assert result["status"] == (
+        "private_clustered_successor_independently_validated"
+        if successor
+        else "private_clustered_schedule_independently_validated"
+    )
     assert result["private_plan_reopened"] is True
     assert result["lineage_overlap"] == 0
     assert result["controller_actions"] == 0

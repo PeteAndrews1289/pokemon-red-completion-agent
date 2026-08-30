@@ -1,0 +1,106 @@
+{
+  "claim_boundary": {
+    "supported": "One published exact-source, action-free Red freeze formed, sealed, reopened, and independently validated the fixed 16-train plus 4-read-only-development successor schedule under a distinct immutable private namespace. All 20 rows use distinct upstream lineages, all seven Red-supported portable option kinds are represented on both sides, and every protected effect remained zero.",
+    "unsupported": [
+      "successor_train_scenario_executed",
+      "successor_outcome_collected",
+      "development_outcome_opened",
+      "integration_fit_executed",
+      "powered_fit_executed",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "living_pokedex_completion"
+    ]
+  },
+  "freeze": {
+    "cluster_weighting": "equal_total_weight_per_lineage",
+    "development_lineages": 4,
+    "development_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ],
+    "development_scenarios": 4,
+    "lineage_overlap": 0,
+    "maximum_observed_scenarios_per_lineage": 1,
+    "plan_manifest_sha256": "b9fe8ea6e8f4bf93f5f8c62bee91d090414eac42f401b57ab85c0684950712fa",
+    "plan_record_sha256": "fd6114c96daf0881eb39f2e990b0d9fb595fba1e18b0f0556444288800b135f8",
+    "policy_sha256": "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171",
+    "private_plan_reopened": true,
+    "private_plan_sha256": "93562084be4dc65cd87c7edf6df97db7b040109e98475eda78085c0e9e56609e",
+    "schedule_sha256": "94b1330d968b9fd4ac91cd046e177d5178262815dd667bd073db5cc2a44f6e2a",
+    "status": "authenticated_action_free_clustered_successor_frozen",
+    "successor_design_sha256": "461e41524d8ad5b1992b80699e8bdd042686674df5ee9749e1ce8baea4b22914",
+    "train_lineages": 16,
+    "train_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply",
+      "unlock_access"
+    ],
+    "train_scenarios": 16
+  },
+  "independent_validation": {
+    "bindings_recomputed": true,
+    "private_plan_reopened": true,
+    "status": "private_clustered_successor_independently_validated"
+  },
+  "interpretation": {
+    "authentic_causal_train_examples_after": 6,
+    "authentic_causal_train_examples_before": 6,
+    "development_remains_read_only": true,
+    "integration_fit_allowed_now": false,
+    "model_authority_changed": false,
+    "model_fit_executed": false,
+    "next_gate": "Publish and exact-CI qualify a train-only consumer binding for this exact successor plan, run one ROM-free preflight, then consume only its 16 train rows at most once each. Reorient before fitting and never open development during fitting.",
+    "transfer_to_crystal_demonstrated": false
+  },
+  "privacy": {
+    "private_identity_fields": 0,
+    "private_path_fields": 0
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "publication": {
+    "exact_source_ci_attempt": 1,
+    "exact_source_ci_run": 33284967875,
+    "pull_request": 106,
+    "source_commit": "d4da25be4c412946ee4d26d138249232219da6a1"
+  },
+  "recorded_on": "2026-08-29",
+  "schema": "pokemon.red.living-dex-clustered-successor-freeze-result.v1",
+  "source_bindings": {
+    "capacity_receipt_sha256": "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4",
+    "context_catalog_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+    "context_plan_sha256": "05a896226611a1f60c6c29db8a7ea593cfd49a5310959369b0e2c83d8dd371db",
+    "goal_registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+    "local_qualification_sha256": "492fd428914b36c30f79cd19bf7ab3cffede7bacee1fcffd3979b5bd08c0eca9",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "route_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "runtime_identity_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "source_bundle_sha256": "2c1ee588bcd37393e28a8115e10f2a93983420f2f9586d727970f8c511240901",
+    "source_commit": "d4da25be4c412946ee4d26d138249232219da6a1"
+  },
+  "status": "private_clustered_successor_schedule_frozen_and_independently_validated_exact_consumer_binding_next"
+}

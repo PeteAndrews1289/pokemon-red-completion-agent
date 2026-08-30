@@ -1,5 +1,21 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 29 frozen causal-syllabus boundary
+
+After exact-source CI, the project ran one action-free production freeze that sealed 16 Red
+training scenarios from 16 lineages and four read-only development scenarios from four distinct
+lineages. Both partitions cover all seven supported title-neutral option kinds; lineage
+multiplicity is one and partition overlap is zero. Independent validation reopened the exact
+schedule, private plan, manifest, and record while controller actions, frames, claims, behavior
+commitments, outcomes, predictions, and fits all remained zero.
+
+The follow-on consumer is bound to that exact plan and uses a distinct identity from the consumed
+eight-row pilot. Its public interface makes only successor train ordinals 0–15 addressable and
+fails closed on ordinal 16 or development. This is a reproducible causal-data trust boundary, not
+a model-quality claim: the authentic corpus remains 6/60 and no gameplay authority or transfer
+result exists. The next evidence is a green exact-source build and one ROM-free, zero-effect
+production preflight before one-shot outcome collection resumes.
+
 ## August 29 attrition-aware successor design
 
 After the first eight-row clustered batch yielded five usable causal examples, the project ran a

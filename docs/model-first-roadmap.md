@@ -8,6 +8,36 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: successor syllabus frozen; publish and preflight its exact consumer
+
+Published freezer source `d4da25be` passed exact-source CI `33284967875/1`. Its single action-free
+production freeze sealed 16 train scenarios from 16 lineages plus four read-only development
+scenarios from four different lineages. Both sides cover all seven Red-supported portable option
+kinds, maximum lineage multiplicity is one, and train/development overlap is zero. The schedule,
+private plan, manifest, and record were independently reopened; every controller, frame, claim,
+teacher, outcome, prediction, and fit counter remained zero.
+
+The next product-aligned sequence is:
+
+1. finish the local full gate and path-free qualification for the distinct exact-plan-bound
+   successor consumer;
+2. publish that exact consumer and require green exact-source CI;
+3. run one ROM-free production preflight that authenticates one frozen train row while every
+   protected effect remains zero;
+4. reorient, then consume only frozen train ordinals 0–15 at most once while retaining every setup
+   terminal honestly and keeping development structurally inaccessible;
+5. run the explicitly non-authoritative integration fit only if cumulative authentic settled
+   examples reach eight, then continue data collection toward 60;
+6. compare against frozen controls on untouched Red lineages before freezing the supported,
+   title-neutral representation for abstention-aware Crystal transfer.
+
+Do not refreeze, select a replacement after rehearsal, alter the consumed eight-row path, fit on
+development, run Crystal, or substitute a full-game teacher replay. The honest board remains
+**causal train 6/60 · powered fit 0 · authority 0 · transfer 0**. See the
+[freeze result](evidence/red-living-dex-clustered-successor-freeze-result-v1-2026-08-29.json) and
+[consumer qualification](evidence/red-living-dex-clustered-successor-train-consumer-local-qualification-v1-2026-08-29.json),
+which records 73 focused tests and the 5,787-test full repository gate.
+
 ## Current checkpoint: successor capacity passed; freeze one fixed 16-row train tranche
 
 The exact-main, action-free recensus found 59 unused authenticated Red roots: 36 upstream-train

@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 29: freeze the semester, then build the one key that cannot open the exam
+
+The larger semester is no longer hypothetical. From published, green source, one action-free
+operation chose sixteen training classrooms and four read-only exam classrooms before seeing any
+setup success or outcome. Every card came from its own lineage, both sides span all seven portable
+Red decision kinds, and the controller never connected. A second reader reopened the same sealed
+schedule, plan, manifest, and record. That operation created no lesson and trained no model; the
+honest scoreboard stayed at six of sixty.
+
+The next engineering object is deliberately small: one key bound to that exact sealed box. Its
+dial permits training cards zero through fifteen and has no representation for the four exam
+cards. The old eight-card key remains separate and consumed. Before the new key can turn in-game,
+the published source must pass CI and a cartridge-free production preflight must prove the plan,
+root, lineage, runtime, and unclaimed pair agree while every effect remains zero.
+
+This matters to the long story because the project is no longer collecting Red arrow sequences.
+It is constructing causal examples of portable choices—capture, evolve, explore, resupply,
+restore, access, and party development—while preserving an untouched generalization wall. Those
+examples are the first layer of a hierarchical player that must later finish Red, transfer shared
+knowledge to Crystal, learn title-specific mechanics, and ultimately plan a living Pokedex. The
+syllabus is infrastructure; the model begins only when authentic outcomes accumulate.
+
 ## August 29: count the empty classrooms, then build a larger semester once
 
 The five real lessons exposed a process problem as well as a learning signal: three of eight

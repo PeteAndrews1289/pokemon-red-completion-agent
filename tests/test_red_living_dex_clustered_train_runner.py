@@ -54,6 +54,7 @@ from pokemon_red_completion.red_living_dex_clustered_successor import (
     RED_LIVING_DEX_CLUSTERED_SUCCESSOR_POLICY,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
+    FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN,
     RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256,
     RED_LIVING_DEX_CLUSTERED_TRAIN_RUNNER_SHA256,
     RedLivingDexClusteredTrainPlanBinding,
@@ -345,6 +346,35 @@ def test_successor_policy_addresses_ordinal_fifteen_but_not_development() -> Non
             16,
             binding=binding,
         )
+
+
+def test_published_successor_binding_names_only_the_exact_frozen_plan() -> None:
+    binding = FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN
+
+    assert binding.private_plan_sha256 == (
+        "93562084be4dc65cd87c7edf6df97db7b040109e98475eda78085c0e9e56609e"
+    )
+    assert binding.plan_manifest_sha256 == (
+        "b9fe8ea6e8f4bf93f5f8c62bee91d090414eac42f401b57ab85c0684950712fa"
+    )
+    assert binding.plan_record_sha256 == (
+        "fd6114c96daf0881eb39f2e990b0d9fb595fba1e18b0f0556444288800b135f8"
+    )
+    assert binding.schedule_sha256 == (
+        "94b1330d968b9fd4ac91cd046e177d5178262815dd667bd073db5cc2a44f6e2a"
+    )
+    assert binding.policy_sha256 == (
+        "4594fce41976b29c56f672071650ff11df6e2cafed3710db742b796c9d791171"
+    )
+    assert binding.record_id == RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_ID
+    assert binding.record_kind == (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_PLAN_RECORD_KIND
+    )
+    assert binding.train_scenarios == 16
+    assert binding.development_scenarios == 4
+    assert binding.causal_runner_sha256 == (
+        RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_RUNNER_SHA256
+    )
 
 
 def test_selection_binds_distinct_schedule_and_template_ordinals() -> None:
