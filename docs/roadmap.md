@@ -3,17 +3,17 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 30 successor ordinal-zero result:** PR 108 published the passed preflight as exact main
-> `00334dec`; push CI `33292350018/1` passed. Successor train ordinal 0 then ran exactly once and
-> recorded one independently observed selected-arm causal target with **one behavior commitment ·
-> 5,178 controller actions · 257,093 emulator frames**. Teachers, counterfactual and unselected
-> targets, development, predictions, fits, retries, and private publication were zero.
+> **August 30 successor ordinal-one result:** PR 109 published ordinal 0 as exact main `2ea86bcc`;
+> push CI `33294371591/1` passed. Untouched successor ordinal 1 then ran exactly once and recorded
+> one independently observed selected-arm causal target with **one behavior commitment · 3,322
+> controller actions · 146,341 emulator frames**. Teachers, counterfactual and unselected targets,
+> development, predictions, fits, retries, and private publication were zero.
 >
-> Next publish the [path-free terminal](evidence/red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json),
-> require green exact-main CI, execute untouched ordinal 1 exactly once, and reorient at its
-> durable terminal. Do not retry ordinal 0 or add another preflight, wrapper, census, route repair,
-> teacher gate, second new row, development outcome, fit, sealed Red run, Crystal execution, or
-> full replay. **Causal train 7/60 · powered fit 0 · authority 0 · transfer 0.**
+> Next publish the [path-free terminal](evidence/red-living-dex-clustered-successor-train-ordinal-1-result-v1-2026-08-30.json),
+> require green exact-main CI, and run one action-free train-only integration-readiness audit over
+> the complete eight-example denominator. Do not retry ordinals 0 or 1, drop awkward rows, open
+> development, fit before the audit, run sealed Red or Crystal, or replay the game. **Causal train
+> 8/60 · powered fit 0 · authority 0 · transfer 0.**
 
 > **August 29 frozen-successor result:** PR 106 published freezer source `d4da25be` and exact-source
 > CI `33284967875/1` passed. The single action-free production freeze sealed **16 train lineages +

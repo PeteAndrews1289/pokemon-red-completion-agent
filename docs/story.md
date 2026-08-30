@@ -7,21 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: card zero taught one honest lesson
+## Current checkpoint: card one makes eight honest lessons
 
-The sixteen-card key was published, rebuilt, and finally turned once. Training card zero was
+Card zero was published, rebuilt on main, and followed by untouched card one. The second card was
 claimed before movement, one random collection strategy was written down durably, and only that
-strategy touched the controller. After 5,178 actions and 257,093 emulator frames, its independently
-observed consequence became one causal lesson. The teacher never whispered an answer, the unplayed
-choices stayed blank, the exam cards stayed sealed, and card zero can never be retried.
+strategy touched the controller. After 3,322 actions and 146,341 emulator frames, its independently
+observed consequence became lesson eight. The teacher never whispered an answer, the unplayed
+choices stayed blank, the exam cards stayed sealed, and neither card can ever be retried.
 
-The honest scoreboard is now **CAUSAL TRAIN 7/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
-That is real progress, but it is still not a player. We publish the lesson, let exact-main CI
-reproduce the evidence boundary, and then open card one exactly once. If it becomes lesson eight,
-the model must still pass support and information checks before its first deliberately
-non-authoritative fit. This discipline keeps the project aimed at a player that can eventually
-complete stories and living Pokedexes across games instead of becoming another fragile Red
-walkthrough.
+The honest scoreboard is **CAUSAL TRAIN 8/60 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**. Eight
+is enough to ask whether the model pipeline has something informative to ingest; it is not enough
+to claim the model can play. The next check never opens the game. It audits every train row for
+independent lineages, portable kinds, supported feature contrast, varying outcomes, and honest
+censoring. A failed check means more untouched lessons; only a pass opens one explicitly
+non-authoritative fit. This keeps the destination—stories and living Pokedexes across games—larger
+than the machinery used to reach it.
 
 ## Previous checkpoint: the semester is sealed; build the key that cannot open the exam
 

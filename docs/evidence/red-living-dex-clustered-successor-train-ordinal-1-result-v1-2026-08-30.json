@@ -1,0 +1,75 @@
+{
+  "claim_boundary": {
+    "supported": "A second frozen lineage-qualified Red successor train assignment was claimed exactly once, committed one randomized selected arm before controller input, executed only that arm, and recorded one independently observed causal train target without teacher, counterfactual, development, prediction, or fit access. The cumulative authentic example count reached the eight-example integration floor.",
+    "unsupported": [
+      "selected_arm_identity_or_private_outcome_disclosure",
+      "integration_support_and_information_gate_passed",
+      "integration_model_fit_executed",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "execution": {
+    "automatic_retry_allowed": false,
+    "behavior_commitments": 1,
+    "campaign_kind": "clustered_successor_train",
+    "causal_behavior_commitments": 1,
+    "causal_train_example_recorded": true,
+    "controller_actions": 3322,
+    "counterfactual_targets": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 146341,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "ordinal": 1,
+    "partition": "train",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 1,
+    "result_schema": "pokemon.red.living-dex-clustered-train-receipt.v1",
+    "retry_allowed": false,
+    "root_claims_metered_setup_only": 1,
+    "selected_candidate_target_only": true,
+    "setup_behavior_draws_metered": 0,
+    "status": "one_causal_campaign_settled",
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 8,
+    "authentic_causal_train_examples_before": 7,
+    "authority_promotions": 0,
+    "integration_example_count_gate_passed": true,
+    "integration_fit_allowed_now": false,
+    "integration_fit_minimum_examples": 8,
+    "integration_support_and_information_gate_pending": true,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this path-free terminal under green exact-main CI, then run one action-free train-only integration-readiness audit over the complete eight-example denominator. The audit must not open development, fit, predict, execute gameplay, query a teacher, or expose private identities. If support or information is insufficient, collect untouched successor ordinal two exactly once after reorientation; only a passing audit may open one explicitly non-authoritative integration fit.",
+  "privacy": {
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_arm_identity_published": false,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "predecessor_terminal_pull_request": 109,
+    "terminal_result_pull_request": null,
+    "status": "terminal_result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "schema": "pokemon.red.living-dex-clustered-successor-train-ordinal-result.v1",
+  "source": {
+    "cartridge_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33294371591,
+    "exact_main_commit": "2ea86bcc6874952ce7281cb083062a099a91714b",
+    "source_bundle_sha256": "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435"
+  },
+  "status": "second_clustered_successor_train_outcome_settled_eight_example_floor_reached_readiness_audit_next"
+}

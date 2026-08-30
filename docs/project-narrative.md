@@ -1,24 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 30: the first successor card became a real lesson
+## August 30: the second successor card reaches the first integration floor
 
-The successor crossed readiness and then did the thing the infrastructure exists to protect. PR
-108 published the path-free preflight, exact main passed every CI gate, and one pristine process
-claimed training card zero. Before controller input it durably committed one randomized,
-collection-oriented option. It executed only that option and retained only its independently
-observed consequence: one new causal lesson after 5,178 controller actions and 257,093 frames.
+PR 109 published the first successor lesson, exact main passed every CI gate, and a second pristine
+process claimed untouched training card one. It durably committed one randomized collection
+option before input, executed only that option, and retained only its independently observed
+consequence: one new causal lesson after 3,322 controller actions and 146,341 frames.
 
-Nothing outside that claim quietly opened. The teacher supplied no label or fallback. Unplayed
-alternatives did not become counterfactual targets. Development examples remained sealed; there
-was no prediction, fit, retry, private identity disclosure, sealed Red test, or Crystal run. Card
-zero is permanently consumed.
+Again, nothing outside that claim quietly opened. The teacher supplied no label or fallback.
+Unplayed alternatives did not become targets. Development stayed sealed; there was no prediction,
+fit, retry, private identity disclosure, sealed Red test, or Crystal run. Cards zero and one are
+permanently consumed.
 
-The honest scoreboard is now seven causal examples out of sixty, with zero powered fits and zero
-gameplay authority. The next operation is not a new route or framework: publish this terminal,
-then turn untouched card one exactly once. If it becomes the eighth authentic lesson, the project
-must still test the frozen support and information gates before a deliberately non-authoritative
-fit. Trustworthy autonomy grows from measured decisions, not from quietly editing the curriculum
-until it works.
+The honest scoreboard is now eight causal examples out of sixty, with zero powered fits and zero
+gameplay authority. Eight opens a question, not an authority claim: do the full eight examples
+actually span enough independent lineages, portable kinds, supported Red features, and varying
+outcomes to exercise model plumbing? The next operation is a train-only aggregate audit with no
+emulator and no fitter. A failure sends the curriculum back to untouched card two; only a pass can
+open one deliberately non-authoritative integration fit.
 
 ## August 29: freeze the semester, then build the one key that cannot open the exam
 

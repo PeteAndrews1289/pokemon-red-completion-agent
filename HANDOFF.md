@@ -12,28 +12,29 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-30: successor ordinal zero settled — one more authentic outcome is the active gate
+## 2026-08-30: successor ordinal one settled — audit the eight-example denominator before fitting
 
 The mission is unchanged: build a hierarchical player that completes stories and living Pokedexes
-across games, with Red as causal curriculum and Crystal as the first transfer falsifier. This
-successor is a short causal lesson collector, not a trained player or fixed Red walkthrough.
+across games, with Red as causal curriculum and Crystal as the first transfer falsifier. These
+successor rows are short causal lessons, not a trained player or fixed Red walkthrough.
 
-PR 108 published the path-free preflight result as exact main
-`00334dece0a080638df07660946871c4dab691c3`; push CI `33292350018/1` passed every gate. A pristine
-cache-free checkout matched that source, source bundle `53116a4a…`, the frozen capture permissions,
-and cartridge identity before one controller-capable invocation. Successor train ordinal 0 then
-settled once with **one behavior commitment · one selected-arm causal target · 5,178 controller
-actions · 257,093 emulator frames**. Teacher queries, counterfactual and unselected targets,
-development access, predictions, fits, retries, and private fields were zero. Ordinal 0 is consumed
-and may never retry. The [path-free terminal](docs/evidence/red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json)
-is `be53cadc…ef4d`.
+PR 109 published ordinal 0 as exact main `2ea86bcc6874952ce7281cb083062a099a91714b`; push CI
+`33294371591/1` passed every gate. A pristine cache-free checkout matched that source, source
+bundle `53116a4a…`, runtime closure `3dd20373…`, frozen input hashes, and cartridge identity before
+one controller-capable invocation. Untouched successor ordinal 1 then settled once with **one
+behavior commitment · one selected-arm causal target · 3,322 controller actions · 146,341
+emulator frames**. Teachers, counterfactual and unselected targets, development, predictions,
+fits, retries, and private publication were zero. Ordinal 1 is consumed and may never retry. The
+[path-free terminal](docs/evidence/red-living-dex-clustered-successor-train-ordinal-1-result-v1-2026-08-30.json)
+is `283113a4…c7ec`.
 
-The board is now **causal train 7/60 · powered fit 0 · authority 0 · transfer 0**. Publish this
-terminal and require green exact-main CI, then run untouched successor train ordinal 1 exactly
-once. Accept a causal target or an honest consumed no-target terminal, then stop and reorient. If
-the cumulative corpus reaches eight, evaluate the preregistered support and information gates
-before any explicitly non-authoritative fit. Another wrapper, preflight, census, route repair,
-teacher target, development access, sealed Red, Crystal, or full replay remains closed.
+The board is **causal train 8/60 · powered fit 0 · authority 0 · transfer 0**. The count floor is
+met, but support and information have not been audited. Publish this terminal and require green
+exact-main CI, then run one action-free train-only readiness audit over all eight examples. It may
+report only aggregate lineage, kind, supported-feature, target-variation, and censoring evidence;
+it may not fit, predict, execute gameplay, query a teacher, open development, or reveal private
+identities. A failed audit returns to untouched ordinal 2 after reorientation. Only a pass may
+open one explicitly non-authoritative integration fit.
 
 ## 2026-08-29: fixed 16+4 successor frozen — exact train consumer was the active gate
 

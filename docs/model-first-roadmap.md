@@ -8,32 +8,31 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: successor ordinal zero produced one causal lesson
+## Current checkpoint: eight authentic lessons exist; audit train information before fitting
 
-PR 108 published the passed successor preflight as exact main `00334dec`; push CI
-`33292350018/1` passed. From that exact source, ordinal 0 was claimed and executed once. It made one
-durable randomized behavior commitment and recorded one independently observed selected-arm
-target after 5,178 controller actions and 257,093 emulator frames. Teachers, counterfactual and
-unselected targets, development access, predictions, fits, retries, and private publication all
-remained zero.
+PR 109 published ordinal 0 as exact main `2ea86bcc`; push CI `33294371591/1` passed. From that
+exact source, untouched ordinal 1 was claimed and executed once. It made one durable randomized
+behavior commitment and recorded one independently observed selected-arm target after 3,322
+controller actions and 146,341 emulator frames. Teachers, counterfactual and unselected targets,
+development access, predictions, fits, retries, and private publication all remained zero.
 
 The next product-aligned sequence is:
 
-1. publish the path-free ordinal-zero terminal and require green exact-main CI;
-2. execute untouched successor train ordinal 1 exactly once through the durable selected-arm journal;
-3. accept one independently observed selected-arm example or an honest consumed no-target setup or
-   interruption terminal; never retry or substitute a root;
-4. stop and reorient before ordinal 2 or any model fit;
-5. if the authentic corpus reaches eight, test the frozen feature-support and information gates
-   before an explicitly non-authoritative integration fit; otherwise continue one-shot rows only
-   after reorientation;
+1. publish the path-free ordinal-one terminal and require green exact-main CI;
+2. run one action-free train-only readiness audit over the complete eight-example denominator;
+3. require aggregate lineage, portable-kind, supported-feature, target-variation, and censoring
+   sufficiency without fitting, prediction, gameplay, teacher access, or development reads;
+4. if the audit fails, publish its reasons and reorient before untouched ordinal 2; never drop or
+   replace an awkward row;
+5. only if the audit passes, open one explicitly non-authoritative integration fit and retain zero
+   gameplay authority;
 6. scale toward 60, beat frozen controls on untouched Red lineages, freeze only the supported
    title-neutral representation, and then run the abstention-aware Crystal transfer falsifier.
 
-Ordinal 0 is consumed without retry. Do not add another wrapper, preflight, census, teacher route,
-full replay, development access, sealed Red run, or Crystal execution. **Causal train 7/60 ·
-powered fit 0 · authority 0 · transfer 0.** See the
-[ordinal-zero result](evidence/red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json).
+Ordinals 0 and 1 are consumed without retry. Do not add another wrapper, preflight, census,
+teacher route, full replay, development access, sealed Red run, or Crystal execution. **Causal
+train 8/60 · powered fit 0 · authority 0 · transfer 0.** See the
+[ordinal-one result](evidence/red-living-dex-clustered-successor-train-ordinal-1-result-v1-2026-08-30.json).
 
 ## Previous checkpoint: successor syllabus frozen; publish and preflight its exact consumer
 
