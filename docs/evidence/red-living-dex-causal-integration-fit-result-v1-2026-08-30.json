@@ -1,0 +1,92 @@
+{
+  "claim_boundary": {
+    "supported": "The complete eight-example authenticated Red causal train denominator produced one immutable, byte-reproducible, explicitly non-authoritative option-value model artifact. This proves the real causal learning path works end to end.",
+    "unsupported": [
+      "model_quality_or_generalization",
+      "powered_model_fit_executed",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 1,
+    "gameplay_model_predictions": 0,
+    "private_fit_claims": 1,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "fit": {
+    "artifact_manifest_sha256": "98440f421f4e0aeb597f90a8bfc3af3176c61d940b08e4c2b765a84cf2a15fac",
+    "artifact_record_sha256": "7a8f2010861f74c6f64f9b54aa6b61731d457265317f009f1d4f8e96fe459795",
+    "candidate_feature_rows": 24,
+    "censored_examples": 0,
+    "coefficient_count": 225,
+    "coefficient_finiteness_passed": true,
+    "complete_denominator_included": true,
+    "model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "normal_equation_condition_number": 674.1219622149168,
+    "reload_bytes_equal": true,
+    "reload_model_equal": true,
+    "settled_train_examples": 8,
+    "supported_candidate_feature_rows": 24,
+    "variable_target_heads": 7
+  },
+  "launch_history": {
+    "fit_invocations": 1,
+    "pre_fit_rejected_invocations": 1,
+    "rejected_effects": {
+      "fit_executions": 0,
+      "private_fit_claims": 0
+    },
+    "rejected_machine_result_path": "docs/evidence/red-living-dex-causal-integration-fit-machine-failure-v1-2026-08-30.json",
+    "rejected_machine_result_sha256": "d2e996af46dc426a6e4bc120c83559a878f3d97b1849d4dcde998b0facf63415",
+    "rejected_stage": "private_corpus_or_store",
+    "resolution": "An initialized but unrelated external private store was selected first. The command found no causal anchor and failed before a claim or learner invocation; the authenticated causal store was then selected without changing source."
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 8,
+    "authentic_causal_train_examples_before": 8,
+    "authority_promotions": 0,
+    "integration_model_fits": 1,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Close R0 and open one prospective R1 throughput pilot over untouched successor train ordinals 2 through 7, each at most once and without development access. Retain every setup failure, interruption, and settled selected-arm result; measure attempted and settled yield, option-kind and feature support, outcome variation, controller and frame cost, and wall-clock throughput. Stop after the six-card batch and reorient before any further collection or powered-design freeze.",
+  "privacy": {
+    "coefficient_values_published": false,
+    "dataset_identity_published": false,
+    "lineage_or_decision_identity_published": false,
+    "loss_values_published": false,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "fit_implementation_pull_request": 114,
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "schema": "pokemon.red.living-dex-causal-integration-fit-public-result.v1",
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33320429925,
+    "exact_main_commit": "f50979827a0faa62adf66c4ca828fd3cdb42a1c6",
+    "machine_result_path": "docs/evidence/red-living-dex-causal-integration-fit-machine-result-v1-2026-08-30.json",
+    "machine_result_sha256": "16d5f26c55634878eb054924c132dca5de9d0f842d5f404a130aa823c0df91f4",
+    "readiness_result_sha256": "d0fcaeb7bde027d4320d2c6b4a119b98a0bf84f2d4a4d56f2104bd24f76f5bff",
+    "source_bundle_sha256": "f6502562b0711e81efc67bafdd26e523b6782627ef376afb18d543011d6bdea8"
+  },
+  "status": "non_authoritative_integration_fit_complete_r0_closed_r1_bounded_batch_next"
+}

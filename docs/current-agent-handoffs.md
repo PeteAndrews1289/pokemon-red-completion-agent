@@ -35,7 +35,31 @@ and unsupported-abstention endpoints. Details are in the
 [review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
 assignments begin at the next named milestone; no standing audit blocks ordinary R0 engineering.
 
-## Current override: Codex owns one non-authoritative eight-row integration fit
+## Current override: R0 is complete; Codex owns the six-card R1 throughput pilot
+
+PR 114 merged the claim-first fitter as exact main `f5097982`; push CI `33320429925/1` passed.
+One authentic learner invocation consumed the complete eight-row train denominator, published one
+immutable non-authoritative model, and reopened identical bytes and typed state. All 225
+coefficients and the conditioning diagnostic were finite. Gameplay predictions, development
+reads, teachers, actions, frames, authority promotions, and Crystal accesses were zero. The board
+is **causal train 8/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+An earlier launch selected an unrelated initialized private store and failed before a claim or fit;
+the path-free record preserves it. The successful launch was the first and only learner invocation.
+R0 may not refit. Codex now owns publication of the
+[fit result](evidence/red-living-dex-causal-integration-fit-result-v1-2026-08-30.json), exact-main
+CI, and one prospectively fixed R1 batch over untouched successor train ordinals 2–7. Each may be
+attempted once. All terminals count. Development, model-controlled gameplay, route patching inside
+the batch, teacher targets, authority promotion, sealed Red, Crystal, and full replay stay closed.
+
+After six attempts, Codex publishes aggregate attempted/settled yield, support, variation,
+controller/frame cost, and wall-clock throughput, then adjudicates whether R1 should use the
+remaining frozen cards or improve a measured scenario-generator bottleneck before the powered
+cluster design freezes. Claude's next useful role is a read-only power, denominator, and leakage
+challenge of that aggregate. Antigravity's is a read-only hierarchy, portable-contract, and
+Crystal-boundary challenge. Neither review blocks the already-qualified batch or sees private rows.
+
+## Previous override: Codex owns one non-authoritative eight-row integration fit
 
 The fit boundary is now locally qualified but has not touched the real private corpus. The command
 pins the exact passed readiness result and unchanged gate implementation, requires clean published

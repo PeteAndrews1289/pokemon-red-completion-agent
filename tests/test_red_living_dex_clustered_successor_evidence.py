@@ -61,6 +61,21 @@ INTEGRATION_READINESS_RESULT_PATH = (
     / "docs/evidence"
     / "red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json"
 )
+INTEGRATION_FIT_FAILURE_MACHINE_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-causal-integration-fit-machine-failure-v1-2026-08-30.json"
+)
+INTEGRATION_FIT_MACHINE_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-causal-integration-fit-machine-result-v1-2026-08-30.json"
+)
+INTEGRATION_FIT_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-causal-integration-fit-result-v1-2026-08-30.json"
+)
 MACHINE_SHA256 = "871c1d5ca12592b4ede506b877b04b8175c61bddb9338fcf5a683d8a0512fbf2"
 RESULT_SHA256 = "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4"
 QUALIFICATION_SHA256 = (
@@ -86,6 +101,15 @@ INTEGRATION_READINESS_MACHINE_SHA256 = (
 )
 INTEGRATION_READINESS_RESULT_SHA256 = (
     "d0fcaeb7bde027d4320d2c6b4a119b98a0bf84f2d4a4d56f2104bd24f76f5bff"
+)
+INTEGRATION_FIT_FAILURE_MACHINE_SHA256 = (
+    "d2e996af46dc426a6e4bc120c83559a878f3d97b1849d4dcde998b0facf63415"
+)
+INTEGRATION_FIT_MACHINE_SHA256 = (
+    "16d5f26c55634878eb054924c132dca5de9d0f842d5f404a130aa823c0df91f4"
+)
+INTEGRATION_FIT_RESULT_SHA256 = (
+    "7b5eef3c79f8475721534d8214670546dadf97e86b2ff9f4e682332e312abfe4"
 )
 
 
@@ -602,3 +626,78 @@ def test_integration_readiness_pass_grants_no_model_or_gameplay_authority() -> N
     assert "integration_model_fit_executed" in result["claim_boundary"]["unsupported"]
     assert "/Users/" not in payload
     assert "/Volumes/" not in payload
+
+
+def test_integration_fit_result_matches_the_one_authentic_model_artifact() -> None:
+    machine_payload = INTEGRATION_FIT_MACHINE_PATH.read_bytes()
+    result_payload = INTEGRATION_FIT_RESULT_PATH.read_bytes()
+    machine = json.loads(machine_payload)
+    result = json.loads(result_payload)
+
+    assert hashlib.sha256(machine_payload).hexdigest() == INTEGRATION_FIT_MACHINE_SHA256
+    assert hashlib.sha256(result_payload).hexdigest() == INTEGRATION_FIT_RESULT_SHA256
+    assert result["source"]["machine_result_sha256"] == INTEGRATION_FIT_MACHINE_SHA256
+    assert result["source"]["exact_main_commit"] == (
+        "f50979827a0faa62adf66c4ca828fd3cdb42a1c6"
+    )
+    assert result["source"]["exact_ci_run"] == 33320429925
+    assert machine["fit_executions"] == 1
+    assert machine["private_fit_claims"] == 1
+    assert machine["complete_denominator_included"] is True
+    assert machine["total_examples"] == 8
+    assert machine["settled_examples"] == 8
+    assert machine["censored_examples"] == 0
+    assert machine["candidate_feature_rows"] == 24
+    assert machine["supported_candidate_feature_rows"] == 24
+    assert machine["variable_target_heads"] == 7
+    assert machine["coefficient_finiteness"] == {
+        "all_finite": True,
+        "coefficients": 225,
+        "finite_coefficients": 225,
+    }
+    assert machine["conditioning"]["number"] == 674.1219622149168
+    assert machine["artifact"]["reload_bytes_equal"] is True
+    assert machine["artifact"]["reload_model_equal"] is True
+
+
+def test_integration_fit_result_preserves_rejected_launch_and_authority_boundary() -> None:
+    failure_payload = INTEGRATION_FIT_FAILURE_MACHINE_PATH.read_bytes()
+    result_payload = INTEGRATION_FIT_RESULT_PATH.read_text(encoding="ascii")
+    failure = json.loads(failure_payload)
+    result = json.loads(result_payload)
+
+    assert (
+        hashlib.sha256(failure_payload).hexdigest()
+        == INTEGRATION_FIT_FAILURE_MACHINE_SHA256
+    )
+    assert failure["stage"] == "private_corpus_or_store"
+    assert failure["fit_executions"] == 0
+    assert failure["private_fit_claims"] == 0
+    assert result["launch_history"]["pre_fit_rejected_invocations"] == 1
+    assert result["launch_history"]["fit_invocations"] == 1
+    assert result["learning_state"] == {
+        "authentic_causal_train_examples_after": 8,
+        "authentic_causal_train_examples_before": 8,
+        "authority_promotions": 0,
+        "integration_model_fits": 1,
+        "powered_model_fits": 0,
+        "transfer_results": 0,
+    }
+    for field in (
+        "authority_promotions",
+        "controller_actions",
+        "counterfactual_targets",
+        "crystal_accesses",
+        "development_examples_read",
+        "emulator_frames",
+        "gameplay_model_predictions",
+        "root_claims",
+        "teacher_queries",
+        "unselected_action_targets",
+    ):
+        assert result["effects"][field] == 0
+    assert "model_quality_or_generalization" in result["claim_boundary"]["unsupported"]
+    assert result["privacy"]["coefficient_values_published"] is False
+    assert result["privacy"]["loss_values_published"] is False
+    assert "/Users/" not in result_payload
+    assert "/Volumes/" not in result_payload

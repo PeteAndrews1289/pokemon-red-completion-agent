@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: the first authentic Red causal model is real
+
+PR 114 published the claim-first integration fitter as exact main `f5097982`, and GitHub rebuilt
+that commit successfully under CI `33320429925/1`. The production learner then consumed the
+complete eight-row authentic Red train denominator exactly once. It retained all 24 supported
+candidate feature rows and seven varying target heads, produced 225 finite coefficients with a
+finite regularized condition number, published one immutable private artifact, and reopened the
+same canonical bytes and typed model.
+
+The protected counters matter more than the fit's in-sample behavior: gameplay predictions,
+development reads, teacher queries, controller actions, emulator frames, authority promotions,
+sealed evaluation, and Crystal access were all zero. No coefficient, target, loss, lineage,
+decision, selected arm, dataset identity, or private path entered the public receipt. The only
+claim R0 earns is that the authentic causal learning path works end to end.
+
+One initial launch selected a valid but unrelated initialized store. It failed at corpus
+authentication before creating a claim or calling the learner. That zero-effect failure is
+published beside the success; selecting the authenticated causal store then produced the first and
+only learner invocation. The distinction prevents an operational correction from being hidden or
+misnamed as a model retry.
+
+The scoreboard is **8/60 causal examples, integration fit 1/1, powered fit 0, authority 0,
+transfer 0**. R1 now begins with a prospective six-card throughput pilot over untouched successor
+ordinals 2–7. Each card runs at most once; every setup failure, interruption, and settled outcome
+stays in the denominator. The batch will measure examples per wall-clock hour, support, outcome
+variation, and controller/frame cost before the project freezes a powered cluster-aware Red
+experiment. This is the shortest honest route from “a model exists” to “a model has evidence that
+it can choose,” and ultimately to a frozen Crystal transfer test and cross-game living Pokedex.
+
 ## August 30: build the first fitter so it can only tell the truth
 
 The first real training command is now locally qualified. It takes the full eight-row authentic

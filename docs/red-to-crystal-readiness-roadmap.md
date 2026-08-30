@@ -32,17 +32,19 @@ answer source for a supposedly learned decision.
 
 ## Honest starting point
 
-Published main `40a0f440185dacadb5f8e38de61186c5602d4103` is green under GitHub CI run
-`33300205577/1`. The one-shot readiness audit authenticated eight settled Red causal train examples
+Published main `f50979827a0faa62adf66c4ca828fd3cdb42a1c6` is green under GitHub CI run
+`33320429925/1`. The one-shot readiness audit authenticated eight settled Red causal train examples
 from eight lineages and decisions, six selected portable kinds, eight selected feature rows,
 24/24 supported candidates, seven varying outcome heads, and no censoring or development access.
+The subsequent R0 learner invocation consumed that complete denominator and byte-reopened one
+immutable non-authoritative model with finite conditioning and 225/225 finite coefficients.
 
 The board is therefore:
 
 | Evidence level | Current state |
 | --- | --- |
 | Authentic causal Red train examples | 8/60 minimum |
-| Non-authoritative integration fit | 0/1 |
+| Non-authoritative integration fit | 1/1 |
 | Powered Red candidate | 0 |
 | Untouched Red development pass | 0 |
 | Model-controlled gameplay authority | 0 |
@@ -73,7 +75,7 @@ A lower rung may reveal a defect in a higher-level design, but it may not be ren
 success. In particular, low train loss does not mean the model can play, a successful skill does not
 mean the hierarchy can compose skills, and a Crystal adapter test does not mean transfer occurred.
 
-## Phase R0 — prove the fit boundary
+## Phase R0 — prove the fit boundary (complete)
 
 Purpose: prove that the complete authenticated causal corpus can train and reproduce one model
 artifact without opening a gameplay or evaluation surface.
@@ -96,11 +98,12 @@ Allowed claim: **the causal learning path works end to end**.
 
 Forbidden shortcut: treating in-sample error or an interesting coefficient as model quality.
 
-Implementation checkpoint, 2026-08-30: the claim-first train-only fitter passes 5,822 full-suite
-and 161 focused tests, static checks, four source-bound registry gates, and the exact Mac runtime
-check. Qualification opened no private corpus and performed zero fits. Publish the exact source,
-require green push CI on exact main, execute once, and do not start R1 until the path-free fit
-receipt is recorded and this roadmap is reoriented.
+Completion checkpoint, 2026-08-30: PR 114 published the claim-first train-only fitter, exact main
+`f5097982` passed push CI `33320429925/1`, and one learner invocation fit all eight authentic rows.
+The private artifact reopened as identical bytes and typed model; every protected gameplay,
+development, teacher, authority, sealed, and Crystal effect stayed zero. One earlier launch at an
+unrelated initialized store failed before a claim or fit and is retained in the path-free receipt.
+R0 may not refit. Its allowed claim is limited to **the causal learning path works end to end**.
 
 ## Phase R1 — freeze the clustered design, then build the powered Red curriculum
 
@@ -115,8 +118,8 @@ checks remain useful; its independence and power schedule is not silently active
 
 Work:
 
-1. After the R0 reorientation, execute a bounded batch of untouched frozen successor train
-   ordinals. Ordinals zero and one are consumed; no consumed identity may retry.
+1. Execute the prospectively fixed six-card batch of untouched frozen successor train ordinals
+   2–7. Ordinals zero and one are consumed; no consumed identity may retry.
 2. Measure setup yield, settled yield, option-kind coverage, selected-feature rank, outcome
    variation, censoring, controller cost, and wall-clock throughput before forecasting the rest.
 3. Use the remaining frozen batch only as far as its prospective schedule permits. Do not select

@@ -1,0 +1,19 @@
+{
+  "authority_promotions": 0,
+  "controller_actions": 0,
+  "counterfactual_targets": 0,
+  "crystal_accesses": 0,
+  "development_examples_read": 0,
+  "emulator_frames": 0,
+  "fit_executions": 0,
+  "gameplay_model_predictions": 0,
+  "private_causal_identity_fields": 0,
+  "private_fit_claims": 0,
+  "private_path_fields": 0,
+  "root_claims": 0,
+  "schema": "pokemon.red.living-dex-causal-integration-fit-failure.v1",
+  "stage": "private_corpus_or_store",
+  "status": "failed_closed",
+  "teacher_queries": 0,
+  "unselected_action_targets": 0
+}
