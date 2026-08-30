@@ -856,6 +856,108 @@ def test_sealed_record_metadata_inspection_never_opens_payload(
     assert str(root) not in json.dumps(metadata.public_dict())
 
 
+def test_sealed_record_inventory_is_stable_bounded_and_manifest_only(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    first_id = "family-" + "a" * 64
+    second_id = "family-" + "b" * 64
+    for record_id in (second_id, first_id):
+        store.publish_sealed_record(
+            record_id,
+            kind="collection_seal",
+            record={"schema": "inventory-test-v1", "record_id": record_id},
+        )
+    store.publish_sealed_record(
+        "other-" + "c" * 64,
+        kind="collection_seal",
+        record={"schema": "inventory-test-v1", "record_id": "other"},
+    )
+    read_entry = private_artifacts_module._read_private_entry
+
+    def reject_payload_open(
+        directory_descriptor: int,
+        filename: str,
+        *,
+        subject: str,
+        maximum_bytes: int,
+        expected_bytes: int | None = None,
+    ) -> bytes:
+        if filename == "record.json":
+            raise AssertionError("inventory opened a sealed payload")
+        return read_entry(
+            directory_descriptor,
+            filename,
+            subject=subject,
+            maximum_bytes=maximum_bytes,
+            expected_bytes=expected_bytes,
+        )
+
+    monkeypatch.setattr(private_artifacts_module, "_read_private_entry", reject_payload_open)
+
+    inventory = store.inventory_sealed_record_metadata(
+        record_id_prefix="family-",
+        expected_kind="collection_seal",
+        maximum_records=2,
+    )
+
+    assert tuple(row.record_id for row in inventory) == (first_id, second_id)
+    assert all(row.kind == "collection_seal" for row in inventory)
+    assert str(root) not in json.dumps([row.public_dict() for row in inventory])
+    with pytest.raises(PrivateArtifactError, match="exceeds"):
+        store.inventory_sealed_record_metadata(
+            record_id_prefix="family-",
+            expected_kind="collection_seal",
+            maximum_records=1,
+        )
+
+
+def test_sealed_record_inventory_rejects_malformed_family_and_census_race(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    record_id = "family-" + "d" * 64
+    store.publish_sealed_record(
+        record_id,
+        kind="collection_seal",
+        record={"schema": "inventory-race-test-v1"},
+    )
+    malformed = root / "family-not-a-digest"
+    malformed.mkdir(mode=0o700)
+    with pytest.raises(PrivateArtifactError, match="family is malformed"):
+        store.inventory_sealed_record_metadata(
+            record_id_prefix="family-",
+            expected_kind="collection_seal",
+            maximum_records=2,
+        )
+    malformed.rmdir()
+
+    inventory = private_artifacts_module._inventory_digest_record_ids
+    calls = 0
+
+    def changed(root_path: Path, prefix: str) -> tuple[str, ...]:
+        nonlocal calls
+        calls += 1
+        original = inventory(root_path, prefix)
+        if calls == 2:
+            return (*original, "family-" + "e" * 64)
+        return original
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_inventory_digest_record_ids",
+        changed,
+    )
+    with pytest.raises(PrivateArtifactError, match="changed during inspection"):
+        store.inventory_sealed_record_metadata(
+            record_id_prefix="family-",
+            expected_kind="collection_seal",
+            maximum_records=2,
+        )
+
+
 @pytest.mark.parametrize(
     "mutation",
     (

@@ -422,6 +422,46 @@ class PrivateArtifactRoot:
             expected_kind=expected_kind,
         )
 
+    def inventory_sealed_record_metadata(
+        self,
+        *,
+        record_id_prefix: str,
+        expected_kind: str,
+        maximum_records: int,
+    ) -> tuple[SealedRecordManifestMetadata, ...]:
+        """Return a stable, path-free manifest census for one strict record family.
+
+        The suffix after ``record_id_prefix`` must be exactly one SHA-256 digest.
+        A malformed matching entry, kind mismatch, census race, or caller bound
+        violation fails closed instead of being skipped.  Payloads are never
+        opened by this method; callers must use :meth:`find_sealed_record` at a
+        separately authorized content-reading boundary.
+        """
+
+        _validate_record_id_digest_prefix(record_id_prefix)
+        _validate_artifact_kind(expected_kind)
+        if type(maximum_records) is not int or maximum_records <= 0:  # noqa: E721
+            raise PrivateArtifactError(
+                "sealed record inventory bound must be a positive integer"
+            )
+        self._revalidate()
+        before = _inventory_digest_record_ids(self._root, record_id_prefix)
+        if len(before) > maximum_records:
+            raise PrivateArtifactError("sealed record inventory exceeds its bound")
+        records = tuple(
+            _inspect_private_sealed_record_metadata(
+                self._root,
+                record_id,
+                expected_kind=expected_kind,
+            )
+            for record_id in before
+        )
+        self._revalidate()
+        after = _inventory_digest_record_ids(self._root, record_id_prefix)
+        if after != before:
+            raise PrivateArtifactError("sealed record inventory changed during inspection")
+        return records
+
     def inspect_episode_state(self, episode_id: str) -> EpisodeArtifactState:
         """Inspect a deterministic episode namespace without returning its location."""
 
@@ -2530,6 +2570,36 @@ def _resolve_directory(path: Path, *, subject: str) -> Path:
         return path.resolve(strict=True)
     except OSError as error:
         raise PrivateArtifactError(f"{subject} cannot be resolved") from error
+
+
+def _validate_record_id_digest_prefix(record_id_prefix: str) -> None:
+    if (
+        not isinstance(record_id_prefix, str)
+        or not record_id_prefix
+        or not _SAFE_NAME.fullmatch(f"{record_id_prefix}{'0' * 64}")
+    ):
+        raise PrivateArtifactError(
+            "sealed record inventory prefix must form a safe digest identifier"
+        )
+
+
+def _inventory_digest_record_ids(root: Path, record_id_prefix: str) -> tuple[str, ...]:
+    try:
+        entries = os.listdir(root)
+    except OSError:
+        raise PrivateArtifactError("unable to inventory sealed private records") from None
+    if any(not isinstance(entry, str) for entry in entries):
+        raise PrivateArtifactError("sealed record inventory contains an invalid entry name")
+    matches: list[str] = []
+    for entry in entries:
+        if not entry.startswith(record_id_prefix):
+            continue
+        suffix = entry.removeprefix(record_id_prefix)
+        if _SHA256.fullmatch(suffix) is None:
+            raise PrivateArtifactError("sealed record inventory family is malformed")
+        _validate_artifact_id(entry)
+        matches.append(entry)
+    return tuple(sorted(matches))
 
 
 def _validate_episode_id(episode_id: str) -> None:

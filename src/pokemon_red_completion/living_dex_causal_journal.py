@@ -675,6 +675,94 @@ class _StoredExample:
     record_sha256: str
 
 
+@dataclass(frozen=True, slots=True)
+class LivingDexAuthenticatedCausalExample:
+    """One fully joined private causal row for aggregate train-only auditing.
+
+    The lineage and causal identity deliberately have no public serializer.
+    Consumers may aggregate them in memory but must never publish either value.
+    """
+
+    identity: LivingDexCausalIdentity
+    behavior: LivingDexCausalBehaviorDecision
+    example: LivingDexObservedArmExample
+    terminal: LivingDexCausalTerminal
+    example_record_sha256: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.identity, LivingDexCausalIdentity):
+            raise TypeError("authenticated causal row needs its identity")
+        if not isinstance(self.behavior, LivingDexCausalBehaviorDecision):
+            raise TypeError("authenticated causal row needs its behavior decision")
+        if not isinstance(self.example, LivingDexObservedArmExample):
+            raise TypeError("authenticated causal row needs its learner example")
+        if not isinstance(self.terminal, LivingDexCausalTerminal):
+            raise TypeError("authenticated causal row needs its terminal")
+        _require_sha256(self.example_record_sha256, subject="sealed example record")
+        if (
+            self.identity.identity_sha256
+            != self.behavior.commitment.causal_identity_sha256
+            or self.behavior.commitment.partition != self.identity.partition
+            or self.behavior.commitment.menu_sha256 != self.identity.menu_sha256
+            or self.example.partition != self.identity.partition
+            or self.example.menu.policy_sha256 != self.identity.menu_sha256
+            or self.example.selected_candidate_index
+            != self.behavior.selected_candidate_index
+            or self.example.behavior_probabilities != self.behavior.probabilities
+            or self.terminal.causal_identity_sha256 != self.identity.identity_sha256
+            or self.terminal.status is not LivingDexCausalTerminalStatus.COMPLETE
+            or self.terminal.example_sha256 != self.example_record_sha256
+        ):
+            raise LivingDexCausalJournalError(
+                "authenticated causal row identity join differs"
+            )
+
+
+def load_living_dex_authenticated_causal_examples(
+    store: PrivateArtifactRoot,
+    *,
+    maximum_examples: int = 100,
+) -> tuple[LivingDexAuthenticatedCausalExample, ...]:
+    """Read the complete immutable causal-example family without row selection.
+
+    The causal collection lock prevents a writer from changing the denominator
+    between manifest inventory and payload authentication.  Every matching
+    ``lc-example-<sha256>`` record is retained and joined to its claim,
+    commitment, behavior selection, release marker, and no-retry terminal.
+    """
+
+    if not isinstance(store, PrivateArtifactRoot):
+        raise TypeError("causal corpus loading needs a private artifact root")
+    if type(maximum_examples) is not int or maximum_examples <= 0:  # noqa: E721
+        raise LivingDexCausalJournalError(
+            "causal corpus maximum must be a positive integer"
+        )
+    result: tuple[LivingDexAuthenticatedCausalExample, ...] | None = None
+    try:
+        with store.collection_session(LIVING_DEX_CAUSAL_COLLECTION_ID):
+            inventory = store.inventory_sealed_record_metadata(
+                record_id_prefix="lc-example-",
+                expected_kind="living_dex_causal_example",
+                maximum_records=maximum_examples,
+            )
+            store_anchor_sha256 = _read_store_anchor(store)
+            result = tuple(
+                _load_authenticated_causal_example(
+                    store,
+                    record_id=metadata.record_id,
+                    expected_payload_sha256=metadata.declared_record_sha256,
+                    expected_manifest_sha256=metadata.manifest_sha256,
+                    store_anchor_sha256=store_anchor_sha256,
+                )
+                for metadata in inventory
+            )
+    except PrivateArtifactError as error:
+        raise LivingDexCausalJournalError(str(error)) from None
+    if result is None:
+        raise AssertionError("causal collection session suppressed an exception")
+    return result
+
+
 def materialize_living_dex_causal_example(
     scenario: LivingDexCausalScenario,
     *,
@@ -882,7 +970,20 @@ def _ensure_store_anchor(store: PrivateArtifactRoot) -> str:
             kind="living_dex_causal_store_anchor",
             record=record,
         )
-    document = sealed.read()
+    return _restore_store_anchor_sha256(sealed.read())
+
+
+def _read_store_anchor(store: PrivateArtifactRoot) -> str:
+    sealed = store.find_sealed_record(
+        LIVING_DEX_CAUSAL_STORE_ANCHOR_RECORD_ID,
+        expected_kind="living_dex_causal_store_anchor",
+    )
+    if sealed is None:
+        raise LivingDexCausalJournalError("causal store anchor is absent")
+    return _restore_store_anchor_sha256(sealed.read())
+
+
+def _restore_store_anchor_sha256(document: Mapping[str, object]) -> str:
     _exact_keys(
         document,
         {"anchor_secret_hex", "collection_id", "schema"},
@@ -1749,6 +1850,358 @@ def _find_terminal(
     return terminal
 
 
+def _load_authenticated_causal_example(
+    store: PrivateArtifactRoot,
+    *,
+    record_id: str,
+    expected_payload_sha256: str,
+    expected_manifest_sha256: str,
+    store_anchor_sha256: str,
+) -> LivingDexAuthenticatedCausalExample:
+    prefix = "lc-example-"
+    if not isinstance(record_id, str) or not record_id.startswith(prefix):
+        raise LivingDexCausalJournalError("causal example record identity differs")
+    identity_sha256 = _require_sha256(
+        record_id.removeprefix(prefix),
+        subject="example record identity",
+    )
+    sealed = store.find_sealed_record(
+        record_id,
+        expected_kind="living_dex_causal_example",
+    )
+    if sealed is None:
+        raise LivingDexCausalJournalError("causal example record is absent")
+    if (
+        sealed.summary.record_sha256 != expected_payload_sha256
+        or sealed.summary.manifest_sha256 != expected_manifest_sha256
+    ):
+        raise LivingDexCausalJournalError("causal example inventory changed")
+    example_record = sealed.read()
+
+    claim_record = _require_stage_record(
+        store,
+        _record_id("claim", identity_sha256),
+        kind="living_dex_causal_claim",
+    )
+    identity, pair = _restore_local_claim(
+        claim_record,
+        identity_sha256=identity_sha256,
+        store_anchor_sha256=store_anchor_sha256,
+    )
+    commitment = _restore_behavior_commitment(
+        _require_stage_record(
+            store,
+            _record_id("commit", identity_sha256),
+            kind="living_dex_causal_commitment",
+        )
+    )
+    behavior = _restore_behavior_decision(
+        _require_stage_record(
+            store,
+            _record_id("select", identity_sha256),
+            kind="living_dex_causal_selection",
+        )
+    )
+    if (
+        behavior.commitment != commitment
+        or commitment.causal_identity_sha256 != identity_sha256
+        or commitment.partition != identity.partition
+        or commitment.menu_sha256 != identity.menu_sha256
+    ):
+        raise LivingDexCausalJournalError("causal behavior identity join differs")
+
+    release = _require_stage_record(
+        store,
+        _record_id("release", identity_sha256),
+        kind="living_dex_causal_controller_release",
+    )
+    _validate_authenticated_release(
+        store,
+        release,
+        identity_sha256=identity_sha256,
+        behavior=behavior,
+    )
+    example = _restore_authenticated_example_record(
+        example_record,
+        identity=identity,
+        pair=pair,
+        behavior=behavior,
+        release=release,
+    )
+    example_record_sha256 = canonical_sha256(example_record)
+    terminal = _restore_terminal(
+        _require_stage_record(
+            store,
+            _record_id("terminal", identity_sha256),
+            kind="living_dex_causal_terminal",
+        )
+    )
+    if (
+        terminal.causal_identity_sha256 != identity_sha256
+        or terminal.pair_claim_sha256 != pair.claim_sha256
+        or terminal.status is not LivingDexCausalTerminalStatus.COMPLETE
+        or terminal.example_sha256 != example_record_sha256
+    ):
+        raise LivingDexCausalJournalError("causal terminal example join differs")
+    return LivingDexAuthenticatedCausalExample(
+        identity,
+        behavior,
+        example,
+        terminal,
+        example_record_sha256,
+    )
+
+
+def _require_stage_record(
+    store: PrivateArtifactRoot,
+    record_id: str,
+    *,
+    kind: str,
+) -> dict[str, object]:
+    record = _find_stage_record(store, record_id, kind=kind)
+    if record is None:
+        raise LivingDexCausalJournalError("required causal record is absent")
+    return record
+
+
+def _restore_local_claim(
+    document: Mapping[str, object],
+    *,
+    identity_sha256: str,
+    store_anchor_sha256: str,
+) -> tuple[LivingDexCausalIdentity, ClaimFirstRootPair]:
+    _exact_keys(
+        document,
+        {
+            "causal_identity",
+            "causal_identity_sha256",
+            "pair_claim",
+            "pair_claim_sha256",
+            "schema",
+            "store_anchor_sha256",
+        },
+        subject="causal local claim",
+    )
+    identity = _restore_causal_identity(
+        _mapping(document["causal_identity"], subject="causal identity")
+    )
+    pair = _restore_claim_first_root_pair(
+        _mapping(document["pair_claim"], subject="causal pair claim")
+    )
+    try:
+        expected_pair = identity.pair_claim_for_store(store_anchor_sha256)
+    except ClaimFirstAdmissionError as error:
+        raise LivingDexCausalJournalError(str(error)) from None
+    if (
+        document["schema"] != LIVING_DEX_CAUSAL_CLAIM_SCHEMA
+        or document["causal_identity_sha256"] != identity_sha256
+        or identity.identity_sha256 != identity_sha256
+        or document["pair_claim_sha256"] != pair.claim_sha256
+        or document["store_anchor_sha256"] != store_anchor_sha256
+        or pair != expected_pair
+    ):
+        raise LivingDexCausalJournalError("causal local claim differs")
+    return identity, pair
+
+
+def _validate_authenticated_release(
+    store: PrivateArtifactRoot,
+    document: Mapping[str, object],
+    *,
+    identity_sha256: str,
+    behavior: LivingDexCausalBehaviorDecision,
+) -> None:
+    _exact_keys(
+        document,
+        {
+            "attempt",
+            "causal_identity_sha256",
+            "effect_checkpoint",
+            "execution_start_sha256",
+            "schema",
+            "selected_binding_sha256",
+            "selected_candidate_index",
+        },
+        subject="authenticated controller release",
+    )
+    attempt = _integer(document["attempt"], subject="controller release attempt")
+    if not 1 <= attempt <= LIVING_DEX_CAUSAL_MAXIMUM_CONSTRUCTION_ATTEMPTS:
+        raise LivingDexCausalJournalError("controller release attempt differs")
+    _restore_checkpoint(document["effect_checkpoint"])
+    selected_binding = _require_sha256(
+        document["selected_binding_sha256"],
+        subject="released binding",
+    )
+    released_selected = _integer(
+        document["selected_candidate_index"],
+        subject="released selected candidate",
+    )
+    _require_sha256(
+        document["execution_start_sha256"],
+        subject="released execution start",
+    )
+    execution = _require_stage_record(
+        store,
+        _attempt_record_id("execute", attempt, identity_sha256),
+        kind="living_dex_causal_execution_start",
+    )
+    _exact_keys(
+        execution,
+        {
+            "attempt",
+            "behavior_selection_sha256",
+            "causal_identity_sha256",
+            "construction_ready_sha256",
+            "effect_checkpoint",
+            "schema",
+            "selected_binding_sha256",
+            "selected_candidate_index",
+        },
+        subject="authenticated execution start",
+    )
+    _restore_checkpoint(execution["effect_checkpoint"])
+    execution_attempt = _integer(execution["attempt"], subject="execution attempt")
+    execution_selected = _integer(
+        execution["selected_candidate_index"],
+        subject="execution selected candidate",
+    )
+    _require_sha256(
+        execution["construction_ready_sha256"],
+        subject="construction ready",
+    )
+    if (
+        document["schema"] != LIVING_DEX_CAUSAL_CONTROLLER_RELEASE_SCHEMA
+        or document["causal_identity_sha256"] != identity_sha256
+        or document["execution_start_sha256"] != canonical_sha256(execution)
+        or released_selected != behavior.selected_candidate_index
+        or execution["schema"] != LIVING_DEX_CAUSAL_EXECUTION_START_SCHEMA
+        or execution_attempt != attempt
+        or execution["behavior_selection_sha256"]
+        != canonical_sha256(behavior.private_dict())
+        or execution["causal_identity_sha256"] != identity_sha256
+        or execution_selected != behavior.selected_candidate_index
+        or execution["selected_binding_sha256"] != selected_binding
+        or execution["effect_checkpoint"] != document["effect_checkpoint"]
+    ):
+        raise LivingDexCausalJournalError("authenticated controller release differs")
+
+
+def _restore_authenticated_example_record(
+    document: Mapping[str, object],
+    *,
+    identity: LivingDexCausalIdentity,
+    pair: ClaimFirstRootPair,
+    behavior: LivingDexCausalBehaviorDecision,
+    release: Mapping[str, object],
+) -> LivingDexObservedArmExample:
+    _exact_keys(
+        document,
+        {
+            "action_trace",
+            "action_trace_sha256",
+            "after_execution_checkpoint",
+            "after_observation_checkpoint",
+            "behavior_selection",
+            "behavior_selection_sha256",
+            "causal_identity_sha256",
+            "controller_action_delta",
+            "controller_release_sha256",
+            "emulator_frame_delta",
+            "example",
+            "example_sha256",
+            "execution_exception_type",
+            "execution_status",
+            "origin_observation",
+            "origin_observation_sha256",
+            "outcome_provenance",
+            "outcome_provenance_sha256",
+            "pair_claim_sha256",
+            "schema",
+            "selected_binding_sha256",
+        },
+        subject="authenticated causal example",
+    )
+    trace = _mapping(document["action_trace"], subject="causal action trace")
+    origin = _mapping(
+        document["origin_observation"],
+        subject="causal origin observation",
+    )
+    provenance = _mapping(
+        document["outcome_provenance"],
+        subject="causal outcome provenance",
+    )
+    behavior_document = _mapping(
+        document["behavior_selection"],
+        subject="causal behavior selection",
+    )
+    restored_behavior = _restore_behavior_decision(behavior_document)
+    before = _restore_checkpoint(release["effect_checkpoint"])
+    after_execution = _restore_checkpoint(document["after_execution_checkpoint"])
+    after_observation = _restore_checkpoint(document["after_observation_checkpoint"])
+    action_delta, frame_delta = before.delta(after_execution)
+    recorded_action_delta = _integer(
+        document["controller_action_delta"],
+        subject="controller action delta",
+    )
+    recorded_frame_delta = _integer(
+        document["emulator_frame_delta"],
+        subject="emulator frame delta",
+    )
+    example_document = _mapping(document["example"], subject="causal learner example")
+    example = _restore_observed_arm_example(example_document)
+    selected = behavior.selected_candidate_index
+    expected_decision_sha256 = canonical_sha256(
+        {
+            "behavior_selection_sha256": canonical_sha256(behavior.private_dict()),
+            "causal_identity_sha256": identity.identity_sha256,
+            "controller_release_sha256": canonical_sha256(release),
+            "schema": "pokemon.core.living-dex-causal-decision.v1",
+            "selected_binding_sha256": release["selected_binding_sha256"],
+            "selected_candidate_index": selected,
+        }
+    )
+    exception_type = document["execution_exception_type"]
+    if exception_type is not None and (
+        not isinstance(exception_type, str) or not exception_type
+    ):
+        raise LivingDexCausalJournalError("causal execution exception type differs")
+    if (
+        document["schema"] != LIVING_DEX_CAUSAL_EXAMPLE_SCHEMA
+        or document["causal_identity_sha256"] != identity.identity_sha256
+        or document["pair_claim_sha256"] != pair.claim_sha256
+        or document["controller_release_sha256"] != canonical_sha256(release)
+        or restored_behavior != behavior
+        or document["behavior_selection_sha256"]
+        != canonical_sha256(behavior.private_dict())
+        or document["selected_binding_sha256"]
+        != release["selected_binding_sha256"]
+        or document["origin_observation_sha256"] != canonical_sha256(origin)
+        or document["origin_observation_sha256"]
+        != identity.origin_observation_sha256
+        or document["action_trace_sha256"] != canonical_sha256(trace)
+        or document["outcome_provenance_sha256"] != canonical_sha256(provenance)
+        or recorded_action_delta != action_delta
+        or recorded_frame_delta != frame_delta
+        or document["execution_status"] not in {"returned", "raised_exception"}
+        or (document["execution_status"] == "returned")
+        is (exception_type is not None)
+        or document["example_sha256"] != canonical_sha256(example.public_dict())
+        or example.public_dict() != dict(example_document)
+        or example.decision_sha256 != expected_decision_sha256
+        or example.partition != identity.partition
+        or example.menu.policy_sha256 != identity.menu_sha256
+        or example.selected_candidate_index != selected
+        or example.behavior_probabilities != behavior.probabilities
+    ):
+        raise LivingDexCausalJournalError("authenticated causal example differs")
+    if (
+        after_observation != after_execution
+        and example.outcome.status is not LivingDexOutcomeStatus.CENSORED
+    ):
+        raise LivingDexCausalJournalError("observer side effects became a learning target")
+    return example
+
+
 def _receipt_from_terminal(
     scenario: LivingDexCausalScenario,
     pair: ClaimFirstRootPair,
@@ -1911,6 +2364,122 @@ def _validate_execution_start(
         or record["selected_binding_sha256"] != scenario.binding_sha256s[selected]
     ):
         raise LivingDexCausalJournalError("stored execution start differs")
+
+
+def _restore_causal_identity(
+    document: Mapping[str, object],
+) -> LivingDexCausalIdentity:
+    _exact_keys(
+        document,
+        {
+            "binding_roster_sha256",
+            "effect_meter_binding_sha256",
+            "envelope_sha256",
+            "lineage_sha256",
+            "menu_sha256",
+            "observer_binding_sha256",
+            "origin_observation_sha256",
+            "partition",
+            "runner_sha256",
+            "schema",
+            "setup_attestation_sha256",
+            "setup_pair_claim_sha256",
+            "setup_terminal_sha256",
+            "source_commit",
+            "state_sha256",
+        },
+        subject="causal identity",
+    )
+    if document["schema"] != LIVING_DEX_CAUSAL_IDENTITY_SCHEMA:
+        raise LivingDexCausalJournalError("causal identity schema differs")
+    identity = LivingDexCausalIdentity(
+        source_commit=_string(document["source_commit"], subject="source commit"),
+        partition=_string(document["partition"], subject="causal partition"),
+        lineage_sha256=_string(document["lineage_sha256"], subject="lineage"),
+        setup_terminal_sha256=_string(
+            document["setup_terminal_sha256"],
+            subject="setup terminal",
+        ),
+        setup_pair_claim_sha256=_string(
+            document["setup_pair_claim_sha256"],
+            subject="setup pair claim",
+        ),
+        setup_attestation_sha256=_string(
+            document["setup_attestation_sha256"],
+            subject="setup attestation",
+        ),
+        state_sha256=_string(document["state_sha256"], subject="state"),
+        envelope_sha256=_string(document["envelope_sha256"], subject="envelope"),
+        menu_sha256=_string(document["menu_sha256"], subject="menu"),
+        binding_roster_sha256=_string(
+            document["binding_roster_sha256"],
+            subject="binding roster",
+        ),
+        origin_observation_sha256=_string(
+            document["origin_observation_sha256"],
+            subject="origin observation",
+        ),
+        observer_binding_sha256=_string(
+            document["observer_binding_sha256"],
+            subject="observer binding",
+        ),
+        effect_meter_binding_sha256=_string(
+            document["effect_meter_binding_sha256"],
+            subject="effect meter binding",
+        ),
+        runner_sha256=_string(document["runner_sha256"], subject="runner"),
+    )
+    if identity.private_dict() != dict(document):
+        raise LivingDexCausalJournalError("causal identity does not replay")
+    return identity
+
+
+def _restore_claim_first_root_pair(
+    document: Mapping[str, object],
+) -> ClaimFirstRootPair:
+    _exact_keys(
+        document,
+        {
+            "execution_identity_sha256",
+            "logical_root_sha256",
+            "physical_root_sha256",
+            "plan_sha256",
+            "runner_sha256",
+            "schema",
+            "slot_sha256",
+            "source_commit",
+            "stage",
+        },
+        subject="causal pair claim",
+    )
+    try:
+        pair = ClaimFirstRootPair(
+            logical_root_sha256=_string(
+                document["logical_root_sha256"],
+                subject="logical root",
+            ),
+            physical_root_sha256=_string(
+                document["physical_root_sha256"],
+                subject="physical root",
+            ),
+            stage=_string(document["stage"], subject="claim stage"),
+            execution_identity_sha256=_string(
+                document["execution_identity_sha256"],
+                subject="execution identity",
+            ),
+            plan_sha256=_string(document["plan_sha256"], subject="plan"),
+            slot_sha256=_string(document["slot_sha256"], subject="slot"),
+            runner_sha256=_string(document["runner_sha256"], subject="runner"),
+            source_commit=_string(
+                document["source_commit"],
+                subject="source commit",
+            ),
+        )
+    except ClaimFirstAdmissionError as error:
+        raise LivingDexCausalJournalError(str(error)) from None
+    if pair.private_dict() != dict(document):
+        raise LivingDexCausalJournalError("causal pair claim does not replay")
+    return pair
 
 
 def _restore_behavior_commitment(
@@ -2252,6 +2821,7 @@ def _require_sha256(value: object, *, subject: str) -> str:
 __all__ = [
     "LIVING_DEX_CAUSAL_COLLECTION_ID",
     "LIVING_DEX_CAUSAL_MAXIMUM_CONSTRUCTION_ATTEMPTS",
+    "LivingDexAuthenticatedCausalExample",
     "LivingDexCausalBehaviorCommitment",
     "LivingDexCausalBehaviorDecision",
     "LivingDexCausalDisposition",
@@ -2266,5 +2836,6 @@ __all__ = [
     "LivingDexCausalTerminal",
     "LivingDexCausalTerminalStatus",
     "LivingDexControllerGate",
+    "load_living_dex_authenticated_causal_examples",
     "materialize_living_dex_causal_example",
 ]
