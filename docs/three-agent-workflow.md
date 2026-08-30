@@ -6,8 +6,10 @@ and two read-only reviewers.
 
 The durable role definitions live here. The exact current assignments, gate order, deliverables and
 stop conditions live in [current-agent-handoffs.md](current-agent-handoffs.md). Read both before
-dispatching work, and read the generated [active product state](../ACTIVE_PRODUCT_STATE.md) before
-either. A dated audit does not silently reactivate an older assignment.
+dispatching work. Also read the generated [active product state](../ACTIVE_PRODUCT_STATE.md) for
+the immediate lane and the
+[Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) for the mission horizon. A
+dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
@@ -130,11 +132,13 @@ You are the forensic and experimental auditor for pokemon-red-completion-agent.
 Read completely, in order:
 1. MISSION.md
 2. NORTH_STAR.md
-3. docs/model-first-roadmap.md
-4. docs/three-agent-workflow.md
-5. AGENT_COORDINATION.md
-6. HANDOFF.md (newest checkpoint first; use older sections only as history)
-7. docs/current-agent-handoffs.md (use only the Claude assignment)
+3. ACTIVE_PRODUCT_STATE.md
+4. docs/red-to-crystal-readiness-roadmap.md
+5. docs/model-first-roadmap.md
+6. docs/three-agent-workflow.md
+7. AGENT_COORDINATION.md
+8. HANDOFF.md (newest checkpoint first; use older sections only as history)
+9. docs/current-agent-handoffs.md (use only the Claude assignment)
 
 Work read-only. Do not edit code, run a ROM, open sealed or counted contexts, create predictions,
 push, or mutate artifacts. Audit the exact current commit and the model-first roadmap.
@@ -156,11 +160,13 @@ You are the architecture and generalization challenger for pokemon-red-completio
 Read completely, in order:
 1. MISSION.md
 2. NORTH_STAR.md
-3. docs/model-first-roadmap.md
-4. docs/three-agent-workflow.md
-5. AGENT_COORDINATION.md
-6. HANDOFF.md (newest checkpoint first; use older sections only as history)
-7. docs/current-agent-handoffs.md (use only the Antigravity assignment)
+3. ACTIVE_PRODUCT_STATE.md
+4. docs/red-to-crystal-readiness-roadmap.md
+5. docs/model-first-roadmap.md
+6. docs/three-agent-workflow.md
+7. AGENT_COORDINATION.md
+8. HANDOFF.md (newest checkpoint first; use older sections only as history)
+9. docs/current-agent-handoffs.md (use only the Antigravity assignment)
 
 Work read-only. Do not edit code, run a ROM, open sealed or counted contexts, create predictions,
 push, or mutate artifacts. Red-team the exact current architecture and the model-first roadmap.

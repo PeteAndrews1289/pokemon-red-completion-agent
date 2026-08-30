@@ -3,6 +3,7 @@
 > **Working on this repository?** Read [MISSION.md](MISSION.md),
 > [NORTH_STAR.md](NORTH_STAR.md), the generated
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
+> [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
 > **Current product focus (August 30, 2026): the complete eight-example corpus passed readiness;

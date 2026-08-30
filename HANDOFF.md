@@ -8,9 +8,44 @@ what is wrong, what is unproven, and what this codebase has repeatedly fooled pe
 Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [NORTH_STAR.md](NORTH_STAR.md) (the mandatory anti-drift contract),
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) (the generated one-page active truth),
+[docs/red-to-crystal-readiness-roadmap.md](docs/red-to-crystal-readiness-roadmap.md) (the mission
+horizon and Crystal-ready definition),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-30: the mission horizon is frozen through Crystal entry
+
+The immediate gate remains one non-authoritative fit over all eight authentic Red examples. The
+longer sequence is now explicit in the
+[Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md): prove the fit
+boundary, freeze a cluster-aware powered Red experiment, beat frozen controls on untouched Red
+lineage clusters, promote only bounded teacher-free gameplay skills, compose story and living-Dex
+dependencies, freeze the title-neutral bundle, and only then open the first Crystal transfer
+falsifier.
+
+This roadmap corrects an important stale assumption. The older powered-curriculum source describes
+90 train and 105 development rows as 195 distinct physical roots. After the clustered pivot, raw
+rows are not automatically independent evidence. Before scaling beyond the bounded successor, a
+new versioned design must freeze the independent unit, lineage influence cap, cluster weights,
+attrition rule, partition ownership, and power calculation. Its information-diversity floors remain
+useful; its old independence schedule is a reference rather than silent authority.
+
+The product is not ready to port merely when a model fits or wins one Red skill. Crystal opens
+only after the model shows useful unseen-Red generalization, bounded teacher-free authority,
+multi-goal living-Dex composition, honest abstention and recovery, and a frozen title-neutral
+contract. Red-specific observers and mechanics remain adapters; Red routes, map IDs, addresses,
+species identities, and teacher decisions may not enter the portable model bundle.
+
+Claude and Antigravity both returned conditional GO. Their conditions are now incorporated. The
+existing paired alternative needs **67 independent lineage units without censoring, or 100 with
+three forced lineage losses**; a clustered V2 must freeze its own `K_min`, correlation sensitivity,
+and finite lineage budget before scale. Crystal must beat both Red's full best-of-three control
+envelope and zero initialization. Supported-mechanic abstentions count as failures, while typed
+abstention is correct only on prospectively declared unsupported mechanics. The old Crystal V3
+goal-manager protocol is therefore retired unopened for this living-Dex test. Red's 124-target
+solo acquisition graph remains a subplan beneath a new 151-target version/trade/event blocker
+catalog. See the [review adjudication](docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
 
 ## 2026-08-30: the eight-example readiness gate passed — fit once, without authority
 

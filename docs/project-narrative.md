@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: draw the whole bridge before taking the next step
+
+The project had accumulated dozens of defensible local gates, yet the distance between them and
+the actual product was becoming hard to see. The target is not a fitted Red scorer or a Crystal
+demo. It is a hierarchical player that can finish stories, acquire and evolve every obtainable
+species, manage a living Pokedex, expose trade or event requirements honestly, and reuse learned
+knowledge across games.
+
+The new Red-to-Crystal roadmap draws that bridge in six evidence phases. First, the eight honest
+Red lessons exercise the training machinery without granting authority. Next, a prospectively
+clustered Red curriculum produces enough independent evidence for a powered held-out test. Only a
+candidate that beats frozen non-learning controls on unseen Red lineages may earn bounded gameplay
+authority. That authority must then compose navigation, battle, capture, party development,
+storage, acquisition, recovery, and story dependencies. The portable semantic bundle freezes
+before Crystal opens, so Gen-II cannot quietly reshape the Red model after the answer is visible.
+
+The planning pass also found a useful contradiction: an older design still equated 195 planned
+rows with 195 independent game roots, while the active strategy had already moved to bounded short
+scenarios grouped by causal lineage. The diversity checks survive, but the statistical contract
+must be rewritten prospectively around cluster weights and lineage-level power. Catching that now
+may save more time than another long emulator campaign. The honest board remains **8/60 causal
+Red examples, powered fit 0, authority 0, transfer 0**.
+
+The outside reviews turned that warning into concrete numbers. Under the existing declared effect,
+the held-out sign test needs 67 independent lineage units with no censoring and 100 if three lineage
+units become forced losses. They also prevented two future shortcuts: Crystal must beat both the
+same full control envelope as Red and an identical zero-initialized model, and abstention can count
+as success only on mechanics declared unsupported before the outcome. Finally, the familiar
+124-species Red acquisition graph is now explicitly a single-save subplan. The mission-level
+planner must account for all 151 through version, trade, mutually exclusive, and legitimate-event
+dependencies.
+
 ## August 30: eight honest lessons are enough to turn on the training machinery
 
 The first question at eight examples was not whether a model could beat Pokémon. It was whether
