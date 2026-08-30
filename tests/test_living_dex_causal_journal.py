@@ -16,6 +16,7 @@ from pokemon_red_completion.living_dex_causal_journal import (
     LivingDexCausalResolvedArm,
     LivingDexCausalScenario,
     LivingDexControllerGate,
+    load_living_dex_authenticated_causal_examples,
     materialize_living_dex_causal_example,
 )
 from pokemon_red_completion.living_dex_option_value import (
@@ -31,6 +32,7 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactRoot,
+    PrivateSealedRecord,
     initialize_private_root,
 )
 from pokemon_red_completion.provenance import canonical_sha256
@@ -255,6 +257,67 @@ def test_settled_selected_arm_round_trips_without_a_second_execution(
     assert recovered.example == receipt.example
     assert harness.resolver_calls == [receipt.example.selected_candidate_index]
     assert harness.executions == [receipt.example.selected_candidate_index]
+
+
+def test_complete_causal_example_family_reopens_with_all_private_joins(
+    tmp_path: Path,
+) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, _ = _scenario("aggregate-reader")
+    receipt = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+
+    rows = load_living_dex_authenticated_causal_examples(store)
+
+    assert len(rows) == 1
+    assert rows[0].identity == scenario.identity
+    assert rows[0].example == receipt.example
+    assert rows[0].terminal == receipt.terminal
+    assert not hasattr(rows[0], "public_dict")
+
+
+def test_causal_corpus_reader_fails_closed_on_example_without_terminal(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, _ = _scenario("aggregate-reader-interrupted")
+
+    def interrupt(stage: str) -> None:
+        if stage == "after_example_publish":
+            raise KeyboardInterrupt
+
+    with pytest.raises(KeyboardInterrupt):
+        materialize_living_dex_causal_example(
+            scenario,
+            store=store,
+            claim_registry=registry,
+            failpoint=interrupt,
+        )
+
+    find_record = PrivateArtifactRoot.find_sealed_record
+
+    def hide_terminal(
+        private_store: PrivateArtifactRoot,
+        record_id: str,
+        *,
+        expected_kind: str | None = None,
+    ) -> PrivateSealedRecord | None:
+        if record_id.startswith("lc-terminal-"):
+            return None
+        return find_record(
+            private_store,
+            record_id,
+            expected_kind=expected_kind,
+        )
+
+    monkeypatch.setattr(PrivateArtifactRoot, "find_sealed_record", hide_terminal)
+
+    with pytest.raises(LivingDexCausalJournalError, match="required causal record"):
+        load_living_dex_authenticated_causal_examples(store)
 
 
 def test_one_preinput_failure_reuses_selection_then_second_failure_is_terminal(
