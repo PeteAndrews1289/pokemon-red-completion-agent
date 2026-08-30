@@ -45,6 +45,7 @@ from pokemon_red_completion.living_dex_policy_codec import (
     restore_living_dex_policy_menu,
 )
 from pokemon_red_completion.private_artifacts import (
+    CollectionSession,
     PrivateArtifactError,
     PrivateArtifactRoot,
 )
@@ -722,6 +723,7 @@ def load_living_dex_authenticated_causal_examples(
     store: PrivateArtifactRoot,
     *,
     maximum_examples: int = 100,
+    collection_session: CollectionSession | None = None,
 ) -> tuple[LivingDexAuthenticatedCausalExample, ...]:
     """Read the complete immutable causal-example family without row selection.
 
@@ -737,25 +739,37 @@ def load_living_dex_authenticated_causal_examples(
         raise LivingDexCausalJournalError(
             "causal corpus maximum must be a positive integer"
         )
+    def load_locked() -> tuple[LivingDexAuthenticatedCausalExample, ...]:
+        inventory = store.inventory_sealed_record_metadata(
+            record_id_prefix="lc-example-",
+            expected_kind="living_dex_causal_example",
+            maximum_records=maximum_examples,
+        )
+        store_anchor_sha256 = _read_store_anchor(store)
+        return tuple(
+            _load_authenticated_causal_example(
+                store,
+                record_id=metadata.record_id,
+                expected_payload_sha256=metadata.declared_record_sha256,
+                expected_manifest_sha256=metadata.manifest_sha256,
+                store_anchor_sha256=store_anchor_sha256,
+            )
+            for metadata in inventory
+        )
+
+    if collection_session is not None:
+        if not isinstance(collection_session, CollectionSession):
+            raise TypeError("causal corpus collection session differs")
+        try:
+            collection_session.require_store(store)
+            return load_locked()
+        except PrivateArtifactError as error:
+            raise LivingDexCausalJournalError(str(error)) from None
+
     result: tuple[LivingDexAuthenticatedCausalExample, ...] | None = None
     try:
         with store.collection_session(LIVING_DEX_CAUSAL_COLLECTION_ID):
-            inventory = store.inventory_sealed_record_metadata(
-                record_id_prefix="lc-example-",
-                expected_kind="living_dex_causal_example",
-                maximum_records=maximum_examples,
-            )
-            store_anchor_sha256 = _read_store_anchor(store)
-            result = tuple(
-                _load_authenticated_causal_example(
-                    store,
-                    record_id=metadata.record_id,
-                    expected_payload_sha256=metadata.declared_record_sha256,
-                    expected_manifest_sha256=metadata.manifest_sha256,
-                    store_anchor_sha256=store_anchor_sha256,
-                )
-                for metadata in inventory
-            )
+            result = load_locked()
     except PrivateArtifactError as error:
         raise LivingDexCausalJournalError(str(error)) from None
     if result is None:

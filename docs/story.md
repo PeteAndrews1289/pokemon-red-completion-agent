@@ -9,6 +9,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ## Current checkpoint: the classroom data can finally enter a model
 
+The machine that will perform that first fit now exists, and its most important feature is what it
+cannot do. It cannot name a game save, choose a different lesson, open an exam row, press a button,
+ask the teacher, or grant itself authority. It locks all eight cards in place, writes a durable
+claim before the learner starts, and stores the resulting transparent model in one immutable
+private envelope. Opening the command twice reopens the same envelope instead of training twice;
+losing power after the claim cannot become permission to try again.
+
+The rehearsal used synthetic cards only. Deliberately dropping one of eight failed. Breaking the
+conditioning diagnostic failed. Interrupting after the durable claim left a permanently closed
+attempt. Exact-byte reload and typed-model reload both had to agree. The broader repository then
+passed 5,822 tests, with its one installation-path-specific runtime check passing separately in
+the original Mac environment. The honest score has not moved: **CAUSAL TRAIN 8/60 · INTEGRATION
+FIT 0/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
+That pause is intentional. The fitter must first become published, reproducible main and pass
+GitHub's independent build. Only then may it touch the eight real lesson cards once. The next
+chapter should end with a model receipt—not with a claim that eight examples can beat the game.
+
 The audit opened all eight lesson cards together without opening the game. None was discarded.
 They came from eight independent lineages and eight distinct choices, exercised six portable
 collection intents, supplied eight distinct feature rows, and varied across seven observed

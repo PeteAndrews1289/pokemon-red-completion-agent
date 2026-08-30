@@ -37,6 +37,14 @@ assignments begin at the next named milestone; no standing audit blocks ordinary
 
 ## Current override: Codex owns one non-authoritative eight-row integration fit
 
+The fit boundary is now locally qualified but has not touched the real private corpus. The command
+pins the exact passed readiness result and unchanged gate implementation, requires clean published
+main plus green push CI, holds the complete causal family locked, claims the sole V1 fit before the
+learner runs, rejects an omitted row, publishes one immutable private model, and byte-reopens it.
+It passed 5,822 full-suite and 161 focused tests plus static, registry, public-artifact, and exact
+runtime gates. Publish this source first; only exact green main may execute the one fit. Reorient at
+the receipt before any successor row or development access.
+
 Exact main `ed6066e0` passed push CI `33298743000/1`, then the action-free readiness audit ran
 once over the complete authenticated causal family. All eight rows are settled train examples
 with eight distinct lineages and decisions, six selected portable kinds, eight selected feature

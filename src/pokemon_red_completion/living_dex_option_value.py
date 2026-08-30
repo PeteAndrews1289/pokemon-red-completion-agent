@@ -957,6 +957,30 @@ def uniform_behavior_probabilities(menu: LivingDexOptionMenu) -> tuple[float, ..
     )
 
 
+def living_dex_option_train_dataset_sha256(
+    examples: Iterable[LivingDexObservedArmExample],
+) -> str:
+    """Return the order-independent identity used by the option-value fitter.
+
+    The helper validates the same complete train denominator as the fitter.  It
+    exists so a claim-before-fit publisher can bind the exact dataset before it
+    invokes the learner without reimplementing the fit's identity contract.
+    """
+
+    rows = tuple(
+        sorted(
+            _validated_examples(examples, expected_partition="train"),
+            key=lambda row: row.decision_sha256,
+        )
+    )
+    return canonical_sha256(
+        {
+            "rows": [row.public_dict() for row in rows],
+            "schema": "pokemon.core.living-dex-option-train-dataset.v1",
+        }
+    )
+
+
 def fit_living_dex_option_value(
     examples: Iterable[LivingDexObservedArmExample],
     *,
@@ -985,12 +1009,7 @@ def fit_living_dex_option_value(
         raise LivingDexOptionValueError(
             "living-Dex option fit needs two settled selected-arm examples"
         )
-    dataset_sha256 = canonical_sha256(
-        {
-            "rows": [row.public_dict() for row in rows],
-            "schema": "pokemon.core.living-dex-option-train-dataset.v1",
-        }
-    )
+    dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
     features = np.asarray([row.selected_vector for row in settled], dtype=np.float64)
     targets = np.asarray(
         [row.outcome.target_vector for row in settled],
@@ -1149,6 +1168,7 @@ __all__ = [
     "LivingDexPredictedOutcome",
     "evaluate_living_dex_option_value",
     "fit_living_dex_option_value",
+    "living_dex_option_train_dataset_sha256",
     "living_dex_option_features_from_semantic_facts",
     "living_dex_option_context_from_goal_situation",
     "uniform_behavior_probabilities",

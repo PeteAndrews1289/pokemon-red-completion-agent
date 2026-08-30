@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+> **2026-08-30 fit-engineering override — publish, green, then fit once:** The claim-first R0
+> fitter is locally qualified with 5,822 full-suite and 161 focused tests. It opened no real
+> private corpus and performed no fit. Codex now owns exact-source publication, green push-CI
+> verification, one production fit over all eight locked train rows, path-free receipt capture,
+> and immediate reorientation. Claude and Antigravity remain optional read-only milestone
+> challengers; neither blocks publication or sees private rows. No successor execution,
+> development read, gameplay scoring, model-quality claim, authority promotion, sealed Red,
+> Crystal, or full replay is open before the fit receipt.
+
 > **2026-08-30 mission-horizon override — plan through Crystal, execute only the current gate:**
 > The [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md) is the shared
 > long-range contract. Codex remains implementation, integration, publication, and adjudication

@@ -769,6 +769,12 @@ def test_sealed_record_is_canonical_private_idempotent_and_immutable(
     )
 
     assert first.read() == record
+    assert first.read_bytes() == (directory_payload := (
+        json.dumps(record, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode(
+            "ascii"
+        )
+        + b"\n"
+    ))
     changed = first.read()
     changed["collection_id"] = "changed"
     assert first.read() == record
@@ -777,10 +783,7 @@ def test_sealed_record_is_canonical_private_idempotent_and_immutable(
     assert _mode(directory) == 0o700
     assert _mode(directory / "manifest.json") == 0o600
     assert _mode(directory / "record.json") == 0o600
-    assert (directory / "record.json").read_bytes() == (
-        json.dumps(record, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("ascii")
-        + b"\n"
-    )
+    assert (directory / "record.json").read_bytes() == directory_payload
     assert str(root) not in json.dumps(first.summary.public_dict())
 
     with pytest.raises(PrivateArtifactError, match="different content"):

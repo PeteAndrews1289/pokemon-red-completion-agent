@@ -47,6 +47,40 @@ goal-manager protocol is therefore retired unopened for this living-Dex test. Re
 solo acquisition graph remains a subplan beneath a new 151-target version/trade/event blocker
 catalog. See the [review adjudication](docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
 
+## 2026-08-30: the eight-row fitter is locally qualified — publish before fitting
+
+The immediate evidence rung is still R0: prove that the authentic Red causal corpus can produce
+and reproduce one model artifact. The product remains a transferable story-and-living-Pokedex
+agent; this fit is plumbing, not gameplay competence.
+
+The new command accepts only a validated private root plus exact published source and green push-CI
+identity. It pins the already-passed readiness result and the unchanged readiness implementation,
+holds the causal collection lock while loading the complete family, and derives the exact train
+dataset identity before learner invocation. A durable constant V1 claim is published before the
+ridge fitter runs. A second invocation reloads rather than refits; a claim without a model is
+permanently non-retryable. The model publishes create-only to an immutable sealed record and is
+reopened as exact canonical bytes and as the same typed model.
+
+The path-free result can expose only row/support/variation counts, regularized normal-equation
+conditioning, coefficient finiteness, artifact digests, reload equality, source provenance, and
+zero-effect counters. It publishes no loss, target, coefficient value, lineage, decision, selected
+arm, binding, private path, or dataset digest. There is no ROM, state, candidate, development,
+teacher, retry, output, or authority argument.
+
+Qualification passed **161 focused tests · 5,822 full-suite tests · Ruff · Mypy over 315 source
+files · four source-bound registry gates**. The sole environment-bound PyBoy metadata test was
+explicitly deselected in the temporary worktree and passed 1/1 read-only in the exact original Mac
+runtime. No private corpus, model fit, controller, frame, teacher, development row, sealed Red, or
+Crystal input opened. See the
+[local qualification](docs/evidence/red-living-dex-causal-integration-fit-local-qualification-v1-2026-08-30.json).
+
+Next commit and publish this exact source, wait for green push CI on exact main, then invoke the fit
+once from a clean exact-main checkout and retain the raw path-free output. Stop and reorient at that
+receipt. Do not execute successor ordinal two, open development, score gameplay, interpret training
+error as quality, promote authority, run sealed Red or Crystal, or replay the game. The board stays
+**causal train 8/60 · integration fit 0/1 · powered fit 0 · authority 0 · transfer 0** until the
+production artifact actually exists.
+
 ## 2026-08-30: the eight-example readiness gate passed — fit once, without authority
 
 The mission remains a hierarchical player that completes stories and living Pokedexes across
