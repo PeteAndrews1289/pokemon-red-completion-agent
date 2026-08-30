@@ -1,0 +1,235 @@
+{
+  "batch": {
+    "attempts": 8,
+    "attempts_per_outer_wall_clock_hour": 55.066922,
+    "behavior_commitments": 6,
+    "causal_train_examples_recorded": 6,
+    "claim_pairs_consumed": 8,
+    "controller_actions": 9658,
+    "emulator_frames": 488081,
+    "examples_per_outer_wall_clock_hour": 41.300191,
+    "outer_observed_complete_at_utc": "2026-08-30T21:34:19Z",
+    "outer_started_at_utc": "2026-08-30T21:25:36Z",
+    "outer_timestamp_resolution": "seconds",
+    "outer_wall_clock_seconds": 523,
+    "provider_executions": 6,
+    "selected_arm_settled_yield": 0.75,
+    "setup_terminals_without_example": 2,
+    "train_ordinal_maximum": 15,
+    "train_ordinal_minimum": 8
+  },
+  "claim_boundary": {
+    "supported": "The eight remaining prospectively frozen Red successor train cards were attempted sequentially and at most once. Six produced randomized selected-arm-only causal train examples and two ended during setup before behavior commitment. All sixteen successor claim pairs are now consumed. The complete eighteen-example causal family remains train-only, lineage-unique, fully supported by the Red portable feature projection, and untouched by teachers, development, predictions, fitting, authority, sealed Red, or Crystal.",
+    "unsupported": [
+      "model_quality_or_generalization",
+      "powered_red_fit_readiness",
+      "outcome_balance_repair_by_row_selection",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "complete_successor": {
+    "attempts": 16,
+    "causal_train_examples_recorded": 12,
+    "claim_pairs_consumed": 16,
+    "controller_actions": 30367,
+    "emulator_frames": 1500787,
+    "selected_arm_settled_yield": 0.75,
+    "setup_terminals_without_example": 4
+  },
+  "corpus_audit": {
+    "all_sixteen_successor_claim_pairs_consumed": true,
+    "all_supported_red_kinds_present": true,
+    "authenticated_causal_train_examples": 18,
+    "batch_authenticated_examples": 6,
+    "batch_selected_option_kind_counts": {
+      "develop": 2,
+      "evolve": 1,
+      "explore": 1,
+      "manage_storage": 1,
+      "resupply": 1
+    },
+    "batch_successful_examples": 1,
+    "batch_unsuccessful_examples": 5,
+    "candidate_feature_rows": 54,
+    "censored_examples": 0,
+    "development_examples": 0,
+    "distinct_causal_identities": 18,
+    "distinct_decision_identities": 18,
+    "distinct_lineages": 18,
+    "distinct_selected_feature_rows": 18,
+    "full_support_examples": 18,
+    "maximum_lineage_multiplicity": 1,
+    "selected_candidate_index_counts": {
+      "0": 6,
+      "1": 8,
+      "2": 4
+    },
+    "selected_feature_rank": 11,
+    "selected_option_kind_counts": {
+      "acquire": 1,
+      "develop": 3,
+      "evolve": 5,
+      "explore": 3,
+      "manage_storage": 3,
+      "resupply": 2,
+      "unlock_access": 1
+    },
+    "significantly_variable_outcome_heads": [
+      "verified_success"
+    ],
+    "successful_examples": 3,
+    "supported_candidate_feature_rows": 54,
+    "train_examples": 18,
+    "unsuccessful_examples": 15,
+    "variable_outcome_heads_at_any_observed_difference": [
+      "verified_success",
+      "completion_gain",
+      "action_cost",
+      "frame_cost",
+      "resource_cost",
+      "party_cost",
+      "storage_cost"
+    ]
+  },
+  "execution_history": {
+    "authenticated_zero_effect_preflights": 1,
+    "gameplay_invocations": 8,
+    "local_runtime_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "owner_only_staged_files": 16,
+    "preflight_bootstrap_locale_failures_before_source_authentication": 1,
+    "preflight_production_process_invocations_total": 2,
+    "runtime_diagnostics_with_relative_path_corrected_before_production": 1,
+    "zero_effect_failures_changed_the_attempt_denominator": false
+  },
+  "interpretation": {
+    "clustered_v2_design_decision": "The bounded successor is exhausted. Before any new private freeze or gameplay, a versioned clustered V2 design must prospectively define lineage ownership and influence caps, attrition treatment, information-diversity floors, partition separation, finite lineage budgets, and correlation-sensitive held-out power. It must target reachable feature and option support without selecting rows from observed outcomes.",
+    "outcome_balance_decision": "The completion batch added one success and five failures, moving the corpus to three successes and fifteen failures. This is retained as evidence rather than repaired by selecting favorable scenarios after outcome observation.",
+    "powered_fit_decision": "All seven supported Red kinds and all 54 candidate rows are represented, but eighteen examples, eighteen selected rows, feature rank eleven, three successes, rare-kind counts of one, and one significantly varying outcome head remain below the powered information floors. Powered fitting stays closed.",
+    "throughput_decision": "The complete successor yielded twelve examples from sixteen attempts, and the final batch yielded six examples in 523 seconds. Scenario execution throughput is not the current bottleneck; prospective information diversity and independent held-out power are."
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 18,
+    "authentic_causal_train_examples_before": 12,
+    "authority_promotions": 0,
+    "integration_fits": 1,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this complete bounded-successor denominator under green exact-main CI. Then engineer and independently review one action-free clustered powered V2 design before freezing any new private scenario schedule. The design must address lineage-level power, rank and kind deficits, attrition, outcome-blind admission, development separation, and the frozen Crystal transfer boundary. Do not fit, execute another Red scenario, open development, or run Crystal during the design gate.",
+  "powered_information_floors": {
+    "minimum_examples": 60,
+    "minimum_examples_per_kind": 8,
+    "minimum_feature_rank": 16,
+    "minimum_selected_feature_rows": 50,
+    "minimum_successful_examples": 8,
+    "minimum_unsuccessful_examples": 8,
+    "minimum_variable_outcome_heads": 5
+  },
+  "privacy": {
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_arm_identity_published": false,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "rows": [
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 5313,
+      "emulator_frames": 273485,
+      "ordinal": 8,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 0,
+      "causal_train_example_recorded": false,
+      "controller_actions": 218,
+      "emulator_frames": 9900,
+      "ordinal": 9,
+      "provider_executions": 0,
+      "root_claims": 1,
+      "status": "one_causal_campaign_terminal_without_train_example"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 404,
+      "emulator_frames": 18624,
+      "ordinal": 10,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 993,
+      "emulator_frames": 44580,
+      "ordinal": 11,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 1800,
+      "emulator_frames": 95652,
+      "ordinal": 12,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 0,
+      "causal_train_example_recorded": false,
+      "controller_actions": 406,
+      "emulator_frames": 20436,
+      "ordinal": 13,
+      "provider_executions": 0,
+      "root_claims": 1,
+      "status": "one_causal_campaign_terminal_without_train_example"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 423,
+      "emulator_frames": 20988,
+      "ordinal": 14,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    },
+    {
+      "behavior_commitments": 1,
+      "causal_train_example_recorded": true,
+      "controller_actions": 101,
+      "emulator_frames": 4416,
+      "ordinal": 15,
+      "provider_executions": 1,
+      "root_claims": 1,
+      "status": "one_causal_campaign_settled"
+    }
+  ],
+  "schema": "pokemon.red.living-dex-r1-successor-completion-result.v1",
+  "source": {
+    "cartridge_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33329384186,
+    "exact_main_commit": "a358014fb2dfe4193c9474ee1cc008cd249eb03c",
+    "source_bundle_sha256": "f6502562b0711e81efc67bafdd26e523b6782627ef376afb18d543011d6bdea8"
+  },
+  "status": "r1_bounded_successor_complete_eighteen_examples_clustered_powered_v2_design_next"
+}

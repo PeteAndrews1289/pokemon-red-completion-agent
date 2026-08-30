@@ -1,19 +1,22 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
-## August 30 prospective throughput and information audit
+## August 30 complete bounded-successor audit
 
-From exact published source under green CI, the project consumed six prospectively fixed Red
-training scenarios once each. Four produced authentic randomized selected-arm consequences and
-two terminated during setup, yielding 4/6 examples in 600.789 seconds after 12,209 controller
-actions and 609,272 emulator frames. Every claim and failure remained in the denominator; no root
-was retried, substituted, or selected after observing an outcome.
+From exact source under green CI, the project consumed the final eight prospectively fixed Red
+training scenarios once each. Six produced authentic randomized selected-arm consequences and two
+terminated during setup, yielding 6/8 examples in 523 seconds after 9,658 controller actions and
+488,081 emulator frames. Across the complete sixteen-card successor, twelve settled and four
+ended during setup. Every claim and failure remained in the denominator; no root was retried,
+substituted, or selected after observing an outcome.
 
-The causal corpus grew to twelve examples from twelve independent lineages and now spans all seven
-supported title-neutral option kinds with 36/36 supported candidate rows. The same audit rejected
-premature model claims: selected-feature rank is 10/16, outcomes are two successes versus ten
-failures, and only one outcome head reaches the powered variation floor. The next milestone is the
-fixed completion batch over the eight remaining successor cards, followed by a prospectively
-clustered power design—not another fit. Gameplay authority and cross-title transfer remain zero.
+The causal corpus grew to eighteen examples from eighteen independent lineages and spans all seven
+supported title-neutral option kinds with 54/54 supported candidate rows. The same audit rejected
+premature model claims: selected-feature rank is 11/16, outcomes are three successes versus
+fifteen failures, rare kinds have one example, and only one outcome head reaches the powered
+variation floor. Execution throughput is no longer the bottleneck. The next milestone is an
+action-free, prospectively clustered power design with finite lineage budgets, attrition and
+correlation sensitivity, outcome-blind information floors, untouched Red separation, and a
+frozen Crystal boundary—not another fit. Gameplay authority and cross-title transfer remain zero.
 
 ## August 30 eight-example causal integration floor
 

@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: close the sixteen-card classroom
+
+Open on eight face-down cards labeled **SUCCESSOR 8–15 · FIXED ORDER · ONE ATTEMPT EACH**. Turn
+six into sealed lesson cards and leave two marked **SETUP TERMINAL — NO TARGET**. Race the counters
+to **9,658 ACTIONS · 488,081 FRAMES · 523 SECONDS**, then land on **6/8 YIELD · 41.30
+EXAMPLES/HOUR**. Pull back to all sixteen successor slots: **12 SETTLED · 4 SETUP-ONLY · ALL 16
+CLAIMS CONSUMED**.
+
+Change the corpus board to **18/60 · 18 LINEAGES · ALL 7 OPTION KINDS · 54/54 SUPPORTED
+CANDIDATES · SELECTED RANK 11/16 · SUCCESS 3 / FAILURE 15 · POWERED-VARIATION HEADS 1/5**.
+Keep the final batch's one success and five failures together. Stamp **NO OUTCOME SHOPPING**.
+Answer **CAN THE CLASSROOM RUN? YES** and replace the next question with **CAN THE EXPERIMENT
+PROVE GENERALIZATION WITHOUT COUNTING SIBLINGS AS STRANGERS?**
+
+End on **PUBLISH → GREEN EXACT MAIN → STOP → ACTION-FREE CLUSTERED V2 DESIGN → LINEAGE POWER +
+ATTRITION + FINITE BUDGET + INFORMATION FLOORS → INDEPENDENT REVIEW → FREEZE → 60 → UNTOUCHED
+RED → TEACHER-FREE AUTHORITY → LIVING POKEDEX → FROZEN PORTABLE BUNDLE → CRYSTAL**. Keep
+**POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 30 scene: six cards separate speed from information
 
 Open on six face-down cards labeled **SUCCESSOR 2–7 · FIXED ORDER · ONE ATTEMPT EACH**. Turn four

@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the path-free R1 six-card throughput result, require green exact-main CI, then execute the remaining untouched successor train ordinals 8 through 15 as one fixed completion batch and reorient before any new scenario freeze or powered fit.
+- Next decision: Publish the path-free complete bounded-successor result and require green exact-main CI. In the next session, engineer and independently review one action-free clustered powered V2 design before any private scenario freeze, Red gameplay, powered fit, development access, or Crystal execution.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds twelve authentic settled Red causal train examples from twelve lineages and one immutable non-authoritative eight-row integration model that reloads exactly. The model has made no gameplay prediction and has no gameplay authority. |
+| Authority now | The pipeline holds eighteen authentic settled Red causal train examples from eighteen lineages and one immutable non-authoritative eight-row integration model that reloads exactly. The model has made no gameplay prediction and has no gameplay authority. |
 | Authority target | Scale to at least 60 informative train outcomes under a prospectively frozen cluster-aware design, pass feature-support information and power gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing supported weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | After publishing the measured six-card denominator under green exact-main CI, execute the remaining untouched successor train ordinals 8 through 15 at most once each and measure the final bounded-successor yield, feature rank, outcome variation, and class balance before freezing the powered clustered Red design. |
+| Cheapest falsifier | Publish the complete bounded-successor denominator under green exact-main CI, then prove on paper and in action-free tests that a versioned clustered V2 design can reach independent lineage-level power, supported feature rank, option-kind coverage, outcome diversity, and a clean held-out Red-to-Crystal boundary before freezing or executing another private scenario. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 12 | 60 |
+| Causal Train Example · train | 18 | 60 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,26 +58,26 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-30-r1-six-card-throughput-complete-successor-8-15-next** · status **active** · evidence [causal train example](docs/evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json)
+**2026-08-30-r1-bounded-successor-complete-clustered-v2-design-next** · status **active** · evidence [causal train example](docs/evidence/red-living-dex-r1-successor-completion-result-v1-2026-08-30.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project added four authentic consequences rather than more teacher or CI work. The measured path is fast enough to finish the already-frozen successor, while the information audit keeps the project honest about the much larger gap to unseen-Red generalization and a frozen Crystal transfer test. |
-| Learning output | Untouched successor ordinals two through seven were each claimed once. Four recorded selected-arm causal examples and two ended during setup, for 4/6 yield, 12,209 actions, 609,272 frames, and about 23.97 examples per outer wall-clock hour. The complete corpus is twelve train-only, lineage-unique examples with all seven kinds and 36/36 supported candidate rows. |
-| Authority delta | None. The authentic corpus grew from eight to twelve independent train examples, but the existing integration model was not refit or used. Gameplay, Red evaluation, Crystal, transfer, and living-Pokedex authority remain zero. |
+| Product alignment | The project added six authentic option consequences and closed the already-frozen successor instead of hardening another route. Its measured throughput clears scenario-generation speed, while the corpus audit prevents a small integration demonstration from being mistaken for the general option-value authority required for full-game and living-Pokedex transfer. |
+| Learning output | Untouched successor ordinals eight through fifteen were each claimed once. Six recorded selected-arm causal examples and two ended during setup, for 6/8 yield, 9,658 actions, 488,081 frames, and about 41.30 examples per outer wall-clock hour. The complete successor is 12/16, and the corpus is eighteen train-only, lineage-unique examples with all seven kinds and 54/54 supported candidate rows. |
+| Authority delta | None. The authentic corpus grew from twelve to eighteen independent train examples, but the existing integration model was neither refit nor used. Gameplay, Red evaluation, Crystal, transfer, and living-Pokedex authority remain zero. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The short-scenario path is productive, but twelve examples remain far below the sixty-example floor. The corpus has all seven kinds and 36/36 supported candidate rows, yet only twelve distinct selected rows, feature rank ten of sixteen, two successes, ten failures, and one outcome head varying at the powered effect threshold. |
-| Decision | The six-card pilot yielded four authentic examples from six attempts in 600.789 seconds of outer wall time, so setup throughput does not justify a generator repair. Publish the complete denominator, then consume untouched successor ordinals 8 through 15 in fixed order and stop again before any new scenario freeze or powered fit. Do not outcome-balance the next batch. |
-| Next session | Publish the six-card result and require green exact-main CI. Then execute untouched successor train ordinals 8 through 15 sequentially and at most once each, aggregate the complete bounded successor, and stop before freezing the powered clustered V2 design. |
-| Next falsifier | The fixed eight-card completion batch over untouched successor ordinals 8 through 15 must preserve every terminal and show whether the bounded successor keeps adding independent feature rank and outcome contrast without retry, development access, teacher targets, model-controlled gameplay, or outcome-aware admission. |
-| Stop condition | Stop after eight attempted successor ordinals or earlier on source binding failure, an unsafe runner boundary, private leakage, development access, teacher or counterfactual target, retry or arm substitution, model-driven gameplay, authority promotion, sealed Red or Crystal execution, or full-game replay. Preserve failures in the denominator and do not patch a route or select for outcome balance inside the batch. |
+| Blocker | The complete bounded successor is exhausted. Eighteen examples remain below the sixty-example floor, feature rank is eleven of sixteen, only three outcomes succeeded, rare option kinds have one example, and only verified success varies at the powered effect threshold. Treating scenario rows as independent would overstate power because upstream lineages, not candidate rows, are the experimental unit. |
+| Decision | The final eight-card batch yielded six authentic examples and two setup-only terminals in 523 seconds, and the full successor yielded twelve examples from sixteen attempts. Throughput is not the bottleneck. Publish the denominator, then engineer and independently review a versioned clustered powered V2 design before any new private freeze, gameplay, fitting, development access, or Crystal execution. Retain the observed 3/15 outcome imbalance; do not repair it through outcome-aware admission. |
+| Next session | Publish the bounded-successor completion result and require green exact-main CI. Then stop this session. The following session may engineer and independently review the action-free clustered V2 design, but may not freeze private scenarios, execute gameplay, fit a powered model, open development, or run Crystal. |
+| Next falsifier | An action-free clustered V2 design and its tests must show a finite, outcome-blind path to at least sixty informative examples, sixteen-rank support, at least eight examples per supported kind, both outcome classes, five variable outcome heads, and lineage-disjoint Red development power without counting sibling candidates as independent. It must also preserve a frozen supported-feature Crystal transfer boundary. |
+| Stop condition | The production batch is closed: all successor ordinals zero through fifteen are consumed. Publish only the measured path-free aggregate and stop after green exact-main CI. Do not retry, substitute, inspect selected-arm identities, freeze another private schedule, execute gameplay, fit or use a model, access development, promote authority, run sealed Red or Crystal, or replay a full game during this session. |
 
 ### Stop conditions
 
 - The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
 - Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
 - Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
-- Successor ordinals zero through seven are permanently consumed: six settled causal targets and two setup-only terminals. The train-only readiness audit and sole R0 integration fit are complete and may not retry or refit. The next session may attempt only untouched successor train ordinals eight through fifteen at most once each; it may not open development, choose rows for outcome balance, use the integration model for gameplay, promote authority, or claim model quality.
+- Successor ordinals zero through fifteen are permanently consumed: twelve settled targets and four setup-only terminals. The readiness audit and R0 integration fit may not retry or refit. This session may only publish the aggregate under exact-main CI; the next session is action-free clustered V2 design and review until prospective power, independence, information diversity, attrition, partition, and transfer-boundary gates pass.
 
 ### Hard boundaries for this lane
 
@@ -212,4 +212,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **16**.
+Current evidence entries: **17**.

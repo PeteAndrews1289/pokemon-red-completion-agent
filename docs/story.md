@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: six new cards show that speed is not the bottleneck
+## Current checkpoint: all sixteen successor cards are closed
+
+The final eight lesson cards ran once. Six became authentic consequences; two stopped during
+setup. Together they took 523 seconds, 9,658 controller actions, and 488,081 emulator frames—about
+41.30 usable lessons per hour. Across the whole successor, twelve of sixteen cards settled and
+four remained honest setup-only terminals. None can be retried or replaced.
+
+The classroom now holds eighteen lessons from eighteen lineages and all seven shared collection
+intents. But the information lights are still red: rank 11/16, three successes, fifteen failures,
+rare intents represented once, and one consequence at the powered variation floor. The player has
+not earned control merely because the emulator can collect data quickly.
+
+So the next chapter is deliberately action-free. The project publishes the complete denominator,
+then designs and independently challenges one clustered V2 experiment whose power lives at the
+lineage level and whose Red exam remains separate from a frozen Crystal transfer test. The score
+is **CAUSAL TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+That pause protects the actual destination: a model that can finish games and build living
+Pokedexes, not a pile of correlated Red lessons presented as intelligence.
+
+## Previous checkpoint: six new cards showed that speed is not the bottleneck
 
 The project locked six untouched lesson cards before play and promised not to retry or replace any
 of them. Four produced real selected-choice consequences. Two failed during setup and stayed in the

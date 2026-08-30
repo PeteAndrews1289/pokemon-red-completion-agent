@@ -32,12 +32,13 @@ answer source for a supposedly learned decision.
 
 ## Honest starting point
 
-Published main `72f57d0a0fc6d68000ab4cfd75b8e0f4dde450fc` is green under GitHub CI run
-`33322464644/1`. From that exact source, the prospective six-card R1 pilot attempted untouched
-successor train ordinals 2–7 exactly once each. Four settled causal examples and two ended during
-setup, producing 4/6 yield in 600.789 seconds. Combined with R0, the private train corpus now has
-twelve examples from twelve distinct lineages, all seven supported portable kinds, 36/36 supported
-candidate rows, selected-feature rank 10/16, two successes, and ten failures.
+Exact source `a358014fb2dfe4193c9474ee1cc008cd249eb03c` is green under GitHub CI run
+`33329384186/1`. From that source, the final prospective R1 batch attempted untouched successor
+train ordinals 8–15 exactly once each. Six settled causal examples and two ended during setup,
+producing 6/8 yield in 523 seconds. Across all sixteen successor ordinals, twelve settled and four
+ended during setup. Combined with R0, the private train corpus now has eighteen examples from
+eighteen distinct lineages, all seven supported portable kinds, 54/54 supported candidate rows,
+selected-feature rank 11/16, three successes, and fifteen failures.
 
 The earlier R0 learner invocation remains the sole integration fit: one immutable
 non-authoritative model over the original eight-row denominator, reopened byte-identically with
@@ -47,7 +48,7 @@ The board is therefore:
 
 | Evidence level | Current state |
 | --- | --- |
-| Authentic causal Red train examples | 12/60 minimum |
+| Authentic causal Red train examples | 18/60 minimum |
 | Non-authoritative integration fit | 1/1 |
 | Powered Red candidate | 0 |
 | Untouched Red development pass | 0 |
@@ -55,8 +56,10 @@ The board is therefore:
 | Crystal realized contexts or predictions | 0 |
 | Demonstrated cross-title transfer | 0 |
 
-Twelve examples and a measured collection rate are enough to finish the already-frozen successor.
-They are not enough to support a powered model-quality, gameplay, completion, or transfer claim.
+Eighteen examples and the complete bounded successor prove that execution throughput is not the
+current bottleneck. They are not enough to support a powered model-quality, gameplay, completion,
+or transfer claim. The next gate is an action-free clustered V2 design and review, not another fit
+or gameplay batch.
 
 ## Evidence ladder
 
@@ -122,13 +125,14 @@ checks remain useful; its independence and power schedule is not silently active
 
 Work:
 
-1. **Complete:** the prospectively fixed batch attempted untouched successor train ordinals 2–7
-   once each. Four settled and two ended during setup; no consumed identity may retry.
-2. **Complete:** the batch measured 4/6 yield, 23.97 examples per outer hour, all-seven-kind corpus
-   coverage, rank 10/16, two successes versus ten failures, 12,209 actions, and 609,272 frames.
-3. **Next:** attempt remaining untouched successor train ordinals 8–15 once each in fixed order.
-   Do not select roots after seeing outcomes and do not open development rows.
-4. Before scaling beyond the bounded successor, freeze a versioned clustered powered design. It
+1. **Complete:** the prospectively fixed batches attempted successor ordinals 0–15 once each.
+   Twelve settled and four ended during setup; no consumed identity may retry.
+2. **Complete:** the final batch measured 6/8 yield and 41.30 examples per outer hour. The full
+   corpus is 18/60, covers all seven kinds and 54/54 candidate rows, has rank 11/16, and retains
+   three successes versus fifteen failures without outcome-aware replacement.
+3. **Next:** publish the complete denominator under green exact-main CI, then engineer and
+   independently review a versioned action-free clustered powered design.
+4. Before scaling beyond the bounded successor, freeze that clustered powered design. It
    must define the independent unit, maximum scenarios and influence per lineage, cluster weights,
    complete attempted denominator, attrition treatment, train/development ownership, and a fixed
    independent-lineage budget split among fit, confirmation, and unopened contingency use.
@@ -163,9 +167,9 @@ prospective revision replaces them:
 - bounded lineage influence, full candidate support, no identity-bearing features, no development
   leakage, and an action-free capacity proof for the complete clustered schedule.
 
-If the next bounded batch shows that root creation or setup yield is the bottleneck, the following
-session improves the short-scenario generator for the measured missing strata. It does not return
-to teacher-route hardening.
+The complete bounded successor shows that execution speed is not the bottleneck. The next design
+must target the measured missing information strata prospectively and outcome-blindly; it must not
+return to teacher-route hardening or treat additional correlated rows as independent evidence.
 
 Exit gate: the clustered-design power review passes, then the action-free powered-fit audit passes
 that exact versioned contract over the complete train denominator. The existing row-level audit
