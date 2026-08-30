@@ -36,6 +36,11 @@ CONSUMER_QUALIFICATION_PATH = (
     / "docs/evidence"
     / "red-living-dex-clustered-successor-train-consumer-local-qualification-v1-2026-08-29.json"
 )
+PREFLIGHT_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-clustered-successor-train-preflight-result-v1-2026-08-29.json"
+)
 MACHINE_SHA256 = "871c1d5ca12592b4ede506b877b04b8175c61bddb9338fcf5a683d8a0512fbf2"
 RESULT_SHA256 = "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4"
 QUALIFICATION_SHA256 = (
@@ -46,6 +51,9 @@ FREEZE_RESULT_SHA256 = (
 )
 CONSUMER_QUALIFICATION_SHA256 = (
     "99b998575b660ba12078e5979c15cb8e8e920845bb1c9ca3b682a77a44543777"
+)
+PREFLIGHT_RESULT_SHA256 = (
+    "f7e5d8de7651b5e53ad51166daac28bc6c8c72eecf449026cfb268ceb52caac5"
 )
 
 
@@ -302,5 +310,61 @@ def test_successor_consumer_qualification_reports_zero_effects_and_no_leakage() 
         for key, value in receipt["protected_effects"].items()
         if key != "collection_authorized"
     )
+    assert "/Users/" not in payload
+    assert "/Volumes/" not in payload
+
+
+def test_successor_preflight_result_binds_exact_main_and_zero_effects() -> None:
+    payload = PREFLIGHT_RESULT_PATH.read_bytes()
+    receipt = json.loads(payload)
+
+    assert hashlib.sha256(payload).hexdigest() == PREFLIGHT_RESULT_SHA256
+    assert receipt["status"] == (
+        "one_rom_free_clustered_successor_train_preflight_passed_"
+        "reorientation_complete_first_authentic_outcome_pending"
+    )
+    assert receipt["source"] == {
+        "exact_ci_attempt": 1,
+        "exact_ci_run": 33290594694,
+        "exact_main_commit": "248346b049fde0ecd70f59277fc31ad9bce9a522",
+        "source_bundle_sha256": (
+            "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435"
+        ),
+    }
+    preflight = receipt["preflight"]
+    assert preflight["ordinal"] == 0
+    assert preflight["partition"] == "train"
+    assert preflight["selected_root_reads"] == 1
+    assert preflight["collection_authorized"] is False
+    for field in (
+        "behavior_commitments",
+        "controller_actions",
+        "counterfactual_targets",
+        "development_outcomes_opened",
+        "emulator_frames",
+        "model_fits",
+        "model_predictions",
+        "private_identity_fields",
+        "private_path_fields",
+        "root_claims",
+        "teacher_queries",
+        "unselected_action_targets",
+    ):
+        assert preflight[field] == 0
+
+
+def test_successor_preflight_result_records_bootstrap_miss_without_leakage() -> None:
+    payload = PREFLIGHT_RESULT_PATH.read_text(encoding="ascii")
+    receipt = json.loads(payload)
+    miss = receipt["execution"]["bootstrap_miss"]
+
+    assert receipt["execution"]["authenticated_preflight_invocations"] == 1
+    assert receipt["execution"]["production_process_invocations_total"] == 2
+    assert receipt["execution"]["retry_allowed"] is False
+    assert miss["stage"] == "bootstrap_source_authentication"
+    assert miss["authenticated_source_reached"] is False
+    assert miss["private_root_opened"] is False
+    assert miss["protected_effects_reachable"] is False
+    assert receipt["learning_state"]["authentic_causal_train_examples"] == 6
     assert "/Users/" not in payload
     assert "/Volumes/" not in payload

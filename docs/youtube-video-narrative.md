@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: the key fits; turn it once
+
+Open on **PR 106 → MAIN → CI ✗** and zoom into a single red label: **SQUASHED COMMIT NOT
+REACHABLE**. Keep the executable bundle glowing green. Replace the ancestry assumption with four
+immutable component hashes, then show **PR 107 → MAIN 248346B0 → CI 33290594694/1 ✓**.
+
+Move to the production launcher. A disposable dependency box contains tiny **`__pycache__`**
+cards; the gate slams shut at **BOOTSTRAP · BEFORE SOURCE · BEFORE PRIVATE ROOT**. Sweep only the
+generated cache from a fresh copy, stamp **REVIEWED CLOSURE 3DD20373 ✓**, and run the cartridge-free
+check once: **SUCCESSOR TRAIN 0 · ROOT READ 1 · CLAIMS/ACTIONS/FRAMES/COMMITMENTS/OUTCOMES/
+PREDICTIONS/TEACHERS/FITS 0**. Add **READINESS IS NOT TRAINING** over **6/60**.
+
+End with one card moving toward the emulator: **PUBLISH RESULT → EXACT-MAIN CI → ORDINAL 0 ONCE →
+ONE RANDOM ARM DURABLE BEFORE INPUT → ONE OBSERVED CONSEQUENCE OR HONEST NO-TARGET TERMINAL →
+STOP + REORIENT**. Cross out **ANOTHER PREFLIGHT · WRAPPER · CENSUS · RETRY · SECOND ROW · FIT
+EARLY**. Continue the distant rail **8+ LESSONS → NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED →
+CRYSTAL → CROSS-GAME LIVING POKEDEX**.
+
 ## August 29 scene: the semester is sealed; build a key that cannot open the exam
 
 Open on **PR 106 · D4DA25BE · CI GREEN**. Drop twenty face-down cards into a transparent box:
