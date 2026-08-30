@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the qualified fitter, require green exact-main push CI, then fit and privately byte-reload exactly one non-authoritative integration model over the complete train denominator. Reorient at the fit receipt before any successor gameplay, development access, or authority claim.
+- Next decision: Publish the path-free R0 fit receipt, require green exact-main CI, then execute one fixed six-card R1 throughput pilot over untouched successor train ordinals 2 through 7 and reorient before any further collection or powered-design freeze.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds eight authentic settled Red causal train examples and a locally qualified claim-first integration fitter. No production model has yet been fit and no gameplay authority exists. |
-| Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
+| Authority now | The pipeline holds eight authentic settled Red causal train examples and one immutable non-authoritative integration model that reloads exactly. It has made no gameplay prediction and has no gameplay authority. |
+| Authority target | Scale to at least 60 informative train outcomes under a prospectively frozen cluster-aware design, pass feature-support information and power gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing supported weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | Fit the existing interpretable option-value model exactly once on the complete authenticated eight-row train denominator, privately reload the model byte-for-byte, and publish only path-free training diagnostics. The fit must make zero gameplay choices, controller actions, teacher queries, development reads, authority promotions, or transfer claims. |
+| Cheapest falsifier | Execute the prospectively fixed untouched successor train ordinals 2 through 7 at most once each, retain every setup failure interruption and settled result, and measure whether short-scenario collection yields enough independent causal lessons per wall-clock hour to support a powered clustered Red design. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,26 +58,26 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-30-integration-fitter-qualified-publication-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-causal-integration-fit-local-qualification-v1-2026-08-30.json)
+**2026-08-30-r0-integration-fit-complete-r1-six-card-throughput-next** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-integration-fit-result-v1-2026-08-30.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project has moved from collecting enough short causal lessons to the first real model-training operation. The fit is deliberately non-authoritative: it proves the cross-title option-value learning path can consume honest Red consequences before the curriculum scales toward powered Red evaluation and Crystal transfer. |
-| Learning output | No new causal example or model was created. The fitter passed 5,822 full-suite tests, 161 focused tests, Ruff, Mypy over 315 source files, four source-bound registry gates, and the exact Mac runtime check. Real private openings, fits, gameplay predictions, development reads, teachers, actions, frames, claims, authority, and transfer remained zero. |
-| Authority delta | None. The exact production fitter is locally qualified, but it opened no real private corpus and created no model. Powered Red, sealed Red, Crystal, transfer, and living-Pokedex authority remain zero. |
+| Product alignment | The project has completed its first authentic model-training operation and now returns to the real bottleneck: enough independent causal experience to test useful Red generalization. The bounded batch measures whether the short-scenario curriculum can scale toward powered Red evidence and an honest frozen Crystal transfer test. |
+| Learning output | The complete eight-row authentic train denominator fit exactly once into one immutable private model. All 225 coefficients were finite, conditioning was finite, and exact-byte plus typed-model reloads matched. Gameplay predictions, development reads, teachers, actions, frames, authority promotions, and transfer remained zero. |
+| Authority delta | None. One real non-authoritative integration model now exists and reloads exactly, but it has made no gameplay prediction and has earned no Red, Crystal, transfer, or living-Pokedex authority. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The eight-row support gate passed and the claim-first fitter now passes the complete local gate. Its exact source must be published on main and pass green push CI before the sole production fit may open the private train corpus. |
-| Decision | Publish the locally qualified claim-first fitter, require green push CI on exact main, then execute it exactly once over the locked complete eight-row train denominator. Retain the raw path-free result and reorient at the fit receipt before any successor gameplay or development access. |
-| Next session | Commit and publish the qualified fitter, wait for green push CI on its exact main commit, then run it once from that clean source over the existing private corpus. Preserve the raw output and stop at the fit receipt for mission reorientation. |
-| Next falsifier | The integration fitter must consume the same complete eight-row denominator, require the passed readiness proof, fit exactly once, privately publish and reload an identical model, and expose only path-free diagnostics while every gameplay, teacher, development, authority, and transfer effect remains zero. |
-| Stop condition | Stop on source or CI mismatch, a changed readiness proof, omission or substitution of any row, an existing incomplete fit claim, nonfinite conditioning, reload inequality, development access, model-driven gameplay, model-quality or authority promotion, private leakage, teacher or counterfactual targets, sealed Red or Crystal execution, or full-game replay. |
+| Blocker | R0 is complete. Eight examples prove the learning path works but cannot support quality or generalization. The powered Red lane now lacks enough independent outcomes and a measured short-scenario yield and throughput estimate for its cluster-aware design. |
+| Decision | Open R1 with one prospective six-card throughput pilot over untouched successor train ordinals 2 through 7. Consume each at most once, preserve every terminal, keep development sealed, then stop and aggregate yield, support, variation, controller/frame cost, and wall-clock throughput before freezing the powered design. |
+| Next session | From one clean exact-main source, execute untouched successor train ordinals 2 through 7 sequentially at most once each. Record outer wall-clock timestamps and aggregate all six terminals path-free, then stop for the clustered-design decision. |
+| Next falsifier | The fixed six-card successor batch must reveal attempted-to-settled yield and examples per wall-clock hour without retry, outcome-aware selection, development access, teacher targets, or model-controlled gameplay. A weak yield redirects R1 to the measured scenario-generator bottleneck rather than another fit or route patch. |
+| Stop condition | Stop after six attempted successor ordinals or earlier on source binding failure, an unsafe runner boundary, private leakage, development access, teacher or counterfactual target, retry or arm substitution, model-driven gameplay, authority promotion, sealed Red or Crystal execution, or full-game replay. Preserve failures in the denominator and do not patch a route inside the batch. |
 
 ### Stop conditions
 
 - The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
 - Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
 - Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
-- Successor ordinals zero and one are permanently consumed after one settled causal target each. The train-only integration-readiness audit passed exactly once and may not retry. The next session may fit the complete eight-row train denominator once, but may not open development, execute successor ordinal two, make a gameplay choice, promote authority, or claim model quality before that fit result and reorientation.
+- Successor ordinals zero and one are permanently consumed after one settled causal target each. The train-only readiness audit and sole R0 integration fit are complete and may not retry or refit. The next session may attempt only untouched successor train ordinals two through seven at most once each; it may not open development, use the integration model for gameplay, promote authority, or claim model quality.
 
 ### Hard boundaries for this lane
 
@@ -212,4 +212,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **14**.
+Current evidence entries: **15**.

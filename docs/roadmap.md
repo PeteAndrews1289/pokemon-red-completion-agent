@@ -3,6 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 30 integration-fit result:** PR 114 merged the claim-first fitter as exact main
+> `f5097982`; push CI `33320429925/1` passed. One learner invocation fit the complete eight-row
+> authentic Red causal denominator and published one immutable non-authoritative model. The result
+> retained **24/24 supported candidate feature rows · 7 varying target heads · 225/225 finite
+> coefficients · finite conditioning · exact-byte reopen ✓ · typed-model reopen ✓**. Gameplay
+> predictions, development, teachers, actions, frames, authority, and Crystal were zero.
+>
+> An earlier launch selected an unrelated initialized store and failed before a claim or learner
+> invocation; the [path-free fit result](evidence/red-living-dex-causal-integration-fit-result-v1-2026-08-30.json)
+> preserves both events. R0 is complete and cannot refit. Next publish this receipt, require green
+> exact-main CI, then attempt untouched successor train ordinals 2–7 once each as a fixed six-card
+> R1 throughput pilot. Preserve failures and measure examples per wall-clock hour before freezing
+> the powered clustered design. **Causal train 8/60 · integration fit 1/1 · powered fit 0 ·
+> authority 0 · transfer 0.**
+
 > **August 30 integration-readiness result:** PR 111 merged the action-free audit as exact main
 > `ed6066e0`; push CI `33298743000/1` passed in 17m41s. The one audit invocation consumed the
 > complete immutable denominator and returned **8 settled train rows · 8 causal identities · 8

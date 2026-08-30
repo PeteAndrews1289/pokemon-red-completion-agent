@@ -323,7 +323,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert focus_progress_fraction(state) == pytest.approx(8 / 60)
     assert focus_scorecard(state) == (("Causal Train Example · train", 8, 60),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
-    assert state.progress["model_fits"] == 4
+    assert state.progress["model_fits"] == 5
     assert state.progress["unseen_comparisons"] == 4
     assert state.progress["development_episode_attempts"] == 15
     assert state.progress["verified_outcome_examples"] == 5

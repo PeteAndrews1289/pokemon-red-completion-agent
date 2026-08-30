@@ -11,7 +11,40 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: eight lessons passed readiness; fit the model once
+## Current checkpoint: R0 fit passed; measure six untouched R1 lessons
+
+PR 114 merged the claim-first fitter as exact main `f5097982`; push CI `33320429925/1` passed.
+The first and only learner invocation consumed all eight authentic causal train rows, published one
+immutable non-authoritative model, and reopened the same bytes and typed model. Support stayed at
+24/24 candidate feature rows, seven target heads varied, all 225 coefficients were finite, and the
+regularized condition number was finite. Development reads, gameplay predictions, teachers,
+controller actions, emulator frames, authority promotions, and Crystal accesses remained zero.
+
+One prior command launch selected an unrelated initialized private store and failed closed before
+a causal anchor, fit claim, or learner invocation. It is preserved in the
+[fit result](evidence/red-living-dex-causal-integration-fit-result-v1-2026-08-30.json); it does not
+authorize or constitute a refit. The honest board is **causal train 8/60 · integration fit 1/1 ·
+powered fit 0 · authority 0 · transfer 0**. R0's only allowed claim is now true: the causal
+learning path works end to end. Model quality and gameplay remain untested.
+
+The next product-aligned sequence is:
+
+1. publish the path-free fit result and this reorientation, then require green exact-main CI;
+2. prospectively bind the next throughput denominator to untouched successor train ordinals 2–7;
+3. attempt each of those six cards sequentially and at most once, preserving setup failures,
+   interruptions, and settled selected-arm outcomes without replacement;
+4. record outer start/end time as well as controller actions and emulator frames so examples per
+   wall-clock hour becomes measurable rather than guessed;
+5. aggregate attempted/settled yield, kind and feature support, outcome variation, censoring, and
+   cost without opening development or fitting again; and
+6. stop and decide whether to use the remaining frozen cards or improve the measured scenario-
+   generator bottleneck before freezing the powered clustered design.
+
+Do not refit R0, retry ordinals 0 or 1, replace a weak card, patch a route inside the batch, open
+development, use the integration model for gameplay, query a teacher for targets, promote
+authority, run sealed Red or Crystal, or resume a full replay.
+
+## Previous checkpoint: eight lessons passed readiness; fit the model once
 
 The smallest production fitter is now locally qualified. It has no ROM, state, development,
 teacher, candidate-selection, retry, public-output-file, or authority surface. It binds the exact

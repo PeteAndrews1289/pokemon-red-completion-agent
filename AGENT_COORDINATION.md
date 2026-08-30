@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-30 R0-complete override — publish the fit receipt, then measure R1 throughput:** PR
+> 114 is exact main `f5097982`; push CI `33320429925/1` passed. One authentic fit consumed all
+> eight causal train rows and byte-reopened one immutable non-authoritative model with finite
+> conditioning and 225/225 finite coefficients. Predictions, development, teachers, actions,
+> frames, authority, and Crystal remained zero. **Causal train 8/60 · integration fit 1/1 ·
+> powered fit 0 · authority 0 · transfer 0.** Codex owns path-free publication and the fixed
+> six-card successor batch over untouched train ordinals 2–7, each once, followed by aggregate
+> yield/throughput evidence and reorientation. R0 refit, development, model-controlled gameplay,
+> within-batch route repair, teacher targets, sealed Red, Crystal, and full replay are closed.
+>
+> Claude's next useful milestone challenge is cluster power, complete denominator, censoring, and
+> leakage after the six-card aggregate. Antigravity's is title-neutral architecture, hierarchy,
+> abstention, recovery, and Crystal scope. Both remain read-only and see only stable public source
+> and path-free evidence. Their absence does not block the already-qualified batch; Codex remains
+> implementation, publication, and adjudication owner.
+
 > **2026-08-30 fit-engineering override — publish, green, then fit once:** The claim-first R0
 > fitter is locally qualified with 5,822 full-suite and 161 focused tests. It opened no real
 > private corpus and performed no fit. Codex now owns exact-source publication, green push-CI

@@ -7,7 +7,38 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom data can finally enter a model
+## Current checkpoint: eight honest lessons became the first real model
+
+For the first time in this project, “training” is no longer shorthand for a scripted playthrough or
+a rehearsal with synthetic data. The published learner opened all eight authentic Red lesson
+cards together, fit one transparent option-value model, sealed it in an immutable private
+envelope, and reopened exactly the same bytes and meaning.
+
+All twenty-four offered choices remained representable. Seven observed consequences varied. Every
+one of the model's 225 coefficients was finite, and the numerical system used to fit them was well
+conditioned enough to solve. Just as important, the operation never opened the game: no prediction
+chose an action, no teacher supplied an answer, no exam card was read, and no controller, emulator,
+Crystal cartridge, or authority switch moved.
+
+There was one revealing false start. The command was first pointed at a real but unrelated private
+archive on the external drive. It found no causal classroom and stopped before writing a claim or
+calling the learner. Once the correct classroom store was identified, the first and only learner
+invocation succeeded. Keeping that failed launch in the story matters: “failed safely” is evidence,
+not embarrassment.
+
+The honest score is now **CAUSAL TRAIN 8/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 ·
+TRANSFER 0**. This is a genuine milestone, but not yet a player. Eight examples prove that the
+learning machinery can consume honest consequences; they cannot prove what it will do on a new
+decision.
+
+The next chapter deliberately returns to experience. Six untouched lesson cards—ordinals two
+through seven—will be attempted once each as a fixed batch. Their failures count, and their wall-
+clock cost will finally tell us whether this classroom can scale toward the sixty-example powered
+experiment. If the doors jam, we repair the measured classroom generator. If the lessons arrive,
+we freeze the cluster-aware experiment. Either way, the work moves toward an unseen-Red test and a
+frozen Crystal transfer, not back toward polishing a teacher's route.
+
+## Previous checkpoint: the classroom data can finally enter a model
 
 The machine that will perform that first fit now exists, and its most important feature is what it
 cannot do. It cannot name a game save, choose a different lesson, open an exam row, press a button,

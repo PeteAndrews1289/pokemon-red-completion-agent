@@ -1,0 +1,54 @@
+{
+  "artifact": {
+    "manifest_sha256": "98440f421f4e0aeb597f90a8bfc3af3176c61d940b08e4c2b765a84cf2a15fac",
+    "model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "record_sha256": "7a8f2010861f74c6f64f9b54aa6b61731d457265317f009f1d4f8e96fe459795",
+    "reload_bytes_equal": true,
+    "reload_model_equal": true
+  },
+  "authority_promotions": 0,
+  "candidate_feature_rows": 24,
+  "censored_examples": 0,
+  "coefficient_finiteness": {
+    "all_finite": true,
+    "coefficients": 225,
+    "finite_coefficients": 225
+  },
+  "complete_denominator_included": true,
+  "conditioning": {
+    "matrix": "ridge-regularized-weighted-normal-equation",
+    "number": 674.1219622149168
+  },
+  "controller_actions": 0,
+  "counterfactual_targets": 0,
+  "crystal_accesses": 0,
+  "development_examples_read": 0,
+  "emulator_frames": 0,
+  "fit_authority": "non-authoritative-integration-only",
+  "fit_executions": 1,
+  "gameplay_model_predictions": 0,
+  "private_causal_identity_fields": 0,
+  "private_fit_claims": 1,
+  "private_path_fields": 0,
+  "recovered_existing_artifact": false,
+  "root_claims": 0,
+  "schema": "pokemon.red.living-dex-causal-integration-fit-result.v1",
+  "selected_outcome_details": 0,
+  "settled_examples": 8,
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33320429925,
+    "source_bundle_sha256": "f6502562b0711e81efc67bafdd26e523b6782627ef376afb18d543011d6bdea8",
+    "source_commit": "f50979827a0faa62adf66c4ca828fd3cdb42a1c6",
+    "source_published": true,
+    "worktree_dirty": false
+  },
+  "status": "non_authoritative_integration_fit_complete",
+  "supported_candidate_feature_rows": 24,
+  "teacher_queries": 0,
+  "total_examples": 8,
+  "train_examples": 8,
+  "transfer_claimed": false,
+  "unselected_action_targets": 0,
+  "variable_target_heads": 7
+}

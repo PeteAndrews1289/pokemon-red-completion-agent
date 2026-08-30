@@ -47,6 +47,44 @@ goal-manager protocol is therefore retired unopened for this living-Dex test. Re
 solo acquisition graph remains a subplan beneath a new 151-target version/trade/event blocker
 catalog. See the [review adjudication](docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
 
+## 2026-08-30: the first authentic causal model fit completed — R0 is closed
+
+The project has now performed its first real training operation on authentic Red consequences.
+PR 114 merged the claim-first fitter as exact main
+`f50979827a0faa62adf66c4ca828fd3cdb42a1c6`; push CI `33320429925/1` passed every gate. From that
+clean detached source, one learner invocation consumed the complete eight-example train
+denominator and created the sole immutable R0 model.
+
+The result retained **8/8 settled rows · 24/24 supported candidate feature rows · 7 varying target
+heads · 225/225 finite coefficients**. The ridge-regularized normal equation had finite condition
+number `674.1219622149168`. Private publication then reopened the same canonical bytes and the
+same typed model. Model `a211de9c…e4af9`, record `7a8f2010…59795`, and manifest
+`98440f42…15fac` bind the artifact without publishing its coefficients, targets, dataset identity,
+lineages, decisions, selected arms, losses, or path.
+
+Record the launch history honestly. The first command invocation selected an initialized but
+unrelated external private store. It found no causal anchor and failed at `private_corpus_or_store`
+with **fit executions 0 · private fit claims 0 · every protected effect 0**. After identifying the
+store-selection error read-only, the authenticated causal store was selected without changing
+source. That produced the first and only learner invocation and the first and only R0 claim. It
+was not a model retry.
+
+R0's allowed claim is now satisfied: **the causal learning path works end to end**. Nothing more
+has been promoted. The model made **gameplay predictions 0 · development reads 0 · teachers 0 ·
+actions 0 · frames 0 · authority promotions 0 · Crystal accesses 0**. The board is **causal train
+8/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**. See the
+[path-free fit result](docs/evidence/red-living-dex-causal-integration-fit-result-v1-2026-08-30.json).
+
+The next gate is one prospective R1 throughput pilot: publish this receipt, require green
+exact-main CI, then attempt untouched successor train ordinals **2 through 7** sequentially and at
+most once each. Preserve all six terminals, including setup failure or interruption, and measure
+attempted-to-settled yield, kind and feature support, outcome variation, controller/frame cost,
+and outer wall-clock throughput. Stop after the six-card denominator and reorient before more
+collection or a powered-design freeze. Do not refit R0, retry consumed ordinals, open development,
+use the model for gameplay, patch a route inside the batch, query a teacher for targets, run sealed
+Red or Crystal, or claim quality, authority, transfer, story completion, or living-Pokedex
+completion.
+
 ## 2026-08-30: the eight-row fitter is locally qualified — publish before fitting
 
 The immediate evidence rung is still R0: prove that the authentic Red causal corpus can produce
