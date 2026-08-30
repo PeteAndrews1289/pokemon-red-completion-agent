@@ -6,23 +6,25 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the R1 throughput pilot is complete; finish the
-> frozen successor before designing the powered curriculum.** From published main `72f57d0a`
-> under green CI `33322464644/1`, untouched train ordinals **2–7** were attempted once each. Four
-> produced authentic randomized selected-arm examples and two ended during setup, for **4/6
-> yield** in **600.789 seconds**: 12,209 controller actions, 609,272 emulator frames, and about
-> **23.97 examples per outer wall-clock hour**. Every terminal remains in the denominator.
+> **Current product focus (August 30, 2026): the bounded R1 successor is complete; design the
+> powered clustered curriculum before collecting more data.** From exact source `a358014f` under
+> green CI `33329384186/1`, untouched train ordinals **8–15** were attempted once each. Six
+> produced authentic randomized selected-arm examples and two ended during setup, for **6/8
+> yield** in **523 seconds**: 9,658 controller actions, 488,081 emulator frames, and about **41.30
+> examples per outer wall-clock hour**. The complete successor produced **12/16** examples; every
+> terminal remains in the denominator and all sixteen claim pairs are consumed.
 >
-> The authentic board is now **causal train 12/60 · integration fit 1/1 · powered fit 0 ·
-> authority 0 · transfer 0**. The corpus spans twelve distinct lineages and all seven supported
-> option kinds, with 36/36 supported candidate rows, twelve selected rows, and feature rank 10/16.
-> It is still sparse and imbalanced—two successes and ten failures, with only one outcome head at
-> the powered variation floor—so another fit would be premature. Publish the
-> [path-free six-card result](docs/evidence/red-living-dex-r1-six-card-throughput-result-v1-2026-08-30.json),
-> require green exact-main CI, then attempt untouched successor ordinals **8–15** once each in fixed
-> order. Do not retry, substitute, outcome-balance, open development, use the R0 model for
-> gameplay, or run Crystal. Stop after that eight-card batch and freeze the clustered powered V2
-> design from the complete measured denominator.
+> The authentic board is now **causal train 18/60 · integration fit 1/1 · powered fit 0 ·
+> authority 0 · transfer 0**. The corpus spans eighteen distinct lineages and all seven supported
+> option kinds, with 54/54 supported candidate rows, eighteen selected rows, and feature rank
+> 11/16. It is still sparse and imbalanced—three successes and fifteen failures, rare kinds with
+> one example, and only one outcome head at the powered variation floor—so another fit would be
+> premature. Publish the
+> [path-free completion result](docs/evidence/red-living-dex-r1-successor-completion-result-v1-2026-08-30.json),
+> require green exact-main CI, and stop. The next session is action-free engineering and independent
+> review of a versioned clustered V2 design with lineage-level power, finite budgets, attrition,
+> outcome-blind admission, information floors, Red development separation, and a frozen Crystal
+> boundary. Do not retry, refreeze, execute gameplay, fit, open development, or run Crystal.
 
 > **Previous product checkpoint (August 30, 2026): the first authentic Red causal model now exists; R1
 > measures whether data collection can scale.** PR [#114](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/114)

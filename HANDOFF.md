@@ -14,7 +14,35 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-30: R1 produced four of six lessons — finish the frozen successor next
+## 2026-08-30: the bounded successor is complete — clustered V2 design is next
+
+Exact source `a358014fb2dfe4193c9474ee1cc008cd249eb03c` passed CI `33329384186/1`.
+From that source, untouched successor train ordinals 8 through 15 were each claimed and attempted
+once in their frozen order. Six settled authentic randomized selected-arm examples and two ended
+during setup before behavior commitment. The batch therefore produced **6/8 examples** after
+9,658 controller actions, 488,081 emulator frames, and 523 seconds of measured outer time—about
+41.30 examples per hour. No card may retry or be replaced.
+
+Across ordinals 0 through 15, the successor produced **12/16 examples**, four setup-only
+terminals, 30,367 actions, and 1,500,787 frames. The complete authenticated train corpus now holds
+**18 examples from 18 causal identities, decisions, and lineages**, maximum lineage multiplicity
+one. It covers all seven Red-supported portable kinds and 54/54 supported candidate rows, but has
+only eighteen selected rows, rank 11/16, three successes, fifteen failures, and only
+`verified_success` at the powered variation floor. The completion batch itself added one success
+and five failures. Preserve that imbalance; do not shop for better outcomes.
+
+This closes the throughput question. Scenario execution is fast enough; prospective information
+diversity and independent held-out power are the bottlenecks. Publish the
+[path-free completion result](docs/evidence/red-living-dex-r1-successor-completion-result-v1-2026-08-30.json)
+under green exact-main CI and stop this session. The following session may engineer and review an
+action-free clustered powered V2 design. It must freeze the independent lineage unit, influence
+cap, attrition treatment, partitions, finite lineage budget, correlation-sensitive power,
+outcome-blind admission, information floors, and supported-feature Crystal boundary before any
+new private schedule or gameplay. Do not retry the successor, refit R0, open development, use a
+model for gameplay, promote authority, run sealed Red or Crystal, or replay a full game. The board
+is **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+## Previous 2026-08-30 checkpoint: R1 produced four of six lessons
 
 Published main `72f57d0a0fc6d68000ab4cfd75b8e0f4dde450fc` passed CI
 `33322464644/1`. From that exact source, successor train ordinals 2 through 7 were each claimed

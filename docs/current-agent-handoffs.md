@@ -6,6 +6,28 @@ Status: active operating assignment as of 2026-08-30. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: bounded R1 complete; Codex owns publication and clustered V2 design
+
+Exact source `a358014f` passed CI `33329384186/1`. Codex then attempted untouched successor
+ordinals 8–15 once each in frozen order. Six settled authentic selected-arm causal examples and
+two ended during setup, for **6/8 yield**, 9,658 actions, 488,081 frames, and about 41.30 examples
+per measured hour. Across ordinals 0–15 the complete successor is **12/16**; all claim pairs are
+consumed. The corpus is **18/60**, eighteen lineages, all seven supported option kinds, 54/54
+supported candidates, selected-feature rank 11/16, three successes, and fifteen failures.
+
+Codex owns publication of the
+[completion result](evidence/red-living-dex-r1-successor-completion-result-v1-2026-08-30.json),
+green exact-main verification, and then a hard stop. In the next session Codex may implement only
+the action-free clustered V2 design and falsification tests. Claude should challenge independent
+unit, cluster power, correlation sensitivity, attrition, leakage, and outcome-blind admission.
+Antigravity should challenge the hierarchy, supported-capability coverage, portable state, and
+frozen Crystal boundary. Both remain read-only; Codex records evidence-based acceptance or
+rejection before any design freeze.
+
+No successor retry or replacement, private scenario freeze, Red gameplay, fit, development open,
+teacher target, authority promotion, sealed Red, Crystal execution, or full replay is permitted
+in this checkpoint. Powered fit, gameplay authority, and transfer remain zero.
+
 ## Mission horizon: Red evidence to an honest Crystal transfer test
 
 All agents must also read the
@@ -35,7 +57,7 @@ and unsupported-abstention endpoints. Details are in the
 [review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
 assignments begin at the next named milestone; no standing audit blocks ordinary current-lane work.
 
-## Current override: six-card R1 passed throughput; Codex owns successor completion
+## Previous override: six-card R1 passed throughput; Codex owned successor completion
 
 Exact published main `72f57d0a` passed CI `33322464644/1`. Codex then attempted untouched
 successor train ordinals 2–7 once each in their frozen order. Four settled authentic selected-arm

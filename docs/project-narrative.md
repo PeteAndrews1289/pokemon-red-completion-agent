@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: the bounded classroom is complete, and speed is no longer the excuse
+
+The final eight frozen Red lesson cards ran once each. Six became authentic randomized
+selected-arm consequences; two ended during setup and stayed in the denominator. The batch took
+523 seconds, 9,658 controller actions, and 488,081 emulator frames—about 41.30 usable lessons per
+hour. Across all sixteen successor cards, twelve settled and four ended during setup. Every claim
+is consumed, so the project cannot polish the result through retries.
+
+The classroom now holds eighteen lessons from eighteen lineages, spans all seven shared
+collection intents, and represents all 54 offered candidate rows. It is still not a powered
+curriculum: selected-feature rank is 11/16, rare intents have one example, outcomes are three
+successes versus fifteen failures, and only verified success reaches the declared variation
+floor. Keeping the five new failures and one new success together is the point; the scenario
+schedule cannot be chosen after seeing which lesson looks useful.
+
+This turns the next problem from execution into experimental design. Before another private
+scenario or fit, a clustered V2 contract must state what counts as an independent lineage, how
+much influence each lineage receives, how attrition and correlation affect power, where train and
+untouched Red development belong, which information floors are achievable, and exactly what
+supported representation will cross into Crystal. The score is **18/60 causal examples,
+integration fit 1/1, powered fit 0, authority 0, transfer 0**. The end product remains a
+teacher-independent, cross-game living-Pokedex agent—not a smoother Red script.
+
 ## August 30: six sealed lesson cards reveal the real bottleneck
 
 The first model proved the plumbing worked, but eight lessons could not tell us whether the

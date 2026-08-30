@@ -3,7 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-> **August 30 R1 six-card result:** Exact published main `72f57d0a` passed CI
+> **August 30 bounded-successor completion:** Exact source `a358014f` passed CI
+> `33329384186/1`, then untouched successor train ordinals 8–15 were attempted once each. Six
+> recorded authentic selected-arm examples and two ended during setup: **6/8 yield · 9,658
+> actions · 488,081 frames · 523 seconds · ~41.30 examples/hour**. The complete successor is
+> **12/16 settled**, four setup-only terminals, and all sixteen claim pairs consumed.
+>
+> The corpus is now **18/60 train examples · 18 lineages · all 7 supported kinds · 54/54
+> supported candidate rows · selected-feature rank 11/16 · successes 3 · failures 15**. This
+> closes throughput but not powered information or held-out power. Publish the
+> [path-free result](evidence/red-living-dex-r1-successor-completion-result-v1-2026-08-30.json),
+> require green exact-main CI, and stop. Next engineer and independently review an action-free
+> clustered powered V2 design before another private freeze, gameplay batch, fit, development
+> open, or Crystal run. **Integration fit 1/1 · powered fit 0 · authority 0 · transfer 0.**
+
+> **Previous August 30 R1 six-card result:** Exact published main `72f57d0a` passed CI
 > `33322464644/1`, then untouched successor train ordinals 2–7 were attempted once each. Four
 > recorded authentic selected-arm examples and two ended during setup: **4/6 yield · 12,209
 > actions · 609,272 frames · 600.789 seconds · ~23.97 examples/hour**. All six claims are consumed.

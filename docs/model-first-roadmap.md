@@ -11,36 +11,47 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: R1 throughput passed; complete the frozen successor
+## Current checkpoint: bounded R1 complete; design clustered powered V2
+
+Exact source `a358014f` passed CI `33329384186/1`, then untouched successor train ordinals 8–15
+were attempted sequentially and at most once. Six settled authentic randomized selected-arm
+examples and two ended during setup. The final prospective denominator yielded **6/8 examples in
+523 seconds**, after 9,658 actions and 488,081 frames, or about 41.30 examples per outer wall-clock
+hour. Across ordinals 0–15 the complete successor yielded **12/16 examples**; all claim pairs are
+consumed.
+
+The corpus is **18 train-only examples from 18 lineages**, with all seven supported portable kinds,
+54/54 supported candidate rows, eighteen selected rows, and feature rank 11/16. It contains three
+successes and fifteen failures, rare kinds with one example, and only `verified_success` at the
+powered variation floor. This closes the throughput gate but fails the powered-information gate.
+It is not evidence that the R0 model can play.
+
+The next product-aligned sequence is:
+
+1. publish the complete bounded-successor denominator and require green exact-main CI;
+2. stop this session without another private read, gameplay action, fit, or development access;
+3. engineer a versioned action-free clustered V2 design around immutable upstream lineages rather
+   than treating sibling candidate rows as independent;
+4. freeze prospective lineage influence caps, attrition treatment, partition ownership, finite
+   budgets, correlation-sensitive held-out power, and outcome-blind admission;
+5. prove action-free capacity for the declared information floors and preserve a frozen
+   supported-feature Crystal transfer boundary; and
+6. obtain independent statistics/leakage and architecture/transfer reviews before any private
+   schedule freezes or gameplay resumes.
+
+Do not refit R0, retry or replace any successor ordinal, select rows to repair the observed class
+imbalance, open development, use a model for gameplay, query a teacher or counterfactual target,
+promote authority, run sealed Red or Crystal, or resume a full replay. The board is **causal train
+18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+## Previous checkpoint: R1 throughput passed; complete the frozen successor
 
 Exact published main `72f57d0a` passed CI `33322464644/1`, then untouched successor train
 ordinals 2–7 were attempted sequentially and at most once. Four settled authentic randomized
 selected-arm examples and two ended during setup. The prospective denominator therefore yielded
 **4/6 examples in 600.789 seconds**, after 12,209 actions and 609,272 frames, or about 23.97
-examples per outer wall-clock hour. All six claim pairs are consumed.
-
-The complete corpus is **12 train-only examples from 12 lineages**, with all seven supported
-portable option kinds, 36/36 supported candidate rows, twelve distinct selected rows, and selected
-feature rank 10/16. It contains two successes and ten failures; the four new rows were all
-failures. Only `verified_success` currently reaches the powered effect-variation floor. This is a
-throughput pass, not a powered-information pass and not evidence that the R0 model can play.
-
-The next product-aligned sequence is:
-
-1. publish the complete six-card denominator and require green exact-main CI;
-2. attempt untouched successor train ordinals 8–15 in fixed order and at most once each;
-3. preserve every setup terminal, interruption, commitment, and selected-arm outcome without
-   replacement, route repair, or outcome-aware admission;
-4. aggregate the complete 16-card successor for yield, lineage uniqueness, option support,
-   selected-feature rank, target variation, class balance, action/frame cost, and wall time;
-5. stop before any new scenario generation or powered fit; and
-6. freeze the clustered powered V2 design, including independent unit, lineage cap, attrition,
-   partition ownership, power sensitivity, and information floors, before scaling further.
-
-Do not refit R0, retry ordinals 0–7, open development, use model predictions for gameplay, query a
-teacher or counterfactual target, balance outcomes by selecting rows, promote authority, run sealed
-Red or Crystal, or resume a full replay. The board is **causal train 12/60 · integration fit 1/1 ·
-powered fit 0 · authority 0 · transfer 0**.
+examples per outer wall-clock hour. All six claim pairs are consumed. The corpus reached 12/60,
+and the next fixed batch was ordinals 8–15; that batch is now complete above.
 
 ## Previous checkpoint: R0 fit passed; measure six untouched R1 lessons
 

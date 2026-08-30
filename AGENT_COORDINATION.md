@@ -1,6 +1,22 @@
 # Three-agent coordination
 
-> **2026-08-30 R1 six-card override — publish, then finish ordinals 8–15:** From exact published
+> **2026-08-30 bounded-successor override — publish, stop, then design clustered V2:** Exact
+> source `a358014f` passed CI `33329384186/1`; untouched successor ordinals 8–15 then ran once
+> each. Six settled and two ended during setup: **6/8 yield · 9,658 actions · 488,081 frames ·
+> 523 seconds · ~41.30 examples/hour**. The complete successor is **12/16**, and every claim pair
+> is consumed. The corpus is **18/60**, one lineage per example, all seven supported kinds, rank
+> 11/16, three successes, and fifteen failures. Powered fit, gameplay authority, and transfer
+> remain zero.
+>
+> Codex owns path-free publication and exact-main CI verification, then stops this session. The
+> next session is action-free clustered V2 engineering. Claude's next useful review is statistics,
+> leakage, lineage-level power, attrition, and outcome-blind admission. Antigravity's is the
+> title-neutral hierarchy, finite capability coverage, and frozen Crystal boundary. Both remain
+> read-only milestone reviewers; Codex adjudicates their findings. No successor retry, new private
+> freeze, gameplay, powered fit, development access, authority promotion, sealed Red, Crystal, or
+> full replay is open until the reviewed design passes.
+
+> **Previous 2026-08-30 R1 six-card override — publish, then finish ordinals 8–15:** From exact published
 > main `72f57d0a` under green CI `33322464644/1`, untouched successor ordinals 2–7 ran once each.
 > Four settled and two ended during setup: **4/6 yield · 12,209 actions · 609,272 frames ·
 > 600.789 seconds · ~23.97 examples/hour**. The corpus is now **12/60**, one lineage per example,
