@@ -96,6 +96,12 @@ Allowed claim: **the causal learning path works end to end**.
 
 Forbidden shortcut: treating in-sample error or an interesting coefficient as model quality.
 
+Implementation checkpoint, 2026-08-30: the claim-first train-only fitter passes 5,822 full-suite
+and 161 focused tests, static checks, four source-bound registry gates, and the exact Mac runtime
+check. Qualification opened no private corpus and performed zero fits. Publish the exact source,
+require green push CI on exact main, execute once, and do not start R1 until the path-free fit
+receipt is recorded and this roadmap is reoriented.
+
 ## Phase R1 — freeze the clustered design, then build the powered Red curriculum
 
 Purpose: replace an integration sample with enough independent, informative consequences to test a

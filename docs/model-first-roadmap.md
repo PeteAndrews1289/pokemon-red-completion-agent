@@ -13,6 +13,15 @@ composition, and a frozen portable contract before Crystal execution opens.
 
 ## Current checkpoint: eight lessons passed readiness; fit the model once
 
+The smallest production fitter is now locally qualified. It has no ROM, state, development,
+teacher, candidate-selection, retry, public-output-file, or authority surface. It binds the exact
+readiness result and unchanged gate implementation, requires clean published main and its green
+push CI, holds the causal denominator stable, claims the one V1 fit before learner invocation,
+and reopens immutable model bytes. Seven-of-eight input, nonfinite conditioning, duplicate fit,
+and incomplete-claim retry all fail closed. The local gate passed 5,822 full-suite and 161 focused
+tests; no real private corpus or model opened. Publication and exact-main CI are now the only steps
+before the one R0 fit.
+
 PR 111 merged the train-only audit as exact main `ed6066e0`; push CI `33298743000/1` passed.
 The audit then ran once over the complete causal-example family. It authenticated eight settled
 train rows from eight distinct lineages and decisions, six selected portable kinds, eight selected

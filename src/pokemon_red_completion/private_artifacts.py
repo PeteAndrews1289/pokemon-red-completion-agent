@@ -169,6 +169,16 @@ class PrivateSealedRecord:
             raise PrivateArtifactError("sealed private record is not a JSON object")
         return value
 
+    def read_bytes(self) -> bytes:
+        """Return the exact canonical bytes authenticated by the sealed manifest.
+
+        Bytes are immutable and contain no filesystem location.  Exposing this
+        verified snapshot lets model publishers prove an actual byte-for-byte
+        reopen instead of weakening the claim to decoded-object equality.
+        """
+
+        return bytes(self._payload)
+
 
 @dataclass(frozen=True, slots=True)
 class EpisodeArtifactState:

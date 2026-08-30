@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: build the first fitter so it can only tell the truth
+
+The first real training command is now locally qualified. It takes the full eight-row authentic
+Red corpus as one locked denominator, requires the already-passed readiness proof, and claims its
+single V1 fit identity before invoking the existing interpretable ridge learner. The resulting
+model can be written only to one immutable private record and must reopen as identical canonical
+bytes and as the same typed model.
+
+The failure tests describe the design better than the happy path. Seven rows cannot masquerade as
+eight. A duplicate invocation cannot fit again. A power loss after the durable claim cannot become
+a retry. Nonfinite conditioning stops publication. The public receipt cannot include a coefficient,
+loss, selected target, lineage, binding, dataset digest, or private path. There is no command-line
+surface for a ROM, state, development row, candidate choice, teacher, retry, output file, or
+authority promotion.
+
+The complete local gate passed 5,822 tests, 161 focused checks, Ruff, Mypy over 315 source files,
+four source-bound registries, and the exact original-Mac runtime check. Those are engineering
+results only: the private corpus never opened and the board remains eight causal examples, zero
+integration fits, zero powered fits, zero authority, and zero transfer. The exact source must now
+be published and pass green push CI before the one real fit. This keeps the next evidence rung
+small and honest while preserving the larger destination: a hierarchical model that completes
+stories and living Pokedexes across games.
+
 ## August 30: draw the whole bridge before taking the next step
 
 The project had accumulated dozens of defensible local gates, yet the distance between them and

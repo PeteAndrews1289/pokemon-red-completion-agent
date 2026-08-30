@@ -1,0 +1,70 @@
+{
+  "claim_boundary": {
+    "supported": "The published-readiness-bound command can hold the complete causal family stable, claim the sole V1 fit identity before learner invocation, fit the existing deterministic ridge model over all eight rows, publish one immutable private model record, and reopen exact bytes without exposing development or gameplay surfaces.",
+    "unsupported": [
+      "production_integration_fit_executed",
+      "model_quality_or_generalization",
+      "powered_model_fit_executed",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 0,
+    "gameplay_model_predictions": 0,
+    "private_fit_claims": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "qualification": {
+    "complete_denominator_enforced": true,
+    "create_only_model_identity": true,
+    "exact_runtime_qualification_tests": 1,
+    "focused_tests": 161,
+    "full_suite_deselected_environment_bound_tests": 1,
+    "full_suite_passed": 5822,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 315,
+    "private_byte_reload_tested": true,
+    "readiness_implementation_pinned": true,
+    "readiness_result_pinned": true,
+    "registry_checks": 4,
+    "ruff_passed": true
+  },
+  "safety_properties": {
+    "causal_collection_lock_held_through_fit": true,
+    "claim_precedes_fit": true,
+    "development_command_surface": false,
+    "duplicate_invocation_refits": false,
+    "incomplete_claim_retry_allowed": false,
+    "model_record_contains_authority": "non_authoritative_integration_only",
+    "public_coefficient_values": false,
+    "public_loss_values": false,
+    "public_private_paths": false,
+    "rom_or_emulator_surface": false,
+    "seven_of_eight_fit_accepted": false,
+    "source_and_green_ci_required": true
+  },
+  "schema": "pokemon.red.living-dex-causal-integration-fit-local-qualification.v1",
+  "source": {
+    "base_commit": "3e19ebecab0df6b8aac2b1c6142e810566c839ca",
+    "fit_command_sha256": "be107758bc299f6c9d1293f1723e4b001f8d63f8df15a752a19a0555865b5ae4",
+    "fit_module_sha256": "1d387603a65c449cba548d36f1564d80f811cfed9ec18fe4a881b0d484c4e7b3",
+    "readiness_implementation_sha256": "26ef82122926df816b0ba1a67db3d5a6f40a80ab4b129a0eb3e16955fb8a41d3",
+    "readiness_result_sha256": "d0fcaeb7bde027d4320d2c6b4a119b98a0bf84f2d4a4d56f2104bd24f76f5bff",
+    "working_source_bundle_sha256": "f6502562b0711e81efc67bafdd26e523b6782627ef376afb18d543011d6bdea8"
+  },
+  "status": "locally_qualified_publication_and_exact_main_ci_next"
+}

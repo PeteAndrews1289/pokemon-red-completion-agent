@@ -6,20 +6,26 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the complete eight-example corpus passed readiness;
-> fit the first model once.** PR [#111](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/111)
+> **Current product focus (August 30, 2026): the first real fitter is qualified; publish it before
+> fitting once.** PR [#111](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/111)
 > merged the action-free audit as exact main `ed6066e0`; push CI `33298743000/1` passed. The one
 > audit invocation authenticated **8 settled train rows · 8 lineages · 8 decisions · 6 selected
 > portable kinds · 8 selected feature rows · 24/24 supported candidates · 7 varying target heads ·
 > censoring/development 0**. It made zero fits, predictions, teacher queries, controller actions,
 > emulator frames, or claims.
 >
-> The board remains **causal train 8/60 · powered fit 0 · authority 0 · transfer 0**. The
+> The board remains **causal train 8/60 · integration fit 0/1 · powered fit 0 · authority 0 ·
+> transfer 0**. The
 > [path-free readiness result](docs/evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json)
-> permits exactly one non-authoritative integration fit over all eight rows; it does not claim the
-> model can play. Next fit the existing interpretable option-value model once, retain and reopen it
-> privately, publish only path-free diagnostics, and reorient before a bounded batch of untouched
-> successor data toward 60. Development, sealed Red, Crystal, and authority promotion stay closed.
+> permits exactly one non-authoritative integration fit over all eight rows. The new claim-first
+> command holds that complete corpus stable, rejects seven-of-eight input, claims the sole private
+> fit identity before learner invocation, and byte-reopens one immutable model. It passes **5,822
+> full-suite tests · 161 focused tests · Ruff · Mypy over 315 source files · four registry gates**;
+> the exact Mac runtime-only check passed separately. No real fit or private opening occurred in
+> qualification. Next publish this exact source, require green push CI on main, run it once, and
+> stop at the fit receipt. Development, gameplay, sealed Red, Crystal, quality claims, and
+> authority promotion stay closed. See the
+> [local qualification](docs/evidence/red-living-dex-causal-integration-fit-local-qualification-v1-2026-08-30.json).
 
 > **Previous product checkpoint (August 29, 2026): the 16+4 successor is frozen; publish its exact
 > train-only consumer.** PR [#106](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/pull/106)

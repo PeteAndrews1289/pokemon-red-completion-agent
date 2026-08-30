@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.living_dex_causal_journal import (
+    LIVING_DEX_CAUSAL_COLLECTION_ID,
     LivingDexCausalDisposition,
     LivingDexCausalEffectCheckpoint,
     LivingDexCausalIdentity,
@@ -277,6 +278,28 @@ def test_complete_causal_example_family_reopens_with_all_private_joins(
     assert rows[0].example == receipt.example
     assert rows[0].terminal == receipt.terminal
     assert not hasattr(rows[0], "public_dict")
+
+
+def test_complete_causal_family_can_remain_locked_through_a_consumer(
+    tmp_path: Path,
+) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, _ = _scenario("aggregate-reader-held-lock")
+    receipt = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+
+    with store.collection_session(LIVING_DEX_CAUSAL_COLLECTION_ID) as session:
+        rows = load_living_dex_authenticated_causal_examples(
+            store,
+            collection_session=session,
+        )
+        session.require_store(store)
+
+    assert len(rows) == 1
+    assert rows[0].example == receipt.example
 
 
 def test_causal_corpus_reader_fails_closed_on_example_without_terminal(

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the passing eight-example readiness result, then fit and privately reload exactly one non-authoritative integration model over the complete train denominator. Reorient at the fit receipt before any successor gameplay, development access, or authority claim.
+- Next decision: Publish the qualified fitter, require green exact-main push CI, then fit and privately byte-reload exactly one non-authoritative integration model over the complete train denominator. Reorient at the fit receipt before any successor gameplay, development access, or authority claim.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds eight authentic settled Red causal train examples. A one-shot action-free audit proved all eight are train-only, independently identified, fully supported, uncensored, and sufficiently varied for one non-authoritative integration fit. No model has yet been fit and no gameplay authority exists. |
+| Authority now | The pipeline holds eight authentic settled Red causal train examples and a locally qualified claim-first integration fitter. No production model has yet been fit and no gameplay authority exists. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
 | Cheapest falsifier | Fit the existing interpretable option-value model exactly once on the complete authenticated eight-row train denominator, privately reload the model byte-for-byte, and publish only path-free training diagnostics. The fit must make zero gameplay choices, controller actions, teacher queries, development reads, authority promotions, or transfer claims. |
@@ -58,19 +58,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-30-eight-example-readiness-passed-integration-fit-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json)
+**2026-08-30-integration-fitter-qualified-publication-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-causal-integration-fit-local-qualification-v1-2026-08-30.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The project has moved from collecting enough short causal lessons to the first real model-training operation. The fit is deliberately non-authoritative: it proves the cross-title option-value learning path can consume honest Red consequences before the curriculum scales toward powered Red evaluation and Crystal transfer. |
-| Learning output | No new causal example or model was created. Exact main ed6066e0 under green CI 33298743000/1 ran the audit once over the complete eight-row train denominator: eight distinct lineages and decisions, six selected kinds, eight selected feature rows, 24/24 candidates supported, seven varying target heads, no censoring, and full support. Fits, predictions, development reads, teachers, actions, frames, claims, and disclosure remained zero. |
-| Authority delta | None. The complete eight-example corpus passed the frozen plumbing-readiness contract, which permits one non-authoritative fit but proves neither model quality nor gameplay competence. Powered Red, sealed Red, Crystal, transfer, and living-Pokedex authority remain zero. |
+| Learning output | No new causal example or model was created. The fitter passed 5,822 full-suite tests, 161 focused tests, Ruff, Mypy over 315 source files, four source-bound registry gates, and the exact Mac runtime check. Real private openings, fits, gameplay predictions, development reads, teachers, actions, frames, claims, authority, and transfer remained zero. |
+| Authority delta | None. The exact production fitter is locally qualified, but it opened no real private corpus and created no model. Powered Red, sealed Red, Crystal, transfer, and living-Pokedex authority remain zero. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The eight-row support gate passed: eight lineages, six selected kinds, eight selected feature rows, 24/24 supported candidates, and seven varying targets. The immediate blocker is a deterministic train-only fit and private byte-identical model publication over the complete denominator, with development and gameplay closed. |
-| Decision | Publish the readiness pass and reorientation, then implement and execute exactly one deterministic non-authoritative integration fit over the complete eight-row train denominator. Privately retain and reload the model, publish only path-free fit diagnostics, and reorient before collecting a bounded batch of never-claimed successor rows toward 60. |
-| Next session | Publish this readiness result, then build and qualify the smallest deterministic train-only integration-fit command around the existing authenticated loader, readiness proof, ridge fitter, and immutable private artifact store. Run it once only after qualification; stop at its fit receipt before any gameplay or successor-row execution. |
+| Blocker | The eight-row support gate passed and the claim-first fitter now passes the complete local gate. Its exact source must be published on main and pass green push CI before the sole production fit may open the private train corpus. |
+| Decision | Publish the locally qualified claim-first fitter, require green push CI on exact main, then execute it exactly once over the locked complete eight-row train denominator. Retain the raw path-free result and reorient at the fit receipt before any successor gameplay or development access. |
+| Next session | Commit and publish the qualified fitter, wait for green push CI on its exact main commit, then run it once from that clean source over the existing private corpus. Preserve the raw output and stop at the fit receipt for mission reorientation. |
 | Next falsifier | The integration fitter must consume the same complete eight-row denominator, require the passed readiness proof, fit exactly once, privately publish and reload an identical model, and expose only path-free diagnostics while every gameplay, teacher, development, authority, and transfer effect remains zero. |
-| Stop condition | Stop on a readiness-audit retry, omission or substitution of any of the eight rows, development access, model-driven gameplay, model-quality or authority promotion from training error, private leakage, teacher or counterfactual targets, sealed Red or Crystal execution, or full-game replay as routine data generation. |
+| Stop condition | Stop on source or CI mismatch, a changed readiness proof, omission or substitution of any row, an existing incomplete fit claim, nonfinite conditioning, reload inequality, development access, model-driven gameplay, model-quality or authority promotion, private leakage, teacher or counterfactual targets, sealed Red or Crystal execution, or full-game replay. |
 
 ### Stop conditions
 
