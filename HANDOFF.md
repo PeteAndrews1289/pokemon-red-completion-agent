@@ -12,6 +12,37 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-30: the eight-example readiness gate passed — fit once, without authority
+
+The mission remains a hierarchical player that completes stories and living Pokedexes across
+games. Red is the first causal curriculum and Crystal is the first transfer falsifier; neither a
+fixed Red route nor this eight-row model is the product.
+
+PR 111 merged the train-only readiness boundary as exact main
+`ed6066e0bd6b6d6140aeb90935a76e26678b2b68`; push CI `33298743000/1` passed every gate in
+17m41s. From a clean detached checkout, the command ran exactly once over the complete immutable
+causal-example family. It authenticated **8 settled train examples · 8 causal identities · 8
+decision identities · 8 lineages · maximum 1/lineage · 6 selected portable kinds · 8 selected
+feature rows · 24/24 supported candidate rows · 7 varying outcome heads · 8/8 full-support
+behavior · censoring 0 · development 0**. The result contains no private identity, path, selected
+arm, or outcome detail.
+
+This audit made **fits 0 · predictions 0 · teachers 0 · controller actions 0 · emulator frames 0 ·
+claims 0**. It therefore changes no learning or authority counter: **causal train 8/60 · powered
+fit 0 · authority 0 · transfer 0**. What changed is permission: the frozen support-and-information
+gate now allows exactly one explicitly non-authoritative integration fit over all eight rows. The
+[path-free result](docs/evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json)
+is `d0fcaeb7…f5bff`; the machine result is `0a6ad9c6…d7ee8`.
+
+Next build the smallest deterministic train-only fitter around the authenticated corpus loader,
+the passed readiness proof, the existing ridge option-value model, and immutable private model
+publication. It must consume all eight rows, fit once, reload the same model byte-for-byte, and
+publish only path-free training diagnostics. Stop and reorient at that fit receipt. Do not rerun
+the readiness audit, open development, execute ordinal 2, drive gameplay with the model, infer
+quality from training error, run sealed Red or Crystal, or promote authority. After the plumbing
+fit, the efficient data path is a bounded batch of never-claimed successor rows toward 60—not
+another full-game teacher campaign or one publication cycle per example.
+
 ## 2026-08-30: successor ordinal one settled — audit the eight-example denominator before fitting
 
 The mission is unchanged: build a hierarchical player that completes stories and living Pokedexes

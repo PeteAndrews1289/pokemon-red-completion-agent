@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: eight honest lessons are enough to turn on the training machinery
+
+The first question at eight examples was not whether a model could beat Pokémon. It was whether
+the eight examples were genuinely different enough to train anything without quietly discarding
+the inconvenient ones. The answer is yes. One action-free audit opened the entire immutable
+train family and found eight settled choices from eight lineages, six selected collection intents,
+eight distinct selected feature rows, and variation across seven measured consequences. Every one
+of the twenty-four offered choices lies on Red's declared portable feature projection.
+
+Nothing played while that answer was measured. There was no teacher, emulator frame, controller
+input, prediction, fit, development read, replacement row, or private disclosure. That distinction
+is the chapter's point: the project has finally crossed from “can we collect honest lessons?” to
+“can the learner consume them?” without pretending the learner is already competent.
+
+The next operation is the first real model-training step. The existing interpretable option-value
+model will fit once on all eight rows, be retained and reopened privately, and publish only a
+path-free diagnostic. Its training error cannot grant gameplay authority; eight rows are far too
+small for that claim. After the plumbing proof, the project returns to what matters—collecting a
+bounded batch of new causal decisions toward sixty, evaluating on untouched Red lineages, and only
+then freezing the shared representation for Crystal. The living Pokedex remains the product; Red
+is still the first classroom.
+
 ## August 30: the second successor card reaches the first integration floor
 
 PR 109 published the first successor lesson, exact main passed every CI gate, and a second pristine

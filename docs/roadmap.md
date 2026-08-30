@@ -3,6 +3,22 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 30 integration-readiness result:** PR 111 merged the action-free audit as exact main
+> `ed6066e0`; push CI `33298743000/1` passed in 17m41s. The one audit invocation consumed the
+> complete immutable denominator and returned **8 settled train rows · 8 causal identities · 8
+> decisions · 8 lineages · max 1/lineage · 6 selected portable kinds · 8 selected feature rows ·
+> 24/24 supported candidates · 7 varying targets · 8/8 full support · censoring/development 0**.
+> Fits, predictions, teachers, actions, frames, claims, and private disclosure were zero.
+>
+> The readiness gate therefore opens exactly one non-authoritative integration fit; it does not
+> grant model quality, gameplay, Red, Crystal, transfer, or living-Pokedex authority. Next publish
+> the [path-free result](evidence/red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json),
+> then build and run a deterministic train-only fitter that consumes all eight rows once, stores
+> and reopens the model privately, and emits only path-free diagnostics. Reorient at the fit receipt
+> before a bounded batch of untouched successor data. Do not rerun the audit, open development,
+> execute gameplay in the fit gate, or infer quality from in-sample error. **Causal train 8/60 ·
+> powered fit 0 · authority 0 · transfer 0.**
+
 > **August 30 successor ordinal-one result:** PR 109 published ordinal 0 as exact main `2ea86bcc`;
 > push CI `33294371591/1` passed. Untouched successor ordinal 1 then ran exactly once and recorded
 > one independently observed selected-arm causal target with **one behavior commitment · 3,322

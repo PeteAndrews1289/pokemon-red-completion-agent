@@ -1,21 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-30 active override — eight-example floor reached; train-only readiness next:** Codex
-> owns publication of the path-free ordinal-one terminal, exact-main CI, and one action-free
-> train-only integration-readiness audit over the complete eight-example denominator. Exact main
-> `2ea86bcc` passed CI `33294371591/1`; ordinal 1 then recorded one selected-arm causal target after
-> 3,322 actions and 146,341 frames with zero teachers, counterfactual or unselected targets,
-> predictions, fits, development access, or retry. **Causal train 8/60 · powered fit 0 · authority
-> 0 · transfer 0.** Ordinals 0 and 1 are permanently consumed. The audit may expose aggregates
-> only and must fit nothing. No ordinal 2, wrapper, preflight, census, route repair, teacher gate,
-> development access, fit, Crystal run, or full replay is admissible before its result and
-> reorientation.
+> **2026-08-30 active override — eight-example readiness passed; one integration fit next:** Codex
+> owns publication of the readiness result and one deterministic train-only fit over the complete
+> eight-row denominator. Exact main `ed6066e0` passed CI `33298743000/1`; the single audit found
+> eight lineages and decisions, six selected kinds, eight selected feature rows, 24/24 supported
+> candidates, seven varying target heads, full support, and zero censoring/development. It made
+> zero fits, predictions, teachers, actions, frames, or claims. **Causal train 8/60 · powered fit 0
+> · authority 0 · transfer 0.** The fit must consume all eight rows once, publish/reopen its model
+> privately, and expose only path-free diagnostics. No audit retry, ordinal 2, development, gameplay,
+> quality claim, authority promotion, sealed Red, Crystal, or full replay is admissible before the
+> fit result and reorientation.
 >
 > Claude remains the optional read-only statistical/leakage challenger at model-fit milestones.
 > Antigravity remains the optional read-only architecture/exactly-once/transfer challenger.
 > Reviewer absence does not block this ordinary development outcome, and neither reviewer edits,
 > sees private identities, executes gameplay, publishes, or grants authority. Codex adjudicates
 > all advice against the mission and measured evidence.
+
+> **2026-08-30 previous override — eight-example floor reached; train-only readiness next:** The
+> ordinal-one result moved the authentic corpus to 8/60 and the subsequent one-shot aggregate audit
+> closed this gate with a pass. Its constraints and consumed identities remain historical evidence.
 
 > **2026-08-29 previous override — frozen successor, exact consumer next:** The single successor
 > freeze is complete and must not retry. Published source `d4da25be` passed exact-source CI

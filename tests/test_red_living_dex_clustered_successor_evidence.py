@@ -51,6 +51,16 @@ ORDINAL_ONE_RESULT_PATH = (
     / "docs/evidence"
     / "red-living-dex-clustered-successor-train-ordinal-1-result-v1-2026-08-30.json"
 )
+INTEGRATION_READINESS_MACHINE_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-causal-integration-readiness-machine-result-v1-2026-08-30.json"
+)
+INTEGRATION_READINESS_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-causal-integration-readiness-result-v1-2026-08-30.json"
+)
 MACHINE_SHA256 = "871c1d5ca12592b4ede506b877b04b8175c61bddb9338fcf5a683d8a0512fbf2"
 RESULT_SHA256 = "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4"
 QUALIFICATION_SHA256 = (
@@ -70,6 +80,12 @@ ORDINAL_ZERO_RESULT_SHA256 = (
 )
 ORDINAL_ONE_RESULT_SHA256 = (
     "283113a41822a5cb03f974c0ec2a04fd3d7aa36c2c57e44c4ef08eb7ba30c7ec"
+)
+INTEGRATION_READINESS_MACHINE_SHA256 = (
+    "0a6ad9c6d051b345223d4e230b269c288befdfefc0ef843c8d2ba03f068d7ee8"
+)
+INTEGRATION_READINESS_RESULT_SHA256 = (
+    "d0fcaeb7bde027d4320d2c6b4a119b98a0bf84f2d4a4d56f2104bd24f76f5bff"
 )
 
 
@@ -507,5 +523,82 @@ def test_successor_ordinal_one_result_preserves_fit_and_privacy_boundaries() -> 
     assert learning["transfer_results"] == 0
     assert receipt["privacy"]["selected_arm_identity_published"] is False
     assert receipt["privacy"]["selected_outcome_detail_published"] is False
+    assert "/Users/" not in payload
+    assert "/Volumes/" not in payload
+
+
+def test_integration_readiness_result_matches_the_one_complete_denominator_audit() -> None:
+    machine_payload = INTEGRATION_READINESS_MACHINE_PATH.read_bytes()
+    result_payload = INTEGRATION_READINESS_RESULT_PATH.read_bytes()
+    machine = json.loads(machine_payload)
+    result = json.loads(result_payload)
+
+    assert (
+        hashlib.sha256(machine_payload).hexdigest()
+        == INTEGRATION_READINESS_MACHINE_SHA256
+    )
+    assert (
+        hashlib.sha256(result_payload).hexdigest()
+        == INTEGRATION_READINESS_RESULT_SHA256
+    )
+    assert result["source"]["machine_result_sha256"] == (
+        INTEGRATION_READINESS_MACHINE_SHA256
+    )
+    assert result["source"]["exact_main_commit"] == (
+        "ed6066e0bd6b6d6140aeb90935a76e26678b2b68"
+    )
+    assert result["source"]["exact_ci_run"] == 33298743000
+    assert machine["complete_denominator_included"] is True
+    assert machine["authentic_examples"] == 8
+    assert machine["train_examples"] == 8
+    assert machine["development_examples"] == 0
+    assert machine["settled_examples"] == 8
+    assert machine["censored_examples"] == 0
+    assert machine["distinct_causal_identities"] == 8
+    assert machine["distinct_decision_identities"] == 8
+    assert machine["distinct_lineages"] == 8
+    assert machine["maximum_lineage_multiplicity"] == 1
+    assert machine["distinct_selected_option_kinds"] == 6
+    assert machine["distinct_selected_feature_rows"] == 8
+    assert machine["candidate_feature_rows"] == 24
+    assert machine["supported_candidate_feature_rows"] == 24
+    assert machine["variable_target_heads"] == 7
+    assert machine["verified_success_varies"] is True
+    assert machine["full_support_examples"] == 8
+    assert machine["reason_codes"] == []
+    assert machine["integration_fit_allowed"] is True
+
+
+def test_integration_readiness_pass_grants_no_model_or_gameplay_authority() -> None:
+    payload = INTEGRATION_READINESS_RESULT_PATH.read_text(encoding="ascii")
+    result = json.loads(payload)
+    execution = result["execution"]
+    learning = result["learning_state"]
+
+    assert execution["audit_invocations"] == 1
+    assert execution["automatic_retry_allowed"] is False
+    for field in (
+        "controller_actions",
+        "counterfactual_targets",
+        "development_schedule_reads",
+        "emulator_frames",
+        "fit_executions",
+        "model_predictions",
+        "private_identity_fields",
+        "private_path_fields",
+        "root_claims",
+        "teacher_queries",
+        "unselected_action_targets",
+    ):
+        assert execution[field] == 0
+    assert learning["authentic_causal_train_examples_before"] == 8
+    assert learning["authentic_causal_train_examples_after"] == 8
+    assert learning["integration_support_and_information_gate_passed"] is True
+    assert learning["non_authoritative_integration_fit_allowed_now"] is True
+    assert learning["integration_model_fits"] == 0
+    assert learning["powered_model_fits"] == 0
+    assert learning["authority_promotions"] == 0
+    assert learning["transfer_results"] == 0
+    assert "integration_model_fit_executed" in result["claim_boundary"]["unsupported"]
     assert "/Users/" not in payload
     assert "/Volumes/" not in payload
