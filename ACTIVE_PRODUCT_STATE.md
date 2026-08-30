@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the passed successor preflight under green exact-main CI, then execute successor train ordinal zero exactly once and reorient at its durable terminal. Open no second row and fit nothing until that result is recorded; never touch development during fitting.
+- Next decision: Publish the successor ordinal-zero terminal under green exact-main CI, then execute successor train ordinal one exactly once and reorient at its durable terminal. Fit nothing below the eight-example gate and never touch development during fitting.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds six authentic settled Red causal train examples in total. The frozen clustered schedule contributed five examples from five lineages, with two successes, three selected-arm failures, all seven kinds present in menus, and four selected kinds exercised; three other train assignments failed setup without targets. No powered fit or gameplay authority exists. |
+| Authority now | The pipeline holds seven authentic settled Red causal train examples in total. The first clustered schedule contributed five examples from five lineages; successor ordinal zero added one more independently observed selected-arm target without publishing its private arm or outcome detail. No powered fit or gameplay authority exists. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | Execute exactly one frozen successor train row, ordinal zero, through its randomized selected-arm journal. A settled example must contain only the committed arm and independently observed outcome; setup failure or interruption must become a durable no-target terminal, never a retry. |
+| Cheapest falsifier | Execute exactly one still-unclaimed frozen successor train row, ordinal one, through its randomized selected-arm journal. A settled example must contain only the committed arm and independently observed outcome; setup failure or interruption must become a durable no-target terminal, never a retry. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 6 | 60 |
+| Causal Train Example · train | 7 | 60 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-29-successor-preflight-passed-first-outcome-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-successor-train-preflight-result-v1-2026-08-29.json)
+**2026-08-30-successor-ordinal-zero-settled-second-outcome-next** · status **active** · evidence [causal train example](docs/evidence/red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The successor has crossed its final readiness gate and can now produce short causal lessons about title-neutral collection decisions rather than Red button sequences. Development remains an untouched generalization wall, and neither the preflight nor the syllabus is training or gameplay authority. |
-| Learning output | No new learning output was counted. Exact main 248346b and CI 33290594694/1 authenticated successor train ordinal zero in one ROM-free preflight with one selected-root read and every protected effect at zero. A preceding disposable-runtime bootstrap miss reached neither source nor private input and is recorded without concealment. |
-| Authority delta | None. The authenticated ROM-free preflight changed no learning counter: causal train remains 6/60, powered fit 0, authority 0, transfer 0. It opened no ROM or development outcome and made no claim, controller action, frame, behavior commitment, prediction, fit, or teacher query. |
+| Product alignment | The successor produced a real short causal lesson about a title-neutral collection decision rather than a Red button sequence. This advances the learning curriculum directly, while development remains an untouched generalization wall and the single example grants no gameplay authority. |
+| Learning output | Exact main 00334dec under green push CI 33292350018/1 consumed successor train ordinal zero exactly once. It recorded one selected-arm causal target after 5,178 controller actions and 257,093 emulator frames, with one durable behavior commitment and zero teacher queries, counterfactual or unselected targets, predictions, fits, development access, or retry. |
+| Authority delta | None. Successor ordinal zero added one causal train example, moving the authentic board from 6/60 to 7/60, but no model was fit and no gameplay, sealed Red, Crystal, transfer, or living-Pokedex authority was granted. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The exact successor consumer and ordinal-zero root now pass production preflight, but the authentic corpus is still only 6/60 and below the eight-example integration gate. The next blocker is measured selected-arm outcome yield, not another wrapper, census, teacher route, or preflight. |
-| Decision | Publish the path-free preflight result under green exact-main CI, then execute exactly successor train ordinal zero once and stop at its durable terminal. Reorient before any second row; retain setup attrition honestly and never expose development during fitting. |
-| Next session | Publish the preflight receipt and require green exact-main CI, then consume successor train ordinal zero exactly once. Stop and reorient at its durable terminal before another row or any fit; the session must create measured outcome evidence or an honest consumed no-target terminal. |
-| Next falsifier | The one-shot ordinal-zero execution must claim its exact logical and physical pair before input, preserve one randomized arm across recovery, execute no unselected arm, and either record one independently observed selected-arm target or terminate durably without a target. |
+| Blocker | The authentic corpus is 7/60 and remains one example below the eight-example non-authoritative integration gate. The blocker is another independently observed selected-arm outcome, not infrastructure, teacher routing, development access, or a full replay. |
+| Decision | Publish the ordinal-zero terminal under green exact-main CI, then execute successor train ordinal one exactly once and stop at its durable terminal. If it records the eighth example, evaluate the preregistered support and information gates before any fit; if it does not, retain the consumed no-target terminal and reorient. |
+| Next session | Publish the ordinal-zero receipt and require green exact-main CI, then consume successor train ordinal one exactly once. Stop and reorient at its durable terminal before another row or any fit; do not add an intervening wrapper, preflight, census, teacher gate, or route repair. |
+| Next falsifier | The one-shot ordinal-one execution must claim its exact logical and physical pair before input, preserve one randomized arm across recovery, execute no unselected arm, and either record the eighth independently observed selected-arm target or terminate durably without a target. |
 | Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
 ### Stop conditions
@@ -77,7 +77,7 @@ outputs.
 - The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
 - Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
 - Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
-- The successful successor preflight exhausts the one-session infrastructure allowance. The next session must attempt exactly one frozen train outcome; another wrapper, preflight, census, or teacher-yield gate is prohibited.
+- Successor ordinal zero is permanently consumed after one settled causal target. The next session may attempt only successor ordinal one once; another wrapper, preflight, census, teacher-yield gate, ordinal-zero retry, or outcome-aware row selection is prohibited.
 
 ### Hard boundaries for this lane
 
@@ -211,4 +211,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **12**.
+Current evidence entries: **13**.
