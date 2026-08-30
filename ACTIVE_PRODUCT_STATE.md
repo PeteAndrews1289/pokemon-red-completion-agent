@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and exact-CI qualify the exact-plan-bound successor consumer, pass one ROM-free zero-effect preflight, then consume only its 16 train rows at most once. Fit only after at least eight authentic settled examples exist; never touch development during fitting.
+- Next decision: Publish the passed successor preflight under green exact-main CI, then execute successor train ordinal zero exactly once and reorient at its durable terminal. Open no second row and fit nothing until that result is recorded; never touch development during fitting.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The pipeline holds six authentic settled Red causal train examples in total. The frozen clustered schedule contributed five examples from five lineages, with two successes, three selected-arm failures, all seven kinds present in menus, and four selected kinds exercised; three other train assignments failed setup without targets. No powered fit or gameplay authority exists. |
 | Authority target | First collect eight authentic settled selected-arm outcomes across at least four train lineages and four portable option kinds for a non-authoritative integration fit. Then scale to at least 60 informative train outcomes with bounded cluster weights, pass feature-support and information gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported feature projection. Compare realized zero-shot Crystal outcomes only on shared supported option kinds; treat trade, time, breeding, held-item, and other unsupported mechanics as required abstentions, then measure Crystal adaptation separately before granting those mechanics authority. |
-| Cheapest falsifier | The exact-plan-bound successor consumer must reopen all 16 frozen train rows, reject ordinal 16 and every development row, preserve the old eight-row interface unchanged, and pass one ROM-free production preflight with zero claims, actions, frames, commitments, outcomes, predictions, or fits. |
+| Cheapest falsifier | Execute exactly one frozen successor train row, ordinal zero, through its randomized selected-arm journal. A settled example must contain only the committed arm and independently observed outcome; setup failure or interruption must become a durable no-target terminal, never a retry. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-29-successor-schedule-frozen-exact-consumer-binding-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-successor-freeze-result-v1-2026-08-29.json)
+**2026-08-29-successor-preflight-passed-first-outcome-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-successor-train-preflight-result-v1-2026-08-29.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The successor is now a fixed, outcome-blind causal syllabus large enough to absorb measured setup attrition while teaching portable option values instead of Red button sequences. Development remains an untouched generalization wall, and the syllabus itself is not training or gameplay authority. |
-| Learning output | No new learning output was counted. The action-free freezer sealed 16 train scenarios from 16 lineages and four read-only development scenarios from four different lineages, covered all seven Red-supported portable kinds on both sides, and retained maximum lineage multiplicity one and zero overlap. |
-| Authority delta | None. Freezing and independently reopening the successor changed no learning counter: causal train remains 6/60, powered fit 0, authority 0, transfer 0. It opened no development outcome and made no prediction, fit, claim, controller action, or emulator frame. |
+| Product alignment | The successor has crossed its final readiness gate and can now produce short causal lessons about title-neutral collection decisions rather than Red button sequences. Development remains an untouched generalization wall, and neither the preflight nor the syllabus is training or gameplay authority. |
+| Learning output | No new learning output was counted. Exact main 248346b and CI 33290594694/1 authenticated successor train ordinal zero in one ROM-free preflight with one selected-root read and every protected effect at zero. A preceding disposable-runtime bootstrap miss reached neither source nor private input and is recorded without concealment. |
+| Authority delta | None. The authenticated ROM-free preflight changed no learning counter: causal train remains 6/60, powered fit 0, authority 0, transfer 0. It opened no ROM or development outcome and made no claim, controller action, frame, behavior commitment, prediction, fit, or teacher query. |
 | Transfer result | Distinct typed Red and Crystal semantic adapters now produce the same title-neutral option-value policy contract and respond to mechanics-specific mutations. No Crystal cartridge, frozen Red weights, or realized zero-shot outcome has run, so empirical transfer remains untested. |
-| Blocker | The fixed 16+4 schedule is frozen and independently validated, but its exact train-only consumer has not yet been published under green exact-source CI or passed the production ROM-free preflight. The eight-example integration fit remains closed. |
-| Decision | Publish the distinct exact-plan-bound successor consumer, require green exact-source CI, and run one ROM-free production preflight. Only then consume frozen train rows at most once; retain setup attrition honestly and never expose development during fitting. |
-| Next session | Finish the exact successor binding and evidence, publish it under green exact-source CI, run one zero-action production preflight, then reorient before any train-row gameplay. If the preflight passes, consume only never-claimed train rows and fit only after the cumulative authentic count reaches eight. |
-| Next falsifier | The published consumer must authenticate the exact frozen plan, expose only successor train ordinals 0 through 15, reject ordinal 16 and all development rows, preserve the consumed pilot path unchanged, and pass one ROM-free preflight with every protected effect at zero. |
+| Blocker | The exact successor consumer and ordinal-zero root now pass production preflight, but the authentic corpus is still only 6/60 and below the eight-example integration gate. The next blocker is measured selected-arm outcome yield, not another wrapper, census, teacher route, or preflight. |
+| Decision | Publish the path-free preflight result under green exact-main CI, then execute exactly successor train ordinal zero once and stop at its durable terminal. Reorient before any second row; retain setup attrition honestly and never expose development during fitting. |
+| Next session | Publish the preflight receipt and require green exact-main CI, then consume successor train ordinal zero exactly once. Stop and reorient at its durable terminal before another row or any fit; the session must create measured outcome evidence or an honest consumed no-target terminal. |
+| Next falsifier | The one-shot ordinal-zero execution must claim its exact logical and physical pair before input, preserve one randomized arm across recovery, execute no unselected arm, and either record one independently observed selected-arm target or terminate durably without a target. |
 | Stop condition | Stop on any lineage crossing train and development, outcome-aware scenario admission, teacher choices or button sequences entering learner targets, unbounded within-lineage replication, private leakage, development-to-train leakage, sealed Red or Crystal execution, authority promotion, another teacher-yield gate, or full-game replay as routine data generation. |
 
 ### Stop conditions
@@ -77,6 +77,7 @@ outputs.
 - The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
 - Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
 - Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
+- The successful successor preflight exhausts the one-session infrastructure allowance. The next session must attempt exactly one frozen train outcome; another wrapper, preflight, census, or teacher-yield gate is prohibited.
 
 ### Hard boundaries for this lane
 

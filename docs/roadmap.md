@@ -3,6 +3,19 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 30 successor-preflight result:** PR 106 published the 16+4 exact consumer; PR 107 made
+> its historical provenance test squash-safe without changing executable bundle `53116a4a…`.
+> Exact main `248346b0` passed push CI `33290594694/1`. One authenticated ROM-free preflight then
+> reopened successor train ordinal 0 with one selected-root read and **claims/actions/frames/
+> commitments/outcomes/predictions/teachers/fits 0**. A preceding disposable-runtime cache miss
+> failed before source or private access and is retained in the receipt.
+>
+> Next publish the [path-free result](evidence/red-living-dex-clustered-successor-train-preflight-result-v1-2026-08-29.json),
+> require green exact-main CI, execute ordinal 0 exactly once, and reorient at its durable terminal.
+> Do not add another preflight, wrapper, census, teacher gate, second row, development outcome, fit,
+> sealed Red run, Crystal execution, or full replay. **Causal train 6/60 · powered fit 0 · authority
+> 0 · transfer 0.**
+
 > **August 29 frozen-successor result:** PR 106 published freezer source `d4da25be` and exact-source
 > CI `33284967875/1` passed. The single action-free production freeze sealed **16 train lineages +
 > 4 distinct read-only development lineages**, all seven Red-supported portable kinds on both

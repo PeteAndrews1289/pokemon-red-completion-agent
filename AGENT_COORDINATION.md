@@ -1,6 +1,22 @@
 # Three-agent coordination
 
-> **2026-08-29 active override — frozen successor, exact consumer next:** The single successor
+> **2026-08-30 active override — preflight passed; measured outcome next:** Codex owns publication
+> of the path-free successor preflight result, exact-main CI, exactly one execution of successor
+> train ordinal 0, its path-free terminal, and the immediate mission reorientation. Exact main
+> `248346b0` passed CI `33290594694/1`; the authenticated ROM-free preflight read one selected root
+> and changed every protected effect by zero. A preceding cache-contaminated disposable-runtime
+> bootstrap miss reached neither source nor private input and is preserved in the receipt.
+> **Causal train 6/60 · powered fit 0 · authority 0 · transfer 0.** No additional wrapper,
+> preflight, census, teacher-yield gate, second row, development access, fit, Crystal run, or full
+> replay is admissible before ordinal 0 reaches a durable terminal and the project reorients.
+>
+> Claude remains the optional read-only statistical/leakage challenger at model-fit milestones.
+> Antigravity remains the optional read-only architecture/exactly-once/transfer challenger.
+> Reviewer absence does not block this ordinary development outcome, and neither reviewer edits,
+> sees private identities, executes gameplay, publishes, or grants authority. Codex adjudicates
+> all advice against the mission and measured evidence.
+
+> **2026-08-29 previous override — frozen successor, exact consumer next:** The single successor
 > freeze is complete and must not retry. Published source `d4da25be` passed exact-source CI
 > `33284967875/1`, then sealed 16 train lineages and four distinct read-only development lineages
 > with all seven Red-supported option kinds and zero protected effects. Codex owns the distinct
