@@ -1,22 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 30 scene: the key fits; turn it once
+## August 30 scene: card zero becomes lesson seven
 
-Open on **PR 106 → MAIN → CI ✗** and zoom into a single red label: **SQUASHED COMMIT NOT
-REACHABLE**. Keep the executable bundle glowing green. Replace the ancestry assumption with four
-immutable component hashes, then show **PR 107 → MAIN 248346B0 → CI 33290594694/1 ✓**.
+Open on **PR 108 → MAIN 00334DEC → CI 33292350018/1 ✓**. Slide one face-down card labeled
+**SUCCESSOR TRAIN 0** into the emulator. Stamp the sequence in order: **CLAIM ONCE → RANDOM ARM
+DURABLE BEFORE INPUT → SELECTED ARM ONLY → OBSERVE CONSEQUENCE → SETTLE**. Let the counters race
+to **5,178 CONTROLLER ACTIONS · 257,093 FRAMES**, then light **CAUSAL TARGET +1** and move the
+scoreboard **6/60 → 7/60**.
 
-Move to the production launcher. A disposable dependency box contains tiny **`__pycache__`**
-cards; the gate slams shut at **BOOTSTRAP · BEFORE SOURCE · BEFORE PRIVATE ROOT**. Sweep only the
-generated cache from a fresh copy, stamp **REVIEWED CLOSURE 3DD20373 ✓**, and run the cartridge-free
-check once: **SUCCESSOR TRAIN 0 · ROOT READ 1 · CLAIMS/ACTIONS/FRAMES/COMMITMENTS/OUTCOMES/
-PREDICTIONS/TEACHERS/FITS 0**. Add **READINESS IS NOT TRAINING** over **6/60**.
+Keep the exclusions visible: **TEACHERS 0 · COUNTERFACTUALS 0 · UNSELECTED TARGETS 0 ·
+DEVELOPMENT 0 · PREDICTIONS 0 · FITS 0 · RETRIES 0**. Lock card zero in a consumed box. Add the
+caption **A REAL LESSON IS NOT YET A PLAYER**.
 
-End with one card moving toward the emulator: **PUBLISH RESULT → EXACT-MAIN CI → ORDINAL 0 ONCE →
-ONE RANDOM ARM DURABLE BEFORE INPUT → ONE OBSERVED CONSEQUENCE OR HONEST NO-TARGET TERMINAL →
-STOP + REORIENT**. Cross out **ANOTHER PREFLIGHT · WRAPPER · CENSUS · RETRY · SECOND ROW · FIT
-EARLY**. Continue the distant rail **8+ LESSONS → NON-AUTHORITATIVE FIT → 60 → UNTOUCHED RED →
-CRYSTAL → CROSS-GAME LIVING POKEDEX**.
+End on **PUBLISH TERMINAL → EXACT-MAIN CI → ORDINAL 1 ONCE → STOP + REORIENT**. Branch after its
+terminal: **IF 8+, TEST SUPPORT + INFORMATION → NON-AUTHORITATIVE FIT; OTHERWISE CONTINUE
+ONE-SHOT ROWS**. Keep the distant rail **60 → UNTOUCHED RED → FROZEN TITLE-NEUTRAL POLICY →
+CRYSTAL → CROSS-GAME LIVING POKEDEX** and cross out **ORDINAL 0 RETRY · NEW WRAPPER · TEACHER
+ROUTE · DEVELOPMENT LEAK · FULL RED REPLAY**.
 
 ## August 29 scene: the semester is sealed; build a key that cannot open the exam
 

@@ -41,6 +41,11 @@ PREFLIGHT_RESULT_PATH = (
     / "docs/evidence"
     / "red-living-dex-clustered-successor-train-preflight-result-v1-2026-08-29.json"
 )
+ORDINAL_ZERO_RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-clustered-successor-train-ordinal-0-result-v1-2026-08-30.json"
+)
 MACHINE_SHA256 = "871c1d5ca12592b4ede506b877b04b8175c61bddb9338fcf5a683d8a0512fbf2"
 RESULT_SHA256 = "db8a5b3805bc6811b3e4266f80506f3cd4f2502aa7ddef32226b02489340b5f4"
 QUALIFICATION_SHA256 = (
@@ -54,6 +59,9 @@ CONSUMER_QUALIFICATION_SHA256 = (
 )
 PREFLIGHT_RESULT_SHA256 = (
     "f7e5d8de7651b5e53ad51166daac28bc6c8c72eecf449026cfb268ceb52caac5"
+)
+ORDINAL_ZERO_RESULT_SHA256 = (
+    "be53cadccce21482a7831617d0623575161cf27295cea2a9b7dbaaf42986ef4d"
 )
 
 
@@ -366,5 +374,66 @@ def test_successor_preflight_result_records_bootstrap_miss_without_leakage() -> 
     assert miss["private_root_opened"] is False
     assert miss["protected_effects_reachable"] is False
     assert receipt["learning_state"]["authentic_causal_train_examples"] == 6
+    assert "/Users/" not in payload
+    assert "/Volumes/" not in payload
+
+
+def test_successor_ordinal_zero_result_records_one_causal_example() -> None:
+    payload = ORDINAL_ZERO_RESULT_PATH.read_bytes()
+    receipt = json.loads(payload)
+
+    assert hashlib.sha256(payload).hexdigest() == ORDINAL_ZERO_RESULT_SHA256
+    assert receipt["source"] == {
+        "cartridge_sha256": (
+            "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+        ),
+        "exact_ci_attempt": 1,
+        "exact_ci_run": 33292350018,
+        "exact_main_commit": "00334dece0a080638df07660946871c4dab691c3",
+        "source_bundle_sha256": (
+            "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435"
+        ),
+    }
+    execution = receipt["execution"]
+    assert execution["campaign_kind"] == "clustered_successor_train"
+    assert execution["ordinal"] == 0
+    assert execution["partition"] == "train"
+    assert execution["causal_train_example_recorded"] is True
+    assert execution["selected_candidate_target_only"] is True
+    assert execution["behavior_commitments"] == 1
+    assert execution["controller_actions"] == 5178
+    assert execution["emulator_frames"] == 257093
+    assert execution["provider_executions"] == 1
+    assert execution["root_claims_metered_setup_only"] == 1
+    assert execution["retry_allowed"] is False
+    assert execution["automatic_retry_allowed"] is False
+
+
+def test_successor_ordinal_zero_result_preserves_learning_and_privacy_boundaries() -> None:
+    payload = ORDINAL_ZERO_RESULT_PATH.read_text(encoding="ascii")
+    receipt = json.loads(payload)
+    execution = receipt["execution"]
+    learning = receipt["learning_state"]
+
+    for field in (
+        "counterfactual_targets",
+        "development_outcomes_opened",
+        "model_fits",
+        "model_predictions",
+        "private_identity_fields",
+        "private_path_fields",
+        "setup_behavior_draws_metered",
+        "teacher_queries",
+        "unselected_action_targets",
+    ):
+        assert execution[field] == 0
+    assert learning["authentic_causal_train_examples_before"] == 6
+    assert learning["authentic_causal_train_examples_after"] == 7
+    assert learning["integration_fit_allowed_now"] is False
+    assert learning["powered_model_fits"] == 0
+    assert learning["authority_promotions"] == 0
+    assert learning["transfer_results"] == 0
+    assert receipt["privacy"]["selected_arm_identity_published"] is False
+    assert receipt["privacy"]["selected_outcome_detail_published"] is False
     assert "/Users/" not in payload
     assert "/Volumes/" not in payload

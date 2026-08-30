@@ -1,0 +1,72 @@
+{
+  "claim_boundary": {
+    "supported": "One frozen lineage-qualified Red successor train assignment was claimed exactly once, committed one randomized selected arm before controller input, executed only that arm, and recorded one independently observed causal train target without teacher, counterfactual, development, prediction, or fit access.",
+    "unsupported": [
+      "selected_arm_identity_or_private_outcome_disclosure",
+      "integration_model_fit_executed",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "execution": {
+    "automatic_retry_allowed": false,
+    "behavior_commitments": 1,
+    "campaign_kind": "clustered_successor_train",
+    "causal_behavior_commitments": 1,
+    "causal_train_example_recorded": true,
+    "controller_actions": 5178,
+    "counterfactual_targets": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 257093,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "ordinal": 0,
+    "partition": "train",
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 1,
+    "result_schema": "pokemon.red.living-dex-clustered-train-receipt.v1",
+    "retry_allowed": false,
+    "root_claims_metered_setup_only": 1,
+    "selected_candidate_target_only": true,
+    "setup_behavior_draws_metered": 0,
+    "status": "one_causal_campaign_settled",
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "learning_state": {
+    "authentic_causal_train_examples_after": 7,
+    "authentic_causal_train_examples_before": 6,
+    "authority_promotions": 0,
+    "integration_fit_allowed_now": false,
+    "integration_fit_minimum_examples": 8,
+    "powered_model_fits": 0,
+    "transfer_results": 0
+  },
+  "next_decision": "Publish this path-free terminal under green exact-main CI, then consume successor train ordinal one exactly once and stop at its durable terminal. Do not fit below eight authentic examples, expose development during fitting, retry ordinal zero, or execute Crystal, sealed Red, or a full replay.",
+  "privacy": {
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_arm_identity_published": false,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "preflight_result_pull_request": 108,
+    "terminal_result_pull_request": null,
+    "status": "terminal_result_pending_publication"
+  },
+  "recorded_on": "2026-08-30",
+  "schema": "pokemon.red.living-dex-clustered-successor-train-ordinal-result.v1",
+  "source": {
+    "cartridge_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33292350018,
+    "exact_main_commit": "00334dece0a080638df07660946871c4dab691c3",
+    "source_bundle_sha256": "53116a4a6c22950aefeebbea170274276759621719f68f875e0ae4457fd92435"
+  },
+  "status": "one_clustered_successor_train_outcome_settled_reorientation_complete_second_outcome_pending"
+}

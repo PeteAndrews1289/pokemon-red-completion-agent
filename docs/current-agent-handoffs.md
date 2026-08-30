@@ -6,25 +6,25 @@ Status: active operating assignment as of 2026-08-30. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex publishes readiness and collects one successor outcome
+## Current override: Codex publishes ordinal zero and collects ordinal one once
 
-Exact main `248346b0` passed push CI `33290594694/1`, and the exact successor consumer's
-authenticated ROM-free preflight passed for train ordinal 0 with one selected-root read and every
-protected effect at zero. The path-free receipt also records the preceding disposable-runtime
-bytecode-cache bootstrap miss, which reached neither source nor private input. Readiness is now
-closed; the board remains **causal train 6/60 · powered fit 0 · authority 0 · transfer 0**.
+Exact main `00334dec` passed push CI `33292350018/1`, then successor ordinal 0 settled exactly
+once: one durable randomized commitment, one independently observed selected-arm target, 5,178
+controller actions, and 257,093 emulator frames. Teachers, counterfactual and unselected targets,
+development, predictions, fits, retries, and private publication remained zero. Ordinal 0 is
+consumed; the board is **causal train 7/60 · powered fit 0 · authority 0 · transfer 0**.
 
-Codex owns receipt publication, exact-main CI, exactly one ordinal-0 execution, its path-free
-durable terminal, and immediate reorientation. The selected logical and physical root pair must
-be claimed before controller input, the randomized arm must not change across recovery, and only
-its independently observed outcome may become a target. Setup failure or interruption consumes
-the row without a target. No retry, second row, development access, fit, Crystal execution, full
-replay, new wrapper, census, or teacher-yield gate is permitted before reorientation.
+Codex owns terminal publication, exact-main CI, exactly one untouched ordinal-1 execution, its
+path-free durable terminal, and immediate reorientation. The logical and physical pair must be
+claimed before input, the randomized arm must not change across recovery, and only its observed
+outcome may become a target. Setup failure or interruption consumes the row without a target. No
+retry, second new row, development access, fit, Crystal execution, full replay, wrapper, preflight,
+census, route repair, or teacher-yield gate is permitted before reorientation.
 
 Claude's next useful role is a read-only statistical and leakage challenge once a model fit is
 actually proposed. Antigravity's is a read-only exactly-once and transfer challenge at the same
-milestone. Neither review blocks this ordinary development outcome, and neither reviewer edits,
-sees private identities, executes gameplay, publishes, or grants authority.
+milestone. Neither review blocks this ordinary train outcome, and neither reviewer edits, sees
+private identities, executes gameplay, publishes, or grants authority.
 
 ## Previous override: Codex publishes and preflights the exact frozen-successor consumer
 

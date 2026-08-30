@@ -320,15 +320,15 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         {"kind": "causal_train_example", "minimum": 60, "partition": "train"}
     ]
     assert len(state.retired_lanes) == 59
-    assert focus_progress_fraction(state) == pytest.approx(6 / 60)
-    assert focus_scorecard(state) == (("Causal Train Example · train", 6, 60),)
+    assert focus_progress_fraction(state) == pytest.approx(7 / 60)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 7, 60),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 4
     assert state.progress["development_episode_attempts"] == 15
     assert state.progress["verified_outcome_examples"] == 5
     assert state.progress["verified_composition_episodes"] == 1
-    assert state.progress["causal_train_examples"] == 6
+    assert state.progress["causal_train_examples"] == 7
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1411,7 +1411,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Causal Train Example · train: 6/60",)
+    assert rows == ("Causal Train Example · train: 7/60",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1499,7 +1499,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 6, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 7, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -1859,16 +1859,16 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(6 / 60)
+    assert public["stage_progress"] == pytest.approx(7 / 60)
     assert public["actions"] == 0
     assert "Clustered Red curriculum" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 6, "total": 60}  # type: ignore[index]
+    assert public["experiment"]["zero_shot"] == {"completed": 7, "total": 60}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Capacity passed: 8 train lineages plus 4 untouched development lineages" in encoded
     assert "Lineage-clustered causal curriculum" in encoded
-    assert "Causal Train Example 6/60" in encoded
+    assert "Causal Train Example 7/60" in encoded
     assert "Settled Red causal train examples" in encoded
     assert "Held-out Red lineage result" in encoded
     assert "Zero-shot Crystal result" in encoded
