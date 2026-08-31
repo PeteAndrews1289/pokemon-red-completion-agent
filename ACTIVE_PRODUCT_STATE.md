@@ -33,26 +33,26 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and run the smallest claim-first battle snapshot curriculum through one train-only update and one prospectively held Red development comparison. Retain flat evidence or rejection as the terminal result and do not increment the unseen counter. Reorient immediately afterward; navigation and party development expand only through the same bounded outcome contract.
+- Next decision: Finish the canonical action-free inventory/freezer, publish the V2 retained-prefix and decision-pressure contract, and require green exact-main CI. Then census and either freeze exactly seven fresh train plus eight simultaneously held development contexts or stop for capacity. Do not claim a fresh root, open an outcome, or fit until the later execution boundary is separately qualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe. |
-| Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus eighteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
+| Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Freeze one lineage-disjoint battle train/development pair using only authenticated pre-outcome identity and observation facts. Claim every root and candidate before input, execute and retain every supported branch, fit only on an informative train menu, and compare with the frozen prior on the prospectively held development menu. Reject on flat train evidence, no discordance, or no advantage; never build another full route to obtain rows. |
+| Cheapest falsifier | Publish and green the locally qualified V2 contract, then run one action-free decision-pressure census for seven fresh train and eight fresh development contexts. Stop if the roster lacks lineage, semantic-venue, party-type, level-match, prior-margin, or hidden-contrast diversity; otherwise freeze the denominator without opening outcomes. Gameplay remains a later separately qualified gate. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 18 | 19 |
-| Model Fit · train | 5 | 6 |
-| Verified Outcome Example · development | 5 | 6 |
+| Causal Train Example · train | 19 | 26 |
+| Model Fit · train | 6 | 7 |
+| Verified Outcome Example · development | 6 | 14 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-31-powered-factory-failed-scenario-lab-reactivated** · status **active** · evidence [falsification](docs/evidence/red-living-dex-powered-lineage-supply-terminal-falsification-v1-2026-08-31.json)
+**2026-08-31-battle-pair-rejected-batch-curriculum** · status **active** · evidence [causal train example](docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | No new learning output from the failed factory. Existing tracked totals remain causal train 18, model fits 5, verified development outcomes 5, unseen comparisons 4, authority promotions 0, and transfer results 0. The next session must retain one exact battle train menu and its prospectively held development comparison; it may not relabel that comparison historically unseen. |
-| Authority delta | None. The closed supply tranche used 208777 teacher-side controller actions and 32312041 frames but produced zero roots and therefore zero learner labels, outcomes, predictions, fits, authority promotions, sealed Red access, or Crystal access. The tracked learning board remains eighteen authentic causal train examples, five model fits, four unseen comparisons, authority zero, and transfer zero. |
+| Learning output | One complete causal train menu, one train-only fit, and one prospectively held verified development menu were added. All six supported actions were claimed and measured, training loss fell from 2.0818 to 0.7190, and development was not used for fitting. The held result was an exact tie with zero discordance, so it grants no advantage, unseen, authority, sealed, or transfer claim. |
+| Authority delta | None. The one-pair battle cycle fit a non-authoritative candidate from one train menu, but the frozen prior and candidate made the same correct choice on the prospectively held development menu. The candidate is rejected and its weights are not adopted. Tracked totals are causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The shared scenario laboratory and three title-neutral outcome adapters exist, but the real catalogs are still thin. The first battle curve was dominated by easy one-hit outcomes, while navigation and party development each have only a narrow evidence pair. The immediate blocker is now one published, claim-first train-to-prospectively-held-development battle loop; historical untouched status is not inferred from partition labels. |
-| Decision | Retire the 0/12 clean-power supply factory without retry or successor. Preserve its exact aggregate failure evidence, repair generic admission so known failure stage/actions/frames are not downgraded to unknown, and reactivate the model-first three-family scenario curriculum. Battle closes one measured update-and-comparison loop first; navigation and party development follow only after that result is retained. |
-| Next session | Publish the claim-first battle-cycle gate, require green exact-main CI, then freeze and execute exactly one authenticated train/development pair. Add one causal train example, one model fit only if train is informative, and one verified development outcome; preserve unseen-comparison count at four because historical untouched provenance is not claimed. Reorient immediately after the receipt. |
-| Next falsifier | Freeze one outcome-blind battle train/development pair from authenticated catalog roots. Atomically claim each upstream-plus-materialized root and durably claim every supported candidate before input, fit one prior-preserving candidate from train outcomes only, and compare it with the frozen prior after committing both development predictions. Flat train evidence, no discordant choice, or no positive advantage is a typed rejection and ends the iteration without a route patch. |
-| Stop condition | Stop this iteration if the bounded battle train menu is flat, any root or candidate claim is unavailable or uncertain, train/development lineages overlap, teacher choices enter as labels, a supported action is unmeasured, or the development comparison has no discordance or no advantage. Do not substitute a capture, repair the full teacher route, retry a consumed plan, open sealed Red or Crystal, or promote authority. |
+| Blocker | The local V2 batch contract now closes the retained-prefix, complete-prior, pressure-fact, consumed-context, semantic-diversity, selector, numerical, and protected-claim boundaries under focused tests. The remaining blocker is an independently audited canonical inventory/freezer followed by publication and green exact-main CI; no fresh roster or outcome exists yet. |
+| Decision | Preserve battle pair V1 as an honest no-discordance rejection and preserve all six measured alternatives. Publish a prospectively frozen V2 battle batch only after every candidate row is reproduced from its bound feature payload, complete original prior, and root-pair claim state. Retain the exact V1 train row without replay, add seven fresh lineage- and feature-diverse train contexts, and hold eight fresh development contexts together. Outcome collection and fitting remain separately gated. |
+| Next session | Close the independent V2 contract audit, implement and qualify the canonical action-free inventory/freezer, update the durable handoff and narrative, run full verification, publish exact source, and require green exact-main CI. No fresh claim, controller input, prediction, outcome, fit, sealed Red, or Crystal access opens in this engineering session. |
+| Next falsifier | Finish and adversarially qualify the canonical action-free inventory/freezer, publish exact source, and require green exact-main CI. Then run one census requiring seven fresh train and eight fresh development contexts with available claims, capped venue/margin/party-type buckets, at least six three-action menus per partition, and full-width hidden-contrast clearance. Freeze all or stop; do not open outcomes. |
+| Stop condition | Stop before execution if the fresh 7+8 roster is unavailable or lacks decision pressure and hidden-contrast coverage. Never replace, retry, or shrink a frozen context; retain every branch and terminal failure. Fit only once from the original prior. V2 is the stop line for this immediate-HP move policy: inadequate discordance triggers a representation/horizon/action redesign, not a larger identical batch. No sealed Red, Crystal, authority, or full replay. |
 
 ### Stop conditions
 
@@ -216,4 +216,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **17**.
+Current evidence entries: **18**.

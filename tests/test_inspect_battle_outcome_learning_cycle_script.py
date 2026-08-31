@@ -2,13 +2,22 @@ from __future__ import annotations
 
 import hashlib
 import runpy
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
+from pokemon_red_completion.battle_outcome_experiment import (
+    BattleOutcomeCaptureBinding,
+    BattleOutcomeExperimentPlan,
+)
 from pokemon_red_completion.battle_semantics import FEATURE_NAMES, FEATURE_SCHEMA_ID
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    root_consumption_sha256,
+)
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 SCRIPT = runpy.run_path("scripts/inspect_battle_outcome_learning_cycle.py")
 
@@ -38,6 +47,7 @@ class Reader:
         self.reason_code = reason_code
         self.summary = SimpleNamespace(
             status=status,
+            manifest_sha256="d" * 64,
             stream_records=tuple((name, len(records)) for name, records in sorted(streams.items())),
             public_dict=lambda: {
                 "schema": "private-json-artifact-summary-v1",
@@ -98,6 +108,94 @@ def _outcome(opponent_damage_fraction: float) -> dict[str, object]:
         "frames_executed": 100,
         "pre_attack_frames": 50,
         "utility": opponent_damage_fraction,
+    }
+
+
+def _retained_binding(
+    partition: ScenarioPartition,
+    marker: str,
+) -> BattleOutcomeCaptureBinding:
+    def digest(label: str) -> str:
+        return hashlib.sha256(f"{marker}:{label}".encode()).hexdigest()
+
+    source_state = digest("source-state")
+    source_envelope = digest("source-envelope")
+    assignment = digest("assignment")
+    return BattleOutcomeCaptureBinding(
+        partition=partition,
+        capture_id=f"retained-{partition.value}-{marker}",
+        manifest_sha256=digest("manifest"),
+        state_sha256=digest("state"),
+        initial_observation_sha256=digest("observation"),
+        source_commit="a" * 40,
+        source_state_sha256=source_state,
+        source_slot_id=f"retained-{partition.value}-{marker}",
+        source_assignment_id=assignment,
+        source_context_id=digest("context"),
+        source_envelope_sha256=source_envelope,
+        root_lineage_id=f"red-goal-root-{assignment}",
+        root_consumption_sha256=root_consumption_sha256(
+            state_sha256=source_state,
+            envelope_sha256=source_envelope,
+        ),
+        menu_sha256=digest("menu"),
+        supported_candidate_count=2,
+        distinct_candidate_vector_count=2,
+        hidden_embedding_sha256=digest("hidden"),
+        distinct_hidden_embedding_count=2,
+        expected_map=165,
+        expected_battle_state=1,
+    )
+
+
+def _retained_plan() -> BattleOutcomeExperimentPlan:
+    return BattleOutcomeExperimentPlan(
+        experiment_id="retained-battle-cycle-test",
+        source_commit="a" * 40,
+        source_bundle_sha256="1" * 64,
+        runner_sha256="2" * 64,
+        materializer_sha256="3" * 64,
+        registry_source_commit="b" * 40,
+        registry_source_bundle_sha256="4" * 64,
+        registry_sha256="5" * 64,
+        context_catalog_sha256="6" * 64,
+        rom_sha256="7" * 64,
+        runtime_identity_sha256="8" * 64,
+        numpy_runtime_sha256="9" * 64,
+        base_model_sha256="a" * 64,
+        controller_timing_sha256="b" * 64,
+        captures=(
+            _retained_binding(ScenarioPartition.TRAIN, "train"),
+            _retained_binding(ScenarioPartition.DEVELOPMENT, "development"),
+        ),
+    )
+
+
+def _retained_record(plan: BattleOutcomeExperimentPlan) -> dict[str, object]:
+    return {
+        "record_type": "battle_outcome_collection",
+        "split": "train",
+        "collection": {
+            "schema": "pokemon.red.battle.outcome-collection.v1",
+            "capture_id": plan.train.capture_id,
+            "manifest_sha256": plan.train.manifest_sha256,
+            "root_lineage_id": plan.train.root_lineage_id,
+            "partition": "train",
+            "initial_state_sha256": plan.train.state_sha256,
+            "initial_observation_sha256": plan.train.initial_observation_sha256,
+            "candidate_count": 2,
+            "measured_candidate_count": 2,
+            "outcomes": [_outcome(0.25), _outcome(0.75)],
+            "best_candidate_indices": [1],
+            "learner_update_eligible": True,
+            "counterfactual_pre_attack_frames": 50,
+            "teacher_queries": 0,
+            "teacher_choice_targets": 0,
+            "full_game_replays": 0,
+            "private_path_fields": 0,
+        },
+        "unexecuted_counterfactual_targets": 0,
+        "unmeasured_action_targets": 0,
     }
 
 
@@ -285,6 +383,110 @@ def test_complete_inspection_reconstructs_the_original_public_terminal() -> None
     assert receipt["measured_candidate_outcomes"] == 4
     assert receipt["model_fits"] == 1
     assert receipt["unseen_comparisons"] == 0
+
+
+def test_complete_inspection_projects_one_exact_path_free_retained_prefix() -> None:
+    plan = _retained_plan()
+    reader = Reader({"outcomes": (_retained_record(plan),)})
+
+    receipt = SCRIPT["_project_retained_batch_prefix"](reader, plan)
+
+    assert receipt["status"] == "verified_no_replay"
+    assert receipt["plan_sha256"] == plan.plan_sha256
+    assert receipt["artifact_manifest_sha256"] == "d" * 64
+    assert receipt["train_supported_candidate_indices"] == [0, 1]
+    assert "/private/" not in str(receipt)
+
+
+def test_retained_prefix_projection_rejects_failed_evidence() -> None:
+    plan = _retained_plan()
+    reader = Reader(
+        {"outcomes": (_retained_record(plan),)},
+        status="failed",
+        reason_code="process_interrupted",
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="failed battle evidence",
+    ):
+        SCRIPT["_project_retained_batch_prefix"](reader, plan)
+
+
+def test_retained_prefix_projection_rejects_a_private_path_field() -> None:
+    plan = _retained_plan()
+    record = _retained_record(plan)
+    record["private_path"] = "/private/capture.state"
+    reader = Reader({"outcomes": (record,)})
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="retained V1 train collection differs",
+    ):
+        SCRIPT["_project_retained_batch_prefix"](reader, plan)
+
+
+def test_run_never_projects_a_prefix_before_full_terminal_validation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = _retained_plan()
+    reader = Reader({"outcomes": (_retained_record(plan),)})
+
+    class Store:
+        def reconcile_interrupted_artifact(
+            self,
+            artifact_id: str,
+            *,
+            expected_kind: str,
+        ) -> SimpleNamespace:
+            assert artifact_id == f"bo-cycle-{plan.plan_sha256}"
+            assert expected_kind == "battle_outcome_cycle"
+            return SimpleNamespace(summary=SimpleNamespace(status="complete"))
+
+        def open_artifact(
+            self,
+            artifact_id: str,
+            *,
+            expected_kind: str,
+        ) -> Reader:
+            assert artifact_id == f"bo-cycle-{plan.plan_sha256}"
+            assert expected_kind == "battle_outcome_cycle"
+            return reader
+
+    globals_ = SCRIPT["_run"].__globals__
+    monkeypatch.setitem(globals_, "_read_plan", lambda path, digest: plan)
+    monkeypatch.setitem(globals_, "open_private_root", lambda *args, **kwargs: Store())
+    prefix_called = False
+
+    def reject_tampered_terminal(
+        observed_reader: Reader,
+        observed_plan: BattleOutcomeExperimentPlan,
+    ) -> dict[str, object]:
+        assert observed_reader is reader
+        assert observed_plan is plan
+        raise SCRIPT["BattleOutcomeCycleInspectionError"]("tampered terminal")
+
+    def forbidden_prefix(*args: object) -> dict[str, object]:
+        nonlocal prefix_called
+        prefix_called = True
+        return {}
+
+    monkeypatch.setitem(globals_, "_project_complete", reject_tampered_terminal)
+    monkeypatch.setitem(globals_, "_project_retained_batch_prefix", forbidden_prefix)
+    args = SimpleNamespace(
+        private_root=Path("/private/artifacts"),
+        plan=Path("/private/plan.json"),
+        expected_plan_sha256=plan.plan_sha256,
+        project_retained_batch_prefix=True,
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="tampered terminal",
+    ):
+        SCRIPT["_run"](args)
+
+    assert prefix_called is False
 
 
 def test_complete_inspection_reconstructs_a_flat_train_terminal() -> None:

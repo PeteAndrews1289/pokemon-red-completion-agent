@@ -20,6 +20,9 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from pokemon_red_completion.battle_neural_model import (  # noqa: E402
     MaskedMLPMoveRanker,
 )
+from pokemon_red_completion.battle_outcome_batch import (  # noqa: E402
+    build_retained_battle_outcome_prefix,
+)
 from pokemon_red_completion.battle_outcome_experiment import (  # noqa: E402
     BattleOutcomeExperimentPlan,
     parse_battle_outcome_experiment_plan,
@@ -32,6 +35,7 @@ from pokemon_red_completion.private_artifacts import (  # noqa: E402
     PrivateArtifactReader,
     open_private_root,
 )
+from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _MAXIMUM_PLAN_BYTES = 128 * 1024
@@ -87,6 +91,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--private-root", type=Path, required=True)
     parser.add_argument("--plan", type=Path, required=True)
     parser.add_argument("--expected-plan-sha256", required=True)
+    parser.add_argument(
+        "--project-retained-batch-prefix",
+        action="store_true",
+        help="project the verified V1 train prefix without replaying it",
+    )
     return parser
 
 
@@ -104,7 +113,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             artifact_id,
             expected_kind="battle_outcome_cycle",
         )
-        return _project_complete(reader, plan)
+        receipt = _project_complete(reader, plan)
+        if getattr(args, "project_retained_batch_prefix", False):
+            return _project_retained_batch_prefix(reader, plan)
+        return receipt
+    if getattr(args, "project_retained_batch_prefix", False):
+        raise BattleOutcomeCycleInspectionError(
+            "failed battle evidence cannot become a retained train prefix"
+        )
     reader = store.open_failed_artifact(
         artifact_id,
         expected_kind="battle_outcome_cycle",
@@ -181,6 +197,36 @@ def _project_complete(
         "artifact": reader.summary.public_dict(),
         **public_terminal,
     }
+
+
+def _project_retained_batch_prefix(
+    reader: PrivateArtifactReader,
+    plan: BattleOutcomeExperimentPlan,
+) -> dict[str, object]:
+    if reader.summary.status != "complete":
+        raise BattleOutcomeCycleInspectionError(
+            "failed battle evidence cannot become a retained train prefix"
+        )
+    train_records = tuple(
+        record
+        for record in _records(reader, "outcomes")
+        if record.get("split") == ScenarioPartition.TRAIN.value
+    )
+    if len(train_records) != 1:
+        raise BattleOutcomeCycleInspectionError(
+            "retained V1 train collection is not singular"
+        )
+    try:
+        retained = build_retained_battle_outcome_prefix(
+            plan,
+            artifact_manifest_sha256=reader.summary.manifest_sha256,
+            train_collection_record=train_records[0],
+        )
+    except (TypeError, ValueError):
+        raise BattleOutcomeCycleInspectionError(
+            "retained V1 train collection differs from its inspected artifact"
+        ) from None
+    return retained.public_dict()
 
 
 def _project_failure(
@@ -436,7 +482,10 @@ def _require_retained_result(
     if expected_paired["discordant_examples"] == 0:
         expected_status = "rejected_no_development_discordance"
         expected_claim = "no_discordant_development_choice"
-    elif expected_paired["updated_wins"] <= expected_paired["base_wins"]:
+    elif _integer(expected_paired, "updated_wins") <= _integer(
+        expected_paired,
+        "base_wins",
+    ):
         expected_status = "rejected_no_development_advantage"
         expected_claim = "candidate_did_not_beat_frozen_prior"
     else:

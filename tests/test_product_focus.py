@@ -16,6 +16,7 @@ from product_focus import (  # noqa: E402
     DEFAULT_FOCUS_CONFIG,
     DEFAULT_FOCUS_DOCUMENT,
     ProductFocusError,
+    _validate_battle_cycle_projection,
     canonical_focus_json,
     focus_progress_fraction,
     focus_scorecard,
@@ -27,6 +28,10 @@ from product_focus import (  # noqa: E402
 CHECKER = runpy.run_path(str(SCRIPTS / "check_product_focus.py"))
 CHECK_DOCS = runpy.run_path(str(SCRIPTS / "check_docs.py"))
 DASHBOARD = runpy.run_path(str(SCRIPTS / "run_product_focus_dashboard.py"))
+BATTLE_OUTCOME_CYCLE_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"
+)
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
 )
@@ -322,30 +327,30 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 19, "partition": "train"},
-        {"kind": "model_fit", "minimum": 6, "partition": "train"},
+        {"kind": "causal_train_example", "minimum": 26, "partition": "train"},
+        {"kind": "model_fit", "minimum": 7, "partition": "train"},
         {
             "kind": "verified_outcome_example",
-            "minimum": 6,
+            "minimum": 14,
             "partition": "development",
         },
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(
-        ((18 / 19) + (5 / 6) + (5 / 6)) / 3
+        ((19 / 26) + (6 / 7) + (6 / 14)) / 3
     )
     assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 18, 19),
-        ("Model Fit · train", 5, 6),
-        ("Verified Outcome Example · development", 5, 6),
+        ("Causal Train Example · train", 19, 26),
+        ("Model Fit · train", 6, 7),
+        ("Verified Outcome Example · development", 6, 14),
     )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
-    assert state.progress["model_fits"] == 5
+    assert state.progress["model_fits"] == 6
     assert state.progress["unseen_comparisons"] == 4
-    assert state.progress["development_episode_attempts"] == 15
-    assert state.progress["verified_outcome_examples"] == 5
+    assert state.progress["development_episode_attempts"] == 16
+    assert state.progress["verified_outcome_examples"] == 6
     assert state.progress["verified_composition_episodes"] == 1
-    assert state.progress["causal_train_examples"] == 18
+    assert state.progress["causal_train_examples"] == 19
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -392,6 +397,43 @@ def test_active_evidence_prefix_cannot_change_without_a_counter_projection() -> 
 
     with pytest.raises(ProductFocusError, match="supported counter projection"):
         validate_product_focus_document(document)
+
+
+def test_battle_cycle_projection_counts_learning_but_rejects_advantage() -> None:
+    receipt = json.loads(BATTLE_OUTCOME_CYCLE_RESULT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "rejected_no_development_discordance"
+    assert receipt["execution"] == {
+        "activated_candidate_targets": 6,
+        "candidate_claims_created": 6,
+        "development_candidate_outcomes": 3,
+        "measured_candidate_outcomes": 6,
+        "root_claims_created": 2,
+        "teacher_choice_targets": 0,
+        "teacher_queries": 0,
+        "train_candidate_outcomes": 3,
+        "unexecuted_counterfactual_targets": 0,
+        "unmeasured_action_targets": 0,
+    }
+    assert receipt["counter_treatment"] == {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 1,
+        "development_episode_attempts_added": 1,
+        "model_fits_added": 1,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_outcome_examples_added": 1,
+    }
+    assert receipt["development_comparison"]["discordant_examples"] == 0
+    assert receipt["development_comparison"]["candidate_advantage_observed"] is False
+
+
+def test_battle_cycle_projection_rejects_counter_treatment_tampering() -> None:
+    tampered = deepcopy(json.loads(BATTLE_OUTCOME_CYCLE_RESULT.read_text()))
+    tampered["counter_treatment"]["authority_promotions_added"] = 1
+
+    with pytest.raises(ProductFocusError, match="counter treatment differs"):
+        _validate_battle_cycle_projection(tampered)
 
 
 def test_active_lane_rename_cannot_bypass_the_counter_projection() -> None:
@@ -1480,9 +1522,9 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Causal Train Example · train: 18/19",
-        "Model Fit · train: 5/6",
-        "Verified Outcome Example · development: 5/6",
+        "Causal Train Example · train: 19/26",
+        "Model Fit · train: 6/7",
+        "Verified Outcome Example · development: 6/14",
     )
 
 
@@ -1555,8 +1597,8 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 15, 12),
-        ("Verified Outcome Example · development", 5, 12),
+        ("Development Episode · development", 16, 12),
+        ("Verified Outcome Example · development", 6, 12),
         ("Verified Composition Episode · development", 1, 2),
     )
 
@@ -1571,7 +1613,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 18, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 19, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -1969,15 +2011,15 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
 
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(
-        ((18 / 19) + (5 / 6) + (5 / 6)) / 3
+        ((19 / 26) + (6 / 7) + (6 / 14)) / 3
     )
     assert public["actions"] == 0
-    assert "Authenticated battle learner loop" in public["stage"]
+    assert "Decision-pressure battle batch" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 18,
+        "completed": 19,
         "total": 60,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 6}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 6, "total": 7}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
         "zero_shot": "Authentic causal train examples",
@@ -1987,11 +2029,11 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
     assert public["model"]["decisions"] == 0  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "The 0/12 clean-power supply factory is retired" in encoded
+    assert "V1 pair was rejected for zero development discordance" in encoded
     assert "Authenticated three-family learner curriculum" in encoded
-    assert "Causal Train Example 18/19" in encoded
-    assert "Model Fit 5/6" in encoded
-    assert "Verified Outcome Example 5/6" in encoded
+    assert "Causal Train Example 19/26" in encoded
+    assert "Model Fit 6/7" in encoded
+    assert "Verified Outcome Example 6/14" in encoded
     assert "Authentic causal train examples" in encoded
     assert "Model fits" in encoded
     assert "Untouched Red comparisons" in encoded

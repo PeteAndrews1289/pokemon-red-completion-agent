@@ -68,17 +68,23 @@ _REQUIRED_STATUS_FIELDS = {
     "time_box",
     "transfer_result",
 }
-_PROJECTED_COUNTER_BASELINE_EVIDENCE_SHA256 = (
+_PROJECTED_COUNTER_PREFIX_EVIDENCE_SHA256 = (
     "c2d45a4dcf544325792ca704069b2ab2b675235661de730b5b67e5bae86ac7a0"
 )
-_PROJECTED_COUNTER_BASELINE_EVIDENCE_COUNT = 17
-_PROJECTED_COUNTER_BASELINE = {
+_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT = 17
+_BATTLE_CYCLE_RESULT_PATH = (
+    "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"
+)
+_BATTLE_CYCLE_RESULT_SHA256 = (
+    "8533368231a3ba6273e848ae65757e0dc1e48a02356488aa2cdeb6413d732ec7"
+)
+_PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 18,
+    "causal_train_examples": 19,
     "composition_attempts": 1,
-    "development_episode_attempts": 15,
-    "model_fits": 5,
+    "development_episode_attempts": 16,
+    "model_fits": 6,
     "outcome_questions": {"development": 15, "train": 30},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -87,7 +93,7 @@ _PROJECTED_COUNTER_BASELINE = {
     "transfer_results": 0,
     "unseen_comparisons": 4,
     "verified_composition_episodes": 1,
-    "verified_outcome_examples": 5,
+    "verified_outcome_examples": 6,
 }
 
 
@@ -221,7 +227,7 @@ def validate_product_focus_document(
     _validate_status_report(_mapping(document, "status_report", subject="product focus"))
     _validate_review_roles(_mapping(document, "review_roles", subject="product focus"))
     _validate_progress_evidence(active[0], project_root=project_root)
-    _validate_projected_counters(active[0])
+    _validate_projected_counters(active[0], project_root=project_root)
     return ProductFocusState(document, active[0], tuple(retired))
 
 
@@ -931,7 +937,11 @@ def _validate_progress_evidence(
             raise ProductFocusError(f"{subject} file digest differs")
 
 
-def _validate_projected_counters(lane: Mapping[str, object]) -> None:
+def _validate_projected_counters(
+    lane: Mapping[str, object],
+    *,
+    project_root: Path | None,
+) -> None:
     """Prevent the live board from out-running its typed evidence projection.
 
     The current lane begins from a frozen, already-audited evidence prefix.  A
@@ -942,26 +952,144 @@ def _validate_projected_counters(lane: Mapping[str, object]) -> None:
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    evidence_payload = json.dumps(
-        evidence,
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 1:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    prefix_payload = json.dumps(
+        evidence[:_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT],
         allow_nan=False,
         ensure_ascii=True,
         separators=(",", ":"),
         sort_keys=True,
     ).encode("ascii")
     if (
-        len(evidence) != _PROJECTED_COUNTER_BASELINE_EVIDENCE_COUNT
-        or hashlib.sha256(evidence_payload).hexdigest()
-        != _PROJECTED_COUNTER_BASELINE_EVIDENCE_SHA256
+        hashlib.sha256(prefix_payload).hexdigest()
+        != _PROJECTED_COUNTER_PREFIX_EVIDENCE_SHA256
     ):
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
-    observed = {key: progress.get(key) for key in _PROJECTED_COUNTER_BASELINE}
-    if observed != _PROJECTED_COUNTER_BASELINE:
+    final_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected battle-cycle evidence",
+    )
+    if final_evidence != {
+        "kind": "causal_train_example",
+        "path": _BATTLE_CYCLE_RESULT_PATH,
+        "sha256": _BATTLE_CYCLE_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    root = (project_root or PROJECT_ROOT).resolve()
+    receipt_path = (root / _BATTLE_CYCLE_RESULT_PATH).resolve()
+    if not receipt_path.is_relative_to(root):  # pragma: no cover - constant path
+        raise ProductFocusError("battle-cycle evidence path is unsafe")
+    try:
+        receipt = json.loads(
+            receipt_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("battle-cycle evidence is invalid") from None
+    if not isinstance(receipt, Mapping):
+        raise ProductFocusError("battle-cycle evidence is invalid")
+    _validate_battle_cycle_projection(receipt)
+    observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
+    if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
             "active learning counters differ from their typed evidence projection"
         )
+
+
+def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:
+    """Project only the retained, rejected one-pair cycle into honest counters."""
+
+    if (
+        receipt.get("schema") != "pokemon.red.battle-outcome-cycle-result.v1"
+        or receipt.get("status") != "rejected_no_development_discordance"
+    ):
+        raise ProductFocusError("battle-cycle evidence status differs")
+    source = _mapping(receipt, "source_verification", subject="battle-cycle evidence")
+    if (
+        source.get("git_commit")
+        != "1d9554923f7973d6c3807445c1c4fc19c65dca1b"
+        or source.get("exact_main_ci_run") != 33424040364
+        or source.get("exact_main_ci_attempt") != 1
+        or source.get("exact_main_ci_conclusion") != "success"
+        or source.get("worktree_dirty") is not False
+    ):
+        raise ProductFocusError("battle-cycle source verification differs")
+    execution = _mapping(receipt, "execution", subject="battle-cycle evidence")
+    if {
+        "root_claims_created": execution.get("root_claims_created"),
+        "candidate_claims_created": execution.get("candidate_claims_created"),
+        "activated_candidate_targets": execution.get("activated_candidate_targets"),
+        "measured_candidate_outcomes": execution.get("measured_candidate_outcomes"),
+        "train_candidate_outcomes": execution.get("train_candidate_outcomes"),
+        "development_candidate_outcomes": execution.get(
+            "development_candidate_outcomes"
+        ),
+        "unexecuted_counterfactual_targets": execution.get(
+            "unexecuted_counterfactual_targets"
+        ),
+        "unmeasured_action_targets": execution.get("unmeasured_action_targets"),
+        "teacher_queries": execution.get("teacher_queries"),
+        "teacher_choice_targets": execution.get("teacher_choice_targets"),
+    } != {
+        "root_claims_created": 2,
+        "candidate_claims_created": 6,
+        "activated_candidate_targets": 6,
+        "measured_candidate_outcomes": 6,
+        "train_candidate_outcomes": 3,
+        "development_candidate_outcomes": 3,
+        "unexecuted_counterfactual_targets": 0,
+        "unmeasured_action_targets": 0,
+        "teacher_queries": 0,
+        "teacher_choice_targets": 0,
+    }:
+        raise ProductFocusError("battle-cycle measured target projection differs")
+    update = _mapping(receipt, "train_update", subject="battle-cycle evidence")
+    development = _mapping(
+        receipt,
+        "development_comparison",
+        subject="battle-cycle evidence",
+    )
+    if (
+        update.get("training_examples") != 1
+        or update.get("model_fits") != 1
+        or update.get("development_influenced_fit") is not False
+        or development.get("examples") != 1
+        or development.get("predictions_committed_before_outcomes") is not True
+        or development.get("discordant_examples") != 0
+        or development.get("equivalent_choices") != 1
+        or development.get("candidate_advantage_observed") is not False
+        or development.get("inferential_claim") is not False
+    ):
+        raise ProductFocusError("battle-cycle update or comparison projection differs")
+    counters = _mapping(receipt, "counter_treatment", subject="battle-cycle evidence")
+    if counters != {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 1,
+        "development_episode_attempts_added": 1,
+        "model_fits_added": 1,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_outcome_examples_added": 1,
+    }:
+        raise ProductFocusError("battle-cycle counter treatment differs")
+    protected = _mapping(receipt, "protected_access", subject="battle-cycle evidence")
+    if (
+        protected.get("authority_promoted") is not False
+        or protected.get("sealed_red_cases_opened") != 0
+        or protected.get("crystal_contexts_opened") != 0
+        or protected.get("full_game_replays") != 0
+        or protected.get("private_identity_fields") != 0
+        or protected.get("private_path_fields") != 0
+    ):
+        raise ProductFocusError("battle-cycle protected access differs")
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:

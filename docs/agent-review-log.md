@@ -3,6 +3,56 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 battle-batch engineering delta audit — accepted 2026-08-31
+
+An independent read-only red-team review initially withheld approval. It found that greedy
+selection could exhaust an overlapping root set before the existing repair ran, the claim-registry
+digest and availability flags still needed an atomic freezer boundary, the hashed policy omitted a
+live party-novelty term and did not exactly describe repair ranking, and the new retained-prefix
+projection lacked tests proving that full V1 terminal validation happens before prefix emission.
+
+Codex accepted and repaired the implementation findings. Selection now uses a bounded exhaustive
+independent-subset fallback; its search-limit terminal explicitly makes no capacity claim, and an
+adversarial row overlapping two otherwise-required roots proves a feasible denominator is
+recovered. The policy binds party novelty, fallback bounds, and the exact repair ranking/tie break
+under a golden digest. Prefix projection has complete, failed, private-path, and runner-sequencing
+tests. Source-fact revalidation also now includes the active Pokémon's one/two-type profile in the
+party condition.
+
+The reviewer returned **GO for publishing the engineering checkpoint** after 57 focused tests,
+lint, and static typing passed. The GO does not authorize a census, roster, root claim, outcome,
+prediction, fit, sealed Red case, Crystal access, authority, or gameplay. Codex agrees that the
+canonical freezer must derive the registry snapshot and every root-pair availability observation
+atomically under one shared lease; the current pure roster contract must not be described as doing
+that work.
+
+## Battle pair V1 result and V2 reorientation — accepted 2026-08-31
+
+The authenticated terminal showed a complete, non-leaking learning loop: two roots, six candidate
+claims, six measured outcomes, one train-only fit, and development predictions committed before
+outcomes. Training loss fell from 2.0818 to 0.7190. The frozen prior and candidate were both correct
+on the one held context and chose the same action, so Codex accepted the typed
+`rejected_no_development_discordance` result. It counts one causal train example, one fit, and one
+verified development outcome; it does not count as advantage, unseen evidence, authority, sealed
+Red, or transfer. The rejected model is not adopted.
+
+A read-only design review recommended against another isolated pair. Codex accepted a V2 batch
+target: the retained V1 train row as a mandatory no-replay prefix, seven fresh train contexts, and
+eight simultaneously frozen development contexts. One fit starts from the original prior, and all
+development predictions precede all development outcomes. Codex also accepted complete-denominator
+retention, outcome-blind selection, cluster-aware diversity, and no replacement after freezing.
+This is still development evidence; even a positive cohort result opens a separate benchmark gate
+rather than authority or Crystal.
+
+Codex accepted the reviewer's stronger definition of diversity. The census must balance venue and
+party conditions, constrain level mismatch, prefer at least three supported actions, stratify
+frozen-prior margins, and maximize hidden-contrast rank/log-determinant without reading outcomes.
+The prior, candidate, and one fixed simple heuristic are committed across the whole development
+roster before outcomes. Eight roots remain descriptive because effective paired sample size is the
+number of discordant roots. V2 is a stop line: continued saturation triggers a feature,
+longer-horizon utility, and later switch/item/catch action redesign—not a larger copy of the same
+one-turn batch.
+
 ## Claim-first battle-cycle red-team audit — accepted 2026-08-31
 
 A read-only adversarial reviewer attacked the new one-pair battle loop rather than reviewing its

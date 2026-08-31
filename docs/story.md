@@ -7,7 +7,46 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: one real lesson, not another classroom factory
+## Current engineering checkpoint: build the class before inviting more students
+
+The first lesson is preserved. The next system now knows how to assemble a whole class without
+secretly choosing the easiest students after seeing their answers. One old lesson stays as a saved
+prefix; seven fresh lessons and eight held checks must all be named together. Their battles must
+vary across meaningful locations and Pokémon conditions, offer real move choices, and exercise the
+full decision machinery inside the model.
+
+The contract is deliberately suspicious of its own paperwork. It reopens the exact saved facts and
+recomputes the model scores and internal representations before trusting them. It also remembers
+the old held battle as consumed, so that battle cannot quietly return wearing a new filename. If a
+greedy selection misses a valid class, a bounded deterministic repair looks for it before the
+system claims capacity is absent.
+
+No new student has taken the lesson yet. The current achievement is a locally tested, resumable
+gate—57 focused checks plus clean lint and typing—not another training claim. A service-capacity
+interruption stopped coding, not an experiment: no button had been pressed and no denominator had
+been half-consumed. The next step is to freeze the real inventory under published green source,
+then either run exactly the declared class or stop honestly if it does not exist.
+
+## Current checkpoint: the lesson ran, and the candidate was honestly rejected
+
+The small experiment finished before it could become another overnight mystery. The system tried
+all three usable moves in the training battle, learned once, then locked in the old and new model's
+answers for a different battle before trying all three moves there. Every promised branch exists
+in the record.
+
+The training number improved sharply, but the held choice did not change: both models picked the
+same correct move. That means the candidate does not get promoted. The honest score is now
+**CAUSAL TRAIN 19 · MODEL FITS 6 · VERIFIED DEVELOPMENT 6 · UNSEEN 4 · AUTHORITY 0 · TRANSFER
+0**.
+
+The next chapter is not “try another lucky battle.” One batch will be declared up front: the saved
+training lesson plus seven new lessons and eight held checks, varied across roots and meaningful
+features. The model will train once on the complete lesson set, and every held answer will be
+written down before any held consequence is revealed. That is still only the battle skill, but it
+is the first shape of experiment that can distinguish a reusable lesson from a coincidence—and the
+same shape can later be carried into Crystal.
+
+## Previous checkpoint: one real lesson, not another classroom factory
 
 The replacement is intentionally small enough to watch and hard enough to matter. Two existing Red
 battle snapshots are assigned before anyone sees an outcome: one lesson and one prospectively held
