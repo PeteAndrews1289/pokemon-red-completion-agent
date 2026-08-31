@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 31 powered-V2 capacity result:** PR `#119` merged as exact main `f1fc3812`; push CI
+> `33355147814/1` passed. The one action-free census found **43 unused lineages**, but only **14/36
+> train, 28/72 train attempts, 22/100 same-reset development, and 0/3 contingency** capacity.
+> Frozen V2 is short **103 independent lineages total** and also fails template, location, kind,
+> semantic-family, and pressure coverage. Actions, frames, claims, teachers, outcomes, predictions,
+> fits, and private disclosure were zero.
+>
+> Current-bank gameplay is closed. Next adapt the qualified clean-power fresh-episode rail from
+> its old thirteen-root train-only plan into a census-bound, prospectively partitioned V2 lineage
+> supply design. Prove one bounded no-retry yield tranche, preserve every failure, then recensus
+> before scaling or collecting an option outcome. Do not weaken the denominator or call clones
+> independent. **Causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer
+> 0.** See the [capacity result](evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json).
+
 > **August 30 bounded-successor completion:** Exact source `a358014f` passed CI
 > `33329384186/1`, then untouched successor train ordinals 8–15 were attempted once each. Six
 > recorded authentic selected-arm examples and two ended during setup: **6/8 yield · 9,658

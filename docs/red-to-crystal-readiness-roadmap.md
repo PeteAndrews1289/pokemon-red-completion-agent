@@ -133,13 +133,17 @@ Work:
 3. **Complete:** the versioned action-free clustered powered V2 design is implemented and reviewed.
    It preserves 18 prefix examples; allocates 72 attempts across 36 train lineages at maximum two
    per lineage; requires 50 settled train lineages; and retains every information floor below.
-4. **Next:** publish the design under green exact-main CI, then prove action-free private capacity
-   for 36 train, 100 development, and three contingency lineages. Before scaling, freeze that
-   exact allocation. The design
+4. **Complete, failed honestly:** PR `#119` published the capacity gate as exact main `f1fc3812`,
+   CI `33355147814/1` passed, and one action-free census found only 14/36 train, 22/100
+   development, and 0/3 contingency lineages. The 103-lineage total deficit and every support
+   failure close current-bank gameplay.
+5. **Next:** bind the existing clean-power episode generator to that exact census result, add
+   prospective train/development/contingency ownership, and prove a bounded one-shot yield tranche
+   before population-scale generation. Recensus before any outcome collection. The supply design
    must define the independent unit, maximum scenarios and influence per lineage, cluster weights,
    complete attempted denominator, attrition treatment, train/development ownership, and a fixed
    independent-lineage budget split among fit, confirmation, and unopened contingency use.
-5. **Complete in the public design:** power the held-out test in independent lineage clusters under a prospectively conservative
+6. **Complete in the public design:** power the held-out test in independent lineage clusters under a prospectively conservative
    within-cluster correlation and observed setup attrition. Publish sensitivity at correlations
    `0.0`, `0.25`, `0.5`, `0.75`, and `1.0`; the binding certificate treats correlation `1.0` as
    the worst case unless a separate prospective pilot justifies another bound. A raw row count is
@@ -149,11 +153,11 @@ Work:
    lineage losses**. A V2 design may choose another test or smallest useful effect only before
    outcomes open and must publish its own numeric `K_min`. If available clusters cannot support
    that design, revise the experiment before generating outcomes.
-6. On a passing census, generate additional short authenticated Red scenarios for missing kinds and feature directions
+7. On a passing census, generate additional short authenticated Red scenarios for missing kinds and feature directions
    inside the frozen cluster allocation. A full Red replay is not a data-loader.
-7. Keep an upstream episode lineage wholly inside one partition. Byte clones, timing variants,
+8. Keep an upstream episode lineage wholly inside one partition. Byte clones, timing variants,
    rehashed states, and sibling scenarios do not become independent because their filenames differ.
-8. Retain every settled, failed, and interrupted selected-arm terminal. Never manufacture an
+9. Retain every settled, failed, and interrupted selected-arm terminal. Never manufacture an
    unselected counterfactual label or replace an awkward row.
 
 Retain these information floors from the existing fit-readiness contract unless a stronger
@@ -170,10 +174,10 @@ prospective revision replaces them:
 - bounded lineage influence, full candidate support, no identity-bearing features, no development
   leakage, and an action-free capacity proof for the complete clustered schedule.
 
-The complete bounded successor shows that execution speed is not the bottleneck. The next design
-does target the measured missing information strata prospectively and outcome-blindly. The next
-session must test its 139-lineage capacity and, on pass, resume bounded example collection without
-another process-only pause. It must not return to teacher-route hardening or treat additional
+The complete bounded successor shows that short-scenario execution speed is not the bottleneck.
+The exact capacity census now shows that independent upstream episode supply is. The next session
+must qualify a census-bound multi-partition supply design and bounded yield tranche; it must not
+return to teacher-route hardening, launch 103 worlds without a yield estimate, or treat additional
 correlated rows as independent evidence.
 
 Exit gate: the clustered-design power review passes, then the action-free powered-fit audit passes

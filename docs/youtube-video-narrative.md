@@ -1,5 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the empty desks were real
+
+**Visual:** The published counter receives a green stamp: **MAIN F1FC3812 · CI 33355147814 ✓**.
+The 139-desk room fills only partially: **14/36 TRAIN**, **22/100 EXAM**, **0/3 CONTINGENCY**.
+Flash **28/72 TRAIN QUESTIONS** and then a large **103 NEW LINEAGES REQUIRED**.
+
+**Voiceover:** “We did not guess. We published the counter, rebuilt the exact source, and let it
+read the nonsealed classroom once without pressing a button. The answer was worse than the old
+estimate: forty-three unused lineages remained, but only fourteen could support training and only
+twenty-two could support the same-reset exam.”
+
+**Visual:** Template, location, family, kind, and pressure columns also turn red. Keep
+**ACTIONS · FRAMES · TEACHERS · PREDICTIONS · OUTCOMES · FITS · CLAIMS = 0** beneath them.
+
+**Voiceover:** “This is a successful failure. It stopped us before we spent days collecting
+outcomes for an experiment that could never prove its claim. We will not lower the standard or
+rename cloned saves. The next machine creates genuinely new clean-power classrooms, fixes their
+train or exam role before play, keeps every failed world, and proves a small yield batch before it
+scales.”
+
+**On-screen rail:** `BOUND V2 SUPPLY DESIGN → BOUNDED ONE-SHOT YIELD → RECENSUS → 60 REAL
+LESSONS → ONE POWERED FIT → UNTOUCHED RED → TEACHER-FREE AUTHORITY → LIVING POKEDEX → CRYSTAL`
+
+**On-screen score:** `TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the attendance counter
 
 **Visual:** 139 empty desks appear. Thirty-six turn blue for training, 100 turn gold for the

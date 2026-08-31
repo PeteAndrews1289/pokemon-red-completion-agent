@@ -7,28 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: counting the empty desks before inviting the class
+## Current checkpoint: the room really is too small
 
-The new experiment needs 139 genuinely separate desks. The project has now built the attendance
-counter, but it has not opened the classroom door. Each desk must belong permanently to lessons or
-the exam, trace back to a different upstream episode, expose a real three-choice Pokémon decision,
-and—on the exam side—support four fair policy branches from the same reset.
+The attendance counter is now published, independently rebuilt, and used exactly once. It opened
+the nonsealed Red classroom without pressing a button and found 43 unused upstream lineages. Only
+14 can sit on the lesson side, supporting at most 28 of the 72 planned questions. Twenty-two can
+sit on the same-reset exam side. None can serve as one of the three unopened contingencies.
 
-Even 139 names on a list are not enough. The counter demands a complete seating chart: 36 lesson
-lineages carrying 72 prescheduled questions, 100 untouched exam lineages carrying one question
-each, and three untouched contingencies, all while the promised kinds, positions, locations,
-families, templates, and state pressures remain represented. A cloned save, a crossed partition,
-or a convenient post-outcome replacement cannot masquerade as another student.
+That turns the old suspicion into a measured result: the project is short 22 lesson lineages, 78
+exam lineages, three contingencies, and **103 independent classrooms total**. The remaining seats
+also do not cover enough templates, locations, semantic families, state pressures, or option kinds.
+No amount of rearranging the same saves can produce the missing evidence.
 
-There is a sober prior. The last published inventory found only 59 eligible lineages—36 for
-lessons and 23 for development—and later work consumed more of them. Against the new design, that
-old shape is short 80 independent lineages. But the project has not quietly reread the private
-archive to confirm the answer. The counter must first become reproducible published main and pass
-an independent build; then it gets exactly one action-free census.
+The counter itself moved nothing in the game. Actions, frames, teacher calls, predictions,
+outcomes, model fits, and claims all stayed at zero. That makes the failure useful: it prevented a
+large outcome campaign from starting with an exam that could never support its conclusion.
 
-If the room is too small, the answer is not to call correlated chairs independent. The next
-chapter becomes scalable episode generation. If the count unexpectedly passes, one frozen seating
-chart opens a bounded lesson batch—not an exam, authority, Crystal, or a full game. The score is
+The next chapter is not “lower the standard.” It is to turn the existing clean-power episode rail
+into a scalable classroom factory with roles fixed before play, failures retained, and a small
+yield tranche before committing to the full population. Then the counter runs again. The score is
 still **CAUSAL TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
 
 ## Previous checkpoint: the experiment finally knows what counts as a stranger

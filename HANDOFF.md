@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-30 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-31 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -13,6 +13,40 @@ horizon and Crystal-ready definition),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-31: powered V2 capacity is falsified — generate independent lineages, not outcomes
+
+PR `#119` merged the action-free capacity implementation as exact main
+`f1fc3812eed44da0fc6ffff926c6656d778c7bf4`; push CI `33355147814/1` passed all source,
+documentation, registry, lint, type, and 5,894-test gates in 18m24s. From one clean detached
+checkout of that exact source, the production census opened the authenticated nonsealed Red
+catalog once and returned a decisive aggregate result. It did not open the twelve sealed Red test
+captures.
+
+The bank contains 81 authenticated contexts, but 29 are consumed and nine are control-ineligible.
+Only 43 unused lineages remain; 36 expose any supported scenario. Against frozen design
+`c20d2934…`, the exact usable supply is **14/36 train lineages, 28/72 train attempts, 22/100
+same-reset development lineages, and 0/3 contingencies**. The resulting lower bounds are **22 new
+train lineages, 78 new development lineages, three new contingencies, and 103 new independent
+lineages total**. Train and development also fail their frozen template, location, kind,
+semantic-family, and pressure floors. No allocation witness exists and current-bank gameplay is
+closed.
+
+Every protected counter stayed zero: controller actions, emulator frames, providers, behavior
+commitments, teachers, predictions, outcomes, fits, root claims, and gameplay executions. The
+[machine result](docs/evidence/red-living-dex-clustered-powered-v2-capacity-machine-result-v1-2026-08-31.json)
+and [path-free publication](docs/evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json)
+bind the exact source and result. This is a useful negative experiment, not training. The board is
+still **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+Do not weaken V2, count a clone or RNG nudge as another lineage, retry consumed roots, open
+development outcomes, or launch a 103-world population blindly. The repository already has a
+qualified clean-power fresh-episode rail, but its V1 plan is train-only, fixed to thirteen roots,
+and targets three old scarce templates. The next engineering gate must bind that rail to this
+exact census, add immutable train/development/contingency ownership, cover the newly measured
+support deficits, retain every one-shot failure, and freeze a bounded yield tranche. Only a
+successful tranche and a fresh action-free census can justify scaling lineage generation. Outcome
+collection, powered fitting, model authority, sealed Red, Crystal, and full replay remain closed.
 
 ## 2026-08-30: powered V2 census implementation is local — publish before the one private read
 

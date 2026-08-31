@@ -1,10 +1,34 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-30. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-31. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: capacity failed; Codex owns V2 lineage-supply engineering
+
+PR `#119` merged as exact main `f1fc3812`; push CI `33355147814/1` passed. The sole action-free
+census found 43 unused Red lineages but only **14/36 train, 28/72 train attempts, 22/100
+same-reset development, and 0/3 contingency** capacity. Frozen V2 is short 103 independent
+lineages and fails additional support floors. The scan used zero actions, frames, claims, teachers,
+predictions, outcomes, fits, or private disclosures. Current-bank gameplay is closed.
+
+Codex owns publication of the
+[capacity result](evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json),
+the audit of the existing clean-power fresh-episode rail, and implementation of a census-bound
+multi-partition V2 lineage-supply design plus bounded one-shot yield tranche. Claude's next useful
+review is statistical: independence, immutable partition ownership, attrition accounting,
+contingency use, and whether the tranche supports a scale decision without weakening V2.
+Antigravity's next useful review is architectural: cheaper genuine episode generation, parallel
+throughput, title-neutral support targeting, dashboard observability, and Red assumptions that will
+break in Crystal. Both remain read-only and receive only stable public source and path-free facts;
+Codex adjudicates.
+
+Do not launch 103 worlds blindly, reuse consumed identities, count clones or timing nudges as
+independent, collect powered outcomes, open development, refit R0, promote authority, open sealed
+Red, execute Crystal, or replay a full game as evaluation. The board remains **causal train 18/60
+· integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
 
 ## Current override: bounded R1 complete; Codex owns publication and clustered V2 design
 

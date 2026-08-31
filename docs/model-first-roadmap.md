@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-30. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-31. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -11,27 +11,28 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: capacity falsifier implemented; publish, census once, then reorient
+## Current checkpoint: capacity failed cleanly; build scalable independent-lineage supply
 
-Exact main `e667bc63` passed CI `33344917534/1` and published the clustered powered V2 design.
-The next gate is now implemented locally without opening private data or gameplay. It converts
-each still-unused authenticated Red root into a title-neutral lineage-capacity description while
-preserving immutable train/development ownership, same-reset feasibility, genuine menu support,
-and the frozen kind, position, family, template, location, and pressure floors.
+PR `#119` merged as exact main `f1fc3812`; push CI `33355147814/1` passed in 18m24s. The sole
+action-free census then authenticated the 81-context Red catalog without opening sealed Red and
+found 29 consumed contexts, nine control-ineligible contexts, 43 unused lineages, and only 36
+lineages with any supported scenario.
 
-The gate cannot pass on aggregate counts alone. A valid exact witness must allocate 36 train
-lineages to 72 questions, 100 untouched development lineages to one question each, and three
-development-capable pre-branch contingencies. The production command binds the public design and
-source before private input, returns only path-free aggregates, and has no action, claim, behavior,
-teacher, outcome, prediction, fit, retry, or allocation-output authority.
+Frozen V2 needs 36 train, 100 development, and three contingency lineages. The current bank can
+support only **14 train lineages and 28 train attempts**, **22 same-reset development lineages**,
+and **zero contingencies**. It is therefore short **22 train, 78 development, three contingency,
+44 train attempts, and 103 total independent lineages**. Both partitions also miss declared
+template, location, kind, semantic-family, and pressure coverage. No exact allocation witness was
+supplied or valid. Current-bank gameplay and outcome collection are closed.
 
-The historical inventory result—59 eligible lineages, split 36 train / 23 development before
-later claims—would fail V2 by 77 development lineages, three contingencies, and 80 lineages total.
-That is a prior rather than a fresh private result. Publish the implementation, require green
-exact-main CI, and then run one census. A hard failure closes gameplay and moves the roadmap to a
-scalable independent-lineage supply design. A pass permits only one exact allocation freeze and a
-bounded train batch. The board remains **causal train 18/60 · integration fit 1/1 · powered fit 0
-· authority 0 · transfer 0**.
+The result used zero actions, frames, claims, behavior commitments, teachers, predictions,
+outcomes, fits, providers, or gameplay executions. Preserve frozen V2 rather than lowering the
+denominator or calling correlated saves independent. The repository's clean-power fresh-episode
+rail is the starting implementation, but its old plan is train-only, thirteen roots, and three
+templates. Next bind a V2 supply design to this exact deficit, add prospective train/development/
+contingency ownership and complete support targeting, and prove a bounded one-shot yield tranche
+before launching population-scale generation. Recensus after that tranche. The board remains
+**causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
 
 ## Previous checkpoint: clustered powered V2 designed; prove capacity, then resume learning
 

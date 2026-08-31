@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-31 capacity-failure override — build lineage supply, not outcomes:** PR `#119` merged
+> as exact main `f1fc3812`, exact-main CI `33355147814/1` passed, and the one action-free census
+> found only 14/36 train, 22/100 development, and 0/3 contingency lineages. The 103-lineage total
+> deficit closes current-bank gameplay. Codex owns path-free publication, audit of the existing
+> clean-power generator, and a V2 multi-partition supply design plus bounded yield tranche. Claude
+> challenges independence, attrition, partition leakage, contingencies, and statistical claims.
+> Antigravity challenges throughput, unnecessary full-run cost, title-neutral generation, Crystal
+> assumptions, and dashboard needs. Both are read-only milestone reviewers; Codex adjudicates.
+> No clone counting, consumed-world retry, outcome collection, development open, fit, authority,
+> sealed Red, Crystal execution, or full replay is authorized.
+
 > **2026-08-30 powered-capacity implementation override — publish before private census:** Exact
 > main `e667bc63` / CI `33344917534/1` contains the frozen V2 design. Codex has locally implemented
 > a path-free Red adapter, title-neutral 139-lineage capacity audit, exact allocation-witness

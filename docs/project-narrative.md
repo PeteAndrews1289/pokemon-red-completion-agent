@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 31: the census rejects the existing classroom
+
+The capacity question now has an exact answer. PR `#119` merged the action-free census as main
+`f1fc3812`, and CI `33355147814/1` rebuilt that exact commit successfully. One authenticated scan
+then found 43 unused Red lineages, only 36 with any supported scenario. Frozen V2 can allocate at
+most 14 of its required 36 train lineages, 28 of 72 train attempts, 22 of 100 same-reset
+development lineages, and none of three contingencies.
+
+The minimum measured gap is 103 independent lineages: 22 train, 78 development, and three
+contingencies. Separate support failures remain in menu templates, locations, option kinds,
+semantic families, and pressure variation. The exact allocation constructor therefore returned no
+witness, and gameplay stayed closed. The census advanced zero frames, issued zero actions, queried
+zero teachers, read zero outcomes, made zero predictions, fit zero models, and claimed zero roots.
+
+This negative result prevents a more expensive mistake. The next system is an independent-lineage
+supply rail, not another option-outcome campaign. The existing clean-power generator already has
+one-shot claims, no state restoration, transcript sealing, and terminal verification, but its old
+plan is train-only and thirteen roots. It must now become prospectively partitioned, target the
+measured V2 support gaps, retain every failed world, and prove a bounded yield tranche before it is
+allowed to scale. The learning board remains **18/60, integration fit 1/1, powered fit 0,
+authority 0, transfer 0**.
+
 ## August 30: count independent classrooms before collecting another lesson
 
 The powered design now has an attendance gate. It does not count save files; it counts unused,

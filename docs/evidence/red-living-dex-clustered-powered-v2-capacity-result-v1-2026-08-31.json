@@ -1,0 +1,90 @@
+{
+  "claim_boundary": {
+    "supported": "One exact-main, action-free census proved that the current unused nonsealed Red context bank cannot satisfy the frozen clustered powered V2 allocation. Gameplay and outcome collection are closed until genuinely independent lineage supply is expanded and recertified.",
+    "unsupported": [
+      "powered_allocation_materialized",
+      "powered_train_collection",
+      "powered_development_opened",
+      "powered_model_fit",
+      "red_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "story_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "capacity_gate": {
+    "allocation_witness_supplied": false,
+    "allocation_witness_valid": false,
+    "authenticated_contexts": 81,
+    "capacity_proven": false,
+    "consumed_contexts": 29,
+    "contingency_lineage_deficit": 3,
+    "contingency_lineage_upper_bound": 0,
+    "development_lineage_deficit": 78,
+    "development_lineages_available": 22,
+    "development_question_upper_bound": 22,
+    "development_same_reset_lineages_available": 22,
+    "eligible_root_pool": 43,
+    "hard_capacity_reasons": [
+      "insufficient_development_contingency_lineages",
+      "insufficient_development_kind_capacity",
+      "insufficient_development_lineages",
+      "insufficient_development_locations",
+      "insufficient_development_templates",
+      "insufficient_total_lineages",
+      "insufficient_train_attempt_capacity",
+      "insufficient_train_lineages",
+      "insufficient_train_locations",
+      "insufficient_train_pressure_variation",
+      "insufficient_train_semantic_families",
+      "insufficient_train_templates"
+    ],
+    "lineages_observed": 43,
+    "lineages_with_any_scenario": 36,
+    "required_new_lineage_supply": 139,
+    "source_train_roots": 20,
+    "source_validation_roots": 23,
+    "total_lineage_deficit": 103,
+    "train_attempt_upper_bound": 28,
+    "train_lineage_deficit": 22,
+    "train_lineages_available": 14
+  },
+  "interpretation": {
+    "authentic_causal_train_examples_after": 18,
+    "authentic_causal_train_examples_before": 18,
+    "development_remains_closed": true,
+    "gameplay_collection_allowed_now": false,
+    "model_authority_changed": false,
+    "model_fit_executed": false,
+    "next_gate": "Publish and qualify a scalable clean-power independent-lineage supply design. It must generate prospectively partitioned Red episode roots with required semantic-family, template, location, pressure, same-reset, and contingency coverage, then pass a new action-free census before any powered outcome collection.",
+    "outcome_aware_root_admission_allowed": false,
+    "transfer_to_crystal_demonstrated": false
+  },
+  "protected_effects": {
+    "behavior_commitments": 0,
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes": 0,
+    "provider_executions": 0,
+    "red_gameplay_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-31",
+  "schema": "pokemon.red.living-dex-clustered-powered-capacity-publication.v1",
+  "source": {
+    "ci_attempt": 1,
+    "ci_run": 33355147814,
+    "commit": "f1fc3812eed44da0fc6ffff926c6656d778c7bf4",
+    "design_sha256": "c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d",
+    "machine_result_path": "docs/evidence/red-living-dex-clustered-powered-v2-capacity-machine-result-v1-2026-08-31.json",
+    "machine_result_sha256": "86f829cd84e6de2df4ad5754e226a87d6afcedb1bcf98bed1b6ac76902fb705c",
+    "source_bundle_sha256": "b077f6a03004482be3ad1437480fbbf930c6ca5d99513d63cd03d38f4d5d8bae"
+  },
+  "status": "clustered_powered_v2_capacity_falsified_gameplay_closed"
+}

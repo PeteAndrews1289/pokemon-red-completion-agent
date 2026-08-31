@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Merged the powered-V2 capacity census as exact main `f1fc3812` and passed push CI
+  `33355147814/1` in 18m24s. The sole action-free production scan found 43 unused lineages but
+  only 14/36 train, 28/72 train attempts, 22/100 same-reset development, and 0/3 contingency
+  capacity. The measured lower bound is 103 new independent lineages, with additional template,
+  location, kind, semantic-family, and pressure deficits. The result closes current-bank gameplay
+  before outcome collection; actions, frames, claims, teachers, predictions, outcomes, fits,
+  providers, and gameplay executions all remained zero. Added path-free evidence, regression
+  guards, and reoriented the active lane to a census-bound multi-partition clean-power lineage
+  supply design and bounded yield tranche.
+
 - Implemented the action-free clustered-powered V2 capacity falsifier from exact main `e667bc63`
   / CI `33344917534/1`. The title-neutral audit preserves immutable upstream lineage partitions,
   genuine three-option support, same-reset development forks, all frozen coverage schedules, and

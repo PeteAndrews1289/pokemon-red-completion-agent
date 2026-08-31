@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the clustered-powered V2 capacity implementation under green exact-main CI, then run one action-free private census. On hard failure, close gameplay and redesign independent-lineage supply. On pass, freeze the exact outcome-blind allocation once and begin a bounded Red train batch; development, powered fitting, Crystal, and full replay remain closed.
+- Next decision: The exact-main census failed current capacity: 14 train, 22 development, and 0 contingency lineages are usable against 36/100/3. Generalize the clean-power fresh-episode rail into a prospectively partitioned V2 supply design, prove a bounded yield tranche, and recensus before any powered outcome collection.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The pipeline holds eighteen authentic settled Red causal train examples from eighteen lineages and one immutable non-authoritative eight-row integration model that reloads exactly. The model has made no gameplay prediction and has no gameplay authority. |
 | Authority target | Scale to at least 60 informative train outcomes under a prospectively frozen cluster-aware design, pass feature-support information and power gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing supported weights for Crystal. |
 | Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported projection. A separately powered Crystal plan must compare it with the same architecture from zero initialization across the complete 251-target catalog. Supported abstention fails; typed unsupported abstention earns boundary credit but no completion credit. Crystal-only mechanics require later adaptation before authority. |
-| Cheapest falsifier | Publish the locally qualified action-free capacity command, require green exact-main CI, then run one census against clustered powered V2 digest c20d2934. It must construct and re-audit a disjoint outcome-blind allocation of 36 train, 100 development, and 3 contingency lineages with every frozen support floor. Failure closes gameplay; a pass permits one frozen allocation and bounded train collection. |
+| Cheapest falsifier | The exact-main census has already falsified current capacity. Next bind the existing clean-power episode generator to the frozen V2 deficit, prove it can prospectively create train, development, and contingency lineages without cloning or outcome access, and run only a bounded yield tranche before committing to the 103-lineage minimum shortfall. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -58,26 +58,26 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-30-powered-v2-capacity-implementation-qualified-publication-next** · status **active** · evidence [qualification](docs/evidence/living-dex-clustered-powered-v2-capacity-implementation-local-qualification-2026-08-30.json)
+**2026-08-31-powered-v2-capacity-falsified-lineage-supply-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The gate prevents correlated Red saves from manufacturing evidence for a cross-title living-Dex model. It checks reusable title-neutral decision support and preserves Crystal as a later separately powered transfer falsifier rather than optimizing another fixed Red route. |
-| Learning output | No new learning output. The board remains 18/60 authentic train examples, integration fit 1/1, powered fit 0, authority promotions 0, and transfer results 0. This session built the cheapest honest falsifier; infrastructure does not increment the learning board. |
-| Authority delta | None. The capacity implementation opened no private inventory, ROM, outcome, teacher, model, or development row and performed no gameplay. The corpus remains eighteen authentic Red causal examples; powered fit, gameplay authority, Crystal transfer, and living-Pokedex authority remain zero. |
+| Product alignment | The census prevents correlated or consumed Red saves from manufacturing a cross-title result. The supply lane now creates genuinely new classrooms while preserving Red as curriculum and Crystal as a later powered transfer falsifier, not another fixed walkthrough. |
+| Learning output | No new learning output. The board remains 18/60 authentic train examples, integration fit 1/1, powered fit 0, authority promotions 0, and transfer results 0. The census is a decisive negative capacity result, not training. |
+| Authority delta | None. The sole census executed no controller action, emulator frame, provider, behavior commitment, teacher query, model prediction, outcome read, fit, claim, or gameplay episode. The corpus remains eighteen authentic Red causal examples; powered fit, gameplay authority, Crystal transfer, and living-Pokedex authority remain zero. |
 | Transfer result | Still untested. The contract now requires a complete per-title catalog, typed supported and unsupported abstentions, explicit Crystal-only mechanics, a best-of-three control envelope, a zero-initialization comparator, and a separately powered Crystal plan before execution. |
-| Blocker | The capacity implementation is local rather than published, and private finite capacity remains unproven. Historical evidence saw only 59 eligible lineages before later claims, but the new one-shot census has not opened that inventory. |
-| Decision | The action-free command constructs and re-audits an exact 36/100/3 witness. PR CI hit the 20-minute pytest ceiling; typed exact-math caching produced a clean 5,894-test qualification in 12m08s within the unchanged limit. Publish the amendment and require green exact-main CI, then run the census once. Any hard shortfall closes gameplay and activates scalable independent-lineage supply. |
-| Next session | Publish the capacity implementation and require green exact-main CI. Then run exactly one action-free census against design digest c20d2934. On failure publish path-free deficits and reorient to scalable lineage generation. On pass freeze the exact allocation once and begin only a bounded outcome-blind Red train batch. |
-| Next falsifier | From published green exact main, one action-free census must construct and re-audit all 139 required new lineages without overlap, cloned-state pseudoreplication, outcome knowledge, unsupported feature rows, or missing same-reset forks. Any hard failed floor closes gameplay. |
-| Stop condition | Do not open private capacity from an unpublished or non-green source. After the sole census, stop immediately on any hard floor failure. A valid witness permits one outcome-blind freeze and bounded train collection only; no powered fit, development branch, authority, sealed Red, Crystal, teacher fallback, or full replay is authorized. |
+| Blocker | The exact census found only 14 usable train lineages, 22 same-reset development lineages, and zero contingencies. Frozen V2 is short 22 train, 78 development, 3 contingency, 44 train attempts, and 103 total independent lineages, with additional template, location, semantic-family, kind, and pressure floors also failing. |
+| Decision | Current-bank gameplay is closed. Preserve frozen V2 rather than weakening its denominator or relabeling clones as independent. Reuse the already qualified clean-power lineage rail as the starting point, generalize its prospective plan beyond the old 13-root train-only tranche, and prove bounded multi-partition yield before scaling root generation. |
+| Next session | Audit the existing fresh-episode generator against V2, publish a source-bound multi-partition lineage-supply design and bounded yield tranche, require green exact-main CI, then generate only that tranche. Re-census after the tranche; do not collect option outcomes until capacity is proven. |
+| Next falsifier | A public V2 lineage-supply design must bind the exact 103-lineage deficit and the failed support floors, freeze immutable train/development ownership before play, retain no-retry failures, and demonstrate on a bounded tranche that fresh clean-power worlds produce compatible multi-partition roots at a usable measured yield. |
+| Stop condition | Current-bank gameplay and powered outcome collection are closed. Do not weaken V2, reclassify old roots, clone or rehash states, retry consumed worlds, or generate a full 103-root population before a bounded prospective yield tranche passes. No powered fit, development outcome, authority, sealed Red, Crystal, or full replay is authorized. |
 
 ### Stop conditions
 
 - The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
 - Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
 - Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
-- Successor ordinals zero through fifteen are permanently consumed: twelve settled targets and four setup-only terminals. The readiness audit and R0 integration fit may not retry or refit. Clustered powered V2 design digest c20d2934 is frozen for the next capacity census; failure closes before gameplay, while a pass permits one outcome-blind allocation and bounded train collection only.
+- Successor ordinals zero through fifteen are permanently consumed: twelve settled targets and four setup-only terminals. The readiness audit and R0 integration fit may not retry or refit. The exact V2 census is permanently consumed and failed with a 103-lineage total deficit; current-bank gameplay is closed until genuinely new prospectively partitioned clean-power lineages pass a fresh action-free census.
 
 ### Hard boundaries for this lane
 

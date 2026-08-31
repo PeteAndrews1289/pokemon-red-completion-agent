@@ -70,11 +70,23 @@ This is a cheapest-falsifier gate, not a capability milestone:
   bounded train batch; it does not permit powered fitting, development opening, authority,
   sealed Red, Crystal, or a full-game replay.
 
-The last published inventory saw only 59 eligible independent roots—36 source-train and 23
-source-development—before later claims consumed additional contexts. Against V2, that historical
-shape would be short 77 development lineages, all three development contingencies, and 80 total
-lineages. This is a prior expectation, not the result of the new one-shot census. The private
-inventory remains unopened until this implementation is published and exact-main CI is green.
+## Production result
+
+PR `#119` merged as exact main `f1fc3812eed44da0fc6ffff926c6656d778c7bf4`, and push CI
+`33355147814/1` passed every gate in 18m24s. The one production census then authenticated 81
+contexts, found 29 consumed and nine control-ineligible contexts, and retained 43 unused lineages.
+Only 36 expose any supported scenario.
+
+The capacity gate failed decisively: 14/36 train lineages, 28/72 train attempts, 22/100 same-reset
+development lineages, and 0/3 contingencies. The exact lower bound is 103 new independent
+lineages—22 train, 78 development, and three contingency—and both partitions also fail declared
+support floors. No allocation witness exists. Controller actions, emulator frames, providers,
+behavior commitments, teachers, predictions, outcomes, fits, gameplay executions, and root claims
+all remained zero. Current-bank gameplay is closed; the next gate is a bounded clean-power
+multi-partition lineage-supply design and yield tranche, followed by another action-free census.
+
+See the [machine result](evidence/red-living-dex-clustered-powered-v2-capacity-machine-result-v1-2026-08-31.json)
+and [path-free publication](evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json).
 
 ## Engineering qualification
 
