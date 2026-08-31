@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-30 powered-capacity implementation override — publish before private census:** Exact
+> main `e667bc63` / CI `33344917534/1` contains the frozen V2 design. Codex has locally implemented
+> a path-free Red adapter, title-neutral 139-lineage capacity audit, exact allocation-witness
+> validator, and action-free production census command. No private inventory or gameplay opened.
+> The gate requires 36 train, 100 development, and three development-capable contingency lineages;
+> raw counts alone cannot pass. Codex owns testing, registry rebinding, publication, exact-main CI,
+> and the sole post-green census. On hard failure it publishes deficits and reorients to scalable
+> independent-lineage generation; on pass it freezes once and starts only a bounded train batch.
+> Claude and Antigravity may review stable public source and the later path-free aggregate, but
+> never private identities, execution, fitting, or authority. The detailed contract is
+> `docs/living-dex-clustered-powered-capacity-census.md`.
+
 > **2026-08-30 clustered-powered-V2 override — publish, census, then return to examples:** Codex
 > implemented the action-free design from exact main `6a7210b8`; Claude returned statistical PASS
 > and Antigravity returned PASS WITH REQUIRED CHANGES. Codex accepted the substantive transfer and

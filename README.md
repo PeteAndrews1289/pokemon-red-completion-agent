@@ -6,6 +6,21 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 30, 2026): the 139-lineage census is implemented locally; the
+> one private read still waits for publication and green exact-main CI.** The new action-free gate
+> preserves immutable train/development lineage ownership, checks genuine three-option Red support,
+> and requires an exact 36-train / 100-development / 3-contingency witness before collection can
+> open. A raw count cannot pass. The command has no controller, claim writer, behavior draw,
+> teacher, outcome reader, model scorer, fitter, retry, or private-path publication surface.
+>
+> Historical public evidence suggests the inventory is far too small: the last census exposed 59
+> eligible lineages, including only 23 development roots, before later claims. That is a prior, not
+> the new result. Publish and qualify the command first, then perform exactly one read. A shortfall
+> closes gameplay and redirects work to scalable independent-lineage generation; it must not weaken
+> the powered endpoint. See the
+> [capacity contract](docs/living-dex-clustered-powered-capacity-census.md). The board remains
+> **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
 > **Current product focus (August 30, 2026): clustered powered V2 is designed; prove finite
 > capacity before collecting again.** The canonical action-free contract preserves the authentic
 > 18-example/18-lineage prefix, prospectively adds 72 outcome-blind attempts across 36 new train

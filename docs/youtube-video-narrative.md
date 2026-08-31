@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the attendance counter
+
+**Visual:** 139 empty desks appear. Thirty-six turn blue for training, 100 turn gold for the
+untouched exam, and three stay gray as sealed contingencies. Then 59 old inventory cards slide
+onto the desks, leaving 80 visibly empty.
+
+**Voiceover:** “Before collecting another Pokémon decision, we finally asked the cheapest
+question: do we even have enough independent games to support the experiment? Not save files.
+Independent upstream episodes. Two questions from the same episode may help a model learn, but
+they cannot pretend to be two strangers on the exam.”
+
+**Visual:** A raw `139` counter flashes red. It changes into a seating chart with kind, position,
+template, location, family, pressure, and same-reset columns.
+
+**Voiceover:** “A big number still cannot pass. Every lineage needs a frozen role and a genuine
+three-choice decision. The 100 exam lineages must each fork the candidate and three controls from
+the same reset. Only an exact 36/100/3 allocation opens collection. The census itself cannot press
+a button, ask the teacher, read an outcome, fit a model, or reveal a private path.”
+
+**On-screen score:** `TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0`
+
 ## August 30 scene: stop counting siblings as strangers
 
 Open on **18 REAL LESSONS / 18 LINEAGES**. Split 72 new lesson cards into 36 braces, two cards per

@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: count independent classrooms before collecting another lesson
+
+The powered design now has an attendance gate. It does not count save files; it counts unused,
+authenticated upstream episodes whose descendants cannot leak across training and examination.
+Each Red root is reduced to title-neutral pressures and genuine three-choice capabilities, while
+the private map, route, state, and lineage identities remain sealed.
+
+The gate is stricter than a total of 139. It requires an exact seating chart: 36 training
+lineages must support the 72 frozen kind/position questions, 100 untouched development lineages
+must each support one confirmatory question and four same-reset policy branches, and three
+development-capable contingencies must remain unread. The selected chart must jointly preserve
+the promised family, template, location, pressure, and option support. A count-only inventory
+cannot authorize play.
+
+The last published action-free inventory contained 59 eligible lineages—36 training and 23
+development—before later claims consumed more. If that shape persists, V2 is short 80 lineages.
+The project has not used that expectation as an excuse to peek again: the census implementation
+must publish and pass exact-main CI before one private read. On failure, the work shifts to
+scalable independent episode generation instead of pretending correlated scenarios are evidence.
+The scoreboard remains **18/60 causal examples, integration fit 1/1, powered fit 0, authority 0,
+transfer 0**.
+
 ## August 30: define an honest exam before buying more lessons
 
 The clustered V2 blueprint is now code rather than a promise. It keeps all eighteen authentic Red

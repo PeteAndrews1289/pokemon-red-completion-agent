@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Implemented the action-free clustered-powered V2 capacity falsifier from exact main `e667bc63`
+  / CI `33344917534/1`. The title-neutral audit preserves immutable upstream lineage partitions,
+  genuine three-option support, same-reset development forks, all frozen coverage schedules, and
+  requires an exact 36-train / 100-development / 3-contingency allocation witness; raw counts
+  cannot open collection. The Red command has no action, claim, behavior, teacher, outcome,
+  prediction, fit, retry, allocation-output, or private-path surface. Rebound all three committed
+  collection registries to executable source bundle `875964d5…3d51` and updated their golden
+  identities. No private capacity, ROM, outcome, model, development row, gameplay, or Crystal
+  input opened. Publication, green exact-main CI, and one action-free census are next; any hard
+  shortfall closes gameplay and triggers independent-lineage supply redesign.
+
 - Qualified the post-yield fresh-Red repair on exact working source bundle `a3b18f34…c0c7a9`.
   Three new one-use development seeds reached the late-Cinnabar `mansion_returned` boundary on
   unchanged source: 3/3 across 112,486 controller actions and 21,072,636 emulator frames. The

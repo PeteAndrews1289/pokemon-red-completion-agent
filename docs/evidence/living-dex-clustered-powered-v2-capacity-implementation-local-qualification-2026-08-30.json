@@ -1,0 +1,102 @@
+{
+  "capacity_contract": {
+    "contingency_lineages": 3,
+    "development_lineages": 100,
+    "exact_allocation_witness_required": true,
+    "historical_59_lineage_shape": {
+      "development_contingency_deficit": 3,
+      "development_lineage_deficit": 77,
+      "source_development_lineages": 23,
+      "source_train_lineages": 36,
+      "total_lineage_deficit": 80
+    },
+    "historical_shape_is_not_a_new_private_census": true,
+    "prospective_train_attempts": 72,
+    "prospective_train_lineages": 36,
+    "required_new_lineage_supply": 139,
+    "synthetic_exact_139_lineage_witness_passed": true
+  },
+  "claim_boundary": {
+    "supported": "The public powered-V2 capacity implementation can falsify insufficient independent Red lineage supply action-free, requires an exact simultaneous allocation witness before capacity can pass, and is locally ready for publication and exact-main CI.",
+    "unsupported": [
+      "private_capacity_opened",
+      "private_capacity_exists",
+      "private_allocation_frozen",
+      "new_red_outcome_collected",
+      "powered_model_fit_executed",
+      "powered_red_development_pass",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 0,
+    "gameplay_model_predictions": 0,
+    "outcomes_read": 0,
+    "private_capacity_reads": 0,
+    "private_fit_claims": 0,
+    "private_schedule_freezes": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "implementation": {
+    "action_free_red_adapter": true,
+    "aggregate_public_output_only": true,
+    "design_digest_authentication_precedes_private_input": true,
+    "development_contingencies_require_same_reset_support": true,
+    "deterministic_outcome_blind_exact_witness_constructor": true,
+    "immutable_partition_ownership_enforced": true,
+    "malformed_or_duplicate_witness_fails_closed": true,
+    "private_allocation_output_surface": false,
+    "private_path_output_surface": false,
+    "production_action_surface": false,
+    "production_claim_surface": false,
+    "production_fit_surface": false,
+    "production_outcome_surface": false,
+    "production_retry_surface": false,
+    "production_teacher_surface": false,
+    "raw_lineage_count_can_prove_capacity": false,
+    "title_neutral_capacity_schema": "pokemon.core.living-dex-clustered-powered-capacity-audit.v1",
+    "transfer_only_trade_kind_accepted_in_red_capacity": false
+  },
+  "next_gate": {
+    "failure_rule": "Publish the aggregate hard deficits, close gameplay, and redesign scalable independent-lineage supply without weakening the frozen powered endpoint.",
+    "kind": "publish_green_then_one_action_free_private_capacity_census",
+    "pass_rule": "Require one exact outcome-blind 36/100/3 allocation freeze before beginning only a bounded train batch; powered fit, development, authority, sealed Red, Crystal, and full replay remain closed."
+  },
+  "qualification": {
+    "changed_file_ruff_checks_passed": true,
+    "exact_local_runtime_test": "environment_bound_worktree_test_deselected_full_run_prior_exact_main_evidence_preserved",
+    "focused_capacity_tests": 16,
+    "focused_capacity_tests_passed": 16,
+    "full_suite_deselected_environment_bound_tests": 1,
+    "full_suite_passed": 5893,
+    "full_suite_skipped": 3,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 318,
+    "registry_protocol_tests": 49,
+    "registry_protocol_tests_passed": 49,
+    "related_provider_design_and_capacity_tests": 86,
+    "related_provider_design_and_capacity_tests_passed": 86
+  },
+  "schema": "pokemon.core.living-dex-clustered-powered-capacity-implementation-local-qualification.v1",
+  "source": {
+    "base_commit": "e667bc6389516f81d5aab8056963ae23f0291759",
+    "base_exact_main_ci_run": 33344917534,
+    "design_sha256": "c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d",
+    "working_source_bundle_sha256": "875964d5cc32b6582947dfed0c5ebbe9eb8ce146242869a96d9df468b3583d51"
+  },
+  "status": "locally_qualified_publication_and_exact_main_ci_next"
+}
