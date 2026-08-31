@@ -6,22 +6,23 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the 139-lineage census is implemented locally; the
-> one private read still waits for publication and green exact-main CI.** The new action-free gate
-> preserves immutable train/development lineage ownership, checks genuine three-option Red support,
-> and requires an exact 36-train / 100-development / 3-contingency witness before collection can
-> open. A raw count cannot pass. The command has no controller, claim writer, behavior draw,
-> teacher, outcome reader, model scorer, fitter, retry, or private-path publication surface.
+> **Current product focus (August 31, 2026): the exact census falsified current powered-V2
+> capacity; build independent lineage supply before collecting another outcome.** PR `#119` merged
+> as exact main `f1fc3812`, and CI `33355147814/1` passed. The sole action-free census found 43
+> unused Red lineages, with only **14/36 train, 28/72 train attempts, 22/100 same-reset
+> development, and 0/3 contingency** capacity. The measured lower bound is **103 new independent
+> lineages**, and both partitions also miss support floors.
 >
-> Historical public evidence suggests the inventory is far too small: the last census exposed 59
-> eligible lineages, including only 23 development roots, before later claims. That is a prior, not
-> the new result. Publish and qualify the command first, then perform exactly one read. A shortfall
-> closes gameplay and redirects work to scalable independent-lineage generation; it must not weaken
-> the powered endpoint. See the
-> [capacity contract](docs/living-dex-clustered-powered-capacity-census.md). The board remains
-> **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+> Actions, frames, claims, teachers, predictions, outcomes, fits, and private disclosure stayed
+> zero. Current-bank gameplay is closed. The next gate generalizes the existing clean-power
+> fresh-episode rail into a prospectively partitioned V2 supply design, proves one bounded no-retry
+> yield tranche, and recensuses before scaling. It must not weaken V2 or relabel clones as
+> independent. See the
+> [capacity result](docs/evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json).
+> The board remains **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 ·
+> transfer 0**.
 
-> **Current product focus (August 30, 2026): clustered powered V2 is designed; prove finite
+> **Previous product focus (August 30, 2026): clustered powered V2 is designed; prove finite
 > capacity before collecting again.** The canonical action-free contract preserves the authentic
 > 18-example/18-lineage prefix, prospectively adds 72 outcome-blind attempts across 36 new train
 > lineages with at most two attempts each, and retains every information-diversity floor. Training
