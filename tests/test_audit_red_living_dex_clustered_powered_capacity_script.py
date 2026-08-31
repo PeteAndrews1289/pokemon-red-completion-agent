@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import runpy
 import sys
@@ -11,12 +12,16 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from test_red_living_dex_fresh_episode_runtime import _powered_plan
 from test_red_living_dex_setup_identity import _runtime
 
 from pokemon_red_completion.living_dex_clustered_powered_design import (
     LivingDexClusteredPoweredDesign,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_living_dex_powered_lineage_supply import (
+    encode_red_living_dex_powered_supply_plan,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_ROOT = PROJECT_ROOT / "scripts"
@@ -64,6 +69,8 @@ def test_parser_binds_the_design_and_has_no_execution_or_publication_target() ->
     parsed = SCRIPT["_parser"]().parse_args(_args())
 
     assert parsed.expected_design_sha256 == LivingDexClusteredPoweredDesign().design_sha256
+    assert parsed.powered_supply_plan is None
+    assert parsed.powered_supply_private_root is None
     for field in (
         "watch",
         "speed",
@@ -101,6 +108,11 @@ def test_main_emits_the_decisive_path_free_shortfall(
     globals_ = SCRIPT["main"].__globals__
     runtime = _runtime()
     roots = (object(), object())
+    powered_roots = (object(), object(), object())
+    powered_bundle = SimpleNamespace(
+        roots=powered_roots,
+        private_dict=lambda: {"schema": "powered-bundle"},
+    )
     integrity_checks = 0
 
     def support(name: str):  # type: ignore[no-untyped-def]
@@ -121,6 +133,8 @@ def test_main_emits_the_decisive_path_free_shortfall(
             return lambda *_args, **_kwargs: roots
         if name == "_observe_supplemental_candidates":
             return lambda *_args, **_kwargs: ()
+        if name == "_observe_powered_supply_candidates":
+            return lambda supplied, *_args, **_kwargs: supplied
         if name == "_require_integrity":
 
             def integrity(*_args: object, **_kwargs: object) -> None:
@@ -150,6 +164,11 @@ def test_main_emits_the_decisive_path_free_shortfall(
         },
     )
     monkeypatch.setitem(globals_, "_support", support)
+    monkeypatch.setitem(
+        globals_,
+        "_authenticate_powered_supply",
+        lambda *_args, **_kwargs: powered_bundle,
+    )
     monkeypatch.setitem(globals_, "build_runtime_identity", lambda: runtime)
     monkeypatch.setitem(globals_, "require_pyboy_import_origins", lambda _runtime: None)
     monkeypatch.setitem(
@@ -201,7 +220,103 @@ def test_main_emits_the_decisive_path_free_shortfall(
     assert result["emulator_frames"] == 0
     assert result["outcomes"] == 0
     assert result["root_claims"] == 0
+    assert result["authenticated_powered_supply_roots"] == 3
+    assert result["eligible_powered_supply_roots"] == 3
+    assert result["consumed_powered_supply_roots"] == 0
+    assert result["root_state_restores"] == 0
     assert "/private" not in str(result)
+
+
+def test_powered_supply_admission_is_exactly_bound_before_recensus(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = _powered_plan()
+    plan_path = tmp_path / "powered-plan.json"
+    payload = encode_red_living_dex_powered_supply_plan(plan)
+    plan_path.write_bytes(payload)
+    record_sha256 = hashlib.sha256(b"admission-record").hexdigest()
+    expected_private = {"schema": "private-powered-admission"}
+    calls: list[bool] = []
+    bundle = SimpleNamespace(
+        roots=(object(), object()),
+        admission=SimpleNamespace(qualification_passed=True),
+        record_id=f"pwr-admit-{plan.plan_sha256}",
+        private_dict=lambda: expected_private,
+    )
+
+    class _Record:
+        summary = SimpleNamespace(record_sha256=record_sha256)
+
+        def read(self) -> dict[str, object]:
+            return expected_private
+
+    class _Store:
+        def find_sealed_record(self, *_args: object, **_kwargs: object) -> _Record:
+            return _Record()
+
+    globals_ = SCRIPT["_authenticate_powered_supply"].__globals__
+    monkeypatch.setitem(globals_, "open_private_root", lambda *_args, **_kwargs: _Store())
+    monkeypatch.setitem(
+        globals_,
+        "open_fixed_account_claim_registry",
+        lambda: Path("claims"),
+    )
+
+    def authenticate(
+        observed_plan,  # type: ignore[no-untyped-def]
+        *,
+        private_store: object,
+        claim_registry: Path,
+        recover_interrupted: bool,
+    ) -> object:
+        assert observed_plan == plan
+        assert isinstance(private_store, _Store)
+        assert claim_registry == Path("claims")
+        calls.append(recover_interrupted)
+        return bundle
+
+    monkeypatch.setitem(
+        globals_,
+        "authenticate_red_living_dex_powered_supply_private_tranche",
+        authenticate,
+    )
+    args = SimpleNamespace(
+        powered_supply_plan=plan_path,
+        expected_powered_supply_plan_sha256=hashlib.sha256(payload).hexdigest(),
+        powered_supply_private_root=Path("/private/store"),
+        expected_powered_supply_admission_record_sha256=record_sha256,
+    )
+
+    observed = SCRIPT["_authenticate_powered_supply"](
+        args,
+        source_commit=plan.source_commit,
+        source_bundle=plan.source_bundle_sha256,
+    )
+
+    assert observed is bundle
+    assert calls == [False]
+
+
+def test_powered_supply_recensus_rejects_partial_or_unsealed_admission(
+    tmp_path: Path,
+) -> None:
+    args = SimpleNamespace(
+        powered_supply_plan=tmp_path / "plan.json",
+        expected_powered_supply_plan_sha256=None,
+        powered_supply_private_root=None,
+        expected_powered_supply_admission_record_sha256=None,
+    )
+
+    with pytest.raises(
+        SCRIPT["PoweredCapacityCensusError"],
+        match="powered_supply_admission_authentication",
+    ):
+        SCRIPT["_authenticate_powered_supply"](
+            args,
+            source_commit="a" * 40,
+            source_bundle=_sha("source"),
+        )
 
 
 def test_wrong_design_digest_fails_before_private_authentication(

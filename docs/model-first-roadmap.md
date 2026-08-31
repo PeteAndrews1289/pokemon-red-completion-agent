@@ -11,7 +11,30 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: capacity failed cleanly; build scalable independent-lineage supply
+## Current checkpoint: bounded independent-lineage supply is implemented; publish before play
+
+Exact main `0ceece13` publishes the 103-lineage capacity failure. The next system now exists
+locally: a prospectively partitioned clean-power rail whose first tranche is fixed at twelve
+worlds—three train, eight development, and one development-owned contingency. Assignments bind the
+exact source, generator, conditioner, CPython/PyBoy runtime, setup teacher, seed, pre-controller
+wait, target menu, conditioning profile, powered design, and failed capacity result before any
+controller input.
+
+Each claimed world starts from clean power in a distinct episode, loads no parent state, writes at
+most one terminal state, and retains exactly one success or failure disposition. Admission is
+action-free and rejects clones across assignment, lineage, physical root, trajectory, state, and
+envelope identities. The tranche passes only at **9/12 total, including at least 2/3 train, 6/8
+development, and 1/1 contingency roots**. A pass qualifies the rail's bounded yield; it does not
+prove population capacity or create a learning example.
+
+Next publish and require green exact-main CI. Only then freeze and execute the twelve assignments
+once, admit the complete denominator, and recensus. A failed tranche closes scale; a passed tranche
+feeds the measured yield and remaining support gaps into a separately frozen population plan.
+Powered outcomes still wait for an exact allocation witness. The board remains **causal train
+18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**. See the
+[supply contract](red-living-dex-powered-lineage-supply.md).
+
+## Previous checkpoint: capacity failed cleanly; build scalable independent-lineage supply
 
 PR `#119` merged as exact main `f1fc3812`; push CI `33355147814/1` passed in 18m24s. The sole
 action-free census then authenticated the 81-context Red catalog without opening sealed Red and

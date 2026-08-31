@@ -31,8 +31,11 @@ for root in (SCRIPTS_ROOT, SRC_ROOT):
 MATERIALIZER_PATH = SCRIPTS_ROOT / "materialize_goal_manager_context.py"
 GENERATOR_PATH = Path(__file__).resolve()
 CAPACITY_EVIDENCE_PATH = (
+    PROJECT_ROOT / "docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json"
+)
+POWERED_CAPACITY_RESULT_PATH = (
     PROJECT_ROOT
-    / "docs/evidence/red-living-dex-causal-capacity-census-v1-2026-08-28.json"
+    / "docs/evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json"
 )
 _MATERIALIZER: dict[str, Any] | None = None
 _MATERIALIZER_SHA256: str | None = None
@@ -85,9 +88,22 @@ from pokemon_red_completion.red_living_dex_fresh_episode_runtime import (
     RedLivingDexFreshEpisodeCheckpoint,
     RedLivingDexFreshEpisodeExecutionFailure,
     RedLivingDexFreshEpisodeTargetVerification,
+    RedLivingDexPoweredSupplyTargetVerification,
     execute_red_living_dex_fresh_episode,
+    execute_red_living_dex_powered_supply_episode,
     issue_red_living_dex_fresh_episode_process_authority,
     read_red_living_dex_fresh_episode_assignment_claim,
+    read_red_living_dex_powered_supply_assignment_claim,
+    red_living_dex_assignment_claim_exists,
+)
+from pokemon_red_completion.red_living_dex_powered_lineage_supply import (
+    RedLivingDexPoweredSupplyAssignment,
+    RedLivingDexPoweredSupplyFailure,
+    compose_red_living_dex_powered_supply_generator_sha256,
+    compose_red_living_dex_powered_supply_runtime_execution_sha256,
+    compose_red_living_dex_powered_supply_teacher_sha256,
+    parse_red_living_dex_powered_supply_plan,
+    powered_supply_collection_id,
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexActionFreeRootObservation,
@@ -121,7 +137,9 @@ class FreshEpisodeGeneratorError(RuntimeError):
     def __init__(
         self,
         stage: str,
-        failure_receipt: RedLivingDexFreshEpisodeFailureReceipt | None = None,
+        failure_receipt: (
+            RedLivingDexFreshEpisodeFailureReceipt | RedLivingDexPoweredSupplyFailure | None
+        ) = None,
     ) -> None:
         self.stage = stage
         self.failure_receipt = failure_receipt
@@ -152,17 +170,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path)
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4))
+    parser.add_argument("--powered-supply", action="store_true")
     return parser
 
 
 def _read_bounded(path: Path, maximum_bytes: int) -> bytes:
     try:
         metadata = path.lstat()
-        if (
-            path.is_symlink()
-            or not path.is_file()
-            or not 0 < metadata.st_size <= maximum_bytes
-        ):
+        if path.is_symlink() or not path.is_file() or not 0 < metadata.st_size <= maximum_bytes:
             raise OSError("unsafe input")
         payload = path.read_bytes()
     except OSError:
@@ -197,11 +212,31 @@ def _generator_execution_binding(
 ) -> tuple[str, str, str]:
     runner_sha256 = _sha256_file(GENERATOR_PATH)
     conditioner_sha256 = _sha256_file(MATERIALIZER_PATH)
-    return compose_red_living_dex_fresh_episode_generator_execution_sha256(
-        source_bundle_sha256=source_bundle_sha256,
-        generator_runner_sha256=runner_sha256,
-        conditioner_runner_sha256=conditioner_sha256,
-    ), runner_sha256, conditioner_sha256
+    return (
+        compose_red_living_dex_fresh_episode_generator_execution_sha256(
+            source_bundle_sha256=source_bundle_sha256,
+            generator_runner_sha256=runner_sha256,
+            conditioner_runner_sha256=conditioner_sha256,
+        ),
+        runner_sha256,
+        conditioner_sha256,
+    )
+
+
+def _powered_generator_execution_binding(
+    source_bundle_sha256: str,
+) -> tuple[str, str, str]:
+    runner_sha256 = _sha256_file(GENERATOR_PATH)
+    conditioner_sha256 = _sha256_file(MATERIALIZER_PATH)
+    return (
+        compose_red_living_dex_powered_supply_generator_sha256(
+            source_bundle_sha256=source_bundle_sha256,
+            generator_runner_sha256=runner_sha256,
+            conditioner_runner_sha256=conditioner_sha256,
+        ),
+        runner_sha256,
+        conditioner_sha256,
+    )
 
 
 def _load_materializer(expected_sha256: str) -> dict[str, Any]:
@@ -267,9 +302,7 @@ def _apply_target_conditioning(
         raise FreshEpisodeGeneratorError("conditioner_authentication")
     apply_mode = cast(Any, _MATERIALIZER["_apply_mode"])
     mode = (
-        "storage-ready"
-        if assignment.target_template_ordinal in {2, 3}
-        else "story-resource-scarce"
+        "storage-ready" if assignment.target_template_ordinal in {2, 3} else "story-resource-scarce"
     )
     apply_mode(
         mode,
@@ -283,6 +316,52 @@ def _apply_target_conditioning(
         maximum_safety_pressure=None,
         blocked_direction=None,
         target_active_box_count=assignment.target_active_box_count,
+    )
+    final = reader.read()
+    completed_after = COMPLETION_QUEST.completed_ids(observer.observe())
+    if (
+        final.battle_state
+        or completed_after != completed_before
+        or emulator.pressed_buttons
+        or not reader.read_input_readiness().ready
+    ):
+        raise FreshEpisodeGeneratorError("target_conditioning")
+
+
+def _apply_powered_target_conditioning(
+    emulator: CleanPowerFreshEpisodeEmulator,
+    assignment: RedLivingDexPoweredSupplyAssignment,
+    checkpoint: RedLivingDexFreshEpisodeCheckpoint,
+) -> None:
+    """Apply exactly the V2 profile committed before clean-power execution."""
+
+    reader = PokemonRedStateReader(emulator)
+    observer = LivePokemonRedObserver(reader, COMPLETION_QUEST)
+    _latch_verified_progress(observer, checkpoint)
+    adapter = PokemonRedGoalStateAdapter(reader, observer, COMPLETION_QUEST)
+    completed_before = COMPLETION_QUEST.completed_ids(observer.observe())
+    actions = CountingExecutor(
+        FrameSafeExecutor(
+            emulator,
+            DEFAULT_NEW_GAME_TIMING.controller_timing(),
+        )
+    )
+    if _MATERIALIZER is None:
+        raise FreshEpisodeGeneratorError("conditioner_authentication")
+    apply_mode = cast(Any, _MATERIALIZER["_apply_mode"])
+    profile = assignment.profile
+    apply_mode(
+        profile.materializer_mode,
+        actions,
+        reader,
+        emulator,
+        adapter,
+        great_ball_quantity=None,
+        hyper_potion_quantity=None,
+        target_safety_pressure=None,
+        maximum_safety_pressure=None,
+        blocked_direction=None,
+        target_active_box_count=profile.target_active_box_count,
     )
     final = reader.read()
     completed_after = COMPLETION_QUEST.completed_ids(observer.observe())
@@ -319,11 +398,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         runner_sha256,
         conditioner_sha256,
     ) = _generator_execution_binding(source_bundle)
-    teacher_execution = (
-        compose_red_living_dex_fresh_episode_teacher_execution_sha256(
-            source_bundle_sha256=source_bundle,
-            generator_execution_sha256=generator_execution,
-        )
+    teacher_execution = compose_red_living_dex_fresh_episode_teacher_execution_sha256(
+        source_bundle_sha256=source_bundle,
+        generator_execution_sha256=generator_execution,
     )
     if (
         plan.source_commit != source.git_commit
@@ -340,9 +417,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         CAPACITY_EVIDENCE_PATH,
         _MAXIMUM_EVIDENCE_BYTES,
     )
-    if hashlib.sha256(capacity_payload).hexdigest() != (
-        plan.capacity_evidence_sha256
-    ):
+    if hashlib.sha256(capacity_payload).hexdigest() != (plan.capacity_evidence_sha256):
         raise FreshEpisodeGeneratorError(stage)
     _load_materializer(conditioner_sha256)
 
@@ -461,15 +536,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             facts=observe_red_living_dex_provider_root_facts(goal),
             observed_state_sha256=root.state_sha256,
             root_claim_available=True,
-            option_context=living_dex_option_context_from_goal_situation(
-                goal.situation
-            ),
+            option_context=living_dex_option_context_from_goal_situation(goal.situation),
             independence_lineage_sha256=canonical_sha256(
                 {
                     "root_lineage_id": selected.root_lineage_id,
-                    "schema": (
-                        "pokemon.red.private-provider-capacity-lineage.v1"
-                    ),
+                    "schema": ("pokemon.red.private-provider-capacity-lineage.v1"),
                 }
             ),
             prospective_independence_authenticated=True,
@@ -516,9 +587,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             source_bundle_sha256=source_bundle,
             generator_execution_sha256=generator_execution,
             runner_sha256=runner_sha256,
-            process_authority=(
-                issue_red_living_dex_fresh_episode_process_authority()
-            ),
+            process_authority=(issue_red_living_dex_fresh_episode_process_authority()),
             private_store=store,
             claim_registry=claim_registry,
             emulator_factory=emulator_factory,
@@ -543,21 +612,369 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 assignment_claim_sha256 = canonical_sha256(claim)
         except BaseException:
             assignment_claim_sha256 = None
-        effects_known, controller_actions, emulator_frames = (
-            _known_runtime_effects(error)
-        )
+        effects_known, controller_actions, emulator_frames = _known_runtime_effects(error)
         raise FreshEpisodeGeneratorError(
             stage,
             RedLivingDexFreshEpisodeFailureReceipt(
                 assignment_id=assignment.assignment_id,
                 plan_sha256=plan.plan_sha256,
                 source_bundle_sha256=assignment.source_bundle_sha256,
-                teacher_execution_sha256=(
-                    assignment.teacher_execution_sha256
-                ),
-                generator_execution_sha256=(
-                    assignment.generator_execution_sha256
-                ),
+                teacher_execution_sha256=(assignment.teacher_execution_sha256),
+                generator_execution_sha256=(assignment.generator_execution_sha256),
+                assignment_claim_sha256=assignment_claim_sha256,
+                failure_stage=stage,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
+            ),
+        ) from None
+    require_pyboy_import_origins(runtime_identity)
+    return result.public_dict()
+
+
+def _run_powered(args: argparse.Namespace) -> dict[str, object]:
+    """Run exactly one V2 supply assignment through the shared one-way rail."""
+
+    if args.speed is not None and not args.watch:
+        raise FreshEpisodeGeneratorError("arguments")
+    stage = "source_authentication"
+    source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
+    require_clean_source(source)
+    require_published_source(PROJECT_ROOT, source)
+    source_bundle = working_source_bundle_sha256(PROJECT_ROOT)
+    if (
+        source.git_commit != args.expected_source_commit
+        or source_bundle != args.expected_source_bundle_sha256
+    ):
+        raise FreshEpisodeGeneratorError(stage)
+
+    stage = "plan_authentication"
+    plan_payload = _read_bounded(args.plan.resolve(), _MAXIMUM_PLAN_BYTES)
+    if hashlib.sha256(plan_payload).hexdigest() != args.expected_plan_sha256:
+        raise FreshEpisodeGeneratorError(stage)
+    plan = parse_red_living_dex_powered_supply_plan(plan_payload)
+    (
+        generator_execution,
+        runner_sha256,
+        conditioner_sha256,
+    ) = _powered_generator_execution_binding(source_bundle)
+    teacher_execution = compose_red_living_dex_powered_supply_teacher_sha256(
+        source_bundle_sha256=source_bundle,
+        generator_execution_sha256=generator_execution,
+    )
+    if (
+        plan.source_commit != source.git_commit
+        or plan.source_bundle_sha256 != source_bundle
+        or plan.generator_execution_sha256 != generator_execution
+        or plan.generator_runner_sha256 != runner_sha256
+        or plan.conditioner_runner_sha256 != conditioner_sha256
+        or plan.teacher_execution_sha256 != teacher_execution
+        or args.expected_generator_execution_sha256 != generator_execution
+    ):
+        raise FreshEpisodeGeneratorError(stage)
+    assignment = plan.assignment(args.assignment_id)
+
+    stage = "capacity_authentication"
+    capacity_payload = _read_bounded(
+        POWERED_CAPACITY_RESULT_PATH,
+        _MAXIMUM_EVIDENCE_BYTES,
+    )
+    if hashlib.sha256(capacity_payload).hexdigest() != (plan.capacity_result_sha256):
+        raise FreshEpisodeGeneratorError(stage)
+    _load_materializer(conditioner_sha256)
+
+    stage = "runtime_authentication"
+    rom_path = resolve_rom_path(args.rom)
+    rom_bytes = rom_path.read_bytes()
+    rom = verify_rom_bytes(
+        rom_bytes,
+        POKEMON_RED_US_REV_0,
+        filename=rom_path.name,
+    )
+    if rom.sha256 != POKEMON_RED_US_REV_0.sha256:
+        raise FreshEpisodeGeneratorError(stage)
+    runtime_identity = build_runtime_identity()
+    if runtime_identity.sha256 != plan.runtime_identity_sha256:
+        raise FreshEpisodeGeneratorError(stage)
+    require_pyboy_import_origins(runtime_identity)
+    world = StrategicScenarioRouteWorld.from_rom(rom_bytes)
+    corridors = derive_red_living_dex_provider_corridors(world)
+    adjacent_before = rom_adjacent_artifacts(rom_path)
+    store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
+    claim_registry = open_fixed_account_claim_registry()
+    checkpoint_box: list[RedLivingDexFreshEpisodeCheckpoint] = []
+
+    def emulator_factory() -> PyBoyAdapter:
+        emulator = PyBoyAdapter(
+            rom_path,
+            watch=args.watch,
+            speed=args.speed,
+            expected_rom=POKEMON_RED_US_REV_0,
+        )
+        emulator.start()
+        require_pyboy_import_origins(runtime_identity)
+        return emulator
+
+    def setup_teacher(
+        emulator: CleanPowerFreshEpisodeEmulator,
+        _assignment: RedLivingDexPoweredSupplyAssignment,
+    ) -> RedLivingDexFreshEpisodeCheckpoint:
+        def progress(update: QualifiedPlayProgress) -> None:
+            if update.checkpoint_id != RED_LIVING_DEX_FRESH_EPISODE_CHECKPOINT_ID:
+                return
+            checkpoint = RedLivingDexFreshEpisodeCheckpoint(
+                checkpoint_id=update.checkpoint_id,
+                label=update.label,
+                completed=update.completed,
+                total=update.total,
+                verified_objective_ids=_verified_objectives(update.completed),
+            )
+            checkpoint_box.append(checkpoint)
+            raise _TeacherCheckpointReached(checkpoint)
+
+        try:
+            run_qualified_play(
+                rom_path,
+                progress=progress,
+                _emulator=cast(Any, emulator),
+            )
+        except _TeacherCheckpointReached as reached:
+            if checkpoint_box != [reached.checkpoint]:
+                raise FreshEpisodeGeneratorError("setup_teacher") from None
+            return reached.checkpoint
+        raise FreshEpisodeGeneratorError("setup_teacher")
+
+    def condition_target(
+        emulator: CleanPowerFreshEpisodeEmulator,
+        selected: RedLivingDexPoweredSupplyAssignment,
+    ) -> None:
+        if len(checkpoint_box) != 1:
+            raise FreshEpisodeGeneratorError("target_conditioning")
+        _apply_powered_target_conditioning(
+            emulator,
+            selected,
+            checkpoint_box[0],
+        )
+
+    def verify_target(
+        emulator: CleanPowerFreshEpisodeEmulator,
+        selected: RedLivingDexPoweredSupplyAssignment,
+        root: RedLivingDexAuthenticatedSetupRoot,
+        _envelope: object,
+    ) -> RedLivingDexPoweredSupplyTargetVerification:
+        if len(checkpoint_box) != 1:
+            raise FreshEpisodeGeneratorError("target_verification")
+        frame_before = emulator.frame_count
+        actions_before = emulator.controller_actions
+        reader = PokemonRedStateReader(emulator)
+        observer = LivePokemonRedObserver(reader, COMPLETION_QUEST)
+        _latch_verified_progress(observer, checkpoint_box[0])
+        goal = PokemonRedGoalStateAdapter(
+            reader,
+            observer,
+            COMPLETION_QUEST,
+        ).observe()
+        traversal = Gen1TraversalObserver(
+            reader,
+            hazard_projector=Gen1TrainerSightProjector(rom_bytes, reader),
+            capability_projector=lambda raw: gen1_field_capabilities(
+                emulator,
+                raw,
+            ),
+        ).observe()
+        with fixed_account_claim_registry_lease(
+            claim_registry,
+            exclusive=False,
+        ):
+            if not all(
+                root_claim_is_available(claim_registry, identity)
+                for identity in (
+                    root.root_consumption_sha256,
+                    root.physical_root_sha256,
+                )
+            ):
+                raise FreshEpisodeGeneratorError("target_verification")
+        context = living_dex_option_context_from_goal_situation(goal.situation)
+        observation = RedLivingDexActionFreeRootObservation(
+            root=root,
+            traversal=traversal,
+            facts=observe_red_living_dex_provider_root_facts(goal),
+            observed_state_sha256=root.state_sha256,
+            root_claim_available=True,
+            option_context=context,
+            independence_lineage_sha256=canonical_sha256(
+                {
+                    "root_lineage_id": selected.root_lineage_id,
+                    "schema": "pokemon.red.private-provider-capacity-lineage.v1",
+                }
+            ),
+            prospective_independence_authenticated=True,
+            cluster_partition=selected.partition,
+        )
+        compatible: list[int] = []
+        slots = build_red_living_dex_prospective_capture_plan().slots
+        for ordinal, slot in enumerate(slots):
+            slot_partition = "train" if ordinal < 10 else "development"
+            if slot_partition != selected.partition:
+                continue
+            try:
+                build_red_living_dex_provider_recipe_for_action_free_root(
+                    slot,
+                    observation,
+                    world=world,
+                    corridors=corridors,
+                )
+            except RedLivingDexProviderPlanError:
+                continue
+            compatible.append(ordinal)
+        if (
+            emulator.frame_count != frame_before
+            or emulator.controller_actions != actions_before
+            or emulator.pressed_buttons
+        ):
+            raise FreshEpisodeGeneratorError("target_verification")
+        pressures = tuple(
+            round(float(getattr(context, name)) * 1_000_000)
+            for name in (
+                "collection_pressure",
+                "dependency_pressure",
+                "access_pressure",
+                "resource_pressure",
+                "storage_pressure",
+                "party_pressure",
+                "knowledge_pressure",
+            )
+        )
+        return RedLivingDexPoweredSupplyTargetVerification(
+            compatible_template_ordinals=tuple(compatible),
+            observed_pressure_millionths=pressures,
+        )
+
+    def post_close_verify() -> None:
+        current_source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
+        require_clean_source(current_source)
+        require_published_source(PROJECT_ROOT, current_source)
+        current_source_bundle = working_source_bundle_sha256(PROJECT_ROOT)
+        (
+            current_generator_execution,
+            current_runner_sha256,
+            current_conditioner_sha256,
+        ) = _powered_generator_execution_binding(current_source_bundle)
+        current_runtime_identity = build_runtime_identity()
+        require_pyboy_import_origins(current_runtime_identity)
+        current_plan_payload = _read_bounded(args.plan.resolve(), _MAXIMUM_PLAN_BYTES)
+        current_capacity_payload = _read_bounded(
+            POWERED_CAPACITY_RESULT_PATH,
+            _MAXIMUM_EVIDENCE_BYTES,
+        )
+        if (
+            current_source.git_commit != source.git_commit
+            or current_source_bundle != source_bundle
+            or current_generator_execution != generator_execution
+            or current_runner_sha256 != runner_sha256
+            or current_conditioner_sha256 != conditioner_sha256
+            or current_runtime_identity.sha256 != runtime_identity.sha256
+            or current_runtime_identity.sha256 != plan.runtime_identity_sha256
+            or hashlib.sha256(current_plan_payload).hexdigest()
+            != args.expected_plan_sha256
+            or hashlib.sha256(current_capacity_payload).hexdigest()
+            != plan.capacity_result_sha256
+            or rom_adjacent_artifacts(rom_path) != adjacent_before
+        ):
+            raise FreshEpisodeGeneratorError("post_close_authentication")
+
+    stage = "fresh_episode_execution"
+    try:
+        with store.collection_session(
+            powered_supply_collection_id(plan.plan_sha256)
+        ) as collection_session:
+            process_authority = issue_red_living_dex_fresh_episode_process_authority()
+            result = execute_red_living_dex_powered_supply_episode(
+                plan,
+                assignment.assignment_id,
+                source_commit=source.git_commit,
+                source_bundle_sha256=source_bundle,
+                generator_execution_sha256=generator_execution,
+                runner_sha256=runner_sha256,
+                runtime_identity_sha256=runtime_identity.sha256,
+                process_authority=process_authority,
+                private_store=store,
+                collection_session=collection_session,
+                claim_registry=claim_registry,
+                emulator_factory=emulator_factory,
+                setup_teacher=setup_teacher,
+                condition_target=condition_target,
+                verify_target=verify_target,
+                post_close_verify=post_close_verify,
+            )
+    except BaseException as error:
+        assignment_claim_sha256: str | None = None
+        try:
+            claim_present = red_living_dex_assignment_claim_exists(
+                claim_registry, assignment.assignment_id
+            )
+            if claim_present:
+                claim = read_red_living_dex_powered_supply_assignment_claim(
+                    claim_registry,
+                    assignment.assignment_id,
+                )
+                expected_execution_sha256 = (
+                    compose_red_living_dex_powered_supply_runtime_execution_sha256(
+                        assignment_id=assignment.assignment_id,
+                        plan_sha256=plan.plan_sha256,
+                        source_commit=source.git_commit,
+                        generator_execution_sha256=generator_execution,
+                        generator_runner_sha256=runner_sha256,
+                        runtime_identity_sha256=runtime_identity.sha256,
+                    )
+                )
+                if not (
+                    claim.get("assignment_id") == assignment.assignment_id
+                    and claim.get("plan_sha256") == plan.plan_sha256
+                    and claim.get("source_commit") == source.git_commit
+                    and claim.get("runner_sha256") == runner_sha256
+                    and claim.get("runtime_identity_sha256")
+                    == runtime_identity.sha256
+                    and claim.get("execution_identity_sha256")
+                    == expected_execution_sha256
+                ):
+                    raise FreshEpisodeGeneratorError(
+                        "fresh_episode_disposition_authentication"
+                    )
+                assignment_claim_sha256 = canonical_sha256(claim)
+        except BaseException:
+            raise FreshEpisodeGeneratorError(
+                "fresh_episode_disposition_authentication"
+            ) from None
+        try:
+            episode_state = store.inspect_episode_state(assignment.episode_id)
+        except BaseException:
+            raise FreshEpisodeGeneratorError(
+                "fresh_episode_disposition_authentication"
+            ) from None
+        if episode_state.status not in {
+            "absent",
+            "partial",
+            "complete",
+            "failed",
+            "interrupted",
+        }:
+            raise FreshEpisodeGeneratorError(
+                "fresh_episode_disposition_authentication"
+            ) from None
+        if not claim_present and episode_state.status == "absent":
+            raise FreshEpisodeGeneratorError("fresh_episode_preclaim") from None
+        effects_known, controller_actions, emulator_frames = _known_runtime_effects(error)
+        raise FreshEpisodeGeneratorError(
+            stage,
+            RedLivingDexPoweredSupplyFailure(
+                assignment_id=assignment.assignment_id,
+                plan_sha256=plan.plan_sha256,
+                role=assignment.role,
+                partition=assignment.partition,
+                source_bundle_sha256=assignment.source_bundle_sha256,
+                teacher_execution_sha256=(assignment.teacher_execution_sha256),
+                generator_execution_sha256=(assignment.generator_execution_sha256),
                 assignment_claim_sha256=assignment_claim_sha256,
                 failure_stage=stage,
                 effects_known=effects_known,
@@ -571,10 +988,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
 def main(argv: list[str] | None = None) -> int:
     stage = "arguments"
-    failure_receipt: RedLivingDexFreshEpisodeFailureReceipt | None = None
+    powered_supply = False
+    failure_receipt: (
+        RedLivingDexFreshEpisodeFailureReceipt | RedLivingDexPoweredSupplyFailure | None
+    ) = None
     try:
         args = _parser().parse_args(argv)
-        result = _run(args)
+        powered_supply = getattr(args, "powered_supply", False)
+        result = _run_powered(args) if powered_supply else _run(args)
         print(
             json.dumps(
                 result,
@@ -604,6 +1025,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     effects_unknown = stage in {
         "fresh_episode_execution",
+        "fresh_episode_disposition_authentication",
         "rom_isolation",
         "unclassified_failure",
     }
@@ -618,7 +1040,9 @@ def main(argv: list[str] | None = None) -> int:
                 "private_identity_fields": 0,
                 "private_path_fields": 0,
                 "schema": (
-                    "pokemon.red.living-dex-fresh-episode-failure.v1"
+                    "pokemon.red.living-dex-powered-lineage-supply-command-failure.v1"
+                    if powered_supply
+                    else "pokemon.red.living-dex-fresh-episode-failure.v1"
                 ),
                 "stage": stage,
                 "status": "failed_closed",

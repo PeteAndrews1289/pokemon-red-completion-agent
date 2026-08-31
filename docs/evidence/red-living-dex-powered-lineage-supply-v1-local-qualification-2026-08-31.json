@@ -1,0 +1,121 @@
+{
+  "claim_boundary": {
+    "supported": "The public Red powered-lineage supply rail is locally qualified to freeze one exact-runtime-bound 3-train, 8-development, 1-contingency plan after publication and green exact-main CI. Its 9-of-12 and 2-of-6-of-1 floors qualify only bounded factory yield and require an action-free recensus before any population scale or outcome collection.",
+    "unsupported": [
+      "private_supply_plan_frozen",
+      "red_rom_opened",
+      "clean_power_world_executed",
+      "setup_teacher_executed",
+      "supply_assignment_claimed",
+      "supply_root_admitted",
+      "capacity_deficit_reduced",
+      "population_scale_authorized",
+      "new_red_outcome_collected",
+      "powered_model_fit_executed",
+      "powered_red_development_pass",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 0,
+    "gameplay_model_predictions": 0,
+    "outcomes_read": 0,
+    "private_plan_freezes": 0,
+    "private_root_admissions": 0,
+    "private_root_generations": 0,
+    "root_claims": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "engineering_gate": {
+    "admission_minimum_roots": 9,
+    "assignment_count": 12,
+    "complete_denominator_required": true,
+    "contingency_assignments": 1,
+    "development_assignments": 8,
+    "final_capacity_required": {
+      "contingency_lineages": 3,
+      "development_lineages": 100,
+      "train_lineages": 36
+    },
+    "measured_original_deficit": {
+      "contingency_lineages": 3,
+      "development_lineages": 78,
+      "total_lineages": 103,
+      "train_attempts": 44,
+      "train_lineages": 22
+    },
+    "minimum_role_roots": {
+      "contingency": 1,
+      "development": 6,
+      "train": 2
+    },
+    "population_scale_authorized": false,
+    "recensus_required": true,
+    "runtime_identity_bound_to_plan_assignment_claim_receipt_and_admission": true,
+    "shared_generation_admission_lock": true,
+    "train_assignments": 3
+  },
+  "independent_audits": [
+    {
+      "adjudication": "Accepted five trust-boundary findings and repaired the shared lock, preclaim accounting, post-close reauthentication, exact runtime binding, and malformed-present-claim handling. The final re-audit found no publication blocker.",
+      "reviewer": "Codex adversarial trust-boundary subagent",
+      "verdict": "pass_after_repairs"
+    },
+    {
+      "adjudication": "Accepted the authoritative-state, exact-runtime, capacity-floor, yield-sizing, retry, terminal-save, and narrative corrections before publication.",
+      "reviewer": "Codex mission-and-documentation subagent",
+      "verdict": "pass_after_documentation_repairs"
+    }
+  ],
+  "next_gate": {
+    "failure_rule": "Any failed publication, exact-main CI, plan freeze, complete-denominator admission, or 9-of-12 and 2-of-6-of-1 yield gate closes execution or population scale without weakening V2 or retrying a durably claimed assignment.",
+    "kind": "publish_green_freeze_once_execute_twelve_once_admit_and_recensus",
+    "pass_rule": "A passed tranche authorizes only an action-free integration and yield recensus. A separately frozen yield-adjusted population campaign must then deliver the remaining independent lineages and pass the final exact 36-train, 100-development, 3-contingency allocation before powered outcomes or model fitting open."
+  },
+  "qualification": {
+    "adversarial_supply_tests": 91,
+    "adversarial_supply_tests_passed": 91,
+    "affected_capacity_provider_and_supply_tests": 146,
+    "affected_capacity_provider_and_supply_tests_passed": 146,
+    "diff_validation_passed": true,
+    "documentation_check_passed": true,
+    "exact_runtime_identity_authenticated": true,
+    "full_suite_passed": 5968,
+    "full_suite_runtime_seconds": 708.01,
+    "full_suite_skipped": 3,
+    "full_suite_warnings": 1,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 320,
+    "public_registry_protocol_tests": 49,
+    "public_registry_protocol_tests_passed": 49,
+    "registry_regeneration_checks_passed": 4,
+    "ruff_passed": true
+  },
+  "schema": "pokemon.red.living-dex-powered-lineage-supply-local-qualification.v1",
+  "source": {
+    "base_commit": "0ceece133fcaa7522a13bd4599ce684692e8b9e8",
+    "capacity_result_sha256": "6509f735bb88f080c696d8591493d729c3d8d6bc83e7c5f254357ea408a8a013",
+    "conditioner_runner_sha256": "54c08a8539243a30b9d206ac79338be8389c810024d3faf6413faf955609784b",
+    "generator_execution_sha256": "3bc644e9b7627288f930bb2f65164d4dae0165acb7b846221287b5d7e3262393",
+    "generator_runner_sha256": "25a62131a4bc0084f81bd9b94ecdfea3e298df72730a7034a4c3c711c640ca6a",
+    "powered_design_sha256": "c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d",
+    "runtime_identity_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "teacher_execution_sha256": "b86d1d9ccc88c28b36592b9c97db7057163605a8eb01e36c767b20414e12ef4e",
+    "working_source_bundle_sha256": "a8a6154d0c6cba449c4239f4c388f0ca7169985fc197b47532f3e5fdb0f4fdb1"
+  },
+  "status": "locally_qualified_publication_and_exact_main_ci_next"
+}

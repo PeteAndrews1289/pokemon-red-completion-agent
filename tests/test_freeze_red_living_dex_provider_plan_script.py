@@ -13,6 +13,7 @@ from types import SimpleNamespace
 
 import pytest
 from test_red_living_dex_option_inventory import _profile
+from test_red_living_dex_powered_supply_admission import _generate
 from test_red_living_dex_provider_plan import _root, _roots
 from test_red_living_dex_setup_identity import _runtime
 
@@ -28,6 +29,9 @@ from pokemon_red_completion.living_dex_capture_curriculum import (
 )
 from pokemon_red_completion.private_artifacts import validate_private_record
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_living_dex_powered_supply_admission import (
+    authenticate_red_living_dex_powered_supply_private_tranche,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_ROOT = PROJECT_ROOT / "scripts"
@@ -443,6 +447,55 @@ def test_supplemental_observation_uses_the_captured_progress_adapter(
     assert state.eligible_root_pool == 1
     assert state.controller_actions == 0
     assert state.emulator_frames == 0
+
+
+def test_powered_supply_observation_preserves_authenticated_partition_and_lineage(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan, store, registry = _generate(
+        tmp_path,
+        successful_ordinals=set(range(1, 13)),
+    )
+    bundle = authenticate_red_living_dex_powered_supply_private_tranche(
+        plan,
+        private_store=store,
+        claim_registry=registry,
+        recover_interrupted=True,
+    )
+    admitted = bundle.roots[0]
+    expected = _root(0)
+    observed_arguments: list[dict[str, object]] = []
+    globals_ = SCRIPT["_observe_powered_supply_candidates"].__globals__
+    monkeypatch.setitem(globals_, "root_claim_is_available", lambda *_args: True)
+
+    def observe_root(_root_value: object, **kwargs: object) -> object:
+        observed_arguments.append(kwargs)
+        return expected
+
+    monkeypatch.setitem(globals_, "_observe_root", observe_root)
+    state = SCRIPT["_DiagnosticState"]()
+
+    candidates = SCRIPT["_observe_powered_supply_candidates"](
+        (admitted,),
+        rom_path=Path("/private/red.gb"),
+        rom_bytes=b"rom",
+        runtime=_runtime(),
+        claim_registry=registry,
+        state=state,
+    )
+
+    assert candidates == (expected,)
+    assert len(observed_arguments) == 1
+    assert observed_arguments[0]["prospective_independence_authenticated"] is True
+    assert observed_arguments[0]["cluster_partition"] == admitted.receipt.partition
+    assert observed_arguments[0]["independence_lineage_sha256"] == canonical_sha256(
+        {
+            "root_lineage_id": admitted.receipt.root_lineage_id,
+            "schema": "pokemon.red.private-provider-capacity-lineage.v1",
+        }
+    )
+    assert state.eligible_root_pool == 1
 
 
 def test_main_holds_the_shared_claim_lease_through_publication(

@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-31 powered-supply implementation override — publish before twelve worlds:** Exact main
+> `0ceece13` preserves the 103-lineage capacity failure. Codex has implemented a source-and-exact-
+> runtime-bound 3-train / 8-development / 1-contingency clean-power yield tranche, at-most-once-
+> after-claim runtime, plan-scoped generation/admission lock, complete-denominator admission,
+> powered-root recensus bridge, and immutable provider partition bridge. The gate is 9/12 total
+> with at least 2 train, 6 development, and 1 contingency root.
+> Codex owns local verification, documentation, publication, exact-main CI, then the single frozen
+> tranche and recensus. Claude challenges one-shot integrity, independence, attrition, admission,
+> and statistical wording. Antigravity challenges throughput, support targeting, observability,
+> and Crystal portability. Both remain read-only milestone reviewers; Codex adjudicates.
+> No unpublished execution, claimed-world retry, population-scale generation, option outcome,
+> model fit, authority, sealed Red, Crystal, or full replay is authorized by this engineering gate.
+
 > **2026-08-31 capacity-failure override — build lineage supply, not outcomes:** PR `#119` merged
 > as exact main `f1fc3812`, exact-main CI `33355147814/1` passed, and the one action-free census
 > found only 14/36 train, 22/100 development, and 0/3 contingency lineages. The 103-lineage total

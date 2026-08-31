@@ -13,8 +13,10 @@ writer, behavior draw, teacher, outcome reader, model scorer, or fitter.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import runpy
+import stat
 import sys
 from pathlib import Path
 from typing import Any, Never, cast
@@ -43,11 +45,20 @@ from pokemon_red_completion.living_dex_clustered_powered_capacity import (
 from pokemon_red_completion.living_dex_clustered_powered_design import (
     LivingDexClusteredPoweredDesign,
 )
+from pokemon_red_completion.private_artifacts import open_private_root
 from pokemon_red_completion.red_living_dex_causal_inventory import (
     enumerate_red_living_dex_causal_capabilities,
 )
 from pokemon_red_completion.red_living_dex_clustered_powered_capacity import (
     adapt_red_living_dex_clustered_powered_capacity,
+)
+from pokemon_red_completion.red_living_dex_powered_lineage_supply import (
+    parse_red_living_dex_powered_supply_plan,
+)
+from pokemon_red_completion.red_living_dex_powered_supply_admission import (
+    RED_LIVING_DEX_POWERED_SUPPLY_ADMISSION_RECORD_KIND,
+    RedLivingDexPoweredSupplyPrivateAdmission,
+    authenticate_red_living_dex_powered_supply_private_tranche,
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
     derive_red_living_dex_provider_corridors,
@@ -68,6 +79,7 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 
 RESULT_SCHEMA = "pokemon.red.living-dex-clustered-powered-capacity-result.v1"
 FAILURE_SCHEMA = "pokemon.red.living-dex-clustered-powered-capacity-failure.v1"
+_MAXIMUM_POWERED_SUPPLY_PLAN_BYTES = 512 * 1024
 
 
 class PoweredCapacityCensusError(RuntimeError):
@@ -102,6 +114,10 @@ def _parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
     )
+    parser.add_argument("--powered-supply-plan", type=Path)
+    parser.add_argument("--expected-powered-supply-plan-sha256")
+    parser.add_argument("--powered-supply-private-root", type=Path)
+    parser.add_argument("--expected-powered-supply-admission-record-sha256")
     return parser
 
 
@@ -109,6 +125,9 @@ def main(argv: list[str] | None = None) -> int:
     diagnostic_type = cast(Any, _PROVIDER_SUPPORT["_DiagnosticState"])
     state = diagnostic_type()
     stage = "arguments"
+    authenticated_powered_supply_roots = 0
+    eligible_powered_supply_roots = 0
+    consumed_powered_supply_roots = 0
     try:
         args = _parser().parse_args(argv)
         stage = "design_authentication"
@@ -133,6 +152,14 @@ def main(argv: list[str] | None = None) -> int:
             tuple(args.expected_supplemental_physical_root_sha256),
         )
         state.authenticated_supplemental_roots = len(supplements)
+        stage = "powered_supply_admission_authentication"
+        powered_supply = _authenticate_powered_supply(
+            args,
+            source_commit=source_commit,
+            source_bundle=source_bundle,
+        )
+        if powered_supply is not None:
+            authenticated_powered_supply_roots = len(powered_supply.roots)
         stage = "runtime_authentication"
         runtime = build_runtime_identity()
         require_pyboy_import_origins(runtime)
@@ -164,6 +191,23 @@ def main(argv: list[str] | None = None) -> int:
                     state=state,
                 ),
             )
+            if powered_supply is not None:
+                powered_candidates = _support(
+                    "_observe_powered_supply_candidates"
+                )(
+                    powered_supply.roots,
+                    rom_path=rom_path,
+                    rom_bytes=rom_bytes,
+                    runtime=runtime,
+                    claim_registry=claim_registry,
+                    state=state,
+                )
+                eligible_powered_supply_roots = len(powered_candidates)
+                consumed_powered_supply_roots = (
+                    authenticated_powered_supply_roots
+                    - eligible_powered_supply_roots
+                )
+                candidates = (*candidates, *powered_candidates)
             effects_after = meter.checkpoint()
             stage = "complete_template_compatibility_census"
             capabilities = enumerate_red_living_dex_causal_capabilities(
@@ -200,6 +244,19 @@ def main(argv: list[str] | None = None) -> int:
                 selected=candidates,
                 claim_registry=claim_registry,
             )
+        if powered_supply is not None:
+            stage = "powered_supply_protected_input_integrity"
+            protected_powered_supply = _authenticate_powered_supply(
+                args,
+                source_commit=source_commit,
+                source_bundle=source_bundle,
+            )
+            if (
+                protected_powered_supply is None
+                or protected_powered_supply.private_dict()
+                != powered_supply.private_dict()
+            ):
+                raise PoweredCapacityCensusError(stage)
         hard_reasons = tuple(
             reason for reason in audit.reasons if reason != "exact_allocation_witness_absent"
         )
@@ -212,13 +269,19 @@ def main(argv: list[str] | None = None) -> int:
         result = {
             **audit.public_dict(),
             "authenticated_contexts": state.authenticated_contexts,
+            "authenticated_powered_supply_roots": (
+                authenticated_powered_supply_roots
+            ),
             "authenticated_supplemental_roots": (state.authenticated_supplemental_roots),
             "consumed_contexts": state.consumed_contexts,
+            "consumed_powered_supply_roots": consumed_powered_supply_roots,
             "consumed_supplemental_roots": state.consumed_supplemental_roots,
             "eligible_root_pool": state.eligible_root_pool,
+            "eligible_powered_supply_roots": eligible_powered_supply_roots,
             "eligible_supplemental_roots": state.eligible_supplemental_roots,
             "hard_capacity_reasons": list(hard_reasons),
             "ineligible_control_contexts": state.ineligible_control_contexts,
+            "root_state_restores": state.states_restored,
             "schema": RESULT_SCHEMA,
             "source_catalog_partition_reused_as_prospective_label": False,
             "source_train_roots": state.source_train_roots,
@@ -233,10 +296,13 @@ def main(argv: list[str] | None = None) -> int:
         pass
     failure = {
         "authenticated_contexts": state.authenticated_contexts,
+        "authenticated_powered_supply_roots": authenticated_powered_supply_roots,
         "authenticated_supplemental_roots": state.authenticated_supplemental_roots,
         "consumed_contexts": state.consumed_contexts,
+        "consumed_powered_supply_roots": consumed_powered_supply_roots,
         "controller_actions": state.controller_actions,
         "eligible_root_pool": state.eligible_root_pool,
+        "eligible_powered_supply_roots": eligible_powered_supply_roots,
         "emulator_frames": state.emulator_frames,
         "model_fits": state.model_fits,
         "model_predictions": state.model_predictions,
@@ -245,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
         "private_path_fields": 0,
         "provider_executions": state.provider_executions,
         "root_claims": state.root_claims,
+        "root_state_restores": state.states_restored,
         "schema": FAILURE_SCHEMA,
         "stage": stage,
         "status": "failed_closed",
@@ -252,6 +319,104 @@ def main(argv: list[str] | None = None) -> int:
     }
     print(json.dumps(failure, allow_nan=False, separators=(",", ":"), sort_keys=True))
     return 1
+
+
+def _authenticate_powered_supply(
+    args: argparse.Namespace,
+    *,
+    source_commit: str,
+    source_bundle: str,
+) -> RedLivingDexPoweredSupplyPrivateAdmission | None:
+    fields = (
+        args.powered_supply_plan,
+        args.expected_powered_supply_plan_sha256,
+        args.powered_supply_private_root,
+        args.expected_powered_supply_admission_record_sha256,
+    )
+    if all(value is None for value in fields):
+        return None
+    if any(value is None for value in fields):
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        )
+    if not isinstance(args.powered_supply_plan, Path) or not isinstance(
+        args.powered_supply_private_root, Path
+    ):
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        )
+    expected_plan_sha256 = _sha256(
+        args.expected_powered_supply_plan_sha256
+    )
+    expected_admission_sha256 = _sha256(
+        args.expected_powered_supply_admission_record_sha256
+    )
+    try:
+        path = args.powered_supply_plan.resolve()
+        metadata = path.lstat()
+        if (
+            path.is_symlink()
+            or not stat.S_ISREG(metadata.st_mode)
+            or not 0 < metadata.st_size <= _MAXIMUM_POWERED_SUPPLY_PLAN_BYTES
+        ):
+            raise OSError("unsafe plan")
+        payload = path.read_bytes()
+    except OSError:
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        ) from None
+    if (
+        len(payload) != metadata.st_size
+        or hashlib.sha256(payload).hexdigest() != expected_plan_sha256
+    ):
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        )
+    plan = parse_red_living_dex_powered_supply_plan(payload)
+    if (
+        plan.source_commit != source_commit
+        or plan.source_bundle_sha256 != source_bundle
+    ):
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        )
+    store = open_private_root(
+        args.powered_supply_private_root,
+        repository_root=PROJECT_ROOT,
+    )
+    bundle = authenticate_red_living_dex_powered_supply_private_tranche(
+        plan,
+        private_store=store,
+        claim_registry=open_fixed_account_claim_registry(),
+        recover_interrupted=False,
+    )
+    if not bundle.admission.qualification_passed:
+        raise PoweredCapacityCensusError(
+            "powered_supply_qualification_failed"
+        )
+    record = store.find_sealed_record(
+        bundle.record_id,
+        expected_kind=RED_LIVING_DEX_POWERED_SUPPLY_ADMISSION_RECORD_KIND,
+    )
+    if (
+        record is None
+        or record.summary.record_sha256 != expected_admission_sha256
+        or record.read() != bundle.private_dict()
+    ):
+        raise PoweredCapacityCensusError(
+            "powered_supply_admission_authentication"
+        )
+    return bundle
+
+
+def _sha256(value: object) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise PoweredCapacityCensusError("arguments")
+    return value
 
 
 def _support(name: str) -> Any:

@@ -14,6 +14,39 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-31: bounded powered-lineage supply is implemented — publish before twelve worlds
+
+Exact main `0ceece133fcaa7522a13bd4599ce684692e8b9e8` contains the published capacity
+falsification. This engineering session generalized the existing clean-power fresh-episode rail
+into a source-bound powered V2 supply system. It freezes exactly twelve prospective worlds: three
+train, eight development, and one development-owned contingency. Every assignment fixes its
+partition, seed, pre-controller wait, target menu, conditioning profile, generator, conditioner,
+teacher, exact CPython/PyBoy runtime, capacity result, and powered-design digest before play.
+
+The one-way runtime claims before controller input, starts from clean power, loads no state, runs
+the deterministic setup teacher, seals its transcript, applies the frozen conditioning profile,
+writes exactly one terminal state on success and at most one on any claimed attempt, and verifies
+the assigned action-free menu. It collects no
+learner label or outcome and makes no model prediction or fit. Once claimed, failure or interruption
+is terminal; admission can reconcile an interrupted namespace only into a permanent failed
+disposition, never a replay.
+
+The action-free admission layer authenticates all twelve terminals, rejects cloned assignment,
+lineage, physical-root, trajectory, state, or envelope identities, and requires at least **9/12
+roots: 2/3 train, 6/8 development, and 1/1 contingency**. Passing is only a bounded engineering-
+yield result. Newly admitted roots enter the existing capacity census only with their immutable
+receipt-backed partition; legacy supplemental saves remain non-prospective. A fresh census is
+mandatory and population scale remains closed.
+
+The exact next order is publication, green exact-main CI, one action-free twelve-world plan
+freeze, at-most-once execution of its assignments, complete-denominator admission, and one fresh
+action-free census. Do not run from this unpublished worktree, retry a claimed assignment, treat a
+root as a learning example, launch a population campaign before measured yield can size it to
+deliver the remaining 103 independent lineages, collect outcomes, fit, open sealed
+Red, execute Crystal, or claim authority. See the
+[supply contract](docs/red-living-dex-powered-lineage-supply.md). The learning board remains
+**18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
 ## 2026-08-31: powered V2 capacity is falsified — generate independent lineages, not outcomes
 
 PR `#119` merged the action-free capacity implementation as exact main
@@ -40,7 +73,8 @@ bind the exact source and result. This is a useful negative experiment, not trai
 still **causal train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
 
 Do not weaken V2, count a clone or RNG nudge as another lineage, retry consumed roots, open
-development outcomes, or launch a 103-world population blindly. The repository already has a
+development outcomes, or blindly launch a campaign intended to deliver the missing 103 lineages.
+The repository already has a
 qualified clean-power fresh-episode rail, but its V1 plan is train-only, fixed to thirteen roots,
 and targets three old scarce templates. The next engineering gate must bind that rail to this
 exact census, add immutable train/development/contingency ownership, cover the newly measured

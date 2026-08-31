@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **August 31 powered-lineage supply implementation:** Exact main `0ceece13` preserves the
+> published 103-lineage deficit. The bounded successor is locally implemented: **3 train + 8
+> development + 1 contingency worlds**, all prospectively assigned before input and terminally
+> retained without retry after durable claim. Admission requires **9/12 total, 2 train, 6 development, and 1
+> contingency** and rejects cloned lineage, physical-root, trajectory, state, and envelope
+> identities.
+>
+> This creates future curriculum capacity, not outcomes or a model. Publish, require green
+> exact-main CI, freeze one plan, execute its twelve worlds at most once, admit the full
+> denominator, and recensus. Population scale, powered outcomes, fitting, authority, sealed Red,
+> Crystal, and full replay remain closed. **Causal train 18/60 · integration fit 1/1 · powered fit
+> 0 · authority 0 · transfer 0.** See the
+> [supply contract](red-living-dex-powered-lineage-supply.md).
+
 > **August 31 powered-V2 capacity result:** PR `#119` merged as exact main `f1fc3812`; push CI
 > `33355147814/1` passed. The one action-free census found **43 unused lineages**, but only **14/36
 > train, 28/72 train attempts, 22/100 same-reset development, and 0/3 contingency** capacity.
