@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-31 atomic-freezer checkpoint — qualify exact source before inventory:** Codex has
+> implemented the canonical V2 action-free freezer. One shared claim-registry lease covers the
+> complete root-pair snapshot, outcome-blind pressure inventory, deterministic roster, and durable
+> single-file publication. Reopening reproduces the inventory and roster; upstream siblings cannot
+> cross partitions. Focused verification is 95 passed with clean lint and typing. No private
+> inventory, freeze, root claim, gameplay, prediction, outcome, fit, sealed Red, Crystal, teacher,
+> authority, or replay has opened.
+>
+> Codex owns coherent commit, full exact-HEAD qualification, publication, and CI. The next later
+> gate is one action-free all-or-stop census for seven fresh train plus eight held development
+> contexts. Claude challenges leakage/statistics when available; Antigravity challenges durability,
+> authentication, and portability. Reviews are read-only and cannot weaken the denominator or turn
+> infrastructure into a learning claim.
+
 > **2026-08-31 V2 engineering override — contract before outcomes:** The local V2 schema now joins
 > the exact V1 plan/artifact/train record, excludes its consumed development root, and rederives
 > each pressure row from its bound features, complete original prior, and root-pair claim state.

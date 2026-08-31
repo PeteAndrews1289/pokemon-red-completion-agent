@@ -16,6 +16,27 @@ horizon and Crystal-ready definition),
 
 ## 2026-08-31: V2 batch contract is implemented locally; no fresh outcome is open
 
+The canonical action-free inventory/freezer is now implemented locally as well. It does not read
+claim availability piecemeal: one shared claim-registry lease covers the complete retained,
+forbidden, train-candidate, and development-candidate root-pair snapshot, roster derivation, and
+durable single-file publication. Reopening the freeze reproduces both the inventory and roster and
+rejects an altered availability bit, upstream sibling split across partitions, or derived-roster
+forgery. The production command also rejects unsafe private paths and holds the lease through file
+and directory synchronization.
+
+Focused verification is now **95 passed**, with clean Ruff and focused mypy. The first full run
+passed 6,125 tests and found only the expected source-bound registry/golden rebinding plus one stale
+local-runtime assumption; those have been repaired and their exact targeted gates pass. Because
+some provenance tests intentionally load committed `HEAD`, the definitive full qualification must
+run after this coherent worktree is committed. No capture inventory or private freeze has been
+opened, and no root claim, controller input, prediction, outcome, fit, sealed case, Crystal context,
+teacher action, or replay occurred.
+
+Next: commit and fully qualify the exact revision, publish it, and require green exact-head/main CI.
+Only then may the separately gated action-free capacity step inventory and either freeze exactly
+the retained V1 prefix plus seven fresh train and eight jointly held development contexts, or stop.
+Do not shrink or substitute the denominator and do not open outcomes.
+
 The overnight session was interrupted by model-service capacity, not by the emulator or a claimed
 experiment. Resume from the working tree; do not recreate V1, repeat its six actions, or imply that
 V2 ran. The local V2 contract now cryptographically joins the complete V1 prospective plan to the

@@ -489,6 +489,34 @@ def test_run_never_projects_a_prefix_before_full_terminal_validation(
     assert prefix_called is False
 
 
+def test_retained_prefix_projection_writer_is_private_exclusive_and_durable(
+    tmp_path: Path,
+) -> None:
+    destination = tmp_path / "retained-prefix.json"
+    payload = b'{"schema":"test"}\n'
+
+    resolved = SCRIPT["_private_new_projection"](destination)
+    SCRIPT["_write_exclusive_projection"](resolved, payload)
+
+    assert destination.read_bytes() == payload
+    assert destination.stat().st_mode & 0o777 == 0o600
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="already exists",
+    ):
+        SCRIPT["_private_new_projection"](destination)
+
+
+def test_retained_prefix_projection_refuses_a_tracked_destination() -> None:
+    destination = Path("docs") / "retained-prefix.json"
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="must remain private",
+    ):
+        SCRIPT["_private_new_projection"](destination)
+
+
 def test_complete_inspection_reconstructs_a_flat_train_terminal() -> None:
     reader = _complete_reader()
     terminal = dict(reader.streams["terminal"][0])

@@ -2,6 +2,18 @@
 
 ## August 31: turn one useful lesson into a crash-safe curriculum contract
 
+The class roster now has a real registrar. All candidate roots are observed under one shared
+claim-registry lease, converted into an outcome-blind inventory, selected as one deterministic
+train/development cohort, and durably frozen before the lease is released. That closes the window
+where one process could consume a context while another was assembling the roster. Upstream
+siblings also cannot be laundered into opposite partitions merely by changing assignment, capture,
+menu, or destination identity.
+
+This remains an engineering result. Ninety-five focused tests pass, but the registrar has not
+opened the private capture bank and no new battle has run. The next honest milestone is exact-source
+publication and green CI, followed by one action-free capacity decision: freeze the complete 7+8
+fresh denominator or stop. Training and outcome collection remain later gates.
+
 The first battle lesson is now wired into the next curriculum without replaying it. The V2 design
 does not carry forward a convenient summary: it rejoins the original prospective plan, the exact
 artifact manifest, the retained train record, all measured move indices, the complete frozen model,

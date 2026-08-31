@@ -40,11 +40,20 @@ from pokemon_red_completion.battle_semantics import (
     STATUS_CATEGORIES,
     BattleFeatureBatch,
 )
+from pokemon_red_completion.claim_first_admission import (
+    ClaimFirstAdmissionError,
+    ClaimFirstAvailabilitySnapshot,
+    parse_claim_first_availability_snapshot,
+)
 from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 BATTLE_OUTCOME_BATCH_ROSTER_SCHEMA = "pokemon-red-battle-outcome-batch-roster-v2"
+BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA = "pokemon-red-battle-outcome-batch-freeze-v2"
+BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA = (
+    "pokemon-red-battle-outcome-pressure-inventory-v2"
+)
 BATTLE_OUTCOME_PRESSURE_CANDIDATE_SCHEMA = (
     "pokemon-red-battle-outcome-pressure-candidate-v2"
 )
@@ -81,6 +90,9 @@ _VENUE_GROUP_PREFIXES = (
 )
 
 _MAXIMUM_ROSTER_BYTES = 4 * 1024 * 1024
+_MAXIMUM_FREEZE_BYTES = 32 * 1024 * 1024
+_MAXIMUM_PRESSURE_INVENTORY_BYTES = 16 * 1024 * 1024
+_MAXIMUM_RETAINED_PREFIX_BYTES = 512 * 1024
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _EXCLUSION_REASONS = {
@@ -270,6 +282,9 @@ class RetainedBattleOutcomePrefix:
             "private_path_fields": 0,
         }
 
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.public_dict())
+
 
 def build_retained_battle_outcome_prefix(
     plan: BattleOutcomeExperimentPlan,
@@ -289,6 +304,29 @@ def build_retained_battle_outcome_prefix(
         train_record_sha256=canonical_sha256(train_collection_record),
         train_supported_candidate_indices=supported,
     )
+
+
+def parse_retained_battle_outcome_prefix(
+    payload: bytes,
+) -> RetainedBattleOutcomePrefix:
+    """Strictly reopen one canonical path-free V1 retained-prefix projection."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("retained battle outcome prefix must be bytes")
+    if not payload or len(payload) > _MAXIMUM_RETAINED_PREFIX_BYTES:
+        raise BattleOutcomeBatchError("retained prefix size is invalid")
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise BattleOutcomeBatchError(
+            "retained prefix is not canonical JSON"
+        ) from None
+    retained = _parse_retained_prefix(value)
+    if retained.canonical_bytes() != payload:
+        raise BattleOutcomeBatchError(
+            "retained prefix is not canonical JSON"
+        )
+    return retained
 
 
 def _validate_retained_train_collection(
@@ -862,6 +900,246 @@ def revalidate_battle_outcome_pressure_candidate(
 
 
 @dataclass(frozen=True, slots=True)
+class BattleOutcomePressureInventory:
+    """Complete path-free pressure census observed under one claim lease."""
+
+    retained_prefix: RetainedBattleOutcomePrefix
+    claim_snapshot: ClaimFirstAvailabilitySnapshot
+    prefix: BattleOutcomePressureCandidate
+    screened: tuple[BattleOutcomePressureCandidate, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.retained_prefix, RetainedBattleOutcomePrefix):
+            raise BattleOutcomeBatchError("pressure inventory prefix is invalid")
+        if not isinstance(self.claim_snapshot, ClaimFirstAvailabilitySnapshot):
+            raise BattleOutcomeBatchError(
+                "pressure inventory claim snapshot is invalid"
+            )
+        if (
+            not isinstance(self.prefix, BattleOutcomePressureCandidate)
+            or self.prefix.binding != self.retained_prefix.train
+            or self.prefix.claim_available
+            or self.prefix.supported_candidate_indices
+            != self.retained_prefix.train_supported_candidate_indices
+        ):
+            raise BattleOutcomeBatchError(
+                "pressure inventory retained row differs"
+            )
+        if (
+            not isinstance(self.screened, tuple)
+            or not self.screened
+            or any(
+                not isinstance(item, BattleOutcomePressureCandidate)
+                for item in self.screened
+            )
+        ):
+            raise BattleOutcomeBatchError(
+                "pressure inventory screened rows differ"
+            )
+        rows = (self.prefix, *self.screened)
+        if any(
+            item.prior_model_sha256 != self.retained_prefix.original_prior_sha256
+            for item in rows
+        ):
+            raise BattleOutcomeBatchError(
+                "pressure inventory differs from the original prior"
+            )
+        if len({item.capture_id for item in rows}) != len(rows):
+            raise BattleOutcomeBatchError(
+                "pressure inventory repeats a capture identity"
+            )
+        expected_pairs = {
+            (
+                self.retained_prefix.train.logical_root_sha256,
+                self.retained_prefix.train.physical_root_sha256,
+            ),
+            (
+                self.retained_prefix.forbidden_development.logical_root_sha256,
+                self.retained_prefix.forbidden_development.physical_root_sha256,
+            ),
+            *(
+                (item.binding.logical_root_sha256, item.binding.physical_root_sha256)
+                for item in self.screened
+            ),
+        }
+        observed_pairs = {
+            (item.logical_root_sha256, item.physical_root_sha256)
+            for item in self.claim_snapshot.observations
+        }
+        if observed_pairs != expected_pairs:
+            raise BattleOutcomeBatchError(
+                "pressure inventory claim denominator differs"
+            )
+        try:
+            prefix_available = self.claim_snapshot.availability_for(
+                self.prefix.binding.logical_root_sha256,
+                self.prefix.binding.physical_root_sha256,
+            )
+            development_available = self.claim_snapshot.availability_for(
+                self.retained_prefix.forbidden_development.logical_root_sha256,
+                self.retained_prefix.forbidden_development.physical_root_sha256,
+            )
+            availability_matches = all(
+                item.claim_available
+                == self.claim_snapshot.availability_for(
+                    item.binding.logical_root_sha256,
+                    item.binding.physical_root_sha256,
+                )
+                for item in self.screened
+            )
+        except ClaimFirstAdmissionError:
+            raise BattleOutcomeBatchError(
+                "pressure inventory claim denominator differs"
+            ) from None
+        if prefix_available or development_available or not availability_matches:
+            raise BattleOutcomeBatchError(
+                "pressure inventory claim availability differs"
+            )
+
+    @property
+    def inventory_sha256(self) -> str:
+        return hashlib.sha256(self.canonical_bytes()).hexdigest()
+
+    @property
+    def screened_inventory_sha256(self) -> str:
+        ordered = tuple(
+            sorted(
+                self.screened,
+                key=lambda item: (item.partition.value, item.capture_id),
+            )
+        )
+        return canonical_sha256(
+            {
+                "candidates": [item.public_dict() for item in ordered],
+                "schema": BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA,
+            }
+        )
+
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA,
+            "status": "observed_unclaimed_not_reserved",
+            "original_prior_sha256": self.retained_prefix.original_prior_sha256,
+            "retained_prefix_sha256": self.retained_prefix.retained_prefix_sha256,
+            "retained_prefix": self.retained_prefix.public_dict(),
+            "claim_snapshot_sha256": self.claim_snapshot.snapshot_sha256,
+            "claim_snapshot": self.claim_snapshot.public_dict(),
+            "prefix": self.prefix.public_dict(),
+            "screened": [item.public_dict() for item in self.screened],
+            "screened_candidate_count": len(self.screened),
+            "screened_inventory_sha256": self.screened_inventory_sha256,
+            "prior_score_vector_evaluations": len(self.screened) + 1,
+            "hidden_representation_evaluations": len(self.screened) + 1,
+            "protections": {
+                "authority_promoted": False,
+                "controller_actions": 0,
+                "crystal_contexts_opened": 0,
+                "full_game_replays": 0,
+                "model_choice_predictions": 0,
+                "model_fits": 0,
+                "outcomes_opened": 0,
+                "root_claims_created": 0,
+                "sealed_red_cases_opened": 0,
+                "teacher_choice_targets": 0,
+                "teacher_queries": 0,
+            },
+            "private_path_fields": 0,
+        }
+
+
+def build_battle_outcome_pressure_inventory(
+    *,
+    retained_prefix: RetainedBattleOutcomePrefix,
+    claim_snapshot: ClaimFirstAvailabilitySnapshot,
+    prefix: BattleOutcomePressureCandidate,
+    screened: Sequence[BattleOutcomePressureCandidate],
+) -> BattleOutcomePressureInventory:
+    """Join every pressure row to one atomically observed claim snapshot."""
+
+    if isinstance(screened, (str, bytes)) or not isinstance(screened, Sequence):
+        raise TypeError("pressure inventory requires a screened sequence")
+    ordered = tuple(
+        sorted(
+            screened,
+            key=lambda item: (item.partition.value, item.capture_id),
+        )
+    )
+    return BattleOutcomePressureInventory(
+        retained_prefix=retained_prefix,
+        claim_snapshot=claim_snapshot,
+        prefix=prefix,
+        screened=ordered,
+    )
+
+
+def parse_battle_outcome_pressure_inventory(
+    payload: bytes,
+) -> BattleOutcomePressureInventory:
+    """Strictly reopen one complete path-free outcome-blind pressure census."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("battle outcome pressure inventory must be bytes")
+    if not payload or len(payload) > _MAXIMUM_PRESSURE_INVENTORY_BYTES:
+        raise BattleOutcomeBatchError("pressure inventory size is invalid")
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise BattleOutcomeBatchError(
+            "pressure inventory is not canonical JSON"
+        ) from None
+    fields = {
+        "schema",
+        "status",
+        "original_prior_sha256",
+        "retained_prefix_sha256",
+        "retained_prefix",
+        "claim_snapshot_sha256",
+        "claim_snapshot",
+        "prefix",
+        "screened",
+        "screened_candidate_count",
+        "screened_inventory_sha256",
+        "prior_score_vector_evaluations",
+        "hidden_representation_evaluations",
+        "protections",
+        "private_path_fields",
+    }
+    if (
+        not isinstance(value, dict)
+        or set(value) != fields
+        or value.get("schema") != BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA
+        or value.get("status") != "observed_unclaimed_not_reserved"
+        or value.get("private_path_fields") != 0
+        or not isinstance(value.get("screened"), list)
+    ):
+        raise BattleOutcomeBatchError("pressure inventory fields differ")
+    try:
+        snapshot = parse_claim_first_availability_snapshot(
+            _canonical_payload(value.get("claim_snapshot"))
+        )
+    except (ClaimFirstAdmissionError, TypeError, ValueError):
+        raise BattleOutcomeBatchError(
+            "pressure inventory claim snapshot differs"
+        ) from None
+    inventory = BattleOutcomePressureInventory(
+        retained_prefix=_parse_retained_prefix(value.get("retained_prefix")),
+        claim_snapshot=snapshot,
+        prefix=_parse_pressure_candidate(value.get("prefix")),
+        screened=tuple(
+            _parse_pressure_candidate(item) for item in value["screened"]
+        ),
+    )
+    if inventory.canonical_bytes() != payload:
+        raise BattleOutcomeBatchError(
+            "pressure inventory is not canonical JSON"
+        )
+    return inventory
+
+
+@dataclass(frozen=True, slots=True)
 class BattleOutcomeBatchRoster:
     """Canonical selected denominator before any V2 outcome is opened."""
 
@@ -1247,6 +1525,29 @@ def select_battle_outcome_batch_roster(
     )
 
 
+def select_battle_outcome_batch_roster_from_inventory(
+    *,
+    roster_id: str,
+    inventory: BattleOutcomePressureInventory,
+) -> BattleOutcomeBatchRoster:
+    """Select only from one canonical atomic claim-snapshot inventory."""
+
+    if not isinstance(inventory, BattleOutcomePressureInventory):
+        raise TypeError("batch selection requires a pressure inventory")
+    roster = select_battle_outcome_batch_roster(
+        roster_id=roster_id,
+        retained_prefix=inventory.retained_prefix,
+        claim_registry_sha256=inventory.claim_snapshot.registry_state_sha256,
+        prefix=inventory.prefix,
+        screened=inventory.screened,
+    )
+    if roster.screened_inventory_sha256 != inventory.screened_inventory_sha256:
+        raise BattleOutcomeBatchError(
+            "batch roster differs from its atomic pressure inventory"
+        )
+    return roster
+
+
 def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoster:
     """Strictly reopen one canonical outcome-blind V2 roster."""
 
@@ -1346,6 +1647,138 @@ def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoste
     if roster.canonical_bytes() != payload:
         raise BattleOutcomeBatchError("batch roster is not canonical JSON")
     return roster
+
+
+@dataclass(frozen=True, slots=True)
+class BattleOutcomeBatchFreeze:
+    """One durably publishable atomic inventory plus its selected roster."""
+
+    inventory: BattleOutcomePressureInventory
+    roster: BattleOutcomeBatchRoster
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.inventory, BattleOutcomePressureInventory):
+            raise BattleOutcomeBatchError("batch freeze inventory is invalid")
+        if not isinstance(self.roster, BattleOutcomeBatchRoster):
+            raise BattleOutcomeBatchError("batch freeze roster is invalid")
+        expected = select_battle_outcome_batch_roster_from_inventory(
+            roster_id=self.roster.roster_id,
+            inventory=self.inventory,
+        )
+        if expected != self.roster:
+            raise BattleOutcomeBatchError(
+                "batch freeze roster differs from its atomic inventory"
+            )
+
+    @property
+    def freeze_sha256(self) -> str:
+        return hashlib.sha256(self.canonical_bytes()).hexdigest()
+
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA,
+            "status": "prospective_unexecuted",
+            "inventory_sha256": self.inventory.inventory_sha256,
+            "roster_sha256": self.roster.roster_sha256,
+            "inventory": self.inventory.public_dict(),
+            "roster": self.roster.public_dict(),
+            "protections": {
+                "authority_promoted": False,
+                "controller_actions": 0,
+                "crystal_contexts_opened": 0,
+                "full_game_replays": 0,
+                "model_choice_predictions": 0,
+                "model_fits": 0,
+                "outcomes_opened": 0,
+                "root_claims_created": 0,
+                "sealed_red_cases_opened": 0,
+                "teacher_choice_targets": 0,
+                "teacher_queries": 0,
+            },
+            "private_path_fields": 0,
+        }
+
+
+def build_battle_outcome_batch_freeze(
+    *,
+    roster_id: str,
+    inventory: BattleOutcomePressureInventory,
+) -> BattleOutcomeBatchFreeze:
+    """Build the single file published while the shared claim lease is held."""
+
+    return BattleOutcomeBatchFreeze(
+        inventory=inventory,
+        roster=select_battle_outcome_batch_roster_from_inventory(
+            roster_id=roster_id,
+            inventory=inventory,
+        ),
+    )
+
+
+def parse_battle_outcome_batch_freeze(
+    payload: bytes,
+) -> BattleOutcomeBatchFreeze:
+    """Strictly reopen one canonical inventory-and-roster freeze."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("battle outcome batch freeze must be bytes")
+    if not payload or len(payload) > _MAXIMUM_FREEZE_BYTES:
+        raise BattleOutcomeBatchError("batch freeze size is invalid")
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise BattleOutcomeBatchError(
+            "batch freeze is not canonical JSON"
+        ) from None
+    fields = {
+        "schema",
+        "status",
+        "inventory_sha256",
+        "roster_sha256",
+        "inventory",
+        "roster",
+        "protections",
+        "private_path_fields",
+    }
+    protections = {
+        "authority_promoted": False,
+        "controller_actions": 0,
+        "crystal_contexts_opened": 0,
+        "full_game_replays": 0,
+        "model_choice_predictions": 0,
+        "model_fits": 0,
+        "outcomes_opened": 0,
+        "root_claims_created": 0,
+        "sealed_red_cases_opened": 0,
+        "teacher_choice_targets": 0,
+        "teacher_queries": 0,
+    }
+    if (
+        not isinstance(value, dict)
+        or set(value) != fields
+        or value.get("schema") != BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA
+        or value.get("status") != "prospective_unexecuted"
+        or value.get("protections") != protections
+        or value.get("private_path_fields") != 0
+    ):
+        raise BattleOutcomeBatchError("batch freeze fields differ")
+    inventory = parse_battle_outcome_pressure_inventory(
+        _canonical_payload(value.get("inventory"))
+    )
+    roster = parse_battle_outcome_batch_roster(
+        _canonical_payload(value.get("roster"))
+    )
+    freeze = BattleOutcomeBatchFreeze(inventory=inventory, roster=roster)
+    if (
+        value.get("inventory_sha256") != inventory.inventory_sha256
+        or value.get("roster_sha256") != roster.roster_sha256
+        or freeze.canonical_bytes() != payload
+    ):
+        raise BattleOutcomeBatchError("batch freeze is not canonical JSON")
+    return freeze
 
 
 def _select_pressure_partition(
@@ -2045,6 +2478,8 @@ def _boolean(value: object, subject: str) -> bool:
 
 
 __all__ = [
+    "BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA",
+    "BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA",
     "BATTLE_OUTCOME_BATCH_ROSTER_SCHEMA",
     "BATTLE_OUTCOME_FIXED_HEURISTIC_ID",
     "BATTLE_OUTCOME_PRESSURE_CANDIDATE_SCHEMA",
@@ -2052,7 +2487,9 @@ __all__ = [
     "FRESH_TRAIN_CONTEXTS",
     "TOTAL_TRAIN_CONTEXTS",
     "BattleOutcomeBatchError",
+    "BattleOutcomeBatchFreeze",
     "BattleOutcomeBatchRoster",
+    "BattleOutcomePressureInventory",
     "BattleOutcomePressureCandidate",
     "RetainedBattleOutcomePrefix",
     "battle_outcome_claim_identity_sha256",
@@ -2062,8 +2499,14 @@ __all__ = [
     "battle_outcome_pressure_policy_sha256",
     "battle_outcome_source_cluster_sha256",
     "build_battle_outcome_pressure_candidate",
+    "build_battle_outcome_pressure_inventory",
+    "build_battle_outcome_batch_freeze",
     "build_retained_battle_outcome_prefix",
+    "parse_battle_outcome_batch_freeze",
     "parse_battle_outcome_batch_roster",
+    "parse_battle_outcome_pressure_inventory",
+    "parse_retained_battle_outcome_prefix",
     "revalidate_battle_outcome_pressure_candidate",
     "select_battle_outcome_batch_roster",
+    "select_battle_outcome_batch_roster_from_inventory",
 ]

@@ -90,8 +90,19 @@ def test_opener_rejects_state_drift_noncanonical_manifest_and_symlinks(tmp_path)
     manifest_path.write_bytes(_payload(b"original"))
     state_link = tmp_path / "linked.state"
     state_link.symlink_to(state_path)
-    with pytest.raises(BattleScenarioCaptureError, match="cannot use symlinks"):
+    with pytest.raises(BattleScenarioCaptureError, match="unavailable"):
         open_battle_scenario_capture(state_link, manifest_path)
+
+    state_link.unlink()
+    hardlink = tmp_path / "hardlinked.state"
+    hardlink.hardlink_to(state_path)
+    with pytest.raises(BattleScenarioCaptureError, match="unavailable"):
+        open_battle_scenario_capture(state_path, manifest_path)
+    hardlink.unlink()
+
+    state_path.chmod(0o666)
+    with pytest.raises(BattleScenarioCaptureError, match="unavailable"):
+        open_battle_scenario_capture(state_path, manifest_path)
 
 
 def test_development_opener_refuses_test_partition() -> None:

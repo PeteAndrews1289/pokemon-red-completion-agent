@@ -3,6 +3,25 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 atomic inventory/freezer closure — Codex adjudication 2026-08-31
+
+The independent review's last P0 concern was correct: a pure roster selector could not claim that
+availability observations were atomic. Codex closed that boundary rather than documenting it away.
+The production freezer now takes one shared claim-registry lease, observes every retained,
+forbidden, train, and development root pair, derives the pressure inventory and deterministic
+roster, and durably publishes one canonical private artifact before releasing the lease.
+
+The focused suite proves canonical round-trip, availability-tamper rejection, derived-roster
+forgery rejection, private-path protections, exclusive durable output, and that the shared lease is
+still held during publication. A dedicated regression gives two candidates different local
+assignment/root/capture/destination/menu identities but the same authenticated upstream source
+state; they cannot cross train and development. The test fails if that upstream dimension is
+removed, so it distinguishes the intended protection rather than restating the implementation.
+
+Status: locally qualified at 95 focused tests with clean Ruff and mypy. This section records no
+external reviewer approval and no execution authorization. No private capture, freeze, claim,
+controller input, outcome, fit, sealed Red, Crystal context, authority, or replay was opened.
+
 ## V2 battle-batch engineering delta audit — accepted 2026-08-31
 
 An independent read-only red-team review initially withheld approval. It found that greedy

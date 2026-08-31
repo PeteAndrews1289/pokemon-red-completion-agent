@@ -9,6 +9,17 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ## Current engineering checkpoint: build the class before inviting more students
 
+The registrar is no longer a sketch. It takes one locked snapshot of every candidate classroom,
+builds the lesson and held-check roster from that single moment, and saves one tamper-evident freeze
+before unlocking the registry. If two captures are merely different descendants of the same
+upstream world, they cannot be split into lesson and test groups. If availability or the derived
+roster is rewritten afterward, reopening fails.
+
+That is reliability infrastructure, not another claim that the model learned. The exact work has
+95 focused passing tests and has pressed no button. After it is published and green, the next step
+is a read-only census: either all seven fresh lessons and all eight held checks exist together, or
+the experiment stops without consuming them.
+
 The first lesson is preserved. The next system now knows how to assemble a whole class without
 secretly choosing the easiest students after seeing their answers. One old lesson stays as a saved
 prefix; seven fresh lessons and eight held checks must all be named together. Their battles must

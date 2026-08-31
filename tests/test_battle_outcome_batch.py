@@ -13,18 +13,26 @@ from pokemon_red_completion.battle_outcome_batch import (
     DEVELOPMENT_CONTEXTS,
     FRESH_TRAIN_CONTEXTS,
     BattleOutcomeBatchError,
+    BattleOutcomeBatchFreeze,
     BattleOutcomeBatchRoster,
     BattleOutcomePressureCandidate,
+    BattleOutcomePressureInventory,
     RetainedBattleOutcomePrefix,
     battle_outcome_fixed_heuristic_choice,
     battle_outcome_model_sha256,
     battle_outcome_pressure_policy_sha256,
     battle_outcome_source_cluster_sha256,
+    build_battle_outcome_batch_freeze,
     build_battle_outcome_pressure_candidate,
+    build_battle_outcome_pressure_inventory,
     build_retained_battle_outcome_prefix,
+    parse_battle_outcome_batch_freeze,
     parse_battle_outcome_batch_roster,
+    parse_battle_outcome_pressure_inventory,
+    parse_retained_battle_outcome_prefix,
     revalidate_battle_outcome_pressure_candidate,
     select_battle_outcome_batch_roster,
+    select_battle_outcome_batch_roster_from_inventory,
 )
 from pokemon_red_completion.battle_outcome_experiment import (
     BattleOutcomeCaptureBinding,
@@ -36,6 +44,10 @@ from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
     FEATURE_SCHEMA_ID,
     BattleFeatureBatch,
+)
+from pokemon_red_completion.claim_first_admission import (
+    ClaimFirstAvailabilitySnapshot,
+    ClaimFirstPairAvailability,
 )
 from pokemon_red_completion.goal_manager_composition_qualification import (
     root_consumption_sha256,
@@ -217,6 +229,41 @@ def _roster(
     )
 
 
+def _inventory() -> BattleOutcomePressureInventory:
+    prefix, screened = _roster_inputs()
+    retained = _roster(prefix=prefix, screened=screened).retained_prefix
+    observations = tuple(
+        sorted(
+            (
+                ClaimFirstPairAvailability(
+                    logical_root_sha256=binding.logical_root_sha256,
+                    physical_root_sha256=binding.physical_root_sha256,
+                    available=available,
+                )
+                for binding, available in (
+                    (retained.train, False),
+                    (retained.forbidden_development, False),
+                    *((item.binding, True) for item in screened),
+                )
+            ),
+            key=lambda item: (
+                item.logical_root_sha256,
+                item.physical_root_sha256,
+            ),
+        )
+    )
+    snapshot = ClaimFirstAvailabilitySnapshot(
+        registry_state_sha256=_digest("inventory", "registry"),
+        observations=observations,
+    )
+    return build_battle_outcome_pressure_inventory(
+        retained_prefix=retained,
+        claim_snapshot=snapshot,
+        prefix=prefix,
+        screened=screened,
+    )
+
+
 def _canonical(document: object) -> bytes:
     return (
         json.dumps(
@@ -339,6 +386,22 @@ def test_retained_prefix_joins_the_exact_v1_plan_and_train_record() -> None:
     assert retained.original_prior_sha256 == plan.base_model_sha256
     assert retained.train_supported_candidate_indices == (0, 1, 2)
     assert retained.train_record_sha256 == canonical_sha256(record)
+    assert parse_retained_battle_outcome_prefix(retained.canonical_bytes()) == retained
+
+
+def test_retained_prefix_parser_rejects_noncanonical_or_duplicate_fields() -> None:
+    retained = _roster().retained_prefix
+    indented = json.dumps(retained.public_dict(), indent=2).encode("ascii")
+    with pytest.raises(BattleOutcomeBatchError, match="not canonical"):
+        parse_retained_battle_outcome_prefix(indented)
+
+    duplicate = retained.canonical_bytes().replace(
+        b'{"artifact_manifest_sha256":',
+        b'{"artifact_manifest_sha256":"d' + b'd' * 63 + b'","artifact_manifest_sha256":',
+        1,
+    )
+    with pytest.raises(BattleOutcomeBatchError, match="not canonical"):
+        parse_retained_battle_outcome_prefix(duplicate)
 
 
 def test_retained_prefix_rejects_a_plan_record_mismatch() -> None:
@@ -364,6 +427,131 @@ def test_batch_selection_is_stable_under_inventory_reordering() -> None:
 
     assert forward.canonical_bytes() == reverse.canonical_bytes()
     assert forward.roster_sha256 == reverse.roster_sha256
+
+
+def test_atomic_pressure_inventory_round_trips_and_is_the_only_roster_input() -> None:
+    inventory = _inventory()
+
+    reopened = parse_battle_outcome_pressure_inventory(
+        inventory.canonical_bytes()
+    )
+    roster = select_battle_outcome_batch_roster_from_inventory(
+        roster_id="red-battle-outcome-batch-v2-inventory",
+        inventory=reopened,
+    )
+
+    assert reopened == inventory
+    assert roster.claim_registry_sha256 == (
+        inventory.claim_snapshot.registry_state_sha256
+    )
+    assert roster.screened_inventory_sha256 == (
+        inventory.screened_inventory_sha256
+    )
+    assert roster.public_dict()["protections"]["outcomes_opened"] == 0
+
+
+def test_atomic_batch_freeze_round_trips_inventory_and_selected_roster() -> None:
+    freeze = build_battle_outcome_batch_freeze(
+        roster_id="red-battle-outcome-batch-v2-freeze",
+        inventory=_inventory(),
+    )
+
+    reopened = parse_battle_outcome_batch_freeze(freeze.canonical_bytes())
+
+    assert isinstance(reopened, BattleOutcomeBatchFreeze)
+    assert reopened == freeze
+    assert reopened.public_dict()["protections"] == {
+        "authority_promoted": False,
+        "controller_actions": 0,
+        "crystal_contexts_opened": 0,
+        "full_game_replays": 0,
+        "model_choice_predictions": 0,
+        "model_fits": 0,
+        "outcomes_opened": 0,
+        "root_claims_created": 0,
+        "sealed_red_cases_opened": 0,
+        "teacher_choice_targets": 0,
+        "teacher_queries": 0,
+    }
+
+
+def test_batch_freeze_rejects_a_roster_not_derived_from_its_inventory() -> None:
+    inventory = _inventory()
+    freeze = build_battle_outcome_batch_freeze(
+        roster_id="red-battle-outcome-batch-v2-freeze",
+        inventory=inventory,
+    )
+    document = freeze.public_dict()
+    roster = document["roster"]
+    assert isinstance(roster, dict)
+    roster["roster_id"] = "red-battle-outcome-batch-v2-forged"
+
+    with pytest.raises(BattleOutcomeBatchError, match="canonical JSON"):
+        parse_battle_outcome_batch_freeze(_canonical(document))
+
+
+def test_pressure_inventory_rejects_availability_or_denominator_drift() -> None:
+    inventory = _inventory()
+    document = inventory.public_dict()
+    snapshot = document["claim_snapshot"]
+    assert isinstance(snapshot, dict)
+    observations = snapshot["observations"]
+    assert isinstance(observations, list)
+    assert isinstance(observations[-1], dict)
+    observations[-1]["available"] = not observations[-1]["available"]
+
+    with pytest.raises(BattleOutcomeBatchError, match="claim availability"):
+        parse_battle_outcome_pressure_inventory(_canonical(document))
+
+
+def test_different_assignments_from_one_upstream_state_cannot_cross_partitions() -> None:
+    prefix, screened = _roster_inputs()
+    train = tuple(
+        item for item in screened if item.partition is ScenarioPartition.TRAIN
+    )
+    development = tuple(
+        item
+        for item in screened
+        if item.partition is ScenarioPartition.DEVELOPMENT
+    )
+    sibling_template = _candidate(
+        ScenarioPartition.DEVELOPMENT,
+        "a-rng-sibling-with-new-assignment",
+        basis_offset=14,
+        expected_map=int(MapId.VICTORY_ROAD_1F),
+        margin_stratum=2,
+        player_hp_ratio=0.5,
+    )
+    sibling_binding = replace(
+        sibling_template.binding,
+        source_state_sha256=train[0].binding.source_state_sha256,
+        root_consumption_sha256=root_consumption_sha256(
+            state_sha256=train[0].binding.source_state_sha256,
+            envelope_sha256=sibling_template.binding.source_envelope_sha256,
+        ),
+    )
+    sibling = replace(
+        sibling_template,
+        binding=sibling_binding,
+        source_cluster_sha256=battle_outcome_source_cluster_sha256(
+            sibling_binding
+        ),
+    )
+
+    roster = _roster(
+        prefix=prefix,
+        screened=(*train, sibling, *development),
+    )
+
+    assert sibling.binding.root_lineage_id != train[0].binding.root_lineage_id
+    assert sibling.binding.source_assignment_id != (
+        train[0].binding.source_assignment_id
+    )
+    assert sibling.binding.state_sha256 != train[0].binding.state_sha256
+    assert sibling.binding.menu_sha256 != train[0].binding.menu_sha256
+    assert sibling.capture_id not in {
+        item.capture_id for item in roster.development
+    }
 
 
 def test_pressure_policy_digest_binds_party_priority_and_repair_order() -> None:

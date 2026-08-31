@@ -12,6 +12,7 @@ import re
 import stat
 import sys
 from collections.abc import Mapping
+from contextlib import suppress
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -96,10 +97,24 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help="project the verified V1 train prefix without replaying it",
     )
+    parser.add_argument(
+        "--out-retained-batch-prefix",
+        type=Path,
+        default=None,
+        help="exclusive private canonical retained-prefix output",
+    )
     return parser
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
+    if getattr(args, "out_retained_batch_prefix", None) is not None and not getattr(
+        args,
+        "project_retained_batch_prefix",
+        False,
+    ):
+        raise BattleOutcomeCycleInspectionError(
+            "retained-prefix output requires retained-prefix projection"
+        )
     expected_plan_sha256 = _sha256(args.expected_plan_sha256, "experiment plan")
     plan = _read_plan(args.plan, expected_plan_sha256)
     artifact_id = f"bo-cycle-{plan.plan_sha256}"
@@ -743,9 +758,83 @@ def _sha256(value: object, subject: str) -> str:
     return value
 
 
+def _private_new_projection(destination: Path) -> Path:
+    if not isinstance(destination, Path):
+        raise TypeError("retained-prefix destination must be a Path")
+    resolved = destination.resolve()
+    if resolved.is_relative_to(PROJECT_ROOT.resolve()):
+        raise BattleOutcomeCycleInspectionError(
+            "retained-prefix projection must remain private"
+        )
+    if (
+        not resolved.parent.is_dir()
+        or resolved.exists()
+        or destination.is_symlink()
+    ):
+        raise BattleOutcomeCycleInspectionError(
+            "retained-prefix output is unavailable or already exists"
+        )
+    return resolved
+
+
+def _write_exclusive_projection(destination: Path, payload: bytes) -> None:
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags |= getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    descriptor = -1
+    directory_descriptor = -1
+    created = False
+    try:
+        descriptor = os.open(destination, flags, 0o600)
+        created = True
+        offset = 0
+        while offset < len(payload):
+            written = os.write(descriptor, payload[offset:])
+            if written <= 0:
+                raise OSError("retained-prefix write made no progress")
+            offset += written
+        os.fsync(descriptor)
+        os.close(descriptor)
+        descriptor = -1
+        directory_descriptor = os.open(
+            destination.parent,
+            os.O_RDONLY
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_DIRECTORY", 0),
+        )
+        os.fsync(directory_descriptor)
+    except OSError:
+        if created:
+            with suppress(OSError):
+                destination.unlink()
+        raise BattleOutcomeCycleInspectionError(
+            "retained-prefix projection could not be retained"
+        ) from None
+    finally:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+        if directory_descriptor >= 0:
+            with suppress(OSError):
+                os.close(directory_descriptor)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    print(json.dumps(_run(args), allow_nan=False, indent=2, sort_keys=True))
+    receipt = _run(args)
+    encoded = (
+        json.dumps(
+            receipt,
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
+    destination = getattr(args, "out_retained_batch_prefix", None)
+    if destination is not None:
+        _write_exclusive_projection(_private_new_projection(destination), encoded)
+    print(json.dumps(receipt, allow_nan=False, indent=2, sort_keys=True))
     return 0
 
 
