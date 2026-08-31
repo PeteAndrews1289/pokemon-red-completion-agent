@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 30: define an honest exam before buying more lessons
+
+The clustered V2 blueprint is now code rather than a promise. It keeps all eighteen authentic Red
+consequences and prospectively schedules 72 more attempts across 36 upstream lineages, at most two
+per lineage. Each lineage receives one unit of total fit influence. The model still must clear the
+full 60-example, 50-lineage, rank, kind, success/failure, multi-head, semantic-family, template,
+location, pressure, and feature-support board; reaching a convenient row count is not enough.
+
+The held-out exam now makes its independent unit impossible to miss: one question on each of 100
+untouched lineages. Under the previously declared paired effect, three incomplete questions scored
+against the model move the 80% power boundary from 67 to 100 lineages. The complete allocation is
+36 training, 100 development, and three pre-branch contingencies—139 new lineages—and that budget
+admits only one candidate model.
+
+Independent review changed the architecture as well as the statistics. Claude passed the exact
+test and censoring logic while asking for clearer correlation, attrition, and future Crystal
+sizing. Antigravity caught the old 151-target ceiling and missing friendship and roaming mechanics.
+The result requires complete per-title catalogs (Red 151, Crystal 251, future declared totals),
+penalizes abstention on supported Crystal mechanics, grants no completion credit for merely
+classifying an unsupported mechanic, and prohibits Crystal until its own powered plan exists.
+
+No game or private classroom was opened to write this blueprint, so the score does not move:
+**18/60 causal examples, integration fit 1/1, powered fit 0, authority 0, transfer 0**. The next
+falsifier is a game-free census of the 139-lineage supply. A pass returns immediately to bounded
+lesson collection; a failure closes the plan before it can waste gameplay.
+
 ## August 30: the bounded classroom is complete, and speed is no longer the excuse
 
 The final eight frozen Red lesson cards ran once each. Six became authentic randomized

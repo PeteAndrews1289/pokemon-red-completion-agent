@@ -58,8 +58,8 @@ The board is therefore:
 
 Eighteen examples and the complete bounded successor prove that execution throughput is not the
 current bottleneck. They are not enough to support a powered model-quality, gameplay, completion,
-or transfer claim. The next gate is an action-free clustered V2 design and review, not another fit
-or gameplay batch.
+or transfer claim. The action-free clustered V2 design and independent review are now complete;
+the next falsifier is its action-free finite-capacity census, not another fit or gameplay batch.
 
 ## Evidence ladder
 
@@ -130,13 +130,16 @@ Work:
 2. **Complete:** the final batch measured 6/8 yield and 41.30 examples per outer hour. The full
    corpus is 18/60, covers all seven kinds and 54/54 candidate rows, has rank 11/16, and retains
    three successes versus fifteen failures without outcome-aware replacement.
-3. **Next:** publish the complete denominator under green exact-main CI, then engineer and
-   independently review a versioned action-free clustered powered design.
-4. Before scaling beyond the bounded successor, freeze that clustered powered design. It
+3. **Complete:** the versioned action-free clustered powered V2 design is implemented and reviewed.
+   It preserves 18 prefix examples; allocates 72 attempts across 36 train lineages at maximum two
+   per lineage; requires 50 settled train lineages; and retains every information floor below.
+4. **Next:** publish the design under green exact-main CI, then prove action-free private capacity
+   for 36 train, 100 development, and three contingency lineages. Before scaling, freeze that
+   exact allocation. The design
    must define the independent unit, maximum scenarios and influence per lineage, cluster weights,
    complete attempted denominator, attrition treatment, train/development ownership, and a fixed
    independent-lineage budget split among fit, confirmation, and unopened contingency use.
-5. Power the held-out test in independent lineage clusters under a prospectively conservative
+5. **Complete in the public design:** power the held-out test in independent lineage clusters under a prospectively conservative
    within-cluster correlation and observed setup attrition. Publish sensitivity at correlations
    `0.0`, `0.25`, `0.5`, `0.75`, and `1.0`; the binding certificate treats correlation `1.0` as
    the worst case unless a separate prospective pilot justifies another bound. A raw row count is
@@ -146,7 +149,7 @@ Work:
    lineage losses**. A V2 design may choose another test or smallest useful effect only before
    outcomes open and must publish its own numeric `K_min`. If available clusters cannot support
    that design, revise the experiment before generating outcomes.
-6. Generate additional short authenticated Red scenarios for missing kinds and feature directions
+6. On a passing census, generate additional short authenticated Red scenarios for missing kinds and feature directions
    inside the frozen cluster allocation. A full Red replay is not a data-loader.
 7. Keep an upstream episode lineage wholly inside one partition. Byte clones, timing variants,
    rehashed states, and sibling scenarios do not become independent because their filenames differ.
@@ -168,8 +171,10 @@ prospective revision replaces them:
   leakage, and an action-free capacity proof for the complete clustered schedule.
 
 The complete bounded successor shows that execution speed is not the bottleneck. The next design
-must target the measured missing information strata prospectively and outcome-blindly; it must not
-return to teacher-route hardening or treat additional correlated rows as independent evidence.
+does target the measured missing information strata prospectively and outcome-blindly. The next
+session must test its 139-lineage capacity and, on pass, resume bounded example collection without
+another process-only pause. It must not return to teacher-route hardening or treat additional
+correlated rows as independent evidence.
 
 Exit gate: the clustered-design power review passes, then the action-free powered-fit audit passes
 that exact versioned contract over the complete train denominator. The existing row-level audit

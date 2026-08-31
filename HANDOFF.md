@@ -14,6 +14,51 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-30: clustered powered V2 is designed and reviewed — capacity is the next falsifier
+
+From exact published main `6a7210b8e9089486738530b7fab94b6d0827fa1f`, this session changed
+only public action-free source, tests, configuration, and documentation. It opened no private
+capture, ROM, outcome, teacher, model, or development row and performed no gameplay or fit. The
+canonical V2 contract is digest `c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d`.
+
+The design preserves the immutable 25-attempt prefix—18 settled examples from 18 lineages and
+seven setup-only terminals—and prospectively adds 72 attempts across 36 new train lineages, at
+most two attempts per lineage. Equal total fit weight per lineage prevents siblings from
+dominating. Powered fitting still requires at least 60 settled examples, 50 distinct settled
+lineages, all seven supported kinds with eight examples each, 50 distinct selected feature rows,
+rank 16, eight successes, eight failures, five varying outcome heads, and the retained semantic-
+family, menu-template, location, pressure, and candidate-support floors.
+
+Held-out development uses exactly one confirmatory question per untouched lineage. Keeping the
+previously declared 0.30 win / 0.10 loss alternative yields computed `K_min=67` without forced
+losses and **100 lineages with three incomplete endpoints scored as candidate losses**. Power is
+0.7996299998823 at 99 and 0.8053956642931617 at 100. Because cluster size is one, the explicit
+design-effect calculation remains one for correlations 0 through 1. The finite allocation is
+36 train + 100 development + 3 contingency = **139 new lineages**, and
+`floor(100/100)` permits only one model candidate. Contingency can replace only a pre-branch unread
+invalid lineage; more than three post-branch incompletes closes the endpoint underpowered without
+promotion.
+
+Claude returned PASS after attacking the exact test, censoring, correlation, candidate cap, and
+mutation coverage. Antigravity returned PASS WITH REQUIRED CHANGES; Codex accepted the substance,
+generalized the living-Dex catalog to each title's declared total (Red 151, Crystal 251, future
+titles), added friendship evolution and roaming-legendaries capabilities, and added the requested
+hard-boundary and statistical mutations. Crystal remains explicitly unsized and unauthorized
+until a separate powered transfer plan exists. Supported abstention will be failure; typed
+unsupported abstention is correct classification but never completion credit.
+
+Private capacity is deliberately **unproven**. After this source publishes and exact-main CI is
+green, the next session begins with one action-free census against this exact 139-lineage contract.
+If it fails, close and redesign without gameplay. If it passes, do not create another process-only
+pause: freeze the disjoint allocation and proceed to a bounded train batch in the same session so
+the anti-drift alarm returns the project to measured learning output. Powered fit, development,
+authority, sealed Red, Crystal, and full replay remain closed. The board is still **causal train
+18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+The path-free [local qualification receipt](docs/evidence/living-dex-clustered-powered-v2-design-local-qualification-2026-08-30.json)
+binds the exact design digest, zero protected effects, full-suite result, and both independent
+review adjudications. It is qualification evidence only; it does not advance a learning counter.
+
 ## 2026-08-30: the bounded successor is complete — clustered V2 design is next
 
 Exact source `a358014fb2dfe4193c9474ee1cc008cd249eb03c` passed CI `33329384186/1`.

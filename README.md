@@ -6,7 +6,28 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 30, 2026): the bounded R1 successor is complete; design the
+> **Current product focus (August 30, 2026): clustered powered V2 is designed; prove finite
+> capacity before collecting again.** The canonical action-free contract preserves the authentic
+> 18-example/18-lineage prefix, prospectively adds 72 outcome-blind attempts across 36 new train
+> lineages with at most two attempts each, and retains every information-diversity floor. Training
+> siblings receive equal total lineage weight and cannot certify evaluation power.
+>
+> Development now has one confirmatory question per untouched lineage. Under the frozen paired
+> alternative, the exact minimum is **67 lineages with no forced losses or 100 with three
+> incompletes scored as candidate losses**; 99 is underpowered. The finite next allocation is
+> **36 train + 100 development + 3 contingency = 139 new lineages**, which permits exactly one
+> model candidate. Claude returned PASS; Antigravity's required transfer corrections are
+> incorporated. The boundary now names complete per-title catalogs (Red 151, Crystal 251, future
+> totals), friendship evolution, roaming legendaries, supported-abstention failure, and a separate
+> powered Crystal plan.
+>
+> The design opened no private data or game and grants no authority. The board remains **causal
+> train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**. After publication
+> and green exact-main CI, run the action-free 139-lineage capacity census. If it passes, freeze
+> and resume a bounded train batch in the same session; if it fails, redesign without gameplay.
+> See the [V2 design](docs/living-dex-clustered-powered-v2-design.md).
+
+> **Previous product checkpoint (August 30, 2026): the bounded R1 successor is complete; design the
 > powered clustered curriculum before collecting more data.** From exact source `a358014f` under
 > green CI `33329384186/1`, untouched train ordinals **8–15** were attempted once each. Six
 > produced authentic randomized selected-arm examples and two ended during setup, for **6/8

@@ -6,6 +6,7 @@ from pokemon_red_completion.evaluation_design import (
     EvaluationDesignError,
     PairedExactDesign,
     minimum_paired_contexts,
+    minimum_paired_contexts_with_forced_losses,
     paired_one_sided_exact_p,
     paired_one_sided_exact_power,
     paired_one_sided_exact_power_with_forced_losses,
@@ -79,6 +80,39 @@ def test_worst_case_censoring_power_counts_missing_pairs_as_losses() -> None:
         win_probability=0.30,
         loss_probability=0.10,
     ) < 0.80
+
+
+def test_minimum_sample_size_with_forced_losses_is_computed_not_asserted() -> None:
+    minimum = minimum_paired_contexts_with_forced_losses(
+        forced_losses=3,
+        win_probability=0.30,
+        loss_probability=0.10,
+        alpha=0.05,
+        target_power=0.80,
+    )
+    assert minimum == 100
+    assert paired_one_sided_exact_power_with_forced_losses(
+        minimum,
+        forced_losses=3,
+        win_probability=0.30,
+        loss_probability=0.10,
+    ) == pytest.approx(0.8053956642931617)
+    assert paired_one_sided_exact_power_with_forced_losses(
+        minimum - 1,
+        forced_losses=3,
+        win_probability=0.30,
+        loss_probability=0.10,
+    ) == pytest.approx(0.7996299998823)
+
+
+def test_forced_loss_sizing_rejects_an_exhausted_search_budget() -> None:
+    with pytest.raises(EvaluationDesignError, match="exhaust"):
+        minimum_paired_contexts_with_forced_losses(
+            forced_losses=10,
+            win_probability=0.30,
+            loss_probability=0.10,
+            maximum_contexts=10,
+        )
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,82 @@
+{
+  "claim_boundary": {
+    "supported": "The public clustered powered V2 contract is internally consistent, action-free, independently reviewed, and ready for exact-main CI followed by one finite private capacity census against the bound digest.",
+    "unsupported": [
+      "private_capacity_exists",
+      "private_allocation_frozen",
+      "new_red_outcome_collected",
+      "powered_model_fit_executed",
+      "powered_red_development_pass",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "design": {
+    "candidate_cap": 1,
+    "development_lineages": 100,
+    "development_primary_unit": "one_confirmatory_question_per_authenticated_upstream_lineage",
+    "existing_attempts": 25,
+    "existing_settled_examples": 18,
+    "new_train_attempts": 72,
+    "new_train_lineages": 36,
+    "required_new_lineage_supply": 139,
+    "train_settled_floor": 60,
+    "worst_case_forced_losses": 3,
+    "worst_case_power": 0.8053956642931617
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 0,
+    "gameplay_model_predictions": 0,
+    "private_capacity_reads": 0,
+    "private_fit_claims": 0,
+    "private_schedule_freezes": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "external_reviews": [
+    {
+      "adjudication": "Accepted all three refinements: derive rather than copy the intracluster-correlation table, close without promotion above three incomplete development endpoints, and require a separately sized Crystal transfer plan.",
+      "reviewer": "Claude CLI Opus high",
+      "verdict": "pass"
+    },
+    {
+      "adjudication": "Accepted the substance and strengthened it: per-title declared target totals replace a Red-only cap; friendship evolution and roaming legendaries are explicit; boundary assertions and alpha, power, contingency, and schedule mutation tests are binding.",
+      "reviewer": "Antigravity app Gemini 3.1 Pro High",
+      "verdict": "pass_with_required_changes_resolved"
+    }
+  ],
+  "next_gate": {
+    "failure_rule": "If a disjoint outcome-blind allocation cannot supply 36 train, 100 development, and 3 contingency lineages with every support floor, close the lane before gameplay.",
+    "kind": "action_free_private_capacity_census",
+    "pass_rule": "Freeze the qualifying allocation and begin the first bounded train collection batch in the same work session so the one-session no-learning-output alarm is not reset by another process-only gate."
+  },
+  "qualification": {
+    "canonical_generator_checks": 4,
+    "exact_local_mac_runtime_tests": 1,
+    "focused_design_and_power_tests": 51,
+    "full_suite_deselected_environment_bound_tests": 4,
+    "full_suite_passed": 5877,
+    "full_suite_xfailed": 1,
+    "mypy_source_files": 316,
+    "public_registry_protocol_tests": 49,
+    "ruff_passed": true
+  },
+  "schema": "pokemon.core.living-dex-clustered-powered-design-local-qualification.v1",
+  "source": {
+    "base_commit": "6a7210b8e9089486738530b7fab94b6d0827fa1f",
+    "design_sha256": "c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d",
+    "working_source_bundle_sha256": "d144a31a10c37a6975da87014041377e5a03efc20c27d9357075da1bb2737ea0"
+  },
+  "status": "locally_qualified_publication_and_exact_main_ci_next"
+}

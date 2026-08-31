@@ -7,7 +7,32 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: all sixteen successor cards are closed
+## Current checkpoint: the experiment finally knows what counts as a stranger
+
+The classroom has a new blueprint, but no new lesson was taken. Seventy-two future cards are
+arranged beneath 36 lineage braces, never more than two cards per brace, and each brace gets the
+same total influence. The exam sits in a different locked cabinet: 100 untouched lineages, one
+question per lineage, three contingencies that can substitute only before anyone looks, and only
+one model allowed to enter.
+
+That exam size is not ceremonial. The old effect promise needs 67 independent lineages in a
+perfectly complete study. If three questions disappear and must count against the model, 99
+lineages reach only 79.963% power; 100 reach 80.540%. The project can no longer turn multiple
+screens from one episode into multiple “independent” successes.
+
+Two outside reviewers attacked the blueprint. Claude could not break the statistics. Antigravity
+caught a more human error: the future catalog still ended at Red's 151 creatures and omitted
+friendship evolution and roaming legendaries. The boundary now expands per title—151 in Red, 251
+in Crystal, then each later game's declared total—and Crystal remains a separately powered test,
+not a reskinned Red run.
+
+The empty outline now needs 139 genuinely distinct new lineages: 36 for lessons, 100 for the exam,
+and three contingencies. We have not claimed they exist. The next action is a game-free census.
+If the supply fails, redesign; if it passes, freeze it and return to real lessons in the same work
+session. The score remains **CAUSAL TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY
+0 · TRANSFER 0**.
+
+## Previous checkpoint: all sixteen successor cards are closed
 
 The final eight lesson cards ran once. Six became authentic consequences; two stopped during
 setup. Together they took 523 seconds, 9,658 controller actions, and 488,081 emulator frames—about
