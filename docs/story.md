@@ -7,6 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the classroom is secure, but three lessons are missing
+
+The new registrar passed every gate and reached `main`. Then it counted the real classrooms without
+opening any answers. The held side has the eight different worlds the experiment promised. The
+lesson side has four, not seven.
+
+There are more files than that, but some are duplicate paperwork for the same worlds. Older files
+also lack the upstream identity needed to prove that two lessons did not come from one save. The
+system refused both shortcuts and froze nothing. That is the point of the integrity work: scarcity
+must stay visible instead of becoming fake sample size.
+
+The next chapter is to create three genuinely independent, bounded battle lessons from existing
+nonsealed Red roots—without another full-game teacher run—then ask the registrar again. No model
+counter moved at this checkpoint.
+
 ## Current engineering checkpoint: build the class before inviting more students
 
 The registrar is no longer a sketch. It takes one locked snapshot of every candidate classroom,

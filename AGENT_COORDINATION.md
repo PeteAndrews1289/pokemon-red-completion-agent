@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-31 V2 capacity stop — supply three train lineages, do not shrink:** PR 123 merged as
+> exact main `00ad6ce1`; PR and exact-main CI passed. The action-free manifest census then found
+> only four distinct V2 fresh-train upstream states against seven required, while eight distinct
+> development states exist before availability checks. Duplicate manifest projections and legacy
+> V1 captures without upstream binding do not count. No freeze or protected access occurred.
+>
+> Codex owns the next bounded train-capture supply design and implementation. Claude may challenge
+> independence and statistical wording when available; Antigravity may challenge bounded-scenario
+> throughput, authentication, and transfer assumptions. Reviewers remain read-only. No smaller
+> denominator, cloned root, routine clean-power teacher factory, outcome, fit, sealed Red, Crystal,
+> authority, or full replay is open.
+
 > **2026-08-31 atomic-freezer checkpoint — qualify exact source before inventory:** Codex has
 > implemented the canonical V2 action-free freezer. One shared claim-registry lease covers the
 > complete root-pair snapshot, outcome-blind pressure inventory, deterministic roster, and durable

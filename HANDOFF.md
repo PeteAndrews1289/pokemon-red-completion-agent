@@ -14,6 +14,30 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-31: V2 action-free census stopped at 4/7 fresh train lineages
+
+PR 123 merged as exact main `00ad6ce1a122feb459f3db07c1e4e51cbde996fe`; both PR CI
+`33450557540/1` and exact-main CI `33451480906/1` passed. The canonical freezer is therefore
+published and qualified.
+
+The next action-free manifest census stopped before capture-state, ROM, base-model, catalog, or
+claim-registry opening. The bank has eight distinct V2 development upstream states before claim
+availability checks, but only four distinct V2 fresh-train upstream states for a requirement of
+seven. Four apparent additional train manifests are duplicate physical projections of the same
+four upstream states. Two older V1 train manifests are also duplicate copies of one state and omit
+`source_state_sha256`, so the V2 authenticator correctly excludes them. The deficit is at least
+three fresh train lineages.
+
+No batch freeze, root claim, controller action, frame, prediction, outcome, fit, authority, sealed
+Red case, Crystal context, teacher query, or replay occurred. The path-free aggregate receipt is
+[red-battle-v2-action-free-capacity-result-2026-08-31.json](docs/evidence/red-battle-v2-action-free-capacity-result-2026-08-31.json).
+Do not shrink the 7+8 denominator or count duplicate manifests as independence.
+
+Next: qualify the smallest bounded source of at least three additional independently authenticated
+V2 **train** battle captures from existing nonsealed roots. This is scenario supply, not a clean
+power teacher factory and not outcome collection. Re-run the complete action-free census only after
+that supply exists.
+
 ## 2026-08-31: V2 batch contract is implemented locally; no fresh outcome is open
 
 The canonical action-free inventory/freezer is now implemented locally as well. It does not read

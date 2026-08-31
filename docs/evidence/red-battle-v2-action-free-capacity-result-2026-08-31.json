@@ -1,0 +1,49 @@
+{
+  "capacity": {
+    "development_deficit_before_claim_check": 0,
+    "fresh_development_v2_manifest_copies": 8,
+    "fresh_development_v2_unique_upstream_states": 8,
+    "fresh_train_v2_manifest_copies": 8,
+    "fresh_train_v2_unique_upstream_states": 4,
+    "legacy_v1_development_manifest_copies": 2,
+    "legacy_v1_development_unique_states": 1,
+    "legacy_v1_train_manifest_copies": 2,
+    "legacy_v1_train_unique_states": 1,
+    "required_fresh_development": 8,
+    "required_fresh_train": 7,
+    "retained_train_prefixes": 1,
+    "train_deficit_before_claim_check": 3
+  },
+  "decision": {
+    "batch_freeze_created": false,
+    "capacity_claimed": false,
+    "reason": "Only four distinct V2 fresh-train upstream states exist for a seven-state requirement. Duplicate physical manifests do not create independent lineages, and legacy V1 manifests omit the upstream-state binding required by V2.",
+    "status": "stopped_insufficient_fresh_train_lineages"
+  },
+  "protected_access": {
+    "authority_promoted": false,
+    "base_model_opened": false,
+    "capture_state_files_opened": 0,
+    "claim_registry_opened": false,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "development_outcomes_opened": 0,
+    "fits": 0,
+    "full_game_replays": 0,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "red_rom_opened": false,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  },
+  "schema": "pokemon.red-battle-v2-action-free-capacity-result.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33451480906,
+    "git_commit": "00ad6ce1a122feb459f3db07c1e4e51cbde996fe",
+    "source_bundle_sha256": "98106a5698c43b714603db443583466b20dcdf9ca3f598b26845046292705e42"
+  }
+}
