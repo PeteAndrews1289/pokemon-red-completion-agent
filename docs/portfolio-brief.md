@@ -1,5 +1,49 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 31 claim-first battle learner gate
+
+The failed full-route supply strategy was replaced with one bounded, snapshot-backed learning
+cycle. A canonical prospective plan binds exact catalog roots, savestates, source, executable
+scripts, Red ROM, CPython/PyBoy and NumPy identities, nonlinear prior, controller timing, objective,
+and fit settings. A read-only preflight rejects any train/development pair without at least two
+supported raw choices and two numerically distinct hidden representations before a scarce root is
+claimed.
+
+Execution then uses durable claims at both root and candidate granularity, restores the exact state
+for every supported action, retains every activated outcome, and proves the learner consumed those
+same outcome records. Fitting is train-only; development predictions are committed before outcomes;
+flat train evidence, zero discordance, and no advantage are typed terminal rejections. The
+development comparison is explicitly iterative rather than historically untouched, and authority,
+sealed Red, Crystal, and full-game replay remain closed.
+
+Execution artifacts are deterministic, identity-sealed before input, append-synced at every
+claim/outcome/model/prediction boundary, and recoverable without replay. Interrupted canonical
+prefixes become permanent failed attempts; a completed attempt with lost stdout can be reconstructed
+only after a no-gameplay inspector revalidates every retained join and terminal policy. Ambiguous
+namespaces or contradictory records fail closed and cannot advance public counters.
+
+The dashboard trust boundary was hardened at the same time. Its learning counters are checked
+against a frozen evidence projection, so editing a displayed total to 999 while keeping valid file
+hashes now fails CI. This turns the next model update into a short, observable falsifier instead of
+another multi-day walkthrough maintenance cycle.
+
+## August 31 failed-factory falsification and model-first recovery
+
+A prospectively frozen twelve-world Red supply factory ran once from exact main under green CI and
+failed **0/12** after 208,777 controller actions and 32,312,041 frames. Nine attempts stopped in
+deterministic setup teaching and three in state conditioning. Every identity remains consumed;
+there was no retry, root substitution, learner target, outcome, prediction, fit, authority
+promotion, sealed Red access, or Crystal access.
+
+The engineering response was to retire the strategy rather than optimize the walkthrough. A
+path-free receipt preserves the complete aggregate denominator, failure taxonomy, and protected
+zeroes. A generic evidence repair now retains authenticated failure phase/action/frame accounting,
+and the product-focus validator rejects routine clean-power teacher factories, route hardening, or
+full replays as active development work. The next measurable gate is one bounded snapshot-backed
+battle update and prospectively held comparison, followed by the same interface for navigation and
+party development. This is an example of a negative result changing architecture before more
+compute is spent.
+
 ## August 30 complete bounded-successor audit
 
 From exact source under green CI, the project consumed the final eight prospectively fixed Red

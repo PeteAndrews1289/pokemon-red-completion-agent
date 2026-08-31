@@ -1,5 +1,15 @@
 # Powered Red lineage-supply rail
 
+Status: **retired after its sole 0/12 tranche on 2026-08-31**. Exact main `56b29528` passed
+CI `33369612082/1`; all twelve assignments were claimed and consumed, zero roots were admitted,
+and no retry or clean-power successor is allowed. The run used 208,777 controller actions and
+32,312,041 frames while producing zero learner outcomes or model updates. See the
+[terminal falsification](evidence/red-living-dex-powered-lineage-supply-terminal-falsification-v1-2026-08-31.json).
+
+The contract below is retained as historical and forensic documentation. It is not an active
+execution plan. The active lane is the bounded snapshot-backed scenario curriculum in the
+[generated product state](../ACTIVE_PRODUCT_STATE.md).
+
 ## Mission boundary
 
 The product is a transferable Pokémon agent that can finish stories and create a living Pokédex
@@ -108,7 +118,7 @@ This engineering gate authorizes no model fitting, development outcome, candidat
 learner-controlled action, sealed Red evaluation, Crystal execution, full-game replay, gameplay
 authority, cross-title transfer claim, or living-Pokédex completion claim.
 
-The next production order is: publish this source, require green exact-main CI, freeze the one
-twelve-world plan action-free, execute each durably claimed assignment at most once, admit the complete
-denominator, and run one fresh action-free capacity census. That sequence creates honest future
-experience without confusing infrastructure with intelligence.
+The historical production order ended after the complete denominator failed 0/12. The source,
+plan codecs, admission logic, and tests remain for authentication; they confer no permission to
+freeze another plan, retry an assignment, repair the teacher route, or use clean-power play as
+routine training-row supply.

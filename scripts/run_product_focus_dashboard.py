@@ -86,7 +86,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "campaign_execution": "campaign",
         "comparison_execution": "compare",
         "consumed_trial_retry": "retry",
-        "counterfactual_target": "counterfactual target",
+        "unexecuted_counterfactual_target": "unexecuted counterfactual target",
         "crystal_execution": "Crystal",
         "development_payload_decode": "dev decode",
         "development_payload_disclosure": "dev disclosure",
@@ -105,6 +105,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "public_manifest_freeze": "manifest",
         "red_preflight_execution": "preflight",
         "rom_access": "ROM",
+        "routine_clean_power_teacher_factory": "clean-power teacher factory",
         "scenario_selection": "scenario",
         "sealed_red_evaluation": "sealed",
         "sealed_or_benchmark_root_use": "sealed/benchmark roots",
@@ -114,7 +115,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "teacher_route_hardening": "teacher",
         "transfer_claim": "transfer claim",
         "unpowered_model_quality_claim": "unpowered quality claim",
-        "unselected_action_target": "unselected-action target",
+        "unmeasured_action_target": "unmeasured-action target",
         "v4_freeze_or_trial_execution": "V4 freeze/trial",
         "v4_trial_execution_before_reorientation": "V4 execution",
     }
@@ -127,22 +128,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Clustered Red curriculum · private schedule freeze",
+        stage="Authenticated battle learner loop · awaiting bounded update",
         message=(
-            "Capacity passed: 8 train lineages plus 4 untouched development lineages, all seven "
-            "portable option kinds, and zero overlap. Next: freeze and independently reopen it."
+            "The 0/12 clean-power supply factory is retired. Next: one snapshot-backed battle "
+            "update on train lineages and one prospectively held development comparison."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red causal curriculum · census passed → private freeze → 8 outcomes → first fit",
+        location="Red bounded scenarios · battle first → navigation → party development → Crystal",
         collection_target=60,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Unfitted powered causal living-Dex policy · actual Red feature rank 16",
+            candidate="Prior-preserving battle learner · not yet updated in this iteration",
             choice=(
-                "No active choice · next: exact private schedule freeze, then train outcomes"
+                "No active choice · next: train-only update, then held-development compare"
             ),
             confidence=None,
-            decisions=1,
+            decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
@@ -150,17 +151,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             phase="catalog",
             zero_shot_completed=causal_train_examples,
             zero_shot_total=60,
-            adaptation_completed=0,
-            adaptation_total=0,
-            sealed_completed=0,
-            sealed_total=1,
+            adaptation_completed=fits,
+            adaptation_total=6,
+            sealed_completed=unseen,
+            sealed_total=5,
             predictions_committed=False,
-            heading="Lineage-clustered causal curriculum",
-            eyebrow="Red short scenarios · cluster split · Crystal",
+            heading="Authenticated three-family learner curriculum",
+            eyebrow="Red snapshots · disjoint lineages · Crystal transfer later",
             counter_labels=(
-                "Settled Red causal train examples",
-                "Held-out Red lineage result",
-                "Zero-shot Crystal result",
+                "Authentic causal train examples",
+                "Model fits",
+                "Untouched Red comparisons",
             ),
         ),
         events=(
@@ -183,20 +184,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             (
-                "Curriculum · integration 8 outcomes · at least 4 train lineages · at least 4 "
-                "portable kinds · scale minimum 60 · selected arms only"
+                "Curriculum order · bounded battle learner first · local navigation second · "
+                "party development third · composition only after each skill has measured support"
             ),
             (
-                "Passed census · train 8/8 lineages · development 4/4 untouched lineages · all "
-                "7 option kinds in both · overlap 0 · schedule 35c00f38… · effects 0"
+                "Evaluation boundary · immutable disjoint train/development snapshot lineages · "
+                "timing variants from one snapshot remain one cluster"
             ),
             (
-                "Fit guard · actual Red feature rank 16 · distinct rows minimum 50 · candidate "
-                "success minimum 50% · development targets excluded"
+                "Fit guard · train outcomes only · selected actions only · no teacher-choice "
+                "targets · development outcomes excluded from fitting"
             ),
             (
-                "Evaluation · untouched upstream lineages · bounded cluster weights · frozen "
-                "random + cost-only + myopic controls · cluster-level endpoint"
+                "Decision rule · retain either a measured improvement or a typed rejection; "
+                "flat outcomes and no discordant advantage end the iteration"
             ),
             (
                 "First causal terminal · settled negative train example · selected-only target · "
@@ -223,8 +224,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Clustered contract · immutable lineage partitions · private schedule reopens "
-                "exactly · variable-size menus · selected outcomes only · teacher labels 0"
+                "Scenario contract · authenticated snapshots · title-neutral observations and "
+                "actions · explicit interventions · retained outcomes · teacher labels 0"
             ),
         ),
     )

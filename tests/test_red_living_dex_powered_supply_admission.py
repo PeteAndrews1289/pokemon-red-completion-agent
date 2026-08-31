@@ -152,7 +152,10 @@ def test_one_terminal_train_failure_remains_in_denominator_and_can_pass(
     assert bundle.admission.qualification_passed is True
     assert bundle.failures[0].assignment_id == plan.assignments[0].assignment_id
     assert bundle.failures[0].retry_allowed is False
-    assert bundle.failures[0].effects_known is False
+    assert bundle.failures[0].failure_stage == "target_conditioning"
+    assert bundle.failures[0].effects_known is True
+    assert bundle.failures[0].controller_actions is not None
+    assert bundle.failures[0].emulator_frames is not None
 
 
 def test_missing_assignment_never_becomes_an_implicit_failure(

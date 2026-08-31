@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_semantics import (
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.red_battle_outcome_runtime import (
     collect_red_battle_outcome_example,
+    prepare_red_battle_outcome_capture,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -44,6 +45,7 @@ def _raw() -> RawGameState:
 @dataclass
 class Session(AbstractContextManager["Session"]):
     loaded: list[bytes]
+    events: list[str] | None = None
 
     def __enter__(self) -> Session:
         return self
@@ -53,6 +55,8 @@ class Session(AbstractContextManager["Session"]):
 
     def load_state_bytes(self, payload: bytes) -> None:
         self.loaded.append(payload)
+        if self.events is not None:
+            self.events.append("load")
 
     def press(self, button: str) -> None:
         del button
@@ -92,15 +96,25 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     loaded: list[bytes] = []
     selected_slots: list[int] = []
     retained: list[tuple[int, BattleTurnOutcome]] = []
+    events: list[str] = []
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_battle_outcome_runtime._prepare_loaded_boundary",
         lambda capture, reader: _prepared(),
     )
 
+    committed = prepare_red_battle_outcome_capture(
+        capture,
+        session_factory=lambda: Session(loaded),
+    )
+    assert committed == _prepared()
+    assert loaded == [state]
+    loaded.clear()
+
     def execute(reader, executor, **kwargs):  # type: ignore[no-untyped-def]
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
+        events.append(f"execute:{kwargs['selected_slot']}")
         return BattleTurnExecution(
             _raw(),
             _raw(),
@@ -138,7 +152,10 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
 
     collection = collect_red_battle_outcome_example(
         capture,
-        session_factory=lambda: Session(loaded),
+        session_factory=lambda: Session(loaded, events),
+        candidate_claim_sink=lambda candidate_index: events.append(
+            f"claim:{candidate_index}"
+        ),
         outcome_sink=lambda candidate_index, result: retained.append(
             (candidate_index, result)
         ),
@@ -156,3 +173,12 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     assert collection.public_dict()["teacher_queries"] == 0
     assert collection.public_dict()["full_game_replays"] == 0
     assert collection.public_dict()["counterfactual_pre_attack_frames"] == 2_048
+    assert events == [
+        "load",
+        "claim:0",
+        "load",
+        "execute:1",
+        "claim:2",
+        "load",
+        "execute:3",
+    ]

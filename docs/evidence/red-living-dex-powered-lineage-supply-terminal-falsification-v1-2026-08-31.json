@@ -1,0 +1,64 @@
+{
+  "decision": {
+    "clean_power_successor_factory_allowed": false,
+    "factory_retired": true,
+    "fixed_route_repair_allowed": false,
+    "next_development_loop": "short_authenticated_snapshot_scenarios",
+    "retry_allowed": false
+  },
+  "diagnostic_integrity": {
+    "admission_downgraded_known_runtime_effects": true,
+    "repair_scope": "retain_authenticated_failure_stage_actions_and_frames_without_route_changes"
+  },
+  "failure_taxonomy": {
+    "additional_static_checkpoint_profile_incompatibilities": 1,
+    "conditioning_failures": {
+      "story_funding_location_mismatch": 1,
+      "storage_resupply_offer_unavailable": 2
+    },
+    "setup_teacher_failures": {
+      "cerulean_accuracy_reset_menu_state": 3,
+      "diglett_capture_without_living_catcher": 1,
+      "erika_inventory_cleanup": 2,
+      "mt_moon_required_trigger_interrupted_by_wild_battle": 1,
+      "mt_moon_required_zubat_pp_gate": 1,
+      "route_3_fainted_active_battler": 1
+    }
+  },
+  "learning_counters": {
+    "authority_promotions": 0,
+    "causal_train_examples_after": 18,
+    "causal_train_examples_before": 18,
+    "crystal_transfer_results": 0,
+    "learner_labels": 0,
+    "learner_outcomes": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "protected_access": {
+    "crystal_executions": 0,
+    "full_game_retries": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "sealed_red_evaluations": 0
+  },
+  "schema": "pokemon.red.living-dex-powered-lineage-supply-terminal-falsification.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33369612082,
+    "git_commit": "56b295280355026971ba8dcabdb68d35bbbe961a"
+  },
+  "status": "bounded_factory_falsified_zero_roots_lane_closed",
+  "tranche": {
+    "assignments_claimed": 12,
+    "assignments_succeeded": 0,
+    "attempts_failed": 12,
+    "controller_actions": 208777,
+    "emulator_frames": 32312041,
+    "qualification_passed": false,
+    "roots_admitted": 0,
+    "total_assignments": 12
+  }
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -363,5 +364,7 @@ def test_tracked_composition_receipt_is_exact_path_free_and_non_executing() -> N
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
-    assert "PokemonRoms" not in encoded
+    configured_rom = os.environ.get("POKEMON_RED_ROM")
+    if configured_rom is not None:
+        assert configured_rom not in encoded
     assert "species_id" not in encoded

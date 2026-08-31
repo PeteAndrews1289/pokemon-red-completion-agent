@@ -6,7 +6,60 @@ Status: active operating assignment as of 2026-08-31. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and the bounded twelve-world supply gate
+## Current override: Codex owns publication and one claim-first battle cycle
+
+Codex has locally replaced the failed full-route supply strategy with one bounded battle
+train/development loop. The freezer authenticates both snapshots to historical catalog roots and
+binds exact source, scripts, ROM, CPython/PyBoy, NumPy, prior, timing, objective, and fit settings.
+The runner first read-only authenticates both exact battle menus and rejects a pair unless each has
+at least two supported raw choices and two numerically distinct frozen-prior representations. That
+opens development metadata/features only. It then claims the upstream-plus-materialized train root
+pair before input, claims every activated candidate durably before its session, digest-joins
+retained outcomes to the objects used by learning, and fits train only. Development is claimed and
+executed only after an informative model is durable; its predictions precede outcomes. Flat
+evidence, zero discordance, and no advantage are terminal typed rejections. The comparison is
+prospectively held development evidence, not a claim of historical untouchedness, promotion,
+sealed evaluation, or transfer.
+
+The same one-way rule survives a power loss. The deterministic typed artifact is identity-sealed
+before input and retains durable root, candidate, outcome, model, prediction, evaluation, and
+terminal records. Reconciliation can only preserve the authenticated canonical prefix and close
+the attempt as failed; it cannot replay. If only stdout was lost after completion, the inspector
+re-derives the terminal projection from those retained joins without opening the emulator or
+fitting again. Failed, contradictory, or namespace-ambiguous recovery has no dashboard authority.
+
+Codex remains sole editor, execution owner, adjudicator, and publisher. Claude's next useful role
+is a read-only statistical/leakage audit of the path-free receipt after the one cycle. Antigravity's
+is a read-only architecture/Crystal-portability audit of the same receipt and supported feature
+boundary. Neither reviewer blocks publication or ordinary engineering, sees private paths, runs
+the emulator, fits, or grants authority.
+
+Next publish this exact source and require green exact-main CI. Then select the pair outcome-blind,
+materialize/freeze it, execute exactly once, and reorient at any terminal. Do not substitute a flat
+or rejected capture, retry a claimed root or candidate, increment the unseen counter, repair the
+teacher route, open sealed Red or Crystal, or replay the game. The board remains **train 18 · fits
+5 · verified development outcomes 5 · unseen comparisons 4 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the bounded learner-scenario loop
+
+Exact main `56b29528` passed CI `33369612082/1`, then the sole powered supply tranche failed
+**0/12** after 208,777 actions and 32,312,041 frames. All twelve identities are consumed. Nine
+attempts failed in setup teaching and three in conditioning; no model action, learner outcome,
+fit, authority, sealed Red access, or Crystal access occurred. The factory is retired without
+retry, replacement, or route repair.
+
+Codex is the sole editor and owns the next measured battle snapshot train-to-development loop,
+its tests, evidence, model update, comparison, documentation, publication, and reorientation.
+Claude's next useful role is a read-only statistical/leakage review after the concrete comparison.
+Antigravity's is a read-only architecture/intervention/Crystal-portability challenge. Their advice
+is not execution authority and their availability does not pause ordinary development.
+
+The next session targets one causal train example, one fit only if train is informative, and one
+verified development outcome while the unseen counter remains four; otherwise retain a typed
+rejection and stop. Do not run another clean-power training factory, harden the teacher
+route, retry consumed work, open sealed Red, execute Crystal, or replay the full game.
+
+## Previous override: Codex owned publication and the bounded twelve-world supply gate
 
 Exact main `0ceece13` publishes the 103-lineage deficit. Codex has locally implemented the
 prospective 3-train / 8-development / 1-contingency clean-power supply plan, at-most-once runtime,

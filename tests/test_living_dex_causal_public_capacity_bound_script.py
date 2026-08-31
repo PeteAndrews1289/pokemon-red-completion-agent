@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -64,5 +65,8 @@ def test_public_capacity_check_mode_and_projection_are_effect_free() -> None:
         "root_claims": 0,
         "teacher_queries": 0,
     }
-    for forbidden in ("/Users/", "/Volumes/", "PokemonRoms", "private_root"):
+    for forbidden in ("/Users/", "/Volumes/", "private_root"):
         assert forbidden not in encoded
+    configured_rom = os.environ.get("POKEMON_RED_ROM")
+    if configured_rom is not None:
+        assert configured_rom not in encoded

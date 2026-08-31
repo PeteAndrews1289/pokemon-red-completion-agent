@@ -313,15 +313,32 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "| Time box | 1 session / 8 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == "cross-title-living-dex-causal-example-pipeline-v1"
+    assert state.active_lane["id"] == "cross-title-authenticated-scenario-curriculum-v1"
     assert state.active_lane["kind"] == "learning"
     assert state.active_lane["maintenance_unblocks"] is None
+    prohibited = set(state.active_lane["prohibited_actions"])
+    assert "unexecuted_counterfactual_target" in prohibited
+    assert "unmeasured_action_target" in prohibited
+    assert "counterfactual_target" not in prohibited
+    assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 60, "partition": "train"}
+        {"kind": "causal_train_example", "minimum": 19, "partition": "train"},
+        {"kind": "model_fit", "minimum": 6, "partition": "train"},
+        {
+            "kind": "verified_outcome_example",
+            "minimum": 6,
+            "partition": "development",
+        },
     ]
-    assert len(state.retired_lanes) == 59
-    assert focus_progress_fraction(state) == pytest.approx(18 / 60)
-    assert focus_scorecard(state) == (("Causal Train Example · train", 18, 60),)
+    assert len(state.retired_lanes) == 60
+    assert focus_progress_fraction(state) == pytest.approx(
+        ((18 / 19) + (5 / 6) + (5 / 6)) / 3
+    )
+    assert focus_scorecard(state) == (
+        ("Causal Train Example · train", 18, 19),
+        ("Model Fit · train", 5, 6),
+        ("Verified Outcome Example · development", 5, 6),
+    )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 5
     assert state.progress["unseen_comparisons"] == 4
@@ -336,6 +353,57 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+@pytest.mark.parametrize(
+    "counter",
+    (
+        "causal_train_examples",
+        "model_fits",
+        "unseen_comparisons",
+        "authority_promotions",
+        "transfer_results",
+    ),
+)
+def test_active_dashboard_counters_cannot_out_run_their_evidence_projection(
+    counter: str,
+) -> None:
+    document = _document()
+    lane = _active(document)
+    progress = lane["progress"]
+    assert isinstance(progress, dict)
+    progress[counter] = 999
+
+    with pytest.raises(ProductFocusError, match="typed evidence projection"):
+        validate_product_focus_document(document)
+
+
+def test_active_evidence_prefix_cannot_change_without_a_counter_projection() -> None:
+    document = _document()
+    lane = _active(document)
+    progress = lane["progress"]
+    assert isinstance(progress, dict)
+    evidence = progress["evidence"]
+    assert isinstance(evidence, list)
+    evidence.append(dict(evidence[-1]))
+    appended = evidence[-1]
+    assert isinstance(appended, dict)
+    appended["path"] = "docs/evidence/unprojected-result.json"
+
+    with pytest.raises(ProductFocusError, match="supported counter projection"):
+        validate_product_focus_document(document)
+
+
+def test_active_lane_rename_cannot_bypass_the_counter_projection() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["id"] = "renamed-dashboard-lane"
+    progress = lane["progress"]
+    assert isinstance(progress, dict)
+    progress["causal_train_examples"] = 999
+
+    with pytest.raises(ProductFocusError, match="typed evidence projection"):
+        validate_product_focus_document(document)
 
 
 def test_first_authentic_red_collection_choice_is_tracked_without_overclaim() -> None:
@@ -1411,7 +1479,11 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Causal Train Example · train: 18/60",)
+    assert rows == (
+        "Causal Train Example · train: 18/19",
+        "Model Fit · train: 5/6",
+        "Verified Outcome Example · development: 5/6",
+    )
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1637,15 +1709,52 @@ def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
         validate_product_focus_document(document)
 
 
-def test_development_cannot_silently_open_a_protected_action() -> None:
+@pytest.mark.parametrize(
+    "protected_action",
+    (
+        "cloned_or_rehashed_root_independence",
+        "consumed_trial_retry",
+        "crystal_execution",
+        "full_game_replay",
+        "model_fit_on_development",
+        "routine_clean_power_teacher_factory",
+        "sealed_red_evaluation",
+        "teacher_choice_or_fallback",
+        "teacher_route_hardening",
+        "unexecuted_counterfactual_target",
+        "unmeasured_action_target",
+    ),
+)
+def test_development_cannot_silently_open_a_protected_action(
+    protected_action: str,
+) -> None:
     document = _document()
     lane = _active(document)
     lane["rigor"] = "development"
     prohibited = lane["prohibited_actions"]
     assert isinstance(prohibited, list)
-    prohibited.remove("full_game_replay")
+    prohibited.remove(protected_action)
 
     with pytest.raises(ProductFocusError, match="protected-action prohibition"):
+        validate_product_focus_document(document)
+
+
+@pytest.mark.parametrize(
+    "forward_action",
+    (
+        "Launch a clean-power factory for more rows.",
+        "Perform teacher route hardening before training.",
+        "Run one full-game replay to see whether the local skill works.",
+    ),
+)
+def test_active_forward_plan_cannot_schedule_its_prohibited_maintenance(
+    forward_action: str,
+) -> None:
+    document = _document()
+    lane = _active(document)
+    lane["next_decision"] = forward_action
+
+    with pytest.raises(ProductFocusError, match="active forward plan"):
         validate_product_focus_document(document)
 
 
@@ -1859,33 +1968,40 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(18 / 60)
+    assert public["stage_progress"] == pytest.approx(
+        ((18 / 19) + (5 / 6) + (5 / 6)) / 3
+    )
     assert public["actions"] == 0
-    assert "Clustered Red curriculum" in public["stage"]
+    assert "Authenticated battle learner loop" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
         "completed": 18,
         "total": 60,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 5, "total": 6}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
+    assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
+        "zero_shot": "Authentic causal train examples",
+        "adaptation": "Model fits",
+        "sealed_test": "Untouched Red comparisons",
+    }
+    assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
+    assert public["model"]["decisions"] == 0  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Capacity passed: 8 train lineages plus 4 untouched development lineages" in encoded
-    assert "Lineage-clustered causal curriculum" in encoded
-    assert "Causal Train Example 18/60" in encoded
-    assert "Settled Red causal train examples" in encoded
-    assert "Held-out Red lineage result" in encoded
-    assert "Zero-shot Crystal result" in encoded
-    assert "train 8/8 lineages" in encoded
-    assert "development 4/4 untouched lineages" in encoded
-    assert "all 7 option kinds in both" in encoded
-    assert "overlap 0" in encoded
-    assert "schedule 35c00f38" in encoded
-    assert "integration 8 outcomes" in encoded
-    assert "at least 4 train lineages" in encoded
-    assert "actual Red feature rank 16" in encoded
-    assert "bounded cluster weights" in encoded
-    assert "random + cost-only + myopic" in encoded
-    assert "selected outcomes only" in encoded
+    assert "The 0/12 clean-power supply factory is retired" in encoded
+    assert "Authenticated three-family learner curriculum" in encoded
+    assert "Causal Train Example 18/19" in encoded
+    assert "Model Fit 5/6" in encoded
+    assert "Verified Outcome Example 5/6" in encoded
+    assert "Authentic causal train examples" in encoded
+    assert "Model fits" in encoded
+    assert "Untouched Red comparisons" in encoded
+    assert "bounded battle learner first" in encoded
+    assert "immutable disjoint train/development snapshot lineages" in encoded
+    assert "train outcomes only" in encoded
+    assert "development outcomes excluded from fitting" in encoded
+    assert "flat outcomes and no discordant advantage end the iteration" in encoded
+    assert "authenticated snapshots" in encoded
+    assert "title-neutral observations and actions" in encoded
     assert "teacher labels 0" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
@@ -1898,6 +2014,16 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "logical atomic 0" in encoded
     assert "actions 945" in encoded
     assert "frames 42,001" in encoded
+    assert "Capacity passed" not in encoded
+    assert "private schedule freeze" not in encoded
+    assert "Unfitted powered causal" not in encoded
+    assert "Lineage-clustered causal curriculum" not in encoded
+    assert "Passed census" not in encoded
+    assert "schedule 35c00f38" not in encoded
+    assert "integration 8 outcomes" not in encoded
+    assert "actual Red feature rank 16" not in encoded
+    assert "bounded cluster weights" not in encoded
+    assert "random + cost-only + myopic" not in encoded
     assert public["model"]["teacher_queries"] == 0  # type: ignore[index]
     assert public["model"]["fallbacks"] == 0  # type: ignore[index]
     assert "/Users/" not in encoded

@@ -1,6 +1,60 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 31: turn the measured deficit into an independent-world factory
+## August 31: replace the failed factory with one observable learning loop
+
+The next iteration is deliberately small: one authenticated Red battle for training and one
+prospectively held battle for development. Before any root is consumed, the system opens both
+boundaries read-only and proves that each offers at least two supported actions that remain
+numerically distinct inside the frozen nonlinear model. That prevents another expensive run from
+discovering only after execution that its “choice” was illegal, duplicated, or impossible for the
+representation to distinguish.
+
+Once admitted, the loop is one way. It claims the exact upstream-plus-snapshot root before input,
+claims every activated move before its restored session, measures every activated consequence, and
+requires the retained outcome bytes to be the same outcome given to learning. A flat training menu
+stops without claiming or executing development. An informative menu permits one train-only,
+prior-preserving update; only then are both development predictions committed and all development
+branches measured. No discordance or no advantage rejects the candidate. Nothing here grants
+gameplay authority, opens sealed Red or Crystal, or pretends the iterative comparison is a final
+untouched exam.
+
+The loop also survives the kind of power loss that repeatedly interrupted earlier runs. Its
+identity is sealed before play and each claim, outcome, model, prediction, evaluation, and terminal
+is durably retained. A crash can be reconciled only into a permanent failed attempt; it cannot
+quietly retry a move. If the game finished and only the console result disappeared, an action-free
+inspector reconstructs the receipt from retained records and rejects any contradiction. Recovery
+therefore checks evidence instead of becoming another hidden execution path.
+
+The project also closed a reporting loophole. The dashboard can no longer display arbitrary
+learning totals merely because some cited files exist and hash correctly. The current evidence
+prefix and its counters are now one checked projection; a new receipt must gain a strict
+schema-aware contribution rule before any number moves. The honest board remains **causal train
+18/19 · model fits 5/6 · verified development 5/6 · unseen 4 · authority 0 · transfer 0** until
+the bounded loop produces a real terminal.
+
+## August 31: twelve expensive empty classrooms force the project back to learning
+
+The independent-world factory received its fairest possible test: exact published source, green
+CI, twelve roles frozen before play, and no retries. It produced **zero usable roots**. All twelve
+assignments were consumed after 208,777 controller actions and 32,312,041 frames. Nine failed while
+the deterministic teacher was still building the starting world; three failed while conditioning
+the intended decision state. The model never got a turn.
+
+That distinction matters. This was not a model failure, and repairing twelve routes would not make
+the model smarter. It falsified the idea that one clean-power Red playthrough should manufacture
+each training row. The factory is now retired, its aggregate evidence is preserved, and CI rejects
+an active development plan that schedules another routine clean-power teacher factory, route
+hardening cycle, or full replay.
+
+The next chapter returns to the model-first plan: restore an authenticated nonsealed snapshot,
+measure competing actions, update the learner on train lineages, and compare it with a frozen
+baseline on prospectively held Red development lineages. Battle goes first; navigation and party development follow
+through the same bounded interface. A rejected update is honest progress because it tells us the
+representation or scenario distribution is wrong in minutes rather than after another overnight
+route. The score remains **18/60 causal examples, model fits 5/6 for the next decision, unseen
+comparisons 4/5, authority 0, transfer 0**.
+
+## Previous August 31 checkpoint: turn the measured deficit into an independent-world factory
 
 The 103-lineage deficit is unchanged: 22 train, 78 development, and three contingency lineages
 remain missing. This engineering session converted that failure into an executable but still-unrun

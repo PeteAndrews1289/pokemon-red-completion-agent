@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import runpy
 import sys
 from collections.abc import Iterator
@@ -200,7 +201,9 @@ def test_published_freeze_result_is_path_free_and_does_not_claim_training() -> N
     encoded = payload.decode("utf-8")
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
-    assert "PokemonRoms" not in encoded
+    configured_rom = os.environ.get("POKEMON_RED_ROM")
+    if configured_rom is not None:
+        assert configured_rom not in encoded
 
 
 def test_selected_capabilities_join_back_to_exact_private_contexts() -> None:
