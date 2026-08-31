@@ -1,5 +1,38 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: building the classroom factory
+
+**Visual:** Twelve clean-power cartridges appear in a row: three blue **TRAIN**, eight gold
+**DEVELOPMENT**, and one gray **CONTINGENCY**. Stamp every cartridge **ROLE + SEED + MENU + STATE
+PROFILE FIXED BEFORE INPUT**. Keep the controller disconnected while the plan freezes.
+
+**Voiceover:** “The counter said we were short 103 independent games. Copying a save would be
+easy, but it would teach us nothing about generalization. So we built a factory that starts each
+classroom from clean power and assigns its role before the first button press.”
+
+**Visual:** Connect the controller. Each cartridge moves through **CLAIM → CLEAN POWER → SETUP
+TEACHER → CONDITION → ONE TERMINAL SAVE → ACTION-FREE AUTHENTICATION**. Cross out any failed
+cartridge but leave it in place. Put a permanent **NO RETRY** seal over the whole row.
+
+**Voiceover:** “The setup teacher reaches a useful decision boundary, but it never tells the
+learner which option is right and it records no outcome. A failure stays visible. The factory
+passes only if at least nine of twelve roots survive, including two training roots, six untouched
+development roots, and the contingency.”
+
+**Visual:** Light a threshold board **9/12 · ROLE FLOORS 2/6/1**. Label the roots
+**CLASSROOM-FACTORY QUALIFICATION — NOT TRAINING DATA**. Then show them entering the old capacity
+counter while the original 103-lineage deficit stays visible until the new census recalculates it.
+
+**Voiceover:** “Even a pass does not fill the room. It proves that genuine new classrooms can be
+created and counted. We then use measured yield to size a separate population run, prove the final
+36/100/3 seating chart, and only then resume outcomes and powered training.”
+
+**On-screen rail:** `PUBLISH → GREEN EXACT MAIN → FREEZE 12 ONCE → RUN ONCE, NO RETRIES → ADMIT
+ALL TERMINALS → INTEGRATION/YIELD RECENSUS → SIZE POPULATION → FINAL CAPACITY PASS → OUTCOMES →
+POWERED MODEL → UNTOUCHED RED → CRYSTAL`
+
+**On-screen score:** `TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the empty desks were real
 
 **Visual:** The published counter receives a green stamp: **MAIN F1FC3812 · CI 33355147814 ✓**.

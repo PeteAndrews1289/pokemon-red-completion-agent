@@ -7,6 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the classroom factory exists, but has not run
+
+The counter said the project was short 103 independent classrooms. The tempting shortcut would
+be to copy saves, perturb timing, and call the new hashes new experience. Instead, the next machine
+now starts twelve worlds from clean power and assigns their roles before the first button press:
+three for lessons, eight for the untouched exam, and one contingency.
+
+Every cartridge receives a frozen seed, menu target, and state-shape request. It gets one attempt.
+If power fails or setup misses its boundary after the durable claim, that crossed-out cartridge
+stays in the picture forever. The factory passes only if nine roots survive, including two lesson
+roots, six exam roots, and the contingency. Authentication rejects repeated lineages, trajectories,
+physical roots, states, and envelopes—not merely identical filenames.
+
+This is still not training. The setup teacher creates a useful classroom but never labels the
+learner's choice, runs an option outcome, makes a model prediction, or fits a model. No real world
+has run during this engineering chapter. After publication and green exact-main CI, the twelve
+worlds run once, every terminal is admitted, and the capacity counter checks that the new roots
+genuinely count. Even a perfect 12/12 leaves most of the original 103-lineage deficit; its purpose
+is to measure a factory before sizing the population order.
+
+That distinction keeps the long story honest. Red is producing independent experience for a
+title-neutral living-Pokédex model; Crystal remains the first transfer falsifier. The score stays
+**CAUSAL TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
 ## Current checkpoint: the room really is too small
 
 The attendance counter is now published, independently rebuilt, and used exactly once. It opened

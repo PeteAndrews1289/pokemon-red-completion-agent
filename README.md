@@ -6,7 +6,23 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 31, 2026): the exact census falsified current powered-V2
+> **Current product focus (August 31, 2026): the bounded independent-world factory is implemented;
+> publish before running it.** Exact main `0ceece13` preserves the measured 103-lineage deficit.
+> The new powered supply rail prospectively freezes twelve clean-power Red worlds—three train,
+> eight development, and one contingency—with immutable roles, seeds, target menus, conditioning
+> profiles, source, runner, conditioner, and exact CPython/PyBoy runtime identities. A plan-scoped
+> lock prevents admission from consuming a live write. Worlds cannot retry after durable claim;
+> every claimed success, failure, or interruption stays in the denominator.
+>
+> Action-free admission requires **9/12 roots, including 2 train, 6 development, and the
+> contingency**, and rejects cloned lineages, trajectories, states, envelopes, or physical roots.
+> Passing qualifies only the factory's bounded yield. It collects no option outcome and fits no
+> model. Next publish, require green exact-main CI, freeze the one plan, run each world once, admit
+> all terminals, and recensus before any population scale. See the
+> [supply contract](docs/red-living-dex-powered-lineage-supply.md). The board remains **causal
+> train 18/60 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
+
+> **Previous product focus (August 31, 2026): the exact census falsified current powered-V2
 > capacity; build independent lineage supply before collecting another outcome.** PR `#119` merged
 > as exact main `f1fc3812`, and CI `33355147814/1` passed. The sole action-free census found 43
 > unused Red lineages, with only **14/36 train, 28/72 train attempts, 22/100 same-reset

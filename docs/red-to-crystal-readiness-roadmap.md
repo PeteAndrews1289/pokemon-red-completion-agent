@@ -1,6 +1,6 @@
 # Red-to-Crystal readiness roadmap
 
-Status: active mission-level execution plan as of 2026-08-30, adopted after independent Claude and
+Status: active mission-level execution plan as of 2026-08-31, adopted after independent Claude and
 Antigravity review and Codex adjudication. Read
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md) first. The active product state still controls
@@ -58,8 +58,12 @@ The board is therefore:
 
 Eighteen examples and the complete bounded successor prove that execution throughput is not the
 current bottleneck. They are not enough to support a powered model-quality, gameplay, completion,
-or transfer claim. The action-free clustered V2 design and independent review are now complete;
-the next falsifier is its action-free finite-capacity census, not another fit or gameplay batch.
+or transfer claim. The action-free clustered V2 design and independent review are complete, and
+the exact census has since proved the existing bank short by 103 lineages. A bounded clean-power
+supply rail is now locally implemented but unrun: twelve prospectively partitioned worlds must
+first demonstrate 9/12 yield with train/development/contingency floors 2/6/1. Only admission and an
+integration/yield recensus may follow. A later population plan must still fill and prove the final
+36/100/3 capacity before outcomes resume.
 
 ## Evidence ladder
 

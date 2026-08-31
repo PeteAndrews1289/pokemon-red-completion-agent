@@ -74,6 +74,9 @@ from pokemon_red_completion.red_goal_manager import (
     PokemonRedGoalStateAdapter,
     RedGoalObservation,
 )
+from pokemon_red_completion.red_living_dex_powered_supply_admission import (
+    RedLivingDexPoweredAdmittedRoot,
+)
 from pokemon_red_completion.red_living_dex_provider_plan import (
     RedLivingDexActionFreeRootObservation,
     derive_red_living_dex_provider_corridors,
@@ -642,6 +645,74 @@ def _observe_supplemental_candidates(
         candidates.append(observation)
         state.eligible_root_pool += 1
         state.eligible_supplemental_roots += 1
+    return tuple(candidates)
+
+
+def _observe_powered_supply_candidates(
+    admitted_roots: tuple[RedLivingDexPoweredAdmittedRoot, ...],
+    *,
+    rom_path: Path,
+    rom_bytes: bytes,
+    runtime: RuntimeIdentity,
+    claim_registry: Path,
+    state: _DiagnosticState,
+) -> tuple[RedLivingDexActionFreeRootObservation, ...]:
+    """Observe receipt-authenticated V2 roots with immutable ownership."""
+
+    if not isinstance(admitted_roots, tuple) or any(
+        not isinstance(item, RedLivingDexPoweredAdmittedRoot)
+        for item in admitted_roots
+    ):
+        raise ProviderPlanFreezeError("powered_supply_root_authentication")
+    candidates: list[RedLivingDexActionFreeRootObservation] = []
+    for admitted in admitted_roots:
+        admitted.__post_init__()
+        root = admitted.root
+        if not all(
+            root_claim_is_available(claim_registry, digest)
+            for digest in (
+                root.root_consumption_sha256,
+                root.physical_root_sha256,
+            )
+        ):
+            continue
+
+        def observe_powered_goal(
+            reader: PokemonRedStateReader,
+            _running: PyBoyAdapter,
+            envelope: CapturedProgressEnvelope = admitted.envelope,
+        ) -> RedGoalObservation:
+            return PokemonRedGoalStateAdapter(
+                reader,
+                CapturedPokemonRedObserver(
+                    reader,
+                    COMPLETION_QUEST,
+                    envelope,
+                ),
+                COMPLETION_QUEST,
+            ).observe()
+
+        observation = _observe_root(
+            root,
+            rom_path=rom_path,
+            rom_bytes=rom_bytes,
+            runtime=runtime,
+            state=state,
+            observe_goal=observe_powered_goal,
+            independence_lineage_sha256=canonical_sha256(
+                {
+                    "root_lineage_id": admitted.receipt.root_lineage_id,
+                    "schema": "pokemon.red.private-provider-capacity-lineage.v1",
+                }
+            ),
+            prospective_independence_authenticated=True,
+            cluster_partition=admitted.receipt.partition,
+        )
+        if observation is None:
+            state.ineligible_control_contexts += 1
+            continue
+        candidates.append(observation)
+        state.eligible_root_pool += 1
     return tuple(candidates)
 
 

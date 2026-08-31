@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Generalized the clean-power Red episode generator into a powered V2 lineage-supply rail bound
+  to the published 103-lineage deficit. The unrun qualification plan fixes twelve worlds before
+  controller input—3 train, 8 development, and 1 contingency—with exact generator/conditioner
+  identities, exact CPython/PyBoy runtime identity, ten conditioning profiles, at-most-once claims,
+  terminal failure retention, and no
+  learner label, outcome, prediction, or fit. Added action-free complete-denominator admission,
+  six-way clone detection, reproducible private sealing, capacity-recensus integration, immutable
+  provider partitions, plan-scoped generation/admission locking, post-close identity
+  reauthentication, path-free outputs, adversarial tests, and the public
+  [supply contract](docs/red-living-dex-powered-lineage-supply.md). Qualification requires 9/12
+  roots with role floors 2/6/1; even a pass authorizes only integration/yield recensus and later
+  population sizing. No private plan, ROM, world, teacher, gameplay, or model has run in this
+  engineering session.
+
 - Merged the powered-V2 capacity census as exact main `f1fc3812` and passed push CI
   `33355147814/1` in 18m24s. The sole action-free production scan found 43 unused lineages but
   only 14/36 train, 28/72 train attempts, 22/100 same-reset development, and 0/3 contingency

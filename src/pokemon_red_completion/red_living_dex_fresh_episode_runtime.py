@@ -33,6 +33,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     root_consumption_sha256,
 )
 from pokemon_red_completion.private_artifacts import (
+    CollectionSession,
     EpisodeSummary,
     PrivateArtifactRoot,
 )
@@ -48,6 +49,14 @@ from pokemon_red_completion.red_living_dex_episode_lineage import (
     RedLivingDexFreshEpisodeReceipt,
     expected_red_living_dex_first_controller_input_frame,
 )
+from pokemon_red_completion.red_living_dex_powered_lineage_supply import (
+    RedLivingDexPoweredSupplyAssignment,
+    RedLivingDexPoweredSupplyPlan,
+    RedLivingDexPoweredSupplyReceipt,
+    compose_red_living_dex_powered_supply_runtime_execution_sha256,
+    powered_supply_collection_id,
+    powered_supply_receipt_from_mapping,
+)
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
 )
@@ -55,11 +64,20 @@ from pokemon_red_completion.red_living_dex_setup_recipe import (
 RED_LIVING_DEX_FRESH_EPISODE_ASSIGNMENT_CLAIM_SCHEMA = (
     "pokemon.red.living-dex-fresh-episode-assignment-claim.v1"
 )
+RED_LIVING_DEX_POWERED_SUPPLY_ASSIGNMENT_CLAIM_SCHEMA = (
+    "pokemon.red.living-dex-powered-lineage-supply-assignment-claim.v1"
+)
 RED_LIVING_DEX_FRESH_EPISODE_PRIVATE_ROOT_SCHEMA = (
     "pokemon.red.private-living-dex-fresh-episode-root.v1"
 )
 RED_LIVING_DEX_FRESH_EPISODE_RUNTIME_RESULT_SCHEMA = (
     "pokemon.red.living-dex-fresh-episode-runtime-result.v1"
+)
+RED_LIVING_DEX_POWERED_SUPPLY_PRIVATE_ROOT_SCHEMA = (
+    "pokemon.red.private-living-dex-powered-lineage-supply-root.v1"
+)
+RED_LIVING_DEX_POWERED_SUPPLY_RUNTIME_RESULT_SCHEMA = (
+    "pokemon.red.living-dex-powered-lineage-supply-runtime-result.v1"
 )
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -74,9 +92,7 @@ class RedLivingDexFreshEpisodeRuntimeError(RuntimeError):
     """One fresh episode crossed its one-shot clean-power boundary."""
 
 
-class RedLivingDexFreshEpisodeExecutionFailure(
-    RedLivingDexFreshEpisodeRuntimeError
-):
+class RedLivingDexFreshEpisodeExecutionFailure(RedLivingDexFreshEpisodeRuntimeError):
     """Retain reconciled failure metering without publishing private diagnostics."""
 
     def __init__(
@@ -123,9 +139,7 @@ class RedLivingDexFreshEpisodeProcessAuthority:
 
     def __post_init__(self) -> None:
         if self._token is not _PROCESS_AUTHORITY_TOKEN or self.pid != os.getpid():
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode process authority differs"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode process authority differs")
 
     def consume(self) -> None:
         self.__post_init__()
@@ -136,8 +150,9 @@ class RedLivingDexFreshEpisodeProcessAuthority:
         self._used = True
 
 
-def issue_red_living_dex_fresh_episode_process_authority(
-) -> RedLivingDexFreshEpisodeProcessAuthority:
+def issue_red_living_dex_fresh_episode_process_authority() -> (
+    RedLivingDexFreshEpisodeProcessAuthority
+):
     """Issue at most one episode authority during a Python process lifetime."""
 
     global _PROCESS_AUTHORITY_ISSUED
@@ -168,29 +183,19 @@ class RedLivingDexFreshEpisodeCheckpoint:
                 "fresh-episode teacher stopped at another checkpoint"
             )
         if not isinstance(self.label, str) or not self.label:
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode checkpoint label is absent"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode checkpoint label is absent")
         if (
             type(self.completed) is not int  # noqa: E721
             or type(self.total) is not int  # noqa: E721
             or not 0 < self.completed <= self.total
         ):
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode checkpoint counts differ"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode checkpoint counts differ")
         if (
             not isinstance(self.verified_objective_ids, tuple)
-            or len(set(self.verified_objective_ids))
-            != len(self.verified_objective_ids)
-            or any(
-                not isinstance(item, str) or not item
-                for item in self.verified_objective_ids
-            )
+            or len(set(self.verified_objective_ids)) != len(self.verified_objective_ids)
+            or any(not isinstance(item, str) or not item for item in self.verified_objective_ids)
         ):
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode verified objectives differ"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode verified objectives differ")
 
     def private_dict(self) -> dict[str, object]:
         return {
@@ -221,8 +226,7 @@ class RedLivingDexFreshEpisodeTargetVerification:
                 type(item) is not int or not 0 <= item < 10  # noqa: E721
                 for item in self.compatible_template_ordinals
             )
-            or assignment.target_template_ordinal
-            not in self.compatible_template_ordinals
+            or assignment.target_template_ordinal not in self.compatible_template_ordinals
         ):
             raise RedLivingDexFreshEpisodeRuntimeError(
                 "fresh-episode terminal root missed its declared menu"
@@ -260,9 +264,15 @@ class CleanPowerFreshEpisodeEmulator:
     def __init__(
         self,
         delegate: FreshEpisodeEmulatorDelegate,
-        assignment: RedLivingDexFreshEpisodeAssignment,
+        assignment: (RedLivingDexFreshEpisodeAssignment | RedLivingDexPoweredSupplyAssignment),
     ) -> None:
-        if not isinstance(assignment, RedLivingDexFreshEpisodeAssignment):
+        if not isinstance(
+            assignment,
+            (
+                RedLivingDexFreshEpisodeAssignment,
+                RedLivingDexPoweredSupplyAssignment,
+            ),
+        ):
             raise TypeError("fresh emulator guard needs an assignment")
         assignment.__post_init__()
         if (
@@ -292,18 +302,14 @@ class CleanPowerFreshEpisodeEmulator:
     def frame_count(self) -> int:
         value = self._port.frame_count
         if type(value) is not int or value < 0:  # noqa: E721
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode frame counter differs"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode frame counter differs")
         return value
 
     @property
     def pressed_buttons(self) -> frozenset[str]:
         value = self._port.pressed_buttons
         if not isinstance(value, frozenset):
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode button state differs"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode button state differs")
         return value
 
     @property
@@ -352,12 +358,8 @@ class CleanPowerFreshEpisodeEmulator:
 
     def perform_initial_wait(self) -> None:
         if self._initial_wait_complete or self.frame_count != 0:
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode initial wait was not first"
-            )
-        if self._assignment.initial_wait_frames > (
-            RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES
-        ):
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode initial wait was not first")
+        if self._assignment.initial_wait_frames > (RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES):
             raise RedLivingDexFreshEpisodeRuntimeError(
                 "fresh-episode initial wait exceeds its frame bound"
             )
@@ -382,12 +384,9 @@ class CleanPowerFreshEpisodeEmulator:
         if (
             type(frames) is not int  # noqa: E721
             or frames <= 0
-            or self.frame_count + frames
-            > RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES
+            or self.frame_count + frames > RED_LIVING_DEX_SETUP_MAX_EMULATOR_FRAMES
         ):
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode tick exceeds its frame bound"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode tick exceeds its frame bound")
         before = self.frame_count
         try:
             self._port.advance(frames)
@@ -408,9 +407,7 @@ class CleanPowerFreshEpisodeEmulator:
 
     def press(self, button: str) -> None:
         self._require_running()
-        if self._controller_actions >= (
-            RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS
-        ):
+        if self._controller_actions >= (RED_LIVING_DEX_SETUP_MAX_CONTROLLER_ACTIONS):
             raise RedLivingDexFreshEpisodeRuntimeError(
                 "fresh-episode controller exceeds its action bound"
             )
@@ -460,15 +457,11 @@ class CleanPowerFreshEpisodeEmulator:
 
     def load_state(self, _source: object) -> None:
         self._save_state_loads += 1
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode state restoration is forbidden"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode state restoration is forbidden")
 
     def load_state_bytes(self, _payload: bytes) -> None:
         self._save_state_loads += 1
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode state restoration is forbidden"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode state restoration is forbidden")
 
     def save_state(self, _destination: object) -> None:
         raise RedLivingDexFreshEpisodeRuntimeError(
@@ -495,9 +488,7 @@ class CleanPowerFreshEpisodeEmulator:
             )
         payload = self._port.capture_state_bytes(token=_token)
         if not isinstance(payload, bytes) or not payload:
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode terminal state is absent"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode terminal state is absent")
         self._terminal_state_saves = 1
         self.reconcile_runtime_accounting()
         return payload
@@ -529,13 +520,10 @@ class CleanPowerFreshEpisodeEmulator:
             self.frame_count != self._port.advanced_frames
             or self._metered_frames != self._port.advanced_frames
             or self._controller_actions != self._port.controller_actions
-            or self._metered_controller_events
-            != self._port.controller_events
+            or self._metered_controller_events != self._port.controller_events
             or self._terminal_state_saves != self._port.state_captures
         ):
-            raise RedLivingDexFreshEpisodeRuntimeError(
-                "fresh-episode low-level accounting differs"
-            )
+            raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode low-level accounting differs")
 
     def _require_running(self) -> None:
         if not self._initial_wait_complete:
@@ -584,6 +572,69 @@ class RedLivingDexFreshEpisodeRuntimeResult:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedLivingDexPoweredSupplyTargetVerification:
+    """Action-free proof that one V2 root exposes its declared menu."""
+
+    compatible_template_ordinals: tuple[int, ...]
+    observed_pressure_millionths: tuple[int, ...]
+
+    def verify(self, assignment: RedLivingDexPoweredSupplyAssignment) -> None:
+        if not isinstance(assignment, RedLivingDexPoweredSupplyAssignment):
+            raise TypeError("powered supply verification needs an assignment")
+        assignment.__post_init__()
+        if (
+            not isinstance(self.compatible_template_ordinals, tuple)
+            or tuple(sorted(set(self.compatible_template_ordinals)))
+            != self.compatible_template_ordinals
+            or assignment.target_template_ordinal not in self.compatible_template_ordinals
+            or any(
+                type(item) is not int or not 0 <= item < 15  # noqa: E721
+                for item in self.compatible_template_ordinals
+            )
+            or any(
+                (item < 10) != (assignment.partition == "train")
+                for item in self.compatible_template_ordinals
+            )
+        ):
+            raise RedLivingDexFreshEpisodeRuntimeError(
+                "powered supply root missed its declared partition menu"
+            )
+        if (
+            not isinstance(self.observed_pressure_millionths, tuple)
+            or len(self.observed_pressure_millionths) != 7
+            or any(
+                type(item) is not int or not 0 <= item <= 1_000_000  # noqa: E721
+                for item in self.observed_pressure_millionths
+            )
+        ):
+            raise RedLivingDexFreshEpisodeRuntimeError(
+                "powered supply root pressure vector differs"
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexPoweredSupplyRuntimeResult:
+    """One V2 root plus a path-free receipt pending complete admission."""
+
+    receipt: RedLivingDexPoweredSupplyReceipt
+    root: RedLivingDexAuthenticatedSetupRoot = field(repr=False)
+    artifact_summary: EpisodeSummary
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **self.receipt.public_dict(),
+            "artifact_manifest_sha256": self.artifact_summary.manifest_sha256,
+            "population_scale_authorized": False,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "recensus_required": True,
+            "root_generation_executions": 1,
+            "schema": RED_LIVING_DEX_POWERED_SUPPLY_RUNTIME_RESULT_SCHEMA,
+            "status": "powered_supply_root_generated_pending_complete_tranche_admission",
+        }
+
+
 FreshEpisodeEmulatorFactory = Callable[[], FreshEpisodeEmulatorDelegate]
 FreshEpisodeTeacher = Callable[
     [CleanPowerFreshEpisodeEmulator, RedLivingDexFreshEpisodeAssignment],
@@ -603,6 +654,23 @@ FreshEpisodeTargetVerifier = Callable[
     RedLivingDexFreshEpisodeTargetVerification,
 ]
 FreshEpisodePostCloseVerifier = Callable[[], None]
+PoweredSupplyTeacher = Callable[
+    [CleanPowerFreshEpisodeEmulator, RedLivingDexPoweredSupplyAssignment],
+    RedLivingDexFreshEpisodeCheckpoint,
+]
+PoweredSupplyConditioner = Callable[
+    [CleanPowerFreshEpisodeEmulator, RedLivingDexPoweredSupplyAssignment],
+    None,
+]
+PoweredSupplyTargetVerifier = Callable[
+    [
+        CleanPowerFreshEpisodeEmulator,
+        RedLivingDexPoweredSupplyAssignment,
+        RedLivingDexAuthenticatedSetupRoot,
+        CapturedProgressEnvelope,
+    ],
+    RedLivingDexPoweredSupplyTargetVerification,
+]
 
 
 def execute_red_living_dex_fresh_episode(
@@ -636,9 +704,7 @@ def execute_red_living_dex_fresh_episode(
             "fresh-episode published execution binding differs"
         )
     if _GIT_OID.fullmatch(source_commit) is None:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode source commit differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode source commit differs")
     for value, subject in (
         (source_bundle_sha256, "source bundle"),
         (generator_execution_sha256, "generator execution"),
@@ -709,9 +775,7 @@ def execute_red_living_dex_fresh_episode(
             execution_phase = "target_accounting"
             guarded.reconcile_runtime_accounting()
             execution_phase = "terminal_capture"
-            state_bytes = guarded.capture_terminal_state(
-                _token=_TERMINAL_SAVE_TOKEN
-            )
+            state_bytes = guarded.capture_terminal_state(_token=_TERMINAL_SAVE_TOKEN)
             execution_phase = "root_construction"
             envelope = CapturedProgressEnvelope(
                 state_sha256=hashlib.sha256(state_bytes).hexdigest(),
@@ -732,9 +796,7 @@ def execute_red_living_dex_fresh_episode(
             root = RedLivingDexAuthenticatedSetupRoot(
                 root_consumption_sha256=root_consumption_sha256(
                     state_sha256=hashlib.sha256(state_bytes).hexdigest(),
-                    envelope_sha256=hashlib.sha256(
-                        envelope_bytes
-                    ).hexdigest(),
+                    envelope_sha256=hashlib.sha256(envelope_bytes).hexdigest(),
                 ),
                 state_bytes=state_bytes,
                 envelope_bytes=envelope_bytes,
@@ -765,7 +827,7 @@ def execute_red_living_dex_fresh_episode(
             ):
                 raise RedLivingDexFreshEpisodeRuntimeError(
                     "fresh-episode target verifier returned another type"
-            )
+                )
             verification.verify(assignment)
             execution_phase = "receipt_construction"
             receipt = RedLivingDexFreshEpisodeReceipt(
@@ -776,9 +838,7 @@ def execute_red_living_dex_fresh_episode(
                 episode_id=assignment.episode_id,
                 source_bundle_sha256=assignment.source_bundle_sha256,
                 teacher_execution_sha256=assignment.teacher_execution_sha256,
-                generator_execution_sha256=(
-                    assignment.generator_execution_sha256
-                ),
+                generator_execution_sha256=(assignment.generator_execution_sha256),
                 started_from_clean_power=True,
                 distinct_process_episode=True,
                 parent_state_sha256=None,
@@ -786,14 +846,10 @@ def execute_red_living_dex_fresh_episode(
                 save_state_loads=guarded.save_state_loads,
                 terminal_state_saves=guarded.terminal_state_saves,
                 initial_wait_frames=assignment.initial_wait_frames,
-                first_controller_input_frame=(
-                    guarded.first_controller_input_frame
-                ),
+                first_controller_input_frame=(guarded.first_controller_input_frame),
                 trajectory_prefix_sha256=guarded.teacher_prefix_sha256,
                 target_template_ordinal=assignment.target_template_ordinal,
-                compatible_template_ordinals=(
-                    verification.compatible_template_ordinals
-                ),
+                compatible_template_ordinals=(verification.compatible_template_ordinals),
                 observed_storage_pressure_millionths=(
                     verification.observed_storage_pressure_millionths
                 ),
@@ -813,14 +869,10 @@ def execute_red_living_dex_fresh_episode(
             writer.append(
                 "root",
                 {
-                    "envelope_base64": base64.b64encode(envelope_bytes).decode(
-                        "ascii"
-                    ),
+                    "envelope_base64": base64.b64encode(envelope_bytes).decode("ascii"),
                     "receipt": receipt.public_dict(),
                     "schema": RED_LIVING_DEX_FRESH_EPISODE_PRIVATE_ROOT_SCHEMA,
-                    "state_base64": base64.b64encode(state_bytes).decode(
-                        "ascii"
-                    ),
+                    "state_base64": base64.b64encode(state_bytes).decode("ascii"),
                 },
                 durable=True,
             )
@@ -864,10 +916,274 @@ def execute_red_living_dex_fresh_episode(
         post_close_verify()
 
     if root is None or receipt is None:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode terminal root was not retained"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode terminal root was not retained")
     return RedLivingDexFreshEpisodeRuntimeResult(
+        receipt=receipt,
+        root=root,
+        artifact_summary=writer.summary,
+    )
+
+
+def execute_red_living_dex_powered_supply_episode(
+    plan: RedLivingDexPoweredSupplyPlan,
+    assignment_id: str,
+    *,
+    source_commit: str,
+    source_bundle_sha256: str,
+    generator_execution_sha256: str,
+    runner_sha256: str,
+    runtime_identity_sha256: str,
+    process_authority: RedLivingDexFreshEpisodeProcessAuthority,
+    private_store: PrivateArtifactRoot,
+    collection_session: CollectionSession,
+    claim_registry: Path,
+    emulator_factory: FreshEpisodeEmulatorFactory,
+    setup_teacher: PoweredSupplyTeacher,
+    condition_target: PoweredSupplyConditioner,
+    verify_target: PoweredSupplyTargetVerifier,
+    post_close_verify: FreshEpisodePostCloseVerifier,
+) -> RedLivingDexPoweredSupplyRuntimeResult:
+    """Execute exactly one precommitted V2 supply assignment."""
+
+    if not isinstance(plan, RedLivingDexPoweredSupplyPlan):
+        raise TypeError("powered supply runtime needs its plan")
+    plan.__post_init__()
+    if (
+        source_commit != plan.source_commit
+        or source_bundle_sha256 != plan.source_bundle_sha256
+        or generator_execution_sha256 != plan.generator_execution_sha256
+        or runner_sha256 != plan.generator_runner_sha256
+        or runtime_identity_sha256 != plan.runtime_identity_sha256
+    ):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply published execution binding differs"
+        )
+    if _GIT_OID.fullmatch(source_commit) is None:
+        raise RedLivingDexFreshEpisodeRuntimeError("powered supply source commit differs")
+    for value, subject in (
+        (source_bundle_sha256, "source bundle"),
+        (generator_execution_sha256, "generator execution"),
+        (runner_sha256, "generator runner"),
+        (runtime_identity_sha256, "runtime identity"),
+    ):
+        _require_sha256(value, f"powered supply {subject}")
+    if not isinstance(process_authority, RedLivingDexFreshEpisodeProcessAuthority):
+        raise TypeError("powered supply runtime needs process authority")
+    if not isinstance(private_store, PrivateArtifactRoot):
+        raise TypeError("powered supply runtime needs a validated private store")
+    if not isinstance(collection_session, CollectionSession):
+        raise TypeError("powered supply runtime needs its active collection session")
+    collection_session.require_store(private_store)
+    if collection_session.collection_id != powered_supply_collection_id(plan.plan_sha256):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply collection session differs"
+        )
+    for callback, subject in (
+        (emulator_factory, "emulator factory"),
+        (setup_teacher, "setup teacher"),
+        (condition_target, "target conditioner"),
+        (verify_target, "target verifier"),
+        (post_close_verify, "post-close verifier"),
+    ):
+        if not callable(callback):
+            raise TypeError(f"powered supply runtime {subject} differs")
+    assignment = plan.assignment(assignment_id)
+    process_authority.consume()
+    writer = private_store.begin_episode(assignment.episode_id)
+    guarded: CleanPowerFreshEpisodeEmulator | None = None
+    root: RedLivingDexAuthenticatedSetupRoot | None = None
+    receipt: RedLivingDexPoweredSupplyReceipt | None = None
+
+    with writer:
+        writer.append("assignment", assignment.public_dict(), durable=True)
+        execution_identity_sha256 = (
+            compose_red_living_dex_powered_supply_runtime_execution_sha256(
+                assignment_id=assignment.assignment_id,
+                plan_sha256=plan.plan_sha256,
+                source_commit=source_commit,
+                generator_execution_sha256=generator_execution_sha256,
+                generator_runner_sha256=runner_sha256,
+                runtime_identity_sha256=runtime_identity_sha256,
+            )
+        )
+        with fixed_account_claim_registry_lease(
+            claim_registry,
+            exclusive=True,
+        ):
+            claim = durably_claim_red_living_dex_powered_supply_assignment(
+                claim_registry,
+                assignment_id=assignment.assignment_id,
+                execution_identity_sha256=execution_identity_sha256,
+                plan_sha256=plan.plan_sha256,
+                source_commit=source_commit,
+                runner_sha256=runner_sha256,
+                runtime_identity_sha256=runtime_identity_sha256,
+            )
+        assignment_claim_sha256 = canonical_sha256(claim)
+        writer.append("claim", claim, durable=True)
+        delegate = emulator_factory()
+        guarded = CleanPowerFreshEpisodeEmulator(delegate, assignment)
+        execution_phase = "initial_wait"
+        try:
+            guarded.perform_initial_wait()
+            execution_phase = "setup_teacher"
+            checkpoint = setup_teacher(guarded, assignment)
+            execution_phase = "teacher_accounting"
+            guarded.reconcile_runtime_accounting()
+            execution_phase = "teacher_seal"
+            guarded.seal_teacher_prefix(checkpoint)
+            execution_phase = "checkpoint_retention"
+            writer.append("checkpoint", checkpoint.private_dict(), durable=True)
+            execution_phase = "target_conditioning"
+            condition_target(guarded, assignment)
+            execution_phase = "target_accounting"
+            guarded.reconcile_runtime_accounting()
+            execution_phase = "terminal_capture"
+            state_bytes = guarded.capture_terminal_state(_token=_TERMINAL_SAVE_TOKEN)
+            execution_phase = "root_construction"
+            state_sha256 = hashlib.sha256(state_bytes).hexdigest()
+            envelope = CapturedProgressEnvelope(
+                state_sha256=state_sha256,
+                checkpoint_id=checkpoint.checkpoint_id,
+                checkpoint_label=checkpoint.label,
+                checkpoints_completed=checkpoint.completed,
+                checkpoints_total=checkpoint.total,
+                verified_objective_ids=checkpoint.verified_objective_ids,
+            )
+            envelope_bytes = (
+                json.dumps(
+                    envelope.to_dict(),
+                    ensure_ascii=True,
+                    sort_keys=True,
+                ).encode("ascii")
+                + b"\n"
+            )
+            envelope_sha256 = hashlib.sha256(envelope_bytes).hexdigest()
+            root = RedLivingDexAuthenticatedSetupRoot(
+                root_consumption_sha256=root_consumption_sha256(
+                    state_sha256=state_sha256,
+                    envelope_sha256=envelope_sha256,
+                ),
+                state_bytes=state_bytes,
+                envelope_bytes=envelope_bytes,
+            )
+            receipt_frame_before = guarded.frame_count
+            receipt_actions_before = guarded.controller_actions
+            execution_phase = "target_verification"
+            verification = verify_target(
+                guarded,
+                assignment,
+                root,
+                envelope,
+            )
+            guarded.reconcile_runtime_accounting()
+            if (
+                guarded.frame_count != receipt_frame_before
+                or guarded.controller_actions != receipt_actions_before
+                or guarded.save_state_loads != 0
+                or guarded.terminal_state_saves != 1
+                or guarded.pressed_buttons
+            ):
+                raise RedLivingDexFreshEpisodeRuntimeError(
+                    "powered supply target verification crossed an effect"
+                )
+            if not isinstance(
+                verification,
+                RedLivingDexPoweredSupplyTargetVerification,
+            ):
+                raise RedLivingDexFreshEpisodeRuntimeError(
+                    "powered supply target verifier returned another type"
+                )
+            verification.verify(assignment)
+            execution_phase = "receipt_construction"
+            receipt = RedLivingDexPoweredSupplyReceipt(
+                assignment_id=assignment.assignment_id,
+                plan_sha256=plan.plan_sha256,
+                assignment_claim_sha256=assignment_claim_sha256,
+                role=assignment.role,
+                partition=assignment.partition,
+                root_lineage_id=assignment.root_lineage_id,
+                episode_id=assignment.episode_id,
+                source_bundle_sha256=assignment.source_bundle_sha256,
+                teacher_execution_sha256=assignment.teacher_execution_sha256,
+                generator_execution_sha256=(assignment.generator_execution_sha256),
+                runtime_identity_sha256=assignment.runtime_identity_sha256,
+                started_from_clean_power=True,
+                distinct_process_episode=True,
+                save_state_loads=guarded.save_state_loads,
+                terminal_state_saves=guarded.terminal_state_saves,
+                initial_wait_frames=assignment.initial_wait_frames,
+                first_controller_input_frame=(guarded.first_controller_input_frame),
+                trajectory_prefix_sha256=guarded.teacher_prefix_sha256,
+                conditioning_profile_id=(assignment.conditioning_profile_id),
+                target_template_ordinal=assignment.target_template_ordinal,
+                compatible_template_ordinals=(verification.compatible_template_ordinals),
+                observed_pressure_millionths=(verification.observed_pressure_millionths),
+                root_consumption_sha256=root.root_consumption_sha256,
+                physical_root_sha256=root.physical_root_sha256,
+                terminal_state_sha256=root.state_sha256,
+                terminal_envelope_sha256=root.envelope_sha256,
+                terminal_checkpoint_id=checkpoint.checkpoint_id,
+                controller_actions=guarded.controller_actions,
+                emulator_frames=guarded.frame_count,
+                setup_teacher_executions=1,
+                learner_teacher_queries=0,
+                learner_labels=0,
+                learner_outcomes=0,
+                model_predictions=0,
+                model_fits=0,
+            )
+            execution_phase = "root_retention"
+            writer.append(
+                "root",
+                {
+                    "envelope_base64": base64.b64encode(envelope_bytes).decode("ascii"),
+                    "receipt": receipt.public_dict(),
+                    "schema": RED_LIVING_DEX_POWERED_SUPPLY_PRIVATE_ROOT_SCHEMA,
+                    "state_base64": base64.b64encode(state_bytes).decode("ascii"),
+                },
+                durable=True,
+            )
+        except BaseException as error:
+            effects_known = False
+            controller_actions: int | None = None
+            emulator_frames: int | None = None
+            try:
+                guarded.reconcile_runtime_accounting()
+                controller_actions = guarded.controller_actions
+                emulator_frames = guarded.frame_count
+                effects_known = True
+            except BaseException:
+                effects_known = False
+                controller_actions = None
+                emulator_frames = None
+            diagnostic = _fresh_episode_failure_diagnostic(
+                error,
+                execution_phase=execution_phase,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
+                pressed_button_count=len(guarded.pressed_buttons),
+                save_state_loads=guarded.save_state_loads,
+                terminal_state_saves=guarded.terminal_state_saves,
+            )
+            with suppress(BaseException):
+                writer.append("failure_diagnostic", diagnostic, durable=True)
+            raise RedLivingDexFreshEpisodeExecutionFailure(
+                str(error) or type(error).__name__,
+                execution_phase=execution_phase,
+                effects_known=effects_known,
+                controller_actions=controller_actions,
+                emulator_frames=emulator_frames,
+            ) from error
+        finally:
+            if guarded is not None:
+                guarded.close()
+        post_close_verify()
+
+    if root is None or receipt is None:
+        raise RedLivingDexFreshEpisodeRuntimeError("powered supply terminal root was not retained")
+    return RedLivingDexPoweredSupplyRuntimeResult(
         receipt=receipt,
         root=root,
         artifact_summary=writer.summary,
@@ -947,9 +1263,61 @@ def durably_claim_red_living_dex_fresh_episode_assignment(
     ):
         _require_sha256(value, subject)
     if not isinstance(source_commit, str) or _GIT_OID.fullmatch(source_commit) is None:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode claim source commit differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode claim source commit differs")
+    document: dict[str, object] = {
+        "assignment_id": assignment_id,
+        "execution_identity_sha256": execution_identity_sha256,
+        "plan_sha256": plan_sha256,
+        "runner_sha256": runner_sha256,
+        "schema": RED_LIVING_DEX_FRESH_EPISODE_ASSIGNMENT_CLAIM_SCHEMA,
+        "source_commit": source_commit,
+    }
+    _publish_red_living_dex_assignment_claim(registry, assignment_id, document)
+    return document
+
+
+def durably_claim_red_living_dex_powered_supply_assignment(
+    registry: Path,
+    *,
+    assignment_id: str,
+    execution_identity_sha256: str,
+    plan_sha256: str,
+    source_commit: str,
+    runner_sha256: str,
+    runtime_identity_sha256: str,
+) -> dict[str, object]:
+    """Consume one V2 assignment with its exact CPython/PyBoy identity."""
+
+    for value, subject in (
+        (assignment_id, "assignment"),
+        (execution_identity_sha256, "execution identity"),
+        (plan_sha256, "plan"),
+        (runner_sha256, "runner"),
+        (runtime_identity_sha256, "runtime identity"),
+    ):
+        _require_sha256(value, subject)
+    if not isinstance(source_commit, str) or _GIT_OID.fullmatch(source_commit) is None:
+        raise RedLivingDexFreshEpisodeRuntimeError("powered supply claim source commit differs")
+    document: dict[str, object] = {
+        "assignment_id": assignment_id,
+        "execution_identity_sha256": execution_identity_sha256,
+        "plan_sha256": plan_sha256,
+        "runner_sha256": runner_sha256,
+        "runtime_identity_sha256": runtime_identity_sha256,
+        "schema": RED_LIVING_DEX_POWERED_SUPPLY_ASSIGNMENT_CLAIM_SCHEMA,
+        "source_commit": source_commit,
+    }
+    _publish_red_living_dex_assignment_claim(registry, assignment_id, document)
+    return document
+
+
+def _publish_red_living_dex_assignment_claim(
+    registry: Path,
+    assignment_id: str,
+    document: Mapping[str, object],
+) -> None:
+    """Publish one already-validated canonical assignment claim create-only."""
+
     marker = registry / f"fresh-episode-assignment-{assignment_id}.json"
     try:
         marker.lstat()
@@ -960,17 +1328,7 @@ def durably_claim_red_living_dex_fresh_episode_assignment(
             "fresh-episode assignment claim cannot be inspected"
         ) from None
     else:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode assignment is already consumed"
-        )
-    document: dict[str, object] = {
-        "assignment_id": assignment_id,
-        "execution_identity_sha256": execution_identity_sha256,
-        "plan_sha256": plan_sha256,
-        "runner_sha256": runner_sha256,
-        "schema": RED_LIVING_DEX_FRESH_EPISODE_ASSIGNMENT_CLAIM_SCHEMA,
-        "source_commit": source_commit,
-    }
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode assignment is already consumed")
     payload = _canonical_line(document)
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     if hasattr(os, "O_CLOEXEC"):
@@ -1011,7 +1369,7 @@ def durably_claim_red_living_dex_fresh_episode_assignment(
             os.close(descriptor)
         if directory_descriptor >= 0:
             os.close(directory_descriptor)
-    return document
+    return None
 
 
 def read_red_living_dex_fresh_episode_assignment_claim(
@@ -1020,6 +1378,71 @@ def read_red_living_dex_fresh_episode_assignment_claim(
 ) -> dict[str, object]:
     """Strictly authenticate one durable assignment marker."""
 
+    return _read_red_living_dex_assignment_claim(
+        registry,
+        assignment_id,
+        expected_schema=RED_LIVING_DEX_FRESH_EPISODE_ASSIGNMENT_CLAIM_SCHEMA,
+        expected_keys={
+            "assignment_id",
+            "execution_identity_sha256",
+            "plan_sha256",
+            "runner_sha256",
+            "schema",
+            "source_commit",
+        },
+    )
+
+
+def read_red_living_dex_powered_supply_assignment_claim(
+    registry: Path,
+    assignment_id: str,
+) -> dict[str, object]:
+    """Strictly authenticate one runtime-bound V2 assignment marker."""
+
+    document = _read_red_living_dex_assignment_claim(
+        registry,
+        assignment_id,
+        expected_schema=RED_LIVING_DEX_POWERED_SUPPLY_ASSIGNMENT_CLAIM_SCHEMA,
+        expected_keys={
+            "assignment_id",
+            "execution_identity_sha256",
+            "plan_sha256",
+            "runner_sha256",
+            "runtime_identity_sha256",
+            "schema",
+            "source_commit",
+        },
+    )
+    _require_sha256(document.get("runtime_identity_sha256"), "runtime identity")
+    return document
+
+
+def red_living_dex_assignment_claim_exists(
+    registry: Path,
+    assignment_id: str,
+) -> bool:
+    """Distinguish a missing marker from a present marker that still needs validation."""
+
+    _require_sha256(assignment_id, "assignment")
+    marker = registry / f"fresh-episode-assignment-{assignment_id}.json"
+    try:
+        marker.lstat()
+    except FileNotFoundError:
+        return False
+    except OSError:
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "fresh-episode assignment claim cannot be inspected"
+        ) from None
+    return True
+
+
+def _read_red_living_dex_assignment_claim(
+    registry: Path,
+    assignment_id: str,
+    *,
+    expected_schema: str,
+    expected_keys: set[str],
+) -> dict[str, object]:
     _require_sha256(assignment_id, "assignment")
     marker = registry / f"fresh-episode-assignment-{assignment_id}.json"
     descriptor = -1
@@ -1060,17 +1483,8 @@ def read_red_living_dex_fresh_episode_assignment_claim(
         ) from None
     if (
         not isinstance(document, dict)
-        or set(document)
-        != {
-            "assignment_id",
-            "execution_identity_sha256",
-            "plan_sha256",
-            "runner_sha256",
-            "schema",
-            "source_commit",
-        }
-        or document.get("schema")
-        != RED_LIVING_DEX_FRESH_EPISODE_ASSIGNMENT_CLAIM_SCHEMA
+        or set(document) != expected_keys
+        or document.get("schema") != expected_schema
         or document.get("assignment_id") != assignment_id
         or _canonical_line(document) != payload
     ):
@@ -1102,13 +1516,9 @@ def decode_red_living_dex_fresh_episode_private_root(
         "schema",
         "state_base64",
     }:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode private root record differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode private root record differs")
     if record["schema"] != RED_LIVING_DEX_FRESH_EPISODE_PRIVATE_ROOT_SCHEMA:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode private root schema differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode private root schema differs")
     try:
         encoded_state = _text(record["state_base64"], "private state")
         encoded_envelope = _text(
@@ -1129,31 +1539,104 @@ def decode_red_living_dex_fresh_episode_private_root(
         ) from None
     if (
         base64.b64encode(state_bytes).decode("ascii") != encoded_state
-        or base64.b64encode(envelope_bytes).decode("ascii")
-        != encoded_envelope
+        or base64.b64encode(envelope_bytes).decode("ascii") != encoded_envelope
     ):
         raise RedLivingDexFreshEpisodeRuntimeError(
             "fresh-episode private root encoding is not canonical"
         )
-    root = RedLivingDexAuthenticatedSetupRoot(
-        root_consumption_sha256=root_consumption_sha256(
-            state_sha256=hashlib.sha256(state_bytes).hexdigest(),
-            envelope_sha256=hashlib.sha256(envelope_bytes).hexdigest(),
-        ),
-        state_bytes=state_bytes,
-        envelope_bytes=envelope_bytes,
-    )
+    try:
+        root = RedLivingDexAuthenticatedSetupRoot(
+            root_consumption_sha256=root_consumption_sha256(
+                state_sha256=hashlib.sha256(state_bytes).hexdigest(),
+                envelope_sha256=hashlib.sha256(envelope_bytes).hexdigest(),
+            ),
+            state_bytes=state_bytes,
+            envelope_bytes=envelope_bytes,
+        )
+    except (TypeError, ValueError):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "fresh-episode private root and receipt differ"
+        ) from None
     receipt = record["receipt"]
     if not isinstance(receipt, Mapping):
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode private receipt differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode private receipt differs")
     if (
         receipt.get("terminal_state_sha256") != root.state_sha256
         or receipt.get("terminal_envelope_sha256") != root.envelope_sha256
     ):
+        raise RedLivingDexFreshEpisodeRuntimeError("fresh-episode private root and receipt differ")
+    return root, receipt
+
+
+def decode_red_living_dex_powered_supply_private_root(
+    record: Mapping[str, object],
+) -> tuple[RedLivingDexAuthenticatedSetupRoot, RedLivingDexPoweredSupplyReceipt]:
+    """Authenticate one retained V2 root and return its typed receipt."""
+
+    if not isinstance(record, Mapping) or set(record) != {
+        "envelope_base64",
+        "receipt",
+        "schema",
+        "state_base64",
+    }:
         raise RedLivingDexFreshEpisodeRuntimeError(
-            "fresh-episode private root and receipt differ"
+            "powered supply private root record differs"
+        )
+    if record["schema"] != RED_LIVING_DEX_POWERED_SUPPLY_PRIVATE_ROOT_SCHEMA:
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private root schema differs"
+        )
+    try:
+        encoded_state = _text(record["state_base64"], "powered private state")
+        encoded_envelope = _text(
+            record["envelope_base64"],
+            "powered private envelope",
+        )
+        state_bytes = base64.b64decode(encoded_state, validate=True)
+        envelope_bytes = base64.b64decode(encoded_envelope, validate=True)
+    except (ValueError, TypeError):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private root encoding differs"
+        ) from None
+    if (
+        base64.b64encode(state_bytes).decode("ascii") != encoded_state
+        or base64.b64encode(envelope_bytes).decode("ascii") != encoded_envelope
+    ):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private root encoding is not canonical"
+        )
+    try:
+        root = RedLivingDexAuthenticatedSetupRoot(
+            root_consumption_sha256=root_consumption_sha256(
+                state_sha256=hashlib.sha256(state_bytes).hexdigest(),
+                envelope_sha256=hashlib.sha256(envelope_bytes).hexdigest(),
+            ),
+            state_bytes=state_bytes,
+            envelope_bytes=envelope_bytes,
+        )
+    except (TypeError, ValueError):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private root and receipt differ"
+        ) from None
+    raw_receipt = record["receipt"]
+    if not isinstance(raw_receipt, Mapping):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private receipt differs"
+        )
+    try:
+        receipt = powered_supply_receipt_from_mapping(raw_receipt)
+    except (TypeError, ValueError):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private receipt differs"
+        ) from None
+    if (
+        receipt.terminal_state_sha256 != root.state_sha256
+        or receipt.terminal_envelope_sha256 != root.envelope_sha256
+        or receipt.root_consumption_sha256 != root.root_consumption_sha256
+        or receipt.physical_root_sha256 != root.physical_root_sha256
+    ):
+        raise RedLivingDexFreshEpisodeRuntimeError(
+            "powered supply private root and receipt differ"
         )
     return root, receipt
 
@@ -1173,17 +1656,13 @@ def _canonical_line(value: object) -> bytes:
 
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            f"fresh-episode {subject} digest differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError(f"fresh-episode {subject} digest differs")
     return value
 
 
 def _text(value: object, subject: str) -> str:
     if not isinstance(value, str) or not value:
-        raise RedLivingDexFreshEpisodeRuntimeError(
-            f"fresh-episode {subject} differs"
-        )
+        raise RedLivingDexFreshEpisodeRuntimeError(f"fresh-episode {subject} differs")
     return value
 
 
@@ -1195,9 +1674,13 @@ __all__ = [
     "RedLivingDexFreshEpisodeRuntimeError",
     "RedLivingDexFreshEpisodeRuntimeResult",
     "RedLivingDexFreshEpisodeTargetVerification",
+    "RedLivingDexPoweredSupplyRuntimeResult",
+    "RedLivingDexPoweredSupplyTargetVerification",
     "decode_red_living_dex_fresh_episode_private_root",
+    "decode_red_living_dex_powered_supply_private_root",
     "durably_claim_red_living_dex_fresh_episode_assignment",
     "execute_red_living_dex_fresh_episode",
+    "execute_red_living_dex_powered_supply_episode",
     "issue_red_living_dex_fresh_episode_process_authority",
     "read_red_living_dex_fresh_episode_assignment_claim",
 ]

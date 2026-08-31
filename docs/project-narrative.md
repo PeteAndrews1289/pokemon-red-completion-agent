@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 31: turn the measured deficit into an independent-world factory
+
+The 103-lineage deficit is unchanged: 22 train, 78 development, and three contingency lineages
+remain missing. This engineering session converted that failure into an executable but still-unrun
+supply rail. It prospectively freezes twelve clean-power worlds—three train, eight development,
+and one development-owned contingency—before controller input. Source, generator, conditioner,
+exact CPython/PyBoy runtime, setup teacher, seed, initial wait, target menu, conditioning profile,
+partition, and evidence digests all become part of each immutable assignment.
+
+The runtime is one way. It durably claims the assignment, starts a distinct clean-power episode,
+loads no parent state, runs the deterministic setup teacher, seals the transcript, conditions the
+state, writes one terminal save on success and at most one on failure, and verifies the assigned
+menu action-free. Every claimed failure
+or interruption remains in the twelve-attempt denominator with no retry or replacement.
+Complete-denominator admission then authenticates the plan, claim, private streams, terminal
+bytes, lineage, trajectory, physical root, state, envelope, and original partition.
+
+Qualification requires at least nine admitted roots, including two train, six development, and
+the contingency. This is an engineering-yield gate, not a powered-capacity or model-quality claim.
+At most twelve roots cannot fill a deficit of 103. A pass permits only an integration/yield
+recensus and a separately frozen population plan sized from measured yield and remaining support
+gaps. The final 36/100/3 allocation witness must still pass before option outcomes resume.
+
+No ROM, world, setup teacher, learner, prediction, outcome, fit, or private plan has run during
+this implementation session. The rail advances the final mission by creating genuinely
+independent Red classrooms for a title-neutral living-Dex model while preserving Crystal as the
+first transfer falsifier. The board remains **18/60, integration fit 1/1, powered fit 0,
+authority 0, transfer 0**.
+
 ## August 31: the census rejects the existing classroom
 
 The capacity question now has an exact answer. PR `#119` merged the action-free census as main

@@ -85,6 +85,13 @@ behavior commitments, teachers, predictions, outcomes, fits, gameplay executions
 all remained zero. Current-bank gameplay is closed; the next gate is a bounded clean-power
 multi-partition lineage-supply design and yield tranche, followed by another action-free census.
 
+That successor is now locally implemented but unrun. It freezes twelve clean-power worlds—three
+train, eight development, and one contingency—and requires 9/12 admitted roots with role floors
+2/6/1. Its post-tranche census is an integration/yield recensus: twelve worlds cannot erase the
+103-lineage deficit. A pass only demonstrates that the new receipt-authenticated roots genuinely
+count and informs a separate population plan. See the
+[powered lineage-supply contract](red-living-dex-powered-lineage-supply.md).
+
 See the [machine result](evidence/red-living-dex-clustered-powered-v2-capacity-machine-result-v1-2026-08-31.json)
 and [path-free publication](evidence/red-living-dex-clustered-powered-v2-capacity-result-v1-2026-08-31.json).
 

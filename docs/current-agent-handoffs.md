@@ -6,6 +6,26 @@ Status: active operating assignment as of 2026-08-31. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns publication and the bounded twelve-world supply gate
+
+Exact main `0ceece13` publishes the 103-lineage deficit. Codex has locally implemented the
+prospective 3-train / 8-development / 1-contingency clean-power supply plan, at-most-once runtime,
+complete-denominator admission, capacity-recensus integration, and immutable provider partition
+bridge. The pass floor is 9/12 total with at least 2 train, 6 development, and 1 contingency root.
+
+Codex owns full verification, documentation, publication, green exact-main CI, and only then the
+one frozen tranche, admission, and recensus. Claude's useful review is one-shot/recovery integrity,
+clone rejection, immutable partition ownership, complete-denominator attrition, and whether claim
+language stays below the evidence. Antigravity's useful review is practical throughput, support-
+profile coverage, dashboard observability, cheaper independent world generation, and assumptions
+that will fail in Crystal. Both remain read-only; Codex records evidence-based adjudication.
+
+Do not execute unpublished code, retry a claimed world, call a generated root a training example,
+launch a population campaign before measured yield sizes it to deliver the remaining 103 lineages,
+collect powered outcomes, fit, grant authority, open sealed Red,
+execute Crystal, or replay the game. The learning board remains **18/60 · integration fit 1/1 ·
+powered fit 0 · authority 0 · transfer 0**.
+
 ## Current override: capacity failed; Codex owns V2 lineage-supply engineering
 
 PR `#119` merged as exact main `f1fc3812`; push CI `33355147814/1` passed. The sole action-free
