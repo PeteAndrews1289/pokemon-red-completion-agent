@@ -11,7 +11,84 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: publish one claim-first battle cycle, then measure it once
+## Current engineering state: the V2 contract exists locally; the roster does not
+
+The outcome-blind V2 schema now joins the full V1 plan, artifact manifest, retained train record,
+and exact measured candidate denominator. It cannot substitute a different prior or a model with
+the same hidden layer and a different output head. Fresh pressure rows bind and can rederive the
+exact menu, supported indices, scores, hidden embeddings, levels, HP, status, Pokémon type profile,
+and root-pair claim observation. The consumed V1 development context is excluded automatically.
+
+Selection freezes a complete 8-train/8-development denominator, including the retained no-replay
+prefix. It enforces semantic venue grouping, capped venue/margin/party buckets, three-action
+coverage, full output-head contrast rank with numerical clearance, and a deterministic one/two-swap
+repair when greedy selection misses an otherwise feasible roster. Policy hashes bind the material
+derivations, tolerances, filter order, and heuristic rules. The roster carries machine-readable
+zeroes for outcomes, fits, teacher targets, replay, authority, sealed Red, Crystal, and inferential
+claims.
+
+The real V1 artifact was projected into this prefix without gameplay, prediction, or refit, and the
+focused contract suite is green (57 tests, lint, and static typing). This does **not** mean V2 has
+run: no fresh inventory or roster is frozen and no fresh root is claimed. The immediate order is:
+
+1. close the independent delta audit;
+2. implement and qualify the canonical inventory/freezer that reopens every bound feature payload,
+   exact prior, and claim key;
+3. publish and obtain green exact-main CI;
+4. only then run the one action-free census and stop if a complete pressure-diverse roster does not
+   exist;
+5. separately build and qualify aggregate execution/recovery before requesting any outcomes.
+
+## Current checkpoint: scale the working battle loop into one frozen diverse batch
+
+Exact main `1d955492` passed CI `33424040364/1`, and battle pair V1 completed without an
+infrastructure failure. It claimed and measured three train plus three development move outcomes,
+fit once on train only, and reduced training loss from 2.0818 to 0.7190. The prior and candidate
+made the same correct prospectively held choice, so the candidate was correctly rejected for zero
+development discordance. This counts one causal train example, one fit, and one verified
+development outcome—not advantage, unseen performance, authority, sealed Red, or transfer.
+
+The next bottleneck is distribution size and diversity. V2 begins with an action-free capacity
+census and must freeze its complete roster before any new outcome: the retained V1 train example
+as a mandatory no-replay prefix, seven fresh train contexts, and eight fresh development contexts.
+The fresh contexts must be lineage-disjoint across partitions, claim-available, supported by at
+least two executable actions, and span multiple title-neutral feature/menu clusters. Timing or RNG
+siblings do not manufacture independence.
+
+The census must measure **decision pressure**, not merely distinct hashes. It balances venue and
+party conditions, limits level mismatch, prefers at least three supported non-identical actions,
+stratifies the frozen prior's top-two margins, and maximizes the rank/log-determinant of pairwise
+hidden-embedding contrasts without consulting outcomes. The batch must meet a declared
+roster-wide hidden-contrast rank floor or fail before gameplay. This addresses the old curve's
+26/32 one-turn knockouts and prevents eight more easy menus from masquerading as diversity.
+
+Only a complete roster opens execution. Every fresh root and candidate is claimed before input;
+failures stay in the denominator and cannot be replaced. One candidate is fit from the original
+nonlinear prior on the eight-row train set. All eight development predictions are committed before
+any development outcome is opened, then paired aggregate adjudication compares the candidate with
+the original prior. The batch is still development evidence: no discordance or no paired advantage
+rejects it, while a positive result opens a separate benchmark design rather than authority.
+
+V2 is the stop line for this immediate-HP move-choice representation. Eight development roots are
+descriptive engineering, not a powered claim, because the effective paired sample is only the
+number of discordant roots. If pressure or discordance remains inadequate, version the features,
+outcome horizon, and action set—including longer-term status/setup effects and later switch, item,
+and catch decisions—instead of enlarging the same one-turn encounter batch.
+
+Immediate order:
+
+1. authenticate and project the V1 receipt into the public scorecard;
+2. implement the ROM-free/action-free capacity census and retained-prefix reader;
+3. implement a canonical 8+8 roster freeze with no-replacement and crash-denominator guards;
+4. implement one train-only aggregate fit and commit-all-before-open development comparison;
+5. mutation-test recovery, lineage overlap, candidate completeness, and result reconstruction;
+6. publish, require exact-main CI, and only then consider one V2 execution.
+
+Current evidence is **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**. V2 targets 26 train, 7 fits, and 14 verified development outcomes. It
+does not target unseen, sealed, authority, or transfer counters.
+
+## Previous checkpoint: publish one claim-first battle cycle, then measure it once
 
 The first bounded replacement is now implemented locally. It uses one authenticated train battle
 and one prospectively held development battle. The plan is frozen before outcomes and binds the

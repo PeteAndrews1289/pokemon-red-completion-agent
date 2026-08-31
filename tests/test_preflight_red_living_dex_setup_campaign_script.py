@@ -1186,7 +1186,11 @@ def test_runtime_identity_uses_only_one_exact_fixture_metadata_root(
     or not Path(
         "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/"
         "Python.framework/Versions/3.14/bin/python3.14"
-    ).exists(),
+    ).exists()
+    or not (
+        PROJECT_ROOT
+        / ".venv/lib/python3.14/site-packages/pyboy-2.7.0.dist-info"
+    ).is_dir(),
     reason="exact local Mac runtime qualification",
 )
 def test_exact_local_mac_runtime_identity_qualification(

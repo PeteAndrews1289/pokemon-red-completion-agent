@@ -241,7 +241,10 @@ def test_binding_rejects_a_runtime_menu_without_two_distinct_candidates() -> Non
     entry = _CatalogEntry()
     registry = _Registry(entry)
 
-    with pytest.raises(ValueError, match="two distinct candidate"):
+    with pytest.raises(
+        FREEZER["BattleOutcomeExperimentFreezeError"],
+        match="two distinct candidate",
+    ):
         FREEZER["_binding_for_capture"](
             _capture(entry),
             prepared=_prepared(duplicate_vectors=True),
@@ -258,7 +261,10 @@ def test_binding_rejects_a_menu_collapsed_by_the_frozen_prior() -> None:
     entry = _CatalogEntry()
     registry = _Registry(entry)
 
-    with pytest.raises(ValueError, match="two distinct hidden"):
+    with pytest.raises(
+        FREEZER["BattleOutcomeExperimentFreezeError"],
+        match="two distinct hidden",
+    ):
         FREEZER["_binding_for_capture"](
             _capture(entry),
             prepared=_prepared(),

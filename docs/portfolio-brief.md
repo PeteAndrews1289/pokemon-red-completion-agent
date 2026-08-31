@@ -1,5 +1,41 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 31 outcome-blind multi-context curriculum contract
+
+Implemented a canonical V2 battle-curriculum contract that retains one previously measured train
+example without replay and prospectively selects seven fresh train plus eight jointly held
+development contexts. The trust boundary cryptographically joins the original plan, artifact,
+train record, complete frozen model, consumed validation context, and root-pair claim identities;
+every serialized score, embedding, menu, HP/status/level/type fact, and availability observation can
+be reproduced from the bound source inputs.
+
+The deterministic selector enforces semantic venue grouping, capped venue/margin/party-condition
+buckets, three-action coverage, full-width hidden-contrast rank and numerical clearance, plus
+bounded swap repair to distinguish selector failure from true capacity failure. Explicit protected
+zeroes prevent an unexecuted roster from being reported as a fit, result, authority promotion,
+sealed evaluation, Crystal transfer, teacher query, or replay. The real V1 artifact passes a
+no-gameplay retained-prefix projection and 57 focused tests plus lint and static typing are green.
+No fresh outcome has been opened; this is the pre-execution engineering checkpoint.
+
+## August 31 measured battle update and rejection
+
+The first production use of the claim-first learner completed from exact published source under
+green CI. Two predeclared Red battle roots exposed six supported alternatives. Every root and move
+was claimed before input, every consequence was retained, and the fitted model consumed only the
+three train outcomes. Training loss improved from 2.0818 to 0.7190.
+
+The prospectively held result rejected the candidate: prior and update both selected the same
+correct action, yielding zero discordant examples and no candidate advantage. The public evidence
+therefore advances one causal example, one fit, and one verified development outcome while keeping
+unseen, authority, sealed Red, Crystal, and transfer at zero. A schema-aware dashboard projection
+enforces those exact deltas.
+
+The next engineering target is a prospectively frozen multi-context cohort—one retained train
+prefix, seven fresh train contexts, and eight jointly held development contexts—with a single fit
+from the original prior and commit-all-before-open paired evaluation. This demonstrates an
+experiment architecture that treats negative results and power loss as permanent evidence rather
+than opportunities to rerun until success.
+
 ## August 31 claim-first battle learner gate
 
 The failed full-route supply strategy was replaced with one bounded, snapshot-backed learning

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import stat
 from dataclasses import InitVar, dataclass, field
 from pathlib import Path
 
@@ -16,6 +18,7 @@ _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _MAX_MANIFEST_BYTES = 64 * 1024
+_MAX_STATE_BYTES = 16 * 1024 * 1024
 _CAPTURE_VALIDATION_TOKEN = object()
 
 
@@ -145,15 +148,17 @@ def open_battle_scenario_capture(
 
     state = Path(state_path)
     manifest = Path(manifest_path)
-    if state.is_symlink() or manifest.is_symlink():
-        raise BattleScenarioCaptureError("battle scenario capture cannot use symlinks")
     try:
-        state_bytes = state.read_bytes()
-        manifest_bytes = manifest.read_bytes()
+        state_bytes = _read_owned_regular_file(
+            state,
+            maximum_bytes=_MAX_STATE_BYTES,
+        )
+        manifest_bytes = _read_owned_regular_file(
+            manifest,
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
     except OSError:
         raise BattleScenarioCaptureError("battle scenario capture is unavailable") from None
-    if not state_bytes or not 0 < len(manifest_bytes) <= _MAX_MANIFEST_BYTES:
-        raise BattleScenarioCaptureError("battle scenario capture is invalid")
     parsed = _parse_manifest(manifest_bytes)
     if hashlib.sha256(state_bytes).hexdigest() != parsed.state_sha256:
         raise BattleScenarioCaptureError("state bytes differ from the capture manifest")
@@ -163,6 +168,33 @@ def open_battle_scenario_capture(
         state_bytes=state_bytes,
         _validation_token=_CAPTURE_VALIDATION_TOKEN,
     )
+
+
+def _read_owned_regular_file(path: Path, *, maximum_bytes: int) -> bytes:
+    descriptor = -1
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        named = path.lstat()
+        descriptor = os.open(path, flags)
+        opened = os.fstat(descriptor)
+        if (
+            named.st_dev != opened.st_dev
+            or named.st_ino != opened.st_ino
+            or not stat.S_ISREG(opened.st_mode)
+            or opened.st_nlink != 1
+            or opened.st_uid != os.getuid()
+            or stat.S_IMODE(opened.st_mode) & 0o022
+            or not 1 <= opened.st_size <= maximum_bytes
+        ):
+            raise OSError("unsafe battle capture file")
+        payload = os.read(descriptor, opened.st_size + 1)
+        if len(payload) != opened.st_size:
+            raise OSError("battle capture file changed while opening")
+        return payload
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
 
 
 def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:

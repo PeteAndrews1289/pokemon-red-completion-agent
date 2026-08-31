@@ -19,13 +19,14 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from pokemon_red_completion.battle_neural_model import (  # noqa: E402
     MaskedMLPMoveRanker,
 )
+from pokemon_red_completion.battle_outcome_capture_authentication import (  # noqa: E402
+    BattleOutcomeCaptureAuthenticationError,
+    authenticate_battle_outcome_capture_binding,
+)
 from pokemon_red_completion.battle_outcome_experiment import (  # noqa: E402
     BattleOutcomeCaptureBinding,
     BattleOutcomeExperimentPlan,
     battle_outcome_controller_timing_sha256,
-    battle_outcome_distinct_hidden_embedding_count,
-    battle_outcome_hidden_menu_sha256,
-    battle_outcome_menu_sha256,
     build_battle_outcome_experiment_plan_payload,
 )
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
@@ -42,11 +43,9 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
     open_fixed_account_claim_registry,
-    root_consumption_sha256,
 )
 from pokemon_red_completion.goal_manager_context_catalog import (  # noqa: E402
     GoalManagerContextCatalog,
-    GoalManagerContextCatalogEntry,
     parse_goal_manager_context_catalog,
 )
 from pokemon_red_completion.goal_manager_development import (  # noqa: E402
@@ -299,96 +298,27 @@ def _binding_for_capture(
     catalog: GoalManagerContextCatalog,
     registry: GoalManagerCollectionRegistry,
 ) -> BattleOutcomeCaptureBinding:
-    manifest = capture.manifest
-    if (
-        manifest.partition is not expected_partition
-        or manifest.source_commit != source_commit
-        or manifest.source_state_sha256 is None
-        or manifest.expected_battle_state != 1
-    ):
-        raise BattleOutcomeExperimentFreezeError("battle capture binding differs")
-    if prepared.initial_observation_sha256 != manifest.initial_observation_sha256:
+    derived_catalog_partition = (
+        "train"
+        if expected_partition is ScenarioPartition.TRAIN
+        else "validation"
+    )
+    if expected_catalog_partition != derived_catalog_partition:
         raise BattleOutcomeExperimentFreezeError(
-            "prepared battle observation differs from its capture"
+            "battle capture catalog partition differs"
         )
-    supported_indices = tuple(
-        index
-        for index, (legal, pp) in enumerate(
-            zip(
-                prepared.features.legal_mask,
-                prepared.features.current_pp,
-                strict=True,
-            )
-        )
-        if legal and pp > 0
-    )
-    supported_vectors = tuple(
-        prepared.features.candidate_vectors[index] for index in supported_indices
-    )
     try:
-        hidden_digest = battle_outcome_hidden_menu_sha256(
-            base_model,
-            prepared.features,
+        return authenticate_battle_outcome_capture_binding(
+            capture,
+            prepared=prepared,
+            base_model=base_model,
+            expected_partition=expected_partition,
+            source_commit=source_commit,
+            catalog=catalog,
+            registry=registry,
         )
-        distinct_hidden_count = battle_outcome_distinct_hidden_embedding_count(
-            base_model,
-            prepared.features,
-        )
-    except (TypeError, ValueError):
-        raise BattleOutcomeExperimentFreezeError(
-            "battle menu differs from the frozen prior schema"
-        ) from None
-    matching = tuple(
-        entry
-        for entry in catalog.entries
-        if entry.state_sha256 == manifest.source_state_sha256
-    )
-    if len(matching) != 1:
-        raise BattleOutcomeExperimentFreezeError(
-            "battle capture has no unique upstream catalog root"
-        )
-    entry: GoalManagerContextCatalogEntry = matching[0]
-    assignment = registry.assignment(entry.slot_id)
-    root_lineage_id = entry.authenticated_root_lineage_id(
-        slot_id=entry.slot_id,
-        capture_id=entry.capture_id,
-        state_sha256=entry.state_sha256,
-        envelope_sha256=entry.envelope_sha256,
-    )
-    if (
-        assignment.partition != expected_catalog_partition
-        or entry.assignment_id != assignment.assignment_id
-        or root_lineage_id != manifest.root_lineage_id
-    ):
-        raise BattleOutcomeExperimentFreezeError(
-            "battle capture partition or lineage differs from its catalog"
-        )
-    consumption = root_consumption_sha256(
-        state_sha256=entry.state_sha256,
-        envelope_sha256=entry.envelope_sha256,
-    )
-    return BattleOutcomeCaptureBinding(
-        partition=expected_partition,
-        capture_id=manifest.capture_id,
-        manifest_sha256=capture.manifest_sha256,
-        state_sha256=manifest.state_sha256,
-        initial_observation_sha256=manifest.initial_observation_sha256,
-        source_commit=manifest.source_commit,
-        source_state_sha256=entry.state_sha256,
-        source_slot_id=entry.slot_id,
-        source_assignment_id=entry.assignment_id,
-        source_context_id=entry.context_id,
-        source_envelope_sha256=entry.envelope_sha256,
-        root_lineage_id=root_lineage_id,
-        root_consumption_sha256=consumption,
-        menu_sha256=battle_outcome_menu_sha256(prepared.features),
-        supported_candidate_count=len(supported_indices),
-        distinct_candidate_vector_count=len(set(supported_vectors)),
-        hidden_embedding_sha256=hidden_digest,
-        distinct_hidden_embedding_count=distinct_hidden_count,
-        expected_map=manifest.expected_map,
-        expected_battle_state=manifest.expected_battle_state,
-    )
+    except BattleOutcomeCaptureAuthenticationError as error:
+        raise BattleOutcomeExperimentFreezeError(str(error)) from None
 
 
 def _private_new_plan(destination: Path, *, rom_path: Path) -> Path:

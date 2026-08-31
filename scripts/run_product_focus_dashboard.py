@@ -128,19 +128,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Authenticated battle learner loop · awaiting bounded update",
+        stage="Decision-pressure battle batch · capacity and V2 engineering",
         message=(
-            "The 0/12 clean-power supply factory is retired. Next: one snapshot-backed battle "
-            "update on train lineages and one prospectively held development comparison."
+            "The V1 pair was rejected for zero development discordance after one valid update. "
+            "Next: freeze a diverse 8-train/8-development V2 batch before new outcomes."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red bounded scenarios · battle first → navigation → party development → Crystal",
         collection_target=60,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Prior-preserving battle learner · not yet updated in this iteration",
+            candidate="Rejected V1 candidate retained as evidence · V2 starts from original prior",
             choice=(
-                "No active choice · next: train-only update, then held-development compare"
+                "No active choice · next: outcome-blind census, then one frozen batch"
             ),
             confidence=None,
             decisions=0,
@@ -152,7 +152,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             zero_shot_completed=causal_train_examples,
             zero_shot_total=60,
             adaptation_completed=fits,
-            adaptation_total=6,
+            adaptation_total=7,
             sealed_completed=unseen,
             sealed_total=5,
             predictions_committed=False,

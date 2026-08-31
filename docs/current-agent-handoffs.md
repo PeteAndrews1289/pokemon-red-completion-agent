@@ -6,7 +6,50 @@ Status: active operating assignment as of 2026-08-31. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and one claim-first battle cycle
+## Current override: Codex owns the local V2 contract and inventory/freezer gate
+
+Codex has implemented the outcome-blind V2 batch contract locally. The full V1 plan, exact artifact
+manifest, retained train record, original prior, and consumed V1 development binding are joined
+rather than copied as free digests. Every pressure row is reproducible from its bound capture menu,
+complete prior, and root-pair claim state. Selection requires a capped multi-venue,
+multi-margin, multi-party/type cohort with three-action coverage and full-width hidden-contrast
+clearance. Focused verification is green; no fresh V2 outcome or model fit exists.
+
+Codex remains sole editor, execution owner, adjudicator, and publisher. Its immediate task is the
+canonical action-free inventory/freezer and its hostile qualification, then publication and exact-
+main CI. The reviewers' current job is to attack that trust boundary and the mission alignment, not
+to request gameplay. Claude focuses on leakage, statistical claims, and development independence;
+Antigravity focuses on source reauthentication, crash denominator, portability, and Crystal-breaking
+assumptions. Reviewer advice is non-authoritative and ordinary engineering does not wait for model
+availability.
+
+No fresh root claim, controller input, outcome, prediction, fit, sealed Red case, Crystal context,
+authority promotion, or full-game replay is open. If an action-free census cannot freeze all seven
+fresh train plus eight development contexts under the declared pressure gates, stop and redesign
+capture supply or the representation; do not shrink, substitute, or rerun the denominator.
+
+## Current override: Codex owns the V1 result and V2 batch gate
+
+Battle pair V1 completed from exact main `1d955492` / CI `33424040364/1`. All six supported move
+branches were claimed and measured; one train-only fit reduced loss, but the prior and candidate
+made the same correct held choice. The candidate is rejected for zero development discordance and
+must not become the next prior. Counters are **train 19 · fits 6 · verified development 6 · unseen
+4 · authority 0 · transfer 0**.
+
+Codex remains sole editor, execution owner, adjudicator, and publisher. Its next engineering work
+is an action-free V2 capacity census plus one canonical batch contract: retain the exact V1 train
+row without replay, add seven fresh train contexts, freeze eight development contexts together,
+fit once from the original prior, and commit all development predictions before outcomes. Claude
+reviews statistical power, leakage, clustering, and claim calibration. Antigravity reviews batch
+architecture, recovery, feature portability, and assumptions that will break in Crystal. Both are
+read-only milestone reviewers; their availability does not pause ordinary engineering.
+
+No new outcome opens until roster capacity/diversity, immutable denominator, claim-first branch
+coverage, no replacement, and aggregate paired reconstruction pass exact-main CI. No V1 retry,
+rejected-weight adoption, teacher-route repair, sealed Red, Crystal, authority, or full replay is
+open.
+
+## Previous override: Codex owned publication and one claim-first battle cycle
 
 Codex has locally replaced the failed full-route supply strategy with one bounded battle
 train/development loop. The freezer authenticates both snapshots to historical catalog roots and

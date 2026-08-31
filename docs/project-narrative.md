@@ -1,5 +1,57 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 31: turn one useful lesson into a crash-safe curriculum contract
+
+The class roster now has a real registrar. All candidate roots are observed under one shared
+claim-registry lease, converted into an outcome-blind inventory, selected as one deterministic
+train/development cohort, and durably frozen before the lease is released. That closes the window
+where one process could consume a context while another was assembling the roster. Upstream
+siblings also cannot be laundered into opposite partitions merely by changing assignment, capture,
+menu, or destination identity.
+
+This remains an engineering result. Ninety-five focused tests pass, but the registrar has not
+opened the private capture bank and no new battle has run. The next honest milestone is exact-source
+publication and green CI, followed by one action-free capacity decision: freeze the complete 7+8
+fresh denominator or stop. Training and outcome collection remain later gates.
+
+The first battle lesson is now wired into the next curriculum without replaying it. The V2 design
+does not carry forward a convenient summary: it rejoins the original prospective plan, the exact
+artifact manifest, the retained train record, all measured move indices, the complete frozen model,
+and the already-consumed held context. If any of those disagree, the prefix is rejected.
+
+Fresh candidate menus are screened without outcomes. The system measures whether a menu creates a
+real learning question—several executable moves, close or varied prior scores, and hidden
+representations that span the model's decision head—while balancing locations and the active
+Pokémon's HP, status, level, and type profile. Serialized facts must be reproduced from the bound
+source before use. A deterministic repair step prevents a merely greedy selector from declaring
+the population inadequate when a valid cohort actually exists.
+
+This is still scaffolding, not training. The real V1 artifact passed the no-gameplay retained-prefix
+projection and 57 focused checks pass, but no fresh V2 roster, action, outcome, or fit exists. That
+honest boundary is the outage recovery: model-service capacity interrupted an engineering session,
+yet the completed V1 evidence and the local V2 contract remain durable and resumable rather than
+turning an overnight interruption into another ambiguous experiment.
+
+## August 31: the first bounded lesson worked—and the model candidate did not improve
+
+The new loop did exactly what the project needed: it turned a model question into a six-second,
+falsifiable experiment instead of an overnight route-repair marathon. Three moves from one Red
+battle were executed from identical restored state and used for one train-only update. Three moves
+from a prospectively held battle were then measured only after the old and new model predictions
+were committed. Every branch was claimed first and retained.
+
+Training loss fell from 2.0818 to 0.7190, but that was not the test. On the held battle, both models
+made the same correct choice. The candidate was rejected for zero discordance. The result still
+adds one authentic train example, one real model fit, and one verified development example; it adds
+no advantage, authority, sealed evaluation, Crystal evidence, or cross-game transfer claim.
+
+That negative result changes the next design. Another isolated pair would remain underpowered, so
+the next gate freezes a diverse batch before outcomes: the retained train lesson plus seven fresh
+train contexts and eight simultaneously held development contexts. It fits once from the original
+prior and judges all development predictions as one paired cohort. The project is finally spending
+its effort on scenario diversity and transferable learning signal rather than preserving a brittle
+walkthrough.
+
 ## August 31: replace the failed factory with one observable learning loop
 
 The next iteration is deliberately small: one authenticated Red battle for training and one

@@ -1,0 +1,94 @@
+{
+  "schema": "pokemon.red.battle-outcome-cycle-result.v1",
+  "recorded_on": "2026-08-31",
+  "status": "rejected_no_development_discordance",
+  "source_verification": {
+    "git_commit": "1d9554923f7973d6c3807445c1c4fc19c65dca1b",
+    "source_bundle_sha256": "676c13cbe9063df14f3de57cb5c8cf1ffc6de1a38b5e477f98389609776c3217",
+    "exact_main_ci_run": 33424040364,
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "worktree_dirty": false
+  },
+  "prospective_contract": {
+    "experiment_plan_sha256": "6e92084a6c81c5fb1eb5fe42568300823f3ee3b18124079576f8d99aa1198f52",
+    "artifact_manifest_sha256": "5100e040b919b9ed132aec99c114fd80bdeeaf51dc75c12708216b1ae8daaca3",
+    "train_root_lineages": 1,
+    "development_root_lineages": 1,
+    "lineage_partition_overlap": 0,
+    "initial_state_partition_overlap": 0,
+    "historically_untouched_claimed": false,
+    "retry_allowed": false
+  },
+  "execution": {
+    "root_claims_created": 2,
+    "candidate_claims_created": 6,
+    "activated_candidate_targets": 6,
+    "measured_candidate_outcomes": 6,
+    "train_candidate_outcomes": 3,
+    "development_candidate_outcomes": 3,
+    "unexecuted_counterfactual_targets": 0,
+    "unmeasured_action_targets": 0,
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0
+  },
+  "train_update": {
+    "training_examples": 1,
+    "model_fits": 1,
+    "base_model_sha256": "de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11",
+    "candidate_model_sha256": "afc79b70dd08b03cc0df221682f3dedbd3753fa5ed179bfcfcd951ec2e2d26f2",
+    "epochs": 100,
+    "learning_rate": 0.01,
+    "prior_l2": 0.1,
+    "loss_before": 2.0818126049274617,
+    "loss_after": 0.7189578022987593,
+    "development_influenced_fit": false
+  },
+  "development_comparison": {
+    "examples": 1,
+    "predictions_committed_before_outcomes": true,
+    "base_correct_preferences": 1,
+    "candidate_correct_preferences": 1,
+    "base_mean_selected_utility": 3.0,
+    "candidate_mean_selected_utility": 3.0,
+    "discordant_examples": 0,
+    "equivalent_choices": 1,
+    "base_wins": 0,
+    "candidate_wins": 0,
+    "candidate_advantage_observed": false,
+    "inferential_claim": false
+  },
+  "counter_treatment": {
+    "causal_train_examples_added": 1,
+    "development_episode_attempts_added": 1,
+    "verified_outcome_examples_added": 1,
+    "model_fits_added": 1,
+    "unseen_comparisons_added": 0,
+    "authority_promotions_added": 0,
+    "transfer_results_added": 0
+  },
+  "claim_boundary": {
+    "supported": [
+      "one informative Red battle menu produced one train-only prior-preserving model update",
+      "all six supported move alternatives across the train and development menus were claimed before input and measured",
+      "the prospectively held development comparison was verified after both model predictions were committed",
+      "the candidate and frozen prior made the same correct development choice"
+    ],
+    "unsupported": [
+      "candidate_advantage",
+      "historically_unseen_generalization",
+      "model_authority_or_promotion",
+      "sealed_red_performance",
+      "crystal_or_cross_title_transfer",
+      "full_game_play_or_living_pokedex_completion"
+    ]
+  },
+  "protected_access": {
+    "authority_promoted": false,
+    "sealed_red_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0
+  }
+}

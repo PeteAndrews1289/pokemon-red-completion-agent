@@ -14,7 +14,79 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-31: claim-first battle learning cycle is local; publish before execution
+## 2026-08-31: V2 batch contract is implemented locally; no fresh outcome is open
+
+The canonical action-free inventory/freezer is now implemented locally as well. It does not read
+claim availability piecemeal: one shared claim-registry lease covers the complete retained,
+forbidden, train-candidate, and development-candidate root-pair snapshot, roster derivation, and
+durable single-file publication. Reopening the freeze reproduces both the inventory and roster and
+rejects an altered availability bit, upstream sibling split across partitions, or derived-roster
+forgery. The production command also rejects unsafe private paths and holds the lease through file
+and directory synchronization.
+
+Focused verification is now **95 passed**, with clean Ruff and focused mypy. The first full run
+passed 6,125 tests and found only the expected source-bound registry/golden rebinding plus one stale
+local-runtime assumption; those have been repaired and their exact targeted gates pass. Because
+some provenance tests intentionally load committed `HEAD`, the definitive full qualification must
+run after this coherent worktree is committed. No capture inventory or private freeze has been
+opened, and no root claim, controller input, prediction, outcome, fit, sealed case, Crystal context,
+teacher action, or replay occurred.
+
+Next: commit and fully qualify the exact revision, publish it, and require green exact-head/main CI.
+Only then may the separately gated action-free capacity step inventory and either freeze exactly
+the retained V1 prefix plus seven fresh train and eight jointly held development contexts, or stop.
+Do not shrink or substitute the denominator and do not open outcomes.
+
+The overnight session was interrupted by model-service capacity, not by the emulator or a claimed
+experiment. Resume from the working tree; do not recreate V1, repeat its six actions, or imply that
+V2 ran. The local V2 contract now cryptographically joins the complete V1 prospective plan to the
+exact retained train record and artifact manifest, automatically excludes the consumed V1
+development root, and reproduces every serialized pressure fact from the exact bound feature menu,
+complete original model, and current claim observation before it can be trusted.
+
+The prospective denominator is one retained no-replay train prefix, seven fresh train contexts,
+and eight jointly frozen development contexts. Selection is outcome-blind and binds venue groups,
+HP/status/level/type party conditions, prior-margin strata, complete model scores, title-neutral
+menu clusters, full-width hidden contrasts, numerical clearance, claim identities, filter order,
+and deterministic swap repair. At least six contexts per partition must expose three usable moves;
+no single venue, margin, or party bucket may occupy more than six of eight. The roster explicitly
+claims zero outcomes, fits, authority, sealed Red, Crystal, replay, teacher choice, and inferential
+result.
+
+Focused verification is green: 57 tests plus lint and static typing. A no-gameplay projection also
+reopened the real completed V1 artifact and recovered the exact retained prefix with plan, artifact,
+record, and candidate-denominator joins. This is an engineering checkpoint only: no fresh capture
+inventory has been frozen, no new root has been claimed, and no outcome, prediction, fit, sealed
+case, or Crystal context has opened. Next finish independent delta review, qualify a canonical
+private-path-free inventory/freezer, publish exact source, and require green exact-main CI before
+considering any V2 execution.
+
+## 2026-08-31: battle pair V1 completed and was rejected; build diversity, not another route
+
+Exact main `1d9554923f7973d6c3807445c1c4fc19c65dca1b` passed CI
+`33424040364/1`. One outcome-blind Mansion train/development pair was materialized and frozen as
+plan `6e92084a...8f52`, then executed once. All two roots and all six supported move candidates were
+claimed before input; all six outcomes were retained. One train-only nonlinear update reduced loss
+from **2.0818 to 0.7190**. Development did not influence fitting, and both predictions were
+committed before its outcomes.
+
+The frozen prior and candidate nevertheless made the same correct held choice. The terminal is
+`rejected_no_development_discordance`: one causal train example, one real fit, and one verified
+development outcome count, but candidate advantage, historically unseen evidence, authority,
+sealed Red, Crystal, and transfer all remain zero. Never adopt the rejected candidate, retry the
+pair, or relabel its validation root as untouched. The path-free
+[receipt](docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json) is the public
+counter source.
+
+Next build an outcome-blind V2 batch gate rather than another isolated pair. Its target is the
+retained V1 train row as a no-replay prefix, seven fresh feature- and lineage-diverse train
+contexts, and eight simultaneously frozen development contexts. Fit once from the original prior
+on all eight train rows; commit all development predictions before opening any outcome. Capacity,
+roster diversity, complete-denominator recovery, no replacement, and aggregate paired
+adjudication must pass exact-main CI before execution. The board is now **causal train 19 · model
+fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+## Previous 2026-08-31 checkpoint: claim-first battle learning cycle was local
 
 The replacement for the failed factory is implemented but has not touched a production capture.
 It is intentionally one train battle plus one prospectively held development battle, not another

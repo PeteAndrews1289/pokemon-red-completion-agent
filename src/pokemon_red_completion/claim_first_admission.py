@@ -17,6 +17,7 @@ import json
 import os
 import re
 import stat
+from collections.abc import Sequence
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
@@ -28,6 +29,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     FreshCompositionQualificationError,
     fixed_account_claim_registry_lease,
     open_fixed_account_claim_registry,
+    read_root_claim,
     root_claim_is_available,
 )
 from pokemon_red_completion.private_artifacts import (
@@ -38,17 +40,137 @@ from pokemon_red_completion.provenance import canonical_sha256
 CLAIM_FIRST_ROOT_PAIR_SCHEMA = "pokemon.core.claim-first-root-pair.v1"
 CLAIM_FIRST_ROOT_PAIR_PREFIX = "claim-pair-v1-"
 CLAIM_FIRST_EXECUTION_IDENTITY_SCHEMA = "pokemon.core.claim-first-execution-identity.v1"
+CLAIM_FIRST_AVAILABILITY_SNAPSHOT_SCHEMA = (
+    "pokemon.core.claim-first-availability-snapshot.v1"
+)
+CLAIM_FIRST_AVAILABILITY_OBSERVATION_SCHEMA = (
+    "pokemon.core.claim-first-pair-availability.v1"
+)
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _STAGE = re.compile(r"[a-z][a-z0-9-]{0,63}\Z")
 _PAIR_NAME = re.compile(rf"{CLAIM_FIRST_ROOT_PAIR_PREFIX}([0-9a-f]{{64}})\.json\Z")
+_LEGACY_ROOT_NAME = re.compile(r"([0-9a-f]{64})\.json\Z")
 _MAXIMUM_PAIR_CLAIMS = 100_000
 _MAXIMUM_PAIR_RECORD_BYTES = 4096
+_MAXIMUM_AVAILABILITY_SNAPSHOT_BYTES = 16 * 1024 * 1024
 
 
 class ClaimFirstAdmissionError(RuntimeError):
     """A pair claim is unavailable, unsafe, or cannot be authenticated."""
+
+
+@dataclass(frozen=True, slots=True)
+class ClaimFirstPairAvailability:
+    """One root-pair observation made inside a shared registry lease."""
+
+    logical_root_sha256: str
+    physical_root_sha256: str
+    available: bool
+
+    def __post_init__(self) -> None:
+        _require_sha256(self.logical_root_sha256, "logical root")
+        _require_sha256(self.physical_root_sha256, "physical root")
+        if self.logical_root_sha256 == self.physical_root_sha256:
+            raise ClaimFirstAdmissionError(
+                "logical and physical root identities collapse"
+            )
+        if type(self.available) is not bool:  # noqa: E721
+            raise ClaimFirstAdmissionError("claim-first availability differs")
+
+    @property
+    def identity_sha256(self) -> str:
+        return canonical_sha256(
+            {
+                "logical_root_sha256": self.logical_root_sha256,
+                "physical_root_sha256": self.physical_root_sha256,
+                "schema": "pokemon.core.claim-first-availability-key.v1",
+            }
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": CLAIM_FIRST_AVAILABILITY_OBSERVATION_SCHEMA,
+            "identity_sha256": self.identity_sha256,
+            "logical_root_sha256": self.logical_root_sha256,
+            "physical_root_sha256": self.physical_root_sha256,
+            "available": self.available,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ClaimFirstAvailabilitySnapshot:
+    """Canonical relevant-ledger state plus a sorted pair availability census."""
+
+    registry_state_sha256: str
+    observations: tuple[ClaimFirstPairAvailability, ...]
+
+    def __post_init__(self) -> None:
+        _require_sha256(self.registry_state_sha256, "registry state")
+        if (
+            not isinstance(self.observations, tuple)
+            or not self.observations
+            or any(
+                not isinstance(item, ClaimFirstPairAvailability)
+                for item in self.observations
+            )
+            or self.observations
+            != tuple(
+                sorted(
+                    self.observations,
+                    key=lambda item: (
+                        item.logical_root_sha256,
+                        item.physical_root_sha256,
+                    ),
+                )
+            )
+            or len(
+                {
+                    (item.logical_root_sha256, item.physical_root_sha256)
+                    for item in self.observations
+                }
+            )
+            != len(self.observations)
+        ):
+            raise ClaimFirstAdmissionError(
+                "claim-first availability observations differ"
+            )
+
+    @property
+    def snapshot_sha256(self) -> str:
+        return canonical_sha256(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": CLAIM_FIRST_AVAILABILITY_SNAPSHOT_SCHEMA,
+            "registry_state_sha256": self.registry_state_sha256,
+            "observations": [item.public_dict() for item in self.observations],
+            "root_claims_created": 0,
+            "private_path_fields": 0,
+        }
+
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.public_dict())
+
+    def availability_for(
+        self,
+        logical_root_sha256: str,
+        physical_root_sha256: str,
+    ) -> bool:
+        logical = _require_sha256(logical_root_sha256, "logical root")
+        physical = _require_sha256(physical_root_sha256, "physical root")
+        matched = tuple(
+            item
+            for item in self.observations
+            if item.logical_root_sha256 == logical
+            and item.physical_root_sha256 == physical
+        )
+        if len(matched) != 1:
+            raise ClaimFirstAdmissionError(
+                "claim-first availability observation is absent"
+            )
+        return matched[0].available
 
 
 @dataclass(frozen=True, slots=True)
@@ -303,10 +425,201 @@ class ClaimFirstPairRegistry:
             raise ClaimFirstAdmissionError("claim-first transaction is not open")
 
 
+class ClaimFirstAvailabilitySnapshotLease:
+    """Hold one shared ledger lease through observation and caller publication."""
+
+    __slots__ = ("_entered", "_lease", "_registry")
+
+    def __init__(self, registry: Path) -> None:
+        if not isinstance(registry, Path):
+            raise TypeError("claim-first availability lease needs a Path")
+        try:
+            self._registry = open_fixed_account_claim_registry(registry)
+        except FreshCompositionQualificationError as error:
+            raise ClaimFirstAdmissionError(str(error)) from None
+        self._lease: FixedAccountClaimRegistryLease | None = None
+        self._entered = False
+
+    def __enter__(self) -> Self:
+        if self._entered:
+            raise ClaimFirstAdmissionError(
+                "claim-first availability lease is already open"
+            )
+        lease = fixed_account_claim_registry_lease(
+            self._registry,
+            exclusive=False,
+        )
+        try:
+            lease.__enter__()
+        except FreshCompositionQualificationError as error:
+            raise ClaimFirstAdmissionError(str(error)) from None
+        self._lease = lease
+        self._entered = True
+        return self
+
+    def __exit__(
+        self,
+        exception_type: type[BaseException] | None,
+        exception: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> bool:
+        lease = self._lease
+        self._lease = None
+        self._entered = False
+        if lease is None:
+            return False
+        return lease.__exit__(exception_type, exception, traceback)
+
+    def observe(
+        self,
+        root_pairs: Sequence[tuple[str, str]],
+    ) -> ClaimFirstAvailabilitySnapshot:
+        self._require_entered()
+        if isinstance(root_pairs, (str, bytes)) or not isinstance(
+            root_pairs,
+            Sequence,
+        ):
+            raise TypeError("claim-first availability needs a pair sequence")
+        canonical_pairs: list[tuple[str, str]] = []
+        for item in root_pairs:
+            if not isinstance(item, tuple) or len(item) != 2:
+                raise ClaimFirstAdmissionError(
+                    "claim-first availability pair differs"
+                )
+            logical = _require_sha256(item[0], "logical root")
+            physical = _require_sha256(item[1], "physical root")
+            if logical == physical:
+                raise ClaimFirstAdmissionError(
+                    "logical and physical root identities collapse"
+                )
+            canonical_pairs.append((logical, physical))
+        ordered = tuple(sorted(canonical_pairs))
+        if not ordered or len(ordered) != len(set(ordered)):
+            raise ClaimFirstAdmissionError(
+                "claim-first availability pairs differ"
+            )
+        registry_state_sha256 = _claim_registry_state_sha256(self._registry)
+        observations = tuple(
+            ClaimFirstPairAvailability(
+                logical_root_sha256=logical,
+                physical_root_sha256=physical,
+                available=_root_pair_is_available(
+                    self._registry,
+                    logical,
+                    physical,
+                ),
+            )
+            for logical, physical in ordered
+        )
+        if _claim_registry_state_sha256(self._registry) != registry_state_sha256:
+            raise ClaimFirstAdmissionError(
+                "claim-first registry changed during availability observation"
+            )
+        return ClaimFirstAvailabilitySnapshot(
+            registry_state_sha256=registry_state_sha256,
+            observations=observations,
+        )
+
+    def _require_entered(self) -> None:
+        if not self._entered or self._lease is None:
+            raise ClaimFirstAdmissionError(
+                "claim-first availability lease is not open"
+            )
+
+
 def claim_first_pair_registry(registry: Path) -> ClaimFirstPairRegistry:
     """Return the only supported check-and-claim transaction boundary."""
 
     return ClaimFirstPairRegistry(registry)
+
+
+def claim_first_availability_snapshot_lease(
+    registry: Path,
+) -> ClaimFirstAvailabilitySnapshotLease:
+    """Return a shared lease the freezer must hold through durable publication."""
+
+    return ClaimFirstAvailabilitySnapshotLease(registry)
+
+
+def parse_claim_first_availability_snapshot(
+    payload: bytes,
+) -> ClaimFirstAvailabilitySnapshot:
+    """Strictly reopen one canonical path-free shared-lease snapshot."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("claim-first availability snapshot must be bytes")
+    if not payload or len(payload) > _MAXIMUM_AVAILABILITY_SNAPSHOT_BYTES:
+        raise ClaimFirstAdmissionError(
+            "claim-first availability snapshot size differs"
+        )
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ClaimFirstAdmissionError(
+            "claim-first availability snapshot is not canonical"
+        ) from None
+    fields = {
+        "schema",
+        "registry_state_sha256",
+        "observations",
+        "root_claims_created",
+        "private_path_fields",
+    }
+    if (
+        not isinstance(value, dict)
+        or set(value) != fields
+        or value.get("schema") != CLAIM_FIRST_AVAILABILITY_SNAPSHOT_SCHEMA
+        or value.get("root_claims_created") != 0
+        or value.get("private_path_fields") != 0
+        or not isinstance(value.get("observations"), list)
+    ):
+        raise ClaimFirstAdmissionError(
+            "claim-first availability snapshot fields differ"
+        )
+    observations: list[ClaimFirstPairAvailability] = []
+    for raw in value["observations"]:
+        observation_fields = {
+            "schema",
+            "identity_sha256",
+            "logical_root_sha256",
+            "physical_root_sha256",
+            "available",
+        }
+        if (
+            not isinstance(raw, dict)
+            or set(raw) != observation_fields
+            or raw.get("schema")
+            != CLAIM_FIRST_AVAILABILITY_OBSERVATION_SCHEMA
+            or type(raw.get("available")) is not bool  # noqa: E721
+        ):
+            raise ClaimFirstAdmissionError(
+                "claim-first availability observation fields differ"
+            )
+        observation = ClaimFirstPairAvailability(
+            logical_root_sha256=_string(raw.get("logical_root_sha256"), "logical root"),
+            physical_root_sha256=_string(
+                raw.get("physical_root_sha256"),
+                "physical root",
+            ),
+            available=raw["available"],
+        )
+        if raw.get("identity_sha256") != observation.identity_sha256:
+            raise ClaimFirstAdmissionError(
+                "claim-first availability observation identity differs"
+            )
+        observations.append(observation)
+    snapshot = ClaimFirstAvailabilitySnapshot(
+        registry_state_sha256=_string(
+            value.get("registry_state_sha256"),
+            "registry state",
+        ),
+        observations=tuple(observations),
+    )
+    if snapshot.canonical_bytes() != payload:
+        raise ClaimFirstAdmissionError(
+            "claim-first availability snapshot is not canonical"
+        )
+    return snapshot
 
 
 def observe_claim_first_pair_availability(
@@ -431,6 +744,42 @@ def _root_pair_is_available(
     return all(requested.isdisjoint(item.identities) for item in root_pair_claims(registry))
 
 
+def _claim_registry_state_sha256(registry: Path) -> str:
+    """Hash every authenticated claim that can affect root-pair availability."""
+
+    try:
+        entries = tuple(registry.iterdir())
+    except OSError:
+        raise ClaimFirstAdmissionError(
+            "claim-first registry cannot be inspected"
+        ) from None
+    legacy_ids = tuple(
+        sorted(
+            matched.group(1)
+            for item in entries
+            if (matched := _LEGACY_ROOT_NAME.fullmatch(item.name)) is not None
+        )
+    )
+    if len(legacy_ids) > _MAXIMUM_PAIR_CLAIMS:
+        raise ClaimFirstAdmissionError(
+            "claim-first registry exceeds its bounded census"
+        )
+    try:
+        legacy_claims = tuple(
+            read_root_claim(registry, identity) for identity in legacy_ids
+        )
+    except FreshCompositionQualificationError as error:
+        raise ClaimFirstAdmissionError(str(error)) from None
+    pair_claims = root_pair_claims(registry)
+    return canonical_sha256(
+        {
+            "legacy_root_claims": list(legacy_claims),
+            "pair_claims": [claim.private_dict() for claim in pair_claims],
+            "schema": "pokemon.core.claim-first-relevant-registry-state.v1",
+        }
+    )
+
+
 def _publish_pair_claim(registry: Path, claim: ClaimFirstRootPair) -> None:
     payload = _canonical_payload(claim.private_dict())
     marker = _pair_marker(registry, claim.claim_sha256)
@@ -520,6 +869,15 @@ def _canonical_payload(document: dict[str, object]) -> bytes:
     )
 
 
+def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
 def _pair_marker(registry: Path, claim_sha256: str) -> Path:
     return registry / f"{CLAIM_FIRST_ROOT_PAIR_PREFIX}{claim_sha256}.json"
 
@@ -544,14 +902,21 @@ def _string(value: object, subject: str) -> str:
 
 
 __all__ = [
+    "CLAIM_FIRST_AVAILABILITY_OBSERVATION_SCHEMA",
+    "CLAIM_FIRST_AVAILABILITY_SNAPSHOT_SCHEMA",
     "CLAIM_FIRST_EXECUTION_IDENTITY_SCHEMA",
     "CLAIM_FIRST_ROOT_PAIR_SCHEMA",
     "ClaimFirstAdmissionError",
+    "ClaimFirstAvailabilitySnapshot",
+    "ClaimFirstAvailabilitySnapshotLease",
     "ClaimFirstExecutionIdentity",
+    "ClaimFirstPairAvailability",
     "ClaimFirstPairRegistry",
     "ClaimFirstRootPair",
+    "claim_first_availability_snapshot_lease",
     "claim_first_pair_registry",
     "observe_claim_first_pair_availability",
+    "parse_claim_first_availability_snapshot",
     "read_root_pair_claim",
     "root_identity_is_pair_claimed",
     "root_pair_claims",

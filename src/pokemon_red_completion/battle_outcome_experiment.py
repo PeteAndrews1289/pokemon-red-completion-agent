@@ -621,6 +621,14 @@ def _parse_capture(value: object) -> BattleOutcomeCaptureBinding:
     )
 
 
+def parse_battle_outcome_capture_binding(
+    value: object,
+) -> BattleOutcomeCaptureBinding:
+    """Strictly parse one canonical capture binding embedded by another contract."""
+
+    return _parse_capture(value)
+
+
 def _canonical_payload(value: object) -> bytes:
     return (
         json.dumps(
@@ -694,5 +702,6 @@ __all__ = [
     "battle_outcome_menu_sha256",
     "battle_outcome_supported_hidden_embeddings",
     "build_battle_outcome_experiment_plan_payload",
+    "parse_battle_outcome_capture_binding",
     "parse_battle_outcome_experiment_plan",
 ]

@@ -1,5 +1,47 @@
 # Three-agent coordination
 
+> **2026-08-31 atomic-freezer checkpoint — qualify exact source before inventory:** Codex has
+> implemented the canonical V2 action-free freezer. One shared claim-registry lease covers the
+> complete root-pair snapshot, outcome-blind pressure inventory, deterministic roster, and durable
+> single-file publication. Reopening reproduces the inventory and roster; upstream siblings cannot
+> cross partitions. Focused verification is 95 passed with clean lint and typing. No private
+> inventory, freeze, root claim, gameplay, prediction, outcome, fit, sealed Red, Crystal, teacher,
+> authority, or replay has opened.
+>
+> Codex owns coherent commit, full exact-HEAD qualification, publication, and CI. The next later
+> gate is one action-free all-or-stop census for seven fresh train plus eight held development
+> contexts. Claude challenges leakage/statistics when available; Antigravity challenges durability,
+> authentication, and portability. Reviews are read-only and cannot weaken the denominator or turn
+> infrastructure into a learning claim.
+
+> **2026-08-31 V2 engineering override — contract before outcomes:** The local V2 schema now joins
+> the exact V1 plan/artifact/train record, excludes its consumed development root, and rederives
+> each pressure row from its bound features, complete original prior, and root-pair claim state.
+> The 8+8 roster gate binds capped venue/margin/party-type diversity, three-action coverage,
+> full-width hidden contrasts, deterministic selector repair, and explicit zero authority/sealed/
+> Crystal/replay claims. Focused tests, lint, and typing are green; no fresh roster or outcome exists.
+>
+> Codex owns the inventory/freezer, qualification, publication, and later aggregate runner. Claude
+> challenges leakage and statistical wording; Antigravity challenges source reauthentication,
+> recovery, and portability. Reviews do not authorize execution or pause ordinary engineering.
+> Next publish only after the canonical inventory/freezer is qualified, require green exact-main CI,
+> then perform an action-free census. No fresh root claim, action, prediction, outcome, fit, sealed
+> Red, Crystal, authority, or full replay is open.
+
+> **2026-08-31 V2 batch override — the V1 pair was an honest no-discordance rejection:** Exact
+> main `1d955492` / CI `33424040364/1` executed one frozen battle pair. All six branches were
+> claimed and measured, and one train-only fit reduced loss, but prior and candidate made the same
+> correct held choice. Count train +1, fit +1, verified development +1; count unseen, authority,
+> sealed, Crystal, and transfer +0. Do not adopt the rejected candidate or retry V1.
+>
+> Codex owns the outcome-blind V2 capacity census, retained-prefix reader, 8+8 canonical roster,
+> batch runner, tests, evidence, adjudication, and publication. Claude challenges power, leakage,
+> clustering, and statistical claims. Antigravity challenges recovery, complete-denominator
+> execution, feature portability, and Crystal assumptions. Both remain read-only. No new outcome
+> opens until the full fresh 7-train/8-development roster plus retained train prefix passes
+> exact-main CI; no replacement, teacher-route patch, sealed Red, Crystal, authority, or full
+> replay is open.
+
 > **2026-08-31 claim-first battle-cycle override — publish, measure once, reorient:** Codex has
 > locally implemented one prospectively frozen train/development battle loop. Exact upstream and
 > materialized roots are claimed before input, every supported candidate is durably claimed and

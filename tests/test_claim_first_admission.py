@@ -12,7 +12,9 @@ from pokemon_red_completion.claim_first_admission import (
     ClaimFirstAdmissionError,
     ClaimFirstExecutionIdentity,
     ClaimFirstRootPair,
+    claim_first_availability_snapshot_lease,
     claim_first_pair_registry,
+    parse_claim_first_availability_snapshot,
     read_root_pair_claim,
     root_pair_claims,
 )
@@ -143,6 +145,122 @@ def test_pair_claim_round_trips_once_and_blocks_every_identity_overlap(
             )
             with pytest.raises(ClaimFirstAdmissionError, match="already consumed"):
                 transaction.claim(candidate)
+
+
+def test_shared_snapshot_binds_the_relevant_ledger_and_sorted_availability(
+    tmp_path: Path,
+) -> None:
+    registry = _registry(tmp_path)
+    first = _claim("snapshot-first")
+    second = _claim("snapshot-second")
+
+    with claim_first_availability_snapshot_lease(registry) as lease:
+        empty = lease.observe(
+            (
+                (second.logical_root_sha256, second.physical_root_sha256),
+                (first.logical_root_sha256, first.physical_root_sha256),
+            )
+        )
+
+    assert tuple(item.identity_sha256 for item in empty.observations) == tuple(
+        item.identity_sha256
+        for item in sorted(
+            empty.observations,
+            key=lambda item: (
+                item.logical_root_sha256,
+                item.physical_root_sha256,
+            ),
+        )
+    )
+    assert all(item.available for item in empty.observations)
+    assert empty.public_dict()["root_claims_created"] == 0
+    assert empty.public_dict()["private_path_fields"] == 0
+    assert parse_claim_first_availability_snapshot(empty.canonical_bytes()) == empty
+
+    with claim_first_pair_registry(registry) as transaction:
+        transaction.claim(first)
+    with claim_first_availability_snapshot_lease(registry) as lease:
+        consumed = lease.observe(
+            (
+                (first.logical_root_sha256, first.physical_root_sha256),
+                (second.logical_root_sha256, second.physical_root_sha256),
+            )
+        )
+
+    assert consumed.snapshot_sha256 != empty.snapshot_sha256
+    assert not consumed.availability_for(
+        first.logical_root_sha256,
+        first.physical_root_sha256,
+    )
+    assert consumed.availability_for(
+        second.logical_root_sha256,
+        second.physical_root_sha256,
+    )
+
+
+def test_availability_snapshot_parser_rejects_duplicates_and_noncanonical_json(
+    tmp_path: Path,
+) -> None:
+    registry = _registry(tmp_path)
+    candidate = _claim("snapshot-parser")
+    with claim_first_availability_snapshot_lease(registry) as lease:
+        snapshot = lease.observe(
+            ((candidate.logical_root_sha256, candidate.physical_root_sha256),)
+        )
+    payload = snapshot.canonical_bytes()
+
+    with pytest.raises(ClaimFirstAdmissionError, match="not canonical"):
+        parse_claim_first_availability_snapshot(payload.replace(b'\n', b' \n'))
+    duplicate = payload.replace(
+        b'{"observations":',
+        b'{"observations":[],"observations":',
+        1,
+    )
+    with pytest.raises(ClaimFirstAdmissionError, match="not canonical"):
+        parse_claim_first_availability_snapshot(duplicate)
+
+
+def test_shared_snapshot_includes_legacy_root_claims(tmp_path: Path) -> None:
+    registry = _registry(tmp_path)
+    candidate = _claim("snapshot-legacy")
+    with claim_first_availability_snapshot_lease(registry) as lease:
+        before = lease.observe(
+            ((candidate.logical_root_sha256, candidate.physical_root_sha256),)
+        )
+    write_root_claim(
+        registry,
+        root_consumption_sha256=candidate.logical_root_sha256,
+        execution_identity_sha256=_sha("snapshot-legacy-execution"),
+        source_commit="b" * 40,
+        runner_sha256=_sha("snapshot-legacy-runner"),
+    )
+
+    with claim_first_availability_snapshot_lease(registry) as lease:
+        after = lease.observe(
+            ((candidate.logical_root_sha256, candidate.physical_root_sha256),)
+        )
+
+    assert before.registry_state_sha256 != after.registry_state_sha256
+    assert after.observations[0].available is False
+
+
+def test_availability_snapshot_requires_one_open_lease_and_unique_pairs(
+    tmp_path: Path,
+) -> None:
+    registry = _registry(tmp_path)
+    candidate = _claim("snapshot-contract")
+    lease = claim_first_availability_snapshot_lease(registry)
+    pair = (candidate.logical_root_sha256, candidate.physical_root_sha256)
+
+    with pytest.raises(ClaimFirstAdmissionError, match="lease is not open"):
+        lease.observe((pair,))
+    with lease:
+        with pytest.raises(ClaimFirstAdmissionError, match="pairs differ"):
+            lease.observe((pair, pair))
+        snapshot = lease.observe((pair,))
+        assert snapshot.availability_for(*pair)
+    with pytest.raises(ClaimFirstAdmissionError, match="lease is not open"):
+        lease.observe((pair,))
 
 
 def test_outer_identity_binds_current_consumer_and_immutable_producer() -> None:
