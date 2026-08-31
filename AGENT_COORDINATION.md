@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-30 clustered-powered-V2 override — publish, census, then return to examples:** Codex
+> implemented the action-free design from exact main `6a7210b8`; Claude returned statistical PASS
+> and Antigravity returned PASS WITH REQUIRED CHANGES. Codex accepted the substantive transfer and
+> mutation findings. The contract now fixes 72 prospective attempts / 36 train lineages, 100
+> one-question development lineages, three pre-branch contingency lineages, one candidate, exact
+> worst-case power, retained information floors, complete per-title Pokédex catalogs, and explicit
+> Gen II capability boundaries.
+>
+> Codex owns publication and exact-main CI. The following session starts with the action-free
+> 139-lineage capacity census; on pass it freezes the allocation and proceeds directly to a bounded
+> train batch, while on failure it closes without gameplay. Claude's next useful review is the
+> private-census **path-free aggregate** and schedule independence; Antigravity's is the capability
+> coverage and later powered Crystal plan. Neither sees private identities, edits, executes, fits,
+> or grants authority. No model fit, development opening, sealed Red, Crystal, or full replay is
+> authorized by this design.
+
 > **2026-08-30 bounded-successor override — publish, stop, then design clustered V2:** Exact
 > source `a358014f` passed CI `33329384186/1`; untouched successor ordinals 8–15 then ran once
 > each. Six settled and two ended during setup: **6/8 yield · 9,658 actions · 488,081 frames ·

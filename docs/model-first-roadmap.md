@@ -11,7 +11,35 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: bounded R1 complete; design clustered powered V2
+## Current checkpoint: clustered powered V2 designed; prove capacity, then resume learning
+
+The action-free V2 contract is now implemented, canonically generated, mutation-tested, and
+independently reviewed. It preserves the 18 authentic settled examples and adds a fixed
+outcome-blind plan for 72 attempts across 36 new train lineages, maximum two attempts per lineage,
+with equal total lineage weights. Powered readiness remains 60 settled examples and now also
+requires 50 distinct settled lineages plus every existing rank, kind, outcome-diversity,
+semantic-family, template, location, pressure, and candidate-support floor.
+
+The confirmatory unit is no longer ambiguous: one development question per untouched upstream
+lineage. The frozen exact paired alternative requires 100 development lineages after allowing
+three incompletes as forced candidate losses; 99 is underpowered. Three additional lineages are
+pre-branch contingency only. With 36 train lineages, the next action-free capacity census must
+prove a disjoint finite supply of **139 new lineages**. Only one model candidate can enter
+development. Correlated siblings may help fitting but never enlarge the confirmatory denominator.
+
+Claude's statistical review returned PASS. Antigravity's architecture review identified a stale
+151-target transfer phrase and missing Gen II mechanics; the contract now requires complete
+per-title catalogs (Red 151, Crystal 251, future declared totals), friendship evolution, roaming
+legendaries, and an explicitly separate powered Crystal plan. No Crystal test is silently
+authorized by the Red design.
+
+Next, publish this exact design and require green exact-main CI. Then run one action-free private
+capacity census. On failure, stop and redesign. On pass, freeze the disjoint allocation and begin
+a bounded train batch in that same session rather than spending a second consecutive session on
+process evidence. The board remains **causal train 18/60 · integration fit 1/1 · powered fit 0 ·
+authority 0 · transfer 0**.
+
+## Previous checkpoint: bounded R1 complete; design clustered powered V2
 
 Exact source `a358014f` passed CI `33329384186/1`, then untouched successor train ordinals 8–15
 were attempted sequentially and at most once. Six settled authentic randomized selected-arm

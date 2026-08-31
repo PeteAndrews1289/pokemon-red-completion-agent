@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 30 scene: stop counting siblings as strangers
+
+Open on **18 REAL LESSONS / 18 LINEAGES**. Split 72 new lesson cards into 36 braces, two cards per
+brace, and make each brace weigh exactly one. Put a separate locked exam box beside them:
+**100 LINEAGES · ONE QUESTION EACH · 3 PRE-BRANCH CONTINGENCIES · ONE MODEL CANDIDATE**. Animate
+the exact power dial from **67 WITH NO FORCED LOSSES** to **99 = 79.963% ✗** and **100 = 80.540%
+✓** when three incomplete questions count against the model.
+
+Stamp **PRIVATE CAPACITY: UNPROVEN** across a 139-slot silhouette. Keep the controller cable
+disconnected and show **ACTIONS · FRAMES · TEACHERS · OUTCOMES · FITS · AUTHORITY · CRYSTAL = 0**.
+Flash the two audit cards: **CLAUDE: PASS** and **ANTIGRAVITY: FIX THE 151 CAP + GEN II GAPS**.
+Replace the old 151 ceiling with **RED 151 · CRYSTAL 251 · FUTURE DECLARED TOTALS**, then add
+friendship evolution and roaming legendaries to the capability board.
+
+End on **PUBLISH → GREEN EXACT MAIN → ACTION-FREE 139-LINEAGE CENSUS → FAIL: REDESIGN / PASS:
+FREEZE + RESUME BOUNDED TRAINING IN THE SAME SESSION → 60 → ONE POWERED FIT → UNTOUCHED RED →
+TEACHER-FREE AUTHORITY → LIVING POKEDEX → POWERED CRYSTAL**. Keep **18/60 · POWERED FIT 0 ·
+AUTHORITY 0 · TRANSFER 0** visible.
+
 ## August 30 scene: close the sixteen-card classroom
 
 Open on eight face-down cards labeled **SUCCESSOR 8–15 · FIXED ORDER · ONE ATTEMPT EACH**. Turn

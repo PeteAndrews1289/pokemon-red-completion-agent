@@ -244,6 +244,50 @@ def minimum_paired_contexts(
     raise EvaluationDesignError("target power exceeds the maximum context budget")
 
 
+def minimum_paired_contexts_with_forced_losses(
+    *,
+    forced_losses: int,
+    win_probability: float,
+    loss_probability: float,
+    alpha: float = 0.05,
+    target_power: float = 0.8,
+    maximum_contexts: int = 10_000,
+) -> int:
+    """Find the first full denominator powered after worst-case incompleteness.
+
+    ``forced_losses`` is fixed prospectively rather than estimated from opened
+    outcomes.  Every such context remains in the denominator and is scored as
+    a candidate loss.  The returned sample size is therefore the first one
+    that survives the declared attrition budget without an ignorability claim.
+    """
+
+    _count(forced_losses, subject="forced losses")
+    _closed_unit(win_probability, subject="win probability")
+    _closed_unit(loss_probability, subject="loss probability")
+    _open_unit(alpha, subject="alpha")
+    _open_unit(target_power, subject="target power")
+    _positive_count(maximum_contexts, subject="maximum contexts")
+    if win_probability + loss_probability > 1.0:
+        raise EvaluationDesignError("paired alternative probabilities exceed one")
+    if win_probability <= loss_probability:
+        raise EvaluationDesignError(
+            "a favorable alternative is required to size a one-sided design"
+        )
+    if forced_losses >= maximum_contexts:
+        raise EvaluationDesignError("forced losses exhaust the maximum context budget")
+    for contexts in range(forced_losses + 1, maximum_contexts + 1):
+        power = paired_one_sided_exact_power_with_forced_losses(
+            contexts,
+            forced_losses=forced_losses,
+            win_probability=win_probability,
+            loss_probability=loss_probability,
+            alpha=alpha,
+        )
+        if power + 1e-15 >= target_power:
+            return contexts
+    raise EvaluationDesignError("target power exceeds the maximum context budget")
+
+
 def zero_loss_conjunction_power(
     independent_contexts: int,
     *,
@@ -317,6 +361,7 @@ __all__ = [
     "EvaluationDesignError",
     "PairedExactDesign",
     "minimum_paired_contexts",
+    "minimum_paired_contexts_with_forced_losses",
     "paired_one_sided_exact_p",
     "paired_one_sided_exact_power",
     "paired_one_sided_exact_power_with_forced_losses",
