@@ -11,7 +11,95 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: bounded independent-lineage supply is implemented; publish before play
+## Current checkpoint: publish one claim-first battle cycle, then measure it once
+
+The first bounded replacement is now implemented locally. It uses one authenticated train battle
+and one prospectively held development battle. The plan is frozen before outcomes and binds the
+catalog roots, exact materialized states, published source, executable scripts, Red ROM, runtime,
+NumPy inventory, nonlinear prior, controller timing, objective, and fit hyperparameters. No path,
+outcome, prediction, or preferred action enters the plan.
+
+Execution is one way. Before any claim, both captures undergo a read-only boundary admission that
+authenticates their exact menu and requires at least two supported vectors plus two numerically
+distinct frozen-prior representations. Development metadata/features are therefore opened
+prospectively, but no development action, prediction, outcome, or claim occurs at that stage. The
+train root and exact materialized state are then atomically claimed before input; every activated
+candidate is durably claimed before its own session; and the retained outcome digest must be
+identical to the object later used for learning. A flat train menu ends the plan without claiming
+or executing development, with its admitted candidates explicitly recorded as unactivated. An
+informative menu permits exactly one train-only update. Only after that model is durable may
+development be claimed, both predictions committed, and every supported branch measured. No
+discordance and no advantage are typed rejections rather than progress claims. This iterative
+development result is not a historically untouched or sealed comparison and cannot grant gameplay
+authority.
+
+The attempt is recoverable without pretending a crash never happened. Its deterministic identity
+and kind are durably sealed before input, every activated unit is append-synced, and one terminal
+record is written before normal completion. Recovery can seal only the authenticated canonical
+prefix as failed; it cannot execute, refit, retry, or claim a new action. A separate no-gameplay
+inspector may reconstruct lost stdout only after rejoining the terminal, predictions, selected
+candidate outcomes, paired evaluation, model, and artifact manifest. Contradictory or ambiguous
+records fail closed and cannot contribute to the scorecard.
+
+The live scorecard is evidence-projected rather than manually trusted. Its current evidence prefix
+and counters are locked together; a new receipt cannot advance a number until a strict schema-aware
+projection is implemented and tested.
+
+The materializer supplies this loop from Route 11, Diglett's Cave, or the Pokémon Mansion with an
+explicit party slot and the first authentic encounter, without opponent/outcome filtering or a
+Pokémon-Center/full-route detour. That is the intended reusable adapter pattern: short authentic
+decisions, complete consequences, and title-neutral features—not another Red walkthrough.
+
+The current evidence claim is deliberately narrower than the materializer's intent. The plan binds
+the exact endpoint, catalog-root association, and materializer source hash, but no retained
+materialization receipt proves causal first-encounter derivation. Both plan and result therefore
+say `materializer_derivation_claimed=false`. This is sufficient for the restored-state action-value
+lesson; a reproducible endpoint-generation claim requires a later receipt join.
+
+The immediate order is:
+
+1. complete full static, test, registry, and documentation verification;
+2. publish the exact source and require green exact-main CI;
+3. choose the pair using only declared pre-outcome identity, party, HP, level, and move-diversity
+   facts;
+4. materialize, authenticate, and freeze exactly one train/development plan;
+5. execute it once, preserving flat, failed, interrupted, and rejected terminals; and
+6. reorient at the receipt before adding another battle pair or opening navigation work.
+
+Current evidence remains **causal train 18 · model fits 5 · verified development outcomes 5 ·
+unseen comparisons 4 · authority 0 · transfer 0**. This iteration targets 19 train examples, a
+sixth fit only if the train menu is informative, and a sixth verified development outcome. It does
+not target the unseen counter.
+
+## Previous checkpoint: the 0/12 factory closed; bounded learner scenarios resumed
+
+Exact main `56b29528` passed CI `33369612082/1`, then the sole twelve-assignment
+independent-lineage supply tranche consumed every frozen identity and produced **zero roots**.
+The complete denominator used **208,777 controller actions and 32,312,041 frames**. Nine attempts
+failed during deterministic setup teaching and three during target conditioning. The learner never
+acted: labels, outcomes, predictions, fits, authority promotions, sealed Red access, and Crystal
+access all remained zero.
+
+This is a training-supply falsification, not a model failure. A successor clean-power factory or
+another round of route repairs would violate the mission, the full-run gate, and the one-session
+learning-output alarm. Preserve the exact aggregate
+[terminal evidence](evidence/red-living-dex-powered-lineage-supply-terminal-falsification-v1-2026-08-31.json),
+retain the factory implementation for forensic reproducibility, and never retry or replace its
+consumed assignments.
+
+The active lane returns to the strategic reset and Milestone 1 below. The next measured loop uses
+nonsealed authenticated snapshots: collect informative battle candidate outcomes on train
+lineages, make one prior-preserving update, and compare it with the frozen prior on prospectively
+held Red development lineages. A flat catalog, no discordant choices, or a rejected update is still
+useful
+evidence and ends that iteration without a teacher patch. Navigation and party development expand
+through the same bounded contract only after this battle loop is retained.
+
+The board remains **causal train 18/19 · model fits 5/6 · verified development 5/6 · unseen
+comparisons 4 · authority 0 · transfer 0**. The session time box is eight hours; spending a second session
+without a measured learner/generalization result is a stop condition.
+
+## Previous checkpoint: bounded independent-lineage supply was implemented before its failed run
 
 Exact main `0ceece13` publishes the 103-lineage capacity failure. The next system now exists
 locally: a prospectively partitioned clean-power rail whose first tranche is fixed at twelve

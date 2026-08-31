@@ -1,6 +1,38 @@
 # Three-agent coordination
 
-> **2026-08-31 powered-supply implementation override — publish before twelve worlds:** Exact main
+> **2026-08-31 claim-first battle-cycle override — publish, measure once, reorient:** Codex has
+> locally implemented one prospectively frozen train/development battle loop. Exact upstream and
+> materialized roots are claimed before input, every supported candidate is durably claimed and
+> measured, retained outcome bytes are digest-joined to learning inputs, training alone controls
+> the fit, and development predictions are committed before outcomes. Flat train, zero
+> discordance, and no advantage are terminal rejections. Development is not called historically
+> untouched and the unseen counter does not move.
+>
+> Codex is sole editor, execution owner, adjudicator, and publisher. Claude reviews statistics,
+> leakage, and claim calibration after the concrete receipt. Antigravity reviews architecture,
+> intervention integrity, dashboard truth, and Crystal portability. Both are read-only and do not
+> delay publication or execution. Next require full local verification, publish exact source,
+> obtain green exact-main CI, execute one frozen pair, and reorient immediately. No substitution,
+> retry, teacher-route patch, sealed Red, Crystal, authority promotion, or full replay is open.
+
+> **2026-08-31 scenario-lab override — the 0/12 factory is retired:** Exact main `56b29528`
+> passed CI `33369612082/1`; its sole twelve-assignment supply tranche then consumed all twelve
+> identities and admitted zero roots after 208,777 actions and 32,312,041 frames. Nine failures
+> occurred in setup teaching and three in conditioning. The model never acted and every learning,
+> authority, sealed Red, and Crystal counter stayed unchanged.
+>
+> Codex remains the sole editor, measurement owner, adjudicator, and publisher. Its active lane is
+> one bounded authenticated battle snapshot update plus one prospectively held comparison, followed
+> by immediate reorientation; navigation and party development use the same contract afterward.
+> Claude may challenge statistics, leakage, and claims at the next milestone. Antigravity may
+> challenge architecture, intervention boundaries, and Crystal portability. Both are read-only and
+> neither blocks ordinary development. No reviewer or subagent edits this worktree.
+>
+> The failed factory may not retry, receive a clean-power successor, or trigger teacher-route
+> hardening. No full replay, sealed Red, Crystal execution, or authority promotion is open. A flat
+> battle catalog or rejected update is retained as the next legitimate falsifier.
+
+> **Previous 2026-08-31 powered-supply implementation override:** Exact main
 > `0ceece13` preserves the 103-lineage capacity failure. Codex has implemented a source-and-exact-
 > runtime-bound 3-train / 8-development / 1-contingency clean-power yield tranche, at-most-once-
 > after-claim runtime, plan-scoped generation/admission lock, complete-denominator admission,

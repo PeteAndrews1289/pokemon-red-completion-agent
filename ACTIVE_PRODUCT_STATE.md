@@ -29,28 +29,30 @@ Not the product:
 
 ## One active lane
 
-**Lineage-clustered cross-title living-Dex causal curriculum V2** (`cross-title-living-dex-causal-example-pipeline-v1`)
+**Authenticated three-family learner scenario curriculum V1** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The 3/8/1 clean-power factory is locally qualified and unrun. Publish it, require green exact-main CI, freeze one exact-runtime plan, execute each claimed assignment once, admit all twelve dispositions, and recensus. Only a 9/12 pass with 2/6/1 role floors may inform a yield-adjusted campaign that still must satisfy the final 36/100/3 capacity witness before powered outcomes.
+- Next decision: Publish and run the smallest claim-first battle snapshot curriculum through one train-only update and one prospectively held Red development comparison. Retain flat evidence or rejection as the terminal result and do not increment the unseen counter. Reorient immediately afterward; navigation and party development expand only through the same bounded outcome contract.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Train a title-neutral living-Dex option-value model from short selected-arm scenarios grouped by immutable upstream episode lineage, evaluate only on lineage-disjoint Red clusters, then freeze the supported representation for an abstention-aware Crystal transfer test. |
-| Authority now | The pipeline holds eighteen authentic settled Red causal train examples from eighteen lineages and one immutable non-authoritative eight-row integration model that reloads exactly. The model has made no gameplay prediction and has no gameplay authority. |
-| Authority target | Scale to at least 60 informative train outcomes under a prospectively frozen cluster-aware design, pass feature-support information and power gates, and beat frozen controls on untouched lineage-level Red development outcomes before freezing supported weights for Crystal. |
-| Transfer test | After the powered Red model beats the best-of-three control envelope, freeze its title-neutral supported projection. A separately powered Crystal plan must compare it with the same architecture from zero initialization across the complete 251-target catalog. Supported abstention fails; typed unsupported abstention earns boundary credit but no completion credit. Crystal-only mechanics require later adaptation before authority. |
-| Cheapest falsifier | The exact-main census already falsified current capacity, and the replacement factory is locally qualified but unrun. Publish it, require green exact-main CI, freeze one exact-runtime twelve-world plan, execute each durably claimed assignment at most once, admit the complete denominator, and recensus. The tranche must pass 9/12 with 2 train, 6 development, and 1 contingency root before a yield-adjusted population campaign can be sized to deliver the remaining 103 independent lineages. |
+| Reusable capability | Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe. |
+| Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus eighteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
+| Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
+| Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
+| Cheapest falsifier | Freeze one lineage-disjoint battle train/development pair using only authenticated pre-outcome identity and observation facts. Claim every root and candidate before input, execute and retain every supported branch, fit only on an informative train menu, and compare with the frozen prior on the prospectively held development menu. Reject on flat train evidence, no discordance, or no advantage; never build another full route to obtain rows. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 18 | 60 |
+| Causal Train Example · train | 18 | 19 |
+| Model Fit · train | 5 | 6 |
+| Verified Outcome Example · development | 5 | 6 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,30 +60,30 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-31-powered-lineage-supply-locally-qualified-publication-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-powered-lineage-supply-v1-local-qualification-2026-08-31.json)
+**2026-08-31-powered-factory-failed-scenario-lab-reactivated** · status **active** · evidence [falsification](docs/evidence/red-living-dex-powered-lineage-supply-terminal-falsification-v1-2026-08-31.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The rail creates genuinely independent Red classrooms without copying state, leaking outcomes, or confusing setup teaching with learner supervision. It preserves Red as causal curriculum, the final 36/100/3 capacity gate before training, and Crystal as the first powered transfer falsifier toward a multi-game living Pokedex agent. |
-| Learning output | No new learning output. The board remains 18/60 authentic train examples, integration fit 1/1, powered fit 0, authority promotions 0, and transfer results 0. The new code qualifies a classroom factory, not a model or outcome dataset. |
-| Authority delta | None. This engineering session opened no ROM, private supply plan, world, setup teacher, claim, outcome, model, sealed Red capture, or Crystal input. Controller actions, emulator frames, predictions, fits, and authority promotions remain zero. The corpus remains eighteen authentic Red causal examples; powered fit, gameplay authority, Crystal transfer, and living-Pokedex authority remain zero. |
-| Transfer result | Still untested. The contract now requires a complete per-title catalog, typed supported and unsupported abstentions, explicit Crystal-only mechanics, a best-of-three control envelope, a zero-initialization comparator, and a separately powered Crystal plan before execution. |
-| Blocker | The replacement rail is locally implemented and adversarially qualified but is not yet published or executed. The original exact census still supplies only 14 usable train lineages, 22 same-reset development lineages, and zero contingencies against final floors of 36/100/3, leaving the original deficit of 22 train, 78 development, 3 contingency, 44 train attempts, and 103 total independent lineages plus support-floor failures. |
-| Decision | The independent-world factory design is complete. It prospectively freezes 3 train, 8 development, and 1 contingency world, binds exact source and CPython/PyBoy runtime identity, shares a plan-scoped generation/admission lock, forbids retry after durable claim, and requires complete-denominator action-free admission. Publish and green the exact source before freezing or running it; a 9/12 and 2/6/1 pass authorizes only recensus, not training. |
-| Next session | Publish the locally qualified powered-lineage supply rail, require green exact-main CI, freeze one action-free 3/8/1 plan, execute the twelve clean-power assignments, admit the complete denominator, and run one fresh action-free capacity census. Use measured yield and the remaining support deficits to decide whether a separately frozen population campaign is justified. |
-| Next falsifier | After publication and green exact-main CI, freeze exactly one twelve-world plan bound to the installed runtime, execute its assignments without retry after durable claim, admit all twelve dispositions, and pass 9/12 with role floors 2/6/1. Then recensus; do not infer that twelve roots erase the original 103-lineage deficit. |
-| Stop condition | Do not execute the unpublished rail, weaken V2, reclassify old roots, clone or rehash states, retry a durably claimed world, call a generated root a training example, or launch a population campaign before the bounded tranche passes and measured yield sizes it to deliver the remaining lineages. No powered outcome, fit, authority, sealed Red, Crystal, or full replay is authorized. |
+| Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
+| Learning output | No new learning output from the failed factory. Existing tracked totals remain causal train 18, model fits 5, verified development outcomes 5, unseen comparisons 4, authority promotions 0, and transfer results 0. The next session must retain one exact battle train menu and its prospectively held development comparison; it may not relabel that comparison historically unseen. |
+| Authority delta | None. The closed supply tranche used 208777 teacher-side controller actions and 32312041 frames but produced zero roots and therefore zero learner labels, outcomes, predictions, fits, authority promotions, sealed Red access, or Crystal access. The tracked learning board remains eighteen authentic causal train examples, five model fits, four unseen comparisons, authority zero, and transfer zero. |
+| Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
+| Blocker | The shared scenario laboratory and three title-neutral outcome adapters exist, but the real catalogs are still thin. The first battle curve was dominated by easy one-hit outcomes, while navigation and party development each have only a narrow evidence pair. The immediate blocker is now one published, claim-first train-to-prospectively-held-development battle loop; historical untouched status is not inferred from partition labels. |
+| Decision | Retire the 0/12 clean-power supply factory without retry or successor. Preserve its exact aggregate failure evidence, repair generic admission so known failure stage/actions/frames are not downgraded to unknown, and reactivate the model-first three-family scenario curriculum. Battle closes one measured update-and-comparison loop first; navigation and party development follow only after that result is retained. |
+| Next session | Publish the claim-first battle-cycle gate, require green exact-main CI, then freeze and execute exactly one authenticated train/development pair. Add one causal train example, one model fit only if train is informative, and one verified development outcome; preserve unseen-comparison count at four because historical untouched provenance is not claimed. Reorient immediately after the receipt. |
+| Next falsifier | Freeze one outcome-blind battle train/development pair from authenticated catalog roots. Atomically claim each upstream-plus-materialized root and durably claim every supported candidate before input, fit one prior-preserving candidate from train outcomes only, and compare it with the frozen prior after committing both development predictions. Flat train evidence, no discordant choice, or no positive advantage is a typed rejection and ends the iteration without a route patch. |
+| Stop condition | Stop this iteration if the bounded battle train menu is flat, any root or candidate claim is unavailable or uncertain, train/development lineages overlap, teacher choices enter as labels, a supported action is unmeasured, or the development comparison has no discordance or no advantage. Do not substitute a capture, repair the full teacher route, retry a consumed plan, open sealed Red or Crystal, or promote authority. |
 
 ### Stop conditions
 
-- The first causal campaign and all eight clustered train assignments are permanently consumed; never refreeze retry recover through execution or substitute another root under their identities.
-- Every powered context needs a prospectively authenticated harness-episode lineage. Byte clones local RNG perturbations and rehashed states inherit their parent lineage and cannot satisfy train or development independence.
-- Stop on insufficient action-free capacity statistical power kind coverage feature rank or candidate success, or on identity leakage counterfactual targets teacher fallback development-to-train leakage sealed Red Crystal execution promotion or full replay.
-- Successor ordinals zero through fifteen are permanently consumed: twelve settled targets and four setup-only terminals. The readiness audit and R0 integration fit may not retry or refit. The exact V2 census is permanently consumed and failed with a 103-lineage total deficit; current-bank gameplay is closed until genuinely new prospectively partitioned clean-power lineages pass a fresh action-free census.
+- All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
+- Train and development snapshots must have immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
+- Stop a model iteration on flat outcomes, inadequate candidate support, claim uncertainty, identity leakage, teacher-choice targets, unmeasured alternatives, or no development discordance/advantage; redesign the scenario distribution instead of patching the route.
+- No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or authority promotion is permitted in this development lane.
 
 ### Hard boundaries for this lane
 
-- **Prohibited:** counterfactual target
+- **Prohibited:** unexecuted counterfactual target
 - **Prohibited:** behavior commitment reissue
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
@@ -98,12 +100,13 @@ outputs.
 - **Prohibited:** sealed or benchmark root use
 - **Prohibited:** synthetic executor fit admission
 - **Prohibited:** promotion from pilot
+- **Prohibited:** routine clean power teacher factory
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher choice or fallback
 - **Prohibited:** teacher route hardening
 - **Prohibited:** transfer claim
 - **Prohibited:** unpowered model quality claim
-- **Prohibited:** unselected action target
+- **Prohibited:** unmeasured action target
 - **Prohibited:** v4 freeze or trial execution
 - **Prohibited:** wrapper only successor
 
@@ -136,6 +139,7 @@ and unmeasured teacher-label copying are also hard alarms.
 ## Retired leading edges
 
 - **Repeatable Red living-Dex observed-arm calibration V1:** PR 87 merged as main 79b456ce and exact-main CI 33087844777/1 passed. The sole V2 ROM-free preflight failed closed at selected_root_authentication with zero claims, runtimes, gameplay, learner, model, or public-private-field effects. V1/V2 are consumed, V3 is forbidden, and the lane is aborted without inferring a private cause. Its frozen plan and public boundaries remain historical evidence, not training data. Evidence is preserved; retry is no.
+- **Red clean-power independent-lineage supply V1:** Exact main 56b295280355026971ba8dcabdb68d35bbbe961a passed CI 33369612082/1. Its sole twelve-assignment tranche consumed every identity and produced zero roots after 208777 actions and 32312041 frames: nine setup-teacher failures and three conditioning failures. It created no learner outcome, fit, authority, sealed Red, or Crystal access. The 0/12 result falsifies this training-supply strategy; it may not retry or receive a clean-power successor. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V4:** The proposed action-free 12+8 freeze was retired unexecuted after independent Claude and Antigravity audits at baseline dee52ff2. Its inherited ranker converted selected-arm failures into positive labels for unexecuted alternatives, exposed only two reachable feature-difference shapes, required an outcome balance the freezer could not control, and had no V4, multiway, observed-arm, or Crystal machinery. Freezing it would have bound scarce roots to a contract already known to be invalid. Evidence is preserved; retry is no.
 - **Post-exception living-ledger qualification V1:** Main c663c3f4 passed CI 32913718889/1 with 4730 tests. The frozen-selection seam executes one selected capability at most once, observes one fresh ledger after ordinary return or exception, settles readable unchanged/partial/exact states as -1/-1/+1, censors only observation failure, propagates process interruption, and killed 9/9 targeted mutations. It opened no ROM or private context and changed no learning counter; receipt 1b402002...f1463 closes the repair. Evidence is preserved; retry is no.
 - **Red multi-family living-Dex option-value curriculum V3:** Collector main 7ebea63c passed CI 32900424741/1; storage-port repair main 14d7bcea passed CI 32902297341/1 and a claim-stubbed preflight reached the boundary with zero effects. Train ordinal zero then interrupted after 4379 actions and 304680 frames. Its durable censored terminal forbids retry; development stayed untouched and no target was added. Seven remaining train trials cannot meet V3's frozen minimum of eight, so receipt aa573cb9...f4b0 closes V3 without replacement. Evidence is preserved; retry is no.

@@ -232,6 +232,7 @@ def authenticate_red_living_dex_powered_supply_private_tranche(
                     _terminal_failure(
                         plan,
                         assignment,
+                        private_store=private_store,
                         claim_registry=claim_registry,
                         status=state.status,
                     )
@@ -334,6 +335,7 @@ def _terminal_failure(
     plan: RedLivingDexPoweredSupplyPlan,
     assignment: RedLivingDexPoweredSupplyAssignment,
     *,
+    private_store: PrivateArtifactRoot,
     claim_registry: Path,
     status: str,
 ) -> RedLivingDexPoweredSupplyFailure:
@@ -343,6 +345,34 @@ def _terminal_failure(
         claim_registry=claim_registry,
         required=False,
     )
+    failure_stage = f"private_episode_{status}"
+    effects_known = False
+    controller_actions: int | None = None
+    emulator_frames: int | None = None
+    if status == "failed":
+        evidence = private_store.read_failed_episode_diagnostic(
+            assignment.episode_id
+        )
+        if evidence.assignment != assignment.public_dict():
+            raise RedLivingDexPoweredSupplyAdmissionError(
+                "powered supply failed assignment differs"
+            )
+        if claim is not None:
+            if evidence.claim != claim:
+                raise RedLivingDexPoweredSupplyAdmissionError(
+                    "powered supply failed claim differs"
+                )
+        elif evidence.claim is not None:
+            raise RedLivingDexPoweredSupplyAdmissionError(
+                "powered supply failed claim differs"
+            )
+        if evidence.failure_diagnostic is not None:
+            (
+                failure_stage,
+                effects_known,
+                controller_actions,
+                emulator_frames,
+            ) = _decode_failure_diagnostic(evidence.failure_diagnostic)
     return RedLivingDexPoweredSupplyFailure(
         assignment_id=assignment.assignment_id,
         plan_sha256=plan.plan_sha256,
@@ -354,11 +384,68 @@ def _terminal_failure(
         assignment_claim_sha256=(
             canonical_sha256(claim) if claim is not None else None
         ),
-        failure_stage=f"private_episode_{status}",
-        effects_known=False,
-        controller_actions=None,
-        emulator_frames=None,
+        failure_stage=failure_stage,
+        effects_known=effects_known,
+        controller_actions=controller_actions,
+        emulator_frames=emulator_frames,
     )
+
+
+def _decode_failure_diagnostic(
+    value: Mapping[str, object],
+) -> tuple[str, bool, int | None, int | None]:
+    if set(value) != {
+        "controller_actions",
+        "effects_known",
+        "emulator_frames",
+        "exception_chain",
+        "execution_phase",
+        "pressed_button_count",
+        "save_state_loads",
+        "schema",
+        "terminal_root_generated",
+        "terminal_state_saves",
+    } or value.get("schema") != (
+        "pokemon.red.private-living-dex-fresh-failure-diagnostic.v1"
+    ):
+        raise RedLivingDexPoweredSupplyAdmissionError(
+            "powered supply failure diagnostic differs"
+        )
+    stage = value.get("execution_phase")
+    effects_known = value.get("effects_known")
+    controller_actions = value.get("controller_actions")
+    emulator_frames = value.get("emulator_frames")
+    if (
+        not isinstance(stage, str)
+        or not stage
+        or any(
+            character not in "abcdefghijklmnopqrstuvwxyz0123456789_-"
+            for character in stage
+        )
+        or not isinstance(effects_known, bool)
+    ):
+        raise RedLivingDexPoweredSupplyAdmissionError(
+            "powered supply failure diagnostic differs"
+        )
+    if effects_known:
+        if any(
+            type(item) is not int or item < 0  # noqa: E721
+            for item in (controller_actions, emulator_frames)
+        ):
+            raise RedLivingDexPoweredSupplyAdmissionError(
+                "powered supply failure diagnostic effects differ"
+            )
+        if not isinstance(controller_actions, int) or not isinstance(
+            emulator_frames,
+            int,
+        ):  # pragma: no cover - the exact-type guard above establishes this
+            raise AssertionError("failure diagnostic counter narrowing failed")
+        return stage, True, controller_actions, emulator_frames
+    elif controller_actions is not None or emulator_frames is not None:
+        raise RedLivingDexPoweredSupplyAdmissionError(
+            "powered supply failure diagnostic effects differ"
+        )
+    return stage, False, None, None
 
 
 def _read_claim(

@@ -27,6 +27,9 @@ PRIVATE_ROOT_SENTINEL = ".pokemon-red-completion-private-root.json"
 PRIVATE_ROOT_FORMAT = "pokemon-red-completion-private-root"
 EPISODE_FORMAT = "pokemon-red-completion-episode-jsonl"
 PRIVATE_JSON_ARTIFACT_FORMAT = "pokemon-red-completion-private-artifact-jsonl"
+PRIVATE_JSON_ARTIFACT_IDENTITY_FORMAT = (
+    "pokemon-red-completion-private-artifact-identity"
+)
 PRIVATE_SEALED_RECORD_FORMAT = "pokemon-red-completion-private-sealed-record"
 PRIVATE_ARTIFACT_SCHEMA_VERSION = 1
 _PRIVATE_DIRECTORY_MODE = 0o700
@@ -34,6 +37,9 @@ _PRIVATE_FILE_MODE = 0o600
 _MAX_MANIFEST_BYTES = 1024 * 1024
 _MAX_SEALED_RECORD_BYTES = 1024 * 1024
 _MAX_JSONL_LINE_BYTES = 16 * 1024 * 1024
+_MAX_TYPED_ARTIFACT_STREAMS = 64
+_TYPED_ARTIFACT_IDENTITY = ".typed-artifact-identity.json"
+_TYPED_RECOVERY_MANIFEST = ".typed-artifact-recovery-manifest.partial"
 # The qualified balanced-team curriculum has measured just over 506 MB before
 # its missing battle labels are included.  One GiB retains a strict reader
 # bound while covering the declared 7,000-battle safety envelope and schedule
@@ -223,6 +229,20 @@ class EpisodeSummary:
 
 
 @dataclass(frozen=True, slots=True)
+class FailedEpisodeDiagnosticEvidence:
+    """Narrow, path-free evidence projection for a retained failed attempt."""
+
+    summary: EpisodeSummary
+    assignment: Mapping[str, object]
+    claim: Mapping[str, object] | None
+    failure_diagnostic: Mapping[str, object] | None
+
+    def __post_init__(self) -> None:
+        if self.summary.status != "failed":
+            raise PrivateArtifactError("failure evidence came from another episode status")
+
+
+@dataclass(frozen=True, slots=True)
 class PrivateArtifactSummary:
     """A deliberately path-free account of a finalized typed JSON artifact."""
 
@@ -244,6 +264,40 @@ class PrivateArtifactSummary:
             "total_records": self.total_records,
             "total_bytes": self.total_bytes,
             "manifest_sha256": self.manifest_sha256,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class PrivateArtifactRecovery:
+    """Path-free result of reconciling one deterministic typed artifact."""
+
+    summary: PrivateArtifactSummary
+    disposition: str
+    reason_code: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.disposition not in {
+            "already_complete",
+            "already_failed",
+            "published_complete",
+            "published_failed",
+            "sealed_interrupted",
+        }:
+            raise PrivateArtifactError("typed artifact recovery disposition is invalid")
+        if self.summary.status == "complete" and self.reason_code is not None:
+            raise PrivateArtifactError("complete typed artifact recovery has a failure reason")
+        if self.summary.status == "failed" and (
+            not isinstance(self.reason_code, str)
+            or _SAFE_REASON.fullmatch(self.reason_code) is None
+        ):
+            raise PrivateArtifactError("failed typed artifact recovery reason is invalid")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "private-json-artifact-recovery-v1",
+            "disposition": self.disposition,
+            "reason_code": self.reason_code,
+            "artifact": self.summary.public_dict(),
         }
 
 
@@ -544,8 +598,12 @@ class PrivateArtifactRoot:
         partial = self._root / f"{artifact_id}.partial"
         final = self._root / artifact_id
         failed = self._root / f"{artifact_id}.failed.partial"
+        interrupted = self._root / f"{artifact_id}.interrupted.partial"
         try:
-            occupied = any(_lexists(candidate) for candidate in (partial, final, failed))
+            occupied = any(
+                _lexists(candidate)
+                for candidate in (partial, final, failed, interrupted)
+            )
         except PrivateArtifactError as error:
             raise PrivateArtifactError(str(error)) from None
         if occupied:
@@ -561,24 +619,104 @@ class PrivateArtifactRoot:
         except OSError:
             raise PrivateArtifactError("unable to create the private partial artifact") from None
 
+        lock_descriptor = -1
         try:
             # A typed artifact may guard a one-shot measurement just as an
             # episode does.  Persist the exclusive partial namespace before
             # returning control to code that can send emulator input.
+            lock_descriptor = _lock_private_artifact_directory(
+                partial,
+                nonblocking=True,
+            )
+            _write_exclusive_private_entry(
+                lock_descriptor,
+                _TYPED_ARTIFACT_IDENTITY,
+                _private_artifact_identity_bytes(
+                    artifact_id=artifact_id,
+                    kind=kind,
+                ),
+            )
             _fsync_directory(partial)
             _fsync_directory(self._root)
         except PrivateArtifactError:
             # Retain the visible partial so a restart treats the attempt as
             # consumed.  Do not expose the private location in the error.
+            _release_private_artifact_lock(lock_descriptor)
             raise PrivateArtifactError("unable to durably claim the private artifact") from None
 
-        return PrivateArtifactWriter(
-            _validation_token=_WRITER_VALIDATION_TOKEN,
-            artifact_id=artifact_id,
-            kind=kind,
-            partial=partial,
-            final=final,
-            failed=failed,
+        try:
+            return PrivateArtifactWriter(
+                _validation_token=_WRITER_VALIDATION_TOKEN,
+                artifact_id=artifact_id,
+                kind=kind,
+                partial=partial,
+                final=final,
+                failed=failed,
+                lock_descriptor=lock_descriptor,
+            )
+        except BaseException:
+            _release_private_artifact_lock(lock_descriptor)
+            raise
+
+    def reconcile_interrupted_artifact(
+        self,
+        artifact_id: str,
+        *,
+        expected_kind: str,
+    ) -> PrivateArtifactRecovery:
+        """Reconcile one deterministic typed artifact without replaying its work.
+
+        A manifest-less ``.partial`` is sealed as failed with the sanitized
+        ``process_interrupted`` reason. Durable JSONL records are authenticated
+        and retained exactly as written. A partial that already contains a valid
+        complete or failed manifest is only published under its corresponding
+        terminal name. Repeated calls are read-only and return the same terminal
+        summary.
+        """
+
+        _validate_artifact_id(artifact_id)
+        _validate_artifact_kind(expected_kind)
+        self._revalidate()
+        return _reconcile_private_artifact(
+            self._root,
+            artifact_id,
+            expected_kind=expected_kind,
+        )
+
+    def open_artifact(
+        self,
+        artifact_id: str,
+        *,
+        expected_kind: str,
+    ) -> PrivateArtifactReader:
+        """Open one complete typed artifact after validating every stream."""
+
+        _validate_artifact_id(artifact_id)
+        _validate_artifact_kind(expected_kind)
+        self._revalidate()
+        return _open_private_artifact(
+            self._root,
+            artifact_id,
+            expected_kind=expected_kind,
+            expected_status="complete",
+        )
+
+    def open_failed_artifact(
+        self,
+        artifact_id: str,
+        *,
+        expected_kind: str,
+    ) -> PrivateArtifactReader:
+        """Open one failed typed artifact after validating every retained stream."""
+
+        _validate_artifact_id(artifact_id)
+        _validate_artifact_kind(expected_kind)
+        self._revalidate()
+        return _open_private_artifact(
+            self._root,
+            artifact_id,
+            expected_kind=expected_kind,
+            expected_status="failed",
         )
 
     def open_episode(self, episode_id: str) -> PrivateEpisodeReader:
@@ -591,7 +729,47 @@ class PrivateArtifactRoot:
             # operating-system exception as its cause. Preserve only its sanitized
             # public message at this boundary.
             raise PrivateArtifactError(str(error)) from None
-        return _open_private_episode(self._root, episode_id)
+        return _open_private_episode(
+            self._root,
+            episode_id,
+            expected_status="complete",
+        )
+
+    def read_failed_episode_diagnostic(
+        self,
+        episode_id: str,
+    ) -> FailedEpisodeDiagnosticEvidence:
+        """Read only assignment, claim, and diagnostic evidence from a failed episode."""
+
+        _validate_episode_id(episode_id)
+        try:
+            self._revalidate()
+        except PrivateArtifactError as error:
+            raise PrivateArtifactError(str(error)) from None
+        reader = _open_private_episode(
+            self._root,
+            episode_id,
+            expected_status="failed",
+        )
+        if "assignment" not in reader.stream_names:
+            raise PrivateArtifactError("failed episode assignment stream is absent")
+        assignment = _read_single_episode_record(reader, "assignment")
+        claim = (
+            _read_single_episode_record(reader, "claim")
+            if "claim" in reader.stream_names
+            else None
+        )
+        failure_diagnostic = (
+            _read_single_episode_record(reader, "failure_diagnostic")
+            if "failure_diagnostic" in reader.stream_names
+            else None
+        )
+        return FailedEpisodeDiagnosticEvidence(
+            summary=reader.summary,
+            assignment=assignment,
+            claim=claim,
+            failure_diagnostic=failure_diagnostic,
+        )
 
     def _revalidate(self) -> None:
         _validate_root_location(
@@ -875,6 +1053,80 @@ class PrivateEpisodeReader:
             if file.stream == stream:
                 return file
         raise PrivateArtifactError("episode stream is absent")
+
+
+class PrivateArtifactReader:
+    """Immutable in-memory snapshot of one authenticated typed artifact."""
+
+    __slots__ = ("_files", "_payloads", "_reason_code", "_summary")
+
+    def __init__(
+        self,
+        *,
+        _validation_token: object,
+        files: tuple[_EpisodeFile, ...],
+        payloads: Mapping[str, bytes],
+        summary: PrivateArtifactSummary,
+        reason_code: str | None,
+    ) -> None:
+        if _validation_token is not _READER_VALIDATION_TOKEN:
+            raise PrivateArtifactError(
+                "private artifact readers must be opened from a validated private root"
+            )
+        self._files = files
+        self._payloads = dict(payloads)
+        self._summary = summary
+        self._reason_code = reason_code
+
+    def __repr__(self) -> str:
+        return (
+            "PrivateArtifactReader("
+            f"artifact_id={self._summary.artifact_id!r}, "
+            f"kind={self._summary.kind!r}, validated=True, streams={len(self._files)})"
+        )
+
+    @property
+    def summary(self) -> PrivateArtifactSummary:
+        return self._summary
+
+    @property
+    def reason_code(self) -> str | None:
+        return self._reason_code
+
+    @property
+    def stream_names(self) -> tuple[str, ...]:
+        return tuple(file.stream for file in self._files)
+
+    def iter_stream(
+        self,
+        stream: str,
+        *,
+        max_records: int | None = None,
+    ) -> Iterator[dict[str, object]]:
+        _validate_stream_name(stream)
+        file = next((item for item in self._files if item.stream == stream), None)
+        if file is None:
+            raise PrivateArtifactError("typed artifact stream is absent")
+        if max_records is not None:
+            if isinstance(max_records, bool) or not isinstance(max_records, int):
+                raise PrivateArtifactError("record limit must be a non-negative integer")
+            if max_records < 0:
+                raise PrivateArtifactError("record limit must be a non-negative integer")
+            if file.records > max_records:
+                raise PrivateArtifactError(
+                    "typed artifact stream exceeds the requested record limit"
+                )
+        return _iter_verified_json_objects(self._payloads[stream])
+
+
+def _read_single_episode_record(
+    reader: PrivateEpisodeReader,
+    stream: str,
+) -> dict[str, object]:
+    records = tuple(reader.iter_stream(stream, max_records=1))
+    if len(records) != 1:
+        raise PrivateArtifactError("failed episode evidence stream is not singular")
+    return records[0]
 
 
 class EpisodeWriter:
@@ -1172,6 +1424,7 @@ class PrivateArtifactWriter:
         "_failed",
         "_final",
         "_kind",
+        "_lock_descriptor",
         "_partial",
         "_state",
         "_streams",
@@ -1187,16 +1440,24 @@ class PrivateArtifactWriter:
         partial: Path,
         final: Path,
         failed: Path,
+        lock_descriptor: int = -1,
     ) -> None:
         if _validation_token is not _WRITER_VALIDATION_TOKEN:
             raise PrivateArtifactError(
                 "private artifact writers must be created from a validated private root"
             )
+        if (
+            isinstance(lock_descriptor, bool)
+            or not isinstance(lock_descriptor, int)
+            or lock_descriptor < 0
+        ):
+            raise PrivateArtifactError("private artifact writer lock is invalid")
         self._artifact_id = artifact_id
         self._kind = kind
         self._partial = partial
         self._final = final
         self._failed = failed
+        self._lock_descriptor = lock_descriptor
         self._streams: dict[str, _Stream] = {}
         self._state = "active"
         self._summary: PrivateArtifactSummary | None = None
@@ -1220,8 +1481,10 @@ class PrivateArtifactWriter:
     ) -> bool:
         del exception, traceback
         if exception_type is not None:
-            with suppress(PrivateArtifactError):
+            try:
                 self.abort("unhandled_exception")
+            except PrivateArtifactError:
+                self._release_lock()
             return False
 
         if self._state == "active":
@@ -1229,8 +1492,10 @@ class PrivateArtifactWriter:
                 self.complete()
             except BaseException:
                 if self._state == "active":
-                    with suppress(PrivateArtifactError):
+                    try:
                         self.abort("finalization_failed")
+                    except PrivateArtifactError:
+                        self._release_lock()
                 raise
         return False
 
@@ -1289,10 +1554,20 @@ class PrivateArtifactWriter:
             raise PrivateArtifactError("completed artifact already exists; refusing to overwrite")
         summary = self._finalize(status="complete", reason_code=None)
         try:
+            self._retire_identity_seal()
+        except PrivateArtifactError:
+            self._state = "reconciliation_required"
+            self._release_lock()
+            raise
+        try:
             _rename_no_replace(self._partial, self._final)
         except OSError:
             self._state = "publication_failed"
-            self._retain_publication_failure()
+            try:
+                self._restore_identity_seal()
+                self._retain_publication_failure()
+            finally:
+                self._release_lock()
             raise PrivateArtifactError("unable to publish the completed private artifact") from None
         self._state = "complete"
         self._summary = summary
@@ -1300,6 +1575,8 @@ class PrivateArtifactWriter:
             _fsync_directory(self._final.parent)
         except PrivateArtifactError as error:
             raise PrivateArtifactError(str(error)) from None
+        finally:
+            self._release_lock()
         return summary
 
     def abort(self, reason_code: str = "artifact_aborted") -> PrivateArtifactSummary:
@@ -1315,10 +1592,17 @@ class PrivateArtifactWriter:
             raise PrivateArtifactError("failed artifact already exists; refusing to overwrite")
         summary = self._finalize(status="failed", reason_code=reason_code)
         try:
+            self._retire_identity_seal()
+        except PrivateArtifactError:
+            self._state = "reconciliation_required"
+            self._release_lock()
+            raise
+        try:
             _rename_no_replace(self._partial, self._failed)
         except OSError:
             self._state = "failed"
             self._summary = summary
+            self._release_lock()
             raise PrivateArtifactError("unable to retain the failed private artifact") from None
         self._state = "failed"
         self._summary = summary
@@ -1326,6 +1610,8 @@ class PrivateArtifactWriter:
             _fsync_directory(self._failed.parent)
         except PrivateArtifactError as error:
             raise PrivateArtifactError(str(error)) from None
+        finally:
+            self._release_lock()
         return summary
 
     @property
@@ -1466,6 +1752,7 @@ class PrivateArtifactWriter:
             reason_code="publication_failed",
         )
         self._summary = failed_summary
+        self._retire_identity_seal()
         try:
             failed_exists = _lexists(self._failed)
         except PrivateArtifactError as error:
@@ -1501,6 +1788,44 @@ class PrivateArtifactWriter:
     def _require_active(self) -> None:
         if self._state != "active":
             raise PrivateArtifactError("artifact writer is already finalized")
+
+    def _release_lock(self) -> None:
+        descriptor = self._lock_descriptor
+        self._lock_descriptor = -1
+        _release_private_artifact_lock(descriptor)
+
+    def _retire_identity_seal(self) -> None:
+        _require_private_artifact_identity(
+            self._lock_descriptor,
+            artifact_id=self._artifact_id,
+            expected_kind=self._kind,
+        )
+        _remove_private_artifact_identity(self._lock_descriptor)
+
+    def _restore_identity_seal(self) -> None:
+        if _entry_metadata(
+            self._lock_descriptor,
+            _TYPED_ARTIFACT_IDENTITY,
+        ) is None:
+            _write_exclusive_private_entry(
+                self._lock_descriptor,
+                _TYPED_ARTIFACT_IDENTITY,
+                _private_artifact_identity_bytes(
+                    artifact_id=self._artifact_id,
+                    kind=self._kind,
+                ),
+            )
+            try:
+                os.fsync(self._lock_descriptor)
+            except OSError:
+                raise PrivateArtifactError(
+                    "unable to restore the typed artifact identity seal"
+                ) from None
+        _require_private_artifact_identity(
+            self._lock_descriptor,
+            artifact_id=self._artifact_id,
+            expected_kind=self._kind,
+        )
 
 
 def initialize_private_root(
@@ -1877,6 +2202,837 @@ def _inspect_episode_artifact_state(
         )
 
 
+def _reconcile_private_artifact(
+    root: Path,
+    artifact_id: str,
+    *,
+    expected_kind: str,
+) -> PrivateArtifactRecovery:
+    candidates = {
+        "complete": root / artifact_id,
+        "partial": root / f"{artifact_id}.partial",
+        "failed": root / f"{artifact_id}.failed.partial",
+        "interrupted": root / f"{artifact_id}.interrupted.partial",
+    }
+    present = tuple(
+        status for status, candidate in candidates.items() if _lexists(candidate)
+    )
+    if not present:
+        raise PrivateArtifactError("typed artifact is absent")
+    if set(present) == {"complete", "failed"}:
+        if _is_valid_terminal_namespace(root, artifact_id):
+            raise PrivateArtifactError("typed artifact state is ambiguous")
+        summary, reason_code = _validate_private_artifact_directory_state(
+            root,
+            candidates["failed"].name,
+            artifact_id=artifact_id,
+            expected_kind=expected_kind,
+            expected_status="failed",
+        )
+        return PrivateArtifactRecovery(
+            summary=summary,
+            disposition="already_failed",
+            reason_code=reason_code,
+        )
+    publication_collision = set(present) == {"complete", "partial"}
+    if publication_collision and _is_valid_terminal_namespace(root, artifact_id):
+        raise PrivateArtifactError("typed artifact state is ambiguous")
+    if len(present) != 1 and not publication_collision:
+        raise PrivateArtifactError("typed artifact state is ambiguous")
+
+    status = "partial" if publication_collision else present[0]
+    if status == "interrupted":
+        raise PrivateArtifactError("typed artifact has an unsupported interrupted namespace")
+    if status in {"complete", "failed"}:
+        summary, reason_code = _validate_private_artifact_directory_state(
+            root,
+            candidates[status].name,
+            artifact_id=artifact_id,
+            expected_kind=expected_kind,
+            expected_status=status,
+        )
+        return PrivateArtifactRecovery(
+            summary=summary,
+            disposition=("already_complete" if status == "complete" else "already_failed"),
+            reason_code=reason_code,
+        )
+
+    partial = candidates["partial"]
+    lock_descriptor = _lock_private_artifact_directory(partial, nonblocking=True)
+    try:
+        _require_named_locked_directory(root, partial.name, lock_descriptor)
+        entries = _directory_entries(lock_descriptor)
+        if publication_collision and "manifest.unpublished.json" not in entries:
+            raise PrivateArtifactError("typed artifact state is ambiguous")
+        if "manifest.json" not in entries:
+            recovered_reason = _seal_interrupted_private_artifact(
+                lock_descriptor,
+                partial=partial,
+                artifact_id=artifact_id,
+                kind=expected_kind,
+            )
+            expected_status = "failed"
+            disposition = (
+                "published_failed"
+                if recovered_reason == "publication_failed"
+                else "sealed_interrupted"
+            )
+        else:
+            identity_seal_present = _TYPED_ARTIFACT_IDENTITY in entries
+            if identity_seal_present:
+                _require_private_artifact_identity(
+                    lock_descriptor,
+                    artifact_id=artifact_id,
+                    expected_kind=expected_kind,
+                )
+            try:
+                _validate_private_artifact_directory_state(
+                    root,
+                    partial.name,
+                    artifact_id=artifact_id,
+                    expected_kind=expected_kind,
+                    expected_status="complete",
+                    allow_identity_seal=identity_seal_present,
+                )
+            except PrivateArtifactError:
+                try:
+                    _validate_private_artifact_directory_state(
+                        root,
+                        partial.name,
+                        artifact_id=artifact_id,
+                        expected_kind=expected_kind,
+                        expected_status="failed",
+                        allow_identity_seal=identity_seal_present,
+                    )
+                except PrivateArtifactError:
+                    raise PrivateArtifactError(
+                        "partial typed artifact manifest failed validation"
+                    ) from None
+                expected_status = "failed"
+                disposition = "published_failed"
+            else:
+                expected_status = "complete"
+                disposition = "published_complete"
+            if identity_seal_present:
+                _remove_private_artifact_identity(lock_descriptor)
+
+        destination = (
+            candidates["complete"]
+            if expected_status == "complete"
+            else candidates["failed"]
+        )
+        _require_named_locked_directory(root, partial.name, lock_descriptor)
+        try:
+            _rename_no_replace(partial, destination)
+            _fsync_directory(root)
+        except OSError:
+            raise PrivateArtifactError(
+                "unable to publish the reconciled typed artifact"
+            ) from None
+        summary, reason_code = _validate_private_artifact_directory_state(
+            root,
+            destination.name,
+            artifact_id=artifact_id,
+            expected_kind=expected_kind,
+            expected_status=expected_status,
+        )
+        return PrivateArtifactRecovery(
+            summary=summary,
+            disposition=disposition,
+            reason_code=reason_code,
+        )
+    finally:
+        _release_private_artifact_lock(lock_descriptor)
+
+
+def _is_valid_terminal_namespace(root: Path, artifact_id: str) -> bool:
+    try:
+        _open_private_sealed_record(root, artifact_id, expected_kind=None)
+    except PrivateArtifactError:
+        pass
+    else:
+        return True
+    try:
+        _validate_episode_directory_state(
+            root,
+            artifact_id,
+            episode_id=artifact_id,
+            expected_status="complete",
+        )
+    except PrivateArtifactError:
+        pass
+    else:
+        return True
+
+    root_descriptor = -1
+    artifact_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        metadata = _entry_metadata(root_descriptor, artifact_id)
+        if metadata is None or not stat.S_ISDIR(metadata.st_mode):
+            return False
+        artifact_descriptor = os.open(
+            artifact_id,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        manifest_payload = _read_private_entry(
+            artifact_descriptor,
+            "manifest.json",
+            subject="terminal namespace manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        manifest = _decode_canonical_json_object(
+            manifest_payload,
+            subject="terminal namespace manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        kind = manifest.get("kind")
+        if (
+            manifest.get("format") != PRIVATE_JSON_ARTIFACT_FORMAT
+            or not isinstance(kind, str)
+        ):
+            return False
+        _validate_artifact_kind(kind)
+        _validate_private_artifact_directory_state(
+            root,
+            artifact_id,
+            artifact_id=artifact_id,
+            expected_kind=kind,
+            expected_status="complete",
+        )
+        return True
+    except (OSError, PrivateArtifactError):
+        return False
+    finally:
+        for descriptor in (artifact_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _seal_interrupted_private_artifact(
+    directory_descriptor: int,
+    *,
+    partial: Path,
+    artifact_id: str,
+    kind: str,
+) -> str:
+    entries = _directory_entries(directory_descriptor)
+    _require_private_artifact_identity(
+        directory_descriptor,
+        artifact_id=artifact_id,
+        expected_kind=kind,
+    )
+    recovery_manifest_present = _TYPED_RECOVERY_MANIFEST in entries
+    unpublished_manifest_present = "manifest.unpublished.json" in entries
+    stream_entries = entries - {
+        _TYPED_ARTIFACT_IDENTITY,
+        _TYPED_RECOVERY_MANIFEST,
+        "manifest.unpublished.json",
+    }
+    if len(stream_entries) > _MAX_TYPED_ARTIFACT_STREAMS:
+        raise PrivateArtifactError("partial typed artifact exceeds its stream bound")
+
+    files: list[dict[str, object]] = []
+    authenticated_files: list[_EpisodeFile] = []
+    total_records = 0
+    total_bytes = 0
+    for filename in sorted(stream_entries):
+        if not filename.endswith(".jsonl"):
+            raise PrivateArtifactError("partial typed artifact contains an invalid entry")
+        stream = filename.removesuffix(".jsonl")
+        try:
+            _validate_stream_name(stream)
+        except PrivateArtifactError:
+            raise PrivateArtifactError(
+                "partial typed artifact contains an invalid stream name"
+            ) from None
+        if filename != f"{stream}.jsonl":
+            raise PrivateArtifactError(
+                "partial typed artifact contains an invalid stream name"
+            )
+        payload = _read_private_entry(
+            directory_descriptor,
+            filename,
+            subject="partial typed artifact stream",
+            maximum_bytes=_MAX_EPISODE_BYTES,
+        )
+        if unpublished_manifest_present:
+            records = _validate_private_artifact_jsonl(payload)
+        else:
+            payload, records = _retain_durable_private_artifact_prefix(
+                directory_descriptor,
+                filename,
+                payload,
+            )
+        total_bytes += len(payload)
+        total_records += records
+        if total_bytes > _MAX_EPISODE_BYTES:
+            raise PrivateArtifactError("partial typed artifact exceeds its size bound")
+        files.append(
+            {
+                "bytes": len(payload),
+                "filename": filename,
+                "records": records,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        )
+        authenticated_files.append(
+            _EpisodeFile(
+                stream=stream,
+                filename=filename,
+                records=records,
+                size=len(payload),
+                sha256=hashlib.sha256(payload).hexdigest(),
+            )
+        )
+
+    if _directory_entries(directory_descriptor) != entries:
+        raise PrivateArtifactError("partial typed artifact changed during reconciliation")
+    reason_code = "process_interrupted"
+    if unpublished_manifest_present:
+        unpublished_payload = _read_private_entry(
+            directory_descriptor,
+            "manifest.unpublished.json",
+            subject="unpublished typed artifact manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        _, unpublished_files = _validate_private_artifact_manifest(
+            unpublished_payload,
+            artifact_id=artifact_id,
+            expected_kind=kind,
+            expected_status="complete",
+        )
+        if unpublished_files != tuple(authenticated_files):
+            raise PrivateArtifactError(
+                "unpublished typed artifact manifest does not match retained streams"
+            )
+        reason_code = "publication_failed"
+    manifest = {
+        "artifact_id": artifact_id,
+        "files": files,
+        "format": PRIVATE_JSON_ARTIFACT_FORMAT,
+        "kind": kind,
+        "reason_code": reason_code,
+        "schema_version": PRIVATE_ARTIFACT_SCHEMA_VERSION,
+        "status": "failed",
+        "totals": {
+            "bytes": total_bytes,
+            "files": len(files),
+            "records": total_records,
+        },
+    }
+    manifest_bytes = _canonical_json_line(manifest)
+    if recovery_manifest_present:
+        try:
+            existing_manifest = _read_private_entry(
+                directory_descriptor,
+                _TYPED_RECOVERY_MANIFEST,
+                subject="typed artifact recovery manifest",
+                maximum_bytes=_MAX_MANIFEST_BYTES,
+            )
+        except PrivateArtifactError:
+            existing_manifest = None
+        if existing_manifest != manifest_bytes:
+            _remove_private_recovery_manifest(directory_descriptor)
+            recovery_manifest_present = False
+    if not recovery_manifest_present:
+        _write_exclusive_private_entry(
+            directory_descriptor,
+            _TYPED_RECOVERY_MANIFEST,
+            manifest_bytes,
+        )
+        try:
+            os.fsync(directory_descriptor)
+        except OSError:
+            raise PrivateArtifactError(
+                "unable to synchronize the typed artifact recovery seal"
+            ) from None
+    try:
+        _rename_no_replace(
+            partial / _TYPED_RECOVERY_MANIFEST,
+            partial / "manifest.json",
+        )
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to publish the typed artifact recovery seal"
+        ) from None
+    try:
+        os.fsync(directory_descriptor)
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to synchronize the reconciled typed artifact"
+        ) from None
+    _remove_private_artifact_identity(directory_descriptor)
+    expected_terminal_entries = {*stream_entries, "manifest.json"}
+    if unpublished_manifest_present:
+        expected_terminal_entries.add("manifest.unpublished.json")
+    if _directory_entries(directory_descriptor) != expected_terminal_entries:
+        raise PrivateArtifactError("partial typed artifact changed during reconciliation")
+    return reason_code
+
+
+def _open_private_artifact(
+    root: Path,
+    artifact_id: str,
+    *,
+    expected_kind: str,
+    expected_status: str,
+) -> PrivateArtifactReader:
+    directory_name = (
+        artifact_id
+        if expected_status == "complete"
+        else f"{artifact_id}.failed.partial"
+    )
+    summary, reason_code = _validate_private_artifact_directory_state(
+        root,
+        directory_name,
+        artifact_id=artifact_id,
+        expected_kind=expected_kind,
+        expected_status=expected_status,
+    )
+    root_descriptor = -1
+    artifact_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        root_metadata = _fstat(root_descriptor, subject="private root")
+        _require_current_owner(root_metadata, subject="private root")
+        candidates = (
+            artifact_id,
+            f"{artifact_id}.partial",
+            f"{artifact_id}.failed.partial",
+            f"{artifact_id}.interrupted.partial",
+        )
+        present = tuple(
+            name for name in candidates if _entry_metadata(root_descriptor, name) is not None
+        )
+        invalid_complete_collision = False
+        if (
+            expected_status == "failed"
+            and set(present) == {artifact_id, directory_name}
+            and not _is_valid_terminal_namespace(root, artifact_id)
+        ):
+            invalid_complete_collision = True
+        if present != (directory_name,) and not invalid_complete_collision:
+            raise PrivateArtifactError("typed artifact state is ambiguous")
+        expected_directory = _entry_metadata(root_descriptor, directory_name)
+        if expected_directory is None:
+            raise PrivateArtifactError("typed artifact is absent")
+        _require_current_owner(expected_directory, subject="typed artifact directory")
+        artifact_descriptor = os.open(
+            directory_name,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        opened_directory = _fstat(
+            artifact_descriptor,
+            subject="typed artifact directory",
+        )
+        if (
+            not _same_file(expected_directory, opened_directory)
+            or not stat.S_ISDIR(opened_directory.st_mode)
+            or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("typed artifact changed while opening")
+        _require_current_owner(opened_directory, subject="typed artifact directory")
+
+        manifest_bytes = _read_private_entry(
+            artifact_descriptor,
+            "manifest.json",
+            subject="typed artifact manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        if hashlib.sha256(manifest_bytes).hexdigest() != summary.manifest_sha256:
+            raise PrivateArtifactError("typed artifact changed after validation")
+        manifest, files = _validate_private_artifact_manifest(
+            manifest_bytes,
+            artifact_id=artifact_id,
+            expected_kind=expected_kind,
+            expected_status=expected_status,
+        )
+        expected_entries = {"manifest.json", *(file.filename for file in files)}
+        if (
+            expected_status == "failed"
+            and manifest.get("reason_code") == "publication_failed"
+        ):
+            expected_entries.add("manifest.unpublished.json")
+        if _directory_entries(artifact_descriptor) != expected_entries:
+            raise PrivateArtifactError(
+                "typed artifact contents do not exactly match its manifest"
+            )
+        payloads: dict[str, bytes] = {}
+        for file in files:
+            payload = _read_private_entry(
+                artifact_descriptor,
+                file.filename,
+                subject="typed artifact stream",
+                maximum_bytes=_MAX_EPISODE_BYTES,
+                expected_bytes=file.size,
+            )
+            if hashlib.sha256(payload).hexdigest() != file.sha256:
+                raise PrivateArtifactError("typed artifact stream failed its integrity check")
+            if _validate_private_artifact_jsonl(payload) != file.records:
+                raise PrivateArtifactError(
+                    "typed artifact stream record count does not match its manifest"
+                )
+            payloads[file.stream] = payload
+
+        final_directory = _fstat(
+            artifact_descriptor,
+            subject="typed artifact directory",
+        )
+        named_directory = _entry_metadata(root_descriptor, directory_name)
+        final_present = tuple(
+            name for name in candidates if _entry_metadata(root_descriptor, name) is not None
+        )
+        if invalid_complete_collision and _is_valid_terminal_namespace(root, artifact_id):
+            raise PrivateArtifactError("typed artifact state is ambiguous")
+        if (
+            named_directory is None
+            or (
+                final_present != (directory_name,)
+                and not (
+                    invalid_complete_collision
+                    and set(final_present) == {artifact_id, directory_name}
+                )
+            )
+            or not _same_file(opened_directory, final_directory)
+            or not _same_file(opened_directory, named_directory)
+            or stat.S_IMODE(final_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+            or _directory_entries(artifact_descriptor) != expected_entries
+        ):
+            raise PrivateArtifactError("typed artifact changed during read")
+        _require_current_owner(final_directory, subject="typed artifact directory")
+        return PrivateArtifactReader(
+            _validation_token=_READER_VALIDATION_TOKEN,
+            files=files,
+            payloads=payloads,
+            summary=summary,
+            reason_code=reason_code,
+        )
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to read the typed artifact") from None
+    finally:
+        for descriptor in (artifact_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _validate_private_artifact_directory_state(
+    root: Path,
+    directory_name: str,
+    *,
+    artifact_id: str,
+    expected_kind: str,
+    expected_status: str,
+    allow_identity_seal: bool = False,
+) -> tuple[PrivateArtifactSummary, str | None]:
+    root_descriptor = -1
+    artifact_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        root_metadata = _fstat(root_descriptor, subject="private root")
+        _require_current_owner(root_metadata, subject="private root")
+        expected_directory = _entry_metadata(root_descriptor, directory_name)
+        if expected_directory is None:
+            raise PrivateArtifactError("typed artifact is absent")
+        if (
+            not stat.S_ISDIR(expected_directory.st_mode)
+            or stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("typed artifact directory is unsafe")
+        _require_current_owner(expected_directory, subject="typed artifact directory")
+        artifact_descriptor = os.open(
+            directory_name,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        opened_directory = _fstat(
+            artifact_descriptor,
+            subject="typed artifact directory",
+        )
+        if (
+            not _same_file(expected_directory, opened_directory)
+            or not stat.S_ISDIR(opened_directory.st_mode)
+            or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("typed artifact changed while opening")
+        _require_current_owner(opened_directory, subject="typed artifact directory")
+
+        manifest_bytes = _read_private_entry(
+            artifact_descriptor,
+            "manifest.json",
+            subject="typed artifact manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        manifest, files = _validate_private_artifact_manifest(
+            manifest_bytes,
+            artifact_id=artifact_id,
+            expected_kind=expected_kind,
+            expected_status=expected_status,
+        )
+        expected_entries = {"manifest.json", *(file.filename for file in files)}
+        entries = _directory_entries(artifact_descriptor)
+        if allow_identity_seal:
+            _require_private_artifact_identity(
+                artifact_descriptor,
+                artifact_id=artifact_id,
+                expected_kind=expected_kind,
+            )
+            expected_entries.add(_TYPED_ARTIFACT_IDENTITY)
+        unpublished = "manifest.unpublished.json" in entries
+        if unpublished:
+            if expected_status != "failed" or manifest.get("reason_code") != "publication_failed":
+                raise PrivateArtifactError(
+                    "typed artifact has an unexpected unpublished seal"
+                )
+            expected_entries.add("manifest.unpublished.json")
+        if entries != expected_entries:
+            raise PrivateArtifactError(
+                "typed artifact contents do not exactly match its manifest"
+            )
+
+        for file in files:
+            payload = _read_private_entry(
+                artifact_descriptor,
+                file.filename,
+                subject="typed artifact stream",
+                maximum_bytes=_MAX_EPISODE_BYTES,
+                expected_bytes=file.size,
+            )
+            if hashlib.sha256(payload).hexdigest() != file.sha256:
+                raise PrivateArtifactError("typed artifact stream failed its integrity check")
+            records = _validate_private_artifact_jsonl(payload)
+            if records != file.records:
+                raise PrivateArtifactError(
+                    "typed artifact stream record count does not match its manifest"
+                )
+
+        if unpublished:
+            unpublished_payload = _read_private_entry(
+                artifact_descriptor,
+                "manifest.unpublished.json",
+                subject="unpublished typed artifact manifest",
+                maximum_bytes=_MAX_MANIFEST_BYTES,
+            )
+            _, unpublished_files = _validate_private_artifact_manifest(
+                unpublished_payload,
+                artifact_id=artifact_id,
+                expected_kind=expected_kind,
+                expected_status="complete",
+            )
+            if unpublished_files != files:
+                raise PrivateArtifactError(
+                    "unpublished typed artifact manifest does not match failed streams"
+                )
+
+        final_directory = _fstat(
+            artifact_descriptor,
+            subject="typed artifact directory",
+        )
+        named_directory = _entry_metadata(root_descriptor, directory_name)
+        if (
+            named_directory is None
+            or not _same_file(opened_directory, final_directory)
+            or not _same_file(opened_directory, named_directory)
+            or stat.S_IMODE(final_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+            or _directory_entries(artifact_descriptor) != expected_entries
+        ):
+            raise PrivateArtifactError("typed artifact changed during validation")
+        _require_current_owner(final_directory, subject="typed artifact directory")
+        totals = manifest["totals"]
+        if not isinstance(totals, dict):
+            raise PrivateArtifactError("typed artifact manifest totals are invalid")
+        return (
+            PrivateArtifactSummary(
+                artifact_id=artifact_id,
+                kind=expected_kind,
+                status=expected_status,
+                stream_records=tuple((file.stream, file.records) for file in files),
+                total_records=_manifest_integer(totals, "records"),
+                total_bytes=_manifest_integer(totals, "bytes"),
+                manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+            ),
+            (
+                str(manifest["reason_code"])
+                if expected_status == "failed"
+                else None
+            ),
+        )
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to inspect the typed artifact") from None
+    finally:
+        for descriptor in (artifact_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _validate_private_artifact_manifest(
+    payload: bytes,
+    *,
+    artifact_id: str,
+    expected_kind: str,
+    expected_status: str,
+) -> tuple[dict[str, object], tuple[_EpisodeFile, ...]]:
+    if expected_status not in {"complete", "failed"}:
+        raise PrivateArtifactError("typed artifact manifest status is unsupported")
+    manifest = _decode_canonical_json_object(
+        payload,
+        subject="typed artifact manifest",
+        maximum_bytes=_MAX_MANIFEST_BYTES,
+    )
+    expected_keys = {
+        "artifact_id",
+        "files",
+        "format",
+        "kind",
+        "schema_version",
+        "status",
+        "totals",
+    }
+    if expected_status == "failed":
+        expected_keys.add("reason_code")
+    _require_exact_keys(manifest, expected_keys, subject="typed artifact manifest")
+    if manifest["format"] != PRIVATE_JSON_ARTIFACT_FORMAT:
+        raise PrivateArtifactError("typed artifact manifest format is unsupported")
+    if (
+        isinstance(manifest["schema_version"], bool)
+        or not isinstance(manifest["schema_version"], int)
+        or manifest["schema_version"] != PRIVATE_ARTIFACT_SCHEMA_VERSION
+    ):
+        raise PrivateArtifactError("typed artifact manifest schema is unsupported")
+    if manifest["artifact_id"] != artifact_id or manifest["kind"] != expected_kind:
+        raise PrivateArtifactError("typed artifact manifest identity does not match")
+    if manifest["status"] != expected_status:
+        raise PrivateArtifactError("typed artifact manifest status does not match")
+    if expected_status == "failed":
+        reason_code = manifest["reason_code"]
+        if not isinstance(reason_code, str) or _SAFE_REASON.fullmatch(reason_code) is None:
+            raise PrivateArtifactError("typed artifact failure reason is invalid")
+
+    raw_files = manifest["files"]
+    if not isinstance(raw_files, list):
+        raise PrivateArtifactError("typed artifact manifest files must be a list")
+    if len(raw_files) > _MAX_TYPED_ARTIFACT_STREAMS:
+        raise PrivateArtifactError("typed artifact manifest exceeds its stream bound")
+    files: list[_EpisodeFile] = []
+    filenames: list[str] = []
+    for raw_file in raw_files:
+        if not isinstance(raw_file, dict):
+            raise PrivateArtifactError("typed artifact manifest file entry is invalid")
+        _require_exact_keys(
+            raw_file,
+            {"bytes", "filename", "records", "sha256"},
+            subject="typed artifact manifest file entry",
+        )
+        filename = raw_file["filename"]
+        if not isinstance(filename, str) or not filename.endswith(".jsonl"):
+            raise PrivateArtifactError("typed artifact stream filename is invalid")
+        stream = filename.removesuffix(".jsonl")
+        try:
+            _validate_stream_name(stream)
+        except PrivateArtifactError:
+            raise PrivateArtifactError("typed artifact stream filename is invalid") from None
+        if filename != f"{stream}.jsonl" or filename in filenames:
+            raise PrivateArtifactError("typed artifact stream filename is invalid")
+        size = _manifest_integer(raw_file, "bytes")
+        records = _manifest_integer(raw_file, "records")
+        digest = raw_file["sha256"]
+        if size > _MAX_EPISODE_BYTES:
+            raise PrivateArtifactError("typed artifact stream exceeds its size bound")
+        if (size == 0) != (records == 0):
+            raise PrivateArtifactError("typed artifact stream has invalid empty totals")
+        if not isinstance(digest, str) or _SHA256.fullmatch(digest) is None:
+            raise PrivateArtifactError("typed artifact stream digest is invalid")
+        filenames.append(filename)
+        files.append(
+            _EpisodeFile(
+                stream=stream,
+                filename=filename,
+                records=records,
+                size=size,
+                sha256=digest,
+            )
+        )
+    if filenames != sorted(filenames):
+        raise PrivateArtifactError("typed artifact stream entries are not canonical")
+
+    totals = manifest["totals"]
+    if not isinstance(totals, dict):
+        raise PrivateArtifactError("typed artifact manifest totals must be an object")
+    _require_exact_keys(
+        totals,
+        {"bytes", "files", "records"},
+        subject="typed artifact manifest totals",
+    )
+    total_bytes = _manifest_integer(totals, "bytes")
+    total_files = _manifest_integer(totals, "files")
+    total_records = _manifest_integer(totals, "records")
+    if total_bytes > _MAX_EPISODE_BYTES:
+        raise PrivateArtifactError("typed artifact exceeds its size bound")
+    if total_files != len(files):
+        raise PrivateArtifactError("typed artifact file total does not match")
+    if total_bytes != sum(file.size for file in files):
+        raise PrivateArtifactError("typed artifact byte total does not match")
+    if total_records != sum(file.records for file in files):
+        raise PrivateArtifactError("typed artifact record total does not match")
+    return manifest, tuple(files)
+
+
+def _validate_private_artifact_jsonl(payload: bytes) -> int:
+    records = 0
+    for record in _iter_canonical_json_lines(
+        payload,
+        subject="typed artifact stream record",
+    ):
+        _canonical_record(record)
+        records += 1
+    return records
+
+
+def _retain_durable_private_artifact_prefix(
+    directory_descriptor: int,
+    filename: str,
+    payload: bytes,
+) -> tuple[bytes, int]:
+    """Discard only a non-newline-terminated tail after a verified JSONL prefix."""
+
+    try:
+        return payload, _validate_private_artifact_jsonl(payload)
+    except PrivateArtifactError:
+        if not payload or payload.endswith(b"\n"):
+            raise
+
+    final_newline = payload.rfind(b"\n")
+    durable_prefix = payload[: final_newline + 1] if final_newline >= 0 else b""
+    records = _validate_private_artifact_jsonl(durable_prefix)
+    _truncate_private_artifact_entry(
+        directory_descriptor,
+        filename,
+        expected_payload=payload,
+        retained_bytes=len(durable_prefix),
+    )
+    retained = _read_private_entry(
+        directory_descriptor,
+        filename,
+        subject="reconciled typed artifact stream",
+        maximum_bytes=_MAX_EPISODE_BYTES,
+        expected_bytes=len(durable_prefix),
+    )
+    if retained != durable_prefix:
+        raise PrivateArtifactError(
+            "reconciled typed artifact stream does not match its durable prefix"
+        )
+    return retained, records
+
+
 def _validate_episode_directory_state(
     root: Path,
     directory_name: str,
@@ -2004,7 +3160,20 @@ def _require_private_directory(path: Path, *, subject: str) -> None:
         raise PrivateArtifactError(f"{subject} is not a regular private directory")
 
 
-def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
+def _open_private_episode(
+    root: Path,
+    episode_id: str,
+    *,
+    expected_status: str,
+) -> PrivateEpisodeReader:
+    if expected_status not in {"complete", "failed"}:
+        raise PrivateArtifactError("episode reader status is unsupported")
+    directory_name = (
+        episode_id
+        if expected_status == "complete"
+        else f"{episode_id}.failed.partial"
+    )
+    status_label = "completed" if expected_status == "complete" else "failed"
     root_descriptor = -1
     episode_descriptor = -1
     try:
@@ -2012,38 +3181,54 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
 
         if _entry_metadata(root_descriptor, f"{episode_id}.partial") is not None:
             raise PrivateArtifactError("episode is still partial and cannot be read")
-        if _entry_metadata(root_descriptor, f"{episode_id}.failed.partial") is not None:
+        if (
+            expected_status == "complete"
+            and _entry_metadata(root_descriptor, f"{episode_id}.failed.partial") is not None
+        ):
             raise PrivateArtifactError("failed episode cannot be read")
         if _entry_metadata(root_descriptor, f"{episode_id}.interrupted.partial") is not None:
             raise PrivateArtifactError("interrupted episode cannot be read")
 
-        expected_directory = _entry_metadata(root_descriptor, episode_id)
+        if expected_status == "failed" and _entry_metadata(root_descriptor, episode_id) is not None:
+            raise PrivateArtifactError("completed episode cannot be read as failed")
+
+        expected_directory = _entry_metadata(root_descriptor, directory_name)
         if expected_directory is None:
-            raise PrivateArtifactError("completed episode is absent")
+            raise PrivateArtifactError(f"{status_label} episode is absent")
         if not stat.S_ISDIR(expected_directory.st_mode):
-            raise PrivateArtifactError("completed episode is not a regular private directory")
+            raise PrivateArtifactError(
+                f"{status_label} episode is not a regular private directory"
+            )
         if stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE:
-            raise PrivateArtifactError("completed episode directory permissions are unsafe")
+            raise PrivateArtifactError(
+                f"{status_label} episode directory permissions are unsafe"
+            )
 
         try:
             episode_descriptor = os.open(
-                episode_id,
+                directory_name,
                 _directory_read_flags(),
                 dir_fd=root_descriptor,
             )
         except OSError:
-            raise PrivateArtifactError("unable to open the completed private episode") from None
+            raise PrivateArtifactError(
+                f"unable to open the {status_label} private episode"
+            ) from None
         opened_directory = _fstat(
             episode_descriptor,
-            subject="completed episode directory",
+            subject=f"{status_label} episode directory",
         )
         if not _same_file(expected_directory, opened_directory):
-            raise PrivateArtifactError("completed episode changed while it was being opened")
+            raise PrivateArtifactError(
+                f"{status_label} episode changed while it was being opened"
+            )
         if (
             not stat.S_ISDIR(opened_directory.st_mode)
             or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
         ):
-            raise PrivateArtifactError("completed episode directory permissions are unsafe")
+            raise PrivateArtifactError(
+                f"{status_label} episode directory permissions are unsafe"
+            )
 
         manifest_bytes = _read_private_entry(
             episode_descriptor,
@@ -2051,12 +3236,22 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
             subject="episode manifest",
             maximum_bytes=_MAX_MANIFEST_BYTES,
         )
-        manifest, files = _validate_complete_manifest(
+        manifest, files = _validate_episode_manifest(
             manifest_bytes,
             episode_id=episode_id,
+            expected_status=expected_status,
         )
 
         expected_entries = {"manifest.json", *(file.filename for file in files)}
+        unpublished = "manifest.unpublished.json" in _directory_entries(
+            episode_descriptor
+        )
+        if unpublished:
+            if expected_status != "failed" or manifest.get("reason_code") != "publication_failed":
+                raise PrivateArtifactError(
+                    "episode artifact has an unexpected unpublished seal"
+                )
+            expected_entries.add("manifest.unpublished.json")
         if _directory_entries(episode_descriptor) != expected_entries:
             raise PrivateArtifactError(
                 "episode directory contents do not exactly match its manifest"
@@ -2075,6 +3270,23 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
                 raise PrivateArtifactError("episode stream failed its integrity check")
             _validate_jsonl_payload(payload, expected_records=file.records)
             payloads[file.stream] = payload
+
+        if unpublished:
+            unpublished_payload = _read_private_entry(
+                episode_descriptor,
+                "manifest.unpublished.json",
+                subject="unpublished episode manifest",
+                maximum_bytes=_MAX_MANIFEST_BYTES,
+            )
+            _, unpublished_files = _validate_episode_manifest(
+                unpublished_payload,
+                episode_id=episode_id,
+                expected_status="complete",
+            )
+            if unpublished_files != files:
+                raise PrivateArtifactError(
+                    "unpublished episode manifest does not match failed streams"
+                )
 
         # Detect additions or removals made during validation before publishing the
         # in-memory snapshot to the caller.
@@ -2095,7 +3307,7 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
             raise PrivateArtifactError("episode manifest totals are invalid")
         summary = EpisodeSummary(
             episode_id=episode_id,
-            status="complete",
+            status=expected_status,
             stream_records=tuple((file.stream, file.records) for file in files),
             total_records=_manifest_integer(totals, "records"),
             total_bytes=_manifest_integer(totals, "bytes"),
@@ -2111,7 +3323,9 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
     except PrivateArtifactError:
         raise
     except OSError:
-        raise PrivateArtifactError("unable to inspect the completed private episode") from None
+        raise PrivateArtifactError(
+            f"unable to inspect the {status_label} private episode"
+        ) from None
     finally:
         for descriptor in (episode_descriptor, root_descriptor):
             if descriptor >= 0:
@@ -2277,6 +3491,7 @@ def _read_private_entry(
     expected = _entry_metadata(directory_descriptor, filename)
     if expected is None:
         raise PrivateArtifactError(f"{subject} is absent")
+    _require_current_owner(expected, subject=subject)
     if not stat.S_ISREG(expected.st_mode):
         raise PrivateArtifactError(f"{subject} is not a regular file")
     if stat.S_IMODE(expected.st_mode) != _PRIVATE_FILE_MODE:
@@ -2304,6 +3519,7 @@ def _read_private_entry(
             or opened.st_nlink != 1
         ):
             raise PrivateArtifactError(f"{subject} permissions are unsafe")
+        _require_current_owner(opened, subject=subject)
 
         chunks: list[bytes] = []
         bytes_read = 0
@@ -2324,6 +3540,7 @@ def _read_private_entry(
             or final.st_nlink != 1
         ):
             raise PrivateArtifactError(f"{subject} changed during validation")
+        _require_current_owner(final, subject=subject)
         if expected_bytes is not None and len(payload) != expected_bytes:
             raise PrivateArtifactError(f"{subject} byte count does not match its manifest")
         return payload
@@ -2447,6 +3664,11 @@ def _fstat(descriptor: int, *, subject: str) -> os.stat_result:
 
 def _same_file(first: os.stat_result, second: os.stat_result) -> bool:
     return first.st_dev == second.st_dev and first.st_ino == second.st_ino
+
+
+def _require_current_owner(metadata: os.stat_result, *, subject: str) -> None:
+    if hasattr(os, "getuid") and metadata.st_uid != os.getuid():
+        raise PrivateArtifactError(f"{subject} owner is unsafe")
 
 
 def _directory_read_flags() -> int:
@@ -2871,6 +4093,277 @@ def _write_exclusive_file(path: Path, payload: bytes, *, mode: int) -> None:
                 os.close(descriptor)
             except OSError as error:
                 raise PrivateArtifactError("unable to close a private artifact") from error
+
+
+def _write_exclusive_private_entry(
+    directory_descriptor: int,
+    filename: str,
+    payload: bytes,
+) -> None:
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_CLOEXEC"):
+        flags |= os.O_CLOEXEC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = -1
+    try:
+        descriptor = os.open(
+            filename,
+            flags,
+            _PRIVATE_FILE_MODE,
+            dir_fd=directory_descriptor,
+        )
+        os.fchmod(descriptor, _PRIVATE_FILE_MODE)
+        written = 0
+        while written < len(payload):
+            count = os.write(descriptor, payload[written:])
+            if count <= 0:
+                raise OSError(errno.EIO, "short private artifact write")
+            written += count
+        os.fsync(descriptor)
+        metadata = _fstat(descriptor, subject="reconciled typed artifact manifest")
+        if (
+            not stat.S_ISREG(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE
+            or metadata.st_nlink != 1
+            or metadata.st_size != len(payload)
+        ):
+            raise PrivateArtifactError(
+                "reconciled typed artifact manifest failed validation"
+            )
+        _require_current_owner(
+            metadata,
+            subject="reconciled typed artifact manifest",
+        )
+    except FileExistsError:
+        raise PrivateArtifactError(
+            "reconciled typed artifact manifest already exists"
+        ) from None
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to persist the reconciled typed artifact manifest"
+        ) from None
+    finally:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+
+
+def _private_artifact_identity_bytes(*, artifact_id: str, kind: str) -> bytes:
+    return _canonical_json_line(
+        {
+            "artifact_id": artifact_id,
+            "format": PRIVATE_JSON_ARTIFACT_IDENTITY_FORMAT,
+            "kind": kind,
+            "schema_version": PRIVATE_ARTIFACT_SCHEMA_VERSION,
+        }
+    )
+
+
+def _require_private_artifact_identity(
+    directory_descriptor: int,
+    *,
+    artifact_id: str,
+    expected_kind: str,
+) -> None:
+    payload = _read_private_entry(
+        directory_descriptor,
+        _TYPED_ARTIFACT_IDENTITY,
+        subject="typed artifact identity seal",
+        maximum_bytes=_MAX_MANIFEST_BYTES,
+    )
+    identity = _decode_canonical_json_object(
+        payload,
+        subject="typed artifact identity seal",
+        maximum_bytes=_MAX_MANIFEST_BYTES,
+    )
+    _require_exact_keys(
+        identity,
+        {"artifact_id", "format", "kind", "schema_version"},
+        subject="typed artifact identity seal",
+    )
+    schema_version = identity["schema_version"]
+    if (
+        identity["artifact_id"] != artifact_id
+        or identity["format"] != PRIVATE_JSON_ARTIFACT_IDENTITY_FORMAT
+        or identity["kind"] != expected_kind
+        or isinstance(schema_version, bool)
+        or not isinstance(schema_version, int)
+        or schema_version != PRIVATE_ARTIFACT_SCHEMA_VERSION
+    ):
+        raise PrivateArtifactError("typed artifact identity seal does not match")
+
+
+def _remove_private_artifact_identity(directory_descriptor: int) -> None:
+    metadata = _entry_metadata(directory_descriptor, _TYPED_ARTIFACT_IDENTITY)
+    if metadata is None:
+        raise PrivateArtifactError("typed artifact identity seal is absent")
+    if (
+        not stat.S_ISREG(metadata.st_mode)
+        or stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE
+        or metadata.st_nlink != 1
+        or metadata.st_size <= 0
+        or metadata.st_size > _MAX_MANIFEST_BYTES
+    ):
+        raise PrivateArtifactError("typed artifact identity seal is unsafe")
+    _require_current_owner(metadata, subject="typed artifact identity seal")
+    try:
+        os.unlink(_TYPED_ARTIFACT_IDENTITY, dir_fd=directory_descriptor)
+        os.fsync(directory_descriptor)
+    except OSError:
+        raise PrivateArtifactError("unable to retire the typed artifact identity seal") from None
+
+
+def _truncate_private_artifact_entry(
+    directory_descriptor: int,
+    filename: str,
+    *,
+    expected_payload: bytes,
+    retained_bytes: int,
+) -> None:
+    if retained_bytes < 0 or retained_bytes >= len(expected_payload):
+        raise PrivateArtifactError("typed artifact tail boundary is invalid")
+    flags = os.O_RDWR
+    if hasattr(os, "O_CLOEXEC"):
+        flags |= os.O_CLOEXEC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = -1
+    try:
+        descriptor = os.open(filename, flags, dir_fd=directory_descriptor)
+        metadata = _fstat(descriptor, subject="partial typed artifact stream")
+        if (
+            not stat.S_ISREG(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE
+            or metadata.st_nlink != 1
+            or metadata.st_size != len(expected_payload)
+        ):
+            raise PrivateArtifactError("partial typed artifact stream changed")
+        _require_current_owner(metadata, subject="partial typed artifact stream")
+        observed = bytearray()
+        while len(observed) < len(expected_payload):
+            chunk = os.read(descriptor, len(expected_payload) - len(observed))
+            if not chunk:
+                break
+            observed.extend(chunk)
+        if bytes(observed) != expected_payload:
+            raise PrivateArtifactError("partial typed artifact stream changed")
+        os.ftruncate(descriptor, retained_bytes)
+        os.fsync(descriptor)
+        final = _fstat(descriptor, subject="partial typed artifact stream")
+        if (
+            not _same_file(metadata, final)
+            or final.st_size != retained_bytes
+            or stat.S_IMODE(final.st_mode) != _PRIVATE_FILE_MODE
+            or final.st_nlink != 1
+        ):
+            raise PrivateArtifactError("partial typed artifact stream changed")
+        _require_current_owner(final, subject="partial typed artifact stream")
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to retain the durable typed artifact stream prefix"
+        ) from None
+    finally:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+
+
+def _remove_private_recovery_manifest(directory_descriptor: int) -> None:
+    metadata = _entry_metadata(directory_descriptor, _TYPED_RECOVERY_MANIFEST)
+    if metadata is None:
+        return
+    if (
+        not stat.S_ISREG(metadata.st_mode)
+        or stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE
+        or metadata.st_nlink != 1
+        or metadata.st_size < 0
+        or metadata.st_size > _MAX_MANIFEST_BYTES
+    ):
+        raise PrivateArtifactError("typed artifact recovery manifest is unsafe")
+    _require_current_owner(metadata, subject="typed artifact recovery manifest")
+    try:
+        os.unlink(_TYPED_RECOVERY_MANIFEST, dir_fd=directory_descriptor)
+        os.fsync(directory_descriptor)
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to replace the typed artifact recovery manifest"
+        ) from None
+
+
+def _lock_private_artifact_directory(path: Path, *, nonblocking: bool) -> int:
+    descriptor = -1
+    try:
+        descriptor = os.open(path, _directory_read_flags())
+        metadata = _fstat(descriptor, subject="typed artifact directory")
+        if (
+            not stat.S_ISDIR(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("typed artifact directory is unsafe")
+        _require_current_owner(metadata, subject="typed artifact directory")
+        operation = fcntl.LOCK_EX | (fcntl.LOCK_NB if nonblocking else 0)
+        try:
+            fcntl.flock(descriptor, operation)
+        except BlockingIOError:
+            raise PrivateArtifactError("typed artifact is still active") from None
+        return descriptor
+    except PrivateArtifactError:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+        raise
+    except OSError:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+        raise PrivateArtifactError("unable to lock the typed artifact") from None
+
+
+def _release_private_artifact_lock(descriptor: int) -> None:
+    if descriptor < 0:
+        return
+    with suppress(OSError):
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
+    with suppress(OSError):
+        os.close(descriptor)
+
+
+def _require_named_locked_directory(
+    root: Path,
+    directory_name: str,
+    descriptor: int,
+) -> None:
+    root_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        root_metadata = _fstat(root_descriptor, subject="private root")
+        _require_current_owner(root_metadata, subject="private root")
+        named = _entry_metadata(root_descriptor, directory_name)
+        opened = _fstat(descriptor, subject="typed artifact directory")
+        if (
+            named is None
+            or not _same_file(named, opened)
+            or not stat.S_ISDIR(opened.st_mode)
+            or stat.S_IMODE(opened.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("typed artifact changed during reconciliation")
+        _require_current_owner(named, subject="typed artifact directory")
+        _require_current_owner(opened, subject="typed artifact directory")
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError(
+            "unable to authenticate the typed artifact directory"
+        ) from None
+    finally:
+        if root_descriptor >= 0:
+            with suppress(OSError):
+                os.close(root_descriptor)
 
 
 def _sha256_file(path: Path) -> str:

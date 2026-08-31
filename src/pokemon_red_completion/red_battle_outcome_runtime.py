@@ -44,6 +44,7 @@ class RedBattleScenarioSession(Protocol):
 
 SessionFactory = Callable[[], AbstractContextManager[RedBattleScenarioSession]]
 OutcomeSink = Callable[[int, BattleTurnOutcome], None]
+CandidateClaimSink = Callable[[int], None]
 COUNTERFACTUAL_PRE_ATTACK_FRAMES = 2_048
 
 
@@ -91,6 +92,7 @@ def collect_red_battle_outcome_example(
     *,
     session_factory: SessionFactory,
     controller_timing: ControllerTiming | None = None,
+    candidate_claim_sink: CandidateClaimSink | None = None,
     outcome_sink: OutcomeSink | None = None,
 ) -> RedBattleOutcomeCollection:
     """Replay every supported move from identical authenticated state bytes."""
@@ -99,6 +101,8 @@ def collect_red_battle_outcome_example(
         raise TypeError("capture must come from the verified battle opener")
     if not callable(session_factory):
         raise TypeError("session_factory must be callable")
+    if candidate_claim_sink is not None and not callable(candidate_claim_sink):
+        raise TypeError("candidate_claim_sink must be callable or None")
     if outcome_sink is not None and not callable(outcome_sink):
         raise TypeError("outcome_sink must be callable or None")
     timing = controller_timing or DEFAULT_NEW_GAME_TIMING.controller_timing()
@@ -108,6 +112,8 @@ def collect_red_battle_outcome_example(
         if not supported:
             outcomes.append(None)
             continue
+        if candidate_claim_sink is not None:
+            candidate_claim_sink(candidate_index)
         with session_factory() as session:
             session.load_state_bytes(capture.state_bytes)
             reader = PokemonRedStateReader(cast(ReadOnlyMemory, session))
@@ -147,6 +153,26 @@ def collect_red_battle_outcome_example(
         initial_observation_sha256=prepared.initial_observation_sha256,
         outcomes=measured,
     )
+
+
+def prepare_red_battle_outcome_capture(
+    capture: BattleScenarioCapture,
+    *,
+    session_factory: SessionFactory,
+) -> PreparedRedBattleScenario:
+    """Authenticate one capture's policy-visible boundary without taking an action.
+
+    A prospective evaluator uses this narrow read-only projection to commit the
+    frozen prior and candidate choices before it executes any development
+    branch.  The later collector repeats the same authentication and fails if
+    the observation changed.
+    """
+
+    if not isinstance(capture, BattleScenarioCapture):
+        raise TypeError("capture must come from the verified battle opener")
+    if not callable(session_factory):
+        raise TypeError("session_factory must be callable")
+    return _prepare_exact_boundary(capture, session_factory=session_factory)
 
 
 def _prepare_exact_boundary(

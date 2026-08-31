@@ -3,6 +3,83 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Claim-first battle-cycle red-team audit — accepted 2026-08-31
+
+A read-only adversarial reviewer attacked the new one-pair battle loop rather than reviewing its
+happy path. Codex accepted the core findings. The frozen plan now reauthenticates both upstream
+catalog assignments at execution, and both captures undergo a read-only pre-claim admission. Each
+must expose at least two supported raw candidate vectors and at least two numerically distinct
+hidden representations under the exact bound nonlinear prior. Feature names and schema must match
+that prior exactly. The runner independently recomputes every menu digest/count, uses the same
+`1e-9` tie rule as paired evaluation, and proves the returned evaluation winner agrees with the
+committed choices and retained outcome utilities.
+
+The reviewer also found two reporting ambiguities. Read-only development admission opens metadata
+and title-neutral features before fit, so the code and current documentation no longer claim that a
+flat train attempt leaves the capture wholly unopened. It leaves the development root, actions,
+predictions, and outcomes unopened, records those candidates as admitted but unactivated, and
+requires zero missing outcomes only among activated targets. The comparison remains prospectively
+held iterative evidence, never a historically untouched or unseen comparison.
+
+Finally, the dashboard previously authenticated only evidence paths and digests while trusting
+manual counters. Codex reproduced the attack by setting learning, unseen, authority, and transfer
+totals to 999. The active evidence prefix and counters are now a single code-checked projection;
+renaming the lane or appending an unrecognized receipt cannot bypass it. New receipt schemas must
+gain an explicit projection before the displayed board can move.
+
+One provenance objection is accepted as a documented limitation rather than a blocker. The capture
+manifest associates the exact endpoint snapshot with an authenticated catalog root and the plan
+binds the materializer source, but no retained materialization receipt proves causal
+first-encounter derivation. The plan and receipts explicitly set
+`materializer_derivation_claimed=false`. This cycle claims restored-state action-value evidence,
+not proof of an endpoint-generation pipeline.
+
+The final recovery review found two additional trust-boundary defects and Codex accepted both.
+First, completion followed by lost stdout had no authenticated way to recover the public result;
+second, a supported-API namespace race could make two physical artifact families appear under one
+ID. The runner now retains one durable terminal projection, reconciliation binds identity and kind
+before input and salvages only newline-terminated canonical records, and the no-gameplay inspector
+rejoins every retained root, candidate, outcome, model, prediction, and evaluation before emitting
+a receipt. Any valid competing namespace is treated as ambiguous and unreadable. The physical
+cross-family race is not globally serialized, so this is detection rather than prevention; that
+residual limitation is non-promotional and fails closed.
+
+## Failed-factory reorientation and battle-loop audit — accepted 2026-08-31
+
+Two read-only Codex reviewers inspected the public source and path-free evidence without editing,
+opening a ROM or private artifact, or executing gameplay. The first confirmed that the sole 0/12
+clean-power supply tranche falsified the factory rather than the model: the learner never acted.
+Codex accepted its recommendations to retire that factory without retry, publish the aggregate
+failure evidence, make routine clean-power training supply a machine-enforced prohibition, retain
+known failure stage/action/frame diagnostics through admission, and return immediately to bounded
+snapshot scenarios.
+
+The second reviewer inventoried the existing battle pipeline. Codex accepted four findings. The
+old one-train/one-development runner looked at development informativeness before deciding whether
+to fit, so it cannot supply the next untouched comparison. The old four-plus-four curve is valid
+historical plumbing evidence but its development roots are exhausted and mostly flat. The
+Mansion-only materializer is likely to reproduce the same one-hit distribution. Finally, selecting
+"non-flat" contexts after observing outcomes would leak labels. The active contract now requires
+an outcome-blind roster based only on prospectively declared observation pressure, retains every
+assigned result including flats, fits from train outcomes only, and evaluates exactly once on
+prospectively held development lineages.
+
+Codex narrowed two previously overbroad prohibitions. Executing each available action from an
+identical authenticated snapshot creates measured action-value evidence; it is not an unexecuted
+counterfactual label. The lane therefore forbids **unexecuted counterfactual targets** and
+**unmeasured action targets** while retaining the complete-candidate measurement requirement.
+No model fit, prediction, authority promotion, sealed Red access, Crystal access, or full replay
+occurred during this reorientation. The next engineering gate is a prospectively frozen,
+source-bound single-fit battle runner with durable per-branch evidence and a lineage-disjoint paired
+comparison. The later claim-first design supersedes that preliminary untouched-development wording.
+
+A separate read-only dashboard review accepted the then-current 18/60, 5/6, and 4/5 cumulative
+board while
+requiring the display to say explicitly that 4/5 means untouched Red development comparisons, not
+sealed or Crystal progress. Codex accepted that clarification and removed every stale powered-
+factory forward claim from the view. The later evidence-projection repair supersedes that manual
+counter review.
+
 ## Red-to-Crystal mission roadmap — conditional reviews resolved 2026-08-30
 
 Claude and Antigravity independently returned `CONDITIONAL GO` on the complete mission horizon.

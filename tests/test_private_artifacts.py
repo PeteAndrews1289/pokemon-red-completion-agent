@@ -1159,6 +1159,43 @@ def test_recovery_promotes_sealed_complete_and_failed_partial_directories(
     assert (root / "sealed-failed.failed.partial").is_dir()
 
 
+def test_failed_episode_diagnostic_reader_exposes_only_bounded_evidence(
+    tmp_path: Path,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("retained-diagnostic")
+    writer.append("assignment", {"assignment_id": "bounded-scenario"})
+    writer.append("claim", {"claim_id": "one-shot"})
+    writer.append(
+        "failure_diagnostic",
+        {"execution_phase": "bounded_scenario", "effects_known": True},
+    )
+    writer.abort("scenario_failed")
+
+    failed = store.read_failed_episode_diagnostic("retained-diagnostic")
+
+    assert failed.summary.status == "failed"
+    assert failed.assignment == {"assignment_id": "bounded-scenario"}
+    assert failed.claim == {"claim_id": "one-shot"}
+    assert failed.failure_diagnostic == {
+        "effects_known": True,
+        "execution_phase": "bounded_scenario",
+    }
+    with pytest.raises(PrivateArtifactError, match="failed"):
+        store.open_episode("retained-diagnostic")
+
+
+def test_complete_episode_cannot_be_opened_through_failed_reader(
+    tmp_path: Path,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    with store.begin_episode("not-a-failure") as writer:
+        writer.append("events", {"kind": "terminal"})
+
+    with pytest.raises(PrivateArtifactError, match="completed"):
+        store.read_failed_episode_diagnostic("not-a-failure")
+
+
 @pytest.mark.parametrize(
     ("status", "reason_code"),
     (

@@ -19,6 +19,7 @@ class _SwitchSimulation:
         self.command = 0
         self.cursor = 0
         self.active = 0
+        self.battle_state = 2
         self.actions: list[MacroAction] = []
 
     def read(self) -> RawGameState:
@@ -28,7 +29,7 @@ class _SwitchSimulation:
             player_x=22,
             player_y=27,
             party_count=3,
-            battle_state=2,
+            battle_state=self.battle_state,
             party_species_ids=(0xB3, 0x40, 0x3B),
             first_party_hp=50,
             first_party_max_hp=79,
@@ -104,6 +105,46 @@ def test_switch_active_battler_observes_party_menu_and_returns_to_main(monkeypat
         action.kind is MacroActionKind.MOVE and action.value == "right"
         for action in simulation.actions
     )
+
+
+def test_switch_active_battler_supports_a_living_wild_battle_target(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    simulation = _SwitchSimulation()
+    simulation.battle_state = 1
+    monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (50, 30, 20))
+
+    battle_recovery.switch_active_battler(
+        simulation,
+        simulation,
+        simulation,
+        1,
+        expected_battle_state=1,
+        label="outcome-blind capture slot",
+    )
+
+    assert simulation.active == 1
+    assert simulation.stage == "main"
+
+
+def test_switch_active_battler_selected_slot_is_a_zero_action_noop(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    simulation = _SwitchSimulation()
+    simulation.battle_state = 1
+    monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (50, 30, 20))
+
+    battle_recovery.switch_active_battler(
+        simulation,
+        simulation,
+        simulation,
+        0,
+        expected_battle_state=1,
+        label="unchanged capture lead",
+    )
+
+    assert simulation.active == 0
+    assert simulation.actions == []
 
 
 def test_forced_party_menu_accepts_a_late_balanced_team_slot(monkeypatch) -> None:

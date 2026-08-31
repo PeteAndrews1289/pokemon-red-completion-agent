@@ -41,14 +41,20 @@ _OUTPUT_KINDS = {
     "verified_composition_episode",
     "verified_outcome_example",
 }
-_REORIENTATION_EVIDENCE_KINDS = _OUTPUT_KINDS | {"qualification"}
+_REORIENTATION_EVIDENCE_KINDS = _OUTPUT_KINDS | {"falsification", "qualification"}
 _OUTPUT_PARTITIONS = {"development", "none", "train", "transfer"}
 _REQUIRED_DEVELOPMENT_PROHIBITIONS = {
+    "cloned_or_rehashed_root_independence",
     "consumed_trial_retry",
     "crystal_execution",
     "full_game_replay",
+    "model_fit_on_development",
+    "routine_clean_power_teacher_factory",
     "sealed_red_evaluation",
+    "teacher_choice_or_fallback",
     "teacher_route_hardening",
+    "unexecuted_counterfactual_target",
+    "unmeasured_action_target",
 }
 _REQUIRED_STATUS_FIELDS = {
     "active_lane",
@@ -61,6 +67,27 @@ _REQUIRED_STATUS_FIELDS = {
     "stop_condition",
     "time_box",
     "transfer_result",
+}
+_PROJECTED_COUNTER_BASELINE_EVIDENCE_SHA256 = (
+    "c2d45a4dcf544325792ca704069b2ab2b675235661de730b5b67e5bae86ac7a0"
+)
+_PROJECTED_COUNTER_BASELINE_EVIDENCE_COUNT = 17
+_PROJECTED_COUNTER_BASELINE = {
+    "atomic_goal_episodes": 0,
+    "authority_promotions": 0,
+    "causal_train_examples": 18,
+    "composition_attempts": 1,
+    "development_episode_attempts": 15,
+    "model_fits": 5,
+    "outcome_questions": {"development": 15, "train": 30},
+    "synthetic_rootless_atomic_goal_episodes": 8,
+    "synthetic_rootless_model_fits": 1,
+    "synthetic_rootless_train_outcomes": 8,
+    "synthetic_rootless_unseen_comparisons": 1,
+    "transfer_results": 0,
+    "unseen_comparisons": 4,
+    "verified_composition_episodes": 1,
+    "verified_outcome_examples": 5,
 }
 
 
@@ -194,6 +221,7 @@ def validate_product_focus_document(
     _validate_status_report(_mapping(document, "status_report", subject="product focus"))
     _validate_review_roles(_mapping(document, "review_roles", subject="product focus"))
     _validate_progress_evidence(active[0], project_root=project_root)
+    _validate_projected_counters(active[0])
     return ProductFocusState(document, active[0], tuple(retired))
 
 
@@ -595,11 +623,52 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
     prohibited = set(_text_sequence(lane, "prohibited_actions", subject="active lane"))
     if rigor == "development" and not prohibited >= _REQUIRED_DEVELOPMENT_PROHIBITIONS:
         raise ProductFocusError("development lane is missing a protected-action prohibition")
+    _validate_forward_plan(lane, prohibited=prohibited)
     progress = _mapping(lane, "progress", subject="active lane")
     _validate_progress(progress)
     _validate_latest_reorientation(
         _mapping(lane, "latest_reorientation", subject="active lane"),
     )
+
+
+def _validate_forward_plan(
+    lane: Mapping[str, object],
+    *,
+    prohibited: set[str],
+) -> None:
+    """Keep an active decision from scheduling the action it already prohibits."""
+
+    reorientation = _mapping(lane, "latest_reorientation", subject="active lane")
+    forward_text = " ".join(
+        (
+            _text(lane, "cheapest_falsifier", subject="active lane"),
+            _text(lane, "next_decision", subject="active lane"),
+            _text(reorientation, "decision", subject="latest reorientation"),
+            _text(reorientation, "next_falsifier", subject="latest reorientation"),
+            _text(reorientation, "next_session_goal", subject="latest reorientation"),
+        )
+    ).lower()
+    if "teacher_route_hardening" in prohibited and any(
+        phrase in forward_text
+        for phrase in (
+            "clean-power factory",
+            "clean power factory",
+            "full-game teacher",
+            "full game teacher",
+            "teacher-route hardening",
+            "teacher route hardening",
+        )
+    ):
+        raise ProductFocusError(
+            "active forward plan schedules prohibited teacher-route maintenance"
+        )
+    if "full_game_replay" in prohibited and any(
+        phrase in forward_text
+        for phrase in ("full-game replay", "full game replay", "full red replay")
+    ):
+        raise ProductFocusError(
+            "active forward plan schedules a prohibited full-game replay"
+        )
 
 
 def _validate_retired_lane(lane: Mapping[str, object]) -> None:
@@ -860,6 +929,39 @@ def _validate_progress_evidence(
         digest = hashlib.sha256(target.read_bytes()).hexdigest()
         if digest != _text(item, "sha256", subject=subject):
             raise ProductFocusError(f"{subject} file digest differs")
+
+
+def _validate_projected_counters(lane: Mapping[str, object]) -> None:
+    """Prevent the live board from out-running its typed evidence projection.
+
+    The current lane begins from a frozen, already-audited evidence prefix.  A
+    new receipt schema must gain an explicit projection here before either the
+    prefix or any counter can advance.  That deliberate code gate prevents a
+    manual JSON edit from turning infrastructure work into apparent learning.
+    """
+
+    progress = _mapping(lane, "progress", subject="active lane")
+    evidence = _sequence(progress, "evidence", subject="active lane progress")
+    evidence_payload = json.dumps(
+        evidence,
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("ascii")
+    if (
+        len(evidence) != _PROJECTED_COUNTER_BASELINE_EVIDENCE_COUNT
+        or hashlib.sha256(evidence_payload).hexdigest()
+        != _PROJECTED_COUNTER_BASELINE_EVIDENCE_SHA256
+    ):
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    observed = {key: progress.get(key) for key in _PROJECTED_COUNTER_BASELINE}
+    if observed != _PROJECTED_COUNTER_BASELINE:
+        raise ProductFocusError(
+            "active learning counters differ from their typed evidence projection"
+        )
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:

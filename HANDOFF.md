@@ -14,7 +14,88 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-31: bounded powered-lineage supply is implemented — publish before twelve worlds
+## 2026-08-31: claim-first battle learning cycle is local; publish before execution
+
+The replacement for the failed factory is implemented but has not touched a production capture.
+It is intentionally one train battle plus one prospectively held development battle, not another
+campaign. The freezer authenticates both materialized states back to the historical goal-manager
+registry and context catalog, binds exact published source, runner, materializer, Red ROM,
+CPython/PyBoy, NumPy, controller timing, nonlinear prior, objective, and fit hyperparameters, and
+writes one canonical path-free private plan. A validation partition is not called historically
+untouched; that stronger claim remains reserved for a separately frozen later gate.
+
+The runner atomically claims each upstream-root/materialized-state pair before input and uses the
+plan digest as a deterministic local attempt identity. Before either claim, it performs a read-only
+admission of both battle boundaries and requires at least two supported candidate vectors that are
+also numerically distinct inside the frozen prior. This opens development metadata and features,
+not actions, predictions, outcomes, or its root claim. Every activated move is then durably claimed
+before its candidate session, and the exact retained outcome digest must equal the outcome handed
+to the fitter or evaluator. Flat train evidence ends as `no_update` without claiming or executing
+development. Otherwise the model is fit on train only, retained, the development root is claimed,
+both predictions are committed before outcomes, and the comparison ends as positive descriptive
+evidence, no-discordance rejection, or no-advantage rejection. None grants authority or increments
+the historically unseen counter.
+
+The private evidence boundary is recoverable without replay. A deterministic artifact ID receives
+a durable kind/identity seal before the first controller input; roots, candidates, outcomes,
+models, predictions, evaluation, and the final public projection are newline-delimited durable
+records. If power disappears mid-attempt, reconciliation authenticates the identity, preserves
+only complete canonical records, and seals the attempt failed without reopening a root or action.
+If execution completed but stdout was lost, a no-gameplay inspector rechecks every retained join
+and reconstructs the same terminal receipt. Failed or ambiguous recovery never advances the
+dashboard. A rare cross-family publisher race may leave two physical namespaces, but the reader
+detects that ambiguity and refuses both rather than trusting either.
+
+Dashboard counters are no longer accepted merely because their cited files exist and hash
+correctly. The current evidence prefix and all learning counters are a machine-checked projection;
+an unrecognized receipt or a manual counter edit fails validation until its schema receives an
+explicit contribution rule.
+
+The battle materializer now supports direct bounded venues at Route 11, Diglett's Cave, and the
+Pokémon Mansion plus explicit party-slot selection. It accepts the first authentic encounter,
+does not filter on opponent or result, and does not route through a Pokémon Center for those direct
+sources. This removes the long Saffron/wall-banging/full-route dependency from the first learner
+loop.
+
+Keep the provenance claim narrow: the plan authenticates an exact endpoint snapshot and its
+catalog-root association, and binds the current materializer source, but it does not bind a retained
+materialization receipt proving that this script causally produced the endpoint. The plan and both
+receipts therefore set `materializer_derivation_claimed` false. That limitation does not invalidate
+the restored-state action-value experiment; add a receipt join later before claiming a reproducible
+first-encounter generation pipeline.
+
+Next: finish full verification, regenerate source registries, publish this exact source, and
+require green exact-main CI. Only then materialize and freeze one outcome-blind pair and execute it
+once. Reorient at the receipt even if train is flat or the candidate is rejected. Current evidence
+is still **causal train 18 · model fits 5 · verified development outcomes 5 · unseen comparisons
+4 · authority 0 · transfer 0**; the active one-cycle targets are 19, 6, and 6 respectively.
+
+## 2026-08-31: the powered factory failed 0/12 — return to learner scenarios
+
+Published main `56b295280355026971ba8dcabdb68d35bbbe961a` passed exact-main CI
+`33369612082/1`. Its sole frozen twelve-assignment supply tranche then consumed every identity and
+produced **zero roots** after **208,777 controller actions and 32,312,041 frames**. Nine attempts
+failed in deterministic setup teaching and three in target conditioning. No learner chose an
+action; learner labels, outcomes, predictions, fits, authority promotions, sealed Red access, and
+Crystal access all remained zero. Do not describe this as model training or model failure.
+
+The factory is retired without retry or successor. Preserve its code for forensic authentication
+and its path-free [terminal evidence](docs/evidence/red-living-dex-powered-lineage-supply-terminal-falsification-v1-2026-08-31.json).
+Teacher-route repairs, another routine clean-power factory, and full replay are prohibited. A
+generic observability repair now carries a retained failed episode's authenticated execution
+phase, action count, and frame count through admission instead of rewriting known effects as
+unknown; it changes no route behavior.
+
+The active lane is the bounded three-family scenario curriculum in
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Next, use nonsealed authenticated battle
+snapshots to collect informative train outcomes, make one prior-preserving model update, and
+compare it with the frozen prior on prospectively held Red development lineages. Retain a rejected
+update as evidence
+and reorient immediately. Only then expand navigation and party-development scenarios. The board
+is **causal train 18/60 · model fits 5/6 for the next decision · unseen comparisons 4/5 · authority
+0 · transfer 0**.
+
+## Previous 2026-08-31 checkpoint: bounded powered-lineage supply was implemented
 
 Exact main `0ceece133fcaa7522a13bd4599ce684692e8b9e8` contains the published capacity
 falsification. This engineering session generalized the existing clean-power fresh-episode rail

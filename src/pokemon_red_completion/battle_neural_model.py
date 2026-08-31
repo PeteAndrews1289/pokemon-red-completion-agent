@@ -78,14 +78,22 @@ class MaskedMLPMoveRanker:
         return self._training_seed
 
     def scores(self, candidate_features: ArrayLike) -> NDArray[np.float64]:
-        features = np.asarray(candidate_features, dtype=np.float64)
-        if features.ndim != 2 or features.shape[1] != len(self.feature_names):
-            raise BattleModelValidationError("MLP candidate features have the wrong shape.")
-        hidden = np.tanh(features @ self._input_weights.T + self._hidden_bias)
+        hidden = self.hidden_embeddings(candidate_features)
         scores = hidden @ self._output_weights + self._output_bias
         if not np.all(np.isfinite(scores)):
             raise BattleModelValidationError("MLP candidate scores must be finite.")
         return np.asarray(scores, dtype=np.float64)
+
+    def hidden_embeddings(self, candidate_features: ArrayLike) -> NDArray[np.float64]:
+        """Project candidates through the frozen representation before ranking."""
+
+        features = np.asarray(candidate_features, dtype=np.float64)
+        if features.ndim != 2 or features.shape[1] != len(self.feature_names):
+            raise BattleModelValidationError("MLP candidate features have the wrong shape.")
+        hidden = np.tanh(features @ self._input_weights.T + self._hidden_bias)
+        if not np.all(np.isfinite(hidden)):
+            raise BattleModelValidationError("MLP hidden embeddings must be finite.")
+        return np.asarray(hidden, dtype=np.float64)
 
     def predict_proba(
         self,

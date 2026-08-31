@@ -7,7 +7,56 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom factory exists, but has not run
+## Current checkpoint: one real lesson, not another classroom factory
+
+The replacement is intentionally small enough to watch and hard enough to matter. Two existing Red
+battle snapshots are assigned before anyone sees an outcome: one lesson and one prospectively held
+check. The system first looks at both menus without pressing a button. If either menu lacks two
+usable moves—or if the model's frozen representation turns two different moves into the same
+internal idea—the pair is rejected for free.
+
+If the pair passes, every move in the lesson gets its own restored cartridge state. The move is
+crossed off before the button is pressed, its consequence is saved, and no supported alternative
+is left imaginary. Only an informative lesson can update the model. The held battle then records
+what the old and new models would choose before revealing either consequence. If the new model
+makes the same choice, or makes a worse one, it is rejected. That is a useful result measured in a
+small loop, not a reason to spend another night repairing Saffron routing.
+
+Even a blackout cannot give the lesson a second life. Before the first move, the attempt receives
+one durable identity. Every crossed-off move and consequence is saved as it happens. Recovery can
+close an interrupted lesson as failed, but it cannot press another button; if the lesson actually
+finished and only its final console message vanished, a separate reader rebuilds the result from
+the saved pieces and rejects any pieces that disagree.
+
+The scoreboard has acquired the same discipline. Its current evidence and numbers are locked
+together, so a hand-edited success count cannot masquerade as learning. Until this loop settles,
+the honest score is **CAUSAL TRAIN 18/19 · MODEL FITS 5/6 · VERIFIED DEVELOPMENT 5/6 · UNSEEN 4 ·
+AUTHORITY 0 · TRANSFER 0**. Red is still the curriculum, Crystal is still the first transfer test,
+and a living Pokédex across games remains the destination.
+
+## Current checkpoint: the factory ran, failed 0/12, and taught us to stop building factories
+
+The twelve cartridges finally went onto the bench. Every one had a frozen role and one chance.
+Together they consumed 208,777 button actions and 32,312,041 emulator frames. Not one reached the
+point where it could become a classroom. Nine broke while the old deterministic teacher was still
+setting up the world; three broke while shaping the intended decision. The model made **zero**
+choices.
+
+That makes the overnight result painful but clear. More route patches would improve the classroom
+builder, not the student. The 0/12 factory is retired, every crossed-out attempt stays crossed out,
+and the project will not create a successor from clean power. Its code remains only so the evidence
+can be authenticated.
+
+Now training returns to the smaller loop the project had already proved: open a safe nonsealed
+snapshot, let several actions reveal their actual consequences, update the model on lesson states,
+and judge it on prospectively held states. Battle goes first; navigation and party development follow.
+Failure here will take minutes and will be a failure of representation or learning—the kind of
+failure that actually helps build a Pokémon player.
+
+The honest score is **CAUSAL TRAIN 18/60 · MODEL FITS 5/6 FOR THE NEXT DECISION · UNSEEN
+COMPARISONS 4/5 · AUTHORITY 0 · TRANSFER 0**.
+
+## Previous checkpoint: the classroom factory existed, but had not run
 
 The counter said the project was short 103 independent classrooms. The tempting shortcut would
 be to copy saves, perturb timing, and call the new hashes new experience. Instead, the next machine

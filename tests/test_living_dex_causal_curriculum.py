@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from dataclasses import replace
@@ -182,13 +183,15 @@ def test_canonical_design_is_replayable_path_free_and_digest_bound() -> None:
     for forbidden in (
         "/Users/",
         "/Volumes/",
-        "PokemonRoms",
         "state_sha256",
         "physical_root_sha256",
         "species_ref",
         "map_id",
     ):
         assert forbidden not in encoded
+    configured_rom = os.environ.get("POKEMON_RED_ROM")
+    if configured_rom is not None:
+        assert configured_rom not in encoded
 
 
 def test_committed_design_matches_generator_and_check_mode() -> None:
