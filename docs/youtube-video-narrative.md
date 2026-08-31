@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the attendance counter
+
+**Visual:** 139 empty desks appear. Thirty-six turn blue for training, 100 turn gold for the
+untouched exam, and three stay gray as sealed contingencies. Then 59 old inventory cards slide
+onto the desks, leaving 80 visibly empty.
+
+**Voiceover:** “Before collecting another Pokémon decision, we finally asked the cheapest
+question: do we even have enough independent games to support the experiment? Not save files.
+Independent upstream episodes. Two questions from the same episode may help a model learn, but
+they cannot pretend to be two strangers on the exam.”
+
+**Visual:** A raw `139` counter flashes red. It changes into a seating chart with kind, position,
+template, location, family, pressure, and same-reset columns.
+
+**Voiceover:** “A big number still cannot pass. Every lineage needs a frozen role and a genuine
+three-choice decision. The 100 exam lineages must each fork the candidate and three controls from
+the same reset. Only an exact 36/100/3 allocation opens collection. The census itself cannot press
+a button, ask the teacher, read an outcome, fit a model, or reveal a private path.”
+
+**On-screen score:** `TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0`
+
 ## August 30 scene: stop counting siblings as strangers
 
 Open on **18 REAL LESSONS / 18 LINEAGES**. Split 72 new lesson cards into 36 braces, two cards per
@@ -4654,3 +4675,19 @@ version has to prove the model learned something worth carrying into a game it h
   leaking the answer.”
 - End on the next rail: **ONE RANDOM ARM DURABLE BEFORE INPUT → SELECTED SKILL ONLY → FRESH
   OBSERVED OUTCOME → STOP/REORIENT → 8-ROW INTEGRATION FIT → 60+ POWERED RED → CRYSTAL**.
+
+## New sequence: “139 saves are not automatically 139 experiments”
+
+- Begin with the honest board: **18/60 CAUSAL TRAIN · INTEGRATION FIT 1/1 · POWERED FIT 0 ·
+  AUTHORITY 0 · TRANSFER 0**.
+- Build the next denominator visually: **36 TRAIN + 100 UNTOUCHED DEVELOPMENT + 3 CONTINGENCY =
+  139 INDEPENDENT LINEAGES**. Draw two saves from one upstream episode collapsing into one lineage.
+- Replace the number with the actual proof: one exact 36/100/3 allocation covering kinds,
+  positions, menus, locations, semantic families, pressures, partitions, and same-reset branches.
+  Keep **ACTIONS 0 · OUTCOMES 0 · FITS 0** visible.
+- Show PR 119's first red CI mark, then reveal **EVERY STATIC GATE PASSED · PYTEST HIT 20:00**.
+  Explain the typed exact-math cache and show the amended **5,894 PASSED · 12:08 LOCAL · FITS THE
+  EXISTING 20-MINUTE CI LIMIT**. Do not portray this as model progress; it is trustworthy
+  experimental throughput.
+- End on the fork: **CAPACITY FAILS → BUILD SCALABLE INDEPENDENT LINEAGES** versus **CAPACITY PASSES
+  → FREEZE ONCE → BOUNDED TRAIN ONLY**. Crystal and authority remain locked on both branches.

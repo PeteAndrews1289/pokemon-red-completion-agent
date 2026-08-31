@@ -14,6 +14,48 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-30: powered V2 census implementation is local — publish before the one private read
+
+Exact main `e667bc6389516f81d5aab8056963ae23f0291759` passed CI `33344917534/1` and
+contains the frozen clustered-powered design digest `c20d2934…`. From that source, this session
+implemented the smallest action-free falsifier for its 139-lineage capacity claim. No private
+catalog, capture, ROM, claim registry, outcome, teacher, model, or development row was opened;
+actions, frames, claims, predictions, fits, authority, and Crystal access remain zero.
+
+The shared gate now represents one unused authenticated upstream lineage with immutable partition,
+physical-root and lineage digests, title-neutral pressures, same-reset feasibility, and genuine
+three-option scenario support. The Red adapter derives those facts from the existing provider
+compatibility census. Necessary counts alone cannot pass: an exact witness must bind 36 train
+lineages to 72 scheduled questions, 100 untouched development lineages to one scheduled question
+each, and three untouched development-capable contingencies while satisfying every kind, position,
+template, location, semantic-family, and pressure floor. Duplicate roots, cloned lineages,
+partition crossings, missing forks, transfer-only Red kinds, or schedule mutations fail closed.
+
+The production census command binds the exact design and source before private authentication,
+holds only a shared claim-registry lease, emits aggregate path-free facts, and has no controller,
+claim writer, behavior draw, teacher, outcome reader, scorer, fitter, allocation output, retry, or
+public private-path surface. The detailed contract is
+[documented here](docs/living-dex-clustered-powered-capacity-census.md). The path-free
+[local qualification](docs/evidence/living-dex-clustered-powered-v2-capacity-implementation-local-qualification-2026-08-30.json)
+records 5,894 full-suite passes, 86 related checks, 49 registry-protocol checks, Ruff, Mypy over
+318 source files, a synthetic constructed pass, and zero protected effects. PR `#119`'s first CI
+run `33350907391` passed every static gate but was canceled when pytest reached the former
+20-minute job ceiling. Exact statistical calculations are now cached with typed keys, their
+validation boundary has regression coverage, and the affected expanded test group fell to 17.98
+seconds locally. The amended full suite completes locally in 12m08s, restoring headroom under the
+unchanged 20-minute CI limit; a fresh PR run and exact-main run are still required before the
+private census.
+
+The previous action-free inventory saw at most 59 eligible lineages (36 source-train, 23
+source-development) before later claims. That historical shape would miss 77 development
+lineages, all three development contingencies, and 80 total lineages. This is only a prior: do not
+publish it as the new census result. First publish this implementation and require green exact-main
+CI. Then run the command exactly once. Any hard shortfall closes gameplay and triggers a
+lineage-supply redesign; an unlikely pass still requires one exact private allocation freeze before
+a bounded train batch. Powered fit, development, authority, sealed Red, Crystal, and full replay
+remain closed. The board is still **causal train 18/60 · integration fit 1/1 · powered fit 0 ·
+authority 0 · transfer 0**.
+
 ## 2026-08-30: clustered powered V2 is designed and reviewed — capacity is the next falsifier
 
 From exact published main `6a7210b8e9089486738530b7fab94b6d0827fa1f`, this session changed

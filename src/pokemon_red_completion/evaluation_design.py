@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from functools import lru_cache
 
 
 class EvaluationDesignError(ValueError):
@@ -102,6 +103,7 @@ class PairedExactDesign:
         }
 
 
+@lru_cache(maxsize=None, typed=True)
 def paired_one_sided_exact_p(wins: int, losses: int) -> float:
     """Return P(Binomial(wins + losses, 0.5) >= wins)."""
 
@@ -116,6 +118,7 @@ def paired_one_sided_exact_p(wins: int, losses: int) -> float:
     )
 
 
+@lru_cache(maxsize=None, typed=True)
 def paired_one_sided_exact_power(
     independent_contexts: int,
     *,
@@ -156,6 +159,7 @@ def paired_one_sided_exact_power(
     return min(max(probability, 0.0), 1.0)
 
 
+@lru_cache(maxsize=None, typed=True)
 def paired_one_sided_exact_power_with_forced_losses(
     independent_contexts: int,
     *,
@@ -211,6 +215,7 @@ def paired_one_sided_exact_power_with_forced_losses(
     return min(max(probability, 0.0), 1.0)
 
 
+@lru_cache(maxsize=None, typed=True)
 def minimum_paired_contexts(
     *,
     win_probability: float,
@@ -244,6 +249,7 @@ def minimum_paired_contexts(
     raise EvaluationDesignError("target power exceeds the maximum context budget")
 
 
+@lru_cache(maxsize=None, typed=True)
 def minimum_paired_contexts_with_forced_losses(
     *,
     forced_losses: int,
@@ -288,6 +294,7 @@ def minimum_paired_contexts_with_forced_losses(
     raise EvaluationDesignError("target power exceeds the maximum context budget")
 
 
+@lru_cache(maxsize=None, typed=True)
 def zero_loss_conjunction_power(
     independent_contexts: int,
     *,

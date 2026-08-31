@@ -7,7 +7,31 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the experiment finally knows what counts as a stranger
+## Current checkpoint: counting the empty desks before inviting the class
+
+The new experiment needs 139 genuinely separate desks. The project has now built the attendance
+counter, but it has not opened the classroom door. Each desk must belong permanently to lessons or
+the exam, trace back to a different upstream episode, expose a real three-choice Pokémon decision,
+and—on the exam side—support four fair policy branches from the same reset.
+
+Even 139 names on a list are not enough. The counter demands a complete seating chart: 36 lesson
+lineages carrying 72 prescheduled questions, 100 untouched exam lineages carrying one question
+each, and three untouched contingencies, all while the promised kinds, positions, locations,
+families, templates, and state pressures remain represented. A cloned save, a crossed partition,
+or a convenient post-outcome replacement cannot masquerade as another student.
+
+There is a sober prior. The last published inventory found only 59 eligible lineages—36 for
+lessons and 23 for development—and later work consumed more of them. Against the new design, that
+old shape is short 80 independent lineages. But the project has not quietly reread the private
+archive to confirm the answer. The counter must first become reproducible published main and pass
+an independent build; then it gets exactly one action-free census.
+
+If the room is too small, the answer is not to call correlated chairs independent. The next
+chapter becomes scalable episode generation. If the count unexpectedly passes, one frozen seating
+chart opens a bounded lesson batch—not an exam, authority, Crystal, or a full game. The score is
+still **CAUSAL TRAIN 18/60 · INTEGRATION FIT 1/1 · POWERED FIT 0 · AUTHORITY 0 · TRANSFER 0**.
+
+## Previous checkpoint: the experiment finally knows what counts as a stranger
 
 The classroom has a new blueprint, but no new lesson was taken. Seventy-two future cards are
 arranged beneath 36 lineage braces, never more than two cards per brace, and each brace gets the
@@ -3701,14 +3725,18 @@ went wrong on the way to noticing that beating Pokémon Red was never the point.
 
 ### Where the project is now
 
-The frozen clustered curriculum has a published train-only consumer and a successful real
-ROM-free preflight. One exact Red training state was authenticated against its envelope, original
-episode lineage, runtime, and unclaimed logical/physical root pair. Nothing moved on screen; no
-choice was made; no model learned. That zero is the point: it proves the next run can create one
-honest observed-arm lesson without quietly opening development labels or replaying a teacher's
-buttons.
+The bounded Red clustered campaigns are complete: 18 authentic selected-arm outcomes came from 18
+independent upstream lineages, and one non-authoritative integration fit reloads exactly. That is
+real training data and a real fit, but it is still far too small and imbalanced to grant gameplay
+authority. The honest board is **18/60 causal train examples, integration fit 1/1, powered fit 0,
+authority 0, transfer 0**.
 
-The next chapter is one bounded causal outcome, then seven more independent train lineages for the
-first non-authoritative integration fit. Only after a larger, powered Red dataset beats frozen
-controls on untouched lineages will the shared representation be frozen for Crystal. The living
-Pokédex remains the product; Red remains the first classroom.
+The next design makes the missing evidence finite instead of saying “collect more.” It requires 36
+new train lineages, 100 untouched development lineages, and three development-capable
+contingencies. A raw pile of 139 saves cannot pass: an action-free constructor must produce one
+simultaneous assignment covering every frozen kind, candidate position, template, location,
+semantic family, pressure axis, partition, and same-reset rule. The command is locally qualified
+and awaiting green pull-request and exact-main CI before its single private census. If the bank is
+short, gameplay stops and scalable independent-lineage generation becomes the work. If it passes,
+only a bounded Red train batch opens. The living Pokédex remains the product; Red remains the first
+causal classroom and Crystal the first transfer falsifier.

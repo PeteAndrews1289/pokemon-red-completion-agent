@@ -11,7 +11,29 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: clustered powered V2 designed; prove capacity, then resume learning
+## Current checkpoint: capacity falsifier implemented; publish, census once, then reorient
+
+Exact main `e667bc63` passed CI `33344917534/1` and published the clustered powered V2 design.
+The next gate is now implemented locally without opening private data or gameplay. It converts
+each still-unused authenticated Red root into a title-neutral lineage-capacity description while
+preserving immutable train/development ownership, same-reset feasibility, genuine menu support,
+and the frozen kind, position, family, template, location, and pressure floors.
+
+The gate cannot pass on aggregate counts alone. A valid exact witness must allocate 36 train
+lineages to 72 questions, 100 untouched development lineages to one question each, and three
+development-capable pre-branch contingencies. The production command binds the public design and
+source before private input, returns only path-free aggregates, and has no action, claim, behavior,
+teacher, outcome, prediction, fit, retry, or allocation-output authority.
+
+The historical inventory result—59 eligible lineages, split 36 train / 23 development before
+later claims—would fail V2 by 77 development lineages, three contingencies, and 80 lineages total.
+That is a prior rather than a fresh private result. Publish the implementation, require green
+exact-main CI, and then run one census. A hard failure closes gameplay and moves the roadmap to a
+scalable independent-lineage supply design. A pass permits only one exact allocation freeze and a
+bounded train batch. The board remains **causal train 18/60 · integration fit 1/1 · powered fit 0
+· authority 0 · transfer 0**.
+
+## Previous checkpoint: clustered powered V2 designed; prove capacity, then resume learning
 
 The action-free V2 contract is now implemented, canonically generated, mutation-tested, and
 independently reviewed. It preserves the 18 authentic settled examples and adds a fixed

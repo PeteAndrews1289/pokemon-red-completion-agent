@@ -133,3 +133,21 @@ def test_power_rejects_an_unfavorable_or_impossible_design() -> None:
             win_probability=0.8,
             loss_probability=0.3,
         )
+
+
+def test_cached_exact_design_functions_preserve_typed_input_validation() -> None:
+    assert paired_one_sided_exact_p(0, 0) == 1.0
+    with pytest.raises(EvaluationDesignError):
+        paired_one_sided_exact_p(False, 0)
+
+    assert paired_one_sided_exact_power(
+        1,
+        win_probability=0.0,
+        loss_probability=0.0,
+    ) == 0.0
+    with pytest.raises(EvaluationDesignError):
+        paired_one_sided_exact_power(
+            1,
+            win_probability=False,
+            loss_probability=0.0,
+        )
