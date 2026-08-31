@@ -37,8 +37,14 @@ claim writer, behavior draw, teacher, outcome reader, scorer, fitter, allocation
 public private-path surface. The detailed contract is
 [documented here](docs/living-dex-clustered-powered-capacity-census.md). The path-free
 [local qualification](docs/evidence/living-dex-clustered-powered-v2-capacity-implementation-local-qualification-2026-08-30.json)
-records 5,893 full-suite passes, 86 related checks, 49 registry-protocol checks, Ruff, Mypy over
-318 source files, a synthetic constructed pass, and zero protected effects.
+records 5,894 full-suite passes, 86 related checks, 49 registry-protocol checks, Ruff, Mypy over
+318 source files, a synthetic constructed pass, and zero protected effects. PR `#119`'s first CI
+run `33350907391` passed every static gate but was canceled when pytest reached the former
+20-minute job ceiling. Exact statistical calculations are now cached with typed keys, their
+validation boundary has regression coverage, and the affected expanded test group fell to 17.98
+seconds locally. The amended full suite completes locally in 12m08s, restoring headroom under the
+unchanged 20-minute CI limit; a fresh PR run and exact-main run are still required before the
+private census.
 
 The previous action-free inventory saw at most 59 eligible lineages (36 source-train, 23
 source-development) before later claims. That historical shape would miss 77 development

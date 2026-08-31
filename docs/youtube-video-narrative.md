@@ -4675,3 +4675,19 @@ version has to prove the model learned something worth carrying into a game it h
   leaking the answer.”
 - End on the next rail: **ONE RANDOM ARM DURABLE BEFORE INPUT → SELECTED SKILL ONLY → FRESH
   OBSERVED OUTCOME → STOP/REORIENT → 8-ROW INTEGRATION FIT → 60+ POWERED RED → CRYSTAL**.
+
+## New sequence: “139 saves are not automatically 139 experiments”
+
+- Begin with the honest board: **18/60 CAUSAL TRAIN · INTEGRATION FIT 1/1 · POWERED FIT 0 ·
+  AUTHORITY 0 · TRANSFER 0**.
+- Build the next denominator visually: **36 TRAIN + 100 UNTOUCHED DEVELOPMENT + 3 CONTINGENCY =
+  139 INDEPENDENT LINEAGES**. Draw two saves from one upstream episode collapsing into one lineage.
+- Replace the number with the actual proof: one exact 36/100/3 allocation covering kinds,
+  positions, menus, locations, semantic families, pressures, partitions, and same-reset branches.
+  Keep **ACTIONS 0 · OUTCOMES 0 · FITS 0** visible.
+- Show PR 119's first red CI mark, then reveal **EVERY STATIC GATE PASSED · PYTEST HIT 20:00**.
+  Explain the typed exact-math cache and show the amended **5,894 PASSED · 12:08 LOCAL · FITS THE
+  EXISTING 20-MINUTE CI LIMIT**. Do not portray this as model progress; it is trustworthy
+  experimental throughput.
+- End on the fork: **CAPACITY FAILS → BUILD SCALABLE INDEPENDENT LINEAGES** versus **CAPACITY PASSES
+  → FREEZE ONCE → BOUNDED TRAIN ONLY**. Crystal and authority remain locked on both branches.

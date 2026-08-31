@@ -3725,14 +3725,18 @@ went wrong on the way to noticing that beating Pokémon Red was never the point.
 
 ### Where the project is now
 
-The frozen clustered curriculum has a published train-only consumer and a successful real
-ROM-free preflight. One exact Red training state was authenticated against its envelope, original
-episode lineage, runtime, and unclaimed logical/physical root pair. Nothing moved on screen; no
-choice was made; no model learned. That zero is the point: it proves the next run can create one
-honest observed-arm lesson without quietly opening development labels or replaying a teacher's
-buttons.
+The bounded Red clustered campaigns are complete: 18 authentic selected-arm outcomes came from 18
+independent upstream lineages, and one non-authoritative integration fit reloads exactly. That is
+real training data and a real fit, but it is still far too small and imbalanced to grant gameplay
+authority. The honest board is **18/60 causal train examples, integration fit 1/1, powered fit 0,
+authority 0, transfer 0**.
 
-The next chapter is one bounded causal outcome, then seven more independent train lineages for the
-first non-authoritative integration fit. Only after a larger, powered Red dataset beats frozen
-controls on untouched lineages will the shared representation be frozen for Crystal. The living
-Pokédex remains the product; Red remains the first classroom.
+The next design makes the missing evidence finite instead of saying “collect more.” It requires 36
+new train lineages, 100 untouched development lineages, and three development-capable
+contingencies. A raw pile of 139 saves cannot pass: an action-free constructor must produce one
+simultaneous assignment covering every frozen kind, candidate position, template, location,
+semantic family, pressure axis, partition, and same-reset rule. The command is locally qualified
+and awaiting green pull-request and exact-main CI before its single private census. If the bank is
+short, gameplay stops and scalable independent-lineage generation becomes the work. If it passes,
+only a bounded Red train batch opens. The living Pokédex remains the product; Red remains the first
+causal classroom and Crystal the first transfer falsifier.

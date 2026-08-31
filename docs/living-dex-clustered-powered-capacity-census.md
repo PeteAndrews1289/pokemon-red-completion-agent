@@ -75,3 +75,16 @@ source-development—before later claims consumed additional contexts. Against V
 shape would be short 77 development lineages, all three development contingencies, and 80 total
 lineages. This is a prior expectation, not the result of the new one-shot census. The private
 inventory remains unopened until this implementation is published and exact-main CI is green.
+
+## Engineering qualification
+
+The first pull-request run passed source, documentation, registry, lint, and type gates, then was
+canceled at the workflow's former 20-minute ceiling while pytest was still active. That was a
+capacity problem in CI, not evidence that a behavioral assertion failed. The exact paired-test
+calculations are now memoized with typed cache keys; regression tests prove that a cached numeric
+result cannot admit a boolean or otherwise bypass the original validation boundary. The expanded
+affected group completes locally in 17.98 seconds, and the complete qualified suite reports 5,894
+passes, one expected xfail, three integration deselections, and one environment-bound local-runtime
+deselection in 12m08s, restoring headroom under the unchanged 20-minute CI limit. These changes
+affect engineering throughput only; the frozen V2 design, private-open rule, and every
+protected-effect counter are unchanged.

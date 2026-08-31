@@ -7721,3 +7721,28 @@ no emulator, and no action. That is valuable because the next process is no long
 replay or wrapper test. It is the first new selected-arm causal outcome in this clustered curriculum.
 The model has still not trained; the honest counter remains 1/60. But for the first time in this
 sequence, the next unit of work is measured learning rather than infrastructure.
+
+## August 30: 139 saves became a falsifiable statement
+
+The first clustered curriculum eventually produced eighteen authentic Red outcomes from eighteen
+independent episode lineages and one non-authoritative integration fit. It also exposed why “keep
+collecting” was not a research plan: development power, not emulator speed, set the real scale.
+With the previously declared 0.30 win / 0.10 loss alternative and three incomplete endpoints
+scored as candidate losses, the least powered denominator is one hundred untouched development
+lineages. Add 36 prospective train lineages and three unread contingencies and the next finite gate
+is 139 genuinely independent lineages.
+
+The implementation refuses to confuse that number with proof. Every lineage retains immutable
+train/development ownership, a physical-root identity, an upstream independence identity,
+same-reset feasibility, title-neutral pressure, and cartridge-supported three-option menus. A
+valid result must construct one exact 36/100/3 witness satisfying all kind, position, template,
+location, semantic-family, and pressure schedules at once. The census can read and aggregate; it
+cannot act, claim, query the teacher, inspect outcomes, fit, score, retry, or publish private paths.
+
+The first PR build produced a red mark for an unglamorous but useful reason: pytest crossed a
+20-minute workflow ceiling after every static gate had passed. Reusing pure exact-test calculations
+with typed cache keys cut the expanded affected group to 17.98 seconds while a regression test
+proved cached numerics cannot bypass typed validation. The complete amended suite passed 5,894
+checks in 12m08s, restoring headroom under the workflow's unchanged 20-minute ceiling. This moved
+no learning counter. It made the cheapest honest answer—“does the evidence bank actually support
+the frozen experiment?”—fast and reliable enough to ask once from green main.

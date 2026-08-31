@@ -59,6 +59,7 @@
     "deterministic_outcome_blind_exact_witness_constructor": true,
     "immutable_partition_ownership_enforced": true,
     "malformed_or_duplicate_witness_fails_closed": true,
+    "typed_exact_design_calculation_cache": true,
     "private_allocation_output_surface": false,
     "private_path_output_surface": false,
     "production_action_surface": false,
@@ -78,12 +79,17 @@
   },
   "qualification": {
     "changed_file_ruff_checks_passed": true,
+    "ci_job_timeout_minutes": 20,
     "exact_local_runtime_test": "environment_bound_worktree_test_deselected_full_run_prior_exact_main_evidence_preserved",
+    "expanded_affected_test_group_passed": 27,
+    "expanded_affected_test_group_runtime_seconds": 17.98,
     "focused_capacity_tests": 16,
     "focused_capacity_tests_passed": 16,
     "full_suite_deselected_environment_bound_tests": 1,
-    "full_suite_passed": 5893,
-    "full_suite_skipped": 3,
+    "full_suite_deselected_integration_tests": 3,
+    "full_suite_passed": 5894,
+    "full_suite_runtime_seconds": 728.3,
+    "full_suite_skipped": 0,
     "full_suite_xfailed": 1,
     "mypy_source_files": 318,
     "registry_protocol_tests": 49,
@@ -96,7 +102,7 @@
     "base_commit": "e667bc6389516f81d5aab8056963ae23f0291759",
     "base_exact_main_ci_run": 33344917534,
     "design_sha256": "c20d2934e8f0632e6bb795ccc15cad2bb5aa9ee8330e08a755801344f9ca5b8d",
-    "working_source_bundle_sha256": "875964d5cc32b6582947dfed0c5ebbe9eb8ce146242869a96d9df468b3583d51"
+    "working_source_bundle_sha256": "b077f6a03004482be3ad1437480fbbf930c6ca5d99513d63cd03d38f4d5d8bae"
   },
   "status": "locally_qualified_publication_and_exact_main_ci_next"
 }
