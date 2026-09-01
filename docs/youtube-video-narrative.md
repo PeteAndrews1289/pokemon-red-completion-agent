@@ -4991,3 +4991,20 @@ version has to prove the model learned something worth carrying into a game it h
   experimental throughput.
 - End on the fork: **CAPACITY FAILS → BUILD SCALABLE INDEPENDENT LINEAGES** versus **CAPACITY PASSES
   → FREEZE ONCE → BOUNDED TRAIN ONLY**. Crystal and authority remain locked on both branches.
+
+## New sequence: “The same save can support more than one honest experiment”
+
+- Open with the failed PP-only hypothesis: **1 ROOT · 1 VENUE · STOPPED · ACTIONS 0**.
+- Change the question, not the evidence: show each untouched root connected to every venue already
+  reachable through bounded mechanics. Resolve the bipartite graph into **10 ELIGIBLE · SELECT 7 ·
+  DIGLETT'S CAVE 4 · ROUTE 11 3**.
+- Make the privacy boundary visible: root identities stay inside the private freezer; the public
+  receipt shows counts only.
+- Animate one assignment moving **PENDING → STARTED** before the emulator launches. Cut the power;
+  show that it cannot return to pending or be replaced.
+- Show the cartridge rederiving the selected venue before input: no caller-supplied location and no
+  new arrow script.
+- Keep the scoreboard onscreen: **TRAIN 19 · FITS 6 · AUTHORITY 0 · CRYSTAL 0**. Say plainly that
+  this is the last execution-safety gate, not a trained player.
+- End on the next rail: **PUBLISH → GREEN CI → FREEZE ONCE AT ZERO EFFECTS → REVIEW RECEIPT →
+  SEPARATE CAPTURE EXECUTION DECISION**.

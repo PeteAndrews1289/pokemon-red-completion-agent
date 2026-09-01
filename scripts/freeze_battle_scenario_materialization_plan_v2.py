@@ -19,7 +19,6 @@ sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 from freeze_battle_scenario_materialization_plan import (  # noqa: E402
     BattleScenarioMaterializationFreezeError,
     _eligible_party_slots,
-    _private_capture_directory,
     _private_new_plan,
     _write_exclusive,
 )
@@ -120,7 +119,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     require_pyboy_import_origins(runtime)
     rom_path = resolve_rom_path(args.rom)
     rom = verify_rom(rom_path)
-    capture_directory = _private_capture_directory(
+    capture_directory = _private_capture_directory_v2(
         args.capture_directory,
         rom_path=rom_path,
     )
@@ -313,6 +312,27 @@ def _freeze_under_shared_lease(
         )
         _write_exclusive(destination, plan.canonical_bytes())
     return plan, claim_available_roots
+
+
+def _private_capture_directory_v2(path: Path, *, rom_path: Path) -> Path:
+    try:
+        resolved = path.resolve(strict=True)
+        observed = resolved.stat()
+    except OSError:
+        raise BattleScenarioMaterializationFreezeV2Error(
+            "capture directory is unavailable"
+        ) from None
+    if (
+        not stat.S_ISDIR(observed.st_mode)
+        or observed.st_uid != os.getuid()
+        or stat.S_IMODE(observed.st_mode) & 0o077
+        or resolved.is_relative_to(PROJECT_ROOT.resolve())
+        or resolved == rom_path.resolve().parent
+    ):
+        raise BattleScenarioMaterializationFreezeV2Error(
+            "capture directory cannot be authenticated"
+        )
+    return resolved
 
 
 def _require_new_assignment_outputs_v2(

@@ -8549,3 +8549,30 @@ Claude did not provide a verdict in this session because its CLI was logged out.
 was not discoverable. Neither review is required for this ordinary development transition; Codex
 retains implementation and adjudication ownership. Request their read-only statistical and
 cross-title reviews again at the eight-row integration-fit decision or any promotion boundary.
+
+---
+
+## 13. Active handoff — Red battle V2 multi-venue materialization (2026-09-01)
+
+Main `65d9b2b4` records the positive V7 capacity result after exact-head CI `33489856427/1` passed.
+The retained successor bank has ten claim-available roots eligible at both Route 11 and Diglett's
+Cave; the exact capped allocation selects seven independent roots as four Cave and three Route 11.
+
+The active branch adds a separate private V2 plan instead of changing consumed V1 history. Its
+freezer reopens the exact exhausted V1 plan and terminal journal, excludes all attempted sources,
+recomputes every reachable venue edge and mechanics-exact party slot, freezes the complete
+inventory, and canonically binds seven root/venue/slot/output assignments. The runner independently
+reopens the exhausted evidence, marks each assignment started before the controller-capable child,
+and never requeues a started or failed item. The child rederives the plan-bound venue from the loaded
+state before input and reuses the existing Route 11/Diglett's Cave transition callbacks.
+
+This is execution readiness, not training. No V2 private plan has been frozen from the bank, no
+controller input occurred, and no capture, outcome, prediction, fit, authority, sealed case,
+Crystal context, or replay was created. The board remains **causal train 19 · model fits 6 · verified
+development 6 · unseen comparisons 4 · authority 0 · transfer 0**.
+
+Immediate order: finish repository-wide verification; publish the engineering gate; require exact-
+head green CI; then freeze exactly one private V2 plan at zero effects and stop for an aggregate
+receipt review. Do not execute the plan in the same decision. Stop on inventory drift, exhausted-
+root reuse, selected-edge mismatch, output collision, private leakage, or any attempt to replace or
+retry a started assignment.

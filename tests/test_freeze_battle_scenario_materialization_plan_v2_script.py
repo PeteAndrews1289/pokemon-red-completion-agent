@@ -72,6 +72,32 @@ def test_v2_freezer_accepts_only_whole_bank_and_exclusion_inputs() -> None:
     assert "--venue" not in options
 
 
+def test_v2_capture_directory_is_owner_private(
+    tmp_path: Path,
+) -> None:
+    private = tmp_path / "private"
+    private.mkdir(mode=0o700)
+    public = tmp_path / "public"
+    public.mkdir(mode=0o755)
+    rom_directory = tmp_path / "roms"
+    rom_directory.mkdir(mode=0o700)
+    rom_path = rom_directory / "red.gb"
+    rom_path.write_bytes(b"rom")
+
+    assert SCRIPT["_private_capture_directory_v2"](
+        private,
+        rom_path=rom_path,
+    ) == private.resolve()
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationFreezeV2Error"],
+        match="cannot be authenticated",
+    ):
+        SCRIPT["_private_capture_directory_v2"](
+            public,
+            rom_path=rom_path,
+        )
+
+
 def test_candidate_rederives_every_eligible_reachable_edge(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
