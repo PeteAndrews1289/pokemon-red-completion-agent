@@ -11,6 +11,40 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: terminal materialization produced five of seven valid captures
+
+Exact main `24fe239c` passed CI `33515692262/1`, and the successor denominator executed once. Five
+captures independently authenticated: two from Diglett's Cave and three from Route 11. Two Cave
+attempts are terminal failures. They may not retry, return to pending, disappear from the seven-item
+journal, or be relabeled as successes.
+
+The requested failure-first forensic pass reopened all seven files without advancing a frame. The
+two failed states match every frozen source, cartridge, party, battle-menu, and observation
+invariant and each exposes two supported actions. Their only mismatch is three represented move
+candidates against a runner invariant of exactly four. The freezer already admits at least two
+mechanics-supported attacks, the battle learner supports variable two-to-four candidate menus, and
+the outcome authenticator records the supported subset. The exact-four runner check is therefore a
+cross-layer contract defect rather than a bad root or unusable lesson.
+
+Next sequence:
+
+1. Preserve the terminal 5/2 journal and publish its path-free forensic receipt.
+2. Prospectively make receipt and independent-state authentication accept two through four
+   represented candidates with two through candidate-count supported actions.
+3. Emit separate sanitized reason codes for policy-boundary, observation, candidate-cardinality,
+   party-binding, and reopen/controller-boundary failures.
+4. Hostile-test, run the complete gate, publish, and require exact-main green CI.
+5. Freeze the smallest additive completion tranche over untouched roots while binding the five
+   immutable successes and retaining both failed assignments as historical denominator members.
+6. Stop before controller input unless the additive design proves no retry, replacement,
+   post-outcome selection, lineage reuse, or source-commit ambiguity.
+7. Only seven independently authenticated captures may open selected-action outcomes and the
+   seventh descriptive fit; authority remains zero.
+
+Five captures are scenario inputs, not causal outcomes. The board remains **causal train 19 ·
+model fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**. See the
+[terminal result](evidence/red-battle-v2-multivenue-successor-materialization-result-2026-09-01.json).
+
 ## Current checkpoint: exact allocation passes at 10 eligible roots / 2 venues
 
 Published source `98544be8` passed GitHub CI `33487956767/1`. The one V7 census then reopened the

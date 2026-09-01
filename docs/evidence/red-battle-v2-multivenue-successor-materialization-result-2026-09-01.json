@@ -1,0 +1,100 @@
+{
+  "decision": {
+    "model_fitting_open": false,
+    "next_gate": "publish and exact-main qualify the variable two-to-four candidate-cardinality repair, then prospectively design an additive untouched-root completion tranche without reopening either failed assignment",
+    "outcome_collection_open": false,
+    "reason": "Five of seven captures independently authenticated. Two otherwise faithful Diglett's Cave captures were permanently rejected because the runner demanded exactly four represented moves even though the freezer and learner admit variable menus with at least two supported actions.",
+    "status": "terminal_partial_materialization_requires_prospective_repair"
+  },
+  "failure_forensics": {
+    "failed_capture_count": 2,
+    "failed_capture_venue_counts": {
+      "digletts_cave": 2
+    },
+    "failed_candidate_count_counts": {
+      "3": 2
+    },
+    "failed_reason_counts": {
+      "materialized_capture_state_differs": 2
+    },
+    "failed_supported_candidate_count_counts": {
+      "2": 2
+    },
+    "independent_zero_frame_reopen": true,
+    "matching_invariants": [
+      "capture_and_source_binding",
+      "train_partition",
+      "source_commit_and_source_state",
+      "expected_map_and_wild_battle_state",
+      "active_party_slot_species_and_level",
+      "main_battle_menu",
+      "initial_observation_digest",
+      "minimum_two_supported_actions",
+      "zero_reopen_frames_and_no_pressed_buttons"
+    ],
+    "mismatch": "represented_candidate_count_was_three_while_runner_required_exactly_four",
+    "private_capture_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "repair_scope": "future_materialization_only",
+    "retried_or_reclassified_failed_assignments": 0
+  },
+  "materialization": {
+    "attempted_capture_counts": {
+      "digletts_cave": 4,
+      "route_11": 3
+    },
+    "created_manifest_count": 7,
+    "created_state_count": 7,
+    "failure_count": 2,
+    "journal_sha256": "f1a500e6ace7d1dd394cad411dd47634eca2e23ff5f5d6c921de622d2aba9f1d",
+    "pending_count": 0,
+    "plan_sha256": "74bd6b2104eebb127860bacefe50e29cb29ba800a8b9635700fce8d454546010",
+    "receipt_sha256": "e489f8cf5d7971747dc59c3228e8de01d02b48adb28e580fb13f09a038339d0d",
+    "started_count": 0,
+    "status": "complete_with_failures",
+    "success_count": 5,
+    "successful_capture_counts": {
+      "digletts_cave": 2,
+      "route_11": 3
+    },
+    "successful_candidate_count_counts": {
+      "4": 5
+    },
+    "successful_output_bindings_sha256": "f77ce2991639b9dd8725ad0a1cf13ab07b4c5c67377486ecdf4fd541afe87dc8",
+    "successful_supported_candidate_count_counts": {
+      "3": 5
+    }
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "controller_capable_assignments_attempted": 7,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "move_choices_executed": 0,
+    "outcomes_opened": 0,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33515692262,
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "executable_source_bundle_sha256": "720c5649d7a28b5ea461a98ba7e1837830494a53536905bc5522d2e22d5fa4d0",
+    "materializer_sha256": "c720b63a584e4f9e9ad40e86fbc40232538dd2addd114429bb551f10dc7f6947",
+    "published_source_commit": "24fe239cc756dde0ebaff6ddc607b452ce881a1e",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runtime_identity_sha256": "38d3d36a6859959d7860380b5a6748d84314038885b4f6a8ca50a1a675b53189"
+  },
+  "schema": "pokemon.red-battle-v2-multivenue-successor-materialization-result.v1"
+}

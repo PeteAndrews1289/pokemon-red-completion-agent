@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: five lessons survived, and the two failures exposed a real contract bug
+
+The one-shot classroom run created all seven private battle snapshots. Five passed an independent
+second-emulator check—two in Diglett's Cave and three on Route 11. Two Cave snapshots were marked
+failed forever, with no retry. They were not corrupt or on the wrong screen: map, battle type,
+active teammate, species, level, menu, and observation all matched, and each had two attacks the
+model can actually choose.
+
+The mismatch was in our own definition of a menu. The roster and learner allow a Pokémon with two,
+three, or four represented moves as long as at least two are supported; the runner had silently
+required exactly four. That is the kind of failure worth preserving because it identifies a
+cross-layer assumption rather than encouraging another root-specific patch. Future runs will use
+the learner's real variable-cardinality rule and retain a more precise public failure category.
+
+The two journal failures stay failed, and five snapshots are still not training outcomes. The next
+step is to publish the general repair and prospectively add enough untouched roots to reach seven
+authenticated captures without hiding or replacing the failed attempts. Only then can the model
+choose moves and learn from cartridge outcomes. The score remains **19 train examples · 6 fits · 6
+verified development outcomes · 4 unseen comparisons · 0 authority · 0 transfer**.
+
 ## September 1: the classroom matching test passes
 
 The final old-bank question produced a real positive result. Ten unused authenticated worlds can

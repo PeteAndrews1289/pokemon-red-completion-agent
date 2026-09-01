@@ -151,6 +151,136 @@ def test_exact_ci_failure_reason_survives_public_sanitization() -> None:
     assert SCRIPT["_failure_reason"](error) == "exact_ci_differs"
 
 
+@pytest.mark.parametrize(
+    ("candidate_count", "supported_candidate_count"),
+    ((2, 2), (3, 2), (3, 3), (4, 2), (4, 3), (4, 4)),
+)
+def test_materialization_accepts_the_learners_variable_candidate_cardinality(
+    candidate_count: int,
+    supported_candidate_count: int,
+) -> None:
+    assert SCRIPT["_battle_candidate_cardinality_is_supported"](
+        candidate_count,
+        supported_candidate_count,
+    )
+
+
+@pytest.mark.parametrize(
+    ("candidate_count", "supported_candidate_count"),
+    (
+        (1, 1),
+        (2, 1),
+        (3, 4),
+        (4, 5),
+        (5, 2),
+        (True, 2),
+        (2, True),
+        (2.0, 2),
+        (2, 2.0),
+    ),
+)
+def test_materialization_rejects_nonlearning_candidate_cardinality(
+    candidate_count: object,
+    supported_candidate_count: object,
+) -> None:
+    assert not SCRIPT["_battle_candidate_cardinality_is_supported"](
+        candidate_count,
+        supported_candidate_count,
+    )
+
+
+@pytest.mark.parametrize(
+    "reason_code",
+    (
+        "materializer_candidate_cardinality_differs",
+        "materialized_capture_candidate_cardinality_differs",
+        "materialized_capture_observation_differs",
+        "materialized_capture_party_binding_differs",
+        "materialized_capture_policy_boundary_differs",
+        "materialized_capture_reopen_crossed_controller_boundary",
+    ),
+)
+def test_materialization_forensic_reasons_survive_public_sanitization(
+    reason_code: str,
+) -> None:
+    error = SCRIPT["BattleScenarioMaterializationRunnerError"](reason_code)
+
+    assert SCRIPT["_failure_reason"](error) == reason_code
+
+
+def _materializer_receipt(
+    *,
+    candidate_count: object = 3,
+    supported_candidate_count: object = 2,
+) -> tuple[object, dict[str, object]]:
+    plan = V2_HELPERS["_build"]()
+    assignment = plan.assignments[0]
+    source = assignment.candidate.source
+    venue = assignment.selected_venue
+    return assignment, {
+        "schema": "pokemon-private-battle-scenario-materialization-receipt-v2",
+        "status": "ok",
+        "capture_id": assignment.capture_id,
+        "root_lineage_id": source.root_lineage_id,
+        "partition": "train",
+        "source_commit": plan.source_commit,
+        "source_state_sha256": source.source_state_sha256,
+        "source_slot_id": source.source_slot_id,
+        "source_assignment_id": source.source_assignment_id,
+        "source_context_id": source.source_context_id,
+        "source_envelope_sha256": source.source_envelope_sha256,
+        "root_consumption_sha256": source.root_consumption_sha256,
+        "context_catalog_sha256": source.catalog_sha256,
+        "registry_sha256": source.registry_sha256,
+        "registry_source_commit": source.registry_source_commit,
+        "state_sha256": "d" * 64,
+        "manifest_sha256": "e" * 64,
+        "venue_id": venue.venue_id,
+        "venue_minimum_encounter_level": venue.minimum_encounter_level,
+        "venue_maximum_encounter_level": venue.maximum_encounter_level,
+        "source_location": venue.source_location,
+        "party_slot": assignment.party_slot.party_slot,
+        "candidate_count": candidate_count,
+        "supported_candidate_count": supported_candidate_count,
+        "teacher_queries": 0,
+        "move_choices_executed": 0,
+        "root_claims_created": 0,
+        "caller_supplied_partition": False,
+        "caller_supplied_lineage": False,
+        "caller_supplied_source_location": False,
+        "selected_reachable_venue_reauthenticated": True,
+        "private_path_fields": 0,
+    }
+
+
+def test_materializer_receipt_accepts_three_candidates_with_two_supported() -> None:
+    assignment, receipt = _materializer_receipt()
+
+    SCRIPT["_require_materializer_receipt"](
+        receipt,
+        assignment=assignment,
+        source_commit=receipt["source_commit"],
+        state_sha256="d" * 64,
+        manifest_sha256="e" * 64,
+    )
+
+
+def test_materializer_receipt_reports_candidate_cardinality_separately() -> None:
+    assignment, receipt = _materializer_receipt(candidate_count=5)
+
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="materializer_candidate_cardinality_differs",
+    ):
+        SCRIPT["_require_materializer_receipt"](
+            receipt,
+            assignment=assignment,
+            source_commit=receipt["source_commit"],
+            state_sha256="d" * 64,
+            manifest_sha256="e" * 64,
+        )
+
+
 def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: five green cards and a useful red light
+
+**Visual:** Run seven sealed cards through a second-emulator scanner. Five turn green: **2 CAVE · 3
+ROUTE 11**. Two Cave cards turn red but keep every other indicator lit: **MAP · BATTLE · PARTY ·
+LEVEL · MAIN MENU · OBSERVATION · TWO LEGAL ATTACKS**. Only **MOVE ROWS 3 / EXPECTED 4** flashes.
+
+**Voiceover:** “Five lessons passed. The other two did not fail because Pokémon behaved badly;
+they exposed a contradiction in our own system. The learner accepts a real choice among two, three,
+or four moves, but the runner insisted every Pokémon show four.”
+
+**Visual:** Lock the two red cards into the permanent journal—**NO RETRY · NO RELABEL**—then replace
+the fixed **4** gate with **2–4 REPRESENTED · AT LEAST 2 SUPPORTED**. Split future failure lights
+into **BOUNDARY · OBSERVATION · CANDIDATES · PARTY · CONTROLLER**.
+
+**Voiceover:** “We keep both failures, fix the shared rule only for future data, and make the next
+error explain itself without revealing a private save. Five snapshots are not outcomes, so the
+model still has not earned another training example.”
+
+**On-screen score:** `CAPTURES 5/7 · RETRIES 0 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: seven honest seats finally exist
 
 **Visual:** The bipartite matcher lights up ten eligible world cards, each connected to Route 11

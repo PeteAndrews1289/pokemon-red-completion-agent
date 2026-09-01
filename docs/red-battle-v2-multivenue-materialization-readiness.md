@@ -1,7 +1,7 @@
 # Red battle V2 multi-venue materialization readiness
 
-Status: published implementation qualified and one private plan frozen; no controller input
-executed.
+Status: successor execution terminal at five authenticated captures and two permanent failures;
+outcome collection remains closed.
 
 Local qualification passed 74 focused tests and 6,246 repository-wide tests, with one intentional
 skip, three integration deselections and one expected xfail. Ruff, the configured 330-source type
@@ -69,27 +69,25 @@ or model authority.
 
 ## Next decision
 
-The first execution launch failed at exact-CI authentication before the ROM or journal opened. The
-runner required the published squash commit to be the head of a pull-request CI event, but GitHub's
-pull-request run belongs to the pre-squash head; the exact squash commit's successful run is a push
-event on main. No assignment started and no frame, input, claim, capture, outcome or private field
-was created.
+The exact-main CI repair was published as `24fe239c`, exact-main run `33515692262/1` passed, and one
+successor plan executed. Five captures independently authenticated; two Diglett's Cave assignments
+failed terminally. A read-only zero-frame forensic pass proved that both failures match every
+source, map, battle, party, MAIN-menu and observation binding and each exposes two supported
+actions. They represent three move candidates while the runner required exactly four.
 
-Publish and qualify the repair that accepts only an exact successful push CI on main while
-retaining exact commit, run, attempt, workflow, repository and URL checks. Preserve the original
-plan and failure as history; do not rerun it. After exact-main green CI, freeze a new source-bound
-seven-assignment denominator at zero effects and review its aggregate receipt before controller
-input. Outcome collection and the seventh descriptive model fit remain later, separately accounted
-steps.
-
-The repair passes 14 direct runner tests, 94 affected materialization/protocol tests and 6,251
-repository-wide tests, with one intentional skip, three integration deselections and one expected
-xfail. Ruff, the configured 330-source type gate, documentation, privacy/public-artifact checks,
-active-product focus and all three source-bound registry reproducers pass.
+The prospective repair aligns materializer-receipt and independent-state authentication with the
+learner's existing variable two-to-four candidate contract, while retaining the minimum of two
+supported actions. It also separates future sanitized failure reasons for policy boundary,
+observation, candidate cardinality, party binding and controller-boundary drift. Publish and
+exact-main qualify that repair. Then freeze the smallest additive untouched-root completion tranche
+at zero effects, binding the five immutable successes while preserving both failures as permanent
+members of their original denominator. No outcome or fit opens until seven independent captures
+authenticate.
 
 ## Stop conditions
 
-Stop before controller input if the complete inventory changes, an exhausted source appears, the
-selected venue cannot be reauthenticated, a party slot no longer satisfies the measured pressure
-band and action support, outputs already exist, provenance differs, or a private identity crosses a
-public boundary. Do not patch a selected root, substitute a replacement, or retry a started item.
+Never retry or reclassify either terminal failure, remove it from the seven-item journal, or call
+the five captures learning outcomes. Stop before new controller input if an additive plan cannot
+prove untouched roots, disjoint output identities, exact source provenance, no adaptive
+substitution, and a complete seven-capture admission boundary. Stop as before on inventory,
+allocation, exhausted-evidence, venue, party, output, identity, teacher, or public-privacy drift.

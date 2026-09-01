@@ -14,6 +14,29 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: five captures passed; two candidate-cardinality failures are terminal
+
+PR 140 merged the exact-main CI repair as `24fe239c`, and exact main CI `33515692262/1` passed.
+The separately frozen successor plan then ran once. Its terminal journal is **5 succeeded / 2
+failed / 0 pending / 0 started**: two Diglett's Cave and all three Route 11 captures independently
+authenticated; two other Cave attempts failed with `materialized_capture_state_differs`. No attempt
+retried and neither failure may be reclassified or replaced inside that denominator.
+
+Read-only zero-frame forensics found one common mismatch. Both failed captures preserved their
+exact source binding, map, wild battle, active slot, species, level, MAIN menu, observation digest,
+and two model-supported attacks, but represented three moves while the runner demanded exactly
+four. That requirement contradicts both the freezer's prospective two-action admission and the
+learner's variable two-to-four menu. The repair is prospective: accept two through four represented
+candidates only when at least two are supported, and emit distinct path-free failure codes for
+boundary, observation, candidate-cardinality, party-binding, and controller-boundary failures.
+
+The five captures are inputs, not learning examples. No move, outcome, prediction, fit, teacher,
+sealed Red case, Crystal context, authority, or replay occurred, so counters remain **train 19 ·
+fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**. Publish and exact-main
+qualify the repair, then freeze a new additive untouched-root completion tranche at zero effects.
+It may preserve the five successful captures but must keep both failures visible and permanently
+closed. Do not open outcomes until seven independent captures authenticate.
+
 ## 2026-09-01: exact venue allocation passed; freeze a new plan before input
 
 Published source `98544be8` passed GitHub CI `33487956767/1`. The sole V7 whole-bank census
