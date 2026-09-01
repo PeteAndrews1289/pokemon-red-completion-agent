@@ -6,6 +6,29 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the mixed-producer seven-capture catalog
+
+The additive terminal is **2/2 succeeded**, so five predecessor captures plus two completion
+captures now supply seven authenticated battle inputs across two producers. Historical failures
+remain failed. No move or outcome has been opened.
+
+Codex owns publication of the terminal receipt and the next action-free catalog engineering gate.
+The catalog must independently reopen every output with its own producer provenance, prove seven
+unique roots and capture IDs, and exclude failed journal entries. Stop and reorient before outcome
+collection or fitting. Reviewers need only tracked code and path-free aggregate evidence.
+
+## Current override: Codex owns the frozen two-assignment terminal
+
+Exact main `c9547d27` passed CI `33528613229/1`. The additive freeze retained five predecessor
+successes, retained two predecessor failures, excluded fourteen attempted roots, and froze two
+untouched Cave assignments at zero effects. The initial 53/54 state-bank scope failure is retained
+as setup evidence; it created no plan or controller effect.
+
+Codex owns publication of the path-free freeze result, exact run-binding review, and one terminal
+execution of the two frozen assignments. Every assignment is started durably before input and may
+never retry after leaving pending. Stop after the terminal journal. Outcome collection, fitting,
+sealed Red, Crystal and replay remain closed; a mixed-producer catalog is a separate successor.
+
 ## Current override: Codex owns publication and the zero-effect additive freeze
 
 The candidate-cardinality repair is published as exact main `2db2fbf1`. The additive completion

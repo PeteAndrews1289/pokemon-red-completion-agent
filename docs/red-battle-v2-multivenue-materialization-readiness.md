@@ -100,6 +100,33 @@ must be published and exact-main green before one zero-effect freeze. That freez
 controller input. A separate mixed-producer catalog remains necessary before any seven-capture
 outcome campaign can begin.
 
+## Additive freeze result
+
+PR 142 merged as exact main `c9547d27`, and exact-main CI `33528613229/1` passed. The first freeze
+invocation failed closed at 53/54 catalog train roots because the supplied bank scope was too
+narrow; it wrote no plan and crossed no controller boundary. A read-only census found all 54 under
+the complete owner-private bank.
+
+The successful zero-effect freeze excluded all fourteen previously attempted roots, found three
+eligible untouched candidates, and selected two Cave assignments. Combined venue counts are four
+Cave and three Route 11. Plan SHA-256 is
+`2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf`. Frames, actions,
+captures, outcomes, predictions, fits, teachers, sealed cases, Crystal contexts and replay were all
+zero. Execution remains closed until the path-free result is published and the exact run binding is
+reviewed; the execution must stop at its two-entry terminal journal.
+
+## Additive terminal result
+
+Both completion assignments executed once and independently authenticated: **2 succeeded / 0
+failed**. Combined input supply is therefore seven captures across two producers, with four Cave
+and three Route 11 boundaries. No move choice, outcome, prediction, fit, teacher query, sealed case,
+Crystal context, authority or replay occurred.
+
+Outcome collection remains closed. The next action-free successor must create a canonical
+mixed-producer catalog that reauthenticates all five predecessor and two completion outputs, binds
+each to its actual producer commit and output hashes, proves seven unique source/capture identities,
+and excludes both failed predecessor assignments.
+
 ## Stop conditions
 
 Never retry or reclassify either terminal failure, remove it from the seven-item journal, or call

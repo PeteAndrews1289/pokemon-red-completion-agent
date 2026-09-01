@@ -14,6 +14,46 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: seven capture inputs now authenticate; build the mixed-producer catalog
+
+The two-assignment additive plan executed once from exact source `c9547d27` under green CI
+`33528613229/1`. Its terminal journal is **2 succeeded / 0 failed / 0 pending / 0 started**. Journal
+SHA-256 is `c6a099c18dc94e15060c2e7573f7cd67428200769e60c728b3b4fb5a9f1e591e`; receipt
+SHA-256 is `880a5002746a79afd9671d630fabba92df71749eae98a08850ffdb744ce705f2`.
+Neither assignment retried.
+
+The scenario supply is now seven independently authenticated inputs: five retained predecessor
+captures and two completion captures, split **4 Cave + 3 Route 11**. The two older failed attempts
+remain failures outside that capture set. No move was selected, no outcome opened, and no
+prediction, fit, teacher, sealed Red, Crystal, authority or replay occurred. Counters remain
+**train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+Do not point an outcome runner at one directory and silently omit the other producer. The next
+zero-action gate is a canonical mixed-producer catalog that independently authenticates all seven
+outputs, retains both producer commits/directories, proves unique source and capture identities,
+and excludes the historical failures. Reorient before selecting a move.
+
+## 2026-09-01: additive five-plus-two plan is frozen; execution remains closed
+
+PR 142 merged as exact main `c9547d27`; PR CI `33526793786/1` and exact-main CI
+`33528613229/1` passed. The first zero-effect invocation failed closed because its narrowed state
+bank contained 53 of 54 catalog train roots. It created no plan and crossed no controller boundary.
+A read-only hash census located the complete owner-private bank, and the same intended freeze then
+passed.
+
+The private plan hash is `2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf`.
+It authenticated all 54 train roots, excluded all 14 sources attempted by the two historical
+materialization generations, found three eligible untouched roots, and selected exactly two new
+Diglett's Cave assignments. Combined with the immutable five successes, the prospective catalog is
+**4 Cave + 3 Route 11**. Both historical failures remain failed; retries, reclassification and
+replacement are zero.
+
+The freeze used zero frames and actions and created no capture, outcome, prediction, fit, teacher,
+sealed case, Crystal context, authority, or replay. Next publish the path-free receipt, verify the
+exact runner binding, execute the two new assignments once from source `c9547d27` under CI
+`33528613229/1`, and reorient at the terminal journal. Outcomes remain closed until a separate
+mixed-producer catalog authenticates the five predecessor outputs plus both completion outputs.
+
 ## 2026-09-01: additive completion is locally qualified; no controller input yet
 
 The variable-cardinality repair is published on exact main `2db2fbf1` after PR 141. The next local
