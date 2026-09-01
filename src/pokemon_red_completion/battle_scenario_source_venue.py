@@ -70,6 +70,14 @@ _CELADON_ROUTE_11_SOURCE = BattleScenarioSourceVenue(
     relocation_required=True,
 )
 
+_LAVENDER_ROUTE_11_SOURCE = BattleScenarioSourceVenue(
+    source_location="lavender_center_route_11",
+    venue_id="route_11",
+    source_map=int(MapId.LAVENDER_POKECENTER),
+    encounter_map=int(MapId.ROUTE_11),
+    relocation_required=True,
+)
+
 
 def battle_scenario_source_venue(
     raw: RawGameState,
@@ -104,6 +112,20 @@ def battle_scenario_source_venue(
             )
         ):
             return _CELADON_ROUTE_11_SOURCE
+        raise BattleScenarioSourceVenueError(
+            "battle source has no qualified bounded relocation to a measured venue"
+        )
+    if map_id == int(MapId.LAVENDER_POKECENTER):
+        if (
+            type(last_blackout_map) is int  # noqa: E721
+            and type(current_map_tileset) is int  # noqa: E721
+            and red_vermilion_training_transition_available(
+                raw,
+                last_blackout_map,
+                current_map_tileset,
+            )
+        ):
+            return _LAVENDER_ROUTE_11_SOURCE
         raise BattleScenarioSourceVenueError(
             "battle source has no qualified bounded relocation to a measured venue"
         )

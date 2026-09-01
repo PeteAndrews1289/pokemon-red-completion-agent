@@ -39,6 +39,7 @@ from pokemon_red_completion.blaine import (  # noqa: E402
     DIGLETTS_CAVE_TRAINING_VENUE,
     MANSION_TRAINING_VENUE,
     ROUTE_11_TRAINING_VENUE,
+    red_training_venues_with_ground_transition,
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
@@ -348,7 +349,17 @@ def _fsync_directory(directory: Path) -> None:
             os.close(descriptor)
 
 
-def _venue_for_source_location(source_location: str) -> TrainingVenue:
+def _venue_for_source_location(
+    source_location: str,
+    *,
+    rom_bytes: bytes | None = None,
+) -> TrainingVenue:
+    if source_location == "lavender_center_route_11":
+        if not isinstance(rom_bytes, bytes) or not rom_bytes:
+            raise BattleScenarioMaterializationError(
+                "Lavender ground relocation requires immutable ROM bytes"
+            )
+        return red_training_venues_with_ground_transition(rom_bytes)[0]
     venues = {
         "route_11": ROUTE_11_TRAINING_VENUE,
         "digletts_cave": DIGLETTS_CAVE_TRAINING_VENUE,
@@ -491,6 +502,7 @@ def _prepare_source_venue(
     relocation_sources = {
         "cinnabar_center": MapId.CINNABAR_POKECENTER,
         "celadon_center_route_11": MapId.CELADON_POKECENTER,
+        "lavender_center_route_11": MapId.LAVENDER_POKECENTER,
     }
     if source_location in relocation_sources:
         if raw.map_id != relocation_sources[source_location] or raw.battle_state != 0:
@@ -537,6 +549,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
     _require_distinct_outputs(out_state, out_manifest)
     partition = source_binding.partition
+    rom_bytes = rom_path.read_bytes()
 
     with PyBoyAdapter(
         rom_path,
@@ -550,7 +563,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             last_blackout_map=reader.read_last_blackout_map(),
             current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
         )
-        venue = _venue_for_source_location(source_location)
+        venue = _venue_for_source_location(
+            source_location,
+            rom_bytes=(
+                rom_bytes
+                if source_location == "lavender_center_route_11"
+                else None
+            ),
+        )
         controller = FrameSafeExecutor(
             emulator,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
