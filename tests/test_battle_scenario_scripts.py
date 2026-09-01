@@ -11,10 +11,11 @@ import pytest
 from pokemon_red_completion.battle_outcome_capture_authentication import (
     authenticate_battle_scenario_source_binding,
 )
+from pokemon_red_completion.gen1_field_moves import FLY_MOVE_ID
 from pokemon_red_completion.goal_manager_composition_qualification import (
     root_consumption_sha256,
 )
-from pokemon_red_completion.observation import BattleMenuPhase, MapId, RawGameState
+from pokemon_red_completion.observation import Badge, BattleMenuPhase, MapId, RawGameState
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -213,6 +214,7 @@ def test_battle_capture_outputs_are_owner_only_durable_and_non_overwriting(
         ("digletts_cave", MapId.DIGLETTS_CAVE),
         ("mansion", MapId.POKEMON_MANSION_1F),
         ("cinnabar_center", MapId.POKEMON_MANSION_1F),
+        ("celadon_center_route_11", MapId.ROUTE_11),
     ),
 )
 def test_battle_capture_materializer_maps_only_measured_venues(
@@ -278,6 +280,34 @@ def test_battle_source_location_rejects_an_unsupported_or_in_battle_state() -> N
         derive(in_battle)
 
 
+def test_celadon_source_requires_the_live_route_11_transition_capability() -> None:
+    error = MATERIALIZE["BattleScenarioMaterializationError"]
+    derive = MATERIALIZE["_source_location_for_state"]
+    celadon = RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=1,
+        battle_state=0,
+        party_hp=(120,),
+        party_moves=((FLY_MOVE_ID, 0, 0, 0),),
+        badge_bits=int(Badge.THUNDER),
+    )
+
+    assert derive(
+        celadon,
+        last_blackout_map=int(MapId.CELADON_CITY),
+        current_map_tileset=6,
+    ) == "celadon_center_route_11"
+    with pytest.raises(error, match="no qualified bounded relocation"):
+        derive(
+            replace(celadon, badge_bits=0),
+            last_blackout_map=int(MapId.CELADON_CITY),
+            current_map_tileset=6,
+        )
+
+
 @pytest.mark.parametrize(
     ("source_location", "map_id"),
     (
@@ -313,6 +343,47 @@ def test_direct_battle_sources_never_run_a_healing_route(
     prepare_source(source_location, venue, object(), reader, object())
 
     assert healer_calls == 0
+
+
+def test_celadon_route_11_source_uses_the_existing_bounded_relocation() -> None:
+    prepare_source = MATERIALIZE["_prepare_source_venue"]
+    source = RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=1,
+        battle_state=0,
+        party_hp=(120,),
+    )
+    destination = replace(source, map_id=MapId.ROUTE_11, player_x=12, player_y=9)
+
+    class Reader:
+        raw = source
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    calls = 0
+
+    def relocate(actions: object, current_reader: Reader, emulator: object) -> None:
+        nonlocal calls
+        del actions, emulator
+        calls += 1
+        current_reader.raw = destination
+
+    venue = SimpleNamespace(map_id=int(MapId.ROUTE_11), heal_and_return=relocate)
+    prepare_source(
+        "celadon_center_route_11",
+        venue,
+        object(),
+        reader,
+        object(),
+    )
+
+    assert calls == 1
+    assert reader.read() == destination
 
 
 def test_battle_capture_materializer_accepts_a_prospectively_selected_living_slot() -> None:

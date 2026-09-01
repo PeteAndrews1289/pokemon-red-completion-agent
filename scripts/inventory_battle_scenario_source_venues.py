@@ -47,7 +47,11 @@ from pokemon_red_completion.goal_manager_protocol import (  # noqa: E402
     GoalManagerProtocolError,
     load_committed_goal_manager_registry_at_revision,
 )
-from pokemon_red_completion.observation import MapId, PokemonRedStateReader  # noqa: E402
+from pokemon_red_completion.observation import (  # noqa: E402
+    MapId,
+    PokemonRedStateReader,
+    RamAddress,
+)
 from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
     require_clean_source,
@@ -82,6 +86,7 @@ class _CatalogTrainRootScan:
 class _ObservedTrainRoot:
     map_label: str
     venue_id: str | None
+    relocation_required: bool
     claim_available: bool
     safe_nonbattle: bool
     living_party_member_available: bool
@@ -292,14 +297,22 @@ def _observe_root(
         root.binding.root_consumption_sha256,
     )
     emulator.load_state_bytes(root.state_bytes)
-    raw = PokemonRedStateReader(emulator).read()
+    reader = PokemonRedStateReader(emulator)
+    raw = reader.read()
     map_label = _map_label(raw.map_id)
     safe_nonbattle = raw.battle_state == 0
     living = any(hp > 0 for hp in (raw.party_hp or ()))
     try:
-        venue_id = battle_scenario_source_venue(raw).venue_id
+        source_venue = battle_scenario_source_venue(
+            raw,
+            last_blackout_map=reader.read_last_blackout_map(),
+            current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
+        )
+        venue_id = source_venue.venue_id
+        relocation_required = source_venue.relocation_required
     except BattleScenarioSourceVenueError:
         venue_id = None
+        relocation_required = False
     if emulator.frame_count != 0 or emulator.pressed_buttons:
         raise BattleScenarioSourceInventoryError(
             "action-free battle source observation crossed the controller boundary"
@@ -307,6 +320,7 @@ def _observe_root(
     return _ObservedTrainRoot(
         map_label=map_label,
         venue_id=venue_id,
+        relocation_required=relocation_required,
         claim_available=available,
         safe_nonbattle=safe_nonbattle,
         living_party_member_available=living,
@@ -379,10 +393,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         and item.living_party_member_available
         and item.venue_id is None
     )
+    eligible_relocation_map_counts = Counter(
+        item.map_label
+        for item in observed
+        if item.materialization_eligible and item.relocation_required
+    )
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v2",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v3",
         "status": (
             "prospective_fresh_train_venue_capacity_passed"
             if _venue_capacity(venue_counts)
@@ -406,6 +425,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "loaded_map_counts": dict(sorted(loaded_map_counts.items())),
         "claim_available_map_counts": dict(sorted(claim_available_map_counts.items())),
         "available_unsupported_map_counts": dict(sorted(available_unsupported_map_counts.items())),
+        "materialization_eligible_relocation_map_counts": dict(
+            sorted(eligible_relocation_map_counts.items())
+        ),
         "minimum_fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
         "minimum_distinct_venues": MINIMUM_DISTINCT_VENUES,
         "maximum_single_venue_contexts": MAXIMUM_SINGLE_BUCKET_CONTEXTS,

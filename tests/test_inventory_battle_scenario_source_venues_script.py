@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import hashlib
 import runpy
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 from pokemon_red_completion.battle_outcome_batch import FRESH_TRAIN_CONTEXTS
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.gen1_field_moves import FLY_MOVE_ID
+from pokemon_red_completion.observation import Badge, MapId, RamAddress, RawGameState
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 INVENTORY = runpy.run_path(
@@ -154,12 +156,19 @@ def test_inventory_observes_map_and_availability_without_advancing(
         def load_state_bytes(self, payload: bytes) -> None:
             self.loads.append(payload)
 
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.CURRENT_MAP_TILESET
+            return 0
+
     emulator = Emulator()
     script_globals = INVENTORY["_observe_root"].__globals__
     monkeypatch.setitem(
         script_globals,
         "PokemonRedStateReader",
-        lambda current: SimpleNamespace(read=lambda: raw),
+        lambda current: SimpleNamespace(
+            read=lambda: raw,
+            read_last_blackout_map=lambda: int(MapId.VERMILION_CITY),
+        ),
     )
     monkeypatch.setitem(
         script_globals,
@@ -180,7 +189,70 @@ def test_inventory_observes_map_and_availability_without_advancing(
     assert emulator.loads == [b"state"]
     assert observed.map_label == "route_11"
     assert observed.venue_id == "route_11"
+    assert observed.relocation_required is False
     assert observed.materialization_eligible is True
+
+
+def test_inventory_counts_only_capable_celadon_roots_as_route_11_supply(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    capable = RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=1,
+        battle_state=0,
+        party_hp=(40,),
+        party_moves=((FLY_MOVE_ID, 0, 0, 0),),
+        badge_bits=int(Badge.THUNDER),
+    )
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = frozenset()
+
+        def load_state_bytes(self, payload: bytes) -> None:
+            del payload
+
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.CURRENT_MAP_TILESET
+            return 6
+
+    current = {"raw": capable}
+    globals_ = INVENTORY["_observe_root"].__globals__
+    monkeypatch.setitem(
+        globals_,
+        "PokemonRedStateReader",
+        lambda emulator: SimpleNamespace(
+            read=lambda: current["raw"],
+            read_last_blackout_map=lambda: int(MapId.CELADON_CITY),
+        ),
+    )
+    monkeypatch.setitem(globals_, "root_claim_is_available", lambda *args: True)
+    root = SimpleNamespace(
+        state_bytes=b"state",
+        binding=SimpleNamespace(root_consumption_sha256="root"),
+    )
+
+    eligible = INVENTORY["_observe_root"](
+        root,
+        emulator=Emulator(),
+        registry_path=Path("claims"),
+    )
+    current["raw"] = replace(capable, party_hp=(0,))
+    rejected = INVENTORY["_observe_root"](
+        root,
+        emulator=Emulator(),
+        registry_path=Path("claims"),
+    )
+
+    assert eligible.venue_id == "route_11"
+    assert eligible.relocation_required is True
+    assert eligible.materialization_eligible is True
+    assert rejected.venue_id is None
+    assert rejected.relocation_required is False
+    assert rejected.materialization_eligible is False
 
 
 def test_inventory_rejects_any_advanced_frame(
@@ -199,12 +271,16 @@ def test_inventory_rejects_any_advanced_frame(
         frame_count=1,
         pressed_buttons=frozenset(),
         load_state_bytes=lambda payload: None,
+        read_u8=lambda address: 0,
     )
     script_globals = INVENTORY["_observe_root"].__globals__
     monkeypatch.setitem(
         script_globals,
         "PokemonRedStateReader",
-        lambda current: SimpleNamespace(read=lambda: raw),
+        lambda current: SimpleNamespace(
+            read=lambda: raw,
+            read_last_blackout_map=lambda: int(MapId.VERMILION_CITY),
+        ),
     )
     monkeypatch.setitem(
         script_globals,

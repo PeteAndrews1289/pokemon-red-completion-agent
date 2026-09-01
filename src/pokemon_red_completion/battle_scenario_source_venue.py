@@ -11,6 +11,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.red_training_transitions import (
+    red_vermilion_training_transition_available,
+)
 
 
 class BattleScenarioSourceVenueError(ValueError):
@@ -59,11 +62,29 @@ _SOURCE_VENUES = {
     ),
 }
 
+_CELADON_ROUTE_11_SOURCE = BattleScenarioSourceVenue(
+    source_location="celadon_center_route_11",
+    venue_id="route_11",
+    source_map=int(MapId.CELADON_POKECENTER),
+    encounter_map=int(MapId.ROUTE_11),
+    relocation_required=True,
+)
+
 
 def battle_scenario_source_venue(
     raw: RawGameState,
+    *,
+    last_blackout_map: int | None = None,
+    current_map_tileset: int | None = None,
 ) -> BattleScenarioSourceVenue:
-    """Derive the measured venue from one loaded state without advancing it."""
+    """Derive one executable measured venue without advancing the emulator.
+
+    Direct venue and Cinnabar-Center sources need only the loaded semantic
+    state.  A Celadon-Center source is admitted only when the same bounded
+    transition guard used by the live Red executor proves that its party and
+    field capabilities can reach Vermilion and Route 11.  This keeps the
+    action-free inventory and later materializer on one source-class rule.
+    """
 
     if not isinstance(raw, RawGameState):
         raise TypeError("battle source venue requires a raw Red state")
@@ -72,6 +93,20 @@ def battle_scenario_source_venue(
     map_id = raw.map_id
     if isinstance(map_id, bool) or not isinstance(map_id, int):
         raise BattleScenarioSourceVenueError("battle source is not at a measured source boundary")
+    if map_id == int(MapId.CELADON_POKECENTER):
+        if (
+            type(last_blackout_map) is int  # noqa: E721
+            and type(current_map_tileset) is int  # noqa: E721
+            and red_vermilion_training_transition_available(
+                raw,
+                last_blackout_map,
+                current_map_tileset,
+            )
+        ):
+            return _CELADON_ROUTE_11_SOURCE
+        raise BattleScenarioSourceVenueError(
+            "battle source has no qualified bounded relocation to a measured venue"
+        )
     try:
         return _SOURCE_VENUES[map_id]
     except KeyError:

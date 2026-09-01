@@ -63,6 +63,7 @@ from pokemon_red_completion.observation import (  # noqa: E402
     BattleMenuPhase,
     MapId,
     PokemonRedStateReader,
+    RamAddress,
     RawGameState,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
@@ -353,6 +354,7 @@ def _venue_for_source_location(source_location: str) -> TrainingVenue:
         "digletts_cave": DIGLETTS_CAVE_TRAINING_VENUE,
         "mansion": MANSION_TRAINING_VENUE,
         "cinnabar_center": MANSION_TRAINING_VENUE,
+        "celadon_center_route_11": ROUTE_11_TRAINING_VENUE,
     }
     try:
         return venues[source_location]
@@ -362,9 +364,18 @@ def _venue_for_source_location(source_location: str) -> TrainingVenue:
         ) from None
 
 
-def _source_location_for_state(raw: RawGameState) -> str:
+def _source_location_for_state(
+    raw: RawGameState,
+    *,
+    last_blackout_map: int | None = None,
+    current_map_tileset: int | None = None,
+) -> str:
     try:
-        return battle_scenario_source_venue(raw).source_location
+        return battle_scenario_source_venue(
+            raw,
+            last_blackout_map=last_blackout_map,
+            current_map_tileset=current_map_tileset,
+        ).source_location
     except BattleScenarioSourceVenueError as error:
         raise BattleScenarioMaterializationError(str(error)) from None
 
@@ -477,8 +488,12 @@ def _prepare_source_venue(
     emulator: PyBoyAdapter,
 ) -> None:
     raw = reader.read()
-    if source_location == "cinnabar_center":
-        if raw.map_id != MapId.CINNABAR_POKECENTER or raw.battle_state != 0:
+    relocation_sources = {
+        "cinnabar_center": MapId.CINNABAR_POKECENTER,
+        "celadon_center_route_11": MapId.CELADON_POKECENTER,
+    }
+    if source_location in relocation_sources:
+        if raw.map_id != relocation_sources[source_location] or raw.battle_state != 0:
             raise BattleScenarioMaterializationError(
                 "center source is not at the expected safe boundary"
             )
@@ -530,7 +545,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     ) as emulator:
         emulator.load_state_bytes(source_bytes)
         reader = PokemonRedStateReader(emulator)
-        source_location = _source_location_for_state(reader.read())
+        source_location = _source_location_for_state(
+            reader.read(),
+            last_blackout_map=reader.read_last_blackout_map(),
+            current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
+        )
         venue = _venue_for_source_location(source_location)
         controller = FrameSafeExecutor(
             emulator,
