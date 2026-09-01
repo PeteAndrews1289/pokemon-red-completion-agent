@@ -685,7 +685,15 @@ def _require_materializer_receipt(
         assignment,
         BattleScenarioMaterializationAssignmentV2,
     )
+    candidate_count = receipt.get("candidate_count")
     supported_candidate_count = receipt.get("supported_candidate_count")
+    if not _battle_candidate_cardinality_is_supported(
+        candidate_count,
+        supported_candidate_count,
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_candidate_cardinality_differs"
+        )
     if (
         receipt.get("schema")
         != "pokemon-private-battle-scenario-materialization-receipt-v2"
@@ -712,9 +720,6 @@ def _require_materializer_receipt(
         != maximum_encounter_level
         or receipt.get("source_location") != source_location
         or receipt.get("party_slot") != assignment.party_slot.party_slot
-        or receipt.get("candidate_count") != 4
-        or not isinstance(supported_candidate_count, int)
-        or supported_candidate_count < 2
         or receipt.get("teacher_queries") != 0
         or receipt.get("move_choices_executed") != 0
         or receipt.get("root_claims_created") != 0
@@ -728,6 +733,20 @@ def _require_materializer_receipt(
         raise BattleScenarioMaterializationRunnerError(
             "materializer_receipt_invalid"
         )
+
+
+def _battle_candidate_cardinality_is_supported(
+    candidate_count: object,
+    supported_candidate_count: object,
+) -> bool:
+    """Share the learner's variable two-to-four action-menu contract."""
+
+    return (
+        type(candidate_count) is int  # noqa: E721
+        and 2 <= candidate_count <= 4
+        and type(supported_candidate_count) is int  # noqa: E721
+        and 2 <= supported_candidate_count <= candidate_count
+    )
 
 
 def _authenticate_assignment_outputs(
@@ -778,7 +797,7 @@ def _authenticate_assignment_outputs(
             )
             if emulator.frame_count != 0 or emulator.pressed_buttons:
                 raise BattleScenarioMaterializationRunnerError(
-                    "capture reopen crossed the controller boundary"
+                    "materialized_capture_reopen_crossed_controller_boundary"
                 )
     except BattleScenarioMaterializationRunnerError:
         raise
@@ -787,15 +806,30 @@ def _authenticate_assignment_outputs(
             "materialized_capture_state_cannot_be_reopened"
         ) from error
     party_index = assignment.party_slot.party_slot - 1
+    candidate_count = len(prepared.features.candidate_vectors)
+    supported_candidate_count = sum(prepared.supported_candidate_mask)
     if (
         raw.map_id != expected_map
         or raw.battle_state != 1
         or raw.active_party_index != party_index
         or menu.phase is not BattleMenuPhase.MAIN
-        or prepared.initial_observation_sha256 != manifest.initial_observation_sha256
-        or len(prepared.features.candidate_vectors) != 4
-        or sum(prepared.supported_candidate_mask) < 2
-        or raw.party_species_ids is None
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materialized_capture_policy_boundary_differs"
+        )
+    if prepared.initial_observation_sha256 != manifest.initial_observation_sha256:
+        raise BattleScenarioMaterializationRunnerError(
+            "materialized_capture_observation_differs"
+        )
+    if not _battle_candidate_cardinality_is_supported(
+        candidate_count,
+        supported_candidate_count,
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materialized_capture_candidate_cardinality_differs"
+        )
+    if (
+        raw.party_species_ids is None
         or raw.party_levels is None
         or party_index >= len(raw.party_species_ids)
         or party_index >= len(raw.party_levels)
@@ -803,7 +837,7 @@ def _authenticate_assignment_outputs(
         or raw.party_levels[party_index] != assignment.party_slot.level
     ):
         raise BattleScenarioMaterializationRunnerError(
-            "materialized_capture_state_differs"
+            "materialized_capture_party_binding_differs"
         )
     return manifest.state_sha256, capture.manifest_sha256
 

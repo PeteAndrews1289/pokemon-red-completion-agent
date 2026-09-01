@@ -6,6 +6,24 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns variable-cardinality repair and additive capture completion
+
+The exact-main CI repair passed and the one successor denominator is terminal at **5 succeeded / 2
+failed**. Both failures remain in the seven-item journal forever. Independent zero-frame forensics
+found faithful Diglett's Cave states with two supported attacks but only three represented moves;
+the runner's exact-four condition contradicted the variable two-to-four learner contract.
+
+Codex owns the prospective repair, forensic evidence, full qualification, publication, exact-main
+CI, and the next zero-effect design. The next design may bind the five immutable successes plus an
+additive tranche of untouched roots only if it proves that no terminal failure is retried,
+reclassified, hidden, or adaptively replaced and that mixed source provenance cannot weaken capture
+authentication. No outcome collection opens below seven authenticated captures.
+
+Claude and Antigravity have no required role in this ordinary engineering gate. A later review is
+useful only after the additive zero-effect design exists. Reviewers remain read-only and receive no
+ROM, save, private plan, root, or capture identity. Counters remain **train 19 · fits 6 · verified
+development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current override: allocation passed; Codex owns the V2 freeze/materializer gate
 
 Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
