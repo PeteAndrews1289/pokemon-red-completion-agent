@@ -1,0 +1,74 @@
+{
+  "decision": {
+    "capture_execution_authorized": false,
+    "materializations_created": 0,
+    "next_gate": "publish_exact_source_then_run_one_action_free_catalog_venue_inventory",
+    "status": "local_supply_authentication_qualified_venue_capacity_unproved"
+  },
+  "engineering": {
+    "caller_supplied_lineage_removed": true,
+    "caller_supplied_partition_removed": true,
+    "caller_supplied_source_location_removed": true,
+    "catalog_derived_root_consumption": true,
+    "catalog_derived_source_assignment": true,
+    "catalog_derived_train_partition": true,
+    "loaded_state_derived_source_location": true,
+    "materializer_sha256": "ba84750f8d9e95bf12f9b63329f1f3bfe64bf4f52f34692eae239fdbd30e9d8d",
+    "shared_authenticator_sha256": "fdd7c5990053a7a904ebfec7b0719ad6a4e42ea8eb8ab4279df916a61d61bd09",
+    "source_root_preflight_is_non_claiming": true
+  },
+  "historical_binding": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038"
+  },
+  "local_qualification": {
+    "focused_tests_passed": 90,
+    "focused_tests_total": 90,
+    "format_check_passed": true,
+    "lint_passed": true,
+    "published_source": false
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "candidate_source_states_authenticated": 5,
+    "catalog_train_roots_checked": 6,
+    "claim_registry_opened_read_only": true,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "private_state_files_hashed_during_discovery": 152,
+    "red_rom_opened": false,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  },
+  "schema": "pokemon.red-battle-v2-train-supply-engineering-qualification.v1",
+  "source": {
+    "base_exact_main_ci_attempt": 1,
+    "base_exact_main_ci_conclusion": "success",
+    "base_exact_main_ci_run": 33454311834,
+    "base_git_commit": "eece3f897408d708d0735f08404c47dd15b4e872"
+  },
+  "supply_observation": {
+    "available_explore_train_catalog_roots": 5,
+    "available_roots_are_battle_captures": false,
+    "available_roots_are_distinct": true,
+    "available_roots_are_materialized": false,
+    "available_roots_profile_declared_distinct_venues": 1,
+    "consumed_explore_train_catalog_roots": 1,
+    "existing_fresh_train_battle_capture_distinct_venues": 1,
+    "minimum_distinct_venues_per_partition": 2,
+    "naive_explore_only_supply_passes_venue_gate": false,
+    "required_additional_train_battle_captures": 3,
+    "venue_capacity_proved": false
+  }
+}

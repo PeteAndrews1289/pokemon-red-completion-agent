@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Supply at least three new independently authenticated V2 train battle captures through a bounded nonsealed scenario path, then rerun the action-free 7+8 census. Do not clone roots, accept legacy manifests without upstream binding, shrink the denominator, claim a fresh root, open an outcome, or fit until the later execution boundary is separately qualified.
+- Next decision: Publish the catalog-derived train materializer and obtain green exact-main CI, then run one action-free inventory of actual supported venues across unused catalog train roots. Only a prospective allocation that can meet seven fresh train captures across at least two venues may open a separately frozen materialization gate; no claim, outcome, fit, sealed Red, or Crystal execution yet.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Supply at least three additional independently authenticated V2 train battle captures, then rerun the action-free all-or-stop census. Stop before state opening if seven distinct fresh train lineages and eight distinct development lineages are not simultaneously present; otherwise continue to claim availability and semantic-diversity checks without opening outcomes. |
+| Cheapest falsifier | Publish the catalog-derived train materializer, then run one action-free inventory of unused historical train roots at their actual loaded map boundaries. Require enough roots to produce seven fresh train captures across at least two venues before any materialization; stop if the source bank is numerically sufficient but venue-ineligible. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-31-battle-v2-capacity-stop** · status **closed** · evidence [falsification](docs/evidence/red-battle-v2-action-free-capacity-result-2026-08-31.json)
+**2026-08-31-battle-v2-catalog-train-supply** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-train-supply-engineering-qualification-2026-08-31.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. Exact-main qualification and the action-free capacity stop add no causal example, fit, verified development outcome, unseen comparison, authority, or transfer result. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The census opened no capture state, model, claim registry, outcome, or gameplay and created no freeze. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Learning output | None. The catalog-derived source authenticator and availability observation add no causal example, fit, verified development outcome, unseen comparison, authority, or transfer result. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. Source authentication and read-only root availability do not create a battle capture, causal example, fit, verified outcome, authority, or transfer result. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The action-free capture census stopped before state, ROM, model, catalog, or claim-registry opening: only four distinct V2 fresh-train upstream states exist for a seven-state requirement. Eight distinct V2 development states exist before availability checks, but no valid batch can be frozen while the train denominator is short by three. |
-| Decision | Retain the exact-main-qualified atomic freezer but create no V2 freeze. Duplicate manifests from the same upstream state do not manufacture independence, and legacy V1 captures without source_state_sha256 do not enter V2. The next lane action is bounded independent train-battle capture supply, not outcomes, fitting, a smaller denominator, or another full teacher replay. |
-| Next session | Design and qualify the smallest bounded source of at least three independent V2 train battle captures from existing authenticated nonsealed roots. Preserve title-neutral battle features and claim-first identity, publish and green exact source, and stop before outcomes, fitting, sealed Red, Crystal, authority, or a full replay. |
-| Next falsifier | Inventory unused authenticated train roots and qualify a bounded V2 battle-capture supply path. Require at least three new independent upstream states beyond the four already present, with no cloning, rehashing, teacher-choice target, routine full replay, or outcome access. Then rerun the complete action-free census from the exact denominator. |
-| Stop condition | Stop before execution if the fresh 7+8 roster is unavailable or lacks decision pressure and hidden-contrast coverage. Never replace, retry, or shrink a frozen context; retain every branch and terminal failure. Fit only once from the original prior. V2 is the stop line for this immediate-HP move policy: inadequate discordance triggers a representation/horizon/action redesign, not a larger identical batch. No sealed Red, Crystal, authority, or full replay. |
+| Blocker | Five distinct unused catalog-bound explore-train roots exist, but all five and the four existing fresh train battle captures are Mansion-profiled. The frozen V2 train roster requires at least two venues and caps any one venue at six contexts, so the naive three-more-Mansion plan is not a valid capacity proof. |
+| Decision | Derive partition, lineage, assignment, source digest, root-consumption identity, and source location instead of accepting caller labels. Preserve the later atomic outcome claim boundary. Publish this repair, then inspect actual maps for the broader unused catalog train bank without controller input; do not materialize a numerically sufficient but venue-ineligible set. |
+| Next session | Finish qualification and publish the catalog-derived train materializer. Then implement and run one action-free, path-free venue-capacity inventory over the broader unused catalog train bank. No controller input, encounter materialization, root claim, outcome, fit, sealed Red, Crystal execution, authority, or full replay belongs before that result. |
+| Next falsifier | After exact-main CI, load each otherwise eligible unused catalog train state without advancing a frame, derive its actual supported source venue, and observe root availability under one shared lease. Require a prospective source allocation that can produce seven fresh train battle captures with at least two venues; otherwise stop and redesign bounded source routing. |
+| Stop condition | Stop before controller input unless the broader catalog inventory proves enough unused independent train roots to meet both the seven-fresh numerical floor and the two-venue roster floor. Do not claim, clone, materialize, replace, shrink, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game during the inventory gate. |
 
 ### Stop conditions
 

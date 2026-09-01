@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create one authenticated wild-battle MAIN-menu capture without choosing a move."""
+"""Create one catalog-authenticated train battle boundary without choosing a move."""
 
 from __future__ import annotations
 
@@ -16,6 +16,11 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.battle_outcome_capture_authentication import (  # noqa: E402
+    BattleOutcomeCaptureAuthenticationError,
+    BattleScenarioSourceBinding,
+    authenticate_battle_scenario_source_binding,
+)
 from pokemon_red_completion.battle_recovery import (  # noqa: E402
     switch_active_battler,
 )
@@ -34,6 +39,22 @@ from pokemon_red_completion.blaine import (  # noqa: E402
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
+    FreshCompositionQualificationError,
+    fixed_account_claim_registry_lease,
+    open_fixed_account_claim_registry,
+    root_claim_is_available,
+)
+from pokemon_red_completion.goal_manager_context_catalog import (  # noqa: E402
+    GoalManagerContextCatalog,
+    GoalManagerContextCatalogError,
+    parse_goal_manager_context_catalog,
+)
+from pokemon_red_completion.goal_manager_protocol import (  # noqa: E402
+    GoalManagerCollectionRegistry,
+    GoalManagerProtocolError,
+    load_committed_goal_manager_registry_at_revision,
+)
 from pokemon_red_completion.observation import (  # noqa: E402
     BattleMenuPhase,
     MapId,
@@ -41,6 +62,7 @@ from pokemon_red_completion.observation import (  # noqa: E402
     RawGameState,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
+    canonical_sha256,
     detect_source_identity,
     require_clean_source,
     require_published_source,
@@ -60,6 +82,7 @@ class BattleScenarioMaterializationError(RuntimeError):
 
 
 _MAXIMUM_BATTLE_STATE_BYTES = 64 * 1024 * 1024
+_MAXIMUM_CONTEXT_CATALOG_BYTES = 4 * 1024 * 1024
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,12 +98,10 @@ class MaterializedBattleBoundary:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-state", type=Path, required=True)
-    parser.add_argument("--source-state-sha256", required=True)
-    parser.add_argument(
-        "--source-location",
-        choices=("route_11", "digletts_cave", "mansion", "cinnabar_center"),
-        required=True,
-    )
+    parser.add_argument("--context-catalog", type=Path, required=True)
+    parser.add_argument("--expected-context-catalog-sha256", required=True)
+    parser.add_argument("--registry-source-commit", required=True)
+    parser.add_argument("--expected-registry-sha256", required=True)
     parser.add_argument(
         "--party-slot",
         type=int,
@@ -89,12 +110,6 @@ def _parser() -> argparse.ArgumentParser:
         help="one-based living party slot prospectively chosen for the capture",
     )
     parser.add_argument("--capture-id", required=True)
-    parser.add_argument("--root-lineage-id", required=True)
-    parser.add_argument(
-        "--partition",
-        choices=(ScenarioPartition.TRAIN.value, ScenarioPartition.DEVELOPMENT.value),
-        required=True,
-    )
     parser.add_argument("--out-state", type=Path, required=True)
     parser.add_argument("--out-manifest", type=Path, default=None)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -117,16 +132,117 @@ def _private_new_output(destination: Path, *, rom_path: Path) -> Path:
     return resolved
 
 
-def _read_authenticated_source(path: Path, expected_sha256: str) -> bytes:
-    if path.is_symlink():
-        raise BattleScenarioMaterializationError("source state cannot be a symlink")
+def _read_owned_regular_input(
+    path: Path,
+    *,
+    maximum_bytes: int,
+    subject: str,
+) -> bytes:
+    descriptor = -1
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
     try:
-        payload = path.read_bytes()
+        named = path.lstat()
+        descriptor = os.open(path, flags)
+        opened = os.fstat(descriptor)
+        if (
+            named.st_dev != opened.st_dev
+            or named.st_ino != opened.st_ino
+            or not stat.S_ISREG(opened.st_mode)
+            or opened.st_nlink != 1
+            or opened.st_uid != os.getuid()
+            or not 1 <= opened.st_size <= maximum_bytes
+        ):
+            raise OSError(f"unsafe {subject}")
+        payload = b""
+        while len(payload) < opened.st_size:
+            chunk = os.read(descriptor, opened.st_size - len(payload))
+            if not chunk:
+                raise OSError(f"{subject} changed while opening")
+            payload += chunk
     except OSError:
-        raise BattleScenarioMaterializationError("source state is unavailable") from None
-    if not payload or hashlib.sha256(payload).hexdigest() != expected_sha256:
-        raise BattleScenarioMaterializationError("source state digest differs")
+        raise BattleScenarioMaterializationError(f"{subject} cannot be authenticated") from None
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
     return payload
+
+
+def _read_source(path: Path) -> bytes:
+    return _read_owned_regular_input(
+        path,
+        maximum_bytes=_MAXIMUM_BATTLE_STATE_BYTES,
+        subject="source state",
+    )
+
+
+def _load_source_binding(
+    source_bytes: bytes,
+    *,
+    catalog_path: Path,
+    expected_catalog_sha256: str,
+    registry_source_commit: str,
+    expected_registry_sha256: str,
+) -> tuple[
+    BattleScenarioSourceBinding,
+    GoalManagerContextCatalog,
+    GoalManagerCollectionRegistry,
+]:
+    """Authenticate bytes against the historical catalog; derive all labels."""
+
+    try:
+        catalog_payload = _read_owned_regular_input(
+            catalog_path,
+            maximum_bytes=_MAXIMUM_CONTEXT_CATALOG_BYTES,
+            subject="context catalog",
+        )
+        registry = load_committed_goal_manager_registry_at_revision(
+            PROJECT_ROOT,
+            registry_source_commit,
+        )
+    except (BattleScenarioMaterializationError, GoalManagerProtocolError):
+        raise BattleScenarioMaterializationError(
+            "historical battle source registry is unavailable"
+        ) from None
+    if (
+        hashlib.sha256(catalog_payload).hexdigest() != expected_catalog_sha256
+        or registry.registry_sha256 != expected_registry_sha256
+    ):
+        raise BattleScenarioMaterializationError("historical battle source provenance differs")
+    try:
+        catalog = parse_goal_manager_context_catalog(catalog_payload, registry)
+        binding = authenticate_battle_scenario_source_binding(
+            hashlib.sha256(source_bytes).hexdigest(),
+            expected_partition=ScenarioPartition.TRAIN,
+            catalog=catalog,
+            registry=registry,
+        )
+    except (
+        BattleOutcomeCaptureAuthenticationError,
+        GoalManagerContextCatalogError,
+    ) as error:
+        raise BattleScenarioMaterializationError(str(error)) from None
+    return binding, catalog, registry
+
+
+def _require_unconsumed_source_root(binding: BattleScenarioSourceBinding) -> None:
+    """Reject a consumed upstream root without reserving or claiming it.
+
+    This is deliberately a non-authoritative preflight.  The later frozen
+    outcome campaign remains responsible for the atomic logical-plus-physical
+    claim before any candidate action.
+    """
+
+    try:
+        registry_path = open_fixed_account_claim_registry()
+        with fixed_account_claim_registry_lease(registry_path, exclusive=False):
+            available = root_claim_is_available(
+                registry_path,
+                binding.root_consumption_sha256,
+            )
+    except FreshCompositionQualificationError as error:
+        raise BattleScenarioMaterializationError(str(error)) from None
+    if not available:
+        raise BattleScenarioMaterializationError("battle source upstream root is already consumed")
 
 
 def _require_distinct_outputs(state: Path, manifest: Path) -> None:
@@ -239,6 +355,30 @@ def _venue_for_source_location(source_location: str) -> TrainingVenue:
     except KeyError:
         raise BattleScenarioMaterializationError(
             "source location has no measured battle venue"
+        ) from None
+
+
+def _source_location_for_state(raw: RawGameState) -> str:
+    if raw.battle_state != 0:
+        raise BattleScenarioMaterializationError(
+            "battle source is not at a safe non-battle boundary"
+        )
+    map_id = raw.map_id
+    if isinstance(map_id, bool) or not isinstance(map_id, int):
+        raise BattleScenarioMaterializationError(
+            "battle source is not at a measured source boundary"
+        )
+    locations = {
+        int(MapId.ROUTE_11): "route_11",
+        int(MapId.DIGLETTS_CAVE): "digletts_cave",
+        int(MapId.POKEMON_MANSION_1F): "mansion",
+        int(MapId.CINNABAR_POKECENTER): "cinnabar_center",
+    }
+    try:
+        return locations[map_id]
+    except KeyError:
+        raise BattleScenarioMaterializationError(
+            "battle source is not at a measured source boundary"
         ) from None
 
 
@@ -371,9 +511,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise BattleScenarioMaterializationError("--speed requires --watch")
     if args.maximum_encounter_steps < 1:
-        raise BattleScenarioMaterializationError(
-            "--maximum-encounter-steps must be positive"
-        )
+        raise BattleScenarioMaterializationError("--maximum-encounter-steps must be positive")
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
     require_published_source(PROJECT_ROOT, source)
@@ -381,18 +519,22 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise AssertionError("clean source identity lacks a commit")
 
     rom_path = resolve_rom_path(args.rom)
-    source_bytes = _read_authenticated_source(
-        args.source_state.resolve(),
-        args.source_state_sha256,
+    source_bytes = _read_source(args.source_state)
+    source_binding, catalog, historical_registry = _load_source_binding(
+        source_bytes,
+        catalog_path=args.context_catalog,
+        expected_catalog_sha256=args.expected_context_catalog_sha256,
+        registry_source_commit=args.registry_source_commit,
+        expected_registry_sha256=args.expected_registry_sha256,
     )
+    _require_unconsumed_source_root(source_binding)
     out_state = _private_new_output(args.out_state, rom_path=rom_path)
     out_manifest = _private_new_output(
         args.out_manifest or Path(f"{out_state}.json"),
         rom_path=rom_path,
     )
     _require_distinct_outputs(out_state, out_manifest)
-    partition = ScenarioPartition(args.partition)
-    venue = _venue_for_source_location(args.source_location)
+    partition = source_binding.partition
 
     with PyBoyAdapter(
         rom_path,
@@ -401,13 +543,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     ) as emulator:
         emulator.load_state_bytes(source_bytes)
         reader = PokemonRedStateReader(emulator)
+        source_location = _source_location_for_state(reader.read())
+        venue = _venue_for_source_location(source_location)
         controller = FrameSafeExecutor(
             emulator,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
         )
         actions = CountingExecutor(controller)
         _prepare_source_venue(
-            args.source_location,
+            source_location,
             venue,
             actions,
             reader,
@@ -427,7 +571,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     state_bytes = _fsync_existing_private_output(out_state)
     manifest_payload = build_battle_scenario_capture_payload(
         capture_id=args.capture_id,
-        root_lineage_id=args.root_lineage_id,
+        root_lineage_id=source_binding.root_lineage_id,
         partition=partition,
         state_bytes=state_bytes,
         initial_observation_sha256=materialized.prepared.initial_observation_sha256,
@@ -441,10 +585,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "schema": "pokemon-private-battle-scenario-materialization-receipt-v2",
         "status": "ok",
         "capture_id": args.capture_id,
-        "root_lineage_id": args.root_lineage_id,
+        "root_lineage_id": source_binding.root_lineage_id,
         "partition": partition.value,
         "source_commit": source.git_commit,
         "source_state_sha256": hashlib.sha256(source_bytes).hexdigest(),
+        "source_slot_id": source_binding.source_slot_id,
+        "source_assignment_id": source_binding.source_assignment_id,
+        "source_context_id": source_binding.source_context_id,
+        "source_envelope_sha256": source_binding.source_envelope_sha256,
+        "root_consumption_sha256": source_binding.root_consumption_sha256,
+        "source_binding_sha256": canonical_sha256(source_binding.public_dict()),
+        "context_catalog_sha256": catalog.catalog_sha256,
+        "registry_sha256": historical_registry.registry_sha256,
+        "registry_source_commit": source_binding.registry_source_commit,
         "state_sha256": hashlib.sha256(state_bytes).hexdigest(),
         "manifest_sha256": hashlib.sha256(manifest_payload).hexdigest(),
         "initial_observation_sha256": materialized.prepared.initial_observation_sha256,
@@ -453,7 +606,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "venue_id": venue.area_id,
         "venue_minimum_encounter_level": venue.band.minimum_encounter_level,
         "venue_maximum_encounter_level": venue.band.maximum_encounter_level,
-        "source_location": args.source_location,
+        "source_location": source_location,
         "party_slot": args.party_slot,
         "encounter_steps": materialized.encounter_steps,
         "encounter_walk_calls": materialized.encounter_walk_calls,
@@ -461,11 +614,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "boundary_frames": materialized.boundary.frames_executed,
         "switch_actions": materialized.switch_actions,
         "party_switches_executed": int(materialized.switch_actions > 0),
-        "total_actions": (
-            actions.actions_executed + materialized.boundary.actions_executed
-        ),
+        "total_actions": (actions.actions_executed + materialized.boundary.actions_executed),
         "teacher_queries": 0,
         "move_choices_executed": 0,
+        "source_root_available_before_materialization": True,
+        "root_claims_created": 0,
+        "caller_supplied_partition": False,
+        "caller_supplied_lineage": False,
+        "caller_supplied_source_location": False,
         "private_path_fields": 0,
     }
 

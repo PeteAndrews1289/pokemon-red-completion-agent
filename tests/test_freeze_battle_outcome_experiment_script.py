@@ -102,6 +102,12 @@ class _CatalogEntry:
 
 
 class _Registry:
+    registry_sha256 = "6" * 64
+    execution = SimpleNamespace(
+        source_commit="a" * 40,
+        source_bundle_sha256="5" * 64,
+    )
+
     def __init__(
         self,
         entry: _CatalogEntry,
@@ -119,7 +125,18 @@ class _Registry:
         return SimpleNamespace(
             assignment_id=self.assignment_id,
             partition=self.partition,
+            root_lineage_id=f"red-goal-root-{self.assignment_id}",
         )
+
+
+def _catalog(*entries: _CatalogEntry) -> SimpleNamespace:
+    return SimpleNamespace(
+        catalog_sha256="7" * 64,
+        registry_sha256=_Registry.registry_sha256,
+        source_bundle_sha256=_Registry.execution.source_bundle_sha256,
+        source_commit=_Registry.execution.source_commit,
+        entries=entries,
+    )
 
 
 def _capture(
@@ -136,9 +153,7 @@ def _capture(
             partition=partition,
             source_commit=source_commit,
             source_state_sha256=(
-                entry.state_sha256
-                if source_state_sha256 is None
-                else source_state_sha256
+                entry.state_sha256 if source_state_sha256 is None else source_state_sha256
             ),
             expected_battle_state=expected_battle_state,
             root_lineage_id=(
@@ -167,7 +182,7 @@ def _bind(
         expected_partition=ScenarioPartition.TRAIN,
         expected_catalog_partition="train",
         source_commit="a" * 40,
-        catalog=SimpleNamespace(entries=(entry,)),
+        catalog=_catalog(entry),
         registry=registry,
     )
 
@@ -232,7 +247,7 @@ def test_binding_rejects_ambiguous_catalog_bytes() -> None:
             expected_partition=ScenarioPartition.TRAIN,
             expected_catalog_partition="train",
             source_commit="a" * 40,
-            catalog=SimpleNamespace(entries=(entry, entry)),
+            catalog=_catalog(entry, entry),
             registry=registry,
         )
 
@@ -252,7 +267,7 @@ def test_binding_rejects_a_runtime_menu_without_two_distinct_candidates() -> Non
             expected_partition=ScenarioPartition.TRAIN,
             expected_catalog_partition="train",
             source_commit="a" * 40,
-            catalog=SimpleNamespace(entries=(entry,)),
+            catalog=_catalog(entry),
             registry=registry,
         )
 
@@ -272,7 +287,7 @@ def test_binding_rejects_a_menu_collapsed_by_the_frozen_prior() -> None:
             expected_partition=ScenarioPartition.TRAIN,
             expected_catalog_partition="train",
             source_commit="a" * 40,
-            catalog=SimpleNamespace(entries=(entry,)),
+            catalog=_catalog(entry),
             registry=registry,
         )
 
@@ -411,10 +426,13 @@ def test_plan_output_must_be_new_private_and_away_from_the_rom(
     rom.write_bytes(b"rom")
     accepted = plan_dir / "battle-plan.json"
 
-    assert FREEZER["_private_new_plan"](
-        accepted,
-        rom_path=rom,
-    ) == accepted.resolve()
+    assert (
+        FREEZER["_private_new_plan"](
+            accepted,
+            rom_path=rom,
+        )
+        == accepted.resolve()
+    )
 
     with pytest.raises(
         FREEZER["BattleOutcomeExperimentFreezeError"],

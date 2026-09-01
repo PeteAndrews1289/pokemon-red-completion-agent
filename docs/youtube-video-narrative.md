@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: five keys, one room
+
+**Visual:** Five authenticated save-state keys light up green, then all five doors open into the
+same room labeled **POKÉMON MANSION**. Beside it, the experiment contract reads **≥2 VENUES · ≤6
+FROM ONE VENUE**.
+
+**Voiceover:** “We thought we were three training states short. The catalog actually had five
+unused roots, but counting them was not enough: every one led to the same encounter venue. A model
+cannot demonstrate robust battle judgment by seeing one room over and over under different file
+names.”
+
+**Visual:** Cross out four command-line labels—**PARTITION**, **LINEAGE**, **SOURCE HASH**,
+**LOCATION**—and replace them with **DERIVED FROM CATALOG + LOADED STATE**. Keep the controller
+disconnected.
+
+**Voiceover:** “We also removed the ability for an operator to tell the evidence system what a
+save was. The code now derives its identity and location from authenticated bytes. Next it scans
+the broader catalog without pressing a button and proves that a genuinely multi-venue classroom
+exists before spending another encounter.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: building the classroom factory
 
 **Visual:** Twelve clean-power cartridges appear in a row: three blue **TRAIN**, eight gold
