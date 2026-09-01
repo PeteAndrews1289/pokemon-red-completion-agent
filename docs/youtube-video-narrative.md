@@ -1,5 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the second classroom opens
+
+**Visual:** A Lavender save card enters a scanner labeled **CARTRIDGE GROUND ROUTE**, follows a
+map line to Route 11, and opens a second classroom beside Pokémon Mansion. Fill a capacity board:
+**MANSION 16 → CAPPED AT 6 · ROUTE 11 2 · USABLE 8 · REQUIRED 7 · TWO VENUES PASS**. Keep the
+controller cable visibly disconnected.
+
+**Voiceover:** “The first obvious route failed, but the aggregate census exposed a better one.
+Two independent Lavender states can reach Route 11 through a route derived from the cartridge,
+not a hand-authored shortcut. Combined with the Mansion supply, the experiment finally has enough
+independent battle lessons across two environments.”
+
+**Visual:** Put seven blank capture cards behind a locked freezer labeled **SOURCE · PARTY SLOT ·
+PRIVATE OUTPUT · PROVENANCE · RECOVERY — FIX BEFORE INPUT**. Leave **OUTCOME**, **PREDICTION**, and
+**TEACHER** boxes empty.
+
+**Voiceover:** “Passing capacity does not mean the model learned. Before a single encounter is
+created, we freeze exactly which seven worlds will be used and how interruption works. That keeps
+selection independent of later battle outcomes and turns the next run into a real curriculum,
+not seven hand-picked successes.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the obvious second classroom was locked
 
 **Visual:** Four Celadon save cards enter a scanner labeled **EXACT BOUNDARY · THUNDER BADGE ·

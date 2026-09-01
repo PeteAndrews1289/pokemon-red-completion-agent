@@ -7,6 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the second classroom is real
+
+The full catalog now proves that seven new battle lessons can be built without pretending copies
+are independent. Sixteen available roots can become Mansion encounters, and two different
+Lavender roots can follow a route composed from the cartridge to Route 11. The experiment caps any
+one venue at six, leaving eight usable roots across two environments for seven required seats.
+
+Nothing was played to obtain that answer. No controller input, outcome, model prediction, fit,
+teacher instruction, or Crystal state was opened. The next chapter is to write the seven names,
+party slots, private destinations, provenance, and blackout rules into one immutable plan before
+creating any encounter. The scoreboard therefore remains **19 lessons · 6 fits · 6 verified held
+outcomes · 0 authority · 0 transfer**.
+
 ## Current checkpoint: the classroom is secure, but three lessons are missing
 
 The new registrar passed every gate and reached `main`. Then it counted the real classrooms without

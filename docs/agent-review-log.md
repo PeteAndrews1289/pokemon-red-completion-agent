@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Lavender battle capacity pass — Codex adjudication 2026-09-01
+
+PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The Lavender source class is admitted
+only through the existing cartridge-composed ground-transition predicate and uses a ROM-derived
+Route 11 venue. The complete action-free census found 18 claim-available materializable roots:
+16 Mansion and two Lavender-to-Route-11. The six-per-venue cap leaves eight usable roots across
+two venues, so seven fresh captures are prospectively feasible.
+
+Codex accepts this as supply qualification, not learning or execution authorization. The next
+gate is a canonical outcome-blind seven-capture freeze with exact source, party-slot, destination,
+provenance, and recovery bindings. No controller action, emulator frame, claim, capture, outcome,
+prediction, fit, teacher query, sealed Red case, Crystal context, authority, or replay occurred.
+No external review was requested for this development checkpoint.
+
 ## Celadon battle relocation falsification — Codex adjudication 2026-09-01
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The source classifier and
