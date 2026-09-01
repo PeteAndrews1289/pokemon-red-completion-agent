@@ -3,7 +3,7 @@
 This is a planning snapshot. `MISSION.md`, `NORTH_STAR.md`, and
 `ACTIVE_PRODUCT_STATE.md` remain authoritative.
 
-## Latest local checkpoint: source identities are derived; venue supply is the falsifier
+## Latest checkpoint: the whole bank is real, but the adapter exposes one venue
 
 The train materializer no longer accepts a caller-declared partition, lineage, source digest, or
 venue. It hashes owner-controlled source bytes, uniquely joins them to the exact historical
@@ -12,16 +12,21 @@ derives the source venue from the loaded state before any controller can act. Th
 capture authenticator now uses the same derivation, so generation and later freezing cannot
 silently disagree about lineage.
 
-A read-only local supply check authenticated five distinct unused explore-train catalog roots and
-created no claim, capture, action, frame, outcome, or fit. That closes the raw three-root numeric
-deficit but does **not** prove the V2 roster is possible: all five are Mansion-profiled, as are the
-four existing fresh train battle captures, while the frozen roster requires at least two venues
-and permits at most six contexts from one venue. The next gate is therefore an exact-main,
-action-free inventory of actual supported venues across the broader unused catalog train bank—not
-blind materialization of three more Mansion encounters.
+A published whole-bank inventory then hashed 152 retained state files and recovered all 54 unique
+catalog train roots. Twenty-five remain claim-available; every state is a safe non-battle boundary
+with a living party member. Sixteen available roots are supported by the current materializer,
+but all sixteen resolve to `pokemon_mansion_1f`. The frozen two-venue, maximum-six-per-venue roster
+therefore fails before materialization despite ample raw supply.
 
-Local evidence:
-[train-supply qualification](evidence/red-battle-v2-train-supply-engineering-qualification-2026-08-31.json).
+The earlier manifest-only census also overstated reusable supply. None of its four Mansion capture
+source states occurs in the exact catalog required by the current freezer. They contribute zero
+to this denominator, so the honest requirement is seven new catalog-authenticated train captures,
+not three. Nine available roots remain at unsupported aggregate boundaries: four Celadon
+Pokecenter, two Lavender Pokecenter, and one each at Cinnabar Mart, Fuchsia City, and Indigo
+Plateau lobby.
+
+Current evidence:
+[whole-bank venue result](evidence/red-battle-v2-catalog-venue-inventory-result-2026-09-01.json).
 The learning board remains **19 train · 6 fits · 6 verified development · 4 unseen · 0 authority ·
 0 transfer**.
 
@@ -33,9 +38,10 @@ eight distinct V2 development states before availability checks. Duplicate train
 create new lineages; legacy V1 manifests lack the upstream-state binding required by V2. No freeze
 was created and no capture state, ROM, model, claim registry, outcome, or gameplay was opened.
 
-The next gate is bounded supply of at least three independently authenticated V2 train battle
-captures, followed by the same complete 7+8 action-free census. The learning counters below do not
-change.
+That old three-root deficit is superseded by the exact-catalog audit above. The next gate is an
+action-free readiness inspection for one reusable non-Mansion source relocation, starting with
+the four available Celadon-Pokecenter roots and existing Route 11/Diglett's Cave travel machinery.
+The learning counters below do not change.
 
 ## Bottom line
 
