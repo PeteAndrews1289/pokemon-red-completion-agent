@@ -3,6 +3,18 @@
 This is a planning snapshot. `MISSION.md`, `NORTH_STAR.md`, and
 `ACTIVE_PRODUCT_STATE.md` remain authoritative.
 
+## Later outcome: exact-main freezer passed; action-free census stopped
+
+PR 123 merged as exact main `00ad6ce1`, and exact-main CI `33451480906/1` passed. A manifest-only
+capacity census then found four distinct V2 fresh-train upstream states against seven required and
+eight distinct V2 development states before availability checks. Duplicate train manifests do not
+create new lineages; legacy V1 manifests lack the upstream-state binding required by V2. No freeze
+was created and no capture state, ROM, model, claim registry, outcome, or gameplay was opened.
+
+The next gate is bounded supply of at least three independently authenticated V2 train battle
+captures, followed by the same complete 7+8 action-free census. The learning counters below do not
+change.
+
 ## Bottom line
 
 Training has already begun at development scale. The evidence-backed board is:

@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 action-free capacity stop — Codex adjudication 2026-08-31
+
+The exact-main-qualified freezer was not invoked with a knowingly inadequate denominator. A
+manifest-only scan found four distinct V2 train upstream states and eight distinct V2 development
+upstream states. V2 requires seven fresh train and eight development states together. The extra
+train filenames were duplicate projections of the same four upstream hashes; legacy V1 manifests
+represented one additional state but lacked the upstream-state field required by the current
+authenticator. Codex therefore stopped with a three-train-lineage deficit.
+
+This result was reached before capture-state, ROM, base-model, catalog, or claim-registry opening.
+It created no freeze, claim, input, frame, prediction, outcome, fit, authority, sealed Red case,
+Crystal context, teacher query, or replay. The next review target is a bounded independent
+train-battle capture supply design, not a reduced batch or a larger teacher route.
+
 ## V2 atomic inventory/freezer closure — Codex adjudication 2026-08-31
 
 The independent review's last P0 concern was correct: a pure roster selector could not claim that

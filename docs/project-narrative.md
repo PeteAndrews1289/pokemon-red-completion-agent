@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 31: the registrar passed, but there are only four new lessons
+
+The atomic freezer passed locally, on its pull request, and again on exact `main`. The project then
+performed the cheapest possible census: it read capture manifests but did not open a cartridge
+state, ROM, model, outcome, or claim registry. Eight distinct held-development battle states exist,
+but the train side has only four distinct V2 upstream states where seven are required.
+
+File count tried to tell a more flattering story. Another four train manifests are byte-for-byte
+projections of those same upstream worlds, and two legacy manifests describe only one more state
+without the upstream binding V2 requires. The system refused to turn copies into independent
+lessons. No roster was frozen.
+
+The next work is narrower than another playthrough: produce at least three independently
+authenticated train battle captures through bounded nonsealed scenarios, then rerun the same
+all-or-stop census. The learning score remains **19 train examples · 6 fits · 6 verified
+development outcomes · 4 unseen comparisons · 0 authority · 0 transfer**.
+
 ## August 31: turn one useful lesson into a crash-safe curriculum contract
 
 The class roster now has a real registrar. All candidate roots are observed under one shared
