@@ -99,6 +99,7 @@ from pokemon_red_completion.runtime_identity import (  # noqa: E402
     build_runtime_identity,
     require_pyboy_import_origins,
 )
+from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -219,14 +220,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     _require_plan_exclusions(args, plan=plan, rom_path=rom_path)
 
     catalog, registry = _load_exact_catalog(args, plan=plan)
+    partition = _plan_partition(plan)
     scan = _open_all_catalog_train_roots(
         _require_state_bank(args.state_bank),
         catalog=catalog,
         registry=registry,
+        partition=partition,
     )
     if scan.missing_catalog_train_roots != 0:
         raise BattleScenarioMaterializationRunnerError(
-            "complete catalog train state bank is required"
+            "complete catalog partition state bank is required"
         )
     roots_by_sha256 = {
         item.binding.source_state_sha256: item for item in scan.roots
@@ -424,6 +427,29 @@ def _load_exact_catalog(
         )
     except BattleScenarioSourceInventoryError as error:
         raise BattleScenarioMaterializationRunnerError(str(error)) from None
+
+
+def _plan_partition(
+    plan: BattleScenarioMaterializationPlanLike,
+) -> ScenarioPartition:
+    partitions = {item.source.partition for item in plan.inventory}
+    if len(partitions) != 1:
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization plan partition differs"
+        )
+    partition = next(iter(partitions))
+    if partition not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization plan partition differs"
+        )
+    if (
+        isinstance(plan, BattleScenarioMaterializationCompletionPlan)
+        and partition is not ScenarioPartition.TRAIN
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "completion materialization partition differs"
+        )
+    return partition
 
 
 def _require_plan_exclusions(
@@ -871,7 +897,7 @@ def _require_materializer_receipt(
         or receipt.get("status") != "ok"
         or receipt.get("capture_id") != assignment.capture_id
         or receipt.get("root_lineage_id") != source.root_lineage_id
-        or receipt.get("partition") != "train"
+        or receipt.get("partition") != source.partition.value
         or receipt.get("source_commit") != source_commit
         or receipt.get("source_state_sha256") != source.source_state_sha256
         or receipt.get("source_slot_id") != source.source_slot_id
@@ -946,7 +972,7 @@ def _authenticate_assignment_outputs(
     if (
         manifest.capture_id != assignment.capture_id
         or manifest.root_lineage_id != assignment.candidate.source.root_lineage_id
-        or manifest.partition.value != "train"
+        or manifest.partition is not assignment.candidate.source.partition
         or manifest.source_commit != source_commit
         or manifest.source_state_sha256
         != assignment.candidate.source.source_state_sha256

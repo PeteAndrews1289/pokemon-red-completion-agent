@@ -20,6 +20,7 @@ from pokemon_red_completion.battle_scenario_materialization_run import (
     start_battle_scenario_materialization_assignment,
     succeed_battle_scenario_materialization_assignment,
 )
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = runpy.run_path(
@@ -216,8 +217,13 @@ def _materializer_receipt(
     *,
     candidate_count: object = 3,
     supported_candidate_count: object = 2,
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
 ) -> tuple[object, dict[str, object]]:
-    plan = V2_HELPERS["_build"]()
+    candidates = tuple(
+        V2_HELPERS["_candidate"](index, partition=partition)
+        for index in range(10)
+    )
+    plan = V2_HELPERS["_build"](candidates)
     assignment = plan.assignments[0]
     source = assignment.candidate.source
     venue = assignment.selected_venue
@@ -226,7 +232,7 @@ def _materializer_receipt(
         "status": "ok",
         "capture_id": assignment.capture_id,
         "root_lineage_id": source.root_lineage_id,
-        "partition": "train",
+        "partition": partition.value,
         "source_commit": plan.source_commit,
         "source_state_sha256": source.source_state_sha256,
         "source_slot_id": source.source_slot_id,
@@ -267,6 +273,31 @@ def test_materializer_receipt_accepts_three_candidates_with_two_supported() -> N
         state_sha256="d" * 64,
         manifest_sha256="e" * 64,
     )
+
+
+def test_materializer_receipt_accepts_catalog_derived_development_partition() -> None:
+    assignment, receipt = _materializer_receipt(
+        partition=ScenarioPartition.DEVELOPMENT
+    )
+
+    SCRIPT["_require_materializer_receipt"](
+        receipt,
+        assignment=assignment,
+        source_commit=receipt["source_commit"],
+        state_sha256="d" * 64,
+        manifest_sha256="e" * 64,
+    )
+    assert SCRIPT["_plan_partition"](
+        V2_HELPERS["_build"](
+            tuple(
+                V2_HELPERS["_candidate"](
+                    index,
+                    partition=ScenarioPartition.DEVELOPMENT,
+                )
+                for index in range(10)
+            )
+        )
+    ) is ScenarioPartition.DEVELOPMENT
 
 
 def test_materializer_receipt_reports_candidate_cardinality_separately() -> None:

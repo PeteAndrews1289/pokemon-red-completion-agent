@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Freeze one canonical multi-venue seven-capture Red battle plan."""
+"""Freeze one canonical partition-sized multi-venue Red battle plan."""
 
 from __future__ import annotations
 
@@ -25,6 +25,7 @@ from freeze_battle_scenario_materialization_plan import (  # noqa: E402
 from inventory_battle_scenario_source_venues import (  # noqa: E402
     BattleScenarioSourceInventoryError,
     _CatalogTrainRootScan,
+    _cross_partition_collision_counts,
     _load_attempted_source_exclusions,
     _load_catalog,
     _observe_root,
@@ -32,6 +33,10 @@ from inventory_battle_scenario_source_venues import (  # noqa: E402
     _require_state_bank,
 )
 
+from pokemon_red_completion.battle_outcome_batch import (  # noqa: E402
+    DEVELOPMENT_CONTEXTS,
+    FRESH_TRAIN_CONTEXTS,
+)
 from pokemon_red_completion.battle_outcome_capture_authentication import (  # noqa: E402
     BattleScenarioSourceBinding,
 )
@@ -75,6 +80,7 @@ from pokemon_red_completion.runtime_identity import (  # noqa: E402
     build_runtime_identity,
     require_pyboy_import_origins,
 )
+from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 
 class BattleScenarioMaterializationFreezeV2Error(RuntimeError):
@@ -91,6 +97,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-context-catalog-sha256", required=True)
     parser.add_argument("--registry-source-commit", required=True)
     parser.add_argument("--expected-registry-sha256", required=True)
+    parser.add_argument(
+        "--partition",
+        choices=(ScenarioPartition.TRAIN.value, ScenarioPartition.DEVELOPMENT.value),
+        required=True,
+    )
     parser.add_argument("--excluded-plan", type=Path, required=True)
     parser.add_argument("--expected-excluded-plan-sha256", required=True)
     parser.add_argument("--excluded-run-journal", type=Path, required=True)
@@ -132,6 +143,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     ).hexdigest()
 
     try:
+        partition = ScenarioPartition(args.partition)
+    except ValueError:
+        raise BattleScenarioMaterializationFreezeV2Error(
+            "battle materialization partition differs"
+        ) from None
+    required_capture_count = (
+        FRESH_TRAIN_CONTEXTS
+        if partition is ScenarioPartition.TRAIN
+        else DEVELOPMENT_CONTEXTS
+    )
+
+    try:
         catalog, registry = _load_catalog(
             args.context_catalog,
             expected_catalog_sha256=args.expected_context_catalog_sha256,
@@ -142,7 +165,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             _require_state_bank(args.state_bank),
             catalog=catalog,
             registry=registry,
+            partition=partition,
         )
+        collision_counts = _cross_partition_collision_counts(catalog, registry)
         attempted_sources = _load_attempted_source_exclusions(
             args.excluded_plan,
             args.excluded_run_journal,
@@ -151,9 +176,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
     except BattleScenarioSourceInventoryError as error:
         raise BattleScenarioMaterializationFreezeV2Error(str(error)) from None
+    if any(collision_counts.values()):
+        raise BattleScenarioMaterializationFreezeV2Error(
+            "battle materialization partitions collide"
+        )
     if scan.missing_catalog_train_roots != 0:
         raise BattleScenarioMaterializationFreezeV2Error(
-            "complete catalog train state bank is required"
+            "complete catalog partition state bank is required"
         )
     successor_scan = _CatalogTrainRootScan(
         roots=tuple(
@@ -195,6 +224,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise BattleScenarioMaterializationFreezeV2Error(
             "retained battle materialization plan differs after reopen"
         )
+    if plan.partition is not partition or len(plan.assignments) != required_capture_count:
+        raise BattleScenarioMaterializationFreezeV2Error(
+            "retained battle materialization partition differs"
+        )
     eligible_counts = Counter(
         venue.venue_id
         for candidate in plan.inventory
@@ -206,6 +239,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     return {
         "schema": "pokemon-red-battle-scenario-materialization-freeze-receipt-v2",
         "status": "prospective_unexecuted_multivenue_plan_frozen",
+        "partition": partition.value,
         "plan_id": plan.plan_id,
         "plan_sha256": plan.plan_sha256,
         "selection_policy_sha256": plan.selection_policy_sha256,
@@ -217,14 +251,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "context_catalog_sha256": catalog.catalog_sha256,
         "registry_sha256": registry.registry_sha256,
         "registry_source_commit": registry.execution.source_commit,
-        "catalog_train_roots": len(scan.roots),
+        "catalog_partition_roots": len(scan.roots),
+        "cross_partition_collision_counts": collision_counts,
         "excluded_attempted_source_roots": len(attempted_sources),
-        "successor_candidate_train_roots": len(successor_scan.roots),
-        "claim_available_train_roots": claim_available_roots,
+        "successor_candidate_partition_roots": len(successor_scan.roots),
+        "claim_available_partition_roots": claim_available_roots,
         "eligible_candidate_root_count": len(plan.inventory),
         "eligible_root_venue_edge_counts": dict(sorted(eligible_counts.items())),
         "selected_capture_counts": dict(sorted(selected_counts.items())),
         "selected_capture_count": len(plan.assignments),
+        "required_capture_count": required_capture_count,
         "selected_source_root_count": len(
             {
                 item.candidate.source.source_state_sha256

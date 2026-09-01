@@ -21,12 +21,14 @@ SCRIPT = runpy.run_path(
 )
 
 
-def _binding() -> BattleScenarioSourceBinding:
+def _binding(
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
+) -> BattleScenarioSourceBinding:
     state = "1" * 64
     envelope = "2" * 64
     assignment = "3" * 64
     return BattleScenarioSourceBinding(
-        partition=ScenarioPartition.TRAIN,
+        partition=partition,
         source_state_sha256=state,
         source_slot_id="slot-1",
         source_assignment_id=assignment,
@@ -67,6 +69,7 @@ def test_v2_freezer_accepts_only_whole_bank_and_exclusion_inputs() -> None:
     assert "--state-bank" in options
     assert "--excluded-plan" in options
     assert "--excluded-run-journal" in options
+    assert "--partition" in options
     assert "--source-state" not in options
     assert "--party-slot" not in options
     assert "--venue" not in options
@@ -158,3 +161,31 @@ def test_candidate_stops_if_rederived_edge_set_differs(
             expected_venue_ids=("route_11",),
             emulator=emulator,
         )
+
+
+def test_candidate_preserves_catalog_derived_development_partition(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    raw = _raw()
+
+    class Reader:
+        def __init__(self, emulator: object) -> None:
+            pass
+
+        def read(self) -> RawGameState:
+            return raw
+
+        def read_last_blackout_map(self) -> int:
+            return int(MapId.VERMILION_CITY)
+
+    emulator = SimpleNamespace(read_u8=lambda address: 0)
+    globals_ = SCRIPT["_candidate_from_loaded_root"].__globals__
+    monkeypatch.setitem(globals_, "PokemonRedStateReader", Reader)
+
+    candidate = SCRIPT["_candidate_from_loaded_root"](
+        _binding(ScenarioPartition.DEVELOPMENT),
+        expected_venue_ids=("digletts_cave", "route_11"),
+        emulator=emulator,
+    )
+
+    assert candidate.source.partition is ScenarioPartition.DEVELOPMENT

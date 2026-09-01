@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from dataclasses import replace
 
 import pytest
@@ -40,12 +41,16 @@ def _sha(label: str) -> str:
     return hashlib.sha256(label.encode("ascii")).hexdigest()
 
 
-def _source(index: int) -> BattleScenarioSourceBinding:
+def _source(
+    index: int,
+    *,
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
+) -> BattleScenarioSourceBinding:
     state = _sha(f"state-{index}")
     envelope = _sha(f"envelope-{index}")
     assignment = _sha(f"assignment-{index}")
     return BattleScenarioSourceBinding(
-        partition=ScenarioPartition.TRAIN,
+        partition=partition,
         source_state_sha256=state,
         source_slot_id=f"slot-{index}",
         source_assignment_id=assignment,
@@ -94,9 +99,14 @@ def _venue(venue_id: str, *, index: int) -> BattleScenarioReachableVenue:
     )
 
 
-def _candidate(index: int, venues: tuple[str, ...] = ("digletts_cave", "route_11")):
+def _candidate(
+    index: int,
+    venues: tuple[str, ...] = ("digletts_cave", "route_11"),
+    *,
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
+):
     return BattleScenarioMaterializationCandidateV2(
-        source=_source(index),
+        source=_source(index, partition=partition),
         reachable_venues=tuple(_venue(venue_id, index=index) for venue_id in venues),
     )
 
@@ -192,6 +202,34 @@ def test_v2_selection_is_independent_of_inventory_order() -> None:
     candidates = tuple(_candidate(index) for index in range(10))
 
     assert _build(candidates) == _build(tuple(reversed(candidates)))
+
+
+def test_v2_development_plan_derives_eight_capture_denominator() -> None:
+    candidates = tuple(
+        _candidate(index, partition=ScenarioPartition.DEVELOPMENT)
+        for index in range(10)
+    )
+
+    plan = _build(candidates)
+    counts = Counter(item.selected_venue.venue_id for item in plan.assignments)
+
+    assert plan.partition is ScenarioPartition.DEVELOPMENT
+    assert plan.required_capture_count == 8
+    assert len(plan.assignments) == 8
+    assert counts == {"digletts_cave": 4, "route_11": 4}
+    assert parse_battle_scenario_materialization_plan_v2(plan.canonical_bytes()) == plan
+
+
+def test_v2_plan_rejects_inventory_crossing_partitions() -> None:
+    candidates = tuple(_candidate(index) for index in range(10))
+
+    with pytest.raises(BattleScenarioMaterializationPlanV2Error, match="partition"):
+        _build(
+            (
+                *candidates[:-1],
+                _candidate(9, partition=ScenarioPartition.DEVELOPMENT),
+            )
+        )
 
 
 def test_v2_exact_allocator_does_not_greedily_consume_scarce_venue_roots() -> None:
@@ -322,6 +360,16 @@ def test_completion_plan_rejects_a_retained_source_in_new_inventory() -> None:
 
     with pytest.raises(BattleScenarioMaterializationPlanV2Error, match="plan differs"):
         _build_completion((reused, _candidate(20), _candidate(21)))
+
+
+def test_completion_plan_remains_train_only() -> None:
+    with pytest.raises(BattleScenarioMaterializationPlanV2Error, match="plan differs"):
+        _build_completion(
+            tuple(
+                _candidate(index, partition=ScenarioPartition.DEVELOPMENT)
+                for index in range(20, 23)
+            )
+        )
 
 
 def test_completion_plan_rejects_duplicate_retained_ordinal() -> None:

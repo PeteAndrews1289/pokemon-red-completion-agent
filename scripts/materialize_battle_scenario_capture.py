@@ -239,17 +239,26 @@ def _load_source_binding(
         raise BattleScenarioMaterializationError("historical battle source provenance differs")
     try:
         catalog = parse_goal_manager_context_catalog(catalog_payload, registry)
-        binding = authenticate_battle_scenario_source_binding(
-            hashlib.sha256(source_bytes).hexdigest(),
-            expected_partition=ScenarioPartition.TRAIN,
-            catalog=catalog,
-            registry=registry,
-        )
-    except (
-        BattleOutcomeCaptureAuthenticationError,
-        GoalManagerContextCatalogError,
-    ) as error:
+    except GoalManagerContextCatalogError as error:
         raise BattleScenarioMaterializationError(str(error)) from None
+    bindings = []
+    for partition in (ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT):
+        try:
+            bindings.append(
+                authenticate_battle_scenario_source_binding(
+                    hashlib.sha256(source_bytes).hexdigest(),
+                    expected_partition=partition,
+                    catalog=catalog,
+                    registry=registry,
+                )
+            )
+        except BattleOutcomeCaptureAuthenticationError:
+            continue
+    if len(bindings) != 1:
+        raise BattleScenarioMaterializationError(
+            "historical battle source partition cannot be derived"
+        )
+    binding = bindings[0]
     return binding, catalog, registry
 
 

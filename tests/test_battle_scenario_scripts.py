@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import runpy
 import stat
@@ -140,6 +141,103 @@ def test_train_materializer_has_no_caller_supplied_identity_or_location_options(
     assert "--partition" not in options
     assert "--context-catalog" in options
     assert "--registry-source-commit" in options
+
+
+def test_materializer_derives_development_partition_without_a_caller_label(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    function = MATERIALIZE["_load_source_binding"]
+    globals_ = function.__globals__
+    catalog_payload = b"catalog"
+    registry = SimpleNamespace(registry_sha256="6" * 64)
+    catalog = SimpleNamespace(catalog_sha256="7" * 64)
+    development_binding = SimpleNamespace(partition=ScenarioPartition.DEVELOPMENT)
+
+    monkeypatch.setitem(
+        globals_,
+        "_read_owned_regular_input",
+        lambda *args, **kwargs: catalog_payload,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "load_committed_goal_manager_registry_at_revision",
+        lambda *args, **kwargs: registry,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "parse_goal_manager_context_catalog",
+        lambda *args, **kwargs: catalog,
+    )
+
+    def authenticate(*args: object, **kwargs: object) -> object:
+        del args
+        if kwargs["expected_partition"] is ScenarioPartition.DEVELOPMENT:
+            return development_binding
+        raise MATERIALIZE["BattleOutcomeCaptureAuthenticationError"](
+            "partition differs"
+        )
+
+    monkeypatch.setitem(
+        globals_,
+        "authenticate_battle_scenario_source_binding",
+        authenticate,
+    )
+
+    binding, observed_catalog, observed_registry = function(
+        b"state",
+        catalog_path=Path("catalog.json"),
+        expected_catalog_sha256=hashlib.sha256(catalog_payload).hexdigest(),
+        registry_source_commit="a" * 40,
+        expected_registry_sha256=registry.registry_sha256,
+    )
+
+    assert binding is development_binding
+    assert observed_catalog is catalog
+    assert observed_registry is registry
+
+
+def test_materializer_rejects_ambiguous_partition_derivation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    function = MATERIALIZE["_load_source_binding"]
+    globals_ = function.__globals__
+    catalog_payload = b"catalog"
+    registry = SimpleNamespace(registry_sha256="6" * 64)
+
+    monkeypatch.setitem(
+        globals_,
+        "_read_owned_regular_input",
+        lambda *args, **kwargs: catalog_payload,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "load_committed_goal_manager_registry_at_revision",
+        lambda *args, **kwargs: registry,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "parse_goal_manager_context_catalog",
+        lambda *args, **kwargs: SimpleNamespace(),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "authenticate_battle_scenario_source_binding",
+        lambda *args, expected_partition, **kwargs: SimpleNamespace(
+            partition=expected_partition
+        ),
+    )
+
+    with pytest.raises(
+        MATERIALIZE["BattleScenarioMaterializationError"],
+        match="partition cannot be derived",
+    ):
+        function(
+            b"state",
+            catalog_path=Path("catalog.json"),
+            expected_catalog_sha256=hashlib.sha256(catalog_payload).hexdigest(),
+            registry_source_commit="a" * 40,
+            expected_registry_sha256=registry.registry_sha256,
+        )
 
 
 def test_materializer_failure_receipt_is_stage_only_and_path_free() -> None:
