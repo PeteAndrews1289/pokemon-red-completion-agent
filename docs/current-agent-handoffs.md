@@ -6,6 +6,22 @@ Status: active operating assignment as of 2026-08-31. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns catalog-derived train supply and venue-capacity proof
+
+Codex has locally removed the materializer's caller-supplied source digest, partition, lineage, and
+location. The exact historical catalog and registry now derive those identities, the loaded state
+derives its venue, and a read-only claim-ledger check rejects already consumed upstream roots
+without prematurely claiming them. Five unused explore-train catalog roots authenticate, but they
+are all Mansion-profiled. Since the V2 roster requires at least two venues and caps one venue at
+six contexts, that aggregate is supply evidence, not permission to materialize.
+
+The immediate job is full qualification, publication, and green exact-main CI, followed by one
+action-free actual-map inventory over the broader unused catalog train bank. The inventory must
+prove a prospective seven-fresh allocation across at least two supported venues before a separate
+materialization gate can open. No controller input, encounter capture, root claim, outcome, fit,
+sealed Red, Crystal execution, authority, or full replay is currently open. Reviewer availability
+does not pause this ordinary engineering lane.
+
 ## Current override: Codex owns the local V2 contract and inventory/freezer gate
 
 Codex has implemented the outcome-blind V2 batch contract locally. The full V1 plan, exact artifact

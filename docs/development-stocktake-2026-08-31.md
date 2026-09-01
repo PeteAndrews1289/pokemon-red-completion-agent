@@ -3,6 +3,28 @@
 This is a planning snapshot. `MISSION.md`, `NORTH_STAR.md`, and
 `ACTIVE_PRODUCT_STATE.md` remain authoritative.
 
+## Latest local checkpoint: source identities are derived; venue supply is the falsifier
+
+The train materializer no longer accepts a caller-declared partition, lineage, source digest, or
+venue. It hashes owner-controlled source bytes, uniquely joins them to the exact historical
+goal-manager catalog and registry, derives the train assignment and root-consumption identity, and
+derives the source venue from the loaded state before any controller can act. The existing shared
+capture authenticator now uses the same derivation, so generation and later freezing cannot
+silently disagree about lineage.
+
+A read-only local supply check authenticated five distinct unused explore-train catalog roots and
+created no claim, capture, action, frame, outcome, or fit. That closes the raw three-root numeric
+deficit but does **not** prove the V2 roster is possible: all five are Mansion-profiled, as are the
+four existing fresh train battle captures, while the frozen roster requires at least two venues
+and permits at most six contexts from one venue. The next gate is therefore an exact-main,
+action-free inventory of actual supported venues across the broader unused catalog train bank—not
+blind materialization of three more Mansion encounters.
+
+Local evidence:
+[train-supply qualification](evidence/red-battle-v2-train-supply-engineering-qualification-2026-08-31.json).
+The learning board remains **19 train · 6 fits · 6 verified development · 4 unseen · 0 authority ·
+0 transfer**.
+
 ## Later outcome: exact-main freezer passed; action-free census stopped
 
 PR 123 merged as exact main `00ad6ce1`, and exact-main CI `33451480906/1` passed. A manifest-only

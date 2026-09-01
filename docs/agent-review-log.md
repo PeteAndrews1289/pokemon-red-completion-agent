@@ -3,6 +3,23 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Catalog-derived train-supply reorientation — Codex adjudication 2026-08-31
+
+The earlier three-root deficit was only a manifest-count result. Codex tested the next cheaper
+assumption before materializing encounters. Five distinct unused explore-train roots authenticate
+against the exact historical catalog and registry, but all five are Mansion-profiled; the four
+existing fresh train captures are also Mansion encounters. Because the frozen V2 roster needs at
+least two venues and caps a venue at six contexts, “add any three roots” would satisfy arithmetic
+while still failing the declared experiment.
+
+The materializer trust boundary is now repaired locally. Callers cannot label partition, lineage,
+source digest, or location; those facts are derived from authenticated bytes, the historical
+registry/catalog join, and the loaded map. Source availability is observed without consuming the
+later outcome claim. Ninety focused tests, lint, and formatting pass. No ROM, controller input,
+emulator frame, capture, claim, teacher, outcome, fit, sealed case, Crystal context, authority, or
+replay was opened. Next publish and green exact main, then run one action-free broader venue
+inventory. This is Codex's own adjudication; no external review was requested for this checkpoint.
+
 ## V2 action-free capacity stop — Codex adjudication 2026-08-31
 
 The exact-main-qualified freezer was not invoked with a knowingly inadequate denominator. A

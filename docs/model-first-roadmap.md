@@ -11,6 +11,27 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: derive train roots, then prove venue capacity before materializing
+
+The battle materializer now derives its upstream identity from the exact historical catalog and
+registry. Partition, lineage, assignment, source-state digest, root-consumption identity, and
+source location are no longer caller labels. Five unused explore-train catalog roots pass this
+read-only join, but all five are Mansion-profiled. Combined with the four existing Mansion battle
+captures, they cannot by themselves meet V2's two-venue and maximum-six-per-venue policy.
+
+The next order is deliberately narrower than gameplay:
+
+1. finish local qualification, publish, and require green exact-main CI;
+2. inventory the actual map boundary and claim availability of the broader unused catalog train
+   bank without advancing a frame;
+3. require a prospective seven-fresh source allocation across at least two measured venues;
+4. stop and redesign bounded source routing if that allocation does not exist;
+5. only after a separate freeze, materialize the exact assigned encounters, then rerun the full
+   7+8 outcome-blind pressure census.
+
+This checkpoint adds no learning output. Current evidence remains **causal train 19 · model fits
+6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current engineering state: the V2 contract exists locally; the roster does not
 
 The outcome-blind V2 schema now joins the full V1 plan, artifact manifest, retained train record,

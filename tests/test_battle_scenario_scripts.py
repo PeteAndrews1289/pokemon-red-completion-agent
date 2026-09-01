@@ -8,12 +8,167 @@ from types import SimpleNamespace
 
 import pytest
 
+from pokemon_red_completion.battle_outcome_capture_authentication import (
+    authenticate_battle_scenario_source_binding,
+)
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    root_consumption_sha256,
+)
 from pokemon_red_completion.observation import BattleMenuPhase, MapId, RawGameState
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MATERIALIZE = runpy.run_path(
     str(PROJECT_ROOT / "scripts" / "materialize_battle_scenario_capture.py")
 )
+
+
+def _source_dependencies(
+    *,
+    assignment_partition: str = "train",
+    duplicate_state: bool = False,
+    forged_entry_assignment: bool = False,
+) -> tuple[str, SimpleNamespace, SimpleNamespace]:
+    source_state = "1" * 64
+    assignment_id = "2" * 64
+    root_lineage_id = f"red-goal-root-{assignment_id}"
+
+    def entry(marker: str) -> SimpleNamespace:
+        return SimpleNamespace(
+            state_sha256=source_state,
+            slot_id=f"red-goal-v1-076-explore-train-{marker}",
+            capture_id=f"red-goal-v1-076-explore-train-{marker}",
+            assignment_id="9" * 64 if forged_entry_assignment else assignment_id,
+            context_id="3" * 64,
+            envelope_sha256="4" * 64,
+            authenticated_root_lineage_id=lambda **kwargs: root_lineage_id,
+        )
+
+    entries = (entry("04"), entry("05")) if duplicate_state else (entry("04"),)
+    execution = SimpleNamespace(source_commit="a" * 40, source_bundle_sha256="5" * 64)
+    registry = SimpleNamespace(
+        registry_sha256="6" * 64,
+        execution=execution,
+        assignment=lambda slot_id: SimpleNamespace(
+            partition=assignment_partition,
+            assignment_id=assignment_id,
+            root_lineage_id=root_lineage_id,
+        ),
+    )
+    catalog = SimpleNamespace(
+        catalog_sha256="7" * 64,
+        registry_sha256=registry.registry_sha256,
+        source_bundle_sha256=execution.source_bundle_sha256,
+        source_commit=execution.source_commit,
+        entries=entries,
+    )
+    return source_state, catalog, registry
+
+
+def test_battle_source_binding_derives_train_partition_and_lineage() -> None:
+    source_state, catalog, registry = _source_dependencies()
+
+    binding = authenticate_battle_scenario_source_binding(
+        source_state,
+        expected_partition=ScenarioPartition.TRAIN,
+        catalog=catalog,
+        registry=registry,
+    )
+
+    assert binding.partition is ScenarioPartition.TRAIN
+    assert binding.source_slot_id == "red-goal-v1-076-explore-train-04"
+    assert binding.root_lineage_id == f"red-goal-root-{'2' * 64}"
+    assert binding.root_consumption_sha256 == root_consumption_sha256(
+        state_sha256=source_state,
+        envelope_sha256="4" * 64,
+    )
+    assert binding.public_dict()["caller_supplied_partition"] is False
+    assert binding.public_dict()["caller_supplied_lineage"] is False
+
+
+def test_battle_source_binding_rejects_partition_laundering() -> None:
+    source_state, catalog, registry = _source_dependencies(assignment_partition="validation")
+
+    with pytest.raises(ValueError, match="partition or lineage"):
+        authenticate_battle_scenario_source_binding(
+            source_state,
+            expected_partition=ScenarioPartition.TRAIN,
+            catalog=catalog,
+            registry=registry,
+        )
+
+
+def test_battle_source_binding_rejects_duplicate_upstream_bytes() -> None:
+    source_state, catalog, registry = _source_dependencies(duplicate_state=True)
+
+    with pytest.raises(ValueError, match="no unique upstream"):
+        authenticate_battle_scenario_source_binding(
+            source_state,
+            expected_partition=ScenarioPartition.TRAIN,
+            catalog=catalog,
+            registry=registry,
+        )
+
+
+def test_battle_source_binding_rejects_forged_catalog_assignment() -> None:
+    source_state, catalog, registry = _source_dependencies(forged_entry_assignment=True)
+
+    with pytest.raises(ValueError, match="partition or lineage"):
+        authenticate_battle_scenario_source_binding(
+            source_state,
+            expected_partition=ScenarioPartition.TRAIN,
+            catalog=catalog,
+            registry=registry,
+        )
+
+
+def test_train_materializer_has_no_caller_supplied_identity_or_location_options() -> None:
+    options = MATERIALIZE["_parser"]()._option_string_actions
+
+    assert "--source-state-sha256" not in options
+    assert "--source-location" not in options
+    assert "--root-lineage-id" not in options
+    assert "--partition" not in options
+    assert "--context-catalog" in options
+    assert "--registry-source-commit" in options
+
+
+def test_source_root_preflight_is_read_only_and_rejects_consumed_root(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    source_state, catalog, registry = _source_dependencies()
+    binding = authenticate_battle_scenario_source_binding(
+        source_state,
+        expected_partition=ScenarioPartition.TRAIN,
+        catalog=catalog,
+        registry=registry,
+    )
+    globals_ = MATERIALIZE["_require_unconsumed_source_root"].__globals__
+    observed: list[tuple[object, bool]] = []
+
+    class Lease:
+        def __enter__(self) -> None:
+            return None
+
+        def __exit__(self, *args: object) -> None:
+            del args
+
+    registry_path = Path("/private/account-claim-registry")
+    monkeypatch.setitem(globals_, "open_fixed_account_claim_registry", lambda: registry_path)
+    monkeypatch.setitem(
+        globals_,
+        "fixed_account_claim_registry_lease",
+        lambda path, *, exclusive: observed.append((path, exclusive)) or Lease(),
+    )
+    monkeypatch.setitem(globals_, "root_claim_is_available", lambda *args: False)
+
+    with pytest.raises(
+        MATERIALIZE["BattleScenarioMaterializationError"],
+        match="already consumed",
+    ):
+        MATERIALIZE["_require_unconsumed_source_root"](binding)
+
+    assert observed == [(registry_path, False)]
 
 
 def test_battle_capture_materializer_rejects_one_shared_output() -> None:
@@ -75,6 +230,52 @@ def test_battle_capture_materializer_rejects_unknown_venue() -> None:
 
     with pytest.raises(error, match="no measured battle venue"):
         venue_for("route_1")
+
+
+@pytest.mark.parametrize(
+    ("map_id", "expected_location"),
+    (
+        (MapId.ROUTE_11, "route_11"),
+        (MapId.DIGLETTS_CAVE, "digletts_cave"),
+        (MapId.POKEMON_MANSION_1F, "mansion"),
+        (MapId.CINNABAR_POKECENTER, "cinnabar_center"),
+    ),
+)
+def test_battle_source_location_is_derived_from_loaded_state(
+    map_id: MapId,
+    expected_location: str,
+) -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=map_id,
+        player_x=5,
+        player_y=26,
+        party_count=1,
+        battle_state=0,
+        party_hp=(120,),
+    )
+
+    assert MATERIALIZE["_source_location_for_state"](raw) == expected_location
+
+
+def test_battle_source_location_rejects_an_unsupported_or_in_battle_state() -> None:
+    error = MATERIALIZE["BattleScenarioMaterializationError"]
+    derive = MATERIALIZE["_source_location_for_state"]
+    unsupported = RawGameState(
+        game_started=True,
+        map_id=MapId.PALLET_TOWN,
+        player_x=5,
+        player_y=6,
+        party_count=1,
+        battle_state=0,
+        party_hp=(120,),
+    )
+    in_battle = replace(unsupported, map_id=MapId.ROUTE_11, battle_state=1)
+
+    with pytest.raises(error, match="measured source"):
+        derive(unsupported)
+    with pytest.raises(error, match="safe non-battle"):
+        derive(in_battle)
 
 
 @pytest.mark.parametrize(
