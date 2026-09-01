@@ -6,13 +6,23 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free development capacity census
+## Current override: Codex owns the partition-aware eight-capture development design
 
-The partition-aware census is locally qualified. Codex owns publication, exact-main CI, and one
-complete-bank development invocation. It must publish only aggregate path-free counts and stop
-before controller input. Hand-picked roots, the eight incompatible historical manifests, and any
-cross-partition identity collision are disallowed. Reviewers have no blocking role at this
-action-free gate; the useful next review is the materialization design only if capacity passes.
+PR 147 merged as exact main `bb78c5bb` under green CI `33552686857/1`. The sole action-free
+development census authenticated 27/27 catalog roots, found 25 claim-available, measured zero
+train/development collisions, and proved an exact eight-root allocation across two venues: **4
+Route 11 + 4 Diglett's Cave**. It created no claim, capture, outcome, prediction, fit or authority.
+
+Codex owns the next engineering gate: generalize the train V2 freezer/materializer seam to carry
+partition and denominator eight, rederive the exact allocation from the whole bank, bind immutable
+outputs and started-before-input identities, hostile-test, publish, and require exact-main green
+CI. The next private operation is one zero-effect plan freeze only. Stop and reorient before any
+controller input. Reviewers may inspect tracked code and path-free evidence, but receive no ROM,
+save, selected-root, private plan or lineage identity.
+
+## Previous override: Codex owned one action-free development capacity census
+
+The partition-aware census was published and passed as recorded above.
 
 ## Current override: Codex owns fresh partition-aware development supply
 
