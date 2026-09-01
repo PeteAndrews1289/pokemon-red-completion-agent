@@ -35,6 +35,10 @@ from pokemon_red_completion.battle_outcome_experiment import (
     parse_battle_outcome_capture_binding,
     parse_battle_outcome_experiment_plan,
 )
+from pokemon_red_completion.battle_outcome_learning import (
+    BattleOutcomeExample,
+    BattleTurnOutcome,
+)
 from pokemon_red_completion.battle_semantics import (
     POKEMON_TYPES,
     STATUS_CATEGORIES,
@@ -51,15 +55,9 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 BATTLE_OUTCOME_BATCH_ROSTER_SCHEMA = "pokemon-red-battle-outcome-batch-roster-v2"
 BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA = "pokemon-red-battle-outcome-batch-freeze-v3"
-BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA = (
-    "pokemon-red-battle-outcome-pressure-inventory-v2"
-)
-BATTLE_OUTCOME_PRESSURE_CANDIDATE_SCHEMA = (
-    "pokemon-red-battle-outcome-pressure-candidate-v2"
-)
-BATTLE_OUTCOME_PRESSURE_POLICY_SCHEMA = (
-    "pokemon-red-battle-outcome-pressure-policy-v2"
-)
+BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA = "pokemon-red-battle-outcome-pressure-inventory-v2"
+BATTLE_OUTCOME_PRESSURE_CANDIDATE_SCHEMA = "pokemon-red-battle-outcome-pressure-candidate-v2"
+BATTLE_OUTCOME_PRESSURE_POLICY_SCHEMA = "pokemon-red-battle-outcome-pressure-policy-v2"
 BATTLE_OUTCOME_FIXED_HEURISTIC_ID = "pokemon.core.battle.fixed-power-heuristic.v1"
 
 FRESH_TRAIN_CONTEXTS = 7
@@ -112,9 +110,7 @@ _PRESSURE_POLICY = {
     "minimum_three_action_contexts_per_partition": MINIMUM_THREE_ACTION_CONTEXTS,
     "minimum_prior_margin_strata_per_partition": MINIMUM_MARGIN_STRATA,
     "minimum_party_conditions_per_partition": MINIMUM_PARTY_CONDITIONS,
-    "maximum_single_venue_margin_or_party_bucket_per_partition": (
-        MAXIMUM_SINGLE_BUCKET_CONTEXTS
-    ),
+    "maximum_single_venue_margin_or_party_bucket_per_partition": (MAXIMUM_SINGLE_BUCKET_CONTEXTS),
     "prior_margin_boundaries": list(_PRIOR_MARGIN_BOUNDARIES),
     "hidden_rank_tolerance": _HIDDEN_RANK_TOLERANCE,
     "minimum_full_rank_singular_value": _MINIMUM_FULL_RANK_SINGULAR_VALUE,
@@ -229,8 +225,7 @@ class RetainedBattleOutcomePrefix:
             _require_sha256(value, subject)
         if (
             not isinstance(self.train_supported_candidate_indices, tuple)
-            or len(self.train_supported_candidate_indices)
-            != self.train.supported_candidate_count
+            or len(self.train_supported_candidate_indices) != self.train.supported_candidate_count
             or self.train_supported_candidate_indices
             != tuple(sorted(set(self.train_supported_candidate_indices)))
             or any(
@@ -238,9 +233,7 @@ class RetainedBattleOutcomePrefix:
                 for index in self.train_supported_candidate_indices
             )
         ):
-            raise BattleOutcomeBatchError(
-                "retained V1 train candidate denominator differs"
-            )
+            raise BattleOutcomeBatchError("retained V1 train candidate denominator differs")
 
     @property
     def plan_sha256(self) -> str:
@@ -271,9 +264,7 @@ class RetainedBattleOutcomePrefix:
             "artifact_manifest_sha256": self.artifact_manifest_sha256,
             "original_prior_sha256": self.original_prior_sha256,
             "train_record_sha256": self.train_record_sha256,
-            "train_supported_candidate_indices": list(
-                self.train_supported_candidate_indices
-            ),
+            "train_supported_candidate_indices": list(self.train_supported_candidate_indices),
             "protections": {
                 "development_reused": False,
                 "prefix_reexecuted": False,
@@ -319,15 +310,124 @@ def parse_retained_battle_outcome_prefix(
     try:
         value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        raise BattleOutcomeBatchError(
-            "retained prefix is not canonical JSON"
-        ) from None
+        raise BattleOutcomeBatchError("retained prefix is not canonical JSON") from None
     retained = _parse_retained_prefix(value)
     if retained.canonical_bytes() != payload:
-        raise BattleOutcomeBatchError(
-            "retained prefix is not canonical JSON"
-        )
+        raise BattleOutcomeBatchError("retained prefix is not canonical JSON")
     return retained
+
+
+def reconstruct_retained_battle_outcome_example(
+    retained: RetainedBattleOutcomePrefix,
+    train_collection_record: Mapping[str, object],
+    *,
+    features: BattleFeatureBatch,
+    model: MaskedMLPMoveRanker,
+) -> BattleOutcomeExample:
+    """Rebuild the retained train example without replaying its controller input.
+
+    The historical record contains measured outcomes but intentionally omits
+    policy-visible feature vectors.  Those vectors are reopened read-only from
+    the retained capture and rebound to the frozen plan/model menu here.
+    """
+
+    if not isinstance(retained, RetainedBattleOutcomePrefix):
+        raise TypeError("retained example requires a verified prefix")
+    if not isinstance(train_collection_record, Mapping):
+        raise TypeError("retained train collection must be a mapping")
+    if not isinstance(features, BattleFeatureBatch):
+        raise TypeError("retained train features must be a BattleFeatureBatch")
+    if not isinstance(model, MaskedMLPMoveRanker):
+        raise TypeError("retained train model must be the nonlinear prior")
+    if canonical_sha256(train_collection_record) != retained.train_record_sha256:
+        raise BattleOutcomeBatchError("retained train record digest differs")
+    supported = _validate_retained_train_collection(
+        retained.plan,
+        train_collection_record,
+    )
+    binding = retained.train
+    if (
+        battle_outcome_model_sha256(model) != retained.original_prior_sha256
+        or battle_outcome_menu_sha256(features) != binding.menu_sha256
+        or battle_outcome_hidden_menu_sha256(model, features) != binding.hidden_embedding_sha256
+        or tuple(
+            index
+            for index, (legal, pp) in enumerate(
+                zip(features.legal_mask, features.current_pp, strict=True)
+            )
+            if legal and pp > 0
+        )
+        != supported
+    ):
+        raise BattleOutcomeBatchError("retained train features differ from the frozen prefix")
+    collection = train_collection_record["collection"]
+    if not isinstance(collection, Mapping):  # pragma: no cover - validated above
+        raise AssertionError("validated retained collection is not a mapping")
+    raw_outcomes = collection["outcomes"]
+    if not isinstance(raw_outcomes, list):  # pragma: no cover - validated above
+        raise AssertionError("validated retained outcomes are not a list")
+    outcomes = tuple(
+        None if value is None else _parse_retained_turn_outcome(value) for value in raw_outcomes
+    )
+    if len(outcomes) != len(features.candidate_vectors):
+        raise BattleOutcomeBatchError(
+            "retained train feature denominator differs from its outcomes"
+        )
+    example = BattleOutcomeExample(
+        root_lineage_id=binding.root_lineage_id,
+        initial_state_sha256=binding.state_sha256,
+        partition=ScenarioPartition.TRAIN,
+        features=features,
+        outcomes=outcomes,
+    )
+    if (
+        example.best_candidate_indices != tuple(collection["best_candidate_indices"])
+        or example.learner_update_eligible is not collection["learner_update_eligible"]
+    ):
+        raise BattleOutcomeBatchError("retained train example differs after reconstruction")
+    return example
+
+
+def _parse_retained_turn_outcome(value: object) -> BattleTurnOutcome:
+    if not isinstance(value, Mapping):
+        raise BattleOutcomeBatchError("retained V1 turn outcome fields differ")
+    pre_attack_frames = _integer(
+        value.get("pre_attack_frames"),
+        "retained outcome pre-attack frames",
+    )
+    _validate_retained_turn_outcome(value, pre_attack_frames=pre_attack_frames)
+    try:
+        return BattleTurnOutcome(
+            move_executed=_boolean(value.get("move_executed"), "move executed"),
+            opponent_damage_fraction=_number(
+                value.get("opponent_damage_fraction"),
+                "opponent damage",
+            ),
+            player_damage_fraction=_number(
+                value.get("player_damage_fraction"),
+                "player damage",
+            ),
+            opponent_fainted=_boolean(
+                value.get("opponent_fainted"),
+                "opponent fainted",
+            ),
+            player_fainted=_boolean(
+                value.get("player_fainted"),
+                "player fainted",
+            ),
+            battle_exited=_boolean(value.get("battle_exited"), "battle exited"),
+            actions_executed=_integer(
+                value.get("actions_executed"),
+                "retained actions",
+            ),
+            frames_executed=_integer(
+                value.get("frames_executed"),
+                "retained frames",
+            ),
+            pre_attack_frames=pre_attack_frames,
+        )
+    except (TypeError, ValueError):
+        raise BattleOutcomeBatchError("retained V1 turn outcome fields differ") from None
 
 
 def _validate_retained_train_collection(
@@ -373,17 +473,14 @@ def _validate_retained_train_collection(
     if (
         not isinstance(collection, Mapping)
         or set(collection) != collection_fields
-        or collection.get("schema")
-        != "pokemon.red.battle.outcome-collection.v1"
+        or collection.get("schema") != "pokemon.red.battle.outcome-collection.v1"
         or collection.get("capture_id") != plan.train.capture_id
         or collection.get("manifest_sha256") != plan.train.manifest_sha256
         or collection.get("root_lineage_id") != plan.train.root_lineage_id
         or collection.get("partition") != ScenarioPartition.TRAIN.value
         or collection.get("initial_state_sha256") != plan.train.state_sha256
-        or collection.get("initial_observation_sha256")
-        != plan.train.initial_observation_sha256
-        or collection.get("measured_candidate_count")
-        != plan.train.supported_candidate_count
+        or collection.get("initial_observation_sha256") != plan.train.initial_observation_sha256
+        or collection.get("measured_candidate_count") != plan.train.supported_candidate_count
         or collection.get("learner_update_eligible") is not True
         or collection.get("teacher_queries") != 0
         or collection.get("teacher_choice_targets") != 0
@@ -428,8 +525,7 @@ def _validate_retained_train_collection(
         )
     )
     if (
-        tuple(best) != expected_best
-        or any(type(index) is not int for index in best)  # noqa: E721
+        tuple(best) != expected_best or any(type(index) is not int for index in best)  # noqa: E721
     ):
         raise BattleOutcomeBatchError("retained V1 train preference differs")
     return tuple(utilities)
@@ -563,10 +659,7 @@ def battle_outcome_fixed_heuristic_choice(features: BattleFeatureBatch) -> int:
 
     if not isinstance(features, BattleFeatureBatch):
         raise TypeError("fixed battle heuristic requires a BattleFeatureBatch")
-    indices = {
-        name: features.feature_names.index(name)
-        for name, _ in _FIXED_HEURISTIC_TERMS
-    }
+    indices = {name: features.feature_names.index(name) for name, _ in _FIXED_HEURISTIC_TERMS}
     scored: list[tuple[float, int]] = []
     for candidate_index, (vector, legal, pp) in enumerate(
         zip(
@@ -578,10 +671,7 @@ def battle_outcome_fixed_heuristic_choice(features: BattleFeatureBatch) -> int:
     ):
         if not legal or pp <= 0:
             continue
-        score = sum(
-            weight * vector[indices[name]]
-            for name, weight in _FIXED_HEURISTIC_TERMS
-        )
+        score = sum(weight * vector[indices[name]] for name, weight in _FIXED_HEURISTIC_TERMS)
         scored.append((score, candidate_index))
     if not scored:
         raise BattleOutcomeBatchError("fixed battle heuristic has no usable candidate")
@@ -621,9 +711,7 @@ class BattleOutcomePressureCandidate:
             raise BattleOutcomeBatchError("pressure candidate binding is invalid")
         _require_sha256(self.prior_model_sha256, "pressure prior model")
         _require_sha256(self.source_cluster_sha256, "source cluster")
-        if self.source_cluster_sha256 != battle_outcome_source_cluster_sha256(
-            self.binding
-        ):
+        if self.source_cluster_sha256 != battle_outcome_source_cluster_sha256(self.binding):
             raise BattleOutcomeBatchError(
                 "pressure source cluster differs from authenticated provenance"
             )
@@ -831,9 +919,7 @@ def build_battle_outcome_pressure_candidate(
     _require_sha256(expected_prior_sha256, "expected pressure prior")
     observed_prior_sha256 = battle_outcome_model_sha256(model)
     if observed_prior_sha256 != expected_prior_sha256:
-        raise BattleOutcomeBatchError(
-            "pressure model differs from the declared original prior"
-        )
+        raise BattleOutcomeBatchError("pressure model differs from the declared original prior")
     if battle_outcome_menu_sha256(features) != binding.menu_sha256:
         raise BattleOutcomeBatchError("pressure features differ from the capture menu")
     if battle_outcome_hidden_menu_sha256(model, features) != binding.hidden_embedding_sha256:
@@ -895,9 +981,7 @@ def revalidate_battle_outcome_pressure_candidate(
         claim_available=claim_available,
     )
     if observed != candidate:
-        raise BattleOutcomeBatchError(
-            "pressure candidate differs from rederived source facts"
-        )
+        raise BattleOutcomeBatchError("pressure candidate differs from rederived source facts")
 
 
 @dataclass(frozen=True, slots=True)
@@ -913,9 +997,7 @@ class BattleOutcomePressureInventory:
         if not isinstance(self.retained_prefix, RetainedBattleOutcomePrefix):
             raise BattleOutcomeBatchError("pressure inventory prefix is invalid")
         if not isinstance(self.claim_snapshot, ClaimFirstAvailabilitySnapshot):
-            raise BattleOutcomeBatchError(
-                "pressure inventory claim snapshot is invalid"
-            )
+            raise BattleOutcomeBatchError("pressure inventory claim snapshot is invalid")
         if (
             not isinstance(self.prefix, BattleOutcomePressureCandidate)
             or self.prefix.binding != self.retained_prefix.train
@@ -923,32 +1005,20 @@ class BattleOutcomePressureInventory:
             or self.prefix.supported_candidate_indices
             != self.retained_prefix.train_supported_candidate_indices
         ):
-            raise BattleOutcomeBatchError(
-                "pressure inventory retained row differs"
-            )
+            raise BattleOutcomeBatchError("pressure inventory retained row differs")
         if (
             not isinstance(self.screened, tuple)
             or not self.screened
-            or any(
-                not isinstance(item, BattleOutcomePressureCandidate)
-                for item in self.screened
-            )
+            or any(not isinstance(item, BattleOutcomePressureCandidate) for item in self.screened)
         ):
-            raise BattleOutcomeBatchError(
-                "pressure inventory screened rows differ"
-            )
+            raise BattleOutcomeBatchError("pressure inventory screened rows differ")
         rows = (self.prefix, *self.screened)
         if any(
-            item.prior_model_sha256 != self.retained_prefix.original_prior_sha256
-            for item in rows
+            item.prior_model_sha256 != self.retained_prefix.original_prior_sha256 for item in rows
         ):
-            raise BattleOutcomeBatchError(
-                "pressure inventory differs from the original prior"
-            )
+            raise BattleOutcomeBatchError("pressure inventory differs from the original prior")
         if len({item.capture_id for item in rows}) != len(rows):
-            raise BattleOutcomeBatchError(
-                "pressure inventory repeats a capture identity"
-            )
+            raise BattleOutcomeBatchError("pressure inventory repeats a capture identity")
         expected_pairs = {
             (
                 self.retained_prefix.train.logical_root_sha256,
@@ -968,9 +1038,7 @@ class BattleOutcomePressureInventory:
             for item in self.claim_snapshot.observations
         }
         if observed_pairs != expected_pairs:
-            raise BattleOutcomeBatchError(
-                "pressure inventory claim denominator differs"
-            )
+            raise BattleOutcomeBatchError("pressure inventory claim denominator differs")
         try:
             prefix_available = self.claim_snapshot.availability_for(
                 self.prefix.binding.logical_root_sha256,
@@ -989,13 +1057,9 @@ class BattleOutcomePressureInventory:
                 for item in self.screened
             )
         except ClaimFirstAdmissionError:
-            raise BattleOutcomeBatchError(
-                "pressure inventory claim denominator differs"
-            ) from None
+            raise BattleOutcomeBatchError("pressure inventory claim denominator differs") from None
         if prefix_available or development_available or not availability_matches:
-            raise BattleOutcomeBatchError(
-                "pressure inventory claim availability differs"
-            )
+            raise BattleOutcomeBatchError("pressure inventory claim availability differs")
 
     @property
     def inventory_sha256(self) -> str:
@@ -1088,9 +1152,7 @@ def parse_battle_outcome_pressure_inventory(
     try:
         value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        raise BattleOutcomeBatchError(
-            "pressure inventory is not canonical JSON"
-        ) from None
+        raise BattleOutcomeBatchError("pressure inventory is not canonical JSON") from None
     fields = {
         "schema",
         "status",
@@ -1122,21 +1184,15 @@ def parse_battle_outcome_pressure_inventory(
             _canonical_payload(value.get("claim_snapshot"))
         )
     except (ClaimFirstAdmissionError, TypeError, ValueError):
-        raise BattleOutcomeBatchError(
-            "pressure inventory claim snapshot differs"
-        ) from None
+        raise BattleOutcomeBatchError("pressure inventory claim snapshot differs") from None
     inventory = BattleOutcomePressureInventory(
         retained_prefix=_parse_retained_prefix(value.get("retained_prefix")),
         claim_snapshot=snapshot,
         prefix=_parse_pressure_candidate(value.get("prefix")),
-        screened=tuple(
-            _parse_pressure_candidate(item) for item in value["screened"]
-        ),
+        screened=tuple(_parse_pressure_candidate(item) for item in value["screened"]),
     )
     if inventory.canonical_bytes() != payload:
-        raise BattleOutcomeBatchError(
-            "pressure inventory is not canonical JSON"
-        )
+        raise BattleOutcomeBatchError("pressure inventory is not canonical JSON")
     return inventory
 
 
@@ -1211,13 +1267,8 @@ class BattleOutcomeBatchRoster:
         ):
             raise BattleOutcomeBatchError("batch development roster differs")
         selected = (self.prefix, *self.fresh_train, *self.development)
-        if any(
-            item.prior_model_sha256 != self.original_prior_sha256
-            for item in selected
-        ):
-            raise BattleOutcomeBatchError(
-                "batch pressure rows differ from the original prior"
-            )
+        if any(item.prior_model_sha256 != self.original_prior_sha256 for item in selected):
+            raise BattleOutcomeBatchError("batch pressure rows differ from the original prior")
         widths = {item.hidden_width for item in selected}
         if len(widths) != 1:
             raise BattleOutcomeBatchError("batch hidden widths differ")
@@ -1252,9 +1303,7 @@ class BattleOutcomeBatchRoster:
         if _hidden_contrast_rank(train) < self.required_hidden_contrast_rank:
             raise BattleOutcomeBatchError("batch train hidden contrast rank is inadequate")
         if _hidden_contrast_rank(self.development) < self.required_hidden_contrast_rank:
-            raise BattleOutcomeBatchError(
-                "batch development hidden contrast rank is inadequate"
-            )
+            raise BattleOutcomeBatchError("batch development hidden contrast rank is inadequate")
         for candidates, subject in (
             (train, "train"),
             (self.development, "development"),
@@ -1272,8 +1321,7 @@ class BattleOutcomeBatchRoster:
         if (
             not isinstance(self.exclusion_counts, tuple)
             or tuple(sorted(self.exclusion_counts)) != self.exclusion_counts
-            or len({reason for reason, _ in self.exclusion_counts})
-            != len(self.exclusion_counts)
+            or len({reason for reason, _ in self.exclusion_counts}) != len(self.exclusion_counts)
             or any(
                 reason not in _EXCLUSION_REASONS
                 or type(count) is not int  # noqa: E721
@@ -1316,35 +1364,23 @@ class BattleOutcomeBatchRoster:
             sum(item.binding.supported_candidate_count >= 3 for item in candidates)
             < MINIMUM_THREE_ACTION_CONTEXTS
         ):
-            raise BattleOutcomeBatchError(
-                f"batch {subject} three-action coverage is inadequate"
-            )
+            raise BattleOutcomeBatchError(f"batch {subject} three-action coverage is inadequate")
+        if len({item.prior_margin_stratum for item in candidates}) < MINIMUM_MARGIN_STRATA:
+            raise BattleOutcomeBatchError(f"batch {subject} prior-margin diversity is inadequate")
         if (
-            len({item.prior_margin_stratum for item in candidates})
-            < MINIMUM_MARGIN_STRATA
+            max(Counter(item.prior_margin_stratum for item in candidates).values())
+            > MAXIMUM_SINGLE_BUCKET_CONTEXTS
         ):
-            raise BattleOutcomeBatchError(
-                f"batch {subject} prior-margin diversity is inadequate"
-            )
-        if max(
-            Counter(item.prior_margin_stratum for item in candidates).values()
-        ) > MAXIMUM_SINGLE_BUCKET_CONTEXTS:
-            raise BattleOutcomeBatchError(
-                f"batch {subject} prior-margin balance is inadequate"
-            )
-        if (
-            len({item.party_condition_id for item in candidates})
-            < MINIMUM_PARTY_CONDITIONS
-        ):
+            raise BattleOutcomeBatchError(f"batch {subject} prior-margin balance is inadequate")
+        if len({item.party_condition_id for item in candidates}) < MINIMUM_PARTY_CONDITIONS:
             raise BattleOutcomeBatchError(
                 f"batch {subject} party-condition diversity is inadequate"
             )
-        if max(
-            Counter(item.party_condition_id for item in candidates).values()
-        ) > MAXIMUM_SINGLE_BUCKET_CONTEXTS:
-            raise BattleOutcomeBatchError(
-                f"batch {subject} party-condition balance is inadequate"
-            )
+        if (
+            max(Counter(item.party_condition_id for item in candidates).values())
+            > MAXIMUM_SINGLE_BUCKET_CONTEXTS
+        ):
+            raise BattleOutcomeBatchError(f"batch {subject} party-condition balance is inadequate")
 
     @property
     def roster_sha256(self) -> str:
@@ -1368,9 +1404,7 @@ class BattleOutcomeBatchRoster:
             "status": "prospective_unexecuted",
             "roster_id": self.roster_id,
             "original_prior_sha256": self.original_prior_sha256,
-            "retained_prefix_sha256": (
-                self.retained_prefix.retained_prefix_sha256
-            ),
+            "retained_prefix_sha256": (self.retained_prefix.retained_prefix_sha256),
             "retained_prefix": self.retained_prefix.public_dict(),
             "claim_registry_sha256": self.claim_registry_sha256,
             "screened_inventory_sha256": self.screened_inventory_sha256,
@@ -1382,40 +1416,29 @@ class BattleOutcomeBatchRoster:
             "prefix": self.prefix.public_dict(),
             "fresh_train": [item.public_dict() for item in self.fresh_train],
             "development": [item.public_dict() for item in self.development],
-            "exclusion_counts": {
-                reason: count for reason, count in self.exclusion_counts
-            },
+            "exclusion_counts": {reason: count for reason, count in self.exclusion_counts},
             "pressure_summary": {
                 "train_contexts": len(train),
                 "fresh_train_contexts": len(self.fresh_train),
                 "development_contexts": len(self.development),
                 "train_distinct_venues": len({item.venue_id for item in train}),
-                "development_distinct_venues": len(
-                    {item.venue_id for item in self.development}
-                ),
+                "development_distinct_venues": len({item.venue_id for item in self.development}),
                 "train_three_action_contexts": sum(
                     item.binding.supported_candidate_count >= 3 for item in train
                 ),
                 "development_three_action_contexts": sum(
-                    item.binding.supported_candidate_count >= 3
-                    for item in self.development
+                    item.binding.supported_candidate_count >= 3 for item in self.development
                 ),
-                "train_prior_margin_strata": len(
-                    {item.prior_margin_stratum for item in train}
-                ),
+                "train_prior_margin_strata": len({item.prior_margin_stratum for item in train}),
                 "development_prior_margin_strata": len(
                     {item.prior_margin_stratum for item in self.development}
                 ),
-                "train_party_conditions": len(
-                    {item.party_condition_id for item in train}
-                ),
+                "train_party_conditions": len({item.party_condition_id for item in train}),
                 "development_party_conditions": len(
                     {item.party_condition_id for item in self.development}
                 ),
                 "train_hidden_contrast_rank": self.train_hidden_contrast_rank,
-                "development_hidden_contrast_rank": (
-                    self.development_hidden_contrast_rank
-                ),
+                "development_hidden_contrast_rank": (self.development_hidden_contrast_rank),
             },
             "protections": {
                 "authority_promoted": False,
@@ -1460,9 +1483,7 @@ def select_battle_outcome_batch_roster(
     if prefix.prior_model_sha256 != original_prior_sha256 or any(
         item.prior_model_sha256 != original_prior_sha256 for item in candidates
     ):
-        raise BattleOutcomeBatchError(
-            "screened pressure rows differ from the original prior"
-        )
+        raise BattleOutcomeBatchError("screened pressure rows differ from the original prior")
     if any(item.hidden_width != prefix.hidden_width for item in candidates):
         raise BattleOutcomeBatchError("screened pressure hidden widths differ")
     ordered = tuple(sorted(candidates, key=lambda item: (item.partition.value, item.capture_id)))
@@ -1486,9 +1507,7 @@ def select_battle_outcome_batch_roster(
             exclusions["level_gap_exceeded"] += 1
             continue
         eligible.append(item)
-    train_pool = tuple(
-        item for item in eligible if item.partition is ScenarioPartition.TRAIN
-    )
+    train_pool = tuple(item for item in eligible if item.partition is ScenarioPartition.TRAIN)
     development_pool = tuple(
         item for item in eligible if item.partition is ScenarioPartition.DEVELOPMENT
     )
@@ -1543,9 +1562,7 @@ def select_battle_outcome_batch_roster_from_inventory(
         screened=inventory.screened,
     )
     if roster.screened_inventory_sha256 != inventory.screened_inventory_sha256:
-        raise BattleOutcomeBatchError(
-            "batch roster differs from its atomic pressure inventory"
-        )
+        raise BattleOutcomeBatchError("batch roster differs from its atomic pressure inventory")
     return roster
 
 
@@ -1604,9 +1621,7 @@ def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoste
     roster = BattleOutcomeBatchRoster(
         roster_id=_string(value.get("roster_id"), "roster identity"),
         retained_prefix=_parse_retained_prefix(value.get("retained_prefix")),
-        claim_registry_sha256=_string(
-            value.get("claim_registry_sha256"), "claim registry"
-        ),
+        claim_registry_sha256=_string(value.get("claim_registry_sha256"), "claim registry"),
         screened_inventory_sha256=_string(
             value.get("screened_inventory_sha256"), "screened inventory"
         ),
@@ -1615,9 +1630,7 @@ def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoste
         ),
         prefix=_parse_pressure_candidate(value.get("prefix")),
         fresh_train=tuple(_parse_pressure_candidate(item) for item in raw_train),
-        development=tuple(
-            _parse_pressure_candidate(item) for item in raw_development
-        ),
+        development=tuple(_parse_pressure_candidate(item) for item in raw_development),
         exclusion_counts=tuple(
             sorted(
                 (
@@ -1631,12 +1644,8 @@ def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoste
             value.get("required_hidden_contrast_rank"),
             "required hidden contrast rank",
         ),
-        selection_policy_sha256=_string(
-            value.get("selection_policy_sha256"), "selection policy"
-        ),
-        fixed_heuristic_sha256=_string(
-            value.get("fixed_heuristic_sha256"), "fixed heuristic"
-        ),
+        selection_policy_sha256=_string(value.get("selection_policy_sha256"), "selection policy"),
+        fixed_heuristic_sha256=_string(value.get("fixed_heuristic_sha256"), "fixed heuristic"),
     )
     if (
         _string(value.get("original_prior_sha256"), "original prior")
@@ -1669,8 +1678,7 @@ class BattleOutcomeBatchFreeze:
         if (
             not isinstance(self.capture_catalog_sha256s, tuple)
             or not self.capture_catalog_sha256s
-            or self.capture_catalog_sha256s
-            != tuple(sorted(set(self.capture_catalog_sha256s)))
+            or self.capture_catalog_sha256s != tuple(sorted(set(self.capture_catalog_sha256s)))
         ):
             raise BattleOutcomeBatchError("batch capture catalogs differ")
         for digest in self.capture_catalog_sha256s:
@@ -1684,9 +1692,7 @@ class BattleOutcomeBatchFreeze:
             inventory=self.inventory,
         )
         if expected != self.roster:
-            raise BattleOutcomeBatchError(
-                "batch freeze roster differs from its atomic inventory"
-            )
+            raise BattleOutcomeBatchError("batch freeze roster differs from its atomic inventory")
 
     @property
     def freeze_sha256(self) -> str:
@@ -1757,9 +1763,7 @@ def parse_battle_outcome_batch_freeze(
     try:
         value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        raise BattleOutcomeBatchError(
-            "batch freeze is not canonical JSON"
-        ) from None
+        raise BattleOutcomeBatchError("batch freeze is not canonical JSON") from None
     fields = {
         "schema",
         "status",
@@ -1798,12 +1802,8 @@ def parse_battle_outcome_batch_freeze(
     raw_catalogs = value.get("capture_catalog_sha256s")
     if not isinstance(raw_catalogs, list):
         raise BattleOutcomeBatchError("batch capture catalogs differ")
-    inventory = parse_battle_outcome_pressure_inventory(
-        _canonical_payload(value.get("inventory"))
-    )
-    roster = parse_battle_outcome_batch_roster(
-        _canonical_payload(value.get("roster"))
-    )
+    inventory = parse_battle_outcome_pressure_inventory(_canonical_payload(value.get("inventory")))
+    roster = parse_battle_outcome_batch_roster(_canonical_payload(value.get("roster")))
     freeze = BattleOutcomeBatchFreeze(
         consumer_source_commit=_string(
             value.get("consumer_source_commit"),
@@ -1845,11 +1845,7 @@ def _select_pressure_partition(
         strata = {item.prior_margin_stratum for item in selected}
         party_conditions = {item.party_condition_id for item in selected}
         blocked = (*forbidden, *(item.binding for item in selected))
-        feasible = [
-            item
-            for item in remaining
-            if not _candidate_overlaps_bindings(item, blocked)
-        ]
+        feasible = [item for item in remaining if not _candidate_overlaps_bindings(item, blocked)]
         if not feasible:
             fallback, search_complete = _find_independent_pressure_subset(
                 pool=pool,
@@ -1868,22 +1864,16 @@ def _select_pressure_partition(
                 )
             selected = [*initial, *fallback]
             fallback_ids = {item.capture_id for item in fallback}
-            remaining = [
-                item for item in pool if item.capture_id not in fallback_ids
-            ]
+            remaining = [item for item in pool if item.capture_id not in fallback_ids]
             break
 
         def key(
             item: BattleOutcomePressureCandidate,
             *,
-            current_selected: tuple[BattleOutcomePressureCandidate, ...] = tuple(
-                selected
-            ),
+            current_selected: tuple[BattleOutcomePressureCandidate, ...] = tuple(selected),
             current_venues: frozenset[str] = frozenset(venues),
             current_strata: frozenset[int] = frozenset(strata),
-            current_party_conditions: frozenset[str] = frozenset(
-                party_conditions
-            ),
+            current_party_conditions: frozenset[str] = frozenset(party_conditions),
         ) -> tuple[object, ...]:
             proposed = (*current_selected, item)
             return (
@@ -1988,9 +1978,7 @@ def _repair_pressure_partition_selection(
             continue
         for removed_indices in combinations(range(len(selected)), swap_count):
             retained = tuple(
-                item
-                for index, item in enumerate(selected)
-                if index not in removed_indices
+                item for index, item in enumerate(selected) if index not in removed_indices
             )
             for replacements in combinations(unselected, swap_count):
                 proposed = tuple(
@@ -2113,9 +2101,7 @@ def _hidden_contrast_rank(
             )
         )
     except np.linalg.LinAlgError:
-        raise BattleOutcomeBatchError(
-            "pressure hidden contrast rank is not computable"
-        ) from None
+        raise BattleOutcomeBatchError("pressure hidden contrast rank is not computable") from None
 
 
 def _minimum_full_rank_singular_value(
@@ -2147,13 +2133,10 @@ def _hidden_contrast_logdet(
     gram = matrix.T @ matrix
     try:
         sign, value = np.linalg.slogdet(
-            _LOGDET_REGULARIZER * np.eye(gram.shape[0], dtype=np.float64)
-            + gram
+            _LOGDET_REGULARIZER * np.eye(gram.shape[0], dtype=np.float64) + gram
         )
     except np.linalg.LinAlgError:
-        raise BattleOutcomeBatchError(
-            "pressure hidden contrast logdet is not computable"
-        ) from None
+        raise BattleOutcomeBatchError("pressure hidden contrast logdet is not computable") from None
     if sign <= 0 or not math.isfinite(float(value)):
         raise BattleOutcomeBatchError("pressure hidden contrast logdet is invalid")
     return float(value)
@@ -2178,18 +2161,11 @@ def _shared_feature_value(features: BattleFeatureBatch, name: str) -> float:
     try:
         index = features.feature_names.index(name)
     except ValueError:
-        raise BattleOutcomeBatchError(
-            f"pressure shared feature {name} is absent"
-        ) from None
+        raise BattleOutcomeBatchError(f"pressure shared feature {name} is absent") from None
     values = tuple(float(row[index]) for row in features.candidate_vectors)
     observed = values[0]
-    if any(
-        not math.isclose(value, observed, rel_tol=0.0, abs_tol=1e-12)
-        for value in values[1:]
-    ):
-        raise BattleOutcomeBatchError(
-            f"pressure shared feature {name} differs across candidates"
-        )
+    if any(not math.isclose(value, observed, rel_tol=0.0, abs_tol=1e-12) for value in values[1:]):
+        raise BattleOutcomeBatchError(f"pressure shared feature {name} differs across candidates")
     return observed
 
 
@@ -2262,9 +2238,7 @@ def _bindings_overlap(
     return any(
         getattr(first, attribute) == getattr(second, attribute)
         for attribute in _BINDING_IDENTITY_ATTRIBUTES
-    ) or battle_outcome_source_cluster_sha256(
-        first
-    ) == battle_outcome_source_cluster_sha256(second)
+    ) or battle_outcome_source_cluster_sha256(first) == battle_outcome_source_cluster_sha256(second)
 
 
 def _candidate_overlaps_bindings(
@@ -2276,8 +2250,7 @@ def _candidate_overlaps_bindings(
             getattr(candidate.binding, attribute) == getattr(binding, attribute)
             for attribute in _BINDING_IDENTITY_ATTRIBUTES
         )
-        or candidate.source_cluster_sha256
-        == battle_outcome_source_cluster_sha256(binding)
+        or candidate.source_cluster_sha256 == battle_outcome_source_cluster_sha256(binding)
         for binding in bindings
     )
 
@@ -2286,10 +2259,7 @@ def _captures_overlap(
     candidates: Sequence[BattleOutcomePressureCandidate],
     bindings: Sequence[BattleOutcomeCaptureBinding],
 ) -> bool:
-    return any(
-        _candidate_overlaps_bindings(candidate, bindings)
-        for candidate in candidates
-    )
+    return any(_candidate_overlaps_bindings(candidate, bindings) for candidate in candidates)
 
 
 def _parse_pressure_candidate(value: object) -> BattleOutcomePressureCandidate:
@@ -2343,31 +2313,20 @@ def _parse_pressure_candidate(value: object) -> BattleOutcomePressureCandidate:
         raise BattleOutcomeBatchError("pressure capture binding differs") from None
     candidate = BattleOutcomePressureCandidate(
         binding=binding,
-        prior_model_sha256=_string(
-            value.get("prior_model_sha256"), "pressure prior model"
-        ),
-        source_cluster_sha256=_string(
-            value.get("source_cluster_sha256"), "source cluster"
-        ),
+        prior_model_sha256=_string(value.get("prior_model_sha256"), "pressure prior model"),
+        source_cluster_sha256=_string(value.get("source_cluster_sha256"), "source cluster"),
         player_level=_integer(value.get("player_level"), "player level"),
         opponent_level=_integer(value.get("opponent_level"), "opponent level"),
         player_hp_ratio=_number(value.get("player_hp_ratio"), "player HP ratio"),
-        opponent_hp_ratio=_number(
-            value.get("opponent_hp_ratio"), "opponent HP ratio"
-        ),
-        player_status_id=_string(
-            value.get("player_status_id"), "player status"
-        ),
-        player_type_ids=tuple(
-            _string(item, "player type") for item in raw_player_types
-        ),
+        opponent_hp_ratio=_number(value.get("opponent_hp_ratio"), "opponent HP ratio"),
+        player_status_id=_string(value.get("player_status_id"), "player status"),
+        player_type_ids=tuple(_string(item, "player type") for item in raw_player_types),
         supported_candidate_indices=tuple(
             _integer(item, "supported candidate index") for item in raw_indices
         ),
         prior_scores=tuple(_number(item, "prior score") for item in raw_scores),
         hidden_embeddings=tuple(
-            tuple(_number(item, "hidden embedding") for item in row)
-            for row in raw_embeddings
+            tuple(_number(item, "hidden embedding") for item in row) for row in raw_embeddings
         ),
         claim_available=_boolean(value.get("claim_available"), "claim availability"),
     )
@@ -2411,8 +2370,7 @@ def _parse_retained_prefix(value: object) -> RetainedBattleOutcomePrefix:
     if (
         not isinstance(value, dict)
         or set(value) != fields
-        or value.get("schema")
-        != "pokemon-red-battle-outcome-retained-prefix-v1"
+        or value.get("schema") != "pokemon-red-battle-outcome-retained-prefix-v1"
         or value.get("status") != "verified_no_replay"
         or value.get("private_path_fields") != 0
     ):
@@ -2431,13 +2389,11 @@ def _parse_retained_prefix(value: object) -> RetainedBattleOutcomePrefix:
             "retained train record",
         ),
         train_supported_candidate_indices=tuple(
-            _integer(item, "retained train candidate index")
-            for item in raw_indices
+            _integer(item, "retained train candidate index") for item in raw_indices
         ),
     )
     if (
-        _string(value.get("plan_sha256"), "retained plan")
-        != retained.plan_sha256
+        _string(value.get("plan_sha256"), "retained plan") != retained.plan_sha256
         or _string(value.get("original_prior_sha256"), "retained original prior")
         != retained.original_prior_sha256
         or retained.public_dict() != value
@@ -2559,6 +2515,7 @@ __all__ = [
     "parse_battle_outcome_batch_roster",
     "parse_battle_outcome_pressure_inventory",
     "parse_retained_battle_outcome_prefix",
+    "reconstruct_retained_battle_outcome_example",
     "revalidate_battle_outcome_pressure_candidate",
     "select_battle_outcome_batch_roster",
     "select_battle_outcome_batch_roster_from_inventory",

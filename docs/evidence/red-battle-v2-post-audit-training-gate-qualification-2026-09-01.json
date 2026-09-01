@@ -1,0 +1,24 @@
+{
+  "authority_promoted": false,
+  "base_source_commit": "dd87e214341157cff16f42c9673527459e1cc581",
+  "controller_actions": 0,
+  "crystal_contexts_opened": 0,
+  "development_capture_catalog_bridge": "implemented_and_synthetically_qualified",
+  "development_plan_capture_count": 8,
+  "development_plan_sha256": "178b5213588e4e2d2e67635a479206a74bda7642d043209b176ecef0eb83f68c",
+  "development_venue_counts": {
+    "digletts_cave": 4,
+    "route_11": 4
+  },
+  "emulator_frames": 0,
+  "full_game_replays": 0,
+  "model_fits": 0,
+  "outcomes_opened": 0,
+  "production_batch_consumer": "implemented_and_synthetically_qualified",
+  "red_sealed_test_cases_opened": 0,
+  "replay_boundary": "canonical_plan_sha256_journal_receipt_and_lock",
+  "schema": "pokemon-red-battle-v2-post-audit-training-gate-qualification-v1",
+  "status": "engineering_ready_not_executed",
+  "targeted_tests_passed": 110,
+  "teacher_queries": 0
+}

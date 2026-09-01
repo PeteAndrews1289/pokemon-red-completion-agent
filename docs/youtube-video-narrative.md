@@ -5181,3 +5181,16 @@ version has to prove the model learned something worth carrying into a game it h
 - Show the runner reopening the same partition and checking the receipt and manifest. Overlay
   **116 FOCUSED · 6,332 FULL · PRIVATE SAVES OPENED 0 · ACTIONS 0**.
 - End before gameplay: **PUBLISH → EXACT-MAIN GREEN → FREEZE EIGHT AT ZERO EFFECTS → STOP**.
+
+## New sequence: “Training is a transaction, not a button”
+
+- Open on the audit finding: **ONE PLAN · TWO POSSIBLE JOURNALS**. Collapse both into one filename
+  and one lock derived from the plan hash; show the second runner rejected.
+- Turn eight private development saves into one path-free catalog card: **8 SUCCEEDED · 8 UNIQUE
+  ROOTS · CAVE 4 · ROUTE 11 4 · OUTCOMES 0**.
+- Draw the real batch rail: **RETAINED TRAIN ×1 (NO REPLAY) + FRESH TRAIN ×7 → FIT ×1 → COMMIT
+  BASE / UPDATED / HEURISTIC ON DEVELOPMENT ×8 → OPEN OUTCOMES ×8**.
+- Freeze the screen before execution and label it **ENGINEERING READY · MODEL FITS STILL 0**. Make
+  clear that code supporting training is not evidence that training occurred.
+- End with the honest mission ladder: **BOUNDED BATTLE PREFERENCE → PARTY / NAVIGATION / GOAL
+  AUTHORITY → FULL RED → LIVING POKÉDEX → THIN CRYSTAL TRANSFER**.

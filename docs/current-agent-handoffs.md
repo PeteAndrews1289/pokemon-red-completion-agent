@@ -3368,3 +3368,26 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Reviewers remain read-only and receive no ROM, save, private plan, root identity or capture.
 - Their verdicts inform Codex but do not authorize execution, fitting, sealed Red, Crystal,
   authority, or replay.
+
+## Current assignments — post-audit Red batch gate (2026-09-01)
+
+### Codex workhorse lane
+
+- Publish the plan-scoped replay repair, typed eight-capture development catalog and production
+  batch consumer from one exact source bundle.
+- Preserve the already frozen private development plan SHA-256
+  `178b5213588e4e2d2e67635a479206a74bda7642d043209b176ecef0eb83f68c`; it has not executed.
+- After green exact-main CI, build the development catalog only from a terminal eight-success
+  journal, freeze the 7+8 batch, stop at its aggregate receipt, and reorient before controller
+  execution.
+- The batch run, when separately opened, must claim all fifteen fresh roots first, fit only the
+  retained-plus-seven train examples, commit all development predictions before outcomes, and
+  retain the resulting model as shadow-only.
+
+### Reviewer lane
+
+- Audit the published one-shot namespace, catalog provenance and fit/development separation.
+- Challenge whether the eight development contexts provide genuine choice discordance and whether
+  the fixed heuristic is a meaningful control.
+- Do not describe this gate as a game-playing model, Red authority, Crystal transfer or living-
+  Pokédex completion. Those remain downstream mission gates.

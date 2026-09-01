@@ -8217,3 +8217,23 @@ the head of main's push CI or its pre-squash source can be the head of pull-requ
 cannot be both. The repair narrows trust to the exact successful main-push run and makes that stage
 visible in the public failure code. The old plan stays historical; a newly source-bound plan must
 freeze from green main before any button is pressed.
+
+## The pipeline finally reached the verb “train”
+
+A final audit found that the experiment was closer to data collection than to training. The runner
+could accept two different journal filenames for the same one-shot plan, the new V2 development
+captures had no typed route into the batch freezer, and the frozen batch had no production
+consumer. Those were not optimizer problems; they were missing trust-boundary joins.
+
+The repair gave each materialization plan exactly one journal, receipt and lock derived from its
+SHA-256. It added a canonical development catalog that independently reopens all eight successful
+outputs and binds their source, runtime, ROM, registry, CI and byte digests without publishing a
+path. The batch freezer now consumes that single catalog. Finally, a production runner implements
+the actual experiment: reuse the already measured first train example without replay, measure
+seven fresh train menus, fit the frozen output head once, commit three controls on all eight held-
+out menus, and only then reveal their cartridge outcomes.
+
+No cartridge was opened while building this gate. The result is not a trained player yet; it is a
+defensible path from authenticated saves to the first new shadow model. That distinction is the
+project's recurring systems lesson: progress is not the number of frames simulated, but the number
+of independent decisions that can safely change a model and survive an untouched comparison.

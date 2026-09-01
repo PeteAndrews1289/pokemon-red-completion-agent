@@ -260,15 +260,23 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         exact_ci_run=args.exact_ci_run,
         exact_ci_attempt=args.exact_ci_attempt,
     )
-    journal_path = _private_journal_path(args.journal, parent=capture_directory)
-    receipt_path = _private_receipt_path(args.receipt, parent=capture_directory)
+    journal_path = _private_journal_path(
+        args.journal,
+        parent=capture_directory,
+        plan_sha256=plan.plan_sha256,
+    )
+    receipt_path = _private_receipt_path(
+        args.receipt,
+        parent=capture_directory,
+        plan_sha256=plan.plan_sha256,
+    )
     if len({plan_path, journal_path, receipt_path}) != 3:
         raise BattleScenarioMaterializationRunnerError(
             "plan, journal, and receipt must be distinct"
         )
 
     registry_path = open_fixed_account_claim_registry()
-    with _run_lease(journal_path):
+    with _run_lease(capture_directory, plan_sha256=plan.plan_sha256):
         journal = _open_or_initialize_journal(
             journal_path,
             plan=plan,
@@ -1107,10 +1115,19 @@ def _private_existing_file(
     return resolved
 
 
-def _private_journal_path(path: Path, *, parent: Path) -> Path:
-    resolved = path.resolve()
-    if resolved.parent != parent or resolved.is_symlink():
-        raise BattleScenarioMaterializationRunnerError("run journal is unavailable")
+def _private_journal_path(
+    path: Path,
+    *,
+    parent: Path,
+    plan_sha256: str,
+) -> Path:
+    resolved = _plan_scoped_run_path(
+        path,
+        parent=parent,
+        plan_sha256=plan_sha256,
+        suffix="journal.json",
+        subject="run journal",
+    )
     if resolved.exists():
         _read_owned_regular(
             resolved,
@@ -1120,16 +1137,47 @@ def _private_journal_path(path: Path, *, parent: Path) -> Path:
     return resolved
 
 
-def _private_receipt_path(path: Path, *, parent: Path) -> Path:
-    resolved = path.resolve()
-    if resolved.parent != parent or resolved.is_symlink():
-        raise BattleScenarioMaterializationRunnerError("run receipt is unavailable")
+def _private_receipt_path(
+    path: Path,
+    *,
+    parent: Path,
+    plan_sha256: str,
+) -> Path:
+    resolved = _plan_scoped_run_path(
+        path,
+        parent=parent,
+        plan_sha256=plan_sha256,
+        suffix="receipt.json",
+        subject="run receipt",
+    )
     if resolved.exists():
         _read_owned_regular(
             resolved,
             maximum_bytes=_MAXIMUM_RECEIPT_BYTES,
             subject="run receipt",
         )
+    return resolved
+
+
+def _plan_scoped_run_path(
+    path: Path,
+    *,
+    parent: Path,
+    plan_sha256: str,
+    suffix: str,
+    subject: str,
+) -> Path:
+    plan_digest = _sha256(plan_sha256, "plan")
+    expected = parent / f"battle-materialization-{plan_digest}.{suffix}"
+    if path.is_symlink():
+        raise BattleScenarioMaterializationRunnerError(f"{subject} is unavailable")
+    resolved = path.resolve()
+    if resolved != expected:
+        raise BattleScenarioMaterializationRunnerError(
+            f"{subject} is not bound to the materialization plan"
+        )
+    if resolved.parent != parent:
+        raise BattleScenarioMaterializationRunnerError(f"{subject} is unavailable")
     return resolved
 
 
@@ -1269,8 +1317,9 @@ def _publish_or_verify_receipt(path: Path, receipt: Mapping[str, object]) -> Non
 
 
 @contextmanager
-def _run_lease(journal_path: Path) -> Iterator[None]:
-    lock_path = journal_path.with_name(f".{journal_path.name}.lock")
+def _run_lease(parent: Path, *, plan_sha256: str) -> Iterator[None]:
+    plan_digest = _sha256(plan_sha256, "plan")
+    lock_path = parent / f".battle-materialization-{plan_digest}.lock"
     flags = os.O_RDWR | os.O_CREAT
     flags |= getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
     descriptor = -1

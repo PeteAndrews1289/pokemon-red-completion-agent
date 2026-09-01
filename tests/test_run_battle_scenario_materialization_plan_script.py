@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
+import os
 import runpy
 import subprocess
 from dataclasses import replace
@@ -745,6 +747,58 @@ def test_atomic_journal_replacement_round_trips_and_rejects_ambiguous_temp(
         match="ambiguous",
     ):
         SCRIPT["_replace_journal"](path, started.canonical_bytes())
+
+
+def test_run_artifact_paths_are_bound_to_the_plan_sha256(tmp_path: Path) -> None:
+    plan, journal = _journal()
+    prefix = f"battle-materialization-{plan.plan_sha256}"
+    journal_path = tmp_path / f"{prefix}.journal.json"
+    receipt_path = tmp_path / f"{prefix}.receipt.json"
+    SCRIPT["_write_new"](journal_path, journal.canonical_bytes())
+
+    assert SCRIPT["_private_journal_path"](
+        journal_path,
+        parent=tmp_path,
+        plan_sha256=plan.plan_sha256,
+    ) == journal_path
+    assert SCRIPT["_private_receipt_path"](
+        receipt_path,
+        parent=tmp_path,
+        plan_sha256=plan.plan_sha256,
+    ) == receipt_path
+
+    for alternate in (tmp_path / "alternate.json", tmp_path / f"other-{prefix}.json"):
+        with pytest.raises(
+            SCRIPT["BattleScenarioMaterializationRunnerError"],
+            match="bound to the materialization plan",
+        ):
+            SCRIPT["_private_journal_path"](
+                alternate,
+                parent=tmp_path,
+                plan_sha256=plan.plan_sha256,
+            )
+
+
+def test_plan_scoped_lease_rejects_a_second_runner(tmp_path: Path) -> None:
+    plan, _ = _journal()
+    lock_path = tmp_path / f".battle-materialization-{plan.plan_sha256}.lock"
+    descriptor = os.open(lock_path, os.O_RDWR | os.O_CREAT, 0o600)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with (
+            pytest.raises(
+                SCRIPT["BattleScenarioMaterializationRunnerError"],
+                match="another materialization runner",
+            ),
+            SCRIPT["_run_lease"](
+                tmp_path,
+                plan_sha256=plan.plan_sha256,
+            ),
+        ):
+            raise AssertionError("second runner crossed the plan-scoped lease")
+    finally:
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
+        os.close(descriptor)
 
 
 def test_resume_reconciles_complete_started_output_without_retry(

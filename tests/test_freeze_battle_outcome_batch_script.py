@@ -4,6 +4,7 @@ import hashlib
 import json
 import runpy
 import stat
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -15,13 +16,14 @@ from pokemon_red_completion.battle_scenario_capture import (
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 SCRIPT = runpy.run_path("scripts/freeze_battle_outcome_batch.py")
+DEVELOPMENT_CATALOG_HELPERS = runpy.run_path(
+    "tests/test_battle_scenario_development_capture_catalog.py"
+)
 
 
 def _canonical(value: object) -> bytes:
     return (
-        json.dumps(value, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode(
-            "ascii"
-        )
+        json.dumps(value, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("ascii")
         + b"\n"
     )
 
@@ -114,6 +116,92 @@ def test_train_catalog_specs_preserve_each_producer_commit_and_directory(
         )
 
 
+def test_typed_development_catalog_supplies_the_entire_eight_capture_boundary(
+    tmp_path: Path,
+) -> None:
+    producer_directory = tmp_path / "development-captures"
+    producer_directory.mkdir()
+    rom_directory = tmp_path / "roms"
+    rom_directory.mkdir()
+    rom_path = rom_directory / "red.gb"
+    rom_path.write_bytes(b"rom")
+    catalog = DEVELOPMENT_CATALOG_HELPERS["_catalog"]()
+    directory_sha256 = hashlib.sha256(str(producer_directory.resolve()).encode("utf-8")).hexdigest()
+    catalog = replace(
+        catalog,
+        producer=replace(
+            catalog.producer,
+            capture_directory_sha256=directory_sha256,
+        ),
+    )
+    catalog_path = tmp_path / "development-catalog.json"
+    catalog_path.write_bytes(catalog.canonical_bytes())
+    catalog_path.chmod(0o600)
+
+    specs = SCRIPT["_typed_development_catalog_specs"](
+        catalog_path,
+        expected_catalog_sha256=catalog.catalog_sha256,
+        producer_directory=producer_directory,
+        rom_sha256=catalog.producer.rom_sha256,
+        context_catalog_sha256=catalog.producer.context_catalog_sha256,
+        registry_sha256=catalog.producer.registry_sha256,
+        registry_source_commit=catalog.producer.registry_source_commit,
+        rom_path=rom_path,
+    )
+
+    assert len(specs) == 8
+    assert {item.partition for item in specs} == {ScenarioPartition.DEVELOPMENT}
+    assert {item.producer_catalog_sha256 for item in specs} == {catalog.catalog_sha256}
+    assert tuple(item.state_path for item in specs) == tuple(
+        producer_directory.resolve() / item.state_filename for item in catalog.captures
+    )
+
+
+def test_typed_development_catalog_rejects_directory_or_registry_substitution(
+    tmp_path: Path,
+) -> None:
+    producer_directory = tmp_path / "development-captures"
+    producer_directory.mkdir()
+    wrong_directory = tmp_path / "wrong-captures"
+    wrong_directory.mkdir()
+    rom_directory = tmp_path / "roms"
+    rom_directory.mkdir()
+    rom_path = rom_directory / "red.gb"
+    rom_path.write_bytes(b"rom")
+    catalog = DEVELOPMENT_CATALOG_HELPERS["_catalog"]()
+    catalog = replace(
+        catalog,
+        producer=replace(
+            catalog.producer,
+            capture_directory_sha256=hashlib.sha256(
+                str(producer_directory.resolve()).encode("utf-8")
+            ).hexdigest(),
+        ),
+    )
+    catalog_path = tmp_path / "development-catalog.json"
+    catalog_path.write_bytes(catalog.canonical_bytes())
+    catalog_path.chmod(0o600)
+
+    for directory, registry_sha256 in (
+        (wrong_directory, catalog.producer.registry_sha256),
+        (producer_directory, "0" * 64),
+    ):
+        with pytest.raises(
+            SCRIPT["BattleOutcomeBatchFreezeError"],
+            match="producer provenance differs",
+        ):
+            SCRIPT["_typed_development_catalog_specs"](
+                catalog_path,
+                expected_catalog_sha256=catalog.catalog_sha256,
+                producer_directory=directory,
+                rom_sha256=catalog.producer.rom_sha256,
+                context_catalog_sha256=catalog.producer.context_catalog_sha256,
+                registry_sha256=registry_sha256,
+                registry_source_commit=catalog.producer.registry_source_commit,
+                rom_path=rom_path,
+            )
+
+
 def test_historical_development_catalog_is_a_strict_producer_membership() -> None:
     source_commit = "a" * 40
     document = {
@@ -171,9 +259,7 @@ def test_development_catalog_loader_rejects_digest_or_duplicate_producer(
     catalog.write_bytes(payload)
     digest = hashlib.sha256(payload).hexdigest()
 
-    assert SCRIPT["_development_catalogs"](
-        [[source_commit, str(catalog), digest]]
-    ) == {
+    assert SCRIPT["_development_catalogs"]([[source_commit, str(catalog), digest]]) == {
         source_commit: (
             digest,
             {"development-one": ("2" * 64, "development-root")},
@@ -183,9 +269,7 @@ def test_development_catalog_loader_rejects_digest_or_duplicate_producer(
         SCRIPT["BattleOutcomeBatchFreezeError"],
         match="digest differs",
     ):
-        SCRIPT["_development_catalogs"](
-            [[source_commit, str(catalog), "0" * 64]]
-        )
+        SCRIPT["_development_catalogs"]([[source_commit, str(catalog), "0" * 64]])
     with pytest.raises(
         SCRIPT["BattleOutcomeBatchFreezeError"],
         match="catalog repeats",
@@ -291,9 +375,7 @@ def test_private_freeze_refuses_project_and_rom_sibling_destinations(
     private_dir = tmp_path / "private"
     private_dir.mkdir()
     destination = private_dir / "freeze.json"
-    assert SCRIPT["_private_new_freeze"](destination, rom_path=rom) == (
-        destination.resolve()
-    )
+    assert SCRIPT["_private_new_freeze"](destination, rom_path=rom) == (destination.resolve())
 
 
 def test_freeze_writer_is_exclusive_private_and_durable(tmp_path: Path) -> None:
@@ -316,11 +398,14 @@ def test_private_reader_rejects_links_and_group_writable_inputs(
 ) -> None:
     source = tmp_path / "private.json"
     source.write_bytes(b'{"schema":"test"}\n')
-    assert SCRIPT["_read_bounded_private_file"](
-        source,
-        maximum_bytes=1024,
-        subject="test input",
-    ) == source.read_bytes()
+    assert (
+        SCRIPT["_read_bounded_private_file"](
+            source,
+            maximum_bytes=1024,
+            subject="test input",
+        )
+        == source.read_bytes()
+    )
 
     symlink = tmp_path / "linked.json"
     symlink.symlink_to(source)
@@ -376,11 +461,13 @@ def test_atomic_builder_holds_one_shared_claim_lease_through_publication(
     observed_pairs: tuple[tuple[str, str], ...] = ()
     written: tuple[Path, bytes] | None = None
     snapshot = SimpleNamespace(
-        availability_for=lambda logical, physical: logical
-        not in {
-            prefix_binding.logical_root_sha256,
-            forbidden_binding.logical_root_sha256,
-        }
+        availability_for=lambda logical, physical: (
+            logical
+            not in {
+                prefix_binding.logical_root_sha256,
+                forbidden_binding.logical_root_sha256,
+            }
+        )
     )
 
     class Lease:
