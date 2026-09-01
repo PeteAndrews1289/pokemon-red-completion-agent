@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: seven files become one trustworthy classroom
+
+The catalog test passed. All seven battle boundaries reopened without advancing the cartridge:
+five under the code that produced the first batch and two under the later completion code. The
+catalog preserved both histories instead of relabeling every file as if today's runner created it.
+It also proved seven unique worlds and capture identities, kept the four-Cave/three-Route split,
+and left both old failures outside the classroom.
+
+That cleared an important phase, but it did not manufacture learning. The score is still **19
+causal train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
+authority · 0 transfer**. The next gate connects these seven train inputs with eight frozen
+development inputs while distinguishing “code that captured this state” from “code that consumes
+it now.” Once that zero-action batch freezes cleanly, the model can begin the bounded decisions and
+fresh cartridge outcomes this work was preparing.
+
 ## September 1: the seven lesson boundaries finally exist
 
 Both new one-shot captures passed. Added to the five preserved snapshots, the project now has seven

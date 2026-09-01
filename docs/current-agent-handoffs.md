@@ -6,6 +6,23 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns catalog-aware 7+8 batch admission
+
+The canonical train catalog is terminal and authenticated: seven captures from two immutable
+producer commits, seven unique roots and capture IDs, **4 Cave + 3 Route 11**, with both historical
+failures excluded. It added no causal example or authority.
+
+Codex owns the next zero-effect engineering gate: make batch admission consume that catalog while
+keeping each capture producer separate from the current outcome-runner source, join exactly eight
+frozen development inputs, hostile-test the boundary, publish, require exact-main CI, and create
+one private freeze. Stop and reorient before any move selection, outcome, prediction or fit.
+
+External reviewers are optional at the subsequent model-design decision; they receive tracked code
+and path-free aggregate evidence only, never ROMs, saves, private catalogs or lineage identities.
+The mission is still reusable story and living-Pokedex completion across titles, not a more
+elaborate Red route. Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**.
+
 ## Current override: Codex owns publication and the one action-free catalog build
 
 The mixed-producer implementation is locally qualified. It reopens exactly five predecessor

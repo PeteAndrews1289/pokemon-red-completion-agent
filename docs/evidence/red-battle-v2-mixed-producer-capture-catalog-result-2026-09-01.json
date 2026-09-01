@@ -1,0 +1,79 @@
+{
+  "catalog": {
+    "authenticated_capture_count": 7,
+    "catalog_id": "red-battle-v2-mixed-producer-seven-inputs",
+    "catalog_sha256": "f375d413dd846d2efed46ac195fae4497a76cc8e05307527af5cb51a84ac99bf",
+    "failed_assignments_admitted": 0,
+    "historical_failed_assignment_count": 2,
+    "producer_commits_preserved": 2,
+    "producer_count": 2,
+    "status": "authenticated_action_free",
+    "unique_capture_id_count": 7,
+    "unique_source_root_count": 7,
+    "venue_counts": {
+      "digletts_cave": 4,
+      "route_11": 3
+    }
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples": 19,
+    "crystal_transfer_results": 0,
+    "model_fits": 6,
+    "unseen_comparisons": 4,
+    "verified_development_outcomes": 6
+  },
+  "next_gate": {
+    "controller_input_open": false,
+    "model_fitting_open": false,
+    "outcome_collection_open": false,
+    "required_action": "engineer and hostile-test catalog-aware batch admission over the seven train captures and eight frozen development inputs while preserving each capture producer separately from the current consumer source",
+    "status": "mixed_producer_catalog_complete_catalog_aware_batch_admission_required"
+  },
+  "producer_bindings": {
+    "completion": {
+      "exact_ci_attempt": 1,
+      "exact_ci_run": 33528613229,
+      "failed_assignment_count": 0,
+      "journal_sha256": "c6a099c18dc94e15060c2e7573f7cd67428200769e60c728b3b4fb5a9f1e591e",
+      "plan_sha256": "2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf",
+      "source_bundle_sha256": "cd8b8347b19c4421e3f5643da50d3fc16bf7e4cb433c08d382c69e42c7f3283e",
+      "source_commit": "c9547d27eba0d47fbb8a6adddb4d6859f41c2db9",
+      "successful_capture_count": 2
+    },
+    "predecessor": {
+      "exact_ci_attempt": 1,
+      "exact_ci_run": 33515692262,
+      "failed_assignment_count": 2,
+      "journal_sha256": "f1a500e6ace7d1dd394cad411dd47634eca2e23ff5f5d6c921de622d2aba9f1d",
+      "plan_sha256": "74bd6b2104eebb127860bacefe50e29cb29ba800a8b9635700fce8d454546010",
+      "source_bundle_sha256": "720c5649d7a28b5ea461a98ba7e1837830494a53536905bc5522d2e22d5fa4d0",
+      "source_commit": "24fe239cc756dde0ebaff6ddc607b452ce881a1e",
+      "successful_capture_count": 5
+    }
+  },
+  "protected_access": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "move_choices_executed": 0,
+    "outcomes_opened": 0,
+    "predictions_computed": 0,
+    "red_sealed_test_cases_opened": 0,
+    "root_claims_created": 0,
+    "teacher_choice_targets": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "builder_source_bundle_sha256": "69c8e49c9ee4492cdf68ff8d3bfd846dcb30f6847d159d0a9d7825e4be7cea33",
+    "catalog_file_mode": "0600",
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33539191358,
+    "published_source_commit": "36d9702f441d5914eda530cab6517e8d5591238b",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "schema": "pokemon.red-battle-v2-mixed-producer-capture-catalog-result.v1"
+}

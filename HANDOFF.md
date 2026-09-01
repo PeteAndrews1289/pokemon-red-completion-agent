@@ -14,6 +14,27 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: mixed-producer catalog passed; separate producer from consumer provenance next
+
+Exact main `36d9702f` passed CI `33539191358/1`. The one private action-free build then reopened
+all seven battle inputs under the commits that actually produced them and wrote a canonical
+mode-`0600` catalog with SHA-256
+`f375d413dd846d2efed46ac195fae4497a76cc8e05307527af5cb51a84ac99bf`.
+
+The terminal result is **7 captures · 2 producer commits · 7 unique source roots · 7 unique
+capture IDs · 4 Cave + 3 Route 11**. Both historical failures remain visible in the denominator and
+neither was admitted as a capture. The build used **0 controller actions · 0 emulator frames · 0
+move choices · 0 outcomes · 0 predictions · 0 fits · 0 teacher queries · 0 authority**. See the
+[path-free result](docs/evidence/red-battle-v2-mixed-producer-capture-catalog-result-2026-09-01.json).
+
+The next defect is now isolated: the existing batch freezer uses one source commit for both the
+historical capture producer and the current outcome consumer. Do not rewrite old producer commits
+to make that check pass. Build catalog-aware zero-effect admission over **7 train captures + 8
+frozen development inputs**, preserving per-capture producer provenance separately from the
+current runner source. Stop and reorient at that freeze before selecting any move or opening an
+outcome. Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 ·
+transfer 0**.
+
 ## 2026-09-01: mixed-producer catalog implementation is locally qualified
 
 The next action-free gate is implemented. Its private canonical catalog keeps separate predecessor
