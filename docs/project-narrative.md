@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the corrected census says the current classroom is empty
+
+The repair passed all 6,199 local tests, passed GitHub's exact clean-checkout run, and merged. Then
+the project asked the remaining state bank the corrected question exactly once. All seven attempted
+worlds were removed by their authenticated identities. Forty-seven other worlds reopened without a
+single frame or button press; eighteen are still unused, but none has a party member in the target
+pressure band with two attacks the learner is allowed to rank.
+
+That is a hard zero: no replacement roots and no qualifying venues. The project will not lower the
+two-choice rule, shrink the seven-example denominator, or put the old worlds back. The next chapter
+must create genuine action diversity through a bounded identity-preserving source-conditioning
+contract or genuinely fresh sources, prove aggregate capacity before input, and obtain review before
+another freeze. The score remains **19 train examples · 6 fits · 6 verified development outcomes ·
+4 unseen comparisons · 0 authority · 0 transfer**.
+
 ## September 1: seven attempts, zero lessons—and the guardrail earned its keep
 
 The published runner passed GitHub and consumed the seven frozen cards exactly once. None became a

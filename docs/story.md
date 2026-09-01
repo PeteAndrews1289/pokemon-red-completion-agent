@@ -7,7 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first seven cards taught the system what not to admit
+## Current checkpoint: the corrected classroom has no eligible students
+
+The repaired scanner passed locally and on GitHub, then counted the remaining worlds once without
+moving the game. It crossed out all seven attempted cards correctly. Forty-seven other cards
+remained, eighteen still unused—but not one had a Pokémon at the right challenge level with two
+real attacks for the learner to compare. The result is zero students across zero classrooms.
+
+We do not turn that zero into seven by lowering the standard. The next chapter must prepare genuine
+multi-choice battle states while preserving each world's identity, then prove seven independent
+students across two classrooms before pressing a button. No lesson, fit, authority, or transfer
+counter moved.
+
+## Previous checkpoint: the first seven cards taught the system what not to admit
 
 The lock opened once. Seven cards were crossed out, and none became a lesson. Three never produced
 a finished battle snapshot. Four produced saves that were exactly where they promised to be, but

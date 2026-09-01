@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the honest answer is zero
+
+**Visual:** Feed the exact old plan and terminal journal into the V5 scanner. Show **7/7 ATTEMPTED
+ROOTS EXCLUDED**, then pass 47 remaining cards under a frame counter frozen at **0**. Eighteen light
+up **UNUSED**, but every card fails **TWO SUPPORTED ATTACKS + LEVEL PRESSURE**. The capacity board
+lands on **0 ROOTS · 0 VENUES · REQUIRED 7 / 2**.
+
+**Voiceover:** “After fixing the roster, the answer got harsher: the current bank cannot supply this
+lesson at all. That is exactly what the test was supposed to reveal before we spent more emulator
+time.”
+
+**Visual:** Lock the old bank. Open a new design board labeled **IDENTITY-PRESERVING CONDITIONING OR
+FRESH SOURCES**, with gates for **REAL CHOICE · SEVEN ROOTS · TWO VENUES · REVIEW BEFORE INPUT**.
+
+**Voiceover:** “We will not lower the two-choice standard or reuse failed worlds. The next task is
+to create genuinely useful battle states, prove their capacity without pressing a button, and only
+then consider another capture batch.”
+
+**On-screen score:** `FRESH CAPACITY 0/7 · VENUES 0/2 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: zero out of seven, and why that is a useful failure
 
 **Visual:** Move all seven cards through the runner. Three turn **MATERIALIZER FAILED**. Four show a
