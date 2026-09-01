@@ -50,7 +50,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 BATTLE_OUTCOME_BATCH_ROSTER_SCHEMA = "pokemon-red-battle-outcome-batch-roster-v2"
-BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA = "pokemon-red-battle-outcome-batch-freeze-v2"
+BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA = "pokemon-red-battle-outcome-batch-freeze-v3"
 BATTLE_OUTCOME_PRESSURE_INVENTORY_SCHEMA = (
     "pokemon-red-battle-outcome-pressure-inventory-v2"
 )
@@ -95,6 +95,7 @@ _MAXIMUM_PRESSURE_INVENTORY_BYTES = 16 * 1024 * 1024
 _MAXIMUM_RETAINED_PREFIX_BYTES = 512 * 1024
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _EXCLUSION_REASONS = {
     "claim_unavailable",
     "level_gap_exceeded",
@@ -1653,10 +1654,27 @@ def parse_battle_outcome_batch_roster(payload: bytes) -> BattleOutcomeBatchRoste
 class BattleOutcomeBatchFreeze:
     """One durably publishable atomic inventory plus its selected roster."""
 
+    consumer_source_commit: str
+    consumer_source_bundle_sha256: str
+    capture_catalog_sha256s: tuple[str, ...]
     inventory: BattleOutcomePressureInventory
     roster: BattleOutcomeBatchRoster
 
     def __post_init__(self) -> None:
+        _require_commit(self.consumer_source_commit, "batch consumer source")
+        _require_sha256(
+            self.consumer_source_bundle_sha256,
+            "batch consumer source bundle",
+        )
+        if (
+            not isinstance(self.capture_catalog_sha256s, tuple)
+            or not self.capture_catalog_sha256s
+            or self.capture_catalog_sha256s
+            != tuple(sorted(set(self.capture_catalog_sha256s)))
+        ):
+            raise BattleOutcomeBatchError("batch capture catalogs differ")
+        for digest in self.capture_catalog_sha256s:
+            _require_sha256(digest, "batch capture catalog")
         if not isinstance(self.inventory, BattleOutcomePressureInventory):
             raise BattleOutcomeBatchError("batch freeze inventory is invalid")
         if not isinstance(self.roster, BattleOutcomeBatchRoster):
@@ -1681,6 +1699,9 @@ class BattleOutcomeBatchFreeze:
         return {
             "schema": BATTLE_OUTCOME_BATCH_FREEZE_SCHEMA,
             "status": "prospective_unexecuted",
+            "consumer_source_commit": self.consumer_source_commit,
+            "consumer_source_bundle_sha256": self.consumer_source_bundle_sha256,
+            "capture_catalog_sha256s": list(self.capture_catalog_sha256s),
             "inventory_sha256": self.inventory.inventory_sha256,
             "roster_sha256": self.roster.roster_sha256,
             "inventory": self.inventory.public_dict(),
@@ -1705,11 +1726,17 @@ class BattleOutcomeBatchFreeze:
 def build_battle_outcome_batch_freeze(
     *,
     roster_id: str,
+    consumer_source_commit: str,
+    consumer_source_bundle_sha256: str,
+    capture_catalog_sha256s: Sequence[str],
     inventory: BattleOutcomePressureInventory,
 ) -> BattleOutcomeBatchFreeze:
     """Build the single file published while the shared claim lease is held."""
 
     return BattleOutcomeBatchFreeze(
+        consumer_source_commit=consumer_source_commit,
+        consumer_source_bundle_sha256=consumer_source_bundle_sha256,
+        capture_catalog_sha256s=tuple(sorted(capture_catalog_sha256s)),
         inventory=inventory,
         roster=select_battle_outcome_batch_roster_from_inventory(
             roster_id=roster_id,
@@ -1736,6 +1763,9 @@ def parse_battle_outcome_batch_freeze(
     fields = {
         "schema",
         "status",
+        "consumer_source_commit",
+        "consumer_source_bundle_sha256",
+        "capture_catalog_sha256s",
         "inventory_sha256",
         "roster_sha256",
         "inventory",
@@ -1765,13 +1795,30 @@ def parse_battle_outcome_batch_freeze(
         or value.get("private_path_fields") != 0
     ):
         raise BattleOutcomeBatchError("batch freeze fields differ")
+    raw_catalogs = value.get("capture_catalog_sha256s")
+    if not isinstance(raw_catalogs, list):
+        raise BattleOutcomeBatchError("batch capture catalogs differ")
     inventory = parse_battle_outcome_pressure_inventory(
         _canonical_payload(value.get("inventory"))
     )
     roster = parse_battle_outcome_batch_roster(
         _canonical_payload(value.get("roster"))
     )
-    freeze = BattleOutcomeBatchFreeze(inventory=inventory, roster=roster)
+    freeze = BattleOutcomeBatchFreeze(
+        consumer_source_commit=_string(
+            value.get("consumer_source_commit"),
+            "batch consumer source",
+        ),
+        consumer_source_bundle_sha256=_string(
+            value.get("consumer_source_bundle_sha256"),
+            "batch consumer source bundle",
+        ),
+        capture_catalog_sha256s=tuple(
+            _string(item, "batch capture catalog") for item in raw_catalogs
+        ),
+        inventory=inventory,
+        roster=roster,
+    )
     if (
         value.get("inventory_sha256") != inventory.inventory_sha256
         or value.get("roster_sha256") != roster.roster_sha256
@@ -2444,6 +2491,12 @@ def _require_safe_id(value: object, subject: str) -> str:
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise BattleOutcomeBatchError(f"{subject} digest is invalid")
+    return value
+
+
+def _require_commit(value: object, subject: str) -> str:
+    if not isinstance(value, str) or _GIT_COMMIT.fullmatch(value) is None:
+        raise BattleOutcomeBatchError(f"{subject} commit is invalid")
     return value
 
 

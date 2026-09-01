@@ -9,6 +9,7 @@ from pokemon_red_completion.battle_scenario_capture import (
     BattleScenarioCaptureManifest,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
+    parse_battle_scenario_capture_manifest,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
@@ -71,6 +72,27 @@ def test_v2_manifest_binds_the_private_source_state_without_retaining_its_path(
     assert capture.manifest.source_state_sha256 == source_state_sha256
     assert capture.manifest.public_dict()["schema"].endswith("capture-v2")
     assert str(tmp_path) not in json.dumps(capture.manifest.public_dict())
+
+
+def test_manifest_parser_authenticates_metadata_without_opening_state() -> None:
+    payload = build_battle_scenario_capture_payload(
+        capture_id="battle-capture-v2",
+        root_lineage_id="red-lineage-v2",
+        partition=ScenarioPartition.DEVELOPMENT,
+        state_bytes=b"state remains unopened",
+        initial_observation_sha256="b" * 64,
+        source_commit="c" * 40,
+        expected_map=165,
+        expected_battle_state=1,
+        source_state_sha256="d" * 64,
+    )
+
+    manifest = parse_battle_scenario_capture_manifest(payload)
+
+    assert manifest.capture_id == "battle-capture-v2"
+    assert manifest.partition is ScenarioPartition.DEVELOPMENT
+    with pytest.raises(TypeError, match="must be bytes"):
+        parse_battle_scenario_capture_manifest("not bytes")  # type: ignore[arg-type]
 
 
 def test_opener_rejects_state_drift_noncanonical_manifest_and_symlinks(tmp_path) -> None:

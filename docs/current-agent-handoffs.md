@@ -6,6 +6,20 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns fresh partition-aware development supply
+
+Producer-aware 7+8 admission is implemented and hostile-tested. The metadata-only preflight found
+that the eight historical development manifests are authentic for their old producer catalogs but
+**0/8 compatible** with the current goal-manager experiment. They are retired as candidate inputs;
+the seven train captures remain valid.
+
+Codex owns publication and the next action-free gate: generalize the capture supply/catalog seam
+to preserve partition, inventory current development roots, and stop unless eight fresh
+independent battle boundaries pass. Antigravity or Claude may review the partition and
+generalization boundary after publication, but neither should rerun old captures or receive ROMs,
+saves, private paths, lineage identities or outcomes. Outcome collection, fitting, sealed Red,
+Crystal and authority remain closed.
+
 ## Current override: Codex owns catalog-aware 7+8 batch admission
 
 The canonical train catalog is terminal and authenticated: seven captures from two immutable

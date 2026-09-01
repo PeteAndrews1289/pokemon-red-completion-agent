@@ -453,6 +453,9 @@ def test_atomic_pressure_inventory_round_trips_and_is_the_only_roster_input() ->
 def test_atomic_batch_freeze_round_trips_inventory_and_selected_roster() -> None:
     freeze = build_battle_outcome_batch_freeze(
         roster_id="red-battle-outcome-batch-v2-freeze",
+        consumer_source_commit="f" * 40,
+        consumer_source_bundle_sha256="e" * 64,
+        capture_catalog_sha256s=("d" * 64,),
         inventory=_inventory(),
     )
 
@@ -460,6 +463,9 @@ def test_atomic_batch_freeze_round_trips_inventory_and_selected_roster() -> None
 
     assert isinstance(reopened, BattleOutcomeBatchFreeze)
     assert reopened == freeze
+    assert reopened.consumer_source_commit == "f" * 40
+    assert reopened.consumer_source_bundle_sha256 == "e" * 64
+    assert reopened.capture_catalog_sha256s == ("d" * 64,)
     assert reopened.public_dict()["protections"] == {
         "authority_promoted": False,
         "controller_actions": 0,
@@ -479,6 +485,9 @@ def test_batch_freeze_rejects_a_roster_not_derived_from_its_inventory() -> None:
     inventory = _inventory()
     freeze = build_battle_outcome_batch_freeze(
         roster_id="red-battle-outcome-batch-v2-freeze",
+        consumer_source_commit="f" * 40,
+        consumer_source_bundle_sha256="e" * 64,
+        capture_catalog_sha256s=("d" * 64,),
         inventory=inventory,
     )
     document = freeze.public_dict()
@@ -487,6 +496,38 @@ def test_batch_freeze_rejects_a_roster_not_derived_from_its_inventory() -> None:
     roster["roster_id"] = "red-battle-outcome-batch-v2-forged"
 
     with pytest.raises(BattleOutcomeBatchError, match="canonical JSON"):
+        parse_battle_outcome_batch_freeze(_canonical(document))
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    (
+        ("consumer_source_commit", "0" * 39, "consumer source commit"),
+        ("consumer_source_bundle_sha256", "0" * 63, "source bundle digest"),
+        ("capture_catalog_sha256s", [], "capture catalogs differ"),
+        (
+            "capture_catalog_sha256s",
+            ["d" * 64, "d" * 64],
+            "capture catalogs differ",
+        ),
+    ),
+)
+def test_batch_freeze_rejects_consumer_or_catalog_provenance_drift(
+    field: str,
+    value: object,
+    message: str,
+) -> None:
+    freeze = build_battle_outcome_batch_freeze(
+        roster_id="red-battle-outcome-batch-v2-freeze",
+        consumer_source_commit="f" * 40,
+        consumer_source_bundle_sha256="e" * 64,
+        capture_catalog_sha256s=("d" * 64,),
+        inventory=_inventory(),
+    )
+    document = freeze.public_dict()
+    document[field] = value
+
+    with pytest.raises(BattleOutcomeBatchError, match=message):
         parse_battle_outcome_batch_freeze(_canonical(document))
 
 

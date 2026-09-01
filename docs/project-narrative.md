@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the compatibility check prevents another wasted campaign
+
+The next gate exposed a subtle mismatch before gameplay. The seven train snapshots belong to the
+current experiment, but the eight development snapshots were created for older source catalogs.
+All eight are genuine historical files; none is a valid held-out example for this experiment.
+
+The important engineering result is reusable: capture producer history and today's consumer code
+are now separate fields, and a metadata-only preflight can reject an entire incompatible supply
+without opening a save, ROM, outcome or model. The honest score is **7 train inputs ready · 0/8
+compatible development inputs · actions 0 · authority 0**. The next classroom will be built from
+fresh current-catalog development roots through one partition-aware supply contract, not another
+one-off conversion.
+
 ## September 1: seven files become one trustworthy classroom
 
 The catalog test passed. All seven battle boundaries reopened without advancing the cartridge:
