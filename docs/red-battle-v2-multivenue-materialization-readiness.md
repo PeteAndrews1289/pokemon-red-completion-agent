@@ -115,6 +115,18 @@ captures, outcomes, predictions, fits, teachers, sealed cases, Crystal contexts 
 zero. Execution remains closed until the path-free result is published and the exact run binding is
 reviewed; the execution must stop at its two-entry terminal journal.
 
+## Additive terminal result
+
+Both completion assignments executed once and independently authenticated: **2 succeeded / 0
+failed**. Combined input supply is therefore seven captures across two producers, with four Cave
+and three Route 11 boundaries. No move choice, outcome, prediction, fit, teacher query, sealed case,
+Crystal context, authority or replay occurred.
+
+Outcome collection remains closed. The next action-free successor must create a canonical
+mixed-producer catalog that reauthenticates all five predecessor and two completion outputs, binds
+each to its actual producer commit and output hashes, proves seven unique source/capture identities,
+and excludes both failed predecessor assignments.
+
 ## Stop conditions
 
 Never retry or reclassify either terminal failure, remove it from the seven-item journal, or call

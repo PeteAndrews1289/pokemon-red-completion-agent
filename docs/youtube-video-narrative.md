@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: seven inputs, zero lessons scored
+
+**Visual:** The two sealed cards run once and both turn green. Join them with the preserved five:
+**7 AUTHENTICATED INPUTS · 4 CAVE · 3 ROUTE 11**. Keep the two historical red cards visible in a
+separate locked journal.
+
+**Voiceover:** “Both untouched captures passed. We finally have seven honest battle boundaries,
+and we got there without repainting either old failure.”
+
+**Visual:** Split the seven green cards into **PRODUCER A: 5** and **PRODUCER B: 2**, then draw a
+new empty box labeled **MIXED-PRODUCER CATALOG**. Keep **MOVES 0 · OUTCOMES 0 · FITS ADDED 0**.
+
+**Voiceover:** “But inputs are not lessons. Before the model chooses a move, one catalog has to
+prove all seven files belong together without erasing who produced each one.”
+
 ## New scene: the last two seats lock in
 
 **Visual:** Flash **53 / 54 ROOTS — FREEZE ABORTED** with the controller still disconnected. Expand

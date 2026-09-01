@@ -14,6 +14,25 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: seven capture inputs now authenticate; build the mixed-producer catalog
+
+The two-assignment additive plan executed once from exact source `c9547d27` under green CI
+`33528613229/1`. Its terminal journal is **2 succeeded / 0 failed / 0 pending / 0 started**. Journal
+SHA-256 is `c6a099c18dc94e15060c2e7573f7cd67428200769e60c728b3b4fb5a9f1e591e`; receipt
+SHA-256 is `880a5002746a79afd9671d630fabba92df71749eae98a08850ffdb744ce705f2`.
+Neither assignment retried.
+
+The scenario supply is now seven independently authenticated inputs: five retained predecessor
+captures and two completion captures, split **4 Cave + 3 Route 11**. The two older failed attempts
+remain failures outside that capture set. No move was selected, no outcome opened, and no
+prediction, fit, teacher, sealed Red, Crystal, authority or replay occurred. Counters remain
+**train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+Do not point an outcome runner at one directory and silently omit the other producer. The next
+zero-action gate is a canonical mixed-producer catalog that independently authenticates all seven
+outputs, retains both producer commits/directories, proves unique source and capture identities,
+and excludes the historical failures. Reorient before selecting a move.
+
 ## 2026-09-01: additive five-plus-two plan is frozen; execution remains closed
 
 PR 142 merged as exact main `c9547d27`; PR CI `33526793786/1` and exact-main CI

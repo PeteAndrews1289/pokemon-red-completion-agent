@@ -6,6 +6,17 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the mixed-producer seven-capture catalog
+
+The additive terminal is **2/2 succeeded**, so five predecessor captures plus two completion
+captures now supply seven authenticated battle inputs across two producers. Historical failures
+remain failed. No move or outcome has been opened.
+
+Codex owns publication of the terminal receipt and the next action-free catalog engineering gate.
+The catalog must independently reopen every output with its own producer provenance, prove seven
+unique roots and capture IDs, and exclude failed journal entries. Stop and reorient before outcome
+collection or fitting. Reviewers need only tracked code and path-free aggregate evidence.
+
 ## Current override: Codex owns the frozen two-assignment terminal
 
 Exact main `c9547d27` passed CI `33528613229/1`. The additive freeze retained five predecessor

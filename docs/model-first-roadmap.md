@@ -11,6 +11,18 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: seven authenticated inputs across two producers
+
+The additive two-assignment terminal completed **2/2** from exact source `c9547d27` under CI
+`33528613229/1`. Combined with five retained predecessor captures, the battle classroom now has
+seven inputs across two venues and two producer generations. The two historical failures remain
+failed and were neither retried nor reclassified.
+
+Next build an action-free mixed-producer catalog. It must reopen every state and manifest with the
+correct producer commit, preserve unique root/capture identities, exclude failures, and publish
+only path-free aggregate evidence. Stop for reorientation after catalog qualification. Only then
+may a selected-action outcome campaign and seventh descriptive fit be designed.
+
 ## Current checkpoint: two untouched completion captures are frozen
 
 PR 142 merged as exact main `c9547d27`, and exact-main CI `33528613229/1` passed. The zero-effect

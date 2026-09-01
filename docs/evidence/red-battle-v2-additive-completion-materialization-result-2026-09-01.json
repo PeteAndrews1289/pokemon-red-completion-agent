@@ -1,0 +1,63 @@
+{
+  "combined_capture_catalog": {
+    "authenticated_capture_count": 7,
+    "producer_count": 2,
+    "retained_predecessor_capture_count": 5,
+    "terminal_historical_failure_count": 2,
+    "venue_counts": {
+      "digletts_cave": 4,
+      "route_11": 3
+    }
+  },
+  "completion_materialization": {
+    "declared_capture_count": 2,
+    "failure_count": 0,
+    "failure_reason_counts": {},
+    "journal_sha256": "c6a099c18dc94e15060c2e7573f7cd67428200769e60c728b3b4fb5a9f1e591e",
+    "pending_count": 0,
+    "plan_sha256": "2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf",
+    "receipt_sha256": "880a5002746a79afd9671d630fabba92df71749eae98a08850ffdb744ce705f2",
+    "started_count": 0,
+    "status": "complete",
+    "success_count": 2,
+    "successful_output_bindings_sha256": "e1d43dc21be8b4ff16586803a131247110793af34563daadf412d051aa6fa8f6"
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "next_gate": {
+    "controller_input_open": false,
+    "model_fitting_open": false,
+    "outcome_collection_open": false,
+    "required_action": "build and qualify an action-free mixed-producer catalog that independently authenticates all seven captures",
+    "status": "capture_inputs_complete_mixed_producer_catalog_required"
+  },
+  "protected_access": {
+    "completion_assignments_attempted": 2,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "move_choices_executed": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33528613229,
+    "executable_source_bundle_sha256": "cd8b8347b19c4421e3f5643da50d3fc16bf7e4cb433c08d382c69e42c7f3283e",
+    "materializer_sha256": "c720b63a584e4f9e9ad40e86fbc40232538dd2addd114429bb551f10dc7f6947",
+    "published_source_commit": "c9547d27eba0d47fbb8a6adddb4d6859f41c2db9",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runtime_identity_sha256": "38d3d36a6859959d7860380b5a6748d84314038885b4f6a8ca50a1a675b53189"
+  },
+  "schema": "pokemon.red-battle-v2-additive-completion-materialization-result.v1"
+}

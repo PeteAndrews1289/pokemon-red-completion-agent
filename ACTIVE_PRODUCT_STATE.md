@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the zero-effect additive freeze, then execute its two untouched assignments exactly once from source c9547d27 under CI 33528613229/1. Reorient at the terminal journal; outcomes remain closed until a mixed-producer seven-capture catalog authenticates.
+- Next decision: Publish the terminal two-of-two capture result, then build and qualify an action-free mixed-producer catalog over all seven authenticated inputs. Reorient before move selection; outcome collection and fitting remain closed until the catalog passes.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Execute the two frozen untouched assignments once from their exact green source and determine whether both independently authenticate. Preserve every terminal and stop before outcomes; success only creates the seven-capture input catalog boundary. |
+| Cheapest falsifier | Build an action-free mixed-producer catalog that independently reopens the five predecessor captures and two completion captures, preserves both producer identities, and proves exactly seven unique source roots and capture IDs. Failure keeps outcome collection closed. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-additive-completion-freeze** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-additive-completion-freeze-result-2026-09-01.json)
+**2026-09-01-battle-v2-additive-completion-materialization-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-additive-completion-materialization-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | No learning output was created. Five capture inputs remain authenticated, two historical failures remain terminal, and two new inputs are only frozen: causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The freeze authenticated existing inputs and wrote one private plan with zero frames, actions, captures, outcomes, predictions, fits, teachers, sealed cases, Crystal contexts, replay, or gameplay authority. |
+| Learning output | Two new authenticated capture boundaries were created, bringing the input supply to seven, but captures are not causal examples. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. Both frozen captures authenticated, but no move was selected, no outcome opened, no prediction or fit ran, and no gameplay authority changed. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | Exactly two untouched capture assignments are frozen but unexecuted. Outcome collection remains closed even if they succeed because a separate mixed-producer catalog must authenticate the five predecessor outputs and two completion outputs without flattening provenance. |
-| Decision | Publish the path-free freeze receipt. Then run the two-assignment completion plan once from exact green source c9547d27 with started-before-input accounting, preserve every terminal without retry, and reorient before building the mixed-producer catalog. |
-| Next session | Publish the path-free freeze result, independently verify the exact run binding, execute the two frozen assignments once from source c9547d27 under CI 33528613229/1, and reorient at the terminal journal before outcome-catalog engineering. |
-| Next falsifier | Run the exact frozen two-assignment plan once. Each assignment must either authenticate one untouched variable-cardinality battle capture or remain permanently failed. Do not retry, adaptively substitute, select a move, or open an outcome. |
-| Stop condition | Never retry, reclassify, hide, overwrite, or adaptively replace a terminal. Stop if the frozen plan, exact source/CI, retained output, attempted-root exclusion, variable-cardinality, claim, or output binding differs. Stop after the two-assignment terminal journal; no outcomes or fit in the capture session. |
+| Blocker | Seven capture inputs now exist across two producers, but there is no canonical mixed-producer catalog. Treating the two directories as one batch would erase source-commit and output provenance, so outcome collection remains closed. |
+| Decision | Publish the terminal two-of-two result, then engineer and adversarially qualify an action-free mixed-producer catalog that independently reopens all seven captures and preserves each producer binding. Reorient before any move selection or outcome collection. |
+| Next session | Publish the two-of-two terminal result, implement and hostile-test the action-free mixed-producer seven-capture catalog, update the handoff and narrative, and reorient before any selected move, outcome, or fit. |
+| Next falsifier | Prove at zero actions that a canonical catalog can independently authenticate five predecessor outputs plus two completion outputs, with seven unique source roots and capture identities, two preserved producer commits, and no historical failure admitted as a capture. |
+| Stop condition | Never retry or reinterpret either historical failure or either completed assignment. Stop if any catalog proposal flattens producer provenance, admits duplicate source/capture identity, opens a move outcome while catalog authentication is incomplete, or treats seven capture inputs as seven learning examples. |
 
 ### Stop conditions
 

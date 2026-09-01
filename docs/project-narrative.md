@@ -1,5 +1,17 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the seven lesson boundaries finally exist
+
+Both new one-shot captures passed. Added to the five preserved snapshots, the project now has seven
+independently authenticated battle boundaries—four in the Cave and three on Route 11. The old red
+cards stay red; success came from two untouched worlds, not from replaying failure until it looked
+clean.
+
+This still is not seven learning examples. No move has been chosen and no cartridge outcome has
+been scored. The next problem is quieter but essential: build one catalog across two producer runs
+without erasing which source and code created each file. Only after that zero-action proof can the
+model begin making the seven decisions.
+
 ## September 1: two new lesson seats are sealed
 
 The additive freeze found three untouched worlds eligible for the remaining two seats and sealed
