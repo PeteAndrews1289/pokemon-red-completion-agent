@@ -6,19 +6,23 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: PP restoration failed; Codex owns one aggregate venue-allocation falsifier
+## Current override: allocation passed; Codex owns the V2 freeze/materializer gate
 
 Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
 only one resource-conditioning-eligible root at one venue. PP-only conditioning therefore cannot
 supply the required seven roots across two venues and must not execute.
 
-Codex's next bounded task is a title-neutral root-to-venue allocation contract with a Red adapter
-over existing measured venues. It must remain complete-bank, aggregate, action-free, zero-frame,
-and outcome-blind. A root counts only once, only at a venue reached by an existing live transition,
-and only with the exact two-action and full encounter-pressure rules. Failure at 7/2 closes all
-current-bank adaptations and sends the project to genuinely fresh bounded scenario generation.
-Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
-0**.
+Published source `98544be8` passed CI `33487956767/1`. Its sole V7 census found ten unused roots
+eligible at both Route 11 and Diglett's Cave and an exact seven-root allocation split four Cave and
+three Route 11. It advanced zero frames and created no learning or authority effect.
+
+Codex now owns the V2 outcome-blind private freezer and selected-venue materializer seam. The
+freezer must derive the complete inventory, use the exact title-neutral allocator, bind seven
+unique roots/venues/party slots and new private outputs, and canonically reopen without outcomes.
+The materializer must rederive the selected edge from the authenticated source, reuse only existing
+Red transition callbacks, and preserve party identity and started-before-input no-retry behavior.
+Publish and obtain exact-head green CI before freezing or executing. Counters remain **train 19 ·
+fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
 
 ## Previous override: Codex owned publication and one action-free conditioning census
 

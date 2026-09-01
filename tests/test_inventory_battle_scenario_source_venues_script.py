@@ -248,6 +248,9 @@ def test_inventory_observes_map_and_availability_without_advancing(
     assert observed.materialization_eligible is True
     assert observed.refreshable_party_slot_available is True
     assert observed.resource_conditioning_eligible is True
+    assert observed.reachable_venue_ids == ("digletts_cave", "route_11")
+    assert observed.eligible_venue_ids == ("digletts_cave", "route_11")
+    assert observed.reachable_venue_allocation_eligible is True
 
 
 def test_inventory_requires_two_learner_supported_attacks() -> None:
@@ -276,6 +279,31 @@ def test_inventory_requires_two_learner_supported_attacks() -> None:
         two_attacks,
         "route_11",
     )
+
+
+def test_inventory_filters_each_reachable_venue_by_its_measured_level_band() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(27,),
+        party_hp=(40,),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 2, 0, 0),),
+        party_pp=((10, 10, 0, 0),),
+        battle_state=0,
+    )
+
+    eligible = INVENTORY["_supported_reachable_venue_ids"](
+        raw,
+        ("digletts_cave", "pokemon_mansion_1f", "route_11"),
+    )
+
+    assert eligible == ("digletts_cave", "pokemon_mansion_1f")
 
 
 def test_inventory_counts_two_depleted_attacks_only_after_resource_restoration() -> None:

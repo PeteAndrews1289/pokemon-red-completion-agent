@@ -11,6 +11,46 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: exact allocation passes at 10 eligible roots / 2 venues
+
+Published source `98544be8` passed GitHub CI `33487956767/1`. The one V7 census then reopened the
+complete post-exclusion bank at zero actions and frames. Ten claim-available unattempted roots have
+at least one currently usable party member at both Route 11 and Diglett's Cave under the exact
+learner move mask and each venue's full measured level pressure. The exact capped matcher found the
+required seven-root assignment: **4 Cave + 3 Route 11**. See the
+[path-free result](evidence/red-battle-v2-reachable-venue-allocation-capacity-result-2026-09-01.json).
+
+This clears prospective supply only. The next order is:
+
+1. implement a V2 outcome-blind private freezer over the complete ten-root inventory;
+2. canonically bind seven unique roots, their selected reachable venues, mechanics-exact party
+   slots, immutable source/ROM/output provenance, and no-retry identities;
+3. extend the materializer only enough to accept a plan-bound venue and rederive that exact
+   root-to-venue edge from the source before controller input;
+4. reuse the existing started-before-input crash journal and independent zero-frame capture reopen;
+5. hostile-test, publish, and obtain exact-head green CI before freezing or executing anything;
+6. freeze once without outcomes, then require a separate execution decision before creating the
+   seven battle boundaries.
+
+No learning counter moved: **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**.
+
+## Current engineering checkpoint: exact reachable-venue allocation
+
+The local successor implements the final retained-bank falsifier. A title-neutral exact allocator
+matches opaque independent roots to semantic venues under a per-venue cap; the Red adapter exposes
+only direct measured venues and Route 11/Diglett's Cave transitions already implemented behind the
+live Vermilion predicate. Every possible root/venue edge independently rechecks the measured level
+band and the learner's current two-action mechanics rule. Flexible roots therefore cannot be
+miscounted by a one-map/one-venue classifier or by a greedy assignment.
+
+This remains action-free engineering. The next order is the full local gate, publication,
+exact-head green CI, and one aggregate zero-frame V7 census. Pass requires seven independent
+unattempted roots, at least two venues, and no more than six roots at one venue. Failure retires all
+further adaptation of the unchanged retained bank and moves directly to genuinely fresh bounded
+scenario generation. See the
+[readiness contract](red-battle-v2-reachable-venue-allocation-readiness.md).
+
 ## Current checkpoint: resource restoration failed at 1 root / 1 venue
 
 Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The published V6 census then reopened the

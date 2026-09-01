@@ -1,5 +1,44 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: seven honest seats finally exist
+
+**Visual:** The bipartite matcher lights up ten eligible world cards, each connected to Route 11
+and Diglett's Cave. Seven lines lock in: **4 CAVE · 3 ROUTE 11**. Keep the frame counter at **0** and
+the controller cable disconnected.
+
+**Voiceover:** “The parties were not empty—they were assigned to the wrong classroom. Ten unused
+worlds can support real two-attack decisions in either of two measured environments, and an exact
+matcher found the seven independent lessons we need.”
+
+**Visual:** Move those seven lines behind a new safe labeled **PRIVATE FREEZE**, with locks for
+**ROOT · VENUE · PARTY SLOT · OUTPUT · PROVENANCE · NO RETRY**. Do not show card identities.
+
+**Voiceover:** “This is capacity, not training. Next we seal the seven choices before an encounter
+exists and make the live materializer prove each route again. Only then can the lessons be
+captured.”
+
+**On-screen score:** `SUPPLY 7/7 · VENUES 2/2 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
+## New scene: the final old-save matching test
+
+**Visual:** Draw saved worlds on the left and the three measured classrooms—Route 11, Diglett's
+Cave, and Pokémon Mansion—on the right. Let each world connect only to places its existing field
+abilities can reach. Run an exact matching animation with locks labeled **ONE USE PER WORLD · TWO
+REAL ATTACKS · MEASURED LEVEL BAND · SIX MAX PER VENUE**.
+
+**Voiceover:** “A save's current map is not necessarily its only classroom. Red now supplies every
+venue its proven travel code can reach, while a game-neutral matcher looks for seven independent
+lessons across two environments. It cannot invent a route or reuse a world.”
+
+**Visual:** Keep the controller cable disconnected and hide all card identities behind one
+aggregate meter. Split the ending into **7/2 → FREEZE A NEW CAPTURE DESIGN** and **LESS THAN 7/2 →
+RETIRE THE OLD BANK, GENERATE FRESH SCENARIOS**.
+
+**Voiceover:** “This is the final cheap test of the old saves. Either they form an honest class, or
+we stop patching them and build fresh bounded scenarios designed for learning.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the PP dial barely moves the board
 
 **Visual:** Turn the **CURRENT PP → FULL PP** dial. Only one card reaches the combined **ROUTE ·
