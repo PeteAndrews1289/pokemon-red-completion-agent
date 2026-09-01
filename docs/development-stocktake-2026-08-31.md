@@ -3,6 +3,26 @@
 This is a planning snapshot. `MISSION.md`, `NORTH_STAR.md`, and
 `ACTIVE_PRODUCT_STATE.md` remain authoritative.
 
+## September 1 update: Celadon relocation was falsified action-free
+
+PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The source classifier and live
+materializer now share the same transition predicate: a Celadon root counts as Route 11 supply
+only at the exact Center boundary with the Thunder Badge and a living Fly holder. A published V3
+whole-bank census then read all 54 catalog train roots with zero controller actions and zero
+emulator frames. None of the four claim-available Celadon roots qualified.
+
+Capacity therefore remains false: 16 available roots resolve to `pokemon_mansion_1f`, zero to a
+second venue, and the roster requires seven new captures across at least two venues with no more
+than six from one venue. No capture, claim, outcome, prediction, fit, teacher query, authority,
+sealed Red case, Crystal context, or replay was opened. Evidence:
+[Celadon readiness result](evidence/red-battle-v2-celadon-relocation-readiness-result-2026-09-01.json).
+
+The next cheapest falsifier is one published aggregate readiness census across all nine available
+unsupported city roots. It will report map-level Fly, cartridge-composed ground-route, and full
+Route 11 transition counts without identifying individual roots. A qualifying reusable map class
+may be exposed; otherwise source supply must be redesigned. Learning counters remain **19 train ·
+6 fits · 6 verified development · 4 unseen · 0 authority · 0 transfer**.
+
 ## Latest checkpoint: the whole bank is real, but the adapter exposes one venue
 
 The train materializer no longer accepts a caller-declared partition, lineage, source digest, or

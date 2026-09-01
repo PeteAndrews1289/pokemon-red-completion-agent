@@ -3,6 +3,21 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Celadon battle relocation falsification — Codex adjudication 2026-09-01
+
+PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The source classifier and
+materializer now share the exact existing Red transition predicate, so Celadon counts as Route 11
+supply only with the measured Center boundary, Thunder Badge, and living Fly capability. A
+published whole-bank V3 census then found zero qualifying roots among the four available Celadon
+roots. Capacity remains false with all 16 materializable roots assigned to the Mansion venue.
+
+Codex accepts this as a falsification, not an invitation to diagnose a selected save or broaden a
+hand route. The next cheapest gate is one aggregate census of the existing Fly, cartridge-composed
+ground-route, and complete Vermilion-transition predicates over all nine available unsupported
+city roots. The census exposes map-level counts only. No controller action, emulator frame, root
+claim, capture, prediction, outcome, fit, teacher query, sealed Red case, Crystal context,
+authority, or replay occurred. No external review was requested for this development checkpoint.
+
 ## Whole-bank battle venue falsification — Codex adjudication 2026-09-01
 
 The catalog-derived materializer merged as main `2de2bd1a`, with exact-main CI

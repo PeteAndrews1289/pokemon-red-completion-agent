@@ -11,7 +11,31 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: raw roots exist; a second venue adapter does not
+## Current checkpoint: Celadon is not the second venue
+
+PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The new adapter does not assume that
+a Celadon save can Fly: it shares the live executor's exact boundary, badge, living-party, and
+field-move transition guard with the whole-bank inventory. The published V3 census read all 54
+catalog train roots and advanced zero frames. All four available Celadon-Pokecenter roots failed
+that complete transition predicate, so the second-venue count remains zero and materialization
+stays closed.
+
+The next order is deliberately aggregate and action-free:
+
+1. publish map-level counts for existing Fly readiness, cartridge-composed ground-route readiness,
+   and complete Vermilion/Route 11 transition readiness across all nine unsupported available
+   city roots;
+2. if exactly supported, expose one reusable map class to the already measured Route 11 venue;
+3. rerun complete venue capacity and require seven fresh roots, at least two venues, and no more
+   than six roots from one venue;
+4. if no unsupported class qualifies, stop and redesign source supply rather than patching a
+   selected save;
+5. only a passed complete census may open a separate materialization freeze.
+
+This checkpoint adds no learning output. Current evidence remains **causal train 19 · model fits
+6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+## Previous checkpoint: raw roots exist; a second venue adapter does not
 
 PR 125 merged as exact main `2de2bd1a`, and CI `33459343207/1` passed. The whole-bank inventory
 hashed 152 retained state files, recovered all 54 unique catalog train states, and observed all 54

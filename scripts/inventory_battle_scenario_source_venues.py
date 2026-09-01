@@ -57,6 +57,11 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_clean_source,
     require_published_source,
 )
+from pokemon_red_completion.red_training_transitions import (  # noqa: E402
+    red_training_fly_available,
+    red_training_ground_transition_available,
+    red_vermilion_training_transition_available,
+)
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
@@ -87,6 +92,9 @@ class _ObservedTrainRoot:
     map_label: str
     venue_id: str | None
     relocation_required: bool
+    fly_relocation_ready: bool
+    ground_relocation_ready: bool
+    route_11_relocation_ready: bool
     claim_available: bool
     safe_nonbattle: bool
     living_party_member_available: bool
@@ -302,11 +310,20 @@ def _observe_root(
     map_label = _map_label(raw.map_id)
     safe_nonbattle = raw.battle_state == 0
     living = any(hp > 0 for hp in (raw.party_hp or ()))
+    last_blackout_map = reader.read_last_blackout_map()
+    current_map_tileset = emulator.read_u8(RamAddress.CURRENT_MAP_TILESET)
+    fly_relocation_ready = red_training_fly_available(raw)
+    ground_relocation_ready = red_training_ground_transition_available(raw)
+    route_11_relocation_ready = red_vermilion_training_transition_available(
+        raw,
+        last_blackout_map,
+        current_map_tileset,
+    )
     try:
         source_venue = battle_scenario_source_venue(
             raw,
-            last_blackout_map=reader.read_last_blackout_map(),
-            current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
+            last_blackout_map=last_blackout_map,
+            current_map_tileset=current_map_tileset,
         )
         venue_id = source_venue.venue_id
         relocation_required = source_venue.relocation_required
@@ -321,6 +338,9 @@ def _observe_root(
         map_label=map_label,
         venue_id=venue_id,
         relocation_required=relocation_required,
+        fly_relocation_ready=fly_relocation_ready,
+        ground_relocation_ready=ground_relocation_ready,
+        route_11_relocation_ready=route_11_relocation_ready,
         claim_available=available,
         safe_nonbattle=safe_nonbattle,
         living_party_member_available=living,
@@ -333,6 +353,29 @@ def _venue_capacity(venue_counts: Counter[str]) -> bool:
         len(positive) >= MINIMUM_DISTINCT_VENUES
         and sum(min(count, MAXIMUM_SINGLE_BUCKET_CONTEXTS) for count in positive)
         >= FRESH_TRAIN_CONTEXTS
+    )
+
+
+def _available_unsupported_capability_counts(
+    observed: tuple[_ObservedTrainRoot, ...],
+    capability: str,
+) -> Counter[str]:
+    if capability not in {
+        "fly_relocation_ready",
+        "ground_relocation_ready",
+        "route_11_relocation_ready",
+    }:
+        raise BattleScenarioSourceInventoryError(
+            "unsupported relocation capability inventory"
+        )
+    return Counter(
+        item.map_label
+        for item in observed
+        if item.claim_available
+        and item.safe_nonbattle
+        and item.living_party_member_available
+        and item.venue_id is None
+        and bool(getattr(item, capability))
     )
 
 
@@ -398,10 +441,22 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         for item in observed
         if item.materialization_eligible and item.relocation_required
     )
+    unsupported_fly_ready_map_counts = _available_unsupported_capability_counts(
+        observed,
+        "fly_relocation_ready",
+    )
+    unsupported_ground_ready_map_counts = _available_unsupported_capability_counts(
+        observed,
+        "ground_relocation_ready",
+    )
+    unsupported_route_11_ready_map_counts = _available_unsupported_capability_counts(
+        observed,
+        "route_11_relocation_ready",
+    )
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v3",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v4",
         "status": (
             "prospective_fresh_train_venue_capacity_passed"
             if _venue_capacity(venue_counts)
@@ -427,6 +482,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "available_unsupported_map_counts": dict(sorted(available_unsupported_map_counts.items())),
         "materialization_eligible_relocation_map_counts": dict(
             sorted(eligible_relocation_map_counts.items())
+        ),
+        "available_unsupported_fly_ready_map_counts": dict(
+            sorted(unsupported_fly_ready_map_counts.items())
+        ),
+        "available_unsupported_ground_ready_map_counts": dict(
+            sorted(unsupported_ground_ready_map_counts.items())
+        ),
+        "available_unsupported_route_11_ready_map_counts": dict(
+            sorted(unsupported_route_11_ready_map_counts.items())
         ),
         "minimum_fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
         "minimum_distinct_venues": MINIMUM_DISTINCT_VENUES,

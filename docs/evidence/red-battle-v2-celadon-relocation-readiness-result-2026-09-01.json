@@ -1,0 +1,64 @@
+{
+  "capacity": {
+    "available_unsupported_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1,
+      "lavender_pokecenter": 2
+    },
+    "catalog_train_roots": 54,
+    "claim_available_train_roots": 25,
+    "materialization_eligible_relocation_map_counts": {
+      "cinnabar_pokecenter": 11
+    },
+    "materialization_eligible_train_roots": 16,
+    "materialization_eligible_venue_counts": {
+      "pokemon_mansion_1f": 16
+    },
+    "maximum_single_venue_contexts": 6,
+    "minimum_distinct_venues": 2,
+    "required_fresh_train_contexts": 7
+  },
+  "decision": {
+    "battle_capture_materialization_authorized": false,
+    "celadon_route_11_ready_roots": 0,
+    "next_gate": "publish and run one aggregate action-free readiness census over every available unsupported map using the existing Fly, ground-route, and full Vermilion-transition predicates",
+    "prospective_fresh_train_venue_capacity": false,
+    "reason": "All four claim-available Celadon-Pokecenter roots remained unsupported after the classifier required the exact existing bounded transition contract. No Celadon root exposed the complete living-party, badge, field-move, and boundary capability needed to reach Route 11.",
+    "status": "stopped_celadon_relocation_unavailable"
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "red_rom_opened_read_only": true,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red-battle-v2-celadon-relocation-readiness-result.v1",
+  "source": {
+    "pull_request": 127,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run": 33463086281,
+    "published_inventory_source_commit": "3186f9f8d352a74cf53eb615d8eda77ff27b2463"
+  },
+  "upstream": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038"
+  }
+}
