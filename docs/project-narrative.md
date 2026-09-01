@@ -15,6 +15,13 @@ provenance, and interruption semantics before materialization. The learning scor
 **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
 authority · 0 transfer**.
 
+The next lock is now built locally. It reads the complete eligible bank, selects both Route 11
+roots plus five Mansion roots, and chooses party members only when they have real move choice and
+stay inside the declared encounter-level pressure band. The exact roots, slots, private output
+names, source/runtime/ROM identities, and no-retry rule become one canonical private plan under the
+same lease that observed availability. It still has not pressed a button; publication and green CI
+come before the one real freeze.
+
 ## August 31: the registrar passed, but there are only four new lessons
 
 The atomic freezer passed locally, on its pull request, and again on exact `main`. The project then

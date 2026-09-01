@@ -17,6 +17,21 @@ provenance, and recovery bindings. No controller action, emulator frame, claim, 
 prediction, fit, teacher query, sealed Red case, Crystal context, authority, or replay occurred.
 No external review was requested for this development checkpoint.
 
+## Seven-capture freezer local qualification — Codex adjudication 2026-09-01
+
+The local freezer now derives the complete eligible inventory and an exact five-Mansion,
+two-Route-11 assignment without accepting selected roots, venues, lineages, partitions, or party
+slots from the caller. It requires two usable moves and a party level within the frozen maximum
+gap of every measured venue level, including rare encounters. Availability, selection, new-output
+checks, and durable publication share one claim-registry lease; canonical reopen rederives the
+assignment rather than trusting serialized selection.
+
+Eighteen focused freezer tests and the 101-test source/materializer/protocol slice pass, with clean
+Ruff and mypy. This is local qualification only. The freezer has not run against the private bank,
+and no claim, controller input, frame, capture, outcome, prediction, fit, teacher query, sealed Red
+case, Crystal context, authority, or replay was created. Publish and obtain green CI before the
+single private freeze.
+
 ## Celadon battle relocation falsification — Codex adjudication 2026-09-01
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The source classifier and

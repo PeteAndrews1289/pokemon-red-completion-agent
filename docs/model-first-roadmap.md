@@ -35,6 +35,13 @@ The next order is:
 Capacity is not training. Current evidence remains **causal train 19 · model fits 6 · verified
 development 6 · unseen 4 · authority 0 · transfer 0**.
 
+Local engineering has now implemented that next freezer. It inventories the whole bank under one
+shared claim lease, admits only party slots with two usable moves and full measured-band level-gap
+safety, derives five Mansion plus both Route 11 assignments, binds a private destination digest,
+and durably reopens the canonical plan. Eighteen focused tests plus the surrounding 101-test battle
+source/protocol slice pass with clean lint and typing. It remains uninvoked and must be published
+and green before the one private freeze.
+
 ## Current checkpoint: Celadon is not the second venue
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The new adapter does not assume that
