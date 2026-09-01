@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: seven names sealed before the encounters exist
+
+**Visual:** The freezer opens just long enough to show seven face-down cards: five stamped
+**MANSION** and two stamped **LAVENDER → ROUTE 11**. A counter beside the unused bank reads
+**ELIGIBLE 14 + 2 · SELECTED 5 + 2**. Seal the cards with a single plan hash while the controller
+cable remains disconnected.
+
+**Voiceover:** “The classroom is no longer hypothetical. We froze the exact seven source worlds
+and party members before generating a wild Pokémon or seeing a battle menu. Both second-venue
+roots are included, so the model cannot learn a Mansion-only shortcut.”
+
+**Visual:** Place an empty ledger beside the cards with columns **PENDING · STARTED · SUCCEEDED ·
+FAILED**. Draw a one-way arrow out of pending and put a large **NO RETRY** wall behind started.
+
+**Voiceover:** “The next gate is recovery, not Pokémon strategy. Before any button press, a card
+must be durably marked started. A blackout can resume untouched cards, but it can never replay a
+started one. Only then will we create the seven battle decision snapshots.”
+
+**On-screen score:** `CAPTURE PLAN 7/7 · CAPTURES 0 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the second classroom opens
 
 **Visual:** A Lavender save card enters a scanner labeled **CARTRIDGE GROUND ROUTE**, follows a

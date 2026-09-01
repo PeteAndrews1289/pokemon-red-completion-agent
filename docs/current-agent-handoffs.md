@@ -6,7 +6,7 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the seven-capture freeze
+## Current override: Codex owns the crash-safe seven-capture runner
 
 PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The action-free V4 census found 18
 claim-available materializable catalog roots: 16 Mansion and two independently authenticated
@@ -22,11 +22,13 @@ claim/interruption recovery without turning materialization failures into labels
 CI before any controller input. Counters remain **train 19 · fits 6 · verified development 6 ·
 unseen 4 · authority 0 · transfer 0**.
 
-The freezer is now implemented locally. Its canonical private plan rederives a five-Mansion,
-two-Route-11 assignment from the complete eligible inventory, prospectively binds party slots with
-two usable moves and full measured-band level-gap safety, and publishes under the same shared claim
-lease used for availability. The next action is publication and green CI, then exactly one private
-freeze. No capture has been created and the execution boundary has not opened.
+The freezer was published and passed CI. The private freeze then succeeded once from exact source
+`06d39db2` under green CI `33469950231/1`. It selected five Mansion and both Route 11 roots from
+14+2 strictly eligible candidates, with zero controller or learning effects. Codex's immediate job
+is now the crash-safe consumer: durable started-before-input journal transitions, permanent
+non-retry of every started or failed assignment, pending-only resume, exact source/output
+reauthentication, and aggregate path-free receipts. No capture materialization is open until that
+runner is published and green.
 
 ## Current override: Celadon failed; Codex owns aggregate relocation readiness
 

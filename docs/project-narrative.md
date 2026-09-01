@@ -1,6 +1,6 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## September 1: a second battle classroom passes the census
+## September 1: seven students are named before the lesson exists
 
 The whole-bank scan finally crossed the curriculum-supply gate. Eighteen unused authenticated
 roots can be turned into battle boundaries: sixteen in Pokémon Mansion and two independent
@@ -15,12 +15,22 @@ provenance, and interruption semantics before materialization. The learning scor
 **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
 authority · 0 transfer**.
 
-The next lock is now built locally. It reads the complete eligible bank, selects both Route 11
+The next lock was built and published. It reads the complete eligible bank, selects both Route 11
 roots plus five Mansion roots, and chooses party members only when they have real move choice and
 stay inside the declared encounter-level pressure band. The exact roots, slots, private output
 names, source/runtime/ROM identities, and no-retry rule become one canonical private plan under the
-same lease that observed availability. It still has not pressed a button; publication and green CI
-come before the one real freeze.
+same lease that observed availability.
+
+The freeze is now real. From the complete bank it retained fourteen Mansion candidates and both
+Lavender-to-Route-11 candidates under the strict move-choice and encounter-pressure rules, then
+wrote five Mansion seats and both Route 11 seats into one owner-private plan. Seven source worlds,
+three party positions, and three species are fixed before a wild encounter exists.
+
+The controller cable is still disconnected. The next system is deliberately less glamorous and
+more important: a journal that crosses out an assignment before input, never gives a started or
+failed card a second life, resumes untouched cards after a blackout, and reopens every successful
+capture against the plan. Only after that runner is published and green do the seven encounter
+boundaries get created.
 
 ## August 31: the registrar passed, but there are only four new lessons
 

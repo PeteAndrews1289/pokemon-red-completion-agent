@@ -7,7 +7,7 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the second classroom is real
+## Current checkpoint: the seven names are sealed
 
 The full catalog now proves that seven new battle lessons can be built without pretending copies
 are independent. Sixteen available roots can become Mansion encounters, and two different
@@ -15,10 +15,14 @@ Lavender roots can follow a route composed from the cartridge to Route 11. The e
 one venue at six, leaving eight usable roots across two environments for seven required seats.
 
 Nothing was played to obtain that answer. No controller input, outcome, model prediction, fit,
-teacher instruction, or Crystal state was opened. The next chapter is to write the seven names,
-party slots, private destinations, provenance, and blackout rules into one immutable plan before
-creating any encounter. The scoreboard therefore remains **19 lessons · 6 fits · 6 verified held
-outcomes · 0 authority · 0 transfer**.
+teacher instruction, or Crystal state was opened. The seven names are now written: five come from
+Mansion worlds and two come from Lavender worlds that can walk to Route 11. The private plan was
+sealed without pressing a button and cannot swap a student after seeing the battle.
+
+Before those lessons can be photographed, the project must add a blackout ledger: cross out each
+card before touching the controller, never reuse a crossed-out card, and continue only cards that
+were untouched when the lights went out. The scoreboard therefore remains **19 lessons · 6 fits ·
+6 verified held outcomes · 0 authority · 0 transfer**.
 
 ## Current checkpoint: the classroom is secure, but three lessons are missing
 

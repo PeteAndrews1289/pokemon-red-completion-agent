@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Seven-capture private freeze pass — Codex adjudication 2026-09-01
+
+PR 131 merged as `8d1b169f` after CI `33469950231/1` passed. The freezer was then invoked once from
+its exact green branch commit `06d39db2`. It authenticated all 54 catalog train roots, observed 25
+as claim-available, retained 14 Mansion and two Route 11 candidates under the strict usable-move
+and full-band level-gap contract, and froze five plus two independent assignments.
+
+Codex accepts the freeze as immutable input, not learning or controller authorization. The next
+gate is a durable exact-plan runner that marks an assignment started before any input, never retries
+started or failed work, resumes only pending work, and independently reopens successful outputs.
+The freeze created zero inputs, frames, claims, captures, outcomes, predictions, fits, teacher
+queries, sealed Red cases, Crystal contexts, authority, or replays. No external review was
+requested for this development checkpoint.
+
 ## Lavender battle capacity pass — Codex adjudication 2026-09-01
 
 PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The Lavender source class is admitted
