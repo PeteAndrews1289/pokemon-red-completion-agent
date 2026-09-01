@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: stop bad data before it becomes an experiment
+
+**Visual:** Feed seven train cards into a green catalog reader, then feed eight development cards
+into a second metadata-only reader. Show **8 AUTHENTIC HISTORICAL FILES**, followed by **0 / 8
+CURRENT EXPERIMENT MATCHES**. Keep the cartridge, controller and model visibly disconnected.
+
+**Voiceover:** “The files were real, but they answered an older experiment. Instead of spending
+hours running them and discovering the mismatch afterward, the new preflight rejected all eight
+from metadata alone.”
+
+**Visual:** Split **CAPTURE PRODUCER** from **CURRENT CONSUMER**, then replace a pile of dated
+adapters with one **PARTITION-AWARE SUPPLY CONTRACT**. Display **FRAMES 0 · OUTCOMES 0 · FITS 0**.
+
+**Voiceover:** “That failure improved the system. Historical producers keep their identity,
+today's code keeps its own, and the next eight held-out lessons must come from fresh roots in the
+current experiment.”
+
 ## New scene: the seven-input classroom authenticates
 
 **Visual:** Feed five green cards through **PRODUCER A** and two through **PRODUCER B** into one

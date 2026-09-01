@@ -170,6 +170,18 @@ def open_battle_scenario_capture(
     )
 
 
+def parse_battle_scenario_capture_manifest(
+    payload: bytes,
+) -> BattleScenarioCaptureManifest:
+    """Strictly parse one canonical manifest without opening its state payload."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("battle scenario capture manifest must be bytes")
+    if not payload or len(payload) > _MAX_MANIFEST_BYTES:
+        raise BattleScenarioCaptureError("capture manifest size is invalid")
+    return _parse_manifest(payload)
+
+
 def _read_owned_regular_file(path: Path, *, maximum_bytes: int) -> bytes:
     descriptor = -1
     flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)

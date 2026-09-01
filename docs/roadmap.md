@@ -3,6 +3,19 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 1 reusable admission and supply result:** The battle batch contract now preserves
+> historical capture producers separately from the current consumer, and a metadata-only preflight
+> can reject incompatible supply without opening states, ROMs, outcomes or models. The canonical
+> train set remains **7 captures / 2 producers**. The eight proposed historical development
+> manifests are authentic for their original catalogs but **0/8 compatible** with the current
+> goal-manager source catalog; development deficit is eight and all gameplay/model effects are
+> zero.
+>
+> Publish and require exact-main green CI. Next create one partition-aware capture supply contract,
+> inventory the current development partition action-free, and freeze fresh development work only
+> if at least eight independent eligible roots pass. Never retry or relabel the old eight. Outcome
+> collection and fitting remain closed until a zero-effect **7 train + 8 development** freeze exists.
+
 > **August 31 powered-lineage supply implementation:** Exact main `0ceece13` preserves the
 > published 103-lineage deficit. The bounded successor is locally implemented: **3 train + 8
 > development + 1 contingency worlds**, all prospectively assigned before input and terminally

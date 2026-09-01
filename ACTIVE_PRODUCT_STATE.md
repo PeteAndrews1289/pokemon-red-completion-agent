@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build and qualify catalog-aware zero-effect batch admission over seven authenticated train captures and eight frozen development inputs. Preserve producer and consumer provenance separately; outcome collection and fitting remain closed until that freeze passes and a new reorientation is published.
+- Next decision: Publish the qualified producer-aware adapter, then build and falsify one partition-aware current-catalog development-supply plan. Outcome collection and fitting remain closed until eight fresh compatible development captures and the 7+8 zero-effect freeze exist.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Prove at zero controller actions that catalog-aware batch admission can reopen all seven train captures under their individual producer commits, join them with eight frozen development inputs, and preserve current consumer-source provenance separately. Failure keeps outcome collection closed. |
+| Cheapest falsifier | At zero controller actions, inventory the current goal-manager development partition and prove whether it can supply eight fresh compatible battle boundaries through a partition-aware producer catalog. Failure keeps outcome collection closed and retires that supply path without replay. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-mixed-producer-catalog-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-mixed-producer-capture-catalog-result-2026-09-01.json)
+**2026-09-01-battle-v2-producer-aware-admission-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-development-capture-supply-audit-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | A canonical action-free catalog independently reopened all seven train captures, preserved two producer commits, proved seven unique roots and capture identities, retained the 4/3 venue split, and admitted neither historical failure. Captures are still inputs rather than causal examples, so counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The seven-input catalog authenticated action-free, but no move was selected, no outcome opened, no prediction or fit ran, and no gameplay authority changed. |
+| Learning output | The reusable metadata-only audit proved that all seven train captures retain two historical producers while all eight proposed development manifests are incompatible with the current experiment. This is a supply falsification, not a causal example: counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The producer-aware adapter and metadata-only audit selected no move, opened no state or outcome, computed no prediction, fit no model, and changed no gameplay authority. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The current batch freezer treats one source commit as both the capture producer and the present outcome consumer. That is invalid for seven authenticated train captures created by two historical producers, so outcome collection remains closed until those identities are modeled separately. |
-| Decision | Engineer and hostile-test catalog-aware batch admission over seven train captures plus eight frozen development inputs. Preserve each capture's producer binding separately from the current runner source; publish a zero-effect freeze before any selected move or outcome. |
-| Next session | Implement and hostile-test catalog-aware batch admission for seven train captures plus eight frozen development inputs, publish a zero-effect freeze, and reorient before any move selection, outcome, prediction, or fit. |
-| Next falsifier | Prove at zero actions that one frozen 7-train/8-development batch can consume producer-specific capture provenance without rewriting old commits as the current consumer commit, omitting a capture, admitting a historical failure, or opening an outcome. |
-| Stop condition | Never rematerialize, retry, or reinterpret an existing capture or historical failure. Stop if batch admission rewrites any producer identity as the current consumer source, loses the 7/8 partition boundary, opens an outcome before a zero-effect freeze passes, or treats capture inputs as learning examples. |
+| Blocker | The reusable adapter is qualified, but all eight historical development manifests belong to older source catalogs: 0/8 join the current goal-manager catalog. The valid seven-input train catalog therefore has an eight-context development deficit. |
+| Decision | Publish the reusable producer/consumer provenance split and retire the historical development files as inputs to this experiment. Next build one partition-aware supply contract that can inventory and catalog fresh compatible development captures without another one-off adapter. |
+| Next session | Generalize the capture catalog/materialization boundary to encode train or development partition, inventory the current development roots without gameplay, and freeze only a fresh eight-capture development plan if the complete support and independence gate passes. |
+| Next falsifier | Prove action-free whether the current goal-manager development partition contains at least eight unused compatible roots that can become battle captures under one partition-aware catalog, with explicit venue, lineage and producer coverage. |
+| Stop condition | Never reuse the eight incompatible historical development manifests, rematerialize an existing capture, or reinterpret a historical failure. Stop before controller input if fewer than eight fresh independent development roots pass the current source, venue, party and claim gates. |
 
 ### Stop conditions
 

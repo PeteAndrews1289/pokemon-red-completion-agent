@@ -11,6 +11,28 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: reusable admission passed; development supply is 0/8
+
+The batch contract now separates the current outcome consumer from each capture's immutable
+producer and catalog. A reusable metadata-only preflight can reject an incompatible set without a
+state file, ROM, emulator, model, teacher or controller. The seven train captures preserve both
+producer generations. All eight proposed historical development manifests are valid members of
+their original catalogs, but **0/8** join the current goal-manager source catalog.
+
+That is a terminal supply result for those files, not permission to reinterpret them. Next:
+
+1. publish the producer-aware admission contract and require exact-main green CI;
+2. make the capture catalog/materialization boundary partition-aware rather than train-specific;
+3. inventory the current goal-manager development partition at zero controller actions;
+4. require at least eight fresh independent eligible roots with explicit venue, party, source and
+   claim support before freezing a development plan;
+5. materialize each authorized assignment at most once and retain every failure;
+6. build the zero-effect **7 train + 8 development** freeze;
+7. only then open bounded selected-action outcomes and the seventh descriptive train-only fit.
+
+The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
+4 · authority 0 · transfer 0**.
+
 ## Current engineering checkpoint: seven-input catalog passed; qualify the 7+8 consumer boundary
 
 Exact main `36d9702f` passed CI `33539191358/1`, and the one action-free catalog build authenticated

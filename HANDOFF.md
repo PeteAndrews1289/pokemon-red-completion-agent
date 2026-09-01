@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-31 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-09-01 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -13,6 +13,27 @@ horizon and Crystal-ready definition),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-09-01: producer-aware admission is reusable; fresh development supply is required
+
+The batch contract now records the current consumer source separately from every capture's
+historical producer commit and catalog. The freezer consumes the canonical seven-input train
+catalog, preserves both producer generations, authenticates development manifests against their
+own producer catalogs, and refuses to open a state when its metadata cannot join the current
+experiment. This removes the former single-commit assumption instead of adding another dated
+special case.
+
+A new metadata-only supply audit has no state, ROM, model, teacher or controller input. Applied to
+the proposed historical development set, it found **8/8 valid producer members but 0/8 current
+source-catalog matches**. The result is therefore **7 train ready · 0 of 8 development compatible ·
+development deficit 8**, with zero frames, actions, outcomes, predictions, fits, claims or
+authority. See the [path-free result](docs/evidence/red-battle-v2-development-capture-supply-audit-2026-09-01.json).
+
+Do not repeat this audit manually, force the eight old files through, or weaken the source join.
+Publish the reusable adapter and require exact-main green CI. Then generalize the capture supply
+contract to carry partition explicitly, inventory the current goal-manager development roots at
+zero actions, and freeze a fresh eight-capture development plan only if support and independence
+pass. Outcome collection remains closed until that supply and a zero-effect 7+8 freeze exist.
 
 ## 2026-09-01: mixed-producer catalog passed; separate producer from consumer provenance next
 
