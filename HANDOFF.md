@@ -8571,8 +8571,9 @@ controller input occurred, and no capture, outcome, prediction, fit, authority, 
 Crystal context, or replay was created. The board remains **causal train 19 · model fits 6 · verified
 development 6 · unseen comparisons 4 · authority 0 · transfer 0**.
 
-Immediate order: finish repository-wide verification; publish the engineering gate; require exact-
-head green CI; then freeze exactly one private V2 plan at zero effects and stop for an aggregate
+Local qualification passed 74 focused and 6,246 repository-wide tests plus every static, privacy,
+documentation and source-bound registry gate. Immediate order: publish the engineering gate;
+require exact-head green CI; then freeze exactly one private V2 plan at zero effects and stop for an aggregate
 receipt review. Do not execute the plan in the same decision. Stop on inventory drift, exhausted-
 root reuse, selected-edge mismatch, output collision, private leakage, or any attempt to replace or
 retry a started assignment.

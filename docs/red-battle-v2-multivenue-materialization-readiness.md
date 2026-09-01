@@ -2,6 +2,11 @@
 
 Status: implementation locally qualified; no private plan frozen and no controller input executed.
 
+Local qualification passed 74 focused tests and 6,246 repository-wide tests, with one intentional
+skip, three integration deselections and one expected xfail. Ruff, the configured 330-source type
+gate, documentation, privacy/public-artifact checks, active-product focus, and exact regeneration
+of all three source-bound registries passed.
+
 ## Mission fit
 
 The product is a transferable agent that completes stories and builds living Pokedexes across

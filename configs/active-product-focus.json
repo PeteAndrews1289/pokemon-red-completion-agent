@@ -34,7 +34,7 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "None. V2 implementation and tests opened no private plan or ROM campaign and created no claim, capture, choice, outcome, prediction, fit, teacher query, sealed case, Crystal context, authority, or replay.",
-        "blocker": "Scenario supply and local execution engineering are no longer the immediate blockers. The V2 freezer, exhausted-root check, selected-venue reauthentication, and crash journal are locally qualified. Publication and exact-head green CI are required before one zero-effect private freeze; no authentic V2 capture or outcome exists yet.",
+        "blocker": "Scenario supply, local execution engineering, and broad verification are complete. The V2 freezer, exhausted-root check, selected-venue reauthentication, crash journal, 6246-test suite, static gates, and source-bound registries pass. Publication and exact-head green CI are required before one zero-effect private freeze; no authentic V2 capture or outcome exists yet.",
         "decision": "Accept the locally qualified V2 execution gate. Preserve consumed V1 history, publish the separate multi-venue path, and after exact-head green CI freeze once from the complete bank. Stop after the aggregate receipt; do not combine freeze, execution, outcome collection, or fitting into one decision.",
         "evidence": {
           "kind": "qualification",
@@ -43,7 +43,7 @@
         },
         "learning_output": "None. The V7 census proved supply and V2 locally qualifies the execution boundary, but neither created a battle capture or learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero.",
         "next_falsifier": "From published exact-head green source and at zero frames, derive and reopen one canonical private seven-assignment plan from the complete successor inventory. Require seven unique unattempted roots, at least two venues, at most six per venue, mechanics-exact slots, exact exhausted evidence, immutable provenance and destinations, no outcomes, and no public identity. Failure closes execution before input.",
-        "next_session_goal": "Finish broad verification, publish the V2 engineering gate, require exact-head green CI, then run exactly one outcome-blind private freeze and stop for aggregate receipt review. Do not execute the plan, inspect selected roots or outcomes, fit, open sealed Red or Crystal, grant authority, or replay the game.",
+        "next_session_goal": "Publish the fully locally qualified V2 engineering gate, require exact-head green CI, then run exactly one outcome-blind private freeze and stop for aggregate receipt review. Do not execute the plan, inspect selected roots or outcomes, fit, open sealed Red or Crystal, grant authority, or replay the game.",
         "product_alignment": "Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion.",
         "session_id": "2026-09-01-battle-v2-multivenue-materialization-readiness",
         "status": "active",
