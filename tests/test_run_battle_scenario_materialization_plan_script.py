@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import runpy
+import subprocess
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -114,6 +116,48 @@ def test_controlled_failure_is_terminal_and_never_requeued(
     assert observed == [STARTED, FAILED]
     assert result.entries[0].status == FAILED
     assert result.entries[0].reason_code == "materializer_process_failed"
+
+
+def test_child_failure_stage_survives_without_stderr_or_path_details(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    plan, _ = _journal()
+    assignment = plan.assignments[0]
+    globals_ = SCRIPT["_materialize_assignment"].__globals__
+    payload = (
+        b'{"move_choices_executed":0,"private_path_fields":0,'
+        b'"reason_code":"source_relocation_failed","root_claims_created":0,'
+        b'"schema":"pokemon-private-battle-scenario-materialization-failure-v1",'
+        b'"status":"failed_closed","teacher_queries":0}'
+    )
+    monkeypatch.setitem(
+        globals_,
+        "subprocess",
+        SimpleNamespace(
+            run=lambda *args, **kwargs: subprocess.CompletedProcess(
+                args=[], returncode=1, stdout=payload, stderr=b"/private/secret"
+            )
+        ),
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="source_relocation_failed",
+    ):
+        SCRIPT["_materialize_assignment"](
+            assignment,
+            source_bytes=b"source",
+            capture_directory=tmp_path,
+            context_catalog=tmp_path / "catalog.json",
+            registry_source_commit="a" * 40,
+            expected_registry_sha256="b" * 64,
+            expected_context_catalog_sha256="c" * 64,
+            rom_path=tmp_path / "red.gb",
+            maximum_encounter_steps=1,
+            watch=False,
+            speed=None,
+        )
 
 
 def test_success_requires_independent_output_and_receipt_authentication(

@@ -3,6 +3,41 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Seven-capture terminal zero — Codex adjudication 2026-09-01
+
+PR 133 merged as `bc7d7076` after CI `33473101194/1` passed. The one frozen plan then consumed all
+seven assignments without retry: zero succeeded, seven failed, zero pending, zero started. Two
+Route 11 and one Mansion calls ended as materializer-process failures. Four Mansion calls produced
+complete state/manifest pairs but were rejected by independent reopen.
+
+Codex accepts the rejection. All four complete pairs match their planned map, active slot, species,
+level, menu, and observation at zero frames, but each has only one supported learner action. The
+freezer's PP-positive move count did not implement the learner's stricter damaging,
+non-Selfdestruct action mask. This is a semantic eligibility failure, not permission to weaken the
+runner or relabel the captures. The exact plan and all seven attempted roots are retired.
+
+Next gate: correct the prospective move-support predicate, add structured failure-stage retention,
+and run a zero-input post-exclusion capacity census. No move was chosen, no teacher queried, no
+outcome or prediction opened, no model fit, authority, sealed Red case, Crystal context, or replay
+occurred. No external review was requested for this execution result.
+
+## Post-zero eligibility and census repair — Codex local adjudication 2026-09-01
+
+Codex implemented the smallest repair implied by the zero result. One shared catalog-backed rule
+now defines supported Red battle moves for learner preparation and prospective source selection.
+The successor census authenticates the exact exhausted plan and journal, excludes every source
+whose assignment left pending, and requires the same level band and two-action surface before a
+root counts. Structured child failure receipts preserve only a bounded stage code and zero-effect
+fields; private paths and raw stderr are discarded.
+
+Seventy-three focused tests pass with clean lint and typing, and regenerated source-bound
+registries now bind the changed executable surface. This remains local engineering. It creates no
+capture, move, outcome, prediction, fit, teacher query, sealed Red case, Crystal context, authority,
+or replay. Publication, exact-head CI, and one action-free census remain before any successor can be
+considered. No external review was requested because no design freeze or authority decision is open.
+The path-free [local qualification](evidence/red-battle-v2-post-zero-repair-local-qualification-2026-09-01.json)
+records the executable hashes and zero-effect boundary.
+
 ## Crash-safe materialization runner local pass — Codex adjudication 2026-09-01
 
 Codex accepts the runner as locally qualified. Its only attempt is consumed by a durable

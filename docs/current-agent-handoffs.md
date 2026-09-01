@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication, exact CI, and one frozen-plan execution
+## Current override: Codex owns the zero-result repair and fresh-capacity proof
+
+PR 133 merged as `bc7d7076` after exact-head CI `33473101194/1` passed. The frozen plan then ran
+once from `c0099a9d`. Its terminal denominator is **0 succeeded / 7 failed / 0 pending / 0
+started**. Four complete Mansion capture pairs reopened faithfully but exposed only one
+model-supported damaging move; two Route 11 and one Mansion materializer processes failed. No retry
+is allowed, and all seven attempted source roots are excluded from any successor.
+
+Codex's immediate job is to repair prospective eligibility to use the learner's exact
+PP-positive, damaging, non-Selfdestruct support rule; retain structured path-free failure stages;
+and publish an action-free census over the remaining roots. A successor needs seven fresh
+independent sources across at least two venues after the six-per-venue cap. If that fails, build new
+source or venue supply rather than replaying the exhausted plan. No materialization, move choice,
+outcome, fit, sealed Red, Crystal, authority, or replay is open. Counters remain **train 19 · fits 6
+· verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+The local repair is now implemented. Freeze, independent reopen, and capacity inventory share the
+same mechanics-backed move rule. The census must ingest the exact private plan and exact monotonic
+journal, excludes every assignment that ever left pending, and counts only party slots that also
+meet the frozen encounter-pressure band. Materializer subprocess failures retain a sanitized stage
+instead of collapsing to an opaque process failure. Focused tests, lint, and typing pass. Codex must
+publish this unchanged repair, require exact-head green CI, and only then run the zero-controller
+successor census. Claude and Antigravity have no pending implementation role at this local gate.
+
+## Previous override: Codex owned publication, exact CI, and one frozen-plan execution
 
 The crash-safe runner is locally complete. It writes and fsyncs `started` before any controller
 input, never retries started or failed assignments, resumes only pending assignments, and can

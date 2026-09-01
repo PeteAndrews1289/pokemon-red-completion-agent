@@ -1,0 +1,72 @@
+{
+  "decision": {
+    "accepted_battle_captures": 0,
+    "exact_plan_retry_allowed": false,
+    "next_gate": "repair prospective supported-move eligibility and failure localization, then prove fresh independent multi-venue source capacity before freezing any successor",
+    "status": "complete_denominator_zero_qualified_captures"
+  },
+  "diagnosis": {
+    "complete_capture_pairs_reopened": 4,
+    "complete_pairs_matching_frozen_map_slot_species_level_menu_and_observation": 4,
+    "complete_pairs_with_at_least_two_model_supported_moves": 0,
+    "model_supported_move_count_per_complete_pair": {
+      "1": 4
+    },
+    "reason": "The freezer counted every PP-positive move, while the battle learner admits only PP-positive damaging, non-Selfdestruct moves. All four complete states therefore exposed a single supported action and were correctly rejected by the runner.",
+    "zero_frame_reopens": 4
+  },
+  "execution": {
+    "declared_capture_count": 7,
+    "failure_reason_counts": {
+      "materialized_capture_state_differs": 4,
+      "materializer_process_failed": 3
+    },
+    "journal_sha256": "2e2b6d474a518e8d1a2efc6342bee802f734c874156eab57ef1264094df9f5d2",
+    "manifest_files_created": 4,
+    "plan_sha256": "1eabadcf3d57646d4edf8a78c2d526f085c0ad0d190f48b9f1c3990d4cd80d1c",
+    "receipt_file_sha256": "9f49d19e0049db0b20596b789f7785a1f78ab23aef8927558c8a7242a15b1052",
+    "receipt_sha256": "e0b9ef606d8a703a19fd201657e4a0c01e58d64f8020a36282cd681a1dd50e94",
+    "state_files_created": 4,
+    "status_counts": {
+      "failed": 7,
+      "pending": 0,
+      "started": 0,
+      "succeeded": 0
+    },
+    "venue_failure_counts": {
+      "pokemon_mansion_1f:materialized_capture_state_differs": 4,
+      "pokemon_mansion_1f:materializer_process_failed": 1,
+      "route_11:materializer_process_failed": 2
+    }
+  },
+  "learning_effects": {
+    "accepted_causal_train_examples_added": 0,
+    "authority_promoted": false,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "model_predictions": 0,
+    "move_choices_executed": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "provenance": {
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success",
+    "exact_ci_run": 33473101194,
+    "materializer_sha256": "62cb9d80ed2ccdac7a5de220ddfa0e51ac24e066d900fe5db7e574cb6348add8",
+    "merged_main_commit": "bc7d70765c77f752a09fc3c628ca7fc0409f2ad1",
+    "pull_request": 133,
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runner_source_commit": "c0099a9d7e710948acccafe6e1984da876624b10",
+    "source_bundle_sha256": "a5993f5310096a373cf3550fe33a03f132f46beac58b2c94ca19c71458ba7780"
+  },
+  "recovery": {
+    "failed_assignments_retained": 7,
+    "pending_assignments_remaining": 0,
+    "retries_performed": 0,
+    "retry_allowed": false
+  },
+  "schema": "pokemon.red-battle-v2-materialization-run-result.v1"
+}

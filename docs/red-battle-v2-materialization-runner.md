@@ -1,6 +1,7 @@
 # Red battle V2 materialization runner
 
-Status: locally qualified on 2026-09-01; publication and exact-head CI are required before use.
+Status: historical runner, executed once and exhausted on 2026-09-01. The exact plan and all seven
+attempted source roots are permanently non-retryable.
 
 This runner consumes the one private seven-capture plan frozen under plan SHA-256
 `1eabadcf3d57646d4edf8a78c2d526f085c0ad0d190f48b9f1c3990d4cd80d1c`. It cannot select a
@@ -71,3 +72,17 @@ Local qualification passed 64 focused runner/freezer/materializer checks, 113 su
 checks, clean public-artifact/document/regeneration checks, Ruff, mypy across 326 source files, and
 the complete non-integration suite: 6,192 passed, one skipped, three deselected, one expected xfail,
 and one benign SDL warning.
+
+## Post-run repair
+
+The terminal 0/7 result exposed two prospective-observation defects rather than a reason to weaken
+the verifier. The freezer and learner now share one mechanics-backed support predicate: a candidate
+move must have PP, deal damage, and not use the Selfdestruct effect. The successor capacity census
+also applies the same move and encounter-level rules, and it cryptographically joins this plan to
+its monotonic journal before excluding every source whose assignment ever left `pending`.
+
+Future materializer failures use a small path-free stage vocabulary—source authentication, source
+reauthentication, source relocation, encounter materialization, output publication, preflight, or
+internal failure. The parent accepts a stage only from a complete fail-closed child receipt; stderr
+and exception text never enter the public journal. This improves diagnosis without exposing private
+paths or reopening an attempt.

@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: seven attempts, zero lessons—and the guardrail earned its keep
+
+The published runner passed GitHub and consumed the seven frozen cards exactly once. None became a
+training lesson. Three materializers failed before a retained capture. Four Mansion saves survived
+and reopened at the exact planned Pokémon, level, menu, and observation, but each offered the model
+only one supported attack.
+
+That exposed a precise bug upstream. The freezer treated every move with PP as a choice; the learner
+intentionally admits only damaging, non-Selfdestruct moves. Status moves made the roster look richer
+than the actual decision surface. The independent verifier refused to turn those files into fake
+choice data. The seven cards are now retired, not replayed.
+
+Next, the project aligns roster eligibility with the learner, records better failure stages, and
+counts fresh unattempted roots across multiple venues before another freeze. The learning score is
+unchanged: **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons ·
+0 authority · 0 transfer**.
+
+The repair now makes the classroom and student ask the same question. A mechanics-backed predicate
+is reused when preparing a learner decision, selecting a party member, and counting replacement
+capacity. The replacement census also opens the old plan and journal together and subtracts every
+world that was ever attempted; a renamed file or copied save cannot restore it. Future failures say
+which bounded stage failed without publishing a private path. This is still engineering, not a new
+lesson: the code must pass clean GitHub CI before one zero-controller census decides whether enough
+fresh multi-venue supply remains.
+
 ## September 1: make a blackout cost evidence, not integrity
 
 The seven source worlds were fixed, but an execution could still become scientifically ambiguous

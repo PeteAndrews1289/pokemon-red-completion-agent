@@ -16,11 +16,14 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.red_battle_scenario import (
     prepare_red_battle_scenario,
     project_red_battle_turn_outcome,
+    red_battle_move_is_model_supported,
+    red_battle_supported_move_count,
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 
 TAIL_WHIP_MOVE_ID = 0x27
 MEGA_PUNCH_MOVE_ID = 0x05
+SELFDESTRUCT_MOVE_ID = 0x78
 
 
 class Reader:
@@ -115,6 +118,17 @@ def test_red_preparation_masks_status_moves_from_first_outcome_family() -> None:
     assert prepared.supported_candidate_mask == (True, False, True, True)
     assert prepared.features.legal_mask == prepared.supported_candidate_mask
     assert len(prepared.initial_observation_sha256) == 64
+
+
+def test_prospective_support_rule_matches_status_and_self_destruct_mask() -> None:
+    assert red_battle_move_is_model_supported(TACKLE_MOVE_ID, 35)
+    assert not red_battle_move_is_model_supported(TAIL_WHIP_MOVE_ID, 30)
+    assert not red_battle_move_is_model_supported(SELFDESTRUCT_MOVE_ID, 5)
+    assert not red_battle_move_is_model_supported(MEGA_PUNCH_MOVE_ID, 0)
+    assert red_battle_supported_move_count(
+        (TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, SELFDESTRUCT_MOVE_ID, WATER_GUN_MOVE_ID),
+        (35, 30, 5, 25),
+    ) == 2
 
 
 def test_red_outcome_projector_measures_damage_and_pp_not_teacher_choice() -> None:
