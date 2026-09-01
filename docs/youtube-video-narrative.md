@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the PP dial barely moves the board
+
+**Visual:** Turn the **CURRENT PP → FULL PP** dial. Only one card reaches the combined **ROUTE ·
+LEVEL · TWO ATTACKS** gate. Show **1 ROOT · 1 VENUE** beside **REQUIRED 7 · 2**. Leave the controller
+cable dark.
+
+**Voiceover:** “The attacks were not merely exhausted. Healing would still leave six missing
+lessons and an entire missing environment, so we reject the idea before touching the game.”
+
+**Visual:** Replace fixed map-to-venue arrows with a bipartite board: unused worlds on the left,
+already-measured Route 11, Diglett’s Cave, and Mansion on the right. Label it **FINAL CURRENT-BANK
+FALSIFIER**.
+
+**Voiceover:** “We will test whether the parties were matched to the wrong classroom. If no honest
+seven-card, two-environment assignment exists, we stop mining old saves and generate fresh bounded
+scenarios.”
+
+**On-screen score:** `CONDITIONED CAPACITY 1/7 · VENUES 1/2 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: are the attacks missing, or merely exhausted?
 
 **Visual:** Put the eighteen unused cards behind glass. Overlay each party's learned moves, then

@@ -14,6 +14,20 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: PP-only source conditioning failed; venue allocation is next
+
+Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The one V6 census excluded all seven
+attempted sources, loaded 47 successors at zero frames, and found 18 claim-available roots. Only
+three successors had two supported moves when current PP was ignored, and only one unused root was
+also reachable and inside its assigned venue's encounter-pressure band. Capacity is **1 Route 11
+root / 1 venue**, below **7 roots / 2 venues**.
+
+Do not execute PP-only conditioning. The next bounded gate is one aggregate action-free allocation
+over every existing measured venue reachable from each unused source. Preserve one root per seat,
+the six-per-venue cap, exact move mechanics, full level pressure, terminal-source exclusions, and
+zero private identity output. If no 7/2 allocation exists, stop current-bank adaptation and design
+genuinely fresh bounded scenario generation. No counter moved.
+
 ## 2026-09-01: resource-conditioning readiness is local; publish before the census
 
 The unchanged post-exclusion bank has zero currently usable two-action roots. The local successor

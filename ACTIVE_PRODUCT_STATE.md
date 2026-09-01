@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Design a bounded identity-preserving source-conditioning or fresh-source contract that creates at least two real supported battle actions, then publish and run an aggregate zero-frame readiness census. No successor freeze or controller input unless seven fresh independent roots across at least two venues are prospectively feasible.
+- Next decision: Test whether claim-available unattempted roots can be allocated across any existing reachable measured venue under exact action and level pressure. If the aggregate zero-frame allocation cannot supply seven independent roots across two venues, stop current-bank work and design genuinely fresh bounded scenario generation.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Before any new controller input, define one identity-preserving source-conditioning contract and run an aggregate action-free readiness census over the 18 claim-available roots. Stop if no bounded portable method can prospectively create at least two supported battle actions on seven independent roots across two venues without reusing an exhausted root. |
+| Cheapest falsifier | Before any new controller input, run one aggregate action-free allocation census that matches every claim-available unattempted root to any existing reachable measured Red venue under the exact two-action and encounter-pressure rules. Stop current-bank work if no allocation can supply seven independent roots across two venues after the six-per-venue cap. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-post-exclusion-capacity-stop** · status **closed** · evidence [qualification](docs/evidence/red-battle-v2-post-exclusion-capacity-result-2026-09-01.json)
+**2026-09-01-battle-v2-resource-conditioning-capacity-stop** · status **closed** · evidence [qualification](docs/evidence/red-battle-v2-resource-conditioning-capacity-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. The V5 census excluded all seven attempted roots and found zero supported successor roots, so it created no capture or learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. Four state/manifest pairs were created and independently reopened, but none is an accepted learning capture; three materializer calls failed. No move choice, outcome, prediction, fit, authority, sealed case, Crystal context, or replay occurred. |
+| Learning output | None. The V6 census rejected resource conditioning before input and created no learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The V6 census loaded retained roots at zero frames and actions and created no claim, capture, choice, outcome, prediction, fit, teacher query, sealed case, Crystal context, authority, or replay. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The published V5 census authenticated and excluded all seven exhausted roots, then found zero supported party slots among 47 retained successor roots and zero materialization-eligible roots among the 18 still claim-available. The current state bank cannot supply the seven-root, two-venue battle denominator without first creating genuine multi-action states. |
-| Decision | Stop capture materialization and do not weaken the two-action verifier. The next lane is a bounded source-conditioning or fresh-source design that preserves upstream independence and creates real learner choice before encounter capture. Require an aggregate action-free readiness proof before freezing or executing any successor. |
-| Next session | Design and hostile-test a bounded, identity-preserving multi-action battle-source supply contract; add an aggregate zero-frame readiness inventory, but execute no conditioning or materialization until the design is published, green, and proves seven independent roots across two venues. Do not weaken action support, reuse exhausted roots, fit, open sealed Red or Crystal, grant authority, or replay the game. |
-| Next falsifier | Define the smallest identity-preserving way to provision two genuinely supported battle actions, then inventory only aggregate readiness across the 18 claim-available roots and their reachable venue classes at zero frames. If fewer than seven independent roots across two venues can satisfy it, reject that supply design before execution. |
-| Stop condition | The V5 census failed at zero supported roots, so this materialization lane is closed. Never retry or repackage the seven terminal assignments, count one-action states, or run another capture census over the unchanged bank. No controller input resumes until a separately designed, published, green, identity-preserving source-supply contract proves seven fresh roots across two venues prospectively. |
+| Blocker | Resource restoration did not create the required supply. Only three successor roots had a two-action surface even when current PP was ignored, and just one claim-available root was reachable and level-eligible. Conditioned capacity is one Route 11 root across one venue versus seven roots across two venues required. |
+| Decision | Retire PP-only identity-preserving conditioning as a current-bank supply strategy. Before fresh source generation, test one final aggregate assignment question: whether roots can be matched to any already-measured reachable venue rather than the single venue implied by their loaded map. Require the same seven-root, two-venue, six-per-venue, two-action, level-pressure, independence, and no-exhausted-root rules. |
+| Next session | Implement and hostile-test a title-neutral root-to-venue allocation contract with a Red adapter over existing measured venues, then publish and run one aggregate zero-frame census. Do not inspect selected private roots, weaken action or level support, reuse exhausted roots, condition or materialize gameplay, fit, open sealed Red or Crystal, grant authority, or replay the game. |
+| Next falsifier | At zero frames, derive every reachable measured venue for every claim-available unattempted root and solve the capped seven-root allocation using the exact mechanics and level-pressure rules. If no seven-root, two-venue allocation exists, stop current-bank adaptation and design genuinely fresh bounded scenario generation. |
+| Stop condition | The V6 census falsified PP-only conditioning at one eligible root and one venue. Never execute it, retry the seven terminal assignments, or count one-action states. If aggregate multi-venue allocation also fails seven roots across two venues, stop adapting the unchanged bank and require genuinely fresh bounded source generation. |
 
 ### Stop conditions
 

@@ -3,7 +3,22 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
-## Resource-conditioning readiness — Codex local adjudication 2026-09-01
+## Resource-conditioning capacity stop — Codex adjudication 2026-09-01
+
+PR 136 source `ca9cab88` passed exact-head CI `33481838000/1`. The sole V6 census authenticated the
+complete catalog, terminal plan/journal exclusions, claim availability, move mechanics, level
+pressure, and existing relocation predicates. It advanced zero frames and actions. Eighteen roots
+were unused; only one was resource-conditioning eligible, at Route 11. The required 7/2 denominator
+is impossible under PP-only conditioning.
+
+Codex accepts the falsification and forbids execution of this design. The next and final current-
+bank question is aggregate allocation across all already-measured reachable venues. Failure there
+requires fresh bounded source generation rather than another source-class patch. No root claim,
+capture, move choice, outcome, prediction, fit, teacher query, sealed Red, Crystal, authority, or
+replay occurred. The [result](evidence/red-battle-v2-resource-conditioning-capacity-result-2026-09-01.json)
+records the path-free counts.
+
+## Previous resource-conditioning readiness — Codex local adjudication 2026-09-01
 
 Codex accepts PP restoration as a hypothesis worth one aggregate falsification, not as permission
 to resume capture work. The implementation introduces a title-neutral identity contract, a Red

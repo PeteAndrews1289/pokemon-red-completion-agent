@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the PP hypothesis fails before healing anyone
+
+The published scan gave a clear answer. Eighteen unused worlds remained, but only one had the
+right level, route, and two real attacks for a measured venue. Ignoring current PP did not uncover a
+hidden classroom: post-heal capacity was still one world in one environment, against seven in two
+required.
+
+So nobody was healed and no encounter was created. The next—and last—question for this old state
+bank is whether its parties were matched to the wrong training environments. One aggregate scan
+will try every already-measured reachable venue under the same strict rules. If that cannot build
+the class, the project stops adapting old saves and creates fresh bounded scenarios. The score
+remains **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
+authority · 0 transfer**.
+
 ## September 1: ask whether the students are merely out of PP
 
 The hard zero suggested one cheap, testable explanation: some unused parties may know two real

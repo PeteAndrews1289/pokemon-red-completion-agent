@@ -1,6 +1,13 @@
 # Red battle V2 resource-conditioning readiness contract
 
-Status: locally implemented design; no private census or controller input has run.
+Status: falsified by the one published V6 census. Do not execute this conditioning design.
+
+Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The census then excluded all seven
+attempted roots and loaded 47 retained successors without advancing a frame. Eighteen roots were
+claim-available. Only three successors had a two-action surface even after current PP was ignored,
+and just one claim-available root was both reachable and level-eligible. Capacity was **1 Route 11
+root / 1 venue**, below **7 roots / 2 venues**. No conditioning or learning operation ran. See the
+[path-free result](evidence/red-battle-v2-resource-conditioning-capacity-result-2026-09-01.json).
 
 Read [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md) first.
@@ -59,9 +66,10 @@ The census is invalid if it diagnoses a selected private root, changes a party, 
 materializes an encounter, chooses a move, queries a teacher, opens an outcome, fits a model, opens
 sealed Red or Crystal, or grants authority.
 
-## Next gate
+## Disposition
 
-Publish the implementation, pass the complete local and exact-head GitHub gates, then run the V6
-census once. A failure closes PP restoration as the current-bank supply strategy. A pass opens only
-the design and review of a new conditioning-aware freezer and crash-safe materializer; existing
-plans remain unchanged and cannot silently opt into conditioning.
+PP restoration is retired as the current-bank supply strategy. Before fresh source generation, one
+last aggregate zero-frame question remains: whether every unused root can be matched to any
+existing reachable measured venue rather than the venue implied by its loaded map. That assignment
+must retain the exact two-action, level-pressure, independence, exclusion, and capped 7/2 rules.
+Failure closes current-bank adaptation and requires genuinely fresh bounded scenario generation.

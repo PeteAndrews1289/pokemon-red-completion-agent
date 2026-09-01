@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and one action-free conditioning census
+## Current override: PP restoration failed; Codex owns one aggregate venue-allocation falsifier
+
+Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
+only one resource-conditioning-eligible root at one venue. PP-only conditioning therefore cannot
+supply the required seven roots across two venues and must not execute.
+
+Codex's next bounded task is a title-neutral root-to-venue allocation contract with a Red adapter
+over existing measured venues. It must remain complete-bank, aggregate, action-free, zero-frame,
+and outcome-blind. A root counts only once, only at a venue reached by an existing live transition,
+and only with the exact two-action and full encounter-pressure rules. Failure at 7/2 closes all
+current-bank adaptations and sends the project to genuinely fresh bounded scenario generation.
+Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
+0**.
+
+## Previous override: Codex owned publication and one action-free conditioning census
 
 The current local design asks whether full resource restoration can turn unused Red states into
 real battle choices without manufacturing independence. Its title-neutral contract permits only
