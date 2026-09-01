@@ -8066,3 +8066,23 @@ proved cached numerics cannot bypass typed validation. The complete amended suit
 checks in 12m08s, restoring headroom under the workflow's unchanged 20-minute ceiling. This moved
 no learning counter. It made the cheapest honest answer—“does the evidence bank actually support
 the frozen experiment?”—fast and reliable enough to ask once from green main.
+
+## A capacity failure became a better experiment, not another route patch
+
+The first recovery hypothesis was wrong: restoring PP could not turn the retained bank into seven
+independent battle decisions across two venues. Instead of loosening the learner or rescuing a
+chosen save, the next census asked a broader title-neutral question—where can each untouched root
+already reach using bounded mechanics that exist? Ten roots could support both Route 11 and
+Diglett's Cave. An exact allocator found a seven-root denominator split four and three.
+
+The implementation then separated evidence from execution. A private V2 freezer binds the complete
+eligible inventory, exact root-to-venue allocation, party slots and outputs before input. The runner
+reopens the exhausted historical evidence, permanently starts an assignment before launching the
+emulator, and the materializer rederives the chosen venue from cartridge state. Nothing in public
+output identifies a root, and no failed attempt can be replaced.
+
+That is the real systems lesson: a model-training pipeline is not merely an optimizer. It is also a
+trustworthy mechanism for deciding what counts as an independent example, proving which action was
+available, retaining failure, and preventing accidental retries. At this checkpoint the machinery
+is locally qualified, but it has produced no new training row. The honest board is still 19 causal
+train examples, 6 fits, no gameplay authority and no Crystal transfer result.

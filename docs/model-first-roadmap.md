@@ -4510,3 +4510,29 @@ Next sequence:
 
 The eight-row fit is a wiring and information check, not gameplay authority. A full Red run, sealed
 evaluation, Crystal execution, and living-Pokédex completion remain downstream gates.
+
+## Current checkpoint — battle V2 multi-venue execution gate
+
+The V7 action-free census passed from main `65d9b2b4`: ten untouched roots support current
+two-action battle pressure at both Route 11 and Diglett's Cave, and an exact capped allocation can
+select seven as four Cave and three Route 11. Supply is no longer the immediate blocker.
+
+The current engineering session implements the outcome-blind V2 freezer and execution seam. The
+private plan binds every selected root, reachable venue, measured band, party slot, output and
+provenance identity. The runner reopens the exhausted V1 evidence, durably consumes the only
+attempt before input, and the child reauthenticates the selected venue from the loaded state. No
+teacher, route target, prediction, outcome, fit, sealed Red case or Crystal context enters the gate.
+
+Next sequence:
+
+1. Publish and green the V2 freezer/materializer implementation.
+2. Freeze exactly one private seven-assignment plan from the complete bank at zero effects.
+3. Stop and review only its aggregate path-free receipt.
+4. Separately decide whether to materialize all seven battle boundaries through the crash journal.
+5. Only a complete authenticated capture denominator may open selected-action outcome collection.
+6. Add seven genuine train outcomes and run the seventh descriptive fit; authority remains zero.
+7. Continue bounded Red development before any sealed Red or Crystal transfer test.
+
+Mission check: this restores a short genuine learning loop rather than another walkthrough repair.
+It advances the shared battle learner that later titles can reuse, but produces no model progress
+until authentic selected actions and outcomes exist.

@@ -16,6 +16,7 @@ import tempfile
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager, suppress
 from pathlib import Path
+from typing import TypeAlias
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MATERIALIZER_PATH = PROJECT_ROOT / "scripts" / "materialize_battle_scenario_capture.py"
@@ -24,6 +25,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 from inventory_battle_scenario_source_venues import (  # noqa: E402
     BattleScenarioSourceInventoryError,
+    _load_attempted_source_exclusions,
     _load_catalog,
     _open_all_catalog_train_roots,
     _require_state_bank,
@@ -40,6 +42,12 @@ from pokemon_red_completion.battle_scenario_materialization_plan import (  # noq
     BattleScenarioMaterializationPlan,
     BattleScenarioMaterializationPlanError,
     parse_battle_scenario_materialization_plan,
+)
+from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (  # noqa: E402
+    BattleScenarioMaterializationAssignmentV2,
+    BattleScenarioMaterializationPlanV2,
+    BattleScenarioMaterializationPlanV2Error,
+    parse_battle_scenario_materialization_plan_v2,
 )
 from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa: E402
     FAILED,
@@ -111,6 +119,13 @@ _MATERIALIZER_FAILURE_REASONS = frozenset(
     }
 )
 
+BattleScenarioMaterializationAssignmentLike: TypeAlias = (
+    BattleScenarioMaterializationAssignment | BattleScenarioMaterializationAssignmentV2
+)
+BattleScenarioMaterializationPlanLike: TypeAlias = (
+    BattleScenarioMaterializationPlan | BattleScenarioMaterializationPlanV2
+)
+
 
 class BattleScenarioMaterializationRunnerError(RuntimeError):
     """Raised when the exact plan cannot continue without risking replay."""
@@ -130,6 +145,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--registry-source-commit", required=True)
     parser.add_argument("--expected-registry-sha256", required=True)
     parser.add_argument("--capture-directory", type=Path, required=True)
+    parser.add_argument("--excluded-plan", type=Path, default=None)
+    parser.add_argument("--excluded-run-journal", type=Path, default=None)
     parser.add_argument("--journal", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -190,6 +207,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise BattleScenarioMaterializationRunnerError(
             "materialization plan environment differs"
         )
+    _require_plan_exclusions(args, plan=plan)
 
     catalog, registry = _load_exact_catalog(args, plan=plan)
     scan = _open_all_catalog_train_roots(
@@ -301,7 +319,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 def _execute_pending_assignment(
     journal: BattleScenarioMaterializationRunJournal,
     *,
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     journal_path: Path,
     source_bytes: bytes,
     capture_directory: Path,
@@ -367,7 +385,7 @@ def _execute_pending_assignment(
 def _load_exact_catalog(
     args: argparse.Namespace,
     *,
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
 ):  # type: ignore[no-untyped-def]
     provenances = {
         (
@@ -399,10 +417,42 @@ def _load_exact_catalog(
         raise BattleScenarioMaterializationRunnerError(str(error)) from None
 
 
+def _require_plan_exclusions(
+    args: argparse.Namespace,
+    *,
+    plan: BattleScenarioMaterializationPlanLike,
+) -> None:
+    if isinstance(plan, BattleScenarioMaterializationPlanV2):
+        if args.excluded_plan is None or args.excluded_run_journal is None:
+            raise BattleScenarioMaterializationRunnerError(
+                "V2 exhausted source evidence is required"
+            )
+        try:
+            attempted_sources = _load_attempted_source_exclusions(
+                args.excluded_plan,
+                args.excluded_run_journal,
+                expected_plan_sha256=plan.excluded_plan_sha256,
+                expected_journal_sha256=plan.excluded_run_journal_sha256,
+            )
+        except BattleScenarioSourceInventoryError as error:
+            raise BattleScenarioMaterializationRunnerError(str(error)) from None
+        if any(
+            item.source.source_state_sha256 in attempted_sources
+            for item in plan.inventory
+        ):
+            raise BattleScenarioMaterializationRunnerError(
+                "V2 materialization plan reuses an exhausted source"
+            )
+    elif args.excluded_plan is not None or args.excluded_run_journal is not None:
+        raise BattleScenarioMaterializationRunnerError(
+            "V1 materialization plan cannot accept V2 exclusion evidence"
+        )
+
+
 def _open_or_initialize_journal(
     path: Path,
     *,
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     identity: BattleScenarioMaterializationRunIdentity,
 ) -> BattleScenarioMaterializationRunJournal:
     if path.exists():
@@ -421,7 +471,7 @@ def _open_or_initialize_journal(
 def _reconcile_existing_entries(
     journal: BattleScenarioMaterializationRunJournal,
     *,
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     capture_directory: Path,
     journal_path: Path,
     rom_path: Path,
@@ -475,7 +525,7 @@ def _reconcile_existing_entries(
 
 
 def _materialize_assignment(
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     *,
     source_bytes: bytes,
     capture_directory: Path,
@@ -529,6 +579,13 @@ def _materialize_assignment(
             "--maximum-encounter-steps",
             str(maximum_encounter_steps),
         ]
+        if isinstance(assignment, BattleScenarioMaterializationAssignmentV2):
+            command.extend(
+                (
+                    "--expected-reachable-venue-id",
+                    assignment.selected_venue.venue_id,
+                )
+            )
         if watch:
             command.append("--watch")
         if speed is not None:
@@ -579,15 +636,55 @@ def _materialize_assignment(
             source_path.unlink()
 
 
+def _assignment_venue_id(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+) -> str:
+    if isinstance(assignment, BattleScenarioMaterializationAssignmentV2):
+        return assignment.selected_venue.venue_id
+    return assignment.candidate.venue_id
+
+
+def _assignment_source_location(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+) -> str:
+    if isinstance(assignment, BattleScenarioMaterializationAssignmentV2):
+        return assignment.selected_venue.source_location
+    return assignment.candidate.source_location
+
+
+def _assignment_minimum_encounter_level(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+) -> int:
+    if isinstance(assignment, BattleScenarioMaterializationAssignmentV2):
+        return assignment.selected_venue.minimum_encounter_level
+    return assignment.candidate.minimum_encounter_level
+
+
+def _assignment_maximum_encounter_level(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+) -> int:
+    if isinstance(assignment, BattleScenarioMaterializationAssignmentV2):
+        return assignment.selected_venue.maximum_encounter_level
+    return assignment.candidate.maximum_encounter_level
+
+
 def _require_materializer_receipt(
     receipt: Mapping[str, object],
     *,
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     source_commit: str,
     state_sha256: str,
     manifest_sha256: str,
 ) -> None:
     source = assignment.candidate.source
+    venue_id = _assignment_venue_id(assignment)
+    source_location = _assignment_source_location(assignment)
+    minimum_encounter_level = _assignment_minimum_encounter_level(assignment)
+    maximum_encounter_level = _assignment_maximum_encounter_level(assignment)
+    selected_venue_reauthenticated = isinstance(
+        assignment,
+        BattleScenarioMaterializationAssignmentV2,
+    )
     supported_candidate_count = receipt.get("supported_candidate_count")
     if (
         receipt.get("schema")
@@ -608,12 +705,12 @@ def _require_materializer_receipt(
         or receipt.get("registry_source_commit") != source.registry_source_commit
         or receipt.get("state_sha256") != state_sha256
         or receipt.get("manifest_sha256") != manifest_sha256
-        or receipt.get("venue_id") != assignment.candidate.venue_id
+        or receipt.get("venue_id") != venue_id
         or receipt.get("venue_minimum_encounter_level")
-        != assignment.candidate.minimum_encounter_level
+        != minimum_encounter_level
         or receipt.get("venue_maximum_encounter_level")
-        != assignment.candidate.maximum_encounter_level
-        or receipt.get("source_location") != assignment.candidate.source_location
+        != maximum_encounter_level
+        or receipt.get("source_location") != source_location
         or receipt.get("party_slot") != assignment.party_slot.party_slot
         or receipt.get("candidate_count") != 4
         or not isinstance(supported_candidate_count, int)
@@ -624,6 +721,8 @@ def _require_materializer_receipt(
         or receipt.get("caller_supplied_partition") is not False
         or receipt.get("caller_supplied_lineage") is not False
         or receipt.get("caller_supplied_source_location") is not False
+        or receipt.get("selected_reachable_venue_reauthenticated")
+        is not selected_venue_reauthenticated
         or receipt.get("private_path_fields") != 0
     ):
         raise BattleScenarioMaterializationRunnerError(
@@ -632,7 +731,7 @@ def _require_materializer_receipt(
 
 
 def _authenticate_assignment_outputs(
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     *,
     capture_directory: Path,
     source_commit: str,
@@ -652,7 +751,8 @@ def _authenticate_assignment_outputs(
     expected_map = {
         MANSION_VENUE_ID: int(MapId.POKEMON_MANSION_1F),
         ROUTE_11_VENUE_ID: int(MapId.ROUTE_11),
-    }[assignment.candidate.venue_id]
+        "digletts_cave": int(MapId.DIGLETTS_CAVE),
+    }[_assignment_venue_id(assignment)]
     if (
         manifest.capture_id != assignment.capture_id
         or manifest.root_lineage_id != assignment.candidate.source.root_lineage_id
@@ -709,7 +809,7 @@ def _authenticate_assignment_outputs(
 
 
 def _require_pending_outputs_absent(
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     *,
     capture_directory: Path,
 ) -> None:
@@ -724,7 +824,7 @@ def _require_pending_outputs_absent(
 
 
 def _assignment_paths(
-    assignment: BattleScenarioMaterializationAssignment,
+    assignment: BattleScenarioMaterializationAssignmentLike,
     *,
     capture_directory: Path,
 ) -> tuple[Path, Path]:
@@ -802,7 +902,7 @@ def _private_receipt_path(path: Path, *, parent: Path) -> Path:
     return resolved
 
 
-def _read_plan(path: Path) -> BattleScenarioMaterializationPlan:
+def _read_plan(path: Path) -> BattleScenarioMaterializationPlanLike:
     payload = _read_owned_regular(
         path,
         maximum_bytes=_MAXIMUM_PLAN_BYTES,
@@ -810,7 +910,11 @@ def _read_plan(path: Path) -> BattleScenarioMaterializationPlan:
     )
     try:
         return parse_battle_scenario_materialization_plan(payload)
-    except BattleScenarioMaterializationPlanError as error:
+    except BattleScenarioMaterializationPlanError:
+        pass
+    try:
+        return parse_battle_scenario_materialization_plan_v2(payload)
+    except BattleScenarioMaterializationPlanV2Error as error:
         raise BattleScenarioMaterializationRunnerError(str(error)) from None
 
 

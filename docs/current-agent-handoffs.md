@@ -3209,3 +3209,22 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
   title-neutral architecture, abstention boundaries, and whether the selected options genuinely
   advance living-Pokédex completion rather than Red-route imitation. Do not block ordinary outcome
   collection while no milestone review is pending.
+
+## Current assignments — Red battle V2 multi-venue gate (2026-09-01)
+
+### Codex workhorse lane
+
+- Own the V2 outcome-blind freezer, selected-venue reauthentication seam, shared crash journal,
+  verification, publication and exact-head CI.
+- Preserve V1 plan/journal history; reopen it independently and reject every exhausted source.
+- After green publication, freeze once at zero effects and stop before controller input.
+- Keep the mission board explicit: 19 causal train, 6 fits, 6 verified development, 4 unseen,
+  authority zero, transfer zero until tracked outcome evidence changes it.
+
+### Claude and Antigravity review lane
+
+- No external review was requested for this ordinary implementation session. The next useful audit
+  is the path-free V2 freeze receipt and the pre-execution trust boundary, not another broad roadmap.
+- Reviewers remain read-only and receive no ROM, save, private plan, root identity or capture.
+- Their verdicts inform Codex but do not authorize execution, fitting, sealed Red, Crystal,
+  authority, or replay.

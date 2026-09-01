@@ -1272,3 +1272,24 @@ Mission check for this planning task:
 - Mission check: this is a causal-curriculum capacity gate. Root generation, outcome collection,
   fitting, sealed Red evaluation, Crystal execution and full-game replay all remain unauthorized by
   the implementation itself.
+
+## Codex reorientation — exact reachable-venue materialization (2026-09-01)
+
+- Finding: the PP-only retained-bank lane failed, but the broader V7 census proved ten untouched
+  roots eligible at both Route 11 and Diglett's Cave; exact allocation selected seven as 4/3.
+- Decision: accept the supply pass and preserve the consumed fixed-venue V1 path. Build a separate
+  V2 private plan rather than weakening action support, level pressure, lineage or no-retry rules.
+- Trust-boundary finding during implementation: binding exhausted-evidence hashes in the plan was
+  not sufficient by itself. The runner now independently reopens the old plan and terminal journal
+  and rejects any V2 inventory source that appears among attempted V1 roots.
+- Venue finding: a plan-bound venue ID is not trusted as a source location. The controller-capable
+  child recomputes all reachable venues from loaded Red state at zero frames, selects the bound edge,
+  checks its measured mechanics identity, and only then permits existing relocation callbacks.
+- External audit: none requested for this ordinary engineering session. Codex retains the decision;
+  review is useful after the private zero-effect freeze or before execution.
+- Learning result: none. This session created no private plan, controller action, capture, outcome,
+  prediction, fit, authority or transfer evidence.
+- Verification: 74 focused tests and 6,246 repository-wide tests passed. Ruff, mypy over 330
+  sources, documentation, active-focus, privacy/public-artifact, and all three source-bound registry
+  checks passed. The initial broad run's eight failures were exclusively stale committed registry
+  identities and disappeared after exact regeneration and a committed-head rerun.
