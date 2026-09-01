@@ -3217,14 +3217,19 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Own the V2 outcome-blind freezer, selected-venue reauthentication seam, shared crash journal,
   verification, publication and exact-head CI.
 - Preserve V1 plan/journal history; reopen it independently and reject every exhausted source.
-- After green publication, freeze once at zero effects and stop before controller input.
+- PR 138 and exact-main CI passed. The sole zero-effect V2 freeze selected seven unique roots as
+  four Diglett's Cave and three Route 11; its aggregate receipt is the current publication gate.
+- Publish and green that path-free receipt, then begin a separately reoriented exact-plan execution
+  session. Stop at the seven-item terminal before outcomes or fitting; never replace or retry a
+  started assignment.
 - Keep the mission board explicit: 19 causal train, 6 fits, 6 verified development, 4 unseen,
   authority zero, transfer zero until tracked outcome evidence changes it.
 
 ### Claude and Antigravity review lane
 
 - No external review was requested for this ordinary implementation session. The next useful audit
-  is the path-free V2 freeze receipt and the pre-execution trust boundary, not another broad roadmap.
+  is the published path-free V2 freeze receipt and pre-execution trust boundary, not another broad
+  roadmap.
 - Reviewers remain read-only and receive no ROM, save, private plan, root identity or capture.
 - Their verdicts inform Codex but do not authorize execution, fitting, sealed Red, Crystal,
   authority, or replay.

@@ -8083,6 +8083,11 @@ output identifies a root, and no failed attempt can be replaced.
 
 That is the real systems lesson: a model-training pipeline is not merely an optimizer. It is also a
 trustworthy mechanism for deciding what counts as an independent example, proving which action was
-available, retaining failure, and preventing accidental retries. At this checkpoint the machinery
-is locally qualified, but it has produced no new training row. The honest board is still 19 causal
-train examples, 6 fits, no gameplay authority and no Crystal transfer result.
+available, retaining failure, and preventing accidental retries.
+
+The implementation passed 6,246 local tests and both pull-request and exact-main CI. The one
+permitted freeze then matched the census exactly: ten untouched roots supported both venues and the
+canonical seven-root plan split four Diglett's Cave and three Route 11, with zero frames, inputs,
+claims or public identities. The private plan remains unopened and unexecuted. That is a real
+experimental milestone, but not a new training row: the honest board is still 19 causal train
+examples, 6 fits, no gameplay authority and no Crystal transfer result.

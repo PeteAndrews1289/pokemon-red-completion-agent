@@ -8558,7 +8558,8 @@ Main `65d9b2b4` records the positive V7 capacity result after exact-head CI `334
 The retained successor bank has ten claim-available roots eligible at both Route 11 and Diglett's
 Cave; the exact capped allocation selects seven independent roots as four Cave and three Route 11.
 
-The active branch adds a separate private V2 plan instead of changing consumed V1 history. Its
+PR 138 merged the separate V2 path as exact main `1065453f6659619630801f31b0b2a038811900fd`;
+pull-request CI `33493759930/1` and exact-main CI `33495471767/1` passed. Its
 freezer reopens the exact exhausted V1 plan and terminal journal, excludes all attempted sources,
 recomputes every reachable venue edge and mechanics-exact party slot, freezes the complete
 inventory, and canonically binds seven root/venue/slot/output assignments. The runner independently
@@ -8566,14 +8567,17 @@ reopens the exhausted evidence, marks each assignment started before the control
 and never requeues a started or failed item. The child rederives the plan-bound venue from the loaded
 state before input and reuses the existing Route 11/Diglett's Cave transition callbacks.
 
-This is execution readiness, not training. No V2 private plan has been frozen from the bank, no
-controller input occurred, and no capture, outcome, prediction, fit, authority, sealed case,
-Crystal context, or replay was created. The board remains **causal train 19 · model fits 6 · verified
+The sole V2 freeze then passed at zero effects. It authenticated all 54 catalog train roots,
+excluded the seven exhausted sources, found ten eligible untouched roots at both venues, and froze
+seven unique assignments as four Diglett's Cave and three Route 11. The private plan SHA-256 is
+`669842cb…da7bd`; its identities remain unopened. No controller input occurred and no claim,
+capture, outcome, prediction, fit, authority, sealed case, Crystal context, replay, or public
+identity/path field was created. The board remains **causal train 19 · model fits 6 · verified
 development 6 · unseen comparisons 4 · authority 0 · transfer 0**.
 
 Local qualification passed 74 focused and 6,246 repository-wide tests plus every static, privacy,
-documentation and source-bound registry gate. Immediate order: publish the engineering gate;
-require exact-head green CI; then freeze exactly one private V2 plan at zero effects and stop for an aggregate
-receipt review. Do not execute the plan in the same decision. Stop on inventory drift, exhausted-
-root reuse, selected-edge mismatch, output collision, private leakage, or any attempt to replace or
-retry a started assignment.
+documentation and source-bound registry gate. Immediate order: publish the path-free aggregate
+freeze result and require exact-head green CI. Only then open a separate execution session for the
+exact frozen plan through the crash-safe runner. Stop at its complete seven-item terminal before
+outcome collection. Stop on inventory drift, exhausted-root reuse, selected-edge mismatch, output
+collision, private leakage, or any attempt to replace or retry a started assignment.

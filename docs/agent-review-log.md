@@ -3,6 +3,22 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Multi-venue plan freeze — Codex adjudication 2026-09-01
+
+PR 138 merged as exact main `1065453f`; pull-request CI `33493759930/1` and exact-main CI
+`33495471767/1` passed. The sole V2 freezer call authenticated all 54 catalog train roots, reopened
+and excluded the exact seven attempted V1 sources, found ten untouched roots eligible at both
+Route 11 and Diglett's Cave, and canonically selected seven unique assignments as four Cave and
+three Route 11. It advanced zero frames and actions and created no claim, capture, outcome,
+prediction, fit, teacher query, sealed Red case, Crystal context, replay, or public private field.
+
+Codex accepts the private plan as a prospective denominator only. The aggregate receipt contains
+no selected identity or path; the plan itself remains unopened. Publish this result, require green
+CI, then make controller execution a separate decision through the crash-safe runner. A started
+failure is evidence and is never retried or replaced. The
+[path-free result](evidence/red-battle-v2-multivenue-materialization-freeze-result-2026-09-01.json)
+records the exact hashes and counts.
+
 ## Reachable-venue allocation pass — Codex adjudication 2026-09-01
 
 Source `98544be8` passed exact-head CI `33487956767/1`. The sole V7 census authenticated the full

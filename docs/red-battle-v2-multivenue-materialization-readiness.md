@@ -1,6 +1,7 @@
 # Red battle V2 multi-venue materialization readiness
 
-Status: implementation locally qualified; no private plan frozen and no controller input executed.
+Status: published implementation qualified and one private plan frozen; no controller input
+executed.
 
 Local qualification passed 74 focused tests and 6,246 repository-wide tests, with one intentional
 skip, three integration deselections and one expected xfail. Ruff, the configured 330-source type
@@ -40,11 +41,21 @@ immutable private denominator while keeping public evidence path-free and identi
 - A started or failed assignment never returns to pending. A restart can authenticate already
   complete outputs, but cannot retry controller input.
 
+## Frozen result
+
+PR 138 merged as exact main `1065453f6659619630801f31b0b2a038811900fd`; pull-request CI
+`33493759930/1` and exact-main CI `33495471767/1` passed. The sole V2 freeze then authenticated all
+54 catalog train roots, excluded the seven historically attempted sources, found ten eligible
+untouched roots at both supported venues, and canonically selected seven unique sources as four
+Diglett's Cave and three Route 11 assignments. It advanced zero frames and actions and created no
+claim, capture, outcome, prediction, teacher query, fit, sealed case, Crystal context, replay, or
+public private-identity/path field. The path-free aggregate result is retained in
+`docs/evidence/red-battle-v2-multivenue-materialization-freeze-result-2026-09-01.json`.
+
 ## What this does not establish
 
-No private V2 plan has been frozen from the retained bank. No encounter has been materialized, no
-root claimed, no outcome observed, no move selected, no prediction made, and no model fitted. The
-learning board therefore remains:
+No encounter has been materialized, no root claimed, no outcome observed, no move selected, no
+prediction made, and no model fitted. The learning board therefore remains:
 
 - causal train examples: 19
 - model fits: 6
@@ -58,14 +69,12 @@ or model authority.
 
 ## Next decision
 
-After publication and exact-head green CI, run the freezer once from the complete authenticated
-bank and retain only its private canonical plan plus a public aggregate receipt. Require seven
-unique roots, at least two venues, no more than six at one venue, the expected exhausted evidence,
-and zero protected effects.
-
-If that freeze passes, stop and inspect only the aggregate receipt. A separate execution decision
-may then materialize the seven frozen battle boundaries through the crash-safe runner. Outcome
-collection and the seventh descriptive model fit remain later, separately accounted steps.
+Publish the aggregate freeze receipt and keep the private plan unopened. A separate execution
+decision may then materialize the seven frozen battle boundaries through the crash-safe runner.
+Require the runner to reopen the exact plan and exhausted evidence, start each assignment durably
+before input, authenticate every retained capture independently, and preserve failures without
+replacement. Outcome collection and the seventh descriptive model fit remain later, separately
+accounted steps.
 
 ## Stop conditions
 
