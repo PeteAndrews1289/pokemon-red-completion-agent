@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build and falsify the partition-aware eight-capture development freezer/materializer contract from the passed 4+4 reachable allocation. Outcome collection and fitting remain closed until those captures exist and the 7+8 zero-effect freeze authenticates them.
+- Next decision: Publish the qualified partition-aware freezer/materializer, require exact-main green CI, then freeze one zero-effect eight-capture development plan and stop before execution. Outcome collection and fitting remain closed until those captures exist and the 7+8 zero-effect freeze authenticates them.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-development-capacity-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-development-partition-capacity-result-2026-09-01.json)
+**2026-09-01-battle-v2-partition-materializer-engineering-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-partition-materializer-engineering-qualification-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | The census established prospective development-scenario supply, not a gameplay lesson: 8 roots can be allocated across 2 venues under the six-per-venue cap, while all state, assignment, context and lineage collision counts are zero. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The published development census advanced zero frames, issued zero controller actions, created zero claims or captures, opened zero outcomes, queried no teacher, computed no prediction, fit no model, and changed no gameplay authority. |
+| Learning output | This is qualified experiment infrastructure, not a gameplay lesson. The 116 focused and 6,332 full tests prove the development denominator, 4+4 allocation, catalog-derived partition, legacy train compatibility, and one-shot journal contract are distinguishable. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. Engineering opened no private state or outcome, issued no controller action, advanced no emulator frame, created no claim or capture, queried no teacher, computed no prediction, fit no model, and changed no gameplay authority. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | Development supply is now prospectively sufficient, but no immutable eight-capture development plan or materializer contract exists. The legacy already-ready filter exposes only 7/8 roots, so the next plan must bind the validated reachable allocation rather than silently reuse the old Route 11-only path. |
-| Decision | Accept the complete-bank action-free capacity result: 27/27 development roots authenticated, 25 claim-available, 22 eligible for both measured venues, and an exact independent 4 Route 11 + 4 Diglett's Cave allocation exists with zero cross-partition collisions. Next engineer a generic partition-aware eight-capture freezer and selected-venue materializer seam; keep execution closed until that separate contract is published and exact-main CI is green. |
-| Next session | Generalize the proven train V2 freezer/materializer seam to carry partition and the eight-context denominator, hostile-test partition drift and allocation substitution, publish it, require exact-main green CI, and stop at a zero-effect private development-plan freeze before controller input. |
-| Next falsifier | At zero controller actions, prove that one generic partition-aware freezer can deterministically bind exactly eight unique development roots to the census-derived 4+4 reachable venue allocation, preserve claim and producer identities, and emit an immutable no-retry plan without opening selected outcomes. |
-| Stop condition | Never reuse the eight incompatible historical development manifests, rematerialize an existing capture, or reinterpret a historical failure. Stop before controller input if the freezer cannot reproduce exactly eight unique development roots across at least two measured venues, preserve partition and lineage independence, bind immutable output identities, or keep all claims and gameplay effects at zero. |
+| Blocker | The generic partition-aware freezer, materializer and runner are locally qualified, but the implementation is not yet published or bound to green exact-main CI. No private development plan may be frozen from an unpublished tree. |
+| Decision | Accept the reusable implementation: plan size is derived as 7 train or 8 development, mixed inventories fail closed, the materializer derives partition by unique catalog authentication, the runner reopens the complete matching partition and reauthenticates receipt and manifest partition, and the existing started-before-input journal remains unchanged. Publish, require exact-main green CI, then freeze one private development plan at zero effects and stop before controller input. |
+| Next session | Publish the partition-aware freezer/materializer, require exact-main green CI, freeze exactly one private eight-capture development plan at zero effects, publish only aggregate path-free evidence, and reorient before any controller-capable execution. |
+| Next falsifier | From the exact published source under green main CI, run one zero-controller freeze over the complete development bank and require exactly eight unique plan-bound roots split 4 Route 11 + 4 Diglett's Cave, with zero collisions, claims, captures, outcomes, predictions or fits. |
+| Stop condition | Never reuse the eight incompatible historical development manifests, hand-pick a root, rematerialize a capture, or reinterpret a failure. Stop before controller input if publication or exact-main CI fails, the private freezer does not reproduce exactly eight unique development roots and the 4+4 venue allocation, any partition identity collides, any output already exists, or any claim/gameplay effect occurs. |
 
 ### Stop conditions
 

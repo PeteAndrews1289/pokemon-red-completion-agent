@@ -124,7 +124,7 @@ class BattleScenarioMaterializationRunIdentity:
 
 @dataclass(frozen=True, slots=True)
 class BattleScenarioMaterializationRunEntry:
-    """One monotonic execution slot from the frozen seven-item denominator."""
+    """One monotonic execution slot from the frozen partition denominator."""
 
     ordinal: int
     capture_id: str

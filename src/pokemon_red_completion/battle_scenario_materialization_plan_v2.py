@@ -1,4 +1,4 @@
-"""Outcome-blind multi-venue freeze for seven Red battle captures.
+"""Outcome-blind multi-venue freeze for partition-sized Red battle captures.
 
 The historical V1 plan binds each retained root to the one venue implied by
 its loaded map.  V2 instead freezes the exact root-to-reachable-venue edge
@@ -16,7 +16,11 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from fractions import Fraction
 
-from pokemon_red_completion.battle_outcome_batch import MAXIMUM_LEVEL_GAP
+from pokemon_red_completion.battle_outcome_batch import (
+    DEVELOPMENT_CONTEXTS,
+    FRESH_TRAIN_CONTEXTS,
+    MAXIMUM_LEVEL_GAP,
+)
 from pokemon_red_completion.battle_outcome_capture_authentication import (
     BattleScenarioSourceBinding,
 )
@@ -44,7 +48,8 @@ BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SELECTION_POLICY_SCHEMA = (
     "pokemon.red.battle-scenario-materialization-completion-selection-policy.v1"
 )
 
-REQUIRED_CAPTURE_COUNT = 7
+REQUIRED_CAPTURE_COUNT = FRESH_TRAIN_CONTEXTS
+MAXIMUM_CAPTURE_COUNT = max(FRESH_TRAIN_CONTEXTS, DEVELOPMENT_CONTEXTS)
 MINIMUM_DISTINCT_VENUES = 2
 MAXIMUM_CAPTURES_PER_VENUE = 6
 
@@ -170,7 +175,8 @@ class BattleScenarioMaterializationCandidateV2:
     def __post_init__(self) -> None:
         if (
             not isinstance(self.source, BattleScenarioSourceBinding)
-            or self.source.partition is not ScenarioPartition.TRAIN
+            or self.source.partition
+            not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}
             or not isinstance(self.reachable_venues, tuple)
             or not self.reachable_venues
             or any(
@@ -220,7 +226,7 @@ class BattleScenarioMaterializationAssignmentV2:
     def __post_init__(self) -> None:
         if (
             type(self.ordinal) is not int  # noqa: E721
-            or not 0 <= self.ordinal < REQUIRED_CAPTURE_COUNT
+            or not 0 <= self.ordinal < MAXIMUM_CAPTURE_COUNT
             or _SAFE_ID.fullmatch(self.capture_id) is None
             or not isinstance(self.candidate, BattleScenarioMaterializationCandidateV2)
             or self.selected_venue not in self.candidate.reachable_venues
@@ -362,6 +368,10 @@ class BattleScenarioMaterializationCompletionPlan:
                 not isinstance(item, BattleScenarioMaterializationCandidateV2)
                 for item in self.inventory
             )
+            or any(
+                item.source.partition is not ScenarioPartition.TRAIN
+                for item in self.inventory
+            )
             or tuple(
                 sorted(self.inventory, key=lambda item: item.candidate_identity_sha256)
             )
@@ -452,7 +462,7 @@ class BattleScenarioMaterializationCompletionPlan:
 
 @dataclass(frozen=True, slots=True)
 class BattleScenarioMaterializationPlanV2:
-    """Canonical complete inventory and its exact seven-edge allocation."""
+    """Canonical complete inventory and its partition-sized exact allocation."""
 
     plan_id: str
     source_commit: str
@@ -490,6 +500,7 @@ class BattleScenarioMaterializationPlanV2:
             != len(self.inventory)
             or len({item.source.source_state_sha256 for item in self.inventory})
             != len(self.inventory)
+            or len({item.source.partition for item in self.inventory}) != 1
         ):
             raise BattleScenarioMaterializationPlanV2Error(
                 "battle materialization plan inventory differs"
@@ -513,7 +524,22 @@ class BattleScenarioMaterializationPlanV2:
 
     @property
     def selection_policy_sha256(self) -> str:
-        return canonical_sha256(_SELECTION_POLICY)
+        return canonical_sha256(_selection_policy(self.partition))
+
+    @property
+    def partition(self) -> ScenarioPartition:
+        """Return the immutable catalog partition shared by the complete inventory."""
+
+        partitions = {item.source.partition for item in self.inventory}
+        if len(partitions) != 1:  # pragma: no cover - __post_init__ closes this
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization plan partition differs"
+            )
+        return next(iter(partitions))
+
+    @property
+    def required_capture_count(self) -> int:
+        return _required_capture_count(self.partition)
 
     @property
     def plan_sha256(self) -> str:
@@ -692,6 +718,12 @@ def _select_assignments(
         raise BattleScenarioMaterializationPlanV2Error(
             "battle materialization plan identity differs"
         )
+    partitions = {item.source.partition for item in inventory}
+    if len(partitions) != 1:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization plan partition differs"
+        )
+    required_capture_count = _required_capture_count(next(iter(partitions)))
     by_identity = {item.candidate_identity_sha256: item for item in inventory}
     allocation = allocate_reachable_venue_roots(
         tuple(
@@ -701,7 +733,7 @@ def _select_assignments(
             )
             for item in inventory
         ),
-        required_roots=REQUIRED_CAPTURE_COUNT,
+        required_roots=required_capture_count,
         minimum_distinct_venues=MINIMUM_DISTINCT_VENUES,
         maximum_roots_per_venue=MAXIMUM_CAPTURES_PER_VENUE,
     )
@@ -750,9 +782,9 @@ def _select_assignments(
     )
     counts = Counter(item.selected_venue.venue_id for item in assignments)
     if (
-        len(assignments) != REQUIRED_CAPTURE_COUNT
+        len(assignments) != required_capture_count
         or len({item.candidate.source.source_state_sha256 for item in assignments})
-        != REQUIRED_CAPTURE_COUNT
+        != required_capture_count
         or len(counts) < MINIMUM_DISTINCT_VENUES
         or max(counts.values(), default=0) > MAXIMUM_CAPTURES_PER_VENUE
     ):
@@ -760,6 +792,30 @@ def _select_assignments(
             "battle materialization assignment denominator differs"
         )
     return assignments
+
+
+def _required_capture_count(partition: ScenarioPartition) -> int:
+    if partition is ScenarioPartition.TRAIN:
+        return FRESH_TRAIN_CONTEXTS
+    if partition is ScenarioPartition.DEVELOPMENT:
+        return DEVELOPMENT_CONTEXTS
+    raise BattleScenarioMaterializationPlanV2Error(
+        "battle materialization plan partition differs"
+    )
+
+
+def _selection_policy(partition: ScenarioPartition) -> Mapping[str, object]:
+    if partition is ScenarioPartition.TRAIN:
+        return _SELECTION_POLICY
+    if partition is ScenarioPartition.DEVELOPMENT:
+        return {
+            **_SELECTION_POLICY,
+            "capture_count": DEVELOPMENT_CONTEXTS,
+            "partition": ScenarioPartition.DEVELOPMENT.value,
+        }
+    raise BattleScenarioMaterializationPlanV2Error(
+        "battle materialization plan partition differs"
+    )
 
 
 def _select_completion_assignments(
@@ -1005,7 +1061,6 @@ def _parse_plan(value: object) -> BattleScenarioMaterializationPlanV2:
         or value.get("status") != "prospective_unexecuted"
         or value.get("retry_after_controller_input") is not False
         or value.get("effects") != _zero_effects()
-        or value.get("selection_policy_sha256") != canonical_sha256(_SELECTION_POLICY)
         or not isinstance(value.get("inventory"), list)
         or not isinstance(value.get("assignments"), list)
     ):
@@ -1013,6 +1068,15 @@ def _parse_plan(value: object) -> BattleScenarioMaterializationPlanV2:
             "battle materialization plan fields differ"
         )
     inventory = tuple(_parse_candidate(item) for item in value["inventory"])
+    partitions = {item.source.partition for item in inventory}
+    if (
+        len(partitions) != 1
+        or value.get("selection_policy_sha256")
+        != canonical_sha256(_selection_policy(next(iter(partitions))))
+    ):
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization plan fields differ"
+        )
     by_identity = {item.candidate_identity_sha256: item for item in inventory}
     assignments = tuple(
         _parse_assignment(item, by_identity=by_identity)

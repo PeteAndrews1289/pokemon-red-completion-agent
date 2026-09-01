@@ -7,6 +7,16 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current engineering checkpoint: one lock, two honest room sizes
+
+The seven-seat training lock now also understands the eight-seat exam room. It reads each world's
+role from the authenticated catalog, refuses to mix roles, and seals four Route 11 plus four Cave
+destinations for development. The photographer cannot be told “this is development”; it must
+prove that fact from the save, and the final manifest is checked again.
+
+All 6,332 tests passed without opening a private world. Publication and green exact-main CI come
+next, followed by one plan freeze with the controller still disconnected.
+
 ## Current checkpoint: eight held-out seats, no borrowed worlds
 
 The development classroom now passes its read-only seating test. All 27 expected worlds were
