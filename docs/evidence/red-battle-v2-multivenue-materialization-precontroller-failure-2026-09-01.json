@@ -1,0 +1,57 @@
+{
+  "decision": {
+    "exact_plan_retried_under_unchanged_source": false,
+    "next_gate": "publish and qualify an exact-main CI authentication repair, then freeze a new prospective denominator because the original plan is source-commit bound",
+    "reason": "The launch stopped before journal creation because the runner required a pull-request CI event whose head SHA equaled a squash-merge commit. That conjunction is impossible: the exact squash commit is validated by a push event on main, while the pull-request run validates the pre-squash head.",
+    "status": "failed_closed_before_controller_or_root_consumption"
+  },
+  "diagnosis": {
+    "failure_stage": "exact_ci_authentication",
+    "published_failure_reason": "materialization_failed",
+    "root_cause": "ci_event_and_exact_source_commit_contract_were_mutually_unsatisfiable_after_squash_merge",
+    "successor_requirement": "accept only an exact successful push CI on main, retain exact SHA, workflow, run, attempt, repository and URL checks, and publish a sanitized exact_ci failure reason",
+    "verified_from_source_without_private_identity_inspection": true
+  },
+  "launch": {
+    "battle_capture_files_created": 0,
+    "journal_created": false,
+    "launch_count": 1,
+    "manifest_files_created": 0,
+    "plan_sha256": "669842cb8983ad6e3a37f6cee372a8e07584891dda02ed19f9cfec49b06da7bd",
+    "receipt_created": false,
+    "retry_after_controller_input": false,
+    "state_files_created": 0
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "red_rom_opened": false,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "started_assignments": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success",
+    "exact_ci_event": "push",
+    "exact_ci_head_branch": "main",
+    "exact_ci_run": 33495471767,
+    "executable_source_bundle_sha256": "720c5649d7a28b5ea461a98ba7e1837830494a53536905bc5522d2e22d5fa4d0",
+    "published_source_commit": "1065453f6659619630801f31b0b2a038811900fd"
+  },
+  "schema": "pokemon.red-battle-v2-multivenue-materialization-precontroller-failure.v1"
+}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import runpy
 import subprocess
 from pathlib import Path
@@ -65,6 +66,89 @@ def test_runner_accepts_only_the_frozen_plan_not_caller_selected_sources() -> No
     assert "--party-slot" not in options
     assert "--capture-id" not in options
     assert "--venue" not in options
+
+
+def _ci_document(*, event: str = "push", head_branch: str = "main") -> dict[str, object]:
+    return {
+        "attempt": 1,
+        "conclusion": "success",
+        "databaseId": 123,
+        "event": event,
+        "headBranch": head_branch,
+        "headSha": "a" * 40,
+        "status": "completed",
+        "url": (
+            "https://github.com/PeteAndrews1289/"
+            "pokemon-red-completion-agent/actions/runs/123"
+        ),
+        "workflowName": "CI",
+    }
+
+
+def _patch_ci_response(
+    monkeypatch: pytest.MonkeyPatch,
+    document: dict[str, object],
+) -> None:
+    function = SCRIPT["_require_exact_green_ci_run"]
+    monkeypatch.setitem(
+        function.__globals__,
+        "subprocess",
+        SimpleNamespace(
+            run=lambda *args, **kwargs: subprocess.CompletedProcess(
+                args=[],
+                returncode=0,
+                stdout=json.dumps(document),
+                stderr="",
+            ),
+            SubprocessError=subprocess.SubprocessError,
+        ),
+    )
+
+
+def test_exact_ci_accepts_only_the_exact_main_push(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _patch_ci_response(monkeypatch, _ci_document())
+
+    result = SCRIPT["_require_exact_green_ci_run"](
+        123,
+        1,
+        source_commit="a" * 40,
+    )
+
+    assert result["event"] == "push"
+    assert result["headBranch"] == "main"
+
+
+@pytest.mark.parametrize(
+    ("event", "head_branch"),
+    (("pull_request", "feature"), ("push", "feature"), ("workflow_dispatch", "main")),
+)
+def test_exact_ci_rejects_non_main_pushes(
+    monkeypatch: pytest.MonkeyPatch,
+    event: str,
+    head_branch: str,
+) -> None:
+    _patch_ci_response(
+        monkeypatch,
+        _ci_document(event=event, head_branch=head_branch),
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="exact_ci_differs",
+    ):
+        SCRIPT["_require_exact_green_ci_run"](
+            123,
+            1,
+            source_commit="a" * 40,
+        )
+
+
+def test_exact_ci_failure_reason_survives_public_sanitization() -> None:
+    error = SCRIPT["BattleScenarioMaterializationRunnerError"]("exact_ci_differs")
+
+    assert SCRIPT["_failure_reason"](error) == "exact_ci_differs"
 
 
 def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(

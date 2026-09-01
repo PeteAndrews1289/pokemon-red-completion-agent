@@ -8581,3 +8581,18 @@ freeze result and require exact-head green CI. Only then open a separate executi
 exact frozen plan through the crash-safe runner. Stop at its complete seven-item terminal before
 outcome collection. Stop on inventory drift, exhausted-root reuse, selected-edge mismatch, output
 collision, private leakage, or any attempt to replace or retry a started assignment.
+
+The first execution launch then failed before journal creation. Its exact source was the published
+squash commit and its exact successful CI was a `push` on main, while the runner required that same
+SHA to belong to a `pull_request` event. GitHub assigns the pull-request run to the pre-squash head,
+so the contract was mutually unsatisfiable. The launch opened no ROM, advanced no frame or input,
+and created no started assignment, claim, capture, receipt or outcome. Do not rerun the original
+source-bound plan.
+
+The active repair requires an exact successful `push` CI on branch `main`, retains exact SHA, run,
+attempt, workflow, repository and URL checks, rejects PR/feature/manual events, and exposes the
+sanitized public code `exact_ci_differs`. It passes 14 direct, 94 affected and 6,251 repository-wide
+tests plus Ruff, the 330-source type gate, documentation, privacy/focus and source-bound registry
+checks. Publish and exact-main green that source, then freeze one new source-bound seven-assignment
+plan at zero effects. Controller execution stays closed until the successor aggregate receipt
+passes review.

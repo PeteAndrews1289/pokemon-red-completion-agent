@@ -3219,9 +3219,11 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Preserve V1 plan/journal history; reopen it independently and reject every exhausted source.
 - PR 138 and exact-main CI passed. The sole zero-effect V2 freeze selected seven unique roots as
   four Diglett's Cave and three Route 11; its aggregate receipt is the current publication gate.
-- Publish and green that path-free receipt, then begin a separately reoriented exact-plan execution
-  session. Stop at the seven-item terminal before outcomes or fitting; never replace or retry a
-  started assignment.
+- The first execution launch stopped before journal creation because the exact squash commit had a
+  main-push CI event while the runner required a pull-request event for that same SHA. No root or
+  controller effect occurred; preserve and do not rerun the original source-bound plan.
+- Publish and green the exact-main CI repair, then freeze one successor denominator at zero effects.
+  Stop for aggregate review before its separately reoriented controller session.
 - Keep the mission board explicit: 19 causal train, 6 fits, 6 verified development, 4 unseen,
   authority zero, transfer zero until tracked outcome evidence changes it.
 

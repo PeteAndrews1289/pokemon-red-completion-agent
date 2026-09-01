@@ -4526,13 +4526,16 @@ context entered the gate.
 
 Next sequence:
 
-1. Publish and green the path-free aggregate freeze receipt.
-2. In a separately reoriented session, execute the exact frozen seven-assignment denominator
-   through the crash-safe runner without replacement or retry.
-3. Stop at the complete terminal and publish aggregate capture/failure counts.
-4. Only seven independently authenticated captures may open selected-action outcome collection.
-5. Add seven genuine train outcomes and run the seventh descriptive fit; authority remains zero.
-6. Continue bounded Red development before any sealed Red or Crystal transfer test.
+1. Preserve the zero-effect exact-CI pre-controller failure and do not rerun its source-bound plan.
+2. Publish and exact-main green the repair that authenticates only exact successful main-push CI.
+3. Freeze one new source-bound seven-assignment denominator at zero effects and compare only its
+   aggregate receipt against the prior 4/3 allocation.
+4. In a separately reoriented session, execute that successor denominator through the crash-safe
+   runner without replacement or retry.
+5. Stop at the complete terminal and publish aggregate capture/failure counts.
+6. Only seven independently authenticated captures may open selected-action outcome collection.
+7. Add seven genuine train outcomes and run the seventh descriptive fit; authority remains zero.
+8. Continue bounded Red development before any sealed Red or Crystal transfer test.
 
 Mission check: this restores a short genuine learning loop rather than another walkthrough repair.
 It advances the shared battle learner that later titles can reuse, but produces no model progress

@@ -187,6 +187,27 @@ quiet retry or replacement.”
 
 **On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
 
+## New scene: the proof gate rejects its own squash commit
+
+**Visual:** Put one green card labeled **PULL REQUEST · PRE-SQUASH SHA** beside another labeled
+**MAIN PUSH · EXACT SQUASH SHA**. Try to overlay them; the hashes do not match. Keep the cartridge
+and controller dark and show **JOURNAL ABSENT · ROOTS CONSUMED 0**.
+
+**Voiceover:** “The first launch never reached Pokémon. Our trust gate demanded one CI run be both
+the pull-request head and the final squash commit, but GitHub correctly gives those events different
+hashes. Because the journal did not exist, we know no lesson was started—not merely that the process
+reported failure.”
+
+**Visual:** Replace the conjunction with **EXACT SHA + PUSH + MAIN + GREEN CI**, surrounded by
+unchanged locks for repository, workflow, run and attempt. Show rejected cards for **PR**,
+**FEATURE PUSH**, and **MANUAL RUN**.
+
+**Voiceover:** “The repair does not weaken provenance. It makes the event match the commit we
+actually execute, rejects every other event class, and reports the precise stage next time. The old
+plan remains history; a new source-bound envelope must freeze before controller input.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the second classroom opens
 
 **Visual:** A Lavender save card enters a scanner labeled **CARTRIDGE GROUND ROUTE**, follows a
