@@ -20,6 +20,7 @@ from pokemon_red_completion.battle_scenario_materialization_plan import (
     BattleScenarioMaterializationPlan,
 )
 from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (
+    BattleScenarioMaterializationCompletionPlan,
     BattleScenarioMaterializationPlanV2,
 )
 from pokemon_red_completion.provenance import canonical_sha256
@@ -43,7 +44,9 @@ _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _MAXIMUM_JOURNAL_BYTES = 2 * 1024 * 1024
 
 BattleScenarioMaterializationPlanLike: TypeAlias = (
-    BattleScenarioMaterializationPlan | BattleScenarioMaterializationPlanV2
+    BattleScenarioMaterializationPlan
+    | BattleScenarioMaterializationPlanV2
+    | BattleScenarioMaterializationCompletionPlan
 )
 
 
@@ -428,7 +431,11 @@ def _require_identity_matches_plan(
 ) -> None:
     if not isinstance(
         plan,
-        (BattleScenarioMaterializationPlan, BattleScenarioMaterializationPlanV2),
+        (
+            BattleScenarioMaterializationPlan,
+            BattleScenarioMaterializationPlanV2,
+            BattleScenarioMaterializationCompletionPlan,
+        ),
     ):
         raise TypeError("battle materialization run requires a frozen plan")
     if (

@@ -84,6 +84,22 @@ at zero effects, binding the five immutable successes while preserving both fail
 members of their original denominator. No outcome or fit opens until seven independent captures
 authenticate.
 
+## Additive completion design
+
+The local successor now implements that decision without modifying either historical journal. A
+strict private completion plan binds the five successful predecessor outputs one by one, retains
+the predecessor's two-failure count, excludes every source attempted by both earlier generations,
+and allocates exactly two untouched roots. Venue diversity and capacity are checked over the
+combined five-plus-two set. Retained and new capture IDs must be disjoint, retained ordinals must
+be unique, and the canonical parser rederives both the new allocation and party-slot choices.
+
+The freezer reauthenticates only successful predecessor outputs and preserves failed entries as
+terminal evidence. The runner repeats that authentication before any new input. Future failures
+retain path-free stage-specific reason codes. This locally clears design qualification only; it
+must be published and exact-main green before one zero-effect freeze. That freeze must stop before
+controller input. A separate mixed-producer catalog remains necessary before any seven-capture
+outcome campaign can begin.
+
 ## Stop conditions
 
 Never retry or reclassify either terminal failure, remove it from the seven-item journal, or call

@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: preserve the five, do not erase the two
+
+The repair now speaks the same menu language as the learner: two to four represented moves, with at
+least two genuinely supported choices. More importantly, the next capture design does not redraw
+history as a clean seven-for-seven run. It independently reopens the five valid snapshots, keeps
+the two failures locked in their original journal, and searches only untouched worlds for the two
+missing lesson boundaries.
+
+That required a new provenance shape. The five old files and two future files have different
+producer commits and directories, so every retained capture carries its own source, assignment,
+state, manifest, venue and party binding. A later learning catalog must verify those seven records
+as a collection rather than pretending they were one batch. The next action is still only a
+zero-frame freeze; no move, outcome, fit or authority has been added. The score remains **19 train
+examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0 authority · 0
+transfer**.
+
 ## September 1: five lessons survived, and the two failures exposed a real contract bug
 
 The one-shot classroom run created all seven private battle snapshots. Five passed an independent

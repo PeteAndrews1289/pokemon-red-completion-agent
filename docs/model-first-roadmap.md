@@ -11,6 +11,28 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: preserve five, add only two
+
+The prospective candidate-cardinality repair is published as exact main `2db2fbf1`. The additive
+completion implementation treats the terminal seven-attempt predecessor as immutable history:
+five successful captures are independently reopened at zero frames, two failures remain failed,
+and all fourteen sources attempted across the two historical generations are excluded. A
+title-neutral additive allocator selects exactly two untouched roots while evaluating venue
+diversity and caps across the retained five plus the new two.
+
+Next sequence:
+
+1. complete repository-wide qualification and publish this design;
+2. require green exact-main CI;
+3. freeze one owner-private, path-free, zero-effect completion plan for exactly two new captures;
+4. stop and reorient before controller input;
+5. if a later separately authorized execution authenticates both captures, build a mixed-producer
+   seven-capture catalog that preserves each output's producer provenance;
+6. only then open selected-action outcome collection and the seventh descriptive fit.
+
+This gate adds no learning output. The board remains **causal train 19 · model fits 6 · verified
+development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current checkpoint: terminal materialization produced five of seven valid captures
 
 Exact main `24fe239c` passed CI `33515692262/1`, and the successor denominator executed once. Five

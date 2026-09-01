@@ -45,8 +45,11 @@ from pokemon_red_completion.battle_scenario_materialization_plan import (  # noq
 )
 from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (  # noqa: E402
     BattleScenarioMaterializationAssignmentV2,
+    BattleScenarioMaterializationCompletionPlan,
     BattleScenarioMaterializationPlanV2,
     BattleScenarioMaterializationPlanV2Error,
+    RetainedBattleScenarioMaterializationCapture,
+    parse_battle_scenario_materialization_completion_plan,
     parse_battle_scenario_materialization_plan_v2,
 )
 from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa: E402
@@ -80,6 +83,7 @@ from pokemon_red_completion.observation import (  # noqa: E402
     PokemonRedStateReader,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
+    canonical_sha256,
     detect_source_identity,
     require_clean_source,
     require_published_source,
@@ -123,7 +127,9 @@ BattleScenarioMaterializationAssignmentLike: TypeAlias = (
     BattleScenarioMaterializationAssignment | BattleScenarioMaterializationAssignmentV2
 )
 BattleScenarioMaterializationPlanLike: TypeAlias = (
-    BattleScenarioMaterializationPlan | BattleScenarioMaterializationPlanV2
+    BattleScenarioMaterializationPlan
+    | BattleScenarioMaterializationPlanV2
+    | BattleScenarioMaterializationCompletionPlan
 )
 
 
@@ -147,6 +153,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--capture-directory", type=Path, required=True)
     parser.add_argument("--excluded-plan", type=Path, default=None)
     parser.add_argument("--excluded-run-journal", type=Path, default=None)
+    parser.add_argument("--predecessor-plan", type=Path, default=None)
+    parser.add_argument("--predecessor-run-journal", type=Path, default=None)
+    parser.add_argument("--predecessor-capture-directory", type=Path, default=None)
     parser.add_argument("--journal", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -207,7 +216,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise BattleScenarioMaterializationRunnerError(
             "materialization plan environment differs"
         )
-    _require_plan_exclusions(args, plan=plan)
+    _require_plan_exclusions(args, plan=plan, rom_path=rom_path)
 
     catalog, registry = _load_exact_catalog(args, plan=plan)
     scan = _open_all_catalog_train_roots(
@@ -421,8 +430,39 @@ def _require_plan_exclusions(
     args: argparse.Namespace,
     *,
     plan: BattleScenarioMaterializationPlanLike,
+    rom_path: Path,
 ) -> None:
-    if isinstance(plan, BattleScenarioMaterializationPlanV2):
+    predecessor_arguments = (
+        args.predecessor_plan,
+        args.predecessor_run_journal,
+        args.predecessor_capture_directory,
+    )
+    if isinstance(plan, BattleScenarioMaterializationCompletionPlan):
+        if (
+            args.excluded_plan is None
+            or args.excluded_run_journal is None
+            or any(item is None for item in predecessor_arguments)
+        ):
+            raise BattleScenarioMaterializationRunnerError(
+                "completion predecessor and exhausted evidence are required"
+            )
+        attempted_sources = _require_completion_predecessor(
+            plan,
+            earliest_plan_path=args.excluded_plan,
+            earliest_journal_path=args.excluded_run_journal,
+            predecessor_plan_path=args.predecessor_plan,
+            predecessor_journal_path=args.predecessor_run_journal,
+            predecessor_capture_directory=args.predecessor_capture_directory,
+            rom_path=rom_path,
+        )
+        if any(
+            item.source.source_state_sha256 in attempted_sources
+            for item in plan.inventory
+        ):
+            raise BattleScenarioMaterializationRunnerError(
+                "completion plan reuses an attempted source"
+            )
+    elif isinstance(plan, BattleScenarioMaterializationPlanV2):
         if args.excluded_plan is None or args.excluded_run_journal is None:
             raise BattleScenarioMaterializationRunnerError(
                 "V2 exhausted source evidence is required"
@@ -443,10 +483,141 @@ def _require_plan_exclusions(
             raise BattleScenarioMaterializationRunnerError(
                 "V2 materialization plan reuses an exhausted source"
             )
-    elif args.excluded_plan is not None or args.excluded_run_journal is not None:
+        if any(item is not None for item in predecessor_arguments):
+            raise BattleScenarioMaterializationRunnerError(
+                "V2 materialization plan cannot accept completion predecessor evidence"
+            )
+    elif (
+        args.excluded_plan is not None
+        or args.excluded_run_journal is not None
+        or any(item is not None for item in predecessor_arguments)
+    ):
         raise BattleScenarioMaterializationRunnerError(
             "V1 materialization plan cannot accept V2 exclusion evidence"
         )
+
+
+def _require_completion_predecessor(
+    plan: BattleScenarioMaterializationCompletionPlan,
+    *,
+    earliest_plan_path: Path,
+    earliest_journal_path: Path,
+    predecessor_plan_path: Path,
+    predecessor_journal_path: Path,
+    predecessor_capture_directory: Path,
+    rom_path: Path,
+) -> frozenset[str]:
+    try:
+        earliest_attempted = _load_attempted_source_exclusions(
+            earliest_plan_path,
+            earliest_journal_path,
+            expected_plan_sha256=plan.earliest_excluded_plan_sha256,
+            expected_journal_sha256=plan.earliest_excluded_run_journal_sha256,
+        )
+    except BattleScenarioSourceInventoryError as error:
+        raise BattleScenarioMaterializationRunnerError(str(error)) from None
+    predecessor_directory = _private_capture_directory(
+        predecessor_capture_directory,
+        rom_path=rom_path,
+    )
+    predecessor_plan = _read_plan(
+        _private_existing_file(
+            predecessor_plan_path,
+            parent=predecessor_directory,
+            maximum_bytes=_MAXIMUM_PLAN_BYTES,
+            subject="predecessor materialization plan",
+        )
+    )
+    if not isinstance(predecessor_plan, BattleScenarioMaterializationPlanV2):
+        raise BattleScenarioMaterializationRunnerError(
+            "completion predecessor plan differs"
+        )
+    predecessor_journal = _read_journal(
+        _private_existing_file(
+            predecessor_journal_path,
+            parent=predecessor_directory,
+            maximum_bytes=_MAXIMUM_JOURNAL_BYTES,
+            subject="predecessor materialization journal",
+        )
+    )
+    try:
+        require_battle_scenario_materialization_run_matches_plan(
+            predecessor_journal,
+            predecessor_plan,
+            predecessor_journal.identity,
+        )
+    except BattleScenarioMaterializationRunError as error:
+        raise BattleScenarioMaterializationRunnerError(str(error)) from None
+    if (
+        predecessor_plan.plan_sha256 != plan.predecessor_plan_sha256
+        or predecessor_journal.journal_sha256
+        != plan.predecessor_run_journal_sha256
+        or predecessor_plan.capture_directory_sha256
+        != plan.predecessor_capture_directory_sha256
+        or hashlib.sha256(str(predecessor_directory).encode("utf-8")).hexdigest()
+        != plan.predecessor_capture_directory_sha256
+        or predecessor_plan.excluded_plan_sha256
+        != plan.earliest_excluded_plan_sha256
+        or predecessor_plan.excluded_run_journal_sha256
+        != plan.earliest_excluded_run_journal_sha256
+        or any(
+            entry.status not in {SUCCEEDED, FAILED}
+            for entry in predecessor_journal.entries
+        )
+        or sum(entry.status == FAILED for entry in predecessor_journal.entries)
+        != plan.predecessor_failure_count
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "completion predecessor binding differs"
+        )
+    retained = []
+    predecessor_attempted = set(earliest_attempted)
+    for assignment, entry in zip(
+        predecessor_plan.assignments,
+        predecessor_journal.entries,
+        strict=True,
+    ):
+        predecessor_attempted.add(
+            assignment.candidate.source.source_state_sha256
+        )
+        if entry.status != SUCCEEDED:
+            continue
+        state_sha256, manifest_sha256 = _authenticate_assignment_outputs(
+            assignment,
+            capture_directory=predecessor_directory,
+            source_commit=predecessor_journal.identity.source_commit,
+            rom_path=rom_path,
+        )
+        if (
+            state_sha256 != entry.state_sha256
+            or manifest_sha256 != entry.manifest_sha256
+        ):
+            raise BattleScenarioMaterializationRunnerError(
+                "completion retained output binding differs"
+            )
+        retained.append(
+            RetainedBattleScenarioMaterializationCapture(
+                ordinal=assignment.ordinal,
+                capture_id=assignment.capture_id,
+                assignment_sha256=canonical_sha256(assignment.private_dict()),
+                source_commit=predecessor_journal.identity.source_commit,
+                source_state_sha256=(
+                    assignment.candidate.source.source_state_sha256
+                ),
+                root_lineage_id=assignment.candidate.source.root_lineage_id,
+                venue_id=assignment.selected_venue.venue_id,
+                party_slot=assignment.party_slot,
+                state_filename=assignment.state_filename,
+                manifest_filename=assignment.manifest_filename,
+                state_sha256=state_sha256,
+                manifest_sha256=manifest_sha256,
+            )
+        )
+    if tuple(retained) != plan.retained_successes:
+        raise BattleScenarioMaterializationRunnerError(
+            "completion retained capture catalog differs"
+        )
+    return frozenset(predecessor_attempted)
 
 
 def _open_or_initialize_journal(
@@ -948,6 +1119,10 @@ def _read_plan(path: Path) -> BattleScenarioMaterializationPlanLike:
         pass
     try:
         return parse_battle_scenario_materialization_plan_v2(payload)
+    except BattleScenarioMaterializationPlanV2Error:
+        pass
+    try:
+        return parse_battle_scenario_materialization_completion_plan(payload)
     except BattleScenarioMaterializationPlanV2Error as error:
         raise BattleScenarioMaterializationRunnerError(str(error)) from None
 
