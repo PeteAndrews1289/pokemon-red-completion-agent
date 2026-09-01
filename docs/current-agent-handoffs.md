@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the zero-result repair and fresh-capacity proof
+## Current override: current-bank battle supply is falsified; Codex owns the next supply design
+
+PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census then
+authenticated the exhausted plan and journal, excluded all seven attempted roots, and inspected 47
+retained roots at zero frames and actions. Eighteen roots remain claim-available, but zero has a
+party slot satisfying both the encounter-pressure band and the learner's two-supported-action
+contract. Capacity is **0 roots / 0 venues**, below **7 roots / 2 venues**.
+
+Codex must not freeze or materialize another batch from the unchanged bank. The next design task is
+one bounded, identity-preserving source-conditioning or fresh-source contract that creates genuine
+multi-action battle states without weakening the learner mask, cloning roots, or replaying the
+game. Its first executable must be an aggregate zero-frame readiness census. If it cannot prove
+seven independent roots across two venues prospectively, reject the design before input. Counters
+remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the zero-result repair and fresh-capacity proof
 
 PR 133 merged as `bc7d7076` after exact-head CI `33473101194/1` passed. The frozen plan then ran
 once from `c0099a9d`. Its terminal denominator is **0 succeeded / 7 failed / 0 pending / 0

@@ -3,6 +3,23 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Post-exclusion capacity stop — Codex adjudication 2026-09-01
+
+PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The one published V5 census
+authenticated all 54 catalog train roots, the exact exhausted plan, and its terminal journal. It
+excluded all seven attempted roots, loaded 47 remaining roots with zero frames and controller
+actions, and found 18 claim-available roots but zero supported party slots and zero eligible venues.
+The required seven-root, two-venue denominator is therefore impossible from the unchanged bank.
+
+Codex accepts the falsification and closes this materialization lane. One-action captures will not
+be relabeled, the denominator will not shrink, and no exhausted root will return. The next design
+question is whether an identity-preserving bounded conditioning step or genuinely fresh source can
+create two supported actions across seven independent roots and two venues. That design receives an
+aggregate zero-frame readiness gate before any input. No external review was requested for the
+deterministic census; Claude and Antigravity become useful again before freezing a new supply
+design. The [path-free result](evidence/red-battle-v2-post-exclusion-capacity-result-2026-09-01.json)
+records all counts and zero effects.
+
 ## Seven-capture terminal zero — Codex adjudication 2026-09-01
 
 PR 133 merged as `bc7d7076` after CI `33473101194/1` passed. The one frozen plan then consumed all

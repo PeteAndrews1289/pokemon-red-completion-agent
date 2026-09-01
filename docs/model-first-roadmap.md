@@ -11,7 +11,30 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the seven-capture denominator finished at zero
+## Current checkpoint: the corrected successor census found zero usable roots
+
+PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census joined
+the exact exhausted plan and journal, excluded all seven attempted source roots, and reopened 47
+remaining catalog roots without advancing a frame. Eighteen are still claim-available. None has a
+party slot inside the prospective encounter-pressure band with two damaging, PP-positive,
+non-Selfdestruct actions. Eligible capacity is therefore zero roots across zero venues.
+
+This closes capture work over the unchanged bank. The next order is:
+
+1. define one bounded, identity-preserving source-conditioning or genuinely fresh-source contract;
+2. require that it creates real action diversity rather than weakening the learner mask or counting
+   a forced singleton as a ranking decision;
+3. preserve independent upstream roots and keep the seven exhausted roots permanently excluded;
+4. implement only an aggregate zero-frame readiness census first;
+5. reject the supply design unless seven independent roots across at least two venues are
+   prospectively feasible after the six-per-venue cap;
+6. obtain review before any new freeze or controller-capable execution.
+
+No learning counter moved: **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**. See the
+[capacity stop](evidence/red-battle-v2-post-exclusion-capacity-result-2026-09-01.json).
+
+## Previous checkpoint: the seven-capture denominator finished at zero
 
 Published source `c0099a9d` passed exact CI `33473101194/1`, and the frozen plan then executed once.
 All seven assignments are terminal failures: four Mansion state/manifest pairs were created but

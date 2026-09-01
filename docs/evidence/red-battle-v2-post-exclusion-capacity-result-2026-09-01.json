@@ -1,0 +1,83 @@
+{
+  "exact_ci_attempt": 1,
+  "exact_ci_run": 33476185867,
+  "exhausted_plan_sha256": "1eabadcf3d57646d4edf8a78c2d526f085c0ad0d190f48b9f1c3990d4cd80d1c",
+  "exhausted_run_journal_sha256": "2e2b6d474a518e8d1a2efc6342bee802f734c874156eab57ef1264094df9f5d2",
+  "inventory": {
+    "attempted_source_roots_declared": 7,
+    "attempted_source_roots_excluded": 7,
+    "authority_promoted": false,
+    "available_unsupported_fly_ready_map_counts": {
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "available_unsupported_ground_ready_map_counts": {},
+    "available_unsupported_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "available_unsupported_route_11_ready_map_counts": {
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "battle_captures_created": 0,
+    "catalog_train_roots": 54,
+    "claim_available_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "cinnabar_pokecenter": 7,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1,
+      "pokemon_mansion_1f": 4
+    },
+    "claim_available_train_roots": 18,
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "living_party_roots": 47,
+    "loaded_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 6,
+      "cinnabar_pokecenter": 22,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1,
+      "pokemon_mansion_1f": 13
+    },
+    "matching_state_file_copies": 74,
+    "materialization_eligible_relocation_map_counts": {},
+    "materialization_eligible_train_roots": 0,
+    "materialization_eligible_venue_counts": {},
+    "maximum_single_venue_contexts": 6,
+    "minimum_distinct_venues": 2,
+    "minimum_fresh_train_contexts": 7,
+    "missing_catalog_train_roots": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "private_path_fields": 0,
+    "prospective_fresh_train_venue_capacity": false,
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "retained_catalog_train_roots": 54,
+    "retained_state_files_hashed": 152,
+    "root_claims_created": 0,
+    "schema": "pokemon.red-battle-scenario-source-venue-inventory.v5",
+    "sealed_red_cases_opened": 0,
+    "source_commit": "b6623d524e23757faacdc533446ebd5e2c3a78f7",
+    "status": "stopped_insufficient_fresh_train_venue_capacity",
+    "successor_candidate_train_roots": 47,
+    "supported_party_slot_roots": 0,
+    "teacher_queries": 0,
+    "unique_catalog_train_states": 54
+  },
+  "merge_commit": "9a5a8fb595474039085fa330d944f00ae3cdb03a",
+  "pull_request": 134,
+  "schema": "pokemon.red-battle-v2-post-exclusion-capacity-result.v1",
+  "status": "stopped_no_supported_successor_capacity"
+}

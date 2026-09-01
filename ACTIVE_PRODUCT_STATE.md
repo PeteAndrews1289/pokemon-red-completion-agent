@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the completed post-zero repair, require exact-head green CI, and run one action-free census that excludes all seven attempted roots and uses the learner's actual move support. Do not freeze a successor unless seven fresh roots still span at least two venues after the six-per-venue cap.
+- Next decision: Design a bounded identity-preserving source-conditioning or fresh-source contract that creates at least two real supported battle actions, then publish and run an aggregate zero-frame readiness census. No successor freeze or controller input unless seven fresh independent roots across at least two venues are prospectively feasible.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Recompute eligibility without input using the learner's actual damaging, non-Selfdestruct move support and permanently exclude every source root attempted by the exhausted plan. Stop if fewer than seven fresh roots remain across at least two venues after the six-per-venue cap. |
+| Cheapest falsifier | Before any new controller input, define one identity-preserving source-conditioning contract and run an aggregate action-free readiness census over the 18 claim-available roots. Stop if no bounded portable method can prospectively create at least two supported battle actions on seven independent roots across two venues without reusing an exhausted root. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-post-zero-repair** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-materialization-run-result-2026-09-01.json)
+**2026-09-01-battle-v2-post-exclusion-capacity-stop** · status **closed** · evidence [qualification](docs/evidence/red-battle-v2-post-exclusion-capacity-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. All seven frozen assignments are terminal failures and zero captures satisfy the two-supported-action learning contract. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Learning output | None. The V5 census excluded all seven attempted roots and found zero supported successor roots, so it created no capture or learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
 | Authority delta | None. Four state/manifest pairs were created and independently reopened, but none is an accepted learning capture; three materializer calls failed. No move choice, outcome, prediction, fit, authority, sealed case, Crystal context, or replay occurred. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The exact plan and its seven attempted roots are exhausted at 0/7 qualified captures. The local repair now aligns learner, freezer, and census move support, excludes every non-pending journal source, and retains sanitized materializer failure stages. Publication and exact-head CI are required before the one action-free successor census can decide whether any replacement denominator exists. |
-| Decision | Accept the zero result and retire the exact plan without retry. Publish the completed prospective-eligibility, exclusion, and failure-stage repair unchanged; after exact-head CI passes, run exactly one zero-controller V5 successor-capacity census. Freeze nothing unless it proves seven fresh roots across at least two venues after the six-per-venue cap. |
-| Next session | Publish the completed supported-damaging-move, attempted-root-exclusion, and structured-failure repair; require exact-head green CI; then run one action-free successor-capacity census. Do not materialize, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
-| Next falsifier | Apply the learner's exact move-mechanics support filter to every available party slot, subtract all seven terminal attempted roots, and enforce seven fresh sources, at least two venues, and no more than six from one venue. A failed census stops capture work and redirects effort to new independent source or venue supply. |
-| Stop condition | Never retry or repackage any of the seven terminal assignments or their source roots. Stop before controller input until a published action-free census proves a fresh independent two-venue denominator under the corrected action-support rule. Do not shrink the denominator, treat one-action captures as training, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
+| Blocker | The published V5 census authenticated and excluded all seven exhausted roots, then found zero supported party slots among 47 retained successor roots and zero materialization-eligible roots among the 18 still claim-available. The current state bank cannot supply the seven-root, two-venue battle denominator without first creating genuine multi-action states. |
+| Decision | Stop capture materialization and do not weaken the two-action verifier. The next lane is a bounded source-conditioning or fresh-source design that preserves upstream independence and creates real learner choice before encounter capture. Require an aggregate action-free readiness proof before freezing or executing any successor. |
+| Next session | Design and hostile-test a bounded, identity-preserving multi-action battle-source supply contract; add an aggregate zero-frame readiness inventory, but execute no conditioning or materialization until the design is published, green, and proves seven independent roots across two venues. Do not weaken action support, reuse exhausted roots, fit, open sealed Red or Crystal, grant authority, or replay the game. |
+| Next falsifier | Define the smallest identity-preserving way to provision two genuinely supported battle actions, then inventory only aggregate readiness across the 18 claim-available roots and their reachable venue classes at zero frames. If fewer than seven independent roots across two venues can satisfy it, reject that supply design before execution. |
+| Stop condition | The V5 census failed at zero supported roots, so this materialization lane is closed. Never retry or repackage the seven terminal assignments, count one-action states, or run another capture census over the unchanged bank. No controller input resumes until a separately designed, published, green, identity-preserving source-supply contract proves seven fresh roots across two venues prospectively. |
 
 ### Stop conditions
 
