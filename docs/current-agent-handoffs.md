@@ -6,6 +6,22 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the seven-capture freeze
+
+PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The action-free V4 census found 18
+claim-available materializable catalog roots: 16 Mansion and two independently authenticated
+Lavender roots that the cartridge-composed ground route can deliver to Route 11. The six-per-venue
+cap leaves eight usable roots across two venues, above the seven-root threshold. Zero controller
+actions, frames, claims, captures, outcomes, predictions, fits, teacher queries, sealed cases,
+Crystal contexts, authority changes, or replays occurred.
+
+Codex's immediate job is one canonical outcome-blind seven-capture assignment freezer. It must
+derive source identities from the exact catalog, select no more than six Mansion roots and at least
+one Lavender root, prospectively bind living party slots and new private destinations, and encode
+claim/interruption recovery without turning materialization failures into labels. Publish and pass
+CI before any controller input. Counters remain **train 19 · fits 6 · verified development 6 ·
+unseen 4 · authority 0 · transfer 0**.
+
 ## Current override: Celadon failed; Codex owns aggregate relocation readiness
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. Its reusable Celadon source adapter

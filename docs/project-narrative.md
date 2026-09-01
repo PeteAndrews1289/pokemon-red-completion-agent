@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: a second battle classroom passes the census
+
+The whole-bank scan finally crossed the curriculum-supply gate. Eighteen unused authenticated
+roots can be turned into battle boundaries: sixteen in Pokémon Mansion and two independent
+Lavender states that can follow the cartridge-composed ground route to Route 11. With a maximum of
+six lessons from any one venue, eight usable roots remain across two venues—enough for the seven
+fresh train lessons the next batch requires.
+
+This was a zero-input result from published green source. It created no capture, claim, outcome,
+prediction, model fit, teacher query, sealed evaluation, Crystal context, or authority. The next
+engineering step is to freeze the exact seven source roots, party slots, private outputs,
+provenance, and interruption semantics before materialization. The learning score therefore stays
+**19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
+authority · 0 transfer**.
+
 ## August 31: the registrar passed, but there are only four new lessons
 
 The atomic freezer passed locally, on its pull request, and again on exact `main`. The project then

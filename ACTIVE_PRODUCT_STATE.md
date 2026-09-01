@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and run one path-free aggregate relocation-readiness census over all nine claim-available unsupported city roots. Only a map class already supported by an exact bounded Fly or cartridge-composed ground transition may become Route 11 supply; then complete venue capacity must pass before any materialization, claim, outcome, fit, sealed Red, or Crystal execution.
+- Next decision: Freeze and qualify one exact outcome-blind seven-capture assignment from the passed 18-root, two-venue capacity census. The plan must bind independent catalog roots, cap each venue at six, prospectively select living party slots, create only private outputs, and remain replay-safe before any controller input.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Inventory every available unsupported city boundary without controller input against the existing Fly, cartridge-composed ground-route, and full Vermilion-transition predicates. Stop if no independently available non-Mansion root can reach Route 11 under an existing bounded contract; otherwise expose only that aggregate-supported source class and repeat complete venue capacity. |
+| Cheapest falsifier | Freeze one exact path-free seven-capture assignment from the passed whole-bank census and require six or fewer roots from Mansion plus at least one independently authenticated Lavender root routed to Route 11. Stop before controller input if any source, party slot, output identity, provenance binding, recovery rule, or zero-learning-effect declaration is incomplete. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-celadon-relocation-falsification** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-celadon-relocation-readiness-result-2026-09-01.json)
+**2026-09-01-battle-v2-lavender-capacity-pass** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-lavender-capacity-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. The Celadon readiness census is falsification infrastructure, not training. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The Celadon readiness census created no capture, causal example, fit, verified outcome, authority, or transfer result. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Learning output | None. The passed capacity census is curriculum-supply evidence, not training. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The capacity census created no capture, causal example, fit, verified outcome, authority, or transfer result. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | All four claim-available Celadon-Pokecenter roots failed the exact shared Route 11 transition predicate, so the published Celadon adapter added zero second-venue supply. Sixteen claim-available roots remain materializable only as pokemon_mansion_1f; the roster still needs seven new captures across at least two venues with no more than six from one venue. |
-| Decision | Stop materialization. The Celadon hypothesis is falsified without controller input. Publish one aggregate readiness census across all nine remaining unsupported available city roots using existing Fly, ground-route, and full Vermilion-transition predicates; only an aggregate-supported reusable source class may be exposed next. |
-| Next session | Publish and run the aggregate unsupported-boundary relocation census. If one source class has complete existing transition support, expose only that reusable class and rerun whole-bank venue capacity. No encounter materialization, claim, outcome, fit, sealed Red, Crystal execution, authority, or full replay belongs before capacity passes. |
-| Next falsifier | Read all nine claim-available unsupported city roots under one shared claim lease without advancing a frame and report path-free aggregate counts for Fly readiness, cartridge-composed ground readiness, and complete Route 11 transition readiness. If no map class qualifies, stop and redesign source supply; do not diagnose or patch a private root. |
-| Stop condition | Stop before controller input until one reusable non-Mansion source class is action-free qualified and the complete catalog inventory can allocate seven fresh independent train roots across at least two venues with no more than six in one venue. Do not claim, clone, materialize, shrink, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
+| Blocker | Raw source supply is no longer the blocker: eighteen claim-available roots are materializable, including sixteen Mansion and two Lavender-to-Route-11 roots. The remaining gate is an immutable outcome-blind assignment of exactly seven independent captures across both venues, with no more than six from Mansion, before any controller input. |
+| Decision | Accept the passed capacity proof. Freeze and hostile-test one canonical seven-capture materialization assignment, binding exact catalog roots, party slots, destinations, source and registry provenance, one-shot recovery semantics, and zero outcome/model effects. Materialization remains closed until that plan is published and green. |
+| Next session | Implement and qualify the outcome-blind seven-capture assignment freezer. Publish it and obtain green CI before any capture materialization. Do not choose battle actions, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
+| Next falsifier | Build the canonical seven-capture plan entirely from the authenticated inventory and reject it unless every identity is independent and available, the venue cap is satisfied, the selected party member is living, outputs are new and private, interruption cannot retry a claimed call, and the plan records zero outcomes, labels, predictions, fits, authority, or transfer. |
+| Stop condition | Stop before controller input until one published canonical plan binds exactly seven fresh independent catalog roots across Mansion and Route 11, no more than six per venue, with prospective party slots, private outputs, exact provenance, durable recovery, and zero learning effects. Do not shrink, substitute, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
 
 ### Stop conditions
 

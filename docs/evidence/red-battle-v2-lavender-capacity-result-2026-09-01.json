@@ -1,0 +1,76 @@
+{
+  "capacity": {
+    "available_unsupported_fly_ready_map_counts": {
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "available_unsupported_ground_ready_map_counts": {},
+    "available_unsupported_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "available_unsupported_route_11_ready_map_counts": {
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1
+    },
+    "catalog_train_roots": 54,
+    "claim_available_train_roots": 25,
+    "materialization_eligible_relocation_map_counts": {
+      "cinnabar_pokecenter": 11,
+      "lavender_pokecenter": 2
+    },
+    "materialization_eligible_train_roots": 18,
+    "materialization_eligible_venue_counts": {
+      "pokemon_mansion_1f": 16,
+      "route_11": 2
+    },
+    "maximum_single_venue_contexts": 6,
+    "minimum_distinct_venues": 2,
+    "required_fresh_train_contexts": 7
+  },
+  "decision": {
+    "battle_capture_materialization_authorized": false,
+    "next_gate": "freeze and qualify one exact outcome-blind seven-capture assignment before any controller input",
+    "prospective_fresh_train_venue_capacity": true,
+    "reason": "The reusable Lavender-Pokecenter adapter exposes two independently available catalog roots through the cartridge-composed ground route to Route 11. Together with sixteen Mansion roots, the six-per-venue cap leaves eight usable roots across two venues, exceeding the frozen seven-root minimum.",
+    "status": "prospective_fresh_train_venue_capacity_passed"
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "red_rom_opened_read_only": true,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red-battle-v2-lavender-capacity-result.v1",
+  "source": {
+    "merged_main_commit": "98a4f8e70427c04c77fd1eab51f0b53399531f31",
+    "pull_request": 129,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run": 33465971401,
+    "published_inventory_source_commit": "6c41c98ec9efc5ed338f71dd72d70fdfbacecdc2"
+  },
+  "upstream": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038"
+  }
+}

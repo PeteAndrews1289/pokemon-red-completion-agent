@@ -11,6 +11,30 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: two-venue battle capacity passed
+
+PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The reusable Lavender adapter admits
+only an exact Lavender Center boundary that satisfies the existing cartridge-composed ground-route
+predicate, then reuses the ROM-derived route to Route 11. A complete V4 census from the published
+green source read all 54 catalog train roots and advanced zero frames.
+
+Eighteen claim-available roots are now materializable: 16 to `pokemon_mansion_1f` and two
+independent Lavender roots to `route_11`. After the six-per-venue cap, eight roots remain usable
+across two venues, so the frozen requirement of seven fresh train captures finally passes.
+
+The next order is:
+
+1. freeze exactly seven catalog-authenticated sources without opening outcomes;
+2. require no more than six from Mansion and at least one Lavender-to-Route-11 source;
+3. prospectively bind a living party slot, private output identity, exact source provenance, and
+   interruption semantics for every capture;
+4. hostile-test and publish that plan before any controller input;
+5. only then materialize the seven battle boundaries, still without choosing a move or querying a
+   teacher.
+
+Capacity is not training. Current evidence remains **causal train 19 · model fits 6 · verified
+development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current checkpoint: Celadon is not the second venue
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The new adapter does not assume that

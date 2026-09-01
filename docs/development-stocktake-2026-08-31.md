@@ -3,6 +3,25 @@
 This is a planning snapshot. `MISSION.md`, `NORTH_STAR.md`, and
 `ACTIVE_PRODUCT_STATE.md` remain authoritative.
 
+## September 1 update: the second battle classroom now exists
+
+PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. Its reusable Lavender adapter accepts
+only the exact Center boundary covered by the existing cartridge-composed ground transition and
+uses the ROM-derived Route 11 venue. The complete published V4 census then found 18 available
+materializable catalog roots: 16 Mansion and two Lavender-to-Route-11 roots. Applying the maximum
+six contexts per venue leaves eight usable roots across two venues, so the seven-fresh-root
+capacity rule passes.
+
+The census advanced zero frames and created zero inputs, claims, captures, predictions, outcomes,
+fits, teacher queries, sealed cases, Crystal contexts, authority, or replays. Evidence:
+[Lavender capacity result](evidence/red-battle-v2-lavender-capacity-result-2026-09-01.json).
+
+The next gate is not outcome collection yet. One canonical plan must freeze exactly seven source
+roots, at least one from Lavender, their prospective living party slots, private destinations,
+exact provenance, and interruption behavior. Only a published green freezer may open capture
+materialization. Learning counters remain **19 train · 6 fits · 6 verified development · 4 unseen
+· 0 authority · 0 transfer**.
+
 ## September 1 update: Celadon relocation was falsified action-free
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The source classifier and live
