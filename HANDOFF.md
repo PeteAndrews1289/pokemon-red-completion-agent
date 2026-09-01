@@ -14,6 +14,26 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: mixed-producer catalog implementation is locally qualified
+
+The next action-free gate is implemented. Its private canonical catalog keeps separate predecessor
+and completion producer records—including plan, journal, source, runtime, ROM, catalog, registry,
+CI and capture-directory digests—then joins exactly five predecessor successes and two completion
+successes. Every output is reopened at its original producer commit and checked at a zero-frame
+wild-battle MAIN-menu boundary. Failed entries are counted as history but cannot become captures.
+
+The contract rejects producer flattening, a duplicate capture/root/lineage/state/manifest,
+single-venue collapse, changed output bytes, symlinked private inputs, reused predecessor roots,
+nonterminal journals, and an eighth replacement. Focused qualification passes 78 affected tests
+plus 17 catalog-specific tests, Ruff and focused mypy. The first repository-wide run passed 6,301
+tests; its eight expected source-registry alarms were repaired by regenerating every executable
+source binding, and all 18 affected regression tests then passed.
+
+Publish and require exact-main green CI before building the private catalog once. That build must
+remain action-free and publish only aggregate path-free evidence. Stop and reorient after the
+seven-input catalog reopens; do not select a move, collect an outcome, fit, open sealed Red or
+Crystal, or claim authority in this gate.
+
 ## 2026-09-01: seven capture inputs now authenticate; build the mixed-producer catalog
 
 The two-assignment additive plan executed once from exact source `c9547d27` under green CI

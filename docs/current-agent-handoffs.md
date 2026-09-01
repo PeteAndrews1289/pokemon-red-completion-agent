@@ -6,6 +6,18 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns publication and the one action-free catalog build
+
+The mixed-producer implementation is locally qualified. It reopens exactly five predecessor
+successes and two completion successes under their separate producer identities, preserves both
+historical failures outside the capture set, and exposes no action, outcome or fit interface.
+
+Codex now owns publication, exact-main CI, and one private catalog build with aggregate path-free
+evidence. Stop and reorient after independent reopen of the catalog. Outcome collection, fitting,
+sealed Red, Crystal execution, full replay and authority remain closed. Claude and Antigravity have
+no blocking role in this ordinary gate; a read-only review is useful at the next model-design
+decision rather than before this zero-effect catalog build.
+
 ## Current override: Codex owns the mixed-producer seven-capture catalog
 
 The additive terminal is **2/2 succeeded**, so five predecessor captures plus two completion
