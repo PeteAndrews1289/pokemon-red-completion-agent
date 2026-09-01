@@ -22,6 +22,12 @@ claim/interruption recovery without turning materialization failures into labels
 CI before any controller input. Counters remain **train 19 · fits 6 · verified development 6 ·
 unseen 4 · authority 0 · transfer 0**.
 
+The freezer is now implemented locally. Its canonical private plan rederives a five-Mansion,
+two-Route-11 assignment from the complete eligible inventory, prospectively binds party slots with
+two usable moves and full measured-band level-gap safety, and publishes under the same shared claim
+lease used for availability. The next action is publication and green CI, then exactly one private
+freeze. No capture has been created and the execution boundary has not opened.
+
 ## Current override: Celadon failed; Codex owns aggregate relocation readiness
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. Its reusable Celadon source adapter
