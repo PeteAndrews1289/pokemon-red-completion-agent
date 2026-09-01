@@ -45,8 +45,33 @@ def red_battle_move_is_model_supported(
     ):
         return False
     resolved_catalog = catalog or PokemonRedBattleCatalog()
+    return red_battle_move_is_refreshable_model_supported(
+        move_id,
+        catalog=resolved_catalog,
+    )
+
+
+def red_battle_move_is_refreshable_model_supported(
+    move_id: object,
+    *,
+    catalog: PokemonRedBattleCatalog | None = None,
+) -> bool:
+    """Return whether a full PP restoration can make this move a learner action.
+
+    This deliberately ignores only *current* PP.  It does not broaden the
+    learner surface: status moves and Selfdestruct remain unsupported, and the
+    cartridge catalog must give the move a positive PP capacity.
+    """
+
+    if type(move_id) is not int or move_id <= 0:  # noqa: E721
+        return False
+    resolved_catalog = catalog or PokemonRedBattleCatalog()
     mechanics = resolved_catalog.resolve_move(pokemon_red_move_ref(move_id))
-    return mechanics.power > 0 and "self_destruct" not in mechanics.effect_flags
+    return (
+        mechanics.max_pp > 0
+        and mechanics.power > 0
+        and "self_destruct" not in mechanics.effect_flags
+    )
 
 
 def red_battle_supported_move_count(
@@ -65,6 +90,18 @@ def red_battle_supported_move_count(
     return sum(
         red_battle_move_is_model_supported(move_id, pp, catalog=catalog)
         for move_id, pp in zip(move_ids, current_pp, strict=True)
+    )
+
+
+def red_battle_refreshable_supported_move_count(move_ids: tuple[int, ...]) -> int:
+    """Count learner actions available after a genuine full PP restoration."""
+
+    if not isinstance(move_ids, tuple):
+        raise RedBattleScenarioError("battle move array is unavailable")
+    catalog = PokemonRedBattleCatalog()
+    return sum(
+        red_battle_move_is_refreshable_model_supported(move_id, catalog=catalog)
+        for move_id in move_ids
     )
 
 
@@ -110,9 +147,7 @@ def prepare_red_battle_scenario(
         strict=True,
     ):
         if slot_index >= len(moves) or moves[slot_index] == 0:
-            raise RedBattleScenarioError(
-                "battle move identities do not match projected candidates"
-            )
+            raise RedBattleScenarioError("battle move identities do not match projected candidates")
         supported_values.append(
             legal
             and red_battle_move_is_model_supported(
@@ -171,11 +206,7 @@ def project_red_battle_turn_outcome(
     player_changed = after.active_party_index != before.active_party_index
     player_fainted = bool(
         (after.battler_hp == 0)
-        or (
-            not battle_exited
-            and player_changed
-            and before.active_party_index is not None
-        )
+        or (not battle_exited and player_changed and before.active_party_index is not None)
     )
     if player_fainted:
         player_damage = before_player_hp / before_player_max

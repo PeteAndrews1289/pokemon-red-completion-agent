@@ -35,6 +35,9 @@ from pokemon_red_completion.battle_scenario_source_venue import (  # noqa: E402
     BattleScenarioSourceVenueError,
     battle_scenario_source_venue,
 )
+from pokemon_red_completion.battle_source_conditioning import (  # noqa: E402
+    BATTLE_RESOURCE_CONDITIONING_V1,
+)
 from pokemon_red_completion.blaine import (  # noqa: E402
     DIGLETTS_CAVE_TRAINING_VENUE,
     MANSION_TRAINING_VENUE,
@@ -76,6 +79,9 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 from pokemon_red_completion.red_battle_scenario import (  # noqa: E402
     PreparedRedBattleScenario,
     prepare_red_battle_scenario,
+)
+from pokemon_red_completion.red_battle_source_conditioning import (  # noqa: E402
+    red_battle_party_identity,
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder  # noqa: E402
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
@@ -364,7 +370,10 @@ def _venue_for_source_location(
     *,
     rom_bytes: bytes | None = None,
 ) -> TrainingVenue:
-    if source_location == "lavender_center_route_11":
+    if source_location in {
+        "lavender_center_route_11",
+        "vermilion_transition_route_11",
+    }:
         if not isinstance(rom_bytes, bytes) or not rom_bytes:
             raise BattleScenarioMaterializationError(
                 "Lavender ground relocation requires immutable ROM bytes"
@@ -507,8 +516,11 @@ def _prepare_source_venue(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
+    *,
+    restore_battle_resources: bool = False,
 ) -> None:
     raw = reader.read()
+    before_identity = None
     relocation_sources = {
         "cinnabar_center": MapId.CINNABAR_POKECENTER,
         "celadon_center_route_11": MapId.CELADON_POKECENTER,
@@ -519,6 +531,21 @@ def _prepare_source_venue(
             raise BattleScenarioMaterializationError(
                 "center source is not at the expected safe boundary"
             )
+        before_identity = red_battle_party_identity(raw)
+        venue.heal_and_return(actions, reader, emulator)
+    elif source_location == "vermilion_transition_route_11":
+        if raw.battle_state != 0:
+            raise BattleScenarioMaterializationError(
+                "portable Route 11 source is not at a safe boundary"
+            )
+        before_identity = red_battle_party_identity(raw)
+        venue.heal_and_return(actions, reader, emulator)
+    elif restore_battle_resources:
+        if raw.map_id != venue.map_id or raw.battle_state != 0:
+            raise BattleScenarioMaterializationError(
+                "direct resource-conditioning source is not at its venue boundary"
+            )
+        before_identity = red_battle_party_identity(raw)
         venue.heal_and_return(actions, reader, emulator)
     elif raw.map_id != venue.map_id or raw.battle_state != 0:
         raise BattleScenarioMaterializationError(
@@ -528,6 +555,11 @@ def _prepare_source_venue(
     if prepared.map_id != venue.map_id or prepared.battle_state != 0:
         raise BattleScenarioMaterializationError(
             "source did not reach its measured encounter venue"
+        )
+    if before_identity is not None:
+        BATTLE_RESOURCE_CONDITIONING_V1.require_identity_preserved(
+            before_identity,
+            red_battle_party_identity(prepared),
         )
 
 
@@ -581,7 +613,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 source_location,
                 rom_bytes=(
                     rom_bytes
-                    if source_location == "lavender_center_route_11"
+                    if source_location
+                    in {
+                        "lavender_center_route_11",
+                        "vermilion_transition_route_11",
+                    }
                     else None
                 ),
             )

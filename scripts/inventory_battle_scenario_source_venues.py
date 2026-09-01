@@ -80,6 +80,7 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 )
 from pokemon_red_completion.red_battle_scenario import (  # noqa: E402
     RedBattleScenarioError,
+    red_battle_refreshable_supported_move_count,
     red_battle_supported_move_count,
 )
 from pokemon_red_completion.red_training_transitions import (  # noqa: E402
@@ -124,6 +125,7 @@ class _ObservedTrainRoot:
     safe_nonbattle: bool
     living_party_member_available: bool
     supported_party_slot_available: bool
+    refreshable_party_slot_available: bool
 
     @property
     def materialization_eligible(self) -> bool:
@@ -132,6 +134,18 @@ class _ObservedTrainRoot:
             and self.safe_nonbattle
             and self.living_party_member_available
             and self.supported_party_slot_available
+            and self.venue_id is not None
+        )
+
+    @property
+    def resource_conditioning_eligible(self) -> bool:
+        """Whether a full-heal route can create a genuine two-action source."""
+
+        return (
+            self.claim_available
+            and self.safe_nonbattle
+            and self.living_party_member_available
+            and self.refreshable_party_slot_available
             and self.venue_id is not None
         )
 
@@ -387,6 +401,19 @@ def _attempted_source_state_sha256(
 
 
 def _supported_party_slot_available(raw: RawGameState, venue_id: str | None) -> bool:
+    return _party_slot_available(raw, venue_id, after_resource_restoration=False)
+
+
+def _refreshable_party_slot_available(raw: RawGameState, venue_id: str | None) -> bool:
+    return _party_slot_available(raw, venue_id, after_resource_restoration=True)
+
+
+def _party_slot_available(
+    raw: RawGameState,
+    venue_id: str | None,
+    *,
+    after_resource_restoration: bool,
+) -> bool:
     if venue_id is None:
         return False
     venue = {
@@ -444,7 +471,12 @@ def _supported_party_slot_available(raw: RawGameState, venue_id: str | None) -> 
             and current_hp > 0
             and type(level) is int  # noqa: E721
             and minimum_level <= level <= maximum_level
-            and red_battle_supported_move_count(move_ids, current_pp) >= 2
+            and (
+                red_battle_refreshable_supported_move_count(move_ids)
+                if after_resource_restoration
+                else red_battle_supported_move_count(move_ids, current_pp)
+            )
+            >= 2
             for level, current_hp, move_ids, current_pp in zip(
                 typed_levels,
                 typed_hp,
@@ -494,6 +526,7 @@ def _observe_root(
         venue_id = None
         relocation_required = False
     supported_party_slot = _supported_party_slot_available(raw, venue_id)
+    refreshable_party_slot = _refreshable_party_slot_available(raw, venue_id)
     if emulator.frame_count != 0 or emulator.pressed_buttons:
         raise BattleScenarioSourceInventoryError(
             "action-free battle source observation crossed the controller boundary"
@@ -509,6 +542,7 @@ def _observe_root(
         safe_nonbattle=safe_nonbattle,
         living_party_member_available=living,
         supported_party_slot_available=supported_party_slot,
+        refreshable_party_slot_available=refreshable_party_slot,
     )
 
 
@@ -530,9 +564,7 @@ def _available_unsupported_capability_counts(
         "ground_relocation_ready",
         "route_11_relocation_ready",
     }:
-        raise BattleScenarioSourceInventoryError(
-            "unsupported relocation capability inventory"
-        )
+        raise BattleScenarioSourceInventoryError("unsupported relocation capability inventory")
     return Counter(
         item.map_label
         for item in observed
@@ -569,9 +601,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         expected_journal_sha256=args.expected_excluded_run_journal_sha256,
     )
     successor_roots = tuple(
-        root
-        for root in scan.roots
-        if root.binding.source_state_sha256 not in attempted_sources
+        root for root in scan.roots if root.binding.source_state_sha256 not in attempted_sources
     )
     excluded_retained_roots = len(scan.roots) - len(successor_roots)
     registry_path = open_fixed_account_claim_registry()
@@ -600,6 +630,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         item.venue_id
         for item in observed
         if item.materialization_eligible and item.venue_id is not None
+    )
+    resource_conditioning_venue_counts = Counter(
+        item.venue_id
+        for item in observed
+        if item.resource_conditioning_eligible and item.venue_id is not None
     )
     loaded_map_counts = Counter(item.map_label for item in observed)
     claim_available_map_counts = Counter(
@@ -633,11 +668,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v5",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v6",
         "status": (
-            "prospective_fresh_train_venue_capacity_passed"
-            if _venue_capacity(venue_counts)
-            else "stopped_insufficient_fresh_train_venue_capacity"
+            "prospective_resource_conditioning_capacity_passed"
+            if _venue_capacity(resource_conditioning_venue_counts)
+            else "stopped_insufficient_resource_conditioning_capacity"
         ),
         "source_commit": source.git_commit,
         "context_catalog_sha256": catalog.catalog_sha256,
@@ -657,6 +692,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "claim_available_train_roots": available_count,
         "materialization_eligible_train_roots": eligible_count,
         "materialization_eligible_venue_counts": dict(sorted(venue_counts.items())),
+        "resource_conditioning_eligible_train_roots": sum(
+            item.resource_conditioning_eligible for item in observed
+        ),
+        "resource_conditioning_eligible_venue_counts": dict(
+            sorted(resource_conditioning_venue_counts.items())
+        ),
         "loaded_map_counts": dict(sorted(loaded_map_counts.items())),
         "claim_available_map_counts": dict(sorted(claim_available_map_counts.items())),
         "available_unsupported_map_counts": dict(sorted(available_unsupported_map_counts.items())),
@@ -676,10 +717,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "minimum_distinct_venues": MINIMUM_DISTINCT_VENUES,
         "maximum_single_venue_contexts": MAXIMUM_SINGLE_BUCKET_CONTEXTS,
         "prospective_fresh_train_venue_capacity": _venue_capacity(venue_counts),
+        "prospective_resource_conditioning_capacity": _venue_capacity(
+            resource_conditioning_venue_counts
+        ),
         "safe_nonbattle_roots": sum(item.safe_nonbattle for item in observed),
         "living_party_roots": sum(item.living_party_member_available for item in observed),
-        "supported_party_slot_roots": sum(
-            item.supported_party_slot_available for item in observed
+        "supported_party_slot_roots": sum(item.supported_party_slot_available for item in observed),
+        "refreshable_party_slot_roots": sum(
+            item.refreshable_party_slot_available for item in observed
         ),
         "controller_actions": 0,
         "emulator_frames": 0,

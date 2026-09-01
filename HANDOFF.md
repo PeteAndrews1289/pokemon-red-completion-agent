@@ -14,6 +14,39 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: PP-only source conditioning failed; venue allocation is next
+
+Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The one V6 census excluded all seven
+attempted sources, loaded 47 successors at zero frames, and found 18 claim-available roots. Only
+three successors had two supported moves when current PP was ignored, and only one unused root was
+also reachable and inside its assigned venue's encounter-pressure band. Capacity is **1 Route 11
+root / 1 venue**, below **7 roots / 2 venues**.
+
+Do not execute PP-only conditioning. The next bounded gate is one aggregate action-free allocation
+over every existing measured venue reachable from each unused source. Preserve one root per seat,
+the six-per-venue cap, exact move mechanics, full level pressure, terminal-source exclusions, and
+zero private identity output. If no 7/2 allocation exists, stop current-bank adaptation and design
+genuinely fresh bounded scenario generation. No counter moved.
+
+## 2026-09-01: resource-conditioning readiness is local; publish before the census
+
+The unchanged post-exclusion bank has zero currently usable two-action roots. The local successor
+tests one bounded explanation: restore battle resources through an existing measured venue while
+preserving ordered party species, levels, and learned moves. The portable contract permits only HP,
+status, and PP restoration. Red's projected post-heal support still requires two damaging,
+non-Selfdestruct moves with positive catalog maximum PP and the exact level-pressure band.
+
+The source classifier now admits other safe Red boundaries only when the existing live Vermilion
+transition predicate already proves the route; no new direction string was added. The V6 inventory
+will report current and post-restoration capacity separately and must remain aggregate, action-free,
+claim-free, and zero-frame. Existing materialization plans do not opt into conditioning.
+
+Next: complete the full local gate, publish, require exact-head green CI, and run the V6 census
+once. Require seven unused independent roots across at least two venues after the six-per-venue cap.
+Failure retires this supply hypothesis; pass opens only a new conditioning-aware freeze/runtime
+design. Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 ·
+transfer 0**.
+
 ## 2026-08-31: V2 action-free census stopped at 4/7 fresh train lineages
 
 PR 123 merged as exact main `00ad6ce1a122feb459f3db07c1e4e51cbde996fe`; both PR CI

@@ -11,6 +11,40 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: resource restoration failed at 1 root / 1 venue
+
+Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The published V6 census then reopened the
+post-exclusion bank at zero actions and frames. Eighteen roots remain claim-available, but ignoring
+current PP exposed only three two-action successors in the retained population and only one root
+that was also unused, reachable, and inside the assigned venue's level-pressure band. Capacity is
+**1 Route 11 root / 1 venue**, below **7 roots / 2 venues**.
+
+PP-only conditioning is retired without execution. The next cheapest falsifier is one aggregate
+root-to-venue allocation census across all existing measured safe venues. It may assign a root only
+to a venue the exact live transition supports and where a real party slot passes the two-action and
+encounter-level rules. If no capped 7/2 allocation exists, stop adapting this bank and design
+genuinely fresh bounded scenario generation. No learning counter moved. See the
+[result](evidence/red-battle-v2-resource-conditioning-capacity-result-2026-09-01.json).
+
+## Previous engineering checkpoint: resource restoration was a falsifiable supply hypothesis
+
+The local successor defines one title-neutral operation, `restore_battle_resources`. It may heal
+HP, cure status, and restore PP, but a before/after semantic projection requires identical party
+order, species, levels, and learned moves. Red counts a post-heal choice only when the cartridge
+catalog says at least two learned moves have positive maximum PP, cause damage, and are not
+Selfdestruct. Current PP is the only support fact ignored by the readiness projection.
+
+The Red adapter also generalizes Route 11 relocation to any source boundary already accepted by
+the existing live Vermilion transition predicate. It adds no route string. The V6 whole-bank census
+will report current capacity separately from resource-conditioned capacity and remains aggregate,
+claim-free, action-free, and zero-frame.
+
+Next: finish the complete local gate, publish unchanged source, require exact-head green CI, then
+run the V6 census once. It must prove seven unattempted roots across two venues after the six-per-
+venue cap. Failure retires this current-bank conditioning design; pass opens only a separately
+bound conditioning-aware freezer/materializer design. No existing plan gains conditioning, and no
+learning counter moves. See the [contract](red-battle-v2-resource-conditioning-readiness.md).
+
 ## Current checkpoint: the corrected successor census found zero usable roots
 
 PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census joined

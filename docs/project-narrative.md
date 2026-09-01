@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the PP hypothesis fails before healing anyone
+
+The published scan gave a clear answer. Eighteen unused worlds remained, but only one had the
+right level, route, and two real attacks for a measured venue. Ignoring current PP did not uncover a
+hidden classroom: post-heal capacity was still one world in one environment, against seven in two
+required.
+
+So nobody was healed and no encounter was created. The next—and last—question for this old state
+bank is whether its parties were matched to the wrong training environments. One aggregate scan
+will try every already-measured reachable venue under the same strict rules. If that cannot build
+the class, the project stops adapting old saves and creates fresh bounded scenarios. The score
+remains **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
+authority · 0 transfer**.
+
+## September 1: ask whether the students are merely out of PP
+
+The hard zero suggested one cheap, testable explanation: some unused parties may know two real
+attacks but have spent their PP. The next design does not teach a move or rewrite a save. It asks
+whether an ordinary Pokémon Center restoration—HP, status, and PP only—would reveal a genuine
+two-action lesson while keeping party order, species, levels, and learned moves identical.
+
+That preservation rule now exists above Red as a title-neutral contract. Red supplies only its
+mechanics catalog and already-tested travel adapters. The next whole-bank scan will compare current
+capacity with post-heal capacity without pressing a button. Seven independent roots across two
+venues are still mandatory. Until that published scan passes, there is no new classroom and the
+score remains **19 train examples · 6 fits · 6 verified development outcomes · 4 unseen
+comparisons · 0 authority · 0 transfer**.
+
 ## September 1: the corrected census says the current classroom is empty
 
 The repair passed all 6,199 local tests, passed GitHub's exact clean-checkout run, and merged. Then

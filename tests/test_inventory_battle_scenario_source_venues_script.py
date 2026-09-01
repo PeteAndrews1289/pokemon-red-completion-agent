@@ -246,6 +246,8 @@ def test_inventory_observes_map_and_availability_without_advancing(
     assert observed.relocation_required is False
     assert observed.route_11_relocation_ready is True
     assert observed.materialization_eligible is True
+    assert observed.refreshable_party_slot_available is True
+    assert observed.resource_conditioning_eligible is True
 
 
 def test_inventory_requires_two_learner_supported_attacks() -> None:
@@ -272,6 +274,50 @@ def test_inventory_requires_two_learner_supported_attacks() -> None:
     )
     assert INVENTORY["_supported_party_slot_available"](
         two_attacks,
+        "route_11",
+    )
+
+
+def test_inventory_counts_two_depleted_attacks_only_after_resource_restoration() -> None:
+    depleted = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_11,
+        player_x=12,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_hp=(40,),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 2, 39, 0),),
+        party_pp=((0, 0, 10, 0),),
+        battle_state=0,
+    )
+
+    assert not INVENTORY["_supported_party_slot_available"](depleted, "route_11")
+    assert INVENTORY["_refreshable_party_slot_available"](depleted, "route_11")
+
+
+def test_inventory_resource_conditioning_never_counts_status_or_self_destruct() -> None:
+    unsupported = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_11,
+        player_x=12,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_hp=(40,),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 39, 120, 0),),
+        party_pp=((0, 0, 0, 0),),
+        battle_state=0,
+    )
+
+    assert not INVENTORY["_refreshable_party_slot_available"](
+        unsupported,
         "route_11",
     )
 
@@ -363,6 +409,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             safe_nonbattle=True,
             living_party_member_available=True,
             supported_party_slot_available=True,
+            refreshable_party_slot_available=True,
         ),
         observed_type(
             map_label="fuchsia_city",
@@ -375,6 +422,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             safe_nonbattle=True,
             living_party_member_available=True,
             supported_party_slot_available=True,
+            refreshable_party_slot_available=True,
         ),
         observed_type(
             map_label="celadon_pokecenter",
@@ -387,6 +435,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             safe_nonbattle=True,
             living_party_member_available=True,
             supported_party_slot_available=True,
+            refreshable_party_slot_available=True,
         ),
     )
 

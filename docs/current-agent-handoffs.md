@@ -6,6 +6,36 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: PP restoration failed; Codex owns one aggregate venue-allocation falsifier
+
+Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
+only one resource-conditioning-eligible root at one venue. PP-only conditioning therefore cannot
+supply the required seven roots across two venues and must not execute.
+
+Codex's next bounded task is a title-neutral root-to-venue allocation contract with a Red adapter
+over existing measured venues. It must remain complete-bank, aggregate, action-free, zero-frame,
+and outcome-blind. A root counts only once, only at a venue reached by an existing live transition,
+and only with the exact two-action and full encounter-pressure rules. Failure at 7/2 closes all
+current-bank adaptations and sends the project to genuinely fresh bounded scenario generation.
+Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
+0**.
+
+## Previous override: Codex owned publication and one action-free conditioning census
+
+The current local design asks whether full resource restoration can turn unused Red states into
+real battle choices without manufacturing independence. Its title-neutral contract permits only
+HP, status, and PP restoration and verifies that party order, species, levels, and learned moves
+are identical afterward. Red's readiness rule still requires two damaging, non-Selfdestruct moves
+and the frozen encounter-pressure band.
+
+The V6 census expands Route 11 source recognition only through the existing live transition
+predicate and reports current versus post-restoration capacity separately. It must remain a
+complete-bank, path-free, zero-action, zero-frame aggregate. Codex owns full qualification,
+publication, exact-head CI, and then one census. If fewer than seven independent roots across two
+venues pass after the six-per-venue cap, retire the design before input. If it passes, review and
+bind a new conditioning-aware freezer/materializer; do not modify or retry an old plan. Counters
+remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current override: current-bank battle supply is falsified; Codex owns the next supply design
 
 PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census then

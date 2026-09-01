@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: healing was not the missing ingredient
+
+The scanner found eighteen unused worlds, but a full PP refill would make only one of them usable
+at a reachable, appropriately difficult training area. The requirement is seven worlds across two
+areas. The project rejected the idea without healing anyone or starting an encounter.
+
+One final read-only question remains for this bank: could those parties train safely in a different
+already-measured area? If no honest assignment reaches seven worlds in two areas, the old saves are
+finished as a source of battle lessons and the system must create fresh short scenarios instead.
+
+## Current engineering checkpoint: perhaps the moves are learned but exhausted
+
+The next hypothesis is deliberately mundane: some unused parties may already know two real
+attacks, but their PP is empty. The system now has a game-neutral rule for an ordinary resource
+restoration. HP, status, and PP may change; party order, species, levels, and learned moves may not.
+
+Before another button is pressed, one published scanner will ask every unused world whether a real
+healing route could expose two valid attacks at the right challenge level. It still needs seven
+independent worlds across two classrooms. If the aggregate answer is no, this idea ends there. If
+yes, the next chapter must seal a brand-new plan that explicitly includes healing; none of the old
+failed cards gets changed or replayed.
+
 ## Current checkpoint: the corrected classroom has no eligible students
 
 The repaired scanner passed locally and on GitHub, then counted the remaining worlds once without
