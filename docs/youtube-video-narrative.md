@@ -166,6 +166,27 @@ started one. Only then will we create the seven battle decision snapshots.”
 
 **On-screen score:** `CAPTURE PLAN 7/7 · CAPTURES 0 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
 
+## New scene: seven lessons frozen, no buttons pressed
+
+**Visual:** Ten anonymous root cards each connect to two classroom doors: **ROUTE 11** and
+**DIGLETT'S CAVE**. An exact allocator seals seven cards into a private envelope, four under Cave
+and three under Route 11. Keep the controller cable visibly disconnected and stamp the envelope
+**0 FRAMES · 0 INPUTS · 0 CLAIMS · 0 OUTCOMES**.
+
+**Voiceover:** “The broader census found the diversity we needed, but we still did not press a
+button. From exact published code, one freezer reopened the whole bank, excluded every previously
+attempted world, and committed seven unique lessons across two environments before learning their
+outcomes. The public record contains counts and hashes—not the identities someone could tune to.”
+
+**Visual:** Put the sealed envelope behind a gate labeled **PUBLISH RECEIPT + GREEN CI**, then a
+separate gate labeled **CRASH-SAFE MATERIALIZATION · STARTED MEANS CONSUMED**.
+
+**Voiceover:** “Freezing and playing are separate decisions. After publication, the runner may
+materialize each boundary once. A blackout or failure costs an example, but it can never become a
+quiet retry or replacement.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the second classroom opens
 
 **Visual:** A Lavender save card enters a scanner labeled **CARTRIDGE GROUND ROUTE**, follows a
