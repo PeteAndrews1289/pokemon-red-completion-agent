@@ -12,10 +12,17 @@ from pokemon_red_completion.battle_outcome_capture_authentication import (
     authenticate_battle_scenario_source_binding,
 )
 from pokemon_red_completion.gen1_field_moves import FLY_MOVE_ID
+from pokemon_red_completion.gen1_traversal import CUT_MOVE_ID
 from pokemon_red_completion.goal_manager_composition_qualification import (
     root_consumption_sha256,
 )
-from pokemon_red_completion.observation import Badge, BattleMenuPhase, MapId, RawGameState
+from pokemon_red_completion.observation import (
+    Badge,
+    BattleMenuPhase,
+    EventFlag,
+    MapId,
+    RawGameState,
+)
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -306,6 +313,62 @@ def test_celadon_source_requires_the_live_route_11_transition_capability() -> No
             last_blackout_map=int(MapId.CELADON_CITY),
             current_map_tileset=6,
         )
+
+
+def test_lavender_source_requires_the_cartridge_composed_ground_transition() -> None:
+    error = MATERIALIZE["BattleScenarioMaterializationError"]
+    derive = MATERIALIZE["_source_location_for_state"]
+    event_flags = bytearray(int(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING) // 8 + 1)
+    byte, bit = divmod(int(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING), 8)
+    event_flags[byte] |= 1 << bit
+    lavender = RawGameState(
+        game_started=True,
+        map_id=MapId.LAVENDER_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=1,
+        battle_state=0,
+        badge_bits=int(Badge.CASCADE),
+        event_flags=bytes(event_flags),
+        party_hp=(120,),
+        party_moves=((CUT_MOVE_ID, 0, 0, 0),),
+    )
+
+    assert derive(
+        lavender,
+        last_blackout_map=int(MapId.LAVENDER_TOWN),
+        current_map_tileset=0,
+    ) == "lavender_center_route_11"
+    with pytest.raises(error, match="no qualified bounded relocation"):
+        derive(
+            replace(lavender, badge_bits=0),
+            last_blackout_map=int(MapId.LAVENDER_TOWN),
+            current_map_tileset=0,
+        )
+
+
+def test_lavender_source_binds_the_rom_derived_route_11_venue(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    venue_for = MATERIALIZE["_venue_for_source_location"]
+    globals_ = venue_for.__globals__
+    route_11 = SimpleNamespace(map_id=int(MapId.ROUTE_11))
+    cave = SimpleNamespace(map_id=int(MapId.DIGLETTS_CAVE))
+    observed: list[bytes] = []
+    monkeypatch.setitem(
+        globals_,
+        "red_training_venues_with_ground_transition",
+        lambda payload: observed.append(payload) or (route_11, cave),
+    )
+
+    assert venue_for(
+        "lavender_center_route_11",
+        rom_bytes=b"immutable-red-rom",
+    ) is route_11
+    assert observed == [b"immutable-red-rom"]
+    with pytest.raises(
+        MATERIALIZE["BattleScenarioMaterializationError"],
+        match="immutable ROM bytes",
+    ):
+        venue_for("lavender_center_route_11")
 
 
 @pytest.mark.parametrize(
