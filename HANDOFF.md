@@ -14,6 +14,26 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: partition-aware eight-capture materialization is locally qualified
+
+The proven train V2 plan, materializer and runner now carry either train or development without a
+new game-specific path. The plan derives **7 train / 8 development** from catalog-authenticated
+sources, rejects a mixed inventory, and preserves the legacy additive completion plan as
+train-only. The materializer accepts no partition label; it authenticates both possible catalog
+partitions and requires exactly one match. The runner reopens the complete matching partition and
+requires the output receipt and manifest to retain that derived partition.
+
+The development fixture canonically selects **8 captures · 4 Route 11 · 4 Diglett's Cave**. The
+same started-before-input journal now creates eight pending entries. Focused qualification passes
+**116 tests**; the full gate passes **6,332**, with Ruff, all **331** mypy source files, public
+artifacts, docs and regenerated executable-source registries green. No private input, action,
+frame, claim, capture, outcome, prediction, fit, teacher or authority surface opened. See the
+[engineering qualification](docs/evidence/red-battle-v2-partition-materializer-engineering-qualification-2026-09-01.json).
+
+Next publish and require exact-main green CI. Then freeze exactly one private development plan at
+zero effects and publish only aggregate path-free evidence. Stop and reorient before controller
+input; do not execute captures in the freeze gate.
+
 ## 2026-09-01: development capacity passed at 22 candidates / 2 venues
 
 PR 147 merged as exact main `bb78c5bb`; CI `33552686857/1` passed. The one complete-bank

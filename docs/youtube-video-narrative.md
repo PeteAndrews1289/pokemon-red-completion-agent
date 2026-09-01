@@ -5169,3 +5169,15 @@ version has to prove the model learned something worth carrying into a game it h
   eight destinations and one-shot identities; it still stops before gameplay.”
 - End on **GENERIC PARTITION FREEZER → GREEN CI → ONE ZERO-EFFECT DEVELOPMENT PLAN → REVIEW →
   SEPARATE CAPTURE DECISION → 7+8 FREEZE → OUTCOMES → TRAIN-ONLY FIT**.
+
+## New sequence: “Do not let the caller label the exam”
+
+- Split one pipeline into **TRAIN: 7** and **DEVELOPMENT: 8**, then show a mixed stack being
+  rejected before selection.
+- Resolve the development side to **ROUTE 11 ×4 · CAVE ×4** and place eight cards in the existing
+  **PENDING → STARTED → TERMINAL** ledger. Keep all cards pending in this scene.
+- Cross out a command-line `--partition development` label at the materializer boundary. Replace
+  it with **AUTHENTICATE TRAIN · AUTHENTICATE DEVELOPMENT · REQUIRE EXACTLY ONE MATCH**.
+- Show the runner reopening the same partition and checking the receipt and manifest. Overlay
+  **116 FOCUSED · 6,332 FULL · PRIVATE SAVES OPENED 0 · ACTIONS 0**.
+- End before gameplay: **PUBLISH → EXACT-MAIN GREEN → FREEZE EIGHT AT ZERO EFFECTS → STOP**.

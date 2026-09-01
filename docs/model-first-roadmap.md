@@ -11,7 +11,35 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: development capacity passed; build the eight-capture freezer
+## Current engineering checkpoint: the generic eight-capture freezer is locally qualified
+
+The existing V2 seam is now partition-aware end to end. A plan derives **7 train / 8 development**
+from its complete authenticated inventory, rejects mixed partitions, preserves old train plan
+bytes and keeps additive completion train-only. The freezer requires a partition but never accepts
+individual roots. The child materializer accepts no partition argument and requires exactly one
+catalog-authenticated partition match. The runner reopens that complete partition and verifies the
+receipt and manifest against the source-derived value.
+
+The development contract selects exactly **4 Route 11 + 4 Diglett's Cave** and reuses the
+started-before-input, no-retry journal. Local qualification is **116 focused + 6,332 full tests**,
+Ruff, mypy over 331 source files, docs, public artifacts and all source-bound registries. It opened
+no private input and caused no gameplay or learning effect.
+
+Next:
+
+1. publish this implementation and require green exact-main CI;
+2. run one zero-effect freeze over the complete development bank with the exact published source;
+3. require eight unique assignments, the 4+4 allocation, zero cross-partition collisions, new
+   owner-private outputs and a canonical reopen;
+4. publish only aggregate path-free evidence and stop before controller input;
+5. only a later separately reviewed decision may execute the eight one-shot captures;
+6. after they authenticate, build the zero-effect **7 train + 8 development** outcome freeze.
+
+The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
+4 · authority 0 · transfer 0**. See the
+[qualification](evidence/red-battle-v2-partition-materializer-engineering-qualification-2026-09-01.json).
+
+## Previous checkpoint: development capacity passed; build the eight-capture freezer
 
 PR 147 merged as exact main `bb78c5bb` after CI `33552686857/1` passed. The one action-free
 development census authenticated all **27** catalog roots, found **25** claim-available and zero

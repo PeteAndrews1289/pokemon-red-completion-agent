@@ -1,0 +1,54 @@
+{
+  "authority_promoted": false,
+  "base_commit": "976131c501f44f266f873c027700426b14443107",
+  "battle_captures_created": 0,
+  "controller_actions": 0,
+  "crystal_contexts_opened": 0,
+  "emulator_frames": 0,
+  "full_game_replays": 0,
+  "implementation": {
+    "caller_supplied_partition": false,
+    "completion_plan_partition": "train_only_legacy",
+    "development_capture_count": 8,
+    "development_selected_venue_counts": {
+      "digletts_cave": 4,
+      "route_11": 4
+    },
+    "freeze_partition_argument_required": true,
+    "materializer_partition_derivation": "unique_catalog_authentication",
+    "mixed_partition_inventory_rejected": true,
+    "partition_aware_complete_bank_reopen": true,
+    "runner_manifest_partition_reauthenticated": true,
+    "started_before_input_journal_reused": true,
+    "train_capture_count": 7,
+    "train_plan_compatibility_retained": true
+  },
+  "implementation_tree_commit": "d4d2fd83",
+  "model_fits": 0,
+  "model_predictions": 0,
+  "outcomes_opened": 0,
+  "private_inputs_opened": 0,
+  "private_path_fields": 0,
+  "root_claims_created": 0,
+  "schema": "pokemon.red-battle-v2-partition-materializer-engineering-qualification.v1",
+  "sealed_red_cases_opened": 0,
+  "source_bundle_sha256": "c3f37e69abc9bfd7d66a1562f0043c1149f2362a3922f81fda080734b5c15ef3",
+  "status": "partition_aware_freezer_materializer_locally_qualified",
+  "teacher_queries": 0,
+  "verification": {
+    "collection_registry_check": "passed",
+    "documentation_check": "passed",
+    "focused_tests": {
+      "passed": 116
+    },
+    "full_tests": {
+      "deselected": 3,
+      "passed": 6332,
+      "skipped": 1,
+      "xfailed": 1
+    },
+    "mypy_source_files": 331,
+    "public_artifact_check": "passed",
+    "ruff": "passed"
+  }
+}

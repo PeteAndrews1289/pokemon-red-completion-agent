@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the partition-aware eight-capture development design
+## Current override: Codex owns publication and one zero-effect development freeze
+
+The generic partition-aware plan/freezer/materializer/runner is locally qualified. It derives a
+seven-item train or eight-item development denominator from authenticated sources, rejects mixed
+partitions, lets no caller label the materializer partition, reopens the matching complete bank,
+and validates output partition through both receipt and manifest. Development canonically selects
+**4 Route 11 + 4 Diglett's Cave** while retaining the existing one-way journal.
+
+Codex owns publication, exact-main CI, and exactly one private action-free development-plan
+freeze. The freeze must create no claim or capture and stop before controller input. Its public
+result may expose aggregate counts and digests only. Capture execution, selected outcomes, model
+fitting, sealed Red, Crystal and authority remain separate closed decisions.
+
+## Previous override: Codex owned the partition-aware eight-capture development design
 
 PR 147 merged as exact main `bb78c5bb` under green CI `33552686857/1`. The sole action-free
 development census authenticated 27/27 catalog roots, found 25 claim-available, measured zero

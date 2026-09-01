@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: one capture pipeline now understands both sides of the experiment
+
+The held-out classroom no longer depends on a separate script. The same plan that seals seven
+training boundaries now derives eight development boundaries from authenticated catalog
+provenance. It refuses a mixed roster, selects four Route 11 and four Cave destinations, and keeps
+the one-way crash ledger. The lower-level materializer is not allowed to trust a caller's
+partition label; it must prove the save belongs to exactly one catalog partition, and the runner
+checks that result again in the saved manifest.
+
+This is still infrastructure rather than learning. The complete 6,332-test gate passed, but no
+private save was opened and no encounter was created. After publication and exact-main CI, the
+next operation is a zero-input freeze that seals the eight held-out seats. Controller execution,
+outcomes and fitting remain later decisions.
+
 ## September 1: the held-out classroom exists without borrowing from training
 
 The complete development bank answered the supply question cleanly. All 27 catalog worlds were
