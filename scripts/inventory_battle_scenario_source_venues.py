@@ -368,10 +368,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if item.materialization_eligible and item.venue_id is not None
     )
     loaded_map_counts = Counter(item.map_label for item in observed)
+    claim_available_map_counts = Counter(
+        item.map_label for item in observed if item.claim_available
+    )
+    available_unsupported_map_counts = Counter(
+        item.map_label
+        for item in observed
+        if item.claim_available
+        and item.safe_nonbattle
+        and item.living_party_member_available
+        and item.venue_id is None
+    )
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v1",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v2",
         "status": (
             "prospective_fresh_train_venue_capacity_passed"
             if _venue_capacity(venue_counts)
@@ -393,6 +404,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "materialization_eligible_train_roots": eligible_count,
         "materialization_eligible_venue_counts": dict(sorted(venue_counts.items())),
         "loaded_map_counts": dict(sorted(loaded_map_counts.items())),
+        "claim_available_map_counts": dict(sorted(claim_available_map_counts.items())),
+        "available_unsupported_map_counts": dict(sorted(available_unsupported_map_counts.items())),
         "minimum_fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
         "minimum_distinct_venues": MINIMUM_DISTINCT_VENUES,
         "maximum_single_venue_contexts": MAXIMUM_SINGLE_BUCKET_CONTEXTS,
