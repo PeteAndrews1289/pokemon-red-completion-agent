@@ -31,7 +31,7 @@ def test_inventory_accepts_only_a_whole_state_bank_not_selected_roots() -> None:
     assert "--state-bank" in options
     assert "--source-state" not in options
     assert "--root-lineage-id" not in options
-    assert "--partition" not in options
+    assert "--partition" in options
     assert "--source-location" not in options
     assert "--excluded-plan" in options
     assert "--excluded-run-journal" in options
@@ -90,6 +90,15 @@ def test_inventory_capacity_enforces_count_and_venue_diversity(
     expected: bool,
 ) -> None:
     assert INVENTORY["_venue_capacity"](INVENTORY["Counter"](counts)) is expected
+
+
+def test_inventory_uses_the_declared_development_denominator() -> None:
+    counts = INVENTORY["Counter"]({"route_11": 6, "digletts_cave": 1})
+
+    assert INVENTORY["_venue_capacity"](counts)
+    assert not INVENTORY["_venue_capacity"](counts, required_contexts=8)
+    counts["digletts_cave"] += 1
+    assert INVENTORY["_venue_capacity"](counts, required_contexts=8)
 
 
 def test_inventory_hash_joins_the_whole_bank_without_trusting_names(
@@ -156,6 +165,106 @@ def test_inventory_hash_joins_the_whole_bank_without_trusting_names(
         ("train-a", hashlib.sha256(b"state-a").hexdigest()),
         ("train-b", hashlib.sha256(b"state-b").hexdigest()),
     ]
+
+
+def test_inventory_can_authenticate_the_complete_development_partition(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    payloads = {
+        "train-a": b"state-a",
+        "development-a": b"state-b",
+        "development-b": b"state-c",
+    }
+    entries = tuple(
+        SimpleNamespace(
+            slot_id=name,
+            capture_id=name,
+            state_sha256=hashlib.sha256(payload).hexdigest(),
+        )
+        for name, payload in payloads.items()
+    )
+    for name, payload in payloads.items():
+        (tmp_path / f"{name}.state").write_bytes(payload)
+    registry = SimpleNamespace(
+        assignment=lambda slot_id: SimpleNamespace(
+            partition="validation" if slot_id.startswith("development") else "train"
+        )
+    )
+    catalog = SimpleNamespace(entries=entries)
+    globals_ = INVENTORY["_open_all_catalog_train_roots"].__globals__
+    observed_partitions: list[object] = []
+
+    def authenticate(state_sha256: str, **kwargs: object) -> SimpleNamespace:
+        observed_partitions.append(kwargs["expected_partition"])
+        entry = next(item for item in entries if item.state_sha256 == state_sha256)
+        return SimpleNamespace(
+            source_slot_id=entry.slot_id,
+            source_state_sha256=state_sha256,
+            root_consumption_sha256=hashlib.sha256(
+                f"root:{entry.slot_id}".encode("ascii")
+            ).hexdigest(),
+        )
+
+    monkeypatch.setitem(
+        globals_,
+        "authenticate_battle_scenario_source_binding",
+        authenticate,
+    )
+
+    scan = INVENTORY["_open_all_catalog_train_roots"](
+        tmp_path,
+        catalog=catalog,
+        registry=registry,
+        partition=INVENTORY["ScenarioPartition"].DEVELOPMENT,
+    )
+
+    assert [root.binding.source_slot_id for root in scan.roots] == [
+        "development-a",
+        "development-b",
+    ]
+    assert scan.state_files_hashed == 3
+    assert scan.matching_state_file_copies == 2
+    assert scan.missing_catalog_train_roots == 0
+    assert observed_partitions == [
+        INVENTORY["ScenarioPartition"].DEVELOPMENT,
+        INVENTORY["ScenarioPartition"].DEVELOPMENT,
+    ]
+
+
+def test_inventory_detects_cross_partition_identity_collisions() -> None:
+    entries = (
+        SimpleNamespace(
+            slot_id="train",
+            state_sha256="1" * 64,
+            assignment_id="2" * 64,
+            context_id="3" * 64,
+        ),
+        SimpleNamespace(
+            slot_id="development",
+            state_sha256="1" * 64,
+            assignment_id="4" * 64,
+            context_id="5" * 64,
+        ),
+    )
+    registry = SimpleNamespace(
+        assignment=lambda slot_id: SimpleNamespace(
+            partition="train" if slot_id == "train" else "validation",
+            root_lineage_id="shared-lineage",
+        )
+    )
+
+    collisions = INVENTORY["_cross_partition_collision_counts"](
+        SimpleNamespace(entries=entries),
+        registry,
+    )
+
+    assert collisions == {
+        "assignments": 0,
+        "contexts": 0,
+        "lineages": 1,
+        "states": 1,
+    }
 
 
 def test_inventory_reports_a_missing_catalog_train_state_without_inventing_it(

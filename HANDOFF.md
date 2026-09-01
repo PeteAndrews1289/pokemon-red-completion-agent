@@ -14,6 +14,21 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: partition-aware development census is locally qualified
+
+The source-venue census now handles the complete train or development partition through one
+contract. It derives the denominator from partition (**7 train / 8 development**), accepts only a
+whole state bank rather than selected roots, authenticates validation entries as development
+sources, retains claim and venue-pressure checks, and measures state, assignment, context and
+lineage collisions across partitions. Any collision fails the capacity result.
+
+This is still unpublished engineering with zero private input or gameplay. Publish it, require
+exact-main green CI, then run exactly one action-free census over the current development
+partition. If fewer than eight independent unused roots can be allocated across at least two
+venues under the six-per-venue cap, stop this supply path. If it passes, the next separate gate is
+a partition-aware eight-capture materialization plan; do not select roots by hand or begin
+controller input in the census gate.
+
 ## 2026-09-01: producer-aware admission is reusable; fresh development supply is required
 
 The batch contract now records the current consumer source separately from every capture's
