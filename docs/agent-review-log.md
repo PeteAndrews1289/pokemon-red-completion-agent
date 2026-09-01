@@ -3,6 +3,21 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Crash-safe materialization runner local pass — Codex adjudication 2026-09-01
+
+Codex accepts the runner as locally qualified. Its only attempt is consumed by a durable
+`pending -> started` transition before the controller-capable child runs. Started and failed work
+cannot retry; only pending work resumes. Complete outputs left after interruption can be reconciled
+without execution, and successful outputs are independently reopened through a fresh zero-frame
+emulator rather than accepted from the child receipt alone.
+
+Sixty-four focused runner/freezer/materializer checks, 113 surrounding protocol checks, clean
+registry regeneration, Ruff, mypy across 326 source files, and the complete 6,192-test
+non-integration suite passed. No controller input, capture, move choice, teacher query, outcome,
+prediction, fit, sealed Red case, Crystal context, authority, or replay occurred. Publication and
+green exact-head CI remain mandatory before the private plan may execute. No external review was
+requested for this development checkpoint.
+
 ## Seven-capture private freeze pass — Codex adjudication 2026-09-01
 
 PR 131 merged as `8d1b169f` after CI `33469950231/1` passed. The freezer was then invoked once from

@@ -29,25 +29,25 @@
     },
     {
       "capability": "Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe.",
-      "cheapest_falsifier": "Build a crash-safe consumer for the exact frozen seven-capture plan and kill it at every boundary around durable assignment claim, source reauthentication, controller input, state/manifest publication, and receipt commit. Stop if any started assignment can retry, any never-started assignment cannot resume, or any output can be substituted or overwritten.",
+      "cheapest_falsifier": "Publish the unchanged runner and require exact-head CI to reproduce its source-bound registries, static checks, and complete non-integration suite. Stop before controller input if CI fails or the published source, bundle, materializer, runtime, ROM, plan, catalog, registry, or private destination cannot be reauthenticated exactly.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "None. The private plan freeze created no capture, causal example, fit, verified outcome, authority, or transfer result. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero.",
-        "blocker": "The exact five-Mansion, two-Route-11 source and party assignment is now durable. Controller input remains closed because no execution journal yet proves claim-before-input, permanent non-retry for every started assignment, resume of only never-started assignments, and exact output reauthentication.",
-        "decision": "Accept the canonical private freeze. Implement and hostile-test one exact-plan runner with a durable per-assignment journal. It must reauthenticate the private plan and source bytes, commit started status before input, retain terminal failures, resume only untouched assignments, and independently reopen every successful state and manifest.",
+        "blocker": "The runner is locally qualified but not yet published or reproduced by exact-head CI. Its 6,192-test local pass cannot authorize controller input by itself.",
+        "decision": "Accept the runner's monotonic journal, started-before-input durability, pending-only execution, complete-source reauthentication, and independent emulator reopen as locally qualified. Publish it unchanged and require green exact-head CI before executing the frozen plan.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-battle-v2-materialization-freeze-result-2026-09-01.json",
-          "sha256": "9c52b0ae2092eb0fbf68438f883a99d40a44942e50aae4219d61392e186c9f55"
+          "path": "docs/evidence/red-battle-v2-materialization-runner-local-qualification-2026-09-01.json",
+          "sha256": "b0d815d10e2a41fa32f42662049d7e4059de7c55e8b96650384090b8a45ff658"
         },
         "learning_output": "None. The private freeze is immutable curriculum input, not training. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero.",
-        "next_falsifier": "Exercise the exact-plan runner under simulated interruption before and after every durable transition. Require one monotonic journal, no retry from started or failed states, continuation of pending states only, exact source/destination/plan bindings, and zero move choices, teacher queries, outcomes, predictions, fits, authority, sealed Red, or Crystal effects.",
-        "next_session_goal": "Implement, qualify, publish, and green the crash-safe seven-capture materialization runner. Only then execute the exact frozen plan; capture boundaries may be created, but battle actions, outcomes, model fitting, sealed Red, Crystal, authority, and replay remain closed.",
+        "next_falsifier": "Require clean-checkout CI to reproduce registry generation, lint, typing, and the complete non-integration suite. At execution preflight, reject any mismatch in exact source, CI, plan, ROM, runtime, catalog, registry, source binding, directory, or output namespace before input.",
+        "next_session_goal": "Publish the locally qualified runner and obtain green exact-head CI. If and only if every identity still matches, execute the already frozen seven-capture plan once, retaining every started or failed assignment and creating no move choice, outcome, model fit, sealed case, Crystal context, authority, or replay.",
         "product_alignment": "Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion.",
-        "session_id": "2026-09-01-battle-v2-materialization-freeze-pass",
+        "session_id": "2026-09-01-battle-v2-runner-local-pass",
         "status": "active",
-        "stop_condition": "Stop before controller input until a published green runner durably records each assignment as started before materialization and proves that started or failed assignments never retry while untouched assignments alone may resume. Do not change the frozen seven, substitute outputs, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game.",
+        "stop_condition": "Stop before controller input until the unchanged runner is published and its exact pull-request head has green CI. After input begins, never retry a started or failed assignment; resume only untouched assignments. Do not change the frozen seven, substitute outputs, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game.",
         "transfer_result": "Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks."
       },
       "learned_authority": {
@@ -73,7 +73,7 @@
         }
       ],
       "name": "Authenticated three-family learner scenario curriculum V1",
-      "next_decision": "Implement and qualify the crash-safe consumer for the exact frozen five-Mansion, two-Route-11 capture plan. It must durably mark each assignment started before controller input, prohibit retry afterward, resume only never-started work, and reauthenticate every private output before capture materialization opens.",
+      "next_decision": "Publish the locally qualified crash-safe seven-capture runner unchanged and require green exact-head pull-request CI. Only that exact green source may execute the already frozen five-Mansion, two-Route-11 plan once.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

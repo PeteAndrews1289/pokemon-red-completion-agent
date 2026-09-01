@@ -7,7 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the seven names are sealed
+## Current checkpoint: the blackout ledger works
+
+The seven lesson cards now have a one-way ledger. A card must be crossed out as started—and that
+change must be safely on disk—before the controller can move. If the power disappears, untouched
+cards can continue later, but a crossed-out card never gets a second chance. If its completed save
+survived, the system can verify and accept it without replaying it.
+
+Verification means opening the save again in a fresh emulator without moving the game. The map,
+Pokémon, level, menu, observation, and available choices must all match the sealed card. The full
+local test gate passed. Publication and GitHub's clean-checkout test remain before the seven
+encounters can be created. No lesson, fit, authority, or transfer counter moved.
+
+## Previous checkpoint: the seven names are sealed
 
 The full catalog now proves that seven new battle lessons can be built without pretending copies
 are independent. Sixteen available roots can become Mansion encounters, and two different

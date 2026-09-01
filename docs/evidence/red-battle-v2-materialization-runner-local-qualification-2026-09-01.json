@@ -1,0 +1,56 @@
+{
+  "claim_boundary": {
+    "battle_capture_materialization_executed": false,
+    "crystal_executed": false,
+    "model_fitting_executed": false,
+    "sealed_red_evaluation_executed": false,
+    "status": "local_engineering_qualification_only"
+  },
+  "decision": {
+    "next_gate": "publish the unchanged runner and require successful exact-head pull-request CI before the frozen plan may execute",
+    "status": "locally_qualified_publication_and_exact_ci_pending"
+  },
+  "implementation": {
+    "capture_count": 7,
+    "journal_states": [
+      "pending",
+      "started",
+      "succeeded",
+      "failed"
+    ],
+    "materializer_sha256": "62cb9d80ed2ccdac7a5de220ddfa0e51ac24e066d900fe5db7e574cb6348add8",
+    "plan_sha256": "1eabadcf3d57646d4edf8a78c2d526f085c0ad0d190f48b9f1c3990d4cd80d1c",
+    "retry_after_started": false,
+    "runner_sha256": "7fdba8f74a59cb685951609730b690c262d88bcb4333153ab3c9d834d2791b80",
+    "source_bundle_sha256": "a5993f5310096a373cf3550fe33a03f132f46beac58b2c94ca19c71458ba7780"
+  },
+  "protected_effects": {
+    "authority_promoted": false,
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "move_choices_executed": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "qualification": {
+    "focused_battle_protocol_tests_passed": 113,
+    "focused_runner_freezer_materializer_tests_passed": 64,
+    "full_non_integration": {
+      "deselected": 3,
+      "expected_xfail": 1,
+      "passed": 6192,
+      "skipped": 1,
+      "warnings": 1
+    },
+    "mypy_source_files_passed": 326,
+    "public_artifact_check": "passed",
+    "registry_regeneration_check": "passed",
+    "ruff": "passed"
+  },
+  "schema": "pokemon.red-battle-v2-materialization-runner-local-qualification.v1"
+}

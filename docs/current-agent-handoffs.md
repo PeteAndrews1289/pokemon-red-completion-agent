@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the crash-safe seven-capture runner
+## Current override: Codex owns publication, exact CI, and one frozen-plan execution
+
+The crash-safe runner is locally complete. It writes and fsyncs `started` before any controller
+input, never retries started or failed assignments, resumes only pending assignments, and can
+reconcile a complete interrupted output without executing it again. Every successful state is
+reopened in a fresh emulator at zero frames and checked against the exact map, active slot, species,
+level, menu, observation, and usable-choice contract. The complete local gate passed: 6,192 tests,
+clean registry regeneration, Ruff, and mypy across 326 source files.
+
+Codex's immediate job is publication and exact-head CI. Only the unchanged green source may consume
+the already frozen five-Mansion, two-Route-11 plan. During execution, retain every started or failed
+assignment in the denominator and resume only untouched work after interruption. No move choice,
+teacher query, outcome, model fit, sealed Red case, Crystal context, authority, or replay is open.
+Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
+0**.
+
+## Previous override: Codex owned the crash-safe seven-capture runner
 
 PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The action-free V4 census found 18
 claim-available materializable catalog roots: 16 Mansion and two independently authenticated
