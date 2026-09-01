@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the final old-save matching test
+
+**Visual:** Draw saved worlds on the left and the three measured classrooms—Route 11, Diglett's
+Cave, and Pokémon Mansion—on the right. Let each world connect only to places its existing field
+abilities can reach. Run an exact matching animation with locks labeled **ONE USE PER WORLD · TWO
+REAL ATTACKS · MEASURED LEVEL BAND · SIX MAX PER VENUE**.
+
+**Voiceover:** “A save's current map is not necessarily its only classroom. Red now supplies every
+venue its proven travel code can reach, while a game-neutral matcher looks for seven independent
+lessons across two environments. It cannot invent a route or reuse a world.”
+
+**Visual:** Keep the controller cable disconnected and hide all card identities behind one
+aggregate meter. Split the ending into **7/2 → FREEZE A NEW CAPTURE DESIGN** and **LESS THAN 7/2 →
+RETIRE THE OLD BANK, GENERATE FRESH SCENARIOS**.
+
+**Voiceover:** “This is the final cheap test of the old saves. Either they form an honest class, or
+we stop patching them and build fresh bounded scenarios designed for learning.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the PP dial barely moves the board
 
 **Visual:** Turn the **CURRENT PP → FULL PP** dial. Only one card reaches the combined **ROUTE ·

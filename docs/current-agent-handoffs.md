@@ -6,17 +6,22 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: PP restoration failed; Codex owns one aggregate venue-allocation falsifier
+## Current override: Codex owns the exact reachable-venue allocation gate
 
 Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
 only one resource-conditioning-eligible root at one venue. PP-only conditioning therefore cannot
 supply the required seven roots across two venues and must not execute.
 
-Codex's next bounded task is a title-neutral root-to-venue allocation contract with a Red adapter
-over existing measured venues. It must remain complete-bank, aggregate, action-free, zero-frame,
-and outcome-blind. A root counts only once, only at a venue reached by an existing live transition,
-and only with the exact two-action and full encounter-pressure rules. Failure at 7/2 closes all
-current-bank adaptations and sends the project to genuinely fresh bounded scenario generation.
+Codex has locally implemented that bounded successor. The title-neutral layer solves an exact
+capacitated root-to-venue matching, while the Red adapter exposes only direct measured venues and
+Route 11/Diglett's Cave paths admitted by the existing live Vermilion transition predicate. Every
+edge independently rechecks the current two-action mechanics rule and full measured encounter
+pressure. It remains complete-bank, aggregate, action-free, zero-frame, and outcome-blind.
+
+Codex owns hostile local qualification, publication, exact-head CI, and one V7 census. A root may
+count once, selected identities remain private, and pass remains 7 independent roots / 2 venues / 6
+maximum per venue. Failure closes all unchanged-bank adaptations and sends the project directly to
+genuinely fresh bounded scenario generation. Pass opens only a new freezer/materializer design.
 Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
 0**.
 

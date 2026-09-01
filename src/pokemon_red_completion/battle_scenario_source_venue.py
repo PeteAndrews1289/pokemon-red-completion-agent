@@ -79,6 +79,9 @@ _LAVENDER_ROUTE_11_SOURCE = BattleScenarioSourceVenue(
 )
 
 _VERMILION_TRANSITION_ROUTE_11_SOURCE_LOCATION = "vermilion_transition_route_11"
+_VERMILION_TRANSITION_DIGLETTS_CAVE_SOURCE_LOCATION = (
+    "vermilion_transition_digletts_cave"
+)
 
 
 def battle_scenario_source_venue(
@@ -154,8 +157,75 @@ def battle_scenario_source_venue(
     raise BattleScenarioSourceVenueError("battle source is not at a measured source boundary")
 
 
+def battle_scenario_reachable_venues(
+    raw: RawGameState,
+    *,
+    last_blackout_map: int | None = None,
+    current_map_tileset: int | None = None,
+) -> tuple[BattleScenarioSourceVenue, ...]:
+    """Return every measured venue reachable by an existing bounded executor.
+
+    This is intentionally broader than :func:`battle_scenario_source_venue`,
+    which preserves the historical one-loaded-map/one-venue binding.  The
+    result remains action-free: it composes only the direct source facts and
+    the same Vermilion transition predicate used by the live Red callbacks.
+    """
+
+    if not isinstance(raw, RawGameState):
+        raise TypeError("battle source venues require a raw Red state")
+    if raw.battle_state != 0:
+        raise BattleScenarioSourceVenueError("battle source is not at a safe non-battle boundary")
+    map_id = raw.map_id
+    if isinstance(map_id, bool) or not isinstance(map_id, int):
+        raise BattleScenarioSourceVenueError("battle source is not at a measured source boundary")
+    venues: dict[str, BattleScenarioSourceVenue] = {}
+    direct = _SOURCE_VENUES.get(map_id)
+    direct_boundary_supported = not (
+        map_id == int(MapId.CINNABAR_POKECENTER)
+        and (raw.player_x, raw.player_y) not in {(3, 3), (3, 7)}
+    )
+    if direct is not None and direct_boundary_supported:
+        venues[direct.venue_id] = direct
+    transition_available = (
+        type(last_blackout_map) is int  # noqa: E721
+        and type(current_map_tileset) is int  # noqa: E721
+        and red_vermilion_training_transition_available(
+            raw,
+            last_blackout_map,
+            current_map_tileset,
+        )
+    )
+    if transition_available:
+        venues.setdefault(
+            "route_11",
+            BattleScenarioSourceVenue(
+                source_location=_VERMILION_TRANSITION_ROUTE_11_SOURCE_LOCATION,
+                venue_id="route_11",
+                source_map=map_id,
+                encounter_map=int(MapId.ROUTE_11),
+                relocation_required=map_id != int(MapId.ROUTE_11),
+            ),
+        )
+        venues.setdefault(
+            "digletts_cave",
+            BattleScenarioSourceVenue(
+                source_location=_VERMILION_TRANSITION_DIGLETTS_CAVE_SOURCE_LOCATION,
+                venue_id="digletts_cave",
+                source_map=map_id,
+                encounter_map=int(MapId.DIGLETTS_CAVE),
+                relocation_required=map_id != int(MapId.DIGLETTS_CAVE),
+            ),
+        )
+    if not venues:
+        raise BattleScenarioSourceVenueError(
+            "battle source has no qualified bounded relocation to a measured venue"
+        )
+    return tuple(venues[venue_id] for venue_id in sorted(venues))
+
+
 __all__ = [
     "BattleScenarioSourceVenue",
     "BattleScenarioSourceVenueError",
+    "battle_scenario_reachable_venues",
     "battle_scenario_source_venue",
 ]

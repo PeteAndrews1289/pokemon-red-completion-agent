@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: let every student try every honest classroom
+
+The last retained-bank test is now concrete. Instead of binding each saved world to the training
+area suggested by its loaded map, Red lists every already-measured venue that its existing bounded
+travel code can actually reach. The portable layer then solves an exact matching: one world can be
+used once, each venue can supply at most six lessons, and every world/venue pair must independently
+preserve the measured level pressure and expose two real attacks with PP.
+
+This is a useful cross-game seam. Red owns map and field-move facts; the allocator knows only opaque
+roots and semantic venues, so Crystal can later provide a different adapter. The scan still cannot
+press a button or reveal selected private worlds. After publication, one aggregate answer decides
+the branch: **7 roots / 2 venues** continues to a new frozen capture design; anything less ends all
+mining of the old bank and starts fresh bounded scenario generation. The learning score remains
+**19 train examples · 6 fits · 6 verified development outcomes · 4 unseen comparisons · 0
+authority · 0 transfer**.
+
 ## September 1: the PP hypothesis fails before healing anyone
 
 The published scan gave a clear answer. Eighteen unused worlds remained, but only one had the

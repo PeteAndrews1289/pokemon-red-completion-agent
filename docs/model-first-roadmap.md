@@ -11,6 +11,22 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: exact reachable-venue allocation
+
+The local successor implements the final retained-bank falsifier. A title-neutral exact allocator
+matches opaque independent roots to semantic venues under a per-venue cap; the Red adapter exposes
+only direct measured venues and Route 11/Diglett's Cave transitions already implemented behind the
+live Vermilion predicate. Every possible root/venue edge independently rechecks the measured level
+band and the learner's current two-action mechanics rule. Flexible roots therefore cannot be
+miscounted by a one-map/one-venue classifier or by a greedy assignment.
+
+This remains action-free engineering. The next order is the full local gate, publication,
+exact-head green CI, and one aggregate zero-frame V7 census. Pass requires seven independent
+unattempted roots, at least two venues, and no more than six roots at one venue. Failure retires all
+further adaptation of the unchanged retained bank and moves directly to genuinely fresh bounded
+scenario generation. See the
+[readiness contract](red-battle-v2-reachable-venue-allocation-readiness.md).
+
 ## Current checkpoint: resource restoration failed at 1 root / 1 venue
 
 Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The published V6 census then reopened the

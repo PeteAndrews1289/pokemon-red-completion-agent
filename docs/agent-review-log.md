@@ -3,6 +3,21 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Reachable-venue allocation readiness — Codex local adjudication 2026-09-01
+
+Codex accepts exact root-to-venue matching as the last justified falsifier over the unchanged
+retained bank. The implementation separates a title-neutral capacitated allocator from Red's
+bounded transition adapter, re-evaluates the learner's exact two-action and measured-level rules on
+every proposed edge, and keeps all selected root identities out of public output. It adds no route
+string and uses no greedy allocation shortcut.
+
+This is still engineering, not a learner result. Publication, exact-head green CI, and one
+aggregate zero-frame V7 census remain mandatory. Failure below seven independent roots across two
+venues ends current-bank adaptation; pass opens only a separately frozen execution design. No
+claim, controller action, frame, capture, outcome, prediction, fit, teacher query, sealed Red,
+Crystal, authority, or replay has occurred. External review is deferred unless the census passes
+and an execution contract is proposed.
+
 ## Resource-conditioning capacity stop — Codex adjudication 2026-09-01
 
 PR 136 source `ca9cab88` passed exact-head CI `33481838000/1`. The sole V6 census authenticated the

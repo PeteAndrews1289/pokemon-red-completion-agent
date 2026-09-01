@@ -44,9 +44,11 @@ from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa
 )
 from pokemon_red_completion.battle_scenario_source_venue import (  # noqa: E402
     BattleScenarioSourceVenueError,
+    battle_scenario_reachable_venues,
     battle_scenario_source_venue,
 )
 from pokemon_red_completion.blaine import (  # noqa: E402
+    DIGLETTS_CAVE_TRAINING_VENUE,
     MANSION_TRAINING_VENUE,
     ROUTE_11_TRAINING_VENUE,
 )
@@ -90,6 +92,10 @@ from pokemon_red_completion.red_training_transitions import (  # noqa: E402
 )
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
+from pokemon_red_completion.scenario_venue_allocation import (  # noqa: E402
+    ReachableVenueRoot,
+    allocate_reachable_venue_roots,
+)
 
 _MAXIMUM_STATE_BYTES = 64 * 1024 * 1024
 _MAXIMUM_CATALOG_BYTES = 4 * 1024 * 1024
@@ -126,6 +132,8 @@ class _ObservedTrainRoot:
     living_party_member_available: bool
     supported_party_slot_available: bool
     refreshable_party_slot_available: bool
+    reachable_venue_ids: tuple[str, ...] = ()
+    eligible_venue_ids: tuple[str, ...] = ()
 
     @property
     def materialization_eligible(self) -> bool:
@@ -147,6 +155,17 @@ class _ObservedTrainRoot:
             and self.living_party_member_available
             and self.refreshable_party_slot_available
             and self.venue_id is not None
+        )
+
+    @property
+    def reachable_venue_allocation_eligible(self) -> bool:
+        """Whether at least one reachable venue preserves exact decision pressure."""
+
+        return (
+            self.claim_available
+            and self.safe_nonbattle
+            and self.living_party_member_available
+            and bool(self.eligible_venue_ids)
         )
 
 
@@ -408,6 +427,21 @@ def _refreshable_party_slot_available(raw: RawGameState, venue_id: str | None) -
     return _party_slot_available(raw, venue_id, after_resource_restoration=True)
 
 
+def _supported_reachable_venue_ids(
+    raw: RawGameState,
+    venue_ids: tuple[str, ...],
+) -> tuple[str, ...]:
+    """Keep only reachable venues that preserve the exact live move surface."""
+
+    if not isinstance(venue_ids, tuple):
+        raise TypeError("reachable venue identifiers must be a tuple")
+    return tuple(
+        venue_id
+        for venue_id in venue_ids
+        if _supported_party_slot_available(raw, venue_id)
+    )
+
+
 def _party_slot_available(
     raw: RawGameState,
     venue_id: str | None,
@@ -419,6 +453,7 @@ def _party_slot_available(
     venue = {
         MANSION_VENUE_ID: MANSION_TRAINING_VENUE,
         ROUTE_11_VENUE_ID: ROUTE_11_TRAINING_VENUE,
+        "digletts_cave": DIGLETTS_CAVE_TRAINING_VENUE,
     }.get(venue_id)
     if venue is None:
         return False
@@ -525,6 +560,19 @@ def _observe_root(
     except BattleScenarioSourceVenueError:
         venue_id = None
         relocation_required = False
+    try:
+        reachable_venues = battle_scenario_reachable_venues(
+            raw,
+            last_blackout_map=last_blackout_map,
+            current_map_tileset=current_map_tileset,
+        )
+    except BattleScenarioSourceVenueError:
+        reachable_venues = ()
+    reachable_venue_ids = tuple(item.venue_id for item in reachable_venues)
+    eligible_venue_ids = _supported_reachable_venue_ids(
+        raw,
+        reachable_venue_ids,
+    )
     supported_party_slot = _supported_party_slot_available(raw, venue_id)
     refreshable_party_slot = _refreshable_party_slot_available(raw, venue_id)
     if emulator.frame_count != 0 or emulator.pressed_buttons:
@@ -543,6 +591,8 @@ def _observe_root(
         living_party_member_available=living,
         supported_party_slot_available=supported_party_slot,
         refreshable_party_slot_available=refreshable_party_slot,
+        reachable_venue_ids=reachable_venue_ids,
+        eligible_venue_ids=eligible_venue_ids,
     )
 
 
@@ -636,6 +686,28 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         for item in observed
         if item.resource_conditioning_eligible and item.venue_id is not None
     )
+    reachable_venue_eligibility_counts = Counter(
+        venue_id
+        for item in observed
+        if item.claim_available
+        and item.safe_nonbattle
+        and item.living_party_member_available
+        for venue_id in item.eligible_venue_ids
+    )
+    allocation_roots = tuple(
+        ReachableVenueRoot(
+            root.binding.root_consumption_sha256,
+            item.eligible_venue_ids,
+        )
+        for root, item in zip(successor_roots, observed, strict=True)
+        if item.reachable_venue_allocation_eligible
+    )
+    allocation = allocate_reachable_venue_roots(
+        allocation_roots,
+        required_roots=FRESH_TRAIN_CONTEXTS,
+        minimum_distinct_venues=MINIMUM_DISTINCT_VENUES,
+        maximum_roots_per_venue=MAXIMUM_SINGLE_BUCKET_CONTEXTS,
+    )
     loaded_map_counts = Counter(item.map_label for item in observed)
     claim_available_map_counts = Counter(
         item.map_label for item in observed if item.claim_available
@@ -668,11 +740,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v6",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v7",
         "status": (
-            "prospective_resource_conditioning_capacity_passed"
-            if _venue_capacity(resource_conditioning_venue_counts)
-            else "stopped_insufficient_resource_conditioning_capacity"
+            "prospective_reachable_venue_allocation_capacity_passed"
+            if allocation.capacity_met
+            else "stopped_insufficient_reachable_venue_allocation_capacity"
         ),
         "source_commit": source.git_commit,
         "context_catalog_sha256": catalog.catalog_sha256,
@@ -698,6 +770,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "resource_conditioning_eligible_venue_counts": dict(
             sorted(resource_conditioning_venue_counts.items())
         ),
+        "reachable_venue_allocation_candidate_train_roots": len(allocation_roots),
+        "reachable_venue_eligibility_counts": dict(
+            sorted(reachable_venue_eligibility_counts.items())
+        ),
+        "reachable_venue_allocation_assigned_train_roots": allocation.assigned_roots,
+        "reachable_venue_allocation_distinct_venues": allocation.distinct_venues,
+        "reachable_venue_allocation_venue_counts": allocation.venue_counts,
         "loaded_map_counts": dict(sorted(loaded_map_counts.items())),
         "claim_available_map_counts": dict(sorted(claim_available_map_counts.items())),
         "available_unsupported_map_counts": dict(sorted(available_unsupported_map_counts.items())),
@@ -720,6 +799,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "prospective_resource_conditioning_capacity": _venue_capacity(
             resource_conditioning_venue_counts
         ),
+        "prospective_reachable_venue_allocation_capacity": allocation.capacity_met,
         "safe_nonbattle_roots": sum(item.safe_nonbattle for item in observed),
         "living_party_roots": sum(item.living_party_member_available for item in observed),
         "supported_party_slot_roots": sum(item.supported_party_slot_available for item in observed),
