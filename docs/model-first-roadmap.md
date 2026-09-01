@@ -11,6 +11,34 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: seven-input catalog passed; qualify the 7+8 consumer boundary
+
+Exact main `36d9702f` passed CI `33539191358/1`, and the one action-free catalog build authenticated
+all seven train inputs. It preserved two producer commits, seven unique source roots and capture
+IDs, the **4 Cave + 3 Route 11** distribution, and both historical failures as excluded history.
+Catalog SHA-256 is `f375d413dd846d2efed46ac195fae4497a76cc8e05307527af5cb51a84ac99bf`.
+
+The catalog clears input authentication, not learning. The next smallest honest gate is a
+catalog-aware zero-effect batch freeze over **7 train + 8 development** inputs. It must treat the
+current executable as the consumer while authenticating every train capture with its own producer
+commit; producer and consumer source identity may not be collapsed. It must preserve the partition
+boundary and open no move, outcome, prediction, fit, teacher, sealed Red, Crystal or authority
+surface.
+
+Next sequence:
+
+1. adapt batch admission to consume the canonical mixed-producer catalog;
+2. retain producer commit/bundle per train capture and bind the current runner separately;
+3. admit exactly seven train captures plus eight frozen development inputs without replacement;
+4. hostile-test commit flattening, capture omission, failure admission, partition drift, symlinks,
+   duplicates and post-freeze mutation;
+5. publish and require exact-main green CI;
+6. build one private zero-effect batch freeze and reorient;
+7. only then design the bounded selected-action outcome campaign and seventh descriptive fit.
+
+The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
+4 · authority 0 · transfer 0**.
+
 ## Current engineering checkpoint: mixed-producer catalog is implemented locally
 
 The action-free catalog now has a strict canonical parser and a source-bound builder. It preserves

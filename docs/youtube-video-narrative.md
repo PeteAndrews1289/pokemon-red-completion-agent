@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the seven-input classroom authenticates
+
+**Visual:** Feed five green cards through **PRODUCER A** and two through **PRODUCER B** into one
+sealed catalog. Light up **7/7 REOPENED · 2 PRODUCER COMMITS · 7 UNIQUE ROOTS · 4 CAVE + 3 ROUTE
+11**. Keep the two historical red cards outside the catalog.
+
+**Voiceover:** “The catalog passed without advancing one frame. Every snapshot still belongs to
+the code and one-shot run that produced it; the two old failures stay failed.”
+
+**Visual:** Separate a label marked **CAPTURE PRODUCER** from another marked **CURRENT OUTCOME
+CONSUMER**. Place seven train cards and eight development cards behind a new locked gate. Keep
+**ACTIONS 0 · OUTCOMES 0 · FITS ADDED 0 · AUTHORITY 0** onscreen.
+
+**Voiceover:** “The next boundary is subtle: old evidence must not be rewritten as if today's code
+created it. We will freeze a seven-train/eight-development batch that preserves both identities.
+Only after that proof can the model choose moves and learn from new cartridge outcomes.”
+
 ## New scene: seven inputs, zero lessons scored
 
 **Visual:** The two sealed cards run once and both turn green. Join them with the preserved five:
