@@ -11,6 +11,19 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: mixed-producer catalog is implemented locally
+
+The action-free catalog now has a strict canonical parser and a source-bound builder. It preserves
+two producer records rather than rewriting seven files as one generation, independently reopens
+only the five-plus-two successful outputs, and rejects duplicate or reused identities, changed
+bytes, symlinked inputs, nonterminal evidence, single-venue collapse and failed-entry admission.
+It has no move, outcome, prediction, fit, claim, teacher, sealed Red, Crystal or authority surface.
+
+Publish the implementation, require exact-main green CI, then build the one private catalog and
+retain a path-free aggregate receipt. Reorient at that result. A selected-action outcome campaign
+and seventh descriptive train-only fit may be designed only if all seven inputs reopen cleanly.
+The development denominator and authority gate remain separate unfinished work.
+
 ## Current checkpoint: seven authenticated inputs across two producers
 
 The additive two-assignment terminal completed **2/2** from exact source `c9547d27` under CI

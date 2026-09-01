@@ -127,6 +127,20 @@ mixed-producer catalog that reauthenticates all five predecessor and two complet
 each to its actual producer commit and output hashes, proves seven unique source/capture identities,
 and excludes both failed predecessor assignments.
 
+## Mixed-producer catalog implementation
+
+The separate catalog successor is now implemented locally. Its two producer records bind each
+plan and terminal journal to the correct source, bundle, materializer, runtime, ROM, catalog,
+registry, CI and capture-directory identity. Its seven entries retain producer-local ordinals and
+the exact assignment, source root, lineage, venue, party, filename, state and manifest bindings.
+
+The builder requires terminal **5 success / 2 failure** and **2 success / 0 failure** journals,
+proves the completion lineage points back to the exact predecessor, reopens only successes, and
+checks every state without controller input or frames. It writes one private mode-0600 canonical
+catalog and immediately reparses it. Public output is aggregate and path-free. Publication and
+exact-main CI must precede the sole real catalog build; outcome collection remains closed until
+that build passes and the session reorients.
+
 ## Stop conditions
 
 Never retry or reclassify either terminal failure, remove it from the seven-item journal, or call
