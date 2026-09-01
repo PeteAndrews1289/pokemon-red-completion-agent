@@ -11,6 +11,19 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current engineering checkpoint: development capacity census is ready to publish
+
+One source-venue census now covers either complete catalog partition without accepting individual
+root paths. It derives **7 train / 8 development**, maps registry validation to the title-neutral
+development partition, checks root claims and reachable venue pressure at zero frames, and fails
+on any state, assignment, context or lineage collision across partitions.
+
+Next publish and require green exact-main CI, then run the census once over the complete private
+development state bank. A pass requires eight independent available roots allocated across at
+least two venues with no more than six from one venue. A shortfall stops this supply path before
+materialization; a pass opens only the engineering of an eight-capture development plan, not
+gameplay or fitting.
+
 ## Current engineering checkpoint: reusable admission passed; development supply is 0/8
 
 The batch contract now separates the current outcome consumer from each capture's immutable

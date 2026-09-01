@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inventory every catalog train root at its loaded Red map without acting."""
+"""Inventory one complete catalog partition at its loaded Red maps without acting."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.battle_outcome_batch import (  # noqa: E402
+    DEVELOPMENT_CONTEXTS,
     FRESH_TRAIN_CONTEXTS,
     MAXIMUM_LEVEL_GAP,
     MAXIMUM_SINGLE_BUCKET_CONTEXTS,
@@ -176,6 +177,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-context-catalog-sha256", required=True)
     parser.add_argument("--registry-source-commit", required=True)
     parser.add_argument("--expected-registry-sha256", required=True)
+    parser.add_argument(
+        "--partition",
+        choices=(ScenarioPartition.TRAIN.value, ScenarioPartition.DEVELOPMENT.value),
+        required=True,
+    )
     parser.add_argument("--excluded-plan", type=Path, required=True)
     parser.add_argument("--expected-excluded-plan-sha256", required=True)
     parser.add_argument("--excluded-run-journal", type=Path, required=True)
@@ -278,17 +284,23 @@ def _open_all_catalog_train_roots(
     *,
     catalog: GoalManagerContextCatalog,
     registry: GoalManagerCollectionRegistry,
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
 ) -> _CatalogTrainRootScan:
-    train_entries = []
+    if partition not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise BattleScenarioSourceInventoryError("catalog partition is unsupported")
+    registry_partition = (
+        "train" if partition is ScenarioPartition.TRAIN else "validation"
+    )
+    partition_entries = []
     for entry in catalog.entries:
         assignment = registry.assignment(entry.slot_id)
-        if assignment.partition != "train":
+        if assignment.partition != registry_partition:
             continue
-        train_entries.append(entry)
-    expected_by_state = {entry.state_sha256: entry for entry in train_entries}
-    if len(expected_by_state) != len(train_entries):
+        partition_entries.append(entry)
+    expected_by_state = {entry.state_sha256: entry for entry in partition_entries}
+    if len(expected_by_state) != len(partition_entries):
         raise BattleScenarioSourceInventoryError(
-            "catalog train root inventory is not independently identifiable"
+            "catalog partition root inventory is not independently identifiable"
         )
 
     matched_bytes: dict[str, bytes] = {}
@@ -314,14 +326,14 @@ def _open_all_catalog_train_roots(
         matched_bytes.setdefault(state_sha256, state_bytes)
 
     roots: list[_CatalogTrainRoot] = []
-    for entry in train_entries:
+    for entry in partition_entries:
         state_sha256 = entry.state_sha256
         if state_sha256 not in matched_bytes:
             continue
         try:
             binding = authenticate_battle_scenario_source_binding(
                 state_sha256,
-                expected_partition=ScenarioPartition.TRAIN,
+                expected_partition=partition,
                 catalog=catalog,
                 registry=registry,
             )
@@ -339,14 +351,42 @@ def _open_all_catalog_train_roots(
         or len({root.binding.root_consumption_sha256 for root in roots}) != len(roots)
     ):
         raise BattleScenarioSourceInventoryError(
-            "catalog train root inventory is not independently identifiable"
+            "catalog partition root inventory is not independently identifiable"
         )
     return _CatalogTrainRootScan(
         roots=tuple(roots),
         state_files_hashed=state_files_hashed,
         matching_state_file_copies=matching_state_file_copies,
-        missing_catalog_train_roots=len(train_entries) - len(roots),
+        missing_catalog_train_roots=len(partition_entries) - len(roots),
     )
+
+
+def _cross_partition_collision_counts(
+    catalog: GoalManagerContextCatalog,
+    registry: GoalManagerCollectionRegistry,
+) -> dict[str, int]:
+    identities: dict[str, dict[str, set[str]]] = {
+        partition: {
+            "states": set(),
+            "assignments": set(),
+            "contexts": set(),
+            "lineages": set(),
+        }
+        for partition in ("train", "validation")
+    }
+    for entry in catalog.entries:
+        assignment = registry.assignment(entry.slot_id)
+        if assignment.partition not in identities:
+            continue
+        current = identities[assignment.partition]
+        current["states"].add(entry.state_sha256)
+        current["assignments"].add(entry.assignment_id)
+        current["contexts"].add(entry.context_id)
+        current["lineages"].add(assignment.root_lineage_id)
+    return {
+        name: len(identities["train"][name] & identities["validation"][name])
+        for name in ("states", "assignments", "contexts", "lineages")
+    }
 
 
 def _map_label(map_id: object) -> str:
@@ -596,12 +636,20 @@ def _observe_root(
     )
 
 
-def _venue_capacity(venue_counts: Counter[str]) -> bool:
+def _venue_capacity(
+    venue_counts: Counter[str],
+    *,
+    required_contexts: int = FRESH_TRAIN_CONTEXTS,
+) -> bool:
+    if type(required_contexts) is not int or required_contexts < 1:  # noqa: E721
+        raise BattleScenarioSourceInventoryError(
+            "required partition context count differs"
+        )
     positive = tuple(count for count in venue_counts.values() if count > 0)
     return (
         len(positive) >= MINIMUM_DISTINCT_VENUES
         and sum(min(count, MAXIMUM_SINGLE_BUCKET_CONTEXTS) for count in positive)
-        >= FRESH_TRAIN_CONTEXTS
+        >= required_contexts
     )
 
 
@@ -633,16 +681,30 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if source.git_commit is None:  # pragma: no cover - clean source establishes this
         raise AssertionError("clean source identity lacks a commit")
 
+    try:
+        partition = ScenarioPartition(args.partition)
+    except ValueError:
+        raise BattleScenarioSourceInventoryError("catalog partition is unsupported") from None
+    if partition not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise BattleScenarioSourceInventoryError("catalog partition is unsupported")
+    required_contexts = (
+        FRESH_TRAIN_CONTEXTS
+        if partition is ScenarioPartition.TRAIN
+        else DEVELOPMENT_CONTEXTS
+    )
+
     catalog, registry = _load_catalog(
         args.context_catalog,
         expected_catalog_sha256=args.expected_context_catalog_sha256,
         registry_source_commit=args.registry_source_commit,
         expected_registry_sha256=args.expected_registry_sha256,
     )
+    cross_partition_collisions = _cross_partition_collision_counts(catalog, registry)
     scan = _open_all_catalog_train_roots(
         _require_state_bank(args.state_bank),
         catalog=catalog,
         registry=registry,
+        partition=partition,
     )
     attempted_sources = _load_attempted_source_exclusions(
         args.excluded_plan,
@@ -704,7 +766,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
     allocation = allocate_reachable_venue_roots(
         allocation_roots,
-        required_roots=FRESH_TRAIN_CONTEXTS,
+        required_roots=required_contexts,
         minimum_distinct_venues=MINIMUM_DISTINCT_VENUES,
         maximum_roots_per_venue=MAXIMUM_SINGLE_BUCKET_CONTEXTS,
     )
@@ -740,41 +802,47 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v7",
+        "schema": "pokemon.red-battle-scenario-partition-venue-inventory.v1",
         "status": (
-            "prospective_reachable_venue_allocation_capacity_passed"
-            if allocation.capacity_met
-            else "stopped_insufficient_reachable_venue_allocation_capacity"
+            "stopped_cross_partition_identity_collision"
+            if any(cross_partition_collisions.values())
+            else (
+                "prospective_reachable_venue_allocation_capacity_passed"
+                if allocation.capacity_met
+                else "stopped_insufficient_reachable_venue_allocation_capacity"
+            )
         ),
         "source_commit": source.git_commit,
+        "partition": partition.value,
         "context_catalog_sha256": catalog.catalog_sha256,
         "registry_sha256": registry.registry_sha256,
         "registry_source_commit": registry.execution.source_commit,
-        "catalog_train_roots": len(scan.roots) + scan.missing_catalog_train_roots,
+        "cross_partition_collision_counts": cross_partition_collisions,
+        "catalog_partition_roots": len(scan.roots) + scan.missing_catalog_train_roots,
         "retained_state_files_hashed": scan.state_files_hashed,
         "matching_state_file_copies": scan.matching_state_file_copies,
-        "missing_catalog_train_roots": scan.missing_catalog_train_roots,
-        "retained_catalog_train_roots": len(scan.roots),
+        "missing_catalog_partition_roots": scan.missing_catalog_train_roots,
+        "retained_catalog_partition_roots": len(scan.roots),
         "attempted_source_roots_declared": len(attempted_sources),
         "attempted_source_roots_excluded": excluded_retained_roots,
-        "successor_candidate_train_roots": len(successor_roots),
-        "unique_catalog_train_states": len(
+        "successor_candidate_partition_roots": len(successor_roots),
+        "unique_catalog_partition_states": len(
             {root.binding.source_state_sha256 for root in scan.roots}
         ),
-        "claim_available_train_roots": available_count,
-        "materialization_eligible_train_roots": eligible_count,
+        "claim_available_partition_roots": available_count,
+        "materialization_eligible_partition_roots": eligible_count,
         "materialization_eligible_venue_counts": dict(sorted(venue_counts.items())),
-        "resource_conditioning_eligible_train_roots": sum(
+        "resource_conditioning_eligible_partition_roots": sum(
             item.resource_conditioning_eligible for item in observed
         ),
         "resource_conditioning_eligible_venue_counts": dict(
             sorted(resource_conditioning_venue_counts.items())
         ),
-        "reachable_venue_allocation_candidate_train_roots": len(allocation_roots),
+        "reachable_venue_allocation_candidate_partition_roots": len(allocation_roots),
         "reachable_venue_eligibility_counts": dict(
             sorted(reachable_venue_eligibility_counts.items())
         ),
-        "reachable_venue_allocation_assigned_train_roots": allocation.assigned_roots,
+        "reachable_venue_allocation_assigned_partition_roots": allocation.assigned_roots,
         "reachable_venue_allocation_distinct_venues": allocation.distinct_venues,
         "reachable_venue_allocation_venue_counts": allocation.venue_counts,
         "loaded_map_counts": dict(sorted(loaded_map_counts.items())),
@@ -792,14 +860,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "available_unsupported_route_11_ready_map_counts": dict(
             sorted(unsupported_route_11_ready_map_counts.items())
         ),
-        "minimum_fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
+        "required_partition_contexts": required_contexts,
         "minimum_distinct_venues": MINIMUM_DISTINCT_VENUES,
         "maximum_single_venue_contexts": MAXIMUM_SINGLE_BUCKET_CONTEXTS,
-        "prospective_fresh_train_venue_capacity": _venue_capacity(venue_counts),
-        "prospective_resource_conditioning_capacity": _venue_capacity(
-            resource_conditioning_venue_counts
+        "prospective_partition_venue_capacity": _venue_capacity(
+            venue_counts,
+            required_contexts=required_contexts,
         ),
-        "prospective_reachable_venue_allocation_capacity": allocation.capacity_met,
+        "prospective_resource_conditioning_capacity": _venue_capacity(
+            resource_conditioning_venue_counts,
+            required_contexts=required_contexts,
+        ),
+        "prospective_reachable_venue_allocation_capacity": (
+            allocation.capacity_met
+            and not any(cross_partition_collisions.values())
+        ),
         "safe_nonbattle_roots": sum(item.safe_nonbattle for item in observed),
         "living_party_roots": sum(item.living_party_member_available for item in observed),
         "supported_party_slot_roots": sum(item.supported_party_slot_available for item in observed),
