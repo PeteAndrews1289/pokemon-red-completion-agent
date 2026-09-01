@@ -9,12 +9,19 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.battle_outcome_batch import FRESH_TRAIN_CONTEXTS
+from pokemon_red_completion.battle_scenario_materialization_run import (
+    initialize_battle_scenario_materialization_run,
+    start_battle_scenario_materialization_assignment,
+)
 from pokemon_red_completion.gen1_field_moves import FLY_MOVE_ID
 from pokemon_red_completion.observation import Badge, MapId, RamAddress, RawGameState
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 INVENTORY = runpy.run_path(
     str(PROJECT_ROOT / "scripts" / "inventory_battle_scenario_source_venues.py")
+)
+RUN_HELPERS = runpy.run_path(
+    str(PROJECT_ROOT / "tests" / "test_battle_scenario_materialization_run.py")
 )
 
 
@@ -26,6 +33,47 @@ def test_inventory_accepts_only_a_whole_state_bank_not_selected_roots() -> None:
     assert "--root-lineage-id" not in options
     assert "--partition" not in options
     assert "--source-location" not in options
+    assert "--excluded-plan" in options
+    assert "--excluded-run-journal" in options
+
+
+def test_inventory_excludes_every_started_source_but_not_pending_sources() -> None:
+    plan = RUN_HELPERS["_plan"]()
+    journal = initialize_battle_scenario_materialization_run(
+        plan,
+        RUN_HELPERS["_identity"](plan),
+    )
+    journal = start_battle_scenario_materialization_assignment(journal, 0)
+
+    excluded = INVENTORY["_attempted_source_state_sha256"](plan, journal)
+
+    assert excluded == {
+        plan.assignments[0].candidate.source.source_state_sha256,
+    }
+    assert plan.assignments[1].candidate.source.source_state_sha256 not in excluded
+
+
+def test_inventory_refuses_a_partial_exclusion_journal(tmp_path: Path) -> None:
+    plan = RUN_HELPERS["_plan"]()
+    journal = initialize_battle_scenario_materialization_run(
+        plan,
+        RUN_HELPERS["_identity"](plan),
+    )
+    plan_path = tmp_path / "plan.json"
+    journal_path = tmp_path / "journal.json"
+    plan_path.write_bytes(plan.canonical_bytes())
+    journal_path.write_bytes(journal.canonical_bytes())
+
+    with pytest.raises(
+        INVENTORY["BattleScenarioSourceInventoryError"],
+        match="not fully attempted",
+    ):
+        INVENTORY["_load_attempted_source_exclusions"](
+            plan_path,
+            journal_path,
+            expected_plan_sha256=hashlib.sha256(plan.canonical_bytes()).hexdigest(),
+            expected_journal_sha256=journal.journal_sha256,
+        )
 
 
 @pytest.mark.parametrize(
@@ -142,7 +190,13 @@ def test_inventory_observes_map_and_availability_without_advancing(
         player_x=12,
         player_y=9,
         party_count=2,
+        party_species_ids=(1, 2),
+        party_levels=(20, 20),
         party_hp=(40, 0),
+        party_max_hp=(50, 50),
+        party_status=(0, 0),
+        party_moves=((1, 2, 0, 0), (1, 2, 0, 0)),
+        party_pp=((10, 10, 0, 0), (10, 10, 0, 0)),
         battle_state=0,
     )
 
@@ -194,6 +248,34 @@ def test_inventory_observes_map_and_availability_without_advancing(
     assert observed.materialization_eligible is True
 
 
+def test_inventory_requires_two_learner_supported_attacks() -> None:
+    status_heavy = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_11,
+        player_x=12,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_hp=(40,),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 39, 45, 0),),
+        party_pp=((10, 10, 10, 0),),
+        battle_state=0,
+    )
+    two_attacks = replace(status_heavy, party_moves=((1, 2, 39, 0),))
+
+    assert not INVENTORY["_supported_party_slot_available"](
+        status_heavy,
+        "route_11",
+    )
+    assert INVENTORY["_supported_party_slot_available"](
+        two_attacks,
+        "route_11",
+    )
+
+
 def test_inventory_counts_only_capable_celadon_roots_as_route_11_supply(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -203,9 +285,14 @@ def test_inventory_counts_only_capable_celadon_roots_as_route_11_supply(
         player_x=3,
         player_y=3,
         party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
         battle_state=0,
         party_hp=(40,),
-        party_moves=((FLY_MOVE_ID, 0, 0, 0),),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 2, FLY_MOVE_ID, 0),),
+        party_pp=((10, 10, 10, 0),),
         badge_bits=int(Badge.THUNDER),
     )
 
@@ -275,6 +362,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             claim_available=True,
             safe_nonbattle=True,
             living_party_member_available=True,
+            supported_party_slot_available=True,
         ),
         observed_type(
             map_label="fuchsia_city",
@@ -286,6 +374,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             claim_available=False,
             safe_nonbattle=True,
             living_party_member_available=True,
+            supported_party_slot_available=True,
         ),
         observed_type(
             map_label="celadon_pokecenter",
@@ -297,6 +386,7 @@ def test_inventory_reports_only_available_unsupported_relocation_supply() -> Non
             claim_available=True,
             safe_nonbattle=True,
             living_party_member_available=True,
+            supported_party_slot_available=True,
         ),
     )
 
@@ -317,7 +407,13 @@ def test_inventory_rejects_any_advanced_frame(
         player_x=12,
         player_y=9,
         party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
         party_hp=(40,),
+        party_max_hp=(50,),
+        party_status=(0,),
+        party_moves=((1, 2, 0, 0),),
+        party_pp=((10, 10, 0, 0),),
         battle_state=0,
     )
     emulator = SimpleNamespace(

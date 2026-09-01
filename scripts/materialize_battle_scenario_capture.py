@@ -86,9 +86,19 @@ from pokemon_red_completion.training_venue import TrainingVenue  # noqa: E402
 class BattleScenarioMaterializationError(RuntimeError):
     """Raised before a private capture can be authenticated."""
 
+    def __init__(
+        self,
+        message: str,
+        *,
+        reason_code: str = "materialization_preflight_failed",
+    ) -> None:
+        super().__init__(message)
+        self.reason_code = reason_code
+
 
 _MAXIMUM_BATTLE_STATE_BYTES = 64 * 1024 * 1024
 _MAXIMUM_CONTEXT_CATALOG_BYTES = 4 * 1024 * 1024
+_FAILURE_SCHEMA = "pokemon-private-battle-scenario-materialization-failure-v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -533,14 +543,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise AssertionError("clean source identity lacks a commit")
 
     rom_path = resolve_rom_path(args.rom)
-    source_bytes = _read_source(args.source_state)
-    source_binding, catalog, historical_registry = _load_source_binding(
-        source_bytes,
-        catalog_path=args.context_catalog,
-        expected_catalog_sha256=args.expected_context_catalog_sha256,
-        registry_source_commit=args.registry_source_commit,
-        expected_registry_sha256=args.expected_registry_sha256,
-    )
+    try:
+        source_bytes = _read_source(args.source_state)
+        source_binding, catalog, historical_registry = _load_source_binding(
+            source_bytes,
+            catalog_path=args.context_catalog,
+            expected_catalog_sha256=args.expected_context_catalog_sha256,
+            registry_source_commit=args.registry_source_commit,
+            expected_registry_sha256=args.expected_registry_sha256,
+        )
+    except Exception as error:
+        raise _staged_failure(error, "source_authentication_failed") from error
     _require_unconsumed_source_root(source_binding)
     out_state = _private_new_output(args.out_state, rom_path=rom_path)
     out_manifest = _private_new_output(
@@ -558,55 +571,67 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     ) as emulator:
         emulator.load_state_bytes(source_bytes)
         reader = PokemonRedStateReader(emulator)
-        source_location = _source_location_for_state(
-            reader.read(),
-            last_blackout_map=reader.read_last_blackout_map(),
-            current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
-        )
-        venue = _venue_for_source_location(
-            source_location,
-            rom_bytes=(
-                rom_bytes
-                if source_location == "lavender_center_route_11"
-                else None
-            ),
-        )
+        try:
+            source_location = _source_location_for_state(
+                reader.read(),
+                last_blackout_map=reader.read_last_blackout_map(),
+                current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
+            )
+            venue = _venue_for_source_location(
+                source_location,
+                rom_bytes=(
+                    rom_bytes
+                    if source_location == "lavender_center_route_11"
+                    else None
+                ),
+            )
+        except Exception as error:
+            raise _staged_failure(error, "source_reauthentication_failed") from error
         controller = FrameSafeExecutor(
             emulator,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
         )
         actions = CountingExecutor(controller)
-        _prepare_source_venue(
-            source_location,
-            venue,
-            actions,
-            reader,
-            emulator,
-        )
-        materialized = _materialize_loaded_battle_boundary(
-            reader,
-            emulator,
-            controller,
-            actions,
-            venue,
-            one_based_party_slot=args.party_slot,
-            maximum_encounter_steps=args.maximum_encounter_steps,
-        )
-        emulator.save_state(out_state)
+        try:
+            _prepare_source_venue(
+                source_location,
+                venue,
+                actions,
+                reader,
+                emulator,
+            )
+        except Exception as error:
+            raise _staged_failure(error, "source_relocation_failed") from error
+        try:
+            materialized = _materialize_loaded_battle_boundary(
+                reader,
+                emulator,
+                controller,
+                actions,
+                venue,
+                one_based_party_slot=args.party_slot,
+                maximum_encounter_steps=args.maximum_encounter_steps,
+            )
+            emulator.save_state(out_state)
+        except Exception as error:
+            raise _staged_failure(error, "encounter_materialization_failed") from error
 
-    state_bytes = _fsync_existing_private_output(out_state)
-    manifest_payload = build_battle_scenario_capture_payload(
-        capture_id=args.capture_id,
-        root_lineage_id=source_binding.root_lineage_id,
-        partition=partition,
-        state_bytes=state_bytes,
-        initial_observation_sha256=materialized.prepared.initial_observation_sha256,
-        source_commit=source.git_commit,
-        expected_map=venue.map_id,
-        expected_battle_state=1,
-        source_state_sha256=hashlib.sha256(source_bytes).hexdigest(),
-    )
-    _write_private_output(out_manifest, manifest_payload)
+    try:
+        state_bytes = _fsync_existing_private_output(out_state)
+        manifest_payload = build_battle_scenario_capture_payload(
+            capture_id=args.capture_id,
+            root_lineage_id=source_binding.root_lineage_id,
+            partition=partition,
+            state_bytes=state_bytes,
+            initial_observation_sha256=materialized.prepared.initial_observation_sha256,
+            source_commit=source.git_commit,
+            expected_map=venue.map_id,
+            expected_battle_state=1,
+            source_state_sha256=hashlib.sha256(source_bytes).hexdigest(),
+        )
+        _write_private_output(out_manifest, manifest_payload)
+    except Exception as error:
+        raise _staged_failure(error, "output_publication_failed") from error
     return {
         "schema": "pokemon-private-battle-scenario-materialization-receipt-v2",
         "status": "ok",
@@ -652,9 +677,36 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     }
 
 
+def _staged_failure(error: Exception, reason_code: str) -> BattleScenarioMaterializationError:
+    message = str(error) if isinstance(error, BattleScenarioMaterializationError) else reason_code
+    return BattleScenarioMaterializationError(message, reason_code=reason_code)
+
+
+def _failure_receipt(error: Exception) -> dict[str, object]:
+    reason_code = (
+        error.reason_code
+        if isinstance(error, BattleScenarioMaterializationError)
+        else "materialization_internal_failure"
+    )
+    return {
+        "schema": _FAILURE_SCHEMA,
+        "status": "failed_closed",
+        "reason_code": reason_code,
+        "private_path_fields": 0,
+        "teacher_queries": 0,
+        "move_choices_executed": 0,
+        "root_claims_created": 0,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    print(json.dumps(_run(args), ensure_ascii=True, sort_keys=True))
+    try:
+        receipt = _run(args)
+    except Exception as error:
+        print(json.dumps(_failure_receipt(error), ensure_ascii=True, sort_keys=True))
+        return 1
+    print(json.dumps(receipt, ensure_ascii=True, sort_keys=True))
     return 0
 
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import runpy
 import stat
 from dataclasses import replace
@@ -139,6 +140,26 @@ def test_train_materializer_has_no_caller_supplied_identity_or_location_options(
     assert "--partition" not in options
     assert "--context-catalog" in options
     assert "--registry-source-commit" in options
+
+
+def test_materializer_failure_receipt_is_stage_only_and_path_free() -> None:
+    error = MATERIALIZE["BattleScenarioMaterializationError"](
+        "/private/source.state could not move",
+        reason_code="source_relocation_failed",
+    )
+
+    receipt = MATERIALIZE["_failure_receipt"](error)
+
+    assert receipt == {
+        "schema": "pokemon-private-battle-scenario-materialization-failure-v1",
+        "status": "failed_closed",
+        "reason_code": "source_relocation_failed",
+        "private_path_fields": 0,
+        "teacher_queries": 0,
+        "move_choices_executed": 0,
+        "root_claims_created": 0,
+    }
+    assert "/private" not in json.dumps(receipt)
 
 
 def test_source_root_preflight_is_read_only_and_rejects_consumed_root(

@@ -1,5 +1,34 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: zero out of seven, and why that is a useful failure
+
+**Visual:** Move all seven cards through the runner. Three turn **MATERIALIZER FAILED**. Four show a
+perfect green scan for **MAP · SLOT · SPECIES · LEVEL · MENU · OBSERVATION**, then fail on a final
+meter: **MODEL-SUPPORTED CHOICES 1/2**. Stamp the whole batch **0 QUALIFIED · NO RETRY**.
+
+**Voiceover:** “The runner worked—and rejected every lesson. Four saves were mechanically perfect,
+but each gave the model only one legal attack. That is not a choice, so it is not useful ranking
+data.”
+
+**Visual:** Compare two filters. The old roster highlights **ANY MOVE WITH PP**, including status
+moves. The learner highlights **DAMAGING · PP-POSITIVE · NOT SELFDESTRUCT**. Cross out the seven old
+source roots and open a blank action-free census board.
+
+**Voiceover:** “The roster and the learner were asking different questions. We keep the zero, retire
+the attempted worlds, align the filters, and count fresh multi-environment supply before spending
+another button press.”
+
+**On-screen score:** `PLAN 0/7 QUALIFIED · RETRIES 0 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
+**Follow-up visual:** Merge the roster filter and learner filter into one cartridge-mechanics gate.
+Feed the old plan and one-way journal into a subtraction machine labeled **7 ATTEMPTED ROOTS
+EXCLUDED**, then point the remaining cards toward a disconnected census scanner. Beside it, replace
+an opaque crash box with four readable labels: **SOURCE · RELOCATION · ENCOUNTER · OUTPUT**.
+
+**Follow-up voiceover:** “The fix is prospective. The learner, freezer, and census now share one
+definition of a useful move, and the exhausted worlds are removed by authenticated identity—not by
+filename. Better stage receipts tell us what failed next time without leaking the private saves.”
+
 ## New scene: a blackout cannot grant a second attempt
 
 **Visual:** Show the seven face-down cards beside a metal ledger. One card moves from **PENDING** to

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 from pokemon_red_completion.battle_outcome_learning import (
@@ -24,6 +25,47 @@ from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 
 class RedBattleScenarioError(ValueError):
     """Raised when a Red state cannot support the bounded outcome experiment."""
+
+
+def red_battle_move_is_model_supported(
+    move_id: object,
+    current_pp: object,
+    *,
+    catalog: PokemonRedBattleCatalog | None = None,
+) -> bool:
+    """Return the learner's title-adapter support rule for one Red move slot."""
+
+    if (
+        type(move_id) is not int  # noqa: E721
+        or move_id <= 0
+        or isinstance(current_pp, bool)
+        or not isinstance(current_pp, (int, float))
+        or not math.isfinite(current_pp)
+        or current_pp <= 0
+    ):
+        return False
+    resolved_catalog = catalog or PokemonRedBattleCatalog()
+    mechanics = resolved_catalog.resolve_move(pokemon_red_move_ref(move_id))
+    return mechanics.power > 0 and "self_destruct" not in mechanics.effect_flags
+
+
+def red_battle_supported_move_count(
+    move_ids: tuple[int, ...],
+    current_pp: tuple[int, ...],
+) -> int:
+    """Count exactly the move slots that can become learner candidates."""
+
+    if (
+        not isinstance(move_ids, tuple)
+        or not isinstance(current_pp, tuple)
+        or len(move_ids) != len(current_pp)
+    ):
+        raise RedBattleScenarioError("battle move arrays differ")
+    catalog = PokemonRedBattleCatalog()
+    return sum(
+        red_battle_move_is_model_supported(move_id, pp, catalog=catalog)
+        for move_id, pp in zip(move_ids, current_pp, strict=True)
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,12 +113,13 @@ def prepare_red_battle_scenario(
             raise RedBattleScenarioError(
                 "battle move identities do not match projected candidates"
             )
-        mechanics = catalog.resolve_move(pokemon_red_move_ref(moves[slot_index]))
         supported_values.append(
             legal
-            and pp > 0
-            and mechanics.power > 0
-            and "self_destruct" not in mechanics.effect_flags
+            and red_battle_move_is_model_supported(
+                moves[slot_index],
+                pp,
+                catalog=catalog,
+            )
         )
     supported = tuple(supported_values)
     features = BattleFeatureBatch(

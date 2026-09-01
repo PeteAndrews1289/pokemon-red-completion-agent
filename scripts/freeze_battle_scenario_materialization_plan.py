@@ -69,6 +69,9 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_clean_source,
     require_published_source,
 )
+from pokemon_red_completion.red_battle_scenario import (  # noqa: E402
+    red_battle_supported_move_count,
+)
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.runtime_identity import (  # noqa: E402
     build_runtime_identity,
@@ -385,14 +388,12 @@ def _eligible_party_slots(
             raise BattleScenarioMaterializationFreezeError(
                 "battle source move observation differs"
             )
-        usable = sum(
-            1
-            for move_id, move_pp in zip(move_ids, current_pp, strict=True)
-            if type(move_id) is int  # noqa: E721
-            and move_id > 0
-            and type(move_pp) is int  # noqa: E721
-            and move_pp > 0
-        )
+        try:
+            usable = red_battle_supported_move_count(move_ids, current_pp)
+        except ValueError:
+            raise BattleScenarioMaterializationFreezeError(
+                "battle source move mechanics differ"
+            ) from None
         if (
             type(current_hp) is int  # noqa: E721
             and current_hp > 0

@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the blackout ledger works
+## Current checkpoint: the first seven cards taught the system what not to admit
+
+The lock opened once. Seven cards were crossed out, and none became a lesson. Three never produced
+a finished battle snapshot. Four produced saves that were exactly where they promised to be, but
+the Pokémon had only one attack the learner was allowed to choose. A one-choice menu cannot teach a
+ranking model.
+
+The mistake was in the classroom roster: it counted any move with PP, including status moves. The
+student's real rules count damaging moves and reject Selfdestruct. The final scanner caught the
+difference, so no bad lesson entered training. Those seven worlds will not be replayed. The next
+chapter corrects the roster, keeps better failure notes, and asks whether seven new worlds still
+exist across two environments before touching the controller again.
+
+The roster has now been repaired locally. The scanner, roster, and student use one definition of a
+real choice, and the next census must prove that it removed all seven crossed-out worlds before it
+counts replacements. Failures will retain only a safe stage label, enough to distinguish a bad
+source, relocation, encounter, or output without exposing the private save. GitHub must verify the
+unchanged code before the controller-free census runs.
+
+## Previous checkpoint: the blackout ledger works
 
 The seven lesson cards now have a one-way ledger. A card must be crossed out as started—and that
 change must be safely on disk—before the controller can move. If the power disappears, untouched

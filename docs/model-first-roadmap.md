@@ -11,7 +11,40 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the crash-safe capture runner passes locally
+## Current checkpoint: the seven-capture denominator finished at zero
+
+Published source `c0099a9d` passed exact CI `33473101194/1`, and the frozen plan then executed once.
+All seven assignments are terminal failures: four Mansion state/manifest pairs were created but
+failed independent learning-surface authentication, while both Route 11 calls and one Mansion call
+failed inside materialization. No assignment retried and none may enter a successor.
+
+The four complete captures are mechanically faithful: zero-frame reopen reproduced the planned
+map, active slot, species, level, main menu, and observation digest. They are not learning examples.
+Every one exposes exactly one model-supported move. The freezer counted all PP-positive moves,
+including status moves, while the learner correctly supports only PP-positive damaging,
+non-Selfdestruct actions. The runner caught the semantic mismatch before it became training data.
+
+The next order is entirely action-free:
+
+1. retire the exact plan and permanently exclude all seven attempted source roots;
+2. make prospective party-slot eligibility use the learner's actual move-mechanics support rule;
+3. retain structured, path-free materializer failure stages for future attempts;
+4. census every remaining independent root under the corrected rule;
+5. require seven fresh roots, at least two venues, and no more than six from one venue before a
+   successor freeze; otherwise stop capture work and build new source or venue supply.
+
+Current evidence remains **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**. See the
+[terminal result](evidence/red-battle-v2-materialization-run-result-2026-09-01.json).
+
+The local repair now satisfies steps 1–3. The shared mechanics rule rejects status, zero-PP, and
+Selfdestruct actions at learner, freezer, and capacity boundaries. The V5 census requires the exact
+plan/journal pair and removes all non-pending source identities before loading any retained root.
+Child failures retain a sanitized stage rather than private exception text. The remaining order is
+publication, exact-head CI, and one zero-frame V5 census. No successor freeze is implied by this
+implementation; the census may falsify remaining supply.
+
+## Previous checkpoint: the crash-safe capture runner passes locally
 
 The exact-plan runner is now locally qualified. Its journal has only one-way transitions:
 `pending -> started -> succeeded/failed`. It durably commits `started` before the controller-capable

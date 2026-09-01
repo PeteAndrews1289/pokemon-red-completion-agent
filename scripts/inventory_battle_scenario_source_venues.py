@@ -12,12 +12,14 @@ import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.battle_outcome_batch import (  # noqa: E402
     FRESH_TRAIN_CONTEXTS,
+    MAXIMUM_LEVEL_GAP,
     MAXIMUM_SINGLE_BUCKET_CONTEXTS,
     MINIMUM_DISTINCT_VENUES,
 )
@@ -26,9 +28,27 @@ from pokemon_red_completion.battle_outcome_capture_authentication import (  # no
     BattleScenarioSourceBinding,
     authenticate_battle_scenario_source_binding,
 )
+from pokemon_red_completion.battle_scenario_materialization_plan import (  # noqa: E402
+    MANSION_VENUE_ID,
+    ROUTE_11_VENUE_ID,
+    BattleScenarioMaterializationPlan,
+    BattleScenarioMaterializationPlanError,
+    parse_battle_scenario_materialization_plan,
+)
+from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa: E402
+    PENDING,
+    BattleScenarioMaterializationRunError,
+    BattleScenarioMaterializationRunJournal,
+    parse_battle_scenario_materialization_run,
+    require_battle_scenario_materialization_run_matches_plan,
+)
 from pokemon_red_completion.battle_scenario_source_venue import (  # noqa: E402
     BattleScenarioSourceVenueError,
     battle_scenario_source_venue,
+)
+from pokemon_red_completion.blaine import (  # noqa: E402
+    MANSION_TRAINING_VENUE,
+    ROUTE_11_TRAINING_VENUE,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
@@ -51,11 +71,16 @@ from pokemon_red_completion.observation import (  # noqa: E402
     MapId,
     PokemonRedStateReader,
     RamAddress,
+    RawGameState,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
     require_clean_source,
     require_published_source,
+)
+from pokemon_red_completion.red_battle_scenario import (  # noqa: E402
+    RedBattleScenarioError,
+    red_battle_supported_move_count,
 )
 from pokemon_red_completion.red_training_transitions import (  # noqa: E402
     red_training_fly_available,
@@ -98,6 +123,7 @@ class _ObservedTrainRoot:
     claim_available: bool
     safe_nonbattle: bool
     living_party_member_available: bool
+    supported_party_slot_available: bool
 
     @property
     def materialization_eligible(self) -> bool:
@@ -105,6 +131,7 @@ class _ObservedTrainRoot:
             self.claim_available
             and self.safe_nonbattle
             and self.living_party_member_available
+            and self.supported_party_slot_available
             and self.venue_id is not None
         )
 
@@ -116,6 +143,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-context-catalog-sha256", required=True)
     parser.add_argument("--registry-source-commit", required=True)
     parser.add_argument("--expected-registry-sha256", required=True)
+    parser.add_argument("--excluded-plan", type=Path, required=True)
+    parser.add_argument("--expected-excluded-plan-sha256", required=True)
+    parser.add_argument("--excluded-run-journal", type=Path, required=True)
+    parser.add_argument("--expected-excluded-run-journal-sha256", required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     return parser
 
@@ -294,6 +325,138 @@ def _map_label(map_id: object) -> str:
         return f"map_{map_id:02x}"
 
 
+def _load_attempted_source_exclusions(
+    plan_path: Path,
+    journal_path: Path,
+    *,
+    expected_plan_sha256: str,
+    expected_journal_sha256: str,
+) -> frozenset[str]:
+    plan_payload = _read_owned_regular(
+        plan_path,
+        maximum_bytes=8 * 1024 * 1024,
+        subject="excluded materialization plan",
+    )
+    journal_payload = _read_owned_regular(
+        journal_path,
+        maximum_bytes=2 * 1024 * 1024,
+        subject="excluded materialization run journal",
+    )
+    if (
+        hashlib.sha256(plan_payload).hexdigest() != expected_plan_sha256
+        or hashlib.sha256(journal_payload).hexdigest() != expected_journal_sha256
+    ):
+        raise BattleScenarioSourceInventoryError(
+            "excluded materialization evidence identity differs"
+        )
+    try:
+        plan = parse_battle_scenario_materialization_plan(plan_payload)
+        journal = parse_battle_scenario_materialization_run(journal_payload)
+        require_battle_scenario_materialization_run_matches_plan(
+            journal,
+            plan,
+            journal.identity,
+        )
+    except (
+        BattleScenarioMaterializationPlanError,
+        BattleScenarioMaterializationRunError,
+    ) as error:
+        raise BattleScenarioSourceInventoryError(str(error)) from None
+    if any(entry.status == PENDING for entry in journal.entries):
+        raise BattleScenarioSourceInventoryError(
+            "excluded materialization plan is not fully attempted"
+        )
+    return _attempted_source_state_sha256(plan, journal)
+
+
+def _attempted_source_state_sha256(
+    plan: BattleScenarioMaterializationPlan,
+    journal: BattleScenarioMaterializationRunJournal,
+) -> frozenset[str]:
+    require_battle_scenario_materialization_run_matches_plan(
+        journal,
+        plan,
+        journal.identity,
+    )
+    attempted = {
+        assignment.candidate.source.source_state_sha256
+        for assignment, entry in zip(plan.assignments, journal.entries, strict=True)
+        if entry.status != PENDING
+    }
+    return frozenset(attempted)
+
+
+def _supported_party_slot_available(raw: RawGameState, venue_id: str | None) -> bool:
+    if venue_id is None:
+        return False
+    venue = {
+        MANSION_VENUE_ID: MANSION_TRAINING_VENUE,
+        ROUTE_11_VENUE_ID: ROUTE_11_TRAINING_VENUE,
+    }.get(venue_id)
+    if venue is None:
+        return False
+    party_count = getattr(raw, "party_count", None)
+    species = getattr(raw, "party_species_ids", None)
+    levels = getattr(raw, "party_levels", None)
+    hp = getattr(raw, "party_hp", None)
+    maximum_hp = getattr(raw, "party_max_hp", None)
+    status = getattr(raw, "party_status", None)
+    moves = getattr(raw, "party_moves", None)
+    pp = getattr(raw, "party_pp", None)
+    if (
+        type(party_count) is not int  # noqa: E721
+        or not 1 <= party_count <= 6
+        or any(
+            not isinstance(value, tuple)
+            for value in (species, levels, hp, maximum_hp, status, moves, pp)
+        )
+    ):
+        return False
+    typed_species = cast(tuple[int, ...], species)
+    typed_levels = cast(tuple[int, ...], levels)
+    typed_hp = cast(tuple[int, ...], hp)
+    typed_maximum_hp = cast(tuple[int, ...], maximum_hp)
+    typed_status = cast(tuple[int, ...], status)
+    typed_moves = cast(tuple[tuple[int, ...], ...], moves)
+    typed_pp = cast(tuple[tuple[int, ...], ...], pp)
+    if any(
+        len(value) != party_count
+        for value in (
+            typed_species,
+            typed_levels,
+            typed_hp,
+            typed_maximum_hp,
+            typed_status,
+            typed_moves,
+            typed_pp,
+        )
+    ):
+        return False
+    rare_maximum = venue.band.rare_maximum_encounter_level
+    minimum = venue.band.minimum_encounter_level
+    if type(rare_maximum) is not int or type(minimum) is not int:  # noqa: E721
+        return False
+    minimum_level = rare_maximum - MAXIMUM_LEVEL_GAP
+    maximum_level = minimum + MAXIMUM_LEVEL_GAP
+    try:
+        return any(
+            type(current_hp) is int  # noqa: E721
+            and current_hp > 0
+            and type(level) is int  # noqa: E721
+            and minimum_level <= level <= maximum_level
+            and red_battle_supported_move_count(move_ids, current_pp) >= 2
+            for level, current_hp, move_ids, current_pp in zip(
+                typed_levels,
+                typed_hp,
+                typed_moves,
+                typed_pp,
+                strict=True,
+            )
+        )
+    except RedBattleScenarioError:
+        return False
+
+
 def _observe_root(
     root: _CatalogTrainRoot,
     *,
@@ -330,6 +493,7 @@ def _observe_root(
     except BattleScenarioSourceVenueError:
         venue_id = None
         relocation_required = False
+    supported_party_slot = _supported_party_slot_available(raw, venue_id)
     if emulator.frame_count != 0 or emulator.pressed_buttons:
         raise BattleScenarioSourceInventoryError(
             "action-free battle source observation crossed the controller boundary"
@@ -344,6 +508,7 @@ def _observe_root(
         claim_available=available,
         safe_nonbattle=safe_nonbattle,
         living_party_member_available=living,
+        supported_party_slot_available=supported_party_slot,
     )
 
 
@@ -397,6 +562,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         catalog=catalog,
         registry=registry,
     )
+    attempted_sources = _load_attempted_source_exclusions(
+        args.excluded_plan,
+        args.excluded_run_journal,
+        expected_plan_sha256=args.expected_excluded_plan_sha256,
+        expected_journal_sha256=args.expected_excluded_run_journal_sha256,
+    )
+    successor_roots = tuple(
+        root
+        for root in scan.roots
+        if root.binding.source_state_sha256 not in attempted_sources
+    )
+    excluded_retained_roots = len(scan.roots) - len(successor_roots)
     registry_path = open_fixed_account_claim_registry()
     rom_path = resolve_rom_path(args.rom)
     try:
@@ -410,7 +587,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     emulator=emulator,
                     registry_path=registry_path,
                 )
-                for root in scan.roots
+                for root in successor_roots
             )
             if emulator.frame_count != 0 or emulator.pressed_buttons:
                 raise BattleScenarioSourceInventoryError(
@@ -456,7 +633,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     available_count = sum(item.claim_available for item in observed)
     eligible_count = sum(item.materialization_eligible for item in observed)
     return {
-        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v4",
+        "schema": "pokemon.red-battle-scenario-source-venue-inventory.v5",
         "status": (
             "prospective_fresh_train_venue_capacity_passed"
             if _venue_capacity(venue_counts)
@@ -471,6 +648,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "matching_state_file_copies": scan.matching_state_file_copies,
         "missing_catalog_train_roots": scan.missing_catalog_train_roots,
         "retained_catalog_train_roots": len(scan.roots),
+        "attempted_source_roots_declared": len(attempted_sources),
+        "attempted_source_roots_excluded": excluded_retained_roots,
+        "successor_candidate_train_roots": len(successor_roots),
         "unique_catalog_train_states": len(
             {root.binding.source_state_sha256 for root in scan.roots}
         ),
@@ -498,6 +678,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "prospective_fresh_train_venue_capacity": _venue_capacity(venue_counts),
         "safe_nonbattle_roots": sum(item.safe_nonbattle for item in observed),
         "living_party_roots": sum(item.living_party_member_available for item in observed),
+        "supported_party_slot_roots": sum(
+            item.supported_party_slot_available for item in observed
+        ),
         "controller_actions": 0,
         "emulator_frames": 0,
         "root_claims_created": 0,

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the locally qualified crash-safe seven-capture runner unchanged and require green exact-head pull-request CI. Only that exact green source may execute the already frozen five-Mansion, two-Route-11 plan once.
+- Next decision: Publish the completed post-zero repair, require exact-head green CI, and run one action-free census that excludes all seven attempted roots and uses the learner's actual move support. Do not freeze a successor unless seven fresh roots still span at least two venues after the six-per-venue cap.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish the unchanged runner and require exact-head CI to reproduce its source-bound registries, static checks, and complete non-integration suite. Stop before controller input if CI fails or the published source, bundle, materializer, runtime, ROM, plan, catalog, registry, or private destination cannot be reauthenticated exactly. |
+| Cheapest falsifier | Recompute eligibility without input using the learner's actual damaging, non-Selfdestruct move support and permanently exclude every source root attempted by the exhausted plan. Stop if fewer than seven fresh roots remain across at least two venues after the six-per-venue cap. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-runner-local-pass** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-materialization-runner-local-qualification-2026-09-01.json)
+**2026-09-01-battle-v2-post-zero-repair** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-materialization-run-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. The private freeze is immutable curriculum input, not training. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The private plan freeze created no capture, causal example, fit, verified outcome, authority, or transfer result. Tracked totals remain causal train 19, model fits 6, verified development outcomes 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Learning output | None. All seven frozen assignments are terminal failures and zero captures satisfy the two-supported-action learning contract. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. Four state/manifest pairs were created and independently reopened, but none is an accepted learning capture; three materializer calls failed. No move choice, outcome, prediction, fit, authority, sealed case, Crystal context, or replay occurred. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The runner is locally qualified but not yet published or reproduced by exact-head CI. Its 6,192-test local pass cannot authorize controller input by itself. |
-| Decision | Accept the runner's monotonic journal, started-before-input durability, pending-only execution, complete-source reauthentication, and independent emulator reopen as locally qualified. Publish it unchanged and require green exact-head CI before executing the frozen plan. |
-| Next session | Publish the locally qualified runner and obtain green exact-head CI. If and only if every identity still matches, execute the already frozen seven-capture plan once, retaining every started or failed assignment and creating no move choice, outcome, model fit, sealed case, Crystal context, authority, or replay. |
-| Next falsifier | Require clean-checkout CI to reproduce registry generation, lint, typing, and the complete non-integration suite. At execution preflight, reject any mismatch in exact source, CI, plan, ROM, runtime, catalog, registry, source binding, directory, or output namespace before input. |
-| Stop condition | Stop before controller input until the unchanged runner is published and its exact pull-request head has green CI. After input begins, never retry a started or failed assignment; resume only untouched assignments. Do not change the frozen seven, substitute outputs, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
+| Blocker | The exact plan and its seven attempted roots are exhausted at 0/7 qualified captures. The local repair now aligns learner, freezer, and census move support, excludes every non-pending journal source, and retains sanitized materializer failure stages. Publication and exact-head CI are required before the one action-free successor census can decide whether any replacement denominator exists. |
+| Decision | Accept the zero result and retire the exact plan without retry. Publish the completed prospective-eligibility, exclusion, and failure-stage repair unchanged; after exact-head CI passes, run exactly one zero-controller V5 successor-capacity census. Freeze nothing unless it proves seven fresh roots across at least two venues after the six-per-venue cap. |
+| Next session | Publish the completed supported-damaging-move, attempted-root-exclusion, and structured-failure repair; require exact-head green CI; then run one action-free successor-capacity census. Do not materialize, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
+| Next falsifier | Apply the learner's exact move-mechanics support filter to every available party slot, subtract all seven terminal attempted roots, and enforce seven fresh sources, at least two venues, and no more than six from one venue. A failed census stops capture work and redirects effort to new independent source or venue supply. |
+| Stop condition | Never retry or repackage any of the seven terminal assignments or their source roots. Stop before controller input until a published action-free census proves a fresh independent two-venue denominator under the corrected action-support rule. Do not shrink the denominator, treat one-action captures as training, choose moves, open outcomes, fit, run sealed Red or Crystal, grant authority, or replay the game. |
 
 ### Stop conditions
 

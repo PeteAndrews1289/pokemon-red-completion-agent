@@ -86,6 +86,22 @@ def test_mansion_party_slots_use_the_same_full_band_level_contract() -> None:
     assert [(item.party_slot, item.level) for item in slots] == [(1, 30)]
 
 
+def test_party_slots_require_two_model_supported_attacks_not_merely_pp() -> None:
+    raw = replace(
+        _raw(),
+        party_levels=(20, 20, 20, 20),
+        party_moves=((1, 39, 45, 0), (1, 2, 39, 0), (1, 2, 3, 4), (1, 0, 0, 0)),
+        party_pp=((10, 10, 10, 0), (10, 10, 10, 0), (10, 10, 10, 10), (10, 0, 0, 0)),
+    )
+
+    slots = SCRIPT["_eligible_party_slots"](
+        raw,
+        venue=ROUTE_11_TRAINING_VENUE,
+    )
+
+    assert [(item.party_slot, item.usable_move_count) for item in slots] == [(2, 2)]
+
+
 def test_party_observation_rejects_incomplete_parallel_arrays() -> None:
     raw = _raw()
     raw = replace(

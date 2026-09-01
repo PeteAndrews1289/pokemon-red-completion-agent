@@ -96,6 +96,20 @@ _MAXIMUM_RECEIPT_BYTES = 512 * 1024
 _MAXIMUM_MATERIALIZER_OUTPUT_BYTES = 2 * 1024 * 1024
 _GITHUB_REPOSITORY = "PeteAndrews1289/pokemon-red-completion-agent"
 _CI_WORKFLOW_NAME = "CI"
+_MATERIALIZER_FAILURE_SCHEMA = (
+    "pokemon-private-battle-scenario-materialization-failure-v1"
+)
+_MATERIALIZER_FAILURE_REASONS = frozenset(
+    {
+        "materialization_preflight_failed",
+        "source_authentication_failed",
+        "source_reauthentication_failed",
+        "source_relocation_failed",
+        "encounter_materialization_failed",
+        "output_publication_failed",
+        "materialization_internal_failure",
+    }
+)
 
 
 class BattleScenarioMaterializationRunnerError(RuntimeError):
@@ -526,8 +540,7 @@ def _materialize_assignment(
             check=False,
         )
         if (
-            completed.returncode != 0
-            or len(completed.stdout) > _MAXIMUM_MATERIALIZER_OUTPUT_BYTES
+            len(completed.stdout) > _MAXIMUM_MATERIALIZER_OUTPUT_BYTES
             or len(completed.stderr) > _MAXIMUM_MATERIALIZER_OUTPUT_BYTES
         ):
             raise BattleScenarioMaterializationRunnerError(
@@ -543,6 +556,21 @@ def _materialize_assignment(
             raise BattleScenarioMaterializationRunnerError(
                 "materializer_receipt_invalid"
             )
+        if completed.returncode != 0:
+            reason_code = value.get("reason_code")
+            if (
+                value.get("schema") != _MATERIALIZER_FAILURE_SCHEMA
+                or value.get("status") != "failed_closed"
+                or reason_code not in _MATERIALIZER_FAILURE_REASONS
+                or value.get("private_path_fields") != 0
+                or value.get("teacher_queries") != 0
+                or value.get("move_choices_executed") != 0
+                or value.get("root_claims_created") != 0
+            ):
+                raise BattleScenarioMaterializationRunnerError(
+                    "materializer_process_failed"
+                )
+            raise BattleScenarioMaterializationRunnerError(str(reason_code))
         return value
     finally:
         if descriptor >= 0:
