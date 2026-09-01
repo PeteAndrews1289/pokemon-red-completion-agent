@@ -42,7 +42,7 @@ def test_inventory_capacity_enforces_count_and_venue_diversity(
     assert INVENTORY["_venue_capacity"](INVENTORY["Counter"](counts)) is expected
 
 
-def test_inventory_opens_every_catalog_train_root_from_derived_names(
+def test_inventory_hash_joins_the_whole_bank_without_trusting_names(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
@@ -59,8 +59,12 @@ def test_inventory_opens_every_catalog_train_root_from_derived_names(
         )
         for name, payload in payloads.items()
     )
-    for name, payload in payloads.items():
-        (tmp_path / f"{name}.state").write_bytes(payload)
+    nested = tmp_path / "nested"
+    nested.mkdir()
+    (tmp_path / "unrelated-name.state").write_bytes(payloads["train-a"])
+    (nested / "another-name.state").write_bytes(payloads["train-b"])
+    (nested / "validation-copy.state").write_bytes(payloads["development-a"])
+    (nested / "unmatched.state").write_bytes(b"not in the catalog")
     registry = SimpleNamespace(
         assignment=lambda slot_id: SimpleNamespace(
             partition="validation" if slot_id.startswith("development") else "train"
@@ -88,20 +92,23 @@ def test_inventory_opens_every_catalog_train_root_from_derived_names(
         authenticate,
     )
 
-    roots = INVENTORY["_open_all_catalog_train_roots"](
+    scan = INVENTORY["_open_all_catalog_train_roots"](
         tmp_path,
         catalog=catalog,
         registry=registry,
     )
 
-    assert [root.binding.source_slot_id for root in roots] == ["train-a", "train-b"]
+    assert [root.binding.source_slot_id for root in scan.roots] == ["train-a", "train-b"]
+    assert scan.state_files_hashed == 4
+    assert scan.matching_state_file_copies == 2
+    assert scan.missing_catalog_train_roots == 0
     assert observed == [
         ("train-a", hashlib.sha256(b"state-a").hexdigest()),
         ("train-b", hashlib.sha256(b"state-b").hexdigest()),
     ]
 
 
-def test_inventory_rejects_a_missing_catalog_train_state(
+def test_inventory_reports_a_missing_catalog_train_state_without_inventing_it(
     tmp_path: Path,
 ) -> None:
     entry = SimpleNamespace(
@@ -112,15 +119,16 @@ def test_inventory_rejects_a_missing_catalog_train_state(
     registry = SimpleNamespace(assignment=lambda slot_id: SimpleNamespace(partition="train"))
     catalog = SimpleNamespace(entries=(entry,))
 
-    with pytest.raises(
-        INVENTORY["BattleScenarioSourceInventoryError"],
-        match="catalog train state",
-    ):
-        INVENTORY["_open_all_catalog_train_roots"](
-            tmp_path,
-            catalog=catalog,
-            registry=registry,
-        )
+    scan = INVENTORY["_open_all_catalog_train_roots"](
+        tmp_path,
+        catalog=catalog,
+        registry=registry,
+    )
+
+    assert scan.roots == ()
+    assert scan.state_files_hashed == 0
+    assert scan.matching_state_file_copies == 0
+    assert scan.missing_catalog_train_roots == 1
 
 
 def test_inventory_observes_map_and_availability_without_advancing(

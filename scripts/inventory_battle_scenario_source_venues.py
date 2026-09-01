@@ -71,6 +71,14 @@ class _CatalogTrainRoot:
 
 
 @dataclass(frozen=True, slots=True)
+class _CatalogTrainRootScan:
+    roots: tuple[_CatalogTrainRoot, ...]
+    state_files_hashed: int
+    matching_state_file_copies: int
+    missing_catalog_train_roots: int
+
+
+@dataclass(frozen=True, slots=True)
 class _ObservedTrainRoot:
     map_label: str
     venue_id: str | None
@@ -193,40 +201,75 @@ def _open_all_catalog_train_roots(
     *,
     catalog: GoalManagerContextCatalog,
     registry: GoalManagerCollectionRegistry,
-) -> tuple[_CatalogTrainRoot, ...]:
-    roots: list[_CatalogTrainRoot] = []
+) -> _CatalogTrainRootScan:
+    train_entries = []
     for entry in catalog.entries:
         assignment = registry.assignment(entry.slot_id)
         if assignment.partition != "train":
             continue
-        state_path = state_bank / f"{entry.capture_id}.state"
+        train_entries.append(entry)
+    expected_by_state = {entry.state_sha256: entry for entry in train_entries}
+    if len(expected_by_state) != len(train_entries):
+        raise BattleScenarioSourceInventoryError(
+            "catalog train root inventory is not independently identifiable"
+        )
+
+    matched_bytes: dict[str, bytes] = {}
+    state_files_hashed = 0
+    matching_state_file_copies = 0
+    try:
+        state_paths = tuple(sorted(state_bank.rglob("*.state")))
+    except OSError:
+        raise BattleScenarioSourceInventoryError(
+            "catalog state bank cannot be enumerated"
+        ) from None
+    for state_path in state_paths:
         state_bytes = _read_owned_regular(
             state_path,
             maximum_bytes=_MAXIMUM_STATE_BYTES,
-            subject="catalog train state",
+            subject="retained state bank file",
         )
-        if hashlib.sha256(state_bytes).hexdigest() != entry.state_sha256:
-            raise BattleScenarioSourceInventoryError("catalog train state digest differs")
+        state_files_hashed += 1
+        state_sha256 = hashlib.sha256(state_bytes).hexdigest()
+        if state_sha256 not in expected_by_state:
+            continue
+        matching_state_file_copies += 1
+        matched_bytes.setdefault(state_sha256, state_bytes)
+
+    roots: list[_CatalogTrainRoot] = []
+    for entry in train_entries:
+        state_sha256 = entry.state_sha256
+        if state_sha256 not in matched_bytes:
+            continue
         try:
             binding = authenticate_battle_scenario_source_binding(
-                entry.state_sha256,
+                state_sha256,
                 expected_partition=ScenarioPartition.TRAIN,
                 catalog=catalog,
                 registry=registry,
             )
         except BattleOutcomeCaptureAuthenticationError as error:
             raise BattleScenarioSourceInventoryError(str(error)) from None
-        roots.append(_CatalogTrainRoot(binding=binding, state_bytes=state_bytes))
+        roots.append(
+            _CatalogTrainRoot(
+                binding=binding,
+                state_bytes=matched_bytes[state_sha256],
+            )
+        )
     if (
-        not roots
-        or len({root.binding.source_slot_id for root in roots}) != len(roots)
+        len({root.binding.source_slot_id for root in roots}) != len(roots)
         or len({root.binding.source_state_sha256 for root in roots}) != len(roots)
         or len({root.binding.root_consumption_sha256 for root in roots}) != len(roots)
     ):
         raise BattleScenarioSourceInventoryError(
             "catalog train root inventory is not independently identifiable"
         )
-    return tuple(roots)
+    return _CatalogTrainRootScan(
+        roots=tuple(roots),
+        state_files_hashed=state_files_hashed,
+        matching_state_file_copies=matching_state_file_copies,
+        missing_catalog_train_roots=len(train_entries) - len(roots),
+    )
 
 
 def _map_label(map_id: object) -> str:
@@ -292,7 +335,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         registry_source_commit=args.registry_source_commit,
         expected_registry_sha256=args.expected_registry_sha256,
     )
-    roots = _open_all_catalog_train_roots(
+    scan = _open_all_catalog_train_roots(
         _require_state_bank(args.state_bank),
         catalog=catalog,
         registry=registry,
@@ -310,7 +353,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     emulator=emulator,
                     registry_path=registry_path,
                 )
-                for root in roots
+                for root in scan.roots
             )
             if emulator.frame_count != 0 or emulator.pressed_buttons:
                 raise BattleScenarioSourceInventoryError(
@@ -338,8 +381,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "context_catalog_sha256": catalog.catalog_sha256,
         "registry_sha256": registry.registry_sha256,
         "registry_source_commit": registry.execution.source_commit,
-        "catalog_train_roots": len(roots),
-        "unique_catalog_train_states": len({root.binding.source_state_sha256 for root in roots}),
+        "catalog_train_roots": len(scan.roots) + scan.missing_catalog_train_roots,
+        "retained_state_files_hashed": scan.state_files_hashed,
+        "matching_state_file_copies": scan.matching_state_file_copies,
+        "missing_catalog_train_roots": scan.missing_catalog_train_roots,
+        "retained_catalog_train_roots": len(scan.roots),
+        "unique_catalog_train_states": len(
+            {root.binding.source_state_sha256 for root in scan.roots}
+        ),
         "claim_available_train_roots": available_count,
         "materialization_eligible_train_roots": eligible_count,
         "materialization_eligible_venue_counts": dict(sorted(venue_counts.items())),
