@@ -14,6 +14,22 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: exact venue allocation passed; freeze a new plan before input
+
+Published source `98544be8` passed GitHub CI `33487956767/1`. The sole V7 whole-bank census
+excluded all seven attempted roots, reopened 47 successors at zero frames, and found ten
+claim-available unattempted roots that independently satisfy the current two-action and measured
+level-pressure rules at both Route 11 and Diglett's Cave. The exact capped matcher selected seven:
+four Cave and three Route 11. Capacity is therefore **7 roots / 2 venues**, with ten eligible roots
+in the complete inventory.
+
+This is supply evidence, not training. No root was claimed; no capture, outcome, prediction, fit,
+teacher query, sealed Red case, Crystal context, authority, or replay occurred. The next bounded
+gate is a V2 outcome-blind private freezer and selected-venue materializer seam. It must derive the
+complete inventory, bind one canonical seven-root allocation and mechanics-exact party slots,
+reauthenticate every chosen root-to-venue edge, retain crash-safe no-retry semantics, and expose no
+selected identity publicly. Do not execute until that separate design is published and green.
+
 ## 2026-09-01: PP-only source conditioning failed; venue allocation is next
 
 Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The one V6 census excluded all seven

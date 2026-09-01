@@ -1,6 +1,18 @@
 # Red battle V2 reachable-venue allocation readiness
 
-Status: local engineering; no controller input or learning output.
+Status: passed from published source; no controller input or learning output.
+
+## Result
+
+Source `98544be8` passed GitHub CI `33487956767/1`. The one V7 whole-bank census found ten
+claim-available unattempted roots eligible at both Route 11 and Diglett's Cave. The exact matcher
+selected seven independent roots split four Cave and three Route 11, satisfying the two-venue and
+six-per-venue constraints. It advanced zero frames and actions and exposed no root identity.
+
+The pass opens only a separately authenticated V2 private freezer and selected-venue materializer
+design. It does not authorize capture materialization, outcome collection, fitting, sealed Red,
+Crystal, authority, or replay. See the
+[path-free evidence](evidence/red-battle-v2-reachable-venue-allocation-capacity-result-2026-09-01.json).
 
 ## Mission fit
 

@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: seven honest seats finally exist
+
+**Visual:** The bipartite matcher lights up ten eligible world cards, each connected to Route 11
+and Diglett's Cave. Seven lines lock in: **4 CAVE · 3 ROUTE 11**. Keep the frame counter at **0** and
+the controller cable disconnected.
+
+**Voiceover:** “The parties were not empty—they were assigned to the wrong classroom. Ten unused
+worlds can support real two-attack decisions in either of two measured environments, and an exact
+matcher found the seven independent lessons we need.”
+
+**Visual:** Move those seven lines behind a new safe labeled **PRIVATE FREEZE**, with locks for
+**ROOT · VENUE · PARTY SLOT · OUTPUT · PROVENANCE · NO RETRY**. Do not show card identities.
+
+**Voiceover:** “This is capacity, not training. Next we seal the seven choices before an encounter
+exists and make the live materializer prove each route again. Only then can the lessons be
+captured.”
+
+**On-screen score:** `SUPPLY 7/7 · VENUES 2/2 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the final old-save matching test
 
 **Visual:** Draw saved worlds on the left and the three measured classrooms—Route 11, Diglett's

@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the classroom matching test passes
+
+The final old-bank question produced a real positive result. Ten unused authenticated worlds can
+each reach both Route 11 and Diglett's Cave through existing bounded travel, and each has a party
+member in the venue's measured pressure band with two currently usable attacks. The exact matcher
+filled seven independent seats: four Cave and three Route 11.
+
+The controller never moved. This is not seven lessons yet; it is proof that seven honest lesson
+boundaries can be built. The next system must privately seal the seven worlds, venues, party
+members, output names, provenance, and one-shot journal, then make the materializer independently
+prove every chosen route before input. Only after that design is published and green can encounter
+captures begin. The score remains **19 train examples · 6 fits · 6 verified development outcomes ·
+4 unseen comparisons · 0 authority · 0 transfer**.
+
 ## September 1: let every student try every honest classroom
 
 The last retained-bank test is now concrete. Instead of binding each saved world to the training

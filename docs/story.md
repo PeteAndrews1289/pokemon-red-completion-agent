@@ -7,6 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the same worlds can support two honest classrooms
+
+The final read-only matching test passed. Ten unused worlds can each reach both Route 11 and
+Diglett's Cave through travel code the system already had, and each has a Pokémon at the right
+challenge level with two real attacks. The exact matcher filled seven seats—four Cave, three Route
+11—without reusing a world or advancing one frame.
+
+That solves supply, not learning. The next chapter must seal which seven worlds, venues, and party
+members will be used; make the materializer prove the same route again; and preserve the blackout
+rule that crosses out an attempt before input. Only after that new plan is published and green can
+the encounters be created. The score remains **19 lessons · 6 fits · 6 verified held outcomes · 0
+authority · 0 transfer**.
+
 ## Current checkpoint: healing was not the missing ingredient
 
 The scanner found eighteen unused worlds, but a full PP refill would make only one of them usable

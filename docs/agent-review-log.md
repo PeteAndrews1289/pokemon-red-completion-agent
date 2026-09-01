@@ -3,6 +3,22 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Reachable-venue allocation pass — Codex adjudication 2026-09-01
+
+Source `98544be8` passed exact-head CI `33487956767/1`. The sole V7 census authenticated the full
+catalog, terminal source exclusions, current claim availability, existing Red transition
+predicates, measured venue bands, and the learner's exact action support. It advanced zero frames
+and actions. Ten unused roots were eligible at both Route 11 and Diglett's Cave; the exact capped
+matcher produced seven independent assignments split four Cave and three Route 11.
+
+Codex accepts this as prospective supply evidence only. It opens a separate V2 outcome-blind
+freezer/materializer design, not immediate execution or training. That successor must bind the
+selected venue before input, reauthenticate the same edge, preserve crash-safe no-retry semantics,
+and keep root identities private. No claim, capture, move choice, outcome, prediction, fit, teacher
+query, sealed Red, Crystal, authority, or replay occurred. The
+[result](evidence/red-battle-v2-reachable-venue-allocation-capacity-result-2026-09-01.json) records
+the aggregate counts.
+
 ## Reachable-venue allocation readiness — Codex local adjudication 2026-09-01
 
 Codex accepts exact root-to-venue matching as the last justified falsifier over the unchanged
