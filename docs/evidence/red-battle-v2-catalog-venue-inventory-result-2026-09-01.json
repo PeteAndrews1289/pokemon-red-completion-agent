@@ -1,0 +1,78 @@
+{
+  "capacity": {
+    "available_unsupported_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1,
+      "lavender_pokecenter": 2
+    },
+    "catalog_train_roots": 54,
+    "claim_available_map_counts": {
+      "celadon_pokecenter": 4,
+      "cinnabar_mart": 1,
+      "cinnabar_pokecenter": 11,
+      "fuchsia_city": 1,
+      "indigo_plateau_lobby": 1,
+      "lavender_pokecenter": 2,
+      "pokemon_mansion_1f": 5
+    },
+    "claim_available_train_roots": 25,
+    "materialization_eligible_train_roots": 16,
+    "materialization_eligible_venue_counts": {
+      "pokemon_mansion_1f": 16
+    },
+    "maximum_single_venue_contexts": 6,
+    "minimum_distinct_venues": 2,
+    "required_fresh_train_contexts": 7,
+    "retained_catalog_train_roots": 54,
+    "retained_state_files_hashed": 152,
+    "unique_catalog_train_states": 54
+  },
+  "decision": {
+    "battle_capture_materialization_authorized": false,
+    "next_gate": "qualify_one_catalog-derived relocation from an available unsupported city boundary to route_11 or digletts_cave, then repeat the action-free capacity decision",
+    "prospective_fresh_train_venue_capacity": false,
+    "reason": "The retained bank is numerically sufficient but every currently supported available source resolves to pokemon_mansion_1f. The V2 roster needs seven new catalog-authenticated train captures across at least two venues and caps one venue at six.",
+    "status": "stopped_insufficient_fresh_train_venue_capacity"
+  },
+  "legacy_manifest_audit": {
+    "catalog_compatible_previously_counted_fresh_train_captures": 0,
+    "previously_counted_fresh_train_capture_manifests": 4,
+    "reason": "None of the four earlier Mansion capture source-state digests occurs in the exact historical goal-manager catalog required by the current freezer. They cannot be combined with new catalog-derived captures under one authenticated catalog.",
+    "true_additional_fresh_train_requirement": 7
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "red_rom_opened_read_only": true,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red-battle-v2-catalog-venue-inventory-result.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33459343207,
+    "exact_main_commit": "2de2bd1ab1822ca2eb00d81bd935f4fa1b530a48",
+    "inventory_source_commit": "08e3b72b3cb82a75482db2230575d9cc2f8abedc"
+  },
+  "upstream": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038"
+  }
+}

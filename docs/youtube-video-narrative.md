@@ -1,24 +1,33 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## New scene: five keys, one room
+## New scene: fifty-four keys, still one classroom
 
-**Visual:** Five authenticated save-state keys light up green, then all five doors open into the
-same room labeled **POKÉMON MANSION**. Beside it, the experiment contract reads **≥2 VENUES · ≤6
-FROM ONE VENUE**.
+**Visual:** 152 retained save files enter a digest scanner and collapse into **54 AUTHENTICATED
+TRAIN ROOTS**. Twenty-five light up **AVAILABLE**. Sixteen open successfully—but every door still
+leads to **POKÉMON MANSION**. Beside it, the contract reads **7 FRESH · ≥2 VENUES · ≤6 FROM ONE
+VENUE**.
 
-**Voiceover:** “We thought we were three training states short. The catalog actually had five
-unused roots, but counting them was not enough: every one led to the same encounter venue. A model
-cannot demonstrate robust battle judgment by seeing one room over and over under different file
-names.”
+**Voiceover:** “The small scan was misleading, so we checked the entire bank. Every historical
+training state was still present and twenty-five were unused. Quantity was not the problem. Our
+adapter could only turn sixteen of them into lessons, and every lesson took place in the same
+Mansion. We stopped before pressing a button.”
+
+**Visual:** Four older Mansion cards approach the classroom, then fail an **EXACT CATALOG JOIN**
+and slide into a historical-evidence tray. Change **3 NEEDED** to **7 NEW NEEDED**.
+
+**Voiceover:** “We also caught a subtler bookkeeping error. Four older captures had been counted
+as future seats, but they did not belong to the catalog the freezer requires. They remain valid
+history, but they cannot be mixed into this experiment. Honest provenance changed the real
+shortfall from three to seven.”
 
 **Visual:** Cross out four command-line labels—**PARTITION**, **LINEAGE**, **SOURCE HASH**,
 **LOCATION**—and replace them with **DERIVED FROM CATALOG + LOADED STATE**. Keep the controller
 disconnected.
 
-**Voiceover:** “We also removed the ability for an operator to tell the evidence system what a
-save was. The code now derives its identity and location from authenticated bytes. Next it scans
-the broader catalog without pressing a button and proves that a genuinely multi-venue classroom
-exists before spending another encounter.”
+**Voiceover:** “The next move is not another long playthrough. Four available roots begin in
+Celadon, two in Lavender, and three at other city boundaries. We qualify one reusable relocation
+to an already measured training venue, then rerun the same zero-input census. Only a genuinely
+multi-venue classroom earns the right to collect outcomes.”
 
 **On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
 

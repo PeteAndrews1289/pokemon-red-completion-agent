@@ -1,26 +1,30 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-31. This document applies the durable roles in
+Status: active operating assignment as of 2026-09-01. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns catalog-derived train supply and venue-capacity proof
+## Current override: Codex owns the second-venue source-adapter gate
 
-Codex has locally removed the materializer's caller-supplied source digest, partition, lineage, and
-location. The exact historical catalog and registry now derive those identities, the loaded state
-derives its venue, and a read-only claim-ledger check rejects already consumed upstream roots
-without prematurely claiming them. Five unused explore-train catalog roots authenticate, but they
-are all Mansion-profiled. Since the V2 roster requires at least two venues and caps one venue at
-six contexts, that aggregate is supply evidence, not permission to materialize.
+PR 125 merged as exact main `2de2bd1a`, and exact-main CI `33459343207/1` passed. The published
+materializer derives source identity, partition, lineage, consumption key, and loaded map instead
+of accepting caller labels. A complete digest-joined inventory then found all 54 historical train
+roots: 25 remain claim-available, but all 16 roots supported by the current materializer resolve to
+`pokemon_mansion_1f`. The two-venue roster therefore failed before controller input.
 
-The immediate job is full qualification, publication, and green exact-main CI, followed by one
-action-free actual-map inventory over the broader unused catalog train bank. The inventory must
-prove a prospective seven-fresh allocation across at least two supported venues before a separate
-materialization gate can open. No controller input, encounter capture, root claim, outcome, fit,
-sealed Red, Crystal execution, authority, or full replay is currently open. Reviewer availability
-does not pause this ordinary engineering lane.
+The four Mansion captures counted by the earlier manifest-only census contribute zero to this
+catalog denominator: none of their source-state digests occurs in the exact catalog required by
+the freezer. The real requirement is seven new catalog-authenticated train captures, not three.
+Nine available roots remain at unsupported city boundaries: four Celadon Pokecenter, two Lavender
+Pokecenter, and one each at Cinnabar Mart, Fuchsia City, and Indigo Plateau lobby.
+
+Codex's immediate job is an action-free readiness check for one aggregate-supported relocation,
+starting with the four Celadon-Pokecenter roots and the existing Route 11/Diglett's Cave travel
+machinery. Only a reusable source-class adapter may proceed; no private-root patch is allowed.
+After publication, repeat the complete capacity decision. No encounter materialization, root
+claim, outcome, fit, sealed Red, Crystal execution, authority, or full replay is open.
 
 ## Current override: Codex owns the local V2 contract and inventory/freezer gate
 

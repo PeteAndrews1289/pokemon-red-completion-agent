@@ -3,6 +3,26 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Whole-bank battle venue falsification — Codex adjudication 2026-09-01
+
+The catalog-derived materializer merged as main `2de2bd1a`, with exact-main CI
+`33459343207/1` green. A first local inventory attempt rejected a filename-matched later catalog
+copy before ROM or claim-registry access because its bytes did not match the selected catalog.
+Codex removed the filename assumption: the published successor hashes the entire retained state
+bank, joins by catalog digest, and deduplicates copies.
+
+The complete action-free census hashed 152 state files, found all 54 unique train roots, observed
+25 as claim-available, and loaded every state with zero advanced frames and zero controller
+actions. Sixteen available roots are supported by the current materializer, but every one maps to
+the Mansion venue. The V2 requirement of seven fresh roots across at least two venues is therefore
+falsified. No capture, claim, prediction, outcome, fit, sealed case, Crystal context, authority, or
+replay was created.
+
+Codex also invalidated the old “three more roots” arithmetic: none of the four previously counted
+Mansion captures joins this exact catalog, so the honest denominator needs seven new captures.
+The next target is one reusable non-Mansion source-class relocation, starting with four available
+Celadon-Pokecenter roots; no selected-root rescue or materialization is authorized.
+
 ## Catalog-derived train-supply reorientation — Codex adjudication 2026-08-31
 
 The earlier three-root deficit was only a manifest-count result. Codex tested the next cheaper

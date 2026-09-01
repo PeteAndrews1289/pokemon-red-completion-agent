@@ -31,6 +31,10 @@ from pokemon_red_completion.battle_runtime import (  # noqa: E402
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
     build_battle_scenario_capture_payload,
 )
+from pokemon_red_completion.battle_scenario_source_venue import (  # noqa: E402
+    BattleScenarioSourceVenueError,
+    battle_scenario_source_venue,
+)
 from pokemon_red_completion.blaine import (  # noqa: E402
     DIGLETTS_CAVE_TRAINING_VENUE,
     MANSION_TRAINING_VENUE,
@@ -359,27 +363,10 @@ def _venue_for_source_location(source_location: str) -> TrainingVenue:
 
 
 def _source_location_for_state(raw: RawGameState) -> str:
-    if raw.battle_state != 0:
-        raise BattleScenarioMaterializationError(
-            "battle source is not at a safe non-battle boundary"
-        )
-    map_id = raw.map_id
-    if isinstance(map_id, bool) or not isinstance(map_id, int):
-        raise BattleScenarioMaterializationError(
-            "battle source is not at a measured source boundary"
-        )
-    locations = {
-        int(MapId.ROUTE_11): "route_11",
-        int(MapId.DIGLETTS_CAVE): "digletts_cave",
-        int(MapId.POKEMON_MANSION_1F): "mansion",
-        int(MapId.CINNABAR_POKECENTER): "cinnabar_center",
-    }
     try:
-        return locations[map_id]
-    except KeyError:
-        raise BattleScenarioMaterializationError(
-            "battle source is not at a measured source boundary"
-        ) from None
+        return battle_scenario_source_venue(raw).source_location
+    except BattleScenarioSourceVenueError as error:
+        raise BattleScenarioMaterializationError(str(error)) from None
 
 
 def _require_living_party_slot(raw: object, one_based_party_slot: int) -> int:

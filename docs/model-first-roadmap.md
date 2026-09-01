@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-31. This document supersedes the execution order in older
+Status: active strategy as of 2026-09-01. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -11,23 +11,26 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: derive train roots, then prove venue capacity before materializing
+## Current checkpoint: raw roots exist; a second venue adapter does not
 
-The battle materializer now derives its upstream identity from the exact historical catalog and
-registry. Partition, lineage, assignment, source-state digest, root-consumption identity, and
-source location are no longer caller labels. Five unused explore-train catalog roots pass this
-read-only join, but all five are Mansion-profiled. Combined with the four existing Mansion battle
-captures, they cannot by themselves meet V2's two-venue and maximum-six-per-venue policy.
+PR 125 merged as exact main `2de2bd1a`, and CI `33459343207/1` passed. The whole-bank inventory
+hashed 152 retained state files, recovered all 54 unique catalog train states, and observed all 54
+loaded maps under one shared read-only claim lease. Twenty-five roots remain available and every
+state is a safe non-battle boundary with a living party member. Nevertheless, all 16 roots
+supported by the current adapter resolve to `pokemon_mansion_1f`, so the frozen requirement of
+seven fresh contexts across at least two venues fails.
 
-The next order is deliberately narrower than gameplay:
+The earlier four Mansion manifests cannot fill four seats: zero of their source-state digests
+belongs to this exact catalog. The next order is therefore:
 
-1. finish local qualification, publish, and require green exact-main CI;
-2. inventory the actual map boundary and claim availability of the broader unused catalog train
-   bank without advancing a frame;
-3. require a prospective seven-fresh source allocation across at least two measured venues;
-4. stop and redesign bounded source routing if that allocation does not exist;
-5. only after a separate freeze, materialize the exact assigned encounters, then rerun the full
-   7+8 outcome-blind pressure census.
+1. inspect the four available Celadon-Pokecenter roots action-free for exact party, badge, and
+   field-move relocation prerequisites;
+2. reuse one bounded existing path to Route 11 or Diglett's Cave only if the source class—not a
+   selected private root—qualifies;
+3. publish and obtain green exact-main CI for that single adapter;
+4. repeat the complete action-free inventory and require seven available roots with at least two
+   venues and no more than six from one venue;
+5. only then freeze a materialization assignment and create encounters.
 
 This checkpoint adds no learning output. Current evidence remains **causal train 19 · model fits
 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
