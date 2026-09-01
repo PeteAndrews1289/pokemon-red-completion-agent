@@ -11,18 +11,39 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current engineering checkpoint: development capacity census is ready to publish
+## Current checkpoint: development capacity passed; build the eight-capture freezer
 
-One source-venue census now covers either complete catalog partition without accepting individual
+PR 147 merged as exact main `bb78c5bb` after CI `33552686857/1` passed. The one action-free
+development census authenticated all **27** catalog roots, found **25** claim-available and zero
+cross-partition identity collisions. Although the old already-ready path has only **7** candidates,
+the exact reachable-venue matcher found **22** roots eligible at both measured venues and allocated
+the required eight as **4 Route 11 + 4 Diglett's Cave**.
+
+This is prospective supply, not learning. The result created no claim or capture and used zero
+actions, frames, outcomes, teacher queries, predictions, fits or authority. Next:
+
+1. generalize the proven train V2 freezer/materializer seam to accept train or development;
+2. derive denominator **8** from development rather than a caller override;
+3. recompute the complete-bank reachable allocation and bind exactly eight unique roots, venues,
+   party slots, outputs, producer/consumer provenance and no-retry identities;
+4. hostile-test partition drift, cross-partition collision, allocation substitution, hand-picked
+   roots, output reuse, symlinks and post-freeze mutation;
+5. publish and require exact-main green CI;
+6. freeze one private development plan at zero effects and reorient before controller input;
+7. only after eight captures authenticate, build the zero-effect **7 train + 8 development**
+   consumer freeze; selected outcomes and the seventh descriptive fit remain later gates.
+
+The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
+4 · authority 0 · transfer 0**. See the
+[capacity result](evidence/red-battle-v2-development-partition-capacity-result-2026-09-01.json).
+
+## Previous engineering checkpoint: development capacity census was ready to publish
+
+One source-venue census covers either complete catalog partition without accepting individual
 root paths. It derives **7 train / 8 development**, maps registry validation to the title-neutral
 development partition, checks root claims and reachable venue pressure at zero frames, and fails
-on any state, assignment, context or lineage collision across partitions.
-
-Next publish and require green exact-main CI, then run the census once over the complete private
-development state bank. A pass requires eight independent available roots allocated across at
-least two venues with no more than six from one venue. A shortfall stops this supply path before
-materialization; a pass opens only the engineering of an eight-capture development plan, not
-gameplay or fitting.
+on any state, assignment, context or lineage collision across partitions. That gate has now passed
+as recorded above.
 
 ## Current engineering checkpoint: reusable admission passed; development supply is 0/8
 

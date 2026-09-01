@@ -14,7 +14,25 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-09-01: partition-aware development census is locally qualified
+## 2026-09-01: development capacity passed at 22 candidates / 2 venues
+
+PR 147 merged as exact main `bb78c5bb`; CI `33552686857/1` passed. The one complete-bank
+development census then authenticated **27/27** catalog roots, found **25** still claim-available,
+and measured zero state, assignment, context or lineage collisions with train. The legacy
+already-ready path supplies only **7/8**, but the exact reachable-venue allocator found **22**
+eligible roots and bound the required eight prospectively as **4 Route 11 + 4 Diglett's Cave**.
+
+The census used **0 actions · 0 frames · 0 claims · 0 captures · 0 outcomes · 0 teacher queries ·
+0 predictions · 0 fits · 0 authority**. See the
+[path-free result](docs/evidence/red-battle-v2-development-partition-capacity-result-2026-09-01.json).
+This opens only a separate engineering gate: generalize the proven train V2 freezer and
+selected-venue materializer to carry development partition and denominator eight. It must
+reproduce the exact allocation from the whole bank, bind immutable no-retry outputs, and stop at a
+zero-effect private plan. Do not freeze by hand, reuse the eight incompatible historical
+manifests, or begin controller input before the new contract is published and exact-main CI is
+green.
+
+## 2026-09-01: partition-aware development census was locally qualified
 
 The source-venue census now handles the complete train or development partition through one
 contract. It derives the denominator from partition (**7 train / 8 development**), accepts only a
@@ -22,12 +40,7 @@ whole state bank rather than selected roots, authenticates validation entries as
 sources, retains claim and venue-pressure checks, and measures state, assignment, context and
 lineage collisions across partitions. Any collision fails the capacity result.
 
-This is still unpublished engineering with zero private input or gameplay. Publish it, require
-exact-main green CI, then run exactly one action-free census over the current development
-partition. If fewer than eight independent unused roots can be allocated across at least two
-venues under the six-per-venue cap, stop this supply path. If it passes, the next separate gate is
-a partition-aware eight-capture materialization plan; do not select roots by hand or begin
-controller input in the census gate.
+This checkpoint was subsequently published and the action-free census passed as recorded above.
 
 ## 2026-09-01: producer-aware admission is reusable; fresh development supply is required
 

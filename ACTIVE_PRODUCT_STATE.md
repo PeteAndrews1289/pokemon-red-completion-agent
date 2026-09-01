@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the qualified producer-aware adapter, then build and falsify one partition-aware current-catalog development-supply plan. Outcome collection and fitting remain closed until eight fresh compatible development captures and the 7+8 zero-effect freeze exist.
+- Next decision: Build and falsify the partition-aware eight-capture development freezer/materializer contract from the passed 4+4 reachable allocation. Outcome collection and fitting remain closed until those captures exist and the 7+8 zero-effect freeze authenticates them.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-producer-aware-admission-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-development-capture-supply-audit-2026-09-01.json)
+**2026-09-01-battle-v2-development-capacity-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-development-partition-capacity-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | The reusable metadata-only audit proved that all seven train captures retain two historical producers while all eight proposed development manifests are incompatible with the current experiment. This is a supply falsification, not a causal example: counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The producer-aware adapter and metadata-only audit selected no move, opened no state or outcome, computed no prediction, fit no model, and changed no gameplay authority. |
+| Learning output | The census established prospective development-scenario supply, not a gameplay lesson: 8 roots can be allocated across 2 venues under the six-per-venue cap, while all state, assignment, context and lineage collision counts are zero. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The published development census advanced zero frames, issued zero controller actions, created zero claims or captures, opened zero outcomes, queried no teacher, computed no prediction, fit no model, and changed no gameplay authority. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The reusable adapter is qualified, but all eight historical development manifests belong to older source catalogs: 0/8 join the current goal-manager catalog. The valid seven-input train catalog therefore has an eight-context development deficit. |
-| Decision | Publish the reusable producer/consumer provenance split and retire the historical development files as inputs to this experiment. Next build one partition-aware supply contract that can inventory and catalog fresh compatible development captures without another one-off adapter. |
-| Next session | Generalize the capture catalog/materialization boundary to encode train or development partition, inventory the current development roots without gameplay, and freeze only a fresh eight-capture development plan if the complete support and independence gate passes. |
-| Next falsifier | Prove action-free whether the current goal-manager development partition contains at least eight unused compatible roots that can become battle captures under one partition-aware catalog, with explicit venue, lineage and producer coverage. |
-| Stop condition | Never reuse the eight incompatible historical development manifests, rematerialize an existing capture, or reinterpret a historical failure. Stop before controller input if fewer than eight fresh independent development roots pass the current source, venue, party and claim gates. |
+| Blocker | Development supply is now prospectively sufficient, but no immutable eight-capture development plan or materializer contract exists. The legacy already-ready filter exposes only 7/8 roots, so the next plan must bind the validated reachable allocation rather than silently reuse the old Route 11-only path. |
+| Decision | Accept the complete-bank action-free capacity result: 27/27 development roots authenticated, 25 claim-available, 22 eligible for both measured venues, and an exact independent 4 Route 11 + 4 Diglett's Cave allocation exists with zero cross-partition collisions. Next engineer a generic partition-aware eight-capture freezer and selected-venue materializer seam; keep execution closed until that separate contract is published and exact-main CI is green. |
+| Next session | Generalize the proven train V2 freezer/materializer seam to carry partition and the eight-context denominator, hostile-test partition drift and allocation substitution, publish it, require exact-main green CI, and stop at a zero-effect private development-plan freeze before controller input. |
+| Next falsifier | At zero controller actions, prove that one generic partition-aware freezer can deterministically bind exactly eight unique development roots to the census-derived 4+4 reachable venue allocation, preserve claim and producer identities, and emit an immutable no-retry plan without opening selected outcomes. |
+| Stop condition | Never reuse the eight incompatible historical development manifests, rematerialize an existing capture, or reinterpret a historical failure. Stop before controller input if the freezer cannot reproduce exactly eight unique development roots across at least two measured venues, preserve partition and lineage independence, bind immutable output identities, or keep all claims and gameplay effects at zero. |
 
 ### Stop conditions
 

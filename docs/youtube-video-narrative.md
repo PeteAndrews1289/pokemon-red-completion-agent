@@ -5154,3 +5154,18 @@ version has to prove the model learned something worth carrying into a game it h
   this is the last execution-safety gate, not a trained player.
 - End on the next rail: **PUBLISH → GREEN CI → FREEZE ONCE AT ZERO EFFECTS → REVIEW RECEIPT →
   SEPARATE CAPTURE EXECUTION DECISION**.
+
+## New sequence: “The exam room is separate from the classroom”
+
+- Open with **27 DEVELOPMENT ROOTS** entering the same partition-aware scanner used for train.
+  Show **27/27 PRESENT · 25 UNUSED · CROSS-PARTITION COLLISIONS 0**.
+- Contrast the narrow old answer, **7 ROUTE-READY**, with the complete reachable graph: **22
+  ELIGIBLE FOR ROUTE 11 OR DIGLETT'S CAVE**.
+- Resolve the graph into **8 HELD-OUT SEATS · ROUTE 11 ×4 · CAVE ×4 · VENUE CAP 6**. Keep root
+  identities hidden and the controller visibly disconnected.
+- Keep the effect rail onscreen: **ACTIONS 0 · FRAMES 0 · CLAIMS 0 · CAPTURES 0 · OUTCOMES 0 ·
+  TEACHER 0 · PREDICTIONS 0 · FITS 0**.
+- Say plainly: “This proves independent exam supply, not model quality. The next phase seals the
+  eight destinations and one-shot identities; it still stops before gameplay.”
+- End on **GENERIC PARTITION FREEZER → GREEN CI → ONE ZERO-EFFECT DEVELOPMENT PLAN → REVIEW →
+  SEPARATE CAPTURE DECISION → 7+8 FREEZE → OUTCOMES → TRAIN-ONLY FIT**.

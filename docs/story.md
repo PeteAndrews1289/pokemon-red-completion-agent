@@ -7,6 +7,18 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: eight held-out seats, no borrowed worlds
+
+The development classroom now passes its read-only seating test. All 27 expected worlds were
+found, 25 were unused, and none shared an identity or ancestry with training. Twenty-two could
+honestly reach both measured classrooms. The matcher assigned eight: four to Route 11 and four to
+Diglett's Cave.
+
+No one pressed a button. The next chapter must seal those seats and destinations in a one-shot
+plan, make the cartridge prove every route again, and stop for review before creating an
+encounter. The score remains **19 lessons · 6 fits · 6 verified held outcomes · 0 authority · 0
+transfer**.
+
 ## Current checkpoint: the same worlds can support two honest classrooms
 
 The final read-only matching test passed. Ten unused worlds can each reach both Route 11 and

@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: the held-out classroom exists without borrowing from training
+
+The complete development bank answered the supply question cleanly. All 27 catalog worlds were
+present, 25 remained unused, and none shared a state, assignment, context, or lineage identity
+with train. Twenty-two could reach either measured battle classroom with a real two-action party
+choice. The exact matcher filled eight held-out seats evenly: four on Route 11 and four in
+Diglett's Cave.
+
+Nothing played the game to get that answer. The census made zero inputs, advanced zero frames,
+claimed no world, created no capture, asked no teacher, opened no outcome, and fit no model. It
+also caught why the old path could not simply be rerun: only seven worlds were already in its
+narrow Route 11-ready shape. The next engineering phase must seal the reachability-aware 4+4
+allocation in a reusable partition-aware plan before any encounter is created. The score therefore
+remains **19 causal train examples · 6 fits · 6 verified development outcomes · 4 unseen
+comparisons · 0 authority · 0 transfer**.
+
 ## September 1: the compatibility check prevents another wasted campaign
 
 The next gate exposed a subtle mismatch before gameplay. The seven train snapshots belong to the
