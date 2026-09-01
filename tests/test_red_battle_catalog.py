@@ -11,6 +11,10 @@ from pokemon_red_completion.red_battle_catalog import (
     pokemon_red_move_ref,
     pokemon_red_species_ref,
 )
+from pokemon_red_completion.red_battle_scenario import (
+    red_battle_move_is_refreshable_model_supported,
+    red_battle_refreshable_supported_move_count,
+)
 
 
 def _move(identifier: int) -> str:
@@ -56,6 +60,13 @@ def test_known_move_mechanics_match_pinned_red_source() -> None:
     assert night_shade.category == "physical"
     assert night_shade.power == 0
     assert night_shade.effect_flags == frozenset({"fixed_damage"})
+
+
+def test_refreshable_move_support_keeps_the_learner_mechanics_boundary() -> None:
+    assert red_battle_move_is_refreshable_model_supported(1)
+    assert not red_battle_move_is_refreshable_model_supported(39)
+    assert not red_battle_move_is_refreshable_model_supported(120)
+    assert red_battle_refreshable_supported_move_count((1, 2, 39, 120)) == 2
 
 
 def test_known_effect_and_priority_flags_match_red_battle_core() -> None:

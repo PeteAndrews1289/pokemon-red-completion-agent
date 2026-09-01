@@ -317,17 +317,22 @@ def test_celadon_source_requires_the_live_route_11_transition_capability() -> No
         player_x=3,
         player_y=3,
         party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
         battle_state=0,
         party_hp=(120,),
         party_moves=((FLY_MOVE_ID, 0, 0, 0),),
         badge_bits=int(Badge.THUNDER),
     )
 
-    assert derive(
-        celadon,
-        last_blackout_map=int(MapId.CELADON_CITY),
-        current_map_tileset=6,
-    ) == "celadon_center_route_11"
+    assert (
+        derive(
+            celadon,
+            last_blackout_map=int(MapId.CELADON_CITY),
+            current_map_tileset=6,
+        )
+        == "celadon_center_route_11"
+    )
     with pytest.raises(error, match="no qualified bounded relocation"):
         derive(
             replace(celadon, badge_bits=0),
@@ -355,17 +360,46 @@ def test_lavender_source_requires_the_cartridge_composed_ground_transition() -> 
         party_moves=((CUT_MOVE_ID, 0, 0, 0),),
     )
 
-    assert derive(
-        lavender,
-        last_blackout_map=int(MapId.LAVENDER_TOWN),
-        current_map_tileset=0,
-    ) == "lavender_center_route_11"
+    assert (
+        derive(
+            lavender,
+            last_blackout_map=int(MapId.LAVENDER_TOWN),
+            current_map_tileset=0,
+        )
+        == "lavender_center_route_11"
+    )
     with pytest.raises(error, match="no qualified bounded relocation"):
         derive(
             replace(lavender, badge_bits=0),
             last_blackout_map=int(MapId.LAVENDER_TOWN),
             current_map_tileset=0,
         )
+
+
+def test_other_supported_fly_boundary_uses_generic_route_11_transition() -> None:
+    derive = MATERIALIZE["_source_location_for_state"]
+    fuchsia = RawGameState(
+        game_started=True,
+        map_id=MapId.FUCHSIA_CITY,
+        player_x=9,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        battle_state=0,
+        badge_bits=int(Badge.THUNDER),
+        party_hp=(120,),
+        party_moves=((FLY_MOVE_ID, 0, 0, 0),),
+    )
+
+    assert (
+        derive(
+            fuchsia,
+            last_blackout_map=int(MapId.FUCHSIA_CITY),
+            current_map_tileset=0,
+        )
+        == "vermilion_transition_route_11"
+    )
 
 
 def test_lavender_source_binds_the_rom_derived_route_11_venue(monkeypatch) -> None:  # type: ignore[no-untyped-def]
@@ -380,16 +414,41 @@ def test_lavender_source_binds_the_rom_derived_route_11_venue(monkeypatch) -> No
         lambda payload: observed.append(payload) or (route_11, cave),
     )
 
-    assert venue_for(
-        "lavender_center_route_11",
-        rom_bytes=b"immutable-red-rom",
-    ) is route_11
+    assert (
+        venue_for(
+            "lavender_center_route_11",
+            rom_bytes=b"immutable-red-rom",
+        )
+        is route_11
+    )
     assert observed == [b"immutable-red-rom"]
     with pytest.raises(
         MATERIALIZE["BattleScenarioMaterializationError"],
         match="immutable ROM bytes",
     ):
         venue_for("lavender_center_route_11")
+
+
+def test_generic_transition_source_binds_the_rom_derived_route_11_venue(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    venue_for = MATERIALIZE["_venue_for_source_location"]
+    globals_ = venue_for.__globals__
+    route_11 = SimpleNamespace(map_id=int(MapId.ROUTE_11))
+    cave = SimpleNamespace(map_id=int(MapId.DIGLETTS_CAVE))
+    monkeypatch.setitem(
+        globals_,
+        "red_training_venues_with_ground_transition",
+        lambda payload: (route_11, cave),
+    )
+
+    assert (
+        venue_for(
+            "vermilion_transition_route_11",
+            rom_bytes=b"immutable-red-rom",
+        )
+        is route_11
+    )
 
 
 @pytest.mark.parametrize(
@@ -418,6 +477,9 @@ def test_direct_battle_sources_never_run_a_healing_route(
         player_x=12,
         player_y=9,
         party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
         battle_state=0,
         party_hp=(120,),
     )
@@ -429,6 +491,100 @@ def test_direct_battle_sources_never_run_a_healing_route(
     assert healer_calls == 0
 
 
+def test_direct_resource_conditioning_runs_healer_and_preserves_identity() -> None:
+    prepare_source = MATERIALIZE["_prepare_source_venue"]
+    source = RawGameState(
+        game_started=True,
+        map_id=MapId.POKEMON_MANSION_1F,
+        player_x=5,
+        player_y=27,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
+        battle_state=0,
+        party_hp=(1,),
+        party_max_hp=(50,),
+        party_status=(4,),
+        party_pp=((0, 0, 0, 0),),
+    )
+    healed = replace(
+        source,
+        party_hp=(50,),
+        party_status=(0,),
+        party_pp=((35, 25, 0, 0),),
+    )
+
+    class Reader:
+        raw = source
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+
+    def heal(actions: object, current_reader: Reader, emulator: object) -> None:
+        del actions, emulator
+        current_reader.raw = healed
+
+    venue = SimpleNamespace(
+        map_id=int(MapId.POKEMON_MANSION_1F),
+        heal_and_return=heal,
+    )
+    prepare_source(
+        "mansion",
+        venue,
+        object(),
+        reader,
+        object(),
+        restore_battle_resources=True,
+    )
+
+    assert reader.read() == healed
+
+
+def test_resource_conditioning_rejects_a_move_change() -> None:
+    prepare_source = MATERIALIZE["_prepare_source_venue"]
+    source = RawGameState(
+        game_started=True,
+        map_id=MapId.POKEMON_MANSION_1F,
+        player_x=5,
+        player_y=27,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
+        battle_state=0,
+        party_hp=(50,),
+    )
+
+    class Reader:
+        raw = source
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+
+    def corrupt(actions: object, current_reader: Reader, emulator: object) -> None:
+        del actions, emulator
+        current_reader.raw = replace(source, party_moves=((1, 3, 0, 0),))
+
+    venue = SimpleNamespace(
+        map_id=int(MapId.POKEMON_MANSION_1F),
+        heal_and_return=corrupt,
+    )
+    with pytest.raises(ValueError, match="changed the upstream party identity"):
+        prepare_source(
+            "mansion",
+            venue,
+            object(),
+            reader,
+            object(),
+            restore_battle_resources=True,
+        )
+
+
 def test_celadon_route_11_source_uses_the_existing_bounded_relocation() -> None:
     prepare_source = MATERIALIZE["_prepare_source_venue"]
     source = RawGameState(
@@ -437,6 +593,9 @@ def test_celadon_route_11_source_uses_the_existing_bounded_relocation() -> None:
         player_x=3,
         player_y=3,
         party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
         battle_state=0,
         party_hp=(120,),
     )
@@ -460,6 +619,50 @@ def test_celadon_route_11_source_uses_the_existing_bounded_relocation() -> None:
     venue = SimpleNamespace(map_id=int(MapId.ROUTE_11), heal_and_return=relocate)
     prepare_source(
         "celadon_center_route_11",
+        venue,
+        object(),
+        reader,
+        object(),
+    )
+
+    assert calls == 1
+    assert reader.read() == destination
+
+
+def test_generic_transition_source_uses_the_existing_bounded_relocation() -> None:
+    prepare_source = MATERIALIZE["_prepare_source_venue"]
+    source = RawGameState(
+        game_started=True,
+        map_id=MapId.FUCHSIA_CITY,
+        player_x=9,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
+        battle_state=0,
+        party_hp=(120,),
+    )
+    destination = replace(source, map_id=MapId.ROUTE_11, player_x=12, player_y=9)
+
+    class Reader:
+        raw = source
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    calls = 0
+
+    def relocate(actions: object, current_reader: Reader, emulator: object) -> None:
+        nonlocal calls
+        del actions, emulator
+        calls += 1
+        current_reader.raw = destination
+
+    venue = SimpleNamespace(map_id=int(MapId.ROUTE_11), heal_and_return=relocate)
+    prepare_source(
+        "vermilion_transition_route_11",
         venue,
         object(),
         reader,

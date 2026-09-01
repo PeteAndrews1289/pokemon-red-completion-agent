@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: are the attacks missing, or merely exhausted?
+
+**Visual:** Put the eighteen unused cards behind glass. Overlay each party's learned moves, then
+turn a dial from **CURRENT PP** to **AFTER POKÉMON CENTER**. Keep four locks visible: **SAME PARTY
+ORDER · SAME SPECIES · SAME LEVELS · SAME MOVES**.
+
+**Voiceover:** “The zero may have a simple cause: these Pokémon could know useful attacks but have
+no PP left. Healing is allowed to restore resources, not rewrite the student. We verify identity
+before and after.”
+
+**Visual:** Route eligible cards through the already-tested Mansion and Vermilion/Route 11 travel
+adapters, but leave the controller cable disconnected. End on a census gate: **7 ROOTS · 2 VENUES ·
+6 MAX PER VENUE**.
+
+**Voiceover:** “First we publish the question and ask it without advancing one frame. A pass only
+earns a new experimental design. A failure ends this idea before another night of emulator work.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: the honest answer is zero
 
 **Visual:** Feed the exact old plan and terminal journal into the V5 scanner. Show **7/7 ATTEMPTED

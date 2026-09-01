@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Resource-conditioning readiness — Codex local adjudication 2026-09-01
+
+Codex accepts PP restoration as a hypothesis worth one aggregate falsification, not as permission
+to resume capture work. The implementation introduces a title-neutral identity contract, a Red
+semantic identity projection, mechanics-exact post-heal action counting, and recognition of source
+boundaries already supported by the existing live Vermilion transition. The runtime can verify
+that healing changed no party order, species, level, or learned move.
+
+The next action remains publication, exact-head green CI, and one whole-bank zero-frame V6 census.
+Only seven unused roots across two venues after the six-per-venue cap can pass. No existing plan
+opts into conditioning; no root claim, controller action, frame, capture, outcome, prediction, fit,
+teacher query, sealed Red case, Crystal context, authority, or replay has occurred. External review
+becomes useful only if the census passes and a new execution contract is proposed.
+
 ## Post-exclusion capacity stop — Codex adjudication 2026-09-01
 
 PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The one published V5 census

@@ -78,6 +78,8 @@ _LAVENDER_ROUTE_11_SOURCE = BattleScenarioSourceVenue(
     relocation_required=True,
 )
 
+_VERMILION_TRANSITION_ROUTE_11_SOURCE_LOCATION = "vermilion_transition_route_11"
+
 
 def battle_scenario_source_venue(
     raw: RawGameState,
@@ -132,9 +134,24 @@ def battle_scenario_source_venue(
     try:
         return _SOURCE_VENUES[map_id]
     except KeyError:
-        raise BattleScenarioSourceVenueError(
-            "battle source is not at a measured source boundary"
-        ) from None
+        pass
+    if (
+        type(last_blackout_map) is int  # noqa: E721
+        and type(current_map_tileset) is int  # noqa: E721
+        and red_vermilion_training_transition_available(
+            raw,
+            last_blackout_map,
+            current_map_tileset,
+        )
+    ):
+        return BattleScenarioSourceVenue(
+            source_location=_VERMILION_TRANSITION_ROUTE_11_SOURCE_LOCATION,
+            venue_id="route_11",
+            source_map=map_id,
+            encounter_map=int(MapId.ROUTE_11),
+            relocation_required=True,
+        )
+    raise BattleScenarioSourceVenueError("battle source is not at a measured source boundary")
 
 
 __all__ = [
