@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the path-free receipt for the sole successful V2 freeze, then separately execute the exact seven-assignment plan through the crash-safe materializer. Stop at the complete terminal for aggregate review; only seven authenticated captures may later open outcome collection and the seventh model fit.
+- Next decision: Publish and exact-main green the CI provenance repair, then freeze one new source-bound seven-assignment denominator at zero effects. The original plan is not rerun; controller execution remains closed until the successor aggregate receipt passes review.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | At the separately published execution gate, require the runner to reopen the exact private plan and exhausted evidence, reject output collisions or source reuse before input, durably start each assignment before controller access, and independently authenticate every retained capture. Any mismatch or started failure remains terminal without replacement. |
+| Cheapest falsifier | Before another private freeze, prove that the runner accepts only an exact successful push CI on main for the executable squash commit and rejects pull-request, feature-branch push, manual-workflow, wrong-SHA, wrong-attempt and wrong-workflow evidence with a sanitized public reason. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-multivenue-freeze-result** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-multivenue-materialization-freeze-result-2026-09-01.json)
+**2026-09-01-battle-v2-precontroller-ci-falsification** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-multivenue-materialization-precontroller-failure-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | None. The freeze established a seven-example prospective denominator but created no battle capture or learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The one V2 freeze opened the Red ROM read-only but advanced zero frames and actions and created no claim, capture, choice, outcome, prediction, fit, teacher query, sealed case, Crystal context, authority, replay, or public identity/path field. |
+| Learning output | None. The failed launch created no battle capture or learning example. The board remains causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The first V2 execution launch stopped at exact-CI authentication before the ROM, journal, controller, root claims, captures, outcomes, predictions, fits, sealed cases, Crystal contexts, authority, replay, or public private fields. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The exact seven-assignment private denominator now exists, but none of its battle boundaries has been materialized. The next risk is controller execution itself: every selected venue and party slot must survive live reauthentication, and any started failure is permanently consumed without replacement. |
-| Decision | Accept the sole V2 freeze as a prospective, unexecuted denominator: ten eligible untouched roots supported both venues and the canonical allocation selected seven unique sources as four Diglett's Cave and three Route 11 with every protected effect at zero. Publish only the aggregate receipt, then treat execution as a separate decision. |
-| Next session | Publish and green the path-free V2 freeze receipt. Then, in a separately reoriented execution session, run the exact frozen seven-assignment plan through the crash-safe materializer and stop at its complete terminal for aggregate review. Do not inspect selected identities or outcomes, retry, fit, open sealed Red or Crystal, grant authority, or replay the game. |
-| Next falsifier | From a separately published exact-head green receipt state, run the exact frozen denominator once through the crash-safe runner. Before each first input, reauthenticate the plan, exhausted evidence, untouched source, output absence, selected reachable venue and party slot. Any started or failed assignment remains terminal; only a complete seven-capture denominator may advance. |
-| Stop condition | Stop before input if the freeze receipt is not published and green, the exact private plan or exhausted evidence differs, any source is unavailable or previously attempted, outputs already exist, or identity, outcome, teacher, or retry information crosses the public boundary. During execution, retain every started failure and never replace or retry it. |
+| Blocker | The runner required a pull-request CI event whose head SHA equaled the published squash-merge commit. GitHub gives that exact commit a push event on main and gives the pull-request event the pre-squash head, so the frozen source and CI contract could never both authenticate. No assignment started. |
+| Decision | Accept the launch as a zero-effect pre-controller falsification, not a materialization attempt. Preserve the original plan and generic failure receipt as history, repair the trust rule to require exact successful main-push CI, add mutation-sensitive rejection tests and a sanitized reason, then publish and requalify before any successor freeze. |
+| Next session | Qualify and publish the exact-main CI repair, require exact-main green CI, then freeze one successor seven-assignment denominator at zero effects and stop for aggregate comparison. Only after that separate review may its crash-safe controller execution begin. |
+| Next falsifier | Publish the exact-main CI repair and require its own successful push CI on main. From that exact source, freeze a new outcome-blind seven-assignment plan at zero effects; reject if the complete bank, exhausted evidence, allocation, source bundle or private boundaries differ. Do not reuse the old source-bound plan. |
+| Stop condition | Do not rerun the original source-bound plan, weaken exact SHA/workflow/repository checks, or cross the controller before the repair is published, exact-main green, and a new canonical private plan freezes at zero effects. Stop on inventory, allocation, exhausted-evidence, output, identity, teacher or retry drift. |
 
 ### Stop conditions
 

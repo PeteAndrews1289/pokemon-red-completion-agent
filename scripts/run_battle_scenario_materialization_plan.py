@@ -1077,7 +1077,7 @@ def _require_exact_green_ci_run(
         or type(exact_ci_attempt) is not int  # noqa: E721
         or exact_ci_attempt <= 0
     ):
-        raise BattleScenarioMaterializationRunnerError("CI identity differs")
+        raise BattleScenarioMaterializationRunnerError("exact_ci_identity_differs")
     try:
         completed = subprocess.run(
             (
@@ -1088,7 +1088,7 @@ def _require_exact_green_ci_run(
                 "--repo",
                 _GITHUB_REPOSITORY,
                 "--json",
-                "attempt,conclusion,databaseId,event,headSha,status,url,workflowName",
+                "attempt,conclusion,databaseId,event,headBranch,headSha,status,url,workflowName",
             ),
             cwd=PROJECT_ROOT,
             env={**os.environ, "GH_PROMPT_DISABLED": "1"},
@@ -1100,7 +1100,7 @@ def _require_exact_green_ci_run(
         value = json.loads(completed.stdout)
     except (OSError, subprocess.SubprocessError, json.JSONDecodeError):
         raise BattleScenarioMaterializationRunnerError(
-            "exact CI cannot be authenticated"
+            "exact_ci_cannot_be_authenticated"
         ) from None
     if (
         completed.returncode != 0
@@ -1110,12 +1110,13 @@ def _require_exact_green_ci_run(
         or value.get("headSha") != source_commit
         or value.get("status") != "completed"
         or value.get("conclusion") != "success"
-        or value.get("event") != "pull_request"
+        or value.get("event") != "push"
+        or value.get("headBranch") != "main"
         or value.get("workflowName") != _CI_WORKFLOW_NAME
         or value.get("url")
         != f"https://github.com/{_GITHUB_REPOSITORY}/actions/runs/{exact_ci_run}"
     ):
-        raise BattleScenarioMaterializationRunnerError("exact CI differs")
+        raise BattleScenarioMaterializationRunnerError("exact_ci_differs")
     return value
 
 

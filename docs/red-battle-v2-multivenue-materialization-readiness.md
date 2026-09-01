@@ -69,12 +69,23 @@ or model authority.
 
 ## Next decision
 
-Publish the aggregate freeze receipt and keep the private plan unopened. A separate execution
-decision may then materialize the seven frozen battle boundaries through the crash-safe runner.
-Require the runner to reopen the exact plan and exhausted evidence, start each assignment durably
-before input, authenticate every retained capture independently, and preserve failures without
-replacement. Outcome collection and the seventh descriptive model fit remain later, separately
-accounted steps.
+The first execution launch failed at exact-CI authentication before the ROM or journal opened. The
+runner required the published squash commit to be the head of a pull-request CI event, but GitHub's
+pull-request run belongs to the pre-squash head; the exact squash commit's successful run is a push
+event on main. No assignment started and no frame, input, claim, capture, outcome or private field
+was created.
+
+Publish and qualify the repair that accepts only an exact successful push CI on main while
+retaining exact commit, run, attempt, workflow, repository and URL checks. Preserve the original
+plan and failure as history; do not rerun it. After exact-main green CI, freeze a new source-bound
+seven-assignment denominator at zero effects and review its aggregate receipt before controller
+input. Outcome collection and the seventh descriptive model fit remain later, separately accounted
+steps.
+
+The repair passes 14 direct runner tests, 94 affected materialization/protocol tests and 6,251
+repository-wide tests, with one intentional skip, three integration deselections and one expected
+xfail. Ruff, the configured 330-source type gate, documentation, privacy/public-artifact checks,
+active-product focus and all three source-bound registry reproducers pass.
 
 ## Stop conditions
 

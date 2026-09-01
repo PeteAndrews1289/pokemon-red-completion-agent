@@ -8091,3 +8091,10 @@ canonical seven-root plan split four Diglett's Cave and three Route 11, with zer
 claims or public identities. The private plan remains unopened and unexecuted. That is a real
 experimental milestone, but not a new training row: the honest board is still 19 causal train
 examples, 6 fits, no gameplay authority and no Crystal transfer result.
+
+Its first attempted launch failed before the cartridge opened, and the absence of a journal proved
+that no lesson was consumed. The failure was in the evidence gate itself: a squash-merge SHA can be
+the head of main's push CI or its pre-squash source can be the head of pull-request CI, but one SHA
+cannot be both. The repair narrows trust to the exact successful main-push run and makes that stage
+visible in the public failure code. The old plan stays historical; a newly source-bound plan must
+freeze from green main before any button is pressed.

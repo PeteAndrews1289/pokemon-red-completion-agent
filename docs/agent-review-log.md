@@ -3,6 +3,23 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Exact-main CI pre-controller stop — Codex adjudication 2026-09-01
+
+The first V2 execution launch returned a sanitized failure before creating its journal. No ROM,
+controller, frame, started assignment, claim, capture, receipt, outcome, model or private public
+field was opened. Source inspection identified an impossible provenance conjunction: the runner
+required a `pull_request` event whose head SHA equaled the published squash-merge commit. GitHub's
+PR event binds the pre-squash head; the exact squash commit's green CI is a `push` on `main`.
+
+Codex accepts this as a zero-effect trust-contract falsification and forbids rerunning the original
+source-bound plan. The repair accepts only exact successful main-push CI while preserving the exact
+commit, run, attempt, workflow, repository and URL checks; it rejects PR, feature-branch push and
+manual events and publishes a sanitized reason. Its 14 direct, 94 affected and 6,251 repository-wide
+tests pass, together with all static and source-bound gates. A new plan may freeze only after that
+repair is published and exact-main green. The
+[path-free result](evidence/red-battle-v2-multivenue-materialization-precontroller-failure-2026-09-01.json)
+retains the complete aggregate diagnosis.
+
 ## Multi-venue plan freeze — Codex adjudication 2026-09-01
 
 PR 138 merged as exact main `1065453f`; pull-request CI `33493759930/1` and exact-main CI
