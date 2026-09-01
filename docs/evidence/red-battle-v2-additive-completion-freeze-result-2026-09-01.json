@@ -1,0 +1,75 @@
+{
+  "freeze": {
+    "catalog_train_roots": 54,
+    "claim_available_train_roots": 11,
+    "combined_capture_count_if_complete": 7,
+    "combined_venue_counts": {
+      "digletts_cave": 4,
+      "route_11": 3
+    },
+    "eligible_candidate_root_count": 3,
+    "excluded_attempted_source_roots": 14,
+    "new_assignment_count": 2,
+    "new_assignment_venue_counts": {
+      "digletts_cave": 2
+    },
+    "plan_sha256": "2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf",
+    "reclassified_failed_assignments": 0,
+    "replacement_slots_inside_predecessor": 0,
+    "retained_successful_capture_count": 5,
+    "retained_terminal_failure_count": 2,
+    "retried_assignments": 0,
+    "selection_policy_sha256": "e2909e234a00ccd98cc3f930c10e32014c5b8ccf95a9f293a8ea545c3dab45d2",
+    "status": "prospective_unexecuted_additive_completion_frozen",
+    "successor_candidate_train_roots": 40
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "next_gate": {
+    "mixed_producer_outcome_catalog_required_after_capture_completion": true,
+    "new_assignment_execution_open": false,
+    "required_action": "reorient and independently review the frozen two-assignment denominator before controller input",
+    "status": "freeze_complete_execution_closed"
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33528613229,
+    "executable_source_bundle_sha256": "cd8b8347b19c4421e3f5643da50d3fc16bf7e4cb433c08d382c69e42c7f3283e",
+    "published_source_commit": "c9547d27eba0d47fbb8a6adddb4d6859f41c2db9",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runtime_identity_sha256": "38d3d36a6859959d7860380b5a6748d84314038885b4f6a8ca50a1a675b53189"
+  },
+  "schema": "pokemon.red-battle-v2-additive-completion-freeze-result.v1",
+  "setup_failure": {
+    "catalog_train_roots_found": 53,
+    "catalog_train_roots_required": 54,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "failure_reason": "state_bank_scope_was_incomplete",
+    "missing_catalog_train_roots": 1,
+    "plan_created": false,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "status": "failed_closed_before_freeze"
+  }
+}

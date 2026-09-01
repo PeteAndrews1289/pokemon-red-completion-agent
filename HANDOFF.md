@@ -14,6 +14,27 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: additive five-plus-two plan is frozen; execution remains closed
+
+PR 142 merged as exact main `c9547d27`; PR CI `33526793786/1` and exact-main CI
+`33528613229/1` passed. The first zero-effect invocation failed closed because its narrowed state
+bank contained 53 of 54 catalog train roots. It created no plan and crossed no controller boundary.
+A read-only hash census located the complete owner-private bank, and the same intended freeze then
+passed.
+
+The private plan hash is `2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf`.
+It authenticated all 54 train roots, excluded all 14 sources attempted by the two historical
+materialization generations, found three eligible untouched roots, and selected exactly two new
+Diglett's Cave assignments. Combined with the immutable five successes, the prospective catalog is
+**4 Cave + 3 Route 11**. Both historical failures remain failed; retries, reclassification and
+replacement are zero.
+
+The freeze used zero frames and actions and created no capture, outcome, prediction, fit, teacher,
+sealed case, Crystal context, authority, or replay. Next publish the path-free receipt, verify the
+exact runner binding, execute the two new assignments once from source `c9547d27` under CI
+`33528613229/1`, and reorient at the terminal journal. Outcomes remain closed until a separate
+mixed-producer catalog authenticates the five predecessor outputs plus both completion outputs.
+
 ## 2026-09-01: additive completion is locally qualified; no controller input yet
 
 The variable-cardinality repair is published on exact main `2db2fbf1` after PR 141. The next local

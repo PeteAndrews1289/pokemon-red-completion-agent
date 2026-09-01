@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the last two seats lock in
+
+**Visual:** Flash **53 / 54 ROOTS — FREEZE ABORTED** with the controller still disconnected. Expand
+the bank scope; the counter becomes **54 / 54**. Three untouched cards light up and exactly two
+slide into the empty tray. The combined venue meter settles at **4 CAVE · 3 ROUTE 11**.
+
+**Voiceover:** “The first freeze failed because the obvious folder was missing one authenticated
+root. That is a setup failure, not a gameplay retry. After finding the complete bank by hash, the
+system sealed two untouched lessons while preserving every old success and failure.”
+
+**Visual:** Show **PLAN LOCKED** and counters **FRAMES 0 · ACTIONS 0 · CAPTURES 0**.
+
+**Voiceover:** “Nothing has fought yet. The next test gets exactly one attempt per card, and then we
+stop before opening outcomes.”
+
 ## New scene: build around failure instead of painting over it
 
 **Visual:** Keep the original seven-card strip on screen: five green, two red and padlocked. Draw a

@@ -11,6 +11,20 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: two untouched completion captures are frozen
+
+PR 142 merged as exact main `c9547d27`, and exact-main CI `33528613229/1` passed. The zero-effect
+freeze authenticated 54 catalog train roots, excluded 14 historically attempted sources, retained
+five successful predecessor captures and both predecessor failures, and selected two untouched
+Diglett's Cave assignments from three eligible roots. The combined prospective set is **4 Cave + 3
+Route 11**. Plan SHA-256 is `2f86c0c3a417c5ab5ab314d41ef5620839cc2c14297fccade357ab47c3d6dbdf`.
+
+Next: publish the path-free freeze result, verify the exact source/CI/plan/output binding, execute
+both assignments once with no retry, and stop at the terminal journal. Do not collect outcomes or
+fit a model in that execution. If both captures authenticate, the next engineering gate is a
+mixed-producer catalog that verifies five old and two new outputs without erasing their producer
+provenance.
+
 ## Current engineering checkpoint: preserve five, add only two
 
 The prospective candidate-cardinality repair is published as exact main `2db2fbf1`. The additive

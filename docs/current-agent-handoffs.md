@@ -6,6 +6,18 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the frozen two-assignment terminal
+
+Exact main `c9547d27` passed CI `33528613229/1`. The additive freeze retained five predecessor
+successes, retained two predecessor failures, excluded fourteen attempted roots, and froze two
+untouched Cave assignments at zero effects. The initial 53/54 state-bank scope failure is retained
+as setup evidence; it created no plan or controller effect.
+
+Codex owns publication of the path-free freeze result, exact run-binding review, and one terminal
+execution of the two frozen assignments. Every assignment is started durably before input and may
+never retry after leaving pending. Stop after the terminal journal. Outcome collection, fitting,
+sealed Red, Crystal and replay remain closed; a mixed-producer catalog is a separate successor.
+
 ## Current override: Codex owns publication and the zero-effect additive freeze
 
 The candidate-cardinality repair is published as exact main `2db2fbf1`. The additive completion

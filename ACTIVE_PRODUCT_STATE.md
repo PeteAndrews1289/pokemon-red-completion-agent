@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and exact-main qualify the additive completion design, then freeze exactly two untouched capture assignments around the five retained successes at zero effects. Reorient before controller input; outcomes remain closed until a mixed-producer seven-capture catalog authenticates.
+- Next decision: Publish the zero-effect additive freeze, then execute its two untouched assignments exactly once from source c9547d27 under CI 33528613229/1. Reorient at the terminal journal; outcomes remain closed until a mixed-producer seven-capture catalog authenticates.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish and exact-main qualify the additive five-plus-two provenance contract, then prove at zero controller actions that two untouched roots can be frozen around the five retained captures without retrying or reclassifying either terminal failure. |
+| Cheapest falsifier | Execute the two frozen untouched assignments once from their exact green source and determine whether both independently authenticate. Preserve every terminal and stop before outcomes; success only creates the seven-capture input catalog boundary. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-additive-completion-local-qualification** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-additive-completion-local-qualification-2026-09-01.json)
+**2026-09-01-battle-v2-additive-completion-freeze** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-additive-completion-freeze-result-2026-09-01.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | No learning output was created. The design preserves five capture inputs and two historical failures; causal train remains 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The additive completion design was tested without controller input, frames, captures, outcomes, predictions, fits, teachers, sealed cases, Crystal contexts, replay, or gameplay authority. |
+| Learning output | No learning output was created. Five capture inputs remain authenticated, two historical failures remain terminal, and two new inputs are only frozen: causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The freeze authenticated existing inputs and wrote one private plan with zero frames, actions, captures, outcomes, predictions, fits, teachers, sealed cases, Crystal contexts, replay, or gameplay authority. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The five retained captures and two permanent failures now have a locally qualified additive provenance contract, but it is unpublished and no zero-effect private completion plan exists. Even after two future captures succeed, a separate mixed-producer catalog must authenticate all seven before outcomes open. |
-| Decision | Publish the additive completion design, require exact-main green CI, freeze exactly two untouched assignments around the five independently reauthenticated predecessor successes at zero effects, and stop for reorientation before controller input. |
-| Next session | Publish and exact-main qualify the additive completion design, then run exactly one zero-controller private freeze and reorient at its path-free receipt. Do not execute either new assignment in the freeze session. |
-| Next falsifier | After publication and exact-main green CI, freeze one zero-effect completion plan. It must independently authenticate the five retained outputs, preserve both failures, exclude all fourteen previously attempted roots, and select exactly two untouched roots under the combined venue cap. |
-| Stop condition | Never retry, reclassify, hide, or overwrite either terminal failure. Stop if retained outputs cannot be independently authenticated, any previously attempted root enters the new inventory, capture identities collide across producers, the freeze advances a frame, or a mixed-producer consumer flattens provenance. |
+| Blocker | Exactly two untouched capture assignments are frozen but unexecuted. Outcome collection remains closed even if they succeed because a separate mixed-producer catalog must authenticate the five predecessor outputs and two completion outputs without flattening provenance. |
+| Decision | Publish the path-free freeze receipt. Then run the two-assignment completion plan once from exact green source c9547d27 with started-before-input accounting, preserve every terminal without retry, and reorient before building the mixed-producer catalog. |
+| Next session | Publish the path-free freeze result, independently verify the exact run binding, execute the two frozen assignments once from source c9547d27 under CI 33528613229/1, and reorient at the terminal journal before outcome-catalog engineering. |
+| Next falsifier | Run the exact frozen two-assignment plan once. Each assignment must either authenticate one untouched variable-cardinality battle capture or remain permanently failed. Do not retry, adaptively substitute, select a move, or open an outcome. |
+| Stop condition | Never retry, reclassify, hide, overwrite, or adaptively replace a terminal. Stop if the frozen plan, exact source/CI, retained output, attempted-root exclusion, variable-cardinality, claim, or output binding differs. Stop after the two-assignment terminal journal; no outcomes or fit in the capture session. |
 
 ### Stop conditions
 
