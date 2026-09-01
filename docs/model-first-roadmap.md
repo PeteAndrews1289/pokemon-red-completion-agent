@@ -11,7 +11,7 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: two-venue battle capacity passed
+## Current checkpoint: seven battle sources frozen; crash-safe execution is next
 
 PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The reusable Lavender adapter admits
 only an exact Lavender Center boundary that satisfies the existing cartridge-composed ground-route
@@ -35,12 +35,23 @@ The next order is:
 Capacity is not training. Current evidence remains **causal train 19 · model fits 6 · verified
 development 6 · unseen 4 · authority 0 · transfer 0**.
 
-Local engineering has now implemented that next freezer. It inventories the whole bank under one
+Local engineering implemented that freezer. It inventories the whole bank under one
 shared claim lease, admits only party slots with two usable moves and full measured-band level-gap
 safety, derives five Mansion plus both Route 11 assignments, binds a private destination digest,
 and durably reopens the canonical plan. Eighteen focused tests plus the surrounding 101-test battle
-source/protocol slice pass with clean lint and typing. It remains uninvoked and must be published
-and green before the one private freeze.
+source/protocol slice pass passed with clean lint and typing.
+
+That one freeze has now completed from published source `06d39db2` under green CI
+`33469950231/1`. The private plan binds seven independent roots: five Mansion and both Route 11
+sources. Strict screening retained 14 Mansion and two Route 11 candidates; the selected seven span
+three party slots and three species. The freeze advanced zero frames and created no capture,
+claim, outcome, prediction, fit, teacher query, sealed case, Crystal context, authority, or replay.
+
+Controller input remains closed. The next gate is a crash-safe exact-plan runner with one durable
+per-assignment journal. A started assignment must become permanently non-retryable before input;
+only untouched assignments may resume after interruption; every successful state and manifest must
+be independently reopened against the frozen identity. See the
+[freeze result](evidence/red-battle-v2-materialization-freeze-result-2026-09-01.json).
 
 ## Current checkpoint: Celadon is not the second venue
 

@@ -1,0 +1,63 @@
+{
+  "decision": {
+    "battle_capture_materialization_authorized": false,
+    "next_gate": "publish and qualify one crash-safe exact-plan runner with a durable claim-before-input journal and resume limited to never-started assignments",
+    "reason": "The canonical private plan froze seven independent catalog roots before controller input: five Mansion captures and both Lavender-to-Route-11 captures. Execution remains closed until a runner can prove that any started assignment is permanently non-retryable.",
+    "status": "prospective_unexecuted_seven_capture_plan_frozen"
+  },
+  "freeze": {
+    "catalog_train_roots": 54,
+    "claim_available_train_roots": 25,
+    "eligible_candidate_counts": {
+      "pokemon_mansion_1f": 14,
+      "route_11": 2
+    },
+    "plan_id": "red-battle-v2-fresh-train",
+    "plan_sha256": "1eabadcf3d57646d4edf8a78c2d526f085c0ad0d190f48b9f1c3990d4cd80d1c",
+    "retry_after_controller_input": false,
+    "selected_capture_count": 7,
+    "selected_capture_counts": {
+      "pokemon_mansion_1f": 5,
+      "route_11": 2
+    },
+    "selected_party_slot_count": 3,
+    "selected_source_root_count": 7,
+    "selected_species_count": 3,
+    "selection_policy_sha256": "7fed5cd5318d81bbe96f822c4001c8e4345a1001cdb48554b9b52ca363e9ad6f"
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "red_rom_opened_read_only": true,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "executable_source_bundle_sha256": "04b9a7c541c648eba74319b33f7c4718b1cc11507d4fd7ebe28f7e43336dc0a5",
+    "merged_main_commit": "8d1b169f90de5a9ba30bc2fa4594812ebdc8b80f",
+    "pull_request": 131,
+    "pull_request_ci_attempt": 1,
+    "pull_request_ci_conclusion": "success",
+    "pull_request_ci_run": 33469950231,
+    "published_freezer_source_commit": "06d39db25dfdcf7cfbfc123c657c7649b0f78aa2",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runtime_identity_sha256": "38d3d36a6859959d7860380b5a6748d84314038885b4f6a8ca50a1a675b53189"
+  },
+  "schema": "pokemon.red-battle-v2-materialization-freeze-result.v1"
+}
