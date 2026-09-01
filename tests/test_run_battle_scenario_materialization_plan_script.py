@@ -23,6 +23,9 @@ SCRIPT = runpy.run_path(
 HELPERS = runpy.run_path(
     str(PROJECT_ROOT / "tests" / "test_battle_scenario_materialization_run.py")
 )
+V2_HELPERS = runpy.run_path(
+    str(PROJECT_ROOT / "tests" / "test_battle_scenario_materialization_plan_v2.py")
+)
 
 
 def _journal():  # type: ignore[no-untyped-def]
@@ -56,10 +59,54 @@ def test_runner_accepts_only_the_frozen_plan_not_caller_selected_sources() -> No
 
     assert "--plan" in options
     assert "--expected-plan-sha256" in options
+    assert "--excluded-plan" in options
+    assert "--excluded-run-journal" in options
     assert "--source-state" not in options
     assert "--party-slot" not in options
     assert "--capture-id" not in options
     assert "--venue" not in options
+
+
+def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = V2_HELPERS["_build"]()
+    args = SimpleNamespace(
+        excluded_plan=Path("old-plan.json"),
+        excluded_run_journal=Path("old-journal.json"),
+    )
+    require = SCRIPT["_require_plan_exclusions"]
+    globals_ = require.__globals__
+    observed: list[tuple[str, str]] = []
+
+    def load(*args: object, **kwargs: object) -> frozenset[str]:
+        del args
+        observed.append(
+            (
+                str(kwargs["expected_plan_sha256"]),
+                str(kwargs["expected_journal_sha256"]),
+            )
+        )
+        return frozenset()
+
+    monkeypatch.setitem(globals_, "_load_attempted_source_exclusions", load)
+    require(args, plan=plan)
+
+    assert observed == [
+        (plan.excluded_plan_sha256, plan.excluded_run_journal_sha256)
+    ]
+    monkeypatch.setitem(
+        globals_,
+        "_load_attempted_source_exclusions",
+        lambda *args, **kwargs: frozenset(
+            {plan.inventory[0].source.source_state_sha256}
+        ),
+    )
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="reuses an exhausted source",
+    ):
+        require(args, plan=plan)
 
 
 def test_started_is_durable_before_controller_capable_materializer(
@@ -158,6 +205,61 @@ def test_child_failure_stage_survives_without_stderr_or_path_details(
             watch=False,
             speed=None,
         )
+
+
+def test_v2_runner_reopens_plan_and_passes_only_its_bound_venue_to_child(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    plan = V2_HELPERS["_build"]()
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_bytes(plan.canonical_bytes())
+    plan_path.chmod(0o600)
+
+    assert SCRIPT["_read_plan"](plan_path) == plan
+
+    observed: list[list[str]] = []
+    payload = (
+        b'{"move_choices_executed":0,"private_path_fields":0,'
+        b'"reason_code":"source_relocation_failed","root_claims_created":0,'
+        b'"schema":"pokemon-private-battle-scenario-materialization-failure-v1",'
+        b'"status":"failed_closed","teacher_queries":0}'
+    )
+
+    def run(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[bytes]:
+        del kwargs
+        observed.append(command)
+        return subprocess.CompletedProcess(
+            args=command,
+            returncode=1,
+            stdout=payload,
+            stderr=b"",
+        )
+
+    globals_ = SCRIPT["_materialize_assignment"].__globals__
+    monkeypatch.setitem(globals_, "subprocess", SimpleNamespace(run=run))
+    assignment = plan.assignments[0]
+
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="source_relocation_failed",
+    ):
+        SCRIPT["_materialize_assignment"](
+            assignment,
+            source_bytes=b"source",
+            capture_directory=tmp_path,
+            context_catalog=tmp_path / "catalog.json",
+            registry_source_commit="a" * 40,
+            expected_registry_sha256="b" * 64,
+            expected_context_catalog_sha256="c" * 64,
+            rom_path=tmp_path / "red.gb",
+            maximum_encounter_steps=1,
+            watch=False,
+            speed=None,
+        )
+
+    venue_flag = observed[0].index("--expected-reachable-venue-id")
+    assert observed[0][venue_flag + 1] == assignment.selected_venue.venue_id
 
 
 def test_success_requires_independent_output_and_receipt_authentication(

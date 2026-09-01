@@ -14,9 +14,13 @@ import re
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass, replace
+from typing import TypeAlias
 
 from pokemon_red_completion.battle_scenario_materialization_plan import (
     BattleScenarioMaterializationPlan,
+)
+from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (
+    BattleScenarioMaterializationPlanV2,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 
@@ -37,6 +41,10 @@ _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _MAXIMUM_JOURNAL_BYTES = 2 * 1024 * 1024
+
+BattleScenarioMaterializationPlanLike: TypeAlias = (
+    BattleScenarioMaterializationPlan | BattleScenarioMaterializationPlanV2
+)
 
 
 class BattleScenarioMaterializationRunError(ValueError):
@@ -281,7 +289,7 @@ class BattleScenarioMaterializationRunJournal:
 
 
 def initialize_battle_scenario_materialization_run(
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     identity: BattleScenarioMaterializationRunIdentity,
 ) -> BattleScenarioMaterializationRunJournal:
     """Create the all-pending denominator before any assignment can execute."""
@@ -305,7 +313,7 @@ def initialize_battle_scenario_materialization_run(
 
 def require_battle_scenario_materialization_run_matches_plan(
     journal: BattleScenarioMaterializationRunJournal,
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     identity: BattleScenarioMaterializationRunIdentity,
 ) -> None:
     """Reject a journal reconstructed for another plan or execution identity."""
@@ -415,10 +423,13 @@ def parse_battle_scenario_materialization_run(
 
 
 def _require_identity_matches_plan(
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     identity: BattleScenarioMaterializationRunIdentity,
 ) -> None:
-    if not isinstance(plan, BattleScenarioMaterializationPlan):
+    if not isinstance(
+        plan,
+        (BattleScenarioMaterializationPlan, BattleScenarioMaterializationPlanV2),
+    ):
         raise TypeError("battle materialization run requires a frozen plan")
     if (
         identity.plan_id != plan.plan_id

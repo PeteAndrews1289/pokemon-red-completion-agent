@@ -32,7 +32,9 @@ from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
     build_battle_scenario_capture_payload,
 )
 from pokemon_red_completion.battle_scenario_source_venue import (  # noqa: E402
+    BattleScenarioSourceVenue,
     BattleScenarioSourceVenueError,
+    battle_scenario_reachable_venues,
     battle_scenario_source_venue,
 )
 from pokemon_red_completion.battle_source_conditioning import (  # noqa: E402
@@ -130,6 +132,11 @@ def _parser() -> argparse.ArgumentParser:
         choices=range(1, 7),
         default=1,
         help="one-based living party slot prospectively chosen for the capture",
+    )
+    parser.add_argument(
+        "--expected-reachable-venue-id",
+        default=None,
+        help="plan-bound V2 venue edge; rederived from the source before input",
     )
     parser.add_argument("--capture-id", required=True)
     parser.add_argument("--out-state", type=Path, required=True)
@@ -410,6 +417,58 @@ def _source_location_for_state(
         raise BattleScenarioMaterializationError(str(error)) from None
 
 
+def _selected_reachable_venue_for_state(
+    raw: RawGameState,
+    expected_venue_id: str,
+    *,
+    last_blackout_map: int,
+    current_map_tileset: int,
+    rom_bytes: bytes,
+) -> tuple[BattleScenarioSourceVenue, TrainingVenue]:
+    """Reauthenticate one plan-bound reachable edge without controller input."""
+
+    if not isinstance(expected_venue_id, str) or not expected_venue_id:
+        raise BattleScenarioMaterializationError(
+            "selected reachable venue identity differs"
+        )
+    try:
+        reachable = battle_scenario_reachable_venues(
+            raw,
+            last_blackout_map=last_blackout_map,
+            current_map_tileset=current_map_tileset,
+        )
+    except BattleScenarioSourceVenueError as error:
+        raise BattleScenarioMaterializationError(str(error)) from None
+    matching = tuple(item for item in reachable if item.venue_id == expected_venue_id)
+    if len(matching) != 1:
+        raise BattleScenarioMaterializationError(
+            "selected reachable venue cannot be reauthenticated"
+        )
+    edge = matching[0]
+    venues = {
+        "digletts_cave": DIGLETTS_CAVE_TRAINING_VENUE,
+        "pokemon_mansion_1f": MANSION_TRAINING_VENUE,
+        "route_11": ROUTE_11_TRAINING_VENUE,
+    }
+    try:
+        venue = venues[edge.venue_id]
+    except KeyError:
+        raise BattleScenarioMaterializationError(
+            "selected reachable venue has no measured battle venue"
+        ) from None
+    if edge.relocation_required and edge.venue_id in {"route_11", "digletts_cave"}:
+        ground_venues = {
+            item.band.area_id: item
+            for item in red_training_venues_with_ground_transition(rom_bytes)
+        }
+        venue = ground_venues[edge.venue_id]
+    if venue.map_id != edge.encounter_map or venue.band.area_id != edge.venue_id:
+        raise BattleScenarioMaterializationError(
+            "selected reachable venue mechanics differ"
+        )
+    return edge, venue
+
+
 def _require_living_party_slot(raw: object, one_based_party_slot: int) -> int:
     if type(one_based_party_slot) is not int or not 1 <= one_based_party_slot <= 6:  # noqa: E721
         raise BattleScenarioMaterializationError("party slot must be between one and six")
@@ -533,7 +592,10 @@ def _prepare_source_venue(
             )
         before_identity = red_battle_party_identity(raw)
         venue.heal_and_return(actions, reader, emulator)
-    elif source_location == "vermilion_transition_route_11":
+    elif source_location in {
+        "vermilion_transition_route_11",
+        "vermilion_transition_digletts_cave",
+    }:
         if raw.battle_state != 0:
             raise BattleScenarioMaterializationError(
                 "portable Route 11 source is not at a safe boundary"
@@ -604,23 +666,36 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         emulator.load_state_bytes(source_bytes)
         reader = PokemonRedStateReader(emulator)
         try:
-            source_location = _source_location_for_state(
-                reader.read(),
-                last_blackout_map=reader.read_last_blackout_map(),
-                current_map_tileset=emulator.read_u8(RamAddress.CURRENT_MAP_TILESET),
-            )
-            venue = _venue_for_source_location(
-                source_location,
-                rom_bytes=(
-                    rom_bytes
-                    if source_location
-                    in {
-                        "lavender_center_route_11",
-                        "vermilion_transition_route_11",
-                    }
-                    else None
-                ),
-            )
+            raw = reader.read()
+            last_blackout_map = reader.read_last_blackout_map()
+            current_map_tileset = emulator.read_u8(RamAddress.CURRENT_MAP_TILESET)
+            if args.expected_reachable_venue_id is not None:
+                edge, venue = _selected_reachable_venue_for_state(
+                    raw,
+                    args.expected_reachable_venue_id,
+                    last_blackout_map=last_blackout_map,
+                    current_map_tileset=current_map_tileset,
+                    rom_bytes=rom_bytes,
+                )
+                source_location = edge.source_location
+            else:
+                source_location = _source_location_for_state(
+                    raw,
+                    last_blackout_map=last_blackout_map,
+                    current_map_tileset=current_map_tileset,
+                )
+                venue = _venue_for_source_location(
+                    source_location,
+                    rom_bytes=(
+                        rom_bytes
+                        if source_location
+                        in {
+                            "lavender_center_route_11",
+                            "vermilion_transition_route_11",
+                        }
+                        else None
+                    ),
+                )
         except Exception as error:
             raise _staged_failure(error, "source_reauthentication_failed") from error
         controller = FrameSafeExecutor(
@@ -709,6 +784,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "caller_supplied_partition": False,
         "caller_supplied_lineage": False,
         "caller_supplied_source_location": False,
+        "selected_reachable_venue_reauthenticated": (
+            args.expected_reachable_venue_id is not None
+        ),
         "private_path_fields": 0,
     }
 

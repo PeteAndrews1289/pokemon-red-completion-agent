@@ -451,6 +451,57 @@ def test_generic_transition_source_binds_the_rom_derived_route_11_venue(
     )
 
 
+def test_plan_bound_reachable_venue_is_rederived_before_input(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    select = MATERIALIZE["_selected_reachable_venue_for_state"]
+    globals_ = select.__globals__
+    route_11 = SimpleNamespace(
+        map_id=int(MapId.ROUTE_11),
+        band=SimpleNamespace(area_id="route_11"),
+    )
+    cave = SimpleNamespace(
+        map_id=int(MapId.DIGLETTS_CAVE),
+        band=SimpleNamespace(area_id="digletts_cave"),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "red_training_venues_with_ground_transition",
+        lambda payload: (route_11, cave),
+    )
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_11,
+        player_x=12,
+        player_y=9,
+        party_count=1,
+        party_hp=(40,),
+        battle_state=0,
+    )
+
+    edge, venue = select(
+        raw,
+        "digletts_cave",
+        last_blackout_map=int(MapId.VERMILION_CITY),
+        current_map_tileset=0,
+        rom_bytes=b"immutable-red-rom",
+    )
+
+    assert edge.source_location == "vermilion_transition_digletts_cave"
+    assert venue is cave
+    with pytest.raises(
+        MATERIALIZE["BattleScenarioMaterializationError"],
+        match="cannot be reauthenticated",
+    ):
+        select(
+            raw,
+            "pokemon_mansion_1f",
+            last_blackout_map=int(MapId.VERMILION_CITY),
+            current_map_tileset=0,
+            rom_bytes=b"immutable-red-rom",
+        )
+
+
 @pytest.mark.parametrize(
     ("source_location", "map_id"),
     (
@@ -663,6 +714,50 @@ def test_generic_transition_source_uses_the_existing_bounded_relocation() -> Non
     venue = SimpleNamespace(map_id=int(MapId.ROUTE_11), heal_and_return=relocate)
     prepare_source(
         "vermilion_transition_route_11",
+        venue,
+        object(),
+        reader,
+        object(),
+    )
+
+    assert calls == 1
+    assert reader.read() == destination
+
+
+def test_generic_cave_transition_uses_the_existing_bounded_relocation() -> None:
+    prepare_source = MATERIALIZE["_prepare_source_venue"]
+    source = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_11,
+        player_x=12,
+        player_y=9,
+        party_count=1,
+        party_species_ids=(1,),
+        party_levels=(20,),
+        party_moves=((1, 2, 0, 0),),
+        battle_state=0,
+        party_hp=(120,),
+    )
+    destination = replace(source, map_id=MapId.DIGLETTS_CAVE, player_x=5, player_y=5)
+
+    class Reader:
+        raw = source
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    calls = 0
+
+    def relocate(actions: object, current_reader: Reader, emulator: object) -> None:
+        nonlocal calls
+        del actions, emulator
+        calls += 1
+        current_reader.raw = destination
+
+    venue = SimpleNamespace(map_id=int(MapId.DIGLETTS_CAVE), heal_and_return=relocate)
+    prepare_source(
+        "vermilion_transition_digletts_cave",
         venue,
         object(),
         reader,
