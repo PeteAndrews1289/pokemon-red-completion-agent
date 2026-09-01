@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import runpy
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -12,9 +14,11 @@ from pokemon_red_completion.battle_scenario_materialization_run import (
     FAILED,
     STARTED,
     SUCCEEDED,
+    fail_battle_scenario_materialization_assignment,
     initialize_battle_scenario_materialization_run,
     parse_battle_scenario_materialization_run,
     start_battle_scenario_materialization_assignment,
+    succeed_battle_scenario_materialization_assignment,
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -288,6 +292,9 @@ def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(
     args = SimpleNamespace(
         excluded_plan=Path("old-plan.json"),
         excluded_run_journal=Path("old-journal.json"),
+        predecessor_plan=None,
+        predecessor_run_journal=None,
+        predecessor_capture_directory=None,
     )
     require = SCRIPT["_require_plan_exclusions"]
     globals_ = require.__globals__
@@ -304,7 +311,7 @@ def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(
         return frozenset()
 
     monkeypatch.setitem(globals_, "_load_attempted_source_exclusions", load)
-    require(args, plan=plan)
+    require(args, plan=plan, rom_path=Path("red.gb"))
 
     assert observed == [
         (plan.excluded_plan_sha256, plan.excluded_run_journal_sha256)
@@ -320,7 +327,185 @@ def test_v2_runner_reopens_exhausted_evidence_and_rejects_root_reuse(
         SCRIPT["BattleScenarioMaterializationRunnerError"],
         match="reuses an exhausted source",
     ):
-        require(args, plan=plan)
+        require(args, plan=plan, rom_path=Path("red.gb"))
+
+
+def test_completion_runner_requires_both_exclusion_generations(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = V2_HELPERS["_build_completion"]()
+    args = SimpleNamespace(
+        excluded_plan=Path("old-plan.json"),
+        excluded_run_journal=Path("old-journal.json"),
+        predecessor_plan=Path("predecessor-plan.json"),
+        predecessor_run_journal=Path("predecessor-journal.json"),
+        predecessor_capture_directory=Path("predecessor-captures"),
+    )
+    require = SCRIPT["_require_plan_exclusions"]
+    globals_ = require.__globals__
+    observed: list[tuple[Path, Path, Path]] = []
+
+    def authenticate(*args: object, **kwargs: object) -> frozenset[str]:
+        del args
+        observed.append(
+            (
+                kwargs["earliest_plan_path"],
+                kwargs["predecessor_plan_path"],
+                kwargs["predecessor_capture_directory"],
+            )
+        )
+        return frozenset(
+            item.source_state_sha256 for item in plan.retained_successes
+        )
+
+    monkeypatch.setitem(globals_, "_require_completion_predecessor", authenticate)
+
+    require(args, plan=plan, rom_path=Path("red.gb"))
+
+    assert observed == [
+        (
+            Path("old-plan.json"),
+            Path("predecessor-plan.json"),
+            Path("predecessor-captures"),
+        )
+    ]
+
+
+def test_completion_runner_rejects_attempted_source_in_new_inventory(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = V2_HELPERS["_build_completion"]()
+    args = SimpleNamespace(
+        excluded_plan=Path("old-plan.json"),
+        excluded_run_journal=Path("old-journal.json"),
+        predecessor_plan=Path("predecessor-plan.json"),
+        predecessor_run_journal=Path("predecessor-journal.json"),
+        predecessor_capture_directory=Path("predecessor-captures"),
+    )
+    require = SCRIPT["_require_plan_exclusions"]
+    monkeypatch.setitem(
+        require.__globals__,
+        "_require_completion_predecessor",
+        lambda *args, **kwargs: frozenset(
+            {plan.inventory[0].source.source_state_sha256}
+        ),
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="reuses an attempted source",
+    ):
+        require(args, plan=plan, rom_path=Path("red.gb"))
+
+
+def test_runner_strictly_reopens_completion_plan(tmp_path: Path) -> None:
+    plan = V2_HELPERS["_build_completion"]()
+    path = tmp_path / "completion-plan.json"
+    path.write_bytes(plan.canonical_bytes())
+    path.chmod(0o600)
+
+    assert SCRIPT["_read_plan"](path) == plan
+
+
+def test_completion_predecessor_reauthenticates_only_successes_and_retains_failures(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    predecessor_directory = tmp_path / "predecessor"
+    predecessor_directory.mkdir(mode=0o700)
+    predecessor_directory_sha256 = hashlib.sha256(
+        str(predecessor_directory.resolve()).encode("utf-8")
+    ).hexdigest()
+    predecessor = V2_HELPERS["_build"]()
+    predecessor = replace(
+        predecessor,
+        capture_directory_sha256=predecessor_directory_sha256,
+    )
+    identity = replace(
+        HELPERS["_identity"](predecessor),
+        source_commit=predecessor.source_commit,
+    )
+    journal = initialize_battle_scenario_materialization_run(
+        predecessor,
+        identity,
+    )
+    successful_ordinals = {0, 2, 4, 5, 6}
+    for assignment in predecessor.assignments:
+        journal = start_battle_scenario_materialization_assignment(
+            journal,
+            assignment.ordinal,
+        )
+        if assignment.ordinal in successful_ordinals:
+            journal = succeed_battle_scenario_materialization_assignment(
+                journal,
+                assignment.ordinal,
+                state_sha256=V2_HELPERS["_sha"](
+                    f"retained-state-{assignment.ordinal}"
+                ),
+                manifest_sha256=V2_HELPERS["_sha"](
+                    f"retained-manifest-{assignment.ordinal}"
+                ),
+            )
+        else:
+            journal = fail_battle_scenario_materialization_assignment(
+                journal,
+                assignment.ordinal,
+                reason_code="materialized_capture_state_differs",
+            )
+    completion = V2_HELPERS["_build_completion"]()
+    completion = replace(
+        completion,
+        predecessor_plan_sha256=predecessor.plan_sha256,
+        predecessor_run_journal_sha256=journal.journal_sha256,
+        predecessor_capture_directory_sha256=predecessor_directory_sha256,
+    )
+    function = SCRIPT["_require_completion_predecessor"]
+    globals_ = function.__globals__
+    historical = frozenset(f"historical-{index}" for index in range(7))
+    observed_ordinals: list[int] = []
+    monkeypatch.setitem(
+        globals_,
+        "_load_attempted_source_exclusions",
+        lambda *args, **kwargs: historical,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_private_capture_directory",
+        lambda *args, **kwargs: predecessor_directory.resolve(),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_private_existing_file",
+        lambda path, **kwargs: path,
+    )
+    monkeypatch.setitem(globals_, "_read_plan", lambda path: predecessor)
+    monkeypatch.setitem(globals_, "_read_journal", lambda path: journal)
+
+    def authenticate(assignment, **kwargs):  # type: ignore[no-untyped-def]
+        del kwargs
+        observed_ordinals.append(assignment.ordinal)
+        entry = journal.entries[assignment.ordinal]
+        return entry.state_sha256, entry.manifest_sha256
+
+    monkeypatch.setitem(
+        globals_,
+        "_authenticate_assignment_outputs",
+        authenticate,
+    )
+
+    attempted = function(
+        completion,
+        earliest_plan_path=Path("earliest-plan.json"),
+        earliest_journal_path=Path("earliest-journal.json"),
+        predecessor_plan_path=Path("predecessor-plan.json"),
+        predecessor_journal_path=Path("predecessor-journal.json"),
+        predecessor_capture_directory=predecessor_directory,
+        rom_path=Path("red.gb"),
+    )
+
+    assert observed_ordinals == [0, 2, 4, 5, 6]
+    assert len(attempted) == 14
+    assert historical.issubset(attempted)
 
 
 def test_started_is_durable_before_controller_capable_materializer(

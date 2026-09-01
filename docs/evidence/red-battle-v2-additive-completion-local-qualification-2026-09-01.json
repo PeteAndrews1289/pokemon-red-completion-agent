@@ -1,0 +1,66 @@
+{
+  "design": {
+    "combined_required_capture_count": 7,
+    "new_assignment_count": 2,
+    "new_sources_must_be_untouched": true,
+    "predecessor_failure_count": 2,
+    "predecessor_failures_reclassified": 0,
+    "predecessor_failures_retried": 0,
+    "retained_success_count": 5,
+    "retained_successes_independently_reauthenticated": true,
+    "source_generations_excluded": 2
+  },
+  "failure_retention": {
+    "future_path_free_reason_codes": [
+      "materialized_capture_candidate_cardinality_differs",
+      "materialized_capture_observation_differs",
+      "materialized_capture_party_binding_differs",
+      "materialized_capture_policy_boundary_differs",
+      "materialized_capture_reopen_crossed_controller_boundary",
+      "materializer_candidate_cardinality_differs"
+    ],
+    "retained_predecessor_failure_count": 2,
+    "terminal_history_mutated": false
+  },
+  "mission": {
+    "authority_promoted": false,
+    "causal_train_examples_added": 0,
+    "crystal_transfer_results_added": 0,
+    "model_fits_added": 0,
+    "verified_development_outcomes_added": 0
+  },
+  "next_gate": {
+    "controller_input_authorized": false,
+    "mixed_producer_outcome_catalog_still_required": true,
+    "required_action": "publish, require exact-main green CI, freeze one zero-effect two-capture completion plan, then reorient",
+    "status": "local_design_qualified"
+  },
+  "protected_access": {
+    "battle_captures_created": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "provenance": {
+    "parent_exact_main_ci_attempt": 1,
+    "parent_exact_main_ci_conclusion": "success",
+    "parent_exact_main_ci_run": 33522028555,
+    "parent_published_source_commit": "2db2fbf1efc5557ec0205423f842475f28fec5d3",
+    "working_executable_source_bundle_sha256": "cd8b8347b19c4421e3f5643da50d3fc16bf7e4cb433c08d382c69e42c7f3283e"
+  },
+  "qualification": {
+    "focused_materialization_tests_passed": 99,
+    "full_nonintegration_deselected": 3,
+    "full_nonintegration_expected_failures": 1,
+    "full_nonintegration_passed": 6292,
+    "full_nonintegration_skipped": 1,
+    "ruff_passed": true,
+    "strict_type_check_passed": true
+  },
+  "schema": "pokemon.red-battle-v2-additive-completion-local-qualification.v1"
+}

@@ -27,6 +27,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.scenario_venue_allocation import (
     ReachableVenueRoot,
+    allocate_additive_reachable_venue_roots,
     allocate_reachable_venue_roots,
 )
 
@@ -35,6 +36,12 @@ BATTLE_SCENARIO_MATERIALIZATION_PLAN_V2_SCHEMA = (
 )
 BATTLE_SCENARIO_MATERIALIZATION_SELECTION_POLICY_V2_SCHEMA = (
     "pokemon.red.battle-scenario-materialization-selection-policy.v2"
+)
+BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA = (
+    "pokemon.red.private-battle-scenario-materialization-completion-plan.v1"
+)
+BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SELECTION_POLICY_SCHEMA = (
+    "pokemon.red.battle-scenario-materialization-completion-selection-policy.v1"
 )
 
 REQUIRED_CAPTURE_COUNT = 7
@@ -69,6 +76,25 @@ _SELECTION_POLICY = {
     ],
     "source_reuse": False,
     "replacement_slots": 0,
+    "controller_actions": 0,
+    "outcome_fields": 0,
+    "prediction_fields": 0,
+    "teacher_choice_fields": 0,
+}
+_COMPLETION_SELECTION_POLICY = {
+    "schema": BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SELECTION_POLICY_SCHEMA,
+    "required_total_capture_count": REQUIRED_CAPTURE_COUNT,
+    "minimum_total_distinct_venues": MINIMUM_DISTINCT_VENUES,
+    "maximum_total_captures_per_venue": MAXIMUM_CAPTURES_PER_VENUE,
+    "retained_successes_are_fixed": True,
+    "terminal_failures_are_retained": True,
+    "new_assignment_count": "required_total_minus_retained_success_count",
+    "root_venue_allocation": "exact_additive_capacitated_title_neutral_v1",
+    "allocation_order": ["candidate_identity_sha256_asc", "venue_id_asc"],
+    "party_slot_selection_order": _SELECTION_POLICY["party_slot_selection_order"],
+    "source_reuse": False,
+    "failed_assignment_reclassification": False,
+    "replacement_slots_inside_prior_denominator": 0,
     "controller_actions": 0,
     "outcome_fields": 0,
     "prediction_fields": 0,
@@ -222,6 +248,209 @@ class BattleScenarioMaterializationAssignmentV2:
 
 
 @dataclass(frozen=True, slots=True)
+class RetainedBattleScenarioMaterializationCapture:
+    """One immutable successful output from the terminal predecessor journal."""
+
+    ordinal: int
+    capture_id: str
+    assignment_sha256: str
+    source_commit: str
+    source_state_sha256: str
+    root_lineage_id: str
+    venue_id: str
+    party_slot: BattleScenarioPartySlot
+    state_filename: str
+    manifest_filename: str
+    state_sha256: str
+    manifest_sha256: str
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.ordinal) is not int  # noqa: E721
+            or not 0 <= self.ordinal < REQUIRED_CAPTURE_COUNT
+            or _SAFE_ID.fullmatch(self.capture_id) is None
+            or _SHA256.fullmatch(self.assignment_sha256) is None
+            or _GIT_COMMIT.fullmatch(self.source_commit) is None
+            or _SHA256.fullmatch(self.source_state_sha256) is None
+            or _SAFE_ID.fullmatch(self.root_lineage_id) is None
+            or _SAFE_ID.fullmatch(self.venue_id) is None
+            or not isinstance(self.party_slot, BattleScenarioPartySlot)
+            or _SAFE_FILENAME.fullmatch(self.state_filename) is None
+            or _SAFE_FILENAME.fullmatch(self.manifest_filename) is None
+            or not self.state_filename.endswith(".state")
+            or not self.manifest_filename.endswith(".state.json")
+            or self.state_filename == self.manifest_filename
+            or _SHA256.fullmatch(self.state_sha256) is None
+            or _SHA256.fullmatch(self.manifest_sha256) is None
+        ):
+            raise BattleScenarioMaterializationPlanV2Error(
+                "retained battle materialization capture differs"
+            )
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "assignment_sha256": self.assignment_sha256,
+            "capture_id": self.capture_id,
+            "manifest_filename": self.manifest_filename,
+            "manifest_sha256": self.manifest_sha256,
+            "ordinal": self.ordinal,
+            "party_slot": self.party_slot.private_dict(),
+            "root_lineage_id": self.root_lineage_id,
+            "source_commit": self.source_commit,
+            "source_state_sha256": self.source_state_sha256,
+            "state_filename": self.state_filename,
+            "state_sha256": self.state_sha256,
+            "venue_id": self.venue_id,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class BattleScenarioMaterializationCompletionPlan:
+    """Add only missing captures while preserving a terminal predecessor."""
+
+    plan_id: str
+    source_commit: str
+    source_bundle_sha256: str
+    rom_sha256: str
+    capture_directory_sha256: str
+    earliest_excluded_plan_sha256: str
+    earliest_excluded_run_journal_sha256: str
+    predecessor_plan_sha256: str
+    predecessor_run_journal_sha256: str
+    predecessor_capture_directory_sha256: str
+    predecessor_failure_count: int
+    retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...]
+    inventory: tuple[BattleScenarioMaterializationCandidateV2, ...]
+    assignments: tuple[BattleScenarioMaterializationAssignmentV2, ...]
+
+    def __post_init__(self) -> None:
+        digests = (
+            self.source_bundle_sha256,
+            self.rom_sha256,
+            self.capture_directory_sha256,
+            self.earliest_excluded_plan_sha256,
+            self.earliest_excluded_run_journal_sha256,
+            self.predecessor_plan_sha256,
+            self.predecessor_run_journal_sha256,
+            self.predecessor_capture_directory_sha256,
+        )
+        if (
+            _SAFE_ID.fullmatch(self.plan_id) is None
+            or _GIT_COMMIT.fullmatch(self.source_commit) is None
+            or any(_SHA256.fullmatch(value) is None for value in digests)
+            or type(self.predecessor_failure_count) is not int  # noqa: E721
+            or self.predecessor_failure_count < 1
+            or not isinstance(self.retained_successes, tuple)
+            or not self.retained_successes
+            or any(
+                not isinstance(item, RetainedBattleScenarioMaterializationCapture)
+                for item in self.retained_successes
+            )
+            or tuple(sorted(self.retained_successes, key=lambda item: item.ordinal))
+            != self.retained_successes
+            or len({item.ordinal for item in self.retained_successes})
+            != len(self.retained_successes)
+            or len({item.capture_id for item in self.retained_successes})
+            != len(self.retained_successes)
+            or len({item.source_state_sha256 for item in self.retained_successes})
+            != len(self.retained_successes)
+            or len(self.retained_successes) + self.predecessor_failure_count
+            != REQUIRED_CAPTURE_COUNT
+            or not isinstance(self.inventory, tuple)
+            or not self.inventory
+            or any(
+                not isinstance(item, BattleScenarioMaterializationCandidateV2)
+                for item in self.inventory
+            )
+            or tuple(
+                sorted(self.inventory, key=lambda item: item.candidate_identity_sha256)
+            )
+            != self.inventory
+            or len({item.candidate_identity_sha256 for item in self.inventory})
+            != len(self.inventory)
+            or len({item.source.source_state_sha256 for item in self.inventory})
+            != len(self.inventory)
+            or {
+                item.source.source_state_sha256 for item in self.inventory
+            }.intersection(
+                item.source_state_sha256 for item in self.retained_successes
+            )
+        ):
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion plan differs"
+            )
+        provenances = {
+            (
+                item.source.catalog_sha256,
+                item.source.registry_sha256,
+                item.source.registry_source_commit,
+            )
+            for item in self.inventory
+        }
+        if len(provenances) != 1:
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion source provenance differs"
+            )
+        if self.assignments != _select_completion_assignments(
+            self.plan_id,
+            self.inventory,
+            self.retained_successes,
+        ):
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion assignment is not canonical"
+            )
+        if len(
+            {
+                *(item.capture_id for item in self.retained_successes),
+                *(item.capture_id for item in self.assignments),
+            }
+        ) != REQUIRED_CAPTURE_COUNT:
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion capture identity differs"
+            )
+
+    @property
+    def selection_policy_sha256(self) -> str:
+        return canonical_sha256(_COMPLETION_SELECTION_POLICY)
+
+    @property
+    def plan_sha256(self) -> str:
+        return hashlib.sha256(self.canonical_bytes()).hexdigest()
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "assignments": [item.private_dict() for item in self.assignments],
+            "capture_directory_sha256": self.capture_directory_sha256,
+            "earliest_excluded_plan_sha256": self.earliest_excluded_plan_sha256,
+            "earliest_excluded_run_journal_sha256": (
+                self.earliest_excluded_run_journal_sha256
+            ),
+            "effects": _zero_effects(),
+            "inventory": [item.private_dict() for item in self.inventory],
+            "plan_id": self.plan_id,
+            "predecessor_capture_directory_sha256": (
+                self.predecessor_capture_directory_sha256
+            ),
+            "predecessor_failure_count": self.predecessor_failure_count,
+            "predecessor_plan_sha256": self.predecessor_plan_sha256,
+            "predecessor_run_journal_sha256": self.predecessor_run_journal_sha256,
+            "retained_successes": [
+                item.private_dict() for item in self.retained_successes
+            ],
+            "retry_after_controller_input": False,
+            "rom_sha256": self.rom_sha256,
+            "schema": BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA,
+            "selection_policy_sha256": self.selection_policy_sha256,
+            "source_bundle_sha256": self.source_bundle_sha256,
+            "source_commit": self.source_commit,
+            "status": "prospective_unexecuted_additive_completion",
+        }
+
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.private_dict())
+
+
+@dataclass(frozen=True, slots=True)
 class BattleScenarioMaterializationPlanV2:
     """Canonical complete inventory and its exact seven-edge allocation."""
 
@@ -356,6 +585,55 @@ def build_battle_scenario_materialization_plan_v2(
     )
 
 
+def build_battle_scenario_materialization_completion_plan(
+    *,
+    plan_id: str,
+    source_commit: str,
+    source_bundle_sha256: str,
+    rom_sha256: str,
+    capture_directory_sha256: str,
+    earliest_excluded_plan_sha256: str,
+    earliest_excluded_run_journal_sha256: str,
+    predecessor_plan_sha256: str,
+    predecessor_run_journal_sha256: str,
+    predecessor_capture_directory_sha256: str,
+    predecessor_failure_count: int,
+    retained_successes: Sequence[RetainedBattleScenarioMaterializationCapture],
+    candidates: Sequence[BattleScenarioMaterializationCandidateV2],
+) -> BattleScenarioMaterializationCompletionPlan:
+    """Freeze one additive gap without reopening the predecessor denominator."""
+
+    if (
+        not isinstance(retained_successes, Sequence)
+        or isinstance(retained_successes, (str, bytes))
+        or not isinstance(candidates, Sequence)
+        or isinstance(candidates, (str, bytes))
+    ):
+        raise TypeError("battle materialization completion inputs must be sequences")
+    retained = tuple(sorted(retained_successes, key=lambda item: item.ordinal))
+    inventory = tuple(
+        sorted(candidates, key=lambda item: item.candidate_identity_sha256)
+    )
+    return BattleScenarioMaterializationCompletionPlan(
+        plan_id=plan_id,
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        rom_sha256=rom_sha256,
+        capture_directory_sha256=capture_directory_sha256,
+        earliest_excluded_plan_sha256=earliest_excluded_plan_sha256,
+        earliest_excluded_run_journal_sha256=(
+            earliest_excluded_run_journal_sha256
+        ),
+        predecessor_plan_sha256=predecessor_plan_sha256,
+        predecessor_run_journal_sha256=predecessor_run_journal_sha256,
+        predecessor_capture_directory_sha256=predecessor_capture_directory_sha256,
+        predecessor_failure_count=predecessor_failure_count,
+        retained_successes=retained,
+        inventory=inventory,
+        assignments=_select_completion_assignments(plan_id, inventory, retained),
+    )
+
+
 def parse_battle_scenario_materialization_plan_v2(
     payload: bytes,
 ) -> BattleScenarioMaterializationPlanV2:
@@ -377,6 +655,31 @@ def parse_battle_scenario_materialization_plan_v2(
     if plan.canonical_bytes() != payload:
         raise BattleScenarioMaterializationPlanV2Error(
             "battle materialization plan is not canonical JSON"
+        )
+    return plan
+
+
+def parse_battle_scenario_materialization_completion_plan(
+    payload: bytes,
+) -> BattleScenarioMaterializationCompletionPlan:
+    """Strictly reopen one canonical private additive completion plan."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("battle materialization completion plan must be bytes")
+    if not payload or len(payload) > _MAXIMUM_PLAN_BYTES:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan size differs"
+        )
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan is not canonical JSON"
+        ) from None
+    plan = _parse_completion_plan(value)
+    if plan.canonical_bytes() != payload:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan is not canonical JSON"
         )
     return plan
 
@@ -457,6 +760,225 @@ def _select_assignments(
             "battle materialization assignment denominator differs"
         )
     return assignments
+
+
+def _select_completion_assignments(
+    plan_id: str,
+    inventory: tuple[BattleScenarioMaterializationCandidateV2, ...],
+    retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...],
+) -> tuple[BattleScenarioMaterializationAssignmentV2, ...]:
+    if _SAFE_ID.fullmatch(plan_id) is None:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan identity differs"
+        )
+    required_additional = REQUIRED_CAPTURE_COUNT - len(retained_successes)
+    if required_additional < 1:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion gap differs"
+        )
+    retained_venue_counts = tuple(
+        sorted(Counter(item.venue_id for item in retained_successes).items())
+    )
+    by_identity = {item.candidate_identity_sha256: item for item in inventory}
+    allocation = allocate_additive_reachable_venue_roots(
+        tuple(
+            ReachableVenueRoot(
+                item.candidate_identity_sha256,
+                tuple(venue.venue_id for venue in item.reachable_venues),
+            )
+            for item in inventory
+        ),
+        retained_venue_counts=retained_venue_counts,
+        required_additional_roots=required_additional,
+        minimum_total_distinct_venues=MINIMUM_DISTINCT_VENUES,
+        maximum_total_roots_per_venue=MAXIMUM_CAPTURES_PER_VENUE,
+    )
+    if not allocation.capacity_met:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion inventory lacks additive venue capacity"
+        )
+
+    species_counts = Counter(item.party_slot.species_id for item in retained_successes)
+    party_slot_counts = Counter(item.party_slot.party_slot for item in retained_successes)
+    status_counts = Counter(item.party_slot.status_id for item in retained_successes)
+    level_counts = Counter(item.party_slot.level for item in retained_successes)
+    selections = []
+    for edge in allocation.assignments:
+        candidate = by_identity[edge.root_id]
+        venue = candidate.venue(edge.venue_id)
+        slot = min(
+            venue.party_slots,
+            key=lambda item: (
+                species_counts[item.species_id],
+                party_slot_counts[item.party_slot],
+                status_counts[item.status_id],
+                level_counts[item.level],
+                -item.usable_move_count,
+                -Fraction(item.current_hp, item.maximum_hp),
+                item.party_slot,
+            ),
+        )
+        species_counts[slot.species_id] += 1
+        party_slot_counts[slot.party_slot] += 1
+        status_counts[slot.status_id] += 1
+        level_counts[slot.level] += 1
+        selections.append((candidate, venue, slot))
+
+    assignments = tuple(
+        BattleScenarioMaterializationAssignmentV2(
+            ordinal=ordinal,
+            capture_id=f"{plan_id}-{ordinal + 1:02d}",
+            candidate=candidate,
+            selected_venue=venue,
+            party_slot=slot,
+            state_filename=f"{plan_id}-{ordinal + 1:02d}.state",
+            manifest_filename=f"{plan_id}-{ordinal + 1:02d}.state.json",
+        )
+        for ordinal, (candidate, venue, slot) in enumerate(selections)
+    )
+    total_counts = Counter(item.venue_id for item in retained_successes)
+    total_counts.update(item.selected_venue.venue_id for item in assignments)
+    if (
+        len(assignments) != required_additional
+        or len({item.candidate.source.source_state_sha256 for item in assignments})
+        != required_additional
+        or len(total_counts) < MINIMUM_DISTINCT_VENUES
+        or max(total_counts.values(), default=0) > MAXIMUM_CAPTURES_PER_VENUE
+    ):
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion denominator differs"
+        )
+    return assignments
+
+
+def _parse_completion_plan(
+    value: object,
+) -> BattleScenarioMaterializationCompletionPlan:
+    fields = {
+        "assignments",
+        "capture_directory_sha256",
+        "earliest_excluded_plan_sha256",
+        "earliest_excluded_run_journal_sha256",
+        "effects",
+        "inventory",
+        "plan_id",
+        "predecessor_capture_directory_sha256",
+        "predecessor_failure_count",
+        "predecessor_plan_sha256",
+        "predecessor_run_journal_sha256",
+        "retained_successes",
+        "retry_after_controller_input",
+        "rom_sha256",
+        "schema",
+        "selection_policy_sha256",
+        "source_bundle_sha256",
+        "source_commit",
+        "status",
+    }
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != fields
+        or value.get("schema")
+        != BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA
+        or value.get("status") != "prospective_unexecuted_additive_completion"
+        or value.get("retry_after_controller_input") is not False
+        or value.get("effects") != _zero_effects()
+        or value.get("selection_policy_sha256")
+        != canonical_sha256(_COMPLETION_SELECTION_POLICY)
+        or not isinstance(value.get("inventory"), list)
+        or not isinstance(value.get("retained_successes"), list)
+        or not isinstance(value.get("assignments"), list)
+    ):
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan fields differ"
+        )
+    inventory = tuple(_parse_candidate(item) for item in value["inventory"])
+    retained = tuple(
+        _parse_retained_capture(item) for item in value["retained_successes"]
+    )
+    by_identity = {item.candidate_identity_sha256: item for item in inventory}
+    assignments = tuple(
+        _parse_assignment(item, by_identity=by_identity)
+        for item in value["assignments"]
+    )
+    return BattleScenarioMaterializationCompletionPlan(
+        plan_id=_text(value.get("plan_id"), "plan id"),
+        source_commit=_text(value.get("source_commit"), "source commit"),
+        source_bundle_sha256=_text(value.get("source_bundle_sha256"), "source bundle"),
+        rom_sha256=_text(value.get("rom_sha256"), "ROM"),
+        capture_directory_sha256=_text(
+            value.get("capture_directory_sha256"), "capture directory"
+        ),
+        earliest_excluded_plan_sha256=_text(
+            value.get("earliest_excluded_plan_sha256"), "earliest excluded plan"
+        ),
+        earliest_excluded_run_journal_sha256=_text(
+            value.get("earliest_excluded_run_journal_sha256"),
+            "earliest excluded run journal",
+        ),
+        predecessor_plan_sha256=_text(
+            value.get("predecessor_plan_sha256"), "predecessor plan"
+        ),
+        predecessor_run_journal_sha256=_text(
+            value.get("predecessor_run_journal_sha256"),
+            "predecessor run journal",
+        ),
+        predecessor_capture_directory_sha256=_text(
+            value.get("predecessor_capture_directory_sha256"),
+            "predecessor capture directory",
+        ),
+        predecessor_failure_count=_integer(
+            value.get("predecessor_failure_count"), "predecessor failure count"
+        ),
+        retained_successes=retained,
+        inventory=inventory,
+        assignments=assignments,
+    )
+
+
+def _parse_retained_capture(
+    value: object,
+) -> RetainedBattleScenarioMaterializationCapture:
+    fields = {
+        "assignment_sha256",
+        "capture_id",
+        "manifest_filename",
+        "manifest_sha256",
+        "ordinal",
+        "party_slot",
+        "root_lineage_id",
+        "source_commit",
+        "source_state_sha256",
+        "state_filename",
+        "state_sha256",
+        "venue_id",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "retained battle materialization capture fields differ"
+        )
+    return RetainedBattleScenarioMaterializationCapture(
+        ordinal=_integer(value.get("ordinal"), "retained ordinal"),
+        capture_id=_text(value.get("capture_id"), "retained capture id"),
+        assignment_sha256=_text(
+            value.get("assignment_sha256"), "retained assignment"
+        ),
+        source_commit=_text(value.get("source_commit"), "retained source commit"),
+        source_state_sha256=_text(
+            value.get("source_state_sha256"), "retained source state"
+        ),
+        root_lineage_id=_text(
+            value.get("root_lineage_id"), "retained root lineage"
+        ),
+        venue_id=_text(value.get("venue_id"), "retained venue"),
+        party_slot=_parse_party_slot(value.get("party_slot")),
+        state_filename=_text(value.get("state_filename"), "retained state filename"),
+        manifest_filename=_text(
+            value.get("manifest_filename"), "retained manifest filename"
+        ),
+        state_sha256=_text(value.get("state_sha256"), "retained state"),
+        manifest_sha256=_text(value.get("manifest_sha256"), "retained manifest"),
+    )
 
 
 def _parse_plan(value: object) -> BattleScenarioMaterializationPlanV2:
@@ -733,15 +1255,20 @@ def _integer(value: object, subject: str) -> int:
 
 
 __all__ = [
+    "BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA",
     "BATTLE_SCENARIO_MATERIALIZATION_PLAN_V2_SCHEMA",
     "MAXIMUM_CAPTURES_PER_VENUE",
     "MINIMUM_DISTINCT_VENUES",
     "REQUIRED_CAPTURE_COUNT",
     "BattleScenarioMaterializationAssignmentV2",
     "BattleScenarioMaterializationCandidateV2",
+    "BattleScenarioMaterializationCompletionPlan",
     "BattleScenarioMaterializationPlanV2",
     "BattleScenarioMaterializationPlanV2Error",
     "BattleScenarioReachableVenue",
+    "RetainedBattleScenarioMaterializationCapture",
+    "build_battle_scenario_materialization_completion_plan",
     "build_battle_scenario_materialization_plan_v2",
     "parse_battle_scenario_materialization_plan_v2",
+    "parse_battle_scenario_materialization_completion_plan",
 ]

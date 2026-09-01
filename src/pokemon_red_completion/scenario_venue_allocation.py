@@ -104,6 +104,63 @@ class ScenarioVenueAllocation:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class AdditiveScenarioVenueAllocation:
+    """Canonical new assignments evaluated with immutable retained venue seats."""
+
+    assignments: tuple[VenueRootAssignment, ...]
+    retained_venue_counts: tuple[tuple[str, int], ...]
+    required_additional_roots: int
+    minimum_total_distinct_venues: int
+    maximum_total_roots_per_venue: int
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.assignments, tuple)
+            or any(not isinstance(item, VenueRootAssignment) for item in self.assignments)
+            or len({item.root_id for item in self.assignments}) != len(self.assignments)
+            or not isinstance(self.retained_venue_counts, tuple)
+            or tuple(sorted(self.retained_venue_counts)) != self.retained_venue_counts
+            or len({venue_id for venue_id, _count in self.retained_venue_counts})
+            != len(self.retained_venue_counts)
+            or any(
+                not isinstance(venue_id, str)
+                or not venue_id
+                or type(count) is not int  # noqa: E721
+                or count < 1
+                for venue_id, count in self.retained_venue_counts
+            )
+            or type(self.required_additional_roots) is not int  # noqa: E721
+            or self.required_additional_roots < 1
+            or len(self.assignments) > self.required_additional_roots
+            or type(self.minimum_total_distinct_venues) is not int  # noqa: E721
+            or self.minimum_total_distinct_venues < 1
+            or type(self.maximum_total_roots_per_venue) is not int  # noqa: E721
+            or self.maximum_total_roots_per_venue < 1
+            or any(
+                count > self.maximum_total_roots_per_venue
+                for count in self.total_venue_counts.values()
+            )
+        ):
+            raise ScenarioVenueAllocationError(
+                "additive scenario venue allocation differs"
+            )
+
+    @property
+    def total_venue_counts(self) -> dict[str, int]:
+        counts = dict(self.retained_venue_counts)
+        for assignment in self.assignments:
+            counts[assignment.venue_id] = counts.get(assignment.venue_id, 0) + 1
+        return dict(sorted(counts.items()))
+
+    @property
+    def capacity_met(self) -> bool:
+        return (
+            len(self.assignments) == self.required_additional_roots
+            and len(self.total_venue_counts) >= self.minimum_total_distinct_venues
+        )
+
+
 def allocate_reachable_venue_roots(
     roots: tuple[ReachableVenueRoot, ...],
     *,
@@ -218,10 +275,137 @@ def allocate_reachable_venue_roots(
     return allocation
 
 
+def allocate_additive_reachable_venue_roots(
+    roots: tuple[ReachableVenueRoot, ...],
+    *,
+    retained_venue_counts: tuple[tuple[str, int], ...],
+    required_additional_roots: int,
+    minimum_total_distinct_venues: int,
+    maximum_total_roots_per_venue: int,
+) -> AdditiveScenarioVenueAllocation:
+    """Select only new roots while scoring capacity across retained plus new seats."""
+
+    if (
+        not isinstance(roots, tuple)
+        or any(not isinstance(root, ReachableVenueRoot) for root in roots)
+        or len({root.root_id for root in roots}) != len(roots)
+        or not isinstance(retained_venue_counts, tuple)
+        or tuple(sorted(retained_venue_counts)) != retained_venue_counts
+        or len({venue_id for venue_id, _count in retained_venue_counts})
+        != len(retained_venue_counts)
+        or any(
+            not isinstance(venue_id, str)
+            or not venue_id
+            or type(count) is not int  # noqa: E721
+            or count < 1
+            for venue_id, count in retained_venue_counts
+        )
+        or type(required_additional_roots) is not int  # noqa: E721
+        or required_additional_roots < 1
+        or type(minimum_total_distinct_venues) is not int  # noqa: E721
+        or minimum_total_distinct_venues < 1
+        or type(maximum_total_roots_per_venue) is not int  # noqa: E721
+        or maximum_total_roots_per_venue < 1
+        or any(count > maximum_total_roots_per_venue for _venue, count in retained_venue_counts)
+    ):
+        raise ScenarioVenueAllocationError(
+            "additive scenario venue allocation contract differs"
+        )
+    ordered_roots = tuple(sorted(roots, key=lambda item: item.root_id))
+    venue_ids = tuple(
+        sorted(
+            {
+                *(venue_id for venue_id, _count in retained_venue_counts),
+                *(venue for root in ordered_roots for venue in root.venue_ids),
+            }
+        )
+    )
+    venue_index = {venue_id: index for index, venue_id in enumerate(venue_ids)}
+    initial_counts = [0] * len(venue_ids)
+    for venue_id, count in retained_venue_counts:
+        initial_counts[venue_index[venue_id]] = count
+    memo: dict[
+        tuple[int, tuple[int, ...], int],
+        tuple[VenueRootAssignment, ...],
+    ] = {}
+
+    def score(
+        assignments: tuple[VenueRootAssignment, ...],
+        base_counts: tuple[int, ...],
+    ) -> tuple[int, int, int, int]:
+        counts = list(base_counts)
+        for assignment in assignments:
+            counts[venue_index[assignment.venue_id]] += 1
+        distinct = sum(count > 0 for count in counts)
+        return (
+            len(assignments),
+            min(distinct, minimum_total_distinct_venues),
+            distinct,
+            -max(counts, default=0),
+        )
+
+    def better(
+        left: tuple[VenueRootAssignment, ...],
+        right: tuple[VenueRootAssignment, ...],
+        base_counts: tuple[int, ...],
+    ) -> tuple[VenueRootAssignment, ...]:
+        left_score = score(left, base_counts)
+        right_score = score(right, base_counts)
+        if left_score != right_score:
+            return left if left_score > right_score else right
+        left_key = tuple((item.root_id, item.venue_id) for item in left)
+        right_key = tuple((item.root_id, item.venue_id) for item in right)
+        return left if left_key <= right_key else right
+
+    def search(
+        root_index: int,
+        venue_counts: tuple[int, ...],
+        assigned_count: int,
+    ) -> tuple[VenueRootAssignment, ...]:
+        key = (root_index, venue_counts, assigned_count)
+        if key in memo:
+            return memo[key]
+        if root_index == len(ordered_roots) or assigned_count == required_additional_roots:
+            return ()
+        root = ordered_roots[root_index]
+        best = search(root_index + 1, venue_counts, assigned_count)
+        for venue_id in root.venue_ids:
+            index = venue_index[venue_id]
+            if venue_counts[index] >= maximum_total_roots_per_venue:
+                continue
+            updated = list(venue_counts)
+            updated[index] += 1
+            suffix = search(root_index + 1, tuple(updated), assigned_count + 1)
+            choice = (VenueRootAssignment(root.root_id, venue_id),) + suffix
+            best = better(best, choice, venue_counts)
+        memo[key] = best
+        return best
+
+    assignments = search(0, tuple(initial_counts), 0)
+    allocation = AdditiveScenarioVenueAllocation(
+        assignments=assignments,
+        retained_venue_counts=retained_venue_counts,
+        required_additional_roots=required_additional_roots,
+        minimum_total_distinct_venues=minimum_total_distinct_venues,
+        maximum_total_roots_per_venue=maximum_total_roots_per_venue,
+    )
+    if any(
+        item.venue_id
+        not in next(root.venue_ids for root in ordered_roots if root.root_id == item.root_id)
+        for item in allocation.assignments
+    ):
+        raise ScenarioVenueAllocationError(
+            "additive scenario venue allocation is inconsistent"
+        )
+    return allocation
+
+
 __all__ = [
+    "AdditiveScenarioVenueAllocation",
     "ReachableVenueRoot",
     "ScenarioVenueAllocation",
     "ScenarioVenueAllocationError",
     "VenueRootAssignment",
+    "allocate_additive_reachable_venue_roots",
     "allocate_reachable_venue_roots",
 ]

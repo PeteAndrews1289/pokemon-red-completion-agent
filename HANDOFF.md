@@ -14,6 +14,29 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-01: additive completion is locally qualified; no controller input yet
+
+The variable-cardinality repair is published on exact main `2db2fbf1` after PR 141. The next local
+gate does not rewrite the terminal **5 succeeded / 2 failed** run. It introduces a separate
+completion plan that authenticates all five successful predecessor outputs at zero frames, retains
+the two failed predecessor entries as failures, excludes all fourteen sources attempted by the two
+historical materialization generations, and selects exactly two untouched roots under the original
+combined two-venue/four-per-venue cap.
+
+The completion journal contains only the two new producer-local assignments. Each retained capture
+carries its own producer commit, assignment, source, state, manifest, venue and party binding, so a
+later consumer cannot pretend all seven files came from one source or directory. The old failures
+cannot retry, become pending, be reclassified, or be filled inside their predecessor denominator.
+Future runner failures distinguish candidate-cardinality, observation, party, policy-boundary and
+controller-boundary drift rather than collapsing them into one generic state mismatch.
+
+This is still engineering, not training. Before any new controller input: publish the completion
+design, require exact-main green CI, freeze one path-free zero-effect two-capture plan, and stop for
+reorientation. Even if both new captures later succeed, outcome collection still needs a separate
+mixed-producer catalog that independently authenticates the five predecessor outputs and two new
+outputs without flattening provenance. Counters remain **train 19 · fits 6 · verified development
+6 · unseen 4 · authority 0 · transfer 0**.
+
 ## 2026-09-01: five captures passed; two candidate-cardinality failures are terminal
 
 PR 140 merged the exact-main CI repair as `24fe239c`, and exact main CI `33515692262/1` passed.

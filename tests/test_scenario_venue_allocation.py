@@ -5,6 +5,7 @@ import pytest
 from pokemon_red_completion.scenario_venue_allocation import (
     ReachableVenueRoot,
     ScenarioVenueAllocationError,
+    allocate_additive_reachable_venue_roots,
     allocate_reachable_venue_roots,
 )
 
@@ -105,3 +106,64 @@ def test_allocator_rejects_duplicate_roots_and_noncanonical_venues() -> None:
         )
     with pytest.raises(ScenarioVenueAllocationError, match="root differs"):
         ReachableVenueRoot("root", ("route", "cave"))
+
+
+def test_additive_allocator_preserves_retained_seats_and_fills_only_the_gap() -> None:
+    allocation = allocate_additive_reachable_venue_roots(
+        tuple(_root(f"root-{index}", "cave", "route") for index in range(3)),
+        retained_venue_counts=(("cave", 2), ("route", 3)),
+        required_additional_roots=2,
+        minimum_total_distinct_venues=2,
+        maximum_total_roots_per_venue=6,
+    )
+
+    assert allocation.capacity_met
+    assert len(allocation.assignments) == 2
+    assert allocation.total_venue_counts == {"cave": 4, "route": 3}
+
+
+def test_additive_allocator_uses_new_venue_when_retained_seats_need_diversity() -> None:
+    allocation = allocate_additive_reachable_venue_roots(
+        (_root("a-flexible", "cave", "route"), _root("b-route", "route")),
+        retained_venue_counts=(("route", 5),),
+        required_additional_roots=1,
+        minimum_total_distinct_venues=2,
+        maximum_total_roots_per_venue=6,
+    )
+
+    assert allocation.capacity_met
+    assert allocation.assignments[0].venue_id == "cave"
+    assert allocation.total_venue_counts == {"cave": 1, "route": 5}
+
+
+def test_additive_allocator_fails_without_replacing_or_hiding_retained_seats() -> None:
+    allocation = allocate_additive_reachable_venue_roots(
+        (_root("route-only", "route"),),
+        retained_venue_counts=(("route", 6),),
+        required_additional_roots=1,
+        minimum_total_distinct_venues=2,
+        maximum_total_roots_per_venue=6,
+    )
+
+    assert not allocation.capacity_met
+    assert allocation.assignments == ()
+    assert allocation.total_venue_counts == {"route": 6}
+
+
+def test_additive_allocator_is_invariant_to_new_root_order() -> None:
+    roots = (
+        _root("root-c", "cave", "route"),
+        _root("root-a", "cave", "route"),
+        _root("root-b", "route"),
+    )
+    kwargs = {
+        "retained_venue_counts": (("cave", 2), ("route", 3)),
+        "required_additional_roots": 2,
+        "minimum_total_distinct_venues": 2,
+        "maximum_total_roots_per_venue": 6,
+    }
+
+    assert allocate_additive_reachable_venue_roots(
+        roots,
+        **kwargs,
+    ) == allocate_additive_reachable_venue_roots(tuple(reversed(roots)), **kwargs)

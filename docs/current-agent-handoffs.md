@@ -6,6 +6,24 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns publication and the zero-effect additive freeze
+
+The candidate-cardinality repair is published as exact main `2db2fbf1`. The additive completion
+design is locally qualified. It preserves five independently authenticated predecessor captures,
+retains both predecessor failures unchanged, excludes all fourteen previously attempted source
+roots, and can add only the missing two captures from untouched roots. Producer provenance remains
+per capture instead of being rewritten as one synthetic seven-file batch.
+
+Codex now owns repository-wide qualification, publication, exact-main CI, and exactly one
+zero-controller freeze. Stop and reorient at the path-free freeze receipt. New capture execution,
+outcomes, model fitting, sealed Red, Crystal, and replay are not part of this gate. A later outcome
+consumer must authenticate the five-plus-two mixed-producer catalog before learning opens.
+
+Claude and Antigravity have no required implementation role in this ordinary gate. A review is
+useful after the zero-effect freeze exists, but reviewers receive only tracked code and path-free
+evidence—never ROM, save, private plan, capture, or selected-root identity. Counters remain **train
+19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## Current override: Codex owns variable-cardinality repair and additive capture completion
 
 The exact-main CI repair passed and the one successor denominator is terminal at **5 succeeded / 2

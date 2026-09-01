@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: build around failure instead of painting over it
+
+**Visual:** Keep the original seven-card strip on screen: five green, two red and padlocked. Draw a
+second tray with exactly two empty seats. Connect the five green cards and two empty seats to one
+combined **7 CAPTURES · 2 VENUES · 4 MAX PER VENUE** meter. Never move the red cards.
+
+**Voiceover:** “The fix is not to rerun the failures until they turn green. We preserve the five
+valid lessons, preserve the two failed attempts, and add exactly two new lessons from worlds the
+system has never touched.”
+
+**Visual:** Stamp each green card with its own **PRODUCER · SOURCE · ASSIGNMENT · STATE · MANIFEST**
+seal, then show the two new cards receiving separate seals. Keep the controller disconnected and
+the frame counter at zero.
+
+**Voiceover:** “Because these files come from different runs, provenance has to live on each
+capture. The next gate only freezes the two new identities. It still does not select a move or train
+the model.”
+
+**On-screen score:** `RETAINED 5 · NEW NEEDED 2 · RETRIES 0 · TRAIN 19 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: five green cards and a useful red light
 
 **Visual:** Run seven sealed cards through a second-emulator scanner. Five turn green: **2 CAVE · 3
