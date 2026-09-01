@@ -6,7 +6,24 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the second-venue source-adapter gate
+## Current override: Celadon failed; Codex owns aggregate relocation readiness
+
+PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. Its reusable Celadon source adapter
+admits a root only when the same predicate used by the live executor proves the exact Center
+boundary, Thunder Badge, and living Fly capability. The published zero-frame census then found
+that none of the four available Celadon roots qualifies. Materialization remains stopped: 16
+available roots still resolve only to `pokemon_mansion_1f`, below the two-venue rule after the
+six-per-venue cap.
+
+Codex's immediate job is to publish and run one aggregate, path-free readiness census across all
+nine available unsupported city roots. It reports only map-level counts for existing Fly,
+cartridge-composed ground-route, and complete Vermilion/Route 11 transition support. If a map
+class qualifies, expose only that reusable class and repeat whole-bank capacity. If none
+qualifies, stop and redesign source supply. No private-root diagnosis, encounter materialization,
+claim, outcome, fit, sealed Red, Crystal execution, authority, or full replay is open. Counters
+remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+## Previous override: Codex owned the second-venue source-adapter gate
 
 PR 125 merged as exact main `2de2bd1a`, and exact-main CI `33459343207/1` passed. The published
 materializer derives source identity, partition, lineage, consumption key, and loaded map instead

@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the obvious second classroom was locked
+
+**Visual:** Four Celadon save cards enter a scanner labeled **EXACT BOUNDARY · THUNDER BADGE ·
+LIVING FLY HOLDER · EXISTING ROUTE 11 TRANSITION**. All four turn red. Keep the controller cable
+visibly disconnected and show **0 FRAMES · 0 INPUTS**.
+
+**Voiceover:** “Celadon looked like the cheapest route to a second battle environment, but we did
+not assume the saves could actually make the trip. We published one reusable adapter that asks
+the same question as the live game controller. All four candidates failed. That is not lost work;
+it is a five-second falsification that prevented four doomed gameplay runs.”
+
+**Visual:** Expand from Celadon to the full unsupported map list: **LAVENDER ×2 · CINNABAR MART ×1
+· FUCHSIA ×1 · INDIGO ×1**, with three aggregate meters: **FLY**, **GROUND ROUTE**, **COMPLETE
+ROUTE 11 TRANSITION**. Hide individual save identities.
+
+**Voiceover:** “The next check stays broad and private-safe. We count which map classes already
+have a proven Fly or cartridge-composed ground route. If one qualifies, it becomes reusable Route
+11 supply. If none does, we redesign how training states are produced instead of teaching a
+single save a bespoke trick.”
+
+**On-screen score:** `TRAIN 19 · FITS 6 · VERIFIED DEVELOPMENT 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: fifty-four keys, still one classroom
 
 **Visual:** 152 retained save files enter a digest scanner and collapse into **54 AUTHENTICATED

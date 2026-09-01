@@ -190,6 +190,7 @@ def test_inventory_observes_map_and_availability_without_advancing(
     assert observed.map_label == "route_11"
     assert observed.venue_id == "route_11"
     assert observed.relocation_required is False
+    assert observed.route_11_relocation_ready is True
     assert observed.materialization_eligible is True
 
 
@@ -249,10 +250,62 @@ def test_inventory_counts_only_capable_celadon_roots_as_route_11_supply(
 
     assert eligible.venue_id == "route_11"
     assert eligible.relocation_required is True
+    assert eligible.fly_relocation_ready is True
+    assert eligible.ground_relocation_ready is False
+    assert eligible.route_11_relocation_ready is True
     assert eligible.materialization_eligible is True
     assert rejected.venue_id is None
     assert rejected.relocation_required is False
+    assert rejected.fly_relocation_ready is False
+    assert rejected.ground_relocation_ready is False
+    assert rejected.route_11_relocation_ready is False
     assert rejected.materialization_eligible is False
+
+
+def test_inventory_reports_only_available_unsupported_relocation_supply() -> None:
+    observed_type = INVENTORY["_ObservedTrainRoot"]
+    observed = (
+        observed_type(
+            map_label="lavender_pokecenter",
+            venue_id=None,
+            relocation_required=False,
+            fly_relocation_ready=False,
+            ground_relocation_ready=True,
+            route_11_relocation_ready=True,
+            claim_available=True,
+            safe_nonbattle=True,
+            living_party_member_available=True,
+        ),
+        observed_type(
+            map_label="fuchsia_city",
+            venue_id=None,
+            relocation_required=False,
+            fly_relocation_ready=True,
+            ground_relocation_ready=False,
+            route_11_relocation_ready=True,
+            claim_available=False,
+            safe_nonbattle=True,
+            living_party_member_available=True,
+        ),
+        observed_type(
+            map_label="celadon_pokecenter",
+            venue_id="route_11",
+            relocation_required=True,
+            fly_relocation_ready=True,
+            ground_relocation_ready=False,
+            route_11_relocation_ready=True,
+            claim_available=True,
+            safe_nonbattle=True,
+            living_party_member_available=True,
+        ),
+    )
+
+    counts = INVENTORY["_available_unsupported_capability_counts"](
+        observed,
+        "route_11_relocation_ready",
+    )
+
+    assert counts == {"lavender_pokecenter": 1}
 
 
 def test_inventory_rejects_any_advanced_frame(
