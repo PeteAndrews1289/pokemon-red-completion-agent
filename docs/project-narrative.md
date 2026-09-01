@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 1: make a blackout cost evidence, not integrity
+
+The seven source worlds were fixed, but an execution could still become scientifically ambiguous
+if the computer lost power between an emulator input and its receipt. The new runner closes that
+gap. Before it can touch the controller, it permanently crosses one assignment off as started.
+After a restart, untouched cards may continue; crossed-out cards never get another attempt.
+
+A finished-looking save is not trusted merely because the child process says it succeeded. The
+runner opens it again in a fresh emulator without advancing a frame and checks the planned venue,
+active party member, species, level, battle menu, observation, and real move-choice surface. The
+entire 6,192-test local suite passes. The remaining gate is clean publication and exact-head CI,
+then one execution of the already frozen plan.
+
+The learning score is intentionally unchanged: **19 train examples · 6 fits · 6 verified
+development outcomes · 4 unseen comparisons · 0 authority · 0 transfer**.
+
 ## September 1: seven students are named before the lesson exists
 
 The whole-bank scan finally crossed the curriculum-supply gate. Eighteen unused authenticated

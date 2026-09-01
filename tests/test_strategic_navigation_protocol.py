@@ -87,11 +87,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "77c1037e351ad9f66def63ada81306860b91fe2f03161d931b3bae7bd80e0fb1"
+        == "90083a224c721ca5375ea7fa6889da96372f88b649cd5061ddbadbf23efa3ba8"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "04b9a7c541c648eba74319b33f7c4718b1cc11507d4fd7ebe28f7e43336dc0a5"
+        == "a5993f5310096a373cf3550fe33a03f132f46beac58b2c94ca19c71458ba7780"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -99,7 +99,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "5c68b5928cc89a8ab734ed46058caa1a6e5415921f47d5b8ef810be40ca07b9b"
+        == "d68847bbd8e9e1c0f25d10a6054538849160cbc81a6359dd280ce68608ba2062"
     )
     assert digest == {
         "bytes": len(payload),

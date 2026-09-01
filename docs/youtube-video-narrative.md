@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: a blackout cannot grant a second attempt
+
+**Visual:** Show the seven face-down cards beside a metal ledger. One card moves from **PENDING** to
+**STARTED**; the ledger stamps **FLUSHED TO DISK** before the controller cable lights up. Cut the
+power. On reboot, the started card hits a **NO RETRY** barrier while untouched cards remain open.
+
+**Voiceover:** “A crash after input could accidentally give one lesson two chances. The runner now
+consumes the only attempt before the emulator can move. A completed file may be verified after a
+restart, but the encounter itself is never replayed.”
+
+**Visual:** Put a finished save through a second, disconnected emulator scanner. Light up **MAP ·
+ACTIVE SLOT · SPECIES · LEVEL · MAIN MENU · OBSERVATION · TWO OR MORE CHOICES** while the frame
+counter remains **0**. Then show **6,192 TESTS PASSED** and a locked **EXACT-HEAD CI** gate.
+
+**Voiceover:** “The child process does not get to grade itself. A fresh emulator reopens every
+successful state without advancing a frame and checks the frozen learning question. Local testing
+is green; one clean GitHub build remains before the seven captures can run.”
+
+**On-screen score:** `RUNNER LOCAL PASS · CAPTURES 0 · TRAIN 19 · FITS 6 · AUTHORITY 0 · TRANSFER 0`
+
 ## New scene: seven names sealed before the encounters exist
 
 **Visual:** The freezer opens just long enough to show seven face-down cards: five stamped

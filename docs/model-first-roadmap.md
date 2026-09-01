@@ -11,7 +11,34 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: seven battle sources frozen; crash-safe execution is next
+## Current checkpoint: the crash-safe capture runner passes locally
+
+The exact-plan runner is now locally qualified. Its journal has only one-way transitions:
+`pending -> started -> succeeded/failed`. It durably commits `started` before the controller-capable
+child can run, never retries a started or failed assignment, and resumes only untouched work. A
+complete output left by an interrupted process may be reconciled after an independent emulator
+reopen; it is never executed twice.
+
+Success no longer trusts the materializer receipt alone. A fresh zero-frame emulator reopen checks
+the exact planned map, battle state, active party slot, species, level, menu phase, observation
+digest, and at least two supported choices. The complete non-integration suite passed with 6,192
+tests, plus clean registry regeneration, lint, and typing across 326 source files.
+
+This is still engineering, not training. The next order is:
+
+1. publish the unchanged runner and require green exact-head pull-request CI;
+2. reauthenticate the exact published source, source bundle, materializer, plan, runtime, ROM,
+   historical catalog and registry, all seven source bindings, and private output namespace;
+3. execute the frozen plan once, with no retry after any assignment reaches `started`;
+4. retain all seven dispositions and publish only a path-free aggregate receipt;
+5. only after the captures reopen successfully may a separate outcome-collection and fitting gate
+   be designed.
+
+Current evidence remains **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
+authority 0 · transfer 0**. See the [runner design](red-battle-v2-materialization-runner.md) and
+[local qualification](evidence/red-battle-v2-materialization-runner-local-qualification-2026-09-01.json).
+
+## Previous checkpoint: seven battle sources frozen; crash-safe execution is next
 
 PR 129 merged as `98a4f8e7` after CI `33465971401/1` passed. The reusable Lavender adapter admits
 only an exact Lavender Center boundary that satisfies the existing cartridge-composed ground-route
