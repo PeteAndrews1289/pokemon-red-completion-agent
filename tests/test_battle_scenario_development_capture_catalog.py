@@ -9,9 +9,13 @@ import pytest
 from pokemon_red_completion.battle_scenario_development_capture_catalog import (
     BATTLE_SCENARIO_DEVELOPMENT_CAPTURE_CATALOG_SCHEMA,
     BattleScenarioDevelopmentCaptureCatalogError,
+    BattleScenarioDevelopmentCaptureCatalogV2,
     BattleScenarioDevelopmentCaptureEntry,
+    BattleScenarioDevelopmentCaptureEntryV2,
     BattleScenarioDevelopmentCaptureProducer,
+    BattleScenarioDevelopmentCaptureProducerV2,
     build_battle_scenario_development_capture_catalog,
+    build_battle_scenario_development_capture_catalog_v2,
     parse_battle_scenario_development_capture_catalog,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -66,6 +70,59 @@ def _catalog():  # type: ignore[no-untyped-def]
         builder_source_bundle_sha256=_sha("builder-bundle"),
         producer=producer,
         captures=tuple(reversed(entries)),
+    )
+
+
+def _catalog_v2() -> BattleScenarioDevelopmentCaptureCatalogV2:
+    original = _catalog()
+
+    def producer(role: str) -> BattleScenarioDevelopmentCaptureProducerV2:
+        return BattleScenarioDevelopmentCaptureProducerV2(
+            producer_id=role,
+            role=role,
+            plan_id=f"development-{role}",
+            plan_sha256=_sha(f"{role}-plan"),
+            run_journal_sha256=_sha(f"{role}-journal"),
+            source_commit=("e" if role == "predecessor" else "d") * 40,
+            source_bundle_sha256=_sha(f"{role}-bundle"),
+            materializer_sha256=_sha(f"{role}-materializer"),
+            runtime_identity_sha256=_sha("runtime"),
+            rom_sha256=_sha("rom"),
+            capture_directory_sha256=_sha(f"{role}-directory"),
+            context_catalog_sha256=_sha("context"),
+            registry_sha256=_sha("registry"),
+            registry_source_commit="c" * 40,
+            exact_ci_run=123,
+            exact_ci_attempt=1,
+            successful_capture_count=7 if role == "predecessor" else 1,
+            failed_assignment_count=1 if role == "predecessor" else 0,
+        )
+
+    captures = tuple(
+        BattleScenarioDevelopmentCaptureEntryV2(
+            ordinal=item.ordinal,
+            capture_id=item.capture_id,
+            assignment_sha256=item.assignment_sha256,
+            source_state_sha256=item.source_state_sha256,
+            root_lineage_id=item.root_lineage_id,
+            venue_id=item.venue_id,
+            party_slot=item.party_slot,
+            state_filename=item.state_filename,
+            manifest_filename=item.manifest_filename,
+            state_sha256=item.state_sha256,
+            manifest_sha256=item.manifest_sha256,
+            producer_id="predecessor" if item.ordinal < 7 else "completion",
+            producer_ordinal=item.ordinal if item.ordinal < 7 else 0,
+        )
+        for item in original.captures
+    )
+    return build_battle_scenario_development_capture_catalog_v2(
+        catalog_id="red-battle-v2-development-catalog-v2",
+        builder_source_commit="f" * 40,
+        builder_source_bundle_sha256=_sha("builder-bundle"),
+        rom_sha256=_sha("rom"),
+        producers=(producer("completion"), producer("predecessor")),
+        captures=tuple(reversed(captures)),
     )
 
 
@@ -138,3 +195,29 @@ def test_development_capture_catalog_contains_no_paths_or_learning_results() -> 
         b'"outcome":',
     ):
         assert forbidden not in payload
+
+
+def test_development_capture_catalog_v2_preserves_seven_plus_one_provenance() -> None:
+    catalog = _catalog_v2()
+    reopened = parse_battle_scenario_development_capture_catalog(catalog.canonical_bytes())
+
+    assert reopened == catalog
+    assert isinstance(reopened, BattleScenarioDevelopmentCaptureCatalogV2)
+    assert tuple(item.role for item in reopened.producers) == (
+        "predecessor",
+        "completion",
+    )
+    assert [item.producer_id for item in reopened.captures].count("predecessor") == 7
+    assert [item.producer_id for item in reopened.captures].count("completion") == 1
+    assert reopened.private_dict()["historical_failed_assignments"] == 1
+
+
+def test_development_capture_catalog_v2_rejects_flattened_provenance() -> None:
+    catalog = _catalog_v2()
+    flattened = replace(catalog.captures[-1], producer_id="predecessor")
+
+    with pytest.raises(
+        BattleScenarioDevelopmentCaptureCatalogError,
+        match="producer membership differs",
+    ):
+        replace(catalog, captures=(*catalog.captures[:-1], flattened))

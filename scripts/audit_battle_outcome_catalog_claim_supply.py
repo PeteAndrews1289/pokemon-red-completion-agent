@@ -27,6 +27,7 @@ from pokemon_red_completion.battle_scenario_capture_catalog import (  # noqa: E4
     parse_battle_scenario_capture_catalog,
 )
 from pokemon_red_completion.battle_scenario_development_capture_catalog import (  # noqa: E402
+    BattleScenarioDevelopmentCaptureCatalog,
     BattleScenarioDevelopmentCaptureCatalogError,
     parse_battle_scenario_development_capture_catalog,
 )
@@ -295,17 +296,22 @@ def _open_development_catalogs(
             catalog = parse_battle_scenario_development_capture_catalog(payload)
         except BattleScenarioDevelopmentCaptureCatalogError as error:
             raise BattleOutcomeCatalogClaimSupplyAuditError(str(error)) from None
-        producer = catalog.producer
-        if (
+        producers = (
+            (catalog.producer,)
+            if isinstance(catalog, BattleScenarioDevelopmentCaptureCatalog)
+            else catalog.producers
+        )
+        if any(
             producer.context_catalog_sha256 != context_sha256
             or producer.registry_sha256 != registry.registry_sha256
             or producer.registry_source_commit != registry.execution.source_commit
+            for producer in producers
         ):
             raise BattleOutcomeCatalogClaimSupplyAuditError(
                 "development capture catalog experiment binding differs"
             )
         digests.append(expected_sha256)
-        roms.add(producer.rom_sha256)
+        roms.update(producer.rom_sha256 for producer in producers)
         for entry in catalog.captures:
             roots.append(
                 _catalog_root(
