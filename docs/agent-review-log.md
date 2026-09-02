@@ -1400,3 +1400,18 @@ Mission check for this planning task:
   freeze are still required before batch execution.
 - Learning result: none added. The mission board remains 19 causal train examples, 6 fits, 6
   verified development outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.
+
+## Codex reorientation — artifact-safe V2 successor (2026-09-02)
+
+- Accepted: the 77-character artifact identity preserves the full freeze digest and crosses the
+  real typed private-store boundary under exact main `c4207af3` and green CI `33601217072/1`.
+- Accepted: fresh freeze `26878069…4cadd3` independently authenticates the preserved runtime and
+  complete 1 retained + 7 fresh train / 8 development roster with an absent artifact namespace.
+- Effect accounting: zero artifacts, claims, actions, frames, predictions, outcomes, fits,
+  teachers, sealed Red, Crystal, replay or authority. This is qualification, not learning.
+- Decision: publish the path-free receipt and require fresh exact-main CI, then execute this freeze
+  once. Fit train only, commit development controls before outcomes, and reject the candidate on
+  zero discordance or no paired advantage.
+- Mission check: this is one bounded title-neutral battle-preference lesson toward reusable skill
+  authority. It does not replace navigation, quest, capture, evolution, trade or living-Pokedex
+  planning and cannot by itself justify Crystal transfer.

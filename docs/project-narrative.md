@@ -8305,3 +8305,9 @@ The repair did not shorten the identity itself. It shortened only the human-read
 the complete digest, and exercised the resulting 77-character name against the real private store.
 It is a small fix with a larger systems point: mocks should preserve the constraints of the
 production boundary they stand in for, especially when that boundary guards one-shot experiments.
+
+The repaired boundary then produced a fresh successor under the exact retained emulator runtime.
+It reconstructed the same classroom—one retained lesson, seven fresh train cases and eight held
+development cases—while leaving the new 77-character artifact namespace absent. Nothing had been
+played or learned at that checkpoint. The value was a clean, independently reopenable transaction
+that could finally be published before its one permitted outcome run.

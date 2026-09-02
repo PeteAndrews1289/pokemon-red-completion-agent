@@ -5253,3 +5253,13 @@ version has to prove the model learned something worth carrying into a game it h
 - Show the regression test crossing the real private-store boundary instead of a permissive mock.
 - End on **PUBLISH REPAIR → GREEN MAIN → NEW ZERO-EFFECT FREEZE → PUBLISH → EXECUTE ONCE**. Keep
   sealed Red, Crystal and authority locked.
+
+## New sequence: “The clean classroom is finally sealed”
+
+- Start with exact main **`c4207af3` · CI GREEN** and the preserved emulator runtime.
+- Rebuild the board as **1 RETAINED + 7 FRESH TRAIN · 8 HELD DEVELOPMENT**.
+- Show freeze **`26878069…4cadd3`** flowing into **77 CHARACTERS · FULL DIGEST · ARTIFACT ABSENT**.
+- Keep **CLAIMS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · PREDICTIONS 0 · FITS 0** visible; call this
+  a qualified experiment, not a trained player.
+- End on the single rail: **PUBLISH RECEIPT → GREEN MAIN → EXECUTE ONCE → FIT TRAIN ONLY → COMMIT
+  EXAM PREDICTIONS → OPEN EXAM OUTCOMES → ACCEPT OR REJECT**.

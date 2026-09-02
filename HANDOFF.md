@@ -14,6 +14,26 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: the artifact-safe compatible-runtime V2 successor is frozen
+
+The artifact-ID repair merged as exact main `c4207af3`; PR CI `33599727126/1` and main CI
+`33601217072/1` passed. Under the preserved retained runtime `7bd8060a…db0b1`, a fresh
+action-free successor reproduced the complete **1 retained + 7 fresh train / 8 development**
+curriculum as freeze `26878069…4cadd3`. Its 77-character private artifact identity preserves the
+full freeze digest and does not yet exist.
+
+This freeze has **0 artifacts · 0 claims · 0 predictions · 0 outcomes · 0 fits · 0 actions · 0
+frames · 0 teachers · 0 sealed Red · 0 Crystal · 0 authority**. Earlier freezes
+`e11ee811…39eb2` and `f7204334…5263` remain terminal and must never retry.
+
+Publish the [path-free successor receipt](docs/evidence/red-battle-v2-artifact-successor-freeze-2026-09-02.json)
+and require green exact-main CI. Then reauthenticate the exact source, runtime, freeze, complete
+roster and absent artifact before executing `26878069…4cadd3` once. Fit only on the eight train
+examples; commit base, candidate and heuristic predictions for all eight development examples
+before opening their outcomes; reject the candidate on zero discordance or no paired advantage.
+Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
+0** until that run produces evidence.
+
 ## 2026-09-02: the compatible-runtime V2 execution stopped on its artifact identifier
 
 Exact main `96c28b7f` passed CI `33596459536/1`, so freeze `f7204334…5263` was reauthenticated

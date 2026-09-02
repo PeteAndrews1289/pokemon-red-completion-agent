@@ -11,7 +11,29 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the compatible-runtime batch stopped before artifact creation
+## Current checkpoint: an artifact-safe V2 successor is frozen and unexecuted
+
+The full-digest artifact-ID repair merged as exact main `c4207af3`; main CI
+`33601217072/1` passed. Under the exact retained runtime, fresh successor freeze
+`26878069…4cadd3` independently reopens the complete **1 retained + 7 fresh train / 8 development**
+curriculum. Its full-digest private artifact identity is 77 characters, valid, absent and
+unclaimed. The freeze added no action, frame, prediction, outcome, fit or authority.
+
+Next:
+
+1. publish the path-free successor receipt and require green exact-main CI;
+2. independently reauthenticate its exact source, runtime, roster and absent artifact;
+3. execute it once, with no retry after controller input;
+4. fit only on eight train examples and durably commit all controls before eight development
+   outcomes are opened;
+5. reject on zero discordance or no paired advantage; a positive descriptive result opens a
+   separate teacher-free authority design, never sealed Red or Crystal directly.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[successor receipt](evidence/red-battle-v2-artifact-successor-freeze-2026-09-02.json).
+
+## Previous checkpoint: the compatible-runtime batch stopped before artifact creation
 
 Exact-main CI `33596459536/1` passed. The one permitted execution of freeze `f7204334…5263` then
 cleared its action-free source, model, runtime, capture and root-availability checks but failed at
