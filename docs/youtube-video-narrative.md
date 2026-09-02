@@ -1,5 +1,33 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: stop sealing every rehearsal and let the model learn
+
+**Visual:** Compress days of freeze cards and approval gates into a small box labeled **SEALED
+BENCHMARKS — LATER**. Beside it, animate a fast loop: **SEMANTIC STATES → MODEL → RED EMULATOR
+OUTCOMES → UPDATE → UNSEEN STATES**.
+
+**Voiceover:** “We had built laboratory-grade evidence machinery, but we were using it for every
+rehearsal. So we kept the final exam sealed and made development repeatable. In seconds, Red tried
+every legal move from exact resets and gave the learner real outcome labels.”
+
+**Visual:** Show **12 TRAIN ROOTS** flowing into the model. On the first development panel, change
+**5/7 → 7/7**. On a second independent panel, change **2/7 → 5/7** and **UTILITY 1.304 → 2.644**.
+Move four malformed cards into a red **QUARANTINED: ACTIVE POKÉMON ALREADY FAINTED** tray while the
+remaining cards continue.
+
+**Voiceover:** “The first authentic update improved both its working development set and a separate
+older set. Bad snapshots stopped being mystery campaign failures; they became individual,
+diagnosable exclusions.”
+
+**Visual:** Present one fresh Red battle with four move cards. Hide all outcome values. The model
+selects card four, the controller fires, and the opponent faints. Then reveal all four utilities and
+highlight **MODEL 3.0 · OLD MODEL 0.878 · TEACHER QUERIES 0**.
+
+**Voiceover:** “For the final check, the model chose before seeing any result. It took the action in
+the real emulator, scored a knockout, and only then learned that its choice was counterfactually
+optimal. That's bounded battle authority—not a complete Pokémon player yet—but it is finally the
+kind of evidence the project was supposed to produce.”
+
 ## New scene: the route factory finally gets switched off
 
 **Visual:** Show two independent route cards advancing in parallel. Both counters stop at

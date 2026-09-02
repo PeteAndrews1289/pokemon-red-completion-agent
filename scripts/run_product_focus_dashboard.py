@@ -128,35 +128,35 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Decision-pressure battle batch · capacity and V2 engineering",
+        stage="Repeatable authentic battle learning · scenario expansion",
         message=(
-            "The V1 pair was rejected for zero development discordance after one valid update. "
-            "Next: freeze a diverse 8-train/8-development V2 batch before new outcomes."
+            "Authentic Red adaptation improved two disjoint development sets and executed one "
+            "fresh teacher-free move. Next: broaden semantic variation and multi-turn authority."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red bounded scenarios · battle first → navigation → party development → Crystal",
-        collection_target=60,
+        collection_target=48,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Rejected V1 candidate retained as evidence · V2 starts from original prior",
+            candidate="Authentic Red battle MLP · bounded development candidate",
             choice=(
-                "No active choice · next: outcome-blind census, then one frozen batch"
+                "Move selection only · switch, item and capture authority remain closed"
             ),
             confidence=None,
-            decisions=0,
+            decisions=1,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="catalog",
+            phase="training",
             zero_shot_completed=causal_train_examples,
-            zero_shot_total=60,
+            zero_shot_total=48,
             adaptation_completed=fits,
-            adaptation_total=7,
+            adaptation_total=8,
             sealed_completed=unseen,
-            sealed_total=5,
+            sealed_total=8,
             predictions_committed=False,
-            heading="Authenticated three-family learner curriculum",
+            heading="Repeatable authenticated learner curriculum",
             eyebrow="Red snapshots · disjoint lineages · Crystal transfer later",
             counter_labels=(
                 "Authentic causal train examples",

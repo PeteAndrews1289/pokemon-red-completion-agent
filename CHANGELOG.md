@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Replaced the one-shot development bottleneck with a repeatable authentic Red battle-learning
+  loop. Added a deterministic Red-backed semantic curriculum, portable path-free outcome datasets,
+  per-capture quarantine, authentic last-layer adaptation, paired development evaluation, and a
+  bounded teacher-free model-action runner. Synthetic pretraining reached 84.0% on 500 unseen
+  menus versus 70.4% for the fixed heuristic. Twelve authentic train roots then improved working
+  development from 5/7 to 7/7 and a separate seven-root set from 2/7 to 5/7, with mean utility
+  1.304 to 2.644. A fresh model-selected Red action produced an optimal knockout with zero teacher
+  queries. This grants no full-player, sealed-test, or Crystal-transfer claim.
+
 - Published the distinct Red battle contrast V2 policy as exact main `d9cf45a4` under green CI
   `33679292761/1`, then ran its single action-free qualification against the fixed one-retained plus
   five-fresh train and eight-development roster. The gate failed closed without creating a

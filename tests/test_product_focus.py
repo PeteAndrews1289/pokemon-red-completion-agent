@@ -327,30 +327,30 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 24, "partition": "train"},
-        {"kind": "model_fit", "minimum": 7, "partition": "train"},
+        {"kind": "causal_train_example", "minimum": 48, "partition": "train"},
+        {"kind": "model_fit", "minimum": 8, "partition": "train"},
         {
             "kind": "verified_outcome_example",
-            "minimum": 14,
+            "minimum": 28,
             "partition": "development",
         },
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(
-        ((19 / 24) + (6 / 7) + (6 / 14)) / 3
+        ((31 / 48) + (7 / 8) + (20 / 28)) / 3
     )
     assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 19, 24),
-        ("Model Fit · train", 6, 7),
-        ("Verified Outcome Example · development", 6, 14),
+        ("Causal Train Example · train", 31, 48),
+        ("Model Fit · train", 7, 8),
+        ("Verified Outcome Example · development", 20, 28),
     )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
-    assert state.progress["model_fits"] == 6
-    assert state.progress["unseen_comparisons"] == 4
+    assert state.progress["model_fits"] == 7
+    assert state.progress["unseen_comparisons"] == 6
     assert state.progress["development_episode_attempts"] == 16
-    assert state.progress["verified_outcome_examples"] == 6
+    assert state.progress["verified_outcome_examples"] == 20
     assert state.progress["verified_composition_episodes"] == 1
-    assert state.progress["causal_train_examples"] == 19
+    assert state.progress["causal_train_examples"] == 31
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1522,9 +1522,9 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Causal Train Example · train: 19/24",
-        "Model Fit · train: 6/7",
-        "Verified Outcome Example · development: 6/14",
+        "Causal Train Example · train: 31/48",
+        "Model Fit · train: 7/8",
+        "Verified Outcome Example · development: 20/28",
     )
 
 
@@ -1598,7 +1598,7 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
 
     assert focus_scorecard(state) == (
         ("Development Episode · development", 16, 12),
-        ("Verified Outcome Example · development", 6, 12),
+        ("Verified Outcome Example · development", 20, 12),
         ("Verified Composition Episode · development", 1, 2),
     )
 
@@ -1613,7 +1613,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 19, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 31, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -2011,29 +2011,29 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
 
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(
-        ((19 / 24) + (6 / 7) + (6 / 14)) / 3
+        ((31 / 48) + (7 / 8) + (20 / 28)) / 3
     )
     assert public["actions"] == 0
-    assert "Decision-pressure battle batch" in public["stage"]
+    assert "Repeatable authentic battle learning" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 19,
-        "total": 60,
+        "completed": 31,
+        "total": 48,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 6, "total": 7}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 5}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 7, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 6, "total": 8}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
         "zero_shot": "Authentic causal train examples",
         "adaptation": "Model fits",
         "sealed_test": "Untouched Red comparisons",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
-    assert public["model"]["decisions"] == 0  # type: ignore[index]
+    assert public["model"]["decisions"] == 1  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "V1 pair was rejected for zero development discordance" in encoded
-    assert "Authenticated three-family learner curriculum" in encoded
-    assert "Causal Train Example 19/24" in encoded
-    assert "Model Fit 6/7" in encoded
-    assert "Verified Outcome Example 6/14" in encoded
+    assert "Authentic Red adaptation improved two disjoint development sets" in encoded
+    assert "Repeatable authenticated learner curriculum" in encoded
+    assert "Causal Train Example 31/48" in encoded
+    assert "Model Fit 7/8" in encoded
+    assert "Verified Outcome Example 20/28" in encoded
     assert "Authentic causal train examples" in encoded
     assert "Model fits" in encoded
     assert "Untouched Red comparisons" in encoded

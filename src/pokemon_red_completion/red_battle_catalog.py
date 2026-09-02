@@ -56,6 +56,18 @@ class PokemonRedBattleCatalog:
     def species_count(self) -> int:
         return len(_SPECIES_BY_ID)
 
+    @property
+    def move_ids(self) -> tuple[int, ...]:
+        """Return the complete pinned move-ID inventory in canonical order."""
+
+        return tuple(sorted(_MOVE_BY_ID))
+
+    @property
+    def species_ids(self) -> tuple[int, ...]:
+        """Return the complete pinned species-ID inventory in canonical order."""
+
+        return tuple(sorted(_SPECIES_BY_ID))
+
     def resolve_species(self, species_ref: str, /) -> SpeciesMechanics:
         identifier = _parse_ref(species_ref, expected_kind="species")
         try:

@@ -11,6 +11,36 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: authentic battle training has started
+
+Development rigor is now intentionally lighter than benchmark rigor. A fast, reusable loop builds
+Red-backed semantic battle menus, pretrains the shared MLP, measures every legal move from exact
+emulator resets, adapts on train roots, and compares the frozen base and challenger on disjoint
+development roots. Invalid legacy snapshots are quarantined individually with an explicit reason;
+one bad capture no longer destroys the useful results from the rest of a development batch.
+
+The first cycle produced 12 authentic train examples and seven held-development examples. The
+updated model improved the held set from 5/7 to 7/7. On a second independent seven-root set it
+improved from 2/7 to 5/7 and raised mean selected utility from 1.304 to 2.644. In a fresh bounded
+rehearsal the model—not the teacher—selected and executed one Red move, knocked out the opponent,
+and was later shown by counterfactual replay to have chosen the optimal candidate. The synthetic
+base would have selected a move worth 0.878 instead of 3.0.
+
+This is genuine outcome training and bounded move authority, but it is not yet a full battle
+policy, full-player authority, a sealed benchmark, or a Crystal transfer result. Immediate order:
+
+1. turn the existing capture sources into a repeatable short-scenario generator with deliberate
+   variation in opponent, HP, PP, status, matchup and move-set pressure;
+2. grow disjoint authentic train and development pools until learning curves and failure clusters
+   stabilize, without route replays or hand-selected successful outcomes;
+3. run model-selected multi-turn battle episodes with explicit switch/item/capture abstentions and
+   teacher intervention only at declared safety boundaries;
+4. integrate the battle head into short quest episodes, then repeat the same pattern for local
+   navigation, capture, party development and inventory;
+5. reserve sealed Red and Crystal only for later promotion and transfer decisions.
+
+See the [repeatable learning result](evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json).
+
 ## Current checkpoint: route-derived supply is closed; qualify the one-plus-five curriculum
 
 Exact main `a891d302` passed CI `33655762177/1`. Its one two-root successor executed once and both

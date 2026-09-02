@@ -14,6 +14,35 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: authentic battle training is live; expand the repeatable loop
+
+The owner explicitly chose faster repeatable development while preserving sealed rigor only for
+later benchmark claims. The new loop uses the runtime's title-neutral battle features and a
+Red-backed mechanics curriculum for MLP initialization, then restores authenticated Red battle
+states once per legal move and adapts only from measured cartridge outcomes. Dataset records retain
+features, partitions and outcomes but no ROM/save bytes or private paths.
+
+Synthetic pretraining used 2,000 train and 500 unseen menus and scored 84.0%, versus 70.4% for the
+fixed power heuristic. Authentic adaptation used twelve independent train roots. It improved the
+seven-root working development set from 5/7 to 7/7, then improved a separate seven-root set from
+2/7 to 5/7 and mean selected utility from 1.304 to 2.644. The updated model identity is
+`7698ac9f…33dca`. These are descriptive development results, not inferential or sealed claims.
+
+One fresh bounded rehearsal gave the updated model move-selection authority before any outcomes
+were opened. It selected candidate index 3, executed the real controller turn with zero teacher
+queries, knocked out the opponent for utility 3.0, and later counterfactual replay confirmed that
+the choice was optimal. The synthetic base would have selected a move worth 0.878. Four legacy
+captures with an already-fainted active battler were quarantined individually instead of aborting
+their entire batches.
+
+Current counters are **train 31 · fits 7 · verified development 20 · unseen 6 · authority
+promotions 0 · transfer 0**. This is bounded move authority, not a promoted full player. Next build
+a repeatable cartridge-native scenario generator with deliberate HP/PP/status/matchup/move-set
+variation, grow disjoint train/development learning curves, and then test multi-turn model-selected
+battles. Keep switch, item, capture, full-run, sealed Red and Crystal authority closed until their
+own outcome gates pass. See the
+[evidence](docs/evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json).
+
 ## 2026-09-02: route-derived battle supply is closed; clustered learning replaces it
 
 Exact main `a891d302f12fc150e0af6a6cde9c257cad1eb998` passed CI `33655762177/1`. One

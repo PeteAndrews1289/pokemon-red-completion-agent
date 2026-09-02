@@ -78,22 +78,28 @@ _BATTLE_CYCLE_RESULT_PATH = (
 _BATTLE_CYCLE_RESULT_SHA256 = (
     "8533368231a3ba6273e848ae65757e0dc1e48a02356488aa2cdeb6413d732ec7"
 )
+_REPEATABLE_BATTLE_RESULT_PATH = (
+    "docs/evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json"
+)
+_REPEATABLE_BATTLE_RESULT_SHA256 = (
+    "4954739e28512c2fabcc702d90fb65cdc2e45662a5647edf98f82e9f66f265c5"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 19,
+    "causal_train_examples": 31,
     "composition_attempts": 1,
     "development_episode_attempts": 16,
-    "model_fits": 6,
+    "model_fits": 7,
     "outcome_questions": {"development": 15, "train": 30},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
     "synthetic_rootless_train_outcomes": 8,
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
-    "unseen_comparisons": 4,
+    "unseen_comparisons": 6,
     "verified_composition_episodes": 1,
-    "verified_outcome_examples": 6,
+    "verified_outcome_examples": 20,
 }
 
 
@@ -952,7 +958,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 1:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 2:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -970,11 +976,11 @@ def _validate_projected_counters(
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
-    final_evidence = _mapping_value(
-        evidence[-1],
+    battle_cycle_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT],
         subject="projected battle-cycle evidence",
     )
-    if final_evidence != {
+    if battle_cycle_evidence != {
         "kind": "causal_train_example",
         "path": _BATTLE_CYCLE_RESULT_PATH,
         "sha256": _BATTLE_CYCLE_RESULT_SHA256,
@@ -997,6 +1003,30 @@ def _validate_projected_counters(
     if not isinstance(receipt, Mapping):
         raise ProductFocusError("battle-cycle evidence is invalid")
     _validate_battle_cycle_projection(receipt)
+    repeatable_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected repeatable battle evidence",
+    )
+    if repeatable_evidence != {
+        "kind": "unseen_comparison",
+        "path": _REPEATABLE_BATTLE_RESULT_PATH,
+        "sha256": _REPEATABLE_BATTLE_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    repeatable_path = (root / _REPEATABLE_BATTLE_RESULT_PATH).resolve()
+    try:
+        repeatable = json.loads(
+            repeatable_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("repeatable battle evidence is invalid") from None
+    if not isinstance(repeatable, Mapping):
+        raise ProductFocusError("repeatable battle evidence is invalid")
+    _validate_repeatable_battle_projection(repeatable)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1090,6 +1120,63 @@ def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:
         or protected.get("private_path_fields") != 0
     ):
         raise ProductFocusError("battle-cycle protected access differs")
+
+
+def _validate_repeatable_battle_projection(receipt: Mapping[str, object]) -> None:
+    """Project the repeatable authentic development loop into honest counters."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon-public-repeatable-red-battle-learning-result-v1"
+        or receipt.get("status") != "development_pass"
+    ):
+        raise ProductFocusError("repeatable battle evidence status differs")
+    adaptation = _mapping(
+        receipt,
+        "authentic_adaptation",
+        subject="repeatable battle evidence",
+    )
+    independent = _mapping(
+        receipt,
+        "independent_development",
+        subject="repeatable battle evidence",
+    )
+    rehearsal = _mapping(
+        receipt,
+        "fresh_live_authority_rehearsal",
+        subject="repeatable battle evidence",
+    )
+    boundaries = _mapping(
+        receipt,
+        "boundaries",
+        subject="repeatable battle evidence",
+    )
+    if (
+        adaptation.get("train_roots") != 12
+        or adaptation.get("development_roots") != 7
+        or adaptation.get("informative_examples") != 19
+        or adaptation.get("base_development_accuracy") != 5 / 7
+        or adaptation.get("updated_development_accuracy") != 1.0
+        or independent.get("roots") != 7
+        or independent.get("base_correct") != 2
+        or independent.get("updated_correct") != 5
+        or independent.get("inferential_claim") is not False
+        or rehearsal.get("model_selected_actions") != 1
+        or rehearsal.get("teacher_queries") != 0
+        or rehearsal.get("choice_was_counterfactually_optimal") is not True
+    ):
+        raise ProductFocusError("repeatable battle learning projection differs")
+    if (
+        boundaries.get("development_artifact") is not True
+        or boundaries.get("sealed_red_cases_opened") != 0
+        or boundaries.get("crystal_contexts_opened") != 0
+        or boundaries.get("full_game_replays") != 0
+        or boundaries.get("teacher_choice_targets") != 0
+        or boundaries.get("gameplay_authority_promoted") is not False
+        or boundaries.get("transfer_claim") is not False
+        or boundaries.get("private_path_fields") != 0
+    ):
+        raise ProductFocusError("repeatable battle protected access differs")
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:
