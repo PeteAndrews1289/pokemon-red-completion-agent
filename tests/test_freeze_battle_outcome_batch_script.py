@@ -393,6 +393,153 @@ def test_freeze_writer_is_exclusive_private_and_durable(tmp_path: Path) -> None:
         SCRIPT["_write_exclusive"](destination, payload)
 
 
+@pytest.mark.parametrize(
+    ("runtime_sha256", "numpy_sha256", "timing_sha256"),
+    (
+        ("0" * 64, "2" * 64, "3" * 64),
+        ("1" * 64, "0" * 64, "3" * 64),
+        ("1" * 64, "2" * 64, "0" * 64),
+    ),
+)
+def test_freezer_rejects_each_retained_runtime_mismatch_before_publication(
+    monkeypatch: pytest.MonkeyPatch,
+    runtime_sha256: str,
+    numpy_sha256: str,
+    timing_sha256: str,
+) -> None:
+    retained = SimpleNamespace(
+        plan=SimpleNamespace(
+            runtime_identity_sha256="1" * 64,
+            numpy_runtime_sha256="2" * 64,
+            controller_timing_sha256="3" * 64,
+        )
+    )
+    runtime = SimpleNamespace(sha256=runtime_sha256)
+    globals_ = SCRIPT["_require_retained_runtime_compatibility"].__globals__
+    monkeypatch.setitem(
+        globals_,
+        "goal_manager_development_numpy_runtime_sha256",
+        lambda: numpy_sha256,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "battle_outcome_controller_timing_sha256",
+        lambda: timing_sha256,
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeBatchFreezeError"],
+        match="retained prefix runtime differs",
+    ):
+        SCRIPT["_require_retained_runtime_compatibility"](retained, runtime)
+
+
+def test_freezer_accepts_the_exact_retained_runtime_contract(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    retained = SimpleNamespace(
+        plan=SimpleNamespace(
+            runtime_identity_sha256="1" * 64,
+            numpy_runtime_sha256="2" * 64,
+            controller_timing_sha256="3" * 64,
+        )
+    )
+    globals_ = SCRIPT["_require_retained_runtime_compatibility"].__globals__
+    monkeypatch.setitem(
+        globals_,
+        "goal_manager_development_numpy_runtime_sha256",
+        lambda: "2" * 64,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "battle_outcome_controller_timing_sha256",
+        lambda: "3" * 64,
+    )
+
+    SCRIPT["_require_retained_runtime_compatibility"](
+        retained,
+        SimpleNamespace(sha256="1" * 64),
+    )
+
+
+def test_run_checks_retained_runtime_before_train_inventory_or_publication(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload = b"private-input"
+    payload_sha256 = hashlib.sha256(payload).hexdigest()
+    args = SimpleNamespace(
+        expected_source_commit="a" * 40,
+        expected_source_bundle_sha256="b" * 64,
+        rom=Path("red.gb"),
+        base_model=Path("model.jsonl"),
+        expected_base_model_sha256="c" * 64,
+        registry_source_commit="d" * 40,
+        expected_registry_sha256="e" * 64,
+        context_catalog=Path("context-catalog.json"),
+        expected_context_catalog_sha256=payload_sha256,
+        retained_prefix=Path("retained-prefix.json"),
+        expected_retained_prefix_sha256=payload_sha256,
+    )
+    globals_ = SCRIPT["_run"].__globals__
+    monkeypatch.setitem(
+        globals_,
+        "detect_source_identity",
+        lambda *args, **kwargs: SimpleNamespace(git_commit="a" * 40),
+    )
+    monkeypatch.setitem(globals_, "require_clean_source", lambda source: None)
+    monkeypatch.setitem(
+        globals_,
+        "require_published_source",
+        lambda project, source: None,
+    )
+    monkeypatch.setitem(globals_, "working_source_bundle_sha256", lambda project: "b" * 64)
+    monkeypatch.setitem(
+        globals_,
+        "build_runtime_identity",
+        lambda: SimpleNamespace(sha256="0" * 64),
+    )
+    monkeypatch.setitem(globals_, "require_pyboy_import_origins", lambda runtime: None)
+    monkeypatch.setitem(globals_, "resolve_rom_path", lambda path: Path("red.gb"))
+    monkeypatch.setitem(globals_, "verify_rom", lambda path: SimpleNamespace(sha256="f" * 64))
+    monkeypatch.setitem(globals_, "MaskedMLPMoveRanker", object)
+    monkeypatch.setitem(globals_, "load_battle_model_artifact", lambda path: object())
+    monkeypatch.setitem(globals_, "battle_outcome_model_sha256", lambda model: "c" * 64)
+    monkeypatch.setitem(
+        globals_,
+        "load_committed_goal_manager_registry_at_revision",
+        lambda project, commit: SimpleNamespace(registry_sha256="e" * 64),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "parse_goal_manager_context_catalog",
+        lambda data, registry: object(),
+    )
+    reads: list[str] = []
+
+    def read_private(path: Path, *, maximum_bytes: int, subject: str) -> bytes:
+        del path, maximum_bytes
+        reads.append(subject)
+        return payload
+
+    monkeypatch.setitem(globals_, "_read_bounded_private_file", read_private)
+    retained = SimpleNamespace(original_prior_sha256="c" * 64)
+    monkeypatch.setitem(globals_, "parse_retained_battle_outcome_prefix", lambda data: retained)
+
+    def reject_runtime(prefix: object, runtime: object) -> None:
+        assert prefix is retained
+        raise SCRIPT["BattleOutcomeBatchFreezeError"]("runtime sentinel")
+
+    monkeypatch.setitem(globals_, "_require_retained_runtime_compatibility", reject_runtime)
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeBatchFreezeError"],
+        match="runtime sentinel",
+    ):
+        SCRIPT["_run"](args)
+
+    assert reads == ["context catalog", "retained prefix"]
+
+
 def test_private_reader_rejects_links_and_group_writable_inputs(
     tmp_path: Path,
 ) -> None:

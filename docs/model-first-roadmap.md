@@ -11,43 +11,36 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the 8+8 outcome-blind batch is frozen; reorient before outcomes
+## Current checkpoint: the V2 execution stopped before gameplay on runtime identity
 
-Exact main `1d8acd0f` passed CI `33581683171/1`. The retained V1 train prefix was projected again
-without replay, and the combined **8 train / 8 development** freezer authenticated all fifteen
-fresh captures. It then failed closed before writing a roster: each partition has fourteen
-candidate-contrast rows against a sixteen-wide hidden layer, so the prior policy's full-rank
-requirement was algebraically impossible. No outcome, prediction, fit, claim or controller input
-was opened.
+The canonical retained-record projection merged as exact main `071a9be1`; pull-request CI
+`33588649710/1` and main CI `33589814077/1` passed. A new action-free freeze then reproduced the
+complete **1 retained + 7 fresh train / 8 development** inventory as `e11ee811…39eb2`, with zero
+actions, frames, claims, outcomes, predictions, fits, teachers, sealed Red, Crystal, replay or
+authority.
 
-The outcome-blind spectra are not collapsed: both partitions have their maximum possible rank
-**14/14**. The fourteenth singular value is `1.758995318792317e-05` for train and
-`0.0005942025828649609` for development, above the existing `1e-6` clearance. The bounded local
-repair therefore requires rank 14 with clearance and explicitly reports **two prior-anchored hidden
-dimensions**. PR 152 merged that contract as exact main `6b8e7615`, and CI `33585842383/1` passed.
+The exact execution attempt failed before creating its private artifact. The retained V1 lesson
+requires runtime `7bd8060a…`, while the freezer had accepted the current environment
+`028fc193…`. The runner's runtime guard rejected that mismatch before captures, claims, fitting or
+controller input. The absent artifact and source ordering establish a zero-effect failure, but the
+exact freeze is terminal and may not retry.
 
-The one action-free retry then froze the complete roster. Freeze SHA-256 is `62f971f8…02b8e`,
-inventory SHA-256 is `c3bc5f18…bf015`, and roster SHA-256 is `295cc6f5…0311b`. It contains one
-retained plus seven fresh train contexts, eight development contexts, three train venues, two
-development venues, four party conditions per partition, and rank 14 in both. It computed the
-frozen prior's scores and hidden representations only; controller actions, emulator frames,
-claims, outcomes, committed model choices, fits, teacher queries, sealed Red, Crystal, replay and
-authority are all zero. The original nonlinear prior plus L2 penalty anchors the two unobserved
-dimensions; this batch remains development evidence and cannot make an inferential or authority
-claim.
+The compatible historical environment is still available. The local repair moves the same
+three-part runtime check—Python/PyBoy identity, NumPy learning identity and controller timing—into
+the freezer. Focused tests distinguish each mismatch; a direct action-free check rejects the
+current environment and accepts the exact retained environment.
 
 Next:
 
-1. reorient at the canonical receipt before any selected-action outcome is opened;
-2. independently verify the aggregate runner still binds this exact freeze and source;
-3. only then run the bounded batch, fit once on train only, and commit all development predictions
-   before development outcomes;
-4. reject promotion on zero discordance or no paired advantage; a positive result opens a separate
-   teacher-free authority design, not Crystal.
+1. publish the fail-before-freeze repair and path-free terminal evidence;
+2. require green exact-main CI;
+3. use the preserved exact runtime to freeze one new source-bound successor at zero effects;
+4. stop before another controller-capable execution decision;
+5. never retry, rename or relabel freeze `e11ee811…39eb2`.
 
 The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
 comparisons 4 · authority 0 · transfer 0**. See the
-[path-free rank result](evidence/red-battle-v2-rank-capacity-result-2026-09-02.json).
+[terminal failure](evidence/red-battle-v2-runtime-mismatch-failure-2026-09-02.json).
 
 ## Previous engineering checkpoint: the generic eight-capture freezer was locally qualified
 

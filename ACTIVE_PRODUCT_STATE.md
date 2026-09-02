@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the qualified partition-aware freezer/materializer, require exact-main green CI, then freeze one zero-effect eight-capture development plan and stop before execution. Outcome collection and fitting remain closed until those captures exist and the 7+8 zero-effect freeze authenticates them.
+- Next decision: Publish the fail-before-freeze runtime compatibility repair and terminal failure evidence, require green exact-main CI, then freeze one new successor under the preserved exact retained runtime and stop before deciding on another controller-capable execution. The terminal e11ee811...39eb2 freeze may not retry.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | At zero controller actions, inventory the current goal-manager development partition and prove whether it can supply eight fresh compatible battle boundaries through a partition-aware producer catalog. Failure keeps outcome collection closed and retires that supply path without replay. |
+| Cheapest falsifier | At zero controller actions, require the batch freezer to reject the incompatible current emulator runtime before publication while accepting the preserved exact runtime bound to the retained V1 lesson. Any output from the mismatch or rejection of the exact runtime closes the successor without gameplay. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-01-battle-v2-partition-materializer-engineering-terminal** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-partition-materializer-engineering-qualification-2026-09-01.json)
+**2026-09-02-battle-v2-runtime-mismatch-terminal** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-runtime-mismatch-failure-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | This is qualified experiment infrastructure, not a gameplay lesson. The 116 focused and 6,332 full tests prove the development denominator, 4+4 allocation, catalog-derived partition, legacy train compatibility, and one-shot journal contract are distinguishable. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. Engineering opened no private state or outcome, issued no controller action, advanced no emulator frame, created no claim or capture, queried no teacher, computed no prediction, fit no model, and changed no gameplay authority. |
+| Learning output | No learning output was created. The exact V2 attempt produced zero train outcomes, zero development outcomes, and zero fits. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The attempted V2 batch stopped before its private execution artifact, root or candidate claims, predictions, fitting, controller input, emulator frames, teacher queries, sealed Red, Crystal, replay, or authority change. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The generic partition-aware freezer, materializer and runner are locally qualified, but the implementation is not yet published or bound to green exact-main CI. No private development plan may be frozen from an unpublished tree. |
-| Decision | Accept the reusable implementation: plan size is derived as 7 train or 8 development, mixed inventories fail closed, the materializer derives partition by unique catalog authentication, the runner reopens the complete matching partition and reauthenticates receipt and manifest partition, and the existing started-before-input journal remains unchanged. Publish, require exact-main green CI, then freeze one private development plan at zero effects and stop before controller input. |
-| Next session | Publish the partition-aware freezer/materializer, require exact-main green CI, freeze exactly one private eight-capture development plan at zero effects, publish only aggregate path-free evidence, and reorient before any controller-capable execution. |
-| Next falsifier | From the exact published source under green main CI, run one zero-controller freeze over the complete development bank and require exactly eight unique plan-bound roots split 4 Route 11 + 4 Diglett's Cave, with zero collisions, claims, captures, outcomes, predictions or fits. |
-| Stop condition | Never reuse the eight incompatible historical development manifests, hand-pick a root, rematerialize a capture, or reinterpret a failure. Stop before controller input if publication or exact-main CI fails, the private freezer does not reproduce exactly eight unique development roots and the 4+4 venue allocation, any partition identity collides, any output already exists, or any claim/gameplay effect occurs. |
+| Blocker | The action-free freezer accepted the current runtime even though the retained V1 plan requires a different exact Python and PyBoy identity. The runner correctly rejected the mismatch before gameplay, but the exact freeze is terminal and cannot retry. |
+| Decision | Accept the terminal failure and do not retry or relabel its exact freeze. Publish the minimal fail-before-freeze runtime compatibility check, require green exact-main CI, then use the preserved exact compatible runtime to freeze a new successor identity at zero effects and stop again before controller-capable execution. |
+| Next session | Publish the runtime compatibility repair and terminal path-free failure evidence, require exact-main green CI, freeze one new compatible-runtime successor at zero effects, and stop before any second batch execution decision. |
+| Next falsifier | Exercise the new freezer guard against both known environments: the incompatible runtime must fail before output and the exact retained runtime must pass. After publication and green exact-main CI, one successor freeze must bind that compatible identity with the same complete 1+7 train and 8 development inventory at zero effects. |
+| Stop condition | Never retry freeze e11ee811...39eb2, replace a root, hand-pick a context, or weaken runtime identity. Stop before gameplay if the repair is unpublished, exact-main CI fails, the incompatible runtime can still publish a freeze, the exact retained runtime is unavailable, the successor does not reproduce the complete inventory, or any claim or controller effect occurs. |
 
 ### Stop conditions
 

@@ -1,0 +1,74 @@
+{
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "batch": {
+    "development_contexts": 8,
+    "freeze_sha256": "e11ee811b50ba4e4a5695c19d0722316cb4b6d3edd233046a2b46486c8a39eb2",
+    "fresh_train_contexts": 7,
+    "inventory_sha256": "c3bc5f18fb74dbeb62f04f29991874b3663b5ff122032f8d698c90aacadbf015",
+    "retained_train_contexts": 1,
+    "roster_sha256": "96c0c4f0a5e3b902774bfcfc4af3d0bcf31c0e647a47e5504cafedaca14057f1"
+  },
+  "claim_boundary": {
+    "supported": "The exact source-bound Red V2 batch attempt failed closed at the retained-runtime compatibility guard before a private execution artifact existed. Source ordering and the absent artifact prove that no root or candidate claim, prediction, fit, controller input, emulator frame, teacher query, sealed case, Crystal context, replay, or authority change occurred.",
+    "unsupported": [
+      "battle_outcome_collection",
+      "candidate_model_quality",
+      "development_comparison",
+      "gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer",
+      "full_game_play",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "failure": {
+    "current_runtime_identity_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "execution_artifact_created": false,
+    "failure_stage": "retained_runtime_compatibility",
+    "required_retained_runtime_identity_sha256": "7bd8060a398ba1d0156f1a83c419e46cb18deec9c982c08eaf946d208e3db0b1",
+    "retry_exact_freeze": false,
+    "status": "failed_closed_before_artifact_or_claim"
+  },
+  "recorded_on": "2026-09-02",
+  "repair": {
+    "compatible_runtime_available": true,
+    "current_incompatible_runtime_rejected": true,
+    "exact_compatible_runtime_accepted": true,
+    "freezer_guard_added": true,
+    "focused_tests_passed": 16,
+    "full_tests_passed": 6358,
+    "model_fit_performed": false,
+    "status": "local_fail_before_freeze_repair_qualified"
+  },
+  "schema": "pokemon-red-battle-v2-runtime-mismatch-failure-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33589814077,
+    "source_bundle_sha256": "95e8b9888a0cd5b111ae4565196a82ab268e9d9dc883ed0e865f8d5bc068c579",
+    "source_commit": "071a9be1f7a46d9d46cf05bc68c90bfdd6917973"
+  },
+  "status": "terminal_pre_game_failure_new_successor_required",
+  "zero_effects": {
+    "authority_promotions": 0,
+    "candidate_claims": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  }
+}

@@ -5221,3 +5221,15 @@ version has to prove the model learned something worth carrying into a game it h
 - Show the two regression checks: **14 PASSES · 15 FAILS**, followed by **51 FOCUSED PASSED**.
 - End on **PUBLISH → EXACT-MAIN CI → FREEZE 1+7 / 8 → REORIENT → ONE TRAIN-ONLY FIT**. Keep
   authority, sealed Red, Crystal and living-Pokédex completion locked.
+
+## New sequence: “The runtime guard stopped the first button”
+
+- Show the complete board: **1 RETAINED + 7 FRESH TRAIN · 8 DEVELOPMENT · ACTIONS 0**.
+- Put the two runtime hashes side by side: **RETAINED `7bd8060a…` ≠ CURRENT `028fc193…`**.
+- Stop the animation before the artifact and controller rails. Keep **CLAIMS 0 · PREDICTIONS 0 ·
+  OUTCOMES 0 · FITS 0 · FRAMES 0** visible.
+- Say plainly: “The model did not train. The runner refused to mix an old lesson with a different
+  executable environment.”
+- Retire freeze `e11ee811…39eb2`; do not depict it as retryable.
+- End on the fixed boundary: **FREEZER PROVES RUNTIME FIRST → GREEN MAIN → NEW ZERO-EFFECT FREEZE
+  → STOP BEFORE EXECUTION**. Crystal and authority remain locked.
