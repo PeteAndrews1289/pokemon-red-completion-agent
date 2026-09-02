@@ -1,0 +1,55 @@
+{
+  "batch_freeze": {
+    "artifact_created": false,
+    "development_contexts_required": 8,
+    "fresh_train_contexts_required": 7,
+    "stop_reason": "retained_legacy_prefix_level_gap_14_exceeded_uniform_policy_12",
+    "status": "action_free_policy_mismatch_stopped"
+  },
+  "development_catalog": {
+    "capture_count": 8,
+    "catalog_sha256": "998c0233cd567fc3352e362c48e96343dc9ad8e25f8bf54ed840f545082f85b8",
+    "outcomes_opened": 0,
+    "unique_source_roots": 8,
+    "venue_counts": {
+      "digletts_cave": 4,
+      "route_11": 4
+    }
+  },
+  "materialization": {
+    "failed": 0,
+    "journal_sha256": "db4dcb773a4d7a16abfd63cf2a148f47eb05ee54e19211f5a2574c26530459da",
+    "pending": 0,
+    "plan_sha256": "53dca4fc87ce3a5609f017b4db882a2876fd8dbbba5d93790d48ca91362a7f20",
+    "receipt_sha256": "8eae2146e76d0efb2ae5b72b6d0ae73292c44b274e513f95704c81f87c2b5b65",
+    "started": 0,
+    "status": "complete",
+    "succeeded": 8
+  },
+  "mission": {
+    "authority_promoted": false,
+    "crystal_transfer_results_added": 0,
+    "full_game_replays_added": 0,
+    "model_fits_added": 0,
+    "model_predictions_added": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "repair": {
+    "fresh_context_maximum_level_gap": 12,
+    "legacy_retained_prefix_maximum_level_gap": 14,
+    "legacy_retained_prefix_observed_level_gap": 14,
+    "scope": "retained_prefix_only",
+    "status": "implemented_locally_awaiting_publication_and_exact_main_ci",
+    "targeted_tests_passed": 51
+  },
+  "schema": "pokemon-red-battle-v2-development-materialization-result-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33573996220,
+    "published_source_bundle_sha256": "8b29cc0453c3e6556dfe4cd7af6f02ab2c35b1636f00a8622faf7b8bbd10d7dc",
+    "published_source_commit": "08569cbccd04ba63f5acf9c6cd85294ac87fa836"
+  },
+  "status": "development_supply_complete_batch_policy_repair_pending_publication"
+}

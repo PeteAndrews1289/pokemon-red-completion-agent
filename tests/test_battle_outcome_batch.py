@@ -571,7 +571,7 @@ def test_different_assignments_from_one_upstream_state_cannot_cross_partitions()
 
 def test_pressure_policy_digest_binds_party_priority_and_repair_order() -> None:
     assert battle_outcome_pressure_policy_sha256() == (
-        "ae815592ea6123e39fd0e6e2e28ef5c75c76ec7cd124c6c600d0e748b409a439"
+        "d6562531ebb75318c327261a0358ad237e7a201db1b9e7fd8c9fcdaf3282131d"
     )
 
 
@@ -869,7 +869,7 @@ def test_batch_excludes_unavailable_and_excessive_level_gap_before_freeze() -> N
             "level-gap",
             basis_offset=0,
         ),
-        player_level=60,
+        player_level=53,
         opponent_level=40,
     )
 
@@ -877,6 +877,24 @@ def test_batch_excludes_unavailable_and_excessive_level_gap_before_freeze() -> N
 
     assert dict(roster.exclusion_counts)["claim_unavailable"] == 1
     assert dict(roster.exclusion_counts)["level_gap_exceeded"] == 1
+
+
+def test_batch_allows_the_authenticated_legacy_prefix_at_its_exact_level_gap() -> None:
+    prefix, screened = _roster_inputs()
+    retained_prefix = replace(prefix, player_level=44, opponent_level=30)
+
+    roster = _roster(prefix=retained_prefix, screened=screened)
+
+    assert roster.prefix.level_gap == 14
+    assert all(item.level_gap <= 12 for item in roster.fresh_train)
+
+
+def test_batch_rejects_a_legacy_prefix_beyond_its_narrow_tolerance() -> None:
+    prefix, screened = _roster_inputs()
+    excessive_prefix = replace(prefix, player_level=45, opponent_level=30)
+
+    with pytest.raises(BattleOutcomeBatchError, match="level gap exceeds policy"):
+        _roster(prefix=excessive_prefix, screened=screened)
 
 
 def test_fixed_heuristic_is_legal_pp_aware_and_avoids_self_destruct() -> None:

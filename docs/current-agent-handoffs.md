@@ -3391,3 +3391,26 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
   the fixed heuristic is a meaningful control.
 - Do not describe this gate as a game-playing model, Red authority, Crystal transfer or living-
   Pokédex completion. Those remain downstream mission gates.
+
+## Current assignments — development terminal and legacy-prefix join (2026-09-01)
+
+### Codex workhorse lane
+
+- Exact main `08569cbccd04ba63f5acf9c6cd85294ac87fa836` and CI `33573996220/1` produced one
+  newly source-bound development plan. It completed 8/8 captures, balanced four Diglett's Cave and
+  four Route 11, with no failed, pending or interrupted assignment.
+- The typed development catalog independently authenticated eight unique roots and opened zero
+  outcomes or predictions.
+- The first action-free 7+8 batch freeze wrote no artifact because the retained historical prefix
+  has level gap 14 while the uniform policy allowed 12. The local repair permits 14 only for that
+  exact retained prefix and preserves 12 for all fresh rows; 51 focused tests, Ruff and mypy pass.
+- Publish and green this repair on exact main. Then rebuild the retained projection, freeze the
+  batch once, and stop for aggregate reorientation before any outcome runner.
+
+### Reviewer lane
+
+- The next useful audit is the published narrow tolerance diff and the eventual action-free batch
+  receipt. Challenge any widening beyond the retained prefix, any development influence on fit,
+  and any claim that eight captures are eight learned examples.
+- Reviewers receive only tracked source and path-free aggregate evidence. ROMs, saves, root
+  identities, private journals and outcomes remain private.

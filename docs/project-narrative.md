@@ -8237,3 +8237,21 @@ No cartridge was opened while building this gate. The result is not a trained pl
 defensible path from authenticated saves to the first new shadow model. That distinction is the
 project's recurring systems lesson: progress is not the number of frames simulated, but the number
 of independent decisions that can safely change a model and survive an untouched comparison.
+
+## Eight exam saves—and one honest stop before training
+
+The repaired materializer completed the held Red development set in one pass: eight independent
+saves, evenly split between Diglett's Cave and Route 11, with a terminal 8/8 journal. A second tool
+reopened every output and produced one typed catalog without looking at any battle outcome. The
+exam room was finally stocked, but still sealed.
+
+The first batch freeze then rejected the curriculum for a surprisingly precise reason. The one
+historical train lesson that must be carried forward came from a level-44 Pokémon facing level 30;
+the later batch policy allowed a maximum gap of 12. Discarding or replaying that lesson would have
+violated the experiment, while raising the limit for every new row would have weakened it. The
+repair therefore permits 14 only for the authenticated retained prefix and leaves every fresh
+train and development context capped at 12.
+
+That stop is part of the result. No batch was frozen, no new outcome was opened and no model was
+fit under an incoherent policy. The next milestone is publication, exact-main CI and one new
+action-free batch freeze—not a claim that the model already plays the game.
