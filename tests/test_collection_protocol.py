@@ -141,7 +141,7 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "51804f0ea465f868c3b1893195a372624dbf7b8dc44fa573cf25ffc16d9a5f9e"
+        == "89d88a1114e154bd998e428492468c8f1a84b80b4b1651cd4ecf1711c0bf537a"
     )
     assert (
         registry.execution.source_bundle_sha256
