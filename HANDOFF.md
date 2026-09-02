@@ -14,7 +14,28 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-09-02: the artifact-safe compatible-runtime V2 successor is frozen
+## 2026-09-02: the artifact-safe V2 run failed on its first candidate
+
+The successor receipt merged as main `38ec10d5`; exact-main CI `33604834768/1` passed. Freeze
+`26878069…4cadd3` was then reauthenticated and executed exactly once from source `c4207af3` under
+the preserved runtime. The runner durably claimed all **15 fresh roots** and candidate 0 of the
+first train context, then stopped with `BattleRuntimeError`. Its terminal failed artifact contains
+**15 root claims · 1 candidate claim · 0 outcomes · 0 collections · 0 predictions · 0 fits**.
+
+The run cannot be retried and none of those fifteen roots may be reused. No safe semantic exception
+message was retained, so controller input may have occurred after the candidate claim, while exact
+action and frame counts are unavailable. Do not replay the state to diagnose it. Teacher queries,
+sealed Red, Crystal, full-game replay and authority all remain zero. See the
+[path-free terminal result](docs/evidence/red-battle-v2-runtime-terminal-2026-09-02.json).
+
+The current repair writes a durable bounded runtime diagnostic before a future artifact fails,
+including partition, ordinal, claimed and retained candidate indices, the known semantic failure
+message, and an explicit input-may-have-occurred flag. Publish it and require green exact-main CI.
+Then run one metadata-only claim-availability census. Freeze another 7-train / 8-development batch
+only if complete independent unclaimed supply exists; otherwise generate new roots first. Counters
+remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
+## 2026-09-02: the artifact-safe compatible-runtime V2 successor was frozen
 
 The artifact-ID repair merged as exact main `c4207af3`; PR CI `33599727126/1` and main CI
 `33601217072/1` passed. Under the preserved retained runtime `7bd8060a…db0b1`, a fresh

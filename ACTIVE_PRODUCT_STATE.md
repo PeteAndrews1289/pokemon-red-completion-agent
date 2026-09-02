@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the artifact-safe compatible-runtime successor receipt, require green exact-main CI, then independently reauthenticate freeze 26878069...4cadd3 and its absent execution artifact before one non-retryable bounded outcome batch. Fit remains train-only; all development predictions must be durable before outcomes, and zero discordance or no paired advantage rejects the update.
+- Next decision: Publish the terminal first-candidate runtime failure and diagnostic repair, require green exact-main CI, then inventory unclaimed independent battle roots at zero actions. Freeze another 7-train / 8-development batch only from complete fresh supply; otherwise generate new roots first.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish successor freeze 26878069...4cadd3 under green exact-main CI, independently reopen its exact source, retained runtime, complete 1+7 train and 8 development roster and absent 77-character artifact namespace, then let one bounded outcome batch decide whether the battle representation produces held-development discordance or paired advantage. |
+| Cheapest falsifier | Publish the terminal 26878069...4cadd3 failure and durable runtime-diagnostic repair under green exact-main CI, then run one action-free claim-availability census. A new batch may be frozen only if a complete independent 7-train and 8-development supply remains; otherwise generate new roots before another outcome decision. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-artifact-safe-successor-freeze** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-artifact-successor-freeze-2026-09-02.json)
+**2026-09-02-battle-v2-first-candidate-runtime-terminal** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-runtime-terminal-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | This was an outcome-blind qualification, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. Successor freeze 26878069...4cadd3 opened no execution artifact, claim, outcome, prediction, fit, controller input, frame, teacher, sealed Red case, Crystal context, replay, or authority change. |
+| Learning output | The terminal execution added no train or development outcome and no fit. All fifteen fresh roots are consumed, but counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The terminal batch added no outcome, prediction, fit, teacher, sealed Red case, Crystal context, replay or authority. Controller input may have occurred after the first candidate claim, but exact action and frame counts were not retained. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | No technical blocker remains in the frozen batch. Its receipt and exact source now require publication and green exact-main CI before the one-shot outcome transaction can begin. |
-| Decision | Accept 26878069...4cadd3 as the only executable V2 successor, retain e11ee811...39eb2 and f7204334...5263 as terminal zero-effect failures, publish the path-free freeze receipt, and require a fresh exact-main green CI binding before one bounded execution. |
-| Next session | Publish the 26878069...4cadd3 successor receipt, require green exact-main CI, independently reauthenticate its exact runner, freeze, runtime, complete roster and absent artifact, then execute once and adjudicate the train-only candidate without opening sealed Red or Crystal. |
-| Next falsifier | Execute 26878069...4cadd3 once only after its receipt is published and exact-main CI is green. Fit on the retained plus seven fresh train outcomes, commit base, candidate and heuristic choices before opening eight development outcomes, and reject on zero discordance or no paired advantage. |
-| Stop condition | Never retry terminal freezes e11ee811...39eb2 or f7204334...5263, and never execute 26878069...4cadd3 from a different source or runtime. Stop before input on any digest, roster, claim-availability or artifact-presence mismatch. After input, every claim is terminal; zero development discordance or no paired advantage rejects the model iteration. |
+| Blocker | Freeze 26878069...4cadd3 failed on its first train candidate after all fifteen roots were durably claimed. The failed artifact retained the exception class but not the safe semantic message, so the exact runtime condition cannot be recovered without a prohibited replay. |
+| Decision | Retire freeze 26878069...4cadd3 and all fifteen claimed roots permanently. Publish its path-free terminal evidence plus a repair that durably records bounded semantic runtime diagnostics, then census fresh independent supply before any successor freeze. |
+| Next session | Publish the terminal failure and durable diagnostic repair, require green exact-main CI, inventory unclaimed independent battle roots without controller input, and choose between a fresh complete batch freeze or new-root generation. |
+| Next falsifier | After the diagnostic repair and terminal evidence pass exact-main CI, perform one metadata-only census. If fewer than seven fresh train or eight fresh development roots remain, stop and generate new independent captures rather than reusing any claimed V2 root. |
+| Stop condition | Never retry terminal freezes e11ee811...39eb2, f7204334...5263 or 26878069...4cadd3, and never reuse any of the latter's fifteen claimed roots. Do not diagnose it through replay. A successor requires a new source-bound freeze, complete unclaimed supply and the published diagnostic repair. |
 
 ### Stop conditions
 

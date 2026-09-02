@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the artifact-safe V2 execution and adjudication
+## Current override: Codex owns terminal publication, diagnostics and fresh-supply census
+
+Freeze `26878069…4cadd3` executed once and failed on its first train candidate after all fifteen
+fresh roots were durably claimed. It retained no outcome, prediction or fit, and it cannot retry.
+The private failure preserved only `BattleRuntimeError`, not the safe semantic message, so replay
+is prohibited and the exact controller effect count is unknown.
+
+Codex owns the minimal durable-diagnostic repair, path-free terminal publication and exact-main CI.
+Afterward it may run one action-free availability census. Another freeze requires a complete new
+7-train / 8-development independent roster; otherwise Codex returns to root generation. Reviewers
+receive tracked code and path-free aggregate evidence only. No teacher, sealed Red, Crystal,
+full-game replay or authority step is open.
+
+## Previous override: Codex owned the artifact-safe V2 execution and adjudication
 
 The repaired runner is published at exact main `c4207af3` under green CI `33601217072/1`. Fresh
 freeze `26878069…4cadd3` binds the exact compatible runtime and complete **1 retained + 7 fresh

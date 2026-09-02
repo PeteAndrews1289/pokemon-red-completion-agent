@@ -36,6 +36,7 @@ from pokemon_red_completion.battle_outcome_learning import (  # noqa: E402
     compare_battle_outcome_preferences,
     evaluate_battle_outcome_preferences,
 )
+from pokemon_red_completion.battle_runtime import BattleRuntimeError  # noqa: E402
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
     BattleScenarioCapture,
     open_battle_scenario_capture,
@@ -67,11 +68,13 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 )
 from pokemon_red_completion.red_battle_outcome_runtime import (  # noqa: E402
     RedBattleOutcomeCollection,
+    RedBattleOutcomeRuntimeError,
     collect_red_battle_outcome_example,
     prepare_red_battle_outcome_capture,
 )
 from pokemon_red_completion.red_battle_scenario import (  # noqa: E402
     PreparedRedBattleScenario,
+    RedBattleScenarioError,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.runtime_identity import (  # noqa: E402
@@ -599,12 +602,28 @@ def _collect_claimed_capture(
         )
         retained.add(index)
 
-    collection = collect_red_battle_outcome_example(
-        capture,
-        session_factory=session_factory,
-        candidate_claim_sink=claim,
-        outcome_sink=retain,
-    )
+    try:
+        collection = collect_red_battle_outcome_example(
+            capture,
+            session_factory=session_factory,
+            candidate_claim_sink=claim,
+            outcome_sink=retain,
+        )
+    except Exception as error:
+        writer.append(
+            "failure_diagnostics",
+            _collection_failure_diagnostic(
+                freeze_sha256=freeze_sha256,
+                partition=candidate.partition,
+                ordinal=ordinal,
+                capture_id=candidate.capture_id,
+                claimed=claimed,
+                retained=retained,
+                error=error,
+            ),
+            durable=True,
+        )
+        raise
     measured = {index for index, outcome in enumerate(collection.outcomes) if outcome is not None}
     if (
         collection.initial_observation_sha256 != prepared.initial_observation_sha256
@@ -626,6 +645,42 @@ def _collect_claimed_capture(
         durable=True,
     )
     return collection
+
+
+def _collection_failure_diagnostic(
+    *,
+    freeze_sha256: str,
+    partition: ScenarioPartition,
+    ordinal: int,
+    capture_id: str,
+    claimed: set[int],
+    retained: set[int],
+    error: Exception,
+) -> dict[str, object]:
+    """Retain a bounded semantic reason without weakening one-shot failure."""
+
+    known_runtime_error = isinstance(
+        error,
+        (BattleRuntimeError, RedBattleOutcomeRuntimeError, RedBattleScenarioError),
+    )
+    message = str(error) if known_runtime_error else "unclassified runtime failure"
+    if not message or len(message) > 1_024 or "\n" in message or "\r" in message:
+        message = "invalid or oversized runtime failure message"
+    return {
+        "record_type": "battle_outcome_batch_failure_diagnostic",
+        "freeze_sha256": freeze_sha256,
+        "partition": partition.value,
+        "ordinal": ordinal,
+        "capture_id": capture_id,
+        "failure_type": type(error).__name__,
+        "failure_message": message,
+        "claimed_candidate_indices": sorted(claimed),
+        "retained_candidate_indices": sorted(retained),
+        "controller_input_may_have_occurred": bool(claimed - retained),
+        "retry_permitted": False,
+        "teacher_queries": 0,
+        "private_path_fields": 0,
+    }
 
 
 def _prediction_commitment(
