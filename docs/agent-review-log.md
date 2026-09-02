@@ -3,6 +3,19 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Outcome-blind V2 rank-capacity adjudication — Codex 2026-09-02
+
+Exact main `1d8acd0f` passed CI `33581683171/1`. The combined freezer authenticated its inputs but
+created no aggregate artifact because each partition's fourteen contrast rows could not satisfy a
+sixteen-rank policy. A separate read-only spectrum check found train and development at maximal
+rank 14, with fourteenth singular values `1.758995318792317e-05` and
+`0.0005942025828649609`, respectively. No outcomes or model predictions were inspected.
+
+Codex rejects both weakening the gate silently and repeating an entire capture campaign merely to
+add two algebraic rows to a descriptive batch. The local repair freezes rank 14 plus the existing
+`1e-6` clearance, identifies two prior-anchored dimensions, and leaves inferential claims and
+authority false. Publication, exact-main CI and a new action-free aggregate freeze remain required.
+
 ## Exact-main CI pre-controller stop — Codex adjudication 2026-09-01
 
 The first V2 execution launch returned a sanitized failure before creating its journal. No ROM,

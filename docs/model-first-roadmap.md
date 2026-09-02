@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-09-01. This document supersedes the execution order in older
+Status: active strategy as of 2026-09-02. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -11,7 +11,37 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current engineering checkpoint: the generic eight-capture freezer is locally qualified
+## Current checkpoint: the outcome-blind batch exposed a rank/cardinality mismatch
+
+Exact main `1d8acd0f` passed CI `33581683171/1`. The retained V1 train prefix was projected again
+without replay, and the combined **8 train / 8 development** freezer authenticated all fifteen
+fresh captures. It then failed closed before writing a roster: each partition has fourteen
+candidate-contrast rows against a sixteen-wide hidden layer, so the prior policy's full-rank
+requirement was algebraically impossible. No outcome, prediction, fit, claim or controller input
+was opened.
+
+The outcome-blind spectra are not collapsed: both partitions have their maximum possible rank
+**14/14**. The fourteenth singular value is `1.758995318792317e-05` for train and
+`0.0005942025828649609` for development, above the existing `1e-6` clearance. The bounded local
+repair therefore requires rank 14 with clearance and explicitly reports **two prior-anchored hidden
+dimensions**. The original nonlinear prior plus L2 penalty anchors those dimensions; this batch
+remains development evidence and cannot make an inferential or authority claim.
+
+Next:
+
+1. publish the rank-floor contract and require green exact-main CI;
+2. rerun the one action-free batch freeze and require a canonical 8+8 aggregate receipt;
+3. reorient at that receipt before any selected-action outcome is opened;
+4. only then run the bounded batch, fit once on train only, and commit all development predictions
+   before development outcomes;
+5. reject promotion on zero discordance or no paired advantage; a positive result opens a separate
+   teacher-free authority design, not Crystal.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[path-free rank result](evidence/red-battle-v2-rank-capacity-result-2026-09-02.json).
+
+## Previous engineering checkpoint: the generic eight-capture freezer was locally qualified
 
 The existing V2 seam is now partition-aware end to end. A plan derives **7 train / 8 development**
 from its complete authenticated inventory, rejects mixed partitions, preserves old train plan
