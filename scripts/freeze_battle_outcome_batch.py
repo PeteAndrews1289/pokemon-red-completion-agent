@@ -50,6 +50,12 @@ from pokemon_red_completion.battle_scenario_capture_catalog import (  # noqa: E4
     BattleScenarioCaptureCatalogError,
     parse_battle_scenario_capture_catalog,
 )
+from pokemon_red_completion.battle_scenario_development_capture_catalog import (  # noqa: E402
+    BattleScenarioDevelopmentCaptureCatalog,
+    BattleScenarioDevelopmentCaptureCatalogError,
+    BattleScenarioDevelopmentCaptureEntry,
+    parse_battle_scenario_development_capture_catalog,
+)
 from pokemon_red_completion.battle_semantics import (  # noqa: E402
     BattleFeatureBatch,
 )
@@ -151,15 +157,16 @@ def _parser() -> argparse.ArgumentParser:
         action="append",
         nargs=3,
         metavar=("SOURCE_COMMIT", "CATALOG", "EXPECTED_SHA256"),
-        required=True,
     )
     parser.add_argument(
         "--development-capture",
         action="append",
         nargs=3,
         metavar=("SOURCE_COMMIT", "STATE", "MANIFEST"),
-        required=True,
     )
+    parser.add_argument("--development-capture-catalog", type=Path)
+    parser.add_argument("--expected-development-capture-catalog-sha256")
+    parser.add_argument("--development-producer-directory", type=Path)
     parser.add_argument("--out-freeze", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     return parser
@@ -171,10 +178,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     require_published_source(PROJECT_ROOT, source)
     source_commit = _commit(args.expected_source_commit, "source")
     source_bundle = working_source_bundle_sha256(PROJECT_ROOT)
-    if (
-        source.git_commit != source_commit
-        or source_bundle
-        != _sha256(args.expected_source_bundle_sha256, "source bundle")
+    if source.git_commit != source_commit or source_bundle != _sha256(
+        args.expected_source_bundle_sha256, "source bundle"
     ):
         raise BattleOutcomeBatchFreezeError("published source identity differs")
 
@@ -184,9 +189,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     rom = verify_rom(rom_path)
     base_model = load_battle_model_artifact(args.base_model)
     if not isinstance(base_model, MaskedMLPMoveRanker):
-        raise BattleOutcomeBatchFreezeError(
-            "battle batch requires the nonlinear prior"
-        )
+        raise BattleOutcomeBatchFreezeError("battle batch requires the nonlinear prior")
     base_model_sha256 = battle_outcome_model_sha256(base_model)
     if base_model_sha256 != _sha256(
         args.expected_base_model_sha256,
@@ -231,9 +234,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     except BattleOutcomeBatchError as error:
         raise BattleOutcomeBatchFreezeError(str(error)) from None
     if retained_prefix.original_prior_sha256 != base_model_sha256:
-        raise BattleOutcomeBatchFreezeError(
-            "retained prefix differs from the original prior"
-        )
+        raise BattleOutcomeBatchFreezeError("retained prefix differs from the original prior")
 
     train_catalog_payload = _read_bounded_private_file(
         args.train_capture_catalog,
@@ -258,15 +259,44 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         catalog_sha256=train_catalog_sha256,
         rom_path=rom_path,
     )
-    development_catalogs = _development_catalogs(
+    typed_development = (
+        args.development_capture_catalog,
+        args.expected_development_capture_catalog_sha256,
+        args.development_producer_directory,
+    )
+    legacy_development = (
         args.development_producer_catalog,
-    )
-    development_specs = _development_capture_specs(
         args.development_capture,
-        catalogs=development_catalogs,
-        catalog=context_catalog,
-        registry=registry,
     )
+    if all(item is not None for item in typed_development) and all(
+        item is None for item in legacy_development
+    ):
+        development_specs = _typed_development_catalog_specs(
+            args.development_capture_catalog,
+            expected_catalog_sha256=args.expected_development_capture_catalog_sha256,
+            producer_directory=args.development_producer_directory,
+            rom_sha256=rom.sha256,
+            context_catalog_sha256=hashlib.sha256(catalog_payload).hexdigest(),
+            registry_sha256=registry.registry_sha256,
+            registry_source_commit=registry_commit,
+            rom_path=rom_path,
+        )
+    elif all(item is None for item in typed_development) and all(
+        item is not None for item in legacy_development
+    ):
+        development_catalogs = _development_catalogs(
+            args.development_producer_catalog,
+        )
+        development_specs = _development_capture_specs(
+            args.development_capture,
+            catalogs=development_catalogs,
+            catalog=context_catalog,
+            registry=registry,
+        )
+    else:
+        raise BattleOutcomeBatchFreezeError(
+            "development producer boundary is incomplete or ambiguous"
+        )
 
     def session_factory():  # type: ignore[no-untyped-def]
         return PyBoyAdapter(rom_path)
@@ -395,17 +425,13 @@ def _open_prepared_binding(
             or capture.manifest.source_state_sha256 != spec.source_state_sha256
             or capture.manifest.root_lineage_id != spec.root_lineage_id
             or (
-                spec.state_sha256 is not None
-                and capture.manifest.state_sha256 != spec.state_sha256
+                spec.state_sha256 is not None and capture.manifest.state_sha256 != spec.state_sha256
             )
             or (
-                spec.manifest_sha256 is not None
-                and capture.manifest_sha256 != spec.manifest_sha256
+                spec.manifest_sha256 is not None and capture.manifest_sha256 != spec.manifest_sha256
             )
         ):
-            raise BattleOutcomeBatchFreezeError(
-                "battle capture differs from its producer catalog"
-            )
+            raise BattleOutcomeBatchFreezeError("battle capture differs from its producer catalog")
         prepared = prepare_red_battle_outcome_capture(
             capture,
             session_factory=session_factory,  # type: ignore[arg-type]
@@ -455,10 +481,7 @@ def _freeze_under_shared_lease(
             retained_prefix.forbidden_development.logical_root_sha256,
             retained_prefix.forbidden_development.physical_root_sha256,
         ),
-        *(
-            (binding.logical_root_sha256, binding.physical_root_sha256)
-            for binding in bindings[1:]
-        ),
+        *((binding.logical_root_sha256, binding.physical_root_sha256) for binding in bindings[1:]),
     )
     try:
         with claim_first_availability_snapshot_lease(registry_path) as lease:
@@ -501,9 +524,7 @@ def _freeze_under_shared_lease(
             )
             payload = freeze.canonical_bytes()
             if parse_battle_outcome_batch_freeze(payload) != freeze:
-                raise BattleOutcomeBatchFreezeError(
-                    "batch freeze failed its canonical self-check"
-                )
+                raise BattleOutcomeBatchFreezeError("batch freeze failed its canonical self-check")
             _write_exclusive(destination, payload)
     except (BattleOutcomeBatchError, ClaimFirstAdmissionError) as error:
         raise BattleOutcomeBatchFreezeError(str(error)) from None
@@ -567,6 +588,82 @@ def _catalog_entry_spec(
     )
 
 
+def _typed_development_catalog_specs(
+    catalog_path: Path,
+    *,
+    expected_catalog_sha256: str,
+    producer_directory: Path,
+    rom_sha256: str,
+    context_catalog_sha256: str,
+    registry_sha256: str,
+    registry_source_commit: str,
+    rom_path: Path,
+) -> tuple[CatalogCaptureSpec, ...]:
+    payload = _read_bounded_private_file(
+        catalog_path,
+        maximum_bytes=_MAXIMUM_CAPTURE_CATALOG_BYTES,
+        subject="typed development capture catalog",
+    )
+    observed_sha256 = hashlib.sha256(payload).hexdigest()
+    if observed_sha256 != _sha256(
+        expected_catalog_sha256,
+        "typed development capture catalog",
+    ):
+        raise BattleOutcomeBatchFreezeError("typed development capture catalog digest differs")
+    try:
+        catalog = parse_battle_scenario_development_capture_catalog(payload)
+    except BattleScenarioDevelopmentCaptureCatalogError as error:
+        raise BattleOutcomeBatchFreezeError(str(error)) from None
+    directory = _private_capture_directory(
+        producer_directory,
+        rom_path=rom_path,
+        subject="development producer directory",
+    )
+    producer = catalog.producer
+    observed_directory_sha256 = hashlib.sha256(str(directory).encode("utf-8")).hexdigest()
+    if (
+        producer.rom_sha256 != rom_sha256
+        or producer.context_catalog_sha256 != context_catalog_sha256
+        or producer.registry_sha256 != registry_sha256
+        or producer.registry_source_commit != registry_source_commit
+        or producer.capture_directory_sha256 != observed_directory_sha256
+    ):
+        raise BattleOutcomeBatchFreezeError("typed development producer provenance differs")
+    return tuple(
+        _typed_development_entry_spec(
+            catalog,
+            entry,
+            catalog_sha256=observed_sha256,
+            directory=directory,
+        )
+        for entry in catalog.captures
+    )
+
+
+def _typed_development_entry_spec(
+    catalog: BattleScenarioDevelopmentCaptureCatalog,
+    entry: BattleScenarioDevelopmentCaptureEntry,
+    *,
+    catalog_sha256: str,
+    directory: Path,
+) -> CatalogCaptureSpec:
+    # The catalog parser already establishes the concrete entry type and all
+    # cardinality/uniqueness invariants; attributes remain explicit here so a
+    # caller cannot supply independent state/manifest paths.
+    return CatalogCaptureSpec(
+        partition=ScenarioPartition.DEVELOPMENT,
+        producer_source_commit=catalog.producer.source_commit,
+        producer_catalog_sha256=catalog_sha256,
+        state_path=directory / entry.state_filename,
+        manifest_path=directory / entry.manifest_filename,
+        capture_id=entry.capture_id,
+        source_state_sha256=entry.source_state_sha256,
+        root_lineage_id=entry.root_lineage_id,
+        state_sha256=entry.state_sha256,
+        manifest_sha256=entry.manifest_sha256,
+    )
+
+
 def _development_catalogs(
     value: object,
 ) -> dict[str, tuple[str, dict[str, tuple[str, str]]]]:
@@ -592,9 +689,7 @@ def _development_catalogs(
         )
         observed_sha256 = hashlib.sha256(payload).hexdigest()
         if observed_sha256 != expected_sha256:
-            raise BattleOutcomeBatchFreezeError(
-                "development producer catalog digest differs"
-            )
+            raise BattleOutcomeBatchFreezeError("development producer catalog digest differs")
         members = _historical_development_catalog_members(
             payload,
             source_commit=source_commit,
@@ -611,9 +706,7 @@ def _historical_development_catalog_members(
     try:
         document = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        raise BattleOutcomeBatchFreezeError(
-            "development producer catalog is invalid"
-        ) from None
+        raise BattleOutcomeBatchFreezeError("development producer catalog is invalid") from None
     allowed = {
         "pokemon-red-private-battle-learning-curve-catalog-v1",
         "pokemon-red-private-battle-learning-curve-catalog-v2",
@@ -666,9 +759,7 @@ def _development_capture_specs(
         source_commit = _commit(item[0], "development capture producer")
         producer = catalogs.get(source_commit)
         if producer is None:
-            raise BattleOutcomeBatchFreezeError(
-                "development capture has no producer catalog"
-            )
+            raise BattleOutcomeBatchFreezeError("development capture has no producer catalog")
         state_path = Path(item[1])
         manifest_path = Path(item[2])
         try:
@@ -738,13 +829,18 @@ def _development_capture_specs(
     return tuple(specs)
 
 
-def _private_capture_directory(path: Path, *, rom_path: Path) -> Path:
+def _private_capture_directory(
+    path: Path,
+    *,
+    rom_path: Path,
+    subject: str = "train producer directory",
+) -> Path:
     try:
         named = path.lstat()
         resolved = path.resolve(strict=True)
         opened = resolved.stat()
     except OSError:
-        raise BattleOutcomeBatchFreezeError("train producer directory is unavailable") from None
+        raise BattleOutcomeBatchFreezeError(f"{subject} is unavailable") from None
     if (
         path.is_symlink()
         or not stat.S_ISDIR(named.st_mode)
@@ -755,15 +851,13 @@ def _private_capture_directory(path: Path, *, rom_path: Path) -> Path:
         or resolved.is_relative_to(PROJECT_ROOT.resolve())
         or resolved == rom_path.resolve().parent
     ):
-        raise BattleOutcomeBatchFreezeError("train producer directory is unavailable")
+        raise BattleOutcomeBatchFreezeError(f"{subject} is unavailable")
     return resolved
 
 
 def _capture_specs(value: object, subject: str) -> tuple[tuple[Path, Path], ...]:
     if not isinstance(value, list) or not value or len(value) > _MAXIMUM_CAPTURE_SPECS:
-        raise BattleOutcomeBatchFreezeError(
-            f"{subject} capture inventory size differs"
-        )
+        raise BattleOutcomeBatchFreezeError(f"{subject} capture inventory size differs")
     specs: list[tuple[Path, Path]] = []
     for item in value:
         if (
@@ -771,14 +865,10 @@ def _capture_specs(value: object, subject: str) -> tuple[tuple[Path, Path], ...]
             or len(item) != 2
             or any(not isinstance(path, Path) for path in item)
         ):
-            raise BattleOutcomeBatchFreezeError(
-                f"{subject} capture inventory differs"
-            )
+            raise BattleOutcomeBatchFreezeError(f"{subject} capture inventory differs")
         specs.append((item[0], item[1]))
     if len(set(specs)) != len(specs):
-        raise BattleOutcomeBatchFreezeError(
-            f"{subject} capture inventory repeats an input"
-        )
+        raise BattleOutcomeBatchFreezeError(f"{subject} capture inventory repeats an input")
     return tuple(specs)
 
 
@@ -796,13 +886,9 @@ def _private_new_freeze(destination: Path, *, rom_path: Path) -> Path:
     if resolved.is_relative_to(PROJECT_ROOT.resolve()):
         raise BattleOutcomeBatchFreezeError("batch freeze must remain private")
     if resolved.parent == rom_path.resolve().parent:
-        raise BattleOutcomeBatchFreezeError(
-            "batch freeze cannot be written beside the ROM"
-        )
+        raise BattleOutcomeBatchFreezeError("batch freeze cannot be written beside the ROM")
     if not resolved.parent.is_dir() or resolved.exists() or destination.is_symlink():
-        raise BattleOutcomeBatchFreezeError(
-            "batch freeze output is unavailable or already exists"
-        )
+        raise BattleOutcomeBatchFreezeError("batch freeze output is unavailable or already exists")
     return resolved
 
 
@@ -847,9 +933,7 @@ def _write_exclusive(destination: Path, payload: bytes) -> None:
         if created:
             with suppress(OSError):
                 destination.unlink()
-        raise BattleOutcomeBatchFreezeError(
-            "batch freeze could not be retained durably"
-        )
+        raise BattleOutcomeBatchFreezeError("batch freeze could not be retained durably")
 
 
 def _read_bounded_private_file(

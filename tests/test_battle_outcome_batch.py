@@ -30,6 +30,7 @@ from pokemon_red_completion.battle_outcome_batch import (
     parse_battle_outcome_batch_roster,
     parse_battle_outcome_pressure_inventory,
     parse_retained_battle_outcome_prefix,
+    reconstruct_retained_battle_outcome_example,
     revalidate_battle_outcome_pressure_candidate,
     select_battle_outcome_batch_roster,
     select_battle_outcome_batch_roster_from_inventory,
@@ -152,9 +153,7 @@ def _roster_inputs() -> tuple[
             f"train-{index:02d}",
             basis_offset=index * 2,
             expected_map=(
-                int(MapId.VICTORY_ROAD_1F)
-                if index % 2
-                else int(MapId.POKEMON_MANSION_1F)
+                int(MapId.VICTORY_ROAD_1F) if index % 2 else int(MapId.POKEMON_MANSION_1F)
             ),
             margin_stratum=2 if index % 2 else 0,
             player_hp_ratio=0.5 if index % 2 else 1.0,
@@ -167,9 +166,7 @@ def _roster_inputs() -> tuple[
             f"development-{index:02d}",
             basis_offset=index * 2,
             expected_map=(
-                int(MapId.VICTORY_ROAD_1F)
-                if index % 2
-                else int(MapId.POKEMON_MANSION_1F)
+                int(MapId.VICTORY_ROAD_1F) if index % 2 else int(MapId.POKEMON_MANSION_1F)
             ),
             margin_stratum=2 if index % 2 else 0,
             player_hp_ratio=0.5 if index % 2 else 1.0,
@@ -187,16 +184,13 @@ def _roster(
 ) -> BattleOutcomeBatchRoster:
     default_prefix, default_screened = _roster_inputs()
     selected_prefix = prefix or default_prefix
-    consumed = (
-        forbidden_consumed
-        or (
-            _candidate(
-                ScenarioPartition.DEVELOPMENT,
-                "consumed-development",
-                basis_offset=0,
-                claim_available=False,
-            ).binding,
-        )
+    consumed = forbidden_consumed or (
+        _candidate(
+            ScenarioPartition.DEVELOPMENT,
+            "consumed-development",
+            basis_offset=0,
+            claim_available=False,
+        ).binding,
     )
     retained = RetainedBattleOutcomePrefix(
         plan=BattleOutcomeExperimentPlan(
@@ -321,9 +315,7 @@ def _retained_train_record(plan: BattleOutcomeExperimentPlan) -> dict[str, objec
             "root_lineage_id": plan.train.root_lineage_id,
             "partition": "train",
             "initial_state_sha256": plan.train.state_sha256,
-            "initial_observation_sha256": (
-                plan.train.initial_observation_sha256
-            ),
+            "initial_observation_sha256": (plan.train.initial_observation_sha256),
             "candidate_count": 3,
             "measured_candidate_count": 3,
             "outcomes": outcomes,
@@ -350,9 +342,7 @@ def test_batch_roster_round_trips_complete_outcome_blind_denominator() -> None:
     assert len(restored.development) == DEVELOPMENT_CONTEXTS
     assert restored.train_hidden_contrast_rank == _HIDDEN_WIDTH
     assert restored.development_hidden_contrast_rank == _HIDDEN_WIDTH
-    assert restored.public_dict()["fixed_heuristic_id"] == (
-        BATTLE_OUTCOME_FIXED_HEURISTIC_ID
-    )
+    assert restored.public_dict()["fixed_heuristic_id"] == (BATTLE_OUTCOME_FIXED_HEURISTIC_ID)
     assert restored.public_dict()["protections"] == {
         "authority_promoted": False,
         "crystal_contexts_opened": 0,
@@ -397,7 +387,7 @@ def test_retained_prefix_parser_rejects_noncanonical_or_duplicate_fields() -> No
 
     duplicate = retained.canonical_bytes().replace(
         b'{"artifact_manifest_sha256":',
-        b'{"artifact_manifest_sha256":"d' + b'd' * 63 + b'","artifact_manifest_sha256":',
+        b'{"artifact_manifest_sha256":"d' + b"d" * 63 + b'","artifact_manifest_sha256":',
         1,
     )
     with pytest.raises(BattleOutcomeBatchError, match="not canonical"):
@@ -432,21 +422,15 @@ def test_batch_selection_is_stable_under_inventory_reordering() -> None:
 def test_atomic_pressure_inventory_round_trips_and_is_the_only_roster_input() -> None:
     inventory = _inventory()
 
-    reopened = parse_battle_outcome_pressure_inventory(
-        inventory.canonical_bytes()
-    )
+    reopened = parse_battle_outcome_pressure_inventory(inventory.canonical_bytes())
     roster = select_battle_outcome_batch_roster_from_inventory(
         roster_id="red-battle-outcome-batch-v2-inventory",
         inventory=reopened,
     )
 
     assert reopened == inventory
-    assert roster.claim_registry_sha256 == (
-        inventory.claim_snapshot.registry_state_sha256
-    )
-    assert roster.screened_inventory_sha256 == (
-        inventory.screened_inventory_sha256
-    )
+    assert roster.claim_registry_sha256 == (inventory.claim_snapshot.registry_state_sha256)
+    assert roster.screened_inventory_sha256 == (inventory.screened_inventory_sha256)
     assert roster.public_dict()["protections"]["outcomes_opened"] == 0
 
 
@@ -547,13 +531,9 @@ def test_pressure_inventory_rejects_availability_or_denominator_drift() -> None:
 
 def test_different_assignments_from_one_upstream_state_cannot_cross_partitions() -> None:
     prefix, screened = _roster_inputs()
-    train = tuple(
-        item for item in screened if item.partition is ScenarioPartition.TRAIN
-    )
+    train = tuple(item for item in screened if item.partition is ScenarioPartition.TRAIN)
     development = tuple(
-        item
-        for item in screened
-        if item.partition is ScenarioPartition.DEVELOPMENT
+        item for item in screened if item.partition is ScenarioPartition.DEVELOPMENT
     )
     sibling_template = _candidate(
         ScenarioPartition.DEVELOPMENT,
@@ -574,9 +554,7 @@ def test_different_assignments_from_one_upstream_state_cannot_cross_partitions()
     sibling = replace(
         sibling_template,
         binding=sibling_binding,
-        source_cluster_sha256=battle_outcome_source_cluster_sha256(
-            sibling_binding
-        ),
+        source_cluster_sha256=battle_outcome_source_cluster_sha256(sibling_binding),
     )
 
     roster = _roster(
@@ -585,14 +563,10 @@ def test_different_assignments_from_one_upstream_state_cannot_cross_partitions()
     )
 
     assert sibling.binding.root_lineage_id != train[0].binding.root_lineage_id
-    assert sibling.binding.source_assignment_id != (
-        train[0].binding.source_assignment_id
-    )
+    assert sibling.binding.source_assignment_id != (train[0].binding.source_assignment_id)
     assert sibling.binding.state_sha256 != train[0].binding.state_sha256
     assert sibling.binding.menu_sha256 != train[0].binding.menu_sha256
-    assert sibling.capture_id not in {
-        item.capture_id for item in roster.development
-    }
+    assert sibling.capture_id not in {item.capture_id for item in roster.development}
 
 
 def test_pressure_policy_digest_binds_party_priority_and_repair_order() -> None:
@@ -603,13 +577,9 @@ def test_pressure_policy_digest_binds_party_priority_and_repair_order() -> None:
 
 def test_batch_selector_repairs_a_feasible_two_venue_subset() -> None:
     prefix, screened = _roster_inputs()
-    train = tuple(
-        item for item in screened if item.partition is ScenarioPartition.TRAIN
-    )
+    train = tuple(item for item in screened if item.partition is ScenarioPartition.TRAIN)
     original_development = tuple(
-        item
-        for item in screened
-        if item.partition is ScenarioPartition.DEVELOPMENT
+        item for item in screened if item.partition is ScenarioPartition.DEVELOPMENT
     )
     mansion_development = tuple(
         replace(
@@ -646,13 +616,9 @@ def test_batch_selector_repairs_a_feasible_two_venue_subset() -> None:
 
 def test_batch_selector_recovers_when_a_greedy_root_blocks_two_needed_rows() -> None:
     prefix, screened = _roster_inputs()
-    train = tuple(
-        item for item in screened if item.partition is ScenarioPartition.TRAIN
-    )
+    train = tuple(item for item in screened if item.partition is ScenarioPartition.TRAIN)
     development = tuple(
-        item
-        for item in screened
-        if item.partition is ScenarioPartition.DEVELOPMENT
+        item for item in screened if item.partition is ScenarioPartition.DEVELOPMENT
     )
     trap_template = _candidate(
         ScenarioPartition.TRAIN,
@@ -678,17 +644,13 @@ def test_batch_selector_recovers_when_a_greedy_root_blocks_two_needed_rows() -> 
     )
 
     assert trap.capture_id not in {item.capture_id for item in roster.fresh_train}
-    assert {item.capture_id for item in train} == {
-        item.capture_id for item in roster.fresh_train
-    }
+    assert {item.capture_id for item in train} == {item.capture_id for item in roster.fresh_train}
 
 
 def test_batch_never_reuses_the_consumed_v1_development_root() -> None:
     prefix, screened = _roster_inputs()
     old_development = next(
-        item
-        for item in screened
-        if item.partition is ScenarioPartition.DEVELOPMENT
+        item for item in screened if item.partition is ScenarioPartition.DEVELOPMENT
     )
     backup = _candidate(
         ScenarioPartition.DEVELOPMENT,
@@ -706,9 +668,7 @@ def test_batch_never_reuses_the_consumed_v1_development_root() -> None:
         forbidden_consumed=(old_development.binding,),
     )
 
-    assert old_development.capture_id not in {
-        item.capture_id for item in roster.development
-    }
+    assert old_development.capture_id not in {item.capture_id for item in roster.development}
     assert dict(roster.exclusion_counts)["previously_consumed"] == 1
 
 
@@ -840,8 +800,7 @@ def test_batch_rejects_inadequate_prior_margin_diversity() -> None:
 def test_batch_rejects_inadequate_hidden_contrast_rank() -> None:
     prefix, screened = _roster_inputs()
     collapsed_embeddings = tuple(
-        tuple(1.0 if column == row else 0.0 for column in range(_HIDDEN_WIDTH))
-        for row in range(3)
+        tuple(1.0 if column == row else 0.0 for column in range(_HIDDEN_WIDTH)) for row in range(3)
     )
 
     def collapse(item: BattleOutcomePressureCandidate) -> BattleOutcomePressureCandidate:
@@ -922,9 +881,7 @@ def test_batch_excludes_unavailable_and_excessive_level_gap_before_freeze() -> N
 
 def test_fixed_heuristic_is_legal_pp_aware_and_avoids_self_destruct() -> None:
     vectors = [[0.0] * len(FEATURE_NAMES) for _ in range(4)]
-    effective = FEATURE_NAMES.index(
-        "move.accuracy_weighted_effective_power_fraction"
-    )
+    effective = FEATURE_NAMES.index("move.accuracy_weighted_effective_power_fraction")
     self_destruct = FEATURE_NAMES.index("move.effect.self_destruct")
     vectors[0][effective] = 0.60
     vectors[1][effective] = 1.00
@@ -1047,11 +1004,86 @@ def test_pressure_builder_binds_exact_prior_features_and_levels() -> None:
             model,
             claim_available=True,
         )
-
     with pytest.raises(BattleOutcomeBatchError, match="rederived source facts"):
         revalidate_battle_outcome_pressure_candidate(
             replace(candidate, prior_scores=(1.0, 0.0, -1.0)),
             features,
             model,
             claim_available=True,
+        )
+
+
+def test_retained_train_example_is_reconstructed_without_replay() -> None:
+    vectors = [[0.0] * len(FEATURE_NAMES) for _ in range(3)]
+    power = FEATURE_NAMES.index("move.power_fraction")
+    for index, vector in enumerate(vectors):
+        vector[power] = 0.2 * (index + 1)
+    features = BattleFeatureBatch(
+        feature_names=FEATURE_NAMES,
+        candidate_vectors=tuple(tuple(row) for row in vectors),
+        legal_mask=(True, True, True),
+        current_pp=(10.0, 10.0, 10.0),
+        slot_indices=(0, 1, 2),
+        schema_id=FEATURE_SCHEMA_ID,
+    )
+    weights = np.zeros((_HIDDEN_WIDTH, len(FEATURE_NAMES)), dtype=np.float64)
+    weights[0, power] = 1.0
+    model = MaskedMLPMoveRanker(
+        feature_names=FEATURE_NAMES,
+        feature_schema_id=FEATURE_SCHEMA_ID,
+        input_weights=weights,
+        hidden_bias=np.zeros(_HIDDEN_WIDTH),
+        output_weights=np.linspace(-0.5, 0.5, _HIDDEN_WIDTH),
+        output_bias=0.0,
+    )
+    train = replace(
+        _candidate(ScenarioPartition.TRAIN, "retained", basis_offset=0).binding,
+        menu_sha256=battle_outcome_menu_sha256(features),
+        hidden_embedding_sha256=battle_outcome_hidden_menu_sha256(model, features),
+    )
+    development = _candidate(
+        ScenarioPartition.DEVELOPMENT,
+        "retained-forbidden",
+        basis_offset=0,
+    ).binding
+    plan = BattleOutcomeExperimentPlan(
+        experiment_id="red-battle-retained-reconstruction",
+        source_commit="a" * 40,
+        source_bundle_sha256="2" * 64,
+        runner_sha256="3" * 64,
+        materializer_sha256="4" * 64,
+        registry_source_commit="b" * 40,
+        registry_source_bundle_sha256="6" * 64,
+        registry_sha256="7" * 64,
+        context_catalog_sha256="8" * 64,
+        rom_sha256="9" * 64,
+        runtime_identity_sha256="a" * 64,
+        numpy_runtime_sha256="b" * 64,
+        base_model_sha256=battle_outcome_model_sha256(model),
+        controller_timing_sha256="c" * 64,
+        captures=(train, development),
+    )
+    record = _retained_train_record(plan)
+    retained = build_retained_battle_outcome_prefix(
+        plan,
+        artifact_manifest_sha256="d" * 64,
+        train_collection_record=record,
+    )
+
+    example = reconstruct_retained_battle_outcome_example(
+        retained,
+        record,
+        features=features,
+        model=model,
+    )
+
+    assert example.root_lineage_id == train.root_lineage_id
+    assert example.best_candidate_indices == (1,)
+    assert example.learner_update_eligible
+    with pytest.raises(BattleOutcomeBatchError, match="record digest differs"):
+        reconstruct_retained_battle_outcome_example(
+            retained,
+            {**record, "unmeasured_action_targets": 1},
+            features=features,
+            model=model,
         )

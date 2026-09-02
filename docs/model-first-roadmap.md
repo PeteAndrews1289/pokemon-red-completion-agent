@@ -4747,3 +4747,31 @@ Next sequence:
 Mission check: this restores a short genuine learning loop rather than another walkthrough repair.
 It advances the shared battle learner that later titles can reuse, but produces no model progress
 until authentic selected actions and outcomes exist.
+
+## Current checkpoint — post-audit Red batch training gate
+
+The zero-effect development freezer selected eight independent development roots, split four
+Diglett's Cave and four Route 11, with every protected effect still zero. The post-audit repair
+then closed the alternate-journal replay namespace: one plan SHA-256 now determines the only
+journal, receipt and process lock accepted by the materialization runner.
+
+The previously missing end-to-end bridge now exists. A terminal eight-success development run can
+be independently reopened into one typed, path-free catalog; the batch freezer consumes that
+catalog directly instead of accepting caller-selected capture triples. A production batch runner
+also exists for the frozen 1 retained + 7 fresh train / 8 development denominator. It reconstructs
+the retained train example read-only, claims all fifteen new roots before input, fits once on the
+eight train examples, commits frozen-prior, updated-model and fixed-heuristic development choices,
+and only then opens development outcomes. Development never enters the fit and authority remains
+zero.
+
+Current state is **engineering ready, not executed**. The exact next sequence is:
+
+1. publish this source and require green exact-main CI;
+2. freeze a source-bound batch using the terminal typed train and development catalogs;
+3. reorient on its aggregate 7+8 pressure receipt;
+4. execute the deterministic batch artifact exactly once;
+5. retain the shadow model and descriptive paired Red result;
+6. audit before any sealed Red or Crystal gate.
+
+This is the first gate where “begin training” has a literal production path. It is still bounded
+battle preference learning, not autonomous game completion or living-Pokédex authority.
