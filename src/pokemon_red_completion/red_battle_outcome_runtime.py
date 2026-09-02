@@ -87,6 +87,80 @@ class RedBattleOutcomeCollection:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedBattleCandidateExecution:
+    """One model-selected action executed from an authenticated capture."""
+
+    capture_id: str
+    manifest_sha256: str
+    selected_candidate_index: int
+    initial_observation_sha256: str
+    outcome: BattleTurnOutcome
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.red.battle.selected-candidate-execution.v1",
+            "capture_id": self.capture_id,
+            "manifest_sha256": self.manifest_sha256,
+            "selected_candidate_index": self.selected_candidate_index,
+            "initial_observation_sha256": self.initial_observation_sha256,
+            "outcome": self.outcome.public_dict(),
+            "teacher_queries": 0,
+            "teacher_choice_targets": 0,
+            "controller_actions_selected_by_model": 1,
+            "private_path_fields": 0,
+        }
+
+
+def execute_red_battle_candidate(
+    capture: BattleScenarioCapture,
+    candidate_index: int,
+    *,
+    session_factory: SessionFactory,
+    controller_timing: ControllerTiming | None = None,
+) -> RedBattleCandidateExecution:
+    """Execute exactly one semantic move candidate without consulting a teacher."""
+
+    if not isinstance(capture, BattleScenarioCapture):
+        raise TypeError("capture must come from the verified battle opener")
+    if not callable(session_factory):
+        raise TypeError("session_factory must be callable")
+    if type(candidate_index) is not int:  # noqa: E721
+        raise TypeError("candidate index must be an integer")
+    prepared = _prepare_exact_boundary(capture, session_factory=session_factory)
+    if (
+        not 0 <= candidate_index < len(prepared.supported_candidate_mask)
+        or not prepared.supported_candidate_mask[candidate_index]
+    ):
+        raise RedBattleOutcomeRuntimeError("selected candidate is unsupported")
+    timing = controller_timing or DEFAULT_NEW_GAME_TIMING.controller_timing()
+    with session_factory() as session:
+        session.load_state_bytes(capture.state_bytes)
+        reader = PokemonRedStateReader(cast(ReadOnlyMemory, session))
+        replay_prepared = _prepare_loaded_boundary(capture, reader)
+        if replay_prepared != prepared:
+            raise RedBattleOutcomeRuntimeError(
+                "selected-candidate replay differs from its authenticated policy boundary"
+            )
+        executor = FrameSafeExecutor(session, timing)
+        execution = execute_bounded_battle_move_turn(
+            reader,
+            executor,
+            expected_map=capture.manifest.expected_map,
+            selected_slot=prepared.features.slot_indices[candidate_index] + 1,
+            expected_battle_state=capture.manifest.expected_battle_state,
+            minimum_pre_attack_frames=COUNTERFACTUAL_PRE_ATTACK_FRAMES,
+            label="model-selected Red battle action",
+        )
+    return RedBattleCandidateExecution(
+        capture_id=capture.manifest.capture_id,
+        manifest_sha256=capture.manifest_sha256,
+        selected_candidate_index=candidate_index,
+        initial_observation_sha256=prepared.initial_observation_sha256,
+        outcome=project_red_battle_turn_outcome(execution),
+    )
+
+
 def collect_red_battle_outcome_example(
     capture: BattleScenarioCapture,
     *,

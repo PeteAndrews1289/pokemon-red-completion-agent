@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-public-repeatable-red-battle-learning-result-v1",
+  "status": "development_pass",
+  "claim": "A repeatable development loop pretrained a title-neutral move ranker, adapted it from authentic Red counterfactual outcomes, improved it on disjoint development roots, and let it execute one fresh optimal Red move without a teacher. This is bounded battle-move evidence, not a full-player, sealed-test, or Crystal-transfer claim.",
+  "synthetic_pretraining": {
+    "train_examples": 2000,
+    "development_examples": 500,
+    "development_accuracy": 0.84,
+    "fixed_power_heuristic_accuracy": 0.704,
+    "zero_weight_accuracy": 0.294,
+    "model_sha256": "47cf964ef8d86e6a3040746a734bd6c02c25d9e6d14f956c6b46727bee479b4c"
+  },
+  "authentic_adaptation": {
+    "train_roots": 12,
+    "development_roots": 7,
+    "candidate_trials": 76,
+    "informative_examples": 19,
+    "training_loss_before": 1.9840383324008097,
+    "training_loss_after": 0.8775059668242385,
+    "base_development_accuracy": 0.7142857142857143,
+    "updated_development_accuracy": 1.0,
+    "base_mean_selected_utility": 2.3857786357786357,
+    "updated_mean_selected_utility": 3.0,
+    "updated_model_sha256": "7698ac9ff9dbc43a216fc4a971d2ab70c8a231611dcf04fa80d876d2c7b33dca"
+  },
+  "independent_development": {
+    "roots": 7,
+    "base_correct": 2,
+    "updated_correct": 5,
+    "base_accuracy": 0.2857142857142857,
+    "updated_accuracy": 0.7142857142857143,
+    "base_mean_selected_utility": 1.3039379827230724,
+    "updated_mean_selected_utility": 2.64442339914038,
+    "updated_wins": 4,
+    "base_wins": 1,
+    "equivalent_choices": 2,
+    "inferential_claim": false
+  },
+  "fresh_live_authority_rehearsal": {
+    "development_roots": 1,
+    "model_selected_actions": 1,
+    "teacher_queries": 0,
+    "selected_candidate_index": 3,
+    "opponent_fainted": true,
+    "selected_utility": 3.0,
+    "choice_was_counterfactually_optimal": true,
+    "synthetic_base_choice_utility": 0.8780487804878049
+  },
+  "failure_handling": {
+    "legacy_captures_quarantined": 4,
+    "reason": "active_battler_already_fainted",
+    "successful_examples_retained": true,
+    "batch_aborted_for_single_bad_capture": false
+  },
+  "boundaries": {
+    "development_artifact": true,
+    "sealed_red_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "teacher_choice_targets": 0,
+    "gameplay_authority_promoted": false,
+    "transfer_claim": false,
+    "private_path_fields": 0
+  }
+}

@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-09-02 repeatable-learning override — authentic training is now the active lane:** Routine
+> development is repeatable; sealed one-shot rigor is reserved for later promotion claims. The
+> first loop pretrained the shared battle MLP, adapted it on twelve authentic Red train roots,
+> improved two disjoint development sets, and executed one fresh optimal model-selected Red move
+> with zero teacher queries. No full-player authority or Crystal transfer is claimed.
+>
+> Codex owns the scenario generator, learner integration, tests, evidence and final decisions.
+> Claude's best use is statistical/leakage review at stable milestones; Antigravity's is adversarial
+> portability and failure-path review. Reviewers are advisory and read-only unless the owner says
+> otherwise. The next engineering target is semantic battle diversity and multi-turn bounded
+> authority—not another route-supply campaign, fixed Red patch, sealed evaluation or full replay.
+
 > **2026-09-02 information-gate override — redesign prospectively, do not weaken V1:** Exact main
 > `af8bff30` and CI `33667972501/1` authenticated a five-capture train catalog, then the action-free
 > qualifier rejected it because only three of five fresh contexts expose at least three usable

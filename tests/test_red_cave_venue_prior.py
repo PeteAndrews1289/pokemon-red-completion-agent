@@ -320,6 +320,7 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
         "src/pokemon_red_completion/executor.py",
         "src/pokemon_red_completion/hideout.py",
         "src/pokemon_red_completion/observation.py",
+        "src/pokemon_red_completion/red_battle_catalog.py",
         "src/pokemon_red_completion/red_party_development_venue_priors.py",
         "src/pokemon_red_completion/red_team_training.py",
     )

@@ -33,26 +33,26 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the terminal V2 rejection and exact-main green its path-free evidence. Then admit only genuinely new title-neutral short-scenario supply that passes a prospective outcome-blind information census; no fixed-roster outcome collection or fit is allowed.
+- Next decision: Expand the repeatable authentic battle generator and learning curve, then decide whether the model may own multi-turn move selection in bounded Red episodes. Keep switch, item, capture, full-run, sealed Red and Crystal authority closed until their own outcome gates pass.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe. |
-| Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
+| Authority now | The battle move ranker has now been pretrained, adapted from twelve authentic Red train roots, improved on two disjoint development sets, and executed one fresh optimal move without a teacher. This is bounded development authority; the full player still relies on fixed specialists and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Before creating another controller-capable campaign, prove with ROM-free fixtures and one outcome-blind bounded census that a title-neutral short-scenario constructor can supply independent battle contexts with the action diversity and hidden-contrast clearance the learner requires. Stop if it only clones timing variants or recreates a fixed Red route. |
+| Cheapest falsifier | Build one small batch of genuinely varied cartridge-native Red battle situations from disjoint upstream roots, let the model act before counterfactual outcomes are opened, and compare it with the frozen synthetic base. Stop if the generator produces repeated semantic states, invalid decision boundaries, or no challenger advantage. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 19 | 24 |
-| Model Fit · train | 6 | 7 |
-| Verified Outcome Example · development | 6 | 14 |
+| Causal Train Example · train | 31 | 48 |
+| Model Fit · train | 7 | 8 |
+| Verified Outcome Example · development | 20 | 28 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -60,26 +60,27 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-contrast-information-gate** · status **closed** · evidence [falsification](docs/evidence/red-battle-contrast-information-gate-result-v2-2026-09-02.json)
+**2026-09-02-repeatable-red-battle-learning-v1** · status **closed** · evidence [unseen comparison](docs/evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | This was input preparation, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. V2 was an action-free information gate and its rejection opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
+| Learning output | Synthetic pretraining reached 84.0% on 500 unseen menus versus 70.4% for the fixed power heuristic. Authentic adaptation used twelve train roots, reached 7/7 on working development, and improved a separate seven-root comparison from 2/7 to 5/7 while raising mean selected utility from 1.304 to 2.644. |
+| Authority delta | The updated model selected and executed one fresh Red battle move with zero teacher queries; the opponent fainted and later counterfactual replay showed the choice was optimal. This is bounded development authority only, not promotion to the full player. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The sole exact-main V2 qualification failed closed. Its public receipt intentionally exposed only the aggregate failure code, so this session does not infer a private root cause or reopen the fixed inputs. The complete one-retained plus five-fresh train and eight-development roster is now closed without outcomes. |
-| Decision | Preserve the V2 rejection, forbid V1/V2 retries and close the fixed roster. Audit before new supply. The successor must create genuinely new independent title-neutral short scenarios prospectively, make information adequacy visible before outcomes, and avoid another clean-power route factory. |
-| Next session | Publish this terminal rejection, then design and test the smallest reusable short-scenario supply seam that varies semantic battle state directly rather than replaying a route. End the session at an outcome-blind information census; do not collect outcomes or fit a model yet. |
-| Next falsifier | Exercise a prospective title-neutral short-scenario supply contract first on ROM-free fixtures, then on a small outcome-blind census. Require independent lineages, real multi-action choices and numerical contrast clearance before freezing any outcome denominator; reject it if those properties are manufactured by timing clones or Red route patches. |
-| Stop condition | Do not rerun V1 or V2, diagnostically reopen the fixed private roster, lower either policy, collect its outcomes, harden the failed Red route, clone captures, or outcome-select replacements. Do not begin a successor until its title-neutral supply and information test are frozen prospectively. |
+| Blocker | The repeatable loop works, but authentic scale and semantic breadth remain small. Twelve train roots, seven working-development roots and seven independent-development roots do not cover multi-turn battles, switches, items, captures, status-heavy matchups, or cross-title behavior. |
+| Decision | Keep sealed benchmark rigor for promotion claims, but use repeatable authenticated scenarios for daily development. Expand authentic semantic diversity and multi-turn model authority before any full replay or Crystal execution. |
+| Next session | Build the repeatable authentic scenario generator and run a larger bounded learning curve. Then exercise model-selected multi-turn battle decisions with explicit abstention for switch, item and capture decisions not yet owned by this head. |
+| Next falsifier | Generate a small cartridge-native batch with deliberate variation in opponent, HP, PP, status, matchup and moves. Commit model choices before revealing alternatives; stop if contexts repeat, boundaries are invalid, or the authentic-trained challenger fails to outperform the synthetic base. |
+| Stop condition | Do not convert this small development result into a full-player, sealed, or transfer claim. Stop the next iteration if it adds no new semantic coverage, has no independent challenger advantage, or requires another full Red route replay. |
 
 ### Stop conditions
 
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Train and development snapshots must have immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
-- Stop a model iteration on flat outcomes, inadequate candidate support, claim uncertainty, identity leakage, teacher-choice targets, unmeasured alternatives, or no development discordance/advantage; redesign the scenario distribution instead of patching the route.
-- No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or authority promotion is permitted in this development lane.
+- Development captures may be replayed for debugging and learning, but train/development identity must remain disjoint and failed boundaries must be quarantined rather than relabeled as successes.
+- Stop a model iteration on flat outcomes, inadequate candidate support, identity leakage, teacher-choice targets, unmeasured alternatives, or no independent development advantage; redesign the scenario distribution instead of patching the route.
+- No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane.
 
 ### Hard boundaries for this lane
 
@@ -92,11 +93,8 @@ outputs.
 - **Prohibited:** claim first preflight v1 or v2 retry
 - **Prohibited:** cloned or rehashed root independence
 - **Prohibited:** model fit on development
-- **Prohibited:** model fit below integration gate
-- **Prohibited:** model fit before integration support and information gate
 - **Prohibited:** opportunity identity feature
 - **Prohibited:** outcome balanced row selection
-- **Prohibited:** private selected root diagnosis
 - **Prohibited:** sealed or benchmark root use
 - **Prohibited:** synthetic executor fit admission
 - **Prohibited:** promotion from pilot
@@ -216,4 +214,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **18**.
+Current evidence entries: **19**.

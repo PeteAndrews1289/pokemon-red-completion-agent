@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_semantics import (
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.red_battle_outcome_runtime import (
     collect_red_battle_outcome_example,
+    execute_red_battle_candidate,
     prepare_red_battle_outcome_capture,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
@@ -182,3 +183,61 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
         "load",
         "execute:3",
     ]
+
+
+def test_selected_candidate_executes_without_teacher(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    state = b"authenticated private state"
+    state_path = tmp_path / "battle.state"
+    manifest_path = tmp_path / "battle.state.json"
+    state_path.write_bytes(state)
+    manifest_path.write_bytes(
+        build_battle_scenario_capture_payload(
+            capture_id="battle-002",
+            root_lineage_id="development-root-a",
+            partition=ScenarioPartition.DEVELOPMENT,
+            state_bytes=state,
+            initial_observation_sha256="b" * 64,
+            source_commit="c" * 40,
+            expected_map=165,
+            expected_battle_state=1,
+        )
+    )
+    capture = open_battle_scenario_capture(state_path, manifest_path)
+    loaded: list[bytes] = []
+    selected_slots: list[int] = []
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_battle_outcome_runtime._prepare_loaded_boundary",
+        lambda capture, reader: _prepared(),
+    )
+
+    def execute(reader, executor, **kwargs):  # type: ignore[no-untyped-def]
+        del reader, executor
+        selected_slots.append(kwargs["selected_slot"])
+        return BattleTurnExecution(_raw(), _raw(), kwargs["selected_slot"], 1, 3_000, True, 2_048)
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_battle_outcome_runtime."
+        "execute_bounded_battle_move_turn",
+        execute,
+    )
+    expected = BattleTurnOutcome(True, 1.0, 0.0, True, False, False, 1, 3_000, 2_048)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_battle_outcome_runtime."
+        "project_red_battle_turn_outcome",
+        lambda execution: expected,
+    )
+
+    result = execute_red_battle_candidate(
+        capture,
+        2,
+        session_factory=lambda: Session(loaded),
+    )
+
+    assert loaded == [state, state]
+    assert selected_slots == [3]
+    assert result.outcome == expected
+    assert result.public_dict()["teacher_queries"] == 0
+    assert result.public_dict()["controller_actions_selected_by_model"] == 1

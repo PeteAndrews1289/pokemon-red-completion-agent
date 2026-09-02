@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 2: the model finally learns from Red and takes an action
+
+The project deliberately relaxed one-shot experiment ceremony for ordinary development while
+keeping sealed benchmarks closed. That changed the cadence immediately. A new loop generated
+2,000 semantic training menus, checked the first model on 500 unseen menus, and then replaced the
+simulated answer key with real cartridge evidence: each authenticated Red snapshot was restored
+once per legal move so the game itself supplied the utility.
+
+The authentic update learned from twelve train roots. On seven held development roots, accuracy
+moved from 5/7 to 7/7. On a second independent seven-root check, it moved from 2/7 to 5/7 and more
+than doubled mean selected utility, from 1.304 to 2.644. Four stale snapshots were not massaged into
+the dataset: the runtime discovered that their active Pokémon had already fainted, quarantined them
+with the exact reason, and continued with the valid examples.
+
+Then the important demonstration happened in the right order. A fresh Red state was shown to the
+updated model. With no teacher query, it selected move four and executed the controller action. The
+opponent fainted for maximum utility. Only afterward did the evaluator replay every alternative;
+the model's choice was optimal, while the synthetic-only predecessor would have chosen a move worth
+0.878. This is not a claim that the agent can yet run an entire battle or finish the game by itself.
+It is the first compact end-to-end proof that authentic Red outcomes changed a learned decision and
+that the changed model could exercise that authority successfully.
+
 ## September 2: stop manufacturing classrooms and start measuring decisions
 
 The final two-route successor gave the same answer twice. Each untouched source advanced through
