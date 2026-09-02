@@ -14,6 +14,23 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: the terminal V2 roster has no reusable root
+
+The metadata-only claim census merged as exact main `43f3d2c7`; CI `33611606034/1` passed. It
+independently reopened freeze `26878069…4cadd3` and one shared claim-ledger snapshot. The result is
+**fresh train 0/7 available · development 0/8 available**. All fifteen roots are claimed exactly as
+the failed artifact reported.
+
+The census opened **0 states · 0 ROMs · 0 actions · 0 frames · 0 outcomes · 0 predictions · 0 fits
+· 0 teachers · 0 sealed Red · 0 Crystal · 0 new claims · 0 authority**. See the
+[path-free result](docs/evidence/red-battle-v2-claim-supply-result-2026-09-02.json).
+
+This proves only the frozen roster is exhausted; it does not yet aggregate compatible captures
+outside that roster. Next publish the result, broaden the catalog-authenticated census to all
+existing train and development captures, and generate only the measured deficits. Do not reuse a
+claimed root, swap partitions, or count an unauthenticated manifest. Counters remain **train 19 ·
+fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## 2026-09-02: the artifact-safe V2 run failed on its first candidate
 
 The successor receipt merged as main `38ec10d5`; exact-main CI `33604834768/1` passed. Freeze

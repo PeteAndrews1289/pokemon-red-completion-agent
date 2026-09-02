@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the terminal first-candidate runtime failure and diagnostic repair, require green exact-main CI, then inventory unclaimed independent battle roots at zero actions. Freeze another 7-train / 8-development batch only from complete fresh supply; otherwise generate new roots first.
+- Next decision: Publish the frozen-roster 0/7 train and 0/8 development availability result, then run one broader metadata-only census of compatible captures outside the terminal batch. Freeze a successor only from a complete independent 7+8 supply; otherwise generate exactly the measured deficits.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish the terminal 26878069...4cadd3 failure and durable runtime-diagnostic repair under green exact-main CI, then run one action-free claim-availability census. A new batch may be frozen only if a complete independent 7-train and 8-development supply remains; otherwise generate new roots before another outcome decision. |
+| Cheapest falsifier | Publish the 0/7 train and 0/8 development frozen-roster census, then inventory every compatible existing capture outside that terminal roster at zero actions. Freeze a successor only if the broader census proves a complete independent 7+8 supply; otherwise generate exactly the measured partition deficits. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-first-candidate-runtime-terminal** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-runtime-terminal-2026-09-02.json)
+**2026-09-02-battle-v2-frozen-roster-supply-exhausted** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-claim-supply-result-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | The terminal execution added no train or development outcome and no fit. All fifteen fresh roots are consumed, but counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The terminal batch added no outcome, prediction, fit, teacher, sealed Red case, Crystal context, replay or authority. Controller input may have occurred after the first candidate claim, but exact action and frame counts were not retained. |
+| Learning output | This was supply accounting, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The census opened no state, ROM, action, frame, outcome, prediction, fit, teacher, sealed Red case, Crystal context or authority surface and created no claim. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | Freeze 26878069...4cadd3 failed on its first train candidate after all fifteen roots were durably claimed. The failed artifact retained the exception class but not the safe semantic message, so the exact runtime condition cannot be recovered without a prohibited replay. |
-| Decision | Retire freeze 26878069...4cadd3 and all fifteen claimed roots permanently. Publish its path-free terminal evidence plus a repair that durably records bounded semantic runtime diagnostics, then census fresh independent supply before any successor freeze. |
-| Next session | Publish the terminal failure and durable diagnostic repair, require green exact-main CI, inventory unclaimed independent battle roots without controller input, and choose between a fresh complete batch freeze or new-root generation. |
-| Next falsifier | After the diagnostic repair and terminal evidence pass exact-main CI, perform one metadata-only census. If fewer than seven fresh train or eight fresh development roots remain, stop and generate new independent captures rather than reusing any claimed V2 root. |
-| Stop condition | Never retry terminal freezes e11ee811...39eb2, f7204334...5263 or 26878069...4cadd3, and never reuse any of the latter's fifteen claimed roots. Do not diagnose it through replay. A successor requires a new source-bound freeze, complete unclaimed supply and the published diagnostic repair. |
+| Blocker | The terminal V2 roster has zero of seven fresh-train roots and zero of eight development roots available. Availability of compatible captures outside that exact roster has not yet been aggregated, so the true new-capture deficit is not yet known. |
+| Decision | Accept the frozen roster as fully exhausted, never reuse any of its fifteen roots, publish the path-free 0/7 and 0/8 result, and broaden the same metadata-only census to every compatible existing capture before generating replacements. |
+| Next session | Publish the frozen-roster exhaustion result, generalize the census to catalog-authenticated captures outside the terminal batch, execute it at zero actions under green exact-main CI, and generate only the measured missing train and development roots. |
+| Next falsifier | Run one broader metadata-only census over all compatible existing train and development captures outside the terminal roster. If it cannot supply seven and eight respectively, publish the exact deficits and return to independent root generation. |
+| Stop condition | Never retry terminal freezes e11ee811...39eb2, f7204334...5263 or 26878069...4cadd3, and never reuse any of the latter's fifteen claimed roots. Do not count captures outside the roster until their producer, partition, lineage and claim identities authenticate in one shared snapshot. |
 
 ### Stop conditions
 

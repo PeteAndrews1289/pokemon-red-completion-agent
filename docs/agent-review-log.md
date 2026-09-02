@@ -1432,3 +1432,15 @@ Mission check for this planning task:
   independent supply without controller input. A successor needs a complete new 7+8 roster.
 - Mission check: no learning counter advanced. This is still a battle-skill data gate, not route
   work or evidence of story, capture, evolution, trade, living-Pokedex or Crystal competence.
+
+## Codex reorientation — frozen-roster claim supply (2026-09-02)
+
+- Result: exact main `43f3d2c7` under CI `33611606034/1` reopened the terminal V2 freeze and one
+  shared claim-ledger snapshot; fresh train availability is 0/7 and development is 0/8.
+- Effect accounting: zero states, ROMs, actions, frames, outcomes, predictions, fits, teachers,
+  sealed Red cases, Crystal contexts, new claims or authority.
+- Decision: accept the selected roster as fully exhausted. Do not infer that captures outside it
+  are exhausted; broaden the same catalog-authenticated census before generating replacements.
+- Mission check: this removes uncertainty from the battle-data gate and prevents consumed-root
+  reuse. It does not advance model, route, story, capture, evolution, trade, living-Pokedex or
+  cross-title competence.

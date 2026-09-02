@@ -11,7 +11,29 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: V2 failed before its first outcome
+## Current checkpoint: the frozen V2 roster is fully exhausted
+
+The reusable claim-supply audit merged as exact main `43f3d2c7`; CI `33611606034/1` passed. Its
+metadata-only census reopened the terminal freeze and one atomic ledger snapshot. All seven fresh
+train roots and all eight development roots are claimed: **0/7 train and 0/8 development remain**.
+It opened no state, ROM, controller, outcome, prediction, fit, teacher, sealed case, Crystal context
+or authority surface and created no claim.
+
+This result does not prove that every compatible capture outside the selected roster is exhausted.
+Next:
+
+1. publish the path-free frozen-roster result;
+2. generalize the same action-free census to all producer- and catalog-authenticated existing
+   train and development captures;
+3. calculate the exact independent deficits against 7 train and 8 development;
+4. generate only those missing captures under the now-published runtime diagnostic;
+5. freeze a successor only after one shared snapshot proves a complete unclaimed 7+8 roster.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[claim-supply result](evidence/red-battle-v2-claim-supply-result-2026-09-02.json).
+
+## Previous checkpoint: V2 failed before its first outcome
 
 The path-free successor receipt merged as main `38ec10d5` and exact-main CI `33604834768/1`
 passed. Freeze `26878069…4cadd3` then executed once from its exact source and runtime. It claimed

@@ -1,0 +1,58 @@
+{
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "claim_boundary": {
+    "supported": "One published metadata-only census independently reopened the terminal V2 freeze and one shared claim-registry snapshot, proving that none of its seven fresh-train or eight development roots remains available.",
+    "unsupported": [
+      "availability_of_captures_outside_the_frozen_roster",
+      "battle_outcome_collection",
+      "candidate_model_fit",
+      "development_comparison",
+      "gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer",
+      "full_game_play",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "result": {
+    "availability_snapshot_sha256": "3fb749dff421713da5986a4253573022a7c7ff77b6668c24be1d00e038721c80",
+    "development_available": 0,
+    "development_claimed": 8,
+    "development_total": 8,
+    "freeze_sha256": "26878069c52304238c8d306fad3ac2000787a85f5ff50fb86400a2229f4cadd3",
+    "fresh_train_available": 0,
+    "fresh_train_claimed": 7,
+    "fresh_train_total": 7,
+    "roster_sha256": "e55ddabc1f2e12a2a8eacdbd34a8f200aee3d7f092460fb53a8141685ce2402f",
+    "status": "fresh_batch_supply_unavailable"
+  },
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33611606034,
+    "source_bundle_sha256": "95e8b9888a0cd5b111ae4565196a82ab268e9d9dc883ed0e865f8d5bc068c579",
+    "source_commit": "43f3d2c73a1e72103936f3b0e04e2b40d9f471f9"
+  },
+  "status": "terminal_roster_supply_exhausted",
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "rom_files_opened": 0,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "state_files_opened": 0,
+    "teacher_queries": 0
+  }
+}

@@ -5274,3 +5274,12 @@ version has to prove the model learned something worth carrying into a game it h
 - Add the repaired private rail: **PARTITION + ORDINAL + CLAIMED/RETAINED CANDIDATES + SAFE REASON
   + INPUT MAY HAVE OCCURRED**, all durable before failure publication.
 - End on **PUBLISH → GREEN MAIN → ZERO-ACTION SUPPLY CENSUS → NEW 7+8 ROOTS OR GENERATE MORE**.
+
+## New sequence: “Ask the ledger what survived”
+
+- Disconnect the emulator and show **STATE FILES 0 · ROMS 0 · ACTIONS 0 · FRAMES 0**.
+- Reopen the terminal freeze and one shared claim-ledger snapshot.
+- Reveal **FRESH TRAIN AVAILABLE 0/7 · DEVELOPMENT AVAILABLE 0/8**.
+- Keep **OUTCOMES 0 · PREDICTIONS 0 · FITS 0 · NEW CLAIMS 0** visible.
+- Clarify the boundary: this proves the selected roster is exhausted, not every capture ever made.
+- End on **BROADER AUTHENTICATED CATALOG CENSUS → EXACT DEFICITS → GENERATE ONLY WHAT IS MISSING**.
