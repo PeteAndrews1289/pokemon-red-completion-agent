@@ -202,6 +202,60 @@ def test_typed_development_catalog_rejects_directory_or_registry_substitution(
             )
 
 
+def test_typed_development_catalog_v2_maps_each_producer_directory(
+    tmp_path: Path,
+) -> None:
+    predecessor_directory = tmp_path / "development-predecessor"
+    completion_directory = tmp_path / "development-completion"
+    predecessor_directory.mkdir()
+    completion_directory.mkdir()
+    rom_directory = tmp_path / "roms"
+    rom_directory.mkdir()
+    rom_path = rom_directory / "red.gb"
+    rom_path.write_bytes(b"rom")
+    catalog = DEVELOPMENT_CATALOG_HELPERS["_catalog_v2"]()
+    producers = tuple(
+        replace(
+            producer,
+            capture_directory_sha256=hashlib.sha256(
+                str(
+                    predecessor_directory.resolve()
+                    if producer.role == "predecessor"
+                    else completion_directory.resolve()
+                ).encode("utf-8")
+            ).hexdigest(),
+        )
+        for producer in catalog.producers
+    )
+    catalog = replace(catalog, producers=producers)
+    catalog_path = tmp_path / "development-catalog-v2.json"
+    catalog_path.write_bytes(catalog.canonical_bytes())
+    catalog_path.chmod(0o600)
+
+    specs = SCRIPT["_typed_development_catalog_specs"](
+        catalog_path,
+        expected_catalog_sha256=catalog.catalog_sha256,
+        producer_directory=[completion_directory, predecessor_directory],
+        rom_sha256=catalog.rom_sha256,
+        context_catalog_sha256=catalog.producers[0].context_catalog_sha256,
+        registry_sha256=catalog.producers[0].registry_sha256,
+        registry_source_commit=catalog.producers[0].registry_source_commit,
+        rom_path=rom_path,
+    )
+
+    assert len(specs) == 8
+    assert tuple(item.producer_source_commit for item in specs).count(
+        catalog.producers[0].source_commit
+    ) == 7
+    assert tuple(item.producer_source_commit for item in specs).count(
+        catalog.producers[1].source_commit
+    ) == 1
+    assert {item.state_path.parent for item in specs} == {
+        predecessor_directory.resolve(),
+        completion_directory.resolve(),
+    }
+
+
 def test_historical_development_catalog_is_a_strict_producer_membership() -> None:
     source_commit = "a" * 40
     document = {

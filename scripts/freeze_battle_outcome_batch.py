@@ -10,7 +10,7 @@ import os
 import re
 import stat
 import sys
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
@@ -54,7 +54,11 @@ from pokemon_red_completion.battle_scenario_capture_catalog import (  # noqa: E4
 from pokemon_red_completion.battle_scenario_development_capture_catalog import (  # noqa: E402
     BattleScenarioDevelopmentCaptureCatalog,
     BattleScenarioDevelopmentCaptureCatalogError,
+    BattleScenarioDevelopmentCaptureCatalogV2,
     BattleScenarioDevelopmentCaptureEntry,
+    BattleScenarioDevelopmentCaptureEntryV2,
+    BattleScenarioDevelopmentCaptureProducer,
+    BattleScenarioDevelopmentCaptureProducerV2,
     parse_battle_scenario_development_capture_catalog,
 )
 from pokemon_red_completion.battle_semantics import (  # noqa: E402
@@ -171,7 +175,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--development-capture-catalog", type=Path)
     parser.add_argument("--expected-development-capture-catalog-sha256")
-    parser.add_argument("--development-producer-directory", type=Path)
+    parser.add_argument(
+        "--development-producer-directory",
+        action="append",
+        type=Path,
+    )
     parser.add_argument("--out-freeze", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     return parser
@@ -615,7 +623,7 @@ def _typed_development_catalog_specs(
     catalog_path: Path,
     *,
     expected_catalog_sha256: str,
-    producer_directory: Path,
+    producer_directory: Path | list[Path],
     rom_sha256: str,
     context_catalog_sha256: str,
     registry_sha256: str,
@@ -637,45 +645,85 @@ def _typed_development_catalog_specs(
         catalog = parse_battle_scenario_development_capture_catalog(payload)
     except BattleScenarioDevelopmentCaptureCatalogError as error:
         raise BattleOutcomeBatchFreezeError(str(error)) from None
-    directory = _private_capture_directory(
-        producer_directory,
-        rom_path=rom_path,
-        subject="development producer directory",
+    raw_directories = (
+        (producer_directory,)
+        if isinstance(producer_directory, Path)
+        else tuple(producer_directory)
     )
-    producer = catalog.producer
-    observed_directory_sha256 = hashlib.sha256(str(directory).encode("utf-8")).hexdigest()
-    if (
+    directories = tuple(
+        _private_capture_directory(
+            item,
+            rom_path=rom_path,
+            subject="development producer directory",
+        )
+        for item in raw_directories
+    )
+    producers = (
+        (catalog.producer,)
+        if isinstance(catalog, BattleScenarioDevelopmentCaptureCatalog)
+        else catalog.producers
+    )
+    if len(directories) != len(producers):
+        raise BattleOutcomeBatchFreezeError(
+            "typed development producer directory count differs"
+        )
+    directory_by_sha256 = {
+        hashlib.sha256(str(item).encode("utf-8")).hexdigest(): item
+        for item in directories
+    }
+    if len(directory_by_sha256) != len(directories) or any(
         producer.rom_sha256 != rom_sha256
         or producer.context_catalog_sha256 != context_catalog_sha256
         or producer.registry_sha256 != registry_sha256
         or producer.registry_source_commit != registry_source_commit
-        or producer.capture_directory_sha256 != observed_directory_sha256
+        or producer.capture_directory_sha256 not in directory_by_sha256
+        for producer in producers
     ):
         raise BattleOutcomeBatchFreezeError("typed development producer provenance differs")
+    producer_by_id = (
+        {"legacy": catalog.producer}
+        if isinstance(catalog, BattleScenarioDevelopmentCaptureCatalog)
+        else {item.producer_id: item for item in catalog.producers}
+    )
     return tuple(
         _typed_development_entry_spec(
             catalog,
             entry,
             catalog_sha256=observed_sha256,
-            directory=directory,
+            producer_by_id=producer_by_id,
+            directory_by_sha256=directory_by_sha256,
         )
         for entry in catalog.captures
     )
 
 
 def _typed_development_entry_spec(
-    catalog: BattleScenarioDevelopmentCaptureCatalog,
-    entry: BattleScenarioDevelopmentCaptureEntry,
+    catalog: BattleScenarioDevelopmentCaptureCatalog | BattleScenarioDevelopmentCaptureCatalogV2,
+    entry: BattleScenarioDevelopmentCaptureEntry | BattleScenarioDevelopmentCaptureEntryV2,
     *,
     catalog_sha256: str,
-    directory: Path,
+    producer_by_id: Mapping[
+        str,
+        BattleScenarioDevelopmentCaptureProducer
+        | BattleScenarioDevelopmentCaptureProducerV2,
+    ],
+    directory_by_sha256: Mapping[str, Path],
 ) -> CatalogCaptureSpec:
     # The catalog parser already establishes the concrete entry type and all
     # cardinality/uniqueness invariants; attributes remain explicit here so a
     # caller cannot supply independent state/manifest paths.
+    producer_id = (
+        entry.producer_id
+        if isinstance(entry, BattleScenarioDevelopmentCaptureEntryV2)
+        else "legacy"
+    )
+    producer = producer_by_id[producer_id]
+    source_commit = producer.source_commit
+    directory_sha256 = producer.capture_directory_sha256
+    directory = directory_by_sha256[directory_sha256]
     return CatalogCaptureSpec(
         partition=ScenarioPartition.DEVELOPMENT,
-        producer_source_commit=catalog.producer.source_commit,
+        producer_source_commit=source_commit,
         producer_catalog_sha256=catalog_sha256,
         state_path=directory / entry.state_filename,
         manifest_path=directory / entry.manifest_filename,
