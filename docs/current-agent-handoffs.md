@@ -3541,3 +3541,9 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Reviews use tracked source and path-free aggregate evidence only. Private captures, identities,
   saves, ROMs, and outcomes remain closed.
 - Codex adjudicates conflicts and records reasons. Reviewer agreement is not execution authority.
+
+Local engineering update: V2 now has a separate schema and policy hash, retains equal context
+weighting, and gates the known mixed-action roster on nine train and fourteen development contrast
+rows plus full available hidden rank. The next Codex task is full verification, publication, and
+exact-main CI. The one action-free V2 qualification remains a later separate step; outcomes remain
+closed.

@@ -3172,9 +3172,9 @@ offer usable-action counts `2,3,2,3,3`; the preregistered rule required all five
 offer at least three. Do not weaken that rule after seeing the result.
 
 1. Publish the path-free failed-gate evidence and keep all learning counters unchanged.
-2. Define the information unit prospectively: independent within-context action contrasts with
-   equal upstream-context weight, including an explicit minimum effective sample size.
-3. Test that definition using outcome-blind support/features only. If it cannot pass without
+2. Define the information unit prospectively: one independent upstream context with equal weight,
+   containing `k - 1` within-context action contrasts. This is now implemented as V2.
+3. Publish V2, then test it once using outcome-blind support/features only. If it cannot pass without
    special-casing these captures, reject the inventory and design new title-neutral supply.
 4. Only after one exact pass, collect train outcomes, fit once descriptively, commit development
    predictions, and then open development outcomes.

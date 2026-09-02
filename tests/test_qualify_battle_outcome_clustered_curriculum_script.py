@@ -179,6 +179,7 @@ def test_qualification_observes_every_root_once_and_writes_only_after_build(
         train_catalog_sha256="3" * 64,
         development_catalog_sha256="4" * 64,
         destination=tmp_path / "curriculum.json",
+        policy_version="v2",
     )
 
     assert result is curriculum
@@ -195,6 +196,7 @@ def test_qualification_observes_every_root_once_and_writes_only_after_build(
     ]
     assert len(captured["fresh_train"]) == 5  # type: ignore[arg-type]
     assert len(captured["development"]) == 8  # type: ignore[arg-type]
+    assert captured["policy_version"] == "v2"
     assert captured["claim_registry_sha256"] == "2" * 64
     assert written == [(tmp_path / "curriculum.json", b"curriculum\n")]
 
@@ -221,3 +223,28 @@ def test_cli_failure_is_path_free_and_effect_free(
     assert '"controller_actions": 0' in output
     assert '"root_claims_created": 0' in output
     assert '"model_fits": 0' in output
+
+
+def test_v2_cli_failure_retains_version_without_private_reason(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setitem(
+        MAIN_GLOBALS,
+        "_parser",
+        lambda: SimpleNamespace(
+            parse_args=lambda _argv: argparse.Namespace(policy_version="v2")
+        ),
+    )
+    monkeypatch.setitem(
+        MAIN_GLOBALS,
+        "_run",
+        lambda _args: (_ for _ in ()).throw(RuntimeError("/private/capture.state")),
+    )
+
+    assert SCRIPT["main"]([]) == 1
+    output = capsys.readouterr().out
+    assert "/private/capture.state" not in output
+    assert '"pokemon-red-battle-outcome-contrast-qualification-failure-v2"' in output
+    assert '"policy_version": "v2"' in output
+    assert '"controller_actions": 0' in output

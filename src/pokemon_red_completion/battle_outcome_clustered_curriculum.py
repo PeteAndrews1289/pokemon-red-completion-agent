@@ -1,10 +1,12 @@
-"""Action-free admission contract for the first clustered battle update.
+"""Versioned action-free admission contracts for clustered battle updates.
 
 The retired V2 batch required seven fresh train contexts.  Repeated attempts to
 manufacture the final two contexts through a Red-specific relocation route were
 falsified.  This successor asks the scientifically relevant question instead:
 whether the retained outcome plus the five authentic fresh contexts contain
 enough *measured action contrasts* to justify one descriptive train-only fit.
+V1 remains immutable and failed its exact three-action rule. V2 has a separate
+schema and policy identity for the prospective mixed-action contrast rule.
 
 Every usable action is still measured from the exact same starting capture.
 Each capture contributes one equally weighted preference example, regardless
@@ -41,8 +43,14 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 BATTLE_OUTCOME_CLUSTERED_CURRICULUM_SCHEMA = (
     "pokemon-red-battle-outcome-clustered-curriculum-v1"
 )
+BATTLE_OUTCOME_CONTRAST_CURRICULUM_SCHEMA = (
+    "pokemon-red-battle-outcome-contrast-curriculum-v2"
+)
 BATTLE_OUTCOME_CLUSTERED_POLICY_SCHEMA = (
     "pokemon-red-battle-outcome-clustered-policy-v1"
+)
+BATTLE_OUTCOME_CONTRAST_POLICY_SCHEMA = (
+    "pokemon-red-battle-outcome-contrast-policy-v2"
 )
 FRESH_TRAIN_CONTEXTS = 5
 TOTAL_TRAIN_CONTEXTS = 6
@@ -52,6 +60,10 @@ MINIMUM_MARGIN_STRATA = 2
 MINIMUM_PARTY_CONDITIONS = 2
 MINIMUM_FRESH_THREE_ACTION_CONTEXTS = 5
 MINIMUM_DEVELOPMENT_THREE_ACTION_CONTEXTS = 6
+MINIMUM_CONTRAST_FRESH_THREE_ACTION_CONTEXTS = 3
+MINIMUM_CONTRAST_DEVELOPMENT_THREE_ACTION_CONTEXTS = 6
+MINIMUM_TRAIN_CONTRAST_ROWS = 9
+MINIMUM_DEVELOPMENT_CONTRAST_ROWS = 14
 MAXIMUM_TARGET_HIDDEN_RANK = 14
 MINIMUM_RANK_SINGULAR_VALUE = 1e-6
 
@@ -60,7 +72,7 @@ _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _MAXIMUM_PAYLOAD_BYTES = 32 * 1024 * 1024
 _RANK_TOLERANCE = 1e-9
 
-_POLICY = {
+_CLUSTERED_POLICY = {
     "schema": BATTLE_OUTCOME_CLUSTERED_POLICY_SCHEMA,
     "retained_train_contexts": 1,
     "fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
@@ -90,15 +102,54 @@ _POLICY = {
     "teacher_choice_targets": 0,
 }
 
+_CONTRAST_POLICY = {
+    "schema": BATTLE_OUTCOME_CONTRAST_POLICY_SCHEMA,
+    "retained_train_contexts": 1,
+    "fresh_train_contexts": FRESH_TRAIN_CONTEXTS,
+    "development_contexts": DEVELOPMENT_CONTEXTS,
+    "independent_example_unit": "one_upstream_capture",
+    "train_example_weighting": "one_equal_contribution_per_upstream_capture",
+    "within_capture_target": "uniform_over_best_measured_usable_actions",
+    "fresh_action_measurement": "every_supported_usable_action_from_exact_reset",
+    "contrast_definition": "each_nonreference_action_hidden_minus_first_action_hidden",
+    "minimum_supported_actions_per_context": 2,
+    "minimum_fresh_three_action_contexts": (
+        MINIMUM_CONTRAST_FRESH_THREE_ACTION_CONTEXTS
+    ),
+    "minimum_development_three_action_contexts": (
+        MINIMUM_CONTRAST_DEVELOPMENT_THREE_ACTION_CONTEXTS
+    ),
+    "minimum_train_contrast_rows": MINIMUM_TRAIN_CONTRAST_ROWS,
+    "minimum_development_contrast_rows": MINIMUM_DEVELOPMENT_CONTRAST_ROWS,
+    "maximum_level_gap": MAXIMUM_LEVEL_GAP,
+    "maximum_retained_prefix_level_gap": MAXIMUM_RETAINED_PREFIX_LEVEL_GAP,
+    "minimum_distinct_venues_per_partition": MINIMUM_DISTINCT_VENUES,
+    "minimum_prior_margin_strata_per_partition": MINIMUM_MARGIN_STRATA,
+    "minimum_party_conditions_per_partition": MINIMUM_PARTY_CONDITIONS,
+    "hidden_contrast_rank_rule": "full_row_rank_up_to_hidden_width_14",
+    "minimum_rank_singular_value": MINIMUM_RANK_SINGULAR_VALUE,
+    "fit_count": 1,
+    "fit_partition": "train_only",
+    "development_prediction_commitment": "before_any_development_outcome",
+    "development_use": "paired_descriptive_comparison_only",
+    "inferential_claim": False,
+    "authority_promoted": False,
+    "teacher_choice_targets": 0,
+}
+
 
 class BattleOutcomeClusteredCurriculumError(ValueError):
     """Raised when the compact curriculum lacks support or independence."""
 
 
-def battle_outcome_clustered_policy_sha256() -> str:
+def battle_outcome_clustered_policy_sha256(*, version: str = "v1") -> str:
     """Return the immutable clustered weighting and admission policy."""
 
-    return canonical_sha256(_POLICY)
+    if version == "v1":
+        return canonical_sha256(_CLUSTERED_POLICY)
+    if version == "v2":
+        return canonical_sha256(_CONTRAST_POLICY)
+    raise ValueError("clustered policy version is unsupported")
 
 
 @dataclass(frozen=True, slots=True)
@@ -134,7 +185,10 @@ class BattleOutcomeClusteredCurriculum:
         ):
             if _SHA256.fullmatch(value) is None:
                 raise BattleOutcomeClusteredCurriculumError(f"{subject} differs")
-        if self.policy_sha256 != battle_outcome_clustered_policy_sha256():
+        if self.policy_sha256 not in {
+            battle_outcome_clustered_policy_sha256(version="v1"),
+            battle_outcome_clustered_policy_sha256(version="v2"),
+        }:
             raise BattleOutcomeClusteredCurriculumError("clustered policy differs")
         if self.fixed_heuristic_sha256 != battle_outcome_fixed_heuristic_sha256():
             raise BattleOutcomeClusteredCurriculumError("fixed heuristic differs")
@@ -161,11 +215,24 @@ class BattleOutcomeClusteredCurriculum:
             count=DEVELOPMENT_CONTEXTS,
             subject="development",
         )
-        if any(
+        if self.policy_version == "v1" and any(
             item.binding.supported_candidate_count < 3 for item in self.fresh_train
         ):
             raise BattleOutcomeClusteredCurriculumError(
                 "clustered fresh train three-action coverage is inadequate"
+            )
+        if self.policy_version == "v2" and any(
+            item.binding.supported_candidate_count < 2
+            for item in (*self.fresh_train, *self.development)
+        ):
+            raise BattleOutcomeClusteredCurriculumError(
+                "contrast curriculum requires two actions per context"
+            )
+        if self.policy_version == "v2" and sum(
+            item.binding.supported_candidate_count >= 3 for item in self.fresh_train
+        ) < MINIMUM_CONTRAST_FRESH_THREE_ACTION_CONTEXTS:
+            raise BattleOutcomeClusteredCurriculumError(
+                "contrast fresh train three-action coverage is inadequate"
             )
         selected = (self.prefix, *self.fresh_train, *self.development)
         if any(
@@ -183,13 +250,31 @@ class BattleOutcomeClusteredCurriculum:
         self._require_pressure(
             (self.prefix, *self.fresh_train),
             subject="train",
-            required_three_action_contexts=MINIMUM_FRESH_THREE_ACTION_CONTEXTS,
+            required_three_action_contexts=(
+                MINIMUM_FRESH_THREE_ACTION_CONTEXTS
+                if self.policy_version == "v1"
+                else 0
+            ),
+            minimum_contrast_rows=(
+                None
+                if self.policy_version == "v1"
+                else MINIMUM_TRAIN_CONTRAST_ROWS
+            ),
             retained_capture_id=self.prefix.capture_id,
         )
         self._require_pressure(
             self.development,
             subject="development",
-            required_three_action_contexts=MINIMUM_DEVELOPMENT_THREE_ACTION_CONTEXTS,
+            required_three_action_contexts=(
+                MINIMUM_DEVELOPMENT_THREE_ACTION_CONTEXTS
+                if self.policy_version == "v1"
+                else MINIMUM_CONTRAST_DEVELOPMENT_THREE_ACTION_CONTEXTS
+            ),
+            minimum_contrast_rows=(
+                None
+                if self.policy_version == "v1"
+                else MINIMUM_DEVELOPMENT_CONTRAST_ROWS
+            ),
         )
 
     @staticmethod
@@ -254,6 +339,7 @@ class BattleOutcomeClusteredCurriculum:
         *,
         subject: str,
         required_three_action_contexts: int,
+        minimum_contrast_rows: int | None = None,
         retained_capture_id: str | None = None,
     ) -> None:
         if any(
@@ -278,6 +364,11 @@ class BattleOutcomeClusteredCurriculum:
         ):
             raise BattleOutcomeClusteredCurriculumError(
                 f"clustered {subject} three-action coverage is inadequate"
+            )
+        contrast_rows = sum(len(item.contrast_vectors) for item in candidates)
+        if minimum_contrast_rows is not None and contrast_rows < minimum_contrast_rows:
+            raise BattleOutcomeClusteredCurriculumError(
+                f"contrast {subject} row coverage is inadequate"
             )
         if (
             len({item.prior_margin_stratum for item in candidates})
@@ -309,6 +400,20 @@ class BattleOutcomeClusteredCurriculum:
         return self.retained_prefix.original_prior_sha256
 
     @property
+    def policy_version(self) -> str:
+        if self.policy_sha256 == battle_outcome_clustered_policy_sha256(version="v1"):
+            return "v1"
+        if self.policy_sha256 == battle_outcome_clustered_policy_sha256(version="v2"):
+            return "v2"
+        raise BattleOutcomeClusteredCurriculumError("clustered policy differs")
+
+    @property
+    def schema(self) -> str:
+        if self.policy_version == "v1":
+            return BATTLE_OUTCOME_CLUSTERED_CURRICULUM_SCHEMA
+        return BATTLE_OUTCOME_CONTRAST_CURRICULUM_SCHEMA
+
+    @property
     def train(self) -> tuple[BattleOutcomePressureCandidate, ...]:
         return (self.prefix, *self.fresh_train)
 
@@ -320,8 +425,62 @@ class BattleOutcomeClusteredCurriculum:
         return _canonical_payload(self.public_dict())
 
     def public_dict(self) -> dict[str, object]:
+        information_summary: dict[str, object] = {
+            "train_contexts": len(self.train),
+            "fresh_train_contexts": len(self.fresh_train),
+            "development_contexts": len(self.development),
+            "fresh_train_measured_action_arms": sum(
+                item.binding.supported_candidate_count for item in self.fresh_train
+            ),
+            "development_measured_action_arms": sum(
+                item.binding.supported_candidate_count for item in self.development
+            ),
+            "train_distinct_venues": len({item.venue_id for item in self.train}),
+            "development_distinct_venues": len(
+                {item.venue_id for item in self.development}
+            ),
+            "train_prior_margin_strata": len(
+                {item.prior_margin_stratum for item in self.train}
+            ),
+            "development_prior_margin_strata": len(
+                {item.prior_margin_stratum for item in self.development}
+            ),
+            "train_party_conditions": len(
+                {item.party_condition_id for item in self.train}
+            ),
+            "development_party_conditions": len(
+                {item.party_condition_id for item in self.development}
+            ),
+            "train_hidden_contrast_rank": _hidden_contrast_rank(self.train),
+            "train_required_hidden_contrast_rank": _required_hidden_rank(self.train),
+            "development_hidden_contrast_rank": _hidden_contrast_rank(self.development),
+            "development_required_hidden_contrast_rank": _required_hidden_rank(
+                self.development
+            ),
+            "train_example_weight": 1.0 / len(self.train),
+            "fit_count": 1,
+        }
+        if self.policy_version == "v2":
+            information_summary.update(
+                {
+                    "train_contrast_rows": sum(
+                        len(item.contrast_vectors) for item in self.train
+                    ),
+                    "development_contrast_rows": sum(
+                        len(item.contrast_vectors) for item in self.development
+                    ),
+                    "fresh_train_three_action_contexts": sum(
+                        item.binding.supported_candidate_count >= 3
+                        for item in self.fresh_train
+                    ),
+                    "development_three_action_contexts": sum(
+                        item.binding.supported_candidate_count >= 3
+                        for item in self.development
+                    ),
+                }
+            )
         return {
-            "schema": BATTLE_OUTCOME_CLUSTERED_CURRICULUM_SCHEMA,
+            "schema": self.schema,
             "status": "qualified_action_free",
             "curriculum_id": self.curriculum_id,
             "original_prior_sha256": self.original_prior_sha256,
@@ -336,45 +495,7 @@ class BattleOutcomeClusteredCurriculum:
             "prefix": self.prefix.public_dict(),
             "fresh_train": [item.public_dict() for item in self.fresh_train],
             "development": [item.public_dict() for item in self.development],
-            "information_summary": {
-                "train_contexts": len(self.train),
-                "fresh_train_contexts": len(self.fresh_train),
-                "development_contexts": len(self.development),
-                "fresh_train_measured_action_arms": sum(
-                    item.binding.supported_candidate_count for item in self.fresh_train
-                ),
-                "development_measured_action_arms": sum(
-                    item.binding.supported_candidate_count for item in self.development
-                ),
-                "train_distinct_venues": len({item.venue_id for item in self.train}),
-                "development_distinct_venues": len(
-                    {item.venue_id for item in self.development}
-                ),
-                "train_prior_margin_strata": len(
-                    {item.prior_margin_stratum for item in self.train}
-                ),
-                "development_prior_margin_strata": len(
-                    {item.prior_margin_stratum for item in self.development}
-                ),
-                "train_party_conditions": len(
-                    {item.party_condition_id for item in self.train}
-                ),
-                "development_party_conditions": len(
-                    {item.party_condition_id for item in self.development}
-                ),
-                "train_hidden_contrast_rank": _hidden_contrast_rank(self.train),
-                "train_required_hidden_contrast_rank": _required_hidden_rank(
-                    self.train
-                ),
-                "development_hidden_contrast_rank": _hidden_contrast_rank(
-                    self.development
-                ),
-                "development_required_hidden_contrast_rank": _required_hidden_rank(
-                    self.development
-                ),
-                "train_example_weight": 1.0 / len(self.train),
-                "fit_count": 1,
-            },
+            "information_summary": information_summary,
             "protections": {
                 "authority_promoted": False,
                 "controller_actions": 0,
@@ -405,6 +526,7 @@ def build_battle_outcome_clustered_curriculum(
     claim_registry_sha256: str,
     train_catalog_sha256: str,
     development_catalog_sha256: str,
+    policy_version: str = "v1",
 ) -> BattleOutcomeClusteredCurriculum:
     """Qualify one fixed, outcome-blind roster without selecting by outcome."""
 
@@ -412,6 +534,7 @@ def build_battle_outcome_clustered_curriculum(
         raise TypeError("clustered fresh train candidates require a sequence")
     if isinstance(development, (str, bytes)) or not isinstance(development, Sequence):
         raise TypeError("clustered development candidates require a sequence")
+    policy_sha256 = battle_outcome_clustered_policy_sha256(version=policy_version)
     return BattleOutcomeClusteredCurriculum(
         curriculum_id=curriculum_id,
         retained_prefix=retained_prefix,
@@ -421,6 +544,7 @@ def build_battle_outcome_clustered_curriculum(
         claim_registry_sha256=claim_registry_sha256,
         train_catalog_sha256=train_catalog_sha256,
         development_catalog_sha256=development_catalog_sha256,
+        policy_sha256=policy_sha256,
     )
 
 
@@ -464,7 +588,11 @@ def parse_battle_outcome_clustered_curriculum(
     if (
         not isinstance(value, dict)
         or set(value) != expected_fields
-        or value.get("schema") != BATTLE_OUTCOME_CLUSTERED_CURRICULUM_SCHEMA
+        or value.get("schema")
+        not in {
+            BATTLE_OUTCOME_CLUSTERED_CURRICULUM_SCHEMA,
+            BATTLE_OUTCOME_CONTRAST_CURRICULUM_SCHEMA,
+        }
         or value.get("status") != "qualified_action_free"
         or value.get("fixed_heuristic_id") != BATTLE_OUTCOME_FIXED_HEURISTIC_ID
         or value.get("private_path_fields") != 0
@@ -504,7 +632,8 @@ def parse_battle_outcome_clustered_curriculum(
     except BattleOutcomeBatchError as error:
         raise BattleOutcomeClusteredCurriculumError(str(error)) from None
     if (
-        value.get("original_prior_sha256") != curriculum.original_prior_sha256
+        value.get("schema") != curriculum.schema
+        or value.get("original_prior_sha256") != curriculum.original_prior_sha256
         or value.get("retained_prefix_sha256")
         != curriculum.retained_prefix.retained_prefix_sha256
         or value.get("information_summary")
