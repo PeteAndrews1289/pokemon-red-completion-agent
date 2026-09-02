@@ -217,9 +217,35 @@ def test_catalog_rejects_changed_two_venue_denominator() -> None:
         )
 
 
-def test_catalog_rejects_rewritten_success_ordinal() -> None:
+def test_catalog_accepts_a_different_authenticated_predecessor_failure_pattern() -> None:
     entries = [_entry(index) for index in range(7)]
-    entries[1] = replace(entries[1], producer_ordinal=1)
+    for index, producer_ordinal in enumerate((1, 2, 3, 4, 6)):
+        entries[index] = replace(entries[index], producer_ordinal=producer_ordinal)
+
+    catalog = build_battle_scenario_capture_catalog(
+        catalog_id="battle-v2-seven-inputs",
+        builder_source_commit="d" * 40,
+        builder_source_bundle_sha256=_sha(500),
+        rom_sha256=_sha(11),
+        producers=(_producer("predecessor"), _producer("completion")),
+        captures=entries,
+    )
+
+    assert tuple(item.producer_ordinal for item in catalog.captures[:5]) == (
+        1,
+        2,
+        3,
+        4,
+        6,
+    )
+
+
+@pytest.mark.parametrize("rewritten", (2, 7))
+def test_catalog_rejects_duplicate_or_out_of_range_success_ordinal(
+    rewritten: int,
+) -> None:
+    entries = [_entry(index) for index in range(7)]
+    entries[0] = replace(entries[0], producer_ordinal=rewritten)
 
     with pytest.raises(BattleScenarioCaptureCatalogError, match="ordinal membership"):
         build_battle_scenario_capture_catalog(

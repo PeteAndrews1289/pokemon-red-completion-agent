@@ -246,16 +246,27 @@ class BattleScenarioCaptureCatalog:
         if producer_counts != Counter(expected_counts):
             raise BattleScenarioCaptureCatalogError("capture producer membership differs")
         producer_ordinals = {
-            producer_id: {
-                item.producer_ordinal for item in self.captures if item.producer_id == producer_id
-            }
-            for producer_id in expected_counts
+            producer.producer_id: tuple(
+                item.producer_ordinal
+                for item in self.captures
+                if item.producer_id == producer.producer_id
+            )
+            for producer in self.producers
         }
-        if producer_ordinals != {
-            self.producers[0].producer_id: {0, 2, 4, 5, 6},
-            self.producers[1].producer_id: {0, 1},
-        }:
-            raise BattleScenarioCaptureCatalogError("capture producer ordinal membership differs")
+        if any(
+            len(ordinals) != len(set(ordinals))
+            or any(
+                not 0
+                <= ordinal
+                < producer.successful_capture_count + producer.failed_assignment_count
+                for ordinal in ordinals
+            )
+            for producer in self.producers
+            for ordinals in (producer_ordinals[producer.producer_id],)
+        ):
+            raise BattleScenarioCaptureCatalogError(
+                "capture producer ordinal membership differs"
+            )
         if any(
             len(values) != REQUIRED_CAPTURE_COUNT
             for values in (
