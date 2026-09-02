@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the fail-before-freeze runtime compatibility repair and terminal failure evidence, require green exact-main CI, then freeze one new successor under the preserved exact retained runtime and stop before deciding on another controller-capable execution. The terminal e11ee811...39eb2 freeze may not retry.
+- Next decision: Publish the compatible-runtime successor freeze receipt, require green exact-main CI, then independently reauthenticate freeze f7204334...5263 and its absent execution artifact before one non-retryable bounded outcome batch. Fit remains train-only; all development predictions must be durable before outcomes, and zero discordance or no paired advantage rejects the update.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | At zero controller actions, require the batch freezer to reject the incompatible current emulator runtime before publication while accepting the preserved exact runtime bound to the retained V1 lesson. Any output from the mismatch or rejection of the exact runtime closes the successor without gameplay. |
+| Cheapest falsifier | Before controller input, independently reopen successor freeze f7204334...5263 under its exact published source and retained runtime, require the complete 1+7 train and 8 development roster and an absent execution artifact, then let the single bounded batch outcome decide whether the current battle representation produces any held-development discordance or paired advantage. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-runtime-mismatch-terminal** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-runtime-mismatch-failure-2026-09-02.json)
+**2026-09-02-battle-v2-compatible-runtime-successor-freeze** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-runtime-successor-freeze-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | No learning output was created. The exact V2 attempt produced zero train outcomes, zero development outcomes, and zero fits. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The attempted V2 batch stopped before its private execution artifact, root or candidate claims, predictions, fitting, controller input, emulator frames, teacher queries, sealed Red, Crystal, replay, or authority change. |
+| Learning output | This was a zero-effect qualification, not a lesson. It added no train or development outcomes and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. The compatible-runtime successor freeze opened no execution artifact, claim, outcome, prediction, fit, controller input, frame, teacher, sealed Red case, Crystal context, replay, or authority change. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The action-free freezer accepted the current runtime even though the retained V1 plan requires a different exact Python and PyBoy identity. The runner correctly rejected the mismatch before gameplay, but the exact freeze is terminal and cannot retry. |
-| Decision | Accept the terminal failure and do not retry or relabel its exact freeze. Publish the minimal fail-before-freeze runtime compatibility check, require green exact-main CI, then use the preserved exact compatible runtime to freeze a new successor identity at zero effects and stop again before controller-capable execution. |
-| Next session | Publish the runtime compatibility repair and terminal path-free failure evidence, require exact-main green CI, freeze one new compatible-runtime successor at zero effects, and stop before any second batch execution decision. |
-| Next falsifier | Exercise the new freezer guard against both known environments: the incompatible runtime must fail before output and the exact retained runtime must pass. After publication and green exact-main CI, one successor freeze must bind that compatible identity with the same complete 1+7 train and 8 development inventory at zero effects. |
-| Stop condition | Never retry freeze e11ee811...39eb2, replace a root, hand-pick a context, or weaken runtime identity. Stop before gameplay if the repair is unpublished, exact-main CI fails, the incompatible runtime can still publish a freeze, the exact retained runtime is unavailable, the successor does not reproduce the complete inventory, or any claim or controller effect occurs. |
+| Blocker | No technical compatibility blocker remains. The successor is intentionally stopped before controller input so execution and its non-retryable root claims remain a separate, explicit learning decision. |
+| Decision | Accept successor freeze f7204334...5263 as the only executable V2 batch candidate, keep failed freeze e11ee811...39eb2 permanently terminal, publish the path-free receipt, and require a fresh exact-main green CI binding before one bounded outcome execution. |
+| Next session | Publish the successor freeze receipt, require green exact-main CI, independently verify the exact runner/freeze/runtime and absent artifact, then execute f7204334...5263 once and adjudicate its train-only candidate against held development without opening sealed Red or Crystal. |
+| Next falsifier | Run the exact compatible-runtime batch once only after its receipt is published and exact-main CI is green. Fit on the retained plus seven fresh train outcomes, commit base, candidate, and heuristic predictions before opening eight development outcomes, and reject the update on zero discordance or no paired advantage. |
+| Stop condition | Never retry freeze e11ee811...39eb2 or execute f7204334...5263 from a different source or runtime. Stop before input on any digest, source, runtime, roster, claim-availability or artifact-presence mismatch. After input, every claimed root and candidate is terminal; zero development discordance or no paired advantage rejects the model iteration without route repair. |
 
 ### Stop conditions
 

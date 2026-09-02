@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the fail-before-freeze runtime repair
+## Current override: the compatible-runtime successor is frozen; Codex owns its separate execution decision
+
+The runtime guard repair merged as exact main `9956665d`; CI `33593610064/1` passed. One new
+action-free successor then reproduced the complete **1 retained + 7 fresh train / 8 development**
+inventory under the exact retained runtime and reopened as freeze `f7204334…5263`. Its execution
+artifact is absent, and actions, frames, claims, outcomes, predictions, fits, teachers, sealed Red,
+Crystal, replay and authority are all zero. Failed freeze `e11ee811…39eb2` remains terminal.
+
+Codex owns publication of this path-free receipt and the later one-shot execution decision. After
+green exact-main CI, reauthenticate the exact source, runtime, roster, freeze and absent artifact
+before input. Fit train only; commit every development control before opening outcomes; reject on
+zero discordance or no paired advantage. Claude later challenges leakage/statistics; Antigravity
+later challenges the title-neutral feature/action boundary. Neither sees private paths or roots.
+
+## Previous override: Codex owned the fail-before-freeze runtime repair
 
 Exact main `071a9be1` and CI `33589814077/1` qualified the canonical retained-record projection.
 The replacement 1+7/8 freeze `e11ee811…39eb2` reproduced the complete inventory at zero effects,

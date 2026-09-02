@@ -14,6 +14,24 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: the compatible-runtime V2 successor is frozen and unexecuted
+
+The fail-before-freeze repair merged as exact main `9956665d`; CI `33593610064/1` passed. Under
+the preserved exact retained runtime, one new action-free successor reproduced the complete **1
+retained + 7 fresh train / 8 development** inventory and independently reopened as freeze
+`f7204334…5263`. Its runtime is `7bd8060a…db0b1`, matching the retained V1 lesson exactly.
+
+The execution artifact is absent. **0 claims · 0 predictions · 0 outcomes · 0 fits · 0 actions ·
+0 frames · 0 teachers · 0 sealed Red · 0 Crystal · 0 authority**. Failed freeze
+`e11ee811…39eb2` remains terminal and must never retry.
+
+Next publish the [path-free successor receipt](docs/evidence/red-battle-v2-runtime-successor-freeze-2026-09-02.json)
+and require green exact-main CI. Only then may a separate decision execute `f7204334…5263` once.
+The runner must fit only on eight train examples and durably commit base, candidate and heuristic
+choices for all eight development examples before opening outcomes. Reject the candidate on zero
+discordance or no paired advantage. Counters remain **train 19 · fits 6 · verified development 6
+· unseen 4 · authority 0 · transfer 0**.
+
 ## 2026-09-02: V2 stopped safely before gameplay on an exact runtime mismatch
 
 The canonical retained-record projection merged as exact main `071a9be1`; PR CI

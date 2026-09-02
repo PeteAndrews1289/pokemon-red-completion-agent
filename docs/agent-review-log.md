@@ -3,6 +3,18 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Compatible-runtime V2 successor freeze — Codex 2026-09-02
+
+The runtime guard repair merged as exact main `9956665d` and CI `33593610064/1` passed. One new
+action-free successor used exact retained runtime `7bd8060a…db0b1`, reproduced inventory
+`c3bc5f18…bf015`, and canonically retained freeze `f7204334…5263` with one retained plus seven
+fresh train and eight development contexts.
+
+Codex accepts this as execution qualification only. The execution artifact remains absent and all
+gameplay, learning, sealed, Crystal and authority effects are zero. The failed incompatible freeze
+remains terminal. Publication and new exact-main CI precede a separate one-shot execution; this
+receipt itself does not count as a train example, model fit or development result.
+
 ## V2 runtime mismatch adjudication — Codex 2026-09-02
 
 The retained-record projection merged as exact main `071a9be1`; PR CI `33588649710/1` and main CI

@@ -11,7 +11,34 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the V2 execution stopped before gameplay on runtime identity
+## Current checkpoint: the compatible-runtime V2 successor is frozen before execution
+
+The runtime guard repair merged as exact main `9956665d`; CI `33593610064/1` passed. Using the
+preserved exact retained environment, one new action-free successor reproduced the complete
+outcome-blind inventory and independently reopened as freeze `f7204334…5263`, inventory
+`c3bc5f18…bf015`, roster `d14539fb…ba09c`, and runtime `7bd8060a…db0b1`.
+
+The successor contains one retained plus seven fresh train contexts and eight development
+contexts. Controller actions, frames, root or candidate claims, outcomes, predictions, fits,
+teachers, sealed Red, Crystal, replay and authority are all zero. Its execution artifact does not
+exist. Failed freeze `e11ee811…39eb2` remains terminal and cannot retry.
+
+Next:
+
+1. publish this path-free successor receipt and require green exact-main CI;
+2. independently reopen the exact freeze, source, runtime, roster and absent artifact;
+3. execute the successor once, durably claiming the whole denominator before input;
+4. fit only on one retained plus seven fresh train examples;
+5. commit base, candidate and heuristic choices on all eight development examples before opening
+   their outcomes;
+6. reject on zero discordance or no paired advantage; a positive descriptive result opens a
+   separate teacher-free authority gate, never Crystal directly.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[successor freeze](evidence/red-battle-v2-runtime-successor-freeze-2026-09-02.json).
+
+## Previous checkpoint: the V2 execution stopped before gameplay on runtime identity
 
 The canonical retained-record projection merged as exact main `071a9be1`; pull-request CI
 `33588649710/1` and main CI `33589814077/1` passed. A new action-free freeze then reproduced the
