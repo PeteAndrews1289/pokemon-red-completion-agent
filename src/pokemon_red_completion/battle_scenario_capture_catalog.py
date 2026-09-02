@@ -373,7 +373,7 @@ class BattleScenarioRetainedTrainCaptureCatalog:
                 "retained train catalog identity repeats"
             )
         if Counter(item.venue_id for item in self.captures) != Counter(
-            {"digletts_cave": 4, "route_11": 1}
+            {"digletts_cave": 3, "route_11": 2}
         ):
             raise BattleScenarioCaptureCatalogError(
                 "retained train venue distribution differs"

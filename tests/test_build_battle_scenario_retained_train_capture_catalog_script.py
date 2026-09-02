@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import runpy
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -83,6 +84,11 @@ def test_builder_authenticates_exact_five_success_two_failure_terminal(
 
     monkeypatch.setattr(builder, "_require_terminal_producer", require_terminal)
     entries = tuple(CATALOG_HELPERS["_entry"](index) for index in range(5))
+    entries = (
+        *entries[:3],
+        replace(entries[3], venue_id="route_11"),
+        entries[4],
+    )
     monkeypatch.setattr(
         builder,
         "_catalog_entries",
@@ -116,7 +122,7 @@ def test_builder_authenticates_exact_five_success_two_failure_terminal(
     assert receipt["status"] == "authenticated_action_free"
     assert receipt["capture_count"] == 5
     assert receipt["historical_failed_assignments"] == 2
-    assert receipt["venue_counts"] == {"digletts_cave": 4, "route_11": 1}
+    assert receipt["venue_counts"] == {"digletts_cave": 3, "route_11": 2}
     assert receipt["controller_actions"] == 0
     assert receipt["emulator_frames"] == 0
     assert receipt["outcomes_opened"] == 0
