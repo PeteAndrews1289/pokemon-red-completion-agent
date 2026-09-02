@@ -15,9 +15,11 @@ from pokemon_red_completion.battle_scenario_materialization_plan import (
 )
 from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (
     BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA,
+    BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA,
     BATTLE_SCENARIO_MATERIALIZATION_PLAN_V2_SCHEMA,
     BattleScenarioMaterializationCandidateV2,
     BattleScenarioMaterializationPlanV2Error,
+    BattleScenarioMaterializationSupplementalExclusion,
     BattleScenarioReachableVenue,
     RetainedBattleScenarioMaterializationCapture,
     build_battle_scenario_materialization_completion_plan,
@@ -158,6 +160,10 @@ def _retained_successes():
 
 def _build_completion(
     candidates: tuple[BattleScenarioMaterializationCandidateV2, ...] | None = None,
+    *,
+    supplemental_exclusions: tuple[
+        BattleScenarioMaterializationSupplementalExclusion, ...
+    ] = (),
 ):
     predecessor, retained = _retained_successes()
     if candidates is None:
@@ -180,6 +186,7 @@ def _build_completion(
         predecessor_failure_count=2,
         retained_successes=retained,
         candidates=candidates,
+        supplemental_exclusions=supplemental_exclusions,
     )
 
 
@@ -352,6 +359,45 @@ def test_completion_plan_selection_is_independent_of_new_inventory_order() -> No
     candidates = tuple(_candidate(index) for index in range(20, 23))
 
     assert _build_completion(candidates) == _build_completion(tuple(reversed(candidates)))
+
+
+def test_completion_successor_binds_every_later_terminal_exclusion() -> None:
+    exclusions = (
+        BattleScenarioMaterializationSupplementalExclusion(
+            plan_sha256=_sha("later-plan-2"),
+            run_journal_sha256=_sha("later-journal-2"),
+        ),
+        BattleScenarioMaterializationSupplementalExclusion(
+            plan_sha256=_sha("later-plan-1"),
+            run_journal_sha256=_sha("later-journal-1"),
+        ),
+    )
+
+    plan = _build_completion(supplemental_exclusions=exclusions)
+    reopened = parse_battle_scenario_materialization_completion_plan(
+        plan.canonical_bytes()
+    )
+
+    assert plan.private_dict()["schema"] == (
+        BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA
+    )
+    assert reopened == plan
+    assert tuple(item.plan_sha256 for item in plan.supplemental_exclusions) == tuple(
+        sorted(item.plan_sha256 for item in exclusions)
+    )
+
+
+def test_completion_successor_rejects_duplicate_terminal_exclusions() -> None:
+    exclusion = BattleScenarioMaterializationSupplementalExclusion(
+        plan_sha256=_sha("later-plan"),
+        run_journal_sha256=_sha("later-journal"),
+    )
+
+    with pytest.raises(
+        BattleScenarioMaterializationPlanV2Error,
+        match="completion plan differs",
+    ):
+        _build_completion(supplemental_exclusions=(exclusion, exclusion))
 
 
 def test_completion_plan_rejects_a_retained_source_in_new_inventory() -> None:

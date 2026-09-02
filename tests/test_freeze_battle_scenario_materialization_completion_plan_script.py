@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+import hashlib
 import runpy
 from contextlib import nullcontext
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+
+from pokemon_red_completion.battle_scenario_materialization_run import (
+    BattleScenarioMaterializationRunIdentity,
+    fail_battle_scenario_materialization_assignment,
+    initialize_battle_scenario_materialization_run,
+    start_battle_scenario_materialization_assignment,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = runpy.run_path(
@@ -29,6 +38,8 @@ def test_completion_freezer_accepts_only_complete_bank_and_history_inputs() -> N
     assert "--predecessor-plan" in options
     assert "--predecessor-run-journal" in options
     assert "--predecessor-capture-directory" in options
+    assert "--supplemental-excluded-plan" in options
+    assert "--supplemental-excluded-run-journal" in options
     assert "--source-state" not in options
     assert "--party-slot" not in options
     assert "--venue" not in options
@@ -115,6 +126,7 @@ def test_completion_freeze_selects_only_the_two_missing_roots(
         predecessor_journal_sha256=HELPERS["_sha"]("predecessor-journal"),
         predecessor_failure_count=2,
         retained_successes=retained,
+        supplemental_exclusions=(),
         destination=tmp_path / "plan.json",
     )
 
@@ -186,5 +198,66 @@ def test_completion_freeze_fails_without_enough_untouched_supply(
             predecessor_journal_sha256=HELPERS["_sha"]("predecessor-journal"),
             predecessor_failure_count=2,
             retained_successes=retained,
+            supplemental_exclusions=(),
             destination=tmp_path / "plan.json",
         )
+
+
+def test_supplemental_exclusion_authenticates_terminal_completion(
+    tmp_path: Path,
+) -> None:
+    predecessor, retained = HELPERS["_retained_successes"]()
+    supplemental = HELPERS["_build_completion"]()
+    supplemental = replace(
+        supplemental,
+        capture_directory_sha256=hashlib.sha256(
+            str(tmp_path).encode("utf-8")
+        ).hexdigest(),
+    )
+    identity = BattleScenarioMaterializationRunIdentity(
+        plan_id=supplemental.plan_id,
+        plan_sha256=supplemental.plan_sha256,
+        source_commit=supplemental.source_commit,
+        source_bundle_sha256=supplemental.source_bundle_sha256,
+        materializer_sha256=HELPERS["_sha"]("materializer"),
+        runtime_identity_sha256=HELPERS["_sha"]("runtime"),
+        rom_sha256=supplemental.rom_sha256,
+        capture_directory_sha256=supplemental.capture_directory_sha256,
+        context_catalog_sha256=HELPERS["_sha"]("catalog"),
+        registry_sha256=HELPERS["_sha"]("registry"),
+        registry_source_commit="a" * 40,
+        exact_ci_run=123,
+        exact_ci_attempt=1,
+    )
+    journal = initialize_battle_scenario_materialization_run(supplemental, identity)
+    for ordinal in range(len(journal.entries)):
+        journal = start_battle_scenario_materialization_assignment(journal, ordinal)
+        journal = fail_battle_scenario_materialization_assignment(
+            journal,
+            ordinal,
+            reason_code="source_relocation_failed",
+        )
+    plan_path = tmp_path / "completion-plan.json"
+    journal_path = tmp_path / "completion-journal.json"
+    plan_path.write_bytes(supplemental.canonical_bytes())
+    journal_path.write_bytes(journal.canonical_bytes())
+    plan_path.chmod(0o600)
+    journal_path.chmod(0o600)
+    predecessor_identity = SimpleNamespace(
+        journal_sha256=supplemental.predecessor_run_journal_sha256
+    )
+
+    exclusion, attempted = SCRIPT["_authenticate_supplemental_exclusion"](
+        plan_path,
+        expected_plan_sha256=supplemental.plan_sha256,
+        journal_path=journal_path,
+        expected_journal_sha256=journal.journal_sha256,
+        predecessor_plan=predecessor,
+        predecessor_journal=predecessor_identity,
+        retained_successes=retained,
+        rom_path=tmp_path.parent / "red.gb",
+    )
+
+    assert exclusion.plan_sha256 == supplemental.plan_sha256
+    assert exclusion.run_journal_sha256 == journal.journal_sha256
+    assert len(attempted) == 2

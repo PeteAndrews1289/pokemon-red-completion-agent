@@ -1,0 +1,76 @@
+{
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "claim_boundary": {
+    "supported": "Two separately authenticated additive materialization attempts left development capture supply complete at eight of eight and train capture supply incomplete at five of seven. The two newly attempted train roots are terminal failures and cannot retry.",
+    "unsupported": [
+      "battle_outcome_collection",
+      "candidate_model_fit",
+      "development_comparison",
+      "gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer",
+      "full_game_play",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "development": {
+    "capture_catalog_sha256": "f970a41d03e16205dfd6c7e7f23b5eb0f8ff6f1275a78d82e1eb933d09fdadd2",
+    "completion_journal_sha256": "79ee4c03997cf710ab8258fa3b2ed7b65c79f8464414441311ef11379f065625",
+    "completion_plan_sha256": "cfa7462fc9a7ac6982aaef9da279828cb956bc80275d4eb6f47125a5ba6a519c",
+    "completion_receipt_sha256": "606009a62e4f0db16235cf2b59c7560e3b792ded6cba99e69531030425084f85",
+    "new_failures": 0,
+    "new_successes": 1,
+    "retained_successes": 7,
+    "status": "capture_denominator_complete",
+    "total_successes": 8
+  },
+  "next_gate": {
+    "diagnostic_requirement": "Future materialization failures must retain bounded semantic route evidence without paths or exception text and bind that evidence into the terminal run receipt.",
+    "successor_requirement": "A later completion plan must authenticate and exclude every terminal supplemental tranche in addition to the original predecessor and earliest exhausted plan.",
+    "terminal_rule": "Never retry either train assignment from completion plan 830d97c28cc46901e0a1a295e23fdfa7e378f8d07727cd65cc347e7862875ada. Do not harden a selected Celadon teacher route to rescue them."
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "crystal_contexts_opened": 0,
+    "development_outcomes_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  },
+  "recorded_on": "2026-09-02",
+  "schema": "pokemon-red-battle-v2-partition-capture-completion-result-v1",
+  "source": {
+    "development_catalog_source_commit": "d3858cc8df708ebdd869474798c12dc3a864f225",
+    "development_catalog_source_main_ci_attempt": 1,
+    "development_catalog_source_main_ci_run": 33632119364,
+    "materialization_source_commit": "c4e699bd3cc601b3d71b0dfc034efa2a3ff1496e",
+    "materialization_source_main_ci_attempt": 1,
+    "materialization_source_main_ci_run": 33630197259
+  },
+  "status": "development_complete_train_incomplete",
+  "train": {
+    "completion_failure_reason_counts": {
+      "source_relocation_failed": 2
+    },
+    "completion_journal_sha256": "2dc864ff4910c297bb97768e2e3ecf2194f128180baa153c2932a90b9bf3a7ee",
+    "completion_plan_sha256": "830d97c28cc46901e0a1a295e23fdfa7e378f8d07727cd65cc347e7862875ada",
+    "completion_receipt_sha256": "40c618ea8576b552a2f8ae20a2f74badd85eedc87bedd7e2e3f75c6d6097b23f",
+    "missing_successes": 2,
+    "new_failures": 2,
+    "new_successes": 0,
+    "retained_successes": 5,
+    "status": "capture_denominator_incomplete",
+    "total_successes": 5
+  }
+}

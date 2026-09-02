@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-09-02 partition-completion override — preserve eight development, recover two train:**
+> The additive materialization attempts left development complete at eight captures and train at
+> five of seven. Both new train roots failed during relocation and are terminal. No outcome,
+> prediction, fit, teacher, sealed Red, Crystal, replay or authority effect occurred.
+>
+> Codex owns the path-free terminal publication, durable future route diagnostics, multi-generation
+> supplemental exclusions, one exact-main qualification, and—only if canonical never-attempted
+> supply permits it—one two-root train successor. Claude may challenge statistical language and
+> Antigravity may challenge durability and portability at the next stable milestone; both remain
+> read-only. No reviewer or agent may retry the consumed roots, harden a selected Celadon teacher
+> route, shrink the denominator, fit five rows, open sealed Red or Crystal, or grant authority.
+
 > **2026-08-31 V2 capacity stop — supply three train lineages, do not shrink:** PR 123 merged as
 > exact main `00ad6ce1`; PR and exact-main CI passed. The action-free manifest census then found
 > only four distinct V2 fresh-train upstream states against seven required, while eight distinct

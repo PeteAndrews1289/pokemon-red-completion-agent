@@ -11,6 +11,29 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: development input is complete; train input is five of seven
+
+The broader authenticated capture recovery produced five retained train captures and seven
+retained development captures. The additive attempts then produced **0/2 train** and **1/1
+development**. Development now has a complete eight-capture, two-producer catalog. Train remains
+two captures short, and both newly failed roots are permanently consumed.
+
+No move outcome, prediction or fit occurred, so the learning board remains **causal train 19 ·
+model fits 6 · verified development 6 · unseen comparisons 4 · authority 0 · transfer 0**. The
+immediate maintenance unblock is deliberately narrow:
+
+1. publish the path-free partition result;
+2. retain bounded route-execution evidence in every future private failure and bind it into the
+   terminal receipt;
+3. let additive successors authenticate every later terminal plan/journal exclusion;
+4. require green exact-main CI, then freeze only never-attempted train roots;
+5. execute a two-root successor only if the canonical allocation supplies it without a selected
+   Celadon teacher-route repair;
+6. on failure of that supply condition, stop this capture strategy and redesign bounded scenarios
+   rather than shrinking the denominator or fitting five rows.
+
+See the [partition result](evidence/red-battle-v2-partition-capture-completion-result-2026-09-02.json).
+
 ## Current checkpoint: the frozen V2 roster is fully exhausted
 
 The reusable claim-supply audit merged as exact main `43f3d2c7`; CI `33611606034/1` passed. Its

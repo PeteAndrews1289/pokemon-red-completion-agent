@@ -6,6 +6,19 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex closes train capture diagnostics and successor history
+
+Development input supply is complete at eight captures across two authenticated producers. Train
+supply remains five of seven after two new relocation failures; both attempted roots are terminal.
+No move outcome, prediction or fit occurred.
+
+Codex owns one coherent publication containing the path-free terminal evidence, durable future
+route diagnostics, and supplemental-exclusion support. After exact-main CI it may freeze and run
+only a qualifying never-attempted two-root train successor. It must stop if success would require
+hardening a selected Celadon teacher route. Claude and Antigravity remain optional read-only
+milestone reviewers; neither review is needed for ordinary implementation. Sealed Red, Crystal,
+full replay, teacher choice, denominator shrinkage and authority promotion remain closed.
+
 ## Current override: Codex owns the broader existing-capture census
 
 The published metadata-only census proves that the terminal V2 roster has **0/7 fresh train and
