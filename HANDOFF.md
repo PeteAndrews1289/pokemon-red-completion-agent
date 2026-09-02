@@ -8988,3 +8988,41 @@ development contexts to remain multiway, nine/fourteen total contrast rows, and 
 hidden-contrast rank. Contexts—not action arms—remain the independent, equally weighted examples.
 Focused verification is green; publication and exact-main CI are still required before its sole
 action-free qualification. See `docs/red-battle-contrast-curriculum-v2.md`.
+
+---
+
+## 15. Active handoff — contrast V2 information gate failed closed (2026-09-02)
+
+PR 171 published the distinct V2 contrast policy as exact main
+`d9cf45a4d09a93470a62e571057af425376a227c`; pull-request CI `33677367025/1` and exact-main CI
+`33679292761/1` passed. The execution checkout reproduced source bundle
+`e1dd0f41…08e9c`, runtime identity `7bd8060a…db0b1`, the canonical prior
+`de284e6e…68a11`, and every fixed catalog binding before the production call.
+
+The one authorized outcome-blind V2 qualification then failed closed in 8.35 seconds. Its public
+CLI disclosed the typed failure and aggregate reason code only. No diagnostic reopen was performed,
+no curriculum artifact was created, and this handoff does not infer a private cause. Effects were
+controller actions 0, frames 0, root claims 0, outcomes 0, predictions 0, fits 0, teacher queries 0,
+sealed Red 0, Crystal 0, full replays 0 and authority 0. Preserve the
+[path-free result](docs/evidence/red-battle-contrast-information-gate-result-v2-2026-09-02.json).
+
+This is the required audit boundary. V1 and V2 are terminal, and the complete fixed roster is closed
+without outcomes. Do not rerun either qualifier, reopen the roster diagnostically, lower a gate,
+fit the fixed data, clone a lineage, or build another route-derived capture factory.
+
+Mission check for the next session:
+
+1. **Reusable capability:** a game-neutral constructor for short battle scenarios whose semantic
+   variation can later be supplied by Red, Crystal and newer adapters.
+2. **Learned authority:** none until a prospectively qualified train roster produces measured
+   selected-action outcomes and a held-development advantage.
+3. **Transfer test:** freeze the supported semantic/action projection after Red development and
+   compare Red initialization with the identical zero initialization on separate Crystal tasks.
+4. **Cheapest falsifier:** ROM-free fixture tests plus one small outcome-blind census must show
+   independent roots, real multi-action choices and sufficient hidden-contrast clearance.
+5. **Time box:** one session, at most eight hours, ending at the information census.
+6. **Stop condition:** stop if supply is timing clones, requires fixed Red-route hardening, cannot
+   expose adequacy before outcomes, or fails its prospective information floor.
+
+Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
+0**. Publish this rejection and exact-main green it before beginning the new supply design.

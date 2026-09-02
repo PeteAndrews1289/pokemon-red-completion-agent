@@ -5328,3 +5328,15 @@ version has to prove the model learned something worth carrying into a game it h
   repair the syllabus.
 - End on the honest fork: **PREREGISTER AGGREGATE CONTRAST V2** or **FIND NEW INDEPENDENT SUPPLY**.
   Never depict a lowered V1 threshold as a pass.
+
+## Scene: the model-training gate says no — September 2, 2026
+
+Show the contrast plainly: days-long route generation on one side, an eight-second information gate
+on the other. The gate rejects the fixed battle roster before a single outcome or model fit. The
+line is: **“Failing before training was the feature.”** We refused to make the graph look busier by
+training on examples that could not support the intended comparison.
+
+Then pivot forward. The next visual is not Pallet Town replaying again; it is a grid of small,
+semantically varied battle scenarios with independent lineages and visible action diversity. That
+is the curriculum intended to transfer: Red supplies the first adapter, Crystal tests whether the
+learned representation travels, and the living Pokédex remains the organizing product goal.

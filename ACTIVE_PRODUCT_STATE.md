@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and exact-main green the separate V2 contrast policy, then run its outcome-blind qualifier exactly once. A pass opens a later bounded train-outcome session; a failure closes the fixed roster and requires genuinely new title-neutral supply.
+- Next decision: Publish the terminal V2 rejection and exact-main green its path-free evidence. Then admit only genuinely new title-neutral short-scenario supply that passes a prospective outcome-blind information census; no fixed-roster outcome collection or fit is allowed.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Authenticate the five retained train captures as one complete cluster-aware catalog, derive their full usable-action contrast rank without opening outcomes, and stop before fitting if one retained plus five fresh contexts lack the preregistered support, diversity, independence, or numerical-clearance gate. |
+| Cheapest falsifier | Before creating another controller-capable campaign, prove with ROM-free fixtures and one outcome-blind bounded census that a title-neutral short-scenario constructor can supply independent battle contexts with the action diversity and hidden-contrast clearance the learner requires. Stop if it only clones timing variants or recreates a fixed Red route. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-contrast-policy-engineering** · status **active** · evidence [falsification](docs/evidence/red-battle-clustered-information-gate-result-2026-09-02.json)
+**2026-09-02-battle-v2-contrast-information-gate** · status **closed** · evidence [falsification](docs/evidence/red-battle-contrast-information-gate-result-v2-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
 | Learning output | This was input preparation, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None yet. The successor retained diagnostic evidence and the replacement engineering gate opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
+| Authority delta | None. V2 was an action-free information gate and its rejection opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The exact one-retained plus five-fresh clustered curriculum failed its action-free gate because only three of five fresh train captures expose at least three usable actions; the required count was five. No outcome, claim, prediction, fit, teacher, sealed Red case, Crystal context, replay, or authority was opened. Route-derived replacement supply remains permanently closed. |
-| Decision | Retire clustered V1 without weakening it. Implement V2 as a separate policy: one equally weighted independent example per upstream capture, all within-context action contrasts retained, minimum mixed-action support derived from the fixed six-train/eight-development denominators, and full available hidden-contrast rank. V2 remains descriptive and shadow-only. |
-| Next session | Complete full verification and publish the distinct V2 contrast policy. After exact-main CI, run exactly one outcome-blind V2 qualification and stop on its result. Only a pass may open a later train outcome session. |
-| Next falsifier | After V2 is published and exact-main CI passes, run its action-free qualifier once against the fixed catalogs. If either partition lacks its frozen contrast-row count, full available hidden rank, clearance, diversity, or exact claim availability, close these inputs without outcomes and design genuinely new title-neutral supply. |
-| Stop condition | Do not lower the failed V1 five-of-five three-action threshold, collect outcomes under that curriculum, retry terminal route plans, harden the failed Red route, clone captures, or outcome-select replacements. Any successor must be frozen prospectively from outcome-blind information only. |
+| Blocker | The sole exact-main V2 qualification failed closed. Its public receipt intentionally exposed only the aggregate failure code, so this session does not infer a private root cause or reopen the fixed inputs. The complete one-retained plus five-fresh train and eight-development roster is now closed without outcomes. |
+| Decision | Preserve the V2 rejection, forbid V1/V2 retries and close the fixed roster. Audit before new supply. The successor must create genuinely new independent title-neutral short scenarios prospectively, make information adequacy visible before outcomes, and avoid another clean-power route factory. |
+| Next session | Publish this terminal rejection, then design and test the smallest reusable short-scenario supply seam that varies semantic battle state directly rather than replaying a route. End the session at an outcome-blind information census; do not collect outcomes or fit a model yet. |
+| Next falsifier | Exercise a prospective title-neutral short-scenario supply contract first on ROM-free fixtures, then on a small outcome-blind census. Require independent lineages, real multi-action choices and numerical contrast clearance before freezing any outcome denominator; reject it if those properties are manufactured by timing clones or Red route patches. |
+| Stop condition | Do not rerun V1 or V2, diagnostically reopen the fixed private roster, lower either policy, collect its outcomes, harden the failed Red route, clone captures, or outcome-select replacements. Do not begin a successor until its title-neutral supply and information test are frozen prospectively. |
 
 ### Stop conditions
 

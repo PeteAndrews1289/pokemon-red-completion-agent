@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Published the distinct Red battle contrast V2 policy as exact main `d9cf45a4` under green CI
+  `33679292761/1`, then ran its single action-free qualification against the fixed one-retained plus
+  five-fresh train and eight-development roster. The gate failed closed without creating a
+  curriculum artifact. It performed zero controller actions, emulator frames, claims, outcomes,
+  predictions, fits, teacher queries, sealed Red or Crystal access, replays, or authority changes.
+  V1/V2 and the fixed roster are closed; the next data lane must prospectively prove genuinely new
+  independent title-neutral short-scenario supply before any outcome or fit.
+
 - Generalized the clean-power Red episode generator into a powered V2 lineage-supply rail bound
   to the published 103-lineage deficit. The unrun qualification plan fixes twelve worlds before
   controller input—3 train, 8 development, and 1 contingency—with exact generator/conditioner

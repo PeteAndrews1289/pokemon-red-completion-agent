@@ -1,0 +1,57 @@
+{
+  "catalogs": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "development_capture_catalog_sha256": "f970a41d03e16205dfd6c7e7f23b5eb0f8ff6f1275a78d82e1eb933d09fdadd2",
+    "fresh_train_capture_catalog_sha256": "27331a7379869e476f25169a81eced1681707b12144d1488e7259bcce9dfbfb0",
+    "retained_prefix_sha256": "30108ed33c331aaf78d60bb9e169f70f99e371434f97a54f81b0da90caf912cd"
+  },
+  "decision": {
+    "development_outcomes_may_open": false,
+    "fixed_roster_closed": true,
+    "model_fit_may_open": false,
+    "next_action": "audit_then_design_genuinely_new_title_neutral_scenario_supply",
+    "train_outcomes_may_open": false,
+    "v1_or_v2_retry_allowed": false
+  },
+  "effects": {
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "outcomes_opened": 0,
+    "predictions_computed": 0,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "execution": {
+    "artifact_created": false,
+    "diagnostic_reopens": 0,
+    "failure_reason_disclosed_by_public_cli": false,
+    "failure_type": "BattleOutcomeClusteredQualificationError",
+    "policy_sha256": "e1816568155ac0666a12137e432d594ed1c4945f138bdab95d0fdc20af7154bc",
+    "policy_version": "v2",
+    "reason_code": "clustered_curriculum_qualification_failed",
+    "status": "failed_closed"
+  },
+  "identities": {
+    "base_model_sha256": "de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "registry_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runtime_identity_sha256": "7bd8060a398ba1d0156f1a83c419e46cb18deec9c982c08eaf946d208e3db0b1",
+    "source_bundle_sha256": "e1dd0f41c3b8cca07441025cb04c451a867f41d1ac0097f713ade1a411008e9c",
+    "source_commit": "d9cf45a4d09a93470a62e571057af425376a227c"
+  },
+  "publication": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33679292761,
+    "policy_pull_request": 171,
+    "pull_request_ci_run": 33677367025
+  },
+  "recorded_on": "2026-09-02",
+  "schema": "pokemon-red-battle-contrast-information-gate-result-v2",
+  "status": "contrast_information_gate_failed_closed"
+}
