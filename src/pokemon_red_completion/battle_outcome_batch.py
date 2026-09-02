@@ -64,6 +64,7 @@ FRESH_TRAIN_CONTEXTS = 7
 DEVELOPMENT_CONTEXTS = 8
 TOTAL_TRAIN_CONTEXTS = FRESH_TRAIN_CONTEXTS + 1
 MAXIMUM_LEVEL_GAP = 12
+MAXIMUM_RETAINED_PREFIX_LEVEL_GAP = 14
 MINIMUM_DISTINCT_VENUES = 2
 MINIMUM_THREE_ACTION_CONTEXTS = 6
 MINIMUM_MARGIN_STRATA = 2
@@ -106,6 +107,7 @@ _PRESSURE_POLICY = {
     "development_contexts": DEVELOPMENT_CONTEXTS,
     "retained_train_prefixes": 1,
     "maximum_level_gap": MAXIMUM_LEVEL_GAP,
+    "maximum_retained_prefix_level_gap": MAXIMUM_RETAINED_PREFIX_LEVEL_GAP,
     "minimum_distinct_venues_per_partition": MINIMUM_DISTINCT_VENUES,
     "minimum_three_action_contexts_per_partition": MINIMUM_THREE_ACTION_CONTEXTS,
     "minimum_prior_margin_strata_per_partition": MINIMUM_MARGIN_STRATA,
@@ -1298,7 +1300,11 @@ class BattleOutcomeBatchRoster:
             if len(values) != len(set(values)):
                 raise BattleOutcomeBatchError(f"batch repeats a {subject}")
         train = (self.prefix, *self.fresh_train)
-        self._require_partition_pressure(train, subject="train")
+        self._require_partition_pressure(
+            train,
+            subject="train",
+            retained_prefix_capture_id=self.prefix.capture_id,
+        )
         self._require_partition_pressure(self.development, subject="development")
         if _hidden_contrast_rank(train) < self.required_hidden_contrast_rank:
             raise BattleOutcomeBatchError("batch train hidden contrast rank is inadequate")
@@ -1351,8 +1357,17 @@ class BattleOutcomeBatchRoster:
         candidates: Sequence[BattleOutcomePressureCandidate],
         *,
         subject: str,
+        retained_prefix_capture_id: str | None = None,
     ) -> None:
-        if any(item.level_gap > MAXIMUM_LEVEL_GAP for item in candidates):
+        if any(
+            item.level_gap
+            > (
+                MAXIMUM_RETAINED_PREFIX_LEVEL_GAP
+                if item.capture_id == retained_prefix_capture_id
+                else MAXIMUM_LEVEL_GAP
+            )
+            for item in candidates
+        ):
             raise BattleOutcomeBatchError(f"batch {subject} level gap exceeds policy")
         if len({item.venue_id for item in candidates}) < MINIMUM_DISTINCT_VENUES:
             raise BattleOutcomeBatchError(f"batch {subject} venue diversity is inadequate")
@@ -1838,6 +1853,7 @@ def _select_pressure_partition(
 ) -> tuple[BattleOutcomePressureCandidate, ...]:
     if len(pool) < count:
         raise BattleOutcomeBatchError(f"batch {subject} capacity is inadequate")
+    retained_prefix_capture_id = initial[0].capture_id if initial else None
     selected = list(initial)
     remaining = list(pool)
     while len(selected) < len(initial) + count:
@@ -1896,6 +1912,7 @@ def _select_pressure_partition(
     if _partition_selection_is_qualified(
         complete,
         required_rank=complete[0].hidden_width,
+        retained_prefix_capture_id=retained_prefix_capture_id,
     ):
         return tuple(sorted(fresh, key=lambda item: item.capture_id))
     repaired = _repair_pressure_partition_selection(
@@ -1903,11 +1920,13 @@ def _select_pressure_partition(
         selected=fresh,
         unselected=tuple(remaining),
         forbidden=tuple(forbidden),
+        retained_prefix_capture_id=retained_prefix_capture_id,
     )
     if repaired is None:
         failure_reason = _partition_selection_failure_reason(
             complete,
             required_rank=complete[0].hidden_width,
+            retained_prefix_capture_id=retained_prefix_capture_id,
         )
         raise BattleOutcomeBatchError(
             f"batch {subject} constrained selector failed without a capacity claim: "
@@ -1970,6 +1989,7 @@ def _repair_pressure_partition_selection(
     selected: tuple[BattleOutcomePressureCandidate, ...],
     unselected: tuple[BattleOutcomePressureCandidate, ...],
     forbidden: tuple[BattleOutcomeCaptureBinding, ...],
+    retained_prefix_capture_id: str | None,
 ) -> tuple[BattleOutcomePressureCandidate, ...] | None:
     required_rank = (*initial, *selected)[0].hidden_width
     valid: list[tuple[BattleOutcomePressureCandidate, ...]] = []
@@ -1990,6 +2010,7 @@ def _repair_pressure_partition_selection(
                 if _partition_selection_is_qualified(
                     complete,
                     required_rank=required_rank,
+                    retained_prefix_capture_id=retained_prefix_capture_id,
                 ):
                     valid.append(proposed)
         if valid:
@@ -2016,11 +2037,13 @@ def _partition_selection_is_qualified(
     candidates: Sequence[BattleOutcomePressureCandidate],
     *,
     required_rank: int,
+    retained_prefix_capture_id: str | None,
 ) -> bool:
     try:
         BattleOutcomeBatchRoster._require_partition_pressure(
             candidates,
             subject="candidate",
+            retained_prefix_capture_id=retained_prefix_capture_id,
         )
         return (
             _hidden_contrast_rank(candidates) >= required_rank
@@ -2038,11 +2061,13 @@ def _partition_selection_failure_reason(
     candidates: Sequence[BattleOutcomePressureCandidate],
     *,
     required_rank: int,
+    retained_prefix_capture_id: str | None,
 ) -> str:
     try:
         BattleOutcomeBatchRoster._require_partition_pressure(
             candidates,
             subject="candidate",
+            retained_prefix_capture_id=retained_prefix_capture_id,
         )
     except BattleOutcomeBatchError as error:
         return str(error)

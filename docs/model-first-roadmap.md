@@ -4775,3 +4775,31 @@ Current state is **engineering ready, not executed**. The exact next sequence is
 
 This is the first gate where “begin training” has a literal production path. It is still bounded
 battle preference learning, not autonomous game completion or living-Pokédex authority.
+
+## Current checkpoint — development set complete, narrow legacy-prefix repair pending
+
+The exact-main development plan completed all eight one-shot captures: four Diglett's Cave and
+four Route 11, each from a distinct development root. The terminal journal contains eight
+successes and no failure, pending or interrupted entry. An independent catalog reopen then
+authenticated all eight states and manifests while opening zero outcomes and computing zero model
+predictions.
+
+The first 7+8 batch freeze stopped without writing a batch artifact. Its only blocker was a policy
+join: the already-consumed retained lesson is level 44 versus level 30, while the newer uniform
+level-gap bound was 12. This is not a fresh-capture failure. The local repair grants that exact
+legacy prefix a maximum gap of 14 while preserving 12 for every new train and development row;
+tests prove 14 passes and 15 fails.
+
+Next sequence:
+
+1. publish the narrow policy repair and require green exact-main CI;
+2. regenerate the action-free retained-prefix projection from the completed historical artifact;
+3. freeze the exact 1 retained + 7 fresh train / 8 development batch once;
+4. reorient on its aggregate pressure, venue, margin and party-condition receipt;
+5. only then execute the batch: claim all 15 fresh roots, collect seven train outcomes, fit once,
+   commit all held predictions, and open the eight development outcomes;
+6. retain the model as shadow-only and audit before sealed Red or Crystal.
+
+Mission check: development supply is no longer the blocker. Training still has not advanced in
+this checkpoint; the board remains 19 causal train examples, 6 fits, 6 verified development
+outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.

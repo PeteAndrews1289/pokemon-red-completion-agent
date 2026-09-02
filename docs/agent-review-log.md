@@ -1326,3 +1326,20 @@ Mission check for this planning task:
   sources, documentation, active-focus, privacy/public-artifact, and all three source-bound registry
   checks passed. The initial broad run's eight failures were exclusively stale committed registry
   identities and disappeared after exact regeneration and a committed-head rerun.
+
+## Codex reorientation — development terminal and legacy-prefix tolerance (2026-09-01)
+
+- Result: one exact-main development campaign completed 8/8 captures with no failed, pending or
+  interrupted entry. The typed catalog independently authenticated eight unique roots split 4/4
+  across Diglett's Cave and Route 11, without outcomes or predictions.
+- Freeze finding: the first action-free batch assembly stopped because the retained historical
+  lesson has a level gap of 14 while the later policy imposed 12 uniformly. No batch artifact was
+  written and no root, outcome or fit was consumed.
+- Decision: reject both easy-looking alternatives. Replaying or dropping the retained example
+  would change history; raising the fresh-context limit would weaken the new curriculum. Permit 14
+  only for the exact retained prefix and keep 12 for every new train and development context.
+- Verification: focused batch/freezer tests pass 51/51, including explicit 14-pass and 15-fail
+  cases. Ruff and focused mypy pass. Publication, exact-main CI and a new source-bound action-free
+  freeze are still required before batch execution.
+- Learning result: none added. The mission board remains 19 causal train examples, 6 fits, 6
+  verified development outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.

@@ -5194,3 +5194,14 @@ version has to prove the model learned something worth carrying into a game it h
   clear that code supporting training is not evidence that training occurred.
 - End with the honest mission ladder: **BOUNDED BATTLE PREFERENCE → PARTY / NAVIGATION / GOAL
   AUTHORITY → FULL RED → LIVING POKÉDEX → THIN CRYSTAL TRANSFER**.
+
+## New sequence: “The exam set passed; the syllabus did not”
+
+- Show the terminal development ledger: **8 SUCCEEDED · 0 FAILED · CAVE 4 · ROUTE 11 4**.
+- Turn those outputs into one catalog while **OUTCOMES 0 · PREDICTIONS 0 · FITS 0** stays visible.
+- Let the 7+8 freeze stop on **LEGACY PREFIX GAP 14 > POLICY 12** before a batch artifact appears.
+- Explain the choice: do not discard or replay the authenticated old lesson, and do not loosen all
+  fresh examples. Draw two rails: **RETAINED PREFIX ≤14** and **EVERY FRESH ROW ≤12**.
+- Show the two regression checks: **14 PASSES · 15 FAILS**, followed by **51 FOCUSED PASSED**.
+- End on **PUBLISH → EXACT-MAIN CI → FREEZE 1+7 / 8 → REORIENT → ONE TRAIN-ONLY FIT**. Keep
+  authority, sealed Red, Crystal and living-Pokédex completion locked.
