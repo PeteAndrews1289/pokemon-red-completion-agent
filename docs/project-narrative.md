@@ -8287,3 +8287,8 @@ The useful engineering result is a sharper transaction boundary. The freezer mus
 the retained lesson and the environment that will consume it share the exact runtime, numerical
 learning stack and controller timing before it can publish a plan. A compatible historical
 environment still exists, so the curriculum survives; the invalid execution identity does not.
+
+The repaired freezer then proved the other half of that claim. Run under the preserved compatible
+environment, it reconstructed the same complete classroom and exam inventory and retained a new
+canonical freeze without pressing a button. The project ended the session there: the next run can
+finally collect outcomes and fit the shadow model, but only as a new explicit one-shot decision.

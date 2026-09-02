@@ -1,0 +1,68 @@
+{
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "claim_boundary": {
+    "supported": "One new source-bound Red V2 successor freeze used the exact preserved runtime required by the retained V1 lesson, reproduced the complete outcome-blind 1+7 train and 8 development inventory, retained a private canonical mode-0600 freeze, and stopped before execution.",
+    "unsupported": [
+      "battle_outcome_collection",
+      "candidate_model_fit",
+      "development_comparison",
+      "gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer",
+      "full_game_play",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "freeze": {
+    "base_model_sha256": "de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11",
+    "capture_catalog_count": 2,
+    "capture_producer_commit_count": 3,
+    "development_contexts": 8,
+    "freeze_sha256": "f7204334de655cecb009d800598d9f9758346f261dbf00f32a03d4d93f905263",
+    "fresh_train_contexts": 7,
+    "inventory_sha256": "c3bc5f18fb74dbeb62f04f29991874b3663b5ff122032f8d698c90aacadbf015",
+    "retained_train_contexts": 1,
+    "roster_sha256": "d14539fbf727ce74ad68b628890725084bdd20c87d200d3db2a36e85304ba09c",
+    "runtime_identity_sha256": "7bd8060a398ba1d0156f1a83c419e46cb18deec9c982c08eaf946d208e3db0b1",
+    "status": "prospective_unexecuted_batch_frozen"
+  },
+  "prior_terminal": {
+    "execution_artifact_created": false,
+    "freeze_sha256": "e11ee811b50ba4e4a5695c19d0722316cb4b6d3edd233046a2b46486c8a39eb2",
+    "retry_allowed": false,
+    "status": "terminal_runtime_mismatch_failure"
+  },
+  "recorded_on": "2026-09-02",
+  "schema": "pokemon-red-battle-v2-runtime-successor-freeze-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33593610064,
+    "source_bundle_sha256": "95e8b9888a0cd5b111ae4565196a82ab268e9d9dc883ed0e865f8d5bc068c579",
+    "source_commit": "9956665dab238814aa62b61d8f28408c72abb0a9"
+  },
+  "status": "compatible_runtime_successor_frozen_stop_before_execution",
+  "zero_effects": {
+    "authority_promotions": 0,
+    "candidate_claims": 0,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "execution_artifact_created": false,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  }
+}

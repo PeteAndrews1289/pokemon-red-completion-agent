@@ -5233,3 +5233,12 @@ version has to prove the model learned something worth carrying into a game it h
 - Retire freeze `e11ee811…39eb2`; do not depict it as retryable.
 - End on the fixed boundary: **FREEZER PROVES RUNTIME FIRST → GREEN MAIN → NEW ZERO-EFFECT FREEZE
   → STOP BEFORE EXECUTION**. Crystal and authority remain locked.
+
+## New sequence: “The classroom reopened under the right runtime”
+
+- Resolve the mismatch with **EXACT RETAINED RUNTIME `7bd8060a…`** and keep the controller unplugged.
+- Rebuild the board as **1 RETAINED + 7 FRESH TRAIN · 8 DEVELOPMENT**.
+- Show successor freeze `f7204334…5263` and identical inventory `c3bc5f18…bf015`.
+- Keep **CLAIMS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · PREDICTIONS 0 · FITS 0** onscreen.
+- End on the honest next rail: **PUBLISH RECEIPT → GREEN MAIN → EXECUTE ONCE → TRAIN 8 → COMMIT
+  DEVELOPMENT CHOICES → OPEN 8 OUTCOMES → ADJUDICATE**.
