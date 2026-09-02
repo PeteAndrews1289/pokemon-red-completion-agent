@@ -8,7 +8,8 @@ from pokemon_red_completion.battle_scenario_source_venue import (
     BattleScenarioSourceVenueError,
     battle_scenario_reachable_venues,
 )
-from pokemon_red_completion.gen1_field_moves import FLY_MOVE_ID
+from pokemon_red_completion.gen1_field_moves import CUT_MOVE_ID, FLY_MOVE_ID
+from pokemon_red_completion.gen1_story_routing import EventFlag
 from pokemon_red_completion.observation import Badge, MapId, RawGameState
 
 
@@ -77,6 +78,27 @@ def test_cinnabar_pc_counter_does_not_claim_unimplemented_mansion_relocation() -
     )
 
     assert tuple(item.venue_id for item in venues) == ("digletts_cave", "route_11")
+
+
+def test_celadon_center_can_reach_both_vermilion_venues_by_ground() -> None:
+    event_flags = bytearray(int(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING) // 8 + 1)
+    byte, bit = divmod(int(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING), 8)
+    event_flags[byte] |= 1 << bit
+    raw = _raw(
+        MapId.CELADON_POKECENTER,
+        badge_bits=int(Badge.CASCADE),
+        event_flags=bytes(event_flags),
+        party_moves=((1, CUT_MOVE_ID, 0, 0),),
+    )
+
+    venues = battle_scenario_reachable_venues(
+        raw,
+        last_blackout_map=int(MapId.CELADON_CITY),
+        current_map_tileset=6,
+    )
+
+    assert tuple(item.venue_id for item in venues) == ("digletts_cave", "route_11")
+    assert all(item.relocation_required for item in venues)
 
 
 def test_direct_mansion_source_does_not_invent_unqualified_travel() -> None:

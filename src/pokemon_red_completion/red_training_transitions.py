@@ -80,10 +80,10 @@ def red_training_fly_available(raw: RawGameState) -> bool:
 def red_training_ground_transition_available(raw: RawGameState) -> bool:
     """Whether a cartridge-composed ground route supports this exact boundary.
 
-    These are the two authenticated no-Fly starts recovered by the scale
-    campaign.  Saffron can leave through an opened guard house.  Lavender's
-    supported route crosses the observed post-Bill Cerulean passage and uses
-    one explicit Cut; neither route relies on a handwritten arrow sequence.
+    These are the authenticated no-Fly starts recovered by the scale
+    campaign.  Saffron can leave through an opened guard house.  Lavender and
+    Celadon use cartridge-composed land routes after Bill's passage opens and
+    require one explicit Cut; none relies on a handwritten arrow sequence.
     """
 
     if (raw.player_x, raw.player_y) != (3, 3):
@@ -91,7 +91,7 @@ def red_training_ground_transition_available(raw: RawGameState) -> bool:
     story = gen1_story_capabilities(raw)
     if raw.map_id == MapId.SAFFRON_POKECENTER:
         return SAFFRON_GUARDS_OPEN in story
-    if raw.map_id == MapId.LAVENDER_POKECENTER:
+    if raw.map_id in {MapId.LAVENDER_POKECENTER, MapId.CELADON_POKECENTER}:
         return (
             CERULEAN_ROBBED_HOUSE_OPEN in story
             and CUT_CAPABILITY in cut_capabilities(raw)
