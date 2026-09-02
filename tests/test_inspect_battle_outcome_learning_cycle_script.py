@@ -398,6 +398,33 @@ def test_complete_inspection_projects_one_exact_path_free_retained_prefix() -> N
     assert "/private/" not in str(receipt)
 
 
+def test_complete_inspection_projects_one_canonical_private_train_record(
+    tmp_path: Path,
+) -> None:
+    plan = _retained_plan()
+    record = _retained_record(plan)
+    reader = Reader({"outcomes": (record,)})
+    destination = tmp_path / "retained-train-record.json"
+
+    digest = SCRIPT["_project_retained_train_record"](
+        reader,
+        plan,
+        destination,
+    )
+
+    assert digest == SCRIPT["_project_retained_batch_prefix"](
+        reader,
+        plan,
+    )["train_record_sha256"]
+    assert destination.read_bytes() == SCRIPT["_canonical_payload"](record)
+    assert destination.stat().st_mode & 0o777 == 0o600
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCycleInspectionError"],
+        match="already exists",
+    ):
+        SCRIPT["_project_retained_train_record"](reader, plan, destination)
+
+
 def test_retained_prefix_projection_rejects_failed_evidence() -> None:
     plan = _retained_plan()
     reader = Reader(
@@ -457,6 +484,7 @@ def test_run_never_projects_a_prefix_before_full_terminal_validation(
     monkeypatch.setitem(globals_, "_read_plan", lambda path, digest: plan)
     monkeypatch.setitem(globals_, "open_private_root", lambda *args, **kwargs: Store())
     prefix_called = False
+    record_called = False
 
     def reject_tampered_terminal(
         observed_reader: Reader,
@@ -471,13 +499,20 @@ def test_run_never_projects_a_prefix_before_full_terminal_validation(
         prefix_called = True
         return {}
 
+    def forbidden_record(*args: object) -> str:
+        nonlocal record_called
+        record_called = True
+        return "0" * 64
+
     monkeypatch.setitem(globals_, "_project_complete", reject_tampered_terminal)
     monkeypatch.setitem(globals_, "_project_retained_batch_prefix", forbidden_prefix)
+    monkeypatch.setitem(globals_, "_project_retained_train_record", forbidden_record)
     args = SimpleNamespace(
         private_root=Path("/private/artifacts"),
         plan=Path("/private/plan.json"),
         expected_plan_sha256=plan.plan_sha256,
         project_retained_batch_prefix=True,
+        out_retained_train_record=Path("/private/retained-train-record.json"),
     )
 
     with pytest.raises(
@@ -487,6 +522,7 @@ def test_run_never_projects_a_prefix_before_full_terminal_validation(
         SCRIPT["_run"](args)
 
     assert prefix_called is False
+    assert record_called is False
 
 
 def test_retained_prefix_projection_writer_is_private_exclusive_and_durable(
