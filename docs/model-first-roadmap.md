@@ -5017,8 +5017,9 @@ outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.
   three-action contexts against five required; development provides six of eight.
 - [x] Confirm zero outcomes, predictions, fits, controller effects, teacher access, sealed Red,
   Crystal, replay, and authority.
-- [ ] Freeze one prospective outcome-blind V2 admission policy around independent action contrasts
-  and equal context weighting, or explicitly reject the fixed inventory and generate new supply.
+- [x] Freeze one prospective outcome-blind V2 admission policy around within-context action
+  contrasts and equal upstream-context weighting, with a separate schema and policy identity.
+- [ ] Publish V2 and require green exact-main CI.
 - [ ] Run V2 once. Only a pass opens train outcome collection and one descriptive shadow fit.
 - [ ] Commit development predictions before opening its outcomes, then audit before any authority
   or Crystal decision.

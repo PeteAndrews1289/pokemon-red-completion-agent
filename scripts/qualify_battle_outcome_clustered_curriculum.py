@@ -87,6 +87,12 @@ class BattleOutcomeClusteredQualificationError(RuntimeError):
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--curriculum-id", required=True)
+    parser.add_argument(
+        "--policy-version",
+        choices=("v1", "v2"),
+        default="v1",
+        help="v1 preserves the retired exact gate; v2 uses aggregate contrast admission",
+    )
     parser.add_argument("--expected-source-commit", required=True)
     parser.add_argument("--expected-source-bundle-sha256", required=True)
     parser.add_argument("--registry-source-commit", required=True)
@@ -299,6 +305,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         train_catalog_sha256=train_catalog_sha256,
         development_catalog_sha256=development_catalog_sha256,
         destination=destination,
+        policy_version=args.policy_version,
     )
     reopened_payload = batch_freezer._read_bounded_private_file(
         destination,
@@ -318,7 +325,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise BattleOutcomeClusteredQualificationError(
             "clustered curriculum information summary differs"
         )
-    return {
+    receipt: dict[str, object] = {
         "schema": "pokemon-red-battle-outcome-clustered-qualification-receipt-v1",
         "status": "qualified_action_free",
         "curriculum_id": curriculum.curriculum_id,
@@ -359,6 +366,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "authority_promoted": False,
         "private_path_fields": 0,
     }
+    if curriculum.policy_version == "v2":
+        receipt.update(
+            {
+                "schema": "pokemon-red-battle-outcome-contrast-qualification-receipt-v2",
+                "policy_version": "v2",
+                "policy_sha256": curriculum.policy_sha256,
+                "train_contrast_rows": summary["train_contrast_rows"],
+                "development_contrast_rows": summary[
+                    "development_contrast_rows"
+                ],
+            }
+        )
+    return receipt
 
 
 def _retained_train_catalog_specs(
@@ -426,6 +446,7 @@ def _qualify_under_shared_lease(
     train_catalog_sha256: str,
     development_catalog_sha256: str,
     destination: Path,
+    policy_version: str = "v1",
 ) -> BattleOutcomeClusteredCurriculum:
     prepared = (prefix, *fresh_train, *development)
     bindings = tuple(item[0] for item in prepared)
@@ -454,6 +475,7 @@ def _qualify_under_shared_lease(
                 claim_registry_sha256=snapshot.registry_state_sha256,
                 train_catalog_sha256=train_catalog_sha256,
                 development_catalog_sha256=development_catalog_sha256,
+                policy_version=policy_version,
             )
             payload = curriculum.canonical_bytes()
             if parse_battle_outcome_clustered_curriculum(payload) != curriculum:
@@ -475,24 +497,30 @@ def main(argv: list[str] | None = None) -> int:
     try:
         receipt = _run(args)
     except Exception as error:
+        policy_version = getattr(args, "policy_version", "v1")
+        failure: dict[str, object] = {
+            "schema": (
+                "pokemon-red-battle-outcome-clustered-qualification-failure-v1"
+                if policy_version == "v1"
+                else "pokemon-red-battle-outcome-contrast-qualification-failure-v2"
+            ),
+            "status": "failed_closed",
+            "reason_code": "clustered_curriculum_qualification_failed",
+            "failure_type": type(error).__name__,
+            "controller_actions": 0,
+            "emulator_frames": 0,
+            "root_claims_created": 0,
+            "outcomes_opened": 0,
+            "predictions_computed": 0,
+            "model_fits": 0,
+            "teacher_queries": 0,
+            "private_path_fields": 0,
+        }
+        if policy_version == "v2":
+            failure["policy_version"] = "v2"
         print(
             json.dumps(
-                {
-                    "schema": (
-                        "pokemon-red-battle-outcome-clustered-qualification-failure-v1"
-                    ),
-                    "status": "failed_closed",
-                    "reason_code": "clustered_curriculum_qualification_failed",
-                    "failure_type": type(error).__name__,
-                    "controller_actions": 0,
-                    "emulator_frames": 0,
-                    "root_claims_created": 0,
-                    "outcomes_opened": 0,
-                    "predictions_computed": 0,
-                    "model_fits": 0,
-                    "teacher_queries": 0,
-                    "private_path_fields": 0,
-                },
+                failure,
                 ensure_ascii=True,
                 indent=2,
                 sort_keys=True,

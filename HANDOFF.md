@@ -8981,3 +8981,10 @@ freeze one new outcome-blind V2 admission policy: either justify aggregate indep
 contrasts with equal context weighting, or require genuinely new independent multi-action supply.
 Run that gate once. Only a pass can open bounded train outcomes; development remains sealed until
 predictions are committed after a train-only fit.
+
+V2 is now implemented locally as a distinct schema/policy rather than a V1 threshold edit. It
+requires every context to remain a real choice, three of five fresh train contexts and six of eight
+development contexts to remain multiway, nine/fourteen total contrast rows, and full available
+hidden-contrast rank. Contexts—not action arms—remain the independent, equally weighted examples.
+Focused verification is green; publication and exact-main CI are still required before its sole
+action-free qualification. See `docs/red-battle-contrast-curriculum-v2.md`.

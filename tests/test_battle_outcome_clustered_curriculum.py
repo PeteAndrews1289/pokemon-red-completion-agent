@@ -7,6 +7,7 @@ from dataclasses import replace
 import pytest
 
 from pokemon_red_completion.battle_outcome_clustered_curriculum import (
+    BATTLE_OUTCOME_CONTRAST_CURRICULUM_SCHEMA,
     DEVELOPMENT_CONTEXTS,
     FRESH_TRAIN_CONTEXTS,
     BattleOutcomeClusteredCurriculumError,
@@ -45,6 +46,47 @@ def _curriculum():  # type: ignore[no-untyped-def]
     )
 
 
+def _contrast_curriculum():  # type: ignore[no-untyped-def]
+    original = _curriculum()
+    fresh = list(original.fresh_train)
+    for index, basis_offset in ((0, 2), (2, 6)):
+        prior = fresh[index]
+        fresh[index] = _candidate(
+            ScenarioPartition.TRAIN,
+            f"contrast-train-{index}",
+            basis_offset=basis_offset,
+            supported_count=2,
+            expected_map=prior.binding.expected_map,
+            margin_stratum=prior.prior_margin_stratum,
+            prior_model_sha256=original.original_prior_sha256,
+            player_hp_ratio=prior.player_hp_ratio,
+        )
+    development = list(original.development)
+    for index, basis_offset in ((1, 2), (3, 6)):
+        prior = development[index]
+        development[index] = _candidate(
+            ScenarioPartition.DEVELOPMENT,
+            f"contrast-development-{index}",
+            basis_offset=basis_offset,
+            supported_count=2,
+            expected_map=prior.binding.expected_map,
+            margin_stratum=prior.prior_margin_stratum,
+            prior_model_sha256=original.original_prior_sha256,
+            player_hp_ratio=prior.player_hp_ratio,
+        )
+    return build_battle_outcome_clustered_curriculum(
+        curriculum_id="red-battle-contrast-integration-v2",
+        retained_prefix=original.retained_prefix,
+        prefix=original.prefix,
+        fresh_train=fresh,
+        development=development,
+        claim_registry_sha256="1" * 64,
+        train_catalog_sha256="2" * 64,
+        development_catalog_sha256="3" * 64,
+        policy_version="v2",
+    )
+
+
 def test_clustered_curriculum_is_canonical_and_action_free() -> None:
     curriculum = _curriculum()
 
@@ -53,6 +95,12 @@ def test_clustered_curriculum_is_canonical_and_action_free() -> None:
     )
 
     assert reopened == curriculum
+    assert battle_outcome_clustered_policy_sha256() == (
+        "6b336685b35c08de090a31723863cf68a70a0c2aafde0ff45a6c4a9bd3c7c67b"
+    )
+    assert curriculum.curriculum_sha256 == (
+        "e669b3cf71a7230e82938a2f4ab14e262a717483414eee79c7358a9659720246"
+    )
     assert reopened.curriculum_sha256 == curriculum.curriculum_sha256
     assert len(reopened.train) == 6
     assert len(reopened.fresh_train) == 5
@@ -84,6 +132,73 @@ def test_clustered_policy_equal_weights_upstream_contexts() -> None:
     assert summary["fresh_train_measured_action_arms"] == 15  # type: ignore[index]
     assert summary["train_hidden_contrast_rank"] == 12  # type: ignore[index]
     assert summary["train_required_hidden_contrast_rank"] == 12  # type: ignore[index]
+
+
+def test_contrast_policy_accepts_mixed_two_and_three_action_contexts() -> None:
+    curriculum = _contrast_curriculum()
+    summary = curriculum.public_dict()["information_summary"]
+
+    assert curriculum.schema == BATTLE_OUTCOME_CONTRAST_CURRICULUM_SCHEMA
+    assert curriculum.policy_version == "v2"
+    assert curriculum.policy_sha256 == battle_outcome_clustered_policy_sha256(
+        version="v2"
+    )
+    assert summary["train_contrast_rows"] == 10  # type: ignore[index]
+    assert summary["development_contrast_rows"] == 14  # type: ignore[index]
+    assert summary["fresh_train_three_action_contexts"] == 3  # type: ignore[index]
+    assert summary["development_three_action_contexts"] == 6  # type: ignore[index]
+    assert summary["train_hidden_contrast_rank"] == 10  # type: ignore[index]
+    assert summary["development_hidden_contrast_rank"] == 14  # type: ignore[index]
+    assert (
+        parse_battle_outcome_clustered_curriculum(curriculum.canonical_bytes())
+        == curriculum
+    )
+
+
+def test_contrast_policy_does_not_rewrite_failed_v1_threshold() -> None:
+    curriculum = _contrast_curriculum()
+
+    with pytest.raises(
+        BattleOutcomeClusteredCurriculumError,
+        match="fresh train three-action coverage",
+    ):
+        replace(
+            curriculum,
+            policy_sha256=battle_outcome_clustered_policy_sha256(version="v1"),
+        )
+
+
+def test_contrast_policy_counts_multiway_fresh_contexts_not_prefix() -> None:
+    curriculum = _contrast_curriculum()
+    multiway_index = next(
+        index
+        for index, item in enumerate(curriculum.fresh_train)
+        if item.binding.supported_candidate_count == 3
+    )
+    prior = curriculum.fresh_train[multiway_index]
+    two_action = _candidate(
+        ScenarioPartition.TRAIN,
+        "contrast-third-two-action",
+        basis_offset=4,
+        supported_count=2,
+        expected_map=prior.binding.expected_map,
+        margin_stratum=prior.prior_margin_stratum,
+        prior_model_sha256=curriculum.original_prior_sha256,
+        player_hp_ratio=prior.player_hp_ratio,
+    )
+
+    with pytest.raises(
+        BattleOutcomeClusteredCurriculumError,
+        match="contrast fresh train three-action coverage",
+    ):
+        changed = list(curriculum.fresh_train)
+        changed[multiway_index] = two_action
+        replace(curriculum, fresh_train=tuple(changed))
+
+
+def test_clustered_policy_rejects_unknown_version() -> None:
+    with pytest.raises(ValueError, match="version is unsupported"):
+        battle_outcome_clustered_policy_sha256(version="v3")
 
 
 def test_clustered_curriculum_rejects_denominator_change() -> None:

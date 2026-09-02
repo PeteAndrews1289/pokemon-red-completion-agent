@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the failed action-free clustered gate. Then decide prospectively whether the correct successor gate is aggregate independent action-contrast information across all fixed contexts or genuinely new multi-action train supply. No outcome collection opens until that policy is frozen and passes once.
+- Next decision: Publish and exact-main green the separate V2 contrast policy, then run its outcome-blind qualifier exactly once. A pass opens a later bounded train-outcome session; a failure closes the fixed roster and requires genuinely new title-neutral supply.
 
 ### Mandatory mission check
 
@@ -60,7 +60,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-clustered-information-gate-result** · status **active** · evidence [falsification](docs/evidence/red-battle-clustered-information-gate-result-2026-09-02.json)
+**2026-09-02-battle-v2-contrast-policy-engineering** · status **active** · evidence [falsification](docs/evidence/red-battle-clustered-information-gate-result-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -69,9 +69,9 @@ outputs.
 | Authority delta | None yet. The successor retained diagnostic evidence and the replacement engineering gate opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
 | Blocker | The exact one-retained plus five-fresh clustered curriculum failed its action-free gate because only three of five fresh train captures expose at least three usable actions; the required count was five. No outcome, claim, prediction, fit, teacher, sealed Red case, Crystal context, replay, or authority was opened. Route-derived replacement supply remains permanently closed. |
-| Decision | Retire the exact clustered V1 curriculum without weakening its failed threshold. Preserve the truthful 3 Cave / 2 Route 11 five-capture catalog and the untouched eight-context development set. Before any outcome collection, prospectively choose and test either an aggregate contrast-information admission rule or a genuinely independent multi-action supply strategy; do not outcome-select, clone, or route-patch a replacement. |
-| Next session | Publish the failed information-gate result, then design one prospective V2 admission policy around measurable aggregate contrast information and exact equal context weighting. Run that action-free policy once; only a pass may open train outcome collection. |
-| Next falsifier | Using only outcome-blind catalog and feature metadata, compare a preregistered aggregate-contrast admission rule against the actual fixed 2/3-action support profile. If it cannot justify enough independent contrast information without post-hoc selection, close these inputs and design genuinely new title-neutral multi-action supply. |
+| Decision | Retire clustered V1 without weakening it. Implement V2 as a separate policy: one equally weighted independent example per upstream capture, all within-context action contrasts retained, minimum mixed-action support derived from the fixed six-train/eight-development denominators, and full available hidden-contrast rank. V2 remains descriptive and shadow-only. |
+| Next session | Complete full verification and publish the distinct V2 contrast policy. After exact-main CI, run exactly one outcome-blind V2 qualification and stop on its result. Only a pass may open a later train outcome session. |
+| Next falsifier | After V2 is published and exact-main CI passes, run its action-free qualifier once against the fixed catalogs. If either partition lacks its frozen contrast-row count, full available hidden rank, clearance, diversity, or exact claim availability, close these inputs without outcomes and design genuinely new title-neutral supply. |
 | Stop condition | Do not lower the failed V1 five-of-five three-action threshold, collect outcomes under that curriculum, retry terminal route plans, harden the failed Red route, clone captures, or outcome-select replacements. Any successor must be frozen prospectively from outcome-blind information only. |
 
 ### Stop conditions
