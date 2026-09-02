@@ -70,6 +70,7 @@ MINIMUM_THREE_ACTION_CONTEXTS = 6
 MINIMUM_MARGIN_STRATA = 2
 MINIMUM_PARTY_CONDITIONS = 2
 MAXIMUM_SINGLE_BUCKET_CONTEXTS = 6
+MINIMUM_HIDDEN_CONTRAST_RANK = 14
 
 _PRIOR_MARGIN_BOUNDARIES = (0.05, 0.20, 0.50)
 _HIDDEN_RANK_TOLERANCE = 1e-9
@@ -121,7 +122,11 @@ _PRESSURE_POLICY = {
         "identity_regularizer": _LOGDET_REGULARIZER,
         "canonical_output_field": False,
     },
-    "required_hidden_contrast_rank": "full_output_head_width",
+    "required_hidden_contrast_rank": {
+        "floor": MINIMUM_HIDDEN_CONTRAST_RANK,
+        "rule": "minimum_of_floor_and_output_head_width",
+        "unobserved_dimensions_remain_anchored_to_original_prior": True,
+    },
     "inventory_order": ["partition_value_asc", "capture_id_asc"],
     "hard_filter_order": [
         "previously_consumed",
@@ -609,6 +614,12 @@ def battle_outcome_pressure_policy_sha256() -> str:
     """Return the exact deterministic roster-selection contract."""
 
     return canonical_sha256(_PRESSURE_POLICY)
+
+
+def _required_hidden_contrast_rank(hidden_width: int) -> int:
+    if type(hidden_width) is not int or hidden_width < 1:  # noqa: E721
+        raise BattleOutcomeBatchError("pressure hidden width is invalid")
+    return min(hidden_width, MINIMUM_HIDDEN_CONTRAST_RANK)
 
 
 def battle_outcome_fixed_heuristic_sha256() -> str:
@@ -1275,9 +1286,9 @@ class BattleOutcomeBatchRoster:
         if len(widths) != 1:
             raise BattleOutcomeBatchError("batch hidden widths differ")
         width = next(iter(widths))
-        if self.required_hidden_contrast_rank != width:
+        if self.required_hidden_contrast_rank != _required_hidden_contrast_rank(width):
             raise BattleOutcomeBatchError(
-                "batch hidden contrast rank must cover the output-head width"
+                "batch hidden contrast rank requirement differs from policy"
             )
         for attribute, subject in (
             ("capture_id", "capture identity"),
@@ -1454,6 +1465,9 @@ class BattleOutcomeBatchRoster:
                 ),
                 "train_hidden_contrast_rank": self.train_hidden_contrast_rank,
                 "development_hidden_contrast_rank": (self.development_hidden_contrast_rank),
+                "prior_anchored_hidden_dimensions": (
+                    train[0].hidden_width - self.required_hidden_contrast_rank
+                ),
             },
             "protections": {
                 "authority_promoted": False,
@@ -1556,7 +1570,7 @@ def select_battle_outcome_batch_roster(
         exclusion_counts=tuple(
             sorted((reason, count) for reason, count in exclusions.items() if count)
         ),
-        required_hidden_contrast_rank=prefix.hidden_width,
+        required_hidden_contrast_rank=_required_hidden_contrast_rank(prefix.hidden_width),
     )
 
 
@@ -1911,7 +1925,7 @@ def _select_pressure_partition(
     complete = (*initial, *fresh)
     if _partition_selection_is_qualified(
         complete,
-        required_rank=complete[0].hidden_width,
+        required_rank=_required_hidden_contrast_rank(complete[0].hidden_width),
         retained_prefix_capture_id=retained_prefix_capture_id,
     ):
         return tuple(sorted(fresh, key=lambda item: item.capture_id))
@@ -1925,7 +1939,7 @@ def _select_pressure_partition(
     if repaired is None:
         failure_reason = _partition_selection_failure_reason(
             complete,
-            required_rank=complete[0].hidden_width,
+            required_rank=_required_hidden_contrast_rank(complete[0].hidden_width),
             retained_prefix_capture_id=retained_prefix_capture_id,
         )
         raise BattleOutcomeBatchError(
@@ -1991,7 +2005,7 @@ def _repair_pressure_partition_selection(
     forbidden: tuple[BattleOutcomeCaptureBinding, ...],
     retained_prefix_capture_id: str | None,
 ) -> tuple[BattleOutcomePressureCandidate, ...] | None:
-    required_rank = (*initial, *selected)[0].hidden_width
+    required_rank = _required_hidden_contrast_rank((*initial, *selected)[0].hidden_width)
     valid: list[tuple[BattleOutcomePressureCandidate, ...]] = []
     for swap_count in (1, 2):
         if len(selected) < swap_count or len(unselected) < swap_count:
@@ -2016,7 +2030,10 @@ def _repair_pressure_partition_selection(
         if valid:
             return min(
                 valid,
-                key=lambda items: _qualified_partition_key((*initial, *items)),
+                key=lambda items: _qualified_partition_key(
+                    (*initial, *items),
+                    required_rank=required_rank,
+                ),
             )
     return None
 
@@ -2083,6 +2100,8 @@ def _partition_selection_failure_reason(
 
 def _qualified_partition_key(
     candidates: Sequence[BattleOutcomePressureCandidate],
+    *,
+    required_rank: int,
 ) -> tuple[object, ...]:
     venue_counts = Counter(item.venue_id for item in candidates)
     margin_counts = Counter(item.prior_margin_stratum for item in candidates)
@@ -2091,7 +2110,7 @@ def _qualified_partition_key(
         -_hidden_contrast_rank(candidates),
         -_minimum_full_rank_singular_value(
             candidates,
-            width=candidates[0].hidden_width,
+            width=required_rank,
         ),
         -_hidden_contrast_logdet(candidates),
         max(venue_counts.values()),

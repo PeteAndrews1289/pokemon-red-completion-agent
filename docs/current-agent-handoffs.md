@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns publication and one zero-effect development freeze
+## Current override: Codex owns the rank-floor publication and aggregate freeze retry
+
+Exact main `1d8acd0f` passed CI `33581683171/1`. The first combined action-free freeze wrote no
+artifact because both fixed partitions have fourteen contrast rows against a sixteen-wide hidden
+head. Outcome-blind inspection found maximal rank 14 in both partitions with numerical clearance
+above `1e-6`. No controller input, claim, prediction, outcome or fit occurred.
+
+Codex owns publication of the bounded rank-14 contract, exact-main CI, and one new action-free
+aggregate freeze. The receipt must state that two dimensions remain anchored to the frozen prior
+and that inferential claims and authority are false. Stop and reorient after the canonical 8+8
+receipt. Selected-action outcomes, fitting, sealed Red, Crystal and gameplay authority remain
+separate gates.
+
+## Previous override: Codex owned publication and one zero-effect development freeze
 
 The generic partition-aware plan/freezer/materializer/runner is locally qualified. It derives a
 seven-item train or eight-item development denominator from authenticated sources, rejects mixed

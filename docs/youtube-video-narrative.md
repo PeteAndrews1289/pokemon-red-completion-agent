@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the gate that refused impossible math
+
+**Visual:** Show fourteen horizontal contrast vectors entering a sixteen-column matrix. Flash
+**MAXIMUM RANK 14 · REQUIRED 16 · STOPPED BEFORE OUTCOMES**. Then show the singular spectrum with
+the last observed values highlighted: **TRAIN 1.76e-5 · DEVELOPMENT 5.94e-4 · FLOOR 1e-6**.
+
+**Voiceover:** “Before asking the emulator for a single new outcome, the batch freezer found that
+our fixed menus could only produce fourteen independent comparisons. The old gate demanded
+sixteen, which no selector could manufacture. We kept the numerical clearance test, declared two
+dimensions prior-anchored under regularization, and kept authority closed. This is the unglamorous
+part of AI systems work: make impossible claims fail before expensive data collection.”
+
 ## New scene: stop bad data before it becomes an experiment
 
 **Visual:** Feed seven train cards into a green catalog reader, then feed eight development cards

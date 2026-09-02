@@ -1,0 +1,50 @@
+{
+  "action_free_batch_freeze": {
+    "artifact_created": false,
+    "development_contexts": 8,
+    "fresh_train_contexts": 7,
+    "retained_train_contexts": 1,
+    "status": "failed_closed_before_roster_publication"
+  },
+  "development_partition": {
+    "contrast_matrix_columns": 16,
+    "contrast_matrix_rows": 14,
+    "contrast_rank": 14,
+    "minimum_observed_singular_value": 0.0005942025828649609
+  },
+  "mission": {
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_choice_predictions": 0,
+    "model_fits": 0,
+    "outcomes_opened": 0,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "repair": {
+    "inferential_claim_allowed": false,
+    "minimum_hidden_contrast_rank": 14,
+    "minimum_singular_value": 1e-06,
+    "policy_sha256": "e67a05907456a990813e25e0eaca85866ba0882a5c38e86e7d857445a41814e3",
+    "prior_anchored_hidden_dimensions": 2,
+    "rationale": "The frozen prior and L2 penalty uniquely anchor dimensions outside the observed contrast subspace; this development batch cannot grant gameplay authority.",
+    "status": "implemented_locally_awaiting_publication_and_exact_main_ci"
+  },
+  "schema": "pokemon-red-battle-v2-rank-capacity-result-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33581683171,
+    "published_source_commit": "1d8acd0f022c3d514c8b8f226942aa3df5453946"
+  },
+  "status": "outcome_blind_rank_gate_repaired_locally",
+  "train_partition": {
+    "contrast_matrix_columns": 16,
+    "contrast_matrix_rows": 14,
+    "contrast_rank": 14,
+    "minimum_observed_singular_value": 0.00001758995318792317
+  }
+}

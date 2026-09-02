@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 2: a pre-outcome algebra check prevented a meaningless execution
+
+The first combined V2 batch freeze authenticated the retained prefix and all fifteen fresh capture
+inputs, then stopped before publishing a roster. Each fixed partition supplied fourteen pairwise
+candidate contrasts to a sixteen-wide hidden layer, making the original full-rank condition
+impossible regardless of selector quality. Because the check happened before outcomes, the design
+could be corrected without contaminating train or development labels.
+
+Both matrices reached their maximum possible rank of fourteen and cleared the existing numerical
+threshold. The revised development-only contract records two dimensions as anchored to the frozen
+prior under L2 regularization instead of claiming they were identified by this batch. It does not
+grant gameplay authority; it clears the smallest honest path to the first aggregate V2 fit and
+held-development comparison.
+
 ## September 1: one capture pipeline now understands both sides of the experiment
 
 The held-out classroom no longer depends on a separate script. The same plan that seals seven

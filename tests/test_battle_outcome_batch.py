@@ -342,6 +342,8 @@ def test_batch_roster_round_trips_complete_outcome_blind_denominator() -> None:
     assert len(restored.development) == DEVELOPMENT_CONTEXTS
     assert restored.train_hidden_contrast_rank == _HIDDEN_WIDTH
     assert restored.development_hidden_contrast_rank == _HIDDEN_WIDTH
+    assert restored.required_hidden_contrast_rank == 14
+    assert restored.public_dict()["pressure_summary"]["prior_anchored_hidden_dimensions"] == 2
     assert restored.public_dict()["fixed_heuristic_id"] == (BATTLE_OUTCOME_FIXED_HEURISTIC_ID)
     assert restored.public_dict()["protections"] == {
         "authority_promoted": False,
@@ -571,8 +573,43 @@ def test_different_assignments_from_one_upstream_state_cannot_cross_partitions()
 
 def test_pressure_policy_digest_binds_party_priority_and_repair_order() -> None:
     assert battle_outcome_pressure_policy_sha256() == (
-        "d6562531ebb75318c327261a0358ad237e7a201db1b9e7fd8c9fcdaf3282131d"
+        "e67a05907456a990813e25e0eaca85866ba0882a5c38e86e7d857445a41814e3"
     )
+
+
+def test_batch_accepts_maximal_fourteen_rank_with_two_prior_anchored_dimensions() -> None:
+    prefix, screened = _roster_inputs()
+    train = [item for item in screened if item.partition is ScenarioPartition.TRAIN]
+    development = [
+        item for item in screened if item.partition is ScenarioPartition.DEVELOPMENT
+    ]
+    train[-1] = _candidate(
+        ScenarioPartition.TRAIN,
+        "rank-fourteen-train",
+        basis_offset=12,
+        expected_map=int(MapId.VICTORY_ROAD_1F),
+        margin_stratum=2,
+        player_hp_ratio=0.5,
+    )
+    development[-1] = _candidate(
+        ScenarioPartition.DEVELOPMENT,
+        "rank-fourteen-development",
+        basis_offset=12,
+        expected_map=int(MapId.VICTORY_ROAD_1F),
+        margin_stratum=2,
+        player_hp_ratio=0.5,
+    )
+
+    roster = _roster(prefix=prefix, screened=(*train, *development))
+
+    assert roster.train_hidden_contrast_rank == 14
+    assert roster.development_hidden_contrast_rank == 14
+    assert roster.required_hidden_contrast_rank == 14
+
+
+def test_batch_rejects_a_rank_requirement_below_the_policy_floor() -> None:
+    with pytest.raises(BattleOutcomeBatchError, match="rank requirement differs"):
+        replace(_roster(), required_hidden_contrast_rank=13)
 
 
 def test_batch_selector_repairs_a_feasible_two_venue_subset() -> None:
