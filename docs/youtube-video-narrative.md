@@ -12,6 +12,10 @@ sixteen, which no selector could manufacture. We kept the numerical clearance te
 dimensions prior-anchored under regularization, and kept authority closed. This is the unglamorous
 part of AI systems work: make impossible claims fail before expensive data collection.”
 
+**Visual:** Replace the red stop card with a sealed box labeled **8 TRAIN · 8 HELD DEVELOPMENT ·
+RANK 14/14 · TWO PRIOR-ANCHORED DIMENSIONS · ZERO OUTCOMES**. Add the short receipt identity
+**62F971F8…02B8E** and leave the controller cable unplugged.
+
 ## New scene: stop bad data before it becomes an experiment
 
 **Visual:** Feed seven train cards into a green catalog reader, then feed eight development cards
