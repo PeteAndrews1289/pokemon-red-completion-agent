@@ -8322,3 +8322,12 @@ The response was not to replay the save. The runner was changed so the next fail
 bounded battle-runtime reason, exact partition and ordinal, claimed-versus-retained candidate set,
 and controller-input uncertainty before sealing. This is painful progress, but it preserves the
 central promise: evidence is never manufactured by rerunning a consumed decision until it passes.
+
+A separate metadata-only census then asked the claim ledger what remained of the failed roster.
+The answer was unambiguous: none of its seven fresh train roots and none of its eight development
+roots could be reused. The census never opened a save or ROM and never ran the emulator; it simply
+turned the transaction's blast radius into a measured capacity fact.
+
+That result changed the next question from “can we try again?” to “what independent captures exist
+outside this roster?” The project now inventories broader compatible supply before generating
+replacements, preserving both experimental independence and engineering time.

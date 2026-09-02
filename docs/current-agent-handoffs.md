@@ -6,7 +6,18 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns terminal publication, diagnostics and fresh-supply census
+## Current override: Codex owns the broader existing-capture census
+
+The published metadata-only census proves that the terminal V2 roster has **0/7 fresh train and
+0/8 development** roots available, with every gameplay and learning effect zero. It does not claim
+that compatible captures outside the roster have been aggregated.
+
+Codex owns publication of the path-free result and one broader catalog-authenticated, action-free
+census across existing captures. It must keep partitions and upstream lineages immutable, derive
+claim availability in one shared snapshot, publish exact deficits, and generate only what is
+missing. No outcome collection, fit, sealed Red, Crystal, replay or authority is open in this gate.
+
+## Previous override: Codex owned terminal publication, diagnostics and fresh-supply census
 
 Freeze `26878069…4cadd3` executed once and failed on its first train candidate after all fifteen
 fresh roots were durably claimed. It retained no outcome, prediction or fit, and it cannot retry.
