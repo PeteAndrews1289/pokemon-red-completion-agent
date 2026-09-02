@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the artifact-ID repair and fresh successor
+## Current override: Codex owns the artifact-safe V2 execution and adjudication
+
+The repaired runner is published at exact main `c4207af3` under green CI `33601217072/1`. Fresh
+freeze `26878069…4cadd3` binds the exact compatible runtime and complete **1 retained + 7 fresh
+train / 8 development** roster. Its valid 77-character artifact namespace is absent and every
+protected effect remains zero.
+
+Codex owns publication of this receipt, a fresh exact-main CI binding, the single non-retryable
+execution, and train-only versus held-development adjudication. Zero discordance or no paired
+advantage rejects the candidate. No result from this batch grants gameplay authority or opens
+sealed Red, Crystal, or full-game replay. Later external review receives only tracked code and
+path-free aggregate evidence, never private saves, roots, paths or outcomes.
+
+## Previous override: Codex owns the artifact-ID repair and fresh successor
 
 The one permitted compatible-runtime execution of freeze `f7204334…5263` stopped before artifact
 creation because its generated identifier exceeded the private store limit. No claim, prediction,
