@@ -8331,3 +8331,23 @@ turned the transaction's blast radius into a measured capacity fact.
 That result changed the next question from “can we try again?” to “what independent captures exist
 outside this roster?” The project now inventories broader compatible supply before generating
 replacements, preserving both experimental independence and engineering time.
+
+## The exam inputs finished before the classroom inputs
+
+The broader census did find replacement supply, but the two partitions behaved differently. Seven
+of eight development captures materialized in the first pass and the final one succeeded from an
+independent Mansion source through the existing Dig transition. The held development set is now
+complete and its catalog honestly records two producing commits.
+
+Training retained five captures, then lost both additive attempts while relocating from Celadon.
+Those failures are not training examples and cannot be retried. They also revealed that a stage-only
+error such as `source_relocation_failed` is safe to publish but too weak to engineer from. Future
+failures now retain a bounded, path-free route trace privately and bind its digest into the public
+run receipt.
+
+The second repair is about experimental memory. A successor used to remember only the original
+predecessor and the earliest exhausted plan; after another failed tranche it could forget which
+new roots had also been attempted. Supplemental exclusion records make that history cumulative.
+This does not make a model play better by itself. It prevents the next model lesson from being
+built on replayed evidence, and it gives the project one honest chance to obtain the two missing
+train captures before redesigning the scenario supply.

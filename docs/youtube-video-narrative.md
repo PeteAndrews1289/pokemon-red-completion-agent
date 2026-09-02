@@ -5283,3 +5283,15 @@ version has to prove the model learned something worth carrying into a game it h
 - Keep **OUTCOMES 0 · PREDICTIONS 0 · FITS 0 · NEW CLAIMS 0** visible.
 - Clarify the boundary: this proves the selected roster is exhausted, not every capture ever made.
 - End on **BROADER AUTHENTICATED CATALOG CENSUS → EXACT DEFICITS → GENERATE ONLY WHAT IS MISSING**.
+
+## New sequence: “The exam was ready before training was”
+
+- Split the board into **TRAIN 5/7** and **DEVELOPMENT 8/8**.
+- Show the final development capture arriving through the existing Mansion-to-Route-11 path, then
+  lock its two-producer catalog.
+- Stop both train cards at **SOURCE RELOCATION FAILED** and stamp them **TERMINAL—NO RETRY**.
+- Keep **OUTCOMES 0 · PREDICTIONS 0 · FITS 0 · AUTHORITY 0 · CRYSTAL 0** visible.
+- Replace the vague future failure card with **PORTABLE REASON · LAST MAP/POSITION · STEPS ·
+  REPLANS · INTERRUPTIONS · WAITS**, retained privately and digest-bound publicly.
+- Draw every consumed tranche into a cumulative exclusion chain. End on **TWO NEVER-ATTEMPTED
+  TRAIN ROOTS OR REDESIGN THE CLASSROOM**—never “patch Celadon until it passes.”

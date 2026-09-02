@@ -44,6 +44,9 @@ BATTLE_SCENARIO_MATERIALIZATION_SELECTION_POLICY_V2_SCHEMA = (
 BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA = (
     "pokemon.red.private-battle-scenario-materialization-completion-plan.v1"
 )
+BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA = (
+    "pokemon.red.private-battle-scenario-materialization-completion-plan.v2"
+)
 BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SELECTION_POLICY_SCHEMA = (
     "pokemon.red.battle-scenario-materialization-completion-selection-policy.v1"
 )
@@ -311,6 +314,29 @@ class RetainedBattleScenarioMaterializationCapture:
 
 
 @dataclass(frozen=True, slots=True)
+class BattleScenarioMaterializationSupplementalExclusion:
+    """One later terminal tranche whose attempted roots remain unavailable."""
+
+    plan_sha256: str
+    run_journal_sha256: str
+
+    def __post_init__(self) -> None:
+        if (
+            _SHA256.fullmatch(self.plan_sha256) is None
+            or _SHA256.fullmatch(self.run_journal_sha256) is None
+        ):
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization supplemental exclusion differs"
+            )
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "plan_sha256": self.plan_sha256,
+            "run_journal_sha256": self.run_journal_sha256,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class BattleScenarioMaterializationCompletionPlan:
     """Add only missing captures while preserving a terminal predecessor."""
 
@@ -328,6 +354,9 @@ class BattleScenarioMaterializationCompletionPlan:
     retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...]
     inventory: tuple[BattleScenarioMaterializationCandidateV2, ...]
     assignments: tuple[BattleScenarioMaterializationAssignmentV2, ...]
+    supplemental_exclusions: tuple[
+        BattleScenarioMaterializationSupplementalExclusion, ...
+    ] = ()
 
     def __post_init__(self) -> None:
         digests = (
@@ -344,6 +373,28 @@ class BattleScenarioMaterializationCompletionPlan:
             _SAFE_ID.fullmatch(self.plan_id) is None
             or _GIT_COMMIT.fullmatch(self.source_commit) is None
             or any(_SHA256.fullmatch(value) is None for value in digests)
+            or not isinstance(self.supplemental_exclusions, tuple)
+            or any(
+                not isinstance(
+                    item,
+                    BattleScenarioMaterializationSupplementalExclusion,
+                )
+                for item in self.supplemental_exclusions
+            )
+            or tuple(
+                sorted(
+                    self.supplemental_exclusions,
+                    key=lambda item: (item.plan_sha256, item.run_journal_sha256),
+                )
+            )
+            != self.supplemental_exclusions
+            or len(
+                {
+                    (item.plan_sha256, item.run_journal_sha256)
+                    for item in self.supplemental_exclusions
+                }
+            )
+            != len(self.supplemental_exclusions)
             or type(self.predecessor_failure_count) is not int  # noqa: E721
             or self.predecessor_failure_count < 1
             or not isinstance(self.retained_successes, tuple)
@@ -442,7 +493,7 @@ class BattleScenarioMaterializationCompletionPlan:
         return hashlib.sha256(self.canonical_bytes()).hexdigest()
 
     def private_dict(self) -> dict[str, object]:
-        return {
+        value = {
             "assignments": [item.private_dict() for item in self.assignments],
             "capture_directory_sha256": self.capture_directory_sha256,
             "earliest_excluded_plan_sha256": self.earliest_excluded_plan_sha256,
@@ -463,12 +514,21 @@ class BattleScenarioMaterializationCompletionPlan:
             ],
             "retry_after_controller_input": False,
             "rom_sha256": self.rom_sha256,
-            "schema": BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA,
+            "schema": (
+                BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA
+                if self.supplemental_exclusions
+                else BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA
+            ),
             "selection_policy_sha256": self.selection_policy_sha256,
             "source_bundle_sha256": self.source_bundle_sha256,
             "source_commit": self.source_commit,
             "status": "prospective_unexecuted_additive_completion",
         }
+        if self.supplemental_exclusions:
+            value["supplemental_exclusions"] = [
+                item.private_dict() for item in self.supplemental_exclusions
+            ]
+        return value
 
     def canonical_bytes(self) -> bytes:
         return _canonical_payload(self.private_dict())
@@ -640,6 +700,9 @@ def build_battle_scenario_materialization_completion_plan(
     predecessor_failure_count: int,
     retained_successes: Sequence[RetainedBattleScenarioMaterializationCapture],
     candidates: Sequence[BattleScenarioMaterializationCandidateV2],
+    supplemental_exclusions: Sequence[
+        BattleScenarioMaterializationSupplementalExclusion
+    ] = (),
 ) -> BattleScenarioMaterializationCompletionPlan:
     """Freeze one additive gap without reopening the predecessor denominator."""
 
@@ -648,11 +711,19 @@ def build_battle_scenario_materialization_completion_plan(
         or isinstance(retained_successes, (str, bytes))
         or not isinstance(candidates, Sequence)
         or isinstance(candidates, (str, bytes))
+        or not isinstance(supplemental_exclusions, Sequence)
+        or isinstance(supplemental_exclusions, (str, bytes))
     ):
         raise TypeError("battle materialization completion inputs must be sequences")
     retained = tuple(sorted(retained_successes, key=lambda item: item.ordinal))
     inventory = tuple(
         sorted(candidates, key=lambda item: item.candidate_identity_sha256)
+    )
+    exclusions = tuple(
+        sorted(
+            supplemental_exclusions,
+            key=lambda item: (item.plan_sha256, item.run_journal_sha256),
+        )
     )
     return BattleScenarioMaterializationCompletionPlan(
         plan_id=plan_id,
@@ -671,6 +742,7 @@ def build_battle_scenario_materialization_completion_plan(
         retained_successes=retained,
         inventory=inventory,
         assignments=_select_completion_assignments(plan_id, inventory, retained),
+        supplemental_exclusions=exclusions,
     )
 
 
@@ -946,7 +1018,7 @@ def _completion_selection_policy(
 def _parse_completion_plan(
     value: object,
 ) -> BattleScenarioMaterializationCompletionPlan:
-    fields = {
+    base_fields = {
         "assignments",
         "capture_directory_sha256",
         "earliest_excluded_plan_sha256",
@@ -967,17 +1039,31 @@ def _parse_completion_plan(
         "source_commit",
         "status",
     }
+    schema = value.get("schema") if isinstance(value, Mapping) else None
+    fields = (
+        base_fields | {"supplemental_exclusions"}
+        if schema == BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA
+        else base_fields
+    )
     if (
         not isinstance(value, Mapping)
         or set(value) != fields
-        or value.get("schema")
-        != BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA
+        or schema
+        not in {
+            BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA,
+            BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA,
+        }
         or value.get("status") != "prospective_unexecuted_additive_completion"
         or value.get("retry_after_controller_input") is not False
         or value.get("effects") != _zero_effects()
         or not isinstance(value.get("inventory"), list)
         or not isinstance(value.get("retained_successes"), list)
         or not isinstance(value.get("assignments"), list)
+        or (
+            schema
+            == BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA
+            and not isinstance(value.get("supplemental_exclusions"), list)
+        )
     ):
         raise BattleScenarioMaterializationPlanV2Error(
             "battle materialization completion plan fields differ"
@@ -999,6 +1085,10 @@ def _parse_completion_plan(
     assignments = tuple(
         _parse_assignment(item, by_identity=by_identity)
         for item in value["assignments"]
+    )
+    supplemental_exclusions = tuple(
+        _parse_supplemental_exclusion(item)
+        for item in value.get("supplemental_exclusions", [])
     )
     return BattleScenarioMaterializationCompletionPlan(
         plan_id=_text(value.get("plan_id"), "plan id"),
@@ -1032,6 +1122,26 @@ def _parse_completion_plan(
         retained_successes=retained,
         inventory=inventory,
         assignments=assignments,
+        supplemental_exclusions=supplemental_exclusions,
+    )
+
+
+def _parse_supplemental_exclusion(
+    value: object,
+) -> BattleScenarioMaterializationSupplementalExclusion:
+    if not isinstance(value, Mapping) or set(value) != {
+        "plan_sha256",
+        "run_journal_sha256",
+    }:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization supplemental exclusion differs"
+        )
+    return BattleScenarioMaterializationSupplementalExclusion(
+        plan_sha256=_text(value.get("plan_sha256"), "supplemental plan"),
+        run_journal_sha256=_text(
+            value.get("run_journal_sha256"),
+            "supplemental run journal",
+        ),
     )
 
 
@@ -1363,6 +1473,7 @@ def _integer(value: object, subject: str) -> int:
 
 __all__ = [
     "BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_PLAN_SCHEMA",
+    "BATTLE_SCENARIO_MATERIALIZATION_COMPLETION_SUCCESSOR_PLAN_SCHEMA",
     "BATTLE_SCENARIO_MATERIALIZATION_PLAN_V2_SCHEMA",
     "MAXIMUM_CAPTURES_PER_VENUE",
     "MINIMUM_DISTINCT_VENUES",
@@ -1370,6 +1481,7 @@ __all__ = [
     "BattleScenarioMaterializationAssignmentV2",
     "BattleScenarioMaterializationCandidateV2",
     "BattleScenarioMaterializationCompletionPlan",
+    "BattleScenarioMaterializationSupplementalExclusion",
     "BattleScenarioMaterializationPlanV2",
     "BattleScenarioMaterializationPlanV2Error",
     "BattleScenarioReachableVenue",

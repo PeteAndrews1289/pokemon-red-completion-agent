@@ -249,13 +249,58 @@ def test_materializer_failure_receipt_is_stage_only_and_path_free() -> None:
     receipt = MATERIALIZE["_failure_receipt"](error)
 
     assert receipt == {
-        "schema": "pokemon-private-battle-scenario-materialization-failure-v1",
+        "schema": "pokemon-private-battle-scenario-materialization-failure-v2",
         "status": "failed_closed",
         "reason_code": "source_relocation_failed",
+        "diagnostics": {"failure_layer": "materialization_stage"},
         "private_path_fields": 0,
         "teacher_queries": 0,
         "move_choices_executed": 0,
         "root_claims_created": 0,
+    }
+    assert "/private" not in json.dumps(receipt)
+
+
+def test_materializer_failure_receipt_retains_bounded_route_diagnostics() -> None:
+    route_error = MATERIALIZE["RouteExecutionError"]("/private/route failed")
+    route_error.attach_failure(
+        SimpleNamespace(
+            executed_steps=(object(), object()),
+            interruptions=(object(),),
+            last_observation=SimpleNamespace(
+                at=(12, 34),
+                interruption=None,
+                map_id=19,
+                ready=True,
+            ),
+            movement_requests=7,
+            replans=(object(), object(), object()),
+            resource_renewals=(),
+            wait_actions=5,
+        )
+    )
+
+    error = MATERIALIZE["_staged_failure"](
+        route_error,
+        "source_relocation_failed",
+    )
+    receipt = MATERIALIZE["_failure_receipt"](error)
+
+    assert receipt["diagnostics"] == {
+        "failure_layer": "route_execution",
+        "route_executed_step_count": 2,
+        "route_failure_reason": "world_state_diverged",
+        "route_failure_report_present": True,
+        "route_interruption_count": 1,
+        "route_last_interruption_present": False,
+        "route_last_map_id": 19,
+        "route_last_ready": True,
+        "route_last_x": 34,
+        "route_last_y": 12,
+        "route_movement_requests": 7,
+        "route_replan_count": 3,
+        "route_resource_renewal_count": 0,
+        "route_wait_actions": 5,
     }
     assert "/private" not in json.dumps(receipt)
 

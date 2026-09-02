@@ -29,25 +29,25 @@
     },
     {
       "capability": "Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe.",
-      "cheapest_falsifier": "Publish the 0/7 train and 0/8 development frozen-roster census, then inventory every compatible existing capture outside that terminal roster at zero actions. Freeze a successor only if the broader census proves a complete independent 7+8 supply; otherwise generate exactly the measured partition deficits.",
+      "cheapest_falsifier": "Publish the five-of-seven train and eight-of-eight development capture result plus the future-failure diagnostic and supplemental-exclusion repair. Then freeze one action-free successor from only never-attempted roots. Stop rather than modify selected Celadon navigation if two safe independent assignments cannot be supplied.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The census opened no state, ROM, action, frame, outcome, prediction, fit, teacher, sealed Red case, Crystal context or authority surface and created no claim.",
-        "blocker": "The terminal V2 roster has zero of seven fresh-train roots and zero of eight development roots available. Availability of compatible captures outside that exact roster has not yet been aggregated, so the true new-capture deficit is not yet known.",
-        "decision": "Accept the frozen roster as fully exhausted, never reuse any of its fifteen roots, publish the path-free 0/7 and 0/8 result, and broaden the same metadata-only census to every compatible existing capture before generating replacements.",
+        "authority_delta": "None. Materialization created scenario inputs only; it opened no move outcome, prediction, fit, teacher, sealed Red case, Crystal context, replay or authority surface.",
+        "blocker": "Development capture supply is complete at eight of eight, but train supply remains five of seven. Both additive train attempts failed during source relocation and are permanently consumed. Their V1 failure receipts retained only source_relocation_failed, and the current completion schema cannot bind exclusions from a later failed tranche.",
+        "decision": "Preserve the complete development denominator and five train successes, publish the terminal partition result, add bounded path-free route diagnostics plus multi-generation supplemental exclusions, and freeze only never-attempted train roots. Do not repair or replay either consumed Celadon attempt.",
         "evidence": {
           "kind": "falsification",
-          "path": "docs/evidence/red-battle-v2-claim-supply-result-2026-09-02.json",
-          "sha256": "056fe9728805b75c52320ab04b7fcafb099ccc406ad69c0b6d3f4640954fc890"
+          "path": "docs/evidence/red-battle-v2-partition-capture-completion-result-2026-09-02.json",
+          "sha256": "77a8b2e29fcf72dc7540cecd7b86a2faf22915150cb9e2d4ff7e94279f53df12"
         },
-        "learning_output": "This was supply accounting, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero.",
-        "next_falsifier": "Run one broader metadata-only census over all compatible existing train and development captures outside the terminal roster. If it cannot supply seven and eight respectively, publish the exact deficits and return to independent root generation.",
-        "next_session_goal": "Publish the frozen-roster exhaustion result, generalize the census to catalog-authenticated captures outside the terminal batch, execute it at zero actions under green exact-main CI, and generate only the measured missing train and development roots.",
+        "learning_output": "This was input preparation, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero.",
+        "next_falsifier": "After the diagnostic and supplemental-exclusion repair passes exact-main CI, freeze one action-free successor from only never-attempted train roots. If the canonical inventory cannot supply two assignments without modifying Red-specific navigation, close this capture strategy and redesign bounded source supply.",
+        "next_session_goal": "Publish the partition terminal, future-failure diagnostic, and multi-generation successor support; require exact-main green CI; then freeze and execute only a qualifying never-attempted train successor before the train-only fit gate.",
         "product_alignment": "Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion.",
-        "session_id": "2026-09-02-battle-v2-frozen-roster-supply-exhausted",
+        "session_id": "2026-09-02-battle-v2-partition-capture-completion",
         "status": "active",
-        "stop_condition": "Never retry terminal freezes e11ee811...39eb2, f7204334...5263 or 26878069...4cadd3, and never reuse any of the latter's fifteen claimed roots. Do not count captures outside the roster until their producer, partition, lineage and claim identities authenticate in one shared snapshot.",
+        "stop_condition": "Never retry terminal completion plan 830d97c2...75ada or any earlier consumed plan or root. Stop the capture lane if two never-attempted independent train assignments require hardening a selected Celadon teacher route; do not shrink the denominator, clone a root or fit five rows.",
         "transfer_result": "Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks."
       },
       "learned_authority": {
@@ -73,7 +73,7 @@
         }
       ],
       "name": "Authenticated three-family learner scenario curriculum V1",
-      "next_decision": "Publish the frozen-roster 0/7 train and 0/8 development availability result, then run one broader metadata-only census of compatible captures outside the terminal batch. Freeze a successor only from a complete independent 7+8 supply; otherwise generate exactly the measured deficits.",
+      "next_decision": "Publish the five-of-seven train and eight-of-eight development capture terminal plus durable failure diagnostics and supplemental exclusion support. After exact-main CI, freeze and execute only a two-root never-attempted train successor; otherwise redesign bounded scenario supply without modifying fixed navigation.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

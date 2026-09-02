@@ -46,6 +46,7 @@ from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (  # 
     BattleScenarioMaterializationCompletionPlan,
     BattleScenarioMaterializationPlanV2,
     BattleScenarioMaterializationPlanV2Error,
+    BattleScenarioMaterializationSupplementalExclusion,
     RetainedBattleScenarioMaterializationCapture,
     build_battle_scenario_materialization_completion_plan,
 )
@@ -53,6 +54,7 @@ from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa
     FAILED,
     SUCCEEDED,
     BattleScenarioMaterializationRunError,
+    BattleScenarioMaterializationRunJournal,
     require_battle_scenario_materialization_run_matches_plan,
 )
 from pokemon_red_completion.collection_protocol import (  # noqa: E402
@@ -106,6 +108,28 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-predecessor-plan-sha256", required=True)
     parser.add_argument("--predecessor-run-journal", type=Path, required=True)
     parser.add_argument("--expected-predecessor-run-journal-sha256", required=True)
+    parser.add_argument(
+        "--supplemental-excluded-plan",
+        action="append",
+        default=[],
+        type=Path,
+    )
+    parser.add_argument(
+        "--expected-supplemental-excluded-plan-sha256",
+        action="append",
+        default=[],
+    )
+    parser.add_argument(
+        "--supplemental-excluded-run-journal",
+        action="append",
+        default=[],
+        type=Path,
+    )
+    parser.add_argument(
+        "--expected-supplemental-excluded-run-journal-sha256",
+        action="append",
+        default=[],
+    )
     parser.add_argument("--capture-directory", type=Path, required=True)
     parser.add_argument("--out-plan", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -113,6 +137,16 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
+    supplemental_arguments = (
+        args.supplemental_excluded_plan,
+        args.expected_supplemental_excluded_plan_sha256,
+        args.supplemental_excluded_run_journal,
+        args.expected_supplemental_excluded_run_journal_sha256,
+    )
+    if len({len(items) for items in supplemental_arguments}) != 1:
+        raise BattleScenarioMaterializationCompletionFreezeError(
+            "supplemental exclusion arguments differ"
+        )
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
     require_published_source(PROJECT_ROOT, source)
@@ -270,6 +304,24 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "terminal predecessor does not require additive completion"
         )
 
+    supplemental_exclusions = []
+    for plan_path, plan_sha256, journal_path, journal_sha256 in zip(
+        *supplemental_arguments,
+        strict=True,
+    ):
+        exclusion, attempted = _authenticate_supplemental_exclusion(
+            plan_path,
+            expected_plan_sha256=plan_sha256,
+            journal_path=journal_path,
+            expected_journal_sha256=journal_sha256,
+            predecessor_plan=predecessor_plan,
+            predecessor_journal=predecessor_journal,
+            retained_successes=tuple(retained),
+            rom_path=rom_path,
+        )
+        supplemental_exclusions.append(exclusion)
+        predecessor_attempted.update(attempted)
+
     successor_scan = _CatalogTrainRootScan(
         roots=tuple(
             root
@@ -295,6 +347,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             predecessor_journal_sha256=predecessor_journal.journal_sha256,
             predecessor_failure_count=failure_count,
             retained_successes=tuple(retained),
+            supplemental_exclusions=tuple(supplemental_exclusions),
             destination=destination,
         )
     except (
@@ -331,6 +384,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "registry_source_commit": registry.execution.source_commit,
         "catalog_train_roots": len(scan.roots),
         "excluded_attempted_source_roots": len(predecessor_attempted),
+        "supplemental_exclusion_count": len(plan.supplemental_exclusions),
         "successor_candidate_train_roots": len(successor_scan.roots),
         "claim_available_train_roots": claim_available_roots,
         "eligible_candidate_root_count": len(plan.inventory),
@@ -376,6 +430,9 @@ def _freeze_under_shared_lease(
     predecessor_failure_count: int,
     retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...],
     destination: Path,
+    supplemental_exclusions: tuple[
+        BattleScenarioMaterializationSupplementalExclusion, ...
+    ] = (),
 ) -> tuple[BattleScenarioMaterializationCompletionPlan, int]:
     with (
         fixed_account_claim_registry_lease(registry_path, exclusive=False),
@@ -423,6 +480,7 @@ def _freeze_under_shared_lease(
             predecessor_failure_count=predecessor_failure_count,
             retained_successes=retained_successes,
             candidates=candidates,
+            supplemental_exclusions=supplemental_exclusions,
         )
         _require_new_assignment_outputs_v2(
             plan,  # type: ignore[arg-type]
@@ -431,6 +489,89 @@ def _freeze_under_shared_lease(
         )
         _write_exclusive(destination, plan.canonical_bytes())
     return plan, claim_available_roots
+
+
+def _authenticate_supplemental_exclusion(
+    plan_path: Path,
+    *,
+    expected_plan_sha256: str,
+    journal_path: Path,
+    expected_journal_sha256: str,
+    predecessor_plan: BattleScenarioMaterializationPlanV2,
+    predecessor_journal: BattleScenarioMaterializationRunJournal,
+    retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...],
+    rom_path: Path,
+) -> tuple[
+    BattleScenarioMaterializationSupplementalExclusion,
+    frozenset[str],
+]:
+    directory = _private_capture_directory_v2(plan_path.parent, rom_path=rom_path)
+    supplemental_plan_path = _private_existing_file(
+        plan_path,
+        parent=directory,
+        maximum_bytes=_MAXIMUM_PLAN_BYTES,
+        subject="supplemental excluded materialization plan",
+    )
+    supplemental_journal_path = _private_existing_file(
+        journal_path,
+        parent=directory,
+        maximum_bytes=_MAXIMUM_JOURNAL_BYTES,
+        subject="supplemental excluded materialization journal",
+    )
+    supplemental_plan = _read_plan(supplemental_plan_path)
+    supplemental_journal = _read_journal(supplemental_journal_path)
+    if not isinstance(supplemental_plan, BattleScenarioMaterializationCompletionPlan):
+        raise BattleScenarioMaterializationCompletionFreezeError(
+            "supplemental exclusion plan differs"
+        )
+    try:
+        require_battle_scenario_materialization_run_matches_plan(
+            supplemental_journal,
+            supplemental_plan,
+            supplemental_journal.identity,
+        )
+        attempted = _load_attempted_source_exclusions(
+            supplemental_plan_path,
+            supplemental_journal_path,
+            expected_plan_sha256=expected_plan_sha256,
+            expected_journal_sha256=expected_journal_sha256,
+        )
+    except (
+        BattleScenarioMaterializationRunError,
+        BattleScenarioSourceInventoryError,
+    ) as error:
+        raise BattleScenarioMaterializationCompletionFreezeError(str(error)) from None
+    if (
+        supplemental_plan.plan_sha256 != expected_plan_sha256
+        or supplemental_journal.journal_sha256 != expected_journal_sha256
+        or supplemental_plan.predecessor_plan_sha256 != predecessor_plan.plan_sha256
+        or supplemental_plan.predecessor_run_journal_sha256
+        != predecessor_journal.journal_sha256
+        or supplemental_plan.predecessor_capture_directory_sha256
+        != predecessor_plan.capture_directory_sha256
+        or supplemental_plan.earliest_excluded_plan_sha256
+        != predecessor_plan.excluded_plan_sha256
+        or supplemental_plan.earliest_excluded_run_journal_sha256
+        != predecessor_plan.excluded_run_journal_sha256
+        or supplemental_plan.partition is not predecessor_plan.partition
+        or supplemental_plan.retained_successes != retained_successes
+        or supplemental_plan.capture_directory_sha256
+        != hashlib.sha256(str(directory).encode("utf-8")).hexdigest()
+        or any(
+            entry.status not in {SUCCEEDED, FAILED}
+            for entry in supplemental_journal.entries
+        )
+    ):
+        raise BattleScenarioMaterializationCompletionFreezeError(
+            "supplemental exclusion binding differs"
+        )
+    return (
+        BattleScenarioMaterializationSupplementalExclusion(
+            plan_sha256=supplemental_plan.plan_sha256,
+            run_journal_sha256=supplemental_journal.journal_sha256,
+        ),
+        attempted,
+    )
 
 
 def _read_private_completion_plan(

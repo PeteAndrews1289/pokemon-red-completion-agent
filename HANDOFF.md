@@ -14,6 +14,28 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: development captures complete; train captures remain five of seven
+
+The additive materialization pass preserved five train captures and seven development captures.
+Its separately authenticated completion attempts then produced **train 0/2** and **development
+1/1**. Development therefore has its complete eight-capture denominator and a canonical
+two-producer catalog. Train remains five of seven. Both failed train roots are terminal and must
+never retry.
+
+The train failures stopped at `source_relocation_failed`, but their V1 child receipts discarded the
+route executor's bounded semantic trace. The current repair changes future failures only: it
+retains the portable reason, last observation, executed-step count, movement requests, waits,
+interruptions, replans and resource renewals in a private path-free diagnostic, then binds that
+diagnostic into the aggregate receipt. It also lets a completion successor bind every later
+terminal plan/journal exclusion instead of forgetting attempted roots after one generation.
+
+This remains scenario-input preparation, not learning. Counters stay **train 19 · fits 6 ·
+verified development 6 · unseen 4 · authority 0 · transfer 0**. After publication and exact-main
+CI, freeze only never-attempted train roots. If two safe independent assignments require another
+selected Celadon route patch, stop this capture strategy and redesign bounded source supply. Do not
+shrink the denominator or fit five rows. See the
+[path-free result](docs/evidence/red-battle-v2-partition-capture-completion-result-2026-09-02.json).
+
 ## 2026-09-02: the terminal V2 roster has no reusable root
 
 The metadata-only claim census merged as exact main `43f3d2c7`; CI `33611606034/1` passed. It

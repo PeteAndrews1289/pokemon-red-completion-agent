@@ -48,6 +48,7 @@ from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (  # 
     BattleScenarioMaterializationCompletionPlan,
     BattleScenarioMaterializationPlanV2,
     BattleScenarioMaterializationPlanV2Error,
+    BattleScenarioMaterializationSupplementalExclusion,
     RetainedBattleScenarioMaterializationCapture,
     parse_battle_scenario_materialization_completion_plan,
     parse_battle_scenario_materialization_plan_v2,
@@ -103,14 +104,21 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+_SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
 _MAXIMUM_PLAN_BYTES = 8 * 1024 * 1024
 _MAXIMUM_JOURNAL_BYTES = 2 * 1024 * 1024
 _MAXIMUM_RECEIPT_BYTES = 512 * 1024
 _MAXIMUM_MATERIALIZER_OUTPUT_BYTES = 2 * 1024 * 1024
 _GITHUB_REPOSITORY = "PeteAndrews1289/pokemon-red-completion-agent"
 _CI_WORKFLOW_NAME = "CI"
-_MATERIALIZER_FAILURE_SCHEMA = (
+_MATERIALIZER_FAILURE_SCHEMA_V1 = (
     "pokemon-private-battle-scenario-materialization-failure-v1"
+)
+_MATERIALIZER_FAILURE_SCHEMA_V2 = (
+    "pokemon-private-battle-scenario-materialization-failure-v2"
+)
+_FAILURE_DIAGNOSTIC_SCHEMA = (
+    "pokemon.red.private-battle-scenario-materialization-failure-diagnostic.v1"
 )
 _MATERIALIZER_FAILURE_REASONS = frozenset(
     {
@@ -138,6 +146,15 @@ class BattleScenarioMaterializationRunnerError(RuntimeError):
     """Raised when the exact plan cannot continue without risking replay."""
 
 
+class BattleScenarioMaterializerFailure(BattleScenarioMaterializationRunnerError):
+    """A validated child failure whose semantic diagnostics are safe to retain."""
+
+    def __init__(self, reason_code: str, diagnostics: Mapping[str, object]) -> None:
+        super().__init__(reason_code)
+        self.reason_code = reason_code
+        self.diagnostics = dict(diagnostics or {"failure_layer": "materialization_stage"})
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
@@ -157,6 +174,18 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--predecessor-plan", type=Path, default=None)
     parser.add_argument("--predecessor-run-journal", type=Path, default=None)
     parser.add_argument("--predecessor-capture-directory", type=Path, default=None)
+    parser.add_argument(
+        "--supplemental-excluded-plan",
+        action="append",
+        default=[],
+        type=Path,
+    )
+    parser.add_argument(
+        "--supplemental-excluded-run-journal",
+        action="append",
+        default=[],
+        type=Path,
+    )
     parser.add_argument("--journal", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -331,7 +360,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             journal_path=journal_path,
             rom_path=rom_path,
         )
-        receipt = journal.public_receipt()
+        receipt = _public_receipt_with_failure_diagnostics(
+            journal,
+            capture_directory=capture_directory,
+        )
         _publish_or_verify_receipt(receipt_path, receipt)
         return receipt
 
@@ -393,6 +425,11 @@ def _execute_pending_assignment(
             manifest_sha256=manifest_sha256,
         )
     except Exception as error:
+        _retain_failure_diagnostic(
+            assignment,
+            capture_directory=capture_directory,
+            error=error,
+        )
         journal = fail_battle_scenario_materialization_assignment(
             journal,
             assignment.ordinal,
@@ -459,6 +496,12 @@ def _require_plan_exclusions(
     plan: BattleScenarioMaterializationPlanLike,
     rom_path: Path,
 ) -> None:
+    supplemental_plan_paths = tuple(
+        getattr(args, "supplemental_excluded_plan", ())
+    )
+    supplemental_journal_paths = tuple(
+        getattr(args, "supplemental_excluded_run_journal", ())
+    )
     predecessor_arguments = (
         args.predecessor_plan,
         args.predecessor_run_journal,
@@ -481,6 +524,8 @@ def _require_plan_exclusions(
             predecessor_journal_path=args.predecessor_run_journal,
             predecessor_capture_directory=args.predecessor_capture_directory,
             rom_path=rom_path,
+            supplemental_plan_paths=supplemental_plan_paths,
+            supplemental_journal_paths=supplemental_journal_paths,
         )
         if any(
             item.source.source_state_sha256 in attempted_sources
@@ -490,6 +535,10 @@ def _require_plan_exclusions(
                 "completion plan reuses an attempted source"
             )
     elif isinstance(plan, BattleScenarioMaterializationPlanV2):
+        if supplemental_plan_paths or supplemental_journal_paths:
+            raise BattleScenarioMaterializationRunnerError(
+                "V2 materialization plan cannot accept supplemental exclusions"
+            )
         if args.excluded_plan is None or args.excluded_run_journal is None:
             raise BattleScenarioMaterializationRunnerError(
                 "V2 exhausted source evidence is required"
@@ -518,6 +567,8 @@ def _require_plan_exclusions(
         args.excluded_plan is not None
         or args.excluded_run_journal is not None
         or any(item is not None for item in predecessor_arguments)
+        or supplemental_plan_paths
+        or supplemental_journal_paths
     ):
         raise BattleScenarioMaterializationRunnerError(
             "V1 materialization plan cannot accept V2 exclusion evidence"
@@ -533,7 +584,13 @@ def _require_completion_predecessor(
     predecessor_journal_path: Path,
     predecessor_capture_directory: Path,
     rom_path: Path,
+    supplemental_plan_paths: tuple[Path, ...] = (),
+    supplemental_journal_paths: tuple[Path, ...] = (),
 ) -> frozenset[str]:
+    if len(supplemental_plan_paths) != len(supplemental_journal_paths):
+        raise BattleScenarioMaterializationRunnerError(
+            "supplemental exclusion arguments differ"
+        )
     try:
         earliest_attempted = _load_attempted_source_exclusions(
             earliest_plan_path,
@@ -645,7 +702,113 @@ def _require_completion_predecessor(
         raise BattleScenarioMaterializationRunnerError(
             "completion retained capture catalog differs"
         )
+    exclusions = []
+    for supplemental_plan_path, supplemental_journal_path in zip(
+        supplemental_plan_paths,
+        supplemental_journal_paths,
+        strict=True,
+    ):
+        exclusion, attempted = _require_supplemental_completion_exclusion(
+            supplemental_plan_path,
+            supplemental_journal_path=supplemental_journal_path,
+            predecessor_plan=predecessor_plan,
+            predecessor_journal=predecessor_journal,
+            retained_successes=tuple(retained),
+            rom_path=rom_path,
+        )
+        exclusions.append(exclusion)
+        predecessor_attempted.update(attempted)
+    if tuple(
+        sorted(
+            exclusions,
+            key=lambda item: (item.plan_sha256, item.run_journal_sha256),
+        )
+    ) != plan.supplemental_exclusions:
+        raise BattleScenarioMaterializationRunnerError(
+            "completion supplemental exclusions differ"
+        )
     return frozenset(predecessor_attempted)
+
+
+def _require_supplemental_completion_exclusion(
+    plan_path: Path,
+    *,
+    supplemental_journal_path: Path,
+    predecessor_plan: BattleScenarioMaterializationPlanV2,
+    predecessor_journal: BattleScenarioMaterializationRunJournal,
+    retained_successes: tuple[RetainedBattleScenarioMaterializationCapture, ...],
+    rom_path: Path,
+) -> tuple[
+    BattleScenarioMaterializationSupplementalExclusion,
+    frozenset[str],
+]:
+    directory = _private_capture_directory(plan_path.parent, rom_path=rom_path)
+    supplemental_plan = _read_plan(
+        _private_existing_file(
+            plan_path,
+            parent=directory,
+            maximum_bytes=_MAXIMUM_PLAN_BYTES,
+            subject="supplemental excluded materialization plan",
+        )
+    )
+    supplemental_journal = _read_journal(
+        _private_existing_file(
+            supplemental_journal_path,
+            parent=directory,
+            maximum_bytes=_MAXIMUM_JOURNAL_BYTES,
+            subject="supplemental excluded materialization journal",
+        )
+    )
+    if not isinstance(supplemental_plan, BattleScenarioMaterializationCompletionPlan):
+        raise BattleScenarioMaterializationRunnerError(
+            "supplemental exclusion plan differs"
+        )
+    try:
+        require_battle_scenario_materialization_run_matches_plan(
+            supplemental_journal,
+            supplemental_plan,
+            supplemental_journal.identity,
+        )
+        attempted = _load_attempted_source_exclusions(
+            plan_path,
+            supplemental_journal_path,
+            expected_plan_sha256=supplemental_plan.plan_sha256,
+            expected_journal_sha256=supplemental_journal.journal_sha256,
+        )
+    except (
+        BattleScenarioMaterializationRunError,
+        BattleScenarioSourceInventoryError,
+    ) as error:
+        raise BattleScenarioMaterializationRunnerError(str(error)) from None
+    if (
+        supplemental_plan.predecessor_plan_sha256 != predecessor_plan.plan_sha256
+        or supplemental_plan.predecessor_run_journal_sha256
+        != predecessor_journal.journal_sha256
+        or supplemental_plan.predecessor_capture_directory_sha256
+        != predecessor_plan.capture_directory_sha256
+        or supplemental_plan.earliest_excluded_plan_sha256
+        != predecessor_plan.excluded_plan_sha256
+        or supplemental_plan.earliest_excluded_run_journal_sha256
+        != predecessor_plan.excluded_run_journal_sha256
+        or supplemental_plan.partition is not predecessor_plan.partition
+        or supplemental_plan.retained_successes != retained_successes
+        or supplemental_plan.capture_directory_sha256
+        != hashlib.sha256(str(directory).encode("utf-8")).hexdigest()
+        or any(
+            entry.status not in {SUCCEEDED, FAILED}
+            for entry in supplemental_journal.entries
+        )
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "supplemental exclusion binding differs"
+        )
+    return (
+        BattleScenarioMaterializationSupplementalExclusion(
+            plan_sha256=supplemental_plan.plan_sha256,
+            run_journal_sha256=supplemental_journal.journal_sha256,
+        ),
+        attempted,
+    )
 
 
 def _open_or_initialize_journal(
@@ -702,7 +865,14 @@ def _reconcile_existing_entries(
                 assignment,
                 capture_directory=capture_directory,
             )
-            if state_path.exists() and manifest_path.exists():
+            failure_path = _failure_diagnostic_path(
+                assignment,
+                capture_directory=capture_directory,
+            )
+            state_exists = state_path.exists()
+            manifest_exists = manifest_path.exists()
+            failure_exists = failure_path.exists() or failure_path.is_symlink()
+            if state_exists and manifest_exists and not failure_exists:
                 state_sha256, manifest_sha256 = _authenticate_assignment_outputs(
                     assignment,
                     capture_directory=capture_directory,
@@ -716,6 +886,31 @@ def _reconcile_existing_entries(
                     manifest_sha256=manifest_sha256,
                 )
                 changed = True
+            elif failure_exists and not state_exists and not manifest_exists:
+                payload = _read_owned_regular(
+                    failure_path,
+                    maximum_bytes=_MAXIMUM_RECEIPT_BYTES,
+                    subject="materialization failure diagnostic",
+                )
+                value = _parse_failure_diagnostic(payload)
+                if (
+                    value["capture_id"] != assignment.capture_id
+                    or value["assignment_sha256"]
+                    != canonical_sha256(assignment.private_dict())
+                ):
+                    raise BattleScenarioMaterializationRunnerError(
+                        "materialization failure diagnostic differs"
+                    )
+                journal = fail_battle_scenario_materialization_assignment(
+                    journal,
+                    assignment.ordinal,
+                    reason_code=str(value["reason_code"]),
+                )
+                changed = True
+            elif state_exists or manifest_exists or failure_exists:
+                raise BattleScenarioMaterializationRunnerError(
+                    "started materialization output state is ambiguous"
+                )
         elif entry.status != FAILED:  # pragma: no cover - dataclass closes this
             raise AssertionError("unsupported journal state")
     if changed:
@@ -814,8 +1009,13 @@ def _materialize_assignment(
             )
         if completed.returncode != 0:
             reason_code = value.get("reason_code")
+            schema = value.get("schema")
             if (
-                value.get("schema") != _MATERIALIZER_FAILURE_SCHEMA
+                schema
+                not in {
+                    _MATERIALIZER_FAILURE_SCHEMA_V1,
+                    _MATERIALIZER_FAILURE_SCHEMA_V2,
+                }
                 or value.get("status") != "failed_closed"
                 or reason_code not in _MATERIALIZER_FAILURE_REASONS
                 or value.get("private_path_fields") != 0
@@ -826,7 +1026,15 @@ def _materialize_assignment(
                 raise BattleScenarioMaterializationRunnerError(
                     "materializer_process_failed"
                 )
-            raise BattleScenarioMaterializationRunnerError(str(reason_code))
+            diagnostics = (
+                {}
+                if schema == _MATERIALIZER_FAILURE_SCHEMA_V1
+                else _validated_failure_diagnostics(value.get("diagnostics"))
+            )
+            raise BattleScenarioMaterializerFailure(
+                str(reason_code),
+                diagnostics,
+            )
         return value
     finally:
         if descriptor >= 0:
@@ -1050,7 +1258,14 @@ def _require_pending_outputs_absent(
         assignment,
         capture_directory=capture_directory,
     )
-    if any(path.exists() or path.is_symlink() for path in (state_path, manifest_path)):
+    failure_path = _failure_diagnostic_path(
+        assignment,
+        capture_directory=capture_directory,
+    )
+    if any(
+        path.exists() or path.is_symlink()
+        for path in (state_path, manifest_path, failure_path)
+    ):
         raise BattleScenarioMaterializationRunnerError(
             "pending materialization output already exists"
         )
@@ -1072,6 +1287,251 @@ def _assignment_paths(
             "materialization destination differs"
         )
     return state, manifest
+
+
+def _failure_diagnostic_path(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+    *,
+    capture_directory: Path,
+) -> Path:
+    path = (capture_directory / f"{assignment.capture_id}.failure.json").resolve()
+    if path.parent != capture_directory:
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization failure destination differs"
+        )
+    return path
+
+
+def _validated_failure_diagnostics(value: object) -> dict[str, object]:
+    allowed_fields = {
+        "failure_layer",
+        "route_executed_step_count",
+        "route_failure_reason",
+        "route_failure_report_present",
+        "route_interruption_count",
+        "route_last_interruption_present",
+        "route_last_map_id",
+        "route_last_ready",
+        "route_last_x",
+        "route_last_y",
+        "route_movement_requests",
+        "route_replan_count",
+        "route_resource_renewal_count",
+        "route_wait_actions",
+    }
+    if not isinstance(value, Mapping) or not set(value).issubset(allowed_fields):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    diagnostics = dict(value)
+    if diagnostics.get("failure_layer") not in {
+        "materialization_stage",
+        "route_execution",
+    }:
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    if diagnostics["failure_layer"] == "materialization_stage":
+        if set(diagnostics) != {"failure_layer"}:
+            raise BattleScenarioMaterializationRunnerError(
+                "materializer_receipt_invalid"
+            )
+        return diagnostics
+    required_route_fields = {
+        "failure_layer",
+        "route_failure_reason",
+        "route_failure_report_present",
+    }
+    if not required_route_fields.issubset(diagnostics):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    reason = diagnostics.get("route_failure_reason")
+    if reason is not None and reason not in {
+        "interruption_unrecovered",
+        "planner_no_route",
+        "resource_unavailable",
+        "step_acknowledgement_exhausted",
+        "terminal_state_mismatch",
+        "world_state_diverged",
+    }:
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    report_fields = {
+        "route_executed_step_count",
+        "route_interruption_count",
+        "route_movement_requests",
+        "route_replan_count",
+        "route_resource_renewal_count",
+        "route_wait_actions",
+    }
+    observation_fields = {
+        "route_last_interruption_present",
+        "route_last_map_id",
+        "route_last_ready",
+        "route_last_x",
+        "route_last_y",
+    }
+    report_present = diagnostics.get("route_failure_report_present")
+    if report_present is False and set(diagnostics) != required_route_fields:
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    if report_present is True and (
+        not report_fields.issubset(diagnostics)
+        or (
+            bool(observation_fields & diagnostics.keys())
+            and not observation_fields.issubset(diagnostics)
+        )
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    boolean_fields = {
+        "route_failure_report_present",
+        "route_last_interruption_present",
+        "route_last_ready",
+    }
+    integer_fields = allowed_fields - {
+        "failure_layer",
+        "route_failure_reason",
+        *boolean_fields,
+    }
+    if any(
+        type(diagnostics[field]) is not bool
+        for field in boolean_fields & diagnostics.keys()
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    if any(
+        type(diagnostics[field]) is not int  # noqa: E721
+        or not 0 <= diagnostics[field] <= 100_000_000
+        for field in integer_fields & diagnostics.keys()
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materializer_receipt_invalid"
+        )
+    return diagnostics
+
+
+def _retain_failure_diagnostic(
+    assignment: BattleScenarioMaterializationAssignmentLike,
+    *,
+    capture_directory: Path,
+    error: Exception,
+) -> None:
+    reason_code = _failure_reason(error)
+    diagnostics = (
+        error.diagnostics
+        if isinstance(error, BattleScenarioMaterializerFailure)
+        else {"failure_layer": "runner"}
+    )
+    payload = {
+        "schema": _FAILURE_DIAGNOSTIC_SCHEMA,
+        "capture_id": assignment.capture_id,
+        "assignment_sha256": canonical_sha256(assignment.private_dict()),
+        "reason_code": reason_code,
+        "diagnostics": diagnostics,
+        "controller_input_may_have_occurred": True,
+        "private_path_fields": 0,
+    }
+    _write_new(
+        _failure_diagnostic_path(
+            assignment,
+            capture_directory=capture_directory,
+        ),
+        _canonical_payload(payload),
+    )
+
+
+def _public_receipt_with_failure_diagnostics(
+    journal: BattleScenarioMaterializationRunJournal,
+    *,
+    capture_directory: Path,
+) -> dict[str, object]:
+    bindings = []
+    for entry in journal.entries:
+        path = (capture_directory / f"{entry.capture_id}.failure.json").resolve()
+        if path.parent != capture_directory:
+            raise BattleScenarioMaterializationRunnerError(
+                "materialization failure destination differs"
+            )
+        if entry.status == FAILED:
+            payload = _read_owned_regular(
+                path,
+                maximum_bytes=_MAXIMUM_RECEIPT_BYTES,
+                subject="materialization failure diagnostic",
+            )
+            value = _parse_failure_diagnostic(payload)
+            if (
+                value["capture_id"] != entry.capture_id
+                or value["assignment_sha256"] != entry.assignment_sha256
+                or value["reason_code"] != entry.reason_code
+            ):
+                raise BattleScenarioMaterializationRunnerError(
+                    "materialization failure diagnostic differs"
+                )
+            bindings.append(
+                {
+                    "assignment_sha256": entry.assignment_sha256,
+                    "diagnostic_sha256": hashlib.sha256(payload).hexdigest(),
+                }
+            )
+        elif path.exists() or path.is_symlink():
+            raise BattleScenarioMaterializationRunnerError(
+                "materialization failure diagnostic state differs"
+            )
+    base = journal.public_receipt()
+    base.pop("receipt_sha256")
+    core = {
+        **base,
+        "failure_diagnostic_count": len(bindings),
+        "failure_diagnostic_bindings_sha256": canonical_sha256(bindings),
+    }
+    return {**core, "receipt_sha256": canonical_sha256(core)}
+
+
+def _parse_failure_diagnostic(payload: bytes) -> Mapping[str, object]:
+    try:
+        value = json.loads(payload.decode("ascii"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization failure diagnostic differs"
+        ) from None
+    fields = {
+        "assignment_sha256",
+        "capture_id",
+        "controller_input_may_have_occurred",
+        "diagnostics",
+        "private_path_fields",
+        "reason_code",
+        "schema",
+    }
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != fields
+        or value.get("schema") != _FAILURE_DIAGNOSTIC_SCHEMA
+        or value.get("controller_input_may_have_occurred") is not True
+        or value.get("private_path_fields") != 0
+        or _SAFE_ID.fullmatch(str(value.get("capture_id"))) is None
+        or _SHA256.fullmatch(str(value.get("assignment_sha256"))) is None
+        or _SAFE_ID.fullmatch(str(value.get("reason_code"))) is None
+    ):
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization failure diagnostic differs"
+        )
+    diagnostics = value.get("diagnostics")
+    if diagnostics == {"failure_layer": "runner"}:
+        pass
+    else:
+        _validated_failure_diagnostics(diagnostics)
+    if _canonical_payload(value) != payload:
+        raise BattleScenarioMaterializationRunnerError(
+            "materialization failure diagnostic differs"
+        )
+    return value
 
 
 def _private_capture_directory(path: Path, *, rom_path: Path) -> Path:

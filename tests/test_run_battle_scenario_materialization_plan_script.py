@@ -571,6 +571,7 @@ def test_controlled_failure_is_terminal_and_never_requeued(
 ) -> None:
     plan, journal = _journal()
     observed: list[str] = []
+    retained: list[str] = []
     globals_ = SCRIPT["_execute_pending_assignment"].__globals__
 
     monkeypatch.setitem(
@@ -589,12 +590,66 @@ def test_controlled_failure_is_terminal_and_never_requeued(
             )
         ),
     )
+    monkeypatch.setitem(
+        globals_,
+        "_retain_failure_diagnostic",
+        lambda assignment, **kwargs: retained.append(assignment.capture_id),
+    )
 
     result = _execute(journal, plan.assignments[0])
 
     assert observed == [STARTED, FAILED]
+    assert retained == [plan.assignments[0].capture_id]
     assert result.entries[0].status == FAILED
     assert result.entries[0].reason_code == "materializer_process_failed"
+
+
+def test_failure_diagnostic_is_durable_path_free_and_receipt_bound(
+    tmp_path: Path,
+) -> None:
+    plan, journal = _journal()
+    assignment = plan.assignments[0]
+    error = SCRIPT["BattleScenarioMaterializerFailure"](
+        "source_relocation_failed",
+        {
+            "failure_layer": "route_execution",
+            "route_failure_reason": "step_acknowledgement_exhausted",
+            "route_failure_report_present": True,
+            "route_executed_step_count": 12,
+            "route_interruption_count": 0,
+            "route_movement_requests": 12,
+            "route_replan_count": 0,
+            "route_resource_renewal_count": 0,
+            "route_wait_actions": 0,
+        },
+    )
+
+    SCRIPT["_retain_failure_diagnostic"](
+        assignment,
+        capture_directory=tmp_path,
+        error=error,
+    )
+    started = start_battle_scenario_materialization_assignment(journal, 0)
+    failed = fail_battle_scenario_materialization_assignment(
+        started,
+        0,
+        reason_code="source_relocation_failed",
+    )
+    receipt = SCRIPT["_public_receipt_with_failure_diagnostics"](
+        failed,
+        capture_directory=tmp_path,
+    )
+    diagnostic_path = tmp_path / f"{assignment.capture_id}.failure.json"
+    diagnostic = json.loads(diagnostic_path.read_text(encoding="ascii"))
+
+    assert diagnostic["diagnostics"]["route_executed_step_count"] == 12
+    assert diagnostic["controller_input_may_have_occurred"] is True
+    assert diagnostic_path.stat().st_mode & 0o077 == 0
+    assert receipt["failure_diagnostic_count"] == 1
+    assert receipt["receipt_sha256"] == SCRIPT["canonical_sha256"](
+        {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    )
+    assert str(tmp_path) not in json.dumps(receipt)
 
 
 def test_child_failure_stage_survives_without_stderr_or_path_details(
@@ -637,6 +692,97 @@ def test_child_failure_stage_survives_without_stderr_or_path_details(
             watch=False,
             speed=None,
         )
+
+
+def test_child_route_failure_diagnostics_survive_validation(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    plan, _ = _journal()
+    assignment = plan.assignments[0]
+    globals_ = SCRIPT["_materialize_assignment"].__globals__
+    payload = json.dumps(
+        {
+            "diagnostics": {
+                "failure_layer": "route_execution",
+                "route_failure_reason": "step_acknowledgement_exhausted",
+                "route_failure_report_present": True,
+                "route_executed_step_count": 27,
+                "route_interruption_count": 0,
+                "route_last_map_id": 19,
+                "route_last_interruption_present": False,
+                "route_last_ready": True,
+                "route_last_x": 11,
+                "route_last_y": 4,
+                "route_movement_requests": 27,
+                "route_replan_count": 1,
+                "route_resource_renewal_count": 0,
+                "route_wait_actions": 2,
+            },
+            "move_choices_executed": 0,
+            "private_path_fields": 0,
+            "reason_code": "source_relocation_failed",
+            "root_claims_created": 0,
+            "schema": "pokemon-private-battle-scenario-materialization-failure-v2",
+            "status": "failed_closed",
+            "teacher_queries": 0,
+        },
+        sort_keys=True,
+    ).encode("ascii")
+    monkeypatch.setitem(
+        globals_,
+        "subprocess",
+        SimpleNamespace(
+            run=lambda *args, **kwargs: subprocess.CompletedProcess(
+                args=[], returncode=1, stdout=payload, stderr=b"/private/secret"
+            )
+        ),
+    )
+
+    with pytest.raises(SCRIPT["BattleScenarioMaterializerFailure"]) as failure:
+        SCRIPT["_materialize_assignment"](
+            assignment,
+            source_bytes=b"source",
+            capture_directory=tmp_path,
+            context_catalog=tmp_path / "catalog.json",
+            registry_source_commit="a" * 40,
+            expected_registry_sha256="b" * 64,
+            expected_context_catalog_sha256="c" * 64,
+            rom_path=tmp_path / "red.gb",
+            maximum_encounter_steps=1,
+            watch=False,
+            speed=None,
+        )
+
+    assert failure.value.diagnostics["route_executed_step_count"] == 27
+    assert "/private" not in json.dumps(failure.value.diagnostics)
+
+
+@pytest.mark.parametrize(
+    "diagnostics",
+    (
+        {"failure_layer": "materialization_stage", "route_last_map_id": 1},
+        {
+            "failure_layer": "route_execution",
+            "route_failure_reason": "planner_no_route",
+            "route_failure_report_present": True,
+        },
+        {
+            "failure_layer": "route_execution",
+            "route_failure_reason": "planner_no_route",
+            "route_failure_report_present": False,
+            "route_executed_step_count": 0,
+        },
+    ),
+)
+def test_child_failure_diagnostics_reject_semantically_incoherent_shapes(
+    diagnostics: dict[str, object],
+) -> None:
+    with pytest.raises(
+        SCRIPT["BattleScenarioMaterializationRunnerError"],
+        match="materializer_receipt_invalid",
+    ):
+        SCRIPT["_validated_failure_diagnostics"](diagnostics)
 
 
 def test_v2_runner_reopens_plan_and_passes_only_its_bound_venue_to_child(
@@ -834,4 +980,36 @@ def test_resume_reconciles_complete_started_output_without_retry(
 
     assert reconciled.entries[0].status == SUCCEEDED
     assert reconciled.entries[0].attempt_count == 1
+    assert SCRIPT["_read_journal"](journal_path) == reconciled
+
+
+def test_resume_reconciles_durable_started_failure_without_retry(
+    tmp_path: Path,
+) -> None:
+    plan, journal = _journal()
+    assignment = plan.assignments[0]
+    journal = start_battle_scenario_materialization_assignment(journal, 0)
+    journal_path = tmp_path / "journal.json"
+    SCRIPT["_write_new"](journal_path, journal.canonical_bytes())
+    error = SCRIPT["BattleScenarioMaterializerFailure"](
+        "source_relocation_failed",
+        {"failure_layer": "materialization_stage"},
+    )
+    SCRIPT["_retain_failure_diagnostic"](
+        assignment,
+        capture_directory=tmp_path.resolve(),
+        error=error,
+    )
+
+    reconciled = SCRIPT["_reconcile_existing_entries"](
+        journal,
+        plan=plan,
+        capture_directory=tmp_path.resolve(),
+        journal_path=journal_path,
+        rom_path=Path("red.gb"),
+    )
+
+    assert reconciled.entries[0].status == FAILED
+    assert reconciled.entries[0].attempt_count == 1
+    assert reconciled.entries[0].reason_code == "source_relocation_failed"
     assert SCRIPT["_read_journal"](journal_path) == reconciled

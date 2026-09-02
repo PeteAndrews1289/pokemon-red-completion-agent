@@ -9,6 +9,7 @@ import json
 import os
 import stat
 import sys
+from collections.abc import Mapping
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
@@ -87,6 +88,7 @@ from pokemon_red_completion.red_battle_source_conditioning import (  # noqa: E40
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder  # noqa: E402
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
+from pokemon_red_completion.route_executor import RouteExecutionError  # noqa: E402
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 from pokemon_red_completion.training_venue import TrainingVenue  # noqa: E402
 
@@ -99,14 +101,18 @@ class BattleScenarioMaterializationError(RuntimeError):
         message: str,
         *,
         reason_code: str = "materialization_preflight_failed",
+        diagnostics: Mapping[str, object] | None = None,
     ) -> None:
         super().__init__(message)
         self.reason_code = reason_code
+        self.diagnostics = dict(
+            diagnostics or {"failure_layer": "materialization_stage"}
+        )
 
 
 _MAXIMUM_BATTLE_STATE_BYTES = 64 * 1024 * 1024
 _MAXIMUM_CONTEXT_CATALOG_BYTES = 4 * 1024 * 1024
-_FAILURE_SCHEMA = "pokemon-private-battle-scenario-materialization-failure-v1"
+_FAILURE_SCHEMA = "pokemon-private-battle-scenario-materialization-failure-v2"
 
 
 @dataclass(frozen=True, slots=True)
@@ -802,7 +808,60 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
 def _staged_failure(error: Exception, reason_code: str) -> BattleScenarioMaterializationError:
     message = str(error) if isinstance(error, BattleScenarioMaterializationError) else reason_code
-    return BattleScenarioMaterializationError(message, reason_code=reason_code)
+    diagnostics = (
+        error.diagnostics
+        if isinstance(error, BattleScenarioMaterializationError)
+        else _portable_failure_diagnostics(error)
+    )
+    return BattleScenarioMaterializationError(
+        message,
+        reason_code=reason_code,
+        diagnostics=diagnostics,
+    )
+
+
+def _portable_failure_diagnostics(error: Exception) -> dict[str, object]:
+    """Retain bounded semantic route evidence without exception text or paths."""
+
+    current: BaseException | None = error
+    visited: set[int] = set()
+    while current is not None and id(current) not in visited:
+        visited.add(id(current))
+        if isinstance(current, RouteExecutionError):
+            report = current.failure
+            diagnostics: dict[str, object] = {
+                "failure_layer": "route_execution",
+                "route_failure_reason": current.reason.value,
+                "route_failure_report_present": report is not None,
+            }
+            if report is not None:
+                diagnostics.update(
+                    {
+                        "route_executed_step_count": len(report.executed_steps),
+                        "route_interruption_count": len(report.interruptions),
+                        "route_movement_requests": report.movement_requests,
+                        "route_replan_count": len(report.replans),
+                        "route_resource_renewal_count": len(
+                            report.resource_renewals
+                        ),
+                        "route_wait_actions": report.wait_actions,
+                    }
+                )
+                if report.last_observation is not None:
+                    diagnostics.update(
+                        {
+                            "route_last_interruption_present": (
+                                report.last_observation.interruption is not None
+                            ),
+                            "route_last_map_id": report.last_observation.map_id,
+                            "route_last_ready": report.last_observation.ready,
+                            "route_last_x": report.last_observation.at[1],
+                            "route_last_y": report.last_observation.at[0],
+                        }
+                    )
+            return diagnostics
+        current = current.__cause__ or current.__context__
+    return {"failure_layer": "materialization_stage"}
 
 
 def _failure_receipt(error: Exception) -> dict[str, object]:
@@ -815,6 +874,11 @@ def _failure_receipt(error: Exception) -> dict[str, object]:
         "schema": _FAILURE_SCHEMA,
         "status": "failed_closed",
         "reason_code": reason_code,
+        "diagnostics": (
+            error.diagnostics
+            if isinstance(error, BattleScenarioMaterializationError)
+            else _portable_failure_diagnostics(error)
+        ),
         "private_path_fields": 0,
         "teacher_queries": 0,
         "move_choices_executed": 0,
