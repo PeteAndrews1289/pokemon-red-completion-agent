@@ -103,17 +103,25 @@ def _parser() -> argparse.ArgumentParser:
         default=None,
         help="exclusive private canonical retained-prefix output",
     )
+    parser.add_argument(
+        "--out-retained-train-record",
+        type=Path,
+        default=None,
+        help="exclusive private canonical retained train-record output",
+    )
     return parser
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    if getattr(args, "out_retained_batch_prefix", None) is not None and not getattr(
-        args,
-        "project_retained_batch_prefix",
-        False,
+    projection_outputs = (
+        getattr(args, "out_retained_batch_prefix", None),
+        getattr(args, "out_retained_train_record", None),
+    )
+    if any(item is not None for item in projection_outputs) and not getattr(
+        args, "project_retained_batch_prefix", False
     ):
         raise BattleOutcomeCycleInspectionError(
-            "retained-prefix output requires retained-prefix projection"
+            "retained output requires retained-prefix projection"
         )
     expected_plan_sha256 = _sha256(args.expected_plan_sha256, "experiment plan")
     plan = _read_plan(args.plan, expected_plan_sha256)
@@ -130,7 +138,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         receipt = _project_complete(reader, plan)
         if getattr(args, "project_retained_batch_prefix", False):
-            return _project_retained_batch_prefix(reader, plan)
+            prefix = _project_retained_batch_prefix(reader, plan)
+            record_destination = getattr(args, "out_retained_train_record", None)
+            if record_destination is not None:
+                record_sha256 = _project_retained_train_record(
+                    reader,
+                    plan,
+                    record_destination,
+                )
+                if record_sha256 != prefix["train_record_sha256"]:
+                    raise BattleOutcomeCycleInspectionError(
+                        "retained train-record projection differs from prefix"
+                    )
+            return prefix
         return receipt
     if getattr(args, "project_retained_batch_prefix", False):
         raise BattleOutcomeCycleInspectionError(
@@ -222,6 +242,21 @@ def _project_retained_batch_prefix(
         raise BattleOutcomeCycleInspectionError(
             "failed battle evidence cannot become a retained train prefix"
         )
+    train_record = _retained_train_record(reader)
+    try:
+        retained = build_retained_battle_outcome_prefix(
+            plan,
+            artifact_manifest_sha256=reader.summary.manifest_sha256,
+            train_collection_record=train_record,
+        )
+    except (TypeError, ValueError):
+        raise BattleOutcomeCycleInspectionError(
+            "retained V1 train collection differs from its inspected artifact"
+        ) from None
+    return retained.public_dict()
+
+
+def _retained_train_record(reader: PrivateArtifactReader) -> dict[str, object]:
     train_records = tuple(
         record
         for record in _records(reader, "outcomes")
@@ -231,17 +266,30 @@ def _project_retained_batch_prefix(
         raise BattleOutcomeCycleInspectionError(
             "retained V1 train collection is not singular"
         )
+    return train_records[0]
+
+
+def _project_retained_train_record(
+    reader: PrivateArtifactReader,
+    plan: BattleOutcomeExperimentPlan,
+    destination: Path,
+) -> str:
+    train_record = _retained_train_record(reader)
     try:
         retained = build_retained_battle_outcome_prefix(
             plan,
             artifact_manifest_sha256=reader.summary.manifest_sha256,
-            train_collection_record=train_records[0],
+            train_collection_record=train_record,
         )
     except (TypeError, ValueError):
         raise BattleOutcomeCycleInspectionError(
             "retained V1 train collection differs from its inspected artifact"
         ) from None
-    return retained.public_dict()
+    _write_exclusive_projection(
+        _private_new_projection(destination),
+        _canonical_payload(train_record),
+    )
+    return retained.train_record_sha256
 
 
 def _project_failure(
@@ -818,12 +866,10 @@ def _write_exclusive_projection(destination: Path, payload: bytes) -> None:
                 os.close(directory_descriptor)
 
 
-def main(argv: list[str] | None = None) -> int:
-    args = _parser().parse_args(argv)
-    receipt = _run(args)
-    encoded = (
+def _canonical_payload(value: object) -> bytes:
+    return (
         json.dumps(
-            receipt,
+            value,
             allow_nan=False,
             ensure_ascii=True,
             separators=(",", ":"),
@@ -831,6 +877,12 @@ def main(argv: list[str] | None = None) -> int:
         ).encode("ascii")
         + b"\n"
     )
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
+    receipt = _run(args)
+    encoded = _canonical_payload(receipt)
     destination = getattr(args, "out_retained_batch_prefix", None)
     if destination is not None:
         _write_exclusive_projection(_private_new_projection(destination), encoded)
