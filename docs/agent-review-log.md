@@ -16,6 +16,12 @@ add two algebraic rows to a descriptive batch. The local repair freezes rank 14 
 `1e-6` clearance, identifies two prior-anchored dimensions, and leaves inferential claims and
 authority false. Publication, exact-main CI and a new action-free aggregate freeze remain required.
 
+PR 152 merged the repair as exact main `6b8e7615`, and CI `33585842383/1` passed. The subsequent
+single action-free freeze succeeded and independently reopened as SHA-256 `62f971f8…02b8e`.
+Its roster is 8 train / 8 development with rank 14 in both partitions, two prior-anchored hidden
+dimensions, and zero actions, frames, claims, outcomes, committed choices, fits, teacher queries,
+sealed cases, Crystal contexts, replay or authority. Codex stops at the required reorientation.
+
 ## Exact-main CI pre-controller stop — Codex adjudication 2026-09-01
 
 The first V2 execution launch returned a sanitized failure before creating its journal. No ROM,

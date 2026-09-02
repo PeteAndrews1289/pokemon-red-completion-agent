@@ -14,6 +14,11 @@ prior under L2 regularization instead of claiming they were identified by this b
 grant gameplay authority; it clears the smallest honest path to the first aggregate V2 fit and
 held-development comparison.
 
+After publication and exact-main CI, the same action-free freezer succeeded. It sealed one retained
+and seven fresh training contexts beside eight held development contexts, with rank fourteen on
+both sides and zero controller actions, outcomes or fits. The project is now at a clean decision
+boundary: execute this exact roster once, or revise the experiment before labels exist.
+
 ## September 1: one capture pipeline now understands both sides of the experiment
 
 The held-out classroom no longer depends on a separate script. The same plan that seals seven

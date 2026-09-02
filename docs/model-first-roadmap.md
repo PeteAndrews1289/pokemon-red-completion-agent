@@ -11,7 +11,7 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the outcome-blind batch exposed a rank/cardinality mismatch
+## Current checkpoint: the 8+8 outcome-blind batch is frozen; reorient before outcomes
 
 Exact main `1d8acd0f` passed CI `33581683171/1`. The retained V1 train prefix was projected again
 without replay, and the combined **8 train / 8 development** freezer authenticated all fifteen
@@ -24,17 +24,25 @@ The outcome-blind spectra are not collapsed: both partitions have their maximum 
 **14/14**. The fourteenth singular value is `1.758995318792317e-05` for train and
 `0.0005942025828649609` for development, above the existing `1e-6` clearance. The bounded local
 repair therefore requires rank 14 with clearance and explicitly reports **two prior-anchored hidden
-dimensions**. The original nonlinear prior plus L2 penalty anchors those dimensions; this batch
-remains development evidence and cannot make an inferential or authority claim.
+dimensions**. PR 152 merged that contract as exact main `6b8e7615`, and CI `33585842383/1` passed.
+
+The one action-free retry then froze the complete roster. Freeze SHA-256 is `62f971f8…02b8e`,
+inventory SHA-256 is `c3bc5f18…bf015`, and roster SHA-256 is `295cc6f5…0311b`. It contains one
+retained plus seven fresh train contexts, eight development contexts, three train venues, two
+development venues, four party conditions per partition, and rank 14 in both. It computed the
+frozen prior's scores and hidden representations only; controller actions, emulator frames,
+claims, outcomes, committed model choices, fits, teacher queries, sealed Red, Crystal, replay and
+authority are all zero. The original nonlinear prior plus L2 penalty anchors the two unobserved
+dimensions; this batch remains development evidence and cannot make an inferential or authority
+claim.
 
 Next:
 
-1. publish the rank-floor contract and require green exact-main CI;
-2. rerun the one action-free batch freeze and require a canonical 8+8 aggregate receipt;
-3. reorient at that receipt before any selected-action outcome is opened;
-4. only then run the bounded batch, fit once on train only, and commit all development predictions
+1. reorient at the canonical receipt before any selected-action outcome is opened;
+2. independently verify the aggregate runner still binds this exact freeze and source;
+3. only then run the bounded batch, fit once on train only, and commit all development predictions
    before development outcomes;
-5. reject promotion on zero discordance or no paired advantage; a positive result opens a separate
+4. reject promotion on zero discordance or no paired advantage; a positive result opens a separate
    teacher-free authority design, not Crystal.
 
 The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen

@@ -6,18 +6,23 @@ Status: active operating assignment as of 2026-09-01. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the rank-floor publication and aggregate freeze retry
+## Current override: the batch is frozen; Codex must reorient before outcomes
 
 Exact main `1d8acd0f` passed CI `33581683171/1`. The first combined action-free freeze wrote no
 artifact because both fixed partitions have fourteen contrast rows against a sixteen-wide hidden
 head. Outcome-blind inspection found maximal rank 14 in both partitions with numerical clearance
 above `1e-6`. No controller input, claim, prediction, outcome or fit occurred.
 
-Codex owns publication of the bounded rank-14 contract, exact-main CI, and one new action-free
-aggregate freeze. The receipt must state that two dimensions remain anchored to the frozen prior
-and that inferential claims and authority are false. Stop and reorient after the canonical 8+8
-receipt. Selected-action outcomes, fitting, sealed Red, Crystal and gameplay authority remain
-separate gates.
+PR 152 merged the bounded rank-14 contract as exact main `6b8e7615`; CI `33585842383/1` passed.
+The action-free retry froze the canonical 8+8 roster as `62f971f8…02b8e`, with rank 14 in both
+partitions and two dimensions explicitly anchored to the frozen prior. It created zero controller
+actions, frames, claims, outcomes, committed model choices, fits, teacher queries, sealed cases,
+Crystal contexts, replay or authority.
+
+Codex must stop and reorient here. The next decision is whether to execute this exact bounded
+roster once. Before doing so, independently reopen the aggregate runner contract and verify that
+all development predictions are durably committed before any development outcome. Selected-action
+outcomes, fitting, sealed Red, Crystal and gameplay authority remain separate gates.
 
 ## Previous override: Codex owned publication and one zero-effect development freeze
 
