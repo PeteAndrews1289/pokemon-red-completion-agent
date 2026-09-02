@@ -362,14 +362,65 @@ def test_completion_plan_rejects_a_retained_source_in_new_inventory() -> None:
         _build_completion((reused, _candidate(20), _candidate(21)))
 
 
-def test_completion_plan_remains_train_only() -> None:
-    with pytest.raises(BattleScenarioMaterializationPlanV2Error, match="plan differs"):
-        _build_completion(
-            tuple(
-                _candidate(index, partition=ScenarioPartition.DEVELOPMENT)
-                for index in range(20, 23)
-            )
+def test_completion_plan_can_fill_one_development_failure() -> None:
+    predecessor = _build(
+        tuple(
+            _candidate(index, partition=ScenarioPartition.DEVELOPMENT)
+            for index in range(10)
         )
+    )
+    retained = tuple(
+        RetainedBattleScenarioMaterializationCapture(
+            ordinal=assignment.ordinal,
+            capture_id=assignment.capture_id,
+            assignment_sha256=canonical_sha256(assignment.private_dict()),
+            source_commit=predecessor.source_commit,
+            source_state_sha256=assignment.candidate.source.source_state_sha256,
+            root_lineage_id=assignment.candidate.source.root_lineage_id,
+            venue_id=assignment.selected_venue.venue_id,
+            party_slot=assignment.party_slot,
+            state_filename=assignment.state_filename,
+            manifest_filename=assignment.manifest_filename,
+            state_sha256=_sha(f"development-state-{assignment.ordinal}"),
+            manifest_sha256=_sha(f"development-manifest-{assignment.ordinal}"),
+        )
+        for assignment in predecessor.assignments
+        if assignment.ordinal != 6
+    )
+
+    plan = build_battle_scenario_materialization_completion_plan(
+        plan_id="red-battle-v2-development-completion",
+        source_commit="c" * 40,
+        source_bundle_sha256=_sha("completion-bundle"),
+        rom_sha256=predecessor.rom_sha256,
+        capture_directory_sha256=_sha("completion-captures"),
+        earliest_excluded_plan_sha256=predecessor.excluded_plan_sha256,
+        earliest_excluded_run_journal_sha256=(
+            predecessor.excluded_run_journal_sha256
+        ),
+        predecessor_plan_sha256=predecessor.plan_sha256,
+        predecessor_run_journal_sha256=_sha("development-journal"),
+        predecessor_capture_directory_sha256=(
+            predecessor.capture_directory_sha256
+        ),
+        predecessor_failure_count=1,
+        retained_successes=retained,
+        candidates=tuple(
+            _candidate(index, partition=ScenarioPartition.DEVELOPMENT)
+            for index in range(20, 23)
+        ),
+    )
+
+    assert plan.partition is ScenarioPartition.DEVELOPMENT
+    assert len(plan.retained_successes) == 7
+    assert len(plan.assignments) == 1
+    assert len(plan.retained_successes) + len(plan.assignments) == 8
+    assert (
+        parse_battle_scenario_materialization_completion_plan(
+            plan.canonical_bytes()
+        )
+        == plan
+    )
 
 
 def test_completion_plan_rejects_duplicate_retained_ordinal() -> None:
