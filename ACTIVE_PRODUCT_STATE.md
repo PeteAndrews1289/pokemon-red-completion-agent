@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the terminal route-supply falsification and the new clustered-curriculum admission contract. After exact-main CI, authenticate all five retained train captures and execute one outcome-blind information qualification. A pass opens full-action train collection and one descriptive fit; a failure closes this roster without touching development.
+- Next decision: Publish the failed action-free clustered gate. Then decide prospectively whether the correct successor gate is aggregate independent action-contrast information across all fixed contexts or genuinely new multi-action train supply. No outcome collection opens until that policy is frozen and passes once.
 
 ### Mandatory mission check
 
@@ -60,7 +60,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-clustered-curriculum-reorientation** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-train-completion-successor-terminal-2026-09-02.json)
+**2026-09-02-battle-v2-clustered-information-gate-result** · status **active** · evidence [falsification](docs/evidence/red-battle-clustered-information-gate-result-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -68,11 +68,11 @@ outputs.
 | Learning output | This was input preparation, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
 | Authority delta | None yet. The successor retained diagnostic evidence and the replacement engineering gate opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The two-root successor reached the same ready position after 111 executed route steps on both assignments and failed planner_no_route. The route-derived train-supply strategy is now falsified and permanently closed. Five authentic fresh train captures and eight disjoint development captures remain available for a smaller full-action clustered curriculum, subject to an outcome-blind information gate. |
-| Decision | Retire the seven-fresh-context V2 experiment without rewriting it or retrying any source. Build a new cluster-aware integration curriculum from one retained plus all five authentic fresh train contexts, measure every supported action from each exact reset, weight each upstream context equally, and preserve all eight development contexts for prediction-before-outcome paired comparison. |
-| Next session | Publish the terminal falsification and the separate retained-train catalog plus clustered-curriculum admission contract. After exact-main CI, build the five-capture private catalog and run the outcome-blind information gate; only a pass opens one train-only full-action collection and descriptive fit. |
-| Next falsifier | After publication and exact-main CI, build the five-capture predecessor catalog and run one action-free clustered information qualification. If the six train clusters lack full attainable contrast rank, two venues, margin and party diversity, or exact claim availability, do not collect outcomes or fit. |
-| Stop condition | Never retry terminal successor plan 5e303d61...c445, completion plan 830d97c2...75ada, or any earlier consumed input. Do not harden the failed Red route. Stop before outcomes if the fixed one-plus-five train roster fails the action-free information gate; do not replace, clone, or outcome-select a context. |
+| Blocker | The exact one-retained plus five-fresh clustered curriculum failed its action-free gate because only three of five fresh train captures expose at least three usable actions; the required count was five. No outcome, claim, prediction, fit, teacher, sealed Red case, Crystal context, replay, or authority was opened. Route-derived replacement supply remains permanently closed. |
+| Decision | Retire the exact clustered V1 curriculum without weakening its failed threshold. Preserve the truthful 3 Cave / 2 Route 11 five-capture catalog and the untouched eight-context development set. Before any outcome collection, prospectively choose and test either an aggregate contrast-information admission rule or a genuinely independent multi-action supply strategy; do not outcome-select, clone, or route-patch a replacement. |
+| Next session | Publish the failed information-gate result, then design one prospective V2 admission policy around measurable aggregate contrast information and exact equal context weighting. Run that action-free policy once; only a pass may open train outcome collection. |
+| Next falsifier | Using only outcome-blind catalog and feature metadata, compare a preregistered aggregate-contrast admission rule against the actual fixed 2/3-action support profile. If it cannot justify enough independent contrast information without post-hoc selection, close these inputs and design genuinely new title-neutral multi-action supply. |
+| Stop condition | Do not lower the failed V1 five-of-five three-action threshold, collect outcomes under that curriculum, retry terminal route plans, harden the failed Red route, clone captures, or outcome-select replacements. Any successor must be frozen prospectively from outcome-blind information only. |
 
 ### Stop conditions
 

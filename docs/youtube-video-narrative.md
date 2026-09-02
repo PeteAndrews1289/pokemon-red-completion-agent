@@ -5315,3 +5315,16 @@ version has to prove the model learned something worth carrying into a game it h
   REPLANS · INTERRUPTIONS · WAITS**, retained privately and digest-bound publicly.
 - Draw every consumed tranche into a cumulative exclusion chain. End on **TWO NEVER-ATTEMPTED
   TRAIN ROOTS OR REDESIGN THE CLASSROOM**—never “patch Celadon until it passes.”
+
+## New sequence: “The syllabus failed before the first answer”
+
+- Open on exact green main **`af8bff30`**, then turn five authenticated train captures into
+  **CAVE 3 · ROUTE 11 2**.
+- Reveal their available choices as **2 · 3 · 2 · 3 · 3** and place the frozen threshold beside
+  them: **FIVE OF FIVE MUST HAVE 3+**.
+- Stop the pipeline at **THREE OF FIVE — REJECTED** while keeping **BUTTONS 0 · FRAMES 0 · OUTCOMES
+  0 · PREDICTIONS 0 · FITS 0 · AUTHORITY 0 · CRYSTAL 0** onscreen.
+- Show the held exam set separately: **6/8 HAVE 3+**, but cross out any attempt to let the exam
+  repair the syllabus.
+- End on the honest fork: **PREREGISTER AGGREGATE CONTRAST V2** or **FIND NEW INDEPENDENT SUPPLY**.
+  Never depict a lowered V1 threshold as a pass.

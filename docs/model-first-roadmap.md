@@ -5006,3 +5006,24 @@ Next sequence:
 Mission check: development supply is no longer the blocker. Training still has not advanced in
 this checkpoint; the board remains 19 causal train examples, 6 fits, 6 verified development
 outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.
+
+## Clustered information gate — failed closed 2026-09-02
+
+- [x] Retire the route-derived replacement-supply strategy after its exact two-root terminal.
+- [x] Authenticate five successful fresh train captures without opening outcomes: three Cave and
+  two Route 11.
+- [x] Run the exact action-free V1 information gate once from green main `af8bff30`.
+- [x] Preserve the failed result: fresh action counts `2,3,2,3,3` provide only three qualifying
+  three-action contexts against five required; development provides six of eight.
+- [x] Confirm zero outcomes, predictions, fits, controller effects, teacher access, sealed Red,
+  Crystal, replay, and authority.
+- [ ] Freeze one prospective outcome-blind V2 admission policy around independent action contrasts
+  and equal context weighting, or explicitly reject the fixed inventory and generate new supply.
+- [ ] Run V2 once. Only a pass opens train outcome collection and one descriptive shadow fit.
+- [ ] Commit development predictions before opening its outcomes, then audit before any authority
+  or Crystal decision.
+
+Mission check: this stop prevented weak data from being mislabeled as training. The next gate must
+improve the information design, not revive a Red-specific route factory. The transferable product
+still requires bounded battle competence, navigation, party development, collection planning, and
+then frozen Red-to-Crystal transfer evidence.
