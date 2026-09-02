@@ -11,7 +11,30 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: an artifact-safe V2 successor is frozen and unexecuted
+## Current checkpoint: V2 failed before its first outcome
+
+The path-free successor receipt merged as main `38ec10d5` and exact-main CI `33604834768/1`
+passed. Freeze `26878069…4cadd3` then executed once from its exact source and runtime. It claimed
+all fifteen fresh roots and the first train candidate before a `BattleRuntimeError` sealed the
+artifact as failed. No outcome, collection, prediction or fit was retained, and no learned
+authority or transfer evidence changed.
+
+The exact semantic error text was not journaled. Controller input may therefore have occurred,
+while exact action and frame counts are unavailable. The freeze and all fifteen roots are terminal;
+diagnostic replay is prohibited. Next:
+
+1. publish the terminal evidence and durable semantic runtime-diagnostic repair;
+2. require green exact-main CI;
+3. perform one action-free census of independent, unclaimed train and development roots;
+4. freeze a successor only if the census proves a complete 7+8 supply; otherwise generate new
+   roots before another outcome decision;
+5. retain the train-only fit and prediction-before-development-outcome rail unchanged.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[terminal result](evidence/red-battle-v2-runtime-terminal-2026-09-02.json).
+
+## Previous checkpoint: an artifact-safe V2 successor was frozen and unexecuted
 
 The full-digest artifact-ID repair merged as exact main `c4207af3`; main CI
 `33601217072/1` passed. Under the exact retained runtime, fresh successor freeze

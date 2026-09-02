@@ -8311,3 +8311,14 @@ It reconstructed the same classroom—one retained lesson, seven fresh train cas
 development cases—while leaving the new 77-character artifact namespace absent. Nothing had been
 played or learned at that checkpoint. The value was a clean, independently reopenable transaction
 that could finally be published before its one permitted outcome run.
+
+That permitted run reached the first real battle branch—and failed before preserving an outcome.
+The transaction had already claimed the complete classroom and exam roster, plus the first move
+candidate, so all fifteen roots stayed consumed. The failed artifact proved that no prediction or
+fit occurred, but it exposed a diagnostic blind spot: the public error was correctly sanitized and
+the private journal kept the exception class, yet neither retained the safe semantic reason.
+
+The response was not to replay the save. The runner was changed so the next failure records its
+bounded battle-runtime reason, exact partition and ordinal, claimed-versus-retained candidate set,
+and controller-input uncertainty before sealing. This is painful progress, but it preserves the
+central promise: evidence is never manufactured by rerunning a consumed decision until it passes.

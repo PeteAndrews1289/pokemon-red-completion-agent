@@ -5263,3 +5263,14 @@ version has to prove the model learned something worth carrying into a game it h
   a qualified experiment, not a trained player.
 - End on the single rail: **PUBLISH RECEIPT → GREEN MAIN → EXECUTE ONCE → FIT TRAIN ONLY → COMMIT
   EXAM PREDICTIONS → OPEN EXAM OUTCOMES → ACCEPT OR REJECT**.
+
+## New sequence: “One candidate consumed the classroom”
+
+- Let exact-main CI turn green, then show **ROOT CLAIMS 15 · FIRST TRAIN CANDIDATE CLAIMED**.
+- Stop immediately on **BATTLE RUNTIME ERROR** with **OUTCOMES 0 · PREDICTIONS 0 · FITS 0**.
+- Mark the complete freeze and all claimed roots **TERMINAL—NO REPLAY**. Do not imply actions or
+  frames were zero; label their exact counts **NOT RETAINED**.
+- Expose the real defect: **EXCEPTION CLASS SAVED · SEMANTIC REASON LOST**.
+- Add the repaired private rail: **PARTITION + ORDINAL + CLAIMED/RETAINED CANDIDATES + SAFE REASON
+  + INPUT MAY HAVE OCCURRED**, all durable before failure publication.
+- End on **PUBLISH → GREEN MAIN → ZERO-ACTION SUPPLY CENSUS → NEW 7+8 ROOTS OR GENERATE MORE**.

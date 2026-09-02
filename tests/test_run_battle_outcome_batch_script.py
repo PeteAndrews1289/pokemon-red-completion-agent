@@ -5,9 +5,11 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_outcome_learning import BattleTurnOutcome
+from pokemon_red_completion.battle_runtime import BattleRuntimeError
 from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
 from pokemon_red_completion.private_artifacts import initialize_private_root
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -124,6 +126,58 @@ def test_batch_collector_durably_claims_each_candidate_before_controller_input(
         "outcomes",
     ]
     assert all(item[2] for item in writer.events)
+
+
+def test_batch_collector_retains_runtime_failure_reason_without_retry(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    candidate = BATCH_HELPERS["_candidate"](
+        ScenarioPartition.TRAIN,
+        "failed-batch-run",
+        basis_offset=0,
+        supported_count=2,
+    )
+    prepared = SimpleNamespace(
+        initial_observation_sha256="7" * 64,
+        features=LEARNING_HELPERS["_features"](),
+    )
+    writer = Writer()
+
+    def fail_after_claim(capture, **kwargs):  # type: ignore[no-untyped-def]
+        del capture
+        kwargs["candidate_claim_sink"](0)
+        raise BattleRuntimeError("bounded turn lost the semantic move menu")
+
+    monkeypatch.setitem(
+        SCRIPT["_collect_claimed_capture"].__globals__,
+        "collect_red_battle_outcome_example",
+        fail_after_claim,
+    )
+
+    with pytest.raises(BattleRuntimeError, match="semantic move menu"):
+        SCRIPT["_collect_claimed_capture"](
+            writer,
+            freeze_sha256="8" * 64,
+            ordinal=2,
+            candidate=candidate,
+            capture=object(),
+            prepared=prepared,
+            root_pair=_claim(),
+            session_factory=lambda: None,
+        )
+
+    assert [item[0] for item in writer.events] == [
+        "candidate_claims",
+        "failure_diagnostics",
+    ]
+    diagnostic = writer.events[-1][1]
+    assert writer.events[-1][2]
+    assert diagnostic["failure_type"] == "BattleRuntimeError"
+    assert diagnostic["failure_message"] == "bounded turn lost the semantic move menu"
+    assert diagnostic["claimed_candidate_indices"] == [0]
+    assert diagnostic["retained_candidate_indices"] == []
+    assert diagnostic["controller_input_may_have_occurred"] is True
+    assert diagnostic["retry_permitted"] is False
 
 
 def test_development_commitment_contains_all_controls_and_no_outcomes() -> None:

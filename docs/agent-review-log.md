@@ -1415,3 +1415,20 @@ Mission check for this planning task:
 - Mission check: this is one bounded title-neutral battle-preference lesson toward reusable skill
   authority. It does not replace navigation, quest, capture, evolution, trade or living-Pokedex
   planning and cannot by itself justify Crystal transfer.
+
+## Codex reorientation — first-candidate V2 runtime terminal (2026-09-02)
+
+- Result: the published freeze executed once, claimed all fifteen fresh roots and the first train
+  candidate, then failed with `BattleRuntimeError` before retaining any outcome or model fit.
+- Evidence limit: the failed artifact retained the exception class but not its semantic message.
+  Controller input may have occurred; exact actions and frames are unavailable. Replay is rejected
+  because the freeze and every claimed root are terminal.
+- Accepted repair: future collection failures durably retain the known semantic runtime message,
+  failed partition and ordinal, claimed and retained candidates, and explicit input uncertainty
+  before the artifact seals as failed. Unknown exception classes remain sanitized.
+- Verification: 5 focused and 6,360 repository-wide tests passed; Ruff, all 332 mypy source files,
+  documentation, active focus, public-artifact privacy and source-bound registries are green.
+- Next decision: publish repair and terminal evidence under exact-main CI, then census unused
+  independent supply without controller input. A successor needs a complete new 7+8 roster.
+- Mission check: no learning counter advanced. This is still a battle-skill data gate, not route
+  work or evidence of story, capture, evolution, trade, living-Pokedex or Crystal competence.

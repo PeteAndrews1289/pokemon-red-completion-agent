@@ -1,0 +1,72 @@
+{
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "artifact": {
+    "candidate_claims": 1,
+    "candidate_outcomes": 0,
+    "development_outcomes": 0,
+    "failure_reason_code": "unhandled_exception",
+    "failure_type": "BattleRuntimeError",
+    "manifest_sha256": "e992f27e9618c8d086640968f4cf6835d19c9d483eb3a09ddd949821b50bac40",
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 15,
+    "status": "failed",
+    "train_outcomes": 0
+  },
+  "claim_boundary": {
+    "supported": "The published artifact-safe V2 freeze executed exactly once, durably claimed all fifteen fresh roots and the first train candidate, then retained a terminal failed artifact before any outcome, collection, prediction or fit.",
+    "unsupported": [
+      "exact_runtime_failure_message",
+      "exact_controller_action_count",
+      "exact_emulator_frame_count",
+      "battle_outcome_collection",
+      "candidate_model_fit",
+      "development_comparison",
+      "gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer",
+      "full_game_play",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "execution": {
+    "controller_input_may_have_occurred": true,
+    "exact_action_count_available": false,
+    "exact_frame_count_available": false,
+    "freeze_sha256": "26878069c52304238c8d306fad3ac2000787a85f5ff50fb86400a2229f4cadd3",
+    "main_ci_attempt": 1,
+    "main_ci_run": 33604834768,
+    "receipt_main_commit": "38ec10d5279083ccf816a13d5b413061143d8a90",
+    "retry_allowed": false,
+    "runtime_identity_sha256": "7bd8060a398ba1d0156f1a83c419e46cb18deec9c982c08eaf946d208e3db0b1",
+    "source_commit": "c4207af346a921c8e2d43a882db81208e70168f5",
+    "status": "terminal_runtime_failure"
+  },
+  "next_gate": {
+    "diagnostic_repair": "Retain a bounded semantic runtime failure message, failed partition and ordinal, claimed and retained candidate indices, and explicit input-may-have-occurred state inside every future failed private artifact.",
+    "supply_requirement": "After publication and exact-main CI, perform an action-free claim-availability census and create a new successor only from a complete independent 7-train and 8-development supply.",
+    "terminal_rule": "Never retry or relabel freeze 26878069c52304238c8d306fad3ac2000787a85f5ff50fb86400a2229f4cadd3 or any of its fifteen claimed roots."
+  },
+  "protected_effects": {
+    "authority_promotions": 0,
+    "crystal_contexts_opened": 0,
+    "development_outcomes_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  },
+  "recorded_on": "2026-09-02",
+  "schema": "pokemon-red-battle-v2-runtime-terminal-v1",
+  "status": "terminal_failed_before_first_outcome"
+}
