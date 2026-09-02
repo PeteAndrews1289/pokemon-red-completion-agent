@@ -6,6 +6,21 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 2, 2026): the fixed Red battle roster failed its final
+> information gate; do not train on it.** The distinct V2 contrast policy was published as exact
+> main `d9cf45a4` under green CI `33679292761/1`. Its sole action-free qualification then failed
+> closed in eight seconds with **zero controller actions, emulator frames, claims, outcomes,
+> predictions, fits, teacher queries, sealed Red cases, Crystal contexts, replays, or authority**.
+> No curriculum artifact was created, and neither V1 nor V2 may be retried.
+>
+> This is a useful rejection, not learned progress: the board remains **causal train 19 · model
+> fits 6 · verified development 6 · unseen comparisons 4 · authority 0 · transfer 0**. The next
+> lane must prospectively create genuinely new, independent, title-neutral short battle scenarios
+> and prove their action diversity and hidden-contrast information before opening outcomes. It may
+> not revive the Red route factory, clone timing variants, lower the failed gates, or use Crystal
+> as extra training data. See the
+> [path-free terminal result](docs/evidence/red-battle-contrast-information-gate-result-v2-2026-09-02.json).
+
 > **Current product focus (August 31, 2026): the bounded independent-world factory is implemented;
 > publish before running it.** Exact main `0ceece13` preserves the measured 103-lineage deficit.
 > The new powered supply rail prospectively freezes twelve clean-power Red worlds—three train,

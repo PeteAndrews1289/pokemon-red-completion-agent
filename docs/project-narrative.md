@@ -8383,3 +8383,18 @@ the point of the architecture: engineering readiness, information readiness, lea
 and authority are separate transitions. The project will now define a new outcome-blind contrast
 test prospectively rather than lower the failed threshold. If the existing captures cannot support
 it honestly, it will seek new title-neutral situations instead of polishing another Red route.
+
+## The gate that refused to call weak inputs training — September 2, 2026
+
+The project published a separate V2 battle-information policy rather than quietly weakening the
+failed V1 rule. V2 treated each upstream state as one example, used within-state action contrasts
+only as information directions, and required sufficient action diversity and numerical clearance
+before any outcome could be opened.
+
+The one production qualification failed closed in eight seconds. It moved no controller, advanced
+no frame, claimed no root, opened no outcome, predicted nothing and fit no model. That result is
+important precisely because it is disappointing: the system rejected a convenient fixed roster
+instead of manufacturing a training claim from it. Both policy versions and those inputs are now
+terminal. The next chapter is not another Red walkthrough repair; it is a reusable short-scenario
+supply seam that can create genuinely independent semantic choices for Red and, through a thin
+adapter, Crystal.

@@ -5019,12 +5019,17 @@ outcomes, 4 unseen comparisons, 0 authority and 0 Crystal transfer.
   Crystal, replay, and authority.
 - [x] Freeze one prospective outcome-blind V2 admission policy around within-context action
   contrasts and equal upstream-context weighting, with a separate schema and policy identity.
-- [ ] Publish V2 and require green exact-main CI.
-- [ ] Run V2 once. Only a pass opens train outcome collection and one descriptive shadow fit.
-- [ ] Commit development predictions before opening its outcomes, then audit before any authority
-  or Crystal decision.
+- [x] Publish V2 as exact main `d9cf45a4` and require green exact-main CI `33679292761/1`.
+- [x] Run V2 once. It failed closed without an artifact or protected effect; V1, V2 and the fixed
+  roster may not retry.
+- [ ] Design genuinely new independent title-neutral short-scenario supply. First prove its
+  multi-action support and hidden-contrast clearance on ROM-free fixtures and one bounded
+  outcome-blind census.
+- [ ] Only a future prospectively qualified roster may collect train outcomes, fit descriptively,
+  commit development predictions and then open development outcomes.
 
-Mission check: this stop prevented weak data from being mislabeled as training. The next gate must
-improve the information design, not revive a Red-specific route factory. The transferable product
-still requires bounded battle competence, navigation, party development, collection planning, and
-then frozen Red-to-Crystal transfer evidence.
+Mission check: both stops prevented weak data from being mislabeled as training. The next gate must
+improve the scenario distribution, not revive a Red-specific route factory. The transferable
+product still requires bounded battle competence, navigation, party development, collection
+planning, and then frozen Red-to-Crystal transfer evidence. Counters remain train 19, fits 6,
+verified development 6, unseen comparisons 4, authority 0 and transfer 0.

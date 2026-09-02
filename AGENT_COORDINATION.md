@@ -3433,3 +3433,19 @@ Earlier highlights:
 Every session closes with: mission statement, newly earned capability, authority still withheld,
 cheapest falsifier, exact next gate, and documentation update. External reviewers may disagree;
 Codex records the disagreement and its evidence instead of silently averaging opinions.
+
+## Active roles — post-V2 battle-supply reorientation (2026-09-02)
+
+- **Codex:** preserves and publishes the terminal V2 rejection, owns the next title-neutral
+  short-scenario supply design, and may not open outcomes until a prospective information census
+  passes. It remains the implementation and adjudication owner.
+- **Claude:** next review is reserved for the new supply contract or a promotion boundary. It should
+  attack statistical independence, weighting, leakage and whether the proposed evidence can
+  support the claim; it does not inspect fixed private roster identities or edit the worktree.
+- **Antigravity:** next review is reserved for the new supply contract's cross-title architecture,
+  emulator trust boundary and failure observability. It should reject Red-route logic disguised as
+  a generic adapter; it does not edit the worktree.
+
+The sole exact-main V2 qualifier failed closed with zero protected effects and no artifact. No
+external reviewer is needed to reinterpret that terminal result. Review resumes before a new
+controller-capable supply plan or any model-authority decision.
