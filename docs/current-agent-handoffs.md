@@ -6,7 +6,19 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: the compatible-runtime successor is frozen; Codex owns its separate execution decision
+## Current override: Codex owns the artifact-ID repair and fresh successor
+
+The one permitted compatible-runtime execution of freeze `f7204334…5263` stopped before artifact
+creation because its generated identifier exceeded the private store limit. No claim, prediction,
+outcome, fit, input, frame, teacher, sealed Red, Crystal, replay or authority effect occurred; the
+freeze is terminal.
+
+Codex owns the minimal full-digest identifier repair, publication, exact-main CI, and one new
+compatible-runtime zero-effect successor freeze. The new freeze must be published and green before
+its own one-shot execution. A later reviewer challenges leakage and title-neutrality only after a
+measured result; reviewers receive no private paths, roots, saves or outcomes.
+
+## Previous override: the compatible-runtime successor was frozen for a separate execution decision
 
 The runtime guard repair merged as exact main `9956665d`; CI `33593610064/1` passed. One new
 action-free successor then reproduced the complete **1 retained + 7 fresh train / 8 development**

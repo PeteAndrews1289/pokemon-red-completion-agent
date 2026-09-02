@@ -5242,3 +5242,14 @@ version has to prove the model learned something worth carrying into a game it h
 - Keep **CLAIMS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · PREDICTIONS 0 · FITS 0** onscreen.
 - End on the honest next rail: **PUBLISH RECEIPT → GREEN MAIN → EXECUTE ONCE → TRAIN 8 → COMMIT
   DEVELOPMENT CHOICES → OPEN 8 OUTCOMES → ADJUDICATE**.
+
+## New sequence: “Eighty characters stopped the first record”
+
+- Let the runtime gate turn green, then stop the pipeline at **ARTIFACT NAME: 89 · LIMIT: 80**.
+- Keep **ARTIFACTS 0 · CLAIMS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · FITS 0** visible.
+- Explain that the attempt remains terminal even though it never reached gameplay; one-shot means
+  failures are evidence, not invitations to silently retry.
+- Replace only the prefix: **FULL 64-CHARACTER DIGEST PRESERVED · TOTAL 77**.
+- Show the regression test crossing the real private-store boundary instead of a permissive mock.
+- End on **PUBLISH REPAIR → GREEN MAIN → NEW ZERO-EFFECT FREEZE → PUBLISH → EXECUTE ONCE**. Keep
+  sealed Red, Crystal and authority locked.

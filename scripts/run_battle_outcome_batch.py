@@ -277,7 +277,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
 
     private_root = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
-    artifact_id = f"red-battle-outcome-batch-{freeze_sha256}"
+    artifact_id = _batch_artifact_id(freeze_sha256)
     writer = private_root.begin_artifact(artifact_id, kind="battle_outcome_batch")
     train_collections: list[RedBattleOutcomeCollection] = []
     development_collections: list[RedBattleOutcomeCollection] = []
@@ -474,6 +474,12 @@ def _ordered_captures(
     for capture, candidate in zip(ordered, expected, strict=True):
         _require_capture_binding(capture, candidate.binding)
     return ordered
+
+
+def _batch_artifact_id(freeze_sha256: object) -> str:
+    """Return a full-digest identifier accepted by the private artifact store."""
+
+    return f"red-bo-batch-{_sha256(freeze_sha256, 'batch freeze')}"
 
 
 def _require_capture_binding(

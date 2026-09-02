@@ -14,6 +14,25 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: the compatible-runtime V2 execution stopped on its artifact identifier
+
+Exact main `96c28b7f` passed CI `33596459536/1`, so freeze `f7204334…5263` was reauthenticated
+under source `9956665d` and the preserved runtime. The one permitted execution passed its
+action-free preflight, then failed before private artifact creation because
+`red-battle-outcome-batch-` plus a 64-character digest is 89 characters; the typed private store
+allows at most 80.
+
+This is another zero-effect terminal attempt: **0 artifacts · 0 claims · 0 predictions · 0
+outcomes · 0 fits · 0 actions · 0 frames · 0 teachers · 0 sealed Red · 0 Crystal · 0 authority**.
+Freeze `f7204334…5263` must never retry. The local repair uses
+`red-bo-batch-<full-freeze-digest>`—77 characters, with no loss of identity—and proves it through
+the real typed private store rather than a permissive mock.
+
+Publish the repair and [terminal evidence](docs/evidence/red-battle-v2-artifact-id-failure-2026-09-02.json),
+require green exact-main CI, then create one new compatible-runtime zero-effect successor freeze.
+Only after its own receipt is published and green may that fresh freeze execute once. Counters
+remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
+
 ## 2026-09-02: the compatible-runtime V2 successor is frozen and unexecuted
 
 The fail-before-freeze repair merged as exact main `9956665d`; CI `33593610064/1` passed. Under
