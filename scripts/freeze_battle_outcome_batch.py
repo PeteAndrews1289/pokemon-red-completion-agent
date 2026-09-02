@@ -39,6 +39,7 @@ from pokemon_red_completion.battle_outcome_capture_authentication import (  # no
 )
 from pokemon_red_completion.battle_outcome_experiment import (  # noqa: E402
     BattleOutcomeCaptureBinding,
+    battle_outcome_controller_timing_sha256,
 )
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
     open_battle_scenario_capture,
@@ -74,6 +75,9 @@ from pokemon_red_completion.goal_manager_context_catalog import (  # noqa: E402
     GoalManagerContextCatalog,
     parse_goal_manager_context_catalog,
 )
+from pokemon_red_completion.goal_manager_development import (  # noqa: E402
+    goal_manager_development_numpy_runtime_sha256,
+)
 from pokemon_red_completion.goal_manager_protocol import (  # noqa: E402
     GoalManagerCollectionRegistry,
     load_committed_goal_manager_registry_at_revision,
@@ -91,6 +95,7 @@ from pokemon_red_completion.red_battle_outcome_runtime import (  # noqa: E402
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.runtime_identity import (  # noqa: E402
+    RuntimeIdentity,
     build_runtime_identity,
     require_pyboy_import_origins,
 )
@@ -233,6 +238,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         retained_prefix = parse_retained_battle_outcome_prefix(retained_payload)
     except BattleOutcomeBatchError as error:
         raise BattleOutcomeBatchFreezeError(str(error)) from None
+    _require_retained_runtime_compatibility(retained_prefix, runtime)
     if retained_prefix.original_prior_sha256 != base_model_sha256:
         raise BattleOutcomeBatchFreezeError("retained prefix differs from the original prior")
 
@@ -408,6 +414,23 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "authority_promoted": False,
         "private_path_fields": 0,
     }
+
+
+def _require_retained_runtime_compatibility(
+    retained_prefix: RetainedBattleOutcomePrefix,
+    runtime: RuntimeIdentity,
+) -> None:
+    plan = retained_prefix.plan
+    if (
+        runtime.sha256 != plan.runtime_identity_sha256
+        or goal_manager_development_numpy_runtime_sha256()
+        != plan.numpy_runtime_sha256
+        or battle_outcome_controller_timing_sha256()
+        != plan.controller_timing_sha256
+    ):
+        raise BattleOutcomeBatchFreezeError(
+            "retained prefix runtime differs from the freezer runtime"
+        )
 
 
 def _open_prepared_binding(

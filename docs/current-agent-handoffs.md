@@ -1,28 +1,25 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-09-01. This document applies the durable roles in
+Status: active operating assignment as of 2026-09-02. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: the batch is frozen; Codex must reorient before outcomes
+## Current override: Codex owns the fail-before-freeze runtime repair
 
-Exact main `1d8acd0f` passed CI `33581683171/1`. The first combined action-free freeze wrote no
-artifact because both fixed partitions have fourteen contrast rows against a sixteen-wide hidden
-head. Outcome-blind inspection found maximal rank 14 in both partitions with numerical clearance
-above `1e-6`. No controller input, claim, prediction, outcome or fit occurred.
+Exact main `071a9be1` and CI `33589814077/1` qualified the canonical retained-record projection.
+The replacement 1+7/8 freeze `e11ee811…39eb2` reproduced the complete inventory at zero effects,
+but its execution failed before a private artifact existed: the retained V1 lesson requires exact
+runtime `7bd8060a…`, while the freezer had accepted `028fc193…`. The runner rejected the mismatch
+before claims, predictions, fitting, input or frames. The freeze is terminal and may not retry.
 
-PR 152 merged the bounded rank-14 contract as exact main `6b8e7615`; CI `33585842383/1` passed.
-The action-free retry froze the canonical 8+8 roster as `62f971f8…02b8e`, with rank 14 in both
-partitions and two dimensions explicitly anchored to the frozen prior. It created zero controller
-actions, frames, claims, outcomes, committed model choices, fits, teacher queries, sealed cases,
-Crystal contexts, replay or authority.
-
-Codex must stop and reorient here. The next decision is whether to execute this exact bounded
-roster once. Before doing so, independently reopen the aggregate runner contract and verify that
-all development predictions are durably committed before any development outcome. Selected-action
-outcomes, fitting, sealed Red, Crystal and gameplay authority remain separate gates.
+Codex owns the minimal repair, publication, exact-main CI and one later zero-effect successor
+freeze under the preserved compatible runtime. Stop before deciding on successor execution.
+Claude's useful later review is whether the train-only/held-development comparison still supports
+its claims after a successful outcome batch. Antigravity's is whether the battle representation
+and action boundary remain title-neutral. Both are read-only and receive no private paths, saves,
+roots or outcomes. No reviewer should reinterpret the terminal freeze as reusable.
 
 ## Previous override: Codex owned publication and one zero-effect development freeze
 

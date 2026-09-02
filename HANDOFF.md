@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-09-01 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-09-02 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -13,6 +13,26 @@ horizon and Crystal-ready definition),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-09-02: V2 stopped safely before gameplay on an exact runtime mismatch
+
+The canonical retained-record projection merged as exact main `071a9be1`; PR CI
+`33588649710/1` and main CI `33589814077/1` passed. A new action-free freeze reproduced the full
+**1 retained + 7 fresh train / 8 development** roster. Its exact execution then failed before a
+private artifact existed because the retained V1 plan binds runtime `7bd8060a…`, while the freezer
+had accepted current runtime `028fc193…`.
+
+This was a zero-effect stop: **0 claims · 0 predictions · 0 outcomes · 0 fits · 0 actions · 0
+frames · 0 teachers · 0 sealed Red · 0 Crystal · 0 authority**. Freeze `e11ee811…39eb2` is
+terminal and must never retry, be renamed, or be treated as a completed batch. The compatible
+historical environment remains available and authenticates exactly.
+
+The current branch adds the missing compatibility guard to the freezer itself, covering exact
+Python/PyBoy runtime, NumPy learning runtime and controller timing. Publish this repair and the
+[path-free failure](docs/evidence/red-battle-v2-runtime-mismatch-failure-2026-09-02.json), require
+green exact-main CI, then freeze one new compatible-runtime successor at zero effects and stop
+before deciding on execution. Counters remain **train 19 · fits 6 · verified development 6 ·
+unseen 4 · authority 0 · transfer 0**.
 
 ## 2026-09-01: partition-aware eight-capture materialization is locally qualified
 

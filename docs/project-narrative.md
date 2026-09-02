@@ -8274,3 +8274,16 @@ train and development context capped at 12.
 That stop is part of the result. No batch was frozen, no new outcome was opened and no model was
 fit under an incoherent policy. The next milestone is publication, exact-main CI and one new
 action-free batch freeze—not a claim that the model already plays the game.
+
+## The guard that stopped training before the first button
+
+The 8+8 batch finally cleared its algebra and provenance gates, but the first executable package
+joined two different emulator identities: the old retained lesson was measured under one exact
+Python/PyBoy runtime, while the new freezer ran under another. The runner caught the mismatch
+before it created an artifact or pressed a button. Nothing was learned, and the exact freeze was
+retired rather than quietly renamed.
+
+The useful engineering result is a sharper transaction boundary. The freezer must now prove that
+the retained lesson and the environment that will consume it share the exact runtime, numerical
+learning stack and controller timing before it can publish a plan. A compatible historical
+environment still exists, so the curriculum survives; the invalid execution identity does not.

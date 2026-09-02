@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 runtime mismatch adjudication — Codex 2026-09-02
+
+The retained-record projection merged as exact main `071a9be1`; PR CI `33588649710/1` and main CI
+`33589814077/1` passed. One new action-free freeze reproduced the complete 1+7 train / 8
+development inventory, then its exact execution stopped before creating an artifact. The current
+runtime identity was `028fc193…`; the retained V1 plan requires `7bd8060a…`.
+
+Codex accepts the runner rejection and the zero-effect result. No root or candidate claim,
+prediction, outcome, fit, controller input, emulator frame, teacher query, sealed case, Crystal
+context, replay or authority change occurred. Freeze `e11ee811…39eb2` is terminal and will not be
+retried or renamed. The preserved compatible runtime still authenticates exactly. The minimal
+repair makes the freezer enforce runtime, NumPy and controller-timing compatibility before it can
+publish a successor. This is a maintenance unblock only; all learning counters remain unchanged.
+
 ## Outcome-blind V2 rank-capacity adjudication — Codex 2026-09-02
 
 Exact main `1d8acd0f` passed CI `33581683171/1`. The combined freezer authenticated its inputs but
