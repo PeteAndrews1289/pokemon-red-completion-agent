@@ -11,6 +11,37 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: route-derived supply is closed; qualify the one-plus-five curriculum
+
+Exact main `a891d302` passed CI `33655762177/1`. Its one two-root successor executed once and both
+assignments failed identically after 111 route steps with `planner_no_route` at the same ready Red
+position. The terminal journal and diagnostic bindings are retained; neither root may retry. This
+meets the declared falsifier, so selected Red route hardening and further capture manufacturing are
+closed.
+
+The replacement does not rewrite the old one-plus-seven/eight experiment. It defines a separate,
+smaller integration question over the evidence that actually exists: one retained plus all five
+authentic fresh train contexts, every usable action measured from exact reset, one equally weighted
+preference example per upstream context, and eight disjoint development contexts whose model and
+control choices are committed before outcomes.
+
+Immediate order:
+
+1. publish the [terminal evidence](evidence/red-battle-v2-train-completion-successor-terminal-2026-09-02.json),
+   the five-capture catalog, and the [clustered admission contract](red-battle-clustered-integration-curriculum.md);
+2. require exact-main green CI;
+3. build the private five-capture catalog from the complete terminal predecessor, with no actions;
+4. run one outcome-blind information qualification over one retained + five fresh train and eight
+   development contexts;
+5. stop without outcomes if support, independence, claim availability, venue/margin/party
+   diversity, full attainable contrast rank, or numerical clearance fails;
+6. only a pass opens one full-action train collection, one descriptive train-only fit, and then
+   prediction-before-outcome paired development comparison.
+
+No fit, prediction, battle outcome, authority, sealed Red case, Crystal context, or full replay has
+occurred in this checkpoint. The board remains **causal train 19 · model fits 6 · verified
+development 6 · unseen comparisons 4 · authority 0 · transfer 0**.
+
 ## Current checkpoint: development input is complete; train input is five of seven
 
 The broader authenticated capture recovery produced five retained train captures and seven

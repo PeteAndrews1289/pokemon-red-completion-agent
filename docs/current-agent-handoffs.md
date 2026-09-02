@@ -6,6 +6,20 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns clustered battle integration admission
+
+The exact-main two-root relocation successor ended **0/2** with identical `planner_no_route`
+diagnostics and is permanently closed. The historical seven-fresh-context V2 experiment remains
+retired incomplete; no root may retry and no selected Red route may be hardened.
+
+Codex owns one coherent publication of the terminal evidence, a canonical catalog for all five
+authentic predecessor successes, and a separate action-free **one retained + five fresh train / eight
+development** information contract. It must preserve equal upstream-context weighting, measure all
+supported actions only after a passing gate, and stop before outcomes on inadequate support,
+diversity, independence, claim availability, hidden rank, or numerical clearance. Claude and
+Antigravity remain read-only milestone reviewers. Sealed Red, Crystal, full replay, teacher choice,
+development fitting, and authority promotion remain closed.
+
 ## Current override: Codex closes train capture diagnostics and successor history
 
 Development input supply is complete at eight captures across two authenticated producers. Train

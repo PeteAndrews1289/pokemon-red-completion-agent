@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
+> `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
+> diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is
+> closed, and the historical one-plus-seven/eight V2 experiment remains retired incomplete.
+>
+> Publish the terminal plus the new five-success catalog and clustered admission seam. After green
+> exact-main CI, build the private catalog action-free and qualify exactly **1 retained + 5 fresh
+> train / 8 development** contexts. Every supported train action must be measured from exact reset,
+> with one equal loss contribution per upstream context. Stop before outcomes on inadequate support,
+> independence, claim availability, diversity, full attainable contrast rank, or numerical
+> clearance. A pass opens one descriptive train-only fit—not authority, sealed Red, Crystal, or a
+> full replay. **Causal train 19/24 · fits 6/7 · verified development 6/14 · authority 0 · transfer
+> 0.**
+
 > **September 1 reusable admission and supply result:** The battle batch contract now preserves
 > historical capture producers separately from the current consumer, and a metadata-only preflight
 > can reject incompatible supply without opening states, ROMs, outcomes or models. The canonical

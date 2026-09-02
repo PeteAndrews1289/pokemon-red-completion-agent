@@ -14,6 +14,34 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: route-derived battle supply is closed; clustered learning replaces it
+
+Exact main `a891d302f12fc150e0af6a6cde9c257cad1eb998` passed CI `33655762177/1`. One
+action-free successor then bound two never-attempted roots and executed exactly once. Both failed
+`source_relocation_failed` with the same durable route diagnostic: `planner_no_route`, 111 executed
+steps, 111 movement requests, ten waits, zero interruptions/replans/renewals, and a final ready
+observation at map 19 `(27, 7)`. Journal `20690d94…fe71`, receipt `7da84a95…d8d3`, and diagnostic
+binding `241022b8…a7b` are terminal. Never retry either assignment.
+
+That result satisfies the active stop condition. Do not patch Celadon/Saffron navigation or
+manufacture more route-derived battle snapshots. The old one-retained-plus-seven-fresh V2 design
+is retired incomplete; it has not been silently shrunk.
+
+The replacement engineering gate authenticates all five genuine predecessor successes as a new
+single-producer catalog and qualifies a separate **one retained + five fresh train / eight held
+development** curriculum. It measures every supported usable move from exact reset, averages the
+learner loss equally across upstream contexts, requires full attainable hidden-contrast rank up to
+14 plus diversity and numerical clearance, and keeps development outcome-blind. A gate failure
+closes the roster; a pass opens one complete train collection and one descriptive fit only. See
+[the design](docs/red-battle-clustered-integration-curriculum.md) and
+[terminal evidence](docs/evidence/red-battle-v2-train-completion-successor-terminal-2026-09-02.json).
+
+Current counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 ·
+transfer 0**. Immediate order: publish and exact-main green this engineering seam; build the
+five-capture private catalog action-free; execute the information gate; only then decide whether
+fresh train outcomes may open. Sealed Red, Crystal, full replay, teacher choice, authority, and
+development fitting remain closed.
+
 ## 2026-09-02: development captures complete; train captures remain five of seven
 
 The additive materialization pass preserved five train captures and seven development captures.
