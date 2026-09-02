@@ -869,7 +869,7 @@ def test_batch_excludes_unavailable_and_excessive_level_gap_before_freeze() -> N
             "level-gap",
             basis_offset=0,
         ),
-        player_level=60,
+        player_level=53,
         opponent_level=40,
     )
 
