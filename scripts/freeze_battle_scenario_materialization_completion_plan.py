@@ -152,11 +152,6 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             registry_source_commit=args.registry_source_commit,
             expected_registry_sha256=args.expected_registry_sha256,
         )
-        scan = _open_all_catalog_train_roots(
-            _require_state_bank(args.state_bank),
-            catalog=catalog,
-            registry=registry,
-        )
         earliest_attempted = _load_attempted_source_exclusions(
             args.earliest_excluded_plan,
             args.earliest_excluded_run_journal,
@@ -167,11 +162,6 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
     except BattleScenarioSourceInventoryError as error:
         raise BattleScenarioMaterializationCompletionFreezeError(str(error)) from None
-    if scan.missing_catalog_train_roots != 0:
-        raise BattleScenarioMaterializationCompletionFreezeError(
-            "complete catalog train state bank is required"
-        )
-
     predecessor_plan = _read_private_plan_v2(
         _private_existing_file(
             args.predecessor_plan,
@@ -188,6 +178,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             subject="predecessor materialization journal",
         )
     )
+    try:
+        scan = _open_all_catalog_train_roots(
+            _require_state_bank(args.state_bank),
+            catalog=catalog,
+            registry=registry,
+            partition=predecessor_plan.partition,
+        )
+    except BattleScenarioSourceInventoryError as error:
+        raise BattleScenarioMaterializationCompletionFreezeError(str(error)) from None
+    if scan.missing_catalog_train_roots != 0:
+        raise BattleScenarioMaterializationCompletionFreezeError(
+            "complete catalog partition state bank is required"
+        )
     try:
         require_battle_scenario_materialization_run_matches_plan(
             predecessor_journal,

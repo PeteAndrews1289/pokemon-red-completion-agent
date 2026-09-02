@@ -273,7 +273,7 @@ class RetainedBattleScenarioMaterializationCapture:
     def __post_init__(self) -> None:
         if (
             type(self.ordinal) is not int  # noqa: E721
-            or not 0 <= self.ordinal < REQUIRED_CAPTURE_COUNT
+            or not 0 <= self.ordinal < MAXIMUM_CAPTURE_COUNT
             or _SAFE_ID.fullmatch(self.capture_id) is None
             or _SHA256.fullmatch(self.assignment_sha256) is None
             or _GIT_COMMIT.fullmatch(self.source_commit) is None
@@ -360,18 +360,13 @@ class BattleScenarioMaterializationCompletionPlan:
             != len(self.retained_successes)
             or len({item.source_state_sha256 for item in self.retained_successes})
             != len(self.retained_successes)
-            or len(self.retained_successes) + self.predecessor_failure_count
-            != REQUIRED_CAPTURE_COUNT
             or not isinstance(self.inventory, tuple)
             or not self.inventory
             or any(
                 not isinstance(item, BattleScenarioMaterializationCandidateV2)
                 for item in self.inventory
             )
-            or any(
-                item.source.partition is not ScenarioPartition.TRAIN
-                for item in self.inventory
-            )
+            or len({item.source.partition for item in self.inventory}) != 1
             or tuple(
                 sorted(self.inventory, key=lambda item: item.candidate_identity_sha256)
             )
@@ -385,6 +380,14 @@ class BattleScenarioMaterializationCompletionPlan:
             }.intersection(
                 item.source_state_sha256 for item in self.retained_successes
             )
+        ):
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion plan differs"
+            )
+        required_capture_count = _required_capture_count(self.partition)
+        if (
+            len(self.retained_successes) + self.predecessor_failure_count
+            != required_capture_count
         ):
             raise BattleScenarioMaterializationPlanV2Error(
                 "battle materialization completion plan differs"
@@ -414,14 +417,25 @@ class BattleScenarioMaterializationCompletionPlan:
                 *(item.capture_id for item in self.retained_successes),
                 *(item.capture_id for item in self.assignments),
             }
-        ) != REQUIRED_CAPTURE_COUNT:
+        ) != required_capture_count:
             raise BattleScenarioMaterializationPlanV2Error(
                 "battle materialization completion capture identity differs"
             )
 
     @property
     def selection_policy_sha256(self) -> str:
-        return canonical_sha256(_COMPLETION_SELECTION_POLICY)
+        return canonical_sha256(_completion_selection_policy(self.partition))
+
+    @property
+    def partition(self) -> ScenarioPartition:
+        """Return the immutable partition inherited from the predecessor."""
+
+        partitions = {item.source.partition for item in self.inventory}
+        if len(partitions) != 1:  # pragma: no cover - __post_init__ closes this
+            raise BattleScenarioMaterializationPlanV2Error(
+                "battle materialization completion plan partition differs"
+            )
+        return next(iter(partitions))
 
     @property
     def plan_sha256(self) -> str:
@@ -827,7 +841,13 @@ def _select_completion_assignments(
         raise BattleScenarioMaterializationPlanV2Error(
             "battle materialization completion plan identity differs"
         )
-    required_additional = REQUIRED_CAPTURE_COUNT - len(retained_successes)
+    partitions = {item.source.partition for item in inventory}
+    if len(partitions) != 1:
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan partition differs"
+        )
+    required_capture_count = _required_capture_count(next(iter(partitions)))
+    required_additional = required_capture_count - len(retained_successes)
     if required_additional < 1:
         raise BattleScenarioMaterializationPlanV2Error(
             "battle materialization completion gap differs"
@@ -907,6 +927,22 @@ def _select_completion_assignments(
     return assignments
 
 
+def _completion_selection_policy(
+    partition: ScenarioPartition,
+) -> Mapping[str, object]:
+    if partition is ScenarioPartition.TRAIN:
+        return _COMPLETION_SELECTION_POLICY
+    if partition is ScenarioPartition.DEVELOPMENT:
+        return {
+            **_COMPLETION_SELECTION_POLICY,
+            "required_total_capture_count": DEVELOPMENT_CONTEXTS,
+            "partition": ScenarioPartition.DEVELOPMENT.value,
+        }
+    raise BattleScenarioMaterializationPlanV2Error(
+        "battle materialization completion plan partition differs"
+    )
+
+
 def _parse_completion_plan(
     value: object,
 ) -> BattleScenarioMaterializationCompletionPlan:
@@ -939,8 +975,6 @@ def _parse_completion_plan(
         or value.get("status") != "prospective_unexecuted_additive_completion"
         or value.get("retry_after_controller_input") is not False
         or value.get("effects") != _zero_effects()
-        or value.get("selection_policy_sha256")
-        != canonical_sha256(_COMPLETION_SELECTION_POLICY)
         or not isinstance(value.get("inventory"), list)
         or not isinstance(value.get("retained_successes"), list)
         or not isinstance(value.get("assignments"), list)
@@ -949,6 +983,15 @@ def _parse_completion_plan(
             "battle materialization completion plan fields differ"
         )
     inventory = tuple(_parse_candidate(item) for item in value["inventory"])
+    partitions = {item.source.partition for item in inventory}
+    if (
+        len(partitions) != 1
+        or value.get("selection_policy_sha256")
+        != canonical_sha256(_completion_selection_policy(next(iter(partitions))))
+    ):
+        raise BattleScenarioMaterializationPlanV2Error(
+            "battle materialization completion plan fields differ"
+        )
     retained = tuple(
         _parse_retained_capture(item) for item in value["retained_successes"]
     )

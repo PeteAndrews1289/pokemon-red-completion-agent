@@ -450,13 +450,6 @@ def _plan_partition(
         raise BattleScenarioMaterializationRunnerError(
             "materialization plan partition differs"
         )
-    if (
-        isinstance(plan, BattleScenarioMaterializationCompletionPlan)
-        and partition is not ScenarioPartition.TRAIN
-    ):
-        raise BattleScenarioMaterializationRunnerError(
-            "completion materialization partition differs"
-        )
     return partition
 
 
@@ -594,6 +587,7 @@ def _require_completion_predecessor(
         != plan.earliest_excluded_plan_sha256
         or predecessor_plan.excluded_run_journal_sha256
         != plan.earliest_excluded_run_journal_sha256
+        or predecessor_plan.partition is not plan.partition
         or any(
             entry.status not in {SUCCEEDED, FAILED}
             for entry in predecessor_journal.entries
