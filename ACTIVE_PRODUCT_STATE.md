@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the five-of-seven train and eight-of-eight development capture terminal plus durable failure diagnostics and supplemental exclusion support. After exact-main CI, freeze and execute only a two-root never-attempted train successor; otherwise redesign bounded scenario supply without modifying fixed navigation.
+- Next decision: Publish the terminal route-supply falsification and the new clustered-curriculum admission contract. After exact-main CI, authenticate all five retained train captures and execute one outcome-blind information qualification. A pass opens full-action train collection and one descriptive fit; a failure closes this roster without touching development.
 
 ### Mandatory mission check
 
@@ -43,14 +43,14 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish the five-of-seven train and eight-of-eight development capture result plus the future-failure diagnostic and supplemental-exclusion repair. Then freeze one action-free successor from only never-attempted roots. Stop rather than modify selected Celadon navigation if two safe independent assignments cannot be supplied. |
+| Cheapest falsifier | Authenticate the five retained train captures as one complete cluster-aware catalog, derive their full usable-action contrast rank without opening outcomes, and stop before fitting if one retained plus five fresh contexts lack the preregistered support, diversity, independence, or numerical-clearance gate. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 19 | 26 |
+| Causal Train Example · train | 19 | 24 |
 | Model Fit · train | 6 | 7 |
 | Verified Outcome Example · development | 6 | 14 |
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-partition-capture-completion** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-partition-capture-completion-result-2026-09-02.json)
+**2026-09-02-battle-v2-clustered-curriculum-reorientation** · status **active** · evidence [falsification](docs/evidence/red-battle-v2-train-completion-successor-terminal-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
 | Learning output | This was input preparation, not a lesson. It added no train or development outcome and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. Materialization created scenario inputs only; it opened no move outcome, prediction, fit, teacher, sealed Red case, Crystal context, replay or authority surface. |
+| Authority delta | None yet. The successor retained diagnostic evidence and the replacement engineering gate opens no battle outcome, fit, prediction, teacher, sealed Red case, Crystal context, replay, or authority surface. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | Development capture supply is complete at eight of eight, but train supply remains five of seven. Both additive train attempts failed during source relocation and are permanently consumed. Their V1 failure receipts retained only source_relocation_failed, and the current completion schema cannot bind exclusions from a later failed tranche. |
-| Decision | Preserve the complete development denominator and five train successes, publish the terminal partition result, add bounded path-free route diagnostics plus multi-generation supplemental exclusions, and freeze only never-attempted train roots. Do not repair or replay either consumed Celadon attempt. |
-| Next session | Publish the partition terminal, future-failure diagnostic, and multi-generation successor support; require exact-main green CI; then freeze and execute only a qualifying never-attempted train successor before the train-only fit gate. |
-| Next falsifier | After the diagnostic and supplemental-exclusion repair passes exact-main CI, freeze one action-free successor from only never-attempted train roots. If the canonical inventory cannot supply two assignments without modifying Red-specific navigation, close this capture strategy and redesign bounded source supply. |
-| Stop condition | Never retry terminal completion plan 830d97c2...75ada or any earlier consumed plan or root. Stop the capture lane if two never-attempted independent train assignments require hardening a selected Celadon teacher route; do not shrink the denominator, clone a root or fit five rows. |
+| Blocker | The two-root successor reached the same ready position after 111 executed route steps on both assignments and failed planner_no_route. The route-derived train-supply strategy is now falsified and permanently closed. Five authentic fresh train captures and eight disjoint development captures remain available for a smaller full-action clustered curriculum, subject to an outcome-blind information gate. |
+| Decision | Retire the seven-fresh-context V2 experiment without rewriting it or retrying any source. Build a new cluster-aware integration curriculum from one retained plus all five authentic fresh train contexts, measure every supported action from each exact reset, weight each upstream context equally, and preserve all eight development contexts for prediction-before-outcome paired comparison. |
+| Next session | Publish the terminal falsification and the separate retained-train catalog plus clustered-curriculum admission contract. After exact-main CI, build the five-capture private catalog and run the outcome-blind information gate; only a pass opens one train-only full-action collection and descriptive fit. |
+| Next falsifier | After publication and exact-main CI, build the five-capture predecessor catalog and run one action-free clustered information qualification. If the six train clusters lack full attainable contrast rank, two venues, margin and party diversity, or exact claim availability, do not collect outcomes or fit. |
+| Stop condition | Never retry terminal successor plan 5e303d61...c445, completion plan 830d97c2...75ada, or any earlier consumed input. Do not harden the failed Red route. Stop before outcomes if the fixed one-plus-five train roster fails the action-free information gate; do not replace, clone, or outcome-select a context. |
 
 ### Stop conditions
 

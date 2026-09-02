@@ -10,7 +10,9 @@ from pokemon_red_completion.battle_scenario_capture_catalog import (
     BattleScenarioCaptureCatalogError,
     BattleScenarioCaptureProducer,
     build_battle_scenario_capture_catalog,
+    build_battle_scenario_retained_train_capture_catalog,
     parse_battle_scenario_capture_catalog,
+    parse_battle_scenario_retained_train_capture_catalog,
 )
 from pokemon_red_completion.battle_scenario_materialization_plan import (
     BattleScenarioPartySlot,
@@ -86,6 +88,78 @@ def _catalog():  # type: ignore[no-untyped-def]
         producers=(_producer("completion"), _producer("predecessor")),
         captures=tuple(reversed(tuple(_entry(index) for index in range(7)))),
     )
+
+
+def _retained_train_catalog():  # type: ignore[no-untyped-def]
+    return build_battle_scenario_retained_train_capture_catalog(
+        catalog_id="battle-v2-five-retained-train-inputs",
+        builder_source_commit="d" * 40,
+        builder_source_bundle_sha256=_sha(500),
+        rom_sha256=_sha(11),
+        producer=_producer("predecessor"),
+        captures=tuple(reversed(tuple(_entry(index) for index in range(5)))),
+    )
+
+
+def test_retained_train_catalog_preserves_all_five_predecessor_successes() -> None:
+    catalog = _retained_train_catalog()
+
+    assert len(catalog.captures) == 5
+    assert tuple(item.ordinal for item in catalog.captures) == tuple(range(5))
+    assert tuple(item.producer_ordinal for item in catalog.captures) == (
+        0,
+        2,
+        4,
+        5,
+        6,
+    )
+    assert catalog.private_dict()["historical_failed_assignments"] == 2
+    assert (
+        parse_battle_scenario_retained_train_capture_catalog(
+            catalog.canonical_bytes()
+        )
+        == catalog
+    )
+
+
+def test_retained_train_catalog_rejects_missing_success() -> None:
+    catalog = _retained_train_catalog()
+
+    with pytest.raises(
+        BattleScenarioCaptureCatalogError,
+        match="denominator",
+    ):
+        replace(catalog, captures=catalog.captures[:-1])
+
+
+def test_retained_train_catalog_rejects_completion_producer() -> None:
+    catalog = _retained_train_catalog()
+
+    with pytest.raises(
+        BattleScenarioCaptureCatalogError,
+        match="producer differs",
+    ):
+        replace(catalog, producer=_producer("completion"))
+
+
+def test_retained_train_catalog_rejects_venue_rewrite() -> None:
+    catalog = _retained_train_catalog()
+    rewritten = replace(catalog.captures[-1], venue_id="digletts_cave")
+
+    with pytest.raises(
+        BattleScenarioCaptureCatalogError,
+        match="venue distribution",
+    ):
+        replace(catalog, captures=(*catalog.captures[:-1], rewritten))
+
+
+def test_retained_train_catalog_parser_rejects_effect_overclaim() -> None:
+    value = json.loads(_retained_train_catalog().canonical_bytes())
+    value["effects"]["model_fits"] = 1
+    payload = (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode()
+
+    with pytest.raises(BattleScenarioCaptureCatalogError, match="fields differ"):
+        parse_battle_scenario_retained_train_capture_catalog(payload)
 
 
 def test_catalog_canonicalizes_two_producers_and_seven_captures() -> None:

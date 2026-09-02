@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the route factory finally gets switched off
+
+**Visual:** Show two independent route cards advancing in parallel. Both counters stop at
+**111 STEPS**, both land on **MAP 19 · (27, 7)**, and both display **NO ROUTE**. Lock the cards with
+**NO RETRY** and unplug the route editor.
+
+**Voiceover:** “We tried the final two untouched sources once. They failed in exactly the same
+place, with enough diagnostics to know the route-supply idea—not random bad luck—was the problem.
+So we stopped. No more patching Pokémon Red just to manufacture a dataset.”
+
+**Visual:** Replace seven empty classroom chairs with five real battle snapshots. Fan three or four
+move cards out of each snapshot, then group them back under one equal-weight label per world. Keep
+eight development cards sealed behind glass.
+
+**Voiceover:** “A snapshot is not one label. It is a controlled experiment: reset the same state,
+try every legal move, and learn which outcome was better. Five fresh worlds plus the retained lesson
+can start an honest integration model—if an action-free rank and diversity test passes first.”
+
+**On-screen score:** `TRAIN OUTCOMES ADDED 0 · FITS ADDED 0 · AUTHORITY 0 · NEXT: INFORMATION GATE`
+
 ## New scene: the gate that refused impossible math
 
 **Visual:** Show fourteen horizontal contrast vectors entering a sixteen-column matrix. Flash

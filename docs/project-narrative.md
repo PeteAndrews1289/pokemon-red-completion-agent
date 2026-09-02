@@ -1,5 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 2: stop manufacturing classrooms and start measuring decisions
+
+The final two-route successor gave the same answer twice. Each untouched source advanced through
+111 route steps, reached the same ready position, and stopped because the planner had no route.
+The diagnostics survived without leaking private paths, both sources stayed permanently consumed,
+and the project honored its stop rule: no more Red-specific navigation patches to satisfy an
+arbitrary seven-context target.
+
+The five successful snapshots already contain more information than five selected move labels.
+Each is an exact-reset decision state with several legal moves. The new integration design measures
+every usable move, converts each snapshot into one complete preference example, and weights all six
+upstream train contexts equally. Eight disjoint development snapshots stay closed until the base,
+updated, and fixed-control choices are committed.
+
+This does not pretend the old 1+7/8 experiment completed, and it does not claim a trained player
+yet. It replaces days of brittle route supply with the cheapest question that can move the model:
+does the real 1+5 classroom contain enough independent action contrast to justify one honest fit?
+
 ## September 2: a pre-outcome algebra check prevented a meaningless execution
 
 The first combined V2 batch freeze authenticated the retained prefix and all fifteen fresh capture

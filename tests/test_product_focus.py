@@ -327,7 +327,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 26, "partition": "train"},
+        {"kind": "causal_train_example", "minimum": 24, "partition": "train"},
         {"kind": "model_fit", "minimum": 7, "partition": "train"},
         {
             "kind": "verified_outcome_example",
@@ -337,10 +337,10 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(
-        ((19 / 26) + (6 / 7) + (6 / 14)) / 3
+        ((19 / 24) + (6 / 7) + (6 / 14)) / 3
     )
     assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 19, 26),
+        ("Causal Train Example · train", 19, 24),
         ("Model Fit · train", 6, 7),
         ("Verified Outcome Example · development", 6, 14),
     )
@@ -1522,7 +1522,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Causal Train Example · train: 19/26",
+        "Causal Train Example · train: 19/24",
         "Model Fit · train: 6/7",
         "Verified Outcome Example · development: 6/14",
     )
@@ -2011,7 +2011,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
 
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(
-        ((19 / 26) + (6 / 7) + (6 / 14)) / 3
+        ((19 / 24) + (6 / 7) + (6 / 14)) / 3
     )
     assert public["actions"] == 0
     assert "Decision-pressure battle batch" in public["stage"]
@@ -2031,7 +2031,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     encoded = json.dumps(public, sort_keys=True)
     assert "V1 pair was rejected for zero development discordance" in encoded
     assert "Authenticated three-family learner curriculum" in encoded
-    assert "Causal Train Example 19/26" in encoded
+    assert "Causal Train Example 19/24" in encoded
     assert "Model Fit 6/7" in encoded
     assert "Verified Outcome Example 6/14" in encoded
     assert "Authentic causal train examples" in encoded

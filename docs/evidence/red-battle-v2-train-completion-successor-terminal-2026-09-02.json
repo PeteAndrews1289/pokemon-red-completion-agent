@@ -1,0 +1,72 @@
+{
+  "authority": {
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "promotions": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "train_outcomes_opened": 0
+  },
+  "diagnostics": {
+    "binding_sha256": "241022b8e276c551422803d33100c65fe2fd47bd714755d18d3406d69135ea7b",
+    "common_failure": {
+      "failure_layer": "route_execution",
+      "route_executed_step_count": 111,
+      "route_failure_reason": "planner_no_route",
+      "route_failure_report_present": true,
+      "route_interruption_count": 0,
+      "route_last_interruption_present": false,
+      "route_last_map_id": 19,
+      "route_last_ready": true,
+      "route_last_x": 27,
+      "route_last_y": 7,
+      "route_movement_requests": 111,
+      "route_replan_count": 0,
+      "route_resource_renewal_count": 0,
+      "route_wait_actions": 10
+    },
+    "matching_failures": 2,
+    "private_paths_published": 0
+  },
+  "execution": {
+    "attempted_assignments": 2,
+    "failed_assignments": 2,
+    "failure_reason_counts": {
+      "source_relocation_failed": 2
+    },
+    "never_claimed_assignments": 0,
+    "pending_assignments": 0,
+    "started_assignments": 0,
+    "succeeded_assignments": 0
+  },
+  "input": {
+    "combined_successful_train_captures": 5,
+    "excluded_previously_attempted_roots": 16,
+    "new_assignment_count": 2,
+    "plan_sha256": "5e303d6152d974e0c2f64250342be4bc3e4c092dfde83649b104d7eee686c445",
+    "retained_successful_train_captures": 5,
+    "selected_venue_counts": {
+      "digletts_cave": 1,
+      "route_11": 1
+    }
+  },
+  "recorded_on": "2026-09-02",
+  "result": {
+    "decision": "close_route_derived_train_supply_and_redesign_curriculum",
+    "journal_sha256": "20690d947b6e68bb569ef1f9f997e970ec74e68f91aed07d2e55fd4a0d92fe71",
+    "receipt_file_sha256": "ff85b13371d62bc7e755dc79a0c8403d09876895dfd67908ba18c3502abc2a15",
+    "receipt_sha256": "7da84a95c84e511c8dea002867f3931ce8db8a19b0a7630ed2885d797877d8d3",
+    "retry_permitted": false,
+    "status": "terminal_falsification"
+  },
+  "schema": "pokemon-red-battle-v2-train-completion-successor-terminal-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33655762177,
+    "source_bundle_sha256": "ab96bc70f6bf599ef08976e0e83588c085607e7fa3a91fe92bdfdbba4bfab009",
+    "source_commit": "a891d302f12fc150e0af6a6cde9c257cad1eb998"
+  },
+  "status": "route_derived_train_supply_closed"
+}

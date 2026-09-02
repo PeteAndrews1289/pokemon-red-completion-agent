@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-09-02 clustered-curriculum override — stop route work and qualify real signal:** The
+> exact-main two-root successor ended 0/2 with identical `planner_no_route` diagnostics after 111
+> steps. Both roots are terminal. This closes route-derived battle-snapshot supply and forbids a
+> selected Red navigation patch.
+>
+> Codex owns the terminal publication, five-success predecessor catalog, outcome-blind
+> one-retained-plus-five-fresh/eight-development information gate, tests, and adjudication. A gate
+> pass may later open full-action train collection and one descriptive fit; it does not grant
+> authority. Claude may audit leakage/statistical language and Antigravity may challenge transfer
+> relevance at the next stable milestone; both remain read-only. No reviewer may reopen private
+> outcomes, retry a root, select rows by outcome, shrink the historical V2 claim, open sealed Red
+> or Crystal, or promote authority.
+
 > **2026-09-02 partition-completion override — preserve eight development, recover two train:**
 > The additive materialization attempts left development complete at eight captures and train at
 > five of seven. Both new train roots failed during relocation and are terminal. No outcome,

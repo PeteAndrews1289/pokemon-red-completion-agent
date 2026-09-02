@@ -20,7 +20,11 @@ from pokemon_red_completion.battle_scenario_materialization_plan import (
 )
 
 BATTLE_SCENARIO_CAPTURE_CATALOG_SCHEMA = "pokemon.red.private-battle-scenario-capture-catalog.v1"
+BATTLE_SCENARIO_RETAINED_TRAIN_CAPTURE_CATALOG_SCHEMA = (
+    "pokemon.red.private-battle-scenario-retained-train-capture-catalog.v1"
+)
 REQUIRED_CAPTURE_COUNT = 7
+REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT = 5
 REQUIRED_PRODUCER_ROLES = ("predecessor", "completion")
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -305,6 +309,98 @@ class BattleScenarioCaptureCatalog:
         return _canonical_payload(self.private_dict())
 
 
+@dataclass(frozen=True, slots=True)
+class BattleScenarioRetainedTrainCaptureCatalog:
+    """The five authentic predecessor successes, without replacement inputs."""
+
+    catalog_id: str
+    builder_source_commit: str
+    builder_source_bundle_sha256: str
+    rom_sha256: str
+    producer: BattleScenarioCaptureProducer
+    captures: tuple[BattleScenarioCaptureCatalogEntry, ...]
+
+    def __post_init__(self) -> None:
+        _require_safe_id(self.catalog_id, "retained train catalog identity")
+        _require_commit(self.builder_source_commit, "retained train catalog builder")
+        _require_sha256(
+            self.builder_source_bundle_sha256,
+            "retained train catalog builder bundle",
+        )
+        _require_sha256(self.rom_sha256, "retained train catalog ROM")
+        if (
+            not isinstance(self.producer, BattleScenarioCaptureProducer)
+            or self.producer.role != "predecessor"
+            or self.producer.producer_id != "predecessor"
+            or self.producer.successful_capture_count
+            != REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT
+            or self.producer.failed_assignment_count != 2
+            or self.producer.rom_sha256 != self.rom_sha256
+        ):
+            raise BattleScenarioCaptureCatalogError(
+                "retained train producer differs"
+            )
+        if (
+            not isinstance(self.captures, tuple)
+            or len(self.captures) != REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT
+            or any(
+                not isinstance(item, BattleScenarioCaptureCatalogEntry)
+                or item.producer_id != self.producer.producer_id
+                for item in self.captures
+            )
+            or tuple(item.ordinal for item in self.captures)
+            != tuple(range(REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT))
+            or len({item.producer_ordinal for item in self.captures})
+            != REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT
+            or any(not 0 <= item.producer_ordinal < 7 for item in self.captures)
+        ):
+            raise BattleScenarioCaptureCatalogError(
+                "retained train catalog denominator differs"
+            )
+        identity_sets = (
+            {item.capture_id for item in self.captures},
+            {item.assignment_sha256 for item in self.captures},
+            {item.source_state_sha256 for item in self.captures},
+            {item.root_lineage_id for item in self.captures},
+            {item.state_sha256 for item in self.captures},
+            {item.manifest_sha256 for item in self.captures},
+        )
+        if any(
+            len(values) != REQUIRED_RETAINED_TRAIN_CAPTURE_COUNT
+            for values in identity_sets
+        ):
+            raise BattleScenarioCaptureCatalogError(
+                "retained train catalog identity repeats"
+            )
+        if Counter(item.venue_id for item in self.captures) != Counter(
+            {"digletts_cave": 4, "route_11": 1}
+        ):
+            raise BattleScenarioCaptureCatalogError(
+                "retained train venue distribution differs"
+            )
+
+    @property
+    def catalog_sha256(self) -> str:
+        return hashlib.sha256(self.canonical_bytes()).hexdigest()
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "builder_source_bundle_sha256": self.builder_source_bundle_sha256,
+            "builder_source_commit": self.builder_source_commit,
+            "captures": [item.private_dict() for item in self.captures],
+            "catalog_id": self.catalog_id,
+            "effects": _ZERO_EFFECTS,
+            "historical_failed_assignments": 2,
+            "producer": self.producer.private_dict(),
+            "rom_sha256": self.rom_sha256,
+            "schema": BATTLE_SCENARIO_RETAINED_TRAIN_CAPTURE_CATALOG_SCHEMA,
+            "status": "authenticated_action_free",
+        }
+
+    def canonical_bytes(self) -> bytes:
+        return _canonical_payload(self.private_dict())
+
+
 def build_battle_scenario_capture_catalog(
     *,
     catalog_id: str,
@@ -370,6 +466,52 @@ def build_battle_scenario_capture_catalog(
     )
 
 
+def build_battle_scenario_retained_train_capture_catalog(
+    *,
+    catalog_id: str,
+    builder_source_commit: str,
+    builder_source_bundle_sha256: str,
+    rom_sha256: str,
+    producer: BattleScenarioCaptureProducer,
+    captures: Sequence[BattleScenarioCaptureCatalogEntry],
+) -> BattleScenarioRetainedTrainCaptureCatalog:
+    """Build one immutable catalog from all five predecessor successes."""
+
+    if isinstance(captures, (str, bytes)) or not isinstance(captures, Sequence):
+        raise TypeError("retained train catalog entries must be a sequence")
+    if any(not isinstance(item, BattleScenarioCaptureCatalogEntry) for item in captures):
+        raise BattleScenarioCaptureCatalogError(
+            "retained train catalog entries differ"
+        )
+    ordered = tuple(sorted(captures, key=lambda item: item.producer_ordinal))
+    normalized = tuple(
+        BattleScenarioCaptureCatalogEntry(
+            ordinal=index,
+            producer_id=item.producer_id,
+            producer_ordinal=item.producer_ordinal,
+            capture_id=item.capture_id,
+            assignment_sha256=item.assignment_sha256,
+            source_state_sha256=item.source_state_sha256,
+            root_lineage_id=item.root_lineage_id,
+            venue_id=item.venue_id,
+            party_slot=item.party_slot,
+            state_filename=item.state_filename,
+            manifest_filename=item.manifest_filename,
+            state_sha256=item.state_sha256,
+            manifest_sha256=item.manifest_sha256,
+        )
+        for index, item in enumerate(ordered)
+    )
+    return BattleScenarioRetainedTrainCaptureCatalog(
+        catalog_id=catalog_id,
+        builder_source_commit=builder_source_commit,
+        builder_source_bundle_sha256=builder_source_bundle_sha256,
+        rom_sha256=rom_sha256,
+        producer=producer,
+        captures=normalized,
+    )
+
+
 def parse_battle_scenario_capture_catalog(payload: bytes) -> BattleScenarioCaptureCatalog:
     """Strictly reopen one canonical path-free mixed-producer catalog."""
 
@@ -384,6 +526,68 @@ def parse_battle_scenario_capture_catalog(payload: bytes) -> BattleScenarioCaptu
     catalog = _parse_catalog(value)
     if catalog.canonical_bytes() != payload:
         raise BattleScenarioCaptureCatalogError("capture catalog is not canonical JSON")
+    return catalog
+
+
+def parse_battle_scenario_retained_train_capture_catalog(
+    payload: bytes,
+) -> BattleScenarioRetainedTrainCaptureCatalog:
+    """Strictly reopen the five-success predecessor catalog."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("retained train capture catalog must be bytes")
+    if not payload or len(payload) > _MAXIMUM_CATALOG_BYTES:
+        raise BattleScenarioCaptureCatalogError(
+            "retained train catalog size differs"
+        )
+    try:
+        value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise BattleScenarioCaptureCatalogError(
+            "retained train catalog is not canonical JSON"
+        ) from None
+    fields = {
+        "builder_source_bundle_sha256",
+        "builder_source_commit",
+        "captures",
+        "catalog_id",
+        "effects",
+        "historical_failed_assignments",
+        "producer",
+        "rom_sha256",
+        "schema",
+        "status",
+    }
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != fields
+        or value.get("schema")
+        != BATTLE_SCENARIO_RETAINED_TRAIN_CAPTURE_CATALOG_SCHEMA
+        or value.get("status") != "authenticated_action_free"
+        or value.get("historical_failed_assignments") != 2
+        or value.get("effects") != _ZERO_EFFECTS
+        or not isinstance(value.get("captures"), list)
+    ):
+        raise BattleScenarioCaptureCatalogError(
+            "retained train catalog fields differ"
+        )
+    catalog = BattleScenarioRetainedTrainCaptureCatalog(
+        catalog_id=_text(value.get("catalog_id"), "retained train catalog identity"),
+        builder_source_commit=_text(
+            value.get("builder_source_commit"), "retained train builder source"
+        ),
+        builder_source_bundle_sha256=_text(
+            value.get("builder_source_bundle_sha256"),
+            "retained train builder bundle",
+        ),
+        rom_sha256=_text(value.get("rom_sha256"), "retained train ROM"),
+        producer=_parse_producer(value.get("producer")),
+        captures=tuple(_parse_entry(item) for item in value["captures"]),
+    )
+    if catalog.canonical_bytes() != payload:
+        raise BattleScenarioCaptureCatalogError(
+            "retained train catalog is not canonical JSON"
+        )
     return catalog
 
 
@@ -535,10 +739,14 @@ def _canonical_payload(value: object) -> bytes:
 
 __all__ = [
     "BATTLE_SCENARIO_CAPTURE_CATALOG_SCHEMA",
+    "BATTLE_SCENARIO_RETAINED_TRAIN_CAPTURE_CATALOG_SCHEMA",
     "BattleScenarioCaptureCatalog",
     "BattleScenarioCaptureCatalogEntry",
     "BattleScenarioCaptureCatalogError",
     "BattleScenarioCaptureProducer",
+    "BattleScenarioRetainedTrainCaptureCatalog",
     "build_battle_scenario_capture_catalog",
+    "build_battle_scenario_retained_train_capture_catalog",
     "parse_battle_scenario_capture_catalog",
+    "parse_battle_scenario_retained_train_capture_catalog",
 ]
