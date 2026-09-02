@@ -8292,3 +8292,16 @@ The repaired freezer then proved the other half of that claim. Run under the pre
 environment, it reconstructed the same complete classroom and exam inventory and retained a new
 canonical freeze without pressing a button. The project ended the session there: the next run can
 finally collect outcomes and fit the shadow model, but only as a new explicit one-shot decision.
+
+## The filename that stopped a training run
+
+The compatible batch passed every published-source and emulator-identity gate, then stopped before
+creating its first private record. The reason was mundane and exact: a descriptive prefix plus the
+full freeze digest made an 89-character artifact name, while the private store accepts 80. Because
+the artifact boundary precedes claims and controller input, the failure consumed no evidence and
+taught the model nothing—but the frozen attempt still stayed terminal.
+
+The repair did not shorten the identity itself. It shortened only the human-readable prefix, kept
+the complete digest, and exercised the resulting 77-character name against the real private store.
+It is a small fix with a larger systems point: mocks should preserve the constraints of the
+production boundary they stand in for, especially when that boundary guards one-shot experiments.

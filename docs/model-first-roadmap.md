@@ -11,7 +11,31 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: the compatible-runtime V2 successor is frozen before execution
+## Current checkpoint: the compatible-runtime batch stopped before artifact creation
+
+Exact-main CI `33596459536/1` passed. The one permitted execution of freeze `f7204334…5263` then
+cleared its action-free source, model, runtime, capture and root-availability checks but failed at
+the private artifact boundary: its generated identifier was 89 characters and the typed store
+permits 80. No artifact existed, so no root or candidate claim, prediction, outcome, fit,
+controller input or frame could occur. The freeze is terminal and cannot retry.
+
+The minimal repair preserves the full freeze digest under a 77-character identifier and exercises
+that identifier against the real typed private store. Next:
+
+1. publish the repair and path-free terminal evidence and require green exact-main CI;
+2. freeze one new compatible-runtime successor with the unchanged 1 retained + 7 fresh train / 8
+   development curriculum;
+3. publish and qualify that zero-effect successor separately;
+4. execute only the new freeze once, fit on train only and commit every development control before
+   opening outcomes;
+5. reject on zero discordance or no paired advantage; never route directly to sealed Red or
+   Crystal.
+
+The evidence board remains **causal train 19 · model fits 6 · verified development 6 · unseen
+comparisons 4 · authority 0 · transfer 0**. See the
+[terminal result](evidence/red-battle-v2-artifact-id-failure-2026-09-02.json).
+
+## Previous checkpoint: the compatible-runtime V2 successor was frozen before execution
 
 The runtime guard repair merged as exact main `9956665d`; CI `33593610064/1` passed. Using the
 preserved exact retained environment, one new action-free successor reproduced the complete

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the compatible-runtime successor freeze receipt, require green exact-main CI, then independently reauthenticate freeze f7204334...5263 and its absent execution artifact before one non-retryable bounded outcome batch. Fit remains train-only; all development predictions must be durable before outcomes, and zero discordance or no paired advantage rejects the update.
+- Next decision: Publish the full-digest artifact-ID repair and f7204334...5263 terminal evidence, require green exact-main CI, then freeze a fresh compatible-runtime successor before one non-retryable bounded outcome batch. Fit remains train-only; all development predictions must be durable before outcomes, and zero discordance or no paired advantage rejects the update.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The repository has bounded learner interfaces and thin real outcome evidence for battle, navigation, and party development, plus nineteen authentic living-Dex causal examples and non-authoritative fitted artifacts. No learned component has gameplay authority and no Crystal transfer result exists. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Before controller input, independently reopen successor freeze f7204334...5263 under its exact published source and retained runtime, require the complete 1+7 train and 8 development roster and an absent execution artifact, then let the single bounded batch outcome decide whether the current battle representation produces any held-development discordance or paired advantage. |
+| Cheapest falsifier | Publish the full-digest artifact-ID repair under green exact-main CI, freeze one new compatible-runtime successor with the same complete 1+7 train and 8 development inventory, and require its private artifact namespace to be valid and absent before one bounded execution decides whether the battle representation produces held-development discordance or paired advantage. |
 | Time box | 1 session / 8 hours |
 
 ### Required learning outputs
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-battle-v2-compatible-runtime-successor-freeze** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-runtime-successor-freeze-2026-09-02.json)
+**2026-09-02-battle-v2-artifact-id-terminal-repair** · status **active** · evidence [qualification](docs/evidence/red-battle-v2-artifact-id-failure-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | This was a zero-effect qualification, not a lesson. It added no train or development outcomes and no fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
-| Authority delta | None. The compatible-runtime successor freeze opened no execution artifact, claim, outcome, prediction, fit, controller input, frame, teacher, sealed Red case, Crystal context, replay, or authority change. |
+| Learning output | The attempt produced no lesson: zero train or development outcomes and zero fit. Counters remain causal train 19, model fits 6, verified development 6, unseen comparisons 4, authority zero, and transfer zero. |
+| Authority delta | None. Freeze f7204334...5263 failed before private artifact creation, root or candidate claims, outcomes, predictions, fitting, controller input, frames, teachers, sealed Red, Crystal, replay, or authority. |
 | Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | No technical compatibility blocker remains. The successor is intentionally stopped before controller input so execution and its non-retryable root claims remain a separate, explicit learning decision. |
-| Decision | Accept successor freeze f7204334...5263 as the only executable V2 batch candidate, keep failed freeze e11ee811...39eb2 permanently terminal, publish the path-free receipt, and require a fresh exact-main green CI binding before one bounded outcome execution. |
-| Next session | Publish the successor freeze receipt, require green exact-main CI, independently verify the exact runner/freeze/runtime and absent artifact, then execute f7204334...5263 once and adjudicate its train-only candidate against held development without opening sealed Red or Crystal. |
-| Next falsifier | Run the exact compatible-runtime batch once only after its receipt is published and exact-main CI is green. Fit on the retained plus seven fresh train outcomes, commit base, candidate, and heuristic predictions before opening eight development outcomes, and reject the update on zero discordance or no paired advantage. |
-| Stop condition | Never retry freeze e11ee811...39eb2 or execute f7204334...5263 from a different source or runtime. Stop before input on any digest, source, runtime, roster, claim-availability or artifact-presence mismatch. After input, every claimed root and candidate is terminal; zero development discordance or no paired advantage rejects the model iteration without route repair. |
+| Blocker | The runner's 89-character artifact identifier exceeded the private store's 80-character contract. A local full-digest 77-character identifier repair passes the real typed-store boundary and now requires publication and exact-main CI before any new freeze. |
+| Decision | Retire freeze f7204334...5263 as a terminal zero-effect pre-game failure, preserve the earlier terminal runtime-mismatch freeze, and publish the minimal full-digest artifact-ID repair before freezing a new compatible-runtime successor. |
+| Next session | Publish the artifact-ID repair and terminal evidence, require green exact-main CI, create and publish one new compatible-runtime zero-effect successor freeze, then execute that fresh freeze once and adjudicate its train-only candidate against held development without opening sealed Red or Crystal. |
+| Next falsifier | After the repair and terminal evidence pass exact-main CI, freeze one new compatible-runtime successor at zero effects, publish its receipt, then execute it once. Fit on train only, commit all development controls before outcomes, and reject on zero discordance or no paired advantage. |
+| Stop condition | Never retry terminal freezes e11ee811...39eb2 or f7204334...5263. A successor must be newly frozen from the published repair under the retained runtime and must stop before input on any digest, source, runtime, roster, claim-availability or artifact-presence mismatch. After input, every claim is terminal; zero development discordance or no paired advantage rejects the model iteration. |
 
 ### Stop conditions
 

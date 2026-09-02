@@ -3,6 +3,18 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## V2 artifact-ID terminal failure — Codex 2026-09-02
+
+Successor receipt exact-main CI `33596459536/1` passed. The one permitted execution of freeze
+`f7204334…5263` then failed before its private artifact existed. Source inspection proves the
+deterministic cause: the runner generated an 89-character artifact identifier while the typed
+store accepts at most 80.
+
+Codex accepts this as a zero-effect pre-game terminal result, not a lesson. The freeze will not be
+retried or renamed. The repair keeps the complete freeze digest in a 77-character identifier and
+tests it through the real store boundary. Publication and green exact-main CI precede one newly
+frozen compatible successor; all learning counters remain unchanged.
+
 ## Compatible-runtime V2 successor freeze — Codex 2026-09-02
 
 The runtime guard repair merged as exact main `9956665d` and CI `33593610064/1` passed. One new

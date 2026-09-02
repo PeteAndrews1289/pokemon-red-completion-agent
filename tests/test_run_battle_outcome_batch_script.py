@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import runpy
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
@@ -8,6 +9,7 @@ import numpy as np
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_outcome_learning import BattleTurnOutcome
 from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
+from pokemon_red_completion.private_artifacts import initialize_private_root
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 SCRIPT = runpy.run_path("scripts/run_battle_outcome_batch.py")
@@ -182,3 +184,30 @@ def test_batch_artifact_and_root_claims_are_freeze_scoped() -> None:
     assert pair.stage == "battle-batch-development"
     assert pair.logical_root_sha256 == candidate.binding.logical_root_sha256
     assert pair.physical_root_sha256 == candidate.binding.physical_root_sha256
+
+
+def test_batch_artifact_id_preserves_full_freeze_digest_and_fits_real_store(
+    tmp_path: Path,
+) -> None:
+    freeze_sha256 = "8" * 64
+    artifact_id = SCRIPT["_batch_artifact_id"](freeze_sha256)
+    repository = tmp_path / "repository"
+    private = tmp_path / "private"
+    repository.mkdir()
+    private.mkdir()
+
+    def device_id(path: Path) -> int:
+        return 2 if path == private.resolve() else 1
+
+    store = initialize_private_root(
+        private,
+        repository_root=repository,
+        device_id=device_id,
+        git_worktree_probe=lambda path: False,
+    )
+    with store.begin_artifact(artifact_id, kind="battle_outcome_batch") as writer:
+        writer.append("terminal", {"status": "synthetic"})
+
+    assert artifact_id == f"red-bo-batch-{freeze_sha256}"
+    assert len(artifact_id) <= 80
+    assert writer.summary.artifact_id == artifact_id
