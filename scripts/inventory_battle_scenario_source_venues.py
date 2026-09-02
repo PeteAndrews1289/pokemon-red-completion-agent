@@ -32,12 +32,17 @@ from pokemon_red_completion.battle_outcome_capture_authentication import (  # no
 from pokemon_red_completion.battle_scenario_materialization_plan import (  # noqa: E402
     MANSION_VENUE_ID,
     ROUTE_11_VENUE_ID,
-    BattleScenarioMaterializationPlan,
     BattleScenarioMaterializationPlanError,
     parse_battle_scenario_materialization_plan,
 )
+from pokemon_red_completion.battle_scenario_materialization_plan_v2 import (  # noqa: E402
+    BattleScenarioMaterializationPlanV2Error,
+    parse_battle_scenario_materialization_completion_plan,
+    parse_battle_scenario_materialization_plan_v2,
+)
 from pokemon_red_completion.battle_scenario_materialization_run import (  # noqa: E402
     PENDING,
+    BattleScenarioMaterializationPlanLike,
     BattleScenarioMaterializationRunError,
     BattleScenarioMaterializationRunJournal,
     parse_battle_scenario_materialization_run,
@@ -423,7 +428,7 @@ def _load_attempted_source_exclusions(
             "excluded materialization evidence identity differs"
         )
     try:
-        plan = parse_battle_scenario_materialization_plan(plan_payload)
+        plan = _parse_materialization_plan(plan_payload)
         journal = parse_battle_scenario_materialization_run(journal_payload)
         require_battle_scenario_materialization_run_matches_plan(
             journal,
@@ -442,8 +447,23 @@ def _load_attempted_source_exclusions(
     return _attempted_source_state_sha256(plan, journal)
 
 
+def _parse_materialization_plan(payload: bytes) -> BattleScenarioMaterializationPlanLike:
+    try:
+        return parse_battle_scenario_materialization_plan(payload)
+    except BattleScenarioMaterializationPlanError:
+        pass
+    try:
+        return parse_battle_scenario_materialization_plan_v2(payload)
+    except BattleScenarioMaterializationPlanV2Error:
+        pass
+    try:
+        return parse_battle_scenario_materialization_completion_plan(payload)
+    except BattleScenarioMaterializationPlanV2Error as error:
+        raise BattleScenarioSourceInventoryError(str(error)) from None
+
+
 def _attempted_source_state_sha256(
-    plan: BattleScenarioMaterializationPlan,
+    plan: BattleScenarioMaterializationPlanLike,
     journal: BattleScenarioMaterializationRunJournal,
 ) -> frozenset[str]:
     require_battle_scenario_materialization_run_matches_plan(

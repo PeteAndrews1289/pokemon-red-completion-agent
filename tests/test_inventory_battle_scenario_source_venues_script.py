@@ -10,6 +10,7 @@ import pytest
 
 from pokemon_red_completion.battle_outcome_batch import FRESH_TRAIN_CONTEXTS
 from pokemon_red_completion.battle_scenario_materialization_run import (
+    fail_battle_scenario_materialization_assignment,
     initialize_battle_scenario_materialization_run,
     start_battle_scenario_materialization_assignment,
 )
@@ -22,6 +23,9 @@ INVENTORY = runpy.run_path(
 )
 RUN_HELPERS = runpy.run_path(
     str(PROJECT_ROOT / "tests" / "test_battle_scenario_materialization_run.py")
+)
+V2_HELPERS = runpy.run_path(
+    str(PROJECT_ROOT / "tests" / "test_battle_scenario_materialization_plan_v2.py")
 )
 
 
@@ -74,6 +78,37 @@ def test_inventory_refuses_a_partial_exclusion_journal(tmp_path: Path) -> None:
             expected_plan_sha256=hashlib.sha256(plan.canonical_bytes()).hexdigest(),
             expected_journal_sha256=journal.journal_sha256,
         )
+
+
+def test_inventory_excludes_a_terminal_v2_plan_without_reclassifying_failures(
+    tmp_path: Path,
+) -> None:
+    plan = V2_HELPERS["_build"]()
+    identity = RUN_HELPERS["_identity"](plan)
+    journal = initialize_battle_scenario_materialization_run(plan, identity)
+    for ordinal in range(len(plan.assignments)):
+        journal = start_battle_scenario_materialization_assignment(journal, ordinal)
+        journal = fail_battle_scenario_materialization_assignment(
+            journal,
+            ordinal,
+            reason_code="controlled_failure",
+        )
+    plan_path = tmp_path / "plan-v2.json"
+    journal_path = tmp_path / "journal-v2.json"
+    plan_path.write_bytes(plan.canonical_bytes())
+    journal_path.write_bytes(journal.canonical_bytes())
+
+    excluded = INVENTORY["_load_attempted_source_exclusions"](
+        plan_path,
+        journal_path,
+        expected_plan_sha256=plan.plan_sha256,
+        expected_journal_sha256=journal.journal_sha256,
+    )
+
+    assert excluded == {
+        assignment.candidate.source.source_state_sha256
+        for assignment in plan.assignments
+    }
 
 
 @pytest.mark.parametrize(
