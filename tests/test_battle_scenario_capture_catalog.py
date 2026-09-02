@@ -91,13 +91,21 @@ def _catalog():  # type: ignore[no-untyped-def]
 
 
 def _retained_train_catalog():  # type: ignore[no-untyped-def]
+    captures = tuple(
+        replace(
+            _entry(index),
+            producer_ordinal=producer_ordinal,
+            venue_id="digletts_cave" if index < 3 else "route_11",
+        )
+        for index, producer_ordinal in enumerate((1, 2, 3, 4, 6))
+    )
     return build_battle_scenario_retained_train_capture_catalog(
         catalog_id="battle-v2-five-retained-train-inputs",
         builder_source_commit="d" * 40,
         builder_source_bundle_sha256=_sha(500),
         rom_sha256=_sha(11),
         producer=_producer("predecessor"),
-        captures=tuple(reversed(tuple(_entry(index) for index in range(5)))),
+        captures=tuple(reversed(captures)),
     )
 
 
@@ -107,10 +115,10 @@ def test_retained_train_catalog_preserves_all_five_predecessor_successes() -> No
     assert len(catalog.captures) == 5
     assert tuple(item.ordinal for item in catalog.captures) == tuple(range(5))
     assert tuple(item.producer_ordinal for item in catalog.captures) == (
-        0,
+        1,
         2,
+        3,
         4,
-        5,
         6,
     )
     assert catalog.private_dict()["historical_failed_assignments"] == 2
