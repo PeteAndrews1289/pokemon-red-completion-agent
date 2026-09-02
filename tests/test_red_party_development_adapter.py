@@ -594,6 +594,19 @@ def test_red_transition_guard_accepts_only_authenticated_no_fly_ground_routes() 
         0,
     )
 
+    celadon = replace(lavender, map_id=MapId.CELADON_POKECENTER)
+    assert red_vermilion_training_transition_available(celadon, 0, 0)
+    assert not red_vermilion_training_transition_available(
+        replace(celadon, badge_bits=0),
+        0,
+        0,
+    )
+    assert not red_vermilion_training_transition_available(
+        replace(celadon, event_flags=bytes(len(celadon.event_flags or b""))),
+        0,
+        0,
+    )
+
 
 def test_direct_safe_recovery_does_not_require_attack_pp_from_unused_escort() -> None:
     areas = _areas()
