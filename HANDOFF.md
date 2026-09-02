@@ -8957,3 +8957,27 @@ tests plus Ruff, the 330-source type gate, documentation, privacy/focus and sour
 checks. Publish and exact-main green that source, then freeze one new source-bound seven-assignment
 plan at zero effects. Controller execution stays closed until the successor aggregate receipt
 passes review.
+
+---
+
+## 14. Active handoff — clustered information gate failed closed (2026-09-02)
+
+PR 168 retired the failed route-derived supply and introduced the clustered-curriculum contract.
+PR 169 added its action-free qualifier and merged as exact main
+`af8bff30b2117d6b5f34462f79aec13184abc81d`; exact-main CI `33667972501/1` passed. The corrected
+private catalog authenticated five fresh train captures as three Diglett's Cave and two Route 11,
+SHA-256 `27331a73…bfb0`. An earlier four/one assumption was rejected before qualification.
+
+The exact V1 information gate then failed before any outcome or controller effect. Fresh train
+usable-action counts were `2, 3, 2, 3, 3`, so only three of five met the preregistered three-action
+threshold; all five were required. Development counts were `3, 2, 3, 2, 3, 3, 3, 3`, meeting its
+separate six-of-eight threshold. No qualification artifact, root claim, frame, input, outcome,
+choice prediction, model fit, teacher query, sealed Red access, Crystal access, replay, or authority
+was created. Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 ·
+transfer 0**.
+
+Do not lower V1's failed threshold or collect outcomes under that curriculum. The next session must
+freeze one new outcome-blind V2 admission policy: either justify aggregate independent action
+contrasts with equal context weighting, or require genuinely new independent multi-action supply.
+Run that gate once. Only a pass can open bounded train outcomes; development remains sealed until
+predictions are committed after a train-only fit.

@@ -1,6 +1,7 @@
 # Red battle clustered integration curriculum
 
-Status: engineering implementation; no new battle outcome or model fit has occurred.
+Status: the first action-free information gate failed closed; no new battle outcome or model fit
+has occurred.
 
 ## Why the seven-context design ended
 
@@ -64,3 +65,21 @@ This is the first small battle update, not a general Pokémon player. Navigation
 inventory, multi-step collection planning, living-Pokédex execution, sealed Red evaluation, and
 Crystal transfer remain separate unfinished capabilities. The value of this gate is that it starts
 real outcome learning without spending more days manufacturing Red-specific teacher routes.
+
+## Outcome-blind gate result
+
+Exact main `af8bff30` passed CI run `33667972501/1`. The five-capture producer catalog then
+authenticated at zero effects and corrected an earlier fixture assumption: the actual retained
+distribution is three Diglett's Cave and two Route 11 captures.
+
+The information qualification stopped before outcomes because only three of the five fresh train
+captures expose at least three usable moves. Their action counts are `2, 3, 2, 3, 3`; the eight
+development counts are `3, 2, 3, 2, 3, 3, 3, 3`, which meets the separate six-of-eight development
+threshold. The failed train threshold is enough to close this exact curriculum without inspecting
+later rank or pressure gates. No qualification artifact, claim, controller input, frame, outcome,
+choice prediction, fit, teacher query, sealed Red access, Crystal access, or authority was created.
+
+Do not lower the failed threshold and call the same V1 curriculum qualified. The next design must
+be prospective and outcome-blind. It should first decide whether aggregate within-context contrast
+information is the scientifically relevant admission rule, or whether genuinely new independent
+three-plus-action train contexts are required. That decision comes before any outcome collection.

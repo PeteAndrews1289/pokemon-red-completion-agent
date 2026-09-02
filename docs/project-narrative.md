@@ -8369,3 +8369,17 @@ new roots had also been attempted. Supplemental exclusion records make that hist
 This does not make a model play better by itself. It prevents the next model lesson from being
 built on replayed evidence, and it gives the project one honest chance to obtain the two missing
 train captures before redesigning the scenario supply.
+
+## The curriculum failed before the model could learn from it
+
+Five authentic train captures survived the route-supply failures, and their catalog corrected the
+record to three Diglett's Cave and two Route 11. The next tool opened those states read-only and
+counted the meaningful actions each exposed. The answer was `2, 3, 2, 3, 3`: only three of five met
+the frozen requirement for three-way choice. The held development set did meet its separate rule,
+but that could not rescue a weak training syllabus.
+
+The gate stopped without an outcome, prediction, fit, frame, or button press. That distinction is
+the point of the architecture: engineering readiness, information readiness, learning, evaluation,
+and authority are separate transitions. The project will now define a new outcome-blind contrast
+test prospectively rather than lower the failed threshold. If the existing captures cannot support
+it honestly, it will seek new title-neutral situations instead of polishing another Red route.

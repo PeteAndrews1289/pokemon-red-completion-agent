@@ -3164,3 +3164,21 @@ genuine multi-option capacity; the 6/6/1 arithmetic is not itself a training-rea
 
 Mission check: this lane teaches a shared living-Pokédex option-value policy from short causal
 choices. It is not a fixed Red walkthrough, and the preflight did not increment training.
+
+## Immediate next gate — prospective clustered curriculum V2
+
+The first clustered information gate failed without opening outcomes. Its fixed train contexts
+offer usable-action counts `2,3,2,3,3`; the preregistered rule required all five fresh contexts to
+offer at least three. Do not weaken that rule after seeing the result.
+
+1. Publish the path-free failed-gate evidence and keep all learning counters unchanged.
+2. Define the information unit prospectively: independent within-context action contrasts with
+   equal upstream-context weight, including an explicit minimum effective sample size.
+3. Test that definition using outcome-blind support/features only. If it cannot pass without
+   special-casing these captures, reject the inventory and design new title-neutral supply.
+4. Only after one exact pass, collect train outcomes, fit once descriptively, commit development
+   predictions, and then open development outcomes.
+5. Reorient before learned authority, sealed Red, Crystal, or full-game replay.
+
+This gate advances the battle component of the portable hierarchy. It is not yet a model that can
+navigate a game or complete a living Pokédex.

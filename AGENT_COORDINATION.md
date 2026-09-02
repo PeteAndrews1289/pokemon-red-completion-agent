@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-09-02 information-gate override — redesign prospectively, do not weaken V1:** Exact main
+> `af8bff30` and CI `33667972501/1` authenticated a five-capture train catalog, then the action-free
+> qualifier rejected it because only three of five fresh contexts expose at least three usable
+> actions. No outcome, prediction, fit, controller effect, sealed Red case, Crystal context, replay,
+> or authority opened.
+>
+> Codex owns publication and the next outcome-blind V2 admission design. Claude may challenge
+> statistical power and leakage; Antigravity may challenge title neutrality and whether the
+> contrast inventory is useful for Crystal. Both are read-only. Nobody may lower the failed V1
+> threshold, select by outcome, clone contexts, retry consumed routes, or treat a future bounded
+> battle fit as autonomous gameplay authority.
+
 > **2026-09-02 clustered-curriculum override — stop route work and qualify real signal:** The
 > exact-main two-root successor ended 0/2 with identical `planner_no_route` diagnostics after 111
 > steps. Both roots are terminal. This closes route-derived battle-snapshot supply and forbids a

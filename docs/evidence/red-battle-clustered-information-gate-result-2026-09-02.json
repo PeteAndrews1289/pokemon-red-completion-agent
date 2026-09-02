@@ -1,0 +1,68 @@
+{
+  "catalog": {
+    "capture_count": 5,
+    "catalog_sha256": "27331a7379869e476f25169a81eced1681707b12144d1488e7259bcce9dfbfb0",
+    "status": "authenticated_action_free",
+    "venue_counts": {
+      "digletts_cave": 3,
+      "route_11": 2
+    }
+  },
+  "diagnostic_reopen": {
+    "reason": "Recover the path-free admission reason after the public CLI failed closed with only an exception class.",
+    "reopens": 1,
+    "write_blocked": true
+  },
+  "effects": {
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_choice_predictions": 0,
+    "model_fits": 0,
+    "outcomes_opened": 0,
+    "root_claims_created": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "information_inventory": {
+    "development_contexts": 8,
+    "development_contexts_with_at_least_three_actions": 6,
+    "development_usable_action_counts": [
+      3,
+      2,
+      3,
+      2,
+      3,
+      3,
+      3,
+      3
+    ],
+    "fresh_train_contexts": 5,
+    "fresh_train_contexts_with_at_least_three_actions": 3,
+    "fresh_train_usable_action_counts": [
+      2,
+      3,
+      2,
+      3,
+      3
+    ],
+    "retained_train_contexts": 1
+  },
+  "qualification": {
+    "artifact_created": false,
+    "decision": "retire_exact_clustered_curriculum_without_outcomes",
+    "failure_reason": "clustered_fresh_train_three_action_coverage_inadequate",
+    "status": "failed_closed"
+  },
+  "recorded_on": "2026-09-02",
+  "schema": "pokemon-red-battle-clustered-information-gate-result-v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33667972501,
+    "source_bundle_sha256": "ae86b7fced2c932aa9b95fa8cd1ea01db0b12e964fd498f1026011e03944b3a4",
+    "source_commit": "af8bff30b2117d6b5f34462f79aec13184abc81d"
+  },
+  "status": "clustered_information_gate_failed_closed"
+}

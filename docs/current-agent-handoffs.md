@@ -3519,3 +3519,25 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
   and any claim that eight captures are eight learned examples.
 - Reviewers receive only tracked source and path-free aggregate evidence. ROMs, saves, root
   identities, private journals and outcomes remain private.
+
+## Current assignments — post-gate curriculum redesign (2026-09-02)
+
+### Codex workhorse lane
+
+- Publish the exact failed information-gate result from main `af8bff30` and preserve every zero-
+  effect counter.
+- Retire clustered curriculum V1 without lowering its five-of-five fresh three-action threshold.
+- Design a prospective V2 gate from outcome-blind feature/support information only. Prefer a
+  context-weighted independent-contrast contract if it is statistically defensible; otherwise
+  require genuinely new multi-action supply.
+- Stop again before outcomes unless V2 passes exactly once. A pass opens bounded battle-outcome
+  learning only, not game control, Red authority, Crystal transfer, or living-Pokédex completion.
+
+### Reviewer lane
+
+- Claude reviews power, leakage, weighting, and whether any proposed statistic was selected after
+  observing outcomes. Antigravity reviews title-neutral features, adapter assumptions, and Crystal
+  relevance.
+- Reviews use tracked source and path-free aggregate evidence only. Private captures, identities,
+  saves, ROMs, and outcomes remain closed.
+- Codex adjudicates conflicts and records reasons. Reviewer agreement is not execution authority.
