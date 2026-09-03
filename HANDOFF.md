@@ -33,10 +33,17 @@ The thin Red bridge now composes `PokemonRedGoalStateAdapter`,
 `RedGoalOpportunityEnumerator` and `living_collection_checkpoint` into that generic observation.
 Its semantic digest contains public Red progress, the exact title-neutral policy input and the
 collection checkpoint, but no private binding reference. Four bridge tests bring the combined
-ROM-free gate to **13/13**. Next add its path-free timeline to the dashboard and qualify one
-authenticated development snapshot action-free; then run two short disjoint Red episodes—learned
-manager versus deterministic manager—before any authority expansion. Do not substitute a full
-replay, sealed Red, Crystal, or another local battle campaign.
+ROM-free gate to **13/13**.
+
+The next action-free boundary is now implemented as `scripts/preflight_red_bounded_player.py`.
+It requires clean published source, authenticated external capture/profile/model files, a verified
+Red ROM, a controller-blocked emulator, at least two executable semantic goals and independent
+zero-action/zero-frame checks after observation and after each authority. It compares the learned
+goal manager with the completion-first teacher over the exact same identity-free question and
+writes one new path-free external receipt. The combined focused gate is **24/24**; no live snapshot
+has been opened through this command yet. Publish it, run one development preflight, then run two
+short disjoint Red episodes before any authority expansion. Do not substitute a full replay, sealed
+Red, Crystal, or another local battle campaign.
 
 ## 2026-09-02: Red-first evidence repair blocks the weak battle model honestly
 

@@ -128,7 +128,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         stage="Red bounded player integration · hybrid control",
         message=(
             "The fixed heuristic won 20/20 locally; the player seam and thin Red bridge now pass "
-            "13/13 ROM-free checks. Next: action-free snapshot preflight, then two paired episodes."
+            "a 24/24 focused gate including the controller-blocked preflight. Next: one live "
+            "action-free snapshot check, then two paired episodes."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red player integration · Crystal transfer deferred",
