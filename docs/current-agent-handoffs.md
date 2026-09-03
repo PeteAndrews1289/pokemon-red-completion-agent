@@ -3595,3 +3595,8 @@ the later transfer test. Trainer-battle supply and full living-Pokédex orchestr
 Operational safety: run one train assignment first after exact-main CI. If it reaches a verified
 MAIN capture, resume the remaining pending train assignments. A started, failed or succeeded row is
 terminal and may not replay; only pending rows continue after interruption.
+
+That materialization is complete: 48 terminal assignments produced 45 verified MAIN captures and
+three non-retried protected-switch failures. The Codex lane now owns publication of capture-level
+claim-before-input recovery in the outcome collector, followed by train-only outcome collection and
+one shadow fit. Development outcomes, learned authority, sealed Red and Crystal remain closed.

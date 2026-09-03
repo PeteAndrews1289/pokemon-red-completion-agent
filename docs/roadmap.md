@@ -3202,9 +3202,14 @@ feature contracts stay title-neutral so the later adapter does not require a red
   terminal, never retry an interrupted item, and continue only untouched siblings after restart.
 - [x] Add a view-only live dashboard for materialization totals, successes, failures,
   interruptions, current gate, authority and downstream mission context.
-- [ ] Publish the implementation and require green exact-main CI before controller execution.
-- [ ] Materialize the 48 train scenarios, retaining every terminal and never substituting a failed
-  setup after observing its result.
+- [x] Publish the implementation and require green exact-main CI before controller execution.
+- [x] Materialize the 48 train scenarios: 45 verified MAIN captures and three protected-switch
+  failures retained without retry or substitution. Successful supply still covers four lineages,
+  four source states, three party menus, three venues and 45 unique semantic setups.
+- [x] Harden outcome collection with clean-published-source binding and a durable claim before any
+  capture can receive controller input; interrupted claims quarantine without replay while only
+  untouched siblings continue.
+- [ ] Publish the outcome-collection hardening and require green exact-main CI.
 - [ ] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights.
 - [ ] Commit predictions for all 24 development scenarios before opening their outcomes.
 - [ ] Require the learned scorer to beat the strongest legal fixed-power heuristic on development;

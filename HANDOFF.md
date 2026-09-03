@@ -9105,10 +9105,11 @@ are wild-battle sources; trainer breadth is not claimed.
 
 Immediate order:
 
-1. Finish repository-wide verification and source-bound registry regeneration.
-2. Publish and require green exact-main CI.
-3. Materialize train only from the frozen plan, retaining every success/failure terminal.
-4. Collect one-turn counterfactual outcomes and perform one lineage-aware shadow fit.
+1. Publish the crash-safe outcome collector and require green exact-main CI.
+2. Collect one-turn train counterfactual outcomes from the 45 successful captures without replaying
+   any claimed capture after interruption.
+3. Fit one lineage-aware shadow model from train outcomes only.
+4. Materialize development scenarios from their untouched four lineages.
 5. Commit all development predictions before opening development outcomes.
 6. Reorient at the heuristic-comparison result before multi-turn authority.
 
@@ -9118,9 +9119,19 @@ failure, and power-loss-started rows are terminal, while only untouched pending 
 Private failed rows retain a bounded reason plus its digest for diagnosis; aggregate dashboard
 progress exposes neither that text nor private paths.
 The dashboard reads only the aggregate progress file and exposes no controller endpoint or private
-path. Publish this follow-up separately after PR 175 merges; use a one-item train pilot before the
-remaining train batch so a systemic materializer defect cannot consume all 48 assignments.
+path. This shipped on exact main `b321201941630744c3f46e6f7eeed48ef6be85c8`. A one-item pilot
+passed before the remaining train batch ran. The final frozen denominator is **48 terminal: 45
+successful and 3 failed**, with no retry or substitution. All 45 successful states were reopened:
+every hash and manifest matched, every state was a wild battle at MAIN, and coverage retained four
+lineages, four source states, three party menus, three venues and 45 unique semantic setups. The
+three failures were all protected switch failures in Pokémon Mansion where the selected lower-level
+target fainted; they remain part of the denominator and are not training examples.
+
+The current branch hardens `collect_repeatable_battle_outcomes.py`: it now requires clean published
+source, binds that commit into the journal, and writes a durable per-capture claim before controller
+input. A claim without a terminal becomes an `InterruptedCapture` quarantine on restart and is
+never replayed; only untouched siblings continue. No train outcome has been opened yet.
 
 Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
 independent examples: there are eight independent upstream lineages. Current learning counters and
-authority are unchanged because inventory and freezing opened no outcomes and fit no model.
+authority remain unchanged: **outcomes 0 · fits 0 · predictions 0 · authority 0 · Crystal 0**.

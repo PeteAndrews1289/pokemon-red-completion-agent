@@ -8464,3 +8464,18 @@ trainer battles, multi-turn battle control, quest planning, or living-Pokédex c
 proof is deliberately simple: after publication and train-only fitting, does the scorer beat the
 best legal fixed-power heuristic on committed development predictions? If not, the representation
 or data supply changes before authority expands.
+
+## The classroom finally reached the cartridge — September 3, 2026
+
+The factory shipped, then a one-scenario pilot proved the natural path before the rest of the frozen
+train plan ran. Forty-five of forty-eight assignments produced distinct, authenticated wild-battle
+states at the MAIN menu. Three assignments failed honestly when the selected lower-level party
+member fainted during a Pokémon Mansion switch; none was retried or replaced. The successful set
+still spans all four train lineages, all three move menus and all three venues.
+
+Every retained state was reopened in the emulator and checked against its manifest, map, battle
+type and menu phase. That turns the project from “a factory that should create lessons” into “a
+verified cartridge-grounded classroom ready to measure moves.” It is not model training yet:
+outcomes, fits, predictions and learned authority all remain zero. The next boundary now claims
+each capture durably before testing its moves, so a restart can quarantine interrupted work and
+continue untouched siblings without silently replaying evidence.
