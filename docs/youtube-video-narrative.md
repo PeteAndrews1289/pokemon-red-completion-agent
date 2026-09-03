@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: four saves, nine fair questions
+
+**Visual:** Put four save-state cards on screen: **DEVELOP TEAM ×1 · EVOLVE ×1 · STORAGE ×2**.
+Duplicate each card once for every available semantic objective until there are nine trial cards.
+Connect trials from the same save to a bold label: **IDENTICAL RESET**.
+
+**Voiceover:** “We stopped asking whether a whole playthrough looked intelligent and started asking
+smaller causal questions. From the exact same moment, what happens if the agent advances the story,
+develops the team, evolves a species, or manages storage?”
+
+**Visual:** Freeze the nine cards under a fingerprint, with **STORY 4 · DEVELOP 2 · EVOLVE 1 ·
+STORAGE 2**. Keep **ACTIONS 0 · FRAMES 0 · TEACHER 0 · PREDICTIONS 0 · OUTCOMES 0** visible.
+
+**Voiceover:** “The plan was locked before any answer was opened. No failed trial can be quietly
+replaced, and no teacher supplies the right choice. The next stage will execute each option once,
+measure verified Pokédex and team progress, and train only from what actually happened.”
+
 ## New scene: 81 saves, one uncomfortable question
 
 **Visual:** Fill the screen with **81 AUTHENTICATED RED SAVES**, grouped as **54 TRAIN / 27

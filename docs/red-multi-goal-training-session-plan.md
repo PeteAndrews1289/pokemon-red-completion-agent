@@ -25,12 +25,13 @@ This distinction no longer blocks all useful learning. It changes the label on t
 1. **Complete — action-free inventory.** Authenticate all context bytes, profiles and partitions;
    reject paths, predictions, outcomes and teacher-choice fields; require explicit lineage evidence
    before calling a split independent.
-2. **Implemented; publication and one action-free freeze remain — compact calibration plan.**
+2. **Complete — compact calibration plan.**
    Select still-unconsumed train roots mechanically, before outcomes or model scores: one team
    development, one evolution and two storage roots. Schedule every model-controlled candidate as
    a separate one-decision intervention from the identical reset. Recovery and restoration remain
    deterministic safety overrides.
-3. **Collect bounded Red outcomes.** Restore the exact state for each candidate, execute one
+3. **Next engineering gate — collect bounded Red outcomes.** Publish and qualify a claim-first
+   forced-candidate runner. Restore the exact state for each candidate, execute one
    semantic goal through the deterministic skill layer, and retain success, typed failure, ledger
    delta, actions, frames and resource cost. No teacher chooses the answer.
 4. **Fit the semantic goal model.** Train only on completed calibration outcomes. Keep identity,
@@ -56,10 +57,9 @@ This distinction no longer blocks all useful learning. It changes the label on t
 
 ## Expected cadence
 
-The action-free inventory is complete and its repository checkpoint passed 6,559 non-integration
-tests, Ruff, mypy, generated-registry reproduction, and public/documentation/product-focus gates.
-The scheduler and freezer wrapper are implemented and locally qualified. The next gate is to
-publish them, require green CI, then perform and validate the one action-free private-plan freeze.
-Once that plan is green, the first new outcome batch and model fit should take one additional work session;
+The action-free inventory is complete. The scheduler and freezer passed the full local gate, PR 193
+passed CI and merged as main `71cf96ad`, and the private plan freeze succeeded with four roots and
+nine trials at zero protected effects. The next gate is the bounded claim-first execution runner.
+Once that runner is published and green, the first new outcome batch and model fit should take one additional work session;
 useful multi-goal comparisons should follow within one to two further sessions. Full Red autonomy
 and living-Pokédex completion remain later milestones, not claims attached to this pilot.

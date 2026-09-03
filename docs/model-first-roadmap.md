@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-09-02. This document supersedes the execution order in older
+Status: active strategy as of 2026-09-03. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -10,6 +10,21 @@ current lane; the accumulated checkpoints below are evidence history when they c
 The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defines how this lane
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
+
+## Current checkpoint: nine Red semantic interventions frozen before outcomes
+
+Published main `71cf96ad` passed CI and the compact action-free freezer selected four open train
+roots: one team-development, one evolution and two storage. It froze every model-controlled option
+from each identical root reset, yielding nine one-decision trials: story 4, team development 2,
+evolution 1 and storage 2. The freeze performed zero actions, frames, claims, predictions, teacher
+queries or outcome access. Its path-free evidence is
+[red-multi-goal-calibration-freeze-result-2026-09-03.json](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
+
+Next implement and adversarially qualify the claim-first forced-candidate runner. Publish it and
+require green CI before executing any trial. Then execute all nine without replacement, retain
+typed outcome and verified ledger/cost evidence, and fit only completed train outcomes. This is a
+calibration loop for strategic goal choice; it is not independent evaluation, broad autonomy, or
+Crystal transfer. The later 8-train/4-development prospective-lineage gate remains mandatory.
 
 ## Current checkpoint: Red-first evidence repair before broader authority
 

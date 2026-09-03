@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: four moments become nine controlled questions
+
+The inventory made the old save bank usable without overselling it. The next step turned four
+still-open train moments—team development, evolution, and two storage situations—into nine precise
+questions. At each moment, every meaningful model-controlled objective is scheduled from the exact
+same reset. That makes the comparison about the semantic choice rather than about different RNG,
+party damage, inventory, or map history.
+
+The freeze itself did not play. Its counters stayed at zero for actions, frames, teacher queries,
+predictions, outcomes, and claims. What it created was a denominator: four story attempts, two team
+development attempts, one evolution attempt, and two storage attempts whose identities cannot be
+silently replaced after seeing a result. The next runner will claim each question before controller
+input and retain success, typed failure, verified living-collection change, and cost. Only then does
+the model get new training evidence.
+
+The first attempt also exposed a useful recovery invariant after the project moved to external
+storage. Code and private evidence had ended up on the same T7, so the private-store guard refused
+to open it. A small temporary checkout on the internal disk restored the two-device boundary while
+the large artifacts remained external. The experiment proceeded without weakening the protection.
+
 ## September 3: eighty-one different save files were not eighty-one independent lessons
 
 The first model-led strategic win raised the obvious next question: how much broader Red data was

@@ -6,7 +6,20 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): train now, label the evidence honestly.** An
+> **Current product focus (September 3, 2026): the first multi-goal calibration denominator is
+> frozen.** Published main `71cf96ad` passed CI, then one action-free freeze selected exactly four
+> still-open Red train roots: one team-development, one evolution and two storage. It scheduled
+> every model-controlled option from the identical root reset, producing **nine** single-decision
+> trials: four story, two team-development, one evolution and two storage interventions.
+>
+> The freeze used **0 controller actions, 0 emulator frames, 0 teacher queries, 0 model
+> predictions, 0 outcomes and 0 trial claims**. Next implement, publish and qualify the claim-first
+> forced-candidate runner; then execute these nine trials without replacement and fit only completed
+> train outcomes. This is calibration evidence, not independent generalization or Crystal transfer.
+> See the [freeze result](docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json)
+> and [session plan](docs/red-multi-goal-training-session-plan.md).
+
+> **Previous product focus (September 3, 2026): train now, label the evidence honestly.** An
 > action-free audit authenticated all **81/81** retained Red states, envelopes and profiles: 54
 > nominal train, 27 nominal development, all nine declared goal families, and 81 unique state
 > files. The older artifacts did not preserve true upstream-lineage provenance, however, so file

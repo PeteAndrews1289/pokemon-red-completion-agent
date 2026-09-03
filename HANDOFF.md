@@ -14,7 +14,34 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-09-03: the 81-state bank is calibration supply, not independent evaluation
+## 2026-09-03: four roots and nine equal-reset interventions are frozen
+
+PR 193 merged as exact main `71cf96ad3f328746f8938ecff577712d4bf98001` after green CI run
+`33811894949`. One action-free execution then authenticated the model, fit, 81-context catalog,
+context plan, runtime, NumPy, skill manifest, claim ledger, ROM and inventory receipt. It selected
+the first eligible still-open train roots in frozen source order: one `develop_team`, one
+`evolve_species` and two distinct `manage_storage` roots.
+
+The private content-addressed plan SHA-256 is
+`1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267`; its schedule SHA-256 is
+`63402689294ec132dc30d02e9238e0e8afb781d07a28554393c63126d6b3fb35`. It contains nine
+single-decision interventions from identical resets: `advance_story` 4, `develop_team` 2,
+`evolve_species` 1 and `manage_storage` 2. All nine episode IDs and trial claims are unique.
+
+The freeze performed zero controller actions, emulator frames, teacher queries, model predictions,
+outcomes, claims or development-label access. The [path-free receipt](docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json)
+is evidence of a denominator, not learning. Next implement and adversarially qualify a claim-first
+forced-candidate runner. It must authenticate this exact plan, claim before input, restore each root
+independently, execute only the frozen semantic option, retain typed terminal/progress/cost evidence,
+and never retry a claimed trial. Only completed train outcomes may enter the subsequent fit.
+
+The source checkout and private root must remain on different storage devices during protected
+execution. The repository's T7 migration made the first attempt fail closed at private-root
+authentication; a clean temporary internal-disk checkout restored the intended two-device boundary
+without moving the large private store. Do not weaken that guard. The failed attempts wrote no plan
+and created no claim.
+
+## Previous 2026-09-03: the 81-state bank is calibration supply, not independent evaluation
 
 The compact calibration freezer is now implemented on the follow-up candidate branch. Its pure
 scheduler mechanically selects one open `develop_team` root, one open `evolve_species` root and
@@ -23,9 +50,8 @@ model-controlled option actually available at each root as a separate one-decisi
 identical reset; recovery and restoration remain deterministic safety overrides. The wrapper
 reobserves menus without controller input, binds exact source/runtime/model/context/private-store
 identities, holds the account claim ledger for a consistent availability snapshot, and writes one
-content-addressed private plan. Nine focused tests, Ruff and mypy pass. No private plan has yet been
-frozen, no claim consumed, no model queried and no game action executed. Publish and green this
-candidate before performing the one action-free freeze.
+content-addressed private plan. Nine focused tests, Ruff and mypy pass. This historical checkpoint
+preceded the successful freeze recorded above.
 
 The new action-free inventory authenticated every state, envelope and profile in private plan
 `09af29ba…d45ff51` and profile-lineage manifest `db660df2…6324`. It found 81 unique state files,

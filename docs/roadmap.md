@@ -3,6 +3,14 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 multi-goal calibration freeze:** exact main `71cf96ad` passed CI, then one
+> action-free freeze selected four open train roots—one team-development, one evolution and two
+> storage—and froze nine equal-reset single-decision interventions. Counts are story 4,
+> team-development 2, evolution 1 and storage 2. It created no claim, outcome, prediction, teacher
+> query, controller action or emulator frame. Next build and qualify the claim-first forced-candidate
+> runner, execute the nine trials without replacement, and fit completed train outcomes only. See
+> the [path-free freeze result](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
+
 > **September 3 multi-goal lineage inventory:** the action-free audit authenticated **81/81**
 > retained Red states, envelopes and profiles, with 54 nominal train contexts, 27 nominal
 > development contexts and declared providers covering all nine goal families. Every state file is
@@ -18,10 +26,8 @@
 > [inventory](evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json) and
 > [session plan](red-multi-goal-training-session-plan.md).
 >
-> The compact calibration freezer is implemented locally: one team-development root, one
-> evolution root and two storage roots, with every learnable semantic option scheduled from an
-> identical reset. Safety goals stay deterministic. No plan, claim, prediction, outcome or action
-> has been opened. Publish, pass CI and freeze the action-free plan before outcome collection.
+> The compact calibration freezer described below is now published and its one action-free plan
+> freeze completed as recorded above. Safety goals remain deterministic.
 
 > **September 3 causal-player failure diagnosis:** PR 188 merged the causal paired runner as main
 > `b8c2999d` under green CI `33784679568/1`. Pair 001 is consumed. Its causal model chose
