@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Protocol
 
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
     GoalAvailability,
@@ -375,6 +376,24 @@ def execute_goal_manager_decision(
         )
         trajectory.require_settled()
         raise
+    except GoalExecutionBudgetExhausted:
+        verification = GoalVerification.failed(
+            GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+        )
+        outcome_recorded = trajectory.record_outcome(
+            pending,
+            status=verification.status,
+            failure_reason=verification.failure_reason,
+        )
+        trajectory.require_settled()
+        return GoalManagerExecutionResult(
+            selected_kind=bound.kind,
+            selected_candidate_index=selected_index,
+            execution=None,
+            verification=verification,
+            decision_recorded=decision_recorded,
+            outcome_recorded=outcome_recorded,
+        )
     except Exception:
         verification = GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
         trajectory.record_outcome(

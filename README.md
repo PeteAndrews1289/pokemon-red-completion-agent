@@ -6,21 +6,18 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): preserve the first causal player failure and repair
-> the reusable boundary.** On exact main `b8c2999d`, the teacher-free living-Dex model selected
-> `develop_team`; the deterministic skill raised the intended teammate from **level 20 to 21** in
-> **1,119 actions / 101,171 frames**, preserved the collection, and returned interactive control.
-> The pair still failed before its baseline arm: Route 11 exposed zero currently available
-> high-level goals, and the observation encoder incorrectly required every post-skill state to be
-> an immediately selectable policy question.
+> **Current product focus (September 3, 2026): turn bounded inability into learning evidence.**
+> Pair 002 proved the first repair: the teacher-free living-Dex model again chose `develop_team`,
+> raised the target from **level 20 to 21** in **1,119 actions / 101,171 frames**, and settled a
+> complete causal arm. The completion-first control instead chose `evolve_species`, raised Diglett
+> from **22 to 23**, then reached the equal **6,000-action / 257,689-frame** cap before evolution.
 >
-> Pair 001 is permanently consumed and advances no counter. A one-time trace replay reproduced all
-> 1,119 actions exactly and isolated the fault without another model prediction. The repair now
-> separates **state evidence** from **decision admission** and lets a multi-decision episode settle
-> durably when no genuine follow-up choice exists. Next: publish and green the repair, then run one
-> new same-state `develop_team` versus `evolve_species` development pair. Deterministic ordering
-> retains production authority; sealed Red, Crystal and full replay remain closed. See the
-> [path-free diagnosis](docs/evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json).
+> The hard limiter correctly refused action 6,001, but the runtime mislabeled that expected outcome
+> as a binding crash before it could compare the arms. Pairs 001 and 002 are consumed and advance no
+> counter. The active repair gives action and frame caps one typed `execution_budget_exhausted`
+> terminal while ordinary defects still fail closed. Next: publish, pass exact-main CI, and run one
+> fresh pair. Deterministic ordering retains production authority; sealed Red, Crystal and full
+> replay remain closed. See the [path-free diagnosis](docs/evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json).
 
 > **Current product focus (September 3, 2026): turn the working Red player into a learning
 > curriculum.** The first same-state live comparison is complete. Both the learned manager and the

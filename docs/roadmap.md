@@ -17,6 +17,19 @@
 > it creates no comparison, counter increment, promotion or transfer result. See the
 > [diagnosis](evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json).
 
+> **September 3 pair-002 diagnosis:** exact main `70e46485` passed CI and pair 002 independently
+> completed the causal `develop_team` arm in **1,119 actions / 101,171 frames**. The
+> completion-first arm selected `evolve_species`, advanced Diglett **22→23**, and correctly stopped
+> at the **6,000-action / 257,689-frame** hard bound before evolution. The old runtime converted that
+> expected bounded outcome into `binding_failed` and threw before comparison.
+>
+> Pairs 001 and 002 are consumed and move no counter. Publish a generic typed budget terminal for
+> both action and frame bounds while retaining independent accounting, post-failure collection
+> checks, and fail-closed programming errors. After exact-main CI, execute fresh pair 003 once. Do
+> not increase the budget or patch a route: the goal is to learn that one semantic objective was
+> achievable under the common bound and the other was not. See the
+> [path-free diagnosis](evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json).
+
 > **September 3 causal player bridge:** The first paired player result is green and merged as main
 > `44adcb38`; learned and deterministic arms tied on storage. The inventory found an existing
 > teacher-free living-Dex outcome model (`a211de9c…e4af9`, eight authenticated selected-arm rows)

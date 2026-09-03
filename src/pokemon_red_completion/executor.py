@@ -24,6 +24,17 @@ class ControllerFrameBudgetError(RuntimeError):
     """Raised before controller time can exceed a declared frame budget."""
 
 
+class GoalExecutionBudgetExhausted(RuntimeError):
+    """Marker for an expected hard goal-execution budget terminal."""
+
+
+class ControllerFrameBudgetExhausted(
+    ControllerFrameBudgetError,
+    GoalExecutionBudgetExhausted,
+):
+    """Raised before a goal's resettable or total frame window is exceeded."""
+
+
 class ControllerInputForbiddenError(RuntimeError):
     """Raised before a read-only controller boundary can send any input or tick."""
 
@@ -195,7 +206,7 @@ class WindowedFrameBudgetController:
             or self.frames_executed + frames > self._maximum_total_frames
             or self.frames_this_window + frames > self._maximum_frames_per_window
         ):
-            raise ControllerFrameBudgetError(
+            raise ControllerFrameBudgetExhausted(
                 "controller exhausted its hard windowed frame budget"
             )
         self._delegate.tick(frames)

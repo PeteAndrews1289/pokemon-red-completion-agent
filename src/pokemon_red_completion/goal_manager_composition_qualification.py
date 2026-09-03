@@ -23,7 +23,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
-from pokemon_red_completion.executor import WindowedFrameBudgetController
+from pokemon_red_completion.executor import (
+    GoalExecutionBudgetExhausted,
+    WindowedFrameBudgetController,
+)
 from pokemon_red_completion.goal_manager_composition_runtime import (
     FRESH_COMPOSITION_ACTIONS_PER_DECISION,
     FRESH_COMPOSITION_MAX_ACTIONS,
@@ -58,6 +61,13 @@ _SKILL_SOURCE_FILES = (
 
 class FreshCompositionQualificationError(RuntimeError):
     """Raised before the qualified execution boundary can be crossed."""
+
+
+class CompositionActionBudgetExhausted(
+    FreshCompositionQualificationError,
+    GoalExecutionBudgetExhausted,
+):
+    """Typed expected terminal when a composition exhausts its action window."""
 
 
 class FixedAccountClaimRegistryLease:
@@ -185,7 +195,7 @@ class HardCompositionActionLimiter:
             or self.attempted_actions_this_decision
             >= self._maximum_actions_per_decision
         ):
-            raise FreshCompositionQualificationError(
+            raise CompositionActionBudgetExhausted(
                 "composition exhausted its hard controller-action budget"
             )
         # Reserve the attempt first.  A partially executed delegate that raises is
@@ -584,6 +594,7 @@ def _require_sha256(value: object, *, subject: str) -> str:
 
 
 __all__ = [
+    "CompositionActionBudgetExhausted",
     "CompositionIndependentBudgetMeter",
     "FixedAccountClaimRegistryLease",
     "FreshCompositionQualificationError",

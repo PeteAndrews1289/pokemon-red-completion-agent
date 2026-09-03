@@ -8,6 +8,7 @@ import pytest
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import (
     ControllerFrameBudgetError,
+    ControllerFrameBudgetExhausted,
     ControllerInputForbiddenError,
     ControllerTiming,
     FrameBudgetController,
@@ -123,11 +124,11 @@ def test_windowed_frame_budget_preserves_cartridge_reads_and_both_caps() -> None
     assert isinstance(bounded, ReadOnlyCartridgeRam)
     assert bounded.read_cartridge_ram_u8(2, 0xA123) == 0xA5
     bounded.tick(4)
-    with pytest.raises(ControllerFrameBudgetError, match="windowed frame budget"):
+    with pytest.raises(ControllerFrameBudgetExhausted, match="windowed frame budget"):
         bounded.tick(1)
     bounded.begin_window()
     bounded.tick(2)
-    with pytest.raises(ControllerFrameBudgetError, match="windowed frame budget"):
+    with pytest.raises(ControllerFrameBudgetExhausted, match="windowed frame budget"):
         bounded.tick(1)
 
     assert bounded.frames_executed == 6

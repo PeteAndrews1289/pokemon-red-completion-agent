@@ -7,11 +7,13 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.executor import (
-    ControllerFrameBudgetError,
+    ControllerFrameBudgetExhausted,
+    GoalExecutionBudgetExhausted,
     WindowedFrameBudgetController,
 )
 from pokemon_red_completion.goal_manager_composition_qualification import (
     ActionFreeAdmissionExecutor,
+    CompositionActionBudgetExhausted,
     CompositionIndependentBudgetMeter,
     FreshCompositionQualificationError,
     HardCompositionActionLimiter,
@@ -56,14 +58,15 @@ def test_action_limiter_reserves_failed_dispatch_and_refuses_before_overrun() ->
         limiter.execute("first")
     assert limiter.attempted_actions == 1
     assert limiter.completed_actions == 0
-    with pytest.raises(FreshCompositionQualificationError, match="action budget"):
+    with pytest.raises(CompositionActionBudgetExhausted, match="action budget") as error:
         limiter.execute("second")
+    assert isinstance(error.value, GoalExecutionBudgetExhausted)
     assert delegate.calls == 1
 
     limiter.begin_decision_window()
     delegate.fail = False
     assert limiter.execute("second") == "second"
-    with pytest.raises(FreshCompositionQualificationError, match="action budget"):
+    with pytest.raises(CompositionActionBudgetExhausted, match="action budget"):
         limiter.execute("third")
     assert delegate.calls == 2
 
@@ -85,13 +88,14 @@ def test_frame_limiter_refuses_tick_before_per_decision_or_episode_overrun() -> 
         maximum_total_frames=8,
     )
     limiter.tick(5)
-    with pytest.raises(ControllerFrameBudgetError, match="frame budget"):
+    with pytest.raises(ControllerFrameBudgetExhausted, match="frame budget") as error:
         limiter.tick(1)
+    assert isinstance(error.value, GoalExecutionBudgetExhausted)
     assert controller.frame_count == 105
 
     limiter.begin_window()
     limiter.tick(3)
-    with pytest.raises(ControllerFrameBudgetError, match="frame budget"):
+    with pytest.raises(ControllerFrameBudgetExhausted, match="frame budget"):
         limiter.tick(1)
     assert controller.frame_count == 108
 

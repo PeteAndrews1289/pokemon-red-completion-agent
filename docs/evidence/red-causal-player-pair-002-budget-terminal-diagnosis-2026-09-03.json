@@ -1,0 +1,63 @@
+{
+  "authority_effect": {
+    "broader_authority_promoted": false,
+    "deterministic_safety_shell_retained": true,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "causal_arm": {
+    "actions": 1119,
+    "collection_transition_valid": true,
+    "component_outcome": "succeeded",
+    "controller_action_errors": 0,
+    "frames": 101171,
+    "selected_goal": "develop_team",
+    "semantic_state_changed": true,
+    "target_level_after": 21,
+    "target_level_before": 20,
+    "terminal": "complete"
+  },
+  "completion_first_arm": {
+    "actions": 6000,
+    "battle_active_after": true,
+    "component_outcome": "execution_budget_exhausted",
+    "controller_action_errors": 0,
+    "frames": 257689,
+    "goal_completed": false,
+    "selected_goal": "evolve_species",
+    "target_evolved": false,
+    "target_level_after": 23,
+    "target_level_before": 22,
+    "terminal": "failed_closed_before_comparison"
+  },
+  "diagnosis": {
+    "failure_boundary": "goal_runtime_budget_terminal",
+    "failure_cause": "the hard action limiter correctly refused a 6001st action, but the goal runtime classified that expected bounded terminal as binding_failed and rethrew it before the paired comparison could settle",
+    "fixed_route_patch_required": false,
+    "larger_budget_required": false,
+    "partial_progress_preserved_as_completion": false
+  },
+  "identity": {
+    "baseline_failed_manifest_sha256": "f4babcab89eba1bb965b661fa810d68f7acbaa865cbf32a0dfc9e82df5e42185",
+    "causal_manifest_sha256": "3d9b904ef2183b66c7733ffdb4faa77547fde26028aa577be363f9c502b12458",
+    "challenger_model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "pair_id": "red-causal-player-pair-002",
+    "source_commit": "70e464850c06ac854c715339a7ba728849ea91f4"
+  },
+  "learning_effect": {
+    "comparison_created": false,
+    "development_counter_delta": 0,
+    "fit_count_delta": 0,
+    "pair_retry_allowed": false,
+    "reason": "the baseline arm recorded its bounded failure but the old runtime rethrew before a two-arm comparison could be created"
+  },
+  "repair_contract": {
+    "action_and_frame_caps_share_one_typed_terminal": true,
+    "budget_counts_come_from_the_independent_meter": true,
+    "expected_budget_exhaustion_settles_as_a_verified_failure": true,
+    "generic_executor_exceptions_still_fail_closed": true,
+    "post_failure_collection_and_semantic_observation_still_required": true
+  },
+  "schema": "pokemon.red.causal-player-pair-budget-terminal-diagnosis.v1",
+  "status": "diagnosed_not_retried"
+}

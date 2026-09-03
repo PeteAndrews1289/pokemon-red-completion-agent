@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "The causal living-Dex policy received bounded controller authority once and selected develop_team without a teacher. The deterministic skill raised the intended teammate from level 20 to 21 in 1119 actions and 101171 frames while preserving the collection, but the enclosing pair failed before the baseline arm because its post-skill observation could not encode a state with zero currently available goals. No broader authority is promoted.",
-        "blocker": "Pair 001 is permanently consumed and produced no comparison. The integration bug is now isolated: observation evidence incorrectly inherited the stricter decision-question requirement for at least one selectable option. The repair must publish and pass exact-main CI before one new pair identity may run.",
-        "decision": "Keep pair 001 as a diagnosed failed integration attempt, repair the distinction between observable states and selectable decision menus, and make a multi-decision episode settle durably when a successful skill reaches a state without enough available goals. Then run one new pair; do not retry or reinterpret pair 001.",
+        "authority_delta": "Pair 002 independently reproduced the causal model's teacher-free develop_team choice and completed it in 1119 actions and 101171 frames. The completion-first control selected evolve_species, advanced Diglett from level 22 to 23, then exhausted the equal 6000-action budget before evolution. The old runtime rethrew that expected terminal before comparison, so no broader authority is promoted.",
+        "blocker": "Pairs 001 and 002 are permanently consumed and neither produced a comparison. Pair 002 proved the observation repair, then isolated a second reusable integration fault: a correctly enforced hard action or frame cap must settle as execution_budget_exhausted rather than binding_failed and a process exception.",
+        "decision": "Publish one generic budget-terminal repair across both action and frame limiters. Preserve independent meter counts, post-failure semantic and collection checks, and fail-closed behavior for ordinary implementation exceptions. After exact-main CI, run one new pair identity; never retry or reinterpret pairs 001 or 002.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json",
-          "sha256": "2d6f85ad11ce2b27591a175a9a68a0e8c45e8acb9f345b4d45ec22ede539c187"
+          "path": "docs/evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json",
+          "sha256": "3bb7fcd49b52332289701fa198308c4cb94dbb50d874a4ad88ac2e9e778ad239"
         },
-        "learning_output": "No learning counter moves. Pair 001 did demonstrate one teacher-free model choice reaching a verified party-development outcome, but the absent baseline arm means there is no comparative result and no authority claim. The diagnostic replay is maintenance evidence only.",
-        "next_falsifier": "After the exact repair is public and green, independently restore both arms under a new pair identity and require durable typed outcomes from causal develop_team and deterministic evolve_species under identical hard budgets. Stop on unequal starts, unsafe action, unverifiable ledger transitions, or another integration failure.",
-        "next_session_goal": "Publish and green the zero-available post-skill observation repair, then run exactly one new same-state development pair and reorient from its verified progress and cost.",
-        "product_alignment": "The failed pair exercised the intended hybrid architecture: a teacher-free model chose a portable semantic objective and deterministic mechanics achieved it. Repairing the observation/decision distinction is reusable across titles and avoids a Red-specific route patch.",
-        "session_id": "2026-09-03-causal-player-post-skill-observation-repair-v1",
+        "learning_output": "No learning counter moves. Pair 002 contains a complete causal arm and a measured but unfinalized baseline arm; the absent paired result means there is still no comparative outcome or authority claim.",
+        "next_falsifier": "After the generic budget terminal is public and green, independently restore both arms under pair 003 and require the causal success plus baseline budget exhaustion to settle into a public comparison with preserved collection and equal starts. Stop on unsafe action, unverifiable post-failure state, generic exception masking, or another integration failure.",
+        "next_session_goal": "Publish and green the typed action/frame budget-terminal repair, then run exactly one new same-state development pair and reorient from its durable comparison.",
+        "product_alignment": "A transferable player must treat bounded inability to finish a semantic objective as learning evidence rather than a crash. The repair is title-neutral, keeps mechanics and safety deterministic, and measures whether the model chose the more achievable completion action.",
+        "session_id": "2026-09-03-causal-player-budget-terminal-repair-v1",
         "status": "active",
-        "stop_condition": "Never retry pair 001. Stop if the successor begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh ledger transition, or turns one development result into production authority. Do not substitute sealed Red, Crystal execution, full replay, or another battle campaign.",
-        "transfer_result": "The repair separates title-neutral state observation from policy admission, a distinction every later game adapter needs. Crystal remains unexecuted and transfer remains untested; the successor pair is Red development evidence only."
+        "stop_condition": "Never retry pairs 001 or 002. Stop if pair 003 begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh post-failure ledger, masks a programming exception as budget exhaustion, or turns one development result into production authority.",
+        "transfer_result": "Typed bounded failure is part of the title-neutral player contract every later game adapter needs. Crystal remains unexecuted and transfer remains untested; pair 003 can supply Red development evidence only."
       },
       "learned_authority": {
         "current": "The goal manager completed one bounded live storage objective exactly as well as the completion-first baseline, while the repeated-RNG battle ranker still trails the fixed heuristic 18/20 to 20/20. Deterministic ordering and skills retain production authority; no full-player promotion is claimed.",
@@ -73,7 +73,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Publish and green the post-skill observation repair, then execute one new repeatable causal-versus-completion-first development pair on the observed develop-team versus evolve-species disagreement. Pair 001 is permanently consumed and may not retry. Use only the new verified comparison to decide whether to design a lineage-disjoint multi-goal curriculum; deterministic goal ordering remains authoritative.",
+      "next_decision": "Publish and green the generic typed action/frame budget-terminal repair, then execute pair 003 on the same observed develop_team versus evolve_species disagreement. Pairs 001 and 002 are permanently consumed. Use only a complete verified comparison to decide whether to design a lineage-disjoint multi-goal curriculum; deterministic goal ordering remains authoritative.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

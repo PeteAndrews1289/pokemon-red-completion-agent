@@ -8645,3 +8645,18 @@ logging. The result will report what each choice actually accomplished; it will 
 when the objectives are genuinely incomparable. That measured outcome is the seed for a broader,
 lineage-disjoint curriculum across acquisition, evolution, development, exploration and story
 unlocking—the strategic knowledge that should eventually transfer beyond Red.
+
+## A useful failure finally reached the learning boundary — September 3, 2026
+
+The successor run proved that the model-controlled arm works end to end. It chose team development,
+the deterministic specialist raised the intended teammate from level 20 to 21, and the episode
+settled after 1,119 actions. The control chose evolution instead. It traveled to Diglett's Cave and
+raised Diglett from 22 to 23, but did not reach level 26 before the common 6,000-action ceiling.
+
+That contrast is exactly the kind of experience a strategic model needs: under the same starting
+state and budget, one high-level objective completed and another made partial but insufficient
+progress. The experiment still could not score the contrast because an expected hard-limit event
+was treated as a software crash. The repair does not make the route easier or enlarge the budget;
+it teaches the player infrastructure to preserve bounded failure as a typed outcome while retaining
+collection checks and strict handling of real defects. A fresh pair can then answer the strategic
+question without pretending either consumed run completed.
