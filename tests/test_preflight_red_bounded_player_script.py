@@ -40,6 +40,8 @@ def test_player_preflight_binds_authentication_and_blocks_controller_input() -> 
         "open_goal_manager_context_capture",
         "load_red_goal_context_profile",
         "load_goal_manager_model",
+        "load_living_dex_goal_model_record",
+        "LivingDexGoalShadowPolicy",
         "ReadOnlyController",
         "preflight_red_bounded_player",
         "_write_exclusive",
@@ -62,6 +64,8 @@ def test_player_preflight_command_imports_without_private_inputs() -> None:
     assert "--assignment-id" in result.stdout
     assert "--state" in result.stdout
     assert "--model" in result.stdout
+    assert "--living-dex-model-record" in result.stdout
+    assert "--expected-living-dex-model-sha256" in result.stdout
     assert "--out" in result.stdout
 
 
@@ -77,9 +81,7 @@ def test_player_preflight_receipt_must_be_new_external_and_not_rom_adjacent(
     rom = rom_dir / "red.gb"
     rom.write_bytes(b"rom")
 
-    assert receipt(output_dir / "ready.json", rom_path=rom) == (
-        output_dir / "ready.json"
-    ).resolve()
+    assert receipt(output_dir / "ready.json", rom_path=rom) == (output_dir / "ready.json").resolve()
     with pytest.raises(RuntimeError, match="new JSON file"):
         receipt(rom_dir / "ready.json", rom_path=rom)
     existing = output_dir / "existing.json"
@@ -102,3 +104,16 @@ def test_player_preflight_budget_meter_counts_actions_and_frames() -> None:
     emulator.frame_count = 39
     with pytest.raises(RuntimeError, match="moved backwards"):
         meter.checkpoint()
+
+
+def test_causal_model_arguments_are_optional_but_atomic() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    arguments = module["_causal_model_arguments"]
+    record = Path("model-record.json")
+
+    assert arguments(None, None) is None
+    assert arguments(record, "a" * 64) == (record, "a" * 64)
+    with pytest.raises(RuntimeError, match="supplied together"):
+        arguments(record, None)
+    with pytest.raises(RuntimeError, match="supplied together"):
+        arguments(None, "a" * 64)

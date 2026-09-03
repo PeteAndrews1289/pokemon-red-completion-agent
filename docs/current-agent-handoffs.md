@@ -6,6 +6,24 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex connects the causal living-Dex model to the player in shadow
+
+The first live pair is merged and exactly equivalent. The immediate lane is no longer another
+broad context inventory: an already-fitted teacher-free causal option-value model was found in the
+private store, but it was never connected to the bounded player. Codex owns the narrow bridge,
+strict provenance loader, zero-input three-authority preflight, publication, and the four-snapshot
+action-free result.
+
+The causal model may rank story, acquisition, team development, evolution, resupply, storage, and
+exploration. It may not override deterministic recovery, restoration, critical storage, or critical
+resupply, and it may not execute a binding in this gate. Its eight selected-arm examples and one
+integration fit are real but too small for production authority. After action-free scoring, Codex
+must reorient around the smallest lineage-disjoint multi-goal outcome curriculum that can test
+improvement over the completion-first manager. Crystal, sealed Red, and full replay remain closed.
+
+Claude and Antigravity remain optional read-only reviewers at the next measured milestone; neither
+is an implementation dependency and neither receives private records or paths.
+
 ## Current override: Codex owns the Red bounded-player bridge
 
 The game-neutral bounded player seam, thin Red observation bridge, authenticated action-free

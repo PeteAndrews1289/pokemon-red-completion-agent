@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prove that two planners can inspect one Red state without controlling it."""
+"""Prove that multiple planners can inspect one Red state without controlling it."""
 
 from __future__ import annotations
 
@@ -32,7 +32,15 @@ from pokemon_red_completion.goal_manager_model import (
     canonical_goal_manager_model_sha256,
     load_goal_manager_model,
 )
-from pokemon_red_completion.goal_manager_runtime import CompletionFirstGoalTeacher
+from pokemon_red_completion.goal_manager_runtime import (
+    CompletionFirstGoalTeacher,
+    GoalDecisionAuthority,
+)
+from pokemon_red_completion.living_dex_goal_model_record import (
+    LivingDexGoalModelRecord,
+    load_living_dex_goal_model_record,
+)
+from pokemon_red_completion.living_dex_goal_policy import LivingDexGoalShadowPolicy
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import (
     detect_source_identity,
@@ -78,6 +86,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--envelope", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument("--model", type=Path, required=True)
+    parser.add_argument("--living-dex-model-record", type=Path, default=None)
+    parser.add_argument("--expected-living-dex-model-sha256", default=None)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     return parser
@@ -139,6 +149,19 @@ def _load_model(path: Path) -> tuple[GoalManagerLinearModel, str, str]:
     return model, file_sha256, canonical_goal_manager_model_sha256(model)
 
 
+def _causal_model_arguments(
+    record: Path | None,
+    expected_model_sha256: str | None,
+) -> tuple[Path, str] | None:
+    if record is None and expected_model_sha256 is None:
+        return None
+    if record is None or expected_model_sha256 is None:
+        raise RedBoundedPlayerPreflightRunError(
+            "causal model record and expected identity must be supplied together"
+        )
+    return record, expected_model_sha256
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
@@ -146,14 +169,23 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     source_bundle_sha256 = working_source_bundle_sha256(PROJECT_ROOT)
     rom_path = resolve_rom_path(args.rom)
     rom = verify_rom(rom_path)
+    causal_arguments = _causal_model_arguments(
+        args.living_dex_model_record,
+        args.expected_living_dex_model_sha256,
+    )
     paths = {
         "state": _regular_external(args.state, subject="state", rom_path=rom_path),
-        "envelope": _regular_external(
-            args.envelope, subject="envelope", rom_path=rom_path
-        ),
+        "envelope": _regular_external(args.envelope, subject="envelope", rom_path=rom_path),
         "profile": _regular_external(args.profile, subject="profile", rom_path=rom_path),
         "model": _regular_external(args.model, subject="model", rom_path=rom_path),
     }
+    if causal_arguments is not None:
+        causal_path, _expected_causal_model_sha256 = causal_arguments
+        paths["living_dex_model_record"] = _regular_external(
+            causal_path,
+            subject="living-Dex model record",
+            rom_path=rom_path,
+        )
     receipt_path = _new_external_receipt(args.out, rom_path=rom_path)
     protected_before = {name: _sha256(path) for name, path in paths.items()}
     adjacent_before = rom_adjacent_artifacts(rom_path)
@@ -163,6 +195,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if capture.capture_id != profile.profile_id:
         raise RedBoundedPlayerPreflightRunError("capture and profile identity differ")
     model, model_file_sha256, model_sha256 = _load_model(paths["model"])
+    causal_record: LivingDexGoalModelRecord | None = None
+    causal_policy: LivingDexGoalShadowPolicy | None = None
+    if causal_arguments is not None:
+        _, expected_causal_model_sha256 = causal_arguments
+        causal_record = load_living_dex_goal_model_record(
+            paths["living_dex_model_record"],
+            expected_model_sha256=expected_causal_model_sha256,
+        )
+        causal_policy = LivingDexGoalShadowPolicy(causal_record.model)
 
     with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(capture.state_bytes)
@@ -181,27 +222,26 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         actions = CountingExecutor(executor)
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
+        authorities: list[tuple[str, GoalDecisionAuthority]] = [
+            ("learned-goal-manager", LearnedGoalManagerPolicy(model)),
+            ("completion-first-teacher", CompletionFirstGoalTeacher()),
+        ]
+        if causal_policy is not None:
+            authorities.append(("living-dex-causal-shadow", causal_policy))
         preflight = preflight_red_bounded_player(
             observe=RedBoundedPlayerObserver(runtime=runtime, actions=actions),
             budget_meter=meter,
             assignment_id=args.assignment_id,
-            authorities=(
-                ("learned-goal-manager", LearnedGoalManagerPolicy(model)),
-                ("completion-first-teacher", CompletionFirstGoalTeacher()),
-            ),
+            authorities=tuple(authorities),
         )
         if meter.checkpoint() != CompositionBudgetCheckpoint(0, 0):
-            raise RedBoundedPlayerPreflightRunError(
-                "preflight crossed its zero-input budget"
-            )
+            raise RedBoundedPlayerPreflightRunError("preflight crossed its zero-input budget")
 
     protected_after = {name: _sha256(path) for name, path in paths.items()}
     if protected_after != protected_before:
         raise RedBoundedPlayerPreflightRunError("private preflight inputs changed")
     if rom_adjacent_artifacts(rom_path) != adjacent_before:
-        raise RedBoundedPlayerPreflightRunError(
-            "preflight created a ROM-adjacent artifact"
-        )
+        raise RedBoundedPlayerPreflightRunError("preflight created a ROM-adjacent artifact")
     summary = {
         **preflight.public_dict(),
         "capture_id": capture.capture_id,
@@ -214,6 +254,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "source_bundle_sha256": source_bundle_sha256,
         "source_commit": source.git_commit,
     }
+    if causal_policy is not None and causal_record is not None:
+        if causal_policy.last_decision is None or causal_policy.decisions != 1:
+            raise RedBoundedPlayerPreflightRunError(
+                "causal shadow did not produce exactly one decision"
+            )
+        summary["living_dex_causal_shadow"] = {
+            "decision": causal_policy.last_decision.public_dict(),
+            "model_record": causal_record.public_dict(),
+            "production_authority": False,
+        }
     payload = (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode("utf-8")
     _write_exclusive(receipt_path, payload)
     return summary

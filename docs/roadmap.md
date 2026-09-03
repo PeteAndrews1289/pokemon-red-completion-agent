@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 causal player bridge:** The first paired player result is green and merged as main
+> `44adcb38`; learned and deterministic arms tied on storage. The inventory found an existing
+> teacher-free living-Dex outcome model (`a211de9c…e4af9`, eight authenticated selected-arm rows)
+> that had never reached the player. A new shadow policy now projects seven semantic goal kinds into
+> its 24-feature contract, scores nine predicted outcomes with explicit completion-first utility,
+> and leaves recovery, restoration, critical storage, and critical supply deterministic. Strict
+> loading binds the private model to its dataset, source, and CI provenance. The three-authority
+> preflight remains action-free and exposes path-free scores.
+>
+> This is locally qualified integration, not new training or authority. Publish and pass CI, then
+> run the causal shadow on the four existing action-free development snapshots. Use that result to
+> freeze the smallest lineage-disjoint, multi-goal Red outcome curriculum; do not resume broad
+> inventory work, manufacture disagreement, or let the shadow execute gameplay yet.
+
 > **September 3 expected-utility verdict and player reorientation:** Repeated-RNG collection
 > retained **32 train aggregates** from 260 complete trials and **20 fresh development aggregates**
 > from 151 complete trials. One root-balanced fit improved the frozen prior from **17/20 to 18/20**,
