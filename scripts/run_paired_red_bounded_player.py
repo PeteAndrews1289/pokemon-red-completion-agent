@@ -1,0 +1,614 @@
+#!/usr/bin/env python3
+"""Run one repeatable same-state Red player comparison in development."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import stat
+import sys
+from collections.abc import Mapping
+from contextlib import suppress
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, cast
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
+from pokemon_red_completion.bounded_player_episode import (  # noqa: E402
+    BoundedPlayerLimits,
+    run_bounded_player_episode,
+)
+from pokemon_red_completion.collection_protocol import (  # noqa: E402
+    working_source_bundle_sha256,
+)
+from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
+from pokemon_red_completion.executor import (  # noqa: E402
+    CountingExecutor,
+    FrameSafeExecutor,
+    ReadOnlyController,
+    WindowedFrameBudgetController,
+)
+from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
+    CompositionIndependentBudgetMeter,
+    HardCompositionActionLimiter,
+)
+from pokemon_red_completion.goal_manager_composition_runtime import (  # noqa: E402
+    CompositionBudgetCheckpoint,
+    GoalManagerCompositionObservation,
+    LivingCollectionCheckpoint,
+)
+from pokemon_red_completion.goal_manager_context_catalog import (  # noqa: E402
+    GoalManagerContextCapture,
+    open_goal_manager_context_capture,
+)
+from pokemon_red_completion.goal_manager_model import (  # noqa: E402
+    GoalManagerLinearModel,
+    LearnedGoalManagerPolicy,
+    canonical_goal_manager_model_sha256,
+    load_goal_manager_model,
+)
+from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
+    CompletionFirstGoalTeacher,
+    GoalDecisionAuthority,
+)
+from pokemon_red_completion.goal_manager_trajectory import (  # noqa: E402
+    GoalManagerTrajectoryObserver,
+)
+from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
+from pokemon_red_completion.paired_bounded_player import (  # noqa: E402
+    PairedBoundedPlayerArm,
+    PairedBoundedPlayerComparison,
+    compare_paired_bounded_player_arms,
+)
+from pokemon_red_completion.private_artifacts import (  # noqa: E402
+    EpisodeWriter,
+    PrivateArtifactRoot,
+    open_private_root,
+)
+from pokemon_red_completion.provenance import (  # noqa: E402
+    canonical_sha256,
+    detect_source_identity,
+    require_clean_source,
+    require_published_source,
+)
+from pokemon_red_completion.red_bounded_player import (  # noqa: E402
+    RedBoundedPlayerObserver,
+    preflight_red_bounded_player,
+)
+from pokemon_red_completion.red_goal_context import (  # noqa: E402
+    RedGoalContextRuntime,
+    build_red_goal_context_runtime,
+)
+from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
+    RedGoalContextProfile,
+    load_red_goal_context_profile,
+)
+from pokemon_red_completion.red_trajectory import (  # noqa: E402
+    PokemonRedObservationEncoder,
+)
+from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
+from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa: E402
+from pokemon_red_completion.trajectory import (  # noqa: E402
+    JSONValue,
+    RecordingExecutor,
+    SparseEvent,
+)
+from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink  # noqa: E402
+
+GAME_ID = "pokemon.mainline:red:gb:us:rev0"
+LEARNED_ARM_ID = "learned-goal-manager"
+BASELINE_ARM_ID = "completion-first-teacher"
+_PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
+
+
+class PairedRedBoundedPlayerRunError(RuntimeError):
+    """A path-free failure from the repeatable paired development runner."""
+
+
+@dataclass(frozen=True, slots=True)
+class _Readiness:
+    pair_id: str
+    source_commit: str
+    source_bundle_sha256: str
+    rom_path: Path
+    rom_sha256: str
+    capture: GoalManagerContextCapture
+    profile: RedGoalContextProfile
+    model: GoalManagerLinearModel
+    model_file_sha256: str
+    model_sha256: str
+    private_root: PrivateArtifactRoot
+    output_path: Path
+    protected_paths: tuple[Path, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class _ReadOnlyBudgetMeter:
+    actions: CountingExecutor
+    emulator: PyBoyAdapter
+    initial_frame_count: int
+
+    def checkpoint(self) -> CompositionBudgetCheckpoint:
+        frames = self.emulator.frame_count - self.initial_frame_count
+        if frames < 0:
+            raise PairedRedBoundedPlayerRunError("preflight_frame_counter_regressed")
+        return CompositionBudgetCheckpoint(
+            controller_actions=self.actions.actions_executed,
+            emulator_frames=frames,
+        )
+
+
+class _DeferredActionExecutor:
+    """Make observation action-free before enabling the returned private bindings."""
+
+    __slots__ = ("_delegate", "_enabled", "attempted_while_disabled")
+
+    def __init__(self, delegate: object) -> None:
+        self._delegate = delegate
+        self._enabled = False
+        self.attempted_while_disabled = 0
+
+    def enable(self) -> None:
+        self._enabled = True
+
+    def execute(self, action: object) -> object:
+        if not self._enabled:
+            self.attempted_while_disabled += 1
+            raise PairedRedBoundedPlayerRunError("action_free_observation")
+        execute = getattr(self._delegate, "execute", None)
+        if not callable(execute):
+            raise PairedRedBoundedPlayerRunError("executor_authentication")
+        return execute(action)
+
+
+@dataclass(slots=True)
+class _LiveObserver:
+    runtime: RedGoalContextRuntime
+    actions: CountingExecutor
+    meter: CompositionIndependentBudgetMeter
+    observations: int = 0
+    starting_observation: GoalManagerCompositionObservation | None = None
+
+    def __call__(self) -> GoalManagerCompositionObservation:
+        if self.observations:
+            self.meter.begin_decision_window()
+        before = self.meter.checkpoint()
+        deferred = _DeferredActionExecutor(self.actions)
+        observation = RedBoundedPlayerObserver(
+            runtime=self.runtime,
+            actions=CountingExecutor(deferred),
+        )()
+        if (
+            self.meter.checkpoint() != before
+            or deferred.attempted_while_disabled
+        ):
+            raise PairedRedBoundedPlayerRunError("action_free_observation")
+        deferred.enable()
+        if self.starting_observation is None:
+            self.starting_observation = observation
+        self.observations += 1
+        return observation
+
+
+@dataclass(slots=True)
+class _ProgressPredicate:
+    initial: LivingCollectionCheckpoint | None = None
+
+    def __call__(self, observation: GoalManagerCompositionObservation) -> bool:
+        current = observation.collection
+        if self.initial is None:
+            self.initial = current
+            return False
+        return any(
+            (
+                current.required_specimens_remaining
+                < self.initial.required_specimens_remaining,
+                current.registered_species > self.initial.registered_species,
+                current.living_species > self.initial.living_species,
+                current.retained_captures > self.initial.retained_captures,
+                current.storage_headroom > self.initial.storage_headroom,
+            )
+        )
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pair-id", required=True)
+    parser.add_argument("--state", type=Path, required=True)
+    parser.add_argument("--envelope", type=Path, required=True)
+    parser.add_argument("--profile", type=Path, required=True)
+    parser.add_argument("--model", type=Path, required=True)
+    parser.add_argument("--private-artifact-root", type=Path, required=True)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
+    return parser
+
+
+def _regular_external(path: Path, *, subject: str, rom_path: Path) -> Path:
+    resolved = path.resolve()
+    try:
+        metadata = resolved.lstat()
+    except OSError as error:
+        raise PairedRedBoundedPlayerRunError(f"{subject}_unavailable") from error
+    if (
+        resolved.is_relative_to(PROJECT_ROOT.resolve())
+        or resolved.parent == rom_path.resolve().parent
+        or resolved.is_symlink()
+        or not stat.S_ISREG(metadata.st_mode)
+    ):
+        raise PairedRedBoundedPlayerRunError(f"{subject}_isolation")
+    return resolved
+
+
+def _new_external_output(path: Path, *, rom_path: Path) -> Path:
+    resolved = path.resolve()
+    if (
+        resolved.is_relative_to(PROJECT_ROOT.resolve())
+        or resolved.parent == rom_path.resolve().parent
+        or not resolved.parent.is_dir()
+        or resolved.exists()
+        or resolved.suffix != ".json"
+    ):
+        raise PairedRedBoundedPlayerRunError("output_isolation")
+    return resolved
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _prepare(args: argparse.Namespace) -> _Readiness:
+    if not isinstance(args.pair_id, str) or _PAIR_ID.fullmatch(args.pair_id) is None:
+        raise PairedRedBoundedPlayerRunError("pair_id")
+    source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
+    require_clean_source(source)
+    require_published_source(PROJECT_ROOT, source)
+    if source.git_commit is None:
+        raise PairedRedBoundedPlayerRunError("source_identity")
+    rom_path = resolve_rom_path(args.rom)
+    rom = verify_rom(rom_path)
+    state = _regular_external(args.state, subject="state", rom_path=rom_path)
+    envelope = _regular_external(args.envelope, subject="envelope", rom_path=rom_path)
+    profile_path = _regular_external(args.profile, subject="profile", rom_path=rom_path)
+    model_path = _regular_external(args.model, subject="model", rom_path=rom_path)
+    output_path = _new_external_output(args.out, rom_path=rom_path)
+    capture = open_goal_manager_context_capture(state, envelope)
+    profile = load_red_goal_context_profile(profile_path)
+    if capture.capture_id != profile.profile_id:
+        raise PairedRedBoundedPlayerRunError("capture_profile_identity")
+    model_file_sha256 = _sha256(model_path)
+    model = load_goal_manager_model(model_path, expected_sha256=model_file_sha256)
+    model_sha256 = canonical_goal_manager_model_sha256(model)
+    private_root = open_private_root(
+        args.private_artifact_root,
+        repository_root=PROJECT_ROOT,
+        allow_same_device=True,
+    )
+    for arm_id in (LEARNED_ARM_ID, BASELINE_ARM_ID):
+        episode_id = _episode_id(args.pair_id, arm_id)
+        if private_root.inspect_episode_state(episode_id).status != "absent":
+            raise PairedRedBoundedPlayerRunError("pair_id_already_used")
+    return _Readiness(
+        pair_id=args.pair_id,
+        source_commit=source.git_commit,
+        source_bundle_sha256=working_source_bundle_sha256(PROJECT_ROOT),
+        rom_path=rom_path,
+        rom_sha256=rom.sha256,
+        capture=capture,
+        profile=profile,
+        model=model,
+        model_file_sha256=model_file_sha256,
+        model_sha256=model_sha256,
+        private_root=private_root,
+        output_path=output_path,
+        protected_paths=(state, envelope, profile_path, model_path, rom_path),
+    )
+
+
+def _episode_id(pair_id: str, arm_id: str) -> str:
+    suffix = "learned" if arm_id == LEARNED_ARM_ID else "baseline"
+    return f"{pair_id}-{suffix}"
+
+
+def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
+    adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
+    with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(readiness.capture.state_bytes)
+        initial_frame_count = emulator.frame_count
+        controller = ReadOnlyController(emulator)
+        reader = PokemonRedStateReader(controller)
+        runtime = build_red_goal_context_runtime(
+            profile=readiness.profile,
+            capture=readiness.capture,
+            emulator=controller,
+            reader=reader,
+        )
+        actions = CountingExecutor(
+            FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
+        )
+        meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
+        result = preflight_red_bounded_player(
+            observe=RedBoundedPlayerObserver(runtime=runtime, actions=actions),
+            budget_meter=meter,
+            assignment_id=readiness.pair_id,
+            authorities=(
+                (LEARNED_ARM_ID, LearnedGoalManagerPolicy(readiness.model)),
+                (BASELINE_ARM_ID, CompletionFirstGoalTeacher()),
+            ),
+        )
+        if meter.checkpoint() != CompositionBudgetCheckpoint(0, 0):
+            raise PairedRedBoundedPlayerRunError("preflight_budget")
+    if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
+        raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
+    return result.public_dict()
+
+
+def _run_arm(
+    readiness: _Readiness,
+    *,
+    arm_id: str,
+    authority: GoalDecisionAuthority,
+) -> PairedBoundedPlayerArm:
+    episode_id = _episode_id(readiness.pair_id, arm_id)
+    writer: EpisodeWriter | None = None
+    sink: EpisodeTrajectorySink | None = None
+    recorder: RecordingExecutor[Any, Any] | None = None
+    try:
+        writer = readiness.private_root.begin_episode(episode_id)
+        sink = EpisodeTrajectorySink(
+            writer,
+            episode_id=episode_id,
+            game_id=GAME_ID,
+            durable_writes=True,
+        )
+        sink.write_episode_header(
+            metadata={
+                "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
+                "pair_id": readiness.pair_id,
+                "arm_id": arm_id,
+                "source_commit": readiness.source_commit,
+                "source_bundle_sha256": readiness.source_bundle_sha256,
+                "rom_sha256": readiness.rom_sha256,
+                "state_sha256": readiness.capture.state_sha256,
+                "envelope_sha256": readiness.capture.envelope_sha256,
+                "profile_sha256": readiness.profile.profile_sha256,
+                "model_sha256": readiness.model_sha256,
+                "teacher_queries": 0,
+                "teacher_fallbacks": 0,
+            }
+        )
+        with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
+            emulator.load_state_bytes(readiness.capture.state_bytes)
+            frames = WindowedFrameBudgetController(
+                emulator,
+                maximum_frames_per_window=600_000,
+                maximum_total_frames=1_200_000,
+            )
+            reader = PokemonRedStateReader(frames)
+            runtime = build_red_goal_context_runtime(
+                profile=readiness.profile,
+                capture=readiness.capture,
+                emulator=frames,
+                reader=reader,
+            )
+            snapshot_provider = PokemonRedObservationEncoder.from_state_reader(reader)
+            frame_safe = FrameSafeExecutor(
+                frames,
+                DEFAULT_NEW_GAME_TIMING.controller_timing(),
+            )
+            recorder = RecordingExecutor(
+                delegate=frame_safe,
+                snapshot_provider=snapshot_provider,
+                sink=sink,
+                episode_id=episode_id,
+            )
+            hard_actions = HardCompositionActionLimiter(
+                recorder,
+                maximum_actions_per_decision=6_000,
+                maximum_episode_actions=12_000,
+            )
+            actions = CountingExecutor(hard_actions)
+            meter = CompositionIndependentBudgetMeter(hard_actions, frames)
+            observer = _LiveObserver(runtime=runtime, actions=actions, meter=meter)
+            trajectory = GoalManagerTrajectoryObserver(
+                episode_id=episode_id,
+                root_lineage_id=canonical_sha256(
+                    {
+                        "schema": "pokemon.red.paired-bounded-player-root.v1",
+                        "state_sha256": readiness.capture.state_sha256,
+                        "envelope_sha256": readiness.capture.envelope_sha256,
+                    }
+                ),
+                partition="development",
+                environment_id=GAME_ID,
+                actor=arm_id,
+                policy_id=(
+                    f"goal-manager-{readiness.model_sha256[:16]}"
+                    if arm_id == LEARNED_ARM_ID
+                    else BASELINE_ARM_ID
+                ),
+                collection_id=readiness.pair_id,
+                assignment_id=f"{readiness.pair_id}-{arm_id}",
+                ordering_assignment_id=readiness.pair_id,
+                source_commit=readiness.source_commit,
+                snapshot_provider=snapshot_provider,
+                recorder=recorder,
+                sink=sink,
+            )
+            result = run_bounded_player_episode(
+                observe=observer,
+                authority=authority,
+                authority_id=arm_id,
+                trajectory=trajectory,
+                budget_meter=meter,
+                completion_satisfied=_ProgressPredicate(),
+                limits=BoundedPlayerLimits(
+                    max_decisions=2,
+                    max_replans=1,
+                    min_available_goals=2,
+                    max_actions_per_decision=6_000,
+                    max_frames_per_decision=600_000,
+                    max_total_actions=12_000,
+                    max_total_frames=1_200_000,
+                ),
+            )
+            if recorder.recording_failures:
+                raise PairedRedBoundedPlayerRunError("trajectory_durability")
+        starting = observer.starting_observation
+        if starting is None:
+            raise PairedRedBoundedPlayerRunError("starting_observation")
+        sink.record_event(
+            SparseEvent(
+                event_id=f"{episode_id}:terminal",
+                episode_id=episode_id,
+                step_index=recorder.next_step_index,
+                kind="terminal",
+                payload={
+                    "status": "complete",
+                    "bounded_player": cast(Mapping[str, JSONValue], result.public_dict()),
+                },
+            )
+        )
+        sink.finalize()
+        artifact = writer.complete()
+        return PairedBoundedPlayerArm(
+            arm_id=arm_id,
+            starting_state_sha256=readiness.capture.state_sha256,
+            starting_semantic_state_sha256=starting.semantic_state_sha256,
+            starting_collection=starting.collection,
+            trajectory_manifest_sha256=artifact.manifest_sha256,
+            episode=result,
+        )
+    except BaseException as error:
+        _retain_failure(
+            writer,
+            sink=sink,
+            recorder=recorder,
+            episode_id=episode_id,
+            error=error,
+        )
+        raise
+
+
+def _retain_failure(
+    writer: EpisodeWriter | None,
+    *,
+    sink: EpisodeTrajectorySink | None,
+    recorder: RecordingExecutor[Any, Any] | None,
+    episode_id: str,
+    error: BaseException,
+) -> None:
+    if writer is None:
+        return
+    failure_class = (
+        "external_interruption"
+        if isinstance(error, (KeyboardInterrupt, SystemExit))
+        else "bounded_player_failure"
+    )
+    with suppress(BaseException):
+        if sink is not None:
+            sink.record_event(
+                SparseEvent(
+                    event_id=f"{episode_id}:terminal",
+                    episode_id=episode_id,
+                    step_index=0 if recorder is None else recorder.next_step_index,
+                    kind="terminal",
+                    payload={"status": "failed", "failure_class": failure_class},
+                )
+            )
+            sink.finalize()
+        else:
+            writer.append(
+                "terminal",
+                {
+                    "schema": "pokemon.red.paired-bounded-player-terminal.v1",
+                    "status": "failed",
+                    "failure_class": failure_class,
+                },
+                durable=True,
+            )
+    with suppress(BaseException):
+        writer.abort("paired_arm_failed")
+
+
+def _write_exclusive(path: Path, document: Mapping[str, object]) -> None:
+    payload = (json.dumps(document, indent=2, sort_keys=True) + "\n").encode("ascii")
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except BaseException:
+        with suppress(OSError):
+            path.unlink()
+        raise
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    readiness = _prepare(args)
+    protected_before = {
+        str(index): _sha256(path)
+        for index, path in enumerate(readiness.protected_paths)
+    }
+    adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
+    preflight = _action_free_preflight(readiness)
+    learned = _run_arm(
+        readiness,
+        arm_id=LEARNED_ARM_ID,
+        authority=LearnedGoalManagerPolicy(readiness.model),
+    )
+    baseline = _run_arm(
+        readiness,
+        arm_id=BASELINE_ARM_ID,
+        authority=CompletionFirstGoalTeacher(),
+    )
+    comparison: PairedBoundedPlayerComparison = compare_paired_bounded_player_arms(
+        pair_id=readiness.pair_id,
+        learned=learned,
+        baseline=baseline,
+    )
+    protected_after = {
+        str(index): _sha256(path)
+        for index, path in enumerate(readiness.protected_paths)
+    }
+    if protected_after != protected_before:
+        raise PairedRedBoundedPlayerRunError("protected_input_changed")
+    if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
+        raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
+    summary = {
+        **comparison.public_dict(),
+        "preflight": preflight,
+        "source_commit": readiness.source_commit,
+        "source_bundle_sha256": readiness.source_bundle_sha256,
+        "rom_sha256": readiness.rom_sha256,
+        "model_file_sha256": readiness.model_file_sha256,
+        "model_sha256": readiness.model_sha256,
+        "teacher_queries": 0,
+        "teacher_fallbacks": 0,
+        "sealed_red_accesses": 0,
+        "crystal_accesses": 0,
+        "full_game_replays": 0,
+    }
+    _write_exclusive(readiness.output_path, summary)
+    return summary
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = _parser()
+    try:
+        summary = _run(parser.parse_args(argv))
+    except Exception:
+        parser.error("paired Red bounded-player run failed closed; private paths were withheld")
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

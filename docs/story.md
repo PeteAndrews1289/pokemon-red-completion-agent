@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current engineering checkpoint: the model and the rule get identical worlds
+
+The next experiment now has a fair starting line. One launcher opens the same authenticated Red
+state twice: once for the learned goal manager and once for the deterministic completion-first
+manager. Each gets the same navigation, battle, capture, party, inventory and recovery machinery.
+Their choices and outcomes are written durably, their actions and frames are counted outside the
+skills, and the original inputs are checked again when both arms finish.
+
+The scoreboard also refuses an easy lie. Capturing a species, advancing the story and healing a
+party are not silently converted into one invented point value. One arm wins only when its verified
+semantic progress dominates; speed matters only after exactly equal progress. The local gate is
+**37/37**, but no cartridge episode has run through it yet. Publication and green CI come before the
+first learned-versus-rule Red pair.
+
 ## Current engineering checkpoint: one lock, two honest room sizes
 
 The seven-seat training lock now also understands the eight-seat exam room. It reads each world's

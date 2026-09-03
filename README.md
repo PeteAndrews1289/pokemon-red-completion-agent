@@ -6,6 +6,16 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 3, 2026): run the first same-state bounded Red player
+> comparison.** The title-neutral player seam, Red adapter, action-free live preflight and paired
+> development launcher are implemented. The launcher restores the same authenticated three-goal
+> save independently for a learned goal manager and a deterministic completion-first manager, uses
+> the same bounded skills, records durable typed outcomes, and compares verified semantic progress
+> before cost. Mixed goal tradeoffs remain incomparable instead of being hidden by an arbitrary
+> score. The local gate is **37/37** with Ruff and Mypy green and zero live effects. Next: publish,
+> pass exact-source CI, then execute one repeatable pair. No sealed Red, Crystal, full replay, or
+> authority promotion is open.
+
 > **Current product focus (September 3, 2026): scale authentic Red battle learning before
 > Crystal.** The fixed five-capture roster was rejected, so the active lane now generates natural
 > battle boundaries from authenticated cartridge states instead of repairing another full-game
