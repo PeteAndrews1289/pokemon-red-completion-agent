@@ -1,0 +1,45 @@
+{
+  "authentication": {
+    "capture_and_profile_identity_must_match": true,
+    "clean_published_source_required": true,
+    "exact_model_bytes_bound": true,
+    "private_inputs_must_be_external_regular_files": true,
+    "protected_inputs_rehashed_after_observation": true,
+    "rom_identity_verified": true
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "live_model_decisions": 0,
+    "model_fits": 0,
+    "rom_reads": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "preflight_contract": {
+    "authorities": [
+      "learned_goal_manager",
+      "completion_first_teacher"
+    ],
+    "authority_budget_checked_individually": true,
+    "foreign_question_choice_rejected": true,
+    "minimum_available_semantic_goals": 2,
+    "observation_budget_checked": true,
+    "path_bearing_public_ids_rejected": true,
+    "private_bindings_in_receipt": false,
+    "read_only_controller_required": true,
+    "receipt_written_exclusively": true
+  },
+  "schema": "pokemon.red.bounded-player-preflight-contract-qualification.v1",
+  "status": "rom_free_preflight_runner_qualified_live_snapshot_not_opened",
+  "tests": {
+    "bounded_player_contract": 9,
+    "combined_focused_passed": 24,
+    "combined_focused_total": 24,
+    "preflight_runner": 4,
+    "red_bridge_and_preflight": 11,
+    "mypy_errors": 0,
+    "ruff_errors": 0
+  }
+}

@@ -61,17 +61,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-bounded-player-seam-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-bridge-qualification-2026-09-03.json)
+**2026-09-03-bounded-player-preflight-contract-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-preflight-contract-qualification-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop. |
-| Learning output | No new learner output. Thirteen ROM-free tests now qualify both the reusable player contract and the thin Red observation bridge; controller actions, emulator frames, fits and live model decisions remained zero. |
+| Learning output | No new learner output. Twenty-four focused ROM-free tests now qualify the reusable player contract, Red observation bridge and controller-blocked authenticated preflight; controller actions, emulator frames, fits and live model decisions remained zero. |
 | Authority delta | The ROM-free player seam now accepts a semantic goal authority and dispatches existing deterministic skills behind durable decisions, independent verification, fresh completion-ledger checks and one changed-context recovery. This is integration capability only: no live model decision or authority promotion occurred. |
 | Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
-| Blocker | The ROM-free Red bridge is qualified, but no authenticated snapshot has yet passed an action-free player preflight and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
-| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Publish the title-neutral player seam and thin Red bridge, expose its goal/skill/ledger/recovery timeline on the read-only dashboard, then preflight and run two short development episodes comparing learned semantic selection with the deterministic manager. |
-| Next session | Publish the seam and Red bridge, add the path-free player timeline to the dashboard, qualify one action-free authenticated-snapshot preflight, then schedule two short repeatable development episodes. |
+| Blocker | The authenticated action-free Red player preflight is implemented and ROM-free qualified, but no live snapshot has passed it and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
+| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Publish the authenticated controller-blocked preflight, run it once on a repeatable development snapshot, then run two short development episodes comparing learned semantic selection with the deterministic manager. |
+| Next session | Publish the preflight runner, pass one action-free authenticated Red development snapshot with at least two semantic goals, then schedule two short repeatable development episodes. |
 | Next falsifier | Prove one authenticated Red development snapshot passes an action-free bridge preflight with at least two executable semantic goals and no private fields, then run paired short episodes through learned and deterministic managers using the same skills and ledger measures. |
 | Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 

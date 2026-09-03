@@ -8564,3 +8564,12 @@ party and inventory skills, observe a fresh living-Pokédex ledger, and replan o
 failure. The dashboard will report the episode timeline and concrete progress rather than label
 every emulator run “training.” Crystal remains the transfer test after this title-neutral player
 seam works in Red.
+
+The first safety gate for that player is now executable. It can load an authenticated Red snapshot
+and model under clean published code while placing a read-only controller between every existing
+skill and the emulator. The learned manager and deterministic completion-first manager answer the
+same semantic question; neither may advance a frame. A real episode is permitted only when the
+state offers at least two genuine goals and the resulting receipt contains hashes and semantic
+choices rather than private file paths or binding identities. Twenty-four focused tests qualify the
+player, Red bridge and preflight, but the live snapshot and controller episode remain deliberately
+unclaimed.

@@ -5482,3 +5482,15 @@ learned representation travels, and the living Pokédex remains the organizing p
 - End on the next live demonstration: one bounded Red episode with a semantic objective, an episode
   timeline, concrete collection progress and a typed recovery. Keep **CRYSTAL DEFERRED** until the
   same title-neutral seam works in Red.
+
+## New sequence: “Look first, then hand over the controller”
+
+- Show one authenticated Red save feeding both **LEARNED GOAL MANAGER** and
+  **COMPLETION-FIRST TEACHER** through the same identity-free menu.
+- Keep the controller visibly locked and display **ACTIONS 0 · FRAMES 0 · EPISODE 0**.
+- Reject a one-option menu, a path-bearing identifier, a choice from another question, or any
+  planner that touches the emulator.
+- Resolve the engineering gate to **24/24 FOCUSED CHECKS**, but label the live snapshot
+  **NOT YET OPENED**.
+- The next scene is the real comparison: identical deterministic skills, two semantic authorities,
+  and the winner decided by verified living-Pokédex progress and cost—not confidence alone.

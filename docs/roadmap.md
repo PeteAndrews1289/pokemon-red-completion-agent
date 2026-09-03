@@ -36,6 +36,14 @@
 > Next: dashboard timeline, one action-free authenticated-snapshot preflight, then the two short
 > paired development episodes.
 
+> **September 3 action-free player preflight:** A reusable command now authenticates one external
+> Red capture/profile/model bundle, blocks every controller primitive, requires at least two live
+> semantic goals, and compares learned and completion-first choices over the same ordered public
+> question. It rechecks zero actions and frames after observation and after each authority, then
+> emits a new path-free external receipt. The complete focused player gate is **24/24** with
+> **ROM/actions/frames/live choices 0** during qualification. Publish this boundary, run it once on
+> a repeatable development snapshot, and only then open the two short paired episodes.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is
