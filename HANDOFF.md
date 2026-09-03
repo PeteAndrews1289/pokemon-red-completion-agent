@@ -9210,3 +9210,26 @@ registry identities after the source bundle changed; the registries and their ex
 bindings were regenerated together, and the complete amended tree then passed. This verifies the
 implementation boundary only—no V2 controller action, cartridge outcome, model fit or authority
 promotion occurred during the audit.
+
+### Expected-utility verdict and bounded-player handoff — 2026-09-03
+
+The V2 campaign is complete. Train materialization retained 43/48 states; seven timing targets per
+state produced 260 complete and 41 quarantined trials, yielding 32 complete expected-utility
+aggregates across four upstream lineages. The train-only fit used 20 examples balanced to five per
+lineage and reduced loss from 0.9460775653 to 0.7789484126.
+
+Fresh development materialization retained 23/24 states. Their committed schedules produced 151
+complete and 10 quarantined trials, yielding 20 informative aggregates across four untouched
+lineages. The frozen prior scored **17/20**, the challenger **18/20**, and the legal fixed heuristic
+**20/20**. Challenger versus prior was one win, zero losses and nineteen equivalent choices;
+challenger versus heuristic was zero wins, two losses and eighteen equivalents. The exact result is
+[`docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json`](docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json).
+
+This closes one-turn learned move promotion. Do not collect another one-turn battle batch to rescue
+it. Keep the learned scorer in shadow and use the fixed heuristic as the deterministic battle
+primitive. The active product gate is now **Red bounded player integration V1**: one title-neutral
+player contract must carry a semantic completion objective through existing navigation, battle,
+capture, party, inventory and recovery skills, then verify a fresh completion-ledger delta and
+replan after a typed recoverable failure. After ROM-free qualification, run two bounded Red
+development episodes and compare against deterministic goal ordering. Crystal, sealed Red, a full
+replay and broad model authority remain closed.

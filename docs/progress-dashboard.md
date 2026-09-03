@@ -18,6 +18,18 @@ The display reports terminal, pending, successful, failed and interrupted scenar
 current model/authority gate. It cannot send controller input and deliberately labels this stage as
 scenario materialization—not model training. Use `--watch` on the separate batch runner only when a
 visible PyBoy game window is desired; the browser dashboard remains read-only.
+
+The current product-focus dashboard is the presentation view for the post-battle reorientation:
+
+```bash
+python scripts/run_product_focus_dashboard.py --port 8768
+```
+
+It now presents the **Red bounded player integration** gate, the 17/20 → 18/20 → 20/20 battle
+verdict, current authority boundaries, the component competence map, and the next episode-level
+measures. It remains view-only. When bounded player episodes begin, their live timeline should add
+semantic goal, current skill, ledger delta, captures, resource use, faints, recoveries and replans;
+it must never imply that an emulator process is model training unless a fit is actually running.
 >
 > **Current rail:** Show **MAIN 0CEECE13 → DEFICIT 103 → POWERED SUPPLY RAIL IMPLEMENTED, UNRUN →
 > 12 CLEAN-POWER WORLDS · 3 TRAIN / 8 DEVELOPMENT / 1 CONTINGENCY → ASSIGN BEFORE INPUT → NO

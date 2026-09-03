@@ -29,30 +29,30 @@ Not the product:
 
 ## One active lane
 
-**Red multi-RNG expected-utility battle curriculum V2** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red bounded player integration V1** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Fit on complete multi-RNG train aggregates and require prospectively committed fresh-root development advantage over both the frozen prior and legal fixed-power heuristic. Only then consider bounded move-only authority; switch, item, capture, full-run, sealed Red and Crystal authority remain closed.
+- Next decision: After two bounded Red composition episodes, compare learned semantic goal selection with a deterministic goal-order baseline on verified completion-ledger progress, resource cost and recovery. Widen objective authority only on a measured advantage; otherwise retain the deterministic manager and redesign the decision context.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Learn battle move value from repeated cartridge outcomes across hidden RNG trajectories, using identity-free semantics, root-balanced training and prospectively committed fresh-root development comparisons. |
-| Authority now | The battle ranker has one authentic root-balanced fit and improved over its frozen synthetic prior on fresh Red development, but it lost to the fixed-power heuristic. It remains shadow-only with zero promoted authority. |
-| Authority target | Move one-turn Red move selection from the fixed heuristic to a model only after repeated-RNG expected-utility training wins on fresh roots; then test bounded multi-turn control before widening to switch, item, capture or route decisions. |
+| Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
+| Authority now | The repeated-RNG battle ranker improved over its prior but lost 18/20 to 20/20 against the fixed heuristic. The model remains shadow-only; deterministic skills retain controller authority and no full-player model authority is claimed. |
+| Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Run the complete multi-RNG schedule on a small fresh-root subset and stop if action means remain unstable, schedules fail too often to aggregate, or the learned scorer cannot improve over the legal fixed-power heuristic. |
+| Cheapest falsifier | Run ROM-free composition contracts and then two bounded development episodes from authenticated Red snapshots. Stop if the manager cannot select a semantic goal, the executors cannot report typed progress or failure, or a fresh ledger cannot verify progress without route-specific orchestration. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 72 | 112 |
-| Model Fit · train | 8 | 9 |
-| Verified Outcome Example · development | 41 | 61 |
+| Composition Attempt · development | 1 | 2 |
+| Verified Composition Episode · development | 1 | 2 |
+| Development Episode · development | 17 | 18 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -61,27 +61,28 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-red-battle-expected-utility-reorientation-v1** · status **closed** · evidence [falsification](docs/evidence/red-repeatable-battle-first-authentic-result-2026-09-03.json)
+**2026-09-03-red-player-integration-reorientation-v1** · status **closed** · evidence [falsification](docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Learning action value across hidden RNG is required for cross-seed robustness in Red and later titles. The work increases learned battle competence without another walkthrough, overleveling, teacher choice, or Crystal-specific patch. |
-| Learning output | Forty-one authentic train examples produced one root-balanced fit. On 21 fresh development examples the base scored 16, the fitted model 17 and the fixed heuristic 18; the failure directly exposed stochastic label aliasing. |
-| Authority delta | The first authentic Red fit improved over its synthetic prior but lost to the fixed heuristic, 17/21 versus 18/21. Battle authority remains zero; no model-selected V2 action has executed. |
-| Transfer result | Untested and deliberately deferred. The V2 target is cross-seed robustness inside Red; Crystal remains the later transfer test after meaningful bounded Red authority exists. |
-| Blocker | One-shot labels alias unobservable cartridge RNG: the same visible charge move can hit, miss after consuming a turn, or expose the player to retaliation. A cross-seed model must learn expected utility rather than one realized future roll. |
-| Decision | Keep Crystal deferred and replace one-shot battle labels with complete multi-RNG expected-utility schedules. Use fresh upstream roots for development, commit every choice before outcomes, and stop if the learned scorer does not beat the fixed heuristic. |
-| Next session | Publish the multi-RNG collector, expected-utility fitter and commitment-bound evaluator; materialize the fresh train scenarios only after exact-main CI is green. |
-| Next falsifier | Collect complete repeated-RNG outcomes from the newly qualified four-train-root and four-development-root plan, then compare prospectively committed mean-utility choices against the frozen prior and fixed heuristic. |
-| Stop condition | Stop the lane if complete RNG schedules cannot be retained, expected utility does not reduce label instability, or fresh development fails to beat the fixed heuristic; do not rescue it with route patches, a full replay, sealed Red, or Crystal execution. |
+| Product alignment | The final product needs long-horizon judgment over quests, captures, party development, resources and recovery. Retaining deterministic local mechanics while learning semantic goals concentrates model capacity where transfer and living-Pokedex completion actually require it. |
+| Learning output | Thirty-two complete repeated-RNG train aggregates produced one root-balanced fit. On 20 fresh development aggregates the frozen prior scored 17, the challenger 18 and the fixed heuristic 20; all examples were informative and the clean comparison rejected learned one-turn promotion. |
+| Authority delta | The repeated-RNG challenger improved over its frozen prior on fresh Red development, 18/20 versus 17/20, but the legal fixed heuristic scored 20/20. Learned battle authority remains zero; the fixed heuristic is retained as the reliable one-turn battle primitive. |
+| Transfer result | Untested and deliberately deferred. The player contract must remain title-neutral, but Crystal execution waits until the composed Red player demonstrates bounded progress with measured recovery. |
+| Blocker | The project has individually verified goal, navigation, battle, capture, party, inventory, ledger and recovery components, but they are not yet composed behind one bounded player contract that can choose a semantic objective, execute it, verify durable completion progress and replan on a typed failure. |
+| Decision | Close the one-turn battle-learning loop and move upward to bounded Red player integration. Keep the learned battle scorer in shadow, use the 20/20 fixed heuristic for the battle primitive, and measure multi-turn quest and living-Pokedex progress where learning can outperform local mechanics. |
+| Next session | Publish this battle result, replace the dashboard with an honest component competence map, and implement the ROM-free bounded-player contract before executing two authenticated Red development episodes. |
+| Next falsifier | Prove one game-neutral player seam can carry a semantic completion goal through existing deterministic skills, return a typed outcome, verify the post-action completion ledger and replan once after an injected recoverable failure. |
+| Stop condition | Stop if the integration becomes a disguised walkthrough, adds Red-coordinate policy features, bypasses typed skill results, or cannot verify ledger progress and recovery in bounded episodes. Do not rescue it with a full replay, sealed Red, Crystal execution or another one-turn battle-data campaign. |
 
 ### Stop conditions
 
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Train and development snapshots must have immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
-- Development captures may be replayed for debugging and learning, but train/development identity must remain disjoint and failed boundaries must be quarantined rather than relabeled as successes.
-- Stop a model iteration on flat outcomes, inadequate candidate support, identity leakage, teacher-choice targets, unmeasured alternatives, or no independent development advantage; redesign the scenario distribution instead of patching the route.
-- No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane.
+- The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.
+- Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.
+- Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.
+- No routine clean-power teacher factory, teacher-route hardening, another one-turn outcome campaign, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane.
 
 ### Hard boundaries for this lane
 
@@ -215,4 +216,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **20**.
+Current evidence entries: **21**.

@@ -24,6 +24,7 @@ from product_focus import (  # noqa: E402
 from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DASHBOARD_DEFAULT_PORT,
     DashboardExperimentState,
+    DashboardLearningComponent,
     DashboardModelState,
     DashboardSnapshot,
     DashboardState,
@@ -118,44 +119,64 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     budgets = _mapping(state.document, "session_budget_percent")
     time_box = _mapping(lane, "time_box")
-    train_target = outputs[0][2]
-    fit_target = outputs[1][2]
-    comparison_target = unseen + 1
+    composition_target = outputs[0][2]
+    verified_composition_target = outputs[1][2]
+    development_episode_target = outputs[2][2]
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Red-first battle learning · multi-RNG expected utility",
+        stage="Red bounded player integration · hybrid control",
         message=(
-            "The first authentic fit improved over its prior but trails the legal fixed-power "
-            "heuristic. Next: learn mean action value across hidden cartridge RNG."
+            "The repeated-RNG battle study is complete: the challenger improved over its prior "
+            "but the fixed heuristic won 20/20. Next: compose a bounded Red player."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red bounded scenarios · Crystal execution deferred",
-        collection_target=train_target,
+        location="Red player integration · Crystal transfer deferred",
+        collection_target=composition_target,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Authentic Red battle MLP · bounded development candidate",
-            choice="Promotion blocked · heuristic 18/21, challenger 17/21",
+            candidate="Semantic goal manager · deterministic skill executors",
+            choice="Battle baseline retained · heuristic 20/20, challenger 18/20 shadow",
             confidence=None,
-            decisions=1,
+            decisions=composition_attempts,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
             phase="training",
-            zero_shot_completed=causal_train_examples,
-            zero_shot_total=train_target,
-            adaptation_completed=fits,
-            adaptation_total=fit_target,
-            sealed_completed=unseen,
-            sealed_total=comparison_target,
+            zero_shot_completed=composition_attempts,
+            zero_shot_total=composition_target,
+            adaptation_completed=verified_compositions,
+            adaptation_total=verified_composition_target,
+            sealed_completed=development_episodes,
+            sealed_total=development_episode_target,
             predictions_committed=False,
-            heading="Cumulative cross-family project totals",
-            eyebrow="Not the battle-model promotion gate",
+            heading="Current Red player integration gate",
+            eyebrow="Battle study closed · long-horizon composition next",
             counter_labels=(
-                "Cumulative causal train examples",
-                "Cumulative model fits",
-                "Cumulative comparisons",
+                "Composition attempts",
+                "Verified composition episodes",
+                "Development episodes",
+            ),
+        ),
+        learning_components=(
+            DashboardLearningComponent(
+                name="One-turn battle scorer",
+                scope="Expected utility across seven cartridge RNG timings",
+                status="shadow",
+                authority="shadow_only",
+                train_examples=20,
+                validation_examples=20,
+                validation_correct=18,
+                baseline_correct=20,
+                baseline_id="legal fixed heuristic",
+                model_sha256=(
+                    "19ac6d3db3305c2e9979f1f31f0d70f4d7ae3df2737b64585313812aef7619db"
+                ),
+                independent_validation_units=4,
+                paired_wins=0,
+                paired_losses=2,
+                paired_two_sided_exact_p=0.5,
             ),
         ),
         events=(
@@ -164,10 +185,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
-            "Battle gate · adapted 17/21 · fixed heuristic 18/21 · authority locked",
+            "Battle verdict · prior 17/20 · challenger 18/20 · fixed heuristic 20/20",
             (
-                "Failure diagnosis · one-shot outcomes alias hidden hit, miss and retaliation "
-                "RNG · V2 learns expected utility across a fixed timing schedule"
+                "Battle decision · deterministic heuristic retains action authority · learned "
+                "scorer remains visible in shadow · no more one-turn data campaigns"
             ),
             (
                 f"Cross-family totals · train examples {causal_train_examples} · logical "
@@ -177,20 +198,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             (
-                "Curriculum order · bounded battle learner first · local navigation second · "
-                "party development third · composition only after each skill has measured support"
+                "Player stack · semantic goal manager · deterministic navigation, battle, "
+                "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
             (
-                "Evaluation boundary · immutable disjoint train/development snapshot lineages · "
-                "timing variants from one snapshot remain one cluster"
+                "Competence map · battle primitive measured · navigation/capture/party/inventory "
+                "components tested · bounded end-to-end composition is the open gate"
             ),
             (
-                "Fit guard · train outcomes only · selected actions only · no teacher-choice "
-                "targets · development outcomes excluded from fitting"
+                "Authority boundary · the model may rank supported semantic goals only after a "
+                "fresh comparison · deterministic code keeps mechanics and safety"
             ),
             (
-                "Decision rule · retain either a measured improvement or a typed rejection; "
-                "flat outcomes and no discordant advantage end the iteration"
+                "Episode measures · completion-ledger delta · captures · quest progress · "
+                "resource cost · faints · recoveries · replans"
             ),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),
@@ -211,8 +232,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Scenario contract · authenticated snapshots · title-neutral observations and "
-                "actions · explicit interventions · retained outcomes · teacher labels 0"
+                "Player contract · authenticated snapshots · title-neutral semantic goals · "
+                "typed skill results · fresh completion ledger · teacher labels 0"
             ),
         ),
     )

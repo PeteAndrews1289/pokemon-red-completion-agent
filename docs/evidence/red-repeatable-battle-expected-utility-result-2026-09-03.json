@@ -1,0 +1,112 @@
+{
+  "authority_promoted": false,
+  "collection": {
+    "development": {
+      "captures_excluded": 3,
+      "captures_presented": 23,
+      "dataset_sha256": "55434376859ba395250c1d3334a1fa92f9635df4890680918c2aa6e914f85631",
+      "examples": 20,
+      "informative_examples": 20,
+      "root_lineages": 4,
+      "trials_complete": 151,
+      "trials_presented": 161,
+      "trials_quarantined": 10
+    },
+    "frame_targets": [
+      2048,
+      2063,
+      2101,
+      2161,
+      2251,
+      2377,
+      2539
+    ],
+    "train": {
+      "captures_excluded": 11,
+      "captures_presented": 43,
+      "dataset_sha256": "75742f7e5afb1803e61fd86a27abe1293867880acc91e1b79f72b1a71952850b",
+      "examples": 32,
+      "informative_examples": 32,
+      "root_lineages": 4,
+      "trials_complete": 260,
+      "trials_presented": 301,
+      "trials_quarantined": 41
+    }
+  },
+  "development_comparison": {
+    "base": {
+      "correct_preferences": 17,
+      "example_count": 20,
+      "mean_selected_expected_utility": 2.6053063189467944
+    },
+    "challenger": {
+      "correct_preferences": 18,
+      "example_count": 20,
+      "mean_selected_expected_utility": 2.614955540270544
+    },
+    "challenger_vs_base": {
+      "challenger_wins": 1,
+      "control_wins": 0,
+      "equivalent_choices": 19
+    },
+    "challenger_vs_fixed_heuristic": {
+      "challenger_wins": 0,
+      "control_wins": 2,
+      "equivalent_choices": 18
+    },
+    "evaluation_sha256": "7a172e900229f6ca7271eb82eca646dfbe2c72df18734038623eb8dbb70c336f",
+    "fixed_heuristic": {
+      "correct_preferences": 20,
+      "example_count": 20,
+      "mean_selected_expected_utility": 2.636653653478091
+    },
+    "prediction_commitment_file_sha256": "a8f0a3f9e9f70cda853a4e46f50028f434dc4659ab8e916327b091d1afefd4d7",
+    "prediction_commitments_sha256": "53951c1d3e58637a907d9293c1f9a2cac080eafb97f7102fc809b9f8f502fa1e"
+  },
+  "effects": {
+    "crystal_executions": 0,
+    "full_game_replays": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "fit": {
+    "balanced_examples_per_lineage": 5,
+    "balanced_training_examples": 20,
+    "base_model_file_sha256": "b422bf0a976e043418423b505e349733ea0c35f40dba74acaaa1b4f1fbd9ef83",
+    "input_examples": 32,
+    "input_root_lineages": 4,
+    "loss_after": 0.7789484125679926,
+    "loss_before": 0.9460775652955935,
+    "report_sha256": "26dd5f61ec0e0354dbc0c9e0720f33dd5c7b3cc3855a811922d290ce8ec19a76",
+    "updated_model_file_sha256": "6e57bce36ff9fa324a14b3989563696a9bd5dff8373e55ab196ebf36fc1b2269",
+    "updated_model_sha256": "19ac6d3db3305c2e9979f1f31f0d70f4d7ae3df2737b64585313812aef7619db"
+  },
+  "materialization": {
+    "development": {
+      "failed": 1,
+      "succeeded": 23,
+      "total": 24
+    },
+    "train": {
+      "failed": 5,
+      "succeeded": 43,
+      "total": 48
+    }
+  },
+  "plan_sha256": "7a1314afe689ffd640a0d0e1541956e3226543e51ab0a3043a97176414fed6fa",
+  "publication": {
+    "collector_and_learner_commit": "4520035fcd8913ecd94fa3ec99565298146532bd",
+    "collector_and_learner_exact_main_ci_run": 33713433115,
+    "evaluator_commit": "2e5b6e1c776e364266c2c998044fadbcfcb1b637",
+    "evaluator_pull_request_ci_run": 33715322645
+  },
+  "schema": "pokemon.core.battle.expected-utility-result.v1",
+  "source_catalog_sha256": "3f155af9c625d56586b57f04f5b207ffad7601cb2c378acdd433802bf78a2f55",
+  "verdict": {
+    "battle_authority": "fixed_heuristic_retained",
+    "challenger_status": "shadow_only",
+    "decision": "Stop one-turn learned move promotion and integrate the fixed heuristic as the reliable battle baseline for bounded multi-turn Red player episodes.",
+    "expected_utility_diagnosis_confirmed": true,
+    "promotion_gate_passed": false
+  }
+}

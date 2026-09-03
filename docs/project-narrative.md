@@ -8517,3 +8517,25 @@ A crash-safe journal prevents power loss from becoming an accidental retry. Befo
 outcomes are opened, the prior, challenger and fixed heuristic all commit their choices. An
 action-free census also qualified four fresh train and four fresh development roots without taking
 a controller action. No new outcomes or authority have been claimed yet.
+
+## The experiment succeeded by telling us to stop — September 3, 2026
+
+The repeated-RNG campaign completed the comparison the earlier result demanded. It produced 32
+complete train aggregates and 20 fresh development aggregates, all grouped by their true upstream
+lineages. Training improved the neural scorer: the frozen prior chose 17 of 20 preferred actions,
+while the challenger chose 18. But the simple legal fixed heuristic chose all 20. Most model and
+heuristic choices were equivalent; the only two meaningful disagreements favored the heuristic.
+
+That is not a reason to keep manufacturing one-turn examples. It is evidence that local move choice
+is already solved well enough by deterministic mechanics for the current product. The model is more
+valuable one level higher, where it must decide whether to advance a quest, seek a species, evolve
+a party member, resupply, recover, or pursue a prerequisite. The architecture now becomes explicitly
+hybrid: deterministic code owns mechanics and safety; a learned manager will earn bounded authority
+over semantic completion goals only through measured Red episodes.
+
+The next demonstration is therefore a small player, not a full replay. From an authenticated Red
+snapshot it must select a supported semantic goal, invoke existing navigation, battle, capture,
+party and inventory skills, observe a fresh living-Pokédex ledger, and replan once after a typed
+failure. The dashboard will report the episode timeline and concrete progress rather than label
+every emulator run “training.” Crystal remains the transfer test after this title-neutral player
+seam works in Red.

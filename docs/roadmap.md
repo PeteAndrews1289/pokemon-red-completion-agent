@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 expected-utility verdict and player reorientation:** Repeated-RNG collection
+> retained **32 train aggregates** from 260 complete trials and **20 fresh development aggregates**
+> from 151 complete trials. One root-balanced fit improved the frozen prior from **17/20 to 18/20**,
+> but the legal fixed heuristic scored **20/20**. Learned battle authority remains zero; the fixed
+> heuristic becomes the dependable one-turn battle primitive and the challenger stays visible in
+> shadow. See the [path-free result](evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json).
+>
+> The next gate is **Red bounded player integration V1**, not another battle-data campaign. Compose
+> a title-neutral semantic goal manager with deterministic navigation, battle, capture, party,
+> inventory and recovery skills. First prove the ROM-free contract, including fresh-ledger
+> verification and one typed replan, then run two bounded authenticated Red development episodes.
+> Measure quest and Pokédex progress, captures, resource cost, faints, recoveries and replans.
+> Crystal, sealed Red and a full-game replay remain deferred until this player seam works.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is
@@ -3232,11 +3246,18 @@ feature contracts stay title-neutral so the later adapter does not require a red
   next comparison. It provides 48/24 prospective scenarios across three menus and three venues;
   materialization and outcomes remain pending, and the four prior development roots are calibration
   data only.
-- [ ] Require the expected-value scorer to beat the strongest legal fixed-power heuristic on fresh
-  development before any battle authority.
+- [x] Compare the expected-value scorer with the strongest legal fixed-power heuristic on fresh
+  development. **Measured rejection:** challenger 18/20, heuristic 20/20; retain the heuristic and
+  stop this one-turn learning lane.
 - [ ] Add independently sourced trainer-battle scenarios before claiming broad battle competence.
 - [ ] Only after stable multi-turn Red battle control, integrate battle authority into Red quest,
   capture, party, inventory, evolution, storage and living-Pokédex planning.
+- [ ] Implement one bounded, game-neutral player contract joining semantic goal selection to the
+  existing deterministic skill executors and a fresh completion-ledger observation.
+- [ ] Prove typed failure recovery and one replan in ROM-free tests without Red coordinates,
+  scripted objective order or swallowed component failures.
+- [ ] Run two bounded Red development episodes and compare semantic goal selection with the
+  deterministic goal-order baseline before widening model authority.
 
 Stop conditions: any private path in tracked output, memory editing, source or lineage drift,
 train/development overlap, a model-selected action during materialization, or a request to claim
