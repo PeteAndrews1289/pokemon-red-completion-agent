@@ -9178,3 +9178,35 @@ Next implement repeated observation-preserving RNG trials per candidate, aggrega
 and obtain fresh upstream roots for the next development test. The four opened development roots are
 now calibration data. Do not reuse them as unseen evidence. Crystal, sealed Red, full-game replay,
 teacher access and learned controller authority remain untouched.
+
+### Expected-utility engineering gate — 2026-09-03
+
+The V2 data path is implemented but has not executed cartridge trials. The runtime now accepts a
+prospective pre-attack frame target. The collector uses a durable claim and terminal for every
+capture/timing pair, never retries an interrupted pair, and admits an aggregate only after every
+usable move completes the full timing schedule. The aggregate retains mean utility, standard
+deviation and trial count per move. Its train-only fitter equalizes examples across upstream roots;
+its development evaluator refuses to score unless every model and fixed-heuristic choice matches a
+pre-outcome prediction commitment.
+
+The action-free replacement census passed. Its private plan identity is
+`7a1314afe689ffd640a0d0e1541956e3226543e51ab0a3043a97176414fed6fa`, sourced from catalog
+identity `3f155af9c625d56586b57f04f5b207ffad7601cb2c378acdd433802bf78a2f55`.
+It contains four byte-distinct train and four byte-distinct development lineages, producing 48 and
+24 prospective scenarios respectively, with three party menus, three venues and unique semantic
+setup hashes in each partition. Inventory used zero controller actions and zero emulator frames.
+The four earlier development roots are excluded from this new comparison.
+
+Next publish and green the V2 implementation. From exact main, materialize the new train scenarios,
+collect their multi-RNG schedules, fit once from train aggregates, materialize fresh development,
+commit predictions, collect development schedules, and compare against both the frozen prior and
+fixed heuristic. Do not execute Crystal, sealed Red, a full-game replay, or a teacher, and do not
+promote battle authority unless fresh expected-utility development beats the fixed control.
+
+The final local engineering audit is green: **6,486 passed, 4 skipped and 1 expected failure** in
+13m01s. Ruff, mypy, every source-bound registry regeneration check, the active-product-focus check
+and the public-artifact safety check also pass. The first full-suite run found only stale generated
+registry identities after the source bundle changed; the registries and their explicit golden
+bindings were regenerated together, and the complete amended tree then passed. This verifies the
+implementation boundary only—no V2 controller action, cartridge outcome, model fit or authority
+promotion occurred during the audit.

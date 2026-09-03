@@ -5438,3 +5438,15 @@ learned representation travels, and the living Pokédex remains the organizing p
   TRAJECTORIES → LEARN EXPECTED UTILITY → TEST ON NEW ROOTS**.
 - Tie it back to the destination: cross-seed learning is a prerequisite for a model that can finish
   Red robustly and later carry battle knowledge into Crystal and a multi-game living Pokédex.
+
+## New sequence: “The same move, seven possible futures”
+
+- Freeze one visible battle decision, then fan each usable move into seven prospectively chosen RNG
+  timings. Keep the policy observation identical while hits, misses and retaliation vary.
+- Aggregate each move into **MEAN UTILITY + VARIANCE**, with incomplete schedules visibly excluded
+  instead of averaged from convenient survivors.
+- Show the recovery contract: **CLAIM BEFORE INPUT · INTERRUPTION QUARANTINED · NO SILENT RETRY**.
+- Introduce the fresh board as **4 TRAIN ROOTS · 4 DEVELOPMENT ROOTS · 48/24 SCENARIOS · OUTCOMES
+  0**. This is qualified supply, not a result.
+- End with the honest next gate: commit all development choices first, then require the learned
+  expected-value scorer to beat the fixed-power control before it receives battle authority.

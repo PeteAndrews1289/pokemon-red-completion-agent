@@ -3225,10 +3225,13 @@ feature contracts stay title-neutral so the later adapter does not require a red
 - [x] Open the development result once: 21/24 produced examples, the adapted model improved over
   its base from 16/21 to 17/21, but the fixed heuristic remained ahead at 18/21. Authority stays
   locked.
-- [ ] Replace single-RNG-trajectory labels with repeated, observation-preserving RNG trials and
-  expected-utility targets. Keep each upstream lineage equally weighted.
-- [ ] Add fresh independent Red roots for the next development comparison; the four lineages opened
-  here are calibration data now and cannot serve as a new unseen test.
+- [x] Implement repeated, observation-preserving RNG trials, complete-schedule aggregation,
+  expected-utility targets, a train-only lineage-balanced fitter, and commitment-bound development
+  evaluation. No V2 cartridge outcome has been opened yet.
+- [x] Qualify an action-free fresh source plan with four train and four development roots for the
+  next comparison. It provides 48/24 prospective scenarios across three menus and three venues;
+  materialization and outcomes remain pending, and the four prior development roots are calibration
+  data only.
 - [ ] Require the expected-value scorer to beat the strongest legal fixed-power heuristic on fresh
   development before any battle authority.
 - [ ] Add independently sourced trainer-battle scenarios before claiming broad battle competence.

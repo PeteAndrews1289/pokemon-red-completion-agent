@@ -87,3 +87,25 @@ move's realized utility changed with cartridge RNG even when the learner could n
 future roll. V2 must execute several observation-preserving RNG trajectories for every usable move,
 aggregate expected utility per candidate, and train on that distribution. The next comparison must
 use newly sourced upstream roots because the first four development roots are now calibration data.
+
+## Multi-RNG expected-utility loop
+
+The V2 implementation holds the visible battle state fixed and varies only a prospectively declared
+pre-attack frame schedule. Every usable move is executed once at every scheduled timing. A capture
+enters the aggregate dataset only if its complete schedule survives; interrupted or invalid trials
+remain quarantined in a claim-first journal. The target is the action with the highest mean measured
+utility across those cartridge trajectories, while per-action standard deviation is retained for
+diagnosis. This removes a future hit, miss, critical hit, or counterattack roll from the learner's
+input and label contract.
+
+Training remains train-only and balances the number of aggregate examples per true root lineage.
+Development evaluation requires the exact model and fixed-heuristic choices to have been committed
+before outcomes, then verifies every capture, manifest, state, lineage, model file hash, and choice
+against that commitment. The result is still a short-scenario development comparison, not sealed
+evidence or authority promotion.
+
+An action-free census found a prospective replacement pool of eight byte-distinct authenticated
+source states: four train and four development roots. The frozen plan provides 48 train and 24
+development scenarios, three party menus, three venues, and unique semantic setup identities in
+each partition. It advanced zero frames and opened zero outcomes. It remains wild-battle-only;
+trainer-battle supply is a later breadth gate.

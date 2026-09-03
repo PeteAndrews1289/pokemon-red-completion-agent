@@ -118,23 +118,24 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     budgets = _mapping(state.document, "session_budget_percent")
     time_box = _mapping(lane, "time_box")
+    train_target = outputs[0][2]
+    fit_target = outputs[1][2]
+    comparison_target = unseen + 1
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Red-first battle learning · evidence repair",
+        stage="Red-first battle learning · multi-RNG expected utility",
         message=(
-            "Authentic adaptation improved over its prior but trails the legal fixed-power "
-            "heuristic. Next: novel semantic scenarios before multi-turn authority."
+            "The first authentic fit improved over its prior but trails the legal fixed-power "
+            "heuristic. Next: learn mean action value across hidden cartridge RNG."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red bounded scenarios · Crystal execution deferred",
-        collection_target=48,
+        collection_target=train_target,
         model=DashboardModelState(
             mode="waiting",
             candidate="Authentic Red battle MLP · bounded development candidate",
-            choice=(
-                "Promotion blocked · heuristic 6/7, challenger 5/7"
-            ),
+            choice="Promotion blocked · heuristic 18/21, challenger 17/21",
             confidence=None,
             decisions=1,
             teacher_queries=0,
@@ -143,11 +144,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         experiment=DashboardExperimentState(
             phase="training",
             zero_shot_completed=causal_train_examples,
-            zero_shot_total=48,
+            zero_shot_total=train_target,
             adaptation_completed=fits,
-            adaptation_total=8,
+            adaptation_total=fit_target,
             sealed_completed=unseen,
-            sealed_total=8,
+            sealed_total=comparison_target,
             predictions_committed=False,
             heading="Cumulative cross-family project totals",
             eyebrow="Not the battle-model promotion gate",
@@ -163,10 +164,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
-            "Battle gate · adapted 5/7 at utility 2.644 · fixed heuristic 6/7 at 2.992",
+            "Battle gate · adapted 17/21 · fixed heuristic 18/21 · authority locked",
             (
-                "Semantic audit · 26 contexts · 21 feature batches · 3 move menus · "
-                "fresh rehearsal duplicates train"
+                "Failure diagnosis · one-shot outcomes alias hidden hit, miss and retaliation "
+                "RNG · V2 learns expected utility across a fixed timing schedule"
             ),
             (
                 f"Cross-family totals · train examples {causal_train_examples} · logical "

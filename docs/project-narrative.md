@@ -8509,3 +8509,11 @@ deterministic realization from each save. The next Red curriculum therefore aggr
 observation-preserving trials per action and holds out newly sourced lineages for the next honest
 comparison. Crystal remains deferred, but this change directly serves eventual cross-seed and
 cross-game competence.
+
+The replacement is now an executable engineering path rather than a roadmap sentence. Each visible
+decision is replayed across a fixed set of cartridge RNG timings, every usable move receives a
+measured outcome at every timing, and the learner targets mean utility while retaining variance.
+A crash-safe journal prevents power loss from becoming an accidental retry. Before development
+outcomes are opened, the prior, challenger and fixed heuristic all commit their choices. An
+action-free census also qualified four fresh train and four fresh development roots without taking
+a controller action. No new outcomes or authority have been claimed yet.

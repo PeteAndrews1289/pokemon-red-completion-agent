@@ -96,6 +96,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     capture = open_battle_scenario_capture(state_path, manifest_path)
     loaded: list[bytes] = []
     selected_slots: list[int] = []
+    pre_attack_targets: list[int] = []
     retained: list[tuple[int, BattleTurnOutcome]] = []
     events: list[str] = []
 
@@ -115,6 +116,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     def execute(reader, executor, **kwargs):  # type: ignore[no-untyped-def]
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
+        pre_attack_targets.append(kwargs["minimum_pre_attack_frames"])
         events.append(f"execute:{kwargs['selected_slot']}")
         return BattleTurnExecution(
             _raw(),
@@ -123,7 +125,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
             1,
             3_000,
             True,
-            2_048,
+            kwargs["minimum_pre_attack_frames"],
         )
 
     monkeypatch.setattr(
@@ -142,7 +144,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
             battle_exited=False,
             actions_executed=1,
             frames_executed=3_000,
-            pre_attack_frames=2_048,
+            pre_attack_frames=execution.pre_attack_frames,
         )
 
     monkeypatch.setattr(
@@ -154,6 +156,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     collection = collect_red_battle_outcome_example(
         capture,
         session_factory=lambda: Session(loaded, events),
+        minimum_pre_attack_frames=2_079,
         candidate_claim_sink=lambda candidate_index: events.append(
             f"claim:{candidate_index}"
         ),
@@ -173,7 +176,12 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     assert collection.example.best_candidate_indices == (2,)
     assert collection.public_dict()["teacher_queries"] == 0
     assert collection.public_dict()["full_game_replays"] == 0
-    assert collection.public_dict()["counterfactual_pre_attack_frames"] == 2_048
+    assert collection.public_dict()["counterfactual_pre_attack_frames"] == 2_079
+    assert all(
+        outcome is None or outcome.pre_attack_frames == 2_079
+        for outcome in collection.outcomes
+    )
+    assert pre_attack_targets == [2_079, 2_079]
     assert events == [
         "load",
         "claim:0",

@@ -84,22 +84,28 @@ _REPEATABLE_BATTLE_RESULT_PATH = (
 _REPEATABLE_BATTLE_RESULT_SHA256 = (
     "4954739e28512c2fabcc702d90fb65cdc2e45662a5647edf98f82e9f66f265c5"
 )
+_FIRST_AUTHENTIC_BATTLE_RESULT_PATH = (
+    "docs/evidence/red-repeatable-battle-first-authentic-result-2026-09-03.json"
+)
+_FIRST_AUTHENTIC_BATTLE_RESULT_SHA256 = (
+    "6f010cc6510e7ef7a0e37579a757df7de49b47350dd1ee7ea83f1b4e253c017d"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 31,
+    "causal_train_examples": 72,
     "composition_attempts": 1,
     "development_episode_attempts": 16,
-    "model_fits": 7,
-    "outcome_questions": {"development": 15, "train": 30},
+    "model_fits": 8,
+    "outcome_questions": {"development": 36, "train": 71},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
     "synthetic_rootless_train_outcomes": 8,
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
-    "unseen_comparisons": 6,
+    "unseen_comparisons": 7,
     "verified_composition_episodes": 1,
-    "verified_outcome_examples": 20,
+    "verified_outcome_examples": 41,
 }
 
 
@@ -962,7 +968,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 2:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 3:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1008,7 +1014,7 @@ def _validate_projected_counters(
         raise ProductFocusError("battle-cycle evidence is invalid")
     _validate_battle_cycle_projection(receipt)
     repeatable_evidence = _mapping_value(
-        evidence[-1],
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 1],
         subject="projected repeatable battle evidence",
     )
     if repeatable_evidence != {
@@ -1031,6 +1037,30 @@ def _validate_projected_counters(
     if not isinstance(repeatable, Mapping):
         raise ProductFocusError("repeatable battle evidence is invalid")
     _validate_repeatable_battle_projection(repeatable)
+    first_authentic_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected first authentic battle evidence",
+    )
+    if first_authentic_evidence != {
+        "kind": "unseen_comparison",
+        "path": _FIRST_AUTHENTIC_BATTLE_RESULT_PATH,
+        "sha256": _FIRST_AUTHENTIC_BATTLE_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    first_authentic_path = (root / _FIRST_AUTHENTIC_BATTLE_RESULT_PATH).resolve()
+    try:
+        first_authentic = json.loads(
+            first_authentic_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("first authentic battle evidence is invalid") from None
+    if not isinstance(first_authentic, Mapping):
+        raise ProductFocusError("first authentic battle evidence is invalid")
+    _validate_first_authentic_battle_projection(first_authentic)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1181,6 +1211,52 @@ def _validate_repeatable_battle_projection(receipt: Mapping[str, object]) -> Non
         or boundaries.get("private_path_fields") != 0
     ):
         raise ProductFocusError("repeatable battle protected access differs")
+
+
+def _validate_first_authentic_battle_projection(receipt: Mapping[str, object]) -> None:
+    """Project the first cartridge-grounded train/fit/development result."""
+
+    if receipt.get("schema") != "pokemon.core.battle.repeatable-first-authentic-result.v1":
+        raise ProductFocusError("first authentic battle evidence schema differs")
+    train = _mapping(receipt, "train", subject="first authentic battle evidence")
+    model = _mapping(receipt, "model", subject="first authentic battle evidence")
+    development = _mapping(
+        receipt,
+        "development",
+        subject="first authentic battle evidence",
+    )
+    interpretation = _mapping(
+        receipt,
+        "interpretation",
+        subject="first authentic battle evidence",
+    )
+    if (
+        train.get("complete_examples") != 41
+        or train.get("fit_examples") != 40
+        or train.get("root_lineages") != 4
+        or train.get("semantic_clusters") != 35
+        or model.get("loss_before") != 2.6713800625569695
+        or model.get("loss_after") != 1.024249795532914
+        or development.get("complete_examples") != 21
+        or development.get("root_lineages") != 4
+        or development.get("predictions_committed_before_outcomes") != 24
+        or development.get("base_correct_preferences") != 16
+        or development.get("updated_correct_preferences") != 17
+        or development.get("fixed_heuristic_correct_preferences") != 18
+        or interpretation.get("base_improved") is not True
+        or interpretation.get("fixed_heuristic_beaten") is not False
+        or interpretation.get("stochastic_label_aliasing_observed") is not True
+    ):
+        raise ProductFocusError("first authentic battle learning projection differs")
+    if (
+        receipt.get("authority_promoted") is not False
+        or receipt.get("teacher_queries") != 0
+        or receipt.get("full_game_replays") != 0
+        or receipt.get("sealed_red_cases_opened") != 0
+        or receipt.get("crystal_contexts_opened") != 0
+        or receipt.get("private_path_fields") != 0
+    ):
+        raise ProductFocusError("first authentic battle protected access differs")
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:
