@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
+import pytest
+
 from pokemon_red_completion.battle_outcome_learning import (
     BattleOutcomeExample,
     BattleTurnOutcome,
@@ -64,3 +68,51 @@ def test_repeatable_battle_record_rejects_changed_winner() -> None:
         assert "best candidates" in str(error)
     else:  # pragma: no cover - assertion path
         raise AssertionError("changed outcome summary was accepted")
+
+
+def test_repeatable_battle_record_rejects_coercions_and_forged_provenance() -> None:
+    record = repeatable_battle_outcome_record(
+        _example(),
+        capture_id="capture-01",
+        manifest_sha256="2" * 64,
+    )
+
+    changed = deepcopy(record)
+    changed["capture_id"] = ""
+    with pytest.raises(ValueError, match="capture identity"):
+        parse_repeatable_battle_outcome_record(changed)
+
+    changed = deepcopy(record)
+    changed["manifest_sha256"] = "not-a-manifest-digest"
+    with pytest.raises(ValueError, match="manifest digest"):
+        parse_repeatable_battle_outcome_record(changed)
+
+    changed = deepcopy(record)
+    changed["features"]["legal_mask"][0] = "false"  # type: ignore[index]
+    with pytest.raises(ValueError, match="record values"):
+        parse_repeatable_battle_outcome_record(changed)
+
+    changed = deepcopy(record)
+    changed["outcomes"][0]["utility"] = 999.0  # type: ignore[index]
+    with pytest.raises(ValueError, match="record values"):
+        parse_repeatable_battle_outcome_record(changed)
+
+    changed = deepcopy(record)
+    changed["learner_update_eligible"] = 1
+    with pytest.raises(ValueError, match="learning eligibility"):
+        parse_repeatable_battle_outcome_record(changed)
+
+
+def test_repeatable_battle_record_writer_requires_canonical_identities() -> None:
+    with pytest.raises(ValueError, match="capture identity"):
+        repeatable_battle_outcome_record(
+            _example(),
+            capture_id="Capture With Spaces",
+            manifest_sha256="2" * 64,
+        )
+    with pytest.raises(ValueError, match="manifest digest"):
+        repeatable_battle_outcome_record(
+            _example(),
+            capture_id="capture-01",
+            manifest_sha256="Z" * 64,
+        )

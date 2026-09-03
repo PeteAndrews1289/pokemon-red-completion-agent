@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 2: the audit found the benchmark the model still has to beat
+
+The first repeatable loop was a genuine milestone, but a stronger audit changed what the result is
+allowed to mean. The authentic update still improved over its synthetic predecessor on the
+independent seven-state comparison, moving from 2/7 to 5/7 and raising mean selected utility from
+1.304 to 2.644. An obvious legal fixed-power policy, however, reaches 6/7 and 2.992 utility on the
+same states. The adapted model has learned something; it has not yet earned control over the simpler
+rule it would replace.
+
+The audit also compared what the model actually sees rather than only save and lineage hashes. The
+supposedly fresh teacher-free rehearsal is an exact policy-feature duplicate of a training example.
+That successful knockout remains useful proof that a learned choice can reach the controller with
+zero teacher queries. It is no longer described as novel-state generalization.
+
+This finding shortened the next path instead of restarting the project. The development loop now
+rejects malformed identities, forged utility summaries and permissive boolean coercions; separates
+train and development by an order-neutral digest of the complete policy-visible menu; binds exact
+dataset and model files into fit/evaluation reports; compares every challenger with the fixed-power
+baseline; and durably retains each completed capture so a power loss does not erase the batch.
+Crystal execution moves to the backburner while Red becomes operational, but the representation
+boundary stays game-neutral so Red work does not become another fixed walkthrough.
+
 ## September 2: the model finally learns from Red and takes an action
 
 The project deliberately relaxed one-shot experiment ceremony for ordinary development while

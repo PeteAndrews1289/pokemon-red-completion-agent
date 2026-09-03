@@ -59,20 +59,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     verified_outcomes = _count(progress, "verified_outcome_examples")
     atomic_episodes = _count(progress, "atomic_goal_episodes")
     causal_train_examples = _count(progress, "causal_train_examples")
-    first_causal_example_settled = causal_train_examples > 0
-    synthetic_train_outcomes = _count(progress, "synthetic_rootless_train_outcomes")
-    synthetic_atomic_episodes = _count(progress, "synthetic_rootless_atomic_goal_episodes")
-    synthetic_model_fits = _count(progress, "synthetic_rootless_model_fits")
-    synthetic_unseen_comparisons = _count(
-        progress,
-        "synthetic_rootless_unseen_comparisons",
-    )
     composition_attempts = _count(progress, "composition_attempts")
     verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
     output_event = (
         " · ".join(
-            f"{label.split(' ·', 1)[0]} {current}/{minimum}" for label, current, minimum in outputs
+            f"{label.split(' ·', 1)[0]} {current}/{minimum}"
+            for label, current, minimum in outputs
         )
         if outputs
         else (
@@ -128,19 +121,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Repeatable authentic battle learning · scenario expansion",
+        stage="Red-first battle learning · evidence repair",
         message=(
-            "Authentic Red adaptation improved two disjoint development sets and executed one "
-            "fresh teacher-free move. Next: broaden semantic variation and multi-turn authority."
+            "Authentic adaptation improved over its prior but trails the legal fixed-power "
+            "heuristic. Next: novel semantic scenarios before multi-turn authority."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red bounded scenarios · battle first → navigation → party development → Crystal",
+        location="Red bounded scenarios · Crystal execution deferred",
         collection_target=48,
         model=DashboardModelState(
             mode="waiting",
             candidate="Authentic Red battle MLP · bounded development candidate",
             choice=(
-                "Move selection only · switch, item and capture authority remain closed"
+                "Promotion blocked · heuristic 6/7, challenger 5/7"
             ),
             confidence=None,
             decisions=1,
@@ -156,12 +149,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_completed=unseen,
             sealed_total=8,
             predictions_committed=False,
-            heading="Repeatable authenticated learner curriculum",
-            eyebrow="Red snapshots · disjoint lineages · Crystal transfer later",
+            heading="Cumulative cross-family project totals",
+            eyebrow="Not the battle-model promotion gate",
             counter_labels=(
-                "Authentic causal train examples",
-                "Model fits",
-                "Untouched Red comparisons",
+                "Cumulative causal train examples",
+                "Cumulative model fits",
+                "Cumulative comparisons",
             ),
         ),
         events=(
@@ -170,17 +163,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
+            "Battle gate · adapted 5/7 at utility 2.644 · fixed heuristic 6/7 at 2.992",
             (
-                f"Cumulative causal board · train examples {causal_train_examples} · logical "
+                "Semantic audit · 26 contexts · 21 feature batches · 3 move menus · "
+                "fresh rehearsal duplicates train"
+            ),
+            (
+                f"Cross-family totals · train examples {causal_train_examples} · logical "
                 f"atomic {atomic_episodes} · attempts {development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
-            ),
-            (
-                f"Rootless · train {synthetic_train_outcomes}/8 · atomic "
-                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} · comparison "
-                f"{synthetic_unseen_comparisons} · reader ecb93c44 qualified · Antigravity GO · "
-                "V1 retry 0 · synthetic support is descriptive, not authentic authority"
             ),
             _event("Reorientation", _text(reorientation, "decision")),
             (
@@ -198,12 +190,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 "Decision rule · retain either a measured improvement or a typed rejection; "
                 "flat outcomes and no discordant advantage end the iteration"
-            ),
-            (
-                "First causal terminal · settled negative train example · selected-only target · "
-                "actions 945 · frames 42,001 · teacher 0 · model fit 0 · retry 0"
-                if first_causal_example_settled
-                else "First causal terminal · pending"
             ),
             _event("Current blocker", _text(reorientation, "blocker")),
             _event("Next session", _text(reorientation, "next_session_goal")),

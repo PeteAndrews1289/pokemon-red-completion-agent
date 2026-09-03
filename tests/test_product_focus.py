@@ -2014,7 +2014,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
         ((31 / 48) + (7 / 8) + (20 / 28)) / 3
     )
     assert public["actions"] == 0
-    assert "Repeatable authentic battle learning" in public["stage"]
+    assert "Red-first battle learning" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
         "completed": 31,
         "total": 48,
@@ -2022,21 +2022,24 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["adaptation"] == {"completed": 7, "total": 8}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 6, "total": 8}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
-        "zero_shot": "Authentic causal train examples",
-        "adaptation": "Model fits",
-        "sealed_test": "Untouched Red comparisons",
+        "zero_shot": "Cumulative causal train examples",
+        "adaptation": "Cumulative model fits",
+        "sealed_test": "Cumulative comparisons",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
     assert public["model"]["decisions"] == 1  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Authentic Red adaptation improved two disjoint development sets" in encoded
-    assert "Repeatable authenticated learner curriculum" in encoded
+    assert "trails the legal fixed-power heuristic" in encoded
+    assert "Cumulative cross-family project totals" in encoded
+    assert "Not the battle-model promotion gate" in encoded
     assert "Causal Train Example 31/48" in encoded
     assert "Model Fit 7/8" in encoded
     assert "Verified Outcome Example 20/28" in encoded
-    assert "Authentic causal train examples" in encoded
-    assert "Model fits" in encoded
-    assert "Untouched Red comparisons" in encoded
+    assert "Cumulative causal train examples" in encoded
+    assert "Cumulative model fits" in encoded
+    assert "Cumulative comparisons" in encoded
+    assert "fixed heuristic 6/7" in encoded
+    assert "fresh rehearsal duplicates train" in encoded
     assert "bounded battle learner first" in encoded
     assert "immutable disjoint train/development snapshot lineages" in encoded
     assert "train outcomes only" in encoded
@@ -2047,15 +2050,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "teacher labels 0" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
-    assert "reader ecb93c44 qualified" in encoded
-    assert "V1 retry 0" in encoded
-    assert "synthetic support is descriptive" in encoded
-    assert "fit 1" in encoded
-    assert "comparison 1" in encoded
-    assert "Rootless" in encoded
     assert "logical atomic 0" in encoded
-    assert "actions 945" in encoded
-    assert "frames 42,001" in encoded
     assert "Capacity passed" not in encoded
     assert "private schedule freeze" not in encoded
     assert "Unfitted powered causal" not in encoded

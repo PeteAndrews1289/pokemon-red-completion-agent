@@ -7,12 +7,14 @@ import argparse
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
+    BattleScenarioCapture,
     open_battle_scenario_capture,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
@@ -21,6 +23,7 @@ from pokemon_red_completion.red_battle_outcome_runtime import (  # noqa: E402
     collect_red_battle_outcome_example,
 )
 from pokemon_red_completion.repeatable_battle_dataset import (  # noqa: E402
+    parse_repeatable_battle_outcome_record,
     repeatable_battle_outcome_record,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
@@ -36,6 +39,12 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--capture-dir", type=Path, action="append", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--journal-dir",
+        type=Path,
+        default=None,
+        help="durable per-capture journal; defaults beside --output",
+    )
     parser.add_argument(
         "--failure-report",
         type=Path,
@@ -65,9 +74,54 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if train_roots & development_roots:  # pragma: no cover - set construction invariant
         raise RepeatableBattleCollectionError("a root crosses train and development")
 
+    journal_dir = args.journal_dir or args.output.with_name(f"{args.output.name}.journal")
+    journal_header = {
+        "schema": "pokemon.core.battle.repeatable-collection-journal.v1",
+        "rom_sha256": rom.sha256,
+        "captures": [
+            {
+                "ordinal": ordinal,
+                "capture_id": capture.manifest.capture_id,
+                "manifest_sha256": capture.manifest_sha256,
+                "state_sha256": capture.manifest.state_sha256,
+                "root_lineage_id": capture.manifest.root_lineage_id,
+                "partition": capture.manifest.partition.value,
+            }
+            for ordinal, capture in enumerate(captures, start=1)
+        ],
+    }
+    _prepare_journal(journal_dir, journal_header)
+
     records: list[dict[str, object]] = []
     failures: list[dict[str, object]] = []
     for ordinal, capture in enumerate(captures, start=1):
+        terminal_path = _terminal_path(journal_dir, ordinal, capture.manifest.capture_id)
+        retained = _read_terminal(terminal_path, capture=capture, ordinal=ordinal)
+        if retained is not None:
+            if retained["status"] == "complete":
+                record = retained["record"]
+                if not isinstance(record, dict):  # pragma: no cover - reader invariant
+                    raise AssertionError("complete journal terminal has no record")
+                records.append(record)
+            else:
+                failure = retained["failure"]
+                if not isinstance(failure, dict):  # pragma: no cover - reader invariant
+                    raise AssertionError("failed journal terminal has no failure")
+                failures.append(failure)
+            print(
+                json.dumps(
+                    {
+                        "event": "capture_recovered",
+                        "completed": ordinal,
+                        "total": len(captures),
+                        "capture_id": capture.manifest.capture_id,
+                        "status": retained["status"],
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+            continue
         try:
             collection = collect_red_battle_outcome_example(
                 capture,
@@ -81,6 +135,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "reason": str(error),
             }
             failures.append(failure)
+            _write_json_new_atomic(
+                terminal_path,
+                {
+                    "schema": "pokemon.core.battle.repeatable-collection-terminal.v1",
+                    "ordinal": ordinal,
+                    "capture_id": capture.manifest.capture_id,
+                    "manifest_sha256": capture.manifest_sha256,
+                    "status": "quarantined",
+                    "record": None,
+                    "failure": failure,
+                },
+            )
             print(
                 json.dumps(
                     {
@@ -94,13 +160,24 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 flush=True,
             )
             continue
-        records.append(
-            repeatable_battle_outcome_record(
-                collection.example,
-                capture_id=collection.capture_id,
-                manifest_sha256=collection.manifest_sha256,
-            )
+        record = repeatable_battle_outcome_record(
+            collection.example,
+            capture_id=collection.capture_id,
+            manifest_sha256=collection.manifest_sha256,
         )
+        _write_json_new_atomic(
+            terminal_path,
+            {
+                "schema": "pokemon.core.battle.repeatable-collection-terminal.v1",
+                "ordinal": ordinal,
+                "capture_id": capture.manifest.capture_id,
+                "manifest_sha256": capture.manifest_sha256,
+                "status": "complete",
+                "record": record,
+                "failure": None,
+            },
+        )
+        records.append(record)
         print(
             json.dumps(
                 {
@@ -118,13 +195,28 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
     if not records:
         raise RepeatableBattleCollectionError("no complete battle outcomes were collected")
+    examples = tuple(parse_repeatable_battle_outcome_record(record) for record in records)
+    train_clusters = {
+        example.semantic_cluster_sha256
+        for example in examples
+        if example.partition is ScenarioPartition.TRAIN
+    }
+    development_clusters = {
+        example.semantic_cluster_sha256
+        for example in examples
+        if example.partition is ScenarioPartition.DEVELOPMENT
+    }
+    if train_clusters & development_clusters:
+        raise RepeatableBattleCollectionError(
+            "semantic battle cluster crosses train and development"
+        )
     payload = "".join(
         json.dumps(record, allow_nan=False, sort_keys=True, separators=(",", ":")) + "\n"
         for record in records
     ).encode("ascii")
-    _write_exclusive(args.output, payload)
+    _publish_idempotent(args.output, payload)
     failure_path = args.failure_report or args.output.with_suffix(".failures.json")
-    _write_exclusive(
+    _publish_idempotent(
         failure_path,
         (
             json.dumps(
@@ -153,6 +245,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "informative_examples": sum(
             record["learner_update_eligible"] is True for record in records
         ),
+        "training_semantic_clusters": len(train_clusters),
+        "development_semantic_clusters": len(development_clusters),
+        "semantic_duplicate_examples": len(examples)
+        - len(train_clusters)
+        - len(development_clusters),
+        "semantic_partition_overlap": 0,
         "quarantined_captures": len(failures),
         "private_path_fields": 0,
         "sealed_test_cases_opened": 0,
@@ -176,16 +274,140 @@ def _capture_pairs(directories: list[Path]) -> tuple[tuple[Path, Path], ...]:
     return tuple(pairs)
 
 
-def _write_exclusive(path: Path, payload: bytes) -> None:
+def _terminal_path(journal_dir: Path, ordinal: int, capture_id: str) -> Path:
+    identity = canonical_sha256(capture_id)[:16]
+    return journal_dir / f"{ordinal:04d}-{identity}.json"
+
+
+def _prepare_journal(journal_dir: Path, header: dict[str, object]) -> None:
+    journal_dir.mkdir(parents=True, exist_ok=True)
+    header_path = journal_dir / "manifest.json"
+    payload = _canonical_json_line(header)
+    if header_path.exists():
+        if header_path.read_bytes() != payload:
+            raise RepeatableBattleCollectionError(
+                "collection journal belongs to different inputs"
+            )
+        return
+    _write_new_atomic(header_path, payload)
+
+
+def _read_terminal(
+    path: Path,
+    *,
+    capture: BattleScenarioCapture,
+    ordinal: int,
+) -> dict[str, object] | None:
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text("ascii"), object_pairs_hook=_unique_object)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise RepeatableBattleCollectionError(
+            "collection journal terminal is invalid"
+        ) from None
+    manifest = capture.manifest
+    if (
+        not isinstance(value, dict)
+        or set(value)
+        != {
+            "schema",
+            "ordinal",
+            "capture_id",
+            "manifest_sha256",
+            "status",
+            "record",
+            "failure",
+        }
+        or value.get("schema")
+        != "pokemon.core.battle.repeatable-collection-terminal.v1"
+        or value.get("ordinal") != ordinal
+        or value.get("capture_id") != manifest.capture_id
+        or value.get("manifest_sha256") != capture.manifest_sha256
+        or value.get("status") not in {"complete", "quarantined"}
+    ):
+        raise RepeatableBattleCollectionError("collection journal terminal is invalid")
+    if value["status"] == "complete":
+        record = value["record"]
+        if not isinstance(record, dict) or value["failure"] is not None:
+            raise RepeatableBattleCollectionError("collection journal terminal is invalid")
+        parsed = parse_repeatable_battle_outcome_record(record)
+        if (
+            record.get("capture_id") != manifest.capture_id
+            or record.get("manifest_sha256") != capture.manifest_sha256
+            or parsed.root_lineage_id != manifest.root_lineage_id
+            or parsed.initial_state_sha256 != manifest.state_sha256
+            or parsed.partition is not manifest.partition
+        ):
+            raise RepeatableBattleCollectionError("collection journal record binding is invalid")
+    elif not isinstance(value["failure"], dict) or value["record"] is not None:
+        raise RepeatableBattleCollectionError("collection journal terminal is invalid")
+    return value
+
+
+def _canonical_json_line(value: object) -> bytes:
+    return (
+        json.dumps(
+            value,
+            allow_nan=False,
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        + "\n"
+    ).encode("ascii")
+
+
+def _write_json_new_atomic(path: Path, value: object) -> None:
+    _write_new_atomic(path, _canonical_json_line(value))
+
+
+def _publish_idempotent(path: Path, payload: bytes) -> None:
+    if path.exists():
+        if path.read_bytes() != payload:
+            raise FileExistsError(path)
+        return
+    _write_new_atomic(path, payload)
+
+
+def _write_new_atomic(path: Path, payload: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    descriptor, temporary_name = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "wb", closefd=False) as handle:
             handle.write(payload)
             handle.flush()
             os.fsync(handle.fileno())
+        if path.exists():
+            raise FileExistsError(path)
+        os.replace(temporary, path)
+        _sync_directory(path.parent)
     finally:
         os.close(descriptor)
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _sync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
 
 
 def main() -> int:

@@ -1,0 +1,56 @@
+{
+  "audited_claim": "The repeatable Red loop demonstrates authentic outcome adaptation and one teacher-free controller action, but not novel-state generalization, deterministic-baseline superiority, multi-turn battle competence, or transfer readiness.",
+  "audited_source_commit": "0adc4e8ad8ef893b0a06a50c93121b6b83007463",
+  "boundaries": {
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_contexts_opened": 0,
+    "development_artifact": true,
+    "full_game_replays": 0,
+    "learner_updates": 0,
+    "private_path_fields": 0,
+    "red_sealed_cases_opened": 0,
+    "rom_access": 0,
+    "teacher_queries": 0,
+    "transfer_claim": false
+  },
+  "coverage_audit": {
+    "authentic_contexts_examined": 26,
+    "distinct_policy_feature_batches": 21,
+    "distinct_usable_move_menus": 3,
+    "distinct_usable_moves": 6,
+    "fresh_rehearsal_exactly_duplicates_train_features": true,
+    "trainer_battle_contexts": 0,
+    "wild_battle_contexts": 26
+  },
+  "decision": {
+    "continue_repeatable_development": true,
+    "next_falsifier": "On prospectively varied, semantic-cluster-disjoint authentic Red contexts, the challenger must beat the legal fixed-power heuristic before multi-turn gameplay authority can be promoted.",
+    "promotion_status": "blocked",
+    "reason": "The challenger improved over its synthetic predecessor but lost the strongest available deterministic-baseline comparison, and the fresh rehearsal was not semantically novel."
+  },
+  "independent_development_reanalysis": {
+    "adapted_model": {
+      "correct": 5,
+      "mean_selected_utility": 2.64442339914038,
+      "total": 7
+    },
+    "fixed_power_heuristic": {
+      "correct": 6,
+      "mean_selected_utility_rounded": 2.992,
+      "total": 7
+    },
+    "paired_adapted_vs_heuristic": {
+      "adapted_wins": 0,
+      "equivalent_choices": 6,
+      "heuristic_wins": 1
+    },
+    "synthetic_base_model": {
+      "correct": 2,
+      "mean_selected_utility": 1.3039379827230724,
+      "total": 7
+    }
+  },
+  "schema": "pokemon-public-repeatable-red-battle-learning-audit-v1",
+  "status": "mechanism_pass_promotion_blocked"
+}

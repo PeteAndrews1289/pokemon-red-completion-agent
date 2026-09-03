@@ -14,6 +14,30 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-02: Red-first evidence repair blocks the weak battle model honestly
+
+Crystal execution is deliberately deferred, not abandoned. The active boundary stays title-neutral,
+but the immediate objective is to make the Red battle learner earn broader authority before paying
+the transfer cost. A falsification audit found that the adapted model scored 5/7 and mean utility
+2.644 on its distinct development set, while the strongest legal fixed effective-power rule scored
+6/7 and mean utility 2.992. The nominally fresh rehearsal also reproduced a training feature batch
+exactly. It demonstrates controller execution, not generalization. Promotion is therefore blocked.
+
+The repeatable outcome rail is now restart-safe and identity-bound. Each claimed capture receives
+an atomic journal terminal, completed captures resume without replay, malformed provenance or
+forged utilities fail closed, train/development separation includes a title-neutral semantic digest,
+and model/evaluation reports bind the exact model and dataset bytes they consumed. Both fitting and
+evaluation score the fixed heuristic on the same states and report paired wins, losses, and ties.
+The public dashboard now states this failed comparison instead of implying that cumulative project
+counters are the battle head's promotion gate.
+
+No ROM campaign, teacher run, sealed Red evaluation, Crystal execution, full-game replay, or new
+authority occurred in this repair. Next build a prospectively varied, cartridge-native Red scenario
+factory with genuinely distinct HP, PP, status, matchup, opponent, and move-set conditions. Freeze
+those identities before opening outcomes, then require a learning curve and paired advantage over
+the fixed heuristic. Only after that gate should multi-turn model-selected Red battles begin. See
+the [falsification evidence](docs/evidence/repeatable-red-battle-learning-audit-v1-2026-09-02.json).
+
 ## 2026-09-02: authentic battle training is live; expand the repeatable loop
 
 The owner explicitly chose faster repeatable development while preserving sealed rigor only for
