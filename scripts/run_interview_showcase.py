@@ -60,8 +60,9 @@ class Probe:
 
 
 class _FrameStore:
-    def __init__(self, probes: tuple[Probe, ...]) -> None:
+    def __init__(self, probes: tuple[Probe, ...], *, emulation_multiplier: int) -> None:
         self.probes = probes
+        self.emulation_multiplier = emulation_multiplier
         self._lock = threading.Lock()
         self._frames = [b""] * len(probes)
         self._logical_frames = [0] * len(probes)
@@ -85,6 +86,7 @@ class _FrameStore:
             "view_only": True,
             "controller_authority": "locked_pending_paired_episode_gate",
             "emulators": len(self.probes),
+            "emulation_multiplier": self.emulation_multiplier,
             "total_logical_frames": sum(logical_frames),
             "uptime_seconds": round(time.monotonic() - self.started_at, 1),
             "planner_agreement": {"agreed": 4, "compared": 4},
@@ -193,6 +195,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--capture-dir", type=Path, required=True)
     parser.add_argument("--preflight-dir", type=Path, required=True)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
+    parser.add_argument("--emulation-multiplier", type=int, default=4)
     parser.add_argument("--no-browser", action="store_true")
     return parser
 
@@ -255,8 +258,10 @@ def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     if not 0 <= args.port <= 65_535:
         raise InterviewShowcaseError("port must be between zero and 65535")
+    if not 1 <= args.emulation_multiplier <= 16:
+        raise InterviewShowcaseError("emulation multiplier must be between 1 and 16")
     probes = _load_probes(args.capture_dir.resolve(), args.preflight_dir.resolve())
-    store = _FrameStore(probes)
+    store = _FrameStore(probes, emulation_multiplier=args.emulation_multiplier)
     emulators = tuple(
         PyBoyAdapter(
             resolve_rom_path(args.rom),
@@ -292,7 +297,7 @@ def main(argv: list[str] | None = None) -> int:
             webbrowser.open(url)
         while True:
             for emulator in started:
-                emulator.tick(1)
+                emulator.tick(args.emulation_multiplier)
             time.sleep(1 / 60)
     except KeyboardInterrupt:
         return 0
@@ -323,7 +328,7 @@ main{max-width:1500px;margin:auto;padding:24px}.top{display:flex;justify-content
 <section class="panel footer"><span><b>Current evidence:</b> four genuine Red states, 12 available semantic options, authenticated model decisions.</span><span class="lock">Controller authority locked · paired learned-vs-teacher episode is next</span></section></main>
 <script>
 const pretty=s=>s.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
-function render(d){document.getElementById('frames').textContent=d.total_logical_frames.toLocaleString();document.getElementById('runtime').textContent=`${d.emulators} emulators live · ${d.uptime_seconds.toFixed(1)}s`;
+function render(d){document.getElementById('frames').textContent=d.total_logical_frames.toLocaleString();document.getElementById('runtime').textContent=`${d.emulators} emulators live · ${d.emulation_multiplier}× · ${d.uptime_seconds.toFixed(1)}s`;
 document.getElementById('probes').innerHTML=d.probes.map(p=>`<article class="panel probe"><div class="screen"><img src="/frame/${p.ordinal}.png?v=${p.logical_frame}" alt="Authentic Pokemon Red state"><span class="badge">LIVE · READ ONLY</span></div><div class="probe-body"><h3>${p.label}</h3><div class="meta">AUTHENTICATED SNAPSHOT · ${p.candidate_count} GOALS</div><div class="choice"><span>Learned selection</span><strong>${pretty(p.selected_kind)}</strong></div><div class="goals">${p.available_goal_kinds.map(g=>`<span class="goal">${pretty(g)}</span>`).join('')}</div></div></article>`).join('')}
 async function update(){try{const r=await fetch('/api/status',{cache:'no-store'});if(r.ok)render(await r.json())}catch{document.getElementById('runtime').textContent='reconnecting'}}update();setInterval(update,250);
 </script>"""
