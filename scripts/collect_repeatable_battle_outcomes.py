@@ -18,7 +18,12 @@ from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
     open_battle_scenario_capture,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
-from pokemon_red_completion.provenance import canonical_sha256  # noqa: E402
+from pokemon_red_completion.provenance import (  # noqa: E402
+    canonical_sha256,
+    detect_source_identity,
+    require_clean_source,
+    require_published_source,
+)
 from pokemon_red_completion.red_battle_outcome_runtime import (  # noqa: E402
     collect_red_battle_outcome_example,
 )
@@ -77,9 +82,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if train_roots & development_roots:
         raise RepeatableBattleCollectionError("a root crosses train and development")
 
+    source_identity = detect_source_identity(PROJECT_ROOT, include_untracked=True)
+    require_clean_source(source_identity)
+    require_published_source(PROJECT_ROOT, source_identity)
+    if source_identity.git_commit is None:  # pragma: no cover - clean source owns this
+        raise AssertionError("published collector source lacks a commit")
+
     journal_dir = args.journal_dir or args.output.with_name(f"{args.output.name}.journal")
     journal_header = {
-        "schema": "pokemon.core.battle.repeatable-collection-journal.v1",
+        "schema": "pokemon.core.battle.repeatable-collection-journal.v2",
+        "collector_source_commit": source_identity.git_commit,
         "rom_sha256": rom.sha256,
         "captures": [
             {
@@ -99,8 +111,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     failures: list[dict[str, object]] = []
     for ordinal, capture in enumerate(captures, start=1):
         terminal_path = _terminal_path(journal_dir, ordinal, capture.manifest.capture_id)
+        claim_path = _claim_path(journal_dir, ordinal, capture.manifest.capture_id)
         retained = _read_terminal(terminal_path, capture=capture, ordinal=ordinal)
         if retained is not None:
+            if not claim_path.exists():
+                raise RepeatableBattleCollectionError(
+                    "collection terminal has no durable input claim"
+                )
+            _read_claim(claim_path, capture=capture, ordinal=ordinal)
             if retained["status"] == "complete":
                 record = retained["record"]
                 if not isinstance(record, dict):  # pragma: no cover - reader invariant
@@ -125,6 +143,51 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 flush=True,
             )
             continue
+        if claim_path.exists():
+            _read_claim(claim_path, capture=capture, ordinal=ordinal)
+            failure = {
+                "capture_id": capture.manifest.capture_id,
+                "partition": capture.manifest.partition.value,
+                "error_type": "InterruptedCapture",
+                "reason": "capture was claimed before input but produced no terminal record",
+            }
+            failures.append(failure)
+            _write_json_new_atomic(
+                terminal_path,
+                {
+                    "schema": "pokemon.core.battle.repeatable-collection-terminal.v1",
+                    "ordinal": ordinal,
+                    "capture_id": capture.manifest.capture_id,
+                    "manifest_sha256": capture.manifest_sha256,
+                    "status": "quarantined",
+                    "record": None,
+                    "failure": failure,
+                },
+            )
+            print(
+                json.dumps(
+                    {
+                        "event": "capture_interruption_quarantined",
+                        "completed": ordinal,
+                        "total": len(captures),
+                        **failure,
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+            continue
+        _write_json_new_atomic(
+            claim_path,
+            {
+                "schema": "pokemon.core.battle.repeatable-collection-claim.v1",
+                "ordinal": ordinal,
+                "capture_id": capture.manifest.capture_id,
+                "manifest_sha256": capture.manifest_sha256,
+                "state_sha256": capture.manifest.state_sha256,
+                "status": "started",
+            },
+        )
         try:
             collection = collect_red_battle_outcome_example(
                 capture,
@@ -237,6 +300,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "schema": "pokemon.core.battle.repeatable-outcome-collection.v1",
         "dataset_sha256": canonical_sha256(records),
         "rom_sha256": rom.sha256,
+        "collector_source_commit": source_identity.git_commit,
         "examples": len(records),
         "training_examples": sum(
             record["partition"] == ScenarioPartition.TRAIN.value for record in records
@@ -279,7 +343,12 @@ def _capture_pairs(directories: list[Path]) -> tuple[tuple[Path, Path], ...]:
 
 def _terminal_path(journal_dir: Path, ordinal: int, capture_id: str) -> Path:
     identity = canonical_sha256(capture_id)[:16]
-    return journal_dir / f"{ordinal:04d}-{identity}.json"
+    return journal_dir / f"{ordinal:04d}-{identity}.terminal.json"
+
+
+def _claim_path(journal_dir: Path, ordinal: int, capture_id: str) -> Path:
+    identity = canonical_sha256(capture_id)[:16]
+    return journal_dir / f"{ordinal:04d}-{identity}.claim.json"
 
 
 def _prepare_journal(journal_dir: Path, header: dict[str, object]) -> None:
@@ -345,6 +414,41 @@ def _read_terminal(
             raise RepeatableBattleCollectionError("collection journal record binding is invalid")
     elif not isinstance(value["failure"], dict) or value["record"] is not None:
         raise RepeatableBattleCollectionError("collection journal terminal is invalid")
+    return value
+
+
+def _read_claim(
+    path: Path,
+    *,
+    capture: BattleScenarioCapture,
+    ordinal: int,
+) -> dict[str, object]:
+    try:
+        value = json.loads(path.read_text("ascii"), object_pairs_hook=_unique_object)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise RepeatableBattleCollectionError(
+            "collection journal claim is invalid"
+        ) from None
+    if (
+        not isinstance(value, dict)
+        or set(value)
+        != {
+            "schema",
+            "ordinal",
+            "capture_id",
+            "manifest_sha256",
+            "state_sha256",
+            "status",
+        }
+        or value.get("schema")
+        != "pokemon.core.battle.repeatable-collection-claim.v1"
+        or value.get("ordinal") != ordinal
+        or value.get("capture_id") != capture.manifest.capture_id
+        or value.get("manifest_sha256") != capture.manifest_sha256
+        or value.get("state_sha256") != capture.manifest.state_sha256
+        or value.get("status") != "started"
+    ):
+        raise RepeatableBattleCollectionError("collection journal claim is invalid")
     return value
 
 

@@ -9,7 +9,9 @@ from sealed Red evaluation and may be repeated on development captures.
    disclosed Red mechanics oracle. These labels are simulated and grant no gameplay authority.
 2. `collect_repeatable_battle_outcomes.py` authenticates each Red capture, restores it once per
    usable move, executes the real controller turn, and writes semantic features plus measured
-   outcomes. Bad captures are quarantined individually in a sibling failure report.
+   outcomes. It requires clean published source and durably claims each capture before controller
+   input. Bad or interrupted captures are quarantined individually and never replayed; untouched
+   sibling captures continue on restart.
 3. `fit_repeatable_battle_outcomes.py` adapts the MLP output layer on train roots only and compares
    the base and update on development roots.
 4. `evaluate_repeatable_battle_outcomes.py` compares models on one or more additional development

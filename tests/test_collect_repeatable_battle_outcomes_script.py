@@ -66,7 +66,7 @@ def _capture(
     )
 
 
-def test_collection_resumes_after_interruption_without_reexecuting_completed_capture(
+def test_collection_quarantines_interruption_and_continues_only_untouched_siblings(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -83,6 +83,12 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
             root="development-root",
             state_character="2",
         ),
+        _capture(
+            "train-capture-2",
+            ScenarioPartition.TRAIN,
+            root="train-root",
+            state_character="3",
+        ),
     )
     examples = {
         "train-capture": _example(
@@ -97,7 +103,14 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
             state_character="2",
             scale=0.5,
         ),
+        "train-capture-2": _example(
+            ScenarioPartition.TRAIN,
+            root="train-root",
+            state_character="3",
+            scale=1.0,
+        ),
     }
+    _install_provenance_fakes(monkeypatch)
     monkeypatch.setitem(GLOBALS, "resolve_rom_path", lambda path: Path("red.gb"))
     monkeypatch.setitem(
         GLOBALS,
@@ -107,7 +120,11 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
     monkeypatch.setitem(
         GLOBALS,
         "_capture_pairs",
-        lambda directories: ((Path("one"), Path("one.json")), (Path("two"), Path("two.json"))),
+        lambda directories: (
+            (Path("one"), Path("one.json")),
+            (Path("two"), Path("two.json")),
+            (Path("three"), Path("three.json")),
+        ),
     )
     opened = iter(captures)
     monkeypatch.setitem(GLOBALS, "open_battle_scenario_capture", lambda *args: next(opened))
@@ -138,6 +155,8 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
         SCRIPT["_run"](args)
     assert first_calls == ["train-capture", "development-capture"]
     assert not output.exists()
+    assert len(list((tmp_path / "journal").glob("*.claim.json"))) == 2
+    assert len(list((tmp_path / "journal").glob("*.terminal.json"))) == 1
 
     second_calls: list[str] = []
 
@@ -156,14 +175,15 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
     monkeypatch.setitem(GLOBALS, "collect_red_battle_outcome_example", finish)
     summary = SCRIPT["_run"](args)
 
-    assert second_calls == ["development-capture"]
+    assert second_calls == ["train-capture-2"]
     assert summary["examples"] == 2
-    assert summary["quarantined_captures"] == 0
+    assert summary["quarantined_captures"] == 1
     assert summary["training_semantic_clusters"] == 1
-    assert summary["development_semantic_clusters"] == 1
+    assert summary["development_semantic_clusters"] == 0
     assert summary["semantic_partition_overlap"] == 0
     assert len(output.read_text("ascii").splitlines()) == 2
-    assert len(list((tmp_path / "journal").glob("*.json"))) == 3
+    assert len(list((tmp_path / "journal").glob("*.json"))) == 7
+    assert summary["collector_source_commit"] == "d" * 40
 
     opened = iter(captures)
     monkeypatch.setitem(GLOBALS, "open_battle_scenario_capture", lambda *args: next(opened))
@@ -174,9 +194,39 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
     )
     assert SCRIPT["_run"](args) == summary
     assert all(
-        json.loads(line)["capture_id"] in {"train-capture", "development-capture"}
+        json.loads(line)["capture_id"] in {"train-capture", "train-capture-2"}
         for line in output.read_text("ascii").splitlines()
     )
+
+
+def test_collection_requires_published_source_before_claim_or_controller_input(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captures = (
+        _capture(
+            "train-capture",
+            ScenarioPartition.TRAIN,
+            root="train-root",
+            state_character="1",
+        ),
+    )
+    _install_collection_fakes(tmp_path, monkeypatch, captures)
+    monkeypatch.setitem(
+        GLOBALS,
+        "require_published_source",
+        lambda *args: (_ for _ in ()).throw(RuntimeError("source is not published")),
+    )
+    monkeypatch.setitem(
+        GLOBALS,
+        "collect_red_battle_outcome_example",
+        lambda *args, **kwargs: pytest.fail("controller input must remain closed"),
+    )
+
+    with pytest.raises(RuntimeError, match="not published"):
+        SCRIPT["_run"](_args(tmp_path))
+
+    assert not (tmp_path / "journal").exists()
 
 
 def test_collection_allows_sibling_states_from_one_training_lineage(
@@ -224,6 +274,7 @@ def _install_collection_fakes(
     monkeypatch: pytest.MonkeyPatch,
     captures: tuple[SimpleNamespace, ...],
 ) -> None:
+    _install_provenance_fakes(monkeypatch)
     monkeypatch.setitem(GLOBALS, "resolve_rom_path", lambda path: Path("red.gb"))
     monkeypatch.setitem(
         GLOBALS,
@@ -260,3 +311,13 @@ def _install_collection_fakes(
         )
 
     monkeypatch.setitem(GLOBALS, "collect_red_battle_outcome_example", collect)
+
+
+def _install_provenance_fakes(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(
+        GLOBALS,
+        "detect_source_identity",
+        lambda *args, **kwargs: SimpleNamespace(git_commit="d" * 40),
+    )
+    monkeypatch.setitem(GLOBALS, "require_clean_source", lambda value: None)
+    monkeypatch.setitem(GLOBALS, "require_published_source", lambda *args: None)

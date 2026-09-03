@@ -5398,3 +5398,17 @@ learned representation travels, and the living Pokédex remains the organizing p
   AUTHORITY 0 · CRYSTAL 0** onscreen.
 - End on the next falsifier: **TRAIN → COMMIT DEVELOPMENT PREDICTIONS → OPEN OUTCOMES → BEAT THE
   LEGAL FIXED-POWER HEURISTIC OR STOP**.
+
+## New sequence: “Forty-five lessons reached the menu”
+
+- Begin with the single pilot at **MAIN · WILD BATTLE · MANIFEST VERIFIED**, then release the
+  remaining frozen train assignments.
+- Resolve the board to **48 TERMINAL · 45 VERIFIED · 3 FAILED · 0 RETRIES**.
+- Keep the failures visible: all three selected lower-level party members fainted during a Mansion
+  switch. Label them evidence about scenario feasibility, not training examples.
+- Reopen all 45 states and show **HASHES MATCH · UNIQUE STATES 45 · LINEAGES 4 · MENUS 3 · VENUES
+  3 · OPPONENT SPECIES 8**.
+- Keep **OUTCOMES 0 · FITS 0 · PREDICTIONS 0 · AUTHORITY 0 · CRYSTAL 0** onscreen. The model has not
+  learned merely because its classroom now exists.
+- End on the next safety rail: **CLAIM CAPTURE BEFORE INPUT → NEVER REPLAY INTERRUPTION → COLLECT
+  TRAIN OUTCOMES → FIT SHADOW MODEL**.
