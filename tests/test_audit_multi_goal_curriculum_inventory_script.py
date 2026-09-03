@@ -73,4 +73,4 @@ def test_run_passes_no_lineage_as_unresolved_without_writing(
     assert result == {"status": "lineage_evidence_required"}
     assert captured["commit"] == "a" * 40
     assert captured["lineage_manifest_payload"] is None
-    assert list(tmp_path.iterdir()) == [plan, profile_lineage]
+    assert set(tmp_path.iterdir()) == {plan, profile_lineage}
