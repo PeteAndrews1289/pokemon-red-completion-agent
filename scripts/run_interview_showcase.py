@@ -18,7 +18,10 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
+from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
+from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.progress_dashboard import encode_rgb_png  # noqa: E402
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
 
@@ -45,7 +48,14 @@ class Probe:
     receipt_sha256: str
     model_sha256: str
 
-    def public_dict(self, *, ordinal: int, logical_frame: int) -> dict[str, object]:
+    def public_dict(
+        self,
+        *,
+        ordinal: int,
+        logical_frame: int,
+        controller_actions: int,
+        last_action: str,
+    ) -> dict[str, object]:
         return {
             "ordinal": ordinal,
             "label": _label(self.capture_id),
@@ -55,17 +65,27 @@ class Probe:
             "logical_frame": logical_frame,
             "receipt_sha256": self.receipt_sha256,
             "model_sha256": self.model_sha256,
-            "controller_actions": 0,
+            "controller_actions": controller_actions,
+            "last_action": last_action,
         }
 
 
 class _FrameStore:
-    def __init__(self, probes: tuple[Probe, ...], *, emulation_multiplier: int) -> None:
+    def __init__(
+        self,
+        probes: tuple[Probe, ...],
+        *,
+        emulation_multiplier: int,
+        movement_demo: bool,
+    ) -> None:
         self.probes = probes
         self.emulation_multiplier = emulation_multiplier
+        self.movement_demo = movement_demo
         self._lock = threading.Lock()
         self._frames = [b""] * len(probes)
         self._logical_frames = [0] * len(probes)
+        self._controller_actions = [0] * len(probes)
+        self._last_actions = ["waiting"] * len(probes)
         self.started_at = time.monotonic()
 
     def publish(self, ordinal: int, payload: bytes, logical_frame: int) -> None:
@@ -77,21 +97,39 @@ class _FrameStore:
         with self._lock:
             return self._frames[ordinal], self._logical_frames[ordinal]
 
+    def record_action(self, ordinal: int, action: str) -> None:
+        with self._lock:
+            self._controller_actions[ordinal] += 1
+            self._last_actions[ordinal] = action
+
     def status(self) -> bytes:
         with self._lock:
             logical_frames = tuple(self._logical_frames)
+            controller_actions = tuple(self._controller_actions)
+            last_actions = tuple(self._last_actions)
         document = {
             "schema": "pokemon.red.interview-showcase.v1",
             "status": "running",
             "view_only": True,
-            "controller_authority": "locked_pending_paired_episode_gate",
+            "controller_authority": (
+                "deterministic_demonstration_only_model_authority_locked"
+                if self.movement_demo
+                else "locked_pending_paired_episode_gate"
+            ),
+            "movement_demo": self.movement_demo,
             "emulators": len(self.probes),
             "emulation_multiplier": self.emulation_multiplier,
             "total_logical_frames": sum(logical_frames),
+            "total_controller_actions": sum(controller_actions),
             "uptime_seconds": round(time.monotonic() - self.started_at, 1),
             "planner_agreement": {"agreed": 4, "compared": 4},
             "probes": [
-                probe.public_dict(ordinal=index, logical_frame=logical_frames[index])
+                probe.public_dict(
+                    ordinal=index,
+                    logical_frame=logical_frames[index],
+                    controller_actions=controller_actions[index],
+                    last_action=last_actions[index],
+                )
                 for index, probe in enumerate(self.probes)
             ],
         }
@@ -196,6 +234,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--preflight-dir", type=Path, required=True)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     parser.add_argument("--emulation-multiplier", type=int, default=4)
+    parser.add_argument("--movement-demo", action="store_true")
     parser.add_argument("--no-browser", action="store_true")
     return parser
 
@@ -261,7 +300,11 @@ def main(argv: list[str] | None = None) -> int:
     if not 1 <= args.emulation_multiplier <= 16:
         raise InterviewShowcaseError("emulation multiplier must be between 1 and 16")
     probes = _load_probes(args.capture_dir.resolve(), args.preflight_dir.resolve())
-    store = _FrameStore(probes, emulation_multiplier=args.emulation_multiplier)
+    store = _FrameStore(
+        probes,
+        emulation_multiplier=args.emulation_multiplier,
+        movement_demo=args.movement_demo,
+    )
     emulators = tuple(
         PyBoyAdapter(
             resolve_rom_path(args.rom),
@@ -270,6 +313,7 @@ def main(argv: list[str] | None = None) -> int:
         for ordinal in range(len(probes))
     )
     started: list[PyBoyAdapter] = []
+    executors: list[CountingExecutor] = []
     server = _Server(store, args.port)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     try:
@@ -278,6 +322,14 @@ def main(argv: list[str] | None = None) -> int:
             started.append(emulator)
             emulator.load_state(probe.state_path)
             emulator.tick(1)
+            executors.append(
+                CountingExecutor(
+                    FrameSafeExecutor(
+                        emulator,
+                        DEFAULT_NEW_GAME_TIMING.controller_timing(),
+                    )
+                )
+            )
         thread.start()
         url = f"http://{HOST}:{server.server_address[1]}/"
         print(
@@ -287,6 +339,7 @@ def main(argv: list[str] | None = None) -> int:
                     "emulators": len(probes),
                     "authentic_snapshots": len(probes),
                     "controller_actions": 0,
+                    "movement_demo": args.movement_demo,
                     "view_only": True,
                 },
                 sort_keys=True,
@@ -295,7 +348,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         if not args.no_browser:
             webbrowser.open(url)
+        movement_patterns = (
+            ("left", "right", "up", "down"),
+            ("up", "down", "right", "left"),
+            ("right", "left", "down", "up"),
+            ("down", "up", "left", "right"),
+        )
+        movement_index = 0
+        next_movement_at = time.monotonic()
         while True:
+            now = time.monotonic()
+            if args.movement_demo and now >= next_movement_at:
+                for ordinal, executor in enumerate(executors):
+                    direction = movement_patterns[ordinal][
+                        movement_index % len(movement_patterns[ordinal])
+                    ]
+                    executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+                    store.record_action(ordinal, direction)
+                movement_index += 1
+                next_movement_at = now + 0.45
             for emulator in started:
                 emulator.tick(args.emulation_multiplier)
             time.sleep(1 / 60)
@@ -321,15 +392,15 @@ main{max-width:1500px;margin:auto;padding:24px}.top{display:flex;justify-content
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.probe{overflow:hidden}.screen{position:relative;aspect-ratio:160/144;background:#17201b;border-bottom:1px solid var(--line)}.screen img{width:100%;height:100%;object-fit:fill;image-rendering:pixelated;filter:saturate(.8) contrast(1.06)}.badge{position:absolute;top:9px;right:9px;background:#06100ddd;border:1px solid #69efa566;border-radius:999px;padding:5px 8px;color:var(--green);font:700 9px ui-monospace;letter-spacing:.09em}.probe-body{padding:15px}.probe h3{margin:0 0 5px;font-size:16px}.meta{font:11px ui-monospace;color:var(--muted)}.choice{margin:13px 0 9px;padding:11px;border:1px solid #69efa555;background:#69efa50d;border-radius:10px}.choice span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.12em}.choice strong{color:var(--green);font-size:17px}.goals{display:flex;gap:5px;flex-wrap:wrap}.goal{padding:4px 6px;border-radius:5px;background:#182821;color:#bed0c6;font-size:10px}.footer{margin-top:16px;display:flex;justify-content:space-between;gap:16px;padding:15px 18px;color:#b8cbc1;font-size:12px}.lock{color:var(--amber)}
 @media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.top{align-items:start;flex-direction:column}.stats{grid-template-columns:1fr}}
 </style>
-<main><header class="top"><div><div class="eyebrow">Authenticated Red curriculum · four parallel probes</div><h1>Pokémon Agent Systems Observatory</h1></div><div class="live"><span class="dot"></span><span id="runtime">4 emulators live</span></div></header>
-<section class="hero"><div class="panel mission"><div class="eyebrow">North-star product</div><h2>A transferable agent for story completion and a living Pokédex</h2><p>The model chooses semantic objectives. Deterministic, tested skills handle navigation, battles, captures, party management and safety. A fresh cartridge-derived ledger verifies progress. Red is the first curriculum; Crystal is the first transfer test.</p></div><div class="panel stats"><div class="stat"><strong id="frames">0</strong><span>authentic emulator frames</span></div><div class="stat"><strong>4 / 4</strong><span>planner agreement</span></div><div class="stat"><strong>0</strong><span>teacher queries</span></div></div></section>
+<main><header class="top"><div><div class="eyebrow">Four parallel Red environments · deterministic movement demonstration</div><h1>Pokémon Agent Systems Observatory</h1></div><div class="live"><span class="dot"></span><span id="runtime">4 emulators live</span></div></header>
+<section class="hero"><div class="panel mission"><div class="eyebrow">North-star product</div><h2>A transferable agent for story completion and a living Pokédex</h2><p>The model chooses semantic objectives. Deterministic, tested skills handle navigation, battles, captures, party management and safety. A fresh cartridge-derived ledger verifies progress. Red is the first curriculum; Crystal is the first transfer test.</p></div><div class="panel stats"><div class="stat"><strong id="frames">0</strong><span>authentic emulator frames</span></div><div class="stat"><strong>4 / 4</strong><span>planner agreement</span></div><div class="stat"><strong id="actions">0</strong><span>demo controller actions</span></div></div></section>
 <section class="panel flow"><div class="node"><b>OBSERVE</b><span>Cartridge memory</span></div><div class="node"><b>ABSTRACT</b><span>Title-neutral state</span></div><div class="node"><b>RANK</b><span>Learned goal manager</span></div><div class="node"><b>EXECUTE</b><span>Deterministic skills</span></div><div class="node"><b>VERIFY</b><span>Living-dex ledger</span></div></section>
 <section class="grid" id="probes"></section>
-<section class="panel footer"><span><b>Current evidence:</b> four genuine Red states, 12 available semantic options, authenticated model decisions.</span><span class="lock">Controller authority locked · paired learned-vs-teacher episode is next</span></section></main>
+<section class="panel footer"><span><b>Current evidence:</b> four genuine Red states, 12 semantic options, authenticated model decisions.</span><span class="lock">Movement is a deterministic skill demo—not training · model authority remains locked</span></section></main>
 <script>
 const pretty=s=>s.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
-function render(d){document.getElementById('frames').textContent=d.total_logical_frames.toLocaleString();document.getElementById('runtime').textContent=`${d.emulators} emulators live · ${d.emulation_multiplier}× · ${d.uptime_seconds.toFixed(1)}s`;
-document.getElementById('probes').innerHTML=d.probes.map(p=>`<article class="panel probe"><div class="screen"><img src="/frame/${p.ordinal}.png?v=${p.logical_frame}" alt="Authentic Pokemon Red state"><span class="badge">LIVE · READ ONLY</span></div><div class="probe-body"><h3>${p.label}</h3><div class="meta">AUTHENTICATED SNAPSHOT · ${p.candidate_count} GOALS</div><div class="choice"><span>Learned selection</span><strong>${pretty(p.selected_kind)}</strong></div><div class="goals">${p.available_goal_kinds.map(g=>`<span class="goal">${pretty(g)}</span>`).join('')}</div></div></article>`).join('')}
+function render(d){document.getElementById('frames').textContent=d.total_logical_frames.toLocaleString();document.getElementById('actions').textContent=d.total_controller_actions.toLocaleString();document.getElementById('runtime').textContent=`${d.emulators} emulators live · ${d.emulation_multiplier}× · ${d.uptime_seconds.toFixed(1)}s`;
+document.getElementById('probes').innerHTML=d.probes.map(p=>`<article class="panel probe"><div class="screen"><img src="/frame/${p.ordinal}.png?v=${p.logical_frame}" alt="Authentic Pokemon Red state"><span class="badge">LIVE · DEMO INPUT</span></div><div class="probe-body"><h3>${p.label}</h3><div class="meta">AUTHENTICATED SNAPSHOT · ${p.candidate_count} GOALS · ${p.controller_actions} MOVES · ${pretty(p.last_action)}</div><div class="choice"><span>Recorded model selection</span><strong>${pretty(p.selected_kind)}</strong></div><div class="goals">${p.available_goal_kinds.map(g=>`<span class="goal">${pretty(g)}</span>`).join('')}</div></div></article>`).join('')}
 async function update(){try{const r=await fetch('/api/status',{cache:'no-store'});if(r.ok)render(await r.json())}catch{document.getElementById('runtime').textContent='reconnecting'}}update();setInterval(update,250);
 </script>"""
 
