@@ -14,9 +14,10 @@ from sealed Red evaluation and may be repeated on development captures.
    sibling captures continue on restart.
 3. `fit_repeatable_battle_train_only.py` equalizes example counts across train roots and adapts the
    MLP output layer without accepting development or test records.
-4. Commit the fitted model's choices for the untouched development captures before collecting their
-   outcomes. `evaluate_repeatable_battle_outcomes.py` then compares the committed model and fixed
-   heuristic on that development dataset.
+4. `commit_repeatable_battle_development_predictions.py` opens untouched development captures only
+   through the read-only observation boundary and durably records the base model, fitted model and
+   fixed heuristic choices. It has no controller call and opens no outcome. Collect development
+   outcomes only after this artifact exists.
 5. `evaluate_repeatable_battle_outcomes.py` compares models on one or more additional development
    datasets without fitting.
 6. `run_repeatable_battle_policy.py` lets the model select and execute one move on each development
@@ -44,6 +45,13 @@ python scripts/fit_repeatable_battle_train_only.py \
   --dataset "$BATTLE_WORK/train-dataset.jsonl" \
   --out-model "$BATTLE_WORK/model-authentic.json" \
   --out-report "$BATTLE_WORK/train-only-fit-report.json"
+
+python scripts/commit_repeatable_battle_development_predictions.py \
+  --rom "$POKEMON_RED_ROM" \
+  --base-model "$BATTLE_WORK/model-base.json" \
+  --updated-model "$BATTLE_WORK/model-authentic.json" \
+  --capture-dir "$RED_FRESH_DEVELOPMENT_CAPTURES" \
+  --output "$BATTLE_WORK/development-predictions.json"
 
 python scripts/run_repeatable_battle_policy.py \
   --rom "$POKEMON_RED_ROM" \

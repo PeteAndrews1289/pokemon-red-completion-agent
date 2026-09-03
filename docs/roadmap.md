@@ -3216,6 +3216,8 @@ feature contracts stay title-neutral so the later adapter does not require a red
   counts across real root lineages before adapting the neural ranker's output layer.
 - [ ] Publish the outcome-collection hardening and require green exact-main CI.
 - [ ] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights.
+- [x] Implement a clean-published, read-only commitment command that records base, fitted and fixed
+  heuristic choices for development captures without exposing controller input.
 - [ ] Commit predictions for all 24 development scenarios before opening their outcomes.
 - [ ] Require the learned scorer to beat the strongest legal fixed-power heuristic on development;
   otherwise revise representation or supply, not the test result.

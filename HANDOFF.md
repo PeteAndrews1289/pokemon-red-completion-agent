@@ -9139,6 +9139,10 @@ synthetic development examples, 200 epochs and 32 hidden units produced model id
 real fitted base ranker but has **authentic outcomes 0** and **authority 0**. The follow-up
 `fit_repeatable_battle_train_only.py` rejects development/test records and balances sibling density
 by using an equal number of examples from each true train root before adapting the output layer.
+`commit_repeatable_battle_development_predictions.py` closes the next trust boundary: from clean
+published source it observes development captures without controller input and binds the base,
+train-adapted and fixed-heuristic choices before any development outcome is collected. The older
+policy rehearsal remains execution-capable and must not be used as the commitment step.
 
 Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
 independent examples: there are eight independent upstream lineages. Current learning counters and
