@@ -12,11 +12,15 @@ from sealed Red evaluation and may be repeated on development captures.
    outcomes. It requires clean published source and durably claims each capture before controller
    input. Bad or interrupted captures are quarantined individually and never replayed; untouched
    sibling captures continue on restart.
-3. `fit_repeatable_battle_outcomes.py` adapts the MLP output layer on train roots only and compares
-   the base and update on development roots.
-4. `evaluate_repeatable_battle_outcomes.py` compares models on one or more additional development
+3. `fit_repeatable_battle_train_only.py` equalizes example counts across train roots and adapts the
+   MLP output layer without accepting development or test records.
+4. `commit_repeatable_battle_development_predictions.py` opens untouched development captures only
+   through the read-only observation boundary and durably records the base model, fitted model and
+   fixed heuristic choices. It has no controller call and opens no outcome. Collect development
+   outcomes only after this artifact exists.
+5. `evaluate_repeatable_battle_outcomes.py` compares models on one or more additional development
    datasets without fitting.
-5. `run_repeatable_battle_policy.py` lets the model select and execute one move on each development
+6. `run_repeatable_battle_policy.py` lets the model select and execute one move on each development
    capture with no teacher query.
 
 The JSON artifacts contain no ROM bytes, save-state bytes, controller-input labels, or private
@@ -34,14 +38,20 @@ python scripts/train_repeatable_battle_model.py \
 python scripts/collect_repeatable_battle_outcomes.py \
   --rom "$POKEMON_RED_ROM" \
   --capture-dir "$RED_TRAIN_CAPTURES" \
-  --capture-dir "$RED_DEVELOPMENT_CAPTURES" \
-  --output "$BATTLE_WORK/dataset.jsonl"
+  --output "$BATTLE_WORK/train-dataset.jsonl"
 
-python scripts/fit_repeatable_battle_outcomes.py \
+python scripts/fit_repeatable_battle_train_only.py \
   --base-model "$BATTLE_WORK/model-base.json" \
-  --dataset "$BATTLE_WORK/dataset.jsonl" \
+  --dataset "$BATTLE_WORK/train-dataset.jsonl" \
   --out-model "$BATTLE_WORK/model-authentic.json" \
-  --out-report "$BATTLE_WORK/authentic-fit-report.json"
+  --out-report "$BATTLE_WORK/train-only-fit-report.json"
+
+python scripts/commit_repeatable_battle_development_predictions.py \
+  --rom "$POKEMON_RED_ROM" \
+  --base-model "$BATTLE_WORK/model-base.json" \
+  --updated-model "$BATTLE_WORK/model-authentic.json" \
+  --capture-dir "$RED_FRESH_DEVELOPMENT_CAPTURES" \
+  --output "$BATTLE_WORK/development-predictions.json"
 
 python scripts/run_repeatable_battle_policy.py \
   --rom "$POKEMON_RED_ROM" \
@@ -51,7 +61,8 @@ python scripts/run_repeatable_battle_policy.py \
 ```
 
 All variables above point outside the repository. Never store private cartridge or capture paths in
-the working tree.
+the working tree. The development-policy example belongs only after its candidate choices have been
+committed and the development outcomes have been opened under that commitment.
 
 ## Interpretation
 

@@ -9132,6 +9132,18 @@ source, binds that commit into the journal, and writes a durable per-capture cla
 input. A claim without a terminal becomes an `InterruptedCapture` quarantine on restart and is
 never replayed; only untouched siblings continue. No train outcome has been opened yet.
 
+Mechanics pretraining has completed privately: seed 1289, 2,000 synthetic train examples, 500
+synthetic development examples, 200 epochs and 32 hidden units produced model identity
+`47cf964ef8d86e6a3040746a734bd6c02c25d9e6d14f956c6b46727bee479b4c`. Training accuracy was
+0.998 and synthetic development accuracy 0.840 versus 0.704 for the fixed heuristic. This is a
+real fitted base ranker but has **authentic outcomes 0** and **authority 0**. The follow-up
+`fit_repeatable_battle_train_only.py` rejects development/test records and balances sibling density
+by using an equal number of examples from each true train root before adapting the output layer.
+`commit_repeatable_battle_development_predictions.py` closes the next trust boundary: from clean
+published source it observes development captures without controller input and binds the base,
+train-adapted and fixed-heuristic choices before any development outcome is collected. The older
+policy rehearsal remains execution-capable and must not be used as the commitment step.
+
 Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
 independent examples: there are eight independent upstream lineages. Current learning counters and
 authority remain unchanged: **outcomes 0 · fits 0 · predictions 0 · authority 0 · Crystal 0**.
