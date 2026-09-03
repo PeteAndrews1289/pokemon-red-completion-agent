@@ -100,6 +100,7 @@ def test_causal_model_ranks_supported_semantic_goals_without_binding_identity() 
     assert policy.deterministic_decisions == 0
     decision = policy.last_decision
     assert decision is not None
+    assert policy.decision_history == (decision,)
     assert decision.mode is LivingDexGoalDecisionMode.MODEL_SHADOW
     assert {row.goal_kind for row in decision.scores} == {
         GoalKind.ADVANCE_STORY,
@@ -121,6 +122,7 @@ def test_restoration_stays_inside_the_deterministic_safety_shell() -> None:
     assert policy.last_decision is not None
     assert policy.last_decision.mode is LivingDexGoalDecisionMode.DETERMINISTIC_SAFETY
     assert policy.last_decision.scores == ()
+    assert policy.decision_history == (policy.last_decision,)
 
 
 def test_critical_storage_pressure_stays_inside_deterministic_safety_shell() -> None:

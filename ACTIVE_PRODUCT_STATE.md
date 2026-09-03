@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the causal living-Dex shadow bridge, screen its nine-outcome predictions on four existing Red development snapshots with zero input, then design the smallest lineage-disjoint multi-goal outcome curriculum. Deterministic goal ordering remains authoritative.
+- Next decision: Publish and green one causal-versus-completion-first same-state development runner, execute the observed develop-team versus evolve-species disagreement under identical hard budgets, then use the verified outcome to design the smallest lineage-disjoint multi-goal curriculum. Deterministic goal ordering remains authoritative.
 
 ### Mandatory mission check
 
@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-causal-living-dex-player-shadow-v1** · status **active** · evidence [verified composition episode](docs/evidence/red-paired-bounded-player-result-2026-09-03.json)
+**2026-09-03-causal-living-dex-outcome-pair-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-goal-shadow-screen-result-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This reuses authentic teacher-free living-Pokedex outcome learning at the actual player decision seam, reducing duplicated infrastructure while preserving the cross-title semantic boundary and deterministic safety controls. |
-| Learning output | No new learning counter moves in this engineering gate. The reusable gain is that one authentic causal outcome model can now score semantic player goals without binding identity while the deterministic safety shell retains emergency authority. |
-| Authority delta | The first bounded player pair remains an exact tie, so deterministic goal ordering stays authoritative. An existing teacher-free causal living-Dex model is now connected locally as a shadow planner only; recovery, restoration, critical storage, and critical supply remain deterministic. |
-| Transfer result | The causal model and player now share a title-neutral semantic option boundary locally, but Crystal remains unexecuted and transfer remains untested. The four-snapshot action-free screen is only a Red integration falsifier. |
-| Blocker | The causal model has only eight authenticated selected-arm examples across four lineages and has never been screened through the bounded player. It cannot receive controller authority until action-free breadth and later lineage-disjoint Red outcomes show useful decisions beyond the deterministic manager. |
-| Decision | Use the already-trained causal living-Dex outcome model instead of beginning another broad inventory from zero. Publish the strict provenance loader and shadow bridge, screen it action-free on the four existing development snapshots, then freeze the smallest multi-goal train/development curriculum justified by those scores. |
-| Next session | Publish and green the causal shadow bridge, then run the four existing development snapshots through the three-authority zero-input preflight and reorient from the observed scores before any gameplay. |
-| Next falsifier | On the same four existing action-free Red snapshots, require the causal shadow to produce valid path-free outcome vectors across several goal families with zero actions or frames; stop on provenance mismatch, private identity leakage, invalid scores, or collapsed unsupported decisions. |
-| Stop condition | Stop if the bridge leaks binding, save, map, species, or route identity; lets the causal shadow override recovery or critical resource gates; changes emulator state during preflight; or treats eight examples as production authority. Do not substitute a full replay, sealed Red, Crystal execution, or another battle campaign. |
+| Product alignment | This measures whether teacher-free outcome learning improves a real living-Pokedex decision while retaining reusable semantic goals and deterministic mechanics, rather than spending another session on inventory or a Red-specific walkthrough. |
+| Learning output | No learning counter moves from the screen. The reusable result is one path-free, title-neutral planning disagreement at the real player seam plus proof that emergency choices remain under deterministic safety control. |
+| Authority delta | The causal living-Dex policy passed four authenticated zero-input Red screens but remains shadow-only. It preserved deterministic recovery, restoration, critical storage, and critical supply; deterministic goal ordering retains controller authority until measured same-state outcomes show an advantage. |
+| Transfer result | The causal model and player share a title-neutral semantic option boundary and passed a four-context Red compatibility screen. Crystal remains unexecuted and transfer remains untested; the next pair is still Red development evidence only. |
+| Blocker | The causal model has only eight authenticated selected-arm examples across four lineages. One action-free disagreement exists, but neither arm has executed from that state, so there is no evidence yet that its develop-team choice produces better verified completion progress than immediate evolution. |
+| Decision | Preserve the four-snapshot screen as noncounting qualification evidence, then run the smallest repeatable same-state development comparison on the one observed causal/control disagreement before designing a larger lineage-disjoint curriculum. |
+| Next session | Publish and green a causal-versus-completion-first paired development runner, then execute one same-state bounded comparison on development snapshot 003 and reorient from verified progress and cost. |
+| Next falsifier | From independently restored copies of the exact disagreement state, require causal develop_team and deterministic evolve_species to produce durable typed outcomes under identical hard budgets; stop on unequal starts, unsafe action, unverifiable ledger transitions, or private identity leakage. |
+| Stop condition | Stop if the pair begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh ledger transition, or turns one development result into production authority. Do not substitute sealed Red, Crystal execution, full replay, or another battle campaign. |
 
 ### Stop conditions
 

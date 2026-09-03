@@ -1,0 +1,113 @@
+{
+  "contexts": [
+    {
+      "assignment_id": "red-living-dex-shadow-preflight-dev-001",
+      "causal_decision_mode": "deterministic_safety",
+      "causal_selected_goal": "restore_team",
+      "control_selected_goal": "restore_team",
+      "disagreement": false,
+      "menu_width": 2,
+      "receipt_sha256": "6fc37f06c5b6af91b015c900973809da225e670d86bb057c75b80f319f6c47e6"
+    },
+    {
+      "assignment_id": "red-living-dex-shadow-preflight-dev-002",
+      "causal_decision_mode": "deterministic_safety",
+      "causal_selected_goal": "manage_storage",
+      "control_selected_goal": "manage_storage",
+      "disagreement": false,
+      "menu_width": 3,
+      "receipt_sha256": "682ba433c86b841bf976bcf9e583d78eec184fae9c9197e4b40eefd98f3c0e53"
+    },
+    {
+      "assignment_id": "red-living-dex-shadow-preflight-dev-003",
+      "causal_decision_mode": "model_shadow",
+      "causal_selected_goal": "develop_team",
+      "control_selected_goal": "evolve_species",
+      "disagreement": true,
+      "menu_width": 4,
+      "receipt_sha256": "0be49fd536646d78ae306417bfbf32a5a3f10830cee66ac525325f02482cdb72",
+      "scored_options": [
+        {
+          "goal": "advance_story",
+          "predicted_verified_success": 0.0,
+          "utility": -1.0724456622919747e-07
+        },
+        {
+          "goal": "develop_team",
+          "predicted_verified_success": 0.1357275723704815,
+          "utility": 0.5427894708574559
+        },
+        {
+          "goal": "evolve_species",
+          "predicted_verified_success": 0.011029940325459314,
+          "utility": 0.038932282830483944
+        }
+      ]
+    },
+    {
+      "assignment_id": "red-living-dex-shadow-preflight-dev-004",
+      "causal_decision_mode": "model_shadow",
+      "causal_selected_goal": "acquire_species",
+      "control_selected_goal": "acquire_species",
+      "disagreement": false,
+      "menu_width": 3,
+      "receipt_sha256": "7900366b5cf691d548550e020acf02bf847edd467fba3b6fa49b7f9bd84961cf",
+      "scored_options": [
+        {
+          "goal": "acquire_species",
+          "predicted_verified_success": 0.5971301529005204,
+          "utility": 2.385720595004639
+        },
+        {
+          "goal": "explore",
+          "predicted_verified_success": 0.005341053881974062,
+          "utility": 0.018834654254565125
+        }
+      ]
+    }
+  ],
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "episodes_created": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "claim": "The causal living-Dex model crossed the semantic player boundary on four authenticated Red development snapshots, preserved deterministic emergency controls, and produced one genuine planning disagreement without controller input.",
+    "limitation": "The model has only eight settled selected-arm examples across four lineages. This action-free screen measures decision compatibility, not outcome quality, generalization, or gameplay authority.",
+    "next_step": "Compare causal develop_team against deterministic evolve_species from the same independently restored development snapshot, then build the smallest lineage-disjoint multi-goal train and development curriculum justified by measured outcomes."
+  },
+  "model": {
+    "authority": "non_authoritative_integration_only",
+    "file_sha256": "7a8f2010861f74c6f64f9b54aa6b61731d457265317f009f1d4f8e96fe459795",
+    "model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "settled_examples": 8,
+    "train_dataset_sha256": "6c7d76b0839a565a0bd69e10fac166a851ac8da08491bfcb831edc06a041a26e"
+  },
+  "private_binding_fields": 0,
+  "private_path_fields": 0,
+  "recorded_on": "2026-09-03",
+  "schema": "pokemon.red.living-dex-goal-shadow-screen-result.v1",
+  "screen": {
+    "causal_model_decisions": 2,
+    "causal_safety_decisions": 2,
+    "contexts": 4,
+    "disagreements": 1,
+    "planner_choices": 12,
+    "status": "passed_action_free"
+  },
+  "source": {
+    "ci_run_attempt": 1,
+    "ci_run_id": 33780135930,
+    "ci_status": "passed",
+    "executable_commit": "c974b7e921c08fcb06f391af93643f5e5c6e0400",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "source_bundle_sha256": "5641e78fc41781995d9ea83603f56c2a90abae6e17fb08b800a98d8afaf91d59"
+  },
+  "status": "qualified_for_bounded_development_outcome_comparison",
+  "tracked_private_paths": 0
+}

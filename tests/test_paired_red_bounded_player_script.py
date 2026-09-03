@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import argparse
 import ast
 import runpy
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -93,6 +95,7 @@ def test_runner_uses_shared_player_and_frame_safe_controller_boundary() -> None:
         "HardCompositionActionLimiter",
         "EpisodeTrajectorySink",
         "compare_paired_bounded_player_arms",
+        "load_living_dex_goal_model_record",
         "_write_exclusive",
     ):
         assert required in calls
@@ -114,7 +117,83 @@ def test_runner_help_names_the_repeatable_pair_inputs() -> None:
     assert "--pair-id" in result.stdout
     assert "--private-artifact-root" in result.stdout
     assert "--model" in result.stdout
+    assert "--challenger" in result.stdout
+    assert "--living-dex-model-record" in result.stdout
+    assert "--expected-living-dex-model-sha256" in result.stdout
+    assert "--decision-limit" in result.stdout
     assert "--out" in result.stdout
+
+
+def test_challenger_arguments_keep_legacy_and_causal_models_disjoint() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    arguments = module["_challenger_arguments"]
+    learned_id = module["LEARNED_ARM_ID"]
+    causal_id = module["CAUSAL_ARM_ID"]
+    legacy = Path("legacy.json")
+    causal = Path("causal.json")
+
+    assert arguments(
+        argparse.Namespace(
+            challenger=learned_id,
+            model=legacy,
+            living_dex_model_record=None,
+            expected_living_dex_model_sha256=None,
+        )
+    ) == (legacy, None)
+    assert arguments(
+        argparse.Namespace(
+            challenger=causal_id,
+            model=None,
+            living_dex_model_record=causal,
+            expected_living_dex_model_sha256="a" * 64,
+        )
+    ) == (causal, "a" * 64)
+    with pytest.raises(RuntimeError, match="challenger_model_arguments"):
+        arguments(
+            argparse.Namespace(
+                challenger=causal_id,
+                model=legacy,
+                living_dex_model_record=causal,
+                expected_living_dex_model_sha256="a" * 64,
+            )
+        )
+
+
+def test_episode_identity_distinguishes_both_learned_challengers() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    episode_id = module["_episode_id"]
+
+    assert episode_id("pair", module["LEARNED_ARM_ID"]) == "pair-learned"
+    assert episode_id("pair", module["CAUSAL_ARM_ID"]) == "pair-causal"
+    assert episode_id("pair", module["BASELINE_ARM_ID"]) == "pair-baseline"
+    with pytest.raises(RuntimeError, match="arm_identity"):
+        episode_id("pair", "unknown")
+
+
+def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    policy_id = module["_policy_id"]
+    causal_id = module["CAUSAL_ARM_ID"]
+    baseline_id = module["BASELINE_ARM_ID"]
+    readiness = SimpleNamespace(
+        challenger_arm_id=causal_id,
+        model_sha256="b" * 64,
+    )
+
+    assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
+    assert policy_id(readiness, baseline_id) == baseline_id
+
+
+def test_one_decision_calibration_disables_replan_and_halves_episode_budgets() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    limits = module["_player_limits"](1)
+
+    assert limits.max_decisions == 1
+    assert limits.max_replans == 0
+    assert limits.max_total_actions == limits.max_actions_per_decision == 6_000
+    assert limits.max_total_frames == limits.max_frames_per_decision == 600_000
+    with pytest.raises(RuntimeError, match="decision_limit"):
+        module["_player_limits"](3)
 
 
 def test_progress_predicate_uses_a_fresh_verified_collection_delta() -> None:

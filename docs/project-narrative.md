@@ -8603,3 +8603,24 @@ win: a comparison where both choose the same thing cannot establish that learnin
 next demonstration therefore restores one three-goal state independently for both authorities and
 measures what actually happens—verified completion progress, resources, actions, frames, failure
 and replanning—while keeping the same deterministic mechanics underneath them.
+
+## A causal collection model reached the player — September 3, 2026
+
+The project already had a small teacher-free model trained from eight settled observed-arm examples.
+Instead of starting another data system, that model was connected to the semantic player boundary.
+It predicts nine separate quantities—success, completion progress, dependency unlocks, routine
+costs and irreversible loss—then applies an explicit utility contract. Deterministic code still
+owns recovery, healing and critical resource safety.
+
+Four real Red snapshots were inspected without taking an input or advancing a frame. The causal
+policy agreed with the existing managers on healing, storage and acquisition. On the fourth useful
+menu it made a genuine strategic distinction: develop the team rather than immediately evolve a
+species. That is not yet proof it was right. It is the first concrete question the integrated
+system can answer experimentally rather than rhetorically.
+
+The next experiment independently restores that same state for the causal challenger and the
+completion-first control. Both use the same deterministic skills, budgets, ledger checks and durable
+logging. The result will report what each choice actually accomplished; it will not declare a winner
+when the objectives are genuinely incomparable. That measured outcome is the seed for a broader,
+lineage-disjoint curriculum across acquisition, evolution, development, exploration and story
+unlocking—the strategic knowledge that should eventually transfer beyond Red.

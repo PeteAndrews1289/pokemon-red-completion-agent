@@ -9342,3 +9342,27 @@ can learn from without selecting contexts for disagreement, leaking binding iden
 different goal types into an arbitrary scalar score. Fit train only; retain deterministic ordering
 unless the learned manager wins on held development. Crystal, sealed Red and full replay remain
 closed.
+
+### Causal living-Dex player screen and next outcome gate — 2026-09-03
+
+Published main `c974b7e921c08fcb06f391af93643f5e5c6e0400` passed CI run
+`33780135930/1`. Four authenticated Red development snapshots then passed a three-authority
+action-free screen: **12 planner choices, zero controller actions, zero emulator frames, zero
+episodes and zero fits**. The causal policy used deterministic safety for restore and critical
+storage, scored ordinary goals on two snapshots, agreed with acquisition on one, and produced one
+genuine disagreement: `develop_team` instead of completion-first `evolve_species`. The path-free
+[screen result](docs/evidence/red-living-dex-goal-shadow-screen-result-2026-09-03.json) is
+qualification evidence only; it changes no learning counter and grants no authority.
+
+The paired development runner now supports either the existing learned goal manager or the causal
+living-Dex policy as an explicit challenger. The causal mode authenticates the strict private model
+record, restores the same cartridge state independently for challenger and control, preserves the
+deterministic safety shell, records durable typed trajectories, and retains the existing hard
+action/frame and verified-ledger boundaries. Legacy behavior remains the default.
+
+Next publish and green this extension, then execute one repeatable development pair from the exact
+screened disagreement state. Interpret it as observed-arm calibration: did each selected goal
+succeed, what verified collection or team effect occurred, and at what cost? Unlike goal families
+may remain `incomparable`; do not invent a scalar winner, promote authority, fit on this development
+result, access sealed Red or Crystal, or run a full replay. Use the result to design the smallest
+lineage-disjoint multi-goal training curriculum.

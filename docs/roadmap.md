@@ -3336,3 +3336,26 @@ train/development overlap, a model-selected action during materialization, or a 
 Crystal transfer from Red-only evidence. The frozen plan is summarized in
 `docs/evidence/red-repeatable-battle-scenario-plan-summary-2026-09-03.json`; it opened no outcome
 and changed no model or authority counter.
+
+## Causal goal policy at the bounded-player seam — active 2026-09-03
+
+- [x] Connect the existing teacher-free nine-outcome living-Dex model to title-neutral semantic
+  player goals without binding identity.
+- [x] Keep recovery, restoration, critical storage and critical supply under deterministic safety.
+- [x] Publish the bridge and pass exact-main CI.
+- [x] Screen four authenticated Red development snapshots with zero actions and frames.
+- [x] Preserve the screen as noncounting qualification evidence; one of four states produced a
+  real `develop_team` versus `evolve_species` disagreement.
+- [x] Extend the same-state paired runner with an explicit causal challenger while keeping the
+  legacy learned-manager mode unchanged.
+- [ ] Publish and green the paired-runner extension.
+- [ ] Execute one repeatable development pair on the screened disagreement and compare typed
+  observed outcomes without forcing unlike goals into one reward.
+- [ ] Freeze a lineage-disjoint train/development curriculum across several goal families, collect
+  observed selected-arm outcomes, and fit train only.
+- [ ] Require a held Red advantage before widening goal-selection authority.
+- [ ] Test the unchanged supported semantic boundary in Crystal only after Red control is stable.
+
+This is the strategic layer of the eventual living-Pokédex player. It does not replace deterministic
+navigation, battle, capture, evolution, storage or recovery mechanics, and one development pair is
+not evidence of cross-game transfer or full-game autonomy.
