@@ -3209,6 +3209,11 @@ feature contracts stay title-neutral so the later adapter does not require a red
 - [x] Harden outcome collection with clean-published-source binding and a durable claim before any
   capture can receive controller input; interrupted claims quarantine without replay while only
   untouched siblings continue.
+- [x] Fit the disclosed mechanics prior on 2,000 synthetic train and 500 synthetic development
+  examples: 0.998 train accuracy and 0.840 synthetic development accuracy versus 0.704 for the
+  fixed heuristic. This opened no cartridge outcome and grants no authority.
+- [x] Add a train-only authentic fitter that rejects development/test outcomes and equalizes example
+  counts across real root lineages before adapting the neural ranker's output layer.
 - [ ] Publish the outcome-collection hardening and require green exact-main CI.
 - [ ] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights.
 - [ ] Commit predictions for all 24 development scenarios before opening their outcomes.

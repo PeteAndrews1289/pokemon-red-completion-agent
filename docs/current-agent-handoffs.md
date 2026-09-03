@@ -3600,3 +3600,8 @@ That materialization is complete: 48 terminal assignments produced 45 verified M
 three non-retried protected-switch failures. The Codex lane now owns publication of capture-level
 claim-before-input recovery in the outcome collector, followed by train-only outcome collection and
 one shadow fit. Development outcomes, learned authority, sealed Red and Crystal remain closed.
+
+The synthetic mechanics base is now fitted privately (2,000/500 examples, 0.840 synthetic
+development accuracy versus 0.704 fixed heuristic). The next offline adapter must use
+`fit_repeatable_battle_train_only.py`: equal examples per train lineage, no development/test records,
+no authority. Commit development choices only after that model exists.

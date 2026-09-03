@@ -8479,3 +8479,10 @@ verified cartridge-grounded classroom ready to measure moves.” It is not model
 outcomes, fits, predictions and learned authority all remain zero. The next boundary now claims
 each capture durably before testing its moves, so a restart can quarantine interrupted work and
 continue untouched siblings without silently replaying evidence.
+
+In parallel, the neural ranker completed its non-cartridge mechanics pretraining. It learned from
+2,000 simulated training menus and reached 84.0% on 500 simulated development menus, compared with
+70.4% for the fixed-power heuristic. That is the initialized model, not the result: it has not seen
+one authentic Red outcome. A separate train-only fitter now prevents the convenient but invalid
+shortcut of opening development labels during adaptation, and equalizes sibling counts across the
+four real train roots so one productive source does not dominate the update.

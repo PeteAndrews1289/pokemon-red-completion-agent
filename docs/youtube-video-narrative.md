@@ -5412,3 +5412,14 @@ learned representation travels, and the living Pokédex remains the organizing p
   learned merely because its classroom now exists.
 - End on the next safety rail: **CLAIM CAPTURE BEFORE INPUT → NEVER REPLAY INTERRUPTION → COLLECT
   TRAIN OUTCOMES → FIT SHADOW MODEL**.
+
+## New sequence: “The model starts with mechanics, not answers”
+
+- Show the offline curriculum separately from the cartridge: **2,000 SYNTHETIC TRAIN · 500
+  SYNTHETIC DEVELOPMENT · AUTHENTIC OUTCOMES 0**.
+- Resolve the first fit to **TRAIN 99.8% · DEVELOPMENT 84.0% · FIXED HEURISTIC 70.4%**.
+- Keep the claim narrow: this initializes a semantic move ranker; it does not prove Red gameplay,
+  Crystal transfer or living-Pokédex competence.
+- Feed the next adapter only the real train dataset. Show four lineage buckets clipped to an equal
+  count, with excess siblings marked **DENSITY, NOT INDEPENDENCE**.
+- Lock the development labels behind **COMMIT CHOICES FIRST** before the first authentic comparison.
