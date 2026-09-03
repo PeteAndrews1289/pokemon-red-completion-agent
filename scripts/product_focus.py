@@ -90,22 +90,28 @@ _FIRST_AUTHENTIC_BATTLE_RESULT_PATH = (
 _FIRST_AUTHENTIC_BATTLE_RESULT_SHA256 = (
     "6f010cc6510e7ef7a0e37579a757df7de49b47350dd1ee7ea83f1b4e253c017d"
 )
+_EXPECTED_UTILITY_BATTLE_RESULT_PATH = (
+    "docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json"
+)
+_EXPECTED_UTILITY_BATTLE_RESULT_SHA256 = (
+    "7ba351061a36c6a622521bed70a9b5a1cba69b271d28d07e0a059ece6d9fc551"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 72,
+    "causal_train_examples": 104,
     "composition_attempts": 1,
-    "development_episode_attempts": 16,
-    "model_fits": 8,
-    "outcome_questions": {"development": 36, "train": 71},
+    "development_episode_attempts": 17,
+    "model_fits": 9,
+    "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
     "synthetic_rootless_train_outcomes": 8,
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
-    "unseen_comparisons": 7,
+    "unseen_comparisons": 8,
     "verified_composition_episodes": 1,
-    "verified_outcome_examples": 41,
+    "verified_outcome_examples": 61,
 }
 
 
@@ -773,6 +779,11 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         "development_episode",
         "verified_outcome_example",
     } <= kinds
+    composition_contract = {
+        "composition_attempt",
+        "development_episode",
+        "verified_composition_episode",
+    } <= kinds
     causal_train_contract = "causal_train_example" in kinds
     synthetic_rootless_contract = {
         "synthetic_rootless_atomic_goal_episode",
@@ -786,19 +797,20 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
     ):
         raise ProductFocusError("synthetic rootless output minima must match")
     if (
-        not legacy_contract
-        and not development_contract
-        and not causal_train_contract
+            not legacy_contract
+            and not development_contract
+            and not composition_contract
+            and not causal_train_contract
         and not (synthetic_rootless_contract)
         and not synthetic_rootless_fit_contract
         and not synthetic_rootless_comparison_contract
     ):
         raise ProductFocusError(
-            "learning lane must require either the legacy fit/evaluation outputs or "
-            "model-led development episodes with verified outcomes, a causal train example, "
-            "paired synthetic rootless outputs, a synthetic rootless fit, or a synthetic "
-            "rootless comparison"
-        )
+                "learning lane must require either the legacy fit/evaluation outputs or "
+                "model-led development episodes with verified outcomes, a causal train example, "
+                "verified composition outputs, paired synthetic rootless outputs, a synthetic "
+                "rootless fit, or a synthetic rootless comparison"
+            )
 
 
 def _validate_progress(progress: Mapping[str, object]) -> None:
@@ -968,7 +980,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 3:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 4:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1038,7 +1050,7 @@ def _validate_projected_counters(
         raise ProductFocusError("repeatable battle evidence is invalid")
     _validate_repeatable_battle_projection(repeatable)
     first_authentic_evidence = _mapping_value(
-        evidence[-1],
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 2],
         subject="projected first authentic battle evidence",
     )
     if first_authentic_evidence != {
@@ -1061,6 +1073,30 @@ def _validate_projected_counters(
     if not isinstance(first_authentic, Mapping):
         raise ProductFocusError("first authentic battle evidence is invalid")
     _validate_first_authentic_battle_projection(first_authentic)
+    expected_utility_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected expected-utility battle evidence",
+    )
+    if expected_utility_evidence != {
+        "kind": "unseen_comparison",
+        "path": _EXPECTED_UTILITY_BATTLE_RESULT_PATH,
+        "sha256": _EXPECTED_UTILITY_BATTLE_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    expected_utility_path = (root / _EXPECTED_UTILITY_BATTLE_RESULT_PATH).resolve()
+    try:
+        expected_utility = json.loads(
+            expected_utility_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("expected-utility battle evidence is invalid") from None
+    if not isinstance(expected_utility, Mapping):
+        raise ProductFocusError("expected-utility battle evidence is invalid")
+    _validate_expected_utility_battle_projection(expected_utility)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1257,6 +1293,68 @@ def _validate_first_authentic_battle_projection(receipt: Mapping[str, object]) -
         or receipt.get("private_path_fields") != 0
     ):
         raise ProductFocusError("first authentic battle protected access differs")
+
+
+def _validate_expected_utility_battle_projection(receipt: Mapping[str, object]) -> None:
+    """Project the repeated-RNG fit and fresh development rejection."""
+
+    if receipt.get("schema") != "pokemon.core.battle.expected-utility-result.v1":
+        raise ProductFocusError("expected-utility battle evidence schema differs")
+    train = _mapping(
+        _mapping(receipt, "collection", subject="expected-utility battle evidence"),
+        "train",
+        subject="expected-utility battle evidence",
+    )
+    development = _mapping(
+        _mapping(receipt, "collection", subject="expected-utility battle evidence"),
+        "development",
+        subject="expected-utility battle evidence",
+    )
+    fit = _mapping(receipt, "fit", subject="expected-utility battle evidence")
+    comparison = _mapping(
+        receipt,
+        "development_comparison",
+        subject="expected-utility battle evidence",
+    )
+    base = _mapping(comparison, "base", subject="expected-utility battle evidence")
+    challenger = _mapping(
+        comparison,
+        "challenger",
+        subject="expected-utility battle evidence",
+    )
+    heuristic = _mapping(
+        comparison,
+        "fixed_heuristic",
+        subject="expected-utility battle evidence",
+    )
+    verdict = _mapping(receipt, "verdict", subject="expected-utility battle evidence")
+    if (
+        train.get("examples") != 32
+        or train.get("root_lineages") != 4
+        or train.get("trials_complete") != 260
+        or development.get("examples") != 20
+        or development.get("root_lineages") != 4
+        or development.get("trials_complete") != 151
+        or fit.get("balanced_training_examples") != 20
+        or fit.get("loss_before") != 0.9460775652955935
+        or fit.get("loss_after") != 0.7789484125679926
+        or base.get("correct_preferences") != 17
+        or challenger.get("correct_preferences") != 18
+        or heuristic.get("correct_preferences") != 20
+        or verdict.get("promotion_gate_passed") is not False
+        or verdict.get("challenger_status") != "shadow_only"
+        or verdict.get("battle_authority") != "fixed_heuristic_retained"
+    ):
+        raise ProductFocusError("expected-utility battle projection differs")
+    effects = _mapping(receipt, "effects", subject="expected-utility battle evidence")
+    if (
+        receipt.get("authority_promoted") is not False
+        or effects.get("teacher_queries") != 0
+        or effects.get("full_game_replays") != 0
+        or effects.get("sealed_red_cases_opened") != 0
+        or effects.get("crystal_executions") != 0
+    ):
+        raise ProductFocusError("expected-utility battle protected access differs")
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:

@@ -956,7 +956,7 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
 </header>
 <div class="layout">
   <section class="panel screen-panel">
-    <div class="screen-shell"><div class="screen-bezel"><img id="game-frame" src="/frame.png" alt="Live emulator frame"><span class="frame-label">LIVE FRAME</span></div></div>
+    <div class="screen-shell"><div class="screen-bezel"><img id="game-frame" src="/frame.png" alt="Emulator frame"><span class="frame-label" id="frame-label">NO LIVE RUN</span></div></div>
     <div class="stage">
       <div class="stage-row"><strong id="stage">Waiting</strong><span class="muted" id="stage-percent">0%</span></div>
       <p class="message" id="message">Waiting for an authenticated emulator session.</p>
@@ -1091,6 +1091,7 @@ function render(data) {
   });
   const events = el("events"); events.replaceChildren(); data.events.slice().reverse().forEach(event => { const li = document.createElement("li"); li.textContent = event; events.append(li); });
   safeText("speed", `${Number(data.emulation_speed || 0).toFixed(1)}× emulation`);
+  safeText("frame-label", data.dashboard.frame_ready ? "LIVE FRAME" : "NO LIVE RUN");
   const frameVersion = Number(data.dashboard.frame_version);
   if (frameVersion !== lastFrame) { lastFrame = frameVersion; el("game-frame").src = `/frame.png?v=${frameVersion}`; }
 }

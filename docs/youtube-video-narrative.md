@@ -5450,3 +5450,17 @@ learned representation travels, and the living Pokédex remains the organizing p
   0**. This is qualified supply, not a result.
 - End with the honest next gate: commit all development choices first, then require the learned
   expected-value scorer to beat the fixed-power control before it receives battle authority.
+## New sequence: “The baseline won, so the architecture moved up”
+
+- Open with the repeated-RNG board: **32 TRAIN AGGREGATES · 20 FRESH DEVELOPMENT AGGREGATES**.
+- Reveal the committed comparison in order: **PRIOR 17/20 → CHALLENGER 18/20 → FIXED HEURISTIC
+  20/20**.
+- Keep **LEARNED BATTLE AUTHORITY 0** visible. Say plainly: **“The model learned, but the simpler
+  rule was still better.”**
+- Cross out **MORE ONE-TURN BATTLE DATA** and retain the challenger as a shadow trace rather than
+  deleting the honest negative result.
+- Zoom out to the hybrid player stack: **GOAL MANAGER → NAVIGATION / BATTLE / CAPTURE / PARTY /
+  INVENTORY → FRESH POKEDEX LEDGER → RECOVER OR REPLAN**.
+- End on the next live demonstration: one bounded Red episode with a semantic objective, an episode
+  timeline, concrete collection progress and a typed recovery. Keep **CRYSTAL DEFERRED** until the
+  same title-neutral seam works in Red.

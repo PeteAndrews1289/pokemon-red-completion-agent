@@ -327,30 +327,34 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 112, "partition": "train"},
-        {"kind": "model_fit", "minimum": 9, "partition": "train"},
+        {"kind": "composition_attempt", "minimum": 2, "partition": "development"},
         {
-            "kind": "verified_outcome_example",
-            "minimum": 61,
+            "kind": "verified_composition_episode",
+            "minimum": 2,
+            "partition": "development",
+        },
+        {
+            "kind": "development_episode",
+            "minimum": 18,
             "partition": "development",
         },
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(
-        ((72 / 112) + (8 / 9) + (41 / 61)) / 3
+        ((1 / 2) + (1 / 2) + (17 / 18)) / 3
     )
     assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 72, 112),
-        ("Model Fit · train", 8, 9),
-        ("Verified Outcome Example · development", 41, 61),
+        ("Composition Attempt · development", 1, 2),
+        ("Verified Composition Episode · development", 1, 2),
+        ("Development Episode · development", 17, 18),
     )
-    assert state.progress["outcome_questions"] == {"development": 36, "train": 71}
-    assert state.progress["model_fits"] == 8
-    assert state.progress["unseen_comparisons"] == 7
-    assert state.progress["development_episode_attempts"] == 16
-    assert state.progress["verified_outcome_examples"] == 41
+    assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
+    assert state.progress["model_fits"] == 9
+    assert state.progress["unseen_comparisons"] == 8
+    assert state.progress["development_episode_attempts"] == 17
+    assert state.progress["verified_outcome_examples"] == 61
     assert state.progress["verified_composition_episodes"] == 1
-    assert state.progress["causal_train_examples"] == 72
+    assert state.progress["causal_train_examples"] == 104
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1522,9 +1526,9 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Causal Train Example · train: 72/112",
-        "Model Fit · train: 8/9",
-        "Verified Outcome Example · development: 41/61",
+        "Composition Attempt · development: 1/2",
+        "Verified Composition Episode · development: 1/2",
+        "Development Episode · development: 17/18",
     )
 
 
@@ -1597,8 +1601,8 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 16, 12),
-        ("Verified Outcome Example · development", 41, 12),
+        ("Development Episode · development", 17, 12),
+        ("Verified Outcome Example · development", 61, 12),
         ("Verified Composition Episode · development", 1, 2),
     )
 
@@ -1613,7 +1617,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 72, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 104, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -2011,42 +2015,41 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
 
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == pytest.approx(
-        ((72 / 112) + (8 / 9) + (41 / 61)) / 3
+        ((1 / 2) + (1 / 2) + (17 / 18)) / 3
     )
     assert public["actions"] == 0
-    assert "Red-first battle learning" in public["stage"]
+    assert "Red bounded player integration" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 72,
-        "total": 112,
+        "completed": 1,
+        "total": 2,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 8, "total": 9}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 7, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 1, "total": 2}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 17, "total": 18}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
-        "zero_shot": "Cumulative causal train examples",
-        "adaptation": "Cumulative model fits",
-        "sealed_test": "Cumulative comparisons",
+        "zero_shot": "Composition attempts",
+        "adaptation": "Verified composition episodes",
+        "sealed_test": "Development episodes",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
     assert public["model"]["decisions"] == 1  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "trails the legal fixed-power heuristic" in encoded
-    assert "Cumulative cross-family project totals" in encoded
-    assert "Not the battle-model promotion gate" in encoded
-    assert "Causal Train Example 72/112" in encoded
-    assert "Model Fit 8/9" in encoded
-    assert "Verified Outcome Example 41/61" in encoded
-    assert "Cumulative causal train examples" in encoded
-    assert "Cumulative model fits" in encoded
-    assert "Cumulative comparisons" in encoded
-    assert "fixed heuristic 18/21" in encoded
-    assert "one-shot outcomes alias hidden" in encoded
-    assert "bounded battle learner first" in encoded
-    assert "immutable disjoint train/development snapshot lineages" in encoded
-    assert "train outcomes only" in encoded
-    assert "development outcomes excluded from fitting" in encoded
-    assert "flat outcomes and no discordant advantage end the iteration" in encoded
+    assert "fixed heuristic won 20/20" in encoded
+    assert "Current Red player integration gate" in encoded
+    assert "Battle study closed" in encoded
+    assert "Composition Attempt 1/2" in encoded
+    assert "Verified Composition Episode 1/2" in encoded
+    assert "Development Episode 17/18" in encoded
+    assert "Composition attempts" in encoded
+    assert "Verified composition episodes" in encoded
+    assert "Development episodes" in encoded
+    assert "fixed heuristic 20/20" in encoded
+    assert "no more one-turn data campaigns" in encoded
+    assert "semantic goal manager" in encoded
+    assert "bounded end-to-end composition is the open gate" in encoded
+    assert "deterministic code keeps mechanics and safety" in encoded
+    assert "completion-ledger delta" in encoded
     assert "authenticated snapshots" in encoded
-    assert "title-neutral observations and actions" in encoded
+    assert "title-neutral semantic goals" in encoded
     assert "teacher labels 0" in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
