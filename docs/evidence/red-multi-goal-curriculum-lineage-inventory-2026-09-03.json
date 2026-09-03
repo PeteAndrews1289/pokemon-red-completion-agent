@@ -1,0 +1,83 @@
+{
+  "claim_boundary": {
+    "supported": "An action-free byte audit authenticated all 81 retained Red context states, envelopes and profiles and separated exact-state uniqueness from upstream-lineage independence.",
+    "unsupported": [
+      "independent_train_lineages",
+      "independent_development_lineages",
+      "held_development_generalization",
+      "new_outcome_collection",
+      "new_model_fit",
+      "learned_authority_promotion",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "sealed_red_evaluations": 0,
+    "teacher_queries": 0
+  },
+  "inventory": {
+    "calibration_contexts_available": 81,
+    "claim_availability_evaluated": true,
+    "contexts": 81,
+    "development_contexts": 27,
+    "development_lineage_deficit": 4,
+    "declared_goal_families": 9,
+    "held_development_claim_allowed": false,
+    "lineage_overlap_evaluated": false,
+    "minimum_development_goal_families": 3,
+    "minimum_development_lineages": 4,
+    "minimum_train_goal_families": 4,
+    "minimum_train_lineages": 8,
+    "open_root_count": 35,
+    "open_root_family_counts": {
+      "development": {
+        "acquire_species": 2,
+        "advance_story": 2,
+        "develop_team": 2,
+        "evolve_species": 2,
+        "explore": 2,
+        "manage_storage": 2,
+        "recover_control": 2,
+        "restore_team": 2,
+        "resupply": 1
+      },
+      "train": {
+        "advance_story": 6,
+        "develop_team": 1,
+        "evolve_species": 1,
+        "explore": 1,
+        "manage_storage": 2,
+        "recover_control": 6,
+        "restore_team": 1
+      }
+    },
+    "profile_lineage_sha256": "db660df20ffcadb8e1520f50861093dcc1cb7e1f8a24687fac44cf1350db6324",
+    "source_plan_sha256": "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51",
+    "train_contexts": 54,
+    "train_lineage_deficit": 8,
+    "transformed_profiles": 4,
+    "unique_envelope_files": 81,
+    "unique_profile_files": 81,
+    "unique_state_files": 81,
+    "verified_development_lineages": 0,
+    "verified_lineage_entries": 0,
+    "verified_train_lineages": 0
+  },
+  "next_gate": {
+    "development_rule": "The existing bank may support explicitly labeled calibration and local diagnostics, but it may not support an unseen-generalization or transfer claim.",
+    "independent_evaluation_rule": "Before authority promotion or Crystal transfer, record at least eight prospective train and four prospective development upstream lineages, disjoint by lineage and physical root, across at least four and three strategic goal families respectively.",
+    "next_engineering_step": "Freeze the smallest outcome-blind calibration plan over still-open Red train roots, collect bounded candidate outcomes, fit train only and label same-bank development as diagnostic rather than held out."
+  },
+  "schema": "pokemon.red.multi-goal-curriculum-lineage-inventory-result.v1",
+  "status": "calibration_supply_present_independent_evaluation_supply_unproven"
+}

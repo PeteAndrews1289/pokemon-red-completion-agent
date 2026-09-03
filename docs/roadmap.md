@@ -3,6 +3,21 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 multi-goal lineage inventory:** the action-free audit authenticated **81/81**
+> retained Red states, envelopes and profiles, with 54 nominal train contexts, 27 nominal
+> development contexts and declared providers covering all nine goal families. Every state file is
+> unique, but the old artifacts do not bind those files to trustworthy upstream gameplay lineages.
+> The development split is therefore same-bank diagnostic supply, not held-out generalization.
+>
+> Existing still-open train roots may now support explicitly labeled calibration training. Freeze
+> the smallest outcome-blind campaign across team development, evolution and storage; collect
+> bounded candidate outcomes; fit train only; then exercise two-to-four consecutive model choices.
+> Never reuse a claimed root or select by disagreement/outcome. Before promotion or Crystal,
+> obtain at least **8 prospective train + 4 prospective development** lineages, disjoint by lineage
+> and physical root, across at least **4/3 strategic families**. See the
+> [inventory](evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json) and
+> [session plan](red-multi-goal-training-session-plan.md).
+
 > **September 3 causal-player failure diagnosis:** PR 188 merged the causal paired runner as main
 > `b8c2999d` under green CI `33784679568/1`. Pair 001 is consumed. Its causal model chose
 > `develop_team`, and the existing skill successfully raised the target from **20→21** in **1,119
