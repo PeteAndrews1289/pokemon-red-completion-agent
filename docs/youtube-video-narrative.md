@@ -5494,3 +5494,5 @@ learned representation travels, and the living Pokédex remains the organizing p
   **NOT YET OPENED**.
 - The next scene is the real comparison: identical deterministic skills, two semantic authorities,
   and the winner decided by verified living-Pokédex progress and cost—not confidence alone.
+- Resolve the live screen honestly: **4 RED SAVES · MENUS 2/3/4/3 · AGREEMENT 4/4 · ACTIONS 0 ·
+  FRAMES 0**. Say: **“Agreement proves the wiring, not that the model is better.”**

@@ -16,8 +16,9 @@ replan that cannot repeat the failed goal. It has not read a ROM or granted live
 
 The preflight requires a clean published source, verified cartridge, external authenticated
 capture/profile/model inputs, a controller-blocked emulator and at least two executable semantic
-goals. No live snapshot has passed it yet. Codex now owns publication, one action-free development
-preflight and the paired bounded episodes. The comparison is learned semantic goal selection versus the
+goals. Four live snapshots now pass it with menu widths 2/3/4/3 and zero actions, frames or episodes;
+the two authorities agreed on every selected goal. Codex now owns the paired bounded episode
+launcher and execution from the same repeatable three-goal state. The comparison is learned semantic goal selection versus the
 deterministic completion-first manager using the same skills and measured ledger progress, resource
 cost and recovery. Crystal, sealed Red and full replay remain closed. Claude and Antigravity are
 optional milestone reviewers, not implementation dependencies.

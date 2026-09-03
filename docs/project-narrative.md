@@ -8573,3 +8573,11 @@ state offers at least two genuine goals and the resulting receipt contains hashe
 choices rather than private file paths or binding identities. Twenty-four focused tests qualify the
 player, Red bridge and preflight, but the live snapshot and controller episode remain deliberately
 unclaimed.
+
+The boundary then inspected four real Red saves without advancing the cartridge. Their menus
+contained two to four supported goals, and the learned manager matched the completion-first manager
+on restore, storage, evolution and acquisition decisions. That agreement is encouraging but not a
+win: a comparison where both choose the same thing cannot establish that learning is better. The
+next demonstration therefore restores one three-goal state independently for both authorities and
+measures what actually happens—verified completion progress, resources, actions, frames, failure
+and replanning—while keeping the same deterministic mechanics underneath them.

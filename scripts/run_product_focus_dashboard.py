@@ -127,9 +127,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage="Red bounded player integration · hybrid control",
         message=(
-            "The fixed heuristic won 20/20 locally; the player seam and thin Red bridge now pass "
-            "a 24/24 focused gate including the controller-blocked preflight. Next: one live "
-            "action-free snapshot check, then two paired episodes."
+            "The fixed heuristic won 20/20. Four live Red preflights passed with zero actions or "
+            "frames and 4/4 planner agreement. Next: restore one three-goal state independently "
+            "for paired episodes."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red player integration · Crystal transfer deferred",
@@ -203,8 +203,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
             (
-                "Player seam · 9/9 ROM-free checks · durable decision · typed outcome · fresh "
-                "ledger · one recovery · Red bridge 4/4 · private bindings excluded"
+                "Player seam · 9/9 ROM-free checks · Red bridge 4/4 · live menu widths 2/3/4/3 · "
+                "planner agreement 4/4 · actions 0 · frames 0 · private bindings excluded"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "

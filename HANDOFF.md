@@ -45,6 +45,14 @@ has been opened through this command yet. Publish it, run one development prefli
 short disjoint Red episodes before any authority expansion. Do not substitute a full replay, sealed
 Red, Crystal, or another local battle campaign.
 
+Four live action-free inspections now pass on the published preflight source. They exposed menus
+of two, three, four and three semantic goals; learned and completion-first authorities respectively
+agreed on `restore_team`, `manage_storage`, `evolve_species` and `acquire_species`. Across all four:
+**ROM reads 4 · actions 0 · frames 0 · episodes 0 · fits 0**. Agreement makes the screen a strong
+integration-readiness result but gives it no comparative power. Next run learned and teacher arms
+from the same repeatable three-goal state and compare verified progress and cost; do not search
+states merely to manufacture disagreement.
+
 ## 2026-09-02: Red-first evidence repair blocks the weak battle model honestly
 
 Crystal execution is deliberately deferred, not abandoned. The active boundary stays title-neutral,

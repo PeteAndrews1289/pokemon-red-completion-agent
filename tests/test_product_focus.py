@@ -2048,8 +2048,9 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "Player seam" in encoded
     assert "9/9 ROM-free checks" in encoded
     assert "Red bridge 4/4" in encoded
-    assert "24/24 focused gate" in encoded
-    assert "one live action-free snapshot check" in encoded
+    assert "Four live Red preflights passed" in encoded
+    assert "planner agreement 4/4" in encoded
+    assert "menu widths 2/3/4/3" in encoded
     assert "deterministic code keeps mechanics and safety" in encoded
     assert "completion-ledger delta" in encoded
     assert "authenticated snapshots" in encoded
