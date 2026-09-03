@@ -5383,3 +5383,18 @@ Then pivot forward. The next visual is not Pallet Town replaying again; it is a 
 semantically varied battle scenarios with independent lineages and visible action diversity. That
 is the curriculum intended to transfer: Red supplies the first adapter, Crystal tests whether the
 learned representation travels, and the living Pokédex remains the organizing product goal.
+
+## New sequence: “Seventy-two battles, eight real roots”
+
+- Open on the rejected five-save syllabus, then replace it with a grid labeled **48 TRAIN · 24
+  DEVELOPMENT**.
+- Collapse the grid into its honest statistical base: **8 SOURCE LINEAGES · 3 MOVE MENUS · 3
+  VENUES · WILD ONLY**.
+- Show one source branching into party, venue and timing variants, but keep every branch connected
+  to the same root. The line is: **“More practice is not more independent evidence.”**
+- Animate only natural cartridge operations: restore, route, wait, encounter, switch, verify MAIN,
+  capture. Keep **RAM EDITS 0 · MOVE CHOICES 0 · TEACHER QUERIES 0** visible.
+- Freeze the plan before outcomes with hash `7206fd06…f303e2`; keep **OUTCOMES 0 · FITS 0 ·
+  AUTHORITY 0 · CRYSTAL 0** onscreen.
+- End on the next falsifier: **TRAIN → COMMIT DEVELOPMENT PREDICTIONS → OPEN OUTCOMES → BEAT THE
+  LEGAL FIXED-POWER HEURISTIC OR STOP**.

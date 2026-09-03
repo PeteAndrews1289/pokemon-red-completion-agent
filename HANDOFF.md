@@ -9079,3 +9079,36 @@ Mission check for the next session:
 
 Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer
 0**. Publish this rejection and exact-main green it before beginning the new supply design.
+
+---
+
+## 16. Active handoff — Red-first repeatable battle scenario factory (2026-09-03)
+
+The active branch replaces the terminal fixed-roster lane with prospective cartridge-native
+scenario generation. The shared plan layer selects party menu, venue and pre-encounter timing while
+retaining the source state's real lineage and partition. The Red adapter inventories a source with
+zero ticks, derives identity-free move mechanics, and rejects malformed or unsafe field/trainer
+boundaries. The Red runtime then reauthenticates the same facts before controller input, uses only
+ordinary routes, waits, encounters and party switches, verifies a live MAIN boundary, and emits a
+V2 capture manifest whose root is the original source lineage. No RAM mutation or move choice is
+available through this interface.
+
+The private plan SHA-256 is `7206fd063e2577edbdd4982adb3a2b95c3a4efcd791335cae21e233941f303e2`.
+Its path-free tracked summary binds source-catalog SHA-256
+`25aadf98b86ccd7daab29a98172f81c9e4d455be1e6237aef5327e51738d3d2e` and reports 48 train plus
+24 development assignments. Each partition has four true source lineages, four source states,
+three distinct party menus, three venues, and unique semantic setup hashes. All current sources
+are wild-battle sources; trainer breadth is not claimed.
+
+Immediate order:
+
+1. Finish repository-wide verification and source-bound registry regeneration.
+2. Publish and require green exact-main CI.
+3. Materialize train only from the frozen plan, retaining every success/failure terminal.
+4. Collect one-turn counterfactual outcomes and perform one lineage-aware shadow fit.
+5. Commit all development predictions before opening development outcomes.
+6. Reorient at the heuristic-comparison result before multi-turn authority.
+
+Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
+independent examples: there are eight independent upstream lineages. Current learning counters and
+authority are unchanged because inventory and freezing opened no outcomes and fit no model.
