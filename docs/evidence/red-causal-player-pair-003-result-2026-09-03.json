@@ -1,0 +1,66 @@
+{
+  "authority_effect": {
+    "broader_authority_promoted": false,
+    "deterministic_safety_shell_retained": true,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "baseline": {
+    "actions": 6000,
+    "collection_transition_valid": true,
+    "controller_action_errors": 0,
+    "failure_reason": "execution_budget_exhausted",
+    "frames": 257689,
+    "goal_completed": false,
+    "selected_goal": "evolve_species",
+    "semantic_state_changed": true,
+    "status": "failed",
+    "target_evolved": false,
+    "target_level_after": 23,
+    "target_level_before": 22
+  },
+  "challenger": {
+    "actions": 1119,
+    "collection_transition_valid": true,
+    "controller_action_errors": 0,
+    "frames": 101171,
+    "selected_goal": "develop_team",
+    "semantic_state_changed": true,
+    "status": "succeeded",
+    "target_level_after": 21,
+    "target_level_before": 20
+  },
+  "comparison": {
+    "decision_basis": "verified_progress_dominance",
+    "equal_starting_collection": true,
+    "equal_starting_semantic_state": true,
+    "equal_starting_state": true,
+    "pair_id": "red-causal-player-pair-003",
+    "verdict": "learned_advantage"
+  },
+  "identity": {
+    "baseline_manifest_sha256": "99e85ae035f0a2b609beac573e0c88ba478f3c187a86e43b1bdb1abdc3b1adf0",
+    "challenger_manifest_sha256": "a650cd92757fd297ead4623957fe2031094e3a417cfc018b975144d2de4cd0bb",
+    "challenger_model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_run": 33798168098,
+    "result_sha256": "8a8369974a2ae03301a13affd6143360afc44eddb2a0513953d81a569f6edea2",
+    "source_bundle_sha256": "7db4cbc681aeca92d73b77d10f9f2898afb279cce76df14aadc724eb06207da4",
+    "source_commit": "09a8bf295ba0734c7ad946d54a7b8b18e7a30eca"
+  },
+  "learning_effect": {
+    "development_comparison_delta": 1,
+    "fit_count_delta": 0,
+    "interpretation": "one same-state development comparison shows that the teacher-free causal manager selected a goal completed under the common bound while completion-first ordering selected a goal that did not complete",
+    "production_authority_delta": 0
+  },
+  "scope": {
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "sealed_red_accesses": 0
+  },
+  "schema": "pokemon.red.causal-player-pair-result.v1",
+  "status": "complete"
+}

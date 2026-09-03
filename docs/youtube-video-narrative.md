@@ -5552,3 +5552,14 @@ learned representation travels, and the living Pokédex remains the organizing p
 - Show the engineering defect separately: **EXPECTED BUDGET TERMINAL ≠ SOFTWARE CRASH**.
 - End with the fresh test: preserve both completion and bounded failure as honest outcomes, compare
   them once, and keep broad authority locked until more independent contexts agree.
+
+## New sequence: “The model chose the goal that actually finished”
+
+- Resolve the fresh pair on one board: **SAME START · SAME SKILLS · SAME HARD BUDGET**.
+- Model side: **DEVELOP TEAM · 20→21 · 1,119 ACTIONS · VERIFIED SUCCESS**.
+- Control side: **EVOLVE SPECIES · 22→23 · 6,000 ACTIONS · NOT EVOLVED**.
+- Stamp the result **LEARNED ADVANTAGE — VERIFIED PROGRESS DOMINANCE**.
+- Keep the limits visible: **ONE DEVELOPMENT CONTEXT · EIGHT CAUSAL TRAIN EXAMPLES · AUTHORITY 0**.
+- Zoom out to the next dataset: independent Red states across acquisition, evolution, development,
+  story, resources, storage, recovery, and exploration—then train only on one side and test the
+  committed choices on the other.

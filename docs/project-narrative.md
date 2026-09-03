@@ -8660,3 +8660,17 @@ was treated as a software crash. The repair does not make the route easier or en
 it teaches the player infrastructure to preserve bounded failure as a typed outcome while retaining
 collection checks and strict handling of real defects. A fresh pair can then answer the strategic
 question without pretending either consumed run completed.
+
+## The model made the better strategic choice — September 3, 2026
+
+The third pair completed the comparison. From the same authenticated state, the causal manager chose
+team development and finished the objective in 1,119 actions. Completion-first ordering chose an
+evolution that was valid but too distant; after 6,000 actions Diglett had gained one level but had
+not evolved. The repaired player retained that as a verified bounded failure, and the result favored
+the model on completed progress rather than on confidence or a hand-written scalar reward.
+
+This is the clearest model-led gameplay milestone so far. It is also deliberately narrow. One
+development state cannot show robust Red play, recovery over many decisions, or transfer to Crystal.
+The next phase turns the same choice→skill→verified-outcome loop into a curriculum spanning several
+completion goal families and independent upstream lineages. That is where a one-state success can
+become learned strategy rather than a good anecdote.

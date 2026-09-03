@@ -102,12 +102,18 @@ _PAIRED_BOUNDED_PLAYER_RESULT_PATH = (
 _PAIRED_BOUNDED_PLAYER_RESULT_SHA256 = (
     "ac9987ef212083ac6510849bc2a7a8faae0734db9a7a18d1931ac63f2500ada1"
 )
+_CAUSAL_PLAYER_RESULT_PATH = (
+    "docs/evidence/red-causal-player-pair-003-result-2026-09-03.json"
+)
+_CAUSAL_PLAYER_RESULT_SHA256 = (
+    "4b4466756b33bc0a41fc711e608f992a8f0a43fc80360c01f6a5685bf0683bbb"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 104,
-    "composition_attempts": 2,
-    "development_episode_attempts": 18,
+    "composition_attempts": 3,
+    "development_episode_attempts": 19,
     "model_fits": 9,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
@@ -115,8 +121,8 @@ _PROJECTED_COUNTERS = {
     "synthetic_rootless_train_outcomes": 8,
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
-    "unseen_comparisons": 8,
-    "verified_composition_episodes": 2,
+    "unseen_comparisons": 9,
+    "verified_composition_episodes": 3,
     "verified_outcome_examples": 61,
 }
 
@@ -986,7 +992,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 5:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 6:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1080,7 +1086,7 @@ def _validate_projected_counters(
         raise ProductFocusError("first authentic battle evidence is invalid")
     _validate_first_authentic_battle_projection(first_authentic)
     expected_utility_evidence = _mapping_value(
-        evidence[-2],
+        evidence[-3],
         subject="projected expected-utility battle evidence",
     )
     if expected_utility_evidence != {
@@ -1104,7 +1110,7 @@ def _validate_projected_counters(
         raise ProductFocusError("expected-utility battle evidence is invalid")
     _validate_expected_utility_battle_projection(expected_utility)
     player_evidence = _mapping_value(
-        evidence[-1],
+        evidence[-2],
         subject="projected paired bounded-player evidence",
     )
     if player_evidence != {
@@ -1127,6 +1133,30 @@ def _validate_projected_counters(
     if not isinstance(player, Mapping):
         raise ProductFocusError("paired bounded-player evidence is invalid")
     _validate_paired_bounded_player_projection(player)
+    causal_player_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected causal player evidence",
+    )
+    if causal_player_evidence != {
+        "kind": "unseen_comparison",
+        "path": _CAUSAL_PLAYER_RESULT_PATH,
+        "sha256": _CAUSAL_PLAYER_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    causal_player_path = (root / _CAUSAL_PLAYER_RESULT_PATH).resolve()
+    try:
+        causal_player = json.loads(
+            causal_player_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("causal player evidence is invalid") from None
+    if not isinstance(causal_player, Mapping):
+        raise ProductFocusError("causal player evidence is invalid")
+    _validate_causal_player_projection(causal_player)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1209,6 +1239,80 @@ def _validate_paired_bounded_player_projection(
     )
     if interpretation.get("authority_promoted") is not False:
         raise ProductFocusError("paired bounded-player authority claim differs")
+
+
+def _validate_causal_player_projection(receipt: Mapping[str, object]) -> None:
+    """Project one same-state causal-manager advantage without broad promotion."""
+
+    if receipt.get("schema") != "pokemon.red.causal-player-pair-result.v1":
+        raise ProductFocusError("causal player evidence schema differs")
+    if receipt.get("status") != "complete":
+        raise ProductFocusError("causal player evidence status differs")
+    comparison = _mapping(receipt, "comparison", subject="causal player evidence")
+    if (
+        comparison.get("pair_id") != "red-causal-player-pair-003"
+        or comparison.get("verdict") != "learned_advantage"
+        or comparison.get("decision_basis") != "verified_progress_dominance"
+        or comparison.get("equal_starting_state") is not True
+        or comparison.get("equal_starting_semantic_state") is not True
+        or comparison.get("equal_starting_collection") is not True
+    ):
+        raise ProductFocusError("causal player comparison differs")
+    challenger = _mapping(receipt, "challenger", subject="causal player evidence")
+    if {
+        "actions": challenger.get("actions"),
+        "frames": challenger.get("frames"),
+        "selected_goal": challenger.get("selected_goal"),
+        "status": challenger.get("status"),
+        "target_level_before": challenger.get("target_level_before"),
+        "target_level_after": challenger.get("target_level_after"),
+    } != {
+        "actions": 1119,
+        "frames": 101171,
+        "selected_goal": "develop_team",
+        "status": "succeeded",
+        "target_level_before": 20,
+        "target_level_after": 21,
+    }:
+        raise ProductFocusError("causal player challenger differs")
+    baseline = _mapping(receipt, "baseline", subject="causal player evidence")
+    if {
+        "actions": baseline.get("actions"),
+        "frames": baseline.get("frames"),
+        "selected_goal": baseline.get("selected_goal"),
+        "status": baseline.get("status"),
+        "failure_reason": baseline.get("failure_reason"),
+        "target_level_before": baseline.get("target_level_before"),
+        "target_level_after": baseline.get("target_level_after"),
+        "target_evolved": baseline.get("target_evolved"),
+    } != {
+        "actions": 6000,
+        "frames": 257689,
+        "selected_goal": "evolve_species",
+        "status": "failed",
+        "failure_reason": "execution_budget_exhausted",
+        "target_level_before": 22,
+        "target_level_after": 23,
+        "target_evolved": False,
+    }:
+        raise ProductFocusError("causal player baseline differs")
+    learning = _mapping(receipt, "learning_effect", subject="causal player evidence")
+    authority = _mapping(receipt, "authority_effect", subject="causal player evidence")
+    scope = _mapping(receipt, "scope", subject="causal player evidence")
+    if (
+        learning.get("development_comparison_delta") != 1
+        or learning.get("fit_count_delta") != 0
+        or learning.get("production_authority_delta") != 0
+        or authority.get("broader_authority_promoted") is not False
+        or authority.get("teacher_queries") != 0
+        or authority.get("teacher_fallbacks") != 0
+        or scope.get("sealed_red_accesses") != 0
+        or scope.get("crystal_accesses") != 0
+        or scope.get("full_game_replays") != 0
+        or scope.get("private_path_fields") != 0
+        or scope.get("private_binding_fields") != 0
+    ):
+        raise ProductFocusError("causal player protected boundary differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:

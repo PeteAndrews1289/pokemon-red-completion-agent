@@ -6,7 +6,7 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the budget-terminal repair and one successor pair
+## Current override: Codex owns the multi-goal curriculum after the first strategic win
 
 PR 188 is merged as exact main `b8c2999d` under green CI `33784679568/1`. The causal arm of pair
 001 selected `develop_team` without a teacher and the deterministic skill achieved its requested
@@ -16,13 +16,16 @@ deterministic replay reproduced the trace and proved collection preservation, se
 budget reconciliation. Pair 001 is consumed, is not a comparison, moves no counter and may not
 retry.
 
-That repair merged and pair 002 completed the causal arm. Its completion-first arm selected
-`evolve_species`, raised Diglett 22→23, then correctly exhausted the 6,000-action bound before
-evolution. The remaining integration fault is generic: the runtime must settle action or frame
-exhaustion as a typed verified failure rather than a binding crash. Codex owns this repair,
-publication, exact-main CI, and exactly one fresh pair 003. Pairs 001 and 002 may never retry.
-Claude and Antigravity are not required for this ordinary repair. They may review the next measured
-milestone read-only; neither receives private paths, saves, or model records.
+That repair merged and pair 003 completed. The teacher-free model chose `develop_team` and achieved
+20→21 in 1,119 actions; completion-first ordering chose `evolve_species`, achieved only 22→23, and
+settled as `execution_budget_exhausted` at 6,000 actions without evolution. The verdict is
+`learned_advantage` by verified progress dominance, with zero teacher use or collection loss.
+
+Codex now owns publication and the action-free design of a lineage-disjoint multi-goal curriculum.
+No more gameplay is justified until the inventory proves genuine breadth across goal families and
+disjoint train/development roots. Pairs 001–003 may never retry. Claude and Antigravity are optional
+read-only reviewers at the next design milestone; neither is an implementation dependency or
+receives private paths, saves, or model records.
 
 ## Current override: Codex connects the causal living-Dex model to the player in shadow
 

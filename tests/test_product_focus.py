@@ -331,31 +331,32 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "composition_attempt", "minimum": 2, "partition": "development"},
+        {"kind": "composition_attempt", "minimum": 3, "partition": "development"},
         {
             "kind": "verified_composition_episode",
-            "minimum": 2,
+            "minimum": 3,
             "partition": "development",
         },
         {
             "kind": "development_episode",
-            "minimum": 18,
+            "minimum": 19,
             "partition": "development",
         },
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(1.0)
     assert focus_scorecard(state) == (
-        ("Composition Attempt · development", 2, 2),
-        ("Verified Composition Episode · development", 2, 2),
-        ("Development Episode · development", 18, 18),
+        ("Composition Attempt · development", 3, 3),
+        ("Verified Composition Episode · development", 3, 3),
+        ("Development Episode · development", 19, 19),
     )
     assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
     assert state.progress["model_fits"] == 9
-    assert state.progress["unseen_comparisons"] == 8
-    assert state.progress["development_episode_attempts"] == 18
+    assert state.progress["composition_attempts"] == 3
+    assert state.progress["unseen_comparisons"] == 9
+    assert state.progress["development_episode_attempts"] == 19
     assert state.progress["verified_outcome_examples"] == 61
-    assert state.progress["verified_composition_episodes"] == 2
+    assert state.progress["verified_composition_episodes"] == 3
     assert state.progress["causal_train_examples"] == 104
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
@@ -1547,9 +1548,9 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Composition Attempt · development: 2/2",
-        "Verified Composition Episode · development: 2/2",
-        "Development Episode · development: 18/18",
+        "Composition Attempt · development: 3/3",
+        "Verified Composition Episode · development: 3/3",
+        "Development Episode · development: 19/19",
     )
 
 
@@ -1622,9 +1623,9 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 18, 12),
+        ("Development Episode · development", 19, 12),
         ("Verified Outcome Example · development", 61, 12),
-        ("Verified Composition Episode · development", 2, 2),
+        ("Verified Composition Episode · development", 3, 2),
     )
 
 
@@ -2039,25 +2040,25 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["actions"] == 0
     assert "Red semantic goal curriculum" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 2,
-        "total": 2,
+        "completed": 3,
+        "total": 3,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 18, "total": 18}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 19, "total": 19}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
         "zero_shot": "Composition attempts",
         "adaptation": "Verified composition episodes",
         "sealed_test": "Development episodes",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
-    assert public["model"]["decisions"] == 2  # type: ignore[index]
+    assert public["model"]["decisions"] == 3  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "fixed heuristic 20/20" in encoded
-    assert "First Red player gate complete" in encoded
-    assert "Battle study closed" in encoded
-    assert "Composition Attempt 2/2" in encoded
-    assert "Verified Composition Episode 2/2" in encoded
-    assert "Development Episode 18/18" in encoded
+    assert "First causal Red player advantage" in encoded
+    assert "Integration gate closed" in encoded
+    assert "Composition Attempt 3/3" in encoded
+    assert "Verified Composition Episode 3/3" in encoded
+    assert "Development Episode 19/19" in encoded
     assert "Composition attempts" in encoded
     assert "Verified composition episodes" in encoded
     assert "Development episodes" in encoded
@@ -2065,8 +2066,9 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no more one-turn data campaigns" in encoded
     assert "semantic goal manager" in encoded
     assert "Player result" in encoded
-    assert "manage_storage in both arms" in encoded
-    assert "equivalent" in encoded
+    assert "model develop_team succeeded" in encoded
+    assert "control evolve_species hit 6,000-action bound" in encoded
+    assert "learned advantage" in encoded
     assert "Four live Red preflights passed" in encoded
     assert "planner agreement 4/4" in encoded
     assert "menu widths 2/3/4/3" in encoded
