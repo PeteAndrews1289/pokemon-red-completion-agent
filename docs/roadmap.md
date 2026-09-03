@@ -3182,3 +3182,35 @@ offer at least three. Do not weaken that rule after seeing the result.
 
 This gate advances the battle component of the portable hierarchy. It is not yet a model that can
 navigate a game or complete a living Pokédex.
+
+## Red-first repeatable battle factory — active 2026-09-03
+
+Mission: learn a reusable semantic battle policy in Red, then expand its authority only after it
+beats a strong legal heuristic on unseen states. Crystal remains deferred, but the factory and
+feature contracts stay title-neutral so the later adapter does not require a redesign.
+
+- [x] Inventory cartridge states without controller input or frame advancement.
+- [x] Preserve true upstream lineage when one source yields multiple party, venue, or timing
+  variants; sibling states increase density but never evaluation independence.
+- [x] Freeze 48 train and 24 development assignments across eight lineages, three party menus and
+  three measured encounter venues.
+- [x] Implement natural Red materialization: exact restore, safe-source reauthentication, bounded
+  route, RNG wait, encounter, party switch, MAIN-menu verification, and path-free capture binding.
+- [x] Permit sibling captures within a partition while rejecting repeated state bytes and any
+  lineage crossing train/development.
+- [ ] Publish the implementation and require green exact-main CI before controller execution.
+- [ ] Materialize the 48 train scenarios, retaining every terminal and never substituting a failed
+  setup after observing its result.
+- [ ] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights.
+- [ ] Commit predictions for all 24 development scenarios before opening their outcomes.
+- [ ] Require the learned scorer to beat the strongest legal fixed-power heuristic on development;
+  otherwise revise representation or supply, not the test result.
+- [ ] Add independently sourced trainer-battle scenarios before claiming broad battle competence.
+- [ ] Only after stable multi-turn Red battle control, integrate battle authority into Red quest,
+  capture, party, inventory, evolution, storage and living-Pokédex planning.
+
+Stop conditions: any private path in tracked output, memory editing, source or lineage drift,
+train/development overlap, a model-selected action during materialization, or a request to claim
+Crystal transfer from Red-only evidence. The frozen plan is summarized in
+`docs/evidence/red-repeatable-battle-scenario-plan-summary-2026-09-03.json`; it opened no outcome
+and changed no model or authority counter.

@@ -8442,3 +8442,25 @@ instead of manufacturing a training claim from it. Both policy versions and thos
 terminal. The next chapter is not another Red walkthrough repair; it is a reusable short-scenario
 supply seam that can create genuinely independent semantic choices for Red and, through a thin
 adapter, Crystal.
+
+## From a rejected syllabus to a cartridge-native classroom — September 3, 2026
+
+The failed fixed roster answered an important question: five convenient saves were not enough to
+support the intended learning claim. The project therefore changed the source of variation rather
+than weakening the test. Eight provenance-backed Red roots now feed a prospective factory that
+varies the active party member, measured encounter venue and pre-encounter timing through normal
+gameplay. Forty-eight train and twenty-four development starts were frozen before any outcome was
+opened.
+
+The distinction between “scenario” and “independent evidence” is explicit. Several starts may
+descend from one restored game, but all retain the same root lineage. They provide useful training
+density without creating fake statistical power. The materializer also cannot choose an attack or
+edit memory: it stops at a verified battle menu and hands the resulting state to the separate
+counterfactual outcome collector.
+
+This is meaningful progress toward a model that plays, but it is still one component. The current
+factory spans three wild encounter venues and three party move menus; it does not yet provide broad
+trainer battles, multi-turn battle control, quest planning, or living-Pokédex completion. The next
+proof is deliberately simple: after publication and train-only fitting, does the scorer beat the
+best legal fixed-power heuristic on committed development predictions? If not, the representation
+or data supply changes before authority expands.

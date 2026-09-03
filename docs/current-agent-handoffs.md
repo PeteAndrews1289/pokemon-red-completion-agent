@@ -3567,3 +3567,26 @@ weighting, and gates the known mixed-action roster on nine train and fourteen de
 rows plus full available hidden rank. The next Codex task is full verification, publication, and
 exact-main CI. The one action-free V2 qualification remains a later separate step; outcomes remain
 closed.
+
+## Current assignments — Red-first repeatable battle factory (2026-09-03)
+
+### Codex workhorse lane
+
+- Own the title-neutral planner, action-free Red source adapter, natural cartridge materializer,
+  lineage-safe collector changes, tests, documentation, publication and CI.
+- After green exact-main CI, materialize the frozen train partition before development, fit only
+  from train outcomes, and commit development predictions before opening development outcomes.
+- Stop at the development comparison. No battle authority follows unless the scorer beats the
+  strongest legal fixed-power heuristic on genuinely novel states.
+
+### Reviewer lane
+
+- No reviewer is needed for ordinary materialization. At the post-fit gate, Claude should challenge
+  leakage, lineage weighting, statistical power and claim scope; Antigravity should challenge
+  adapter boundaries, multi-turn authority and whether the Red representation remains portable.
+- Reviewers remain read-only and do not receive ROMs, saves, private paths, plan identities or
+  outcomes. Codex adjudicates disagreements and records the reason.
+
+Mission status: this is a Red battle-component learning lane, not a general game-playing model.
+Crystal stays deferred to shorten feedback time, while title-neutral contracts are preserved for
+the later transfer test. Trainer-battle supply and full living-Pokédex orchestration remain planned.

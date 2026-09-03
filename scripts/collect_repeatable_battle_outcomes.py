@@ -62,16 +62,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if any(capture.manifest.partition is ScenarioPartition.TEST for capture in captures):
         raise RepeatableBattleCollectionError("sealed test captures are not development inputs")
     state_ids = tuple(capture.manifest.state_sha256 for capture in captures)
-    root_ids = tuple(capture.manifest.root_lineage_id for capture in captures)
-    if len(state_ids) != len(set(state_ids)) or len(root_ids) != len(set(root_ids)):
-        raise RepeatableBattleCollectionError("capture states and roots must be distinct")
+    if len(state_ids) != len(set(state_ids)):
+        raise RepeatableBattleCollectionError("capture states must be distinct")
     train_roots = {
         capture.manifest.root_lineage_id
         for capture in captures
         if capture.manifest.partition is ScenarioPartition.TRAIN
     }
-    development_roots = set(root_ids) - train_roots
-    if train_roots & development_roots:  # pragma: no cover - set construction invariant
+    development_roots = {
+        capture.manifest.root_lineage_id
+        for capture in captures
+        if capture.manifest.partition is ScenarioPartition.DEVELOPMENT
+    }
+    if train_roots & development_roots:
         raise RepeatableBattleCollectionError("a root crosses train and development")
 
     journal_dir = args.journal_dir or args.output.with_name(f"{args.output.name}.journal")

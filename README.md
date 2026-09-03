@@ -6,6 +6,22 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 3, 2026): scale authentic Red battle learning before
+> Crystal.** The fixed five-capture roster was rejected, so the active lane now generates natural
+> battle boundaries from authenticated cartridge states instead of repairing another full-game
+> route. An action-free inventory has frozen **48 train + 24 development** wild-battle scenarios
+> across **8 true source lineages, 3 party move menus, and 3 measured venues**, with every timing
+> child retaining its parent lineage. Inventory used zero controller actions and zero emulator
+> frames; no outcome was opened, no model was fit, and authority remains unchanged.
+>
+> The implementation restores an exact source, re-derives its safe map and party facts, uses only
+> natural routes, waits, and switches, verifies the final MAIN battle menu, and writes a path-free
+> capture binding. Next: publish and green this source, materialize the frozen train partition,
+> collect counterfactual move outcomes, fit one shadow model, commit development predictions, and
+> compare it with the strongest legal fixed-power heuristic. Trainer-battle breadth remains an
+> explicit gap; Crystal execution stays deferred while the shared interfaces remain title-neutral.
+> See the [path-free plan summary](docs/evidence/red-repeatable-battle-scenario-plan-summary-2026-09-03.json).
+
 > **Current product focus (September 2, 2026): repair the Red evidence boundary before broader
 > authority.** Repeatable authentic training is real but narrow. The adapted model improved over its
 > synthetic predecessor from **2/7 to 5/7** on the independent comparison and raised mean selected

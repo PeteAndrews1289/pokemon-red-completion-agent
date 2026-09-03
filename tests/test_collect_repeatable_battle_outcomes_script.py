@@ -16,6 +16,7 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 SCRIPT = runpy.run_path("scripts/collect_repeatable_battle_outcomes.py")
 GLOBALS = SCRIPT["_run"].__globals__
+RepeatableBattleCollectionError = SCRIPT["RepeatableBattleCollectionError"]
 
 
 def _example(
@@ -176,3 +177,86 @@ def test_collection_resumes_after_interruption_without_reexecuting_completed_cap
         json.loads(line)["capture_id"] in {"train-capture", "development-capture"}
         for line in output.read_text("ascii").splitlines()
     )
+
+
+def test_collection_allows_sibling_states_from_one_training_lineage(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captures = (
+        _capture("train-a", ScenarioPartition.TRAIN, root="shared-train-root", state_character="1"),
+        _capture("train-b", ScenarioPartition.TRAIN, root="shared-train-root", state_character="2"),
+        _capture("dev", ScenarioPartition.DEVELOPMENT, root="dev-root", state_character="3"),
+    )
+    _install_collection_fakes(tmp_path, monkeypatch, captures)
+
+    summary = SCRIPT["_run"](_args(tmp_path))
+
+    assert summary["examples"] == 3
+
+
+def test_collection_rejects_lineage_crossing_partitions(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captures = (
+        _capture("train", ScenarioPartition.TRAIN, root="crossing-root", state_character="1"),
+        _capture("dev", ScenarioPartition.DEVELOPMENT, root="crossing-root", state_character="2"),
+    )
+    _install_collection_fakes(tmp_path, monkeypatch, captures)
+
+    with pytest.raises(RepeatableBattleCollectionError, match="crosses"):
+        SCRIPT["_run"](_args(tmp_path))
+
+
+def _args(tmp_path: Path) -> SimpleNamespace:
+    return SimpleNamespace(
+        rom=None,
+        capture_dir=[tmp_path],
+        output=tmp_path / "outcomes.jsonl",
+        journal_dir=tmp_path / "journal",
+        failure_report=None,
+    )
+
+
+def _install_collection_fakes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    captures: tuple[SimpleNamespace, ...],
+) -> None:
+    monkeypatch.setitem(GLOBALS, "resolve_rom_path", lambda path: Path("red.gb"))
+    monkeypatch.setitem(
+        GLOBALS,
+        "verify_rom",
+        lambda path: SimpleNamespace(sha256="c" * 64),
+    )
+    monkeypatch.setitem(
+        GLOBALS,
+        "_capture_pairs",
+        lambda directories: tuple(
+            (tmp_path / f"{index}.state", tmp_path / f"{index}.json")
+            for index in range(len(captures))
+        ),
+    )
+    opened = iter(captures)
+    monkeypatch.setitem(GLOBALS, "open_battle_scenario_capture", lambda *args: next(opened))
+
+    def collect(capture, **kwargs):  # type: ignore[no-untyped-def]
+        del kwargs
+        state_character = capture.manifest.state_sha256[0]
+        return SimpleNamespace(
+            example=_example(
+                capture.manifest.partition,
+                root=capture.manifest.root_lineage_id,
+                state_character=state_character,
+                scale=(
+                    1.0
+                    if capture.manifest.partition is ScenarioPartition.TRAIN
+                    else 0.5
+                ),
+            ),
+            capture_id=capture.manifest.capture_id,
+            manifest_sha256=capture.manifest_sha256,
+        )
+
+    monkeypatch.setitem(GLOBALS, "collect_red_battle_outcome_example", collect)
