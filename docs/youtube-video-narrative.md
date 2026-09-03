@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New opening beat: the boring rule beat the neural network
+
+The most useful audit result was not another victory screen. The authentic Red model improved from
+2/7 to 5/7 against its synthetic predecessor, but a simple legal strongest-move calculation scored
+6/7 on the same independent states. Even the exciting teacher-free knockout was an exact
+policy-input duplicate of a training example. It proved the model could drive the controller, not
+that it understood a new situation.
+
+That is the engineering pivot to show on screen: the project does not hide the embarrassing
+baseline. It makes that baseline the next opponent. Train and development are now separated by what
+the model can actually see rather than filenames, every completed emulator outcome survives a
+restart, and every future challenger must beat the simple rule before it receives more authority.
+Red becomes the focused training ground; Crystal waits, while the shared interface remains capable
+of accepting later games.
+
 ## New scene: stop sealing every rehearsal and let the model learn
 
 **Visual:** Compress days of freeze cards and approval gates into a small box labeled **SEALED

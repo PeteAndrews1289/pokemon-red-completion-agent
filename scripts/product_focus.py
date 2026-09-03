@@ -382,7 +382,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
                 f"{time_box_hours} {time_box_hour_label} |"
             ),
             "",
-            "### Required learning outputs",
+            "### Cumulative cross-family learning outputs",
             "",
             "| Output | Current | Minimum for the next decision |",
             "| --- | ---: | ---: |",
@@ -395,6 +395,10 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
         [
             "",
             "Each counter changes only when tracked, path-free evidence supports it.",
+            (
+                "These totals aggregate several learner heads and historical scenario families; "
+                "they do not by themselves gate battle-model promotion."
+            ),
             (
                 "Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not "
                 "learning"

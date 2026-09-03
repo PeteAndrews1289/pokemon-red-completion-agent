@@ -6,20 +6,19 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 2, 2026): authentic Red battle training has begun.** Routine
-> development now uses repeatable authenticated scenarios; sealed rigor is reserved for later
-> promotion claims. A Red-backed semantic curriculum pretrained the shared battle MLP, and twelve
-> authentic train roots then improved a seven-root working development set from **5/7 to 7/7**.
-> On a second independent seven-root set, the updated model improved from **2/7 to 5/7** and raised
-> mean selected utility from **1.304 to 2.644**.
+> **Current product focus (September 2, 2026): repair the Red evidence boundary before broader
+> authority.** Repeatable authentic training is real but narrow. The adapted model improved over its
+> synthetic predecessor from **2/7 to 5/7** on the independent comparison and raised mean selected
+> utility from **1.304 to 2.644**. The legal fixed-power heuristic still scores **6/7** at **2.992**,
+> so the mechanism passes and promotion fails.
 >
-> In one fresh bounded rehearsal, the model selected and executed a Red move with **zero teacher
-> queries**, knocked out the opponent for utility **3.0**, and later counterfactual replay confirmed
-> that its choice was optimal; the synthetic-only predecessor would have chosen a move worth
-> **0.878**. This is real outcome training and bounded battle-move authority, not a complete player,
-> sealed result, or Crystal transfer claim. Next: generate broader cartridge-native battle
-> variation and test multi-turn model authority before integrating switches, items and captures.
-> See the [development evidence](docs/evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json).
+> The teacher-free knockout remains genuine controller evidence, but its policy-visible feature
+> batch exactly duplicates training and is not novel-state generalization. The Red-first loop now
+> rejects semantic train/development collisions, binds exact model and dataset files, reports the
+> strongest fixed baseline, and retains each completed capture durably across interruption. Next:
+> generate varied cartridge-native scenarios and require a heuristic advantage before bounded
+> multi-turn move authority. Crystal execution is deferred while the shared contract remains
+> transfer-ready. See the [audit correction](docs/evidence/repeatable-red-battle-learning-audit-v1-2026-09-02.json).
 
 > **Current product focus (September 2, 2026): the fixed Red battle roster failed its final
 > information gate; do not train on it.** The distinct V2 contrast policy was published as exact

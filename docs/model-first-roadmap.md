@@ -11,6 +11,41 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
+## Current checkpoint: Red-first evidence repair before broader authority
+
+The September 2 Ultra audit reclassified the first repeatable result as a **mechanism pass and
+promotion failure**. Authentic outcome adaptation remains real: the challenger improved over its
+synthetic predecessor from 2/7 to 5/7 on the independent development set. It does not yet beat the
+legal fixed-power heuristic, which scores 6/7 with higher mean selected utility. The one
+teacher-free controller rehearsal also exactly duplicates a training example at the policy-visible
+feature level. It proves that a model can control one move without a teacher, not that the model
+generalized to a novel battle state.
+
+Crystal execution is deliberately deferred while Red becomes operational. This does not authorize
+Red-specific model inputs or routes: shared observations remain identity-free, unsupported action
+kinds remain explicit, and inexpensive ROM-free compatibility checks protect the later transfer
+boundary.
+
+Immediate order:
+
+1. reject malformed provenance, forged outcome summaries and permissive value coercions;
+2. bind every fit and evaluation to exact model and dataset file digests;
+3. prohibit policy-visible semantic clusters from crossing train and development, regardless of
+   distinct save or lineage hashes;
+4. compare every authentic challenger with the legal fixed-power heuristic as well as its learned
+   prior;
+5. journal each completed collection unit durably and resume without re-executing retained work;
+6. generate genuinely varied wild and trainer scenarios, then stop unless the challenger beats the
+   heuristic on novel semantic clusters;
+7. integrate the existing multi-turn controller behind move-only learned authority and explicit
+   switch, item and capture abstentions.
+
+The cumulative 31/48, 7/8 and 20/28 board combines multiple historical learner heads. It remains an
+audited project total, not the promotion gate for this battle model. Battle promotion is gated by
+unique semantic clusters, menu/mechanics coverage, strongest-baseline comparison, multi-turn
+outcomes and safety accounting. See the
+[audit correction](evidence/repeatable-red-battle-learning-audit-v1-2026-09-02.json).
+
 ## Current checkpoint: authentic battle training has started
 
 Development rigor is now intentionally lighter than benchmark rigor. A fast, reusable loop builds

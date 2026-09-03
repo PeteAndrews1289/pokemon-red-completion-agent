@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_outcome_learning import (
     BattleOutcomeLearningError,
     BattleTurnOutcome,
     adapt_mlp_last_layer_from_outcomes,
+    battle_feature_semantic_sha256,
     compare_battle_outcome_preferences,
     evaluate_battle_outcome_preferences,
     run_battle_outcome_learning_curve,
@@ -354,11 +355,13 @@ def test_flat_prefix_remains_a_no_update_curve_point_instead_of_being_replaced()
             partition=ScenarioPartition.DEVELOPMENT,
             lineage="development-root-a",
             state_character="a",
+            scale=0.4,
         ),
         _example(
             partition=ScenarioPartition.DEVELOPMENT,
             lineage="development-root-b",
             state_character="b",
+            scale=0.5,
         ),
     )
 
@@ -395,11 +398,13 @@ def test_learning_curve_rejects_dependent_roots_and_optional_final_prefix() -> N
             partition=ScenarioPartition.DEVELOPMENT,
             lineage="development-one",
             state_character="0",
+            scale=0.5,
         ),
         _example(
             partition=ScenarioPartition.DEVELOPMENT,
             lineage="development-two",
             state_character="1",
+            scale=0.6,
         ),
     )
 
@@ -417,6 +422,40 @@ def test_learning_curve_rejects_dependent_roots_and_optional_final_prefix() -> N
             training_examples=(training[0], dependent, training[2]),
             development_examples=development,
             training_sizes=(1, 2, 3),
+        )
+
+
+def test_semantic_cluster_is_slot_order_neutral_and_cannot_cross_partitions() -> None:
+    training = _example(
+        partition=ScenarioPartition.TRAIN,
+        lineage="semantic-train",
+        state_character="3",
+    )
+    original = training.features
+    reordered_features = replace(
+        original,
+        candidate_vectors=tuple(reversed(original.candidate_vectors)),
+        legal_mask=tuple(reversed(original.legal_mask)),
+        current_pp=tuple(reversed(original.current_pp)),
+        slot_indices=tuple(reversed(original.slot_indices)),
+    )
+    development = replace(
+        training,
+        partition=ScenarioPartition.DEVELOPMENT,
+        root_lineage_id="semantic-development",
+        initial_state_sha256=_digest("4"),
+        features=reordered_features,
+        outcomes=tuple(reversed(training.outcomes)),
+    )
+
+    assert battle_feature_semantic_sha256(original) == (
+        battle_feature_semantic_sha256(reordered_features)
+    )
+    with pytest.raises(BattleOutcomeLearningError, match="semantic battle cluster"):
+        run_battle_outcome_learning_cycle(
+            _model(),
+            training_examples=(training,),
+            development_examples=(development,),
         )
 
 

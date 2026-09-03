@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Repaired the repeatable Red battle-learning evidence boundary after a falsification audit showed
+  the adapted model (5/7, utility 2.644) trailing the strongest legal fixed-power rule (6/7,
+  utility 2.992), and showed that the nominally fresh rehearsal duplicated a training feature
+  batch. Promotion now remains explicitly blocked. Added strict path-free record validation,
+  recomputed outcome utilities, title-neutral semantic train/development separation, exact
+  model/dataset input bindings, paired fixed-heuristic comparisons, and crash-safe per-capture
+  journaling with idempotent resume. Updated the dashboard and narratives to distinguish cumulative
+  project evidence from this head's promotion gate. Rebound all committed collection registries to
+  source bundle `539ff370…8d57a`. No gameplay, teacher, sealed Red, Crystal, replay, or authority
+  action occurred; the next lane is prospectively varied cartridge-native Red scenario supply.
+
 - Replaced the one-shot development bottleneck with a repeatable authentic Red battle-learning
   loop. Added a deterministic Red-backed semantic curriculum, portable path-free outcome datasets,
   per-capture quarantine, authentic last-layer adaptation, paired development evaluation, and a

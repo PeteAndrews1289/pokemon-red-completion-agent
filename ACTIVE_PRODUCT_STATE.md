@@ -33,20 +33,20 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Expand the repeatable authentic battle generator and learning curve, then decide whether the model may own multi-turn move selection in bounded Red episodes. Keep switch, item, capture, full-run, sealed Red and Crystal authority closed until their own outcome gates pass.
+- Next decision: After the trustworthy data-path repair, expand the authentic Red scenario generator and require the learner to beat the legal fixed-power heuristic on novel semantic clusters. Only then may the model own move selection in bounded multi-turn Red episodes; switch, item, capture, full-run, sealed Red and Crystal authority remain closed.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Run title-neutral battle, local-navigation, and party-development learners in bounded authenticated snapshot scenarios, retain every executed outcome and intervention, update from train lineages, and compare against frozen controls on prospectively held Red development lineages before any separately sealed evaluation or Crystal transfer probe. |
-| Authority now | The battle move ranker has now been pretrained, adapted from twelve authentic Red train roots, improved on two disjoint development sets, and executed one fresh optimal move without a teacher. This is bounded development authority; the full player still relies on fixed specialists and no Crystal transfer result exists. |
+| Reusable capability | Run a trustworthy Red-first battle learner in short authenticated scenarios, retain every executed outcome durably, separate train and development by policy-visible semantic cluster, and compare each challenger with both its frozen learned prior and the strongest legal deterministic baseline. |
+| Authority now | The battle move ranker has been pretrained, adapted from twelve authentic Red train roots, and executed one optimal move without a teacher. The independent comparison improves over the synthetic prior but loses to the legal fixed-power heuristic, and the executed feature batch duplicates training; this is mechanism evidence, not promoted battle authority. |
 | Authority target | Move battle, local-navigation recovery, and party-development choices from teacher or fixed policy to outcome-trained models one bounded skill at a time; use prospectively held development for iteration, then require a separately frozen untouched Red gate before freezing only the supported title-neutral representation for Crystal. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Build one small batch of genuinely varied cartridge-native Red battle situations from disjoint upstream roots, let the model act before counterfactual outcomes are opened, and compare it with the frozen synthetic base. Stop if the generator produces repeated semantic states, invalid decision boundaries, or no challenger advantage. |
+| Cheapest falsifier | Build one small batch of genuinely varied cartridge-native Red battle situations from disjoint upstream roots and policy-visible semantic clusters. Stop if the contexts collapse into repeated strongest-move menus or the challenger cannot beat the legal fixed-power heuristic. |
 | Time box | 1 session / 8 hours |
 
-### Required learning outputs
+### Cumulative cross-family learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
@@ -55,24 +55,25 @@ Not the product:
 | Verified Outcome Example · development | 20 | 28 |
 
 Each counter changes only when tracked, path-free evidence supports it.
+These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
 
 ### Latest session reorientation
 
-**2026-09-02-repeatable-red-battle-learning-v1** · status **closed** · evidence [unseen comparison](docs/evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json)
+**2026-09-02-repeatable-red-battle-audit-v1** · status **closed** · evidence [falsification](docs/evidence/repeatable-red-battle-learning-audit-v1-2026-09-02.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Short semantic scenarios teach reusable choices and expose generalization within minutes rather than spending hours reproducing a Red route. The same observation, action, outcome, lineage, abstention, and intervention contracts become the thin adapter boundary for Crystal and later games on the path to story and living-Pokedex completion. |
-| Learning output | Synthetic pretraining reached 84.0% on 500 unseen menus versus 70.4% for the fixed power heuristic. Authentic adaptation used twelve train roots, reached 7/7 on working development, and improved a separate seven-root comparison from 2/7 to 5/7 while raising mean selected utility from 1.304 to 2.644. |
-| Authority delta | The updated model selected and executed one fresh Red battle move with zero teacher queries; the opponent fainted and later counterfactual replay showed the choice was optimal. This is bounded development authority only, not promotion to the full player. |
-| Transfer result | Still untested. The next valid transfer evidence is not another Red teacher run: after bounded Red battle, navigation, and party-development gates pass, freeze the supported title-neutral contract and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. |
-| Blocker | The repeatable loop works, but authentic scale and semantic breadth remain small. Twelve train roots, seven working-development roots and seven independent-development roots do not cover multi-turn battles, switches, items, captures, status-heavy matchups, or cross-title behavior. |
-| Decision | Keep sealed benchmark rigor for promotion claims, but use repeatable authenticated scenarios for daily development. Expand authentic semantic diversity and multi-turn model authority before any full replay or Crystal execution. |
-| Next session | Build the repeatable authentic scenario generator and run a larger bounded learning curve. Then exercise model-selected multi-turn battle decisions with explicit abstention for switch, item and capture decisions not yet owned by this head. |
-| Next falsifier | Generate a small cartridge-native batch with deliberate variation in opponent, HP, PP, status, matchup and moves. Commit model choices before revealing alternatives; stop if contexts repeat, boundaries are invalid, or the authentic-trained challenger fails to outperform the synthetic base. |
-| Stop condition | Do not convert this small development result into a full-player, sealed, or transfer claim. Stop the next iteration if it adds no new semantic coverage, has no independent challenger advantage, or requires another full Red route replay. |
+| Product alignment | Red-first short scenarios move real gameplay choices into learned authority without another walkthrough. Crystal execution is deferred, while title-neutral inputs and explicit unsupported actions preserve the later transfer path toward cross-game story and living-Pokedex completion. |
+| Learning output | Authentic outcome adaptation remains real but narrow: the synthetic prior moved from 2/7 to 5/7 on the independent set and mean selected utility rose from 1.304 to 2.644. The stronger legal fixed-power heuristic scores 6/7 at 2.992, so the mechanism passes and promotion fails. |
+| Authority delta | The updated model selected and executed one Red move with zero teacher queries, but its exact policy-visible feature batch duplicates a training example. This proves teacher-free controller execution, not novel-state generalization, and grants no promotion. |
+| Transfer result | Still untested and deliberately deferred while Red becomes operational. Preserve the shared contract through ROM-free compatibility checks; do not execute Crystal until a bounded Red model owns meaningful multi-turn decisions. |
+| Blocker | The adapted model improves on its synthetic predecessor but loses to the legal fixed-power heuristic on the seven-root independent comparison, 5/7 versus 6/7. Across twenty-six examined authentic contexts there are only three usable move menus and six usable moves, and policy-visible semantic duplication crosses the prior train/development boundary. |
+| Decision | Keep Crystal execution on the backburner and make Red operational through short scenarios. First repair semantic separation, artifact binding, durable collection and strongest-baseline reporting; then generate varied authentic Red situations. Build the multi-turn runner without promoting its authority until the learner beats the heuristic on genuinely novel semantic clusters. |
+| Next session | Complete the trustworthy Red data path and authentic scenario factory, then run a battle-specific learning curve against the strongest fixed baseline. In parallel, implement the bounded multi-turn runner behind explicit move-only authority and switch, item and capture abstentions. |
+| Next falsifier | Generate prospectively varied wild and trainer contexts spanning HP, PP, physical and special moves, type pressure, status and stages. Keep semantic clusters partition-disjoint and stop unless the challenger beats the legal fixed-power heuristic. |
+| Stop condition | Do not count repeated semantic menus as new evidence or promote a model that fails to beat the strongest deterministic baseline. Stop rather than patch a route, replay the full game, or open Crystal to compensate for inadequate Red scenarios. |
 
 ### Stop conditions
 

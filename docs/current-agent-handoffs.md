@@ -6,6 +6,26 @@ Status: active operating assignment as of 2026-09-02. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the Red-first trustworthy learning loop
+
+The September 2 Ultra audit found that the repeatable mechanism is real but the battle candidate is
+not promotable. On seven independent development roots the authentic challenger improves over the
+synthetic prior from 2/7 to 5/7, yet the legal fixed-power heuristic scores 6/7 with greater mean
+utility. The teacher-free rehearsal exactly duplicates a training menu at the policy-visible
+feature level. It is controller evidence, not novel-state generalization.
+
+Codex owns the smallest repair that makes the next Red result trustworthy: strict portable-record
+validation, semantic-cluster partition separation, exact dataset/model bindings, strongest-baseline
+reporting, durable per-capture collection recovery, and direct tests of those boundaries. After
+that, Codex builds a varied authentic Red scenario factory and a bounded multi-turn runner. The
+runner may be implemented and tested, but learned authority remains damaging-move-only and may not
+be promoted until the challenger beats the fixed heuristic on novel semantic clusters.
+
+Crystal gameplay is on the backburner. Preserve later transfer through identity-free contracts and
+ROM-free compatibility checks; do not execute Crystal, replay the Red route, open sealed Red, or
+turn switch/item/capture abstentions into hidden teacher choices. Claude and Antigravity remain
+read-only milestone reviewers rather than implementation blockers.
+
 ## Current override: Codex owns clustered battle integration admission
 
 The exact-main two-root relocation successor ended **0/2** with identical `planner_no_route`

@@ -13,13 +13,15 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker  # noqa: E402
 from pokemon_red_completion.battle_outcome_learning import (  # noqa: E402
     compare_battle_outcome_preferences,
     run_battle_outcome_learning_cycle,
 )
-from pokemon_red_completion.repeatable_battle_dataset import (  # noqa: E402
-    parse_repeatable_battle_outcome_record,
+from pokemon_red_completion.repeatable_battle_evaluation import (  # noqa: E402
+    compare_model_with_repeatable_fixed_heuristic,
+    evaluate_repeatable_fixed_heuristic,
+    load_repeatable_battle_datasets,
+    load_repeatable_battle_model,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
@@ -37,13 +39,11 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    model = MaskedMLPMoveRanker.from_dict(json.loads(args.base_model.read_text("ascii")))
-    records = [
-        parse_repeatable_battle_outcome_record(json.loads(line))
-        for dataset in args.dataset
-        for line in dataset.read_text("ascii").splitlines()
-        if line
-    ]
+    model, base_model_file_sha256 = load_repeatable_battle_model(args.base_model)
+    records, dataset_inputs = load_repeatable_battle_datasets(
+        args.dataset,
+        subject="fit",
+    )
     training = tuple(
         item for item in records if item.partition is ScenarioPartition.TRAIN
     )
@@ -63,9 +63,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         cycle.update.model,
         development,
     )
-    _write_exclusive(args.out_model, cycle.update.model.to_json().encode("ascii") + b"\n")
+    heuristic, heuristic_choices = evaluate_repeatable_fixed_heuristic(development)
+    challenger_vs_heuristic = compare_model_with_repeatable_fixed_heuristic(
+        cycle.update.model,
+        development,
+        heuristic_choices,
+    )
+    model_payload = cycle.update.model.to_json().encode("ascii") + b"\n"
     report = {
-        "schema": "pokemon.core.battle.repeatable-authentic-fit.v1",
+        "schema": "pokemon.core.battle.repeatable-authentic-fit.v2",
+        "inputs": {
+            "base_model_file_sha256": base_model_file_sha256,
+            "datasets": list(dataset_inputs),
+        },
         "base_model_sha256": hashlib.sha256(model.to_json().encode("ascii")).hexdigest(),
         "updated_model_sha256": hashlib.sha256(
             cycle.update.model.to_json().encode("ascii")
@@ -74,17 +84,42 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "base_development": cycle.base_development.public_dict(),
         "updated_development": cycle.updated_development.public_dict(),
         "paired_development": paired.public_dict(),
+        "fixed_heuristic_development": heuristic,
+        "challenger_vs_fixed_heuristic": challenger_vs_heuristic,
         "authentic_outcome_training": True,
         "development_artifact": True,
         "sealed_evidence": False,
         "authority_promoted": False,
         "crystal_transfer_claim": False,
     }
-    _write_exclusive(
-        args.out_report,
-        (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("ascii"),
+    _write_bundle(
+        model_path=args.out_model,
+        model_payload=model_payload,
+        report_path=args.out_report,
+        report_payload=(
+            json.dumps(report, indent=2, sort_keys=True) + "\n"
+        ).encode("ascii"),
     )
     return report
+
+
+def _write_bundle(
+    *,
+    model_path: Path,
+    model_payload: bytes,
+    report_path: Path,
+    report_payload: bytes,
+) -> None:
+    if model_path.resolve() == report_path.resolve():
+        raise ValueError("fit model and report paths must differ")
+    if report_path.exists():
+        raise FileExistsError(report_path)
+    if model_path.exists():
+        if model_path.read_bytes() != model_payload:
+            raise FileExistsError(model_path)
+    else:
+        _write_exclusive(model_path, model_payload)
+    _write_exclusive(report_path, report_payload)
 
 
 def _write_exclusive(path: Path, payload: bytes) -> None:

@@ -10,6 +10,7 @@ deterministic, and explicitly anchored to that prior.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import re
 from collections.abc import Iterable
@@ -192,6 +193,12 @@ class BattleOutcomeExample:
         usable_count = int(np.sum(self.usable_mask))
         return len(self.best_candidate_indices) < usable_count
 
+    @property
+    def semantic_cluster_sha256(self) -> str:
+        """Order-neutral identity of exactly what the move ranker can observe."""
+
+        return battle_feature_semantic_sha256(self.features)
+
 
 @dataclass(frozen=True, slots=True)
 class BattleOutcomeUpdateReport:
@@ -271,6 +278,7 @@ class BattleOutcomeLearningCycle:
             "updated_development": self.updated_development.public_dict(),
             "lineage_partition_overlap": 0,
             "initial_state_partition_overlap": 0,
+            "semantic_cluster_partition_overlap": 0,
             "sealed_test_cases_opened": 0,
             "authority_promoted": False,
         }
@@ -670,14 +678,7 @@ def run_battle_outcome_learning_cycle(
     development = tuple(development_examples)
     _require_examples(training, partition=ScenarioPartition.TRAIN)
     _require_examples(development, partition=ScenarioPartition.DEVELOPMENT)
-    training_roots = {example.root_lineage_id for example in training}
-    development_roots = {example.root_lineage_id for example in development}
-    if training_roots & development_roots:
-        raise BattleOutcomeLearningError("root lineage crosses train and development")
-    training_states = {example.initial_state_sha256 for example in training}
-    development_states = {example.initial_state_sha256 for example in development}
-    if training_states & development_states:
-        raise BattleOutcomeLearningError("initial state crosses train and development")
+    _require_disjoint_partitions(training, development)
 
     update = adapt_mlp_last_layer_from_outcomes(
         base_model,
@@ -879,6 +880,63 @@ def _require_disjoint_partitions(
         example.initial_state_sha256 for example in development
     }:
         raise BattleOutcomeLearningError("initial state crosses train and development")
+    if {example.semantic_cluster_sha256 for example in training} & {
+        example.semantic_cluster_sha256 for example in development
+    }:
+        raise BattleOutcomeLearningError(
+            "semantic battle cluster crosses train and development"
+        )
+
+
+def battle_feature_semantic_sha256(features: BattleFeatureBatch) -> str:
+    """Return an order-neutral digest of the policy-visible candidate menu.
+
+    Physical move slots and cartridge identities are deliberately excluded.
+    Candidate ordering is normalized because the ranker scores candidates
+    independently and a slot permutation must not manufacture independence.
+    """
+
+    if not isinstance(features, BattleFeatureBatch):
+        raise TypeError("semantic battle digest requires a BattleFeatureBatch")
+    candidates = [
+        {
+            "candidate_vector": [_canonical_float(value) for value in vector],
+            "legal": legal,
+            "current_pp": _canonical_float(pp),
+        }
+        for vector, legal, pp in zip(
+            features.candidate_vectors,
+            features.legal_mask,
+            features.current_pp,
+            strict=True,
+        )
+    ]
+    candidates.sort(
+        key=lambda value: json.dumps(
+            value,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
+    payload = {
+        "schema": "pokemon.core.battle.semantic-cluster.v1",
+        "feature_schema_id": features.schema_id,
+        "feature_names": list(features.feature_names),
+        "candidates": candidates,
+    }
+    encoded = json.dumps(
+        payload,
+        allow_nan=False,
+        ensure_ascii=True,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("ascii")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _canonical_float(value: float) -> float:
+    return 0.0 if value == 0.0 else float(value)
 
 
 def _require_curve_sizes(
