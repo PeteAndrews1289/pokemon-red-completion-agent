@@ -2045,7 +2045,10 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "fixed heuristic 20/20" in encoded
     assert "no more one-turn data campaigns" in encoded
     assert "semantic goal manager" in encoded
-    assert "bounded end-to-end composition is the open gate" in encoded
+    assert "Player seam" in encoded
+    assert "9/9 ROM-free checks" in encoded
+    assert "Red bridge 4/4" in encoded
+    assert "action-free snapshot preflight" in encoded
     assert "deterministic code keeps mechanics and safety" in encoded
     assert "completion-ledger delta" in encoded
     assert "authenticated snapshots" in encoded

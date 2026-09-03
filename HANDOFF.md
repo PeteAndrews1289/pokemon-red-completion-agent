@@ -29,13 +29,14 @@ Nine ROM-free tests pass. They include a durable `restore_team` failure followed
 input rejection, budget mismatch rejection and interruption retention. This advances no learning
 counter: **ROM reads 0 · actions 0 · frames 0 · fits 0 · live model decisions 0 · promotions 0**.
 
-Next, build the thin Red bridge from `PokemonRedGoalStateAdapter`,
-`RedGoalOpportunityEnumerator`, `living_collection_checkpoint` and the existing independent budget
-meter. Its dashboard-safe timeline must show semantic goal, typed result, skill cost, ledger delta
-and recovery without exposing private bindings. Qualify it without controller input, then run two
-short disjoint Red development episodes—learned manager versus deterministic manager—before any
-authority expansion. Do not substitute a full replay, sealed Red, Crystal, or another local battle
-campaign.
+The thin Red bridge now composes `PokemonRedGoalStateAdapter`,
+`RedGoalOpportunityEnumerator` and `living_collection_checkpoint` into that generic observation.
+Its semantic digest contains public Red progress, the exact title-neutral policy input and the
+collection checkpoint, but no private binding reference. Four bridge tests bring the combined
+ROM-free gate to **13/13**. Next add its path-free timeline to the dashboard and qualify one
+authenticated development snapshot action-free; then run two short disjoint Red episodes—learned
+manager versus deterministic manager—before any authority expansion. Do not substitute a full
+replay, sealed Red, Crystal, or another local battle campaign.
 
 ## 2026-09-02: Red-first evidence repair blocks the weak battle model honestly
 

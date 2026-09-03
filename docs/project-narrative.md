@@ -19,6 +19,12 @@ reuse stale state, lose a specimen and repeat the failed goal. All are caught. T
 model is playing Red yet; it means the next short Red episode can measure the model rather than the
 glue around it.
 
+The Red-specific side is now only a thin adapter: it reuses the existing cartridge observer, goal
+enumerator and living-collection projector and hashes their public meaning without exposing private
+skill bindings. Four more checks bring the ROM-free total to thirteen. The remaining boundary is
+operational, not architectural: action-free preflight an authenticated snapshot, make the timeline
+visible, and then let the two managers attempt the same short development problem.
+
 ## September 2: the audit found the benchmark the model still has to beat
 
 The first repeatable loop was a genuine milestone, but a stronger audit changed what the result is

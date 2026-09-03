@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-bounded-player-seam-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-contract-qualification-2026-09-03.json)
+**2026-09-03-bounded-player-seam-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-bridge-qualification-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop. |
-| Learning output | No new learner output. Nine ROM-free tests qualified the reusable contract, including a durable restore-team failure followed by fresh-state replanning to a successful storage goal; controller actions, emulator frames, fits and live model decisions remained zero. |
+| Learning output | No new learner output. Thirteen ROM-free tests now qualify both the reusable player contract and the thin Red observation bridge; controller actions, emulator frames, fits and live model decisions remained zero. |
 | Authority delta | The ROM-free player seam now accepts a semantic goal authority and dispatches existing deterministic skills behind durable decisions, independent verification, fresh completion-ledger checks and one changed-context recovery. This is integration capability only: no live model decision or authority promotion occurred. |
 | Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
-| Blocker | The generic player contract is qualified, but it is not yet bound to the authenticated Red observation and skill context used for short development episodes. No live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
-| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Bind the title-neutral player seam to the existing Red adapter, expose its goal/skill/ledger/recovery timeline on the read-only dashboard, then run two short development episodes comparing learned semantic selection with the deterministic manager. |
-| Next session | Publish the ROM-free seam, implement the thin Red observation/execution bridge and player timeline, then qualify the bridge without ROM input before scheduling two short repeatable development episodes. |
-| Next falsifier | From an authenticated development snapshot, prove the Red adapter can produce two fresh player observations, execute the selected existing binding, reconcile independent budgets and emit a dashboard-safe ledger delta. Then compare learned and deterministic goal selection on two disjoint short episodes. |
+| Blocker | The ROM-free Red bridge is qualified, but no authenticated snapshot has yet passed an action-free player preflight and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
+| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Publish the title-neutral player seam and thin Red bridge, expose its goal/skill/ledger/recovery timeline on the read-only dashboard, then preflight and run two short development episodes comparing learned semantic selection with the deterministic manager. |
+| Next session | Publish the seam and Red bridge, add the path-free player timeline to the dashboard, qualify one action-free authenticated-snapshot preflight, then schedule two short repeatable development episodes. |
+| Next falsifier | Prove one authenticated Red development snapshot passes an action-free bridge preflight with at least two executable semantic goals and no private fields, then run paired short episodes through learned and deterministic managers using the same skills and ledger measures. |
 | Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 
 ### Stop conditions

@@ -1,0 +1,49 @@
+{
+  "bridge": {
+    "collection_projector": "existing_living_collection_checkpoint",
+    "goal_enumerator": "existing_red_goal_opportunity_enumerator",
+    "observer": "existing_pokemon_red_goal_state_adapter",
+    "policy_input_contains_private_bindings": false,
+    "red_route_logic_added": false,
+    "semantic_digest_includes_collection_checkpoint": true,
+    "semantic_digest_includes_public_red_progress": true,
+    "semantic_digest_includes_title_neutral_policy_input": true
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "live_model_decisions": 0,
+    "model_fits": 0,
+    "rom_reads": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "next_gate": {
+    "development_episodes": 2,
+    "first_step": "action_free_authenticated_red_snapshot_preflight",
+    "measures": [
+      "verified_completion_ledger_delta",
+      "controller_actions",
+      "emulator_frames",
+      "resource_cost",
+      "typed_failures",
+      "recoveries",
+      "replans"
+    ],
+    "paired_authorities": [
+      "learned_goal_manager",
+      "completion_first_deterministic_manager"
+    ]
+  },
+  "schema": "pokemon.red.bounded-player-bridge-qualification.v1",
+  "status": "rom_free_bridge_qualified_authenticated_snapshot_preflight_next",
+  "tests": {
+    "bridge_passed": 4,
+    "bridge_total": 4,
+    "combined_player_passed": 13,
+    "combined_player_total": 13,
+    "mypy_errors": 0,
+    "ruff_errors": 0
+  }
+}
