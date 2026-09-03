@@ -6,15 +6,18 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): run the first same-state bounded Red player
-> comparison.** The title-neutral player seam, Red adapter, action-free live preflight and paired
-> development launcher are implemented. The launcher restores the same authenticated three-goal
-> save independently for a learned goal manager and a deterministic completion-first manager, uses
-> the same bounded skills, records durable typed outcomes, and compares verified semantic progress
-> before cost. Mixed goal tradeoffs remain incomparable instead of being hidden by an arbitrary
-> score. The local gate is **37/37** with Ruff and Mypy green and zero live effects. Next: publish,
-> pass exact-source CI, then execute one repeatable pair. No sealed Red, Crystal, full replay, or
-> authority promotion is open.
+> **Current product focus (September 3, 2026): turn the working Red player into a learning
+> curriculum.** The first same-state live comparison is complete. Both the learned manager and the
+> deterministic completion-first baseline chose `manage_storage`, preserved all 24 living
+> specimens, increased storage headroom from **2 to 20**, and finished in exactly **36 actions and
+> 4,512 frames**. The result is `equivalent`: it proves the learned policy can drive one real
+> semantic objective through the reusable player seam, but not that it chooses better goals.
+>
+> Deterministic ordering therefore remains the production authority. Next build an action-free
+> inventory of independent train and development contexts across collection, story, party,
+> resources and recovery, then fit only on train outcomes and require a held-development advantage.
+> No sealed Red, Crystal, full replay, or broader authority promotion is open. See the
+> [path-free paired result](docs/evidence/red-paired-bounded-player-result-2026-09-03.json).
 
 > **Current product focus (September 3, 2026): scale authentic Red battle learning before
 > Crystal.** The fixed five-capture roster was rejected, so the active lane now generates natural

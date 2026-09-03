@@ -21,6 +21,19 @@ semantic progress dominates; speed matters only after exactly equal progress. Th
 **37/37**, but no cartridge episode has run through it yet. Publication and green CI come before the
 first learned-versus-rule Red pair.
 
+## Current checkpoint: the first real pair is an exact tie
+
+The two copies of Red finally ran. Both planners looked at restoration, story progress and storage;
+both chose storage. Each preserved all twenty-four living specimens, expanded the available slots
+from two to twenty, and stopped after exactly thirty-six actions and 4,512 frames. The private
+timelines are durable. The public verdict is `equivalent`.
+
+That is a real milestone and an intentionally modest claim. The model can now choose and complete a
+live semantic objective through the reusable player, but one agreement cannot teach it or prove it
+plans better. The deterministic manager keeps control. The next chapter is to assemble independent
+training and held-development situations across captures, evolutions, story, party, resources and
+recovery—enough varied consequences for goal selection to become a learning problem.
+
 ## Current engineering checkpoint: one lock, two honest room sizes
 
 The seven-seat training lock now also understands the eight-seat exam room. It reads each world's

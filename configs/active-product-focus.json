@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Four live action-free Red snapshots exposed genuine two-to-four-goal menus. The learned and completion-first authorities agreed on restore, storage, evolution and acquisition choices with zero actions or frames. This proves integration readiness only; no controller or authority promotion occurred.",
-        "blocker": "The paired launcher is locally qualified but is not yet published under green CI, so live use remains closed. No Red episode has yet demonstrated model-selected quest or living-Pokedex progress through this seam.",
-        "decision": "Publish the repeatable paired launcher, require green CI, then restore the same three-goal Red state independently for learned and completion-first arms and compare durable verified progress. Do not search for disagreement or return to local battle campaigns.",
+        "authority_delta": "The learned manager received one bounded semantic decision and completed manage_storage with the same verified progress and exact 36-action/4512-frame cost as the deterministic baseline. This proves live integration, not advantage; deterministic goal ordering remains the production authority.",
+        "blocker": "One same-choice storage episode cannot train or distinguish semantic planning. The next curriculum needs independent train/development contexts across multiple goal kinds and outcome variation without manufacturing disagreement or exposing private identity to the policy.",
+        "decision": "Close the first player integration gate as successful but equivalent. Keep the deterministic manager, then design an outcome-dense bounded Red goal curriculum with lineage-disjoint train and development contexts across collection, story, party, resource and recovery goals. Fit on train only and require development advantage before widening authority.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-paired-bounded-player-runner-local-qualification-2026-09-03.json",
-          "sha256": "06d3ecc7d1759412a1053e30e9f2438427c33d908a992e0a3ba93eecf3157c8e"
+          "kind": "verified_composition_episode",
+          "path": "docs/evidence/red-paired-bounded-player-result-2026-09-03.json",
+          "sha256": "ac9987ef212083ac6510849bc2a7a8faae0734db9a7a18d1931ac63f2500ada1"
         },
-        "learning_output": "No new learner output. The same-state paired launcher passed 37 focused checks with zero ROM reads, actions, frames, episodes or fits; the first live paired outcome remains pending publication and CI.",
-        "next_falsifier": "Restore the same repeatable three-goal Red state independently for learned and completion-first arms, then require durable decisions, typed outcomes, fresh ledgers and exact independent action/frame accounting from both.",
-        "next_session_goal": "Publish the locally qualified paired launcher, pass exact-source CI, then execute one learned arm and one completion-first arm from the same repeatable three-goal Red state.",
-        "product_alignment": "The launcher gives the learned manager one bounded long-horizon choice while reusing deterministic navigation, battle, capture, party, inventory and recovery skills. Its comparator preserves progress by semantic goal kind and treats mixed tradeoffs as incomparable, so a cheap but different task cannot masquerade as transferable superiority.",
-        "session_id": "2026-09-03-paired-bounded-player-runner-local-qualification-v1",
+        "learning_output": "One verified learned development composition episode was added. Learned and baseline arms independently restored the same three-goal state, selected manage_storage, increased storage headroom 2 to 20, preserved all 24 specimens, and tied at 36 actions and 4512 frames with zero failures or recoveries.",
+        "next_falsifier": "Inventory existing authenticated Red contexts action-free and stop unless independent train and development lineages expose several executable semantic goal kinds plus outcome variation sufficient to teach a manager rather than copy deterministic ordering.",
+        "next_session_goal": "Build and qualify the action-free multi-goal context inventory and curriculum contract; do not run more gameplay until it proves adequate train/development breadth, lineage separation and reusable policy-visible variation.",
+        "product_alignment": "The first learned decision now flows through the title-neutral player into real Red mechanics and a verified living-ledger delta. The tie directs the next work toward diverse semantic outcome learning instead of more route hardening or a premature full replay.",
+        "session_id": "2026-09-03-first-live-paired-bounded-player-v1",
         "status": "active",
         "stop_condition": "Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign.",
-        "transfer_result": "The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority."
+        "transfer_result": "The shared player/result contracts survived their first live Red episode without title identity or private bindings in policy-visible data. Crystal remains unexecuted and transfer remains untested until diverse Red semantic authority is learned."
       },
       "learned_authority": {
-        "current": "The repeated-RNG battle ranker improved over its prior but lost 18/20 to 20/20 against the fixed heuristic. The model remains shadow-only; deterministic skills retain controller authority and no full-player model authority is claimed.",
+        "current": "The goal manager completed one bounded live storage objective exactly as well as the completion-first baseline, while the repeated-RNG battle ranker still trails the fixed heuristic 18/20 to 20/20. Deterministic ordering and skills retain production authority; no full-player promotion is claimed.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -73,13 +73,13 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "After two bounded Red composition episodes, compare learned semantic goal selection with a deterministic goal-order baseline on verified completion-ledger progress, resource cost and recovery. Widen objective authority only on a measured advantage; otherwise retain the deterministic manager and redesign the decision context.",
+      "next_decision": "The first same-state live comparison was exactly equivalent, so retain deterministic goal ordering and redesign the manager curriculum. Advance only after train-only learning across diverse semantic goal families beats the deterministic baseline on lineage-disjoint Red development episodes.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
         "causal_train_examples": 104,
-        "composition_attempts": 1,
-        "development_episode_attempts": 17,
+        "composition_attempts": 2,
+        "development_episode_attempts": 18,
         "evidence": [
           {
             "kind": "unseen_comparison",
@@ -185,6 +185,11 @@
             "kind": "unseen_comparison",
             "path": "docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json",
             "sha256": "7ba351061a36c6a622521bed70a9b5a1cba69b271d28d07e0a059ece6d9fc551"
+          },
+          {
+            "kind": "verified_composition_episode",
+            "path": "docs/evidence/red-paired-bounded-player-result-2026-09-03.json",
+            "sha256": "ac9987ef212083ac6510849bc2a7a8faae0734db9a7a18d1931ac63f2500ada1"
           }
         ],
         "model_fits": 9,
@@ -198,7 +203,7 @@
         "synthetic_rootless_unseen_comparisons": 1,
         "transfer_results": 0,
         "unseen_comparisons": 8,
-        "verified_composition_episodes": 1,
+        "verified_composition_episodes": 2,
         "verified_outcome_examples": 61
       },
       "prohibited_actions": [

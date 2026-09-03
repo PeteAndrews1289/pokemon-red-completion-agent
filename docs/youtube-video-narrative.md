@@ -18,6 +18,15 @@ capture. Different kinds of progress remain different. Cost breaks a tie only wh
 progress is identical. Thirty-seven focused checks pass; the live paired Red run comes after the
 launcher is published and green.”
 
+**Payoff visual:** Run both timelines. Highlight **MANAGE STORAGE** on each, then animate
+**HEADROOM 2→20 · SPECIMENS 24→24 · 36 ACTIONS · 4,512 FRAMES** twice. Stamp the center card
+**EQUIVALENT — INTEGRATION PROVED, ADVANTAGE NOT PROVED**.
+
+**Voiceover:** “The first live pair tied exactly. That is not a disappointing result—it is the
+honest boundary. The model proved it could drive a real high-level objective, while the simple rule
+remained just as good. So the rule keeps control and the next dataset must contain genuinely varied
+goal consequences, not handpicked disagreements.”
+
 ## New scene: seven systems become one bounded player
 
 **Visual:** Arrange cards labeled **GOAL MODEL**, **NAVIGATION**, **BATTLE**, **CAPTURE**, **PARTY**,

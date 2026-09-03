@@ -32,14 +32,12 @@ semantic goal, current skill, ledger delta, captures, resource use, faints, reco
 it must never imply that an emulator process is model training unless a fit is actually running.
 
 The ROM-free bounded player contract, thin Red observation bridge, controller-blocked preflight and
-same-state paired launcher are now qualified at **37/37** focused checks. The dashboard now shows four live action-free
-passes, menu widths **2/3/4/3**, planner agreement
-**4/4**, and zero actions, frames or episodes. It should next consume only a path-free
-`BoundedPlayerResult`: one row per semantic decision with typed outcome,
-action/frame cost, fresh-state change, collection before/after and recovery marker. The display must
-not receive private binding references or controller authority. The paired result adds a second arm
-from an independent restore and reports learned advantage, baseline advantage, equivalence, or an
-honest incomparable tradeoff; it never collapses different goal kinds into a single arbitrary score.
+same-state paired launcher passed **37/37** focused checks. The first live pair is now complete:
+both arms chose `manage_storage`, increased storage headroom **2→20**, preserved all 24 specimens,
+and used exactly **36 actions / 4,512 frames**. The dashboard reports `equivalent`, keeps
+deterministic goal ordering authoritative, and shows the three integration counters at **2/2,
+2/2 and 18/18**. Its next rail is the action-free multi-goal curriculum inventory. It must not imply
+that one tied development episode trained a model or demonstrated transfer.
 >
 > **Current rail:** Show **MAIN 0CEECE13 → DEFICIT 103 → POWERED SUPPLY RAIL IMPLEMENTED, UNRUN →
 > 12 CLEAN-POWER WORLDS · 3 TRAIN / 8 DEVELOPMENT / 1 CONTINGENCY → ASSIGN BEFORE INPUT → NO

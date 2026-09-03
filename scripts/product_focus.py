@@ -96,12 +96,18 @@ _EXPECTED_UTILITY_BATTLE_RESULT_PATH = (
 _EXPECTED_UTILITY_BATTLE_RESULT_SHA256 = (
     "7ba351061a36c6a622521bed70a9b5a1cba69b271d28d07e0a059ece6d9fc551"
 )
+_PAIRED_BOUNDED_PLAYER_RESULT_PATH = (
+    "docs/evidence/red-paired-bounded-player-result-2026-09-03.json"
+)
+_PAIRED_BOUNDED_PLAYER_RESULT_SHA256 = (
+    "ac9987ef212083ac6510849bc2a7a8faae0734db9a7a18d1931ac63f2500ada1"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 104,
-    "composition_attempts": 1,
-    "development_episode_attempts": 17,
+    "composition_attempts": 2,
+    "development_episode_attempts": 18,
     "model_fits": 9,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
@@ -110,7 +116,7 @@ _PROJECTED_COUNTERS = {
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
     "unseen_comparisons": 8,
-    "verified_composition_episodes": 1,
+    "verified_composition_episodes": 2,
     "verified_outcome_examples": 61,
 }
 
@@ -980,7 +986,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 4:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 5:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1074,7 +1080,7 @@ def _validate_projected_counters(
         raise ProductFocusError("first authentic battle evidence is invalid")
     _validate_first_authentic_battle_projection(first_authentic)
     expected_utility_evidence = _mapping_value(
-        evidence[-1],
+        evidence[-2],
         subject="projected expected-utility battle evidence",
     )
     if expected_utility_evidence != {
@@ -1097,11 +1103,112 @@ def _validate_projected_counters(
     if not isinstance(expected_utility, Mapping):
         raise ProductFocusError("expected-utility battle evidence is invalid")
     _validate_expected_utility_battle_projection(expected_utility)
+    player_evidence = _mapping_value(
+        evidence[-1],
+        subject="projected paired bounded-player evidence",
+    )
+    if player_evidence != {
+        "kind": "verified_composition_episode",
+        "path": _PAIRED_BOUNDED_PLAYER_RESULT_PATH,
+        "sha256": _PAIRED_BOUNDED_PLAYER_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    player_path = (root / _PAIRED_BOUNDED_PLAYER_RESULT_PATH).resolve()
+    try:
+        player = json.loads(
+            player_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("paired bounded-player evidence is invalid") from None
+    if not isinstance(player, Mapping):
+        raise ProductFocusError("paired bounded-player evidence is invalid")
+    _validate_paired_bounded_player_projection(player)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
             "active learning counters differ from their typed evidence projection"
         )
+
+
+def _validate_paired_bounded_player_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project one verified learned arm while retaining its baseline as a control."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.paired-bounded-player-result-summary.v1"
+        or receipt.get("status") != "complete_equivalent"
+        or receipt.get("tracked_private_paths") != 0
+        or receipt.get("private_path_fields") != 0
+        or receipt.get("private_binding_fields") != 0
+    ):
+        raise ProductFocusError("paired bounded-player evidence status differs")
+    delta = _mapping(
+        receipt,
+        "learning_counter_delta",
+        subject="paired bounded-player evidence",
+    )
+    if delta != {
+        "composition_attempts_development": 1,
+        "development_episode_attempts": 1,
+        "verified_composition_episodes_development": 1,
+    }:
+        raise ProductFocusError("paired bounded-player counter delta differs")
+    comparison = _mapping(
+        receipt,
+        "comparison",
+        subject="paired bounded-player evidence",
+    )
+    if (
+        comparison.get("verdict") != "equivalent"
+        or comparison.get("decision_basis") != "equal_progress_and_cost"
+        or comparison.get("storage_headroom_gained_each") != 18
+        or comparison.get("specimen_loss_each") != 0
+    ):
+        raise ProductFocusError("paired bounded-player comparison differs")
+    arms = _mapping(receipt, "arms", subject="paired bounded-player evidence")
+    learned = _mapping(arms, "learned", subject="paired bounded-player arms")
+    baseline = _mapping(arms, "baseline", subject="paired bounded-player arms")
+    for arm, authority in (
+        (learned, "learned-goal-manager"),
+        (baseline, "completion-first-teacher"),
+    ):
+        if {
+            "actions": arm.get("actions"),
+            "authority_id": arm.get("authority_id"),
+            "completion_satisfied": arm.get("completion_satisfied"),
+            "decisions": arm.get("decisions"),
+            "frames": arm.get("frames"),
+            "recovery_attempts": arm.get("recovery_attempts"),
+            "selected_goal": arm.get("selected_goal"),
+            "status": arm.get("status"),
+            "storage_headroom_after": arm.get("storage_headroom_after"),
+            "storage_headroom_before": arm.get("storage_headroom_before"),
+        } != {
+            "actions": 36,
+            "authority_id": authority,
+            "completion_satisfied": True,
+            "decisions": 1,
+            "frames": 4512,
+            "recovery_attempts": 0,
+            "selected_goal": "manage_storage",
+            "status": "succeeded",
+            "storage_headroom_after": 20,
+            "storage_headroom_before": 2,
+        }:
+            raise ProductFocusError("paired bounded-player arm differs")
+    interpretation = _mapping(
+        receipt,
+        "interpretation",
+        subject="paired bounded-player evidence",
+    )
+    if interpretation.get("authority_promoted") is not False:
+        raise ProductFocusError("paired bounded-player authority claim differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:
