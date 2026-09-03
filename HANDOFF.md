@@ -14,6 +14,38 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-03: the 81-state bank is calibration supply, not independent evaluation
+
+The new action-free inventory authenticated every state, envelope and profile in private plan
+`09af29ba…d45ff51` and profile-lineage manifest `db660df2…6324`. It found 81 unique state files,
+81 unique envelopes, 81 unique profiles, 54 nominal train contexts, 27 nominal development
+contexts and declared provider coverage across all nine semantic goal families. It ran no emulator,
+controller, teacher, prediction, outcome or fit.
+
+The implementation checkpoint passed 6,559 non-integration tests (plus one expected skip and one
+expected xfail), Ruff, mypy, all three generated-registry reproduction checks, and the public,
+documentation and active-product-focus gates. The source-bound battle, goal-manager and strategic
+navigation registries were regenerated because this inventory module joined the audited source
+bundle; their behavior, schedules and frozen data did not change.
+
+The critical result is negative but useful: the artifacts bind exact bytes and profile
+transformations, but they do not bind each save to a trustworthy upstream gameplay lineage.
+Assignment IDs and different filenames are not evidence of independent experience. Therefore the
+old development split cannot support held-out generalization, and its apparent cross-partition
+lineage overlap is unmeasured rather than zero.
+
+This no longer blocks ordinary learning. Existing still-unclaimed train roots may be used in an
+explicitly labeled **calibration** campaign, and old development roots may be used only as
+same-bank diagnostics. Codex's immediate implementation target is a compact outcome-blind plan
+over open team-development, evolution and storage roots, followed by bounded candidate outcomes,
+a train-only fit and two-to-four consecutive model-selected goals. Before authority promotion or
+Crystal transfer, require at least eight prospective train and four development lineages, disjoint
+by upstream episode and physical root, spanning at least four and three strategic families.
+
+Do not reuse any consumed root or pairs 001–003. Do not select a context by current-model
+disagreement or observed outcome. The [path-free inventory](docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json)
+and [session plan](docs/red-multi-goal-training-session-plan.md) are the current execution map.
+
 ## 2026-09-03: the causal player earned its first same-state strategic win
 
 The typed budget-terminal repair merged as exact main `09a8bf29` under green CI

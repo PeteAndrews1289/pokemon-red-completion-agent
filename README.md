@@ -6,6 +6,19 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 3, 2026): train now, label the evidence honestly.** An
+> action-free audit authenticated all **81/81** retained Red states, envelopes and profiles: 54
+> nominal train, 27 nominal development, all nine declared goal families, and 81 unique state
+> files. The older artifacts did not preserve true upstream-lineage provenance, however, so file
+> uniqueness cannot be promoted into 81 independent experiences.
+>
+> The bank remains useful for real calibration training and same-bank diagnostics. It is not a
+> held-out generalization test. Next freeze a compact outcome-blind campaign over still-unclaimed
+> train roots, collect bounded semantic-goal outcomes, fit train only, and exercise consecutive
+> model choices. Before authority promotion or Crystal transfer, add prospectively disjoint roots.
+> See the [inventory result](docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json)
+> and [session plan](docs/red-multi-goal-training-session-plan.md).
+
 > **Current product focus (September 3, 2026): scale the first model-led strategic win.** Pair 003
 > independently restored the same authenticated Red state for both arms. The teacher-free causal
 > model chose `develop_team` and completed it, raising the target **level 20→21** in **1,119 actions

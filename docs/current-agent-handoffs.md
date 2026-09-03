@@ -6,6 +6,21 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns calibration training plus independent-root follow-through
+
+The 81-context bank is mechanically healthy but statistically unresolved. All state, envelope and
+profile bytes authenticate and all nine declared goal families appear, yet no artifact records the
+true upstream episode for each save. Existing train roots may be used for clearly labeled
+calibration; existing development roots are same-bank diagnostics only. Neither supports a new
+generalization or transfer claim.
+
+Codex owns the compact calibration-plan freezer, bounded selected-candidate outcome runner,
+train-only fit and multi-decision Red exercise. It must exclude every account-wide claimed
+physical root before freezing and must not choose contexts by model disagreement, teacher choice
+or observed outcome. In parallel, the later promotion gate needs eight prospective train and four
+development lineages across at least four/three strategic families. Crystal remains deferred until
+that honest Red gate passes. External reviewers are optional and do not block implementation.
+
 ## Current override: Codex owns the multi-goal curriculum after the first strategic win
 
 PR 188 is merged as exact main `b8c2999d` under green CI `33784679568/1`. The causal arm of pair

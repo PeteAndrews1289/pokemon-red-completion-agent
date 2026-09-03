@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: eighty-one different save files were not eighty-one independent lessons
+
+The first model-led strategic win raised the obvious next question: how much broader Red data was
+already available? The answer looked excellent at first. The retained bank held 81 authenticated
+states, divided 54/27 between train and development, with a separate envelope and profile for each
+and declared mechanics spanning all nine semantic goal families.
+
+Then the inventory asked a stricter question: which independent gameplay episode produced each
+state? The old collection contract never recorded that fact. It could prove every byte was
+different, but not whether several saves were descendants of the same playthrough. Treating those
+files as independent evaluation would make the model look more general than the evidence allowed.
+
+The practical correction is not to throw the bank away. It becomes a calibration classroom, and
+its development side becomes a local stress test. The project can now collect real Red outcomes
+and fit the semantic goal model without pretending that the resulting score measures unseen-run
+generalization. Promotion and Crystal transfer get a smaller, explicit 8-train/4-development
+prospective-lineage gate. That separates productive iteration from the standard of proof required
+for a transferable player.
+
 ## September 3: the model made the right kind of move, then the wrapper rejected reality
 
 The first causal player arm was not idle. Without asking a teacher, the living-Pokédex model chose

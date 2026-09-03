@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: 81 saves, one uncomfortable question
+
+**Visual:** Fill the screen with **81 AUTHENTICATED RED SAVES**, grouped as **54 TRAIN / 27
+DEVELOPMENT / 9 GOAL FAMILIES**. Then replace the equals sign in “81 files = 81 experiences” with a
+large question mark.
+
+**Voiceover:** “We had plenty of different files. What we did not have was proof that they came
+from different gameplay histories. A later save from the same run is useful training data, but it
+is not an independent exam.”
+
+**Visual:** Split the bank into **CALIBRATION CLASSROOM — USE NOW** and **INDEPENDENT EVALUATION —
+NEW ROOTS REQUIRED**. Keep **EMULATOR 0 · ACTIONS 0 · TEACHER 0 · OUTCOMES 0** visible during the
+inventory.
+
+**Voiceover:** “Instead of discarding the work or exaggerating it, we changed the evidence label.
+Train on the open classroom, diagnose locally, and require prospectively separate roots before
+claiming generalization or transferring to Crystal.”
+
 ## New scene: the level-up succeeded, but the experiment still turned red
 
 **Visual:** Show the model choosing **DEVELOP TEAM**, then animate the target card from **LEVEL 20
