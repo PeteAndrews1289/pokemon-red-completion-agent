@@ -164,6 +164,36 @@ def test_evaluation_rejects_prediction_drift_before_writing(
     assert not args.out_report.exists()
 
 
+def test_evaluation_accepts_preoutcome_commitment_superset_after_quarantine(
+    tmp_path: Path,
+) -> None:
+    args = _write_inputs(tmp_path)
+    commitment = json.loads(args.prediction_commitment.read_text("ascii"))
+    omitted = dict(commitment["commitments"][0])
+    omitted.update(
+        {
+            "ordinal": 2,
+            "capture_id": "quarantined-development-capture",
+            "manifest_sha256": "6" * 64,
+            "state_sha256": "7" * 64,
+            "initial_observation_sha256": "8" * 64,
+        }
+    )
+    commitment["commitments"].append(omitted)
+    commitment["capture_count"] = 2
+    commitment["commitments_sha256"] = canonical_sha256(commitment["commitments"])
+    args.prediction_commitment.write_text(
+        json.dumps(commitment, sort_keys=True),
+        encoding="ascii",
+    )
+
+    report = SCRIPT["_run"](args)
+
+    assert report["coverage"]["examples"] == 1
+    assert report["coverage"]["committed_captures"] == 2
+    assert report["coverage"]["committed_captures_without_complete_schedule"] == 1
+
+
 def test_evaluation_rejects_train_aggregates(tmp_path: Path) -> None:
     args = _write_inputs(tmp_path)
     record = json.loads(args.dataset[0].read_text("ascii"))
