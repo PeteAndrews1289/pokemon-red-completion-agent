@@ -8693,3 +8693,11 @@ development state cannot show robust Red play, recovery over many decisions, or 
 The next phase turns the same choice→skill→verified-outcome loop into a curriculum spanning several
 completion goal families and independent upstream lineages. That is where a one-state success can
 become learned strategy rather than a good anecdote.
+## September 3: turning the census into an executable calibration plan
+
+The follow-up implementation converts the inventory result into a deliberately small experiment:
+one team-development root, one evolution root and two storage roots, selected only by authenticated
+source order and open-claim status. Every model-controlled option at each root gets its own
+identical-reset intervention, while recovery and restoration remain hard safety behavior. This is
+the missing bridge between “we have save states” and “we have comparable outcomes a model can learn
+from.” At this checkpoint the freezer is code, not evidence: it has opened no outcome or gameplay.

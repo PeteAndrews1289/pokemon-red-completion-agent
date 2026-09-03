@@ -17,6 +17,11 @@
 > and physical root, across at least **4/3 strategic families**. See the
 > [inventory](evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json) and
 > [session plan](red-multi-goal-training-session-plan.md).
+>
+> The compact calibration freezer is implemented locally: one team-development root, one
+> evolution root and two storage roots, with every learnable semantic option scheduled from an
+> identical reset. Safety goals stay deterministic. No plan, claim, prediction, outcome or action
+> has been opened. Publish, pass CI and freeze the action-free plan before outcome collection.
 
 > **September 3 causal-player failure diagnosis:** PR 188 merged the causal paired runner as main
 > `b8c2999d` under green CI `33784679568/1`. Pair 001 is consumed. Its causal model chose

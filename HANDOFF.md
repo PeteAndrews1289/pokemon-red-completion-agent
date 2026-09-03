@@ -16,6 +16,17 @@ horizon and Crystal-ready definition),
 
 ## 2026-09-03: the 81-state bank is calibration supply, not independent evaluation
 
+The compact calibration freezer is now implemented on the follow-up candidate branch. Its pure
+scheduler mechanically selects one open `develop_team` root, one open `evolve_species` root and
+two open `manage_storage` roots in authenticated source order. It then schedules every
+model-controlled option actually available at each root as a separate one-decision trial from an
+identical reset; recovery and restoration remain deterministic safety overrides. The wrapper
+reobserves menus without controller input, binds exact source/runtime/model/context/private-store
+identities, holds the account claim ledger for a consistent availability snapshot, and writes one
+content-addressed private plan. Nine focused tests, Ruff and mypy pass. No private plan has yet been
+frozen, no claim consumed, no model queried and no game action executed. Publish and green this
+candidate before performing the one action-free freeze.
+
 The new action-free inventory authenticated every state, envelope and profile in private plan
 `09af29ba…d45ff51` and profile-lineage manifest `db660df2…6324`. It found 81 unique state files,
 81 unique envelopes, 81 unique profiles, 54 nominal train contexts, 27 nominal development

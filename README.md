@@ -13,9 +13,11 @@
 > uniqueness cannot be promoted into 81 independent experiences.
 >
 > The bank remains useful for real calibration training and same-bank diagnostics. It is not a
-> held-out generalization test. Next freeze a compact outcome-blind campaign over still-unclaimed
-> train roots, collect bounded semantic-goal outcomes, fit train only, and exercise consecutive
-> model choices. Before authority promotion or Crystal transfer, add prospectively disjoint roots.
+> held-out generalization test. The compact freezer is now implemented: it selects one team,
+> one evolution and two storage roots mechanically, then schedules every model-controlled option
+> from equal resets. Publish and action-free freeze that plan next; then collect bounded outcomes,
+> fit train only, and exercise consecutive model choices. Before authority promotion or Crystal
+> transfer, add prospectively disjoint roots.
 > See the [inventory result](docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json)
 > and [session plan](docs/red-multi-goal-training-session-plan.md).
 

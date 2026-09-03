@@ -5581,3 +5581,10 @@ learned representation travels, and the living Pokédex remains the organizing p
 - Zoom out to the next dataset: independent Red states across acquisition, evolution, development,
   story, resources, storage, recovery, and exploration—then train only on one side and test the
   committed choices on the other.
+## Scene: from eighty-one saves to four useful experiments
+
+The visual is a funnel: 81 authenticated Red states, 35 open roots, then four mechanically chosen
+training roots—team development, evolution, and two storage situations. Each root fans back out
+into every strategic option the agent could genuinely execute, with the emulator reset before each
+attempt. The narration should stress the distinction: this creates comparable causal training
+examples; it does not yet prove the model can generalize or finish the game.
