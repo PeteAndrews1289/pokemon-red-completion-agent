@@ -75,3 +75,15 @@ committed and the development outcomes have been opened under that commitment.
 The next scale gate should vary opponent, HP, PP, status, matchup and move-set pressure across
 disjoint upstream roots. If model advantage does not persist under that variation, redesign the
 scenario distribution before adding full-run cost.
+
+## First authentic result and V2 direction
+
+The first run produced 41 train examples and fit on 40 lineage-balanced rows. On 21 retained
+development outcomes the adapted model improved over its base from 16 to 17 preferred choices, but
+the fixed heuristic reached 18. The model therefore remains shadow-only.
+
+The decisive disagreements showed why a second one-shot batch is the wrong response. A charge
+move's realized utility changed with cartridge RNG even when the learner could not observe the
+future roll. V2 must execute several observation-preserving RNG trajectories for every usable move,
+aggregate expected utility per candidate, and train on that distribution. The next comparison must
+use newly sourced upstream roots because the first four development roots are now calibration data.

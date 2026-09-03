@@ -8486,3 +8486,26 @@ In parallel, the neural ranker completed its non-cartridge mechanics pretraining
 one authentic Red outcome. A separate train-only fitter now prevents the convenient but invalid
 shortcut of opening development labels during adaptation, and equalizes sibling counts across the
 four real train roots so one productive source does not dominate the update.
+
+## The first authentic model learned—and the baseline still won — September 3, 2026
+
+The first cartridge-grounded training pass finished quickly once the boundaries were ready.
+Forty-one of forty-five train captures returned complete counterfactual move outcomes; four were
+quarantined without replay. The shadow fit used forty examples, exactly ten from each of four true
+source lineages, and reduced its training objective from 2.671 to 1.024. Twenty-four untouched
+development states then materialized successfully, and the base model, fitted model and fixed
+heuristic choices were committed before any result was opened.
+
+The fitted model improved over its synthetic starting point: 17/21 preferred moves instead of
+16/21, with mean selected utility rising from 2.058 to 2.164. It did not beat the deliberately strong
+fixed heuristic, which reached 18/21. In their direct comparison the model won one state, lost two
+and made an equivalent choice on eighteen. That is useful learning evidence, not an authority pass.
+
+The disagreement audit exposed the next curriculum problem. Several decisive examples involved a
+charge move whose realized value depended on the cartridge RNG trajectory: it could hit for more
+damage, miss after consuming a turn, or expose the player to a large counterattack. A model meant to
+work across seeds should learn expected value across repeated RNG perturbations, not memorize one
+deterministic realization from each save. The next Red curriculum therefore aggregates multiple
+observation-preserving trials per action and holds out newly sourced lineages for the next honest
+comparison. Crystal remains deferred, but this change directly serves eventual cross-seed and
+cross-game competence.

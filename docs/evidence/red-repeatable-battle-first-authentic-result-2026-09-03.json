@@ -1,0 +1,64 @@
+{
+  "authority_promoted": false,
+  "crystal_contexts_opened": 0,
+  "development": {
+    "base_correct_preferences": 16,
+    "base_mean_selected_utility": 2.058024198498651,
+    "complete_examples": 21,
+    "dataset_file_sha256": "bb94b490a65ee1e32e321d5332fef07061a43d31c6e1238d19e361196a01abc2",
+    "evaluation_file_sha256": "efa218008b04bef94851fbb455ff69c5fe393c0229d16cde07c304e9160424d5",
+    "fixed_heuristic_correct_preferences": 18,
+    "fixed_heuristic_mean_selected_utility": 2.1234495010317898,
+    "informative_examples": 18,
+    "materialized": 24,
+    "prediction_commitment_file_sha256": "1d0ee97f5a951e3a508f65468adb876a363756af546e5c30e36a6e344f20a9b3",
+    "prediction_commitment_sha256": "07915d4f7046665838e59789da01ccc2802fd70025f26fdb3afdba88ac33bcc7",
+    "predictions_committed_before_outcomes": 24,
+    "quarantined": 3,
+    "root_lineages": 4,
+    "semantic_clusters": 19,
+    "updated_correct_preferences": 17,
+    "updated_mean_selected_utility": 2.1643734048478573,
+    "updated_vs_fixed": {
+      "equivalent": 18,
+      "fixed_wins": 2,
+      "updated_wins": 1
+    }
+  },
+  "full_game_replays": 0,
+  "interpretation": {
+    "base_improved": true,
+    "fixed_heuristic_beaten": false,
+    "next_gate": "multi_rng_expected_utility_then_fresh_root_development",
+    "stochastic_label_aliasing_observed": true
+  },
+  "model": {
+    "base_model_sha256": "47cf964ef8d86e6a3040746a734bd6c02c25d9e6d14f956c6b46727bee479b4c",
+    "fit_report_file_sha256": "4e0117d8e55db2132b55be73a8a030cdcaa8ea91834605ce46e78aa6e45deeb9",
+    "loss_after": 1.024249795532914,
+    "loss_before": 2.6713800625569695,
+    "model_file_sha256": "b422bf0a976e043418423b505e349733ea0c35f40dba74acaaa1b4f1fbd9ef83",
+    "updated_model_sha256": "af47f9deba56d6fd4d6690589f58de9ca5470cf2443fd576e69f2416a0ceac85"
+  },
+  "private_path_fields": 0,
+  "schema": "pokemon.core.battle.repeatable-first-authentic-result.v1",
+  "sealed_red_cases_opened": 0,
+  "source": {
+    "collection_commit": "5ec708c0425e0228613395b77a7198fb8e606fd0",
+    "fit_and_commit_commit": "db7f6dbb90ddcf25488bc733353471cac42c5de7",
+    "github_ci_run": 33707539011
+  },
+  "teacher_queries": 0,
+  "train": {
+    "balanced_examples_per_root": 10,
+    "complete_examples": 41,
+    "dataset_file_sha256": "66f9e692122094160c7c49f42dd7ad4b0a7d089040dce71bee968bfe8af37463",
+    "fit_examples": 40,
+    "fit_informative_examples": 37,
+    "informative_examples": 38,
+    "materialized": 45,
+    "quarantined": 4,
+    "root_lineages": 4,
+    "semantic_clusters": 35
+  }
+}

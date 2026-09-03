@@ -5423,3 +5423,18 @@ learned representation travels, and the living Pokédex remains the organizing p
 - Feed the next adapter only the real train dataset. Show four lineage buckets clipped to an equal
   count, with excess siblings marked **DENSITY, NOT INDEPENDENCE**.
 - Lock the development labels behind **COMMIT CHOICES FIRST** before the first authentic comparison.
+
+## New sequence: “The model learned, but the baseline kept the keys”
+
+- Resolve collection to **TRAIN 41/45 · INFORMATIVE 38 · ROOTS 4**, then show the balanced fit using
+  **10 PER ROOT** and reducing loss **2.671 → 1.024**.
+- Put the untouched board onscreen before results: **DEVELOPMENT 24/24 MATERIALIZED · 24
+  PREDICTIONS COMMITTED · BUTTONS 0**.
+- Open the result honestly: **BASE 16/21 · LEARNED 17/21 · FIXED HEURISTIC 18/21**. Keep
+  **AUTHORITY LOCKED** visible.
+- Zoom into the charge-move disagreements: the same semantic choice can hit, miss, or expose the
+  player to retaliation under a different RNG trajectory.
+- End on the product-facing correction: **ONE SAVE IS NOT AN EXPECTATION → SAMPLE MULTIPLE RNG
+  TRAJECTORIES → LEARN EXPECTED UTILITY → TEST ON NEW ROOTS**.
+- Tie it back to the destination: cross-seed learning is a prerequisite for a model that can finish
+  Red robustly and later carry battle knowledge into Crystal and a multi-game living Pokédex.
