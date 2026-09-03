@@ -1684,3 +1684,26 @@ phase—boot jitter, deterministic setup, target conditioning, terminal verifica
 durable assignment claim already exists. A failed episode stays visible and cannot acquire a retry
 button. The current local dashboard is historical until this exact-main generator is published and
 a separately authorized execution begins.
+
+## Current strategic-player status — September 3, 2026
+
+> **Mission:** transferable story completion and a living Pokédex across games.
+>
+> **Current layer:** Red semantic goal selection above deterministic skills.
+>
+> **Causal model:** 8 settled train examples across 4 lineages; shadow-only.
+>
+> **Action-free screen:** 4/4 contexts passed · 12 choices · 0 actions · 0 frames · 0 episodes.
+>
+> **Decision mix:** 2 deterministic safety choices · 2 model-scored choices · 1 disagreement.
+>
+> **Observed disagreement:** causal `develop_team` versus control `evolve_species`.
+>
+> **Authority:** deterministic goal order, battle mechanics and safety remain authoritative.
+>
+> **Next visible milestone:** one same-state bounded Red outcome pair, followed by a reorientation
+> from verified progress, typed goal outcomes, actions, frames and recovery.
+
+The screen is preserved in the
+[path-free qualification result](evidence/red-living-dex-goal-shadow-screen-result-2026-09-03.json).
+It is not gameplay, training, a promotion, a Crystal transfer result or a full-game completion.

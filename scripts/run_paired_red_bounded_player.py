@@ -60,6 +60,13 @@ from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
 from pokemon_red_completion.goal_manager_trajectory import (  # noqa: E402
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
+    LivingDexGoalModelRecord,
+    load_living_dex_goal_model_record,
+)
+from pokemon_red_completion.living_dex_goal_policy import (  # noqa: E402
+    LivingDexGoalShadowPolicy,
+)
 from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
 from pokemon_red_completion.paired_bounded_player import (  # noqa: E402
     PairedBoundedPlayerArm,
@@ -103,7 +110,9 @@ from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink  # noqa: 
 
 GAME_ID = "pokemon.mainline:red:gb:us:rev0"
 LEARNED_ARM_ID = "learned-goal-manager"
+CAUSAL_ARM_ID = "living-dex-causal-shadow"
 BASELINE_ARM_ID = "completion-first-teacher"
+_CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
 
 
@@ -120,7 +129,9 @@ class _Readiness:
     rom_sha256: str
     capture: GoalManagerContextCapture
     profile: RedGoalContextProfile
-    model: GoalManagerLinearModel
+    challenger_arm_id: str
+    legacy_model: GoalManagerLinearModel | None
+    causal_record: LivingDexGoalModelRecord | None
     model_file_sha256: str
     model_sha256: str
     private_root: PrivateArtifactRoot
@@ -223,7 +234,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument("--envelope", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
-    parser.add_argument("--model", type=Path, required=True)
+    parser.add_argument(
+        "--challenger",
+        choices=_CHALLENGER_IDS,
+        default=LEARNED_ARM_ID,
+    )
+    parser.add_argument("--model", type=Path, default=None)
+    parser.add_argument("--living-dex-model-record", type=Path, default=None)
+    parser.add_argument("--expected-living-dex-model-sha256", default=None)
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -263,6 +281,29 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _challenger_arguments(args: argparse.Namespace) -> tuple[Path, str | None]:
+    if args.challenger == LEARNED_ARM_ID:
+        if (
+            not isinstance(args.model, Path)
+            or args.living_dex_model_record is not None
+            or args.expected_living_dex_model_sha256 is not None
+        ):
+            raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+        return args.model, None
+    if args.challenger == CAUSAL_ARM_ID:
+        if (
+            args.model is not None
+            or not isinstance(args.living_dex_model_record, Path)
+            or not isinstance(args.expected_living_dex_model_sha256, str)
+        ):
+            raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+        return (
+            args.living_dex_model_record,
+            args.expected_living_dex_model_sha256,
+        )
+    raise PairedRedBoundedPlayerRunError("challenger_identity")
+
+
 def _prepare(args: argparse.Namespace) -> _Readiness:
     if not isinstance(args.pair_id, str) or _PAIR_ID.fullmatch(args.pair_id) is None:
         raise PairedRedBoundedPlayerRunError("pair_id")
@@ -271,26 +312,47 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     require_published_source(PROJECT_ROOT, source)
     if source.git_commit is None:
         raise PairedRedBoundedPlayerRunError("source_identity")
+    challenger_model_path, expected_causal_model_sha256 = _challenger_arguments(args)
     rom_path = resolve_rom_path(args.rom)
     rom = verify_rom(rom_path)
     state = _regular_external(args.state, subject="state", rom_path=rom_path)
     envelope = _regular_external(args.envelope, subject="envelope", rom_path=rom_path)
     profile_path = _regular_external(args.profile, subject="profile", rom_path=rom_path)
-    model_path = _regular_external(args.model, subject="model", rom_path=rom_path)
     output_path = _new_external_output(args.out, rom_path=rom_path)
     capture = open_goal_manager_context_capture(state, envelope)
     profile = load_red_goal_context_profile(profile_path)
     if capture.capture_id != profile.profile_id:
         raise PairedRedBoundedPlayerRunError("capture_profile_identity")
+    model_path = _regular_external(
+        challenger_model_path,
+        subject="model",
+        rom_path=rom_path,
+    )
     model_file_sha256 = _sha256(model_path)
-    model = load_goal_manager_model(model_path, expected_sha256=model_file_sha256)
-    model_sha256 = canonical_goal_manager_model_sha256(model)
+    legacy_model: GoalManagerLinearModel | None = None
+    causal_record: LivingDexGoalModelRecord | None = None
+    if args.challenger == LEARNED_ARM_ID:
+        legacy_model = load_goal_manager_model(
+            model_path,
+            expected_sha256=model_file_sha256,
+        )
+        model_sha256 = canonical_goal_manager_model_sha256(legacy_model)
+    else:
+        if expected_causal_model_sha256 is None:
+            raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+        causal_record = load_living_dex_goal_model_record(
+            model_path,
+            expected_model_sha256=expected_causal_model_sha256,
+        )
+        if causal_record.file_sha256 != model_file_sha256:
+            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        model_sha256 = causal_record.model.model_sha256
     private_root = open_private_root(
         args.private_artifact_root,
         repository_root=PROJECT_ROOT,
         allow_same_device=True,
     )
-    for arm_id in (LEARNED_ARM_ID, BASELINE_ARM_ID):
+    for arm_id in (args.challenger, BASELINE_ARM_ID):
         episode_id = _episode_id(args.pair_id, arm_id)
         if private_root.inspect_episode_state(episode_id).status != "absent":
             raise PairedRedBoundedPlayerRunError("pair_id_already_used")
@@ -302,7 +364,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         rom_sha256=rom.sha256,
         capture=capture,
         profile=profile,
-        model=model,
+        challenger_arm_id=args.challenger,
+        legacy_model=legacy_model,
+        causal_record=causal_record,
         model_file_sha256=model_file_sha256,
         model_sha256=model_sha256,
         private_root=private_root,
@@ -312,12 +376,45 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
 
 
 def _episode_id(pair_id: str, arm_id: str) -> str:
-    suffix = "learned" if arm_id == LEARNED_ARM_ID else "baseline"
+    suffix_by_arm = {
+        LEARNED_ARM_ID: "learned",
+        CAUSAL_ARM_ID: "causal",
+        BASELINE_ARM_ID: "baseline",
+    }
+    try:
+        suffix = suffix_by_arm[arm_id]
+    except KeyError as error:
+        raise PairedRedBoundedPlayerRunError("arm_identity") from error
     return f"{pair_id}-{suffix}"
+
+
+def _challenger_authority(readiness: _Readiness) -> GoalDecisionAuthority:
+    if readiness.challenger_arm_id == LEARNED_ARM_ID:
+        if readiness.legacy_model is None or readiness.causal_record is not None:
+            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        return LearnedGoalManagerPolicy(readiness.legacy_model)
+    if readiness.challenger_arm_id == CAUSAL_ARM_ID:
+        if readiness.causal_record is None or readiness.legacy_model is not None:
+            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        return LivingDexGoalShadowPolicy(readiness.causal_record.model)
+    raise PairedRedBoundedPlayerRunError("challenger_identity")
+
+
+def _policy_id(readiness: _Readiness, arm_id: str) -> str:
+    if arm_id == BASELINE_ARM_ID:
+        return BASELINE_ARM_ID
+    if arm_id != readiness.challenger_arm_id:
+        raise PairedRedBoundedPlayerRunError("arm_identity")
+    if arm_id == LEARNED_ARM_ID:
+        return f"goal-manager-{readiness.model_sha256[:16]}"
+    if arm_id == CAUSAL_ARM_ID:
+        return f"living-dex-goal-{readiness.model_sha256[:16]}"
+    raise PairedRedBoundedPlayerRunError("challenger_identity")
 
 
 def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
+    challenger = _challenger_authority(readiness)
     with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(readiness.capture.state_bytes)
         initial_frame_count = emulator.frame_count
@@ -338,7 +435,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             budget_meter=meter,
             assignment_id=readiness.pair_id,
             authorities=(
-                (LEARNED_ARM_ID, LearnedGoalManagerPolicy(readiness.model)),
+                (readiness.challenger_arm_id, challenger),
                 (BASELINE_ARM_ID, CompletionFirstGoalTeacher()),
             ),
         )
@@ -346,7 +443,15 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             raise PairedRedBoundedPlayerRunError("preflight_budget")
     if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
         raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
-    return result.public_dict()
+    public = result.public_dict()
+    if isinstance(challenger, LivingDexGoalShadowPolicy):
+        if challenger.last_decision is None or challenger.decisions != 1:
+            raise PairedRedBoundedPlayerRunError("causal_preflight_decision")
+        public["living_dex_causal_shadow"] = {
+            "decision": challenger.last_decision.public_dict(),
+            "production_authority": False,
+        }
+    return public
 
 
 def _run_arm(
@@ -428,11 +533,7 @@ def _run_arm(
                 partition="development",
                 environment_id=GAME_ID,
                 actor=arm_id,
-                policy_id=(
-                    f"goal-manager-{readiness.model_sha256[:16]}"
-                    if arm_id == LEARNED_ARM_ID
-                    else BASELINE_ARM_ID
-                ),
+                policy_id=_policy_id(readiness, arm_id),
                 collection_id=readiness.pair_id,
                 assignment_id=f"{readiness.pair_id}-{arm_id}",
                 ordering_assignment_id=readiness.pair_id,
@@ -559,10 +660,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     }
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
     preflight = _action_free_preflight(readiness)
+    challenger_authority = _challenger_authority(readiness)
     learned = _run_arm(
         readiness,
-        arm_id=LEARNED_ARM_ID,
-        authority=LearnedGoalManagerPolicy(readiness.model),
+        arm_id=readiness.challenger_arm_id,
+        authority=challenger_authority,
     )
     baseline = _run_arm(
         readiness,
@@ -590,12 +692,29 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "rom_sha256": readiness.rom_sha256,
         "model_file_sha256": readiness.model_file_sha256,
         "model_sha256": readiness.model_sha256,
+        "challenger_arm_id": readiness.challenger_arm_id,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,
         "sealed_red_accesses": 0,
         "crystal_accesses": 0,
         "full_game_replays": 0,
     }
+    if readiness.causal_record is not None:
+        if not isinstance(challenger_authority, LivingDexGoalShadowPolicy):
+            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        if challenger_authority.last_decision is None:
+            raise PairedRedBoundedPlayerRunError("causal_outcome_decision")
+        summary["living_dex_causal_shadow"] = {
+            "decision_count": challenger_authority.decisions,
+            "decisions": [
+                decision.public_dict()
+                for decision in challenger_authority.decision_history
+            ],
+            "deterministic_decision_count": challenger_authority.deterministic_decisions,
+            "model_decision_count": challenger_authority.model_decisions,
+            "model_record": readiness.causal_record.public_dict(),
+            "production_authority": False,
+        }
     _write_exclusive(readiness.output_path, summary)
     return summary
 

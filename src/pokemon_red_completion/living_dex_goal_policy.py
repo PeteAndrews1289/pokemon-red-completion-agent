@@ -180,6 +180,11 @@ class LivingDexGoalShadowPolicy:
     model_decisions: int = field(default=0, init=False)
     deterministic_decisions: int = field(default=0, init=False)
     last_decision: LivingDexGoalShadowDecision | None = field(default=None, init=False)
+    _decision_history: list[LivingDexGoalShadowDecision] = field(
+        default_factory=list,
+        init=False,
+        repr=False,
+    )
 
     def __post_init__(self) -> None:
         if not isinstance(self.model, LivingDexOptionValueModel):
@@ -188,6 +193,12 @@ class LivingDexGoalShadowPolicy:
             raise TypeError("living-Dex shadow policy needs a utility contract")
         if not isinstance(self.safety, CompletionFirstGoalTeacher):
             raise TypeError("living-Dex shadow policy needs a deterministic safety policy")
+
+    @property
+    def decision_history(self) -> tuple[LivingDexGoalShadowDecision, ...]:
+        """Return every decision in order without exposing a mutable log."""
+
+        return tuple(self._decision_history)
 
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
         if not isinstance(question, GoalManagerQuestion):
@@ -273,7 +284,7 @@ class LivingDexGoalShadowPolicy:
         bound = bind_goal_selection(question, selected.goal_candidate_index)
         self.decisions += 1
         self.model_decisions += 1
-        self.last_decision = LivingDexGoalShadowDecision(
+        decision = LivingDexGoalShadowDecision(
             mode=LivingDexGoalDecisionMode.MODEL_SHADOW,
             selected_kind=bound.kind,
             selected_candidate_index=bound.selected_index,
@@ -281,6 +292,8 @@ class LivingDexGoalShadowPolicy:
             menu_sha256=menu.policy_sha256,
             scores=tuple(scored),
         )
+        self.last_decision = decision
+        self._decision_history.append(decision)
         return bound
 
     def _record_deterministic(
@@ -294,7 +307,7 @@ class LivingDexGoalShadowPolicy:
             raise LivingDexGoalPolicyError("deterministic choice belongs to another question")
         self.decisions += 1
         self.deterministic_decisions += 1
-        self.last_decision = LivingDexGoalShadowDecision(
+        decision = LivingDexGoalShadowDecision(
             mode=mode,
             selected_kind=selection.kind,
             selected_candidate_index=selection.selected_index,
@@ -302,6 +315,8 @@ class LivingDexGoalShadowPolicy:
             menu_sha256=None,
             scores=(),
         )
+        self.last_decision = decision
+        self._decision_history.append(decision)
         return selection
 
 

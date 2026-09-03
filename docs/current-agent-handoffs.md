@@ -3652,3 +3652,24 @@ The synthetic mechanics base is now fitted privately (2,000/500 examples, 0.840 
 development accuracy versus 0.704 fixed heuristic). The next offline adapter must use
 `fit_repeatable_battle_train_only.py`: equal examples per train lineage, no development/test records,
 no authority. Commit development choices only after that model exists.
+
+## Current assignments — causal living-Dex bounded outcome (2026-09-03)
+
+### Codex workhorse lane
+
+- Treat [the active product state](../ACTIVE_PRODUCT_STATE.md) as the current mission contract.
+- Preserve the four-context causal screen as qualification only: zero actions, frames, episodes,
+  fits and counter changes; one screened disagreement.
+- Publish and green the causal challenger extension to the existing paired runner.
+- Run exactly one repeatable same-state development comparison on the screened disagreement, then
+  reorient from the typed outcome before creating a larger curriculum.
+- Keep deterministic mechanics and emergency safety authoritative. Do not fit on development,
+  promote from one pair, open sealed Red or Crystal, or substitute a full replay.
+
+### Reviewer lane
+
+- A later milestone review should challenge whether observed outcomes justify the proposed
+  lineage-disjoint multi-goal curriculum and whether any scalar comparison hides incompatible
+  objectives.
+- Review tracked code and path-free aggregates only. Private cartridge paths, saves, binding
+  identities and durable trajectories stay private.
