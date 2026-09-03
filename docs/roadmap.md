@@ -30,6 +30,19 @@
 > achievable under the common bound and the other was not. See the
 > [path-free diagnosis](evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json).
 
+> **September 3 first causal-player advantage:** pair 003 ran from exact main `09a8bf29` under
+> green CI `33798168098/1`. The teacher-free model completed `develop_team` (**20→21**, **1,119
+> actions / 101,171 frames**); completion-first ordering failed `evolve_species` at the common hard
+> bound after partial progress (**22→23**, **6,000 actions / 257,689 frames**, no evolution). The
+> paired verdict is **`learned_advantage` by verified progress dominance**.
+>
+> This closes the integration falsifier, not the product. Count one development comparison, one
+> model-led composition attempt, and one verified composition episode; count no fit or authority
+> promotion. Next inventory lineage-disjoint, multi-goal Red train/development contexts without
+> controller input or disagreement selection. Then collect train outcomes, fit train-only, bind
+> held-development predictions before outcomes, and require advantage across multiple goal families.
+> See the [path-free result](evidence/red-causal-player-pair-003-result-2026-09-03.json).
+
 > **September 3 causal player bridge:** The first paired player result is green and merged as main
 > `44adcb38`; learned and deterministic arms tied on storage. The inventory found an existing
 > teacher-free living-Dex outcome model (`a211de9c…e4af9`, eight authenticated selected-arm rows)

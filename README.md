@@ -6,18 +6,18 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): turn bounded inability into learning evidence.**
-> Pair 002 proved the first repair: the teacher-free living-Dex model again chose `develop_team`,
-> raised the target from **level 20 to 21** in **1,119 actions / 101,171 frames**, and settled a
-> complete causal arm. The completion-first control instead chose `evolve_species`, raised Diglett
-> from **22 to 23**, then reached the equal **6,000-action / 257,689-frame** cap before evolution.
+> **Current product focus (September 3, 2026): scale the first model-led strategic win.** Pair 003
+> independently restored the same authenticated Red state for both arms. The teacher-free causal
+> model chose `develop_team` and completed it, raising the target **level 20→21** in **1,119 actions
+> / 101,171 frames**. Completion-first ordering chose `evolve_species`, raised Diglett **22→23**,
+> then reached the equal **6,000-action / 257,689-frame** cap without evolving it.
 >
-> The hard limiter correctly refused action 6,001, but the runtime mislabeled that expected outcome
-> as a binding crash before it could compare the arms. Pairs 001 and 002 are consumed and advance no
-> counter. The active repair gives action and frame caps one typed `execution_budget_exhausted`
-> terminal while ordinary defects still fail closed. Next: publish, pass exact-main CI, and run one
-> fresh pair. Deterministic ordering retains production authority; sealed Red, Crystal and full
-> replay remain closed. See the [path-free diagnosis](docs/evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json).
+> The comparison completed as **`learned_advantage` by verified progress dominance**, with zero
+> teacher queries, collection losses, or private fields. This is one genuine development win—not
+> broad competence or production authority. Next: build an action-free, lineage-disjoint curriculum
+> across multiple goal families, then fit train-only and test committed held-development choices.
+> No consumed pair may retry; sealed Red, Crystal, and full replay remain closed. See the
+> [path-free result](docs/evidence/red-causal-player-pair-003-result-2026-09-03.json).
 
 > **Current product focus (September 3, 2026): turn the working Red player into a learning
 > curriculum.** The first same-state live comparison is complete. Both the learned manager and the

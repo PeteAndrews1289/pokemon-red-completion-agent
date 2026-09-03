@@ -127,9 +127,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage="Red semantic goal curriculum · hybrid control",
         message=(
-            "First same-state Red pair: both arms chose manage_storage, raised headroom 2→20, "
-            "and tied at 36 actions/4,512 frames. Verdict: equivalent. Deterministic ordering "
-            "stays active while a multi-goal training curriculum is designed."
+            "First causal-player advantage: the model completed develop_team in 1,119 actions; "
+            "completion-first ordering exhausted 6,000 actions before evolve_species completed. "
+            "One development win is recorded; multi-goal curriculum design is next."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red multi-goal curriculum · Crystal transfer deferred",
@@ -137,7 +137,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         model=DashboardModelState(
             mode="shadow",
             candidate="Semantic goal manager · deterministic skill executors",
-            choice="Goal pair equivalent · deterministic ordering retained · learner shadow",
+            choice="First strategic advantage · deterministic ordering retained · learner shadow",
             confidence=None,
             decisions=composition_attempts,
             teacher_queries=0,
@@ -152,8 +152,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_completed=development_episodes,
             sealed_total=development_episode_target,
             predictions_committed=False,
-            heading="First Red player gate complete",
-            eyebrow="Battle study closed · pair tied · curriculum next",
+            heading="First causal Red player advantage",
+            eyebrow="Integration gate closed · one development win · curriculum next",
             counter_labels=(
                 "Composition attempts",
                 "Verified composition episodes",
@@ -207,8 +207,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "planner agreement 4/4 · actions 0 · frames 0"
             ),
             (
-                "Player result · same state · manage_storage in both arms · headroom 2→20 · "
-                "36 actions · 4,512 frames each · equivalent · private bindings excluded"
+                "Player result · same state · model develop_team succeeded in 1,119 actions · "
+                "control evolve_species hit 6,000-action bound · learned advantage · private "
+                "bindings excluded"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "

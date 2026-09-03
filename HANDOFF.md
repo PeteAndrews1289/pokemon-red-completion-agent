@@ -14,6 +14,30 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-03: the causal player earned its first same-state strategic win
+
+The typed budget-terminal repair merged as exact main `09a8bf29` under green CI
+`33798168098/1`. Pair `red-causal-player-pair-003` then completed both independently restored arms.
+The teacher-free causal living-Dex policy selected `develop_team`; its deterministic specialist
+raised the intended teammate from level 20 to 21 in 1,119 actions and 101,171 frames. The
+completion-first control selected `evolve_species`; it raised Diglett from 22 to 23 but reached the
+6,000-action ceiling after 257,689 frames without evolving it. The latter settled durably as
+`execution_budget_exhausted`, not a crash.
+
+The public verdict is `learned_advantage` by verified progress dominance. Starts were identical,
+both collection transitions were valid, and teacher queries, fallbacks, controller errors,
+collection losses, sealed Red, Crystal, and full replay were all zero. This adds one development
+comparison, one model-led composition attempt, and one verified composition episode. It adds no fit
+and grants no production authority: the model still rests on only eight settled causal training
+examples and one successful integrated comparison.
+
+Next publish this result and create an **action-free** inventory of independent Red contexts across
+acquisition, evolution, team development, story, storage, supply, exploration, and recovery. Do not
+select contexts for disagreement. Freeze disjoint train/development lineages, collect train outcomes,
+fit train-only, commit held-development choices before outcomes, and require advantage across more
+than one goal family before expanding bounded authority. Evidence:
+[pair-003 result](docs/evidence/red-causal-player-pair-003-result-2026-09-03.json).
+
 ## 2026-09-03: pair 002 completed the model arm and exposed the budget terminal
 
 The post-skill observation repair merged as exact main `70e46485` under green CI

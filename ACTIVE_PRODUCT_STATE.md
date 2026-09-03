@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the generic typed action/frame budget-terminal repair, then execute pair 003 on the same observed develop_team versus evolve_species disagreement. Pairs 001 and 002 are permanently consumed. Use only a complete verified comparison to decide whether to design a lineage-disjoint multi-goal curriculum; deterministic goal ordering remains authoritative.
+- Next decision: Publish the complete pair-003 learned-advantage result, then inventory a lineage-disjoint multi-goal Red curriculum before taking more controller input. Fit train only and require committed held-development advantage across multiple goal families before expanding the model's bounded authority; deterministic ordering remains production-authoritative meanwhile.
 
 ### Mandatory mission check
 
@@ -50,9 +50,9 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Composition Attempt · development | 2 | 2 |
-| Verified Composition Episode · development | 2 | 2 |
-| Development Episode · development | 18 | 18 |
+| Composition Attempt · development | 3 | 3 |
+| Verified Composition Episode · development | 3 | 3 |
+| Development Episode · development | 19 | 19 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-causal-player-budget-terminal-repair-v1** · status **active** · evidence [qualification](docs/evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json)
+**2026-09-03-causal-player-first-advantage-v1** · status **active** · evidence [unseen comparison](docs/evidence/red-causal-player-pair-003-result-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A transferable player must treat bounded inability to finish a semantic objective as learning evidence rather than a crash. The repair is title-neutral, keeps mechanics and safety deterministic, and measures whether the model chose the more achievable completion action. |
-| Learning output | No learning counter moves. Pair 002 contains a complete causal arm and a measured but unfinalized baseline arm; the absent paired result means there is still no comparative outcome or authority claim. |
-| Authority delta | Pair 002 independently reproduced the causal model's teacher-free develop_team choice and completed it in 1119 actions and 101171 frames. The completion-first control selected evolve_species, advanced Diglett from level 22 to 23, then exhausted the equal 6000-action budget before evolution. The old runtime rethrew that expected terminal before comparison, so no broader authority is promoted. |
-| Transfer result | Typed bounded failure is part of the title-neutral player contract every later game adapter needs. Crystal remains unexecuted and transfer remains untested; pair 003 can supply Red development evidence only. |
-| Blocker | Pairs 001 and 002 are permanently consumed and neither produced a comparison. Pair 002 proved the observation repair, then isolated a second reusable integration fault: a correctly enforced hard action or frame cap must settle as execution_budget_exhausted rather than binding_failed and a process exception. |
-| Decision | Publish one generic budget-terminal repair across both action and frame limiters. Preserve independent meter counts, post-failure semantic and collection checks, and fail-closed behavior for ordinary implementation exceptions. After exact-main CI, run one new pair identity; never retry or reinterpret pairs 001 or 002. |
-| Next session | Publish and green the typed action/frame budget-terminal repair, then run exactly one new same-state development pair and reorient from its durable comparison. |
-| Next falsifier | After the generic budget terminal is public and green, independently restore both arms under pair 003 and require the causal success plus baseline budget exhaustion to settle into a public comparison with preserved collection and equal starts. Stop on unsafe action, unverifiable post-failure state, generic exception masking, or another integration failure. |
-| Stop condition | Never retry pairs 001 or 002. Stop if pair 003 begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh post-failure ledger, masks a programming exception as budget exhaustion, or turns one development result into production authority. |
+| Product alignment | The high-level model, not a teacher, made a semantic choice that completed under a bound where deterministic ordering did not. Scaling this exact choice-outcome loop across goal families is the shortest path toward a Red player that can later transfer its completion strategy to other games. |
+| Learning output | Pair 003 adds one development comparison, one model-led composition attempt, and one verified composition episode. The challenger completed develop_team while the baseline failed evolve_species at the equal hard bound. No fit or authority counter moves. |
+| Authority delta | Pair 003 is the first complete teacher-free strategic advantage in the live Red player. From an equal authenticated start, the causal model selected develop_team and completed it in 1119 actions and 101171 frames; completion-first selected evolve_species and exhausted 6000 actions after raising Diglett 22 to 23 without evolution. The verdict is learned_advantage by verified progress dominance, but one development context does not grant production authority. |
+| Transfer result | Pair 003 validates the title-neutral semantic manager and typed bounded-failure contract in one Red state. Crystal remains unexecuted and transfer remains untested; the next curriculum must preserve title-neutral features so future adapters can reuse the learned strategy. |
+| Blocker | The integrated model has only one successful same-state strategic comparison and its underlying causal fit contains eight settled training examples. This is too narrow to establish cross-state Red competence, multi-decision recovery, full-game planning, or transfer. The next blocker is lineage-disjoint multi-goal data rather than another runtime repair. |
+| Decision | Close the pair-003 repair cycle and design the smallest action-free train/development curriculum spanning genuine acquisition, evolution, team development, story, storage, supply, and recovery choices. Fit only on authenticated train outcomes, commit held-development choices before outcomes, and retain deterministic skills and safety beneath the manager. |
+| Next session | Publish the pair-003 result, then build and test the action-free lineage-disjoint multi-goal curriculum inventory that gates authentic strategic training. |
+| Next falsifier | Before more gameplay, inventory independent authenticated contexts and prove that train and development lineages cover multiple genuine goal families without selecting for model disagreement. Stop if the available supply is one lineage, one goal family, identity-bearing, or dependent on teacher choices. |
+| Stop condition | Never retry pairs 001, 002, or 003. Do not collect another outcome until an action-free plan proves disjoint upstream lineages and genuine multi-goal coverage. Stop on private identity features, teacher-choice targets, outcome-selected contexts, collection regression, unbounded execution, or any attempt to call one Red comparison broad competence. |
 
 ### Stop conditions
 
@@ -216,4 +216,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **22**.
+Current evidence entries: **23**.
