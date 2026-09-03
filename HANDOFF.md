@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-09-02 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-09-03 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -13,6 +13,29 @@ horizon and Crystal-ready definition),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-09-03: the bounded player seam exists; live Red binding is next
+
+`bounded_player_episode.py` now supplies the missing title-neutral integration boundary. A semantic
+authority chooses from the complete goal menu; the existing private binding executes only after the
+choice is durably recorded; an independent verifier settles it; independent action/frame counters
+must match the skill report; and a new living-collection checkpoint is checked after every ordinary
+success or failure. One verified failure may trigger one changed-context replan, but the recovery
+may not repeat the failed semantic goal. Executor defects and external interruption still fail
+closed rather than becoming ordinary recovery evidence.
+
+Nine ROM-free tests pass. They include a durable `restore_team` failure followed by a fresh
+`manage_storage` success, collection-regression rejection, stale-success rejection, hidden observer
+input rejection, budget mismatch rejection and interruption retention. This advances no learning
+counter: **ROM reads 0 · actions 0 · frames 0 · fits 0 · live model decisions 0 · promotions 0**.
+
+Next, build the thin Red bridge from `PokemonRedGoalStateAdapter`,
+`RedGoalOpportunityEnumerator`, `living_collection_checkpoint` and the existing independent budget
+meter. Its dashboard-safe timeline must show semantic goal, typed result, skill cost, ledger delta
+and recovery without exposing private bindings. Qualify it without controller input, then run two
+short disjoint Red development episodes—learned manager versus deterministic manager—before any
+authority expansion. Do not substitute a full replay, sealed Red, Crystal, or another local battle
+campaign.
 
 ## 2026-09-02: Red-first evidence repair blocks the weak battle model honestly
 

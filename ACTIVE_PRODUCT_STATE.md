@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-red-player-integration-reorientation-v1** · status **closed** · evidence [falsification](docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json)
+**2026-09-03-bounded-player-seam-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-contract-qualification-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The final product needs long-horizon judgment over quests, captures, party development, resources and recovery. Retaining deterministic local mechanics while learning semantic goals concentrates model capacity where transfer and living-Pokedex completion actually require it. |
-| Learning output | Thirty-two complete repeated-RNG train aggregates produced one root-balanced fit. On 20 fresh development aggregates the frozen prior scored 17, the challenger 18 and the fixed heuristic 20; all examples were informative and the clean comparison rejected learned one-turn promotion. |
-| Authority delta | The repeated-RNG challenger improved over its frozen prior on fresh Red development, 18/20 versus 17/20, but the legal fixed heuristic scored 20/20. Learned battle authority remains zero; the fixed heuristic is retained as the reliable one-turn battle primitive. |
-| Transfer result | Untested and deliberately deferred. The player contract must remain title-neutral, but Crystal execution waits until the composed Red player demonstrates bounded progress with measured recovery. |
-| Blocker | The project has individually verified goal, navigation, battle, capture, party, inventory, ledger and recovery components, but they are not yet composed behind one bounded player contract that can choose a semantic objective, execute it, verify durable completion progress and replan on a typed failure. |
-| Decision | Close the one-turn battle-learning loop and move upward to bounded Red player integration. Keep the learned battle scorer in shadow, use the 20/20 fixed heuristic for the battle primitive, and measure multi-turn quest and living-Pokedex progress where learning can outperform local mechanics. |
-| Next session | Publish this battle result, replace the dashboard with an honest component competence map, and implement the ROM-free bounded-player contract before executing two authenticated Red development episodes. |
-| Next falsifier | Prove one game-neutral player seam can carry a semantic completion goal through existing deterministic skills, return a typed outcome, verify the post-action completion ledger and replan once after an injected recoverable failure. |
-| Stop condition | Stop if the integration becomes a disguised walkthrough, adds Red-coordinate policy features, bypasses typed skill results, or cannot verify ledger progress and recovery in bounded episodes. Do not rescue it with a full replay, sealed Red, Crystal execution or another one-turn battle-data campaign. |
+| Product alignment | The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop. |
+| Learning output | No new learner output. Nine ROM-free tests qualified the reusable contract, including a durable restore-team failure followed by fresh-state replanning to a successful storage goal; controller actions, emulator frames, fits and live model decisions remained zero. |
+| Authority delta | The ROM-free player seam now accepts a semantic goal authority and dispatches existing deterministic skills behind durable decisions, independent verification, fresh completion-ledger checks and one changed-context recovery. This is integration capability only: no live model decision or authority promotion occurred. |
+| Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
+| Blocker | The generic player contract is qualified, but it is not yet bound to the authenticated Red observation and skill context used for short development episodes. No live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
+| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Bind the title-neutral player seam to the existing Red adapter, expose its goal/skill/ledger/recovery timeline on the read-only dashboard, then run two short development episodes comparing learned semantic selection with the deterministic manager. |
+| Next session | Publish the ROM-free seam, implement the thin Red observation/execution bridge and player timeline, then qualify the bridge without ROM input before scheduling two short repeatable development episodes. |
+| Next falsifier | From an authenticated development snapshot, prove the Red adapter can produce two fresh player observations, execute the selected existing binding, reconcile independent budgets and emit a dashboard-safe ledger delta. Then compare learned and deterministic goal selection on two disjoint short episodes. |
+| Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 
 ### Stop conditions
 

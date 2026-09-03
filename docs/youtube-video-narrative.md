@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: seven systems become one bounded player
+
+**Visual:** Arrange cards labeled **GOAL MODEL**, **NAVIGATION**, **BATTLE**, **CAPTURE**, **PARTY**,
+**INVENTORY** and **RECOVERY** around a central **LIVING POKÉDEX LEDGER**. Animate one arrow from the
+model to a semantic goal, then through a deterministic skill and back to a verified ledger delta.
+
+**Voiceover:** “We had built the parts of a Pokémon agent, but parts are not a player. The missing
+piece was a contract: the model chooses what should happen next, bounded code handles the mechanics,
+and the collection ledger—not the model—decides whether progress was real.”
+
+**Visual:** Show **RESTORE TEAM → FAILED**, then a fresh observation card and **MANAGE STORAGE →
+SUCCEEDED**. Beside it, flash rejected cards for **STALE STATE**, **LOST SPECIMEN**, **FAKE BUDGET**
+and **REPEAT FAILED GOAL**.
+
+**Voiceover:** “The ROM-free rehearsal retained a real typed failure and recovered by choosing a
+different goal. Nine adversarial checks passed. No game was run and no new authority was claimed;
+the next scene is the first short Red episode through this exact seam.”
+
 ## New opening beat: the boring rule beat the neural network
 
 The most useful audit result was not another victory screen. The authentic Red model improved from
