@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "The repeated-RNG challenger improved over its frozen prior on fresh Red development, 18/20 versus 17/20, but the legal fixed heuristic scored 20/20. Learned battle authority remains zero; the fixed heuristic is retained as the reliable one-turn battle primitive.",
-        "blocker": "The project has individually verified goal, navigation, battle, capture, party, inventory, ledger and recovery components, but they are not yet composed behind one bounded player contract that can choose a semantic objective, execute it, verify durable completion progress and replan on a typed failure.",
-        "decision": "Close the one-turn battle-learning loop and move upward to bounded Red player integration. Keep the learned battle scorer in shadow, use the 20/20 fixed heuristic for the battle primitive, and measure multi-turn quest and living-Pokedex progress where learning can outperform local mechanics.",
+        "authority_delta": "The ROM-free player seam now accepts a semantic goal authority and dispatches existing deterministic skills behind durable decisions, independent verification, fresh completion-ledger checks and one changed-context recovery. This is integration capability only: no live model decision or authority promotion occurred.",
+        "blocker": "The ROM-free Red bridge is qualified, but no authenticated snapshot has yet passed an action-free player preflight and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam.",
+        "decision": "Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Publish the title-neutral player seam and thin Red bridge, expose its goal/skill/ledger/recovery timeline on the read-only dashboard, then preflight and run two short development episodes comparing learned semantic selection with the deterministic manager.",
         "evidence": {
-          "kind": "falsification",
-          "path": "docs/evidence/red-repeatable-battle-expected-utility-result-2026-09-03.json",
-          "sha256": "7ba351061a36c6a622521bed70a9b5a1cba69b271d28d07e0a059ece6d9fc551"
+          "kind": "qualification",
+          "path": "docs/evidence/red-bounded-player-bridge-qualification-2026-09-03.json",
+          "sha256": "b75d253d6f4938d8aa69a7b751f72a40546af2d8e324c8ff869cfb10fa42146a"
         },
-        "learning_output": "Thirty-two complete repeated-RNG train aggregates produced one root-balanced fit. On 20 fresh development aggregates the frozen prior scored 17, the challenger 18 and the fixed heuristic 20; all examples were informative and the clean comparison rejected learned one-turn promotion.",
-        "next_falsifier": "Prove one game-neutral player seam can carry a semantic completion goal through existing deterministic skills, return a typed outcome, verify the post-action completion ledger and replan once after an injected recoverable failure.",
-        "next_session_goal": "Publish this battle result, replace the dashboard with an honest component competence map, and implement the ROM-free bounded-player contract before executing two authenticated Red development episodes.",
-        "product_alignment": "The final product needs long-horizon judgment over quests, captures, party development, resources and recovery. Retaining deterministic local mechanics while learning semantic goals concentrates model capacity where transfer and living-Pokedex completion actually require it.",
-        "session_id": "2026-09-03-red-player-integration-reorientation-v1",
-        "status": "closed",
-        "stop_condition": "Stop if the integration becomes a disguised walkthrough, adds Red-coordinate policy features, bypasses typed skill results, or cannot verify ledger progress and recovery in bounded episodes. Do not rescue it with a full replay, sealed Red, Crystal execution or another one-turn battle-data campaign.",
-        "transfer_result": "Untested and deliberately deferred. The player contract must remain title-neutral, but Crystal execution waits until the composed Red player demonstrates bounded progress with measured recovery."
+        "learning_output": "No new learner output. Thirteen ROM-free tests now qualify both the reusable player contract and the thin Red observation bridge; controller actions, emulator frames, fits and live model decisions remained zero.",
+        "next_falsifier": "Prove one authenticated Red development snapshot passes an action-free bridge preflight with at least two executable semantic goals and no private fields, then run paired short episodes through learned and deterministic managers using the same skills and ledger measures.",
+        "next_session_goal": "Publish the seam and Red bridge, add the path-free player timeline to the dashboard, qualify one action-free authenticated-snapshot preflight, then schedule two short repeatable development episodes.",
+        "product_alignment": "The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop.",
+        "session_id": "2026-09-03-bounded-player-seam-v1",
+        "status": "active",
+        "stop_condition": "Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign.",
+        "transfer_result": "The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority."
       },
       "learned_authority": {
         "current": "The repeated-RNG battle ranker improved over its prior but lost 18/20 to 20/20 against the fixed heuristic. The model remains shadow-only; deterministic skills retain controller authority and no full-player model authority is claimed.",

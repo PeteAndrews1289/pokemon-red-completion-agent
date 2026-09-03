@@ -17,6 +17,25 @@
 > Measure quest and Pokédex progress, captures, resource cost, faints, recoveries and replans.
 > Crystal, sealed Red and a full-game replay remain deferred until this player seam works.
 
+> **September 3 bounded-player contract:** The title-neutral seam is now implemented and passes
+> **9/9 ROM-free checks**. One synthetic episode durably retained a failed `restore_team` choice,
+> reobserved changed semantic state and selected a different successful `manage_storage` goal. The
+> gate also rejects collection regression, stale success, observer-side input, self-reported budget
+> drift and repeated failed goals; interruption remains recorded and propagated. This is integration
+> evidence only: **ROM/actions/frames/fits/live model decisions/promotions 0**.
+>
+> Next bind the seam to the existing Red adapter, enumerator, ledger projector and hard budget
+> meter; expose its path-free timeline on the dashboard; qualify that bridge without input; then run
+> two short disjoint development episodes comparing learned and deterministic semantic selection.
+> Do not replace this with a full replay or another one-turn battle-data campaign.
+
+> **September 3 Red bridge:** The existing Red state adapter, executable goal enumerator and living
+> collection projector now feed the generic seam through one thin module. Its semantic digest binds
+> public Red progress, the exact title-neutral policy input and the collection checkpoint while
+> omitting private bindings. The combined gate is **13/13 ROM-free tests** with zero gameplay.
+> Next: dashboard timeline, one action-free authenticated-snapshot preflight, then the two short
+> paired development episodes.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is

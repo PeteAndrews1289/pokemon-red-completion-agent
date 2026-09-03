@@ -1,0 +1,52 @@
+{
+  "authority": {
+    "live_model_decisions": 0,
+    "promotion_granted": false,
+    "teacher_fallbacks": 0
+  },
+  "contract": {
+    "completion_predicate_is_action_free": true,
+    "durable_decision_before_execution": true,
+    "executor_exceptions_fail_closed": true,
+    "fresh_observation_after_every_settled_attempt": true,
+    "independent_budget_reconciliation": true,
+    "living_collection_nonregression_required": true,
+    "maximum_replans": 1,
+    "repeated_failed_goal_rejected": true,
+    "typed_terminal_result": true
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "rom_reads": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "falsification": {
+    "collection_regression_rejected": true,
+    "hidden_observer_input_rejected": true,
+    "interruption_recorded_and_propagated": true,
+    "mismatched_execution_budget_rejected": true,
+    "recovery_sequence": [
+      "restore_team:failed",
+      "manage_storage:succeeded"
+    ],
+    "stale_success_rejected": true
+  },
+  "schema": "pokemon.core.bounded-player-contract-qualification.v1",
+  "status": "rom_free_contract_qualified_live_red_not_run",
+  "tests": {
+    "focused_passed": 9,
+    "focused_total": 9,
+    "mypy_errors": 0,
+    "ruff_errors": 0
+  },
+  "transfer_boundary": {
+    "policy_inputs_are_title_neutral": true,
+    "private_binding_fields_in_public_result": 0,
+    "private_path_fields_in_public_result": 0,
+    "red_specific_route_logic_added": false
+  }
+}

@@ -127,8 +127,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage="Red bounded player integration · hybrid control",
         message=(
-            "The repeated-RNG battle study is complete: the challenger improved over its prior "
-            "but the fixed heuristic won 20/20. Next: compose a bounded Red player."
+            "The fixed heuristic won 20/20 locally; the player seam and thin Red bridge now pass "
+            "13/13 ROM-free checks. Next: action-free snapshot preflight, then two paired episodes."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red player integration · Crystal transfer deferred",
@@ -152,7 +152,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_total=development_episode_target,
             predictions_committed=False,
             heading="Current Red player integration gate",
-            eyebrow="Battle study closed · long-horizon composition next",
+            eyebrow="Battle study closed · player seam qualified",
             counter_labels=(
                 "Composition attempts",
                 "Verified composition episodes",
@@ -202,8 +202,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
             (
-                "Competence map · battle primitive measured · navigation/capture/party/inventory "
-                "components tested · bounded end-to-end composition is the open gate"
+                "Player seam · 9/9 ROM-free checks · durable decision · typed outcome · fresh "
+                "ledger · one recovery · Red bridge 4/4 · private bindings excluded"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "

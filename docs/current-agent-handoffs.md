@@ -1,10 +1,24 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-09-02. This document applies the durable roles in
+Status: active operating assignment as of 2026-09-03. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: Codex owns the Red bounded-player bridge
+
+The game-neutral bounded player seam and thin Red observation bridge are implemented and pass
+thirteen ROM-free checks. The seam durably
+records semantic decisions, executes existing bounded bindings, reconciles independent budgets,
+checks a fresh living-collection ledger after success or failure, and permits one changed-context
+replan that cannot repeat the failed goal. It has not read a ROM or granted live model authority.
+
+Codex now owns the dashboard timeline and action-free authenticated-snapshot preflight needed to
+exercise that seam. The later comparison is learned semantic goal selection versus the
+deterministic completion-first manager using the same skills and measured ledger progress, resource
+cost and recovery. Crystal, sealed Red and full replay remain closed. Claude and Antigravity are
+optional milestone reviewers, not implementation dependencies.
 
 ## Current override: Codex owns the Red-first trustworthy learning loop
 

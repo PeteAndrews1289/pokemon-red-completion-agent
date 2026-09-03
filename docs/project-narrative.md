@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: the pieces finally become a player loop
+
+The project already had observers, a semantic goal model, deterministic navigation and battle
+skills, capture and party management, recovery, and a living-Pokédex ledger. What it lacked was one
+small contract that made those components take turns without quietly becoming another walkthrough.
+
+The new bounded player seam gives the model exactly one kind of authority: choose the next semantic
+goal. Private title-specific code performs the mechanic only after that choice is durably recorded.
+An independent verifier settles the outcome, independent counters reconcile the cost, and a fresh
+living-collection checkpoint must prove that nothing was lost. A normal verified failure can cause
+one replan, but only from changed evidence and only to a different goal. Programming defects and
+power interruptions still stop the episode.
+
+The first proof is deliberately ROM-free. Nine tests include a failed recovery choice followed by
+a successful storage choice, while adversarial cases try to hide controller input, falsify budgets,
+reuse stale state, lose a specimen and repeat the failed goal. All are caught. That does not mean a
+model is playing Red yet; it means the next short Red episode can measure the model rather than the
+glue around it.
+
+The Red-specific side is now only a thin adapter: it reuses the existing cartridge observer, goal
+enumerator and living-collection projector and hashes their public meaning without exposing private
+skill bindings. Four more checks bring the ROM-free total to thirteen. The remaining boundary is
+operational, not architectural: action-free preflight an authenticated snapshot, make the timeline
+visible, and then let the two managers attempt the same short development problem.
+
 ## September 2: the audit found the benchmark the model still has to beat
 
 The first repeatable loop was a genuine milestone, but a stronger audit changed what the result is
