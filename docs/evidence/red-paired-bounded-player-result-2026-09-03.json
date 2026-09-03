@@ -1,0 +1,99 @@
+{
+  "arms": {
+    "baseline": {
+      "actions": 36,
+      "authority_id": "completion-first-teacher",
+      "completion_satisfied": true,
+      "decisions": 1,
+      "frames": 4512,
+      "recovery_attempts": 0,
+      "selected_goal": "manage_storage",
+      "status": "succeeded",
+      "storage_headroom_after": 20,
+      "storage_headroom_before": 2,
+      "trajectory_manifest_sha256": "70400d529eef3e2b6fa642d5e2f44a5a688306a795025cb600c6f6deb238cf12"
+    },
+    "learned": {
+      "actions": 36,
+      "authority_id": "learned-goal-manager",
+      "completion_satisfied": true,
+      "decisions": 1,
+      "frames": 4512,
+      "recovery_attempts": 0,
+      "selected_goal": "manage_storage",
+      "status": "succeeded",
+      "storage_headroom_after": 20,
+      "storage_headroom_before": 2,
+      "trajectory_manifest_sha256": "644cdbe0fc108dccba4f5da89d1afb5c6a2ad42838f353464c11b924849c68e5"
+    }
+  },
+  "comparison": {
+    "decision_basis": "equal_progress_and_cost",
+    "living_species_gained_each": 0,
+    "registered_species_gained_each": 0,
+    "required_specimens_reduced_each": 0,
+    "retained_captures_gained_each": 0,
+    "specimen_loss_each": 0,
+    "storage_headroom_gained_each": 18,
+    "verdict": "equivalent"
+  },
+  "effects": {
+    "controller_actions": 72,
+    "crystal_executions": 0,
+    "emulator_frames": 9024,
+    "episodes_completed": 2,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "rom_reads": 3,
+    "sealed_red_cases_opened": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "claim": "The learned manager completed one bounded semantic Red goal through the reusable player seam with the same verified progress and exact cost as the deterministic baseline.",
+    "limitation": "Both authorities chose the same goal from one repeatable development state, so this result demonstrates integration and durable execution but no learned advantage or generalization.",
+    "next_step": "run_bounded_learned_development_episodes_on_other_authenticated_goal_families_then_redesign_or_retain_the_manager_from_measured_advantage"
+  },
+  "learning_counter_delta": {
+    "composition_attempts_development": 1,
+    "development_episode_attempts": 1,
+    "verified_composition_episodes_development": 1
+  },
+  "pair": {
+    "available_goal_count": 3,
+    "available_goal_kinds": [
+      "restore_team",
+      "advance_story",
+      "manage_storage"
+    ],
+    "available_menu_sha256": "08a39ec5cb9a7f550d163163c064be73bd5862e82ed0720a45eefbcb40fc28eb",
+    "pair_id": "red-bounded-player-pair-001",
+    "policy_context_sha256": "f6df85d32303deaf7259aea54b0095be4cb1e49c59d691fca1dc65f4c45dff90",
+    "starting_semantic_state_sha256": "414cec930f6cca30e53e315a521a16422ffd50b650d58611d3d6a72e9489a699",
+    "starting_state_sha256": "d1234c1ce208ab6a89abc366086c468934164aa0601180a524bbf83a2edc7a1e"
+  },
+  "pre_input_rejection": {
+    "controller_or_emulator_effects": 0,
+    "episode_created": false,
+    "pair_identity_consumed": false,
+    "reason": "local_settings_visible_under_sanitized_git_environment",
+    "source_authentication_worked_as_designed": true
+  },
+  "private_binding_fields": 0,
+  "private_path_fields": 0,
+  "recorded_on": "2026-09-03",
+  "result_file_sha256": "19774017fea9366159fa22ca8b3229e2bbefcdcd66b9cd64b50525c7a442e265",
+  "schema": "pokemon.red.paired-bounded-player-result-summary.v1",
+  "source": {
+    "ci_run_attempt": 1,
+    "ci_run_id": 33770728984,
+    "ci_status": "passed",
+    "executable_commit": "9f0524b525e7ac1bd6aceadf5bdbc1b31f997061",
+    "model_sha256": "eb5c6515dd4c7a7c1021199c82e2a5475184dbb7eae0eec473161054c8b0d2ce",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "source_bundle_sha256": "fc76054de80dbb49410cb7179b6546e3d2dc156c1fc7e9c182d9e8feadb0b8e1"
+  },
+  "status": "complete_equivalent",
+  "tracked_private_paths": 0
+}

@@ -125,26 +125,26 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
-        stage="Red bounded player integration · hybrid control",
+        stage="Red semantic goal curriculum · hybrid control",
         message=(
-            "The fixed heuristic won 20/20. Four live Red preflights passed with zero actions or "
-            "frames and 4/4 planner agreement. Next: restore one three-goal state independently "
-            "for paired episodes."
+            "First same-state Red pair: both arms chose manage_storage, raised headroom 2→20, "
+            "and tied at 36 actions/4,512 frames. Verdict: equivalent. Deterministic ordering "
+            "stays active while a multi-goal training curriculum is designed."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red player integration · Crystal transfer deferred",
+        location="Red multi-goal curriculum · Crystal transfer deferred",
         collection_target=composition_target,
         model=DashboardModelState(
-            mode="waiting",
+            mode="shadow",
             candidate="Semantic goal manager · deterministic skill executors",
-            choice="Battle baseline retained · heuristic 20/20, challenger 18/20 shadow",
+            choice="Goal pair equivalent · deterministic ordering retained · learner shadow",
             confidence=None,
             decisions=composition_attempts,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="catalog",
             zero_shot_completed=composition_attempts,
             zero_shot_total=composition_target,
             adaptation_completed=verified_compositions,
@@ -152,8 +152,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_completed=development_episodes,
             sealed_total=development_episode_target,
             predictions_committed=False,
-            heading="Current Red player integration gate",
-            eyebrow="Battle study closed · player seam qualified",
+            heading="First Red player gate complete",
+            eyebrow="Battle study closed · pair tied · curriculum next",
             counter_labels=(
                 "Composition attempts",
                 "Verified composition episodes",
@@ -203,8 +203,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
             (
-                "Player seam · 9/9 ROM-free checks · Red bridge 4/4 · live menu widths 2/3/4/3 · "
-                "planner agreement 4/4 · actions 0 · frames 0 · private bindings excluded"
+                "Preflight · Four live Red preflights passed · menu widths 2/3/4/3 · "
+                "planner agreement 4/4 · actions 0 · frames 0"
+            ),
+            (
+                "Player result · same state · manage_storage in both arms · headroom 2→20 · "
+                "36 actions · 4,512 frames each · equivalent · private bindings excluded"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "
@@ -229,8 +233,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"{'session' if _count(time_box, 'maximum_sessions') == 1 else 'sessions'} / "
                 f"{_count(time_box, 'maximum_hours')} hours"
             ),
-            _event("Stop 1", stop_conditions[0]),
-            _event("Stop 2", stop_conditions[1]),
+            _event("Stop conditions", f"{stop_conditions[0]} / {stop_conditions[1]}"),
             _event("Next decision", _text(lane, "next_decision")),
             (
                 "Player contract · authenticated snapshots · title-neutral semantic goals · "

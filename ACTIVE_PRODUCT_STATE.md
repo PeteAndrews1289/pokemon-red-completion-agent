@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After two bounded Red composition episodes, compare learned semantic goal selection with a deterministic goal-order baseline on verified completion-ledger progress, resource cost and recovery. Widen objective authority only on a measured advantage; otherwise retain the deterministic manager and redesign the decision context.
+- Next decision: The first same-state live comparison was exactly equivalent, so retain deterministic goal ordering and redesign the manager curriculum. Advance only after train-only learning across diverse semantic goal families beats the deterministic baseline on lineage-disjoint Red development episodes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The repeated-RNG battle ranker improved over its prior but lost 18/20 to 20/20 against the fixed heuristic. The model remains shadow-only; deterministic skills retain controller authority and no full-player model authority is claimed. |
+| Authority now | The goal manager completed one bounded live storage objective exactly as well as the completion-first baseline, while the repeated-RNG battle ranker still trails the fixed heuristic 18/20 to 20/20. Deterministic ordering and skills retain production authority; no full-player promotion is claimed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
 | Cheapest falsifier | Run ROM-free composition contracts and then two bounded development episodes from authenticated Red snapshots. Stop if the manager cannot select a semantic goal, the executors cannot report typed progress or failure, or a fresh ledger cannot verify progress without route-specific orchestration. |
@@ -50,9 +50,9 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Composition Attempt · development | 1 | 2 |
-| Verified Composition Episode · development | 1 | 2 |
-| Development Episode · development | 17 | 18 |
+| Composition Attempt · development | 2 | 2 |
+| Verified Composition Episode · development | 2 | 2 |
+| Development Episode · development | 18 | 18 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-paired-bounded-player-runner-local-qualification-v1** · status **active** · evidence [qualification](docs/evidence/red-paired-bounded-player-runner-local-qualification-2026-09-03.json)
+**2026-09-03-first-live-paired-bounded-player-v1** · status **active** · evidence [verified composition episode](docs/evidence/red-paired-bounded-player-result-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The launcher gives the learned manager one bounded long-horizon choice while reusing deterministic navigation, battle, capture, party, inventory and recovery skills. Its comparator preserves progress by semantic goal kind and treats mixed tradeoffs as incomparable, so a cheap but different task cannot masquerade as transferable superiority. |
-| Learning output | No new learner output. The same-state paired launcher passed 37 focused checks with zero ROM reads, actions, frames, episodes or fits; the first live paired outcome remains pending publication and CI. |
-| Authority delta | Four live action-free Red snapshots exposed genuine two-to-four-goal menus. The learned and completion-first authorities agreed on restore, storage, evolution and acquisition choices with zero actions or frames. This proves integration readiness only; no controller or authority promotion occurred. |
-| Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
-| Blocker | The paired launcher is locally qualified but is not yet published under green CI, so live use remains closed. No Red episode has yet demonstrated model-selected quest or living-Pokedex progress through this seam. |
-| Decision | Publish the repeatable paired launcher, require green CI, then restore the same three-goal Red state independently for learned and completion-first arms and compare durable verified progress. Do not search for disagreement or return to local battle campaigns. |
-| Next session | Publish the locally qualified paired launcher, pass exact-source CI, then execute one learned arm and one completion-first arm from the same repeatable three-goal Red state. |
-| Next falsifier | Restore the same repeatable three-goal Red state independently for learned and completion-first arms, then require durable decisions, typed outcomes, fresh ledgers and exact independent action/frame accounting from both. |
+| Product alignment | The first learned decision now flows through the title-neutral player into real Red mechanics and a verified living-ledger delta. The tie directs the next work toward diverse semantic outcome learning instead of more route hardening or a premature full replay. |
+| Learning output | One verified learned development composition episode was added. Learned and baseline arms independently restored the same three-goal state, selected manage_storage, increased storage headroom 2 to 20, preserved all 24 specimens, and tied at 36 actions and 4512 frames with zero failures or recoveries. |
+| Authority delta | The learned manager received one bounded semantic decision and completed manage_storage with the same verified progress and exact 36-action/4512-frame cost as the deterministic baseline. This proves live integration, not advantage; deterministic goal ordering remains the production authority. |
+| Transfer result | The shared player/result contracts survived their first live Red episode without title identity or private bindings in policy-visible data. Crystal remains unexecuted and transfer remains untested until diverse Red semantic authority is learned. |
+| Blocker | One same-choice storage episode cannot train or distinguish semantic planning. The next curriculum needs independent train/development contexts across multiple goal kinds and outcome variation without manufacturing disagreement or exposing private identity to the policy. |
+| Decision | Close the first player integration gate as successful but equivalent. Keep the deterministic manager, then design an outcome-dense bounded Red goal curriculum with lineage-disjoint train and development contexts across collection, story, party, resource and recovery goals. Fit on train only and require development advantage before widening authority. |
+| Next session | Build and qualify the action-free multi-goal context inventory and curriculum contract; do not run more gameplay until it proves adequate train/development breadth, lineage separation and reusable policy-visible variation. |
+| Next falsifier | Inventory existing authenticated Red contexts action-free and stop unless independent train and development lineages expose several executable semantic goal kinds plus outcome variation sufficient to teach a manager rather than copy deterministic ordering. |
 | Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 
 ### Stop conditions
@@ -216,4 +216,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **21**.
+Current evidence entries: **22**.

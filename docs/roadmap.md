@@ -63,6 +63,18 @@
 > **ROM/actions/frames/episodes/fits 0**. Next publish, pass exact-source CI, then run one repeatable
 > three-goal development pair. This does not open sealed Red, Crystal, a full replay, or promotion.
 
+> **September 3 first live player result:** PR 185 passed CI `33770728984/1` and merged as main
+> `9f0524b5`. From the same authenticated three-goal state, learned and completion-first arms both
+> selected `manage_storage`, preserved 24 specimens, increased storage headroom **2→20**, and used
+> exactly **36 actions / 4,512 frames**. Both episode manifests are durable and the result is
+> `equivalent`. Count the learned arm once: the board reaches **2/2 composition attempts · 2/2
+> verified compositions · 18/18 development episodes**. No authority or transfer claim follows.
+>
+> The equivalence triggers the declared redesign: inventory independent train/development Red
+> contexts across multiple semantic goal kinds, require outcome variation visible without identity,
+> fit on train only, and beat deterministic ordering on held development before widening authority.
+> Do not manufacture planner disagreement, resume route hardening, or open Crystal/full replay.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is

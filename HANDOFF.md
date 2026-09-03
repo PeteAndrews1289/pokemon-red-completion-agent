@@ -9295,3 +9295,25 @@ episode root if needed, and execute pair `red-bounded-player-pair-001` from auth
 authorities already selected `manage_storage`. The result asks whether the learned controller can
 actually produce the same durable verified progress, at what cost, through the reusable player seam.
 Sealed Red, Crystal, full replay, model fitting, and broader promotion remain closed.
+
+### First live paired bounded-player result — 2026-09-03
+
+PR 185 passed CI run `33770728984/1` and merged as exact main
+`9f0524b525e7ac1bd6aceadf5bdbc1b31f997061`. Pair 001 then restored the same authenticated
+three-goal state independently for both arms. Learned and completion-first authorities each chose
+`manage_storage`, preserved all 24 living specimens, increased storage headroom from 2 to 20, and
+completed in exactly 36 actions and 4,512 frames with no failure or recovery. Both durable private
+episode manifests exist; the public comparison is `equivalent` on equal progress and cost.
+
+Count only the learned arm as one new development composition attempt, one verified composition
+episode, and one development episode. The baseline is a control, not another learning example. The
+active board is now **2/2 composition attempts · 2/2 verified compositions · 18/18 development
+episodes**. Authority remains unchanged because a one-context same-choice tie says nothing about
+better planning or generalization.
+
+The next work is an action-free inventory and curriculum contract for multiple semantic goal kinds
+over lineage-disjoint train and development contexts. It must create outcome variation the manager
+can learn from without selecting contexts for disagreement, leaking binding identity, or converting
+different goal types into an arbitrary scalar score. Fit train only; retain deterministic ordering
+unless the learned manager wins on held development. Crystal, sealed Red and full replay remain
+closed.

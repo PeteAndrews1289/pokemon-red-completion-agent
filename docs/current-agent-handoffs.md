@@ -27,6 +27,14 @@ deterministic completion-first manager using the same skills and measured ledger
 cost and recovery. Crystal, sealed Red and full replay remain closed. Claude and Antigravity are
 optional milestone reviewers, not implementation dependencies.
 
+Pair 001 is now complete under exact main `9f0524b5` and green CI `33770728984/1`. Both arms chose
+`manage_storage`, preserved 24 living specimens, gained 18 storage slots, and used 36 actions plus
+4,512 frames. The result is exactly equivalent, so deterministic ordering remains authoritative.
+The learned arm advances the board once to 2/2 composition attempts, 2/2 verified compositions and
+18/18 development episodes. Codex now owns the action-free inventory and design of a lineage-disjoint
+multi-goal train/development curriculum; no more gameplay is justified until that inventory proves
+several goal kinds and learnable outcome variation.
+
 ## Current override: Codex owns the Red-first trustworthy learning loop
 
 The September 2 Ultra audit found that the repeatable mechanism is real but the battle candidate is
