@@ -5605,3 +5605,13 @@ training roots—team development, evolution, and two storage situations. Each r
 into every strategic option the agent could genuinely execute, with the emulator reset before each
 attempt. The narration should stress the distinction: this creates comparable causal training
 examples; it does not yet prove the model can generalize or finish the game.
+
+## Scene: the experiment does not grade itself
+
+Show the nine frozen arms behind a locked controller. Before any movement, all four root states are
+reserved and one exact trial is stamped **CLAIMED — NO RETRY**. Then split the pipeline in two:
+**EXECUTOR** restores and runs the preregistered semantic goal; **INDEPENDENT READER** reopens the
+sealed streams and checks the selected arm, verified outcome, living-Pokédex ledger, action count,
+and frame count before emitting +1 or -1. Keep **TRIALS EXECUTED 0/9** visible during the
+engineering scene. The honest payoff is not another green test—it is that the upcoming training
+rows cannot be selected after seeing outcomes or accepted from a self-reported summary.

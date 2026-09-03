@@ -30,8 +30,9 @@ This distinction no longer blocks all useful learning. It changes the label on t
    development, one evolution and two storage roots. Schedule every model-controlled candidate as
    a separate one-decision intervention from the identical reset. Recovery and restoration remain
    deterministic safety overrides.
-3. **Next engineering gate — collect bounded Red outcomes.** Publish and qualify a claim-first
-   forced-candidate runner. Restore the exact state for each candidate, execute one
+3. **Implemented locally; publication pending — collect bounded Red outcomes.** The claim-first
+   forced-candidate runner and independent episode reader pass their focused gate. Publish and
+   qualify the exact source, then restore the exact state for each candidate and execute one
    semantic goal through the deterministic skill layer, and retain success, typed failure, ledger
    delta, actions, frames and resource cost. No teacher chooses the answer.
 4. **Fit the semantic goal model.** Train only on completed calibration outcomes. Keep identity,
@@ -60,6 +61,7 @@ This distinction no longer blocks all useful learning. It changes the label on t
 The action-free inventory is complete. The scheduler and freezer passed the full local gate, PR 193
 passed CI and merged as main `71cf96ad`, and the private plan freeze succeeded with four roots and
 nine trials at zero protected effects. The next gate is the bounded claim-first execution runner.
-Once that runner is published and green, the first new outcome batch and model fit should take one additional work session;
+Once that runner is published and green and its action-free production preflight passes, the first
+new outcome batch and model fit should take one additional work session;
 useful multi-goal comparisons should follow within one to two further sessions. Full Red autonomy
 and living-Pokédex completion remain later milestones, not claims attached to this pilot.

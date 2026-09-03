@@ -13,8 +13,10 @@
 > trials: four story, two team-development, one evolution and two storage interventions.
 >
 > The freeze used **0 controller actions, 0 emulator frames, 0 teacher queries, 0 model
-> predictions, 0 outcomes and 0 trial claims**. Next implement, publish and qualify the claim-first
-> forced-candidate runner; then execute these nine trials without replacement and fit only completed
+> predictions, 0 outcomes and 0 trial claims**. The claim-first forced-candidate runner and a
+> separate strict outcome-admission reader are now implemented and locally qualified. Next publish
+> them under green exact-head CI, run one action-free production preflight, then execute and admit
+> these nine trials without replacement and fit only completed
 > train outcomes. This is calibration evidence, not independent generalization or Crystal transfer.
 > See the [freeze result](docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json)
 > and [session plan](docs/red-multi-goal-training-session-plan.md).

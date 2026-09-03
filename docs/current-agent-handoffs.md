@@ -14,12 +14,15 @@ single-decision trials: story 4, team development 2, evolution 1 and storage 2. 
 outcomes, predictions, teacher queries, controller actions and frames. The tracked public receipt is
 `docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json`.
 
-Codex's immediate implementation assignment is now the claim-first forced-candidate runner and its
-adversarial tests. It must preserve the plan's exact source/runtime/model/context/private-root
-bindings, claim a trial before any input, run only the frozen option from an independent restore,
-settle typed terminals durably, rehash protected inputs, and prohibit retries. Do not execute the
-nine trials from unpublished runner code. After runner publication and green CI, collect the nine
-train outcomes, fit completed outcomes only, and reorient before any same-bank diagnostic.
+Codex has implemented the claim-first forced-candidate runner and a separate strict episode
+admission boundary; 22 focused tests pass locally. The runner preserves the plan's exact
+source/runtime/model/context/private-root bindings, reserves all four roots and claims a trial
+before input, runs only the frozen option from an independent restore, settles typed terminals
+durably, rehashes protected inputs, and prohibits retries. The admission reader reconstructs the
+one-hot arm, verified outcome, collection transition and controller cost from immutable streams.
+Do not execute the nine trials from unpublished runner code. After publication and green CI, run
+one action-free production preflight, collect and independently admit the nine train outcomes, fit
+completed outcomes only, and reorient before any same-bank diagnostic.
 
 The 81-context bank is mechanically healthy but statistically unresolved. All state, envelope and
 profile bytes authenticate and all nine declared goal families appear, yet no artifact records the
@@ -27,8 +30,9 @@ true upstream episode for each save. Existing train roots may be used for clearl
 calibration; existing development roots are same-bank diagnostics only. Neither supports a new
 generalization or transfer claim.
 
-Codex owns the compact calibration-plan freezer, bounded selected-candidate outcome runner,
-train-only fit and multi-decision Red exercise. It must exclude every account-wide claimed
+Codex owns publication and green CI for the bounded selected-candidate outcome runner and
+independent admission reader, followed by the train-only fit and multi-decision Red exercise. It
+must exclude every account-wide claimed
 physical root before freezing and must not choose contexts by model disagreement, teacher choice
 or observed outcome. In parallel, the later promotion gate needs eight prospective train and four
 development lineages across at least four/three strategic families. Crystal remains deferred until

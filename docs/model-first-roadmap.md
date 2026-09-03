@@ -20,8 +20,12 @@ evolution 1 and storage 2. The freeze performed zero actions, frames, claims, pr
 queries or outcome access. Its path-free evidence is
 [red-multi-goal-calibration-freeze-result-2026-09-03.json](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
 
-Next implement and adversarially qualify the claim-first forced-candidate runner. Publish it and
-require green CI before executing any trial. Then execute all nine without replacement, retain
+The claim-first forced-candidate runner and separate strict episode-admission boundary are now
+implemented and locally qualified. The execution path reserves the complete four-root campaign and
+claims one trial before input; the admission path reconstructs the arm, verified outcome,
+living-collection transition and controller cost from the immutable streams instead of trusting the
+runner summary. Publish them and require green CI before executing any trial. Then execute and admit
+all nine without replacement, retain
 typed outcome and verified ledger/cost evidence, and fit only completed train outcomes. This is a
 calibration loop for strategic goal choice; it is not independent evaluation, broad autonomy, or
 Crystal transfer. The later 8-train/4-development prospective-lineage gate remains mandatory.

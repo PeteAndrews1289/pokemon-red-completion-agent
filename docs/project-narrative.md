@@ -8721,3 +8721,15 @@ source order and open-claim status. Every model-controlled option at each root g
 identical-reset intervention, while recovery and restoration remain hard safety behavior. This is
 the missing bridge between “we have save states” and “we have comparable outcomes a model can learn
 from.” At this checkpoint the freezer is code, not evidence: it has opened no outcome or gameplay.
+
+## September 3: separating execution from belief
+
+The four-root campaign is now frozen, and the next boundary is implemented without spending any of
+its nine trials. The execution runner reserves the campaign before input, claims each arm once,
+restores the exact cartridge state, and forces only the option selected before outcomes existed.
+A different reader then reopens the sealed episode and reconstructs the assignment, verified
+result, living-Pokédex transition, and controller cost from the raw durable streams. This matters
+because the training pipeline should not believe a success merely because the component that ran
+the emulator printed “success.” Twenty-two focused checks now attack substitution, retry,
+provenance, assignment-probability, collection-ledger, and counter drift. The source still must be
+published and pass exact-head CI before trial zero can touch the controller.

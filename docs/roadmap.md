@@ -7,8 +7,10 @@
 > action-free freeze selected four open train roots—one team-development, one evolution and two
 > storage—and froze nine equal-reset single-decision interventions. Counts are story 4,
 > team-development 2, evolution 1 and storage 2. It created no claim, outcome, prediction, teacher
-> query, controller action or emulator frame. Next build and qualify the claim-first forced-candidate
-> runner, execute the nine trials without replacement, and fit completed train outcomes only. See
+> query, controller action or emulator frame. The claim-first forced-candidate runner and independent
+> episode admission reader are now implemented and pass 22 focused tests. Next publish and green
+> that exact source, run one action-free production preflight, execute and admit the nine trials
+> without replacement, and fit completed train outcomes only. See
 > the [path-free freeze result](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
 
 > **September 3 multi-goal lineage inventory:** the action-free audit authenticated **81/81**
