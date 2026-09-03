@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-bounded-player-preflight-contract-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-preflight-contract-qualification-2026-09-03.json)
+**2026-09-03-bounded-player-live-preflight-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-live-preflight-result-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop. |
-| Learning output | No new learner output. Twenty-four focused ROM-free tests now qualify the reusable player contract, Red observation bridge and controller-blocked authenticated preflight; controller actions, emulator frames, fits and live model decisions remained zero. |
-| Authority delta | The ROM-free player seam now accepts a semantic goal authority and dispatches existing deterministic skills behind durable decisions, independent verification, fresh completion-ledger checks and one changed-context recovery. This is integration capability only: no live model decision or authority promotion occurred. |
+| Learning output | No new learner output. Four authenticated Red snapshots passed action-free planning with menu widths 2/3/4/3; learned and completion-first choices agreed 4/4 while controller actions, emulator frames, episodes and fits remained zero. |
+| Authority delta | Four live action-free Red snapshots exposed genuine two-to-four-goal menus. The learned and completion-first authorities agreed on restore, storage, evolution and acquisition choices with zero actions or frames. This proves integration readiness only; no controller or authority promotion occurred. |
 | Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
-| Blocker | The authenticated action-free Red player preflight is implemented and ROM-free qualified, but no live snapshot has passed it and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
-| Decision | Keep the fixed 20/20 battle heuristic as the local battle primitive and move upward. Publish the authenticated controller-blocked preflight, run it once on a repeatable development snapshot, then run two short development episodes comparing learned semantic selection with the deterministic manager. |
-| Next session | Publish the preflight runner, pass one action-free authenticated Red development snapshot with at least two semantic goals, then schedule two short repeatable development episodes. |
-| Next falsifier | Prove one authenticated Red development snapshot passes an action-free bridge preflight with at least two executable semantic goals and no private fields, then run paired short episodes through learned and deterministic managers using the same skills and ledger measures. |
+| Blocker | The live preflight gate passed, but the paired bounded episode launcher is not yet implemented and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
+| Decision | Implement one repeatable paired launcher that restores the same three-goal Red state independently for learned and completion-first arms, durably records each decision, and compares verified ledger progress and cost. Do not search for disagreement or return to local battle campaigns. |
+| Next session | Implement, qualify and publish the paired bounded episode launcher; after green CI, execute one learned arm and one completion-first arm from the same repeatable three-goal Red state. |
+| Next falsifier | Restore the same repeatable three-goal Red state independently for learned and completion-first arms, then require durable decisions, typed outcomes, fresh ledgers and exact independent action/frame accounting from both. |
 | Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 
 ### Stop conditions

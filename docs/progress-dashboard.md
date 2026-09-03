@@ -32,8 +32,9 @@ semantic goal, current skill, ledger delta, captures, resource use, faints, reco
 it must never imply that an emulator process is model training unless a fit is actually running.
 
 The ROM-free bounded player contract, thin Red observation bridge and controller-blocked preflight
-runner are now qualified at **24/24** focused checks. No live preflight has run. The next dashboard
-increment should first show its path-free readiness receipt, then consume only a path-free
+runner are now qualified at **24/24** focused checks. The dashboard now shows four live action-free
+passes, menu widths **2/3/4/3**, planner agreement
+**4/4**, and zero actions, frames or episodes. It should next consume only a path-free
 `BoundedPlayerResult`: one row per semantic decision with typed outcome,
 action/frame cost, fresh-state change, collection before/after and recovery marker. The display must
 not receive private binding references or controller authority.

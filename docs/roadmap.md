@@ -44,6 +44,14 @@
 > **ROM/actions/frames/live choices 0** during qualification. Publish this boundary, run it once on
 > a repeatable development snapshot, and only then open the two short paired episodes.
 
+> **September 3 live preflight result:** Four action-free Red snapshots passed with semantic menu
+> widths **2/3/4/3**. Learned and completion-first authorities agreed on all four choices:
+> `restore_team`, `manage_storage`, `evolve_species`, and `acquire_species`. The screen used four ROM
+> reads but **actions/frames/episodes/fits 0**. This proves live integration readiness, not a learned
+> advantage. Do not select a state merely because the planners disagree; run both arms from the
+> same repeatable three-goal state and compare verified execution progress, resource cost, actions,
+> frames, failures and replans.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is

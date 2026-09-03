@@ -1,0 +1,60 @@
+{
+  "authority_comparison": {
+    "agreement_count": 4,
+    "disagreement_count": 0,
+    "learned_authority": "goal_manager_outcome_candidate_eb5c6515",
+    "planner_pairs": 4,
+    "teacher_authority": "completion_first_teacher"
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "episodes_created": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "rom_reads": 4,
+    "sealed_red_cases_opened": 0
+  },
+  "inspections": [
+    {
+      "available_goal_count": 2,
+      "available_goal_kinds": ["manage_storage", "restore_team"],
+      "both_selected_kind": "restore_team",
+      "receipt_sha256": "6a03d64dd05870c02f76aaf896b7957d6a8779ab38f0bf49816a0cfc669bea71"
+    },
+    {
+      "available_goal_count": 3,
+      "available_goal_kinds": ["advance_story", "manage_storage", "restore_team"],
+      "both_selected_kind": "manage_storage",
+      "receipt_sha256": "a55c00b23e9146e304887e1d6d749473275064b6c2f42fc87bde527f4cbc6c1a"
+    },
+    {
+      "available_goal_count": 4,
+      "available_goal_kinds": ["advance_story", "develop_team", "evolve_species", "restore_team"],
+      "both_selected_kind": "evolve_species",
+      "receipt_sha256": "116e34d085fea017dfa7c733b49ed79c774aa7ec70a5203ddd10eb23cd163359"
+    },
+    {
+      "available_goal_count": 3,
+      "available_goal_kinds": ["acquire_species", "explore", "restore_team"],
+      "both_selected_kind": "acquire_species",
+      "receipt_sha256": "1ed50fcd0b4c4ce64196d4b642756159908e26746073e93f946eff3244957443"
+    }
+  ],
+  "interpretation": {
+    "comparison_power": "none_because_all_observed_choices_agreed",
+    "integration_readiness": "passed",
+    "next_context_selection_may_use_planner_disagreement": false,
+    "next_step": "run_learned_and_teacher_arms_from_the_same_repeatable_three_goal_state_to_compare_verified_execution_cost_and_progress",
+    "selection_warning": "These four action-free inspections were a readiness screen, not an outcome evaluation or independent generalization result."
+  },
+  "recorded_on": "2026-09-03",
+  "schema": "pokemon.red.bounded-player-live-preflight-result.v1",
+  "source": {
+    "executable_commit": "b5850cb77b586598ef41b220241c02aeb5ae5db6",
+    "source_bundle_sha256": "14e5c27984e3417c63c52a7c0e723a6a19f43caf3ffe3fbe0cc0851acc4b2b99"
+  },
+  "status": "ready_for_paired_bounded_episode_runner",
+  "tracked_private_paths": 0
+}
