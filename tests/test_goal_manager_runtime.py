@@ -4,9 +4,11 @@ import json
 
 import pytest
 
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalDecisionOutcome,
+    GoalFailureReason,
     GoalKind,
     GoalManagerQuestion,
     GoalOpportunity,
@@ -198,6 +200,43 @@ def test_runtime_records_a_failure_if_the_bound_executor_raises() -> None:
         "status": "failed",
     }
     assert "implementation detail" not in json.dumps(sink.events[0].to_dict())
+
+
+def test_runtime_returns_a_typed_failure_when_goal_budget_is_exhausted() -> None:
+    trajectory, sink = _trajectory()
+
+    def exhaust_budget() -> GoalExecutionReport:
+        raise GoalExecutionBudgetExhausted("private budget detail")
+
+    selected = _binding(
+        GoalKind.ADVANCE_STORY,
+        execute=exhaust_budget,
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+    other = _binding(
+        GoalKind.RESTORE_TEAM,
+        execute=lambda: GoalExecutionReport(0, 0, {}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+
+    result = execute_goal_manager_decision(
+        situation=_situation(),
+        binding_set=GoalBindingSet(
+            (selected.opportunity, other.opportunity),
+            (selected, other),
+        ),
+        authority=_SelectKind(GoalKind.ADVANCE_STORY),
+        trajectory=trajectory,
+    )
+
+    assert result.execution is None
+    assert result.verification == GoalVerification.failed(
+        GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+    )
+    assert result.decision_recorded and result.outcome_recorded
+    assert len(sink.decisions) == len(sink.events) == 1
+    assert sink.events[0].payload["failure_reason"] == "execution_budget_exhausted"
+    assert "private budget detail" not in json.dumps(result.public_dict())
 
 
 def test_required_durable_decision_stops_before_controller_input(

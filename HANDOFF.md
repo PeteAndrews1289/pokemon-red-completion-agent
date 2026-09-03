@@ -14,6 +14,27 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-03: pair 002 completed the model arm and exposed the budget terminal
+
+The post-skill observation repair merged as exact main `70e46485` under green CI
+`33790769966/1`. Pair `red-causal-player-pair-002` is permanently consumed. Its causal arm again
+selected `develop_team` without a teacher and completed the same level 20→21 result in 1,119
+actions and 101,171 frames. This time the arm finalized durably, proving the first repair.
+
+The independently restored completion-first arm selected `evolve_species`. It moved from Cinnabar
+to Diglett's Cave and raised Diglett from level 22 to 23, but had not evolved it when the hard
+limiter refused action 6,001 after 257,689 frames. There were no controller-action errors and the
+cap was enforced before overrun. The goal runtime then incorrectly recorded `binding_failed` and
+re-threw the limiter exception, preventing a paired comparison.
+
+The active repair defines one reusable `GoalExecutionBudgetExhausted` terminal shared by action and
+frame limiters. The goal runtime settles it as `execution_budget_exhausted`; the bounded player uses
+its independent meter, re-observes semantic and collection state, and emits a verified failure.
+Ordinary implementation exceptions continue to record failure and propagate. Publish and green
+this repair before running fresh pair 003. Never retry pairs 001 or 002, increase their budget, or
+patch the Diglett route. Evidence:
+[pair-002 diagnosis](docs/evidence/red-causal-player-pair-002-budget-terminal-diagnosis-2026-09-03.json).
+
 ## 2026-09-03: the first causal player action worked; its enclosing observation failed
 
 The causal bridge and paired runner were published through PR 188 as exact main `b8c2999d` under

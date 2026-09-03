@@ -6,7 +6,7 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the post-skill observation repair and one successor pair
+## Current override: Codex owns the budget-terminal repair and one successor pair
 
 PR 188 is merged as exact main `b8c2999d` under green CI `33784679568/1`. The causal arm of pair
 001 selected `develop_team` without a teacher and the deterministic skill achieved its requested
@@ -16,11 +16,13 @@ deterministic replay reproduced the trace and proved collection preservation, se
 budget reconciliation. Pair 001 is consumed, is not a comparison, moves no counter and may not
 retry.
 
-Codex owns the general repair: observations may encode zero selectable candidates, actual decisions
-still require a genuine choice, and a later decision boundary without enough goals settles as a
-typed terminal. Publish and pass exact-main CI, then execute one new development pair and reorient
-from its outcome. Claude and Antigravity are not required for this ordinary repair. They may review
-the next measured milestone read-only; neither receives private paths, saves or model records.
+That repair merged and pair 002 completed the causal arm. Its completion-first arm selected
+`evolve_species`, raised Diglett 22→23, then correctly exhausted the 6,000-action bound before
+evolution. The remaining integration fault is generic: the runtime must settle action or frame
+exhaustion as a typed verified failure rather than a binding crash. Codex owns this repair,
+publication, exact-main CI, and exactly one fresh pair 003. Pairs 001 and 002 may never retry.
+Claude and Antigravity are not required for this ordinary repair. They may review the next measured
+milestone read-only; neither receives private paths, saves, or model records.
 
 ## Current override: Codex connects the causal living-Dex model to the player in shadow
 

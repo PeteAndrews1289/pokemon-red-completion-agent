@@ -260,9 +260,7 @@ def run_bounded_player_episode(
         if actions < 0 or frames < 0:
             raise BoundedPlayerError("bounded player budget counters regressed")
         execution_report = execution.execution
-        if execution_report is None:  # pragma: no cover - checked by the helper
-            raise BoundedPlayerError("bounded player execution report is absent")
-        if (
+        if execution_report is not None and (
             actions != execution_report.actions_executed
             or frames != execution_report.frames_executed
         ):
@@ -395,11 +393,16 @@ def _require_settled_execution(result: GoalManagerExecutionResult) -> None:
         not isinstance(result, GoalManagerExecutionResult)
         or not result.decision_recorded
         or not result.outcome_recorded
-        or result.execution is None
     ):
         raise BoundedPlayerError(
             "bounded player decision did not produce a durable settled outcome"
         )
+    if result.execution is None and (
+        result.verification.status is not GoalDecisionOutcome.FAILED
+        or result.verification.failure_reason
+        is not GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+    ):
+        raise BoundedPlayerError("bounded player execution report is absent")
 
 
 def _different_goal_guard(

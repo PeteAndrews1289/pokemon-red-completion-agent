@@ -7,9 +7,11 @@ import pytest
 
 from pokemon_red_completion.bounded_player_episode import (
     BoundedPlayerError,
+    BoundedPlayerLimits,
     BoundedPlayerStopReason,
     run_bounded_player_episode,
 )
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalFailureReason,
@@ -116,6 +118,7 @@ def _observer(
     interrupt: bool = False,
     observer_acts: bool = False,
     no_goals_after_first: bool = False,
+    exhaust_budget: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -160,6 +163,9 @@ def _observer(
                 state["frames"] += 50
                 if interrupt:
                     raise KeyboardInterrupt
+                if exhaust_budget:
+                    state["stage"] += 1
+                    raise GoalExecutionBudgetExhausted("private budget detail")
                 if not unchanged_success:
                     state["stage"] += 1
                 return GoalExecutionReport(
@@ -346,6 +352,32 @@ def test_self_report_must_match_independent_budget_meter() -> None:
             budget_meter=meter,
             completion_satisfied=_complete,
         )
+
+
+def test_budget_exhaustion_is_a_durable_verified_failure() -> None:
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(exhaust_budget=True)
+
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+        limits=BoundedPlayerLimits(max_decisions=1, max_replans=0),
+    )
+
+    assert result.stop_reason is BoundedPlayerStopReason.VERIFIED_FAILURE
+    assert len(result.steps) == 1
+    assert result.steps[0].failure_reason is (
+        GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+    )
+    assert result.steps[0].actions_executed == 5
+    assert result.steps[0].frames_executed == 50
+    assert state["actions"] == 5
+    assert len(sink.decisions) == len(sink.events) == 1
+    trajectory.require_settled()
 
 
 def test_observation_may_not_hide_controller_input() -> None:

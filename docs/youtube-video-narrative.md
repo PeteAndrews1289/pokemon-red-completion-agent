@@ -5541,3 +5541,14 @@ learned representation travels, and the living Pokédex remains the organizing p
   and the winner decided by verified living-Pokédex progress and cost—not confidence alone.
 - Resolve the live screen honestly: **4 RED SAVES · MENUS 2/3/4/3 · AGREEMENT 4/4 · ACTIONS 0 ·
   FRAMES 0**. Say: **“Agreement proves the wiring, not that the model is better.”**
+
+## New sequence: “Finishing matters more than merely moving”
+
+- Split the screen from one identical Red save: **MODEL → DEVELOP TEAM** and **CONTROL → EVOLVE
+  SPECIES**.
+- Resolve the model arm to **LEVEL 20→21 · 1,119 ACTIONS · COMPLETE**.
+- Accelerate the control through Diglett's Cave: **LEVEL 22→23 · 6,000 ACTION CAP · NOT EVOLVED**.
+- Emphasize that action 6,001 was refused before execution and that no controller error occurred.
+- Show the engineering defect separately: **EXPECTED BUDGET TERMINAL ≠ SOFTWARE CRASH**.
+- End with the fresh test: preserve both completion and bounded failure as honest outcomes, compare
+  them once, and keep broad authority locked until more independent contexts agree.
