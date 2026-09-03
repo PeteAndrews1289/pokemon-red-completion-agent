@@ -1,0 +1,54 @@
+{
+  "acceptance": {
+    "all_trials_single_decision": true,
+    "all_trials_unique": true,
+    "candidate_rule": "every-model-controlled-option-from-identical-reset",
+    "exact_root_quota_met": true,
+    "partition": "train",
+    "selection_rule": "first-eligible-open-train-root-in-authenticated-source-order"
+  },
+  "campaign": {
+    "campaign_plan_sha256": "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267",
+    "root_count": 4,
+    "root_family_counts": {
+      "develop_team": 1,
+      "evolve_species": 1,
+      "manage_storage": 2
+    },
+    "schedule_sha256": "63402689294ec132dc30d02e9238e0e8afb781d07a28554393c63126d6b3fb35",
+    "trial_count": 9,
+    "trial_goal_counts": {
+      "advance_story": 4,
+      "develop_team": 2,
+      "evolve_species": 1,
+      "manage_storage": 2
+    }
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "independent_generalization_claim": false,
+    "learning_examples_created": 0,
+    "next": "Publish and qualify a claim-first forced-candidate runner, then execute the nine frozen train trials without replacement and fit only completed outcomes.",
+    "transfer_claim": false
+  },
+  "protected_effects": {
+    "controller_actions": 0,
+    "development_labels_opened": 0,
+    "emulator_frames": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "teacher_queries": 0,
+    "trial_claims_created": 0
+  },
+  "provenance": {
+    "inventory_result_sha256": "37b7dd1cbaf37b4c51a57bd02045fe3d8dc521656c4fcc320fd4add0ad801123",
+    "runner_sha256": "faa401db3982e554889412b84339b23f5e8eeff70378515eba17f0b6592a6aff",
+    "source_bundle_sha256": "ebd91c137ed2fb0584bfd1967c3e3e0390ee4898b15a2097fb99aa47357ee3d6",
+    "source_commit": "71cf96ad3f328746f8938ecff577712d4bf98001"
+  },
+  "recorded_on": "2026-09-03",
+  "schema": "pokemon.red.multi-goal-calibration-freeze-result.v1",
+  "status": "compact_train_calibration_campaign_frozen",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

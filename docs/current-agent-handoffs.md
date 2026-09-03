@@ -8,6 +8,19 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 
 ## Current override: Codex owns calibration training plus independent-root follow-through
 
+PR 193 is merged as exact main `71cf96ad` under green CI `33811894949`. The one permitted
+action-free freeze succeeded and produced a private plan with four open train roots and nine unique
+single-decision trials: story 4, team development 2, evolution 1 and storage 2. It used zero claims,
+outcomes, predictions, teacher queries, controller actions and frames. The tracked public receipt is
+`docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json`.
+
+Codex's immediate implementation assignment is now the claim-first forced-candidate runner and its
+adversarial tests. It must preserve the plan's exact source/runtime/model/context/private-root
+bindings, claim a trial before any input, run only the frozen option from an independent restore,
+settle typed terminals durably, rehash protected inputs, and prohibit retries. Do not execute the
+nine trials from unpublished runner code. After runner publication and green CI, collect the nine
+train outcomes, fit completed outcomes only, and reorient before any same-bank diagnostic.
+
 The 81-context bank is mechanically healthy but statistically unresolved. All state, envelope and
 profile bytes authenticate and all nine declared goal families appear, yet no artifact records the
 true upstream episode for each save. Existing train roots may be used for clearly labeled
@@ -21,11 +34,8 @@ or observed outcome. In parallel, the later promotion gate needs eight prospecti
 development lineages across at least four/three strategic families. Crystal remains deferred until
 that honest Red gate passes. External reviewers are optional and do not block implementation.
 
-The freezer implementation is now locally complete and qualified: fixed 1/1/2 quotas for team,
-evolution and storage, all model-controlled options from equal resets, and deterministic safety
-overrides. Codex next publishes it, waits for exact-source green CI, performs one action-free plan
-freeze, and validates the frozen denominator. It may not collect an outcome from unpublished or
-dirty source.
+The freezer implementation and the one action-free freeze are complete. Historical instructions to
+publish or rerun that freeze are superseded by the assignment above.
 
 ## Current override: Codex owns the multi-goal curriculum after the first strategic win
 
