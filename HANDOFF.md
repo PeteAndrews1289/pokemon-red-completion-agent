@@ -16,6 +16,16 @@ horizon and Crystal-ready definition),
 
 ## 2026-09-03: four roots and nine equal-reset interventions are frozen
 
+The follow-up execution boundary is now implemented locally. It authenticates the exact frozen
+campaign and current published source, reserves all four physical roots before input, claims each
+trial before opening its episode, restores the selected root independently, and executes only the
+preregistered semantic option. A separate admission reader reopens the immutable episode and
+independently checks provenance, the one-hot assignment law, question/menu identity, selected arm,
+typed outcome, living-collection transition, and action/frame streams before deriving a +1/-1
+training target. The focused gate is 22/22. No frozen trial has executed at this checkpoint. Next
+publish and green this source, run one action-free production preflight, and only then claim trial
+ordinal zero. See [the execution contract](docs/red-multi-goal-calibration-execution.md).
+
 PR 193 merged as exact main `71cf96ad3f328746f8938ecff577712d4bf98001` after green CI run
 `33811894949`. One action-free execution then authenticated the model, fit, 81-context catalog,
 context plan, runtime, NumPy, skill manifest, claim ledger, ROM and inventory receipt. It selected
