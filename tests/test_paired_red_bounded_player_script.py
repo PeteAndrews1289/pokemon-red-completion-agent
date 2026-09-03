@@ -120,6 +120,7 @@ def test_runner_help_names_the_repeatable_pair_inputs() -> None:
     assert "--challenger" in result.stdout
     assert "--living-dex-model-record" in result.stdout
     assert "--expected-living-dex-model-sha256" in result.stdout
+    assert "--decision-limit" in result.stdout
     assert "--out" in result.stdout
 
 
@@ -181,6 +182,18 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
 
     assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
     assert policy_id(readiness, baseline_id) == baseline_id
+
+
+def test_one_decision_calibration_disables_replan_and_halves_episode_budgets() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    limits = module["_player_limits"](1)
+
+    assert limits.max_decisions == 1
+    assert limits.max_replans == 0
+    assert limits.max_total_actions == limits.max_actions_per_decision == 6_000
+    assert limits.max_total_frames == limits.max_frames_per_decision == 600_000
+    with pytest.raises(RuntimeError, match="decision_limit"):
+        module["_player_limits"](3)
 
 
 def test_progress_predicate_uses_a_fresh_verified_collection_delta() -> None:

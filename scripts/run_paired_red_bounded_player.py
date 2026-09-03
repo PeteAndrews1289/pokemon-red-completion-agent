@@ -134,6 +134,7 @@ class _Readiness:
     causal_record: LivingDexGoalModelRecord | None
     model_file_sha256: str
     model_sha256: str
+    decision_limit: int
     private_root: PrivateArtifactRoot
     output_path: Path
     protected_paths: tuple[Path, ...]
@@ -242,6 +243,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", type=Path, default=None)
     parser.add_argument("--living-dex-model-record", type=Path, default=None)
     parser.add_argument("--expected-living-dex-model-sha256", default=None)
+    parser.add_argument("--decision-limit", type=int, choices=(1, 2), default=2)
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -369,6 +371,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         causal_record=causal_record,
         model_file_sha256=model_file_sha256,
         model_sha256=model_sha256,
+        decision_limit=args.decision_limit,
         private_root=private_root,
         output_path=output_path,
         protected_paths=(state, envelope, profile_path, model_path, rom_path),
@@ -410,6 +413,20 @@ def _policy_id(readiness: _Readiness, arm_id: str) -> str:
     if arm_id == CAUSAL_ARM_ID:
         return f"living-dex-goal-{readiness.model_sha256[:16]}"
     raise PairedRedBoundedPlayerRunError("challenger_identity")
+
+
+def _player_limits(decision_limit: int) -> BoundedPlayerLimits:
+    if type(decision_limit) is not int or decision_limit not in {1, 2}:  # noqa: E721
+        raise PairedRedBoundedPlayerRunError("decision_limit")
+    return BoundedPlayerLimits(
+        max_decisions=decision_limit,
+        max_replans=decision_limit - 1,
+        min_available_goals=2,
+        max_actions_per_decision=6_000,
+        max_frames_per_decision=600_000,
+        max_total_actions=6_000 * decision_limit,
+        max_total_frames=600_000 * decision_limit,
+    )
 
 
 def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
@@ -461,6 +478,7 @@ def _run_arm(
     authority: GoalDecisionAuthority,
 ) -> PairedBoundedPlayerArm:
     episode_id = _episode_id(readiness.pair_id, arm_id)
+    limits = _player_limits(readiness.decision_limit)
     writer: EpisodeWriter | None = None
     sink: EpisodeTrajectorySink | None = None
     recorder: RecordingExecutor[Any, Any] | None = None
@@ -492,8 +510,8 @@ def _run_arm(
             emulator.load_state_bytes(readiness.capture.state_bytes)
             frames = WindowedFrameBudgetController(
                 emulator,
-                maximum_frames_per_window=600_000,
-                maximum_total_frames=1_200_000,
+                maximum_frames_per_window=limits.max_frames_per_decision,
+                maximum_total_frames=limits.max_total_frames,
             )
             reader = PokemonRedStateReader(frames)
             runtime = build_red_goal_context_runtime(
@@ -515,8 +533,8 @@ def _run_arm(
             )
             hard_actions = HardCompositionActionLimiter(
                 recorder,
-                maximum_actions_per_decision=6_000,
-                maximum_episode_actions=12_000,
+                maximum_actions_per_decision=limits.max_actions_per_decision,
+                maximum_episode_actions=limits.max_total_actions,
             )
             actions = CountingExecutor(hard_actions)
             meter = CompositionIndependentBudgetMeter(hard_actions, frames)
@@ -549,15 +567,7 @@ def _run_arm(
                 trajectory=trajectory,
                 budget_meter=meter,
                 completion_satisfied=_ProgressPredicate(),
-                limits=BoundedPlayerLimits(
-                    max_decisions=2,
-                    max_replans=1,
-                    min_available_goals=2,
-                    max_actions_per_decision=6_000,
-                    max_frames_per_decision=600_000,
-                    max_total_actions=12_000,
-                    max_total_frames=1_200_000,
-                ),
+                limits=limits,
             )
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
@@ -693,6 +703,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_file_sha256": readiness.model_file_sha256,
         "model_sha256": readiness.model_sha256,
         "challenger_arm_id": readiness.challenger_arm_id,
+        "decision_limit": readiness.decision_limit,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,
         "sealed_red_accesses": 0,
