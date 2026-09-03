@@ -3214,13 +3214,26 @@ feature contracts stay title-neutral so the later adapter does not require a red
   fixed heuristic. This opened no cartridge outcome and grants no authority.
 - [x] Add a train-only authentic fitter that rejects development/test outcomes and equalizes example
   counts across real root lineages before adapting the neural ranker's output layer.
-- [ ] Publish the outcome-collection hardening and require green exact-main CI.
-- [ ] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights.
+- [x] Publish the outcome-collection hardening and require green exact-main CI.
+- [x] Collect counterfactual one-turn outcomes and fit one shadow model using lineage-aware weights:
+  41/45 train captures produced examples, 38 were informative, and the fit used 40 examples balanced
+  to 10 per root.
 - [x] Implement a clean-published, read-only commitment command that records base, fitted and fixed
   heuristic choices for development captures without exposing controller input.
-- [ ] Commit predictions for all 24 development scenarios before opening their outcomes.
-- [ ] Require the learned scorer to beat the strongest legal fixed-power heuristic on development;
-  otherwise revise representation or supply, not the test result.
+- [x] Materialize 24/24 untouched development scenarios and commit all base, fitted and fixed
+  heuristic predictions before opening outcomes.
+- [x] Open the development result once: 21/24 produced examples, the adapted model improved over
+  its base from 16/21 to 17/21, but the fixed heuristic remained ahead at 18/21. Authority stays
+  locked.
+- [x] Implement repeated, observation-preserving RNG trials, complete-schedule aggregation,
+  expected-utility targets, a train-only lineage-balanced fitter, and commitment-bound development
+  evaluation. No V2 cartridge outcome has been opened yet.
+- [x] Qualify an action-free fresh source plan with four train and four development roots for the
+  next comparison. It provides 48/24 prospective scenarios across three menus and three venues;
+  materialization and outcomes remain pending, and the four prior development roots are calibration
+  data only.
+- [ ] Require the expected-value scorer to beat the strongest legal fixed-power heuristic on fresh
+  development before any battle authority.
 - [ ] Add independently sourced trainer-battle scenarios before claiming broad battle competence.
 - [ ] Only after stable multi-turn Red battle control, integrate battle authority into Red quest,
   capture, party, inventory, evolution, storage and living-Pokédex planning.

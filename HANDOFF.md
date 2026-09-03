@@ -9147,3 +9147,66 @@ policy rehearsal remains execution-capable and must not be used as the commitmen
 Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
 independent examples: there are eight independent upstream lineages. Current learning counters and
 authority remain unchanged: **outcomes 0 · fits 0 · predictions 0 · authority 0 · Crystal 0**.
+
+### First authentic Red comparison — completed 2026-09-03
+
+Exact main `5ec708c0425e0228613395b77a7198fb8e606fd0` collected train outcomes from the 45
+retained captures. The immutable result is **41 complete, 4 quarantined, 38 informative, 35 semantic
+clusters**, with root counts `10,10,10,11`. Three quarantines failed the shared pre-attack-frame
+contract and one active battler fainted. All 45 claims and terminals exist; none was retried.
+
+PR 178 merged as exact main `db7f6dbb90ddcf25488bc733353471cac42c5de7` under green CI run
+`33707539011`. The train-only fit used 40 examples—10 per true root, 37 informative—and changed
+model identity from `47cf964ef8d86e6a3040746a734bd6c02c25d9e6d14f956c6b46727bee479b4c`
+to `af47f9deba56d6fd4d6690589f58de9ca5470cf2443fd576e69f2416a0ceac85`; loss moved
+from 2.6713800626 to 1.0242497955. It opened zero development outcomes and grants no authority.
+
+All **24/24** development assignments then materialized successfully across four untouched roots,
+with six states per root and eight per venue. Their base, adapted and fixed-heuristic choices were
+durably committed as commitment identity
+`07915d4f7046665838e59789da01ccc2802fd70025f26fdb3afdba88ac33bcc7` before outcomes.
+Development collection retained **21 complete, 3 quarantined, 18 informative, 19 semantic
+clusters**. The comparison was base **16/21, mean utility 2.0580**; adapted **17/21, 2.1644**;
+fixed heuristic **18/21, 2.1234**. Adapted versus fixed was **1 win, 2 losses, 18 equivalent**.
+The gate therefore failed and authority remains zero.
+
+The actionable diagnosis is stochastic-label aliasing, not controller failure. The decisive rows
+include a charge move that can hit, miss after consuming its turn, or expose the player to damage
+under different cartridge RNG states while the policy-visible semantics do not reveal the future
+roll. A single deterministic rollout is an inappropriate target for the stated cross-seed goal.
+Next implement repeated observation-preserving RNG trials per candidate, aggregate expected utility,
+and obtain fresh upstream roots for the next development test. The four opened development roots are
+now calibration data. Do not reuse them as unseen evidence. Crystal, sealed Red, full-game replay,
+teacher access and learned controller authority remain untouched.
+
+### Expected-utility engineering gate — 2026-09-03
+
+The V2 data path is implemented but has not executed cartridge trials. The runtime now accepts a
+prospective pre-attack frame target. The collector uses a durable claim and terminal for every
+capture/timing pair, never retries an interrupted pair, and admits an aggregate only after every
+usable move completes the full timing schedule. The aggregate retains mean utility, standard
+deviation and trial count per move. Its train-only fitter equalizes examples across upstream roots;
+its development evaluator refuses to score unless every model and fixed-heuristic choice matches a
+pre-outcome prediction commitment.
+
+The action-free replacement census passed. Its private plan identity is
+`7a1314afe689ffd640a0d0e1541956e3226543e51ab0a3043a97176414fed6fa`, sourced from catalog
+identity `3f155af9c625d56586b57f04f5b207ffad7601cb2c378acdd433802bf78a2f55`.
+It contains four byte-distinct train and four byte-distinct development lineages, producing 48 and
+24 prospective scenarios respectively, with three party menus, three venues and unique semantic
+setup hashes in each partition. Inventory used zero controller actions and zero emulator frames.
+The four earlier development roots are excluded from this new comparison.
+
+Next publish and green the V2 implementation. From exact main, materialize the new train scenarios,
+collect their multi-RNG schedules, fit once from train aggregates, materialize fresh development,
+commit predictions, collect development schedules, and compare against both the frozen prior and
+fixed heuristic. Do not execute Crystal, sealed Red, a full-game replay, or a teacher, and do not
+promote battle authority unless fresh expected-utility development beats the fixed control.
+
+The final local engineering audit is green: **6,486 passed, 4 skipped and 1 expected failure** in
+13m01s. Ruff, mypy, every source-bound registry regeneration check, the active-product-focus check
+and the public-artifact safety check also pass. The first full-suite run found only stale generated
+registry identities after the source bundle changed; the registries and their explicit golden
+bindings were regenerated together, and the complete amended tree then passed. This verifies the
+implementation boundary only—no V2 controller action, cartridge outcome, model fit or authority
+promotion occurred during the audit.

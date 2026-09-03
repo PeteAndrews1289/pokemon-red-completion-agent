@@ -166,6 +166,7 @@ def collect_red_battle_outcome_example(
     *,
     session_factory: SessionFactory,
     controller_timing: ControllerTiming | None = None,
+    minimum_pre_attack_frames: int = COUNTERFACTUAL_PRE_ATTACK_FRAMES,
     candidate_claim_sink: CandidateClaimSink | None = None,
     outcome_sink: OutcomeSink | None = None,
 ) -> RedBattleOutcomeCollection:
@@ -179,6 +180,8 @@ def collect_red_battle_outcome_example(
         raise TypeError("candidate_claim_sink must be callable or None")
     if outcome_sink is not None and not callable(outcome_sink):
         raise TypeError("outcome_sink must be callable or None")
+    if type(minimum_pre_attack_frames) is not int or minimum_pre_attack_frames < 1:  # noqa: E721
+        raise TypeError("minimum_pre_attack_frames must be a positive integer")
     timing = controller_timing or DEFAULT_NEW_GAME_TIMING.controller_timing()
     prepared = _prepare_exact_boundary(capture, session_factory=session_factory)
     outcomes: list[BattleTurnOutcome | None] = []
@@ -203,7 +206,7 @@ def collect_red_battle_outcome_example(
                 expected_map=capture.manifest.expected_map,
                 selected_slot=prepared.features.slot_indices[candidate_index] + 1,
                 expected_battle_state=capture.manifest.expected_battle_state,
-                minimum_pre_attack_frames=COUNTERFACTUAL_PRE_ATTACK_FRAMES,
+                minimum_pre_attack_frames=minimum_pre_attack_frames,
                 label="authenticated Red battle counterfactual",
             )
             outcome = project_red_battle_turn_outcome(execution)

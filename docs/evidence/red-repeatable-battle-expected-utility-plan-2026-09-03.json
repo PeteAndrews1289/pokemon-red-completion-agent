@@ -1,0 +1,58 @@
+{
+  "authority_promoted": false,
+  "controller_actions": 0,
+  "development": {
+    "battle_kinds": 1,
+    "party_menus": 3,
+    "scenarios": 24,
+    "schema": "pokemon.core.battle.repeatable-scenario-coverage.v1",
+    "semantic_setups": 24,
+    "source_lineages": 4,
+    "source_states": 4,
+    "venues": 3
+  },
+  "emulator_frames": 0,
+  "inventory_actions": 0,
+  "inventory_frames": 0,
+  "minimum_coverage": {
+    "development": {
+      "battle_kinds": 1,
+      "party_menus": 3,
+      "scenarios": 24,
+      "schema": "pokemon.core.battle.repeatable-scenario-coverage.v1",
+      "semantic_setups": 24,
+      "source_lineages": 4,
+      "source_states": 4,
+      "venues": 3
+    },
+    "train": {
+      "battle_kinds": 1,
+      "party_menus": 3,
+      "scenarios": 48,
+      "schema": "pokemon.core.battle.repeatable-scenario-coverage.v1",
+      "semantic_setups": 48,
+      "source_lineages": 4,
+      "source_states": 4,
+      "venues": 3
+    }
+  },
+  "model_fits": 0,
+  "outcomes": 0,
+  "plan_sha256": "7a1314afe689ffd640a0d0e1541956e3226543e51ab0a3043a97176414fed6fa",
+  "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+  "schema": "pokemon.core.battle.repeatable-scenario-plan-summary.v1",
+  "seed": 1289,
+  "source_catalog_sha256": "3f155af9c625d56586b57f04f5b207ffad7601cb2c378acdd433802bf78a2f55",
+  "source_count": 8,
+  "source_paths": 0,
+  "train": {
+    "battle_kinds": 1,
+    "party_menus": 3,
+    "scenarios": 48,
+    "schema": "pokemon.core.battle.repeatable-scenario-coverage.v1",
+    "semantic_setups": 48,
+    "source_lineages": 4,
+    "source_states": 4,
+    "venues": 3
+  }
+}
