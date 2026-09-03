@@ -76,7 +76,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
     commitment_payload = args.prediction_commitment.read_bytes()
     commitment = _load_commitment(commitment_payload)
-    _verify_commitment(
+    omitted_commitments = _verify_commitment(
         commitment,
         rows=rows,
         base_file_sha256=base_file_sha256,
@@ -101,6 +101,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         },
         "coverage": {
             "examples": len(examples),
+            "committed_captures": len(examples) + omitted_commitments,
+            "committed_captures_without_complete_schedule": omitted_commitments,
             "root_lineages": len(
                 {example.root_lineage_id for example in examples}
             ),
@@ -162,7 +164,7 @@ def _verify_commitment(
     base_choices: tuple[int, ...],
     challenger_choices: tuple[int, ...],
     fixed_choices: tuple[int, ...],
-) -> None:
+) -> int:
     if (
         value.get("schema")
         != "pokemon.core.battle.repeatable-development-predictions.v1"
@@ -181,28 +183,62 @@ def _verify_commitment(
     commitments = value.get("commitments")
     if (
         not isinstance(commitments, list)
-        or len(commitments) != len(rows)
-        or value.get("capture_count") != len(rows)
+        or len(commitments) < len(rows)
+        or value.get("capture_count") != len(commitments)
         or value.get("commitments_sha256") != canonical_sha256(commitments)
     ):
         raise RepeatableBattleExpectedUtilityEvaluationError(
             "prediction commitment collection binding differs"
         )
-    for ordinal, (raw, row, base, challenger, fixed) in enumerate(
-        zip(
-            commitments,
-            rows,
-            base_choices,
-            challenger_choices,
-            fixed_choices,
-            strict=True,
-        ),
-        start=1,
+    expected_fields = {
+        "ordinal",
+        "capture_id",
+        "manifest_sha256",
+        "state_sha256",
+        "root_lineage_id",
+        "initial_observation_sha256",
+        "base_candidate_index",
+        "updated_candidate_index",
+        "fixed_heuristic_candidate_index",
+    }
+    by_capture: dict[str, Mapping[str, object]] = {}
+    committed_states: set[str] = set()
+    for ordinal, raw in enumerate(commitments, start=1):
+        capture_id = raw.get("capture_id") if isinstance(raw, Mapping) else None
+        state_id = raw.get("state_sha256") if isinstance(raw, Mapping) else None
+        indices = (
+            raw.get("base_candidate_index") if isinstance(raw, Mapping) else None,
+            raw.get("updated_candidate_index") if isinstance(raw, Mapping) else None,
+            raw.get("fixed_heuristic_candidate_index")
+            if isinstance(raw, Mapping)
+            else None,
+        )
+        if (
+            not isinstance(raw, Mapping)
+            or set(raw) != expected_fields
+            or raw.get("ordinal") != ordinal
+            or not isinstance(capture_id, str)
+            or capture_id in by_capture
+            or not isinstance(state_id, str)
+            or state_id in committed_states
+            or any(type(index) is not int or index < 0 for index in indices)  # noqa: E721
+        ):
+            raise RepeatableBattleExpectedUtilityEvaluationError(
+                "one committed development prediction is invalid or duplicated"
+            )
+        by_capture[capture_id] = raw
+        committed_states.add(state_id)
+
+    for row, base, challenger, fixed in zip(
+        rows,
+        base_choices,
+        challenger_choices,
+        fixed_choices,
+        strict=True,
     ):
-        if not isinstance(raw, Mapping) or (
-            raw.get("ordinal") != ordinal
-            or raw.get("capture_id") != row.capture_id
-            or raw.get("manifest_sha256") != row.manifest_sha256
+        raw = by_capture.get(row.capture_id)
+        if raw is None or (
+            raw.get("manifest_sha256") != row.manifest_sha256
             or raw.get("state_sha256") != row.example.initial_state_sha256
             or raw.get("root_lineage_id") != row.example.root_lineage_id
             or raw.get("base_candidate_index") != base
@@ -212,6 +248,7 @@ def _verify_commitment(
             raise RepeatableBattleExpectedUtilityEvaluationError(
                 "one committed development prediction differs from its outcome"
             )
+    return len(commitments) - len(rows)
 
 
 def _require_output(path: Path) -> None:
