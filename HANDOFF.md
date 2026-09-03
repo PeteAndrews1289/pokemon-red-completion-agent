@@ -9093,7 +9093,10 @@ ordinary routes, waits, encounters and party switches, verifies a live MAIN boun
 V2 capture manifest whose root is the original source lineage. No RAM mutation or move choice is
 available through this interface.
 
-The private plan SHA-256 is `7206fd063e2577edbdd4982adb3a2b95c3a4efcd791335cae21e233941f303e2`.
+The private plan's canonical semantic SHA-256 is
+`7206fd063e2577edbdd4982adb3a2b95c3a4efcd791335cae21e233941f303e2`. Materializers verify this
+parsed-plan identity rather than the newline-sensitive raw file hash. The source catalog remains
+bound by its exact raw-byte SHA-256.
 Its path-free tracked summary binds source-catalog SHA-256
 `25aadf98b86ccd7daab29a98172f81c9e4d455be1e6237aef5327e51738d3d2e` and reports 48 train plus
 24 development assignments. Each partition has four true source lineages, four source states,
@@ -9108,6 +9111,15 @@ Immediate order:
 4. Collect one-turn counterfactual outcomes and perform one lineage-aware shadow fit.
 5. Commit all development predictions before opening development outcomes.
 6. Reorient at the heuristic-comparison result before multi-turn authority.
+
+The operational follow-up adds `run_repeatable_battle_scenario_batch.py` and a dedicated view-only
+dashboard. The journal marks a row started durably before controller-capable execution; success,
+failure, and power-loss-started rows are terminal, while only untouched pending siblings resume.
+Private failed rows retain a bounded reason plus its digest for diagnosis; aggregate dashboard
+progress exposes neither that text nor private paths.
+The dashboard reads only the aggregate progress file and exposes no controller endpoint or private
+path. Publish this follow-up separately after PR 175 merges; use a one-item train pilot before the
+remaining train batch so a systemic materializer defect cannot consume all 48 assignments.
 
 Do not run Crystal, sealed Red, a full-game replay, or a teacher. Do not call the 72 assignments 72
 independent examples: there are eight independent upstream lineages. Current learning counters and

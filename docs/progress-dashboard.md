@@ -4,6 +4,20 @@
 > [active product state](../ACTIVE_PRODUCT_STATE.md) and the view-only focus dashboard replace the
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
+
+For the Red-first scenario factory, the batch runner writes a private aggregate progress document.
+After its publication gate, launch the view-only materialization display with:
+
+```bash
+python scripts/run_repeatable_battle_scenario_dashboard.py \
+  --progress /path/to/private/materialization-progress.json \
+  --port 8768
+```
+
+The display reports terminal, pending, successful, failed and interrupted scenario counts plus the
+current model/authority gate. It cannot send controller input and deliberately labels this stage as
+scenario materialization—not model training. Use `--watch` on the separate batch runner only when a
+visible PyBoy game window is desired; the browser dashboard remains read-only.
 >
 > **Current rail:** Show **MAIN 0CEECE13 → DEFICIT 103 → POWERED SUPPLY RAIL IMPLEMENTED, UNRUN →
 > 12 CLEAN-POWER WORLDS · 3 TRAIN / 8 DEVELOPMENT / 1 CONTINGENCY → ASSIGN BEFORE INPUT → NO

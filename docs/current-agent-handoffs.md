@@ -3573,7 +3573,8 @@ closed.
 ### Codex workhorse lane
 
 - Own the title-neutral planner, action-free Red source adapter, natural cartridge materializer,
-  lineage-safe collector changes, tests, documentation, publication and CI.
+  lineage-safe collector changes, crash-safe batch journal, live dashboard, tests, documentation,
+  publication and CI.
 - After green exact-main CI, materialize the frozen train partition before development, fit only
   from train outcomes, and commit development predictions before opening development outcomes.
 - Stop at the development comparison. No battle authority follows unless the scorer beats the
@@ -3590,3 +3591,7 @@ closed.
 Mission status: this is a Red battle-component learning lane, not a general game-playing model.
 Crystal stays deferred to shorten feedback time, while title-neutral contracts are preserved for
 the later transfer test. Trainer-battle supply and full living-Pokédex orchestration remain planned.
+
+Operational safety: run one train assignment first after exact-main CI. If it reaches a verified
+MAIN capture, resume the remaining pending train assignments. A started, failed or succeeded row is
+terminal and may not replay; only pending rows continue after interruption.

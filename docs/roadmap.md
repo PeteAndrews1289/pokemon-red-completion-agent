@@ -3198,6 +3198,10 @@ feature contracts stay title-neutral so the later adapter does not require a red
   route, RNG wait, encounter, party switch, MAIN-menu verification, and path-free capture binding.
 - [x] Permit sibling captures within a partition while rejecting repeated state bytes and any
   lineage crossing train/development.
+- [x] Add a crash-safe batch journal: mark each assignment started before input, retain every
+  terminal, never retry an interrupted item, and continue only untouched siblings after restart.
+- [x] Add a view-only live dashboard for materialization totals, successes, failures,
+  interruptions, current gate, authority and downstream mission context.
 - [ ] Publish the implementation and require green exact-main CI before controller execution.
 - [ ] Materialize the 48 train scenarios, retaining every terminal and never substituting a failed
   setup after observing its result.
