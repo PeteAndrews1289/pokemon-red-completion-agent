@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: a trained living-Pokédex model finally reaches the player boundary
+
+The first paired player run ended in an honest tie: both planners chose storage management and
+produced the same verified ledger improvement at the same cost. Looking for the next classroom then
+revealed a shortcut hidden in the project's own history. Eight earlier teacher-free interventions
+had already trained a small causal model to predict success, collection progress, dependency
+unlocks, action and frame cost, resource and party cost, storage cost, and irreversible loss. The
+model existed, but the player never asked it a question.
+
+The new bridge makes that conversation possible without pretending the model is ready to drive.
+The bounded player exposes only semantic choices—advance, acquire, develop, evolve, resupply,
+manage storage, or explore. The model predicts the outcome of each and an explicit completion-first
+utility ranks them. Private save names, map identities, species identities, and executor bindings
+stay outside the learning boundary. Emergency recovery, healing, critically full storage, and
+critical supply still go to deterministic safeguards.
+
+The bridge and strict provenance loader are locally tested, and the existing preflight can now
+compare three planners while controller actions and emulator frames remain zero. The next visible
+milestone is not another long gameplay run. It is an action-free four-snapshot screen showing what
+the causal model actually values, followed by a small disjoint Red curriculum that can measure
+whether those predictions improve through bounded outcomes.
+
 ## September 3: the pieces finally become a player loop
 
 The project already had observers, a semantic goal model, deterministic navigation and battle

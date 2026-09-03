@@ -5,6 +5,14 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
+The immediate September 3 gate connects the existing authentic causal living-Dex model to the
+bounded player in **shadow only**. The model was trained on eight teacher-free selected-arm Red
+interventions and predicts nine outcome dimensions, but it has never controlled a player episode.
+The new three-way preflight will show its semantic choice and per-goal predicted outcomes beside
+the older goal manager and completion-first baseline while actions and frames remain zero. Critical
+recovery, healing, storage, and supply gates remain deterministic. Do not label this integration as
+a new fit, promotion, or transfer result.
+
 For the Red-first scenario factory, the batch runner writes a private aggregate progress document.
 After its publication gate, launch the view-only materialization display with:
 

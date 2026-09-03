@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "The learned manager received one bounded semantic decision and completed manage_storage with the same verified progress and exact 36-action/4512-frame cost as the deterministic baseline. This proves live integration, not advantage; deterministic goal ordering remains the production authority.",
-        "blocker": "One same-choice storage episode cannot train or distinguish semantic planning. The next curriculum needs independent train/development contexts across multiple goal kinds and outcome variation without manufacturing disagreement or exposing private identity to the policy.",
-        "decision": "Close the first player integration gate as successful but equivalent. Keep the deterministic manager, then design an outcome-dense bounded Red goal curriculum with lineage-disjoint train and development contexts across collection, story, party, resource and recovery goals. Fit on train only and require development advantage before widening authority.",
+        "authority_delta": "The first bounded player pair remains an exact tie, so deterministic goal ordering stays authoritative. An existing teacher-free causal living-Dex model is now connected locally as a shadow planner only; recovery, restoration, critical storage, and critical supply remain deterministic.",
+        "blocker": "The causal model has only eight authenticated selected-arm examples across four lineages and has never been screened through the bounded player. It cannot receive controller authority until action-free breadth and later lineage-disjoint Red outcomes show useful decisions beyond the deterministic manager.",
+        "decision": "Use the already-trained causal living-Dex outcome model instead of beginning another broad inventory from zero. Publish the strict provenance loader and shadow bridge, screen it action-free on the four existing development snapshots, then freeze the smallest multi-goal train/development curriculum justified by those scores.",
         "evidence": {
           "kind": "verified_composition_episode",
           "path": "docs/evidence/red-paired-bounded-player-result-2026-09-03.json",
           "sha256": "ac9987ef212083ac6510849bc2a7a8faae0734db9a7a18d1931ac63f2500ada1"
         },
-        "learning_output": "One verified learned development composition episode was added. Learned and baseline arms independently restored the same three-goal state, selected manage_storage, increased storage headroom 2 to 20, preserved all 24 specimens, and tied at 36 actions and 4512 frames with zero failures or recoveries.",
-        "next_falsifier": "Inventory existing authenticated Red contexts action-free and stop unless independent train and development lineages expose several executable semantic goal kinds plus outcome variation sufficient to teach a manager rather than copy deterministic ordering.",
-        "next_session_goal": "Build and qualify the action-free multi-goal context inventory and curriculum contract; do not run more gameplay until it proves adequate train/development breadth, lineage separation and reusable policy-visible variation.",
-        "product_alignment": "The first learned decision now flows through the title-neutral player into real Red mechanics and a verified living-ledger delta. The tie directs the next work toward diverse semantic outcome learning instead of more route hardening or a premature full replay.",
-        "session_id": "2026-09-03-first-live-paired-bounded-player-v1",
+        "learning_output": "No new learning counter moves in this engineering gate. The reusable gain is that one authentic causal outcome model can now score semantic player goals without binding identity while the deterministic safety shell retains emergency authority.",
+        "next_falsifier": "On the same four existing action-free Red snapshots, require the causal shadow to produce valid path-free outcome vectors across several goal families with zero actions or frames; stop on provenance mismatch, private identity leakage, invalid scores, or collapsed unsupported decisions.",
+        "next_session_goal": "Publish and green the causal shadow bridge, then run the four existing development snapshots through the three-authority zero-input preflight and reorient from the observed scores before any gameplay.",
+        "product_alignment": "This reuses authentic teacher-free living-Pokedex outcome learning at the actual player decision seam, reducing duplicated infrastructure while preserving the cross-title semantic boundary and deterministic safety controls.",
+        "session_id": "2026-09-03-causal-living-dex-player-shadow-v1",
         "status": "active",
-        "stop_condition": "Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign.",
-        "transfer_result": "The shared player/result contracts survived their first live Red episode without title identity or private bindings in policy-visible data. Crystal remains unexecuted and transfer remains untested until diverse Red semantic authority is learned."
+        "stop_condition": "Stop if the bridge leaks binding, save, map, species, or route identity; lets the causal shadow override recovery or critical resource gates; changes emulator state during preflight; or treats eight examples as production authority. Do not substitute a full replay, sealed Red, Crystal execution, or another battle campaign.",
+        "transfer_result": "The causal model and player now share a title-neutral semantic option boundary locally, but Crystal remains unexecuted and transfer remains untested. The four-snapshot action-free screen is only a Red integration falsifier."
       },
       "learned_authority": {
         "current": "The goal manager completed one bounded live storage objective exactly as well as the completion-first baseline, while the repeated-RNG battle ranker still trails the fixed heuristic 18/20 to 20/20. Deterministic ordering and skills retain production authority; no full-player promotion is claimed.",
@@ -73,7 +73,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "The first same-state live comparison was exactly equivalent, so retain deterministic goal ordering and redesign the manager curriculum. Advance only after train-only learning across diverse semantic goal families beats the deterministic baseline on lineage-disjoint Red development episodes.",
+      "next_decision": "Publish the causal living-Dex shadow bridge, screen its nine-outcome predictions on four existing Red development snapshots with zero input, then design the smallest lineage-disjoint multi-goal outcome curriculum. Deterministic goal ordering remains authoritative.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

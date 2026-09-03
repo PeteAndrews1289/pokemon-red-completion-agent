@@ -14,6 +14,31 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-03: the authentic living-Dex model is entering the player in shadow
+
+The first paired Red player result merged as main `44adcb38` after CI `33775111373/1` passed.
+Both arms selected `manage_storage`, preserved 24 specimens, gained 18 storage slots, and tied at
+36 actions plus 4,512 frames. That proves the player seam, not learned advantage.
+
+An inventory then found that the project already has a teacher-free causal living-Dex option-value
+model (`a211de9c…e4af9`) fitted from eight authenticated selected-arm interventions across four
+lineages. It predicts nine separate success, progress, cost, storage, party, and irreversible-loss
+outcomes over 24 identity-free features. The model had never been connected to the bounded player.
+
+The active implementation adds that connection as `LivingDexGoalShadowPolicy`. It projects the
+player's semantic story, acquire, develop, evolve, resupply, storage, and exploration choices into
+the causal model, applies one explicit completion-first utility, and returns a bound goal without
+seeing private binding identity. Recovery, restoration, critical storage, and critical resupply
+remain inside the deterministic safety shell. A strict loader rejoins the private model record to
+its model, dataset, source, and CI identities. The authenticated preflight can now compare the old
+goal manager, completion-first control, and causal living-Dex shadow on one state with zero input.
+
+This bridge is locally qualified, not yet published or exercised on a live Red snapshot. Next:
+publish it, require green CI, then replay the four existing development snapshots action-free and
+record the causal model's scores and choices. Do not promote it or run gameplay from those choices;
+use the result to choose a small lineage-disjoint train/development curriculum for actual bounded
+player learning.
+
 ## 2026-09-03: the bounded player seam exists; live Red binding is next
 
 `bounded_player_episode.py` now supplies the missing title-neutral integration boundary. A semantic
