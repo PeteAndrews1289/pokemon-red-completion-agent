@@ -3,6 +3,20 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 causal-player failure diagnosis:** PR 188 merged the causal paired runner as main
+> `b8c2999d` under green CI `33784679568/1`. Pair 001 is consumed. Its causal model chose
+> `develop_team`, and the existing skill successfully raised the target from **20→21** in **1,119
+> actions / 101,171 frames** with no collection regression or action error. The pair failed before
+> the baseline because the outcome observer could not encode a valid Route 11 state with zero
+> currently available semantic goals.
+>
+> One deterministic diagnostic replay reproduced the saved trace exactly and isolated the error to
+> the observation-versus-decision boundary. The repair keeps decision menus strict while allowing
+> evidence observations with no available choice and emits a typed terminal if a later choice is
+> unavailable. Publish and green the repair, then run one new pair identity. Never retry pair 001;
+> it creates no comparison, counter increment, promotion or transfer result. See the
+> [diagnosis](evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json).
+
 > **September 3 causal player bridge:** The first paired player result is green and merged as main
 > `44adcb38`; learned and deterministic arms tied on storage. The inventory found an existing
 > teacher-free living-Dex outcome model (`a211de9c…e4af9`, eight authenticated selected-arm rows)
@@ -3348,8 +3362,11 @@ and changed no model or authority counter.
   real `develop_team` versus `evolve_species` disagreement.
 - [x] Extend the same-state paired runner with an explicit causal challenger while keeping the
   legacy learned-manager mode unchanged.
-- [ ] Publish and green the paired-runner extension.
-- [ ] Execute one repeatable development pair on the screened disagreement and compare typed
+- [x] Publish and green the paired-runner extension through PR 188 and CI `33784679568/1`.
+- [x] Attempt pair 001 once; preserve its successful causal skill outcome and failed enclosing
+  terminal without retry after the zero-available-goal observation fault.
+- [ ] Publish and green the general post-skill observation repair.
+- [ ] Execute one new repeatable development pair on the screened disagreement and compare typed
   observed outcomes without forcing unlike goals into one reward.
 - [ ] Freeze a lineage-disjoint train/development curriculum across several goal families, collect
   observed selected-arm outcomes, and fit train only.
