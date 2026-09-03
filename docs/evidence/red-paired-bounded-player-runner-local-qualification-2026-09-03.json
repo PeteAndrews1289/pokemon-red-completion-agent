@@ -1,0 +1,58 @@
+{
+  "comparison_contract": {
+    "cost_breaks_only_exact_progress_ties": true,
+    "distinct_semantic_goal_progress_is_scalarized": false,
+    "independent_emulator_restore_per_arm": true,
+    "mixed_progress_or_cost_tradeoffs": "incomparable",
+    "same_starting_collection_required": true,
+    "same_starting_semantic_state_required": true,
+    "same_starting_state_required": true
+  },
+  "effects": {
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames": 0,
+    "episodes_created": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "rom_reads": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "engineering": {
+    "focused_tests_passed": 37,
+    "full_repository_tests_deselected": 3,
+    "full_repository_tests_expected_failure": 1,
+    "full_repository_tests_passed": 6528,
+    "full_repository_tests_skipped": 1,
+    "full_mypy_source_files": 345,
+    "mypy_passed": true,
+    "path_free_public_result": true,
+    "public_artifact_check_passed": true,
+    "ruff_passed": true,
+    "source_bound_registries_regenerated": 4
+  },
+  "execution_boundary": {
+    "action_free_live_preflight_before_episodes": true,
+    "controller_and_frame_budgets_independently_metered": true,
+    "durable_decision_and_outcome_required": true,
+    "failure_replan_limit": 1,
+    "goal_decision_limit": 2,
+    "protected_inputs_rehashed_after_both_arms": true,
+    "publisher_gate_required_before_live_use": true,
+    "rom_adjacent_outputs_forbidden": true
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "claim": "local_engineering_qualification_only",
+    "learning_output_added": false,
+    "next_step": "publish_the_runner_pass_exact_source_ci_then_execute_one_repeatable_same_state_development_pair"
+  },
+  "recorded_on": "2026-09-03",
+  "schema": "pokemon.red.paired-bounded-player-runner-local-qualification.v1",
+  "source": {
+    "baseline_commit": "0d0b78033c916db3e0ce4a66f59b598b22ae344a",
+    "qualified_working_source_bundle_sha256": "fc76054de80dbb49410cb7179b6546e3d2dc156c1fc7e9c182d9e8feadb0b8e1"
+  },
+  "status": "locally_qualified_pending_publication",
+  "tracked_private_paths": 0
+}

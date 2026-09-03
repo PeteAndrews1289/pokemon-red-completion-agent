@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: same save, two players, no invented scoreboard
+
+**Visual:** Duplicate one authenticated Red save into two emulator windows labeled **LEARNED GOAL
+MANAGER** and **COMPLETION-FIRST RULE**. Feed both through the same seven skill cards and show two
+durable timelines returning to a shared comparison panel.
+
+**Voiceover:** “A model only deserves credit if the comparison is fair. Both players now begin from
+the exact same save, use the same mechanical skills, and have their inputs, actions, frames and
+collection ledgers checked independently.”
+
+**Visual:** Put **CAPTURE**, **STORY**, **HEAL** and **STORAGE** on separate axes. Show one mixed
+result resolving to **INCOMPARABLE**, then an exact progress tie where the lower action count wins.
+
+**Voiceover:** “We refused to invent a magic score that says a fast heal is worth more than a slow
+capture. Different kinds of progress remain different. Cost breaks a tie only when the verified
+progress is identical. Thirty-seven focused checks pass; the live paired Red run comes after the
+launcher is published and green.”
+
 ## New scene: seven systems become one bounded player
 
 **Visual:** Arrange cards labeled **GOAL MODEL**, **NAVIGATION**, **BATTLE**, **CAPTURE**, **PARTY**,

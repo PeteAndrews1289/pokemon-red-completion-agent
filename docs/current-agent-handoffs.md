@@ -8,8 +8,9 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 
 ## Current override: Codex owns the Red bounded-player bridge
 
-The game-neutral bounded player seam, thin Red observation bridge and authenticated action-free
-preflight runner are implemented and pass twenty-four focused ROM-free checks. The seam durably
+The game-neutral bounded player seam, thin Red observation bridge, authenticated action-free
+preflight and same-state paired launcher are implemented and pass thirty-seven focused ROM-free
+checks. The seam durably
 records semantic decisions, executes existing bounded bindings, reconciles independent budgets,
 checks a fresh living-collection ledger after success or failure, and permits one changed-context
 replan that cannot repeat the failed goal. It has not read a ROM or granted live model authority.
@@ -17,8 +18,11 @@ replan that cannot repeat the failed goal. It has not read a ROM or granted live
 The preflight requires a clean published source, verified cartridge, external authenticated
 capture/profile/model inputs, a controller-blocked emulator and at least two executable semantic
 goals. Four live snapshots now pass it with menu widths 2/3/4/3 and zero actions, frames or episodes;
-the two authorities agreed on every selected goal. Codex now owns the paired bounded episode
-launcher and execution from the same repeatable three-goal state. The comparison is learned semantic goal selection versus the
+the two authorities agreed on every selected goal. The launcher independently restores both arms,
+protects and rehashes its inputs, retains durable private trajectories, and compares semantic
+progress before cost; progress in different goal kinds remains incomparable. Codex now owns
+publication, green CI, and execution from the same repeatable three-goal state. The comparison is
+learned semantic goal selection versus the
 deterministic completion-first manager using the same skills and measured ledger progress, resource
 cost and recovery. Crystal, sealed Red and full replay remain closed. Claude and Antigravity are
 optional milestone reviewers, not implementation dependencies.

@@ -52,6 +52,17 @@
 > same repeatable three-goal state and compare verified execution progress, resource cost, actions,
 > frames, failures and replans.
 
+> **September 3 paired-player launcher:** The same-state development runner is now implemented and
+> locally qualified. It restores the authenticated Red snapshot independently for the learned and
+> completion-first arms, records every semantic decision and typed outcome durably, enforces hard
+> action/frame budgets outside the skills, and rehashes every protected input afterward. Its
+> comparison uses Pareto dominance over completion-ledger deltas and successful semantic goal kinds;
+> cost breaks a tie only when progress is exactly equal, while mixed tradeoffs remain
+> `incomparable`. The focused gate is **37/37**, the full gate is **6,528 passed**, Ruff and Mypy
+> pass, and the qualification used
+> **ROM/actions/frames/episodes/fits 0**. Next publish, pass exact-source CI, then run one repeatable
+> three-goal development pair. This does not open sealed Red, Crystal, a full replay, or promotion.
+
 > **September 2 route-supply falsification and clustered reset:** Exact main `a891d302` passed CI
 > `33655762177/1`; its two-root successor then ended **0/2** with identical `planner_no_route`
 > diagnostics after 111 steps. Both roots are terminal. Route-derived battle-snapshot supply is

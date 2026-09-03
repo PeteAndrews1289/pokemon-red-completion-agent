@@ -61,17 +61,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-bounded-player-live-preflight-v1** · status **active** · evidence [qualification](docs/evidence/red-bounded-player-live-preflight-result-2026-09-03.json)
+**2026-09-03-paired-bounded-player-runner-local-qualification-v1** · status **active** · evidence [qualification](docs/evidence/red-paired-bounded-player-runner-local-qualification-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The seam moves reusable authority to the long-horizon decision layer while keeping navigation, battle, capture, party and inventory mechanics deterministic and bounded. Completion is judged by the living-collection ledger, so later titles can replace the adapter without replacing the player loop. |
-| Learning output | No new learner output. Four authenticated Red snapshots passed action-free planning with menu widths 2/3/4/3; learned and completion-first choices agreed 4/4 while controller actions, emulator frames, episodes and fits remained zero. |
+| Product alignment | The launcher gives the learned manager one bounded long-horizon choice while reusing deterministic navigation, battle, capture, party, inventory and recovery skills. Its comparator preserves progress by semantic goal kind and treats mixed tradeoffs as incomparable, so a cheap but different task cannot masquerade as transferable superiority. |
+| Learning output | No new learner output. The same-state paired launcher passed 37 focused checks with zero ROM reads, actions, frames, episodes or fits; the first live paired outcome remains pending publication and CI. |
 | Authority delta | Four live action-free Red snapshots exposed genuine two-to-four-goal menus. The learned and completion-first authorities agreed on restore, storage, evolution and acquisition choices with zero actions or frames. This proves integration readiness only; no controller or authority promotion occurred. |
 | Transfer result | The new seam is title-neutral and its public result contains no private binding or path fields. Cross-title transfer remains untested until bounded Red episodes establish useful semantic authority. |
-| Blocker | The live preflight gate passed, but the paired bounded episode launcher is not yet implemented and no live Red episode has demonstrated model-selected quest or living-Pokedex progress through this seam. |
-| Decision | Implement one repeatable paired launcher that restores the same three-goal Red state independently for learned and completion-first arms, durably records each decision, and compares verified ledger progress and cost. Do not search for disagreement or return to local battle campaigns. |
-| Next session | Implement, qualify and publish the paired bounded episode launcher; after green CI, execute one learned arm and one completion-first arm from the same repeatable three-goal Red state. |
+| Blocker | The paired launcher is locally qualified but is not yet published under green CI, so live use remains closed. No Red episode has yet demonstrated model-selected quest or living-Pokedex progress through this seam. |
+| Decision | Publish the repeatable paired launcher, require green CI, then restore the same three-goal Red state independently for learned and completion-first arms and compare durable verified progress. Do not search for disagreement or return to local battle campaigns. |
+| Next session | Publish the locally qualified paired launcher, pass exact-source CI, then execute one learned arm and one completion-first arm from the same repeatable three-goal Red state. |
 | Next falsifier | Restore the same repeatable three-goal Red state independently for learned and completion-first arms, then require durable decisions, typed outcomes, fresh ledgers and exact independent action/frame accounting from both. |
 | Stop condition | Stop if the Red bridge adds fixed route order or coordinates to policy input, swallows a typed component failure, permits collection regression, or cannot expose a fresh ledger and recovery trace. Do not substitute a full replay, sealed Red, Crystal execution or another local battle campaign. |
 

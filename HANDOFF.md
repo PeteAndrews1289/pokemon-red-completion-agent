@@ -9272,3 +9272,26 @@ capture, party, inventory and recovery skills, then verify a fresh completion-le
 replan after a typed recoverable failure. After ROM-free qualification, run two bounded Red
 development episodes and compare against deterministic goal ordering. Crystal, sealed Red, a full
 replay and broad model authority remain closed.
+
+### Paired bounded-player launcher handoff — 2026-09-03
+
+The repeatable development launcher is implemented and locally qualified. It opens one authenticated
+three-goal Red snapshot through an action-free learned/teacher preflight, then restores that state
+independently for a learned goal-manager arm and a completion-first baseline arm. Both arms use the
+same existing deterministic skills. Decisions and outcomes are durable, action/frame accounting is
+independent, one changed-context replan is allowed, and all protected inputs are rehashed after both
+arms. No private path or binding enters the public result.
+
+The comparison does not reduce unlike objectives to one reward. It applies Pareto dominance to the
+fresh completion-ledger deltas and the per-goal-kind success counts, then consults actions, frames and
+recovery only when progress is exactly equal. Mixed progress or cost remains `incomparable`. The
+focused gate is **37/37**; the complete repository gate is **6,528 passed, 1 skipped, 3 deselected,
+1 expected failure**. Ruff, full-source Mypy, the public-artifact gate and regenerated source
+registries pass. Qualification used **ROM/actions/frames/episodes/fits 0** and grants no authority.
+
+Next commit and publish this source, require green GitHub CI, initialize a new external private
+episode root if needed, and execute pair `red-bounded-player-pair-001` from authenticated context
+`red-goal-v1-061-manage_storage-validation-01`. Do not search for a disagreement: both preflight
+authorities already selected `manage_storage`. The result asks whether the learned controller can
+actually produce the same durable verified progress, at what cost, through the reusable player seam.
+Sealed Red, Crystal, full replay, model fitting, and broader promotion remain closed.
