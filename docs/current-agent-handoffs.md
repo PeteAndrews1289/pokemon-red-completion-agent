@@ -21,6 +21,12 @@ or observed outcome. In parallel, the later promotion gate needs eight prospecti
 development lineages across at least four/three strategic families. Crystal remains deferred until
 that honest Red gate passes. External reviewers are optional and do not block implementation.
 
+The freezer implementation is now locally complete and qualified: fixed 1/1/2 quotas for team,
+evolution and storage, all model-controlled options from equal resets, and deterministic safety
+overrides. Codex next publishes it, waits for exact-source green CI, performs one action-free plan
+freeze, and validates the frozen denominator. It may not collect an outcome from unpublished or
+dirty source.
+
 ## Current override: Codex owns the multi-goal curriculum after the first strategic win
 
 PR 188 is merged as exact main `b8c2999d` under green CI `33784679568/1`. The causal arm of pair

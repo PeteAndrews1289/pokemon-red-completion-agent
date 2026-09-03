@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze and qualify a compact outcome-blind calibration campaign over still-unclaimed Red train roots, collect bounded semantic-goal outcomes, fit train only and exercise consecutive model decisions. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
+- Next decision: Publish and green the implemented compact calibration freezer, perform its one action-free four-root plan freeze, then collect equal-reset semantic outcomes and fit train only. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
 
 ### Mandatory mission check
 
@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-multi-goal-lineage-inventory-v1** · status **active** · evidence [falsification](docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json)
+**2026-09-03-multi-goal-calibration-freezer-v1** · status **active** · evidence [falsification](docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The project can now train on authentic Red outcomes without pretending local diagnostics are transfer evidence. This accelerates model iteration while preserving the independent-root standard required before broader authority and Crystal. |
-| Learning output | This session adds no outcome, fit, comparison or authority counter. It authenticates 81 calibration contexts and falsifies the assumption that their file-level split proves upstream independence. |
+| Learning output | This session adds no outcome, fit, comparison or authority counter. It implements the outcome-blind four-root equal-reset calibration freezer and qualifies its core and wrapper with focused tests. |
 | Authority delta | No new authority is granted. Pair 003 remains the first teacher-free strategic win, but the 81-context census proves only byte-distinct calibration breadth; it does not turn the old nominal development partition into an independent evaluation set. |
 | Transfer result | None. Crystal remains unexecuted. The inventory makes the future transfer gate more credible by requiring prospectively recorded lineage rather than treating different save files as independent games. |
-| Blocker | All 81 context bytes authenticate and declared providers span nine goal families, but the old artifacts do not retain trustworthy upstream gameplay lineage. Thirty-five physical roots remain unclaimed account-wide, while the immediately useful train supply is narrow. The next blocker is a compact outcome-blind calibration plan, not another clean-power factory or sealed experiment. |
-| Decision | Use still-unclaimed historical train roots for explicitly labeled calibration outcomes and same-bank development roots only for diagnostics. Fit train only and exercise consecutive semantic choices. In parallel, require a later 8-train and 4-development prospective lineage gate before authority promotion or Crystal transfer. |
-| Next session | Implement and qualify the compact still-open-root calibration-plan freezer, then prepare bounded selected-candidate outcome collection without reusing any consumed physical root. |
-| Next falsifier | Freeze candidate roots without looking at model scores or outcomes, then action-free reobserve each exact state. Stop if fewer than three still-open train roots expose genuine strategic alternatives or if any selected physical root is already claimed. |
+| Blocker | The 81-state bank is authenticated and the compact calibration freezer is implemented, but no content-addressed private campaign plan has yet been frozen from published green source. Independent upstream lineage remains unproven for the older development bank. |
+| Decision | Publish the freezer that mechanically selects one develop-team, one evolution and two storage train roots and schedules every model-controlled option from equal resets. Then freeze once action-free, collect bounded outcomes, fit train only and retain the later 8-train/4-development independent gate before promotion or Crystal. |
+| Next session | Publish the compact calibration freezer, freeze and validate its private denominator without controller input, then implement the bounded forced-candidate outcome runner. |
+| Next falsifier | Publish and green the freezer, then perform one action-free private-plan freeze. Stop if the exact open bank cannot supply one develop-team, one evolution and two distinct storage roots with at least two model-controlled choices each. |
 | Stop condition | Never retry pairs 001-003 or any claimed physical root. Calibration may use only prospectively frozen open train roots and may not be described as held out. Stop on teacher-choice targets, disagreement or outcome-selected contexts, identity-bearing model features, collection regression, unbounded execution, or any Crystal/transfer claim from same-bank evidence. |
 
 ### Stop conditions
