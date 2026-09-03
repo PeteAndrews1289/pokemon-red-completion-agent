@@ -92,6 +92,21 @@ def _binding_set() -> GoalBindingSet:
     return GoalBindingSet(opportunities, bindings)
 
 
+def _unavailable_binding_set() -> GoalBindingSet:
+    return GoalBindingSet(
+        tuple(
+            GoalOpportunity(
+                binding_ref=f"private:red:unavailable:{kind.value}",
+                kind=kind,
+                availability=GoalAvailability.UNAVAILABLE,
+                unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET,
+            )
+            for kind in GoalKind
+        ),
+        (),
+    )
+
+
 def _collection() -> LivingCollectionCheckpoint:
     return LivingCollectionCheckpoint(
         registered_species=10,
@@ -221,6 +236,39 @@ def test_semantic_digest_changes_with_public_red_progress() -> None:
     )
 
     assert first != second
+
+
+def test_observer_encodes_a_post_skill_state_without_available_goals() -> None:
+    live = _live(story_completed=4)
+    binding_set = _unavailable_binding_set()
+    collection = _collection()
+    enumerator = Mock()
+    enumerator.enumerate.return_value = binding_set
+    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime.adapter.observe.return_value = live
+    runtime.enumerator.return_value = enumerator
+
+    observation = RedBoundedPlayerObserver(
+        runtime=runtime,
+        actions=Mock(spec=CountingExecutor),
+        collection_projector=Mock(return_value=collection),
+    )()
+
+    assert observation.binding_set is binding_set
+    assert len(observation.semantic_state_sha256) == 64
+    document = red_bounded_player_semantic_document(
+        live=live,
+        binding_set=binding_set,
+        collection=collection,
+    )
+    policy_input = document["policy_input"]
+    assert isinstance(policy_input, dict)
+    candidates = policy_input["candidates"]
+    assert isinstance(candidates, list)
+    assert all(
+        candidate["availability"] == "unavailable"
+        for candidate in candidates
+    )
 
 
 def test_observer_rejects_an_invalid_collection_projection() -> None:

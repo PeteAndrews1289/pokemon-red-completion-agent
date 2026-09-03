@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the level-up succeeded, but the experiment still turned red
+
+**Visual:** Show the model choosing **DEVELOP TEAM**, then animate the target card from **LEVEL 20
+→ 21**. Keep **TEACHER QUERIES 0 · ACTION ERRORS 0 · SPECIMENS PRESERVED** visible. When the player
+arrives on Route 11, turn the outer experiment card red while leaving the level-up green.
+
+**Voiceover:** “The model actually made a strategic choice and the game carried it out. But the
+comparison failed anyway—not because training failed, but because the wrapper assumed every valid
+state must already offer another high-level decision.”
+
+**Visual:** Split one box labeled **OBSERVE THE WORLD** from another labeled **ASK THE MODEL**.
+Allow the first to contain **0 AVAILABLE GOALS**; keep the second locked until **2+ GENUINE
+CHOICES**. Stamp the original run **CONSUMED — NO RETRY**, then show a new empty comparison card.
+
+**Voiceover:** “We replayed the saved trace once, reproduced all 1,119 actions exactly, and found
+the other safety checks passed. The fix separates observation from decision admission. Successful
+work can now settle honestly even when the next quest is not immediately available.”
+
 ## New scene: same save, two players, no invented scoreboard
 
 **Visual:** Duplicate one authenticated Red save into two emulator windows labeled **LEARNED GOAL

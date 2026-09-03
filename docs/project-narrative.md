@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: the model made the right kind of move, then the wrapper rejected reality
+
+The first causal player arm was not idle. Without asking a teacher, the living-Pokédex model chose
+team development over immediate evolution. The deterministic specialist then carried out 1,119
+controller actions, trained the intended teammate from level 20 to 21, preserved every living
+specimen, and returned interactive control. The outcome verifier called the skill a success.
+
+The enclosing comparison still failed before its baseline ran. The player had finished on Route
+11, where none of the currently installed high-level bindings were immediately available. The
+observer tried to describe that valid world by constructing a policy question, and the policy
+question correctly refused to exist without a selectable answer. In other words, the system had
+conflated “I can observe where I am” with “I am ready to choose the next quest.”
+
+A single replay of the saved action trace reproduced every action and the terminal snapshot, then
+showed that budget accounting, collection preservation and semantic change all passed. The repair
+is deliberately general: game adapters may report a state with zero available objectives, while
+the policy is still never invoked without a genuine choice. If a later decision cannot be made, the
+episode now stops with a typed terminal rather than erasing the successful work. The failed pair
+remains failed and consumed; the next comparison gets a new identity only after this repair is
+public and green.
+
 ## September 3: a trained living-Pokédex model finally reaches the player boundary
 
 The first paired player run ended in an honest tie: both planners chose storage management and

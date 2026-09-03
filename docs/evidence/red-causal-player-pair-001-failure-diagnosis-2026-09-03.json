@@ -1,0 +1,59 @@
+{
+  "authority_effect": {
+    "broader_authority_promoted": false,
+    "deterministic_safety_shell_retained": true,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "diagnosis": {
+    "collection_transition_valid": true,
+    "controller_action_errors": 0,
+    "failure_boundary": "post_skill_semantic_observation",
+    "failure_cause": "post-skill state had zero currently available semantic goals, but the observation encoder incorrectly required a selectable decision menu",
+    "recorded_trace_reproduced_exactly": true,
+    "semantic_state_changed": true
+  },
+  "diagnostic_replay": {
+    "actions": 1119,
+    "counted_as_learning_output": false,
+    "frames": 101171,
+    "model_predictions": 0,
+    "purpose": "replay the already-consumed action trace once to isolate each postcondition",
+    "teacher_queries": 0
+  },
+  "episode": {
+    "actions": 1119,
+    "available_goals_after": 0,
+    "component_outcome": "succeeded",
+    "ending_area_kind": "route",
+    "frames": 101171,
+    "living_species_after": 13,
+    "living_species_before": 13,
+    "pair_id": "red-causal-player-pair-001",
+    "registered_species_after": 17,
+    "registered_species_before": 17,
+    "selected_goal": "develop_team",
+    "target_level_after": 21,
+    "target_level_before": 20,
+    "terminal": "failed_closed"
+  },
+  "identity": {
+    "challenger_model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "failed_episode_manifest_sha256": "85879f3ced41d3c5e12bd76f5da16b965ba2d6a3dac14285343ccae011e7e838",
+    "source_commit": "b8c2999dbdb23d752928cd881b9a2d56536f0575"
+  },
+  "learning_effect": {
+    "comparison_created": false,
+    "development_counter_delta": 0,
+    "fit_count_delta": 0,
+    "pair_retry_allowed": false,
+    "reason": "the challenger arm settled its component outcome but the pair did not reach a two-arm comparison"
+  },
+  "repair_contract": {
+    "decision_questions_still_require_an_available_candidate": true,
+    "post_skill_observations_may_encode_zero_available_candidates": true,
+    "subsequent_multi_decision_episode_stops_durably_if_no_genuine_choice_exists": true
+  },
+  "schema": "pokemon.red.causal-player-pair-failure-diagnosis.v1",
+  "status": "diagnosed_not_retried"
+}

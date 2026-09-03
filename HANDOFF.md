@@ -14,6 +14,30 @@ horizon and Crystal-ready definition),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-09-03: the first causal player action worked; its enclosing observation failed
+
+The causal bridge and paired runner were published through PR 188 as exact main `b8c2999d` under
+green CI `33784679568/1`. Pair `red-causal-player-pair-001` is permanently consumed. Its causal arm
+asked no teacher, selected `develop_team`, and the deterministic specialist raised the intended
+party member from level 20 to 21 in 1,119 actions and 101,171 frames. The skill verifier recorded a
+durable success, the living collection was unchanged and valid, semantic state changed, and the
+emulator returned to interactive Route 11 control with no action errors.
+
+The comparison did not complete. The post-skill Red observer enumerated zero currently available
+high-level goals at Route 11, then constructed `GoalManagerQuestion`; that type correctly refuses a
+policy question with no selectable option. The bug was using its decision-admission contract while
+merely encoding outcome evidence. A one-time deterministic replay of the already-consumed action
+trace reproduced the terminal snapshot exactly and made every other postcondition pass. It made no
+model prediction and is not a learning result.
+
+The active repair encodes public state even when all nine goals are unavailable, while actual model
+selection still requires a genuine menu. A multi-decision episode now returns a durable
+`insufficient_available_goals` terminal after a settled step instead of throwing. Pair 001 remains
+failed, has no baseline, advances no counter, and may never be retried. Publish and green this
+repair, then use a new pair identity for exactly one same-state causal-versus-completion-first
+development comparison. Evidence:
+[diagnosis](docs/evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json).
+
 ## 2026-09-03: the authentic living-Dex model is entering the player in shadow
 
 The first paired Red player result merged as main `44adcb38` after CI `33775111373/1` passed.

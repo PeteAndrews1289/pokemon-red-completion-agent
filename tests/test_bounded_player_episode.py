@@ -115,6 +115,7 @@ def _observer(
     mismatched_report: bool = False,
     interrupt: bool = False,
     observer_acts: bool = False,
+    no_goals_after_first: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -125,6 +126,9 @@ def _observer(
         stage = state["stage"]
         policy_stage = 0 if same_failure_context and stage == 1 else stage
         available = (
+            set()
+            if no_goals_after_first and stage >= 1
+            else
             {GoalKind.RESTORE_TEAM, GoalKind.MANAGE_STORAGE, GoalKind.ADVANCE_STORY}
             if policy_stage == 0 or repeated_failure
             else {GoalKind.MANAGE_STORAGE, GoalKind.ADVANCE_STORY}
@@ -255,6 +259,33 @@ def test_unchanged_failed_context_stops_without_repeating_input() -> None:
     assert len(result.steps) == 1
     assert state["actions"] == 5
     assert len(sink.decisions) == len(sink.events) == 1
+
+
+def test_successful_step_can_settle_before_an_unavailable_followup_menu() -> None:
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(
+        fail_first=False,
+        no_goals_after_first=True,
+    )
+
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+    )
+
+    assert (
+        result.stop_reason
+        is BoundedPlayerStopReason.INSUFFICIENT_AVAILABLE_GOALS
+    )
+    assert len(result.steps) == 1
+    assert result.steps[0].status.value == "succeeded"
+    assert state["actions"] == 5
+    assert len(sink.decisions) == len(sink.events) == 1
+    trajectory.require_settled()
 
 
 def test_recovery_cannot_repeat_the_failed_semantic_goal() -> None:

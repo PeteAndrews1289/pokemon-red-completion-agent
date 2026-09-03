@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
     GoalDecisionOutcome,
     GoalFailureReason,
     GoalKind,
@@ -51,6 +52,7 @@ class BoundedPlayerStopReason(StrEnum):
     DECISION_LIMIT = "decision_limit"
     VERIFIED_FAILURE = "verified_failure"
     FAILURE_CONTEXT_UNCHANGED = "failure_context_unchanged"
+    INSUFFICIENT_AVAILABLE_GOALS = "insufficient_available_goals"
 
 
 @dataclass(frozen=True, slots=True)
@@ -207,12 +209,32 @@ def run_bounded_player_episode(
     replans_used = 0
 
     for decision_index in range(limits.max_decisions):
+        available_count = sum(
+            opportunity.availability is GoalAvailability.AVAILABLE
+            for opportunity in current.binding_set.opportunities
+        )
+        if available_count < limits.min_available_goals:
+            if not steps:
+                raise BoundedPlayerError(
+                    "bounded player lacks a genuine semantic choice"
+                )
+            trajectory.require_settled()
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=(
+                    BoundedPlayerStopReason.INSUFFICIENT_AVAILABLE_GOALS
+                ),
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         question = trajectory.ordered_question(
             current.situation,
             current.binding_set.opportunities,
         )
-        if len(question.available_indices) < limits.min_available_goals:
-            raise BoundedPlayerError("bounded player lacks a genuine semantic choice")
+        if len(question.available_indices) != available_count:
+            raise BoundedPlayerError(
+                "bounded player availability accounting differs"
+            )
         recovery_attempt = failed_kind is not None
         if recovery_attempt and question.policy_context_sha256 == failed_context:
             trajectory.require_settled()

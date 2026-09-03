@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green one causal-versus-completion-first same-state development runner, execute the observed develop-team versus evolve-species disagreement under identical hard budgets, then use the verified outcome to design the smallest lineage-disjoint multi-goal curriculum. Deterministic goal ordering remains authoritative.
+- Next decision: Publish and green the post-skill observation repair, then execute one new repeatable causal-versus-completion-first development pair on the observed develop-team versus evolve-species disagreement. Pair 001 is permanently consumed and may not retry. Use only the new verified comparison to decide whether to design a lineage-disjoint multi-goal curriculum; deterministic goal ordering remains authoritative.
 
 ### Mandatory mission check
 
@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-causal-living-dex-outcome-pair-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-goal-shadow-screen-result-2026-09-03.json)
+**2026-09-03-causal-player-post-skill-observation-repair-v1** · status **active** · evidence [qualification](docs/evidence/red-causal-player-pair-001-failure-diagnosis-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This measures whether teacher-free outcome learning improves a real living-Pokedex decision while retaining reusable semantic goals and deterministic mechanics, rather than spending another session on inventory or a Red-specific walkthrough. |
-| Learning output | No learning counter moves from the screen. The reusable result is one path-free, title-neutral planning disagreement at the real player seam plus proof that emergency choices remain under deterministic safety control. |
-| Authority delta | The causal living-Dex policy passed four authenticated zero-input Red screens but remains shadow-only. It preserved deterministic recovery, restoration, critical storage, and critical supply; deterministic goal ordering retains controller authority until measured same-state outcomes show an advantage. |
-| Transfer result | The causal model and player share a title-neutral semantic option boundary and passed a four-context Red compatibility screen. Crystal remains unexecuted and transfer remains untested; the next pair is still Red development evidence only. |
-| Blocker | The causal model has only eight authenticated selected-arm examples across four lineages. One action-free disagreement exists, but neither arm has executed from that state, so there is no evidence yet that its develop-team choice produces better verified completion progress than immediate evolution. |
-| Decision | Preserve the four-snapshot screen as noncounting qualification evidence, then run the smallest repeatable same-state development comparison on the one observed causal/control disagreement before designing a larger lineage-disjoint curriculum. |
-| Next session | Publish and green a causal-versus-completion-first paired development runner, then execute one same-state bounded comparison on development snapshot 003 and reorient from verified progress and cost. |
-| Next falsifier | From independently restored copies of the exact disagreement state, require causal develop_team and deterministic evolve_species to produce durable typed outcomes under identical hard budgets; stop on unequal starts, unsafe action, unverifiable ledger transitions, or private identity leakage. |
-| Stop condition | Stop if the pair begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh ledger transition, or turns one development result into production authority. Do not substitute sealed Red, Crystal execution, full replay, or another battle campaign. |
+| Product alignment | The failed pair exercised the intended hybrid architecture: a teacher-free model chose a portable semantic objective and deterministic mechanics achieved it. Repairing the observation/decision distinction is reusable across titles and avoids a Red-specific route patch. |
+| Learning output | No learning counter moves. Pair 001 did demonstrate one teacher-free model choice reaching a verified party-development outcome, but the absent baseline arm means there is no comparative result and no authority claim. The diagnostic replay is maintenance evidence only. |
+| Authority delta | The causal living-Dex policy received bounded controller authority once and selected develop_team without a teacher. The deterministic skill raised the intended teammate from level 20 to 21 in 1119 actions and 101171 frames while preserving the collection, but the enclosing pair failed before the baseline arm because its post-skill observation could not encode a state with zero currently available goals. No broader authority is promoted. |
+| Transfer result | The repair separates title-neutral state observation from policy admission, a distinction every later game adapter needs. Crystal remains unexecuted and transfer remains untested; the successor pair is Red development evidence only. |
+| Blocker | Pair 001 is permanently consumed and produced no comparison. The integration bug is now isolated: observation evidence incorrectly inherited the stricter decision-question requirement for at least one selectable option. The repair must publish and pass exact-main CI before one new pair identity may run. |
+| Decision | Keep pair 001 as a diagnosed failed integration attempt, repair the distinction between observable states and selectable decision menus, and make a multi-decision episode settle durably when a successful skill reaches a state without enough available goals. Then run one new pair; do not retry or reinterpret pair 001. |
+| Next session | Publish and green the zero-available post-skill observation repair, then run exactly one new same-state development pair and reorient from its verified progress and cost. |
+| Next falsifier | After the exact repair is public and green, independently restore both arms under a new pair identity and require durable typed outcomes from causal develop_team and deterministic evolve_species under identical hard budgets. Stop on unequal starts, unsafe action, unverifiable ledger transitions, or another integration failure. |
+| Stop condition | Never retry pair 001. Stop if the successor begins from unequal state, bypasses the deterministic safety shell, leaks private binding or path identity, exceeds hard action/frame bounds, cannot verify a fresh ledger transition, or turns one development result into production authority. Do not substitute sealed Red, Crystal execution, full replay, or another battle campaign. |
 
 ### Stop conditions
 

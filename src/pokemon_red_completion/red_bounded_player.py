@@ -238,14 +238,18 @@ def red_bounded_player_semantic_document(
         raise TypeError("binding_set must be a GoalBindingSet")
     if not isinstance(collection, LivingCollectionCheckpoint):
         raise TypeError("collection must be a LivingCollectionCheckpoint")
-    question = GoalManagerQuestion(
-        situation=live.situation,
-        opportunities=binding_set.opportunities,
-    )
     policy_input = {
-        "candidates": [item.policy_dict() for item in question.opportunities],
+        # A post-execution observation is evidence before it is a decision
+        # menu.  A successful skill may settle at a controllable location where
+        # every currently bound goal is unavailable.  Encoding that state must
+        # not construct GoalManagerQuestion, whose stricter contract correctly
+        # requires at least one selectable candidate when a policy is actually
+        # asked to choose.
+        "candidates": [
+            item.policy_dict() for item in binding_set.opportunities
+        ],
         "schema": "pokemon.core.goal-manager-input.v1",
-        "situation": question.situation.policy_dict(),
+        "situation": live.situation.policy_dict(),
     }
     return {
         "collection": collection.public_dict(),
