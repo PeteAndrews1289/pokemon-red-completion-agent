@@ -64,9 +64,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "state and manifest outputs must be distinct"
         )
     plan_payload = _read_bounded(args.private_plan, maximum_bytes=_MAXIMUM_PLAN_BYTES)
-    if hashlib.sha256(plan_payload).hexdigest() != args.expected_plan_sha256:
-        raise RepeatableBattleScenarioMaterializationError("private plan digest differs")
     plan = parse_repeatable_battle_scenario_plan(plan_payload)
+    if plan.sha256 != args.expected_plan_sha256:
+        raise RepeatableBattleScenarioMaterializationError("private plan digest differs")
     matches = tuple(
         item for item in plan.assignments if item.scenario_id == args.scenario_id
     )
@@ -121,7 +121,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise
     return {
         **result.public_dict(),
-        "plan_sha256": hashlib.sha256(plan_payload).hexdigest(),
+        "plan_sha256": plan.sha256,
         "rom_sha256": rom.sha256,
         "materializer_source_commit": source_identity.git_commit,
         "private_path_fields": 0,

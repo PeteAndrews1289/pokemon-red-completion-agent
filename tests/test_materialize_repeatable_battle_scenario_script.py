@@ -72,7 +72,7 @@ def _inputs(tmp_path: Path) -> tuple[SimpleNamespace, RepeatableBattleSourceObse
     rom_path.write_bytes(b"rom")
     args = SimpleNamespace(
         private_plan=plan_path,
-        expected_plan_sha256=hashlib.sha256(plan_payload).hexdigest(),
+        expected_plan_sha256=plan.sha256,
         scenario_id=plan.partition_assignments(ScenarioPartition.TRAIN)[0].scenario_id,
         source_state=state_path,
         out_state=tmp_path / "capture.state",
@@ -90,6 +90,9 @@ def test_script_binds_plan_source_and_private_outputs_before_execution(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     args, source = _inputs(tmp_path)
+    assert hashlib.sha256(args.private_plan.read_bytes()).hexdigest() != (
+        args.expected_plan_sha256
+    )
     monkeypatch.setitem(
         GLOBALS,
         "detect_source_identity",
