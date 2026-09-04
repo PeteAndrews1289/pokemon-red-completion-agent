@@ -132,13 +132,19 @@ _CALIBRATION_PLAYER_RECOVERY_RESULT_PATH = (
 _CALIBRATION_PLAYER_RECOVERY_RESULT_SHA256 = (
     "92a130160f3b2473c411cbae79f440eb9b31fd8f871daa52297186757fb2a923"
 )
+_CAUSAL_MODEL_UPDATE_RESULT_PATH = (
+    "docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json"
+)
+_CAUSAL_MODEL_UPDATE_RESULT_SHA256 = (
+    "fdc1d211e60c5acc961bf7b561ef2461231b544121904f61668d9c24e0153b52"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
     "composition_attempts": 6,
     "development_episode_attempts": 24,
-    "model_fits": 10,
+    "model_fits": 11,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -1016,7 +1022,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 10:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 11:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1285,11 +1291,96 @@ def _validate_projected_counters(
     if not isinstance(recovery_player, Mapping):
         raise ProductFocusError("calibration player recovery evidence is invalid")
     _validate_calibration_player_recovery_projection(recovery_player)
+    causal_model_update_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 10],
+        subject="projected causal model update evidence",
+    )
+    if causal_model_update_evidence != {
+        "kind": "model_fit",
+        "path": _CAUSAL_MODEL_UPDATE_RESULT_PATH,
+        "sha256": _CAUSAL_MODEL_UPDATE_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    causal_model_update_path = (root / _CAUSAL_MODEL_UPDATE_RESULT_PATH).resolve()
+    try:
+        causal_model_update = json.loads(
+            causal_model_update_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("causal model update evidence is invalid") from None
+    if not isinstance(causal_model_update, Mapping):
+        raise ProductFocusError("causal model update evidence is invalid")
+    _validate_causal_model_update_projection(causal_model_update)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
             "active learning counters differ from their typed evidence projection"
         )
+
+
+def _validate_causal_model_update_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project exactly one train-only causal fit with no gameplay or authority."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.living-dex-causal-model-update-public-result.v1"
+        or receipt.get("status") != "complete_train_only_shadow"
+        or receipt.get("recorded_on") != "2026-09-04"
+    ):
+        raise ProductFocusError("causal model update evidence status differs")
+    effects = _mapping(receipt, "effects", subject="causal model update evidence")
+    if effects != {
+        "authority_promotions": 0,
+        "controller_actions": 0,
+        "counterfactual_targets": 0,
+        "crystal_accesses": 0,
+        "development_examples_read": 0,
+        "emulator_frames": 0,
+        "fit_executions": 1,
+        "teacher_queries": 0,
+        "unselected_action_targets": 0,
+    }:
+        raise ProductFocusError("causal model update effects differ")
+    fit = _mapping(receipt, "fit", subject="causal model update evidence")
+    if fit != {
+        "added_settled_examples": 10,
+        "artifact_manifest_sha256": (
+            "a5ac1eaaeaf8b2dbe2575c64d8192ebf91a7ef6c57ffbcb0ea99e99414bfdaf9"
+        ),
+        "artifact_record_sha256": (
+            "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb"
+        ),
+        "distinct_selected_feature_rows": 18,
+        "model_sha256": (
+            "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56"
+        ),
+        "policy_disagreements_on_train_menus": 3,
+        "prior_model_sha256": (
+            "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9"
+        ),
+        "prior_weighted_training_mse": 0.000337943754007985,
+        "selected_kind_count": 7,
+        "settled_train_examples": 18,
+        "successful_examples": 3,
+        "updated_weighted_training_mse": 6.106826230221792e-07,
+    }:
+        raise ProductFocusError("causal model update fit differs")
+    source = _mapping(receipt, "source", subject="causal model update evidence")
+    if source != {
+        "exact_ci_attempt": 1,
+        "exact_ci_run": 33856641047,
+        "exact_main_commit": "4414215e0910c69657371d871ae92e16d8078419",
+        "source_bundle_sha256": (
+            "1590336c48dae9c828813fb51b1fa1c09eefaf102c578628cd2f9c82d0ae3269"
+        ),
+    }:
+        raise ProductFocusError("causal model update source differs")
 
 
 def _validate_paired_bounded_player_projection(

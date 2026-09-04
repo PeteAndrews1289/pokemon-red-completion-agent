@@ -1,0 +1,63 @@
+{
+  "claim_boundary": {
+    "supported": "One immutable title-neutral option-value model was fitted from the complete authenticated eighteen-example Red causal train corpus and reloaded through the existing model-record boundary.",
+    "unsupported": [
+      "fresh_red_generalization",
+      "policy_superiority",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "emulator_frames": 0,
+    "fit_executions": 1,
+    "teacher_queries": 0,
+    "unselected_action_targets": 0
+  },
+  "fit": {
+    "added_settled_examples": 10,
+    "artifact_manifest_sha256": "a5ac1eaaeaf8b2dbe2575c64d8192ebf91a7ef6c57ffbcb0ea99e99414bfdaf9",
+    "artifact_record_sha256": "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb",
+    "distinct_selected_feature_rows": 18,
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "policy_disagreements_on_train_menus": 3,
+    "prior_model_sha256": "a211de9ce4a406ac2900a805198183fcdce8e911a1833ec90fa68813520e4af9",
+    "prior_weighted_training_mse": 0.000337943754007985,
+    "selected_kind_count": 7,
+    "settled_train_examples": 18,
+    "successful_examples": 3,
+    "updated_weighted_training_mse": 6.106826230221792e-07
+  },
+  "next_decision": "Bind this exact model record to non-authoritative bounded-player shadow scoring, then use the existing prospective capture contract to create at least eight new train and four lineage-disjoint untouched Red development roots. Fit train only and compare once on development before any authority or Crystal decision.",
+  "privacy": {
+    "coefficient_values_published": false,
+    "dataset_identity_published": false,
+    "lineage_or_decision_identity_published": false,
+    "private_identity_fields_published": 0,
+    "private_path_fields_published": 0,
+    "selected_outcome_detail_published": false
+  },
+  "publication": {
+    "fit_implementation_pull_request": 205,
+    "result_pull_request": null,
+    "status": "result_pending_publication"
+  },
+  "recorded_on": "2026-09-04",
+  "schema": "pokemon.red.living-dex-causal-model-update-public-result.v1",
+  "source": {
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 33856641047,
+    "exact_main_commit": "4414215e0910c69657371d871ae92e16d8078419",
+    "source_bundle_sha256": "1590336c48dae9c828813fb51b1fa1c09eefaf102c578628cd2f9c82d0ae3269"
+  },
+  "status": "complete_train_only_shadow"
+}

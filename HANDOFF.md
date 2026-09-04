@@ -1,22 +1,23 @@
 # Handoff
 
-## Current checkpoint: use the causal experience already collected
+## Current checkpoint: the complete causal classroom is fitted; fresh roots are next
 
-The post-Pair-006 audit found a stronger existing learning lane that the latest seven-outcome
-calibration had obscured. The private causal living-Pokedex store authenticates **18 settled
-train-only outcomes** spanning all seven supported portable option kinds. The immutable integration
-model used only the first eight, so ten already-collected lessons have never reached that model. A
-read-only dry refit on the complete denominator changes three of the 18 train-menu choices and
-reduces aggregate train error; this is readiness evidence, not generalization evidence.
+PR 205 merged as exact main `4414215e0910c69657371d871ae92e16d8078419` and passed push CI
+`33856641047/1`. The action-free updater then fitted one immutable model from all **18 authenticated
+settled Red train outcomes**, adding ten lessons to the eight-example predecessor and spanning all
+seven supported portable option kinds. The model changed three of 18 train-menu choices. Weighted
+training MSE moved from `0.000337943754007985` to `0.0000006106826230221792`. The execution read no
+development examples and used zero emulator frames, controller actions, teacher queries, Crystal
+accesses or authority promotions. See the
+[public result](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json).
 
-The current branch adds a repeatable, corpus-addressed updater. It accepts only a clean published
-source binding and private store, refuses development rows or a non-extended corpus, retains the
-complete denominator, fits selected arms only, publishes an immutable model record compatible with
-the existing bounded-player loader, and can safely finish publication after interruption because
-fitting has no controller effects. After green exact-main CI, run the updater once from the protected
-checkout, publish only aggregate telemetry, then point fresh shadow development at that exact model.
-The next gameplay gate remains prospective lineage-disjoint Red development; no same-bank pair,
-Crystal execution, sealed test, or authority promotion is opened by lower training error.
+This is real model fitting, but it is not generalization evidence. The exact model remains shadow-
+only. The next gate is strict action-free loading into bounded-player scoring plus concrete supply
+under the already-published purpose-built capture contract: freeze ten train and five development
+short-scenario setup slots, tolerate at most two/one setup losses, and require at least eight train
+and four lineage-disjoint untouched development roots across the required semantic families. Do
+not rebuild the shared contract, replay pairs 004–006, select roots from outcomes, open Crystal, or
+grant authority. Fit only the new train outcomes and compare once on untouched development.
 
 ## Current checkpoint: bounded multi-decision acquisition works; new roots are next
 
