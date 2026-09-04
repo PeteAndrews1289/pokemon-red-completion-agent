@@ -43,6 +43,7 @@ from pokemon_red_completion.red_living_dex_claim_first_campaign import (
 )
 from pokemon_red_completion.red_living_dex_clustered_development_runner import (
     RedLivingDexClusteredDevelopmentSelection,
+    RedLivingDexDevelopmentPlanBinding,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
     RedLivingDexClusteredTrainPlanBinding,
@@ -57,6 +58,9 @@ from pokemon_red_completion.red_living_dex_development_setup_journal import (
     RedLivingDexDevelopmentSetupReceipt,
     RedLivingDexDevelopmentSetupResolver,
     run_red_living_dex_development_setup,
+)
+from pokemon_red_completion.red_living_dex_development_supplement_reader import (
+    RedLivingDexDevelopmentSupplementBinding,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
@@ -113,9 +117,7 @@ class RedLivingDexClusteredDevelopmentPreflightReceipt:
             "partition": "development",
             "private_identity_fields": 0,
             "private_path_fields": 0,
-            "schema": (
-                "pokemon.red.living-dex-clustered-development-preflight.v1"
-            ),
+            "schema": ("pokemon.red.living-dex-clustered-development-preflight.v1"),
             "teacher_queries": 0,
             "training_targets_emitted": 0,
         }
@@ -157,11 +159,7 @@ class RedLivingDexClusteredDevelopmentReceipt:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "development": (
-                None
-                if self.development is None
-                else self.development.public_dict()
-            ),
+            "development": (None if self.development is None else self.development.public_dict()),
             "development_outcomes_opened": int(self.development is not None),
             "model_fits": 0,
             "model_predictions": int(self.development is not None),
@@ -178,7 +176,7 @@ class RedLivingDexClusteredDevelopmentReceipt:
 def run_red_living_dex_clustered_development_assignment(
     *,
     selection: RedLivingDexClusteredDevelopmentSelection,
-    binding: RedLivingDexClusteredTrainPlanBinding,
+    binding: RedLivingDexDevelopmentPlanBinding,
     store: PrivateArtifactRoot,
     plan_loader: Callable[[], Mapping[str, object]],
     root: RedLivingDexAuthenticatedSetupRoot,
@@ -201,7 +199,9 @@ def run_red_living_dex_clustered_development_assignment(
     ):
         raise TypeError("Red development execution needs a held selection")
     selection.__post_init__()
-    if not isinstance(binding, RedLivingDexClusteredTrainPlanBinding):
+    if not isinstance(
+        binding, (RedLivingDexClusteredTrainPlanBinding, RedLivingDexDevelopmentSupplementBinding)
+    ):
         raise TypeError("Red development execution needs its plan binding")
     binding.__post_init__()
     if not isinstance(store, PrivateArtifactRoot):
@@ -230,7 +230,10 @@ def run_red_living_dex_clustered_development_assignment(
         raise TypeError("Red development execution needs an option model")
     model.__post_init__()
     expected_model = _require_sha256(expected_model_sha256, "model")
-    if model.model_sha256 != expected_model:
+    if model.model_sha256 != expected_model or (
+        isinstance(binding, RedLivingDexDevelopmentSupplementBinding)
+        and expected_model != binding.model_sha256
+    ):
         raise RedLivingDexClusteredDevelopmentExecutionError(
             "Red development model identity differs"
         )
@@ -303,9 +306,7 @@ def run_red_living_dex_clustered_development_assignment(
         setup_terminal_sha256=canonical_sha256(setup.terminal.private_dict()),
         setup_pair_claim_sha256=setup_pair.claim_sha256,
         causal_source_commit=outer_execution_identity.source_commit,
-        causal_runner_sha256=(
-            RED_LIVING_DEX_CLUSTERED_DEVELOPMENT_EXECUTION_SHA256
-        ),
+        causal_runner_sha256=(RED_LIVING_DEX_CLUSTERED_DEVELOPMENT_EXECUTION_SHA256),
         upstream_lineage_sha256=selection.upstream_lineage_sha256,
     )
     development = execute_living_dex_policy_development(
@@ -327,7 +328,7 @@ def run_red_living_dex_clustered_development_assignment(
 def preflight_red_living_dex_clustered_development_assignment(
     *,
     selection: RedLivingDexClusteredDevelopmentSelection,
-    binding: RedLivingDexClusteredTrainPlanBinding,
+    binding: RedLivingDexDevelopmentPlanBinding,
     plan_document: Mapping[str, object],
     root: RedLivingDexAuthenticatedSetupRoot,
     producer_execution_identity: RedLivingDexSetupExecutionIdentity,
@@ -345,7 +346,9 @@ def preflight_red_living_dex_clustered_development_assignment(
     ):
         raise TypeError("Red development preflight needs a held selection")
     selection.__post_init__()
-    if not isinstance(binding, RedLivingDexClusteredTrainPlanBinding):
+    if not isinstance(
+        binding, (RedLivingDexClusteredTrainPlanBinding, RedLivingDexDevelopmentSupplementBinding)
+    ):
         raise TypeError("Red development preflight needs its plan binding")
     binding.__post_init__()
     if not isinstance(plan_document, Mapping):
@@ -370,7 +373,10 @@ def preflight_red_living_dex_clustered_development_assignment(
         raise TypeError("Red development preflight needs an option model")
     model.__post_init__()
     expected_model = _require_sha256(expected_model_sha256, "model")
-    if model.model_sha256 != expected_model:
+    if model.model_sha256 != expected_model or (
+        isinstance(binding, RedLivingDexDevelopmentSupplementBinding)
+        and expected_model != binding.model_sha256
+    ):
         raise RedLivingDexClusteredDevelopmentExecutionError(
             "Red development model identity differs"
         )
@@ -415,27 +421,21 @@ def preflight_red_living_dex_clustered_development_assignment(
 def _require_outer_join(
     selection: RedLivingDexClusteredDevelopmentSelection,
     *,
-    binding: RedLivingDexClusteredTrainPlanBinding,
+    binding: RedLivingDexDevelopmentPlanBinding,
     producer_execution_identity: RedLivingDexSetupExecutionIdentity,
     outer_execution_identity: ClaimFirstExecutionIdentity,
 ) -> None:
     if (
-        outer_execution_identity.producer_plan_sha256
-        != selection.private_plan_sha256
-        or outer_execution_identity.producer_private_plan_sha256
-        != selection.private_plan_sha256
-        or outer_execution_identity.producer_manifest_sha256
-        != binding.plan_manifest_sha256
+        outer_execution_identity.producer_plan_sha256 != selection.private_plan_sha256
+        or outer_execution_identity.producer_private_plan_sha256 != selection.private_plan_sha256
+        or outer_execution_identity.producer_manifest_sha256 != binding.plan_manifest_sha256
         or outer_execution_identity.producer_execution_identity_sha256
         != producer_execution_identity.identity_sha256
         or outer_execution_identity.slot_sha256 != selection.slot_sha256
         or outer_execution_identity.recipe_sha256 != selection.recipe_sha256
-        or outer_execution_identity.logical_root_sha256
-        != selection.logical_root_sha256
-        or outer_execution_identity.physical_root_sha256
-        != selection.physical_root_sha256
-        or outer_execution_identity.runner_sha256
-        != RED_LIVING_DEX_DEVELOPMENT_SETUP_RUNNER_SHA256
+        or outer_execution_identity.logical_root_sha256 != selection.logical_root_sha256
+        or outer_execution_identity.physical_root_sha256 != selection.physical_root_sha256
+        or outer_execution_identity.runner_sha256 != RED_LIVING_DEX_DEVELOPMENT_SETUP_RUNNER_SHA256
     ):
         raise RedLivingDexClusteredDevelopmentExecutionError(
             "Red development outer identity differs"
@@ -452,9 +452,7 @@ def _require_root_join(
         or selection.root_state_sha256 != root.state_sha256
         or selection.root_envelope_sha256 != root.envelope_sha256
     ):
-        raise RedLivingDexClusteredDevelopmentExecutionError(
-            "Red development root differs"
-        )
+        raise RedLivingDexClusteredDevelopmentExecutionError("Red development root differs")
 
 
 def _require_resolved_runtime(
@@ -476,9 +474,7 @@ def _require_resolved_runtime(
 
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedLivingDexClusteredDevelopmentExecutionError(
-            f"Red development {subject} differs"
-        )
+        raise RedLivingDexClusteredDevelopmentExecutionError(f"Red development {subject} differs")
     return value
 
 

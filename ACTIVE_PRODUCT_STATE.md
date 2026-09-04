@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Supply is frozen. Implement the strict development-only supplement reader/admission adapter and concrete five-root preflight, then run admitted bounded model-selected development choices through the existing journals. Do not repeat the census/freeze or fabricate historical train rows.
+- Next decision: The supplement adapter is implemented and rehearsed. Finish the concrete five-root command and production resolver check, obtain focused review and zero-effect preflight, then run bounded model-selected development choices through the existing journals. Do not repeat the census/freeze or fabricate train rows.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Rehearse a strict reader/admission adapter for the already-frozen zero-train supplement, then preflight its three roots plus the two preserved historical roots against the exact eighteen-example model and claim ledger with zero predictions, outcomes, claims or controller input. Do not repeat the full-bank census or freeze. |
+| Cheapest falsifier | Wire the qualified supplement reader to a concrete five-root command and rehearse the production resolver, then preflight the three supplement roots plus two preserved historical roots against the exact eighteen-example model without predictions, outcomes, claims or controller input. Do not repeat the census or freeze. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-supplement-frozen-reorientation-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json)
+**2026-09-04-development-supplement-adapter-reorientation-v1** · status **active** · evidence [qualification](docs/evidence/red-development-supplement-adapter-rehearsal-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The repair and frozen supply unblock a real independent test of portable living-Pokedex objective selection. The next work connects those situations to learned decisions; Crystal remains deferred while shared semantic interfaces are preserved. |
-| Learning output | No learning counter changed. Main 7d654cdf passed both CI runs; the census proved 429 of 429 bindings within 834 seconds and the single subsequent freeze stored/reopened three new development roots in 788.71 seconds. The two preserved plus three new roots retain seven-kind coverage after one new setup censor. |
-| Authority delta | No authority changed. The eighteen-example model remains shadow-only. The successful census and three-root freeze recorded zero predictions, claims, outcomes, actions, frames, fits and teachers. Bounded model-selected development play still requires a working supplement admission path. |
+| Learning output | No learning counter changed. Three of three actual stored supplement rows authenticate under separate shared-plan and complete Red-plan commitments. A ROM-free positive-path test reaches actual model scoring, the selected-option journal and recovery without rerunning a runtime. |
+| Authority delta | No authority changed. The eighteen-example model remains shadow-only. The positive-path test exercises actual scoring and terminal recovery in a simulated environment only; the real supplement metadata check opened no state files, predictions, outcomes, claims or gameplay. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | Supply is now frozen. The audit found that the existing clustered development consumer requires a held suffix of a mixed schedule and cannot parse the new development-only supplement. A strict reader/admission adapter and concrete executable five-root preflight remain unfinished. |
+| Blocker | The strict supplement reader and shared admission path are implemented. The concrete five-root command, full source/model/context join and production resolver rehearsal remain unfinished; no live readiness is claimed. |
 | Decision | Stop supply diagnosis. Reuse the existing development setup journal and model-selected outcome executor behind a strict supplement reader/admission interface; never fabricate train rows. Qualify and preflight the declared five roots, then obtain bounded model-selected development outcomes without refitting on them. |
-| Next session | Implement the missing supplement reader/admission adapter and five-root preflight, reuse the existing journals and executor, and reach observable model-selected development behavior. Do not start another supply census, freeze or diagnostic-only expansion. |
-| Next falsifier | A strict supplement-reader rehearsal and executable five-root preflight must authenticate the exact plan, recipes, model, contexts, source and disjoint unclaimed lineages without gameplay or predictions. Reject zero-train plans forced through the historical mixed-schedule parser. Then retain factual outcomes from admitted bounded model choices. |
+| Next session | Implement the concrete five-root command using the completed reader and existing journals. Rehearse production integration, obtain focused independent review, preflight the declared roots and reach observable model-selected development behavior. Do not repeat the census or freeze. |
+| Next falsifier | A production-resolver rehearsal and concrete five-root preflight must authenticate the exact plans, recipes, model record, context files, source and disjoint unclaimed lineages without gameplay or predictions. Then retain factual outcomes from admitted bounded model choices. |
 | Stop condition | Stop before predictions, claims or controller input until the supplement admission path is qualified and the five-root preflight passes. Stop on plan/model/context/source mismatch, train crossover, fabricated train rows, private output, consumed-root reuse, teacher fallback or a second diagnostic-only expansion. Never refit on development, repeat the completed freeze, or replay pairs 004, 005 or 006. |
 
 ### Stop conditions

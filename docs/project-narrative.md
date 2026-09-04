@@ -1,5 +1,15 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## Latest checkpoint: supplement adapter and positive-path rehearsal
+
+The development-only reader now authenticates all three real stored supplement rows. Its shared
+admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
+This is engineering evidence, not live gameplay or new learning. The concrete five-root command
+and cartridge preflight remain unfinished; no prospective root has been consumed.
+See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
+and the remaining execution sequence. In particular, the shared plan digest and complete Red
+plan digest are different identities. Do not repeat the completed census or freeze.
+
 ## September 4: the binding gate finally produced a usable plan
 
 The performance repair passed both hosted suites, each with 6,691 passing tests, and merged as

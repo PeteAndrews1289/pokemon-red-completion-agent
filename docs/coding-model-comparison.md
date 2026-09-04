@@ -18,6 +18,41 @@ inherited work, machine/runtime differences and CI waits. Faster generated text,
 more documentation alone do not establish better value. API prices do not establish subscription
 usage debits. No account quota or billing data is inferred from elapsed time.
 
+## 2026-09-04: supplement-consumer implementation session
+
+Starting revision: `52cb0dcc`. The preceding GPT-6 session had already identified this adapter
+gap, so this session is implementation rather than an independently discovered diagnosis.
+
+The new explicit supplement binding and strict reader share development admission and journals
+with the historical held-suffix path. The real stored three-row plan authenticates without
+opening state files, a ROM, predictions or outcomes. A ROM-free positive-path test reaches the
+actual scorer and selected-outcome journal and recovers without reopening a runtime. The concrete
+five-root production command remains unfinished; no real learning progress is claimed.
+
+Corrections: the initial module import used an incorrect guessed filename; several exploratory
+file lookups also missed. One test confused a coordination lock with a claim. The positive-path
+fixture needed correction for authentic root/recipe pairing, occupied storage and scarce supplies;
+otherwise actual providers correctly rejected its offers. A temporary diagnostic initially used
+a symlinked system temporary path and was corrected to its resolved path. The real-record check
+also corrected the inherited conflation of shared-plan and complete Red-plan digests.
+
+The first focused batch passed 36 tests and failed one lock assertion in 151.03 seconds.
+The successful full positive-path test passed in 30.00 seconds after fixture corrections.
+Whole-source typing passed across 365 modules and repository lint passed at this checkpoint.
+The final regression batch passed 212 tests in 272.94 seconds; a strengthened positive-path
+test separately passed in 30.08 seconds. One additional test correction compared a stored JSON
+record with the JSON-normalized fixture rather than expecting in-memory tuples to survive as
+tuples. A guessed registry-loader function name also failed before being replaced with the
+existing parser. No hosted failure is inferred from these local iterations.
+These timings are not matched GPT-5.6 comparisons. Exact assistant tokens, account debit,
+reasoning setting and Fast-mode state remain unknown.
+
+Judgment: do not yet claim GPT-6 is better value. This session demonstrates useful integration
+work but also rework and remaining production assembly. Use a focused two-lane independent audit
+before consuming the five development cases, not a large whole-repository review. Official
+[model comparison documentation](https://developers.openai.com/api/docs/models/compare) is product
+reference material, not evidence of this project's subscription cost or measured speed.
+
 ## 2026-09-04: GPT-5.6 Sol handoff to GPT-6
 
 **Inherited evidence:** PR 211 fixed the mixed-partition binding defect, passed 6,688 local tests,
