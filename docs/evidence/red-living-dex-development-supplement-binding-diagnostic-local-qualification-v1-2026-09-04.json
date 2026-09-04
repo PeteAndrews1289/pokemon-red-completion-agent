@@ -1,0 +1,65 @@
+{
+  "claim_boundary": {
+    "supported": "The Red development-supplement binding diagnostic is locally qualified. It enumerates every shared supplement that already satisfies the fixed capacity policy, passes each through the freezer's extracted production binding constructor, and publishes only aggregate acceptance and fixed rejection-category counts. It cannot choose or persist a plan or release behavior.",
+    "unsupported": [
+      "production_binding_census_completed",
+      "binding_failure_substage_identified",
+      "binding_defect_repaired",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "gates": {
+    "focused_evidence_product_and_protocol_tests": {
+      "passed": 192,
+      "status": "passed"
+    },
+    "full_non_integration_suite": {
+      "deselected": 3,
+      "passed": 6687,
+      "skipped": 1,
+      "status": "passed",
+      "xfailed": 1
+    },
+    "generated_registries_reproduced": 4,
+    "mypy_source_files": 364,
+    "product_focus": "passed",
+    "ruff": "passed"
+  },
+  "implementation": {
+    "binding_result_fields": [
+      "binding_ready",
+      "binding_ready_supplements",
+      "binding_failure_counts"
+    ],
+    "binding_schema": "pokemon.red.living-dex-development-supplement-binding-capacity.v1",
+    "shared_constructor": "The freezer and diagnostic invoke the same extracted Red supplement binding function."
+  },
+  "next_gate": "Publish the binding diagnostic, require green pull-request and exact-main CI, then perform one protected aggregate-only binding census. Do not retry the terminal freeze.",
+  "schema": "pokemon.red.living-dex-development-supplement-binding-diagnostic-local-qualification.v1",
+  "source": {
+    "base_commit": "61b5cc4b0bbba394a5bb312a66b573302e389219",
+    "working_source_bundle_sha256": "abecb247acf8b8023c78182ebebde7681e34e1d7b41d6df8d9b16403dab16dda"
+  },
+  "status": "locally_qualified_awaiting_publication",
+  "zero_effect_design": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  }
+}

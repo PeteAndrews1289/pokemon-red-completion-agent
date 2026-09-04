@@ -35,7 +35,8 @@ from pokemon_red_completion.red_living_dex_causal_inventory import (
     enumerate_red_living_dex_causal_capabilities,
 )
 from pokemon_red_completion.red_living_dex_development_supplement_plan import (
-    audit_red_living_dex_development_supplement_capacity,
+    RedLivingDexDevelopmentSupplementBindings,
+    audit_red_living_dex_development_supplement_binding_capacity,
 )
 from pokemon_red_completion.red_living_dex_development_supply import (
     inventory_red_living_dex_development_supply,
@@ -57,7 +58,7 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
     load_strategic_navigation_scenario_registry,
 )
 
-RESULT_SCHEMA = "pokemon.red.living-dex-development-supplement-capacity-audit-result.v1"
+RESULT_SCHEMA = "pokemon.red.living-dex-development-supplement-binding-capacity-audit-result.v1"
 FAILURE_SCHEMA = "pokemon.red.living-dex-development-supplement-capacity-audit-failure.v1"
 SUPPLY_AUDIT_EVIDENCE_PATH = (
     PROJECT_ROOT / "docs/evidence/red-living-dex-development-supply-audit-v1-2026-09-04.json"
@@ -112,8 +113,8 @@ def main(argv: list[str] | None = None) -> int:
             rom_sha256,
             rom_bytes,
             contexts,
-            _catalog_sha256,
-            _context_plan_sha256,
+            catalog_sha256,
+            context_plan_sha256,
         ) = _support("_authenticate_inputs")(args, source_commit, source_bundle)
         state.authenticated_contexts = len(contexts)
         stage = "private_namespace_authentication"
@@ -154,10 +155,30 @@ def main(argv: list[str] | None = None) -> int:
                 effects_before=effects_before,
                 effects_after=effects_after,
             )
-            stage = "capacity_diagnosis"
-            result = audit_red_living_dex_development_supplement_capacity(
+            contexts_by_root = {
+                item.root_consumption_sha256: item.context_identity_sha256 for item in contexts
+            }
+            if len(contexts_by_root) != len(contexts):
+                raise DevelopmentSupplementCapacityAuditError("private_assignment_join")
+            bindings = RedLivingDexDevelopmentSupplementBindings(
+                source_commit=source_commit,
+                source_bundle_sha256=source_bundle,
+                rom_sha256=rom_sha256,
+                goal_registry_sha256=args.expected_registry_sha256,
+                route_registry_sha256=route_registry.registry_sha256,
+                context_catalog_sha256=catalog_sha256,
+                context_plan_sha256=context_plan_sha256,
+                runtime_identity_sha256=runtime.sha256,
+                supply_audit_evidence_sha256=SUPPLY_AUDIT_EVIDENCE_SHA256,
+                model_sha256=args.expected_model_sha256,
+                model_record_sha256=args.expected_model_record_sha256,
+            )
+            stage = "binding_capacity_diagnosis"
+            result = audit_red_living_dex_development_supplement_binding_capacity(
                 capabilities,
                 supply=supply,
+                context_identities=contexts_by_root,
+                bindings=bindings,
             )
             stage = "protected_input_integrity"
             _support("_require_integrity")(

@@ -1,0 +1,66 @@
+{
+  "claim_boundary": {
+    "supported": "One protected exact-main aggregate census authenticated 81 Red contexts and found 13 eligible physical roots across 4 families and 4 locations. The fixed three-root policy has 286 candidate root triples, 1,898 scenario combinations, and 429 fully feasible supplements. Insufficient supply and policy-level family, location, option-kind, and censor-safe coverage are therefore ruled out as the cause of the earlier freeze failure.",
+    "unsupported": [
+      "binding_failure_substage_identified",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "operational_history": {
+    "corrected_invocation": "A clean checkout on a different storage device satisfied the existing private-root isolation guard and completed the census.",
+    "initial_invocation": "A clean checkout placed on the same storage device as the private root failed closed at private_namespace_authentication before private state access.",
+    "initial_zero_effects": true
+  },
+  "result": {
+    "authenticated_contexts": 81,
+    "candidate_root_sets": 286,
+    "candidate_scenario_combinations": 1898,
+    "eligible_capabilities": 25,
+    "eligible_families": 4,
+    "eligible_lineages": 13,
+    "eligible_locations": 4,
+    "eligible_physical_roots": 13,
+    "feasible_supplements": 429,
+    "option_kind_root_counts": {
+      "acquire": 10,
+      "develop": 9,
+      "evolve": 6,
+      "explore": 10,
+      "manage_storage": 12,
+      "resupply": 9,
+      "unlock_access": 1
+    },
+    "selection_ready": true,
+    "status": "supplement_capacity_ready"
+  },
+  "schema": "pokemon.red.living-dex-development-supplement-capacity-result-evidence.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33887050869,
+    "source_bundle_sha256": "7d6bd2a2bfd37e0ef7748cb2f6eaacc401cb0df7ff3c7e7ff4206a42e3b3b1ad",
+    "source_commit": "61b5cc4b0bbba394a5bb312a66b573302e389219"
+  },
+  "status": "capacity_ready_binding_path_discrepancy_open",
+  "zero_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  }
+}

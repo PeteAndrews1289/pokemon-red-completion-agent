@@ -86,13 +86,13 @@ def test_main_rehearses_action_free_aggregate_census(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    capabilities, supply, _contexts, bindings = _inputs()
+    capabilities, supply, input_contexts, bindings = _inputs()
     contexts = tuple(
         SimpleNamespace(
             root_consumption_sha256=item.root.root.root_consumption_sha256,
-            context_identity_sha256=f"context-{index}",
+            context_identity_sha256=input_contexts[item.root.root.root_consumption_sha256],
         )
-        for index, item in enumerate(capabilities)
+        for item in capabilities
     )
     integrity_selected: tuple[object, ...] = ()
 
@@ -184,6 +184,9 @@ def test_main_rehearses_action_free_aggregate_census(
     assert len(integrity_selected) == len(capabilities)
     assert result["selection_ready"] is True
     assert result["feasible_supplements"] > 0
+    assert result["binding_ready"] is True
+    assert result["binding_ready_supplements"] == result["feasible_supplements"]
+    assert result["binding_failure_counts"] == {}
     assert result["controller_actions"] == 0
     assert result["model_predictions"] == 0
     assert result["root_claims"] == 0

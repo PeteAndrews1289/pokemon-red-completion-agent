@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: 429 legal envelopes point to one broken doorway
+
+**Visual:** The aggregate counter fills: **13 ROOTS · 25 SCENARIOS · 4 FAMILIES · 4 LOCATIONS ·
+429 LEGAL SUPPLEMENTS**. Keep **ACTIONS 0 · FRAMES 0** fixed at the bottom.
+
+**Voiceover:** “The missing supply was not missing. Hundreds of three-root sets met every rule,
+including the one-failure safety margin. Creating more gameplay would have treated the symptom.”
+
+**Visual:** Move one generic legal envelope toward a doorway labelled
+**TITLE-NEUTRAL PLAN → RED CONTEXT + RECIPE**. Let the doorway jam, then fan all 429 anonymous
+envelopes through a transparent test gauge that shows only rejection categories.
+
+**Voiceover:** “The bug was later: translating a portable strategic situation back into an exact
+Red setup. The next test uses the same binding code across every legal set without selecting one or
+touching the game.”
+
 ## New scene: the envelope stays empty—and the counter explains why
 
 **Visual:** The three blank cards approach the sealed envelope, but a red
