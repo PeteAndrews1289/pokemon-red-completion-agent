@@ -126,12 +126,18 @@ _CALIBRATION_PLAYER_PARTIAL_RESULT_PATH = (
 _CALIBRATION_PLAYER_PARTIAL_RESULT_SHA256 = (
     "aebd493ee22397c8833ec2894c6ede0eabe15dac093f9c2edbfae395eb7c0d74"
 )
+_CALIBRATION_PLAYER_RECOVERY_RESULT_PATH = (
+    "docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json"
+)
+_CALIBRATION_PLAYER_RECOVERY_RESULT_SHA256 = (
+    "92a130160f3b2473c411cbae79f440eb9b31fd8f871daa52297186757fb2a923"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
-    "composition_attempts": 5,
-    "development_episode_attempts": 22,
+    "composition_attempts": 6,
+    "development_episode_attempts": 24,
     "model_fits": 10,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
@@ -140,7 +146,7 @@ _PROJECTED_COUNTERS = {
     "synthetic_rootless_unseen_comparisons": 1,
     "transfer_results": 0,
     "unseen_comparisons": 9,
-    "verified_composition_episodes": 3,
+    "verified_composition_episodes": 4,
     "verified_outcome_examples": 61,
 }
 
@@ -1010,7 +1016,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 9:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 10:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1251,6 +1257,34 @@ def _validate_projected_counters(
     if not isinstance(partial_player, Mapping):
         raise ProductFocusError("calibration player partial evidence is invalid")
     _validate_calibration_player_partial_projection(partial_player)
+    recovery_player_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 9],
+        subject="projected calibration player recovery evidence",
+    )
+    if recovery_player_evidence != {
+        "kind": "verified_composition_episode",
+        "path": _CALIBRATION_PLAYER_RECOVERY_RESULT_PATH,
+        "sha256": _CALIBRATION_PLAYER_RECOVERY_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    recovery_player_path = (
+        root / _CALIBRATION_PLAYER_RECOVERY_RESULT_PATH
+    ).resolve()
+    try:
+        recovery_player = json.loads(
+            recovery_player_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError(
+            "calibration player recovery evidence is invalid"
+        ) from None
+    if not isinstance(recovery_player, Mapping):
+        raise ProductFocusError("calibration player recovery evidence is invalid")
+    _validate_calibration_player_recovery_projection(recovery_player)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1745,6 +1779,148 @@ def _validate_calibration_player_partial_projection(
         "teacher_queries": 0,
     }:
         raise ProductFocusError("calibration player partial boundary differs")
+
+
+def _validate_calibration_player_recovery_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project pair 006 as verified same-bank composition, never promotion."""
+
+    if (
+        receipt.get("schema") != "pokemon.red.calibration-player-pair-result.v2"
+        or receipt.get("status")
+        != "complete_equivalent_verified_progress_and_typed_stop"
+    ):
+        raise ProductFocusError("calibration player recovery status differs")
+    comparison = _mapping(
+        receipt,
+        "comparison",
+        subject="calibration player recovery evidence",
+    )
+    if {
+        "pair_id": comparison.get("pair_id"),
+        "verdict": comparison.get("verdict"),
+        "decision_basis": comparison.get("decision_basis"),
+        "authority_disagreement": comparison.get("authority_disagreement"),
+        "model_strategic_decisions": comparison.get("model_strategic_decisions"),
+        "living_collection_regressions": comparison.get(
+            "living_collection_regressions"
+        ),
+        "result_file_sha256": comparison.get("result_file_sha256"),
+    } != {
+        "pair_id": "red-calibration-player-pair-006",
+        "verdict": "equivalent",
+        "decision_basis": "equal_progress_and_cost",
+        "authority_disagreement": False,
+        "model_strategic_decisions": 3,
+        "living_collection_regressions": 0,
+        "result_file_sha256": (
+            "00c282e939cc04f5114584f4aca5a439217cef3a1031a4574651b2911bb5ebd8"
+        ),
+    }:
+        raise ProductFocusError("calibration player recovery comparison differs")
+    arms = _mapping(receipt, "arms", subject="calibration player recovery evidence")
+    expected_decisions = [
+        ("acquire_species", "succeeded", None, 88, 8124),
+        ("acquire_species", "succeeded", None, 242, 15168),
+        ("acquire_species", "failed", "binding_failed", 178, 7056),
+    ]
+    for key, authority, manifest in (
+        (
+            "calibration_model",
+            "multi-goal-calibration-shadow",
+            "eaf46e469df341559832fdb8281f6d6a0210b1ba1378c315430f8274a3018b97",
+        ),
+        (
+            "baseline",
+            "completion-first-teacher",
+            "3d5e118cf5f8529c87adff81889ffdf1d73b44616cfb1ece1bd359cfbfa5c7f9",
+        ),
+    ):
+        arm = _mapping(arms, key, subject="calibration player recovery arm")
+        if {
+            "authority_id": arm.get("authority_id"),
+            "authority_decisions": arm.get("authority_decisions"),
+            "forced_singleton_steps": arm.get("forced_singleton_steps"),
+            "actions": arm.get("actions"),
+            "frames": arm.get("frames"),
+            "stop_reason": arm.get("stop_reason"),
+            "living_species_gained": arm.get("living_species_gained"),
+            "registered_species_gained": arm.get("registered_species_gained"),
+            "required_specimens_reduced": arm.get("required_specimens_reduced"),
+            "retained_captures_gained": arm.get("retained_captures_gained"),
+            "trajectory_manifest_sha256": arm.get("trajectory_manifest_sha256"),
+        } != {
+            "authority_id": authority,
+            "authority_decisions": 3,
+            "forced_singleton_steps": 0,
+            "actions": 508,
+            "frames": 30348,
+            "stop_reason": "failure_context_unchanged",
+            "living_species_gained": 1,
+            "registered_species_gained": 1,
+            "required_specimens_reduced": 2,
+            "retained_captures_gained": 2,
+            "trajectory_manifest_sha256": manifest,
+        }:
+            raise ProductFocusError("calibration player recovery arm differs")
+        decisions = _sequence(
+            arm,
+            "decisions",
+            subject="calibration player recovery arm",
+        )
+        if [
+            (
+                _mapping_value(
+                    item, subject="calibration player recovery decision"
+                ).get("goal"),
+                _mapping_value(
+                    item, subject="calibration player recovery decision"
+                ).get("status"),
+                _mapping_value(
+                    item, subject="calibration player recovery decision"
+                ).get("failure_reason"),
+                _mapping_value(
+                    item, subject="calibration player recovery decision"
+                ).get("actions"),
+                _mapping_value(
+                    item, subject="calibration player recovery decision"
+                ).get("frames"),
+            )
+            for item in decisions
+        ] != expected_decisions:
+            raise ProductFocusError("calibration player recovery decisions differ")
+    counters = _mapping(
+        receipt,
+        "counter_treatment",
+        subject="calibration player recovery evidence",
+    )
+    if counters != {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 0,
+        "composition_attempts_added": 1,
+        "development_episode_attempts_added": 2,
+        "model_fits_added": 0,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_composition_episodes_added": 1,
+    }:
+        raise ProductFocusError("calibration player recovery counters differ")
+    scope = _mapping(
+        receipt,
+        "scope",
+        subject="calibration player recovery evidence",
+    )
+    if scope != {
+        "crystal_accesses": 0,
+        "full_game_replays": 0,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "sealed_red_accesses": 0,
+        "teacher_fallbacks": 0,
+        "teacher_queries": 0,
+    }:
+        raise ProductFocusError("calibration player recovery boundary differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:

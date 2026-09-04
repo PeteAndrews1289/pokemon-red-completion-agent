@@ -1,6 +1,20 @@
 # Current agent handoffs
 
-## Current override: Codex owns bounded binding-failure retention and a fresh pair
+## Current override: Codex owns the prospective Red curriculum boundary
+
+Exact main `7133d171` passed CI `33848221585`. Pair 006 then completed both arms: two verified
+acquisitions followed by a typed `binding_failed` and clean unchanged-context stop, at 508 actions /
+30,348 frames per arm. Each gained two retained specimens and one living/registered species. The
+comparison is equivalent; no target, fit, promotion or transfer claim was added. Pair 006 is
+consumed and may not replay.
+
+Codex now owns a title-neutral prospective context-capture and partition contract for at least eight
+train and four untouched development roots. Physical state bytes and upstream episodes must be
+disjoint across partitions, root selection must precede outcomes and predictions, train must span at
+least four goal families, and development at least three. Same-bank rehearsal is closed; Crystal,
+sealed Red and full replay remain deferred.
+
+## Previous override: Codex owns bounded binding-failure retention and a fresh pair
 
 The forced-bridge repair is published as exact main `65246348` under green CI `33844066128`.
 Pair 005 is consumed: the fitted manager made three genuine `acquire_species` choices; two succeeded
