@@ -68,6 +68,8 @@ from pokemon_red_completion.red_living_dex_runtime_contract import (
     RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
 )
 from pokemon_red_completion.red_living_dex_setup_admission import (
+    RedLivingDexSetupAdmissionError,
+    authenticate_frozen_red_living_dex_clustered_development_slot,
     authenticate_frozen_red_living_dex_clustered_train_slot,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
@@ -345,6 +347,49 @@ def test_successor_policy_addresses_ordinal_fifteen_but_not_development() -> Non
             plan.private_dict(),
             16,
             binding=binding,
+        )
+
+
+def test_development_admission_addresses_only_the_held_suffix() -> None:
+    plan, binding = _successor_clustered_fixture()
+    identity = _identity()
+    capability = plan.assignments[binding.train_scenarios].capability
+
+    frozen = authenticate_frozen_red_living_dex_clustered_development_slot(
+        plan.private_dict(),
+        expected_private_plan_sha256=plan.private_plan_sha256,
+        ordinal=binding.train_scenarios,
+        root=capability.root.root,
+        producer_execution_identity=identity,
+        expected_runtime_identity_sha256=plan.bindings.runtime_identity_sha256,
+    )
+
+    assert frozen.ordinal == binding.train_scenarios
+    assert frozen.recipe_document()["partition"] == "development"
+    frozen.reauthenticate(plan.private_dict(), root=capability.root.root)
+    with pytest.raises(
+        RedLivingDexSetupAdmissionError,
+        match="producer binding differs",
+    ):
+        authenticate_frozen_red_living_dex_clustered_development_slot(
+            plan.private_dict(),
+            expected_private_plan_sha256=plan.private_plan_sha256,
+            ordinal=binding.train_scenarios - 1,
+            root=plan.assignments[binding.train_scenarios - 1].capability.root.root,
+            producer_execution_identity=identity,
+            expected_runtime_identity_sha256=plan.bindings.runtime_identity_sha256,
+        )
+    with pytest.raises(
+        RedLivingDexSetupAdmissionError,
+        match="producer binding differs",
+    ):
+        authenticate_frozen_red_living_dex_clustered_train_slot(
+            plan.private_dict(),
+            expected_private_plan_sha256=plan.private_plan_sha256,
+            ordinal=binding.train_scenarios,
+            root=capability.root.root,
+            producer_execution_identity=identity,
+            expected_runtime_identity_sha256=plan.bindings.runtime_identity_sha256,
         )
 
 

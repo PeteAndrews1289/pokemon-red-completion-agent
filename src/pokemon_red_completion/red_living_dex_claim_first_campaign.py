@@ -46,6 +46,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_setup_admission import (
     FrozenRedLivingDexSetupSlot,
     RedLivingDexSetupAdmissionError,
+    authenticate_frozen_red_living_dex_clustered_development_slot,
     authenticate_frozen_red_living_dex_clustered_train_slot,
     authenticate_frozen_red_living_dex_setup_slot,
 )
@@ -313,6 +314,7 @@ def run_red_living_dex_claim_first_setup_slot(
     meter: RedLivingDexSetupEffectMeter,
     claim_registry: Path,
     producer_execution_identity: RedLivingDexSetupExecutionIdentity | None = None,
+    clustered_partition: str = "train",
     failpoint: RedLivingDexClaimFirstFailpoint | None = None,
 ) -> RedLivingDexClaimFirstReceipt:
     """Execute or recover exactly one frozen slot without sibling preflight."""
@@ -335,6 +337,10 @@ def run_red_living_dex_claim_first_setup_slot(
         raise TypeError("claim-first setup needs an account claim registry")
     if failpoint is not None and not callable(failpoint):
         raise TypeError("claim-first setup failpoint must be callable")
+    if clustered_partition not in {"train", "development"}:
+        raise RedLivingDexClaimFirstCampaignError(
+            "claim-first clustered partition differs"
+        )
     try:
         registry = open_fixed_account_claim_registry(claim_registry)
     except FreshCompositionQualificationError as error:
@@ -342,6 +348,10 @@ def run_red_living_dex_claim_first_setup_slot(
 
     plan_document = plan_loader()
     if producer_execution_identity is None:
+        if clustered_partition != "train":
+            raise RedLivingDexClaimFirstCampaignError(
+                "legacy setup cannot address development"
+            )
         frozen = authenticate_frozen_red_living_dex_setup_slot(
             plan_document,
             expected_plan_sha256=expected_producer_plan_sha256,
@@ -351,7 +361,12 @@ def run_red_living_dex_claim_first_setup_slot(
     else:
         producer_execution_identity.__post_init__()
         runtime_identity_sha256 = plan_document.get("runtime_identity_sha256")
-        frozen = authenticate_frozen_red_living_dex_clustered_train_slot(
+        authenticate_clustered = (
+            authenticate_frozen_red_living_dex_clustered_development_slot
+            if clustered_partition == "development"
+            else authenticate_frozen_red_living_dex_clustered_train_slot
+        )
+        frozen = authenticate_clustered(
             plan_document,
             expected_private_plan_sha256=expected_producer_plan_sha256,
             ordinal=ordinal,

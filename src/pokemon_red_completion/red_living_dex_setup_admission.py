@@ -176,9 +176,24 @@ class FrozenRedLivingDexSetupSlot:
                 raise RedLivingDexSetupAdmissionError(
                     "clustered frozen setup schedule differs"
                 ) from None
-            if self.ordinal >= clustered_schedule.policy.train_scenarios:
+            train_scenarios = clustered_schedule.policy.train_scenarios
+            total_scenarios = (
+                train_scenarios + clustered_schedule.policy.development_scenarios
+            )
+            expected_partition = (
+                "train" if self.ordinal < train_scenarios else "development"
+            )
+            assignments = plan.get("assignments")
+            if (
+                self.ordinal >= total_scenarios
+                or not isinstance(assignments, list)
+                or self.ordinal >= len(assignments)
+                or not isinstance(assignments[self.ordinal], dict)
+                or assignments[self.ordinal].get("partition") != expected_partition
+                or recipe.get("partition") != expected_partition
+            ):
                 raise RedLivingDexSetupAdmissionError(
-                    "clustered frozen setup selected a non-train ordinal"
+                    "clustered frozen setup partition differs"
                 )
         if (
             plan_commitment != self.producer_plan_sha256
@@ -285,7 +300,12 @@ class FrozenRedLivingDexSetupSlot:
                 root=root,
             )
         else:
-            current = authenticate_frozen_red_living_dex_clustered_train_slot(
+            authenticate = (
+                authenticate_frozen_red_living_dex_clustered_development_slot
+                if self.recipe_document().get("partition") == "development"
+                else authenticate_frozen_red_living_dex_clustered_train_slot
+            )
+            current = authenticate(
                 plan_document,
                 expected_private_plan_sha256=self.producer_plan_sha256,
                 ordinal=self.ordinal,
@@ -397,11 +417,55 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
     producer_execution_identity: RedLivingDexSetupExecutionIdentity,
     expected_runtime_identity_sha256: str | None,
 ) -> FrozenRedLivingDexSetupSlot:
-    """Detach one train assignment from the immutable clustered schedule.
+    """Detach one train assignment from the immutable clustered schedule."""
+
+    return _authenticate_frozen_red_living_dex_clustered_slot(
+        plan_document,
+        expected_private_plan_sha256=expected_private_plan_sha256,
+        ordinal=ordinal,
+        root=root,
+        producer_execution_identity=producer_execution_identity,
+        expected_runtime_identity_sha256=expected_runtime_identity_sha256,
+        partition="train",
+    )
+
+
+def authenticate_frozen_red_living_dex_clustered_development_slot(
+    plan_document: Mapping[str, object],
+    *,
+    expected_private_plan_sha256: str,
+    ordinal: int,
+    root: RedLivingDexAuthenticatedSetupRoot,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity,
+    expected_runtime_identity_sha256: str | None,
+) -> FrozenRedLivingDexSetupSlot:
+    """Detach one held development assignment without opening an outcome."""
+
+    return _authenticate_frozen_red_living_dex_clustered_slot(
+        plan_document,
+        expected_private_plan_sha256=expected_private_plan_sha256,
+        ordinal=ordinal,
+        root=root,
+        producer_execution_identity=producer_execution_identity,
+        expected_runtime_identity_sha256=expected_runtime_identity_sha256,
+        partition="development",
+    )
+
+
+def _authenticate_frozen_red_living_dex_clustered_slot(
+    plan_document: Mapping[str, object],
+    *,
+    expected_private_plan_sha256: str,
+    ordinal: int,
+    root: RedLivingDexAuthenticatedSetupRoot,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity,
+    expected_runtime_identity_sha256: str | None,
+    partition: str,
+) -> FrozenRedLivingDexSetupSlot:
+    """Detach one partition-qualified assignment from a clustered schedule.
 
     The schedule ordinal and Red template ordinal are intentionally distinct.
-    Only the policy-declared leading train rows are addressable, and the
-    selected row must independently attest that it belongs to that partition.
+    Public wrappers keep train and development address spaces distinct.
     """
 
     if not isinstance(plan_document, Mapping):
@@ -410,9 +474,13 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
         expected_private_plan_sha256,
         "expected clustered private plan",
     )
+    if partition not in {"train", "development"}:
+        raise RedLivingDexSetupAdmissionError(
+            "clustered setup partition differs"
+        )
     if type(ordinal) is not int or ordinal < 0:  # noqa: E721
         raise RedLivingDexSetupAdmissionError(
-            "clustered setup selected a non-train ordinal"
+            f"clustered setup selected a non-{partition} ordinal"
         )
     if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
         raise TypeError("clustered setup admission needs an authenticated root")
@@ -452,8 +520,13 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
     total_scenarios = (
         train_scenarios + clustered_schedule.policy.development_scenarios
     )
+    ordinal_in_partition = (
+        ordinal < train_scenarios
+        if partition == "train"
+        else train_scenarios <= ordinal < total_scenarios
+    )
     if (
-        ordinal >= train_scenarios
+        not ordinal_in_partition
         or detached_plan.get("private_plan_sha256") != expected
         or canonical_sha256(payload) != expected
         or detached_plan.get("source_commit")
@@ -479,13 +552,13 @@ def authenticate_frozen_red_living_dex_clustered_train_slot(
     template_ordinal = selected.get("template_ordinal")
     if (
         selected.get("ordinal") != ordinal
-        or selected.get("partition") != "train"
+        or selected.get("partition") != partition
         or type(template_ordinal) is not int  # noqa: E721
         or not 0 <= template_ordinal < 15
         or not isinstance(recipe, dict)
         or recipe.get("schema") != RED_LIVING_DEX_SETUP_SLOT_RECIPE_SCHEMA
         or canonical_sha256(recipe) != selected.get("recipe_sha256")
-        or recipe.get("partition") != "train"
+        or recipe.get("partition") != partition
         or recipe.get("root_consumption_sha256")
         != root.root_consumption_sha256
         or recipe.get("root_state_sha256") != root.state_sha256
@@ -568,6 +641,7 @@ def _string(value: object, subject: str) -> str:
 __all__ = [
     "FrozenRedLivingDexSetupSlot",
     "RedLivingDexSetupAdmissionError",
+    "authenticate_frozen_red_living_dex_clustered_development_slot",
     "authenticate_frozen_red_living_dex_clustered_train_slot",
     "authenticate_frozen_red_living_dex_setup_slot",
 ]
