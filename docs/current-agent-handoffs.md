@@ -1,5 +1,20 @@
 # Current agent handoffs
 
+## Current override: supply is frozen; Codex owns the missing development-only consumer
+
+PR 212 is merged and both CI runs passed 6,691 tests. The census proved 429/429 bindings in under
+14 minutes; the following freeze stored and reopened three new roots in 788.71 seconds. Together
+with two preserved roots, the declared set covers all seven kinds despite one new setup loss.
+No root was claimed and no gameplay or learning output occurred. See [handoff](../HANDOFF.md).
+
+Codex's audit found that the existing development consumer only parses historical mixed schedules;
+it cannot consume this zero-train supplement. Implement its strict reader/admission adapter and
+five-root executable preflight, reusing the journals and model outcome executor. Do not fabricate
+train rows or repeat the census/freeze. Codex owns code, measurement and publication. Claude's
+next useful review is leakage and claim scope; Antigravity's is interface reuse and portability
+at the adapter design boundary. They remain read-only and advisory. No external audit was run
+for the completed performance-only repair. Keep the [model log](coding-model-comparison.md) current.
+
 ## Current override: bounded performance repair, then measure the existing model
 
 PR 211 and exact-main CI `33904380404/1` are green. The next census was interrupted after more

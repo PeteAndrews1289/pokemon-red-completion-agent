@@ -26,11 +26,29 @@ merged at `32dcb064`, and passed CI `33904380404/1`. The following census was in
 and proposed index refactor were already present before the model switch; credit for finding
 that defect must not be assigned to GPT-6.
 
-**GPT-6 work in progress:** implements a per-call validated capability index and exact shared join,
+**GPT-6 delivered:** implements a per-call validated capability index and exact shared join,
 while retaining full private-plan validation in the freezer. Six added regression cases cover
 bounded projection work, parity across context faults and projection substitution. The focused
 slice passes 25 tests in 62.72 seconds. Lint, typing across 364 modules, documentation/privacy/focus
-checks and four registry reproductions pass. Hosted CI and production timing are pending.
+checks and four registry reproductions pass. PR 212 merged as `7d654cdf`; both hosted runs passed
+6,691 tests, with four skips and one expected failure. No hosted CI run failed in this session.
+
+**Production outcome:** all 429 feasible supplements bound with zero failures. Completion was
+observed within 834 seconds of launch (an upper bound; exact process duration was not measured).
+The preceding attempt had been stopped after 65+ minutes. The following one-shot freeze completed
+in a measured 788.71 seconds and stored/reopened three new development roots. Both commands had
+zero gameplay, prediction, fit, outcome, teacher and claim effects. Supply preparation succeeded;
+the Pokemon model did not learn or gain authority in this session.
+
+**Audit finding:** the existing held runner parses historical mixed schedules and cannot consume
+the new zero-train supplement. GPT-6 identified and documented the missing reader/admission and
+executable preflight instead of treating the freeze as gameplay readiness.
+
+**Infrastructure timing:** PR pytest took 1,498.24 seconds; main pytest took 982.70 seconds for the
+same source and test counts. That variation is a warning against attributing session wall-clock
+differences to the coding model. Total pytest waiting alone was about 41 minutes. The subsequent
+census and freeze also spent substantial time in unchanged input checking and capability discovery;
+their individual stage timings were not instrumented, so the split is unknown.
 
 **Corrections so far:** the first test invocation and registry-generation batch omitted the
 worktree import path and failed before executing tests; both were corrected. An additional
@@ -42,5 +60,11 @@ passed in that run (65.54 seconds); the stale digest was corrected and the faile
 Fast-mode state are unavailable in this log. The recommendation to use High is not evidence
 that High was selected. No cost or speed superiority is established yet.
 
-**Current judgment:** promising repair implementation, insufficient evidence for a model-value
-comparison. The decisive result is a verified completed development gate at acceptable cost.
+**Current judgment:** a verified engineering success, but insufficient evidence that GPT-6 earns
+its additional usage cost over Sol. Sol had already supplied the diagnosis and refactor direction.
+Credit GPT-6 for implementation, regression coverage, completing the gate and the downstream
+integration audit; do not claim a controlled model advantage. Compare several similarly scoped
+sessions and their observed usage before changing the default solely on this result.
+
+Evidence: [binding result](evidence/red-living-dex-development-supplement-binding-result-v1-2026-09-04.json),
+[freeze result](evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).

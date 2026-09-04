@@ -1,5 +1,11 @@
 # Roadmap
 
+> **September 4 completed supply gate:** Green main `7d654cdf` proved 429/429 Red bindings and
+> froze/reopened three new development roots. No claims, gameplay or learning occurred. The next
+> task is the missing development-only supplement reader/admission adapter and a five-root
+> preflight feeding the existing model-selected outcome executor. Do not repeat the supply work.
+> See [current handoff](../HANDOFF.md) for exact bindings, audit and stop conditions.
+
 > **September 4 performance reorientation:** PR 211 is merged and green. The subsequent census
 > was interrupted after 65 minutes of repeated binding validation with zero effects. Build the
 > validated index once, preserve the exact join, qualify rejection parity and bounded work, then
