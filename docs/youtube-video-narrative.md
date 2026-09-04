@@ -1,18 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## New scene: the data was ahead of the model
+## New scene: the data was ahead of the model—and the model catches up
 
 The visible player test caught two Pokémon and then handled a failed third attempt without crashing.
 But the more important discovery came afterward: the project already held 18 authenticated causal
 living-Pokédex outcomes across seven reusable goal families, while the causal model had been frozen
 after only eight. Ten hard-won experiences had never been incorporated.
 
-That changes the next scene from “collect more data” to “use the data honestly.” The new update fits
-only actions the system actually took, reads no held development outcomes, publishes an immutable
-model artifact, and reloads it through the same interface used by the game-playing agent. In a dry
-comparison the updated model changes three of the 18 known menu decisions. The claim stays modest:
-the student changed after seeing more experience; fresh Red situations still decide whether it
-learned anything that travels.
+That changed the next scene from “collect more data” to “use the data honestly.” The update fitted
+only actions the system actually took, read no development outcomes, published an immutable model,
+and reloaded it through the same interface used by the game-playing agent. It changes three of the
+18 known menu decisions and moves weighted training error from `3.38e-4` to `6.11e-7`, with zero
+emulator frames, controller actions, teacher queries or authority promotions.
+
+**Visual:** Move ten dim lesson cards into the eight-card model, relabel it **18 LESSONS · 7 GOAL
+KINDS**, and flip three decision cards. Keep a large lock on **FRESH DEVELOPMENT** and counters at
+**GAME FRAMES 0 · TEACHER 0 · AUTHORITY 0**.
+
+**Voiceover:** “The student really updated, but this is still the classroom score. Next we build
+independent short Red situations, train on one partition, and let an untouched partition decide
+whether any of this knowledge travels.”
 
 ## New scene: the same failure no longer kills the player
 

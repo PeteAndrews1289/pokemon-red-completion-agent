@@ -363,7 +363,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         ("Development Episode · development", 24, 24),
     )
     assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
-    assert state.progress["model_fits"] == 10
+    assert state.progress["model_fits"] == 11
     assert state.progress["composition_attempts"] == 6
     assert state.progress["unseen_comparisons"] == 9
     assert state.progress["development_episode_attempts"] == 24

@@ -1,19 +1,21 @@
 # Current agent handoffs
 
-## Current override: Codex owns the complete-corpus causal model update
+## Current override: Codex owns updated-model shadow binding and prospective supply
 
-The active audit reconciled two Red learning lines. The recent semantic-goal calibration has seven
-outcomes, while the earlier causal living-Pokedex store contains 18 authenticated, settled,
-train-only outcomes across acquire, evolve, develop, storage, resupply, access and exploration. Its
-loadable integration model was frozen after only eight examples. Codex owns publication and exact-
-main execution of one corpus-addressed update over all 18, strict reload through the existing model
-record boundary, aggregate result publication, and subsequent shadow binding.
+The complete-corpus update is finished. Exact main `4414215e` passed CI `33856641047/1`, then one
+action-free fit consumed all 18 authenticated Red train outcomes and produced immutable model
+`cbff9990…42a56`. It adds ten examples to the prior model, spans all seven supported option kinds,
+changes three train-menu choices, and used zero development data, controller actions, frames,
+teacher queries, Crystal accesses or authority promotions. Training error is not a generalization
+claim; the model remains shadow-only.
 
-This is real model fitting but not fresh evaluation. It grants no authority and cannot be called
-generalization. Afterward, Codex returns to the already-published purpose-built capture contract and
-builds the smallest viable short-scenario supply for eight new train and four lineage-disjoint
-development roots. Claude and Antigravity remain optional read-only reviewers at the next promotion
-or transfer boundary; neither reviewer edits the worktree or blocks this ordinary fit engineering.
+Codex now owns strict loading of that exact model into bounded-player shadow scoring and the
+smallest concrete Red short-scenario supply under the existing purpose-built capture contract. The
+frozen denominator is ten train plus five development setup slots, with at least eight/four settled
+lineage-disjoint roots after allowed attrition and the published family-coverage requirements. Root
+selection precedes outcomes and predictions. Fit only train and compare once on untouched
+development. Claude and Antigravity remain optional read-only reviewers at the next promotion or
+transfer boundary; neither blocks ordinary implementation.
 
 ## Current override: Codex owns the prospective Red curriculum boundary
 

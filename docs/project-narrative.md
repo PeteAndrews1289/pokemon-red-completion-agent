@@ -1,6 +1,6 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## September 4: ten lessons were waiting for the model
+## September 4: the model finally receives every collected causal lesson
 
 After the first multi-decision player rehearsal, the project stepped back far enough to reconcile
 its learning artifacts. That audit found 18 authenticated causal living-Pokédex experiences across
@@ -9,12 +9,17 @@ resupplying, unlocking access and exploring. The model being exercised in the bo
 learned from only the first eight. Ten expensive Red outcomes were already sitting in the classroom
 without ever reaching the student.
 
-The repair is deliberately less theatrical than another emulator run: fit the complete train-only
-denominator, preserve every selected-arm consequence, publish a new immutable model keyed to those
-exact data, and reload it through the same boundary the player uses. A dry run shows the update
-changes three choices on the 18 known menus. That is evidence that the added experience matters,
-not evidence that the model will generalize. Fresh, lineage-disjoint Red situations remain the next
-test before more authority or Crystal transfer.
+The repair was deliberately less theatrical than another emulator run: it fitted the complete
+train-only denominator, preserved every selected-arm consequence, published a new immutable model,
+and reloaded it through the same boundary the player uses. The updated model changes three choices
+on the 18 known menus. Its weighted training error fell from about `3.38e-4` to `6.11e-7` while the
+run used no game frames, teacher, development data, or controller authority.
+
+That is evidence that the added experience changed the student, not evidence that the student will
+generalize. The next chapter uses the existing capture and routed-skill architecture to create
+short, genuinely independent Red situations: ten train and five development setup slots, with at
+least eight/four usable roots after bounded setup attrition. Only the train side can update the
+model; untouched development decides whether it learned something that can eventually travel.
 
 ## September 4: the player catches twice and fails without falling over
 

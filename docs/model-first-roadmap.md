@@ -1,25 +1,22 @@
 # Model-first development roadmap
 
-## Current checkpoint: update the causal model before buying more experience
+## Current checkpoint: the full causal corpus is fitted; buy independent experience next
 
-The Pair-006 reorientation correctly closed same-bank player comparisons, but its next instruction
-would have rebuilt a curriculum contract that already exists. The deeper audit also found **18
-authenticated settled causal train outcomes** in the living-Pokedex store, spanning all seven
-currently supported portable option kinds. The only loadable model from that stream was fitted at
-the eight-example integration milestone. Ten later outcomes were collected but never incorporated.
+PR 205 merged as exact main `4414215e` and passed exact-main CI `33856641047/1`. The authenticated
+action-free update then fitted all **18 settled causal Red train outcomes**, ten more than the prior
+integration model, across all seven supported portable option kinds. Updated model
+`cbff9990…42a56` changes three of 18 train-menu choices and reduces weighted training MSE from
+`0.000337943754007985` to `0.0000006106826230221792`. It read no development data and used zero
+controller actions, emulator frames, teachers, Crystal access or authority promotion.
 
-The immediate gate is therefore a deterministic, corpus-addressed refit over the complete 18-row
-train denominator. The updater must refuse development access and corpus filtering, preserve
-selected-arm-only targets, produce finite diagnostics, publish and byte-reload an immutable record
-through the existing player loader, and keep authority at zero. A dry fit changes three choices on
-the 18 train menus; that makes the update behaviorally nontrivial, but neither that fact nor lower
-training error demonstrates generalization.
-
-After the exact model artifact exists, resume the prospective requirement rather than inventing a
-second contract: reuse the published purpose-built capture schema, supply at least eight new train
-and four untouched development roots through bounded short scenarios, keep upstream and physical
-lineages disjoint across partitions, fit train only, and compare once on development. Crystal stays
-deferred until this Red comparison earns a promotion decision.
+The fit closes a real learning gap but cannot show generalization. The next engineering gate is
+strict action-free shadow loading of that exact record, followed by concrete independent Red supply
+under the contracts already published. Freeze ten train and five development short-scenario setup
+slots before outcomes or predictions; retain every terminal; tolerate at most two train and one
+development setup losses; and require at least eight train plus four untouched development roots,
+with disjoint upstream/physical lineages and the required semantic-family breadth. Then collect
+selected-arm outcomes, fit train only and compare once on development. Crystal stays deferred until
+that comparison earns a promotion decision.
 
 ## Current checkpoint: multi-decision play works; move learning onto prospective roots
 
