@@ -17,6 +17,7 @@ from pathlib import Path
 
 from pokemon_red_completion.claim_first_admission import (
     ClaimFirstExecutionIdentity,
+    observe_claim_first_pair_availability,
 )
 from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexCaptureSetupStatus,
@@ -85,6 +86,39 @@ _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 class RedLivingDexClusteredDevelopmentExecutionError(RuntimeError):
     """A Red held setup and title-neutral model execution do not join."""
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexClusteredDevelopmentPreflightReceipt:
+    selection: RedLivingDexClusteredDevelopmentSelection
+    model_sha256: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(
+            self.selection,
+            RedLivingDexClusteredDevelopmentSelection,
+        ):
+            raise TypeError("Red development preflight needs its selection")
+        self.selection.__post_init__()
+        _require_sha256(self.model_sha256, "preflight model")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "claim_available": True,
+            "controller_actions": 0,
+            "emulator_frames": 0,
+            "model_fits": 0,
+            "model_predictions": 0,
+            "model_sha256": self.model_sha256,
+            "partition": "development",
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "schema": (
+                "pokemon.red.living-dex-clustered-development-preflight.v1"
+            ),
+            "teacher_queries": 0,
+            "training_targets_emitted": 0,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -204,6 +238,12 @@ def run_red_living_dex_clustered_development_assignment(
         raise TypeError("Red development execution needs a utility")
     utility.__post_init__()
     _require_root_join(selection, root)
+    _require_outer_join(
+        selection,
+        binding=binding,
+        producer_execution_identity=producer_execution_identity,
+        outer_execution_identity=outer_execution_identity,
+    )
 
     first_document = plan_loader()
     runtime_identity = _require_sha256(
@@ -284,6 +324,124 @@ def run_red_living_dex_clustered_development_assignment(
     )
 
 
+def preflight_red_living_dex_clustered_development_assignment(
+    *,
+    selection: RedLivingDexClusteredDevelopmentSelection,
+    binding: RedLivingDexClusteredTrainPlanBinding,
+    plan_document: Mapping[str, object],
+    root: RedLivingDexAuthenticatedSetupRoot,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity,
+    outer_execution_identity: ClaimFirstExecutionIdentity,
+    meter: RedLivingDexSetupEffectMeter,
+    claim_registry: Path,
+    model: LivingDexOptionValueModel,
+    expected_model_sha256: str,
+) -> RedLivingDexClusteredDevelopmentPreflightReceipt:
+    """Authenticate the complete live join without a runtime or prediction."""
+
+    if not isinstance(
+        selection,
+        RedLivingDexClusteredDevelopmentSelection,
+    ):
+        raise TypeError("Red development preflight needs a held selection")
+    selection.__post_init__()
+    if not isinstance(binding, RedLivingDexClusteredTrainPlanBinding):
+        raise TypeError("Red development preflight needs its plan binding")
+    binding.__post_init__()
+    if not isinstance(plan_document, Mapping):
+        raise TypeError("Red development preflight needs a plan mapping")
+    if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
+        raise TypeError("Red development preflight needs an authenticated root")
+    root.__post_init__()
+    if not isinstance(
+        producer_execution_identity,
+        RedLivingDexSetupExecutionIdentity,
+    ):
+        raise TypeError("Red development preflight needs a producer identity")
+    producer_execution_identity.__post_init__()
+    if not isinstance(outer_execution_identity, ClaimFirstExecutionIdentity):
+        raise TypeError("Red development preflight needs an outer identity")
+    outer_execution_identity.__post_init__()
+    if type(meter) is not RedLivingDexSetupEffectMeter:
+        raise TypeError("Red development preflight needs the protected meter")
+    if not isinstance(claim_registry, Path):
+        raise TypeError("Red development preflight needs a claim registry Path")
+    if not isinstance(model, LivingDexOptionValueModel):
+        raise TypeError("Red development preflight needs an option model")
+    model.__post_init__()
+    expected_model = _require_sha256(expected_model_sha256, "model")
+    if model.model_sha256 != expected_model:
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development model identity differs"
+        )
+    before = meter.checkpoint()
+    _require_root_join(selection, root)
+    _require_outer_join(
+        selection,
+        binding=binding,
+        producer_execution_identity=producer_execution_identity,
+        outer_execution_identity=outer_execution_identity,
+    )
+    runtime_identity = _require_sha256(
+        plan_document.get("runtime_identity_sha256"),
+        "producer runtime identity",
+    )
+    authenticate_frozen_red_living_dex_development_setup_slot(
+        plan_document,
+        selection=selection,
+        binding=binding,
+        root=root,
+        producer_execution_identity=producer_execution_identity,
+        expected_runtime_identity_sha256=runtime_identity,
+    )
+    if not observe_claim_first_pair_availability(
+        claim_registry,
+        selection.logical_root_sha256,
+        selection.physical_root_sha256,
+    ):
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development root pair is unavailable"
+        )
+    if meter.checkpoint() != before:
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development preflight changed protected effects"
+        )
+    return RedLivingDexClusteredDevelopmentPreflightReceipt(
+        selection,
+        expected_model,
+    )
+
+
+def _require_outer_join(
+    selection: RedLivingDexClusteredDevelopmentSelection,
+    *,
+    binding: RedLivingDexClusteredTrainPlanBinding,
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity,
+    outer_execution_identity: ClaimFirstExecutionIdentity,
+) -> None:
+    if (
+        outer_execution_identity.producer_plan_sha256
+        != selection.private_plan_sha256
+        or outer_execution_identity.producer_private_plan_sha256
+        != selection.private_plan_sha256
+        or outer_execution_identity.producer_manifest_sha256
+        != binding.plan_manifest_sha256
+        or outer_execution_identity.producer_execution_identity_sha256
+        != producer_execution_identity.identity_sha256
+        or outer_execution_identity.slot_sha256 != selection.slot_sha256
+        or outer_execution_identity.recipe_sha256 != selection.recipe_sha256
+        or outer_execution_identity.logical_root_sha256
+        != selection.logical_root_sha256
+        or outer_execution_identity.physical_root_sha256
+        != selection.physical_root_sha256
+        or outer_execution_identity.runner_sha256
+        != RED_LIVING_DEX_DEVELOPMENT_SETUP_RUNNER_SHA256
+    ):
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development outer identity differs"
+        )
+
+
 def _require_root_join(
     selection: RedLivingDexClusteredDevelopmentSelection,
     root: RedLivingDexAuthenticatedSetupRoot,
@@ -328,6 +486,8 @@ __all__ = [
     "RED_LIVING_DEX_CLUSTERED_DEVELOPMENT_EXECUTION_SCHEMA",
     "RED_LIVING_DEX_CLUSTERED_DEVELOPMENT_EXECUTION_SHA256",
     "RedLivingDexClusteredDevelopmentExecutionError",
+    "RedLivingDexClusteredDevelopmentPreflightReceipt",
     "RedLivingDexClusteredDevelopmentReceipt",
+    "preflight_red_living_dex_clustered_development_assignment",
     "run_red_living_dex_clustered_development_assignment",
 ]
