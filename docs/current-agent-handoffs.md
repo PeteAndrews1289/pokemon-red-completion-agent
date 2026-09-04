@@ -1,5 +1,20 @@
 # Current agent handoffs
 
+## Current override: Codex owns the complete-corpus causal model update
+
+The active audit reconciled two Red learning lines. The recent semantic-goal calibration has seven
+outcomes, while the earlier causal living-Pokedex store contains 18 authenticated, settled,
+train-only outcomes across acquire, evolve, develop, storage, resupply, access and exploration. Its
+loadable integration model was frozen after only eight examples. Codex owns publication and exact-
+main execution of one corpus-addressed update over all 18, strict reload through the existing model
+record boundary, aggregate result publication, and subsequent shadow binding.
+
+This is real model fitting but not fresh evaluation. It grants no authority and cannot be called
+generalization. Afterward, Codex returns to the already-published purpose-built capture contract and
+builds the smallest viable short-scenario supply for eight new train and four lineage-disjoint
+development roots. Claude and Antigravity remain optional read-only reviewers at the next promotion
+or transfer boundary; neither reviewer edits the worktree or blocks this ordinary fit engineering.
+
 ## Current override: Codex owns the prospective Red curriculum boundary
 
 Exact main `7133d171` passed CI `33848221585`. Pair 006 then completed both arms: two verified

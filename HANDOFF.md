@@ -1,5 +1,23 @@
 # Handoff
 
+## Current checkpoint: use the causal experience already collected
+
+The post-Pair-006 audit found a stronger existing learning lane that the latest seven-outcome
+calibration had obscured. The private causal living-Pokedex store authenticates **18 settled
+train-only outcomes** spanning all seven supported portable option kinds. The immutable integration
+model used only the first eight, so ten already-collected lessons have never reached that model. A
+read-only dry refit on the complete denominator changes three of the 18 train-menu choices and
+reduces aggregate train error; this is readiness evidence, not generalization evidence.
+
+The current branch adds a repeatable, corpus-addressed updater. It accepts only a clean published
+source binding and private store, refuses development rows or a non-extended corpus, retains the
+complete denominator, fits selected arms only, publishes an immutable model record compatible with
+the existing bounded-player loader, and can safely finish publication after interruption because
+fitting has no controller effects. After green exact-main CI, run the updater once from the protected
+checkout, publish only aggregate telemetry, then point fresh shadow development at that exact model.
+The next gameplay gate remains prospective lineage-disjoint Red development; no same-bank pair,
+Crystal execution, sealed test, or authority promotion is opened by lower training error.
+
 ## Current checkpoint: bounded multi-decision acquisition works; new roots are next
 
 The binding-retention repair merged as main `7133d171654ecf7b0686509678803b3059b6cf7b`
