@@ -3,6 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 4 acquisition rehearsal:** the singleton repair merged as exact main `65246348`
+> under green CI `33844066128`. Pair 005 gave the fitted manager three genuine acquisition choices.
+> Two succeeded with fresh collection checks; the third durably recorded `binding_failed`. Total
+> challenger cost was **614 actions / 34,920 frames**. The recorded exception then escaped before
+> post-failure observation or baseline, so there is no paired verdict, training target or promotion.
+> Pair 005 is consumed.
+>
+> Retain binding executor exceptions only inside the bounded research player as independently
+> metered typed failures, then use the existing reobservation and recovery rules. Keep generic
+> runtime, interruption and evidence failures fail-closed. Publish and green before a fresh pair.
+> See the [partial result](evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json).
+
 > **September 4 paired rehearsal result:** exact main `8ec5c2d5` passed CI `33839775994`.
 > Pair 004 completed both arms once: each restored the team in **188 actions / 17,136 frames**,
 > preserved **15/15 specimens**, and produced an `equivalent` comparison. The learned scorer never

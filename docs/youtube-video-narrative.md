@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the model catches twice, then the composition layer drops the failure
+
+**Visual:** Show a three-option menu—**ACQUIRE · RESTORE · EXPLORE**—and three model decision cards.
+Turn the first two `ACQUIRE` cards green at **140 / 9,060** and **224 / 12,372**. Turn the third red
+at **250 / 13,488**, then total **614 ACTIONS · 34,920 FRAMES · TEACHER 0**.
+
+**Voiceover:** “This time the model really did choose. Two acquisition goals succeeded and passed
+fresh collection checks. The third failed honestly—but although the outcome was recorded, the
+exception still escaped and stopped the whole player before it could recover.”
+
+**Visual:** Keep the red outcome card, route it through **METER → REOBSERVE → RECOVER OR STOP**, and
+cross out **RETRY PAIR 005**.
+
+**Voiceover:** “The fix is not a scripted catch or a replay. The bounded player retains the exact
+cost and typed failure, observes what is true now, and either chooses a different legal goal or
+stops. That is the failure behavior a transferable long-horizon agent needs.”
+
 ## New scene: a fair tie exposes the difference between choice and workflow
 
 **Visual:** Split the same Red save into **FITTED MODEL** and **DETERMINISTIC BASELINE**. Run both

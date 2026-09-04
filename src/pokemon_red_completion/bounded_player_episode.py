@@ -4,7 +4,9 @@ The goal authority sees only the public semantic question.  Existing private
 bindings perform the selected mechanic, an independent verifier settles the
 attempt, and a new observation plus living-collection ledger check decides
 whether play may continue.  Ordinary verified failures may trigger one changed-
-context replan; executor exceptions and interruptions remain fail-closed.
+context replan. Binding exceptions become independently metered, typed failures
+inside this bounded research player; interruptions and evidence defects remain
+fail-closed.
 """
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalDecisionOutcome,
@@ -31,8 +34,12 @@ from pokemon_red_completion.goal_manager_composition_runtime import (
     require_living_collection_transition,
 )
 from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
     GoalDecisionAuthority,
+    GoalExecutionReport,
     GoalManagerExecutionResult,
+    GoalVerification,
     execute_goal_manager_decision,
 )
 from pokemon_red_completion.goal_manager_trajectory import (
@@ -187,6 +194,60 @@ PlayerObserver = Callable[[], GoalManagerCompositionObservation]
 CompletionPredicate = Callable[[GoalManagerCompositionObservation], bool]
 
 
+def _retain_executor_failure(
+    binding: ExecutableGoalBinding,
+    budget_meter: CompositionBudgetMeter,
+) -> ExecutableGoalBinding:
+    """Turn an executor exception into one metered failure for bounded recovery."""
+
+    failed = False
+
+    def execute() -> GoalExecutionReport:
+        nonlocal failed
+        before = budget_meter.checkpoint()
+        try:
+            return binding.execute()
+        except GoalExecutionBudgetExhausted:
+            raise
+        except Exception:
+            after = budget_meter.checkpoint()
+            failed = True
+            return GoalExecutionReport(
+                actions_executed=(
+                    after.controller_actions - before.controller_actions
+                ),
+                frames_executed=after.emulator_frames - before.emulator_frames,
+                evidence={},
+            )
+
+    def verify(report: GoalExecutionReport) -> GoalVerification:
+        if failed:
+            return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
+        return binding.verify(report)
+
+    return ExecutableGoalBinding(
+        binding_ref=binding.binding_ref,
+        kind=binding.kind,
+        estimated_effort=binding.estimated_effort,
+        estimated_risk=binding.estimated_risk,
+        execute=execute,
+        verify=verify,
+    )
+
+
+def _retaining_binding_set(
+    binding_set: GoalBindingSet,
+    budget_meter: CompositionBudgetMeter,
+) -> GoalBindingSet:
+    return GoalBindingSet(
+        opportunities=binding_set.opportunities,
+        bindings=tuple(
+            _retain_executor_failure(binding, budget_meter)
+            for binding in binding_set.bindings
+        ),
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class _ForcedSingletonAuthority:
     """Select the sole legal goal without consulting learned authority."""
@@ -300,7 +361,7 @@ def run_bounded_player_episode(
 
         execution = execute_goal_manager_decision(
             situation=current.situation,
-            binding_set=current.binding_set,
+            binding_set=_retaining_binding_set(current.binding_set, budget_meter),
             authority=selected_authority,
             trajectory=trajectory,
             require_durable_decision=True,

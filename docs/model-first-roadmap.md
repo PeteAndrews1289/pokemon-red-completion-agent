@@ -1,6 +1,22 @@
 # Model-first development roadmap
 
-## Current checkpoint: outcome training has begun; preserve strategic credit through prerequisites
+## Current checkpoint: outcome training has begun; retain failed skills without crashing play
+
+The forced-singleton seam is published as exact main `65246348` under green CI `33844066128`.
+Pair 005 then reached real model authority: three consecutive `acquire_species` choices from a
+fresh three-option Red context. Two succeeded under fresh semantic and living-collection checks;
+the third durably recorded `binding_failed`. The challenger used 614 actions / 34,920 frames in
+total. Because the generic goal runtime rethrows a recorded binding exception, the bounded player
+never reobserved the third outcome and the baseline never started. Pair 005 is consumed and has no
+paired verdict or training target.
+
+The next repair is deliberately local to the bounded research player. It converts an executor
+exception into an independently metered failed report, then relies on the existing fresh-state,
+collection, unchanged-context and one-replan rules. It does not catch interruptions, durability
+failures, invalid evidence, or weaken the generic runtime. After publication and green exact-main
+CI, use a new pair and different context. Crystal and full replay remain deferred.
+
+## Previous checkpoint: outcome training has begun; preserve strategic credit through prerequisites
 
 The fitted-model integration is published at exact main `8ec5c2d5` under green CI `33839775994`.
 The first paired rehearsal, pair 004, was valid but uninformative: both arms completed the mandatory

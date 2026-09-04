@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: two catches work, then a recorded failure still crashes composition
+
+With automatic prerequisites separated from strategic credit, a fresh Red rehearsal finally gave
+the fitted manager a real three-way menu. It selected species acquisition three times. The first
+two attempts succeeded, each followed by a fresh semantic observation and a living-collection
+integrity check. Together with the third attempt, the challenger executed 614 controller actions
+and 34,920 emulator frames without asking a teacher.
+
+The third acquisition could not complete and correctly wrote a durable `binding_failed` outcome.
+But the low-level runtime then rethrew that same exception, ending the whole arm before the player
+could observe the changed situation or choose a recovery goal. The next repair keeps this narrow:
+inside bounded research play, measure the failed skill exactly and let the existing recovery rules
+handle it. Infrastructure faults and interruptions still stop immediately. The failed pair remains
+on the record rather than being replayed into a cleaner story.
+
 ## September 4: the first player comparison reveals that prerequisites are not decisions
 
 The authenticated fitted model entered its first paired Red rehearsal from the same reset as the
