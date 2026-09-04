@@ -26,6 +26,7 @@ from pokemon_red_completion.multi_goal_calibration_admission import (
 from pokemon_red_completion.multi_goal_calibration_outcome import (
     FORCED_CALIBRATION_POLICY_ID,
 )
+from pokemon_red_completion.private_artifacts import PrivateArtifactError
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
 from pokemon_red_completion.red_collection import (
@@ -57,6 +58,8 @@ class _Reader:
         return deepcopy(self.header)
 
     def iter_stream(self, stream: str) -> Iterator[Mapping[str, object]]:
+        if stream not in self.streams:
+            raise PrivateArtifactError("episode stream is absent")
         yield from deepcopy(self.streams.get(stream, []))
 
 
@@ -239,8 +242,13 @@ def _reader() -> _Reader:
     )
 
 
-def _admit(monkeypatch: pytest.MonkeyPatch, reader: _Reader):
-    dataset = _dataset()
+def _admit(
+    monkeypatch: pytest.MonkeyPatch,
+    reader: _Reader,
+    *,
+    dataset: CollectedGoalManagerDataset | None = None,
+):
+    dataset = _dataset() if dataset is None else dataset
     monkeypatch.setattr(
         "pokemon_red_completion.multi_goal_calibration_admission.load_goal_manager_episode",
         lambda _reader: dataset,
@@ -296,6 +304,42 @@ def test_admission_rejects_execution_counter_drift(
 ) -> None:
     reader = _reader()
     reader.streams["executions"][0]["frames"] = 9
+
+    with pytest.raises(MultiGoalCalibrationAdmissionError, match="accounting"):
+        _admit(monkeypatch, reader)
+
+
+def test_admission_accepts_absent_execution_stream_for_exact_zero_action_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _reader()
+    del reader.streams["executions"]
+    terminal = reader.streams["events"][0]
+    terminal["step_index"] = 0
+    calibration = terminal["payload"]["calibration"]  # type: ignore[index]
+    calibration["actions_executed"] = 0  # type: ignore[index]
+    calibration["frames_executed"] = 0  # type: ignore[index]
+    calibration["semantic_state_changed"] = False  # type: ignore[index]
+    calibration["status"] = "failed"  # type: ignore[index]
+    dataset = _dataset()
+    object.__setattr__(
+        dataset.examples[0],
+        "outcome_status",
+        GoalDecisionOutcome.FAILED,
+    )
+    result = _admit(monkeypatch, reader, dataset=dataset)
+
+    assert result.status is GoalDecisionOutcome.FAILED
+    assert result.reward == -1.0
+    assert result.actions_executed == 0
+    assert result.frames_executed == 0
+
+
+def test_admission_rejects_absent_execution_stream_for_nonzero_outcome(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _reader()
+    del reader.streams["executions"]
 
     with pytest.raises(MultiGoalCalibrationAdmissionError, match="accounting"):
         _admit(monkeypatch, reader)

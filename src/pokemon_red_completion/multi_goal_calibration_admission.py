@@ -30,6 +30,7 @@ from pokemon_red_completion.goal_manager_trajectory import (
 from pokemon_red_completion.multi_goal_calibration_outcome import (
     FORCED_CALIBRATION_POLICY_ID,
 )
+from pokemon_red_completion.private_artifacts import PrivateArtifactError
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
 from pokemon_red_completion.red_collection import (
@@ -252,10 +253,21 @@ def admit_multi_goal_calibration_episode(
             "calibration collection transition differs"
         ) from error
 
-    executions = [
-        _mapping(row, "calibration execution")
-        for row in reader.iter_stream("executions")
-    ]
+    try:
+        executions = [
+            _mapping(row, "calibration execution")
+            for row in reader.iter_stream("executions")
+        ]
+    except PrivateArtifactError as error:
+        # Episode writers materialize streams lazily. A legitimately settled
+        # zero-action failure therefore has no executions file at all, while
+        # every nonzero outcome must still carry the independently counted
+        # controller records below.
+        if actions != 0 or frames != 0:
+            raise MultiGoalCalibrationAdmissionError(
+                "calibration execution accounting differs"
+            ) from error
+        executions = []
     execution_frames = [_integer(row.get("frames"), "execution frames") for row in executions]
     if (
         len(executions) != actions
