@@ -1,5 +1,70 @@
 # Handoff
 
+## Current checkpoint: the exact three-root supplement freezer is locally qualified
+
+The action-free supplement freezer now derives private exclusion sets from the complete train
+corpus and historical schedules, removes every overlapping lineage, physical root, and state, and
+selects exactly the measured three-root shortfall. It requires three new families and locations and
+requires the full seven-kind option vocabulary—including `manage_storage`—to survive loss of any
+one new setup. The selected shared capabilities are bound back to exact Red contexts and setup
+recipes in a development-only private plan with no train rows or behavior commitments.
+
+The related bridge and freezer slice passes 45 tests; the source-bound protocol slice passes 49;
+all four generated registries reproduce; lint and focused type checks pass. The rehearsal publishes
+and reopens a synthetic private plan while reporting zero predictions, outcomes, controller actions,
+teachers, claims, or training targets. This is local qualification only: no real supplement plan
+has been frozen. See the
+[qualification receipt](docs/evidence/red-living-dex-development-supplement-freezer-local-qualification-v1-2026-09-04.json).
+
+Next publish this exact branch, require green PR and exact-main CI, and invoke the freezer once from
+the protected clean checkout. If it cannot find three eligible roots, retain that capacity result
+and stop; do not weaken independence or resurrect a teacher factory. If it succeeds, independently
+preflight the sealed supplement plus the two preserved held roots before any model prediction or
+controller input.
+
+## Previous checkpoint: exact-main audit preserved two exam roots; three new roots remain
+
+PR 207 merged as exact main `481b31d9fd2e2df97f8199ecda80346630da5ec1`, and push CI
+`33866844485/1` passed all 6,637 selected hosted tests. The protected action-free audit then
+reopened only the complete train corpus, exact model record, two historical schedule records, and
+the account claim ledger. It reproduced the local finding exactly: 18 authenticated train
+examples, four unique historical development roots, two unavailable, and **two still clean**. The
+surviving pair has zero lineage or state overlap with train and spans six of seven portable option
+kinds; only `manage_storage` is missing. See the
+[path-free result](docs/evidence/red-living-dex-development-supply-audit-v1-2026-09-04.json).
+
+The measured minimum is now fixed: retain those two roots and freeze exactly three new independent
+development roots—two needed to reach the four-root floor plus one setup-censor spare. The new set
+must preserve coverage after any one setup loss and include `manage_storage`. No ROM, outcome,
+prediction, fit, teacher, controller action, claim, Crystal task, or authority promotion occurred
+in the audit. PR 208 contains the separate model-led development bridge; after it is green and
+merged, build and publish the dedicated action-free supplement freezer, run zero-effect preflight,
+then allow one model-selected branch per successfully admitted root. Do not refit on development.
+
+## Previous checkpoint: the held Red model path exists without reopening train history
+
+The eighteen-example title-neutral option model is still shadow-only and no held outcome has been
+opened. The follow-on branch now implements the smallest bridge needed to evaluate it: an
+outcome-blind three-root supplement planner, development-only clustered selection, a canonical Red
+setup admission, a one-shot crash-safe setup journal, an exact model decision journal, and their Red
+composition. The qualified train setup and claim-first runner remain byte-for-byte unchanged.
+
+The new boundary claims logical and physical roots before a controller-capable runtime can exist,
+never retries after that claim, commits the complete model score vector before selected-arm input,
+records only the selected factual outcome, and emits no training target. ROM-free tests cover train
+partition exclusion, root and plan substitution, exact model mismatch, canonical-byte detachment,
+post-claim power loss, post-release power loss, and recovery without a second runtime. The supplied
+development fixtures intentionally fail setup availability, so the Red composition's successful
+live path remains unexecuted rather than being simulated into a claim.
+
+PR 207 contains the aggregate-only supply auditor. Its second hosted run exposed one stale strategic
+registry golden after all source-bound registries were regenerated; that final golden is repaired
+and CI is running again. Once it is green, merge it, reproduce the action-free audit from exact main,
+then rebase and publish this bridge. If the audit still reports two clean historical roots, freeze
+exactly three new independent roots with `manage_storage` coverage. Only then may the existing model
+make one development choice per admitted root. Do not refit on development, replace a failed setup,
+open Crystal or sealed Red, or run a full game.
+
 ## Current checkpoint: two held exam roots survived; generate only the measured gap
 
 The eighteen-example title-neutral causal model is fitted and remains shadow-only. A local

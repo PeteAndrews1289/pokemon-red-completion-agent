@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and reproduce the action-free audit of the held Red development roots. If exactly two remain clean as locally observed, preserve them and freeze three new independent development roots with manage_storage coverage, then compare the existing eighteen-example model once without refitting. Pairs 004 through 006 remain terminal.
+- Next decision: Publish and green the development-only bridge and exact three-root freezer, merge under exact-main CI, then run one action-free supplement freeze. If it succeeds, preflight before comparing the existing model once without refitting; if capacity fails, retain the falsifier. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-supply-salvage-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
+**2026-09-04-development-supplement-freezer-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supplement-freezer-local-qualification-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now reuses every valid asset instead of restarting its curriculum. Two clean unseen Red roots are preserved, and only the measured gap needed to test the title-neutral model will be generated before any Crystal work or broader authority decision. |
-| Learning output | One immutable corpus-addressed model was fitted from all eighteen authenticated Red train outcomes, ten more than its predecessor and spanning all seven supported portable option kinds. It changed three of eighteen train-menu choices and reduced weighted training MSE from 0.000337943754007985 to 0.0000006106826230221792 with zero development reads or game effects. This is a real model fit, not a generalization result. |
-| Authority delta | No authority changed. The newly fitted eighteen-example causal living-Pokedex model remains non-authoritative and shadow-only until fresh lineage-disjoint Red development situations show useful behavior. |
+| Product alignment | The freezer purchases only genuinely unseen Red semantic decisions needed to test the title-neutral model, while preserving deterministic mechanics and the long-term cross-title living-Pokedex architecture. |
+| Learning output | No learning counter changed. The measurable engineering output is a locally qualified, development-only freezer that can create exactly the three independent Red roots required by the published audit without scoring a model or opening an outcome. |
+| Authority delta | No authority changed. The eighteen-example model remains shadow-only. Exact-main supply authentication and the separate development bridge opened no held Red outcome; deterministic skills retain all controller authority. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | A local action-free audit found that the original and successor schedules reserved the same four development roots. Two remain clean and lineage-disjoint from all eighteen train rows; two are consumed. The clean pair spans six option kinds but lacks manage_storage, leaving a two-root evaluation shortfall rather than a new train-data shortfall. |
-| Decision | Publish and exact-CI qualify the aggregate-only development-supply auditor, reproduce the two-clean-root result from protected main, then preserve those roots and freeze exactly three new independent development roots: two required plus one setup-censor allowance, with manage_storage coverage. Build a development-only model-led outcome gate; do not refit before the untouched comparison. |
-| Next session | Publish and run the exact action-free development-supply audit, then implement the smallest outcome-blind three-root supplement and development-only model-led evaluation boundary without consuming the two clean historical roots. |
-| Next falsifier | From clean published main, the auditor must reproduce eighteen authenticated train rows, the exact updated model, four unique held roots across two schedules, zero train overlap, exactly two available roots, a two-root shortfall and manage_storage as the sole missing option kind, with zero ROM, outcome, prediction, fit or controller effect. |
-| Stop condition | Stop on model-record authentication failure, controller input during shadow binding, outcome-informed root selection, train/development lineage overlap, family-coverage failure, private-path leakage, or any attempt to replace a failed setup adaptively. Never replay pairs 004, 005 or 006. |
+| Blocker | The dedicated three-root freezer is locally qualified but unpublished. No real supplement plan exists until this exact source passes hosted CI, merges, passes exact-main CI, and completes one protected action-free freeze. |
+| Decision | Publish and green the development bridge plus supplement freezer, merge under exact-main CI, then invoke exactly one action-free three-root freeze. Stop on insufficient capacity; otherwise preflight the sealed supplement and preserved held roots before model-led outcomes. |
+| Next session | Publish and merge the qualified bridge/freezer, require exact-main green CI, then perform one action-free private supplement freeze and independently preflight any successful plan. |
+| Next falsifier | After green exact-main CI, one protected action-free invocation must either publish and reopen a three-root plan satisfying every exclusion and censor-safe coverage rule or retain an insufficient-capacity failure without weakening the contract. |
+| Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover, outcome-informed root selection, root overlap, private-identity policy features, development entering fit, or any retry after a claimed setup. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 

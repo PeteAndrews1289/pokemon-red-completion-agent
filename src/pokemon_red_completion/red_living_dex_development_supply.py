@@ -23,11 +23,20 @@ from pathlib import Path
 from pokemon_red_completion.claim_first_admission import (
     claim_first_availability_snapshot_lease,
 )
+from pokemon_red_completion.living_dex_capture_curriculum import (
+    LivingDexCapturePartition,
+)
 from pokemon_red_completion.living_dex_causal_curriculum import (
     RED_DIRECT_CAUSAL_OPTION_KINDS,
 )
 from pokemon_red_completion.living_dex_causal_journal import (
     load_living_dex_authenticated_causal_examples,
+)
+from pokemon_red_completion.living_dex_clustered_curriculum import (
+    LivingDexClusteredScenarioCapability,
+)
+from pokemon_red_completion.living_dex_development_supplement import (
+    LivingDexDevelopmentSupplementCapability,
 )
 from pokemon_red_completion.living_dex_goal_model_record import (
     load_living_dex_goal_model_record_bytes,
@@ -37,6 +46,9 @@ from pokemon_red_completion.living_dex_option_value import (
     living_dex_option_train_dataset_sha256,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+from pokemon_red_completion.red_living_dex_causal_inventory import (
+    RedLivingDexCausalRootCapability,
+)
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     validate_red_living_dex_clustered_private_plan,
 )
@@ -96,18 +108,14 @@ class RedLivingDexDevelopmentRoot:
             self.envelope_sha256,
         ):
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-                raise RedLivingDexDevelopmentSupplyError(
-                    "development root identity differs"
-                )
+                raise RedLivingDexDevelopmentSupplyError("development root identity differs")
         if (
             self.logical_root_sha256 == self.physical_root_sha256
             or not isinstance(self.option_kinds, frozenset)
             or not self.option_kinds
             or any(not isinstance(item, str) or not item for item in self.option_kinds)
         ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "development root semantics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("development root semantics differ")
 
     @property
     def deduplication_key(self) -> tuple[str, str, str, str, str]:
@@ -168,16 +176,13 @@ class RedLivingDexDevelopmentSupplyResult:
             != self.available_development_roots + self.unavailable_development_roots
             or self.available_development_lineages > self.available_development_roots
             or not isinstance(self.available_option_kinds, tuple)
-            or tuple(sorted(set(self.available_option_kinds)))
-            != self.available_option_kinds
+            or tuple(sorted(set(self.available_option_kinds))) != self.available_option_kinds
             or not isinstance(self.model_sha256, str)
             or _SHA256.fullmatch(self.model_sha256) is None
             or not isinstance(self.model_record_sha256, str)
             or _SHA256.fullmatch(self.model_record_sha256) is None
         ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "development supply diagnostics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("development supply diagnostics differ")
 
     @property
     def supply_ready(self) -> bool:
@@ -203,9 +208,7 @@ class RedLivingDexDevelopmentSupplyResult:
         available = set(self.available_option_kinds)
         return tuple(
             sorted(
-                item.value
-                for item in RED_DIRECT_CAUSAL_OPTION_KINDS
-                if item.value not in available
+                item.value for item in RED_DIRECT_CAUSAL_OPTION_KINDS if item.value not in available
             )
         )
 
@@ -236,17 +239,13 @@ class RedLivingDexDevelopmentSupplyResult:
             "private_identity_fields": 0,
             "private_path_fields": 0,
             "required_development_roots": self.required_development_roots,
-            "scheduled_development_assignments": (
-                self.scheduled_development_assignments
-            ),
+            "scheduled_development_assignments": (self.scheduled_development_assignments),
             "schedules_authenticated": self.schedules_authenticated,
             "schema": RED_LIVING_DEX_DEVELOPMENT_SUPPLY_RESULT_SCHEMA,
             "setup_censor_allowance": self.setup_censor_allowance,
             "state_overlap_with_train": self.state_overlap_with_train,
             "status": (
-                "development_supply_ready"
-                if self.supply_ready
-                else "development_supply_shortfall"
+                "development_supply_ready" if self.supply_ready else "development_supply_shortfall"
             ),
             "teacher_queries": 0,
             "train_examples_authenticated": self.authenticated_train_examples,
@@ -254,6 +253,63 @@ class RedLivingDexDevelopmentSupplyResult:
             "unavailable_development_roots": self.unavailable_development_roots,
             "unique_development_roots": self.unique_development_roots,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexDevelopmentSupplyInventory:
+    """Private exclusion inventory retained only by an action-free freezer."""
+
+    result: RedLivingDexDevelopmentSupplyResult
+    train_lineages: frozenset[str]
+    train_states: frozenset[tuple[str, str]]
+    historical_roots: tuple[RedLivingDexDevelopmentRoot, ...]
+    available_roots: tuple[RedLivingDexDevelopmentRoot, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.result, RedLivingDexDevelopmentSupplyResult):
+            raise TypeError("development supply inventory needs its public result")
+        self.result.__post_init__()
+        if (
+            not isinstance(self.train_lineages, frozenset)
+            or not self.train_lineages
+            or any(
+                not isinstance(item, str) or _SHA256.fullmatch(item) is None
+                for item in self.train_lineages
+            )
+            or not isinstance(self.train_states, frozenset)
+            or not self.train_states
+            or any(
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or any(
+                    not isinstance(value, str) or _SHA256.fullmatch(value) is None for value in item
+                )
+                for item in self.train_states
+            )
+            or not isinstance(self.historical_roots, tuple)
+            or not isinstance(self.available_roots, tuple)
+            or any(
+                not isinstance(item, RedLivingDexDevelopmentRoot)
+                for item in (*self.historical_roots, *self.available_roots)
+            )
+        ):
+            raise RedLivingDexDevelopmentSupplyError("development supply private inventory differs")
+        for root in (*self.historical_roots, *self.available_roots):
+            root.__post_init__()
+        historical = {item.deduplication_key for item in self.historical_roots}
+        available = {item.deduplication_key for item in self.available_roots}
+        if (
+            len(historical) != len(self.historical_roots)
+            or len(available) != len(self.available_roots)
+            or not available.issubset(historical)
+            or len(self.historical_roots) != self.result.unique_development_roots
+            or len(self.available_roots) != self.result.available_development_roots
+            or len(self.train_lineages) > self.result.authenticated_train_examples
+            or len(self.train_states) > self.result.authenticated_train_examples
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "development supply private inventory does not match its result"
+            )
 
 
 def audit_red_living_dex_development_supply(
@@ -285,12 +341,8 @@ def audit_red_living_dex_development_supply(
 
     try:
         authenticated = load_living_dex_authenticated_causal_examples(store)
-        if not authenticated or any(
-            item.identity.partition != "train" for item in authenticated
-        ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "causal corpus is not train-only"
-            )
+        if not authenticated or any(item.identity.partition != "train" for item in authenticated):
+            raise RedLivingDexDevelopmentSupplyError("causal corpus is not train-only")
         rows = tuple(item.example for item in authenticated)
         dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
         model_record = store.find_sealed_record(
@@ -318,13 +370,11 @@ def audit_red_living_dex_development_supply(
             plan_roots.extend(_load_plan_development_roots(store, binding))
         train_lineages = {item.identity.lineage_sha256 for item in authenticated}
         train_states = {
-            (item.identity.state_sha256, item.identity.envelope_sha256)
-            for item in authenticated
+            (item.identity.state_sha256, item.identity.envelope_sha256) for item in authenticated
         }
         unique_roots = _deduplicate_roots(plan_roots)
         root_pairs = tuple(
-            (root.logical_root_sha256, root.physical_root_sha256)
-            for root in unique_roots
+            (root.logical_root_sha256, root.physical_root_sha256) for root in unique_roots
         )
         with claim_first_availability_snapshot_lease(claim_registry) as lease:
             availability = lease.observe(root_pairs)
@@ -336,8 +386,7 @@ def audit_red_living_dex_development_supply(
         available = tuple(
             root
             for root in unique_roots
-            if (root.logical_root_sha256, root.physical_root_sha256)
-            in available_pairs
+            if (root.logical_root_sha256, root.physical_root_sha256) in available_pairs
         )
         return RedLivingDexDevelopmentSupplyResult(
             authenticated_train_examples=len(authenticated),
@@ -350,24 +399,15 @@ def audit_red_living_dex_development_supply(
             duplicate_schedule_assignments=len(plan_roots) - len(unique_roots),
             available_development_roots=len(available),
             unavailable_development_roots=len(unique_roots) - len(available),
-            available_development_lineages=len(
-                {root.lineage_sha256 for root in available}
-            ),
+            available_development_lineages=len({root.lineage_sha256 for root in available}),
             available_option_kinds=tuple(
-                sorted(
-                    {
-                        kind
-                        for root in available
-                        for kind in root.option_kinds
-                    }
-                )
+                sorted({kind for root in available for kind in root.option_kinds})
             ),
             lineage_overlap_with_train=sum(
                 root.lineage_sha256 in train_lineages for root in unique_roots
             ),
             state_overlap_with_train=sum(
-                (root.state_sha256, root.envelope_sha256) in train_states
-                for root in unique_roots
+                (root.state_sha256, root.envelope_sha256) in train_states for root in unique_roots
             ),
         )
     except RedLivingDexDevelopmentSupplyError:
@@ -376,6 +416,137 @@ def audit_red_living_dex_development_supply(
         raise RedLivingDexDevelopmentSupplyError(
             "development supply authentication failed"
         ) from None
+
+
+def inventory_red_living_dex_development_supply(
+    store: PrivateArtifactRoot,
+    *,
+    claim_registry: Path,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+    bindings: Sequence[RedLivingDexClusteredTrainPlanBinding] = (
+        FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN,
+        FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN,
+    ),
+) -> RedLivingDexDevelopmentSupplyInventory:
+    """Reopen the authenticated supply only to derive private exclusions.
+
+    The public audit remains the authority for counts and model identity.  This
+    second pass exposes no public serializer and verifies that its private root
+    sets reproduce every relevant public count before a freezer may use them.
+    """
+
+    result = audit_red_living_dex_development_supply(
+        store,
+        claim_registry=claim_registry,
+        expected_model_sha256=expected_model_sha256,
+        expected_model_record_sha256=expected_model_record_sha256,
+        bindings=bindings,
+    )
+    try:
+        authenticated = load_living_dex_authenticated_causal_examples(store)
+        train_lineages = frozenset(item.identity.lineage_sha256 for item in authenticated)
+        train_states = frozenset(
+            (item.identity.state_sha256, item.identity.envelope_sha256) for item in authenticated
+        )
+        plan_roots: list[RedLivingDexDevelopmentRoot] = []
+        for binding in bindings:
+            plan_roots.extend(_load_plan_development_roots(store, binding))
+        historical = _deduplicate_roots(plan_roots)
+        root_pairs = tuple(
+            (root.logical_root_sha256, root.physical_root_sha256) for root in historical
+        )
+        with claim_first_availability_snapshot_lease(claim_registry) as lease:
+            availability = lease.observe(root_pairs)
+        available_pairs = {
+            (item.logical_root_sha256, item.physical_root_sha256)
+            for item in availability.observations
+            if item.available
+        }
+        available = tuple(
+            root
+            for root in historical
+            if (root.logical_root_sha256, root.physical_root_sha256) in available_pairs
+        )
+        inventory = RedLivingDexDevelopmentSupplyInventory(
+            result=result,
+            train_lineages=train_lineages,
+            train_states=train_states,
+            historical_roots=historical,
+            available_roots=available,
+        )
+        if (
+            len(train_lineages & {item.lineage_sha256 for item in historical})
+            != result.lineage_overlap_with_train
+            or len(
+                train_states & {(item.state_sha256, item.envelope_sha256) for item in historical}
+            )
+            != result.state_overlap_with_train
+            or tuple(sorted({kind for root in available for kind in root.option_kinds}))
+            != result.available_option_kinds
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "development supply private inventory reproduction differs"
+            )
+        return inventory
+    except RedLivingDexDevelopmentSupplyError:
+        raise
+    except BaseException:
+        raise RedLivingDexDevelopmentSupplyError(
+            "development supply private inventory authentication failed"
+        ) from None
+
+
+def build_red_living_dex_development_supplement_capabilities(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+) -> tuple[LivingDexDevelopmentSupplementCapability, ...]:
+    """Project authenticated Red development edges into the shared planner."""
+
+    if isinstance(capabilities, (str, bytes)) or not isinstance(
+        capabilities,
+        Sequence,
+    ):
+        raise TypeError("Red development supplement capabilities need a sequence")
+    projected: list[LivingDexDevelopmentSupplementCapability] = []
+    for capability in capabilities:
+        if not isinstance(capability, RedLivingDexCausalRootCapability):
+            raise TypeError("Red development supplement capability differs")
+        capability.__post_init__()
+        root = capability.root
+        if (
+            root.cluster_partition != "development"
+            or capability.slot.partition is not LivingDexCapturePartition.DEVELOPMENT
+        ):
+            continue
+        if (
+            not root.prospective_independence_authenticated
+            or root.independence_lineage_sha256 is None
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "Red development supplement lineage is unauthenticated"
+            )
+        shared = LivingDexClusteredScenarioCapability(
+            lineage_sha256=root.independence_lineage_sha256,
+            physical_root_sha256=root.root.physical_root_sha256,
+            partition="development",
+            template_sha256=capability.slot.slot_sha256,
+            available_option_kinds=capability.slot.available_option_kinds,
+        )
+        projected.append(
+            LivingDexDevelopmentSupplementCapability(
+                lineage_sha256=shared.lineage_sha256,
+                physical_root_sha256=shared.physical_root_sha256,
+                scenario_sha256=shared.scenario_sha256,
+                family_scope_id=capability.slot.family_scope_id,
+                location_scope_id=capability.slot.location_scope_id,
+                available_option_kinds=shared.available_option_kinds,
+            )
+        )
+    if not projected:
+        raise RedLivingDexDevelopmentSupplyError(
+            "Red development supplement has no eligible capabilities"
+        )
+    return tuple(sorted(projected, key=lambda item: item.scenario_sha256))
 
 
 def _load_plan_development_roots(
@@ -394,9 +565,7 @@ def _load_plan_development_roots(
         or record.summary.manifest_sha256 != binding.plan_manifest_sha256
         or record.summary.record_sha256 != binding.plan_record_sha256
     ):
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule record differs"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule record differs")
     document = record.read()
     schedule = validate_red_living_dex_clustered_private_plan(
         document,
@@ -405,18 +574,14 @@ def _load_plan_development_roots(
     )
     assignments = document.get("assignments")
     if not isinstance(assignments, list):
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule assignments differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule assignments differ")
     development = tuple(
         _parse_development_root(item)
         for item in assignments
         if isinstance(item, Mapping) and item.get("partition") == "development"
     )
     if len(development) != schedule.policy.development_scenarios:
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule denominator differs"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule denominator differs")
     return development
 
 
@@ -424,14 +589,10 @@ def _parse_development_root(
     value: Mapping[str, object],
 ) -> RedLivingDexDevelopmentRoot:
     if set(value) != _ASSIGNMENT_FIELDS or value.get("partition") != "development":
-        raise RedLivingDexDevelopmentSupplyError(
-            "development assignment fields differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development assignment fields differ")
     kinds = value.get("available_option_kinds")
     if not isinstance(kinds, list) or not kinds:
-        raise RedLivingDexDevelopmentSupplyError(
-            "development assignment option kinds differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development assignment option kinds differ")
     try:
         return RedLivingDexDevelopmentRoot(
             lineage_sha256=value["lineage_sha256"],  # type: ignore[arg-type]
@@ -452,15 +613,11 @@ def _deduplicate_roots(
 ) -> tuple[RedLivingDexDevelopmentRoot, ...]:
     if not roots:
         raise RedLivingDexDevelopmentSupplyError("development schedules are empty")
-    grouped: dict[
-        tuple[str, str, str, str, str], RedLivingDexDevelopmentRoot
-    ] = {}
+    grouped: dict[tuple[str, str, str, str, str], RedLivingDexDevelopmentRoot] = {}
     for root in roots:
         existing = grouped.get(root.deduplication_key)
         if existing is not None and existing.option_kinds != root.option_kinds:
-            raise RedLivingDexDevelopmentSupplyError(
-                "duplicate development root semantics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("duplicate development root semantics differ")
         grouped[root.deduplication_key] = root
     unique = tuple(grouped[key] for key in sorted(grouped))
     lineages = [root.lineage_sha256 for root in unique]
@@ -482,7 +639,10 @@ __all__ = [
     "MINIMUM_DEVELOPMENT_ROOTS",
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLY_RESULT_SCHEMA",
     "RedLivingDexDevelopmentRoot",
+    "RedLivingDexDevelopmentSupplyInventory",
     "RedLivingDexDevelopmentSupplyError",
     "RedLivingDexDevelopmentSupplyResult",
     "audit_red_living_dex_development_supply",
+    "build_red_living_dex_development_supplement_capabilities",
+    "inventory_red_living_dex_development_supply",
 ]

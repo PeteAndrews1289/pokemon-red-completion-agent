@@ -2682,6 +2682,16 @@ def _restore_observed_outcome(
     return outcome
 
 
+def restore_living_dex_observed_outcome(
+    document: Mapping[str, object],
+) -> LivingDexObservedOutcome:
+    """Strictly restore one title-neutral observed outcome document."""
+
+    if not isinstance(document, Mapping):
+        raise TypeError("observed outcome document must be a mapping")
+    return _restore_observed_outcome(document)
+
+
 def _restore_terminal(document: Mapping[str, object]) -> LivingDexCausalTerminal:
     _exact_keys(
         document,
@@ -2852,4 +2862,5 @@ __all__ = [
     "LivingDexControllerGate",
     "load_living_dex_authenticated_causal_examples",
     "materialize_living_dex_causal_example",
+    "restore_living_dex_observed_outcome",
 ]

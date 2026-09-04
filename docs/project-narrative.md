@@ -1,5 +1,53 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the shopping list becomes an immutable three-root plan
+
+Once the audit fixed the number at three, the next risk was letting implementation quietly expand
+it again. The new freezer begins from the train corpus and historical schedules, removes anything
+sharing a lineage, physical root, or exact state, and searches only the remaining action-free Red
+capabilities. It must find three different families in three different places, with storage
+management represented strongly enough that one failed setup cannot erase it.
+
+The resulting artifact is deliberately boring: a sealed development-only plan connecting shared
+semantic menus to exact Red setup recipes. It contains no preferred answer and cannot run the game.
+That separation is the point. Publication and one protected freeze come next; only a successfully
+reopened plan can become input to the already-built model-led outcome bridge.
+
+## September 4: the project counts the exam seats before building more classrooms
+
+The published audit answered a question the project had repeatedly blurred: how much genuinely
+untouched Red evaluation supply already exists? It authenticated the eighteen training experiences,
+the exact fitted model, both historical schedules, and the claim ledger without opening the game or
+an outcome. The two schedules turned out to repeat the same four roots. Two are gone; two remain
+clean and share neither lineage nor state with training.
+
+Those two surviving roots already span six kinds of strategic work. Storage management is the one
+missing kind. That makes the next purchase precise: three new roots, not another ten-example
+classroom—two to reach the four-root evaluation floor and one spare in case setup fails. This is a
+small result in gameplay terms and a large result in project discipline: the next emulator work is
+now tied to a measured information gap rather than to a desire for a bigger run.
+
+## September 4: the exam runner stops rewriting the classroom
+
+Opening the held Red rows looked like a small extension to the train runner. It was not. The first
+implementation made old setup code understand the development suffix, and the repository's exact
+historical evidence rejected the change. That failure clarified the correct architecture: training
+and evaluation share semantic interfaces, but a qualified one-shot consumer is immutable evidence.
+
+The replacement is a separate development path. It authenticates a frozen Red setup without moving
+the game, claims both root identities before a runtime can exist, and treats every claimed
+interruption as terminal. Once setup succeeds, the fitted model receives an identity-free menu,
+scores each available candidate once, seals the complete score vector and choice, and only then
+releases the selected branch. The resulting outcome is evaluation evidence, never another training
+label.
+
+The work deliberately produced no flattering gameplay number. Its ROM-free fixtures catch plan and
+root substitution, train/development crossover, wrong-model use, power loss after claim, and power
+loss after controller release. A successful real development branch remains unopened until the
+aggregate supply audit is green and the measured three-root supplement exists. The important gain
+is that the model now has an honest path toward acting in Red without erasing the provenance that
+made its eighteen training experiences trustworthy.
+
 ## September 4: the model finally receives every collected causal lesson
 
 After the first multi-decision player rehearsal, the project stepped back far enough to reconcile

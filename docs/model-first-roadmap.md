@@ -1,5 +1,79 @@
 # Model-first development roadmap
 
+## Current checkpoint: the measured three-root freezer is locally qualified
+
+The project now has a dedicated action-free freezer for the exact gap established by the published
+supply audit. It reconstructs private train and historical-root exclusions, rejects lineage,
+physical-root, and state reuse, and asks the title-neutral planner for exactly three development
+roots. The plan must span three families and locations, include `manage_storage`, and retain all
+seven portable option kinds after any one new setup censor. Each selected capability is then bound
+to one exact Red context and deterministic setup recipe in an immutable development-only plan.
+
+The freezer contains no model scorer, outcome reader, controller, teacher, claim writer, or fitting
+path. Its synthetic end-to-end publication rehearsal and the full related bridge slice are green.
+The next sequence is now operational rather than architectural:
+
+1. publish the qualified branch and require green hosted CI;
+2. merge it and require green exact-main push CI;
+3. run exactly one action-free private supplement freeze from that clean revision;
+4. stop and retain the falsifier if three eligible roots do not exist;
+5. if the plan freezes, independently preflight all new and preserved roots with the exact model;
+6. then open one selected development branch per admitted root without fitting on the results.
+
+No real root was frozen or consumed in this engineering checkpoint. Crystal, sealed Red, and full
+replay remain closed.
+
+## Previous checkpoint: the exact supply gap is measured; freeze three roots, not a classroom
+
+PR 207 is exact main `481b31d9` under green CI `33866844485/1`. Its protected action-free audit
+authenticated the complete eighteen-example train corpus, exact shadow model, both historical
+development schedules and the account claim ledger. The two schedules duplicate the same four
+roots; two are unavailable and two remain untouched. The surviving roots are lineage- and
+state-disjoint from train and cover `acquire`, `develop`, `evolve`, `explore`, `resupply`, and
+`unlock_access`. `manage_storage` is the sole missing portable option kind.
+
+This converts an estimate into a fixed engineering target:
+
+1. green and merge PR 208's separate development-only model execution bridge;
+2. implement and adversarially qualify a dedicated action-free supplement freezer;
+3. freeze exactly three new independent development roots across three families and locations,
+   with `manage_storage` coverage surviving any one setup censor;
+4. join the preserved two roots and new plan through zero-effect admission and exact-model
+   preflight;
+5. execute each successfully admitted root once, retaining every setup censor and selected factual
+   outcome;
+6. compare the immutable model with its frozen control without fitting on development, then
+   reorient before any authority change.
+
+The audit itself used zero ROM reads, emulator frames, predictions, outcomes, teachers, fits,
+controller actions, or claims. Four or more resulting development outcomes will be an integration
+falsifier, not a statistically strong promotion study. Crystal, sealed Red, and full replay remain
+closed.
+
+## Previous checkpoint: the model-led Red development bridge is locally complete
+
+The project can now carry one frozen held Red row through a separate development-only path without
+modifying the qualified train consumer. The path authenticates the complete schedule and exact root,
+claims before controller-capable construction, creates a validated Red setup, projects its menu into
+the title-neutral option model, commits every candidate prediction and the selected index, executes
+only that selected branch, and preserves its independently observed outcome without creating a
+training target. Claimed interruptions are terminal and recovery cannot reopen a runtime.
+
+This is an engineering milestone, not a generalization result. No ROM, development outcome, model
+authority, Crystal task, or full replay was opened while building it. The exact next sequence is:
+
+1. green and merge the action-free held-supply auditor;
+2. reproduce its expected two-clean-root result from protected exact main;
+3. publish and green the development bridge;
+4. freeze exactly three outcome-blind independent supplement roots, including `manage_storage`;
+5. run action-free admission and model-identity preflight over the preserved two plus new supply;
+6. execute one model-selected development branch per admitted root, retaining setup censors;
+7. compare the frozen model with its preregistered control and reorient before any authority change.
+
+Stop if the audit changes, any root overlaps train, a private identity reaches policy features, a
+claimed setup is retried, or a development result enters fitting. Crystal remains deliberately
+deferred until this same portable decision seam earns useful Red evidence.
+
 ## Current checkpoint: salvage the held exam before building another classroom
 
 The complete eighteen-example causal model is fitted and immutable. A local action-free audit then
