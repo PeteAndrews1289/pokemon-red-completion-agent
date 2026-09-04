@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: a failed freeze becomes a capacity measurement
+
+The three-root freezer passed local and hosted qualification, merged, and ran once from exact green
+main. It found no admissible supplement and failed closed before publishing a plan or releasing any
+behavior. Every effect counter remained zero. That outcome is terminal: repeatedly asking the same
+selector would not create information and could quietly turn a one-shot design into result hunting.
+
+The useful follow-up is narrower than another gameplay campaign. A new aggregate-only diagnostic
+reuses the exact eligibility exclusions and supplement policy, but removes selection and
+publication entirely. It counts eligible independent roots, family and location breadth,
+storage-capable coverage, candidate triples, and triples satisfying the whole contract. Its output
+contains no private root identity or path. This is how the project turns an engineering failure into
+a falsifiable next choice: add supply if supply is missing, or revise an unjustified constraint only
+if the measured bank shows that constraint—not the model or the outcome—is the bottleneck.
+
 ## September 4: the shopping list becomes an immutable three-root plan
 
 Once the audit fixed the number at three, the next risk was letting implementation quietly expand

@@ -1,0 +1,53 @@
+{
+  "claim_boundary": {
+    "supported": "The sole action-free three-root supplement freeze failed closed during supplement selection. It created no private plan, claimed no root, opened no outcome, made no prediction, and executed no controller action or emulator frame. The exact freeze is terminal and will not be retried.",
+    "unsupported": [
+      "supplement_capacity_absent",
+      "supplement_constraint_identified",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "next_gate": {
+    "action": "Publish an aggregate-only capacity diagnostic, require green exact-main CI, then perform one read-only census that distinguishes root-count, family/location-diversity, and option-kind coverage constraints without revealing private identities.",
+    "prohibition": "Do not retry the terminal freeze or weaken the supplement policy before the aggregate constraint is measured."
+  },
+  "result": {
+    "private_plan_created": false,
+    "stage": "supplement_selection",
+    "status": "failed_closed",
+    "terminal": true
+  },
+  "schema": "pokemon.red.living-dex-development-supplement-freeze-failure-evidence.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33878230427,
+    "source_bundle_sha256": "327aeedff06a364660b97d838e3bf319504f12b7c65dc47e1e4c0ae7dcb82881",
+    "source_commit": "5345ee3d1b062806f45a33a2d4db337cd106c541"
+  },
+  "status": "terminal_zero_effect_supplement_selection_failure",
+  "zero_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "training_targets": 0,
+    "unselected_action_targets": 0
+  }
+}
