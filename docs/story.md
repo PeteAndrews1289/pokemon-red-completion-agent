@@ -7,6 +7,18 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: thirteen roots, 429 legal exams, one broken doorway
+
+The read-only census found that the bank was not the problem. Thirteen independent roots can host
+twenty-five compatible situations across four families and four locations. Of 1,898 possible
+three-situation combinations, 429 satisfy every rule—including storage coverage that survives one
+failed setup. The game still never advanced a frame.
+
+That changes the diagnosis completely. The earlier freeze did not need more data; it stumbled while
+turning a valid title-neutral plan into exact Red recipes and contexts. The next instrument sends
+every legal combination through that same doorway without choosing or publishing one, then reports
+only how many pass and why the others fail.
+
 ## Current checkpoint: the sealed envelope stayed empty
 
 The qualified freezer reached the real context bank and found no three-root set satisfying every

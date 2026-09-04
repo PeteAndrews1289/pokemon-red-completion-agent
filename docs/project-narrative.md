@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: 429 legal supplements move the bug from supply to binding
+
+The protected capacity census authenticated all 81 contexts without advancing the emulator. After
+train and historical exclusions, 13 independent roots remained with 25 compatible scenarios across
+four families and locations. Twelve roots could expose storage management. The exact robustness
+policy admitted 429 complete three-root supplements out of 1,898 scenario combinations.
+
+That is the useful negative result hidden inside the earlier failure. The project does not need
+another expensive scenario factory, a weaker independence rule, or a looser evaluation policy. The
+shared title-neutral planner has ample legal supply. The unresolved defect sits in the subsequent
+Red-specific join from shared scenario to context and deterministic recipe—or in the metadata that
+authenticates that join. The next diagnostic now reuses the binding constructor itself across every
+feasible combination and reports aggregate rejection categories, preserving the no-selection,
+no-controller boundary while making the failure precise enough to repair once.
+
 ## September 4: a failed freeze becomes a capacity measurement
 
 The three-root freezer passed local and hosted qualification, merged, and ran once from exact green

@@ -1,23 +1,24 @@
 # Model-first development roadmap
 
-## Current checkpoint: the first freeze is terminal; diagnose capacity without choosing
+## Current checkpoint: supply is ample; isolate the Red binding mismatch
 
-PR 208 merged as exact main `5345ee3d` and both pull-request and exact-main CI passed. The sole
-action-free three-root freeze then failed closed at `supplement_selection`. It created no plan,
-claims, predictions, outcomes, controller actions, or emulator frames. That exact invocation is
-terminal and will not be retried. Its result says the full fixed contract was infeasible in the
-observed bank; it does not yet say whether the limiting factor was root count, family/location
-diversity, storage coverage, or their intersection.
+PR 209 merged as exact main `61b5cc4b` under green CI `33887050869/1`. One protected action-free
+census then found 13 eligible roots and 429 supplements satisfying the exact three-root family,
+location, option-kind and censor-safe contract. Twelve roots can expose storage management, while
+only one can expose `unlock_access`; even with that pressure, 429 complete combinations remain.
+The earlier terminal failure is therefore downstream of shared capacity—in the Red recipe/context
+binding path or its exact metadata—not a reason to build another classroom.
 
 The next bounded sequence is:
 
-1. publish an aggregate-only capacity census that uses the freezer's exact eligibility and policy;
-2. adversarially prove it cannot select or publish a plan, score or fit a model, query a teacher,
-   claim a root, reveal an identity/path, or execute controller input;
-3. require green hosted and exact-main CI;
-4. run one protected read-only census over the authenticated bank;
-5. preserve its path-free aggregate result and choose the minimum evidence-backed successor;
-6. only then freeze new development supply under a new identity and preflight it before outcomes.
+1. factor the freezer's Red binding constructor so selection and binding have separate testable
+   boundaries;
+2. enumerate all feasible shared supplements through that exact constructor and publish only
+   aggregate bindable counts and fixed rejection categories;
+3. require green hosted and exact-main CI, then run one protected binding census;
+4. repair only the measured binding defect and add a regression that survives capability reorder;
+5. publish the repair under a new supplement-plan identity rather than retrying the terminal one;
+6. preflight any new plan action-free before opening one development outcome per admitted root.
 
 The model remains the immutable eighteen-example title-neutral shadow scorer. No authority or
 learning counter changed. Crystal, sealed Red, and full replay remain closed.

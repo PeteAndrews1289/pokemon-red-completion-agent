@@ -1,22 +1,22 @@
 # Current agent handoffs
 
-## Current override: Codex owns the terminal freeze diagnosis and measured successor
+## Current override: Codex owns the Red binding discrepancy
 
-PR 208 is exact main `5345ee3d` under green CI `33878230427/1`. The one permitted
-action-free three-root freeze then failed closed at `supplement_selection`. It created no plan,
-claimed no root, opened no outcome, made no prediction, and executed no controller action or
-emulator frame. That exact freeze is terminal and must not be retried. The failure does not prove
-that supply is absent; it only proves that the fixed selector found no admissible supplement.
+PR 209 is exact main `61b5cc4b` under green CI `33887050869/1`. Its protected aggregate census
+authenticated 81 contexts and found 13 eligible roots, 25 capabilities, four families, four
+locations, 12 storage-capable roots, 286 root triples, 1,898 scenario combinations and 429 fully
+feasible supplements. It used zero predictions, claims, outcomes, actions or frames. The earlier
+terminal freeze therefore did not fail because Red lacks enough independent supply or because the
+fixed family, location, option-kind and censor-safe policy is impossible.
 
-Codex owns one new aggregate-only capacity diagnostic. It may reopen authenticated context state to
-count eligible roots, families, locations, option-kind coverage, candidate triples, and feasible
-triples. It must not expose private identities or paths, publish/select a plan, query a teacher,
-score or fit a model, claim a root, or release controller input. Publish and qualify this diagnostic,
-then run one protected census from exact green main. The measured constraint—not speculation—will
-determine whether the successor changes supply or policy. Crystal, sealed Red, and full replay
-remain closed.
+Codex owns the aggregate-only binding census and narrow repair. Reuse the freezer's own Red binding
+constructor across every feasible shared supplement and report only fixed rejection categories and
+the number of bindable supplements. Do not select or publish a plan, expose identities or paths,
+score or fit a model, query a teacher, claim a root, or release controller input. After the exact
+binding seam is measured, repair only that seam, publish it, and use a new supplement identity;
+never retry the terminal freeze. Crystal, sealed Red, and full replay remain closed.
 
-## Previous override: Codex owns held-development salvage and the minimum supplement
+## Previous override: Codex owns the terminal freeze diagnosis and measured successor
 
 The eighteen-example title-neutral causal model is trained and published as shadow-only. A local
 action-free audit found that the original and successor clustered schedules name the same four

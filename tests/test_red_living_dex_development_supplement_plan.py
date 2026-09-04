@@ -12,6 +12,7 @@ from pokemon_red_completion.red_living_dex_development_supplement_plan import (
     RedLivingDexDevelopmentSupplementBindings,
     RedLivingDexDevelopmentSupplementPlanError,
     RedLivingDexDevelopmentSupplementPrivatePlan,
+    audit_red_living_dex_development_supplement_binding_capacity,
     audit_red_living_dex_development_supplement_capacity,
     freeze_red_living_dex_development_supplement_plan,
 )
@@ -213,3 +214,37 @@ def test_capacity_audit_distinguishes_insufficient_root_count() -> None:
     assert result.candidate_scenario_combinations == 0
     assert result.feasible_supplements == 0
     assert result.selection_ready is False
+
+
+def test_binding_capacity_uses_the_same_red_binding_boundary() -> None:
+    capabilities, supply, contexts, bindings = _inputs()
+    result = audit_red_living_dex_development_supplement_binding_capacity(
+        capabilities,
+        supply=supply,
+        context_identities=contexts,
+        bindings=bindings,
+    )
+    public = result.public_dict()
+    encoded = json.dumps(public, sort_keys=True)
+
+    assert result.binding_ready_supplements == result.capacity.feasible_supplements
+    assert result.binding_failure_counts == ()
+    assert result.binding_ready is True
+    assert public["status"] == "supplement_binding_ready"
+    assert all(value not in encoded for value in contexts.values())
+
+
+def test_binding_capacity_aggregates_missing_context_rejections() -> None:
+    capabilities, supply, _contexts, bindings = _inputs()
+    result = audit_red_living_dex_development_supplement_binding_capacity(
+        capabilities,
+        supply=supply,
+        context_identities={},
+        bindings=bindings,
+    )
+
+    assert result.binding_ready_supplements == 0
+    assert result.binding_failure_counts == (
+        ("missing_red_context", result.capacity.feasible_supplements),
+    )
+    assert result.binding_ready is False

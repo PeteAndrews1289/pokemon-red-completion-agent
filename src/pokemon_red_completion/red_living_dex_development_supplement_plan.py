@@ -9,7 +9,8 @@ model scores, behavior choices, outcomes, claims, or controller authority.
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping, Sequence
+from collections import Counter
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from itertools import combinations, product
 
@@ -130,6 +131,57 @@ class RedLivingDexDevelopmentSupplementCapacity:
                 else "supplement_capacity_insufficient"
             ),
             "teacher_queries": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexDevelopmentSupplementBindingCapacity:
+    """Aggregate binding feasibility without selecting or publishing a plan."""
+
+    capacity: RedLivingDexDevelopmentSupplementCapacity
+    binding_ready_supplements: int
+    binding_failure_counts: tuple[tuple[str, int], ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.capacity, RedLivingDexDevelopmentSupplementCapacity):
+            raise TypeError("supplement binding capacity needs its capacity census")
+        self.capacity.__post_init__()
+        if (
+            type(self.binding_ready_supplements) is not int  # noqa: E721
+            or self.binding_ready_supplements < 0
+            or not isinstance(self.binding_failure_counts, tuple)
+            or any(
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or not isinstance(item[0], str)
+                or re.fullmatch(r"[a-z0-9]+(?:_[a-z0-9]+)*", item[0]) is None
+                or type(item[1]) is not int  # noqa: E721
+                or item[1] <= 0
+                for item in self.binding_failure_counts
+            )
+            or tuple(sorted(self.binding_failure_counts)) != self.binding_failure_counts
+            or self.binding_ready_supplements
+            + sum(value for _reason, value in self.binding_failure_counts)
+            != self.capacity.feasible_supplements
+        ):
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement binding capacity counts differ"
+            )
+
+    @property
+    def binding_ready(self) -> bool:
+        return self.binding_ready_supplements > 0
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **self.capacity.public_dict(),
+            "binding_failure_counts": dict(self.binding_failure_counts),
+            "binding_ready": self.binding_ready,
+            "binding_ready_supplements": self.binding_ready_supplements,
+            "schema": ("pokemon.red.living-dex-development-supplement-binding-capacity.v1"),
+            "status": (
+                "supplement_binding_ready" if self.binding_ready else "supplement_binding_blocked"
+            ),
         }
 
 
@@ -365,8 +417,41 @@ def freeze_red_living_dex_development_supplement_plan(
         excluded_lineages=frozenset(supply.train_lineages | historical_lineages),
         excluded_physical_roots=frozenset(historical_physical),
     )
+    return _bind_red_living_dex_development_supplement_plan(
+        supplement,
+        eligible_red=eligible_red,
+        context_identities=context_identities,
+        bindings=bindings,
+    )
+
+
+def _bind_red_living_dex_development_supplement_plan(
+    supplement: LivingDexDevelopmentSupplementPlan,
+    *,
+    eligible_red: Sequence[RedLivingDexCausalRootCapability],
+    context_identities: Mapping[str, str],
+    bindings: RedLivingDexDevelopmentSupplementBindings,
+) -> RedLivingDexDevelopmentSupplementPrivatePlan:
+    """Bind one already-validated shared supplement to exact Red recipes."""
+
+    if not isinstance(supplement, LivingDexDevelopmentSupplementPlan):
+        raise TypeError("supplement Red binding needs its shared plan")
+    supplement.__post_init__()
+    if isinstance(eligible_red, (str, bytes)) or not isinstance(
+        eligible_red,
+        Sequence,
+    ):
+        raise TypeError("supplement Red binding needs eligible capabilities")
+    if not isinstance(context_identities, Mapping):
+        raise TypeError("supplement Red binding needs context identities")
+    if not isinstance(bindings, RedLivingDexDevelopmentSupplementBindings):
+        raise TypeError("supplement Red binding needs exact bindings")
+    bindings.__post_init__()
     red_by_scenario: dict[str, RedLivingDexCausalRootCapability] = {}
     for capability in eligible_red:
+        if not isinstance(capability, RedLivingDexCausalRootCapability):
+            raise TypeError("supplement Red binding capability differs")
+        capability.__post_init__()
         projected = build_red_living_dex_development_supplement_capabilities((capability,))[0]
         if projected.scenario_sha256 in red_by_scenario:
             raise RedLivingDexDevelopmentSupplementPlanError(
@@ -419,6 +504,58 @@ def audit_red_living_dex_development_supplement_capacity(
     policy = _supplement_policy(supply)
     eligible_red = _eligible_red_capabilities(capabilities, supply=supply)
     shared = build_red_living_dex_development_supplement_capabilities(eligible_red)
+    return _capacity_from_shared(shared, policy=policy)
+
+
+def audit_red_living_dex_development_supplement_binding_capacity(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+    *,
+    supply: RedLivingDexDevelopmentSupplyInventory,
+    context_identities: Mapping[str, str],
+    bindings: RedLivingDexDevelopmentSupplementBindings,
+) -> RedLivingDexDevelopmentSupplementBindingCapacity:
+    """Count Red-bindable supplements without choosing or publishing one."""
+
+    if isinstance(capabilities, (str, bytes)) or not isinstance(capabilities, Sequence):
+        raise TypeError("supplement binding capacity needs a capability sequence")
+    if not isinstance(supply, RedLivingDexDevelopmentSupplyInventory):
+        raise TypeError("supplement binding capacity needs its authenticated supply")
+    if not isinstance(context_identities, Mapping):
+        raise TypeError("supplement binding capacity needs context identities")
+    if not isinstance(bindings, RedLivingDexDevelopmentSupplementBindings):
+        raise TypeError("supplement binding capacity needs exact bindings")
+    supply.__post_init__()
+    bindings.__post_init__()
+    policy = _supplement_policy(supply)
+    eligible_red = _eligible_red_capabilities(capabilities, supply=supply)
+    shared = build_red_living_dex_development_supplement_capabilities(eligible_red)
+    capacity = _capacity_from_shared(shared, policy=policy)
+    binding_ready = 0
+    failures: Counter[str] = Counter()
+    for supplement in _feasible_shared_supplements(shared, policy=policy):
+        try:
+            _bind_red_living_dex_development_supplement_plan(
+                supplement,
+                eligible_red=eligible_red,
+                context_identities=context_identities,
+                bindings=bindings,
+            )
+        except RedLivingDexDevelopmentSupplementPlanError as error:
+            failures[_binding_failure_code(error)] += 1
+        else:
+            binding_ready += 1
+    return RedLivingDexDevelopmentSupplementBindingCapacity(
+        capacity=capacity,
+        binding_ready_supplements=binding_ready,
+        binding_failure_counts=tuple(sorted(failures.items())),
+    )
+
+
+def _capacity_from_shared(
+    shared: Sequence[LivingDexDevelopmentSupplementCapability],
+    *,
+    policy: LivingDexDevelopmentSupplementPolicy,
+) -> RedLivingDexDevelopmentSupplementCapacity:
     by_root: dict[str, list[LivingDexDevelopmentSupplementCapability]] = {}
     for item in shared:
         by_root.setdefault(item.physical_root_sha256, []).append(item)
@@ -428,17 +565,11 @@ def audit_red_living_dex_development_supplement_capacity(
     )
     candidate_root_sets = 0
     candidate_scenario_combinations = 0
-    feasible_supplements = 0
     for groups in combinations(root_groups, policy.new_roots):
         candidate_root_sets += 1
-        for candidate_tuple in product(*groups):
+        for _candidate_tuple in product(*groups):
             candidate_scenario_combinations += 1
-            ordered = tuple(sorted(candidate_tuple, key=lambda item: item.scenario_sha256))
-            try:
-                LivingDexDevelopmentSupplementPlan(policy, ordered)
-            except LivingDexDevelopmentSupplementError:
-                continue
-            feasible_supplements += 1
+    feasible_supplements = sum(1 for _item in _feasible_shared_supplements(shared, policy=policy))
     return RedLivingDexDevelopmentSupplementCapacity(
         eligible_capabilities=len(shared),
         eligible_lineages=len({item.lineage_sha256 for item in shared}),
@@ -462,6 +593,40 @@ def audit_red_living_dex_development_supplement_capacity(
             for kind in RED_DIRECT_CAUSAL_OPTION_KINDS
         ),
     )
+
+
+def _feasible_shared_supplements(
+    shared: Sequence[LivingDexDevelopmentSupplementCapability],
+    *,
+    policy: LivingDexDevelopmentSupplementPolicy,
+) -> Iterator[LivingDexDevelopmentSupplementPlan]:
+    by_root: dict[str, list[LivingDexDevelopmentSupplementCapability]] = {}
+    for item in shared:
+        by_root.setdefault(item.physical_root_sha256, []).append(item)
+    root_groups = tuple(
+        tuple(sorted(by_root[root], key=lambda item: item.scenario_sha256))
+        for root in sorted(by_root)
+    )
+    for groups in combinations(root_groups, policy.new_roots):
+        for candidate_tuple in product(*groups):
+            ordered = tuple(sorted(candidate_tuple, key=lambda item: item.scenario_sha256))
+            try:
+                yield LivingDexDevelopmentSupplementPlan(policy, ordered)
+            except LivingDexDevelopmentSupplementError:
+                continue
+
+
+def _binding_failure_code(error: RedLivingDexDevelopmentSupplementPlanError) -> str:
+    return {
+        "supplement freeze repeats a Red scenario": "duplicate_red_scenario",
+        "supplement freeze cannot join its Red context": "missing_red_context",
+        "supplement freeze repeats a Red context": "duplicate_red_context",
+        "supplement assignment does not join its Red capability": (
+            "red_capability_projection_mismatch"
+        ),
+        "supplement private assignments differ": "private_assignment_count_mismatch",
+        "supplement private assignment order differs": "private_assignment_order_mismatch",
+    }.get(str(error), "other_red_binding_rejection")
 
 
 def _supplement_policy(
@@ -540,10 +705,12 @@ __all__ = [
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_SCHEMA",
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_STATUS",
     "RedLivingDexDevelopmentSupplementBindings",
+    "RedLivingDexDevelopmentSupplementBindingCapacity",
     "RedLivingDexDevelopmentSupplementCapacity",
     "RedLivingDexDevelopmentSupplementFrozenScenario",
     "RedLivingDexDevelopmentSupplementPlanError",
     "RedLivingDexDevelopmentSupplementPrivatePlan",
+    "audit_red_living_dex_development_supplement_binding_capacity",
     "audit_red_living_dex_development_supplement_capacity",
     "freeze_red_living_dex_development_supplement_plan",
 ]
