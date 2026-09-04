@@ -13,7 +13,10 @@ from pokemon_red_completion.living_dex_goal_policy import (
 from pokemon_red_completion.living_dex_option_value import (
     LIVING_DEX_OPTION_FEATURE_NAMES,
     LIVING_DEX_OPTION_OUTCOME_NAMES,
+    LivingDexOptionCandidate,
+    LivingDexOptionContext,
     LivingDexOptionValueModel,
+    LivingDexPredictedOutcome,
 )
 from pokemon_red_completion.living_dex_policy_development import (
     LivingDexPolicyDevelopmentError,
@@ -54,9 +57,28 @@ def _development_scenario() -> tuple[LivingDexCausalScenario, object]:
     )
 
 
-def test_decision_scores_complete_held_menu_without_runtime_effects() -> None:
+def test_decision_scores_complete_held_menu_without_runtime_effects(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     scenario, harness = _development_scenario()
     model = _model()
+    original = LivingDexOptionValueModel.predict_candidate
+    predictions = 0
+
+    def counted_prediction(
+        self: LivingDexOptionValueModel,
+        context: LivingDexOptionContext,
+        candidate: LivingDexOptionCandidate,
+    ) -> LivingDexPredictedOutcome:
+        nonlocal predictions
+        predictions += 1
+        return original(self, context, candidate)
+
+    monkeypatch.setattr(
+        LivingDexOptionValueModel,
+        "predict_candidate",
+        counted_prediction,
+    )
 
     decision = commit_living_dex_policy_development_decision(
         scenario,
@@ -68,6 +90,7 @@ def test_decision_scores_complete_held_menu_without_runtime_effects() -> None:
     assert decision.selected_candidate_index == 0
     assert decision.candidate_scores[2] is None
     assert decision.predicted_outcomes[2] is None
+    assert predictions == len(scenario.menu.available_indices)
     assert decision.public_dict()["training_targets_emitted"] == 0
     assert decision.public_dict()["teacher_queries"] == 0
     assert harness.resolver_calls == []

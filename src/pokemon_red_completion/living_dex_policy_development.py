@@ -200,13 +200,19 @@ def commit_living_dex_policy_development_decision(
         raise LivingDexPolicyDevelopmentError(
             "development model identity differs"
         )
-    scores = model.scores(scenario.menu, utility)
-    selected = model.select(scenario.menu, utility)
-    outcomes = tuple(
-        model.predict_candidate(scenario.menu.context, candidate).vector()
+    predictions = tuple(
+        model.predict_candidate(scenario.menu.context, candidate)
         if index in scenario.menu.available_indices
         else None
         for index, candidate in enumerate(scenario.menu.candidates)
+    )
+    scores = tuple(
+        utility.score(prediction) if prediction is not None else None
+        for prediction in predictions
+    )
+    selected = max(
+        scenario.menu.available_indices,
+        key=lambda index: (scores[index], -index),
     )
     return LivingDexPolicyDevelopmentDecision(
         causal_identity_sha256=scenario.identity.identity_sha256,
@@ -215,7 +221,10 @@ def commit_living_dex_policy_development_decision(
         utility_sha256=living_dex_option_utility_sha256(utility),
         selected_candidate_index=selected,
         candidate_scores=scores,
-        predicted_outcomes=outcomes,
+        predicted_outcomes=tuple(
+            None if prediction is None else prediction.vector()
+            for prediction in predictions
+        ),
     )
 
 
