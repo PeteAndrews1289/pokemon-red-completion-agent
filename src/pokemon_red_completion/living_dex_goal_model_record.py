@@ -109,19 +109,37 @@ def load_living_dex_goal_model_record(
 
     if not isinstance(path, Path):
         raise TypeError("causal model record path must be a Path")
+    try:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise LivingDexGoalModelRecordError("causal model record is unreadable") from error
+    return load_living_dex_goal_model_record_bytes(
+        payload,
+        expected_model_sha256=expected_model_sha256,
+    )
+
+
+def load_living_dex_goal_model_record_bytes(
+    payload: bytes,
+    *,
+    expected_model_sha256: str,
+) -> LivingDexGoalModelRecord:
+    """Authenticate an immutable in-memory model record without a path round trip."""
+
+    if not isinstance(payload, bytes):
+        raise TypeError("causal model record payload must be bytes")
     if (
         not isinstance(expected_model_sha256, str)
         or _SHA256.fullmatch(expected_model_sha256) is None
     ):
         raise LivingDexGoalModelRecordError("expected causal model identity differs")
     try:
-        payload = path.read_bytes()
         decoded = json.loads(
             payload,
             object_pairs_hook=_unique_object,
             parse_constant=_reject_constant,
         )
-    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as error:
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
         raise LivingDexGoalModelRecordError("causal model record is unreadable") from error
     if not isinstance(decoded, Mapping) or set(decoded) != _RECORD_FIELDS:
         raise LivingDexGoalModelRecordError("causal model record fields differ")
@@ -198,4 +216,5 @@ __all__ = [
     "LivingDexGoalModelRecord",
     "LivingDexGoalModelRecordError",
     "load_living_dex_goal_model_record",
+    "load_living_dex_goal_model_record_bytes",
 ]

@@ -1,5 +1,20 @@
 # Current agent handoffs
 
+## Current override: Codex owns held-development salvage and the minimum supplement
+
+The eighteen-example title-neutral causal model is trained and published as shadow-only. A local
+action-free audit found that the original and successor clustered schedules name the same four
+development roots. Two are consumed; two remain clean and disjoint from all eighteen train rows.
+The clean pair covers six portable option kinds and lacks only `manage_storage`. This observation
+must be reproduced by the published exact-source audit before it is treated as tracked evidence.
+
+Codex owns the aggregate-only audit, publication, exact-main execution, a three-root independent
+development supplement (two required plus one setup-censor allowance), and the development-only
+model-led outcome boundary. Preserve the two clean roots until the supplement and decision
+commitments are durable. Do not rebuild train supply, refit on development, retry consumed roots,
+open Crystal or sealed Red, or run a full replay. External reviewers are not required at this
+ordinary development gate.
+
 ## Current override: Codex owns updated-model shadow binding and prospective supply
 
 The complete-corpus update is finished. Exact main `4414215e` passed CI `33856641047/1`, then one

@@ -1,5 +1,32 @@
 # Model-first development roadmap
 
+## Current checkpoint: salvage the held exam before building another classroom
+
+The complete eighteen-example causal model is fitted and immutable. A local action-free audit then
+reopened only its train corpus, exact model record, both historical clustered schedule records and
+the account claim ledger. The two schedules do not provide eight independent exam roots: they
+reserve the same four roots twice. Two of those four roots are now consumed; two remain clean,
+lineage- and state-disjoint from every train example, and collectively expose six of the seven
+portable option kinds. `manage_storage` is the only missing kind.
+
+The earlier 10+5 replacement plan would rebuild training supply the current model does not need.
+The narrower sequence is now:
+
+1. publish and exact-CI qualify the aggregate-only audit;
+2. reproduce the result from protected clean main with zero ROM, outcomes, predictions, fits or
+   controller effects;
+3. preserve the two clean held roots;
+4. freeze three new independent development roots—two required plus one setup-censor allowance—
+   including `manage_storage` coverage;
+5. commit model and deterministic-control decisions before opening any outcome;
+6. execute the resulting four-or-more development cases once and report descriptive unseen
+   behavior without refitting on them.
+
+This is a development gate, not a sealed benchmark. Four outcomes are enough to falsify gross
+integration errors and decide whether to redesign the representation; they are not enough for a
+strong statistical promotion claim. Controller authority, Crystal, sealed Red and full replay
+remain closed.
+
 ## Current checkpoint: the full causal corpus is fitted; buy independent experience next
 
 PR 205 merged as exact main `4414215e` and passed exact-main CI `33856641047/1`. The authenticated

@@ -1,5 +1,23 @@
 # Handoff
 
+## Current checkpoint: two held exam roots survived; generate only the measured gap
+
+The eighteen-example title-neutral causal model is fitted and remains shadow-only. A local
+action-free audit reopened its authenticated train corpus, exact private model record, the original
+and successor clustered schedule records, and the account-wide claim ledger. The schedules both
+refer to the same four development roots. Two roots are consumed; two remain available and are
+lineage- and state-disjoint from all eighteen train examples. The available pair spans six of seven
+portable option kinds; `manage_storage` is missing.
+
+The new aggregate-only auditor has no ROM, outcome reader, model scorer, fitter, controller,
+teacher, or claim writer. Publish it and require green exact-main CI, then run it once from the
+protected internal checkout to convert the local observation into tracked evidence. If it
+reproduces the result, retain those two roots and freeze three new development roots—two required
+plus one setup-censor allowance—with `manage_storage` coverage. Then build the development-only
+model-led outcome gate and compare the existing model without refitting. Do not revive the former
+10+5 classroom build, consume the clean roots during engineering, retry consumed identities, open
+Crystal or sealed Red, or run a full replay.
+
 ## Current checkpoint: the complete causal classroom is fitted; fresh roots are next
 
 PR 205 merged as exact main `4414215e0910c69657371d871ae92e16d8078419` and passed push CI
