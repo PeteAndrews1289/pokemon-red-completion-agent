@@ -319,7 +319,8 @@ def freeze_red_living_dex_development_supplement_plan(
         excluded_physical_roots=frozenset(historical_physical),
     )
     red_by_scenario: dict[str, RedLivingDexCausalRootCapability] = {}
-    for capability, projected in zip(eligible_red, shared, strict=True):
+    for capability in eligible_red:
+        projected = build_red_living_dex_development_supplement_capabilities((capability,))[0]
         if projected.scenario_sha256 in red_by_scenario:
             raise RedLivingDexDevelopmentSupplementPlanError(
                 "supplement freeze repeats a Red scenario"

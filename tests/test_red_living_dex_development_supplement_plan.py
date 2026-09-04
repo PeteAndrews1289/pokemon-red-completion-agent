@@ -24,13 +24,15 @@ def _sha(value: object) -> str:
     return canonical_sha256({"value": value})
 
 
-def _plan() -> RedLivingDexDevelopmentSupplementPrivatePlan:
+def _plan(*, reverse_capabilities: bool = False) -> RedLivingDexDevelopmentSupplementPrivatePlan:
     historical, _binding = _successor_clustered_fixture()
     red_capabilities = tuple(
         item.capability
         for item in historical.assignments
         if item.assignment.capability.partition == "development"
     )
+    if reverse_capabilities:
+        red_capabilities = tuple(reversed(red_capabilities))
     contexts = {
         item.capability.root.root.root_consumption_sha256: item.context_identity_sha256
         for item in historical.assignments
@@ -124,6 +126,10 @@ def test_private_plan_binds_exact_three_development_recipes_without_behavior() -
     assert document["behavior_commitments"] == 0
     assert document["model_predictions"] == 0
     assert document["training_targets"] == 0
+
+
+def test_red_capability_input_order_cannot_change_the_frozen_plan() -> None:
+    assert _plan(reverse_capabilities=True).private_dict() == _plan().private_dict()
 
 
 def test_public_projection_is_path_free_and_hides_root_identity() -> None:

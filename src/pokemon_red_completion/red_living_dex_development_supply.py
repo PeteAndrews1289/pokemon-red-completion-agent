@@ -108,18 +108,14 @@ class RedLivingDexDevelopmentRoot:
             self.envelope_sha256,
         ):
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-                raise RedLivingDexDevelopmentSupplyError(
-                    "development root identity differs"
-                )
+                raise RedLivingDexDevelopmentSupplyError("development root identity differs")
         if (
             self.logical_root_sha256 == self.physical_root_sha256
             or not isinstance(self.option_kinds, frozenset)
             or not self.option_kinds
             or any(not isinstance(item, str) or not item for item in self.option_kinds)
         ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "development root semantics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("development root semantics differ")
 
     @property
     def deduplication_key(self) -> tuple[str, str, str, str, str]:
@@ -180,16 +176,13 @@ class RedLivingDexDevelopmentSupplyResult:
             != self.available_development_roots + self.unavailable_development_roots
             or self.available_development_lineages > self.available_development_roots
             or not isinstance(self.available_option_kinds, tuple)
-            or tuple(sorted(set(self.available_option_kinds)))
-            != self.available_option_kinds
+            or tuple(sorted(set(self.available_option_kinds))) != self.available_option_kinds
             or not isinstance(self.model_sha256, str)
             or _SHA256.fullmatch(self.model_sha256) is None
             or not isinstance(self.model_record_sha256, str)
             or _SHA256.fullmatch(self.model_record_sha256) is None
         ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "development supply diagnostics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("development supply diagnostics differ")
 
     @property
     def supply_ready(self) -> bool:
@@ -215,9 +208,7 @@ class RedLivingDexDevelopmentSupplyResult:
         available = set(self.available_option_kinds)
         return tuple(
             sorted(
-                item.value
-                for item in RED_DIRECT_CAUSAL_OPTION_KINDS
-                if item.value not in available
+                item.value for item in RED_DIRECT_CAUSAL_OPTION_KINDS if item.value not in available
             )
         )
 
@@ -248,17 +239,13 @@ class RedLivingDexDevelopmentSupplyResult:
             "private_identity_fields": 0,
             "private_path_fields": 0,
             "required_development_roots": self.required_development_roots,
-            "scheduled_development_assignments": (
-                self.scheduled_development_assignments
-            ),
+            "scheduled_development_assignments": (self.scheduled_development_assignments),
             "schedules_authenticated": self.schedules_authenticated,
             "schema": RED_LIVING_DEX_DEVELOPMENT_SUPPLY_RESULT_SCHEMA,
             "setup_censor_allowance": self.setup_censor_allowance,
             "state_overlap_with_train": self.state_overlap_with_train,
             "status": (
-                "development_supply_ready"
-                if self.supply_ready
-                else "development_supply_shortfall"
+                "development_supply_ready" if self.supply_ready else "development_supply_shortfall"
             ),
             "teacher_queries": 0,
             "train_examples_authenticated": self.authenticated_train_examples,
@@ -285,13 +272,18 @@ class RedLivingDexDevelopmentSupplyInventory:
         if (
             not isinstance(self.train_lineages, frozenset)
             or not self.train_lineages
-            or any(_SHA256.fullmatch(item) is None for item in self.train_lineages)
+            or any(
+                not isinstance(item, str) or _SHA256.fullmatch(item) is None
+                for item in self.train_lineages
+            )
             or not isinstance(self.train_states, frozenset)
             or not self.train_states
             or any(
                 not isinstance(item, tuple)
                 or len(item) != 2
-                or any(_SHA256.fullmatch(value) is None for value in item)
+                or any(
+                    not isinstance(value, str) or _SHA256.fullmatch(value) is None for value in item
+                )
                 for item in self.train_states
             )
             or not isinstance(self.historical_roots, tuple)
@@ -301,9 +293,7 @@ class RedLivingDexDevelopmentSupplyInventory:
                 for item in (*self.historical_roots, *self.available_roots)
             )
         ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "development supply private inventory differs"
-            )
+            raise RedLivingDexDevelopmentSupplyError("development supply private inventory differs")
         for root in (*self.historical_roots, *self.available_roots):
             root.__post_init__()
         historical = {item.deduplication_key for item in self.historical_roots}
@@ -351,12 +341,8 @@ def audit_red_living_dex_development_supply(
 
     try:
         authenticated = load_living_dex_authenticated_causal_examples(store)
-        if not authenticated or any(
-            item.identity.partition != "train" for item in authenticated
-        ):
-            raise RedLivingDexDevelopmentSupplyError(
-                "causal corpus is not train-only"
-            )
+        if not authenticated or any(item.identity.partition != "train" for item in authenticated):
+            raise RedLivingDexDevelopmentSupplyError("causal corpus is not train-only")
         rows = tuple(item.example for item in authenticated)
         dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
         model_record = store.find_sealed_record(
@@ -384,13 +370,11 @@ def audit_red_living_dex_development_supply(
             plan_roots.extend(_load_plan_development_roots(store, binding))
         train_lineages = {item.identity.lineage_sha256 for item in authenticated}
         train_states = {
-            (item.identity.state_sha256, item.identity.envelope_sha256)
-            for item in authenticated
+            (item.identity.state_sha256, item.identity.envelope_sha256) for item in authenticated
         }
         unique_roots = _deduplicate_roots(plan_roots)
         root_pairs = tuple(
-            (root.logical_root_sha256, root.physical_root_sha256)
-            for root in unique_roots
+            (root.logical_root_sha256, root.physical_root_sha256) for root in unique_roots
         )
         with claim_first_availability_snapshot_lease(claim_registry) as lease:
             availability = lease.observe(root_pairs)
@@ -402,8 +386,7 @@ def audit_red_living_dex_development_supply(
         available = tuple(
             root
             for root in unique_roots
-            if (root.logical_root_sha256, root.physical_root_sha256)
-            in available_pairs
+            if (root.logical_root_sha256, root.physical_root_sha256) in available_pairs
         )
         return RedLivingDexDevelopmentSupplyResult(
             authenticated_train_examples=len(authenticated),
@@ -416,24 +399,15 @@ def audit_red_living_dex_development_supply(
             duplicate_schedule_assignments=len(plan_roots) - len(unique_roots),
             available_development_roots=len(available),
             unavailable_development_roots=len(unique_roots) - len(available),
-            available_development_lineages=len(
-                {root.lineage_sha256 for root in available}
-            ),
+            available_development_lineages=len({root.lineage_sha256 for root in available}),
             available_option_kinds=tuple(
-                sorted(
-                    {
-                        kind
-                        for root in available
-                        for kind in root.option_kinds
-                    }
-                )
+                sorted({kind for root in available for kind in root.option_kinds})
             ),
             lineage_overlap_with_train=sum(
                 root.lineage_sha256 in train_lineages for root in unique_roots
             ),
             state_overlap_with_train=sum(
-                (root.state_sha256, root.envelope_sha256) in train_states
-                for root in unique_roots
+                (root.state_sha256, root.envelope_sha256) in train_states for root in unique_roots
             ),
         )
     except RedLivingDexDevelopmentSupplyError:
@@ -471,20 +445,16 @@ def inventory_red_living_dex_development_supply(
     )
     try:
         authenticated = load_living_dex_authenticated_causal_examples(store)
-        train_lineages = frozenset(
-            item.identity.lineage_sha256 for item in authenticated
-        )
+        train_lineages = frozenset(item.identity.lineage_sha256 for item in authenticated)
         train_states = frozenset(
-            (item.identity.state_sha256, item.identity.envelope_sha256)
-            for item in authenticated
+            (item.identity.state_sha256, item.identity.envelope_sha256) for item in authenticated
         )
         plan_roots: list[RedLivingDexDevelopmentRoot] = []
         for binding in bindings:
             plan_roots.extend(_load_plan_development_roots(store, binding))
         historical = _deduplicate_roots(plan_roots)
         root_pairs = tuple(
-            (root.logical_root_sha256, root.physical_root_sha256)
-            for root in historical
+            (root.logical_root_sha256, root.physical_root_sha256) for root in historical
         )
         with claim_first_availability_snapshot_lease(claim_registry) as lease:
             availability = lease.observe(root_pairs)
@@ -496,8 +466,7 @@ def inventory_red_living_dex_development_supply(
         available = tuple(
             root
             for root in historical
-            if (root.logical_root_sha256, root.physical_root_sha256)
-            in available_pairs
+            if (root.logical_root_sha256, root.physical_root_sha256) in available_pairs
         )
         inventory = RedLivingDexDevelopmentSupplyInventory(
             result=result,
@@ -510,22 +479,10 @@ def inventory_red_living_dex_development_supply(
             len(train_lineages & {item.lineage_sha256 for item in historical})
             != result.lineage_overlap_with_train
             or len(
-                train_states
-                & {
-                    (item.state_sha256, item.envelope_sha256)
-                    for item in historical
-                }
+                train_states & {(item.state_sha256, item.envelope_sha256) for item in historical}
             )
             != result.state_overlap_with_train
-            or tuple(
-                sorted(
-                    {
-                        kind
-                        for root in available
-                        for kind in root.option_kinds
-                    }
-                )
-            )
+            or tuple(sorted({kind for root in available for kind in root.option_kinds}))
             != result.available_option_kinds
         ):
             raise RedLivingDexDevelopmentSupplyError(
@@ -608,9 +565,7 @@ def _load_plan_development_roots(
         or record.summary.manifest_sha256 != binding.plan_manifest_sha256
         or record.summary.record_sha256 != binding.plan_record_sha256
     ):
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule record differs"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule record differs")
     document = record.read()
     schedule = validate_red_living_dex_clustered_private_plan(
         document,
@@ -619,18 +574,14 @@ def _load_plan_development_roots(
     )
     assignments = document.get("assignments")
     if not isinstance(assignments, list):
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule assignments differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule assignments differ")
     development = tuple(
         _parse_development_root(item)
         for item in assignments
         if isinstance(item, Mapping) and item.get("partition") == "development"
     )
     if len(development) != schedule.policy.development_scenarios:
-        raise RedLivingDexDevelopmentSupplyError(
-            "development schedule denominator differs"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development schedule denominator differs")
     return development
 
 
@@ -638,14 +589,10 @@ def _parse_development_root(
     value: Mapping[str, object],
 ) -> RedLivingDexDevelopmentRoot:
     if set(value) != _ASSIGNMENT_FIELDS or value.get("partition") != "development":
-        raise RedLivingDexDevelopmentSupplyError(
-            "development assignment fields differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development assignment fields differ")
     kinds = value.get("available_option_kinds")
     if not isinstance(kinds, list) or not kinds:
-        raise RedLivingDexDevelopmentSupplyError(
-            "development assignment option kinds differ"
-        )
+        raise RedLivingDexDevelopmentSupplyError("development assignment option kinds differ")
     try:
         return RedLivingDexDevelopmentRoot(
             lineage_sha256=value["lineage_sha256"],  # type: ignore[arg-type]
@@ -666,15 +613,11 @@ def _deduplicate_roots(
 ) -> tuple[RedLivingDexDevelopmentRoot, ...]:
     if not roots:
         raise RedLivingDexDevelopmentSupplyError("development schedules are empty")
-    grouped: dict[
-        tuple[str, str, str, str, str], RedLivingDexDevelopmentRoot
-    ] = {}
+    grouped: dict[tuple[str, str, str, str, str], RedLivingDexDevelopmentRoot] = {}
     for root in roots:
         existing = grouped.get(root.deduplication_key)
         if existing is not None and existing.option_kinds != root.option_kinds:
-            raise RedLivingDexDevelopmentSupplyError(
-                "duplicate development root semantics differ"
-            )
+            raise RedLivingDexDevelopmentSupplyError("duplicate development root semantics differ")
         grouped[root.deduplication_key] = root
     unique = tuple(grouped[key] for key in sorted(grouped))
     lineages = [root.lineage_sha256 for root in unique]
