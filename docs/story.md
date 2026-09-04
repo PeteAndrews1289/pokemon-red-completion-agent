@@ -1,5 +1,14 @@
 # The story: teaching a model to actually play Pokémon
 
+## Current checkpoint: the owner was right to call it stuck
+
+After fixing the partition error, the diagnostic spent over an hour checking the same recipes
+again and again. We stopped it without advancing the game or consuming a trial. The correction
+is to validate the inputs once and reuse the exact join across candidate plans. Full validation
+still applies when a real plan is created. This is maintenance; the model has learned nothing
+from this delay. The next census has a firm time box so infrastructure cannot quietly consume
+another session. See the [recorded stop](evidence/red-living-dex-development-supplement-binding-performance-stop-v1-2026-09-04.json).
+
 A narrative account of this project, written for an audience rather than for a compiler. The
 engineering record lives in [project-narrative.md](project-narrative.md); this is the arc.
 

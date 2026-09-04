@@ -1,5 +1,19 @@
 # Current agent handoffs
 
+## Current override: bounded performance repair, then measure the existing model
+
+PR 211 and exact-main CI `33904380404/1` are green. The next census was interrupted after more
+than 65 minutes in binding diagnosis with zero effects. Codex is factoring a per-call validated
+capability index and an exact shared join so 429 combinations do not rebuild the same recipes.
+The freezer retains full private-plan validation. Count-based regression and parity checks must
+pass before publication; the next private census has a 15-minute time box.
+
+The anti-drift alarm is acknowledged: this is maintenance unblocking the eighteen-example model's
+independent development test, with no authority or learning-counter increase. If it fails again,
+reassess before another diagnostic expansion. Claude's next role is leakage/statistical review;
+Antigravity's is architecture/transfer review at a design or promotion boundary. Both remain
+read-only and ordinary maintenance does not wait for them. See [handoff](../HANDOFF.md).
+
 ## Current override: Codex owns the narrow Red partition-binding repair
 
 Exact main `c1fb1bca` passed CI `33896140351/1`, then the protected binding census failed closed at

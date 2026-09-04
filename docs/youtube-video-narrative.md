@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: a busy processor is not progress
+
+**Visual:** The 81-context observation completes, while 429 candidate plans repeatedly send
+the same recipe cards through validation. Mark the run **INTERRUPTED AFTER 65+ MINUTES** and
+keep gameplay and learning counters at zero.
+
+**Voiceover:** “The owner called it stuck, and he was right. Our diagnostic kept rebuilding
+the same checks. We are reusing one validated index and testing that the amount of expensive
+work grows with the inputs. The model learned nothing during that wait.”
+
+Show the repaired runtime only after it is measured; do not invent a before/after speedup.
+
 ## New scene: the wrong students were sent through the exam doorway
 
 **Visual:** Show blue **TRAIN** cards and gold **DEVELOPMENT** cards entering a shared sorter. The

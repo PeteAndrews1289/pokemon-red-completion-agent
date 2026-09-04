@@ -1,5 +1,18 @@
 # Model-first development roadmap
 
+## Current checkpoint: bounded census performance repair
+
+The partition fix is published as PR 211 with green CI, but its census was interrupted after
+65 minutes inside repeated binding validation. Build the validated input index once and reuse
+the exact assignment/context join; retain full validation for a real frozen plan. Qualify the
+operation count and rejection parity, publish, then time-box the private census to 15 minutes.
+On success, follow the existing three-root supplement freeze and model-development bridge. On
+failure, reassess the gate rather than starting another unbounded maintenance session.
+
+This maintenance exists solely to test the already-fitted eighteen-example model on independent
+Red situations. It does not add learning examples, controller authority or a Crystal result.
+See [current handoff](../HANDOFF.md) and the [stop evidence](evidence/red-living-dex-development-supplement-binding-performance-stop-v1-2026-09-04.json).
+
 ## Current checkpoint: supply is ample; isolate the Red binding mismatch
 
 PR 209 merged as exact main `61b5cc4b` under green CI `33887050869/1`. One protected action-free

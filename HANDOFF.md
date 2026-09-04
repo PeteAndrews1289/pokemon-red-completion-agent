@@ -1,5 +1,33 @@
 # Handoff
 
+## Current checkpoint: stop repeated validation before resuming the development gate
+
+PR 211 is merged at `32dcb064a58ee426099bcf21ea341f9678b30325`; CI `33904380404/1`
+passed. The subsequent census authenticated 81 contexts but spent more than 65 minutes inside
+`binding_capacity_diagnosis` before it was interrupted with zero effects. The prior census's
+13 roots / 25 capabilities / 429 feasible supplements remain capacity evidence, not a completed
+Red binding result. See the [performance stop](docs/evidence/red-living-dex-development-supplement-binding-performance-stop-v1-2026-09-04.json).
+
+The repair builds a validated capability index once per call and shares the exact projection and
+context join between the census and freezer. Only an actual freeze constructs and deeply validates
+the complete private plan. There is no global cache, no validation bypass at publication, and no
+change to partition, independence, selection or controller policy. Regression checks count expensive
+projections and compare census results with full freezer validation across every fixture combination.
+
+This is maintenance to unblock the already-fitted eighteen-example model's independent development
+test. It creates no learning output or authority. The anti-drift alarm has fired: do not follow this
+with another open-ended diagnostic lane. Run focused qualification, hosted CI and the repaired census
+with a 15-minute wall-time bound; if it fails, retain the exact cause and reassess the development
+gate before adding machinery. A positive result permits the existing successor-freeze workflow;
+consumed trials remain consumed. Crystal and full replay remain deferred.
+
+Codex owns implementation/publication. External reviews remain reserved for a design change or
+authority decision; no reviewer is needed to wait on this pure performance repair.
+
+Keep the owner's [coding-model comparison log](docs/coding-model-comparison.md) current each session.
+Distinguish inherited diagnosis, model corrections, infrastructure time and verified outcomes;
+leave token/quota usage unknown when it is not observable.
+
 ## Current checkpoint: the Red adapter mixed train roots into a development-only join
 
 PR 210 merged as exact main `c1fb1bca00ab113d67b362609102ff5464616049`; exact-main CI
