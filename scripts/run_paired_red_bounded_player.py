@@ -67,6 +67,10 @@ from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
 from pokemon_red_completion.living_dex_goal_policy import (  # noqa: E402
     LivingDexGoalShadowPolicy,
 )
+from pokemon_red_completion.multi_goal_calibration_model import (  # noqa: E402
+    MultiGoalCalibrationModel,
+    load_multi_goal_calibration_model,
+)
 from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
 from pokemon_red_completion.paired_bounded_player import (  # noqa: E402
     PairedBoundedPlayerArm,
@@ -111,8 +115,9 @@ from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink  # noqa: 
 GAME_ID = "pokemon.mainline:red:gb:us:rev0"
 LEARNED_ARM_ID = "learned-goal-manager"
 CAUSAL_ARM_ID = "living-dex-causal-shadow"
+CALIBRATION_ARM_ID = "multi-goal-calibration-shadow"
 BASELINE_ARM_ID = "completion-first-teacher"
-_CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID)
+_CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID, CALIBRATION_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
 
 
@@ -132,6 +137,7 @@ class _Readiness:
     challenger_arm_id: str
     legacy_model: GoalManagerLinearModel | None
     causal_record: LivingDexGoalModelRecord | None
+    calibration_record: MultiGoalCalibrationModel | None
     model_file_sha256: str
     model_sha256: str
     decision_limit: int
@@ -229,6 +235,14 @@ class _ProgressPredicate:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class _LivingDexCompletionPredicate:
+    """Keep a calibration rehearsal running until its limit or the ledger is complete."""
+
+    def __call__(self, observation: GoalManagerCompositionObservation) -> bool:
+        return observation.collection.required_specimens_remaining == 0
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pair-id", required=True)
@@ -243,7 +257,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--model", type=Path, default=None)
     parser.add_argument("--living-dex-model-record", type=Path, default=None)
     parser.add_argument("--expected-living-dex-model-sha256", default=None)
-    parser.add_argument("--decision-limit", type=int, choices=(1, 2), default=2)
+    parser.add_argument("--calibration-model", type=Path, default=None)
+    parser.add_argument("--calibration-fit-summary", type=Path, default=None)
+    parser.add_argument("--expected-calibration-model-file-sha256", default=None)
+    parser.add_argument("--expected-calibration-summary-file-sha256", default=None)
+    parser.add_argument("--decision-limit", type=int, choices=(1, 2, 3, 4), default=2)
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -283,25 +301,54 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _challenger_arguments(args: argparse.Namespace) -> tuple[Path, str | None]:
+def _challenger_arguments(
+    args: argparse.Namespace,
+) -> tuple[Path, Path | None, str | None, str | None]:
     if args.challenger == LEARNED_ARM_ID:
         if (
             not isinstance(args.model, Path)
             or args.living_dex_model_record is not None
             or args.expected_living_dex_model_sha256 is not None
+            or args.calibration_model is not None
+            or args.calibration_fit_summary is not None
+            or args.expected_calibration_model_file_sha256 is not None
+            or args.expected_calibration_summary_file_sha256 is not None
         ):
             raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
-        return args.model, None
+        return args.model, None, None, None
     if args.challenger == CAUSAL_ARM_ID:
         if (
             args.model is not None
             or not isinstance(args.living_dex_model_record, Path)
             or not isinstance(args.expected_living_dex_model_sha256, str)
+            or args.calibration_model is not None
+            or args.calibration_fit_summary is not None
+            or args.expected_calibration_model_file_sha256 is not None
+            or args.expected_calibration_summary_file_sha256 is not None
         ):
             raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
         return (
             args.living_dex_model_record,
+            None,
             args.expected_living_dex_model_sha256,
+            None,
+        )
+    if args.challenger == CALIBRATION_ARM_ID:
+        if (
+            args.model is not None
+            or args.living_dex_model_record is not None
+            or args.expected_living_dex_model_sha256 is not None
+            or not isinstance(args.calibration_model, Path)
+            or not isinstance(args.calibration_fit_summary, Path)
+            or not isinstance(args.expected_calibration_model_file_sha256, str)
+            or not isinstance(args.expected_calibration_summary_file_sha256, str)
+        ):
+            raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+        return (
+            args.calibration_model,
+            args.calibration_fit_summary,
+            args.expected_calibration_model_file_sha256,
+            args.expected_calibration_summary_file_sha256,
         )
     raise PairedRedBoundedPlayerRunError("challenger_identity")
 
@@ -314,7 +361,12 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     require_published_source(PROJECT_ROOT, source)
     if source.git_commit is None:
         raise PairedRedBoundedPlayerRunError("source_identity")
-    challenger_model_path, expected_causal_model_sha256 = _challenger_arguments(args)
+    (
+        challenger_model_path,
+        calibration_summary_path,
+        expected_model_sha256,
+        expected_calibration_summary_sha256,
+    ) = _challenger_arguments(args)
     rom_path = resolve_rom_path(args.rom)
     rom = verify_rom(rom_path)
     state = _regular_external(args.state, subject="state", rom_path=rom_path)
@@ -333,6 +385,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     model_file_sha256 = _sha256(model_path)
     legacy_model: GoalManagerLinearModel | None = None
     causal_record: LivingDexGoalModelRecord | None = None
+    calibration_record: MultiGoalCalibrationModel | None = None
+    extra_protected_paths: tuple[Path, ...] = ()
     if args.challenger == LEARNED_ARM_ID:
         legacy_model = load_goal_manager_model(
             model_path,
@@ -340,15 +394,40 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         )
         model_sha256 = canonical_goal_manager_model_sha256(legacy_model)
     else:
-        if expected_causal_model_sha256 is None:
-            raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
-        causal_record = load_living_dex_goal_model_record(
-            model_path,
-            expected_model_sha256=expected_causal_model_sha256,
-        )
-        if causal_record.file_sha256 != model_file_sha256:
-            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
-        model_sha256 = causal_record.model.model_sha256
+        if args.challenger == CAUSAL_ARM_ID:
+            if expected_model_sha256 is None:
+                raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+            causal_record = load_living_dex_goal_model_record(
+                model_path,
+                expected_model_sha256=expected_model_sha256,
+            )
+            if causal_record.file_sha256 != model_file_sha256:
+                raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+            model_sha256 = causal_record.model.model_sha256
+        else:
+            if (
+                calibration_summary_path is None
+                or expected_model_sha256 is None
+                or expected_calibration_summary_sha256 is None
+            ):
+                raise PairedRedBoundedPlayerRunError("challenger_model_arguments")
+            summary_path = _regular_external(
+                calibration_summary_path,
+                subject="calibration_summary",
+                rom_path=rom_path,
+            )
+            calibration_record = load_multi_goal_calibration_model(
+                model_path,
+                summary_path,
+                expected_model_file_sha256=expected_model_sha256,
+                expected_summary_file_sha256=expected_calibration_summary_sha256,
+            )
+            if calibration_record.model_file_sha256 != model_file_sha256:
+                raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+            model_sha256 = canonical_goal_manager_model_sha256(
+                calibration_record.model
+            )
+            extra_protected_paths = (summary_path,)
     private_root = open_private_root(
         args.private_artifact_root,
         repository_root=PROJECT_ROOT,
@@ -369,12 +448,20 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         challenger_arm_id=args.challenger,
         legacy_model=legacy_model,
         causal_record=causal_record,
+        calibration_record=calibration_record,
         model_file_sha256=model_file_sha256,
         model_sha256=model_sha256,
         decision_limit=args.decision_limit,
         private_root=private_root,
         output_path=output_path,
-        protected_paths=(state, envelope, profile_path, model_path, rom_path),
+        protected_paths=(
+            state,
+            envelope,
+            profile_path,
+            model_path,
+            *extra_protected_paths,
+            rom_path,
+        ),
     )
 
 
@@ -382,6 +469,7 @@ def _episode_id(pair_id: str, arm_id: str) -> str:
     suffix_by_arm = {
         LEARNED_ARM_ID: "learned",
         CAUSAL_ARM_ID: "causal",
+        CALIBRATION_ARM_ID: "calibration",
         BASELINE_ARM_ID: "baseline",
     }
     try:
@@ -393,13 +481,29 @@ def _episode_id(pair_id: str, arm_id: str) -> str:
 
 def _challenger_authority(readiness: _Readiness) -> GoalDecisionAuthority:
     if readiness.challenger_arm_id == LEARNED_ARM_ID:
-        if readiness.legacy_model is None or readiness.causal_record is not None:
+        if (
+            readiness.legacy_model is None
+            or readiness.causal_record is not None
+            or readiness.calibration_record is not None
+        ):
             raise PairedRedBoundedPlayerRunError("challenger_model_identity")
         return LearnedGoalManagerPolicy(readiness.legacy_model)
     if readiness.challenger_arm_id == CAUSAL_ARM_ID:
-        if readiness.causal_record is None or readiness.legacy_model is not None:
+        if (
+            readiness.causal_record is None
+            or readiness.legacy_model is not None
+            or readiness.calibration_record is not None
+        ):
             raise PairedRedBoundedPlayerRunError("challenger_model_identity")
         return LivingDexGoalShadowPolicy(readiness.causal_record.model)
+    if readiness.challenger_arm_id == CALIBRATION_ARM_ID:
+        if (
+            readiness.calibration_record is None
+            or readiness.legacy_model is not None
+            or readiness.causal_record is not None
+        ):
+            raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        return LearnedGoalManagerPolicy(readiness.calibration_record.model)
     raise PairedRedBoundedPlayerRunError("challenger_identity")
 
 
@@ -412,11 +516,13 @@ def _policy_id(readiness: _Readiness, arm_id: str) -> str:
         return f"goal-manager-{readiness.model_sha256[:16]}"
     if arm_id == CAUSAL_ARM_ID:
         return f"living-dex-goal-{readiness.model_sha256[:16]}"
+    if arm_id == CALIBRATION_ARM_ID:
+        return f"calibration-goal-{readiness.model_sha256[:16]}"
     raise PairedRedBoundedPlayerRunError("challenger_identity")
 
 
 def _player_limits(decision_limit: int) -> BoundedPlayerLimits:
-    if type(decision_limit) is not int or decision_limit not in {1, 2}:  # noqa: E721
+    if type(decision_limit) is not int or decision_limit not in {1, 2, 3, 4}:  # noqa: E721
         raise PairedRedBoundedPlayerRunError("decision_limit")
     return BoundedPlayerLimits(
         max_decisions=decision_limit,
@@ -566,7 +672,11 @@ def _run_arm(
                 authority_id=arm_id,
                 trajectory=trajectory,
                 budget_meter=meter,
-                completion_satisfied=_ProgressPredicate(),
+                completion_satisfied=(
+                    _LivingDexCompletionPredicate()
+                    if readiness.challenger_arm_id == CALIBRATION_ARM_ID
+                    else _ProgressPredicate()
+                ),
                 limits=limits,
             )
             if recorder.recording_failures:
@@ -725,6 +835,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "model_decision_count": challenger_authority.model_decisions,
             "model_record": readiness.causal_record.public_dict(),
             "production_authority": False,
+        }
+    if readiness.calibration_record is not None:
+        summary["multi_goal_calibration_shadow"] = {
+            "model_record": readiness.calibration_record.public_dict(),
+            "production_authority": False,
+            "same_bank_diagnostic_only": True,
         }
     _write_exclusive(readiness.output_path, summary)
     return summary

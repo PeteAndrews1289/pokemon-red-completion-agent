@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the first model update, then back into the game
+
+**Visual:** Nine frozen trial cards settle into **7 ADMITTED · 2 INVALID / NO RETRY**. Sort the
+admitted cards into **4 SUCCESS · 3 FAILURE** and four columns: **STORY · TEAM · EVOLUTION ·
+STORAGE**. Keep **TEACHER 0 · COLLECTION LOSS 0** on screen.
+
+**Voiceover:** “This is where the project crossed from infrastructure into training. The labels
+came from what the agent's selected goals actually accomplished in the game—not from copying a
+walkthrough or asking a teacher what it should have done.”
+
+**Visual:** Animate **LOSS 1.252677 → 1.248107** and **GUARD KL 0.001712 / 0.010000**. Stamp the
+model card **AUTHENTICATED · SHADOW ONLY · SAME-BANK CALIBRATION**.
+
+**Voiceover:** “One small update improved the model on its seven real outcomes without moving its
+unrelated decisions beyond the safety cap. That proves the learning loop works. It does not prove
+generalization, so the model gets no victory lap and no production authority yet.”
+
+**Visual:** Put the fitted model and deterministic baseline beside the same same-bank Red save, marked
+**UNUSED BY THIS PLAYER REHEARSAL · NOT AN UNSEEN GENERALIZATION TEST**. Show a
+four-step loop: **OBSERVE → CHOOSE GOAL → EXECUTE SKILL → VERIFY POKÉDEX LEDGER**.
+
+**Voiceover:** “Next, both players start from the same calibration-bank development moment. The learned
+manager may choose up to four goals in sequence while deterministic skills keep mechanics safe.
+Now we can ask the question that matters: does training help it make progress when it actually has
+to play?”
+
 ## New scene: failures have to survive too
 
 **Visual:** Show four cards entering a training set: two green `DEVELOP TEAM` cards and two red

@@ -2,14 +2,15 @@
 
 ## Current execution state
 
-Trials 1–4 are complete and admitted: two team-development successes plus one story and one
-evolution failure at the equal 6,000-action cap. Trial 5 durably recorded `binding_failed` with one
-decision, zero execution rows and zero controller actions, then remained partial because the
-generic runtime rethrew the private exception. It is permanently consumed. A calibration-local
-adapter now turns an executor exception into an independently metered typed failure before it
-reaches the unchanged generic runtime; the frozen skills and generic goal execution remain
-fail-fast. Only untouched trials 6–8 may proceed after
-this repair publishes and passes CI.
+The campaign is terminal: seven admitted teacher-free outcomes, four successes and three failures,
+plus two permanently invalid no-retry trials. Trials 6 and 8 each completed `manage_storage` in 36
+actions / 4,512 frames; trial 7 retained an immediate zero-action `advance_story` failure. All
+admitted rows preserve the collection. The train-only calibration fit is complete and remains
+shadow-only; no campaign trial may execute again.
+
+One bounded update reduced weighted loss from 1.252677 to 1.248107. Maximum guard-menu KL was
+0.001712 under the frozen 0.01 cap. The exact candidate model and fit summary are now inputs to a
+fail-closed bounded-player loader; their private locations never enter public evidence.
 
 ## Purpose
 

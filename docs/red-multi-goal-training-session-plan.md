@@ -2,12 +2,15 @@
 
 ## Live progress update
 
-The admission repair merged as main `d25b0975` under CI `33824286498`. Trials 1–4 now contribute
-four admitted targets: two team-development successes and two equal-cap negative alternatives.
-Trial 5 is a permanently consumed zero-controller partial after a durably recorded binding failure.
-Publish the calibration-only binding-failure retention option, then execute/admit only untouched
-trials 6–8. The fixed denominator may shrink through permanent failures; it may not be repaired by
-replay or outcome-selected replacement.
+The calibration is complete: seven admitted outcomes, four positive and three negative, from four
+authenticated roots and four goal kinds. Trials 0 and 5 are permanently invalid and may not retry.
+One authenticated outcome update reduced weighted loss from 1.252677 to 1.248107 while preserving
+the guard distribution within the 0.01 KL cap. The fitted model remains same-bank and shadow-only.
+
+The live task is to publish its strict path-free loader and bounded-player integration, then use one
+bounded-player-unconsumed same-bank Red development context for a paired, up-to-four-decision rehearsal. The result determines
+whether a prospectively disjoint 8-train/4-development curriculum is justified; it cannot promote
+authority or make a Crystal claim by itself.
 
 ## Mission
 
@@ -39,7 +42,7 @@ This distinction no longer blocks all useful learning. It changes the label on t
    development, one evolution and two storage roots. Schedule every model-controlled candidate as
    a separate one-decision intervention from the identical reset. Recovery and restoration remain
    deterministic safety overrides.
-3. **Index repair implemented locally; publication pending — collect bounded Red outcomes.** The
+3. **Complete — collect bounded Red outcomes.** The
    first runner passed CI and production preflight, but trial 0 exposed a pre-input mismatch between
    available-menu ordinals and full-question indices. Trial 0 is invalid and cannot retry. The
    repair resolves the ordinal by semantic question structure, independently reconstructs it at
@@ -50,14 +53,12 @@ This distinction no longer blocks all useful learning. It changes the label on t
    The repair subsequently merged and trial 1 completed `develop_team` in 2,009 actions / 162,918
    frames with no specimen loss. Admission found a reader-only standalone-decision linkage
    assumption; publish that null-link repair and admit the immutable episode before trial 2.
-4. **Fit the semantic goal model.** Train only on completed calibration outcomes. Keep identity,
-   coordinates, route strings and teacher selections out of model features.
-5. **Run same-bank diagnostics.** Commit predictions first, then execute untouched diagnostic
-   roots. Report this as local robustness, not independent generalization.
-6. **Exercise multi-decision play.** Let the fitted manager choose two to four consecutive goals,
+4. **Complete — fit the semantic goal model.** Seven outcomes produced one authenticated bounded
+   update. Identity, coordinates, route strings and teacher selections remain outside the features.
+5. **Active — exercise multi-decision play.** Let the fitted manager choose two to four consecutive goals,
    reobserve after each skill and recover through typed failures while the living-Pokédex ledger
-   verifies progress.
-7. **Build the independent gate in parallel with evidence, not ceremony.** Before promotion or
+   verifies progress. Pair it with deterministic ordering from the same unconsumed player context.
+6. **Build the independent gate in parallel with evidence, not ceremony.** Before promotion or
    Crystal, obtain at least eight prospective train and four development lineages, disjoint by
    upstream episode and physical root, covering at least four and three strategic families.
 
@@ -73,10 +74,7 @@ This distinction no longer blocks all useful learning. It changes the label on t
 
 ## Expected cadence
 
-The inventory, freeze, runner publication, and first production preflight are complete. Trial 0
-failed before a decision or execution record and exposed one indexing defect; it is retained as an
-invalid no-retry attempt. Once the repair is published and green, trials 1–8 and their independent
-admission should produce the first new outcome batch. The model fit should then take one additional
-work session;
-useful multi-goal comparisons should follow within one to two further sessions. Full Red autonomy
-and living-Pokédex completion remain later milestones, not claims attached to this pilot.
+The first fit is complete. Strict player integration and one short paired rehearsal should fit in
+the current session plus CI/runtime latency. A useful result opens prospective independent Red data
+collection; a failed result should expose one strategic, binding, or recovery limitation without a
+full replay. Full Red autonomy and living-Pokédex completion remain later milestones.

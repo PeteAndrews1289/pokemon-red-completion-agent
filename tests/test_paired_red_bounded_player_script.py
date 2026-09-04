@@ -96,6 +96,7 @@ def test_runner_uses_shared_player_and_frame_safe_controller_boundary() -> None:
         "EpisodeTrajectorySink",
         "compare_paired_bounded_player_arms",
         "load_living_dex_goal_model_record",
+        "load_multi_goal_calibration_model",
         "_write_exclusive",
     ):
         assert required in calls
@@ -120,6 +121,10 @@ def test_runner_help_names_the_repeatable_pair_inputs() -> None:
     assert "--challenger" in result.stdout
     assert "--living-dex-model-record" in result.stdout
     assert "--expected-living-dex-model-sha256" in result.stdout
+    assert "--calibration-model" in result.stdout
+    assert "--calibration-fit-summary" in result.stdout
+    assert "--expected-calibration-model-file-sha256" in result.stdout
+    assert "--expected-calibration-summary-file-sha256" in result.stdout
     assert "--decision-limit" in result.stdout
     assert "--out" in result.stdout
 
@@ -132,22 +137,30 @@ def test_challenger_arguments_keep_legacy_and_causal_models_disjoint() -> None:
     legacy = Path("legacy.json")
     causal = Path("causal.json")
 
+    common = {
+        "calibration_model": None,
+        "calibration_fit_summary": None,
+        "expected_calibration_model_file_sha256": None,
+        "expected_calibration_summary_file_sha256": None,
+    }
     assert arguments(
         argparse.Namespace(
             challenger=learned_id,
             model=legacy,
             living_dex_model_record=None,
             expected_living_dex_model_sha256=None,
+            **common,
         )
-    ) == (legacy, None)
+    ) == (legacy, None, None, None)
     assert arguments(
         argparse.Namespace(
             challenger=causal_id,
             model=None,
             living_dex_model_record=causal,
             expected_living_dex_model_sha256="a" * 64,
+            **common,
         )
-    ) == (causal, "a" * 64)
+    ) == (causal, None, "a" * 64, None)
     with pytest.raises(RuntimeError, match="challenger_model_arguments"):
         arguments(
             argparse.Namespace(
@@ -155,6 +168,41 @@ def test_challenger_arguments_keep_legacy_and_causal_models_disjoint() -> None:
                 model=legacy,
                 living_dex_model_record=causal,
                 expected_living_dex_model_sha256="a" * 64,
+                **common,
+            )
+        )
+
+
+def test_challenger_arguments_require_the_complete_calibration_bundle() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    arguments = module["_challenger_arguments"]
+    calibration_id = module["CALIBRATION_ARM_ID"]
+    model = Path("calibration-model.json")
+    summary = Path("calibration-summary.json")
+
+    assert arguments(
+        argparse.Namespace(
+            challenger=calibration_id,
+            model=None,
+            living_dex_model_record=None,
+            expected_living_dex_model_sha256=None,
+            calibration_model=model,
+            calibration_fit_summary=summary,
+            expected_calibration_model_file_sha256="b" * 64,
+            expected_calibration_summary_file_sha256="c" * 64,
+        )
+    ) == (model, summary, "b" * 64, "c" * 64)
+    with pytest.raises(RuntimeError, match="challenger_model_arguments"):
+        arguments(
+            argparse.Namespace(
+                challenger=calibration_id,
+                model=None,
+                living_dex_model_record=None,
+                expected_living_dex_model_sha256=None,
+                calibration_model=model,
+                calibration_fit_summary=None,
+                expected_calibration_model_file_sha256="b" * 64,
+                expected_calibration_summary_file_sha256="c" * 64,
             )
         )
 
@@ -165,6 +213,7 @@ def test_episode_identity_distinguishes_both_learned_challengers() -> None:
 
     assert episode_id("pair", module["LEARNED_ARM_ID"]) == "pair-learned"
     assert episode_id("pair", module["CAUSAL_ARM_ID"]) == "pair-causal"
+    assert episode_id("pair", module["CALIBRATION_ARM_ID"]) == "pair-calibration"
     assert episode_id("pair", module["BASELINE_ARM_ID"]) == "pair-baseline"
     with pytest.raises(RuntimeError, match="arm_identity"):
         episode_id("pair", "unknown")
@@ -184,7 +233,7 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
     assert policy_id(readiness, baseline_id) == baseline_id
 
 
-def test_one_decision_calibration_disables_replan_and_halves_episode_budgets() -> None:
+def test_one_to_four_decisions_scale_episode_budgets_and_replans() -> None:
     module = runpy.run_path(str(SCRIPT))
     limits = module["_player_limits"](1)
 
@@ -192,8 +241,13 @@ def test_one_decision_calibration_disables_replan_and_halves_episode_budgets() -
     assert limits.max_replans == 0
     assert limits.max_total_actions == limits.max_actions_per_decision == 6_000
     assert limits.max_total_frames == limits.max_frames_per_decision == 600_000
+    four = module["_player_limits"](4)
+    assert four.max_decisions == 4
+    assert four.max_replans == 3
+    assert four.max_total_actions == 24_000
+    assert four.max_total_frames == 2_400_000
     with pytest.raises(RuntimeError, match="decision_limit"):
-        module["_player_limits"](3)
+        module["_player_limits"](5)
 
 
 def test_progress_predicate_uses_a_fresh_verified_collection_delta() -> None:
@@ -203,6 +257,32 @@ def test_progress_predicate_uses_a_fresh_verified_collection_delta() -> None:
     assert predicate(_observation(storage=2)) is False
     assert predicate(_observation(storage=2)) is False
     assert predicate(_observation(storage=3)) is True
+
+
+def test_calibration_rehearsal_stops_only_on_living_dex_completion() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    predicate = module["_LivingDexCompletionPredicate"]()
+
+    assert predicate(_observation(storage=2)) is False
+    complete = _observation(storage=2)
+    complete = GoalManagerCompositionObservation(
+        semantic_state_sha256=complete.semantic_state_sha256,
+        situation=complete.situation,
+        binding_set=complete.binding_set,
+        collection=LivingCollectionCheckpoint(
+            registered_species=151,
+            living_species=151,
+            required_specimens_remaining=0,
+            retained_captures=151,
+            storage_headroom=1,
+            undeclared_specimen_losses=0,
+            completion_contract_sha256="1" * 64,
+            specimen_ledger_sha256="2" * 64,
+            required_specimens_sha256="3" * 64,
+            specimen_counts=(("pokemon:red:living:starter", 151),),
+        ),
+    )
+    assert predicate(complete) is True
 
 
 def test_read_only_meter_rejects_a_regressing_frame_counter() -> None:

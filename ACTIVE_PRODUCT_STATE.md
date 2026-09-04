@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green calibration-only binding-failure retention, then execute and admit untouched trials 6-8 and fit the completed fixed-denominator train outcomes. Trials 0-5 may not replay. Same-bank evidence is calibration only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
+- Next decision: Publish and green the exact calibration model/summary loader and bounded-player shadow integration, then compare the fitted manager with deterministic ordering for up to four decisions on one bounded-player-unconsumed same-bank Red development context. Use the result to decide whether to collect a prospectively disjoint Red train/development curriculum; do not promote from calibration.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The goal manager has one bounded teacher-free strategic advantage over completion-first ordering: develop_team completed where evolve_species exhausted the equal action bound. Deterministic ordering and skills retain production authority because one same-state comparison is not broad competence. |
+| Authority now | A semantic goal manager has now been updated once from seven teacher-free Red gameplay outcomes spanning four goal kinds and four roots. It may score choices only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because the classroom is same-bank and small. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
 | Cheapest falsifier | Run ROM-free composition contracts and then two bounded development episodes from authenticated Red snapshots. Stop if the manager cannot select a semantic goal, the executors cannot report typed progress or failure, or a fresh ledger cannot verify progress without route-specific orchestration. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 108 | 108 |
+| Causal Train Example · train | 111 | 111 |
 | Composition Attempt · development | 3 | 3 |
 | Verified Composition Episode · development | 3 | 3 |
 | Development Episode · development | 19 | 19 |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-multi-goal-binding-failure-retention-v1** · status **active** · evidence [qualification](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json)
+**2026-09-04-calibration-fit-player-integration-v1** · status **active** · evidence [qualification](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The paired roots now measure which semantic objective actually works from the same state instead of copying a teacher ranking. Retaining typed binding failures closes survivorship bias in those outcome labels and directly improves the evidence used to train title-neutral goal choice. |
-| Learning output | Four new causal train outcomes are admitted from two authenticated Red roots. Team development succeeded in 2009 and 1179 actions; story advancement and evolution each failed at the equal 6000-action cap. All four used zero teacher queries and preserved every specimen. The cumulative causal-train-example counter advances from 104 to 108. |
-| Authority delta | No new production authority is granted. The calibration now contains two teacher-free team-development successes and two equal-budget negative alternatives from two roots. This is real outcome training evidence, but it is too small and same-bank to justify promotion. |
-| Transfer result | None. Crystal remains unexecuted. The frozen campaign is same-bank Red calibration; the future transfer gate still requires prospectively disjoint Red lineages and a title-neutral feature/action projection. |
-| Blocker | Trials 1-4 are independently admitted: develop_team succeeded twice, while advance_story and evolve_species each exhausted the 6000-action cap; all preserved the collection. Trial 5 recorded binding_failed before any controller action, but the generic runtime rethrew after durably recording that typed failure, leaving a partial artifact. Trial 5 is permanently consumed. Future binding failures need explicit calibration-only retention so negative examples are not systematically lost. |
-| Decision | Publish and green the narrow calibration-only binding-failure retention option while preserving fail-fast behavior for every other caller. Then preflight, execute and admit untouched trials 6-8 without replacement, record the fixed denominator, and fit only the completed admitted train outcomes. |
-| Next session | Publish and green binding-failure retention; execute and admit untouched trials 6-8; then build the fixed-denominator train-only fit input. |
-| Next falsifier | Require green exact-head CI for calibration-only binding-failure retention, then run untouched storage trial 6 once. It must either complete with an admissible typed outcome or prove another predeclared stop condition without losing the failure or issuing undeclared input. |
-| Stop condition | Never retry pairs 001-003 or any claimed physical root. Calibration may use only prospectively frozen open train roots and may not be described as held out. Stop on teacher-choice targets, disagreement or outcome-selected contexts, identity-bearing model features, collection regression, unbounded execution, or any Crystal/transfer claim from same-bank evidence. |
+| Product alignment | This is the first completed update in which a title-neutral strategic model learns from whether its own selected goals actually changed the game. Connecting that exact model to the bounded player tests reusable choice and recovery without adding a Red walkthrough or weakening deterministic safety. |
+| Learning output | Seven admitted teacher-free outcomes from four authenticated Red roots now form the fixed classroom: four successes and three failures across develop_team, advance_story, evolve_species and manage_storage. One authenticated update reduced weighted training loss from 1.252677 to 1.248107 while maximum guard-menu KL remained 0.001712 below the 0.01 cap. Cumulative causal train examples advance from 108 to 111 and model fits from 9 to 10. |
+| Authority delta | The first gameplay-outcome update of the semantic goal manager is complete, but it is authenticated as shadow_calibration_only. Deterministic skills and safety constraints retain all controller authority until an unused Red development context measures the fitted manager prospectively. |
+| Transfer result | None. Crystal remains deliberately deferred. This same-bank Red fit cannot support a transfer claim; it only qualifies the exact model for a prospective unused-Red rehearsal before any separately designed cross-title test. |
+| Blocker | The seven-outcome classroom is same-bank calibration across only four physical roots. Its lower training loss proves that the fitting path works, not that the policy generalizes. The next missing evidence is a multi-decision player episode from a bounded-player-unconsumed same-bank Red context. |
+| Decision | Publish and green strict calibration-model loading plus bounded-player shadow integration. Then run one paired up-to-four-decision Red development rehearsal from a bounded-player-unconsumed same-bank context, retaining model choices, typed executor outcomes, ledger progress, deterministic comparison and all safety interventions. |
+| Next session | Publish and green the authenticated calibration shadow integration, then execute and admit one paired multi-decision Red development rehearsal from a bounded-player-unconsumed same-bank context. |
+| Next falsifier | Load the exact fitted model and fit summary through the fail-closed player boundary, then run one unused Red development context for at most four decisions. Fail on identity mismatch, private-path retention, collection regression, untyped executor failure, budget overrun, or no independently observable ledger progress. |
+| Stop condition | Stop this lane on any model or summary identity mismatch, use of a previously claimed context, private path in a public artifact, collection regression, swallowed failure, unbounded execution, teacher choice or fallback, or a result that cannot distinguish model behavior from deterministic ordering. Do not patch a route around a failed strategic choice. |
 
 ### Stop conditions
 

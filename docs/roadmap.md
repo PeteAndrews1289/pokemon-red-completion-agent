@@ -3,6 +3,14 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 4 first authentic strategic fit:** all nine frozen trials are terminal. Seven usable
+> outcomes across four roots contain four successes and three failures; two trials are permanent
+> invalid no-retry records. One train-only update reduced weighted loss from **1.252677 to
+> 1.248107** while guard-menu KL remained **0.001712 < 0.01**. This proves the outcome-learning
+> mechanism works; it does not prove generalization. The fitted model is shadow-only. Publish its
+> strict player binding, then run one paired up-to-four-decision rehearsal on a bounded-player-unconsumed Red
+> development context. Do not open Crystal, sealed Red, or a full replay.
+
 > **September 3 fixed-batch progress:** main `d25b0975` passed CI `33824286498`; trial 1 admitted
 > reader-only, and trials 2–4 executed once and admitted. The batch now has two successful
 > `develop_team` targets and two equal-cap negative alternatives, with no teacher use or collection

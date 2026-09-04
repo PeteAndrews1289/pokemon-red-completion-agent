@@ -1,17 +1,19 @@
 # Current agent handoffs
 
-## Current override: Codex owns binding-failure retention and trials 6–8
+## Current override: Codex owns fitted-model player integration and rehearsal
 
-Main `d25b0975` passed CI `33824286498`. Trials 1–4 are independently admitted: two
-`develop_team` successes and two equal-budget negative alternatives, with zero teacher use and no
-collection regression. Trial 5 recorded `binding_failed` before controller input but is a consumed
-partial artifact because the generic runtime rethrew after recording the failure. Codex owns the
-calibration-local adapter that retains an independently metered typed negative without changing
-frozen skills, publication, and the remaining untouched trials 6–8. Normal callers must remain
-fail-fast; trial 5 must not replay. Antigravity and Claude remain
-read-only reviewers at the next fit or promotion boundary, not editors of this worktree.
+The nine-trial calibration is terminal: seven independently admitted outcomes across four roots
+produced one authenticated train-only model update; trials 0 and 5 are permanent invalid no-retry
+records. Candidate `70a72bdb…16bcb` is same-bank and shadow-only. Codex owns strict model/summary
+authentication, bounded-player integration, publication, exact-main CI, and one paired
+up-to-four-decision rehearsal from a mechanically selected bounded-player-unconsumed same-bank Red development context.
 
-Status: active operating assignment as of 2026-09-03. This document applies the durable roles in
+The rehearsal must retain model choices, typed failures, independent controller accounting,
+living-collection integrity, ledger progress, and the deterministic comparison. It grants no
+authority by itself. Claude and Antigravity remain optional read-only reviewers at a promotion or
+cross-title boundary; they do not edit this worktree or block routine development.
+
+Status: active operating assignment as of 2026-09-04. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the

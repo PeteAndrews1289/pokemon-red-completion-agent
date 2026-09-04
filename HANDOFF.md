@@ -1,25 +1,26 @@
 # Handoff
 
-## Current checkpoint: four outcomes admitted; retain typed binding failures
+## Current checkpoint: the first strategic outcome model is fitted; player rehearsal is next
 
-PR 197 merged as main `d25b0975a55507631a9cfe168b9f0f8e1d73ef59` after CI run
-`33824286498` passed. Reader-only admission then accepted immutable trial 1 without controller
-input. Trials 2–4 were executed once and admitted: `develop_team` succeeded in 1,179 actions /
-98,347 frames, while `advance_story` and `evolve_species` each failed at the equal 6,000-action /
-273,453-frame cap. Together with trial 1, the campaign now has four usable targets: two positive
-team-development outcomes and two negative alternatives, all with zero teacher use and no specimen
-loss.
+The fixed calibration campaign is complete: seven independently admitted, teacher-free outcomes
+from four authenticated Red roots, containing four successes and three failures across
+`develop_team`, `advance_story`, `evolve_species`, and `manage_storage`. Trials 0 and 5 remain
+permanently invalid and may not retry. No run lost a specimen or queried a teacher.
 
-Trial 5 selected `advance_story`, durably recorded `binding_failed`, and stopped before any
-controller execution. The generic runtime rethrew the private binding exception after recording the
-typed failure, so the outer runner retained a five-record partial artifact instead of a complete
-negative example. Trial 5 is permanently consumed and may not retry. The active repair adds an
-explicit calibration-only adapter that converts an executor exception into an independently
-metered typed failure while preserving the frozen skills and generic runtime's fail-fast behavior.
-Publish and green that repair before untouched
-trials 6–8. See the [campaign progress](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json).
+PR 200 merged as main `6fc4b59f5dc8f450a15044c23b181518486ef96c`; exact-main CI run
+`33836145354` passed. The first authentic semantic-goal update reduced weighted training loss from
+**1.252677 to 1.248107** in one bounded step. Maximum guard-menu KL was **0.001712**, below the
+frozen **0.01** cap. The fitted candidate is canonical model `70a72bdb…16bcb`; it is explicitly
+same-bank calibration and has **no production authority**.
 
-Originally written 2026-08-07 and updated through 2026-09-03 for the agent taking over. Read this
+The active branch adds a strict path-free loader for the exact model/fit-summary pair and connects
+it to the paired bounded player as `multi-goal-calibration-shadow`. The next gate is publication,
+green exact-main CI, and one up-to-four-decision paired Red rehearsal from a mechanically selected,
+bounded-player-unconsumed same-bank development context. Deterministic skills and safety remain authoritative;
+Crystal, sealed Red, full replay, and promotion remain closed. See the
+[campaign and fit result](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json).
+
+Originally written 2026-08-07 and updated through 2026-09-04 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
