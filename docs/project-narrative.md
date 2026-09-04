@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the shopping list becomes an immutable three-root plan
+
+Once the audit fixed the number at three, the next risk was letting implementation quietly expand
+it again. The new freezer begins from the train corpus and historical schedules, removes anything
+sharing a lineage, physical root, or exact state, and searches only the remaining action-free Red
+capabilities. It must find three different families in three different places, with storage
+management represented strongly enough that one failed setup cannot erase it.
+
+The resulting artifact is deliberately boring: a sealed development-only plan connecting shared
+semantic menus to exact Red setup recipes. It contains no preferred answer and cannot run the game.
+That separation is the point. Publication and one protected freeze come next; only a successfully
+reopened plan can become input to the already-built model-led outcome bridge.
+
 ## September 4: the project counts the exam seats before building more classrooms
 
 The published audit answered a question the project had repeatedly blurred: how much genuinely

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve the two exact-main-authenticated held roots, publish the separate development-only execution bridge, and freeze exactly three independent supplement roots with manage_storage coverage before comparing the existing model once without refitting. Pairs 004 through 006 remain terminal.
+- Next decision: Publish and green the development-only bridge and exact three-root freezer, merge under exact-main CI, then run one action-free supplement freeze. If it succeeds, preflight before comparing the existing model once without refitting; if capacity fails, retain the falsifier. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-exact-development-supply-audit-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supply-audit-v1-2026-09-04.json)
+**2026-09-04-development-supplement-freezer-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supplement-freezer-local-qualification-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The audit avoids rebuilding training data the fitted model no longer needs and directs the next Red work toward genuinely unseen semantic decisions that test transferable living-Pokedex planning. |
-| Learning output | No learning counter changed. The exact-main zero-effect audit converted uncertain supply into a measured gap: two clean roots preserved, two unavailable, three new roots required, and manage_storage identified as the sole missing option kind. |
+| Product alignment | The freezer purchases only genuinely unseen Red semantic decisions needed to test the title-neutral model, while preserving deterministic mechanics and the long-term cross-title living-Pokedex architecture. |
+| Learning output | No learning counter changed. The measurable engineering output is a locally qualified, development-only freezer that can create exactly the three independent Red roots required by the published audit without scoring a model or opening an outcome. |
 | Authority delta | No authority changed. The eighteen-example model remains shadow-only. Exact-main supply authentication and the separate development bridge opened no held Red outcome; deterministic skills retain all controller authority. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The protected exact-main audit proved that two clean historical roots remain and that manage_storage is the only missing option kind. A dedicated action-free freezer must now bind exactly three new independent supplement roots before model-led development can execute. |
-| Decision | Preserve the two authenticated held roots, green and merge the separate development bridge, then freeze exactly three new independent roots across three families and locations with manage_storage coverage surviving any one setup censor. Preflight before opening one selected outcome per admitted root. |
-| Next session | Green and merge the development-only bridge, implement and qualify the dedicated supplement freezer, then freeze and preflight exactly the measured three-root supplement without opening outcomes. |
-| Next falsifier | A dedicated freezer must action-free authenticate enough Red capability edges to select exactly three lineage- and state-independent development roots across three families and locations, with complete seven-kind coverage surviving any one new setup censor. |
+| Blocker | The dedicated three-root freezer is locally qualified but unpublished. No real supplement plan exists until this exact source passes hosted CI, merges, passes exact-main CI, and completes one protected action-free freeze. |
+| Decision | Publish and green the development bridge plus supplement freezer, merge under exact-main CI, then invoke exactly one action-free three-root freeze. Stop on insufficient capacity; otherwise preflight the sealed supplement and preserved held roots before model-led outcomes. |
+| Next session | Publish and merge the qualified bridge/freezer, require exact-main green CI, then perform one action-free private supplement freeze and independently preflight any successful plan. |
+| Next falsifier | After green exact-main CI, one protected action-free invocation must either publish and reopen a three-root plan satisfying every exclusion and censor-safe coverage rule or retain an insufficient-capacity failure without weakening the contract. |
 | Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover, outcome-informed root selection, root overlap, private-identity policy features, development entering fit, or any retry after a claimed setup. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions

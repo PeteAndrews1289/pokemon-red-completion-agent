@@ -1,0 +1,78 @@
+{
+  "claim_boundary": {
+    "supported": "A dedicated development-only freezer is locally qualified to derive private train and historical-root exclusions, select exactly the measured three-root Red supplement, require three distinct families and locations, preserve full option-kind coverage after any one setup censor, and seal exact Red contexts and recipes without selecting behavior or opening outcomes.",
+    "unsupported": [
+      "published_exact_source",
+      "green_exact_head_ci",
+      "private_supplement_plan_frozen",
+      "new_development_root_claimed",
+      "model_prediction_computed",
+      "development_outcome_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "design": {
+    "development_only_from_origin": true,
+    "exact_new_roots": 3,
+    "held_roots_preserved": 2,
+    "historical_lineages_excluded": true,
+    "historical_physical_roots_excluded": true,
+    "historical_states_excluded": true,
+    "manage_storage_required": true,
+    "minimum_new_families": 3,
+    "minimum_new_locations": 3,
+    "one_setup_censor_tolerated": true,
+    "train_lineages_excluded": true,
+    "train_states_excluded": true
+  },
+  "next_gate": {
+    "failure_rule": "A publication failure, exact-head CI failure, supply-authentication mismatch, insufficient capability inventory, identity overlap, coverage loss, or private-plan reopen mismatch stops before a real supplement plan exists.",
+    "kind": "publish_green_then_freeze_once_action_free",
+    "pass_rule": "One exact published invocation must authenticate the same supply evidence and model, select exactly three eligible roots, publish and reopen one immutable private plan, and report zero claims, predictions, outcomes, teachers, or controller actions."
+  },
+  "qualification": {
+    "development_bridge_and_supplement_tests_passed": 45,
+    "generated_registry_reproduction_checks_passed": 4,
+    "lint_passed": true,
+    "protocol_and_golden_tests_passed": 49,
+    "supplement_plan_and_script_tests_passed": 8,
+    "typed_source_files_checked": 2
+  },
+  "schema": "pokemon.red.living-dex-development-supplement-freezer-local-qualification.v1",
+  "source": {
+    "candidate_commit": "1109e3c5750e294dda702a3d51d32259ad712611",
+    "published": false,
+    "working_source_bundle_sha256": "adc56ce002dcd76d5d5208074a622cb8b6e398480aeeda2abd6e5dff6177a929"
+  },
+  "status": "locally_qualified_publication_and_exact_head_ci_required",
+  "zero_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_plan_freezes": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "training_targets": 0,
+    "unselected_action_targets": 0
+  }
+}

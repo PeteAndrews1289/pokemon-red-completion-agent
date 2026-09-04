@@ -1,6 +1,28 @@
 # Handoff
 
-## Current checkpoint: exact-main audit preserved two exam roots; three new roots remain
+## Current checkpoint: the exact three-root supplement freezer is locally qualified
+
+The action-free supplement freezer now derives private exclusion sets from the complete train
+corpus and historical schedules, removes every overlapping lineage, physical root, and state, and
+selects exactly the measured three-root shortfall. It requires three new families and locations and
+requires the full seven-kind option vocabulary—including `manage_storage`—to survive loss of any
+one new setup. The selected shared capabilities are bound back to exact Red contexts and setup
+recipes in a development-only private plan with no train rows or behavior commitments.
+
+The related bridge and freezer slice passes 45 tests; the source-bound protocol slice passes 49;
+all four generated registries reproduce; lint and focused type checks pass. The rehearsal publishes
+and reopens a synthetic private plan while reporting zero predictions, outcomes, controller actions,
+teachers, claims, or training targets. This is local qualification only: no real supplement plan
+has been frozen. See the
+[qualification receipt](docs/evidence/red-living-dex-development-supplement-freezer-local-qualification-v1-2026-09-04.json).
+
+Next publish this exact branch, require green PR and exact-main CI, and invoke the freezer once from
+the protected clean checkout. If it cannot find three eligible roots, retain that capacity result
+and stop; do not weaken independence or resurrect a teacher factory. If it succeeds, independently
+preflight the sealed supplement plus the two preserved held roots before any model prediction or
+controller input.
+
+## Previous checkpoint: exact-main audit preserved two exam roots; three new roots remain
 
 PR 207 merged as exact main `481b31d9fd2e2df97f8199ecda80346630da5ec1`, and push CI
 `33866844485/1` passed all 6,637 selected hosted tests. The protected action-free audit then

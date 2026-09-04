@@ -1,6 +1,29 @@
 # Model-first development roadmap
 
-## Current checkpoint: the exact supply gap is measured; freeze three roots, not a classroom
+## Current checkpoint: the measured three-root freezer is locally qualified
+
+The project now has a dedicated action-free freezer for the exact gap established by the published
+supply audit. It reconstructs private train and historical-root exclusions, rejects lineage,
+physical-root, and state reuse, and asks the title-neutral planner for exactly three development
+roots. The plan must span three families and locations, include `manage_storage`, and retain all
+seven portable option kinds after any one new setup censor. Each selected capability is then bound
+to one exact Red context and deterministic setup recipe in an immutable development-only plan.
+
+The freezer contains no model scorer, outcome reader, controller, teacher, claim writer, or fitting
+path. Its synthetic end-to-end publication rehearsal and the full related bridge slice are green.
+The next sequence is now operational rather than architectural:
+
+1. publish the qualified branch and require green hosted CI;
+2. merge it and require green exact-main push CI;
+3. run exactly one action-free private supplement freeze from that clean revision;
+4. stop and retain the falsifier if three eligible roots do not exist;
+5. if the plan freezes, independently preflight all new and preserved roots with the exact model;
+6. then open one selected development branch per admitted root without fitting on the results.
+
+No real root was frozen or consumed in this engineering checkpoint. Crystal, sealed Red, and full
+replay remain closed.
+
+## Previous checkpoint: the exact supply gap is measured; freeze three roots, not a classroom
 
 PR 207 is exact main `481b31d9` under green CI `33866844485/1`. Its protected action-free audit
 authenticated the complete eighteen-example train corpus, exact shadow model, both historical

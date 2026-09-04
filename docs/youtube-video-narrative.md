@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: turn the three blank cards into a sealed plan
+
+**Visual:** Feed a large pile of root cards through three filters—**TRAIN LINEAGE**, **HISTORICAL
+ROOT**, and **EXACT STATE**. From the survivors, lock three cards from three families and locations
+into a sealed envelope labelled **DEVELOPMENT ONLY · NO ANSWERS INSIDE**.
+
+**Voiceover:** “The system now builds exactly the evidence the audit asked for. Anything related to
+training or an old exam state is excluded. The final three must still cover every kind of strategic
+choice even if one setup fails.”
+
+**Visual:** Keep the emulator and model switches visibly off. Show **45 RELATED TESTS · 49 PROTOCOL
+TESTS · 4 REGISTRIES REPRODUCED**, followed by **REAL PLAN: NOT FROZEN YET**.
+
+**Voiceover:** “This was the last local engineering gate. The next step is one published,
+action-free freeze. Only after that plan survives an independent preflight does the model get to
+make a new choice in the game.”
+
 ## New scene: count the untouched exam before making new levels
 
 **Visual:** Two historical schedule cards collapse into four unique root cards. Turn two gray as
