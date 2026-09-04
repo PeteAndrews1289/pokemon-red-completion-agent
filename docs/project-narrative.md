@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the binding gate finally produced a usable plan
+
+The performance repair passed both hosted suites, each with 6,691 passing tests, and merged as
+PR 212. The private census then finished within 13 minutes 54 seconds and accepted all 429
+feasible bindings. The previous run had been stopped after 65+ minutes. A following freeze took
+788.71 seconds and stored/reopened three new development roots across three families and locations.
+With the two preserved roots, they retain all seven supported option kinds after one setup loss.
+These are supply results; every gameplay, model and claim counter remained zero.
+
+The closing audit exposed a remaining connection that the earlier handoff made sound complete:
+the existing held runner understands an older mixed training/development schedule, while the new
+supplement has development rows only. The next work is its strict reader and admission adapter,
+then concrete preflight and model-selected outcomes through the existing journals. The model
+cannot play these new situations until that adapter works. See the
+[binding receipt](evidence/red-living-dex-development-supplement-binding-result-v1-2026-09-04.json)
+and [freeze receipt](evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).
+
 ## September 4: correct checks can still make the system unusable
 
 The partition repair passed CI and merged, but the next census ran for more than 65 minutes

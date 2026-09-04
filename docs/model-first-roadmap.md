@@ -1,5 +1,19 @@
 # Model-first development roadmap
 
+## Current checkpoint: the missing work is supplement execution, not supply
+
+The repaired census and one three-root freeze both succeeded on green main `7d654cdf`.
+All 429 feasible combinations bind. Three new development roots are stored and reopened,
+joining two preserved roots under the existing seven-kind coverage policy. No learning or
+controller authority changed. See [freeze evidence](evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).
+
+The audit found that the older development runner cannot parse the new zero-train supplement.
+Next build its strict record reader and admission adapter, reuse the existing journals and model
+executor, run a concrete zero-effect preflight on the declared five roots, then obtain bounded
+model-selected factual outcomes. Do not create synthetic train rows, repeat the bank census or
+freeze, fit on development, or open Crystal. The full six-part mission check and stop rules are
+in [the current handoff](../HANDOFF.md).
+
 ## Current checkpoint: bounded census performance repair
 
 The partition fix is published as PR 211 with green CI, but its census was interrupted after

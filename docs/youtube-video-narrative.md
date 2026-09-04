@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: 429 green bindings, then an honest connection gap
+
+**Visual:** Replace the stalled counter with **429 / 429 BINDABLE** and **COMPLETED IN <14 MIN**.
+Show three new development cards joining two preserved cards, with one setup-failure allowance.
+Keep gameplay and learning counters at zero. The separate freeze took 788.71 seconds.
+
+**Voiceover:** “The repair worked and we saved the new situations. But the audit found one more
+real integration gap: the existing runner reads the old schedule format. We still need to connect
+this new development-only plan to the same setup and model-outcome machinery. Supply preparation
+is complete; we have not turned these situations into model gameplay yet.”
+
+Do not depict this session as training or claim that GPT-6 alone caused the improvement: the
+diagnosis and proposed refactor were inherited. See the [comparison log](coding-model-comparison.md).
+
 ## New scene: a busy processor is not progress
 
 **Visual:** The 81-context observation completes, while 429 candidate plans repeatedly send

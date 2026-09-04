@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon.red.living-dex-development-supplement-freeze-result-evidence.v1",
+  "status": "three_development_roots_frozen",
+  "source_commit": "7d654cdf8419a116ab8716b6b1b03a91069ae292",
+  "source_bundle_sha256": "26f7e2dcc578d61158daf4d4132beb6ab3e907a7a111c49b15a02e61568c63a9",
+  "github_ci_run": 33915908264,
+  "github_ci_attempt": 1,
+  "github_ci_conclusion": "success",
+  "process_elapsed_seconds": 788.71,
+  "result": {
+    "collection_authorized": false,
+    "controller_actions": 0,
+    "coverage_survives_any_allowed_censor": true,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "new_families": 3,
+    "new_locations": 3,
+    "new_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "manage_storage",
+      "resupply"
+    ],
+    "new_roots": 3,
+    "outcomes_opened": 0,
+    "plan_manifest_sha256": "3ac8b47a573dad76ccce593e780d93752576c74df97484bf7958dbedcddd8a79",
+    "plan_record_sha256": "647e6d9f6ab6639527d48e16a45d4a45a62aa9afcd555ec6621f1e807fc574a4",
+    "plan_sha256": "e17e7781250014ffcff338b9f0fabe3d00e66a0f1d9b7bb5d93683040fab880a",
+    "policy": {
+      "held_option_kinds": [
+        "acquire",
+        "evolve",
+        "develop",
+        "resupply",
+        "unlock_access",
+        "explore"
+      ],
+      "held_root_count": 2,
+      "maximum_setup_censors": 1,
+      "minimum_new_families": 3,
+      "minimum_new_locations": 3,
+      "minimum_surviving_roots": 2,
+      "missing_option_kinds": [
+        "manage_storage"
+      ],
+      "new_roots": 3,
+      "required_option_kinds": [
+        "acquire",
+        "evolve",
+        "develop",
+        "manage_storage",
+        "resupply",
+        "unlock_access",
+        "explore"
+      ],
+      "required_total_roots": 4,
+      "schema": "pokemon.core.living-dex-development-supplement-policy.v1"
+    },
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "private_plan_reopened": true,
+    "root_claims": 0,
+    "schema": "pokemon.red.living-dex-development-supplement-freeze-command-result.v1",
+    "status": "authenticated_action_free_development_supplement_frozen",
+    "teacher_queries": 0,
+    "training_targets": 0
+  },
+  "remaining_integration": "The current development consumer accepts historical mixed schedules only. Implement a strict development-only supplement reader/admission adapter and executable preflight before these new roots can be used for model-selected play.",
+  "claim_boundary": "Supply preparation only: no new training example, model fit, held outcome, gameplay authority or transfer result. Preserve the two historical held roots; the three new roots remain unclaimed."
+}

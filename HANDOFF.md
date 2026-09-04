@@ -1,5 +1,56 @@
 # Handoff
 
+## Current checkpoint: census and three-root freeze succeeded; wire the supplement consumer
+
+PR 212 merged at `7d654cdf8419a116ab8716b6b1b03a91069ae292`. PR CI `33913706704/1`
+and main CI `33915908264/1` each passed **6,691 tests**, with four skips and one expected failure.
+The repaired private census completed within **13 minutes 54 seconds** of launch and proved that
+**all 429 feasible supplements bind**, with no binding failures. That is an observed upper bound,
+not an exact process duration. The preceding attempt was interrupted after more than 65 minutes.
+See the [binding result](docs/evidence/red-living-dex-development-supplement-binding-result-v1-2026-09-04.json).
+
+One subsequent freeze completed in **788.71 seconds** and stored/reopened exactly **three new
+development roots**, across three families and locations. Alongside the two preserved historical
+held roots, the policy preserves all seven supported option kinds after any one new setup censor.
+Both commands recorded zero actions, frames, predictions, fits, outcomes, teachers and root claims.
+See the [freeze result and exact public bindings](docs/evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).
+Do not rerun either census or freeze to rediscover this result. The private supplement is now
+an immutable input; all five prospective development roots still require admission before use.
+
+### Audit finding and next bounded session
+
+The earlier handoff overstated how directly the new plan could reach execution. The existing
+`red_living_dex_clustered_development_runner.py` accepts only a held suffix of a mixed schedule
+and requires positive train counts. The development setup admission and execution modules use
+that same binding. The new supplement contains no train rows and currently has no consumer
+beyond its freezer. Supply is ready; the supplement execution adapter is unfinished.
+
+1. Implement a strict reader for the frozen supplement record and the smallest shared development
+   selection/admission interface for its rows and the preserved historical rows. Never fabricate
+   train rows or relabel the supplement as an old clustered schedule.
+2. Reuse the existing setup journal and model-selected factual-outcome executor. Preserve exact
+   plan/recipe/source/model/context joins, lineage separation and claim-before-runtime ordering.
+3. Add one executable preflight over the declared two-plus-three roots and exact eighteen-example
+   model, with no claims, predictions, outcomes or controller input. Avoid another full-bank census.
+4. Verify a successful adapter path plus substitution, train crossover, consumed-root and
+   interruption failures. Once admitted, execute bounded model-selected development choices and
+   retain every setup censor and observed completion-ledger result; never fit on development.
+5. Reorient on measured model behavior. Four or five cases can expose integration failures;
+   they cannot establish a strong statistical promotion or cross-game transfer claim.
+
+Mission check: **capability** is portable objective selection grounded in real outcomes;
+**authority** stays withheld until the bounded development bridge passes; **transfer test** is
+fresh Red lineages first, with Crystal deferred; **cheapest falsifier** is the supplement-reader
+rehearsal and five-root zero-effect preflight; **time box** is one session with a checkpoint at
+the first successful preflight; **stop** on unauthenticated joins, reused roots, invented train
+rows or a second diagnostic-only expansion. The maintenance alarm remains acknowledged: the
+next deliverable must reach model behavior, not another supply audit. High is the recommended
+starting effort; actual model settings and usage remain user/account observations.
+
+The [coding-model comparison log](docs/coding-model-comparison.md) records the inherited diagnosis,
+GPT-6 implementation, corrections, both CI timings, successful production results and unknown usage.
+No learner counter or global authority changed this session. No campaign or emulator remains active.
+
 ## Current checkpoint: stop repeated validation before resuming the development gate
 
 PR 211 is merged at `32dcb064a58ee426099bcf21ea341f9678b30325`; CI `33904380404/1`

@@ -1,5 +1,14 @@
 # The story: teaching a model to actually play Pokémon
 
+## Current checkpoint: a successful gate, with the remaining gap named
+
+The repaired diagnostic finished in under 14 minutes and accepted all 429 candidate combinations.
+We then stored and reopened three new development situations. They join two preserved situations
+for the model's next test, but no Pokemon was played and no new lesson was learned in these steps.
+The audit found that the existing runner cannot yet read this new plan format. Connecting that
+format to the existing setup and outcome machinery is the next concrete job. See the
+[result](evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).
+
 ## Current checkpoint: the owner was right to call it stuck
 
 After fixing the partition error, the diagnostic spent over an hour checking the same recipes
