@@ -1,22 +1,22 @@
 # Model-first development roadmap
 
-## Current checkpoint: the batch now has positive and negative strategic outcomes
+## Current checkpoint: outcome training has begun; bind the first fitted model to play
 
-Main `d25b0975` and CI `33824286498` qualified the repaired independent reader. Trial 1 admitted
-without gameplay, and trials 2–4 executed once and admitted. The four usable targets contain two
-successful `develop_team` choices and two equal-cap failures (`advance_story` and
-`evolve_species`) across two authenticated roots. This is outcome supervision for semantic goal
-choice, not teacher imitation.
+The calibration denominator is terminal. Seven admitted, teacher-free outcomes from four Red roots
+contain four successes and three failures across four semantic goal families; trials 0 and 5 are
+permanent invalid no-retry records. The authenticated train-only fitter made one bounded update:
+weighted loss **1.252677 → 1.248107**, maximum guard-menu KL **0.001712 < 0.01**, zero authority
+delta, zero Crystal access, and zero private path fields. Candidate model identity is
+`70a72bdb084fbfe3ae8eccf68b582a3503ebbc5f07428616ddeb4e9d78416bcb`.
 
-Trial 5 exposed survivorship bias in the collection wrapper: its binding failure was durably typed
-before any controller action, but the generic runtime correctly rethrew the underlying exception
-and the calibration wrapper retained only a partial artifact. It is permanently consumed. The
-narrow adapter lets only this calibration caller convert an executor exception into an
-independently metered typed negative while the frozen skills and generic runtime remain unchanged.
-After green CI, finish untouched
-trials 6–8 and construct the one train-only fit from completed admitted outcomes.
+This is the first real strategic gameplay-outcome training update, but it is same-bank calibration,
+not evidence of generalization. The immediate work is strict model/fit-summary authentication and
+shadow integration into the bounded player. After publication and exact-main CI, use one
+bounded-player-unconsumed same-bank Red development context to compare up to four consecutive model choices with
+deterministic ordering. Preserve typed outcomes, ledger progress, cost, and interventions. Any
+promotion still requires prospective, disjoint Red train/development lineages.
 
-Status: active strategy as of 2026-09-03. This document supersedes the execution order in older
+Status: active strategy as of 2026-09-04. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 

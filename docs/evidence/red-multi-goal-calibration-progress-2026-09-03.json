@@ -1,16 +1,37 @@
 {
-  "admission_reader_ci_run_id": 33824286498,
-  "admission_reader_source_commit": "d25b0975a55507631a9cfe168b9f0f8e1d73ef59",
-  "admitted_failed_outcomes": 2,
-  "admitted_outcomes": 4,
-  "admitted_succeeded_outcomes": 2,
+  "admission_reader_ci_run_id": 33834577946,
+  "admission_reader_source_commit": "a16fc0d8d85c5560b43b55116b594cfae543f488",
+  "admitted_failed_outcomes": 3,
+  "admitted_outcomes": 7,
+  "admitted_succeeded_outcomes": 4,
   "campaign_plan_sha256": "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267",
   "collection_regressions": 0,
   "consumed_unusable_trials": 2,
-  "model_predictions": 0,
+  "fit": {
+    "base_model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "campaign_roster_sha256": "aefccbfec92419af6d95bfc91c716c781e7bd4043706b8fd92795b3bb4625c56",
+    "candidate_model_canonical_sha256": "70a72bdb084fbfe3ae8eccf68b582a3503ebbc5f07428616ddeb4e9d78416bcb",
+    "candidate_model_file_sha256": "5fc8106d7223824f1bbb422c23f89a1f18cc071edc144ef8971fc85d84cd6f40",
+    "fit_ci_run_id": 33836145354,
+    "fit_source_bundle_sha256": "bc64b98477629bd55312e4af2339a6a448f117aa1263e075abae268ac395db6a",
+    "fit_source_commit": "6fc4b59f5dc8f450a15044c23b181518486ef96c",
+    "guard_roster_sha256": "50a229b48c1229821b5e50e3e4ba925bec8cd97aac04b2eda393ac873b133d20",
+    "maximum_guard_menu_kl": 0.0017115827744108268,
+    "maximum_guard_menu_kl_cap": 0.01,
+    "model_predictions": 7,
+    "private_path_fields": 0,
+    "same_bank_calibration_only": true,
+    "summary_file_sha256": "01281fb58901b4557ef0a2c626c39b89607cfc837734fa6d96a77d61b139e4d2",
+    "training_loss_after": 1.2481073745536153,
+    "training_loss_before": 1.2526772559519361,
+    "update_steps": 1
+  },
+  "model_fits": 1,
+  "model_predictions": 7,
   "private_path_fields": 0,
+  "promotion_authorized": false,
   "schema": "pokemon.red.multi-goal-calibration-progress.v1",
-  "status": "binding-failure-retention-repair-pending",
+  "status": "completed-train-only-calibration-fit",
   "teacher_queries": 0,
   "trials": [
     {
@@ -64,7 +85,34 @@
       "goal_kind": "advance_story",
       "partial_manifest_file_sha256": "2970f8dbde06c6e9b98c4345e7c553a2792ec325cb7376bb03b6814b3ae4f712",
       "trial_ordinal": 5
+    },
+    {
+      "actions_executed": 36,
+      "admission": "admitted",
+      "frames_executed": 4512,
+      "goal_kind": "manage_storage",
+      "manifest_sha256": "9481258c4882e022286fe9375ca38678d9246189c4a0aef35fab768724a628d8",
+      "reward": 1.0,
+      "trial_ordinal": 6
+    },
+    {
+      "actions_executed": 0,
+      "admission": "admitted",
+      "frames_executed": 0,
+      "goal_kind": "advance_story",
+      "manifest_sha256": "f31c4443141f97b75410b38ee54f30e18b96f1dd1e886e8139c31b4f38d23de6",
+      "reward": -1.0,
+      "trial_ordinal": 7
+    },
+    {
+      "actions_executed": 36,
+      "admission": "admitted",
+      "frames_executed": 4512,
+      "goal_kind": "manage_storage",
+      "manifest_sha256": "b720d461c1fc6fa34b49e0e7649d366151dc1f282b83af5ee2f56062806ac9b8",
+      "reward": 1.0,
+      "trial_ordinal": 8
     }
   ],
-  "untouched_trials": 3
+  "untouched_trials": 0
 }

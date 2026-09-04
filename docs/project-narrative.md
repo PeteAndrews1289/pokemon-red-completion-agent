@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the model finally learns from its own gameplay outcomes
+
+The fixed classroom closed with seven usable experiences across four authenticated moments in Red:
+four successes and three failures spanning team development, story progress, evolution, and storage.
+No teacher supplied a preferred answer, and no failed run was replaced. Two malformed attempts stay
+on the record as permanent no-retry failures.
+
+Those outcomes produced the first real update to the strategic goal model. Its weighted loss moved
+from 1.252677 to 1.248107 in one deliberately small step, while a guard set confirmed that unrelated
+goal menus changed by no more than 0.001712 KL against a 0.01 cap. That is modest—and honest. It
+proves the system can turn verified game results into a new policy without destabilizing its other
+choices. It does not yet prove the policy generalizes.
+
+The next engineering move connects that exact authenticated model to the bounded player in shadow.
+The model will choose several semantic goals in sequence, deterministic skills will execute them,
+and an independent living-Pokédex ledger will judge progress after every choice. A deterministic
+ordering starts from the same bounded-player-unconsumed, same-bank state for comparison. This is the bridge from isolated
+training examples to an agent that can begin playing; controller safety remains deterministic until
+prospective Red evidence earns broader authority.
+
 ## September 3: the first real strategic outcome batch takes shape
 
 The repaired reader admitted the earlier team-development run without moving the game. Three more

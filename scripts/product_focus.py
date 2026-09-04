@@ -112,15 +112,15 @@ _MULTI_GOAL_CALIBRATION_PROGRESS_PATH = (
     "docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json"
 )
 _MULTI_GOAL_CALIBRATION_PROGRESS_SHA256 = (
-    "e66caa75910b8ef7ec03736f0a6c9edd829eb5c1447bb4eeb3369f0502633b61"
+    "22eebf59f1b82f17f95f54328714cfee2a70dcc8ee11d3f2df3a731568497473"
 )
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 108,
+    "causal_train_examples": 111,
     "composition_attempts": 3,
     "development_episode_attempts": 19,
-    "model_fits": 9,
+    "model_fits": 10,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -1365,31 +1365,35 @@ def _validate_multi_goal_calibration_projection(receipt: Mapping[str, object]) -
         "untouched_trials": receipt.get("untouched_trials"),
         "collection_regressions": receipt.get("collection_regressions"),
         "teacher_queries": receipt.get("teacher_queries"),
+        "model_fits": receipt.get("model_fits"),
         "model_predictions": receipt.get("model_predictions"),
         "private_path_fields": receipt.get("private_path_fields"),
+        "promotion_authorized": receipt.get("promotion_authorized"),
     } != {
         "schema": "pokemon.red.multi-goal-calibration-progress.v1",
-        "status": "binding-failure-retention-repair-pending",
-        "admission_reader_ci_run_id": 33824286498,
+        "status": "completed-train-only-calibration-fit",
+        "admission_reader_ci_run_id": 33834577946,
         "admission_reader_source_commit": (
-            "d25b0975a55507631a9cfe168b9f0f8e1d73ef59"
+            "a16fc0d8d85c5560b43b55116b594cfae543f488"
         ),
         "campaign_plan_sha256": (
             "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267"
         ),
-        "admitted_outcomes": 4,
-        "admitted_succeeded_outcomes": 2,
-        "admitted_failed_outcomes": 2,
+        "admitted_outcomes": 7,
+        "admitted_succeeded_outcomes": 4,
+        "admitted_failed_outcomes": 3,
         "consumed_unusable_trials": 2,
-        "untouched_trials": 3,
+        "untouched_trials": 0,
         "collection_regressions": 0,
         "teacher_queries": 0,
-        "model_predictions": 0,
+        "model_fits": 1,
+        "model_predictions": 7,
         "private_path_fields": 0,
+        "promotion_authorized": False,
     }:
         raise ProductFocusError("multi-goal calibration projection differs")
     trials = _sequence(receipt, "trials", subject="multi-goal calibration evidence")
-    if len(trials) != 6:
+    if len(trials) != 9:
         raise ProductFocusError("multi-goal calibration trial denominator differs")
     expected = (
         (0, "advance_story", "invalid-no-retry", None, 0),
@@ -1398,6 +1402,9 @@ def _validate_multi_goal_calibration_projection(receipt: Mapping[str, object]) -
         (3, "advance_story", None, "admitted", 6000),
         (4, "evolve_species", None, "admitted", 6000),
         (5, "advance_story", "invalid-no-retry", None, 0),
+        (6, "manage_storage", None, "admitted", 36),
+        (7, "advance_story", None, "admitted", 0),
+        (8, "manage_storage", None, "admitted", 36),
     )
     observed = tuple(
         (
@@ -1424,6 +1431,43 @@ def _validate_multi_goal_calibration_projection(receipt: Mapping[str, object]) -
     )
     if observed != expected:
         raise ProductFocusError("multi-goal calibration trial projection differs")
+    fit = _mapping(receipt, "fit", subject="multi-goal calibration evidence")
+    if {
+        "base_model_canonical_sha256": fit.get("base_model_canonical_sha256"),
+        "candidate_model_canonical_sha256": fit.get(
+            "candidate_model_canonical_sha256"
+        ),
+        "candidate_model_file_sha256": fit.get("candidate_model_file_sha256"),
+        "summary_file_sha256": fit.get("summary_file_sha256"),
+        "training_loss_before": fit.get("training_loss_before"),
+        "training_loss_after": fit.get("training_loss_after"),
+        "maximum_guard_menu_kl": fit.get("maximum_guard_menu_kl"),
+        "maximum_guard_menu_kl_cap": fit.get("maximum_guard_menu_kl_cap"),
+        "update_steps": fit.get("update_steps"),
+        "same_bank_calibration_only": fit.get("same_bank_calibration_only"),
+        "private_path_fields": fit.get("private_path_fields"),
+    } != {
+        "base_model_canonical_sha256": (
+            "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d"
+        ),
+        "candidate_model_canonical_sha256": (
+            "70a72bdb084fbfe3ae8eccf68b582a3503ebbc5f07428616ddeb4e9d78416bcb"
+        ),
+        "candidate_model_file_sha256": (
+            "5fc8106d7223824f1bbb422c23f89a1f18cc071edc144ef8971fc85d84cd6f40"
+        ),
+        "summary_file_sha256": (
+            "01281fb58901b4557ef0a2c626c39b89607cfc837734fa6d96a77d61b139e4d2"
+        ),
+        "training_loss_before": 1.2526772559519361,
+        "training_loss_after": 1.2481073745536153,
+        "maximum_guard_menu_kl": 0.0017115827744108268,
+        "maximum_guard_menu_kl_cap": 0.01,
+        "update_steps": 1,
+        "same_bank_calibration_only": True,
+        "private_path_fields": 0,
+    }:
+        raise ProductFocusError("multi-goal calibration fit projection differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:

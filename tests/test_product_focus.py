@@ -331,7 +331,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 108, "partition": "train"},
+        {"kind": "causal_train_example", "minimum": 111, "partition": "train"},
         {"kind": "composition_attempt", "minimum": 3, "partition": "development"},
         {
             "kind": "verified_composition_episode",
@@ -347,19 +347,19 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(1.0)
     assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 108, 108),
+        ("Causal Train Example · train", 111, 111),
         ("Composition Attempt · development", 3, 3),
         ("Verified Composition Episode · development", 3, 3),
         ("Development Episode · development", 19, 19),
     )
     assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
-    assert state.progress["model_fits"] == 9
+    assert state.progress["model_fits"] == 10
     assert state.progress["composition_attempts"] == 3
     assert state.progress["unseen_comparisons"] == 9
     assert state.progress["development_episode_attempts"] == 19
     assert state.progress["verified_outcome_examples"] == 61
     assert state.progress["verified_composition_episodes"] == 3
-    assert state.progress["causal_train_examples"] == 108
+    assert state.progress["causal_train_examples"] == 111
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1550,7 +1550,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Causal Train Example · train: 108/108",
+        "Causal Train Example · train: 111/111",
         "Composition Attempt · development: 3/3",
         "Verified Composition Episode · development: 3/3",
         "Development Episode · development: 19/19",
@@ -1642,7 +1642,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 108, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 111, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
