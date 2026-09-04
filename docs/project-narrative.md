@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: correct checks can still make the system unusable
+
+The partition repair passed CI and merged, but the next census ran for more than 65 minutes
+without finishing. It had observed all 81 contexts; the remaining work repeatedly rebuilt and
+deeply checked the same Red recipes for each of 429 feasible supplements. We interrupted it
+with zero gameplay or model effects. This was an engineering delay, not training progress.
+
+The repair reuses a validated input index within one census and shares the exact context and
+assignment join with the freezer. Real plan publication still performs full validation. A
+regression counts the expensive operations rather than hoping a tiny fixture runs quickly.
+The next production result must demonstrate the improvement; no speedup is claimed yet.
+
+The larger lesson is about priorities: repeated checks and green builds do not teach a model
+to play. This repair has a named purpose—unblock the fitted model's independent Red test—and
+the next census has a 15-minute limit before reassessment.
+
 ## September 4: one missing filter jammed all 429 legal plans
 
 The second protected census failed before it could count a single Red binding, again without

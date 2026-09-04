@@ -7,6 +7,7 @@ from functools import cache
 import pytest
 from test_red_living_dex_clustered_train_runner import _successor_clustered_fixture
 
+import pokemon_red_completion.red_living_dex_development_supplement_plan as supplement_module
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_development_supplement_plan import (
     RedLivingDexDevelopmentSupplementBindings,
@@ -280,3 +281,82 @@ def test_binding_capacity_aggregates_missing_context_rejections() -> None:
         ("missing_red_context", result.capacity.feasible_supplements),
     )
     assert result.binding_ready is False
+
+
+def test_binding_census_projects_inputs_once_not_once_per_combination(monkeypatch) -> None:
+    capabilities, supply, contexts, bindings = _inputs()
+    project = supplement_module.build_red_living_dex_development_supplement_capabilities
+    projected_inputs = 0
+
+    def counted_projection(inputs):
+        nonlocal projected_inputs
+        projected_inputs += len(inputs)
+        return project(inputs)
+
+    monkeypatch.setattr(
+        supplement_module,
+        "build_red_living_dex_development_supplement_capabilities",
+        counted_projection,
+    )
+    result = audit_red_living_dex_development_supplement_binding_capacity(
+        capabilities, supply=supply, context_identities=contexts, bindings=bindings
+    )
+
+    assert result.binding_ready_supplements > 1
+    assert result.binding_ready_supplements == result.capacity.feasible_supplements
+    # One capacity projection and one Red index projection per capability.
+    # This measures expensive work, without a machine-dependent wall-clock bound.
+    assert projected_inputs == 2 * len(capabilities)
+
+
+@pytest.mark.parametrize("context_fault", ["none", "missing", "duplicate", "malformed"])
+def test_census_matches_full_freezer_validation_for_every_combination(context_fault) -> None:
+    capabilities, supply, contexts, bindings = _inputs()
+    contexts = dict(contexts)
+    if context_fault == "missing":
+        contexts.pop(next(iter(contexts)))
+    elif context_fault == "duplicate":
+        contexts = dict.fromkeys(contexts, _sha("one-context"))
+    elif context_fault == "malformed":
+        contexts[next(iter(contexts))] = "invalid-digest"
+    shared = supplement_module.build_red_living_dex_development_supplement_capabilities(
+        capabilities
+    )
+    policy = supplement_module._supplement_policy(supply)
+    expected_ready = 0
+    expected_failures: dict[str, int] = {}
+    for supplement in supplement_module._feasible_shared_supplements(shared, policy=policy):
+        try:
+            supplement_module._bind_red_living_dex_development_supplement_plan(
+                supplement,
+                eligible_red=capabilities,
+                context_identities=contexts,
+                bindings=bindings,
+            )
+        except RedLivingDexDevelopmentSupplementPlanError as error:
+            code = supplement_module._binding_failure_code(error)
+            expected_failures[code] = expected_failures.get(code, 0) + 1
+        else:
+            expected_ready += 1
+    result = audit_red_living_dex_development_supplement_binding_capacity(
+        capabilities, supply=supply, context_identities=contexts, bindings=bindings
+    )
+    assert result.binding_ready_supplements == expected_ready
+    assert dict(result.binding_failure_counts) == expected_failures
+    if context_fault != "none":
+        assert expected_failures
+
+
+def test_binding_join_rejects_changed_projection_with_matching_scenario_identity() -> None:
+    plan = _plan()
+    capabilities, _supply, contexts, _bindings = _inputs()
+    index = supplement_module._index_red_capabilities(capabilities)
+    first = plan.supplement.assignments[0]
+    projected, capability = index[first.scenario_sha256]
+    index[first.scenario_sha256] = (
+        replace(projected, family_scope_id="different-family"), capability
+    )
+    with pytest.raises(RedLivingDexDevelopmentSupplementPlanError, match="does not join"):
+        supplement_module._join_red_supplement(
+            plan.supplement, red_by_scenario=index, context_identities=contexts
+        )

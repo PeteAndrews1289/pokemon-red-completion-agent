@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon.red.living-dex-development-supplement-binding-performance-qualification.v1",
+  "status": "local_qualification_only",
+  "base_commit": "32dcb064a58ee426099bcf21ea341f9678b30325",
+  "source_bundle_sha256": "26f7e2dcc578d61158daf4d4132beb6ab3e907a7a111c49b15a02e61568c63a9",
+  "qualification": {
+    "focused_tests_passed": 25,
+    "focused_seconds": 62.72,
+    "protocol_and_focus_tests_passed_after_golden_correction": 141,
+    "new_regression_cases": 6,
+    "projection_work": "Exactly two input projections per eligible development capability in the census fixture, independent of the number of feasible combinations.",
+    "binding_parity": "Every feasible fixture combination agrees with full freezer validation for valid, missing, duplicate and malformed context mappings.",
+    "projection_substitution_rejected": true,
+    "lint": "passed",
+    "mypy_files": 364,
+    "mypy": "passed",
+    "docs_privacy_product_focus": "passed",
+    "registries_reproduced": 4,
+    "full_local_suite_run": false,
+    "hosted_ci": "pending",
+    "production_runtime": "not_yet_measured"
+  },
+  "claim_boundary": "Maintenance to unblock independent development of the existing eighteen-example model. No new data, fit, model authority, transfer or live binding success is claimed.",
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "model_predictions": 0,
+  "root_claims": 0,
+  "outcomes_opened": 0
+}

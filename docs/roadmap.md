@@ -1,5 +1,12 @@
 # Roadmap
 
+> **September 4 performance reorientation:** PR 211 is merged and green. The subsequent census
+> was interrupted after 65 minutes of repeated binding validation with zero effects. Build the
+> validated index once, preserve the exact join, qualify rejection parity and bounded work, then
+> run the repaired census within 15 minutes. If that fails, stop and reassess the development gate.
+> This maintenance unblocks the existing eighteen-example model's test; no learning counter moves.
+> See [handoff](../HANDOFF.md) for the current sequence.
+
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 

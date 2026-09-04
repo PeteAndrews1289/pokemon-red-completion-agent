@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon.red.living-dex-development-supplement-binding-performance-stop.v1",
+  "status": "interrupted_during_binding_capacity_diagnosis",
+  "source_commit": "32dcb064a58ee426099bcf21ea341f9678b30325",
+  "github_ci_run": 33904380404,
+  "github_ci_attempt": 1,
+  "github_ci_conclusion": "success",
+  "authenticated_contexts": 81,
+  "prior_capacity": {"eligible_roots": 13, "eligible_capabilities": 25, "feasible_supplements": 429},
+  "elapsed_minutes_lower_bound": 65,
+  "failure_stage": "binding_capacity_diagnosis",
+  "diagnosis": "Source inspection found repeated deep capability projection and private-plan construction for every feasible supplement. This is a performance diagnosis, not a completed binding count or a measured speedup.",
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "model_predictions": 0,
+  "model_fits": 0,
+  "root_claims": 0,
+  "outcomes_opened": 0,
+  "teacher_queries": 0,
+  "learning_outputs_added": 0,
+  "new_private_plan_published": false,
+  "next_falsifier": "Validate input capabilities once per census, retain exact projection/context joins, and finish the repaired private census within a 15-minute diagnostic time box. Stop and inspect if that bound is exceeded."
+}

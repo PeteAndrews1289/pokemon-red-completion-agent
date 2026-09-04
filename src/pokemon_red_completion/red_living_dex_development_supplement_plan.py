@@ -450,7 +450,37 @@ def _bind_red_living_dex_development_supplement_plan(
     if not isinstance(bindings, RedLivingDexDevelopmentSupplementBindings):
         raise TypeError("supplement Red binding needs exact bindings")
     bindings.__post_init__()
-    red_by_scenario: dict[str, RedLivingDexCausalRootCapability] = {}
+    red_by_scenario = _index_red_capabilities(eligible_red)
+    joined = _join_red_supplement(
+        supplement,
+        red_by_scenario=red_by_scenario,
+        context_identities=context_identities,
+    )
+    return RedLivingDexDevelopmentSupplementPrivatePlan(
+        bindings=bindings,
+        supplement=supplement,
+        assignments=tuple(
+            RedLivingDexDevelopmentSupplementFrozenScenario(
+                ordinal=ordinal,
+                assignment=assignment,
+                capability=capability,
+                context_identity_sha256=context_identity,
+            )
+            for ordinal, (assignment, capability, context_identity) in enumerate(joined)
+        ),
+    )
+
+
+def _index_red_capabilities(
+    eligible_red: Sequence[RedLivingDexCausalRootCapability],
+) -> dict[
+    str, tuple[LivingDexDevelopmentSupplementCapability, RedLivingDexCausalRootCapability]
+]:
+    """Validate and project each input once per binding operation, not per combination."""
+
+    red_by_scenario: dict[
+        str, tuple[LivingDexDevelopmentSupplementCapability, RedLivingDexCausalRootCapability]
+    ] = {}
     for capability in eligible_red:
         if not isinstance(capability, RedLivingDexCausalRootCapability):
             raise TypeError("supplement Red binding capability differs")
@@ -465,12 +495,33 @@ def _bind_red_living_dex_development_supplement_plan(
             raise RedLivingDexDevelopmentSupplementPlanError(
                 "supplement freeze repeats a Red scenario"
             )
-        red_by_scenario[projected.scenario_sha256] = capability
-    frozen: list[RedLivingDexDevelopmentSupplementFrozenScenario] = []
+        red_by_scenario[projected.scenario_sha256] = (projected, capability)
+    return red_by_scenario
+
+
+def _join_red_supplement(
+    supplement: LivingDexDevelopmentSupplementPlan,
+    *,
+    red_by_scenario: Mapping[
+        str, tuple[LivingDexDevelopmentSupplementCapability, RedLivingDexCausalRootCapability]
+    ],
+    context_identities: Mapping[str, str],
+) -> tuple[
+    tuple[LivingDexDevelopmentSupplementCapability, RedLivingDexCausalRootCapability, str], ...
+]:
+    """Check the exact assignment and context join against this call's validated index.
+
+    The census shares these checks with the freezer without constructing hundreds
+    of private plans. The freezer still validates its complete published plan.
+    """
+
+    joined: list[
+        tuple[LivingDexDevelopmentSupplementCapability, RedLivingDexCausalRootCapability, str]
+    ] = []
     used_contexts: set[str] = set()
-    for ordinal, assignment in enumerate(supplement.assignments):
+    for assignment in supplement.assignments:
         try:
-            capability = red_by_scenario[assignment.scenario_sha256]
+            projected, capability = red_by_scenario[assignment.scenario_sha256]
             context_identity = context_identities[capability.root.root.root_consumption_sha256]
         except (KeyError, TypeError):
             raise RedLivingDexDevelopmentSupplementPlanError(
@@ -482,19 +533,12 @@ def _bind_red_living_dex_development_supplement_plan(
                 "supplement freeze repeats a Red context"
             )
         used_contexts.add(context_identity)
-        frozen.append(
-            RedLivingDexDevelopmentSupplementFrozenScenario(
-                ordinal=ordinal,
-                assignment=assignment,
-                capability=capability,
-                context_identity_sha256=context_identity,
+        if projected != assignment:
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement assignment does not join its Red capability"
             )
-        )
-    return RedLivingDexDevelopmentSupplementPrivatePlan(
-        bindings=bindings,
-        supplement=supplement,
-        assignments=tuple(frozen),
-    )
+        joined.append((assignment, capability, context_identity))
+    return tuple(joined)
 
 
 def audit_red_living_dex_development_supplement_capacity(
@@ -540,13 +584,22 @@ def audit_red_living_dex_development_supplement_binding_capacity(
     capacity = _capacity_from_shared(shared, policy=policy)
     binding_ready = 0
     failures: Counter[str] = Counter()
+    try:
+        red_by_scenario = _index_red_capabilities(eligible_red)
+    except RedLivingDexDevelopmentSupplementPlanError as error:
+        if capacity.feasible_supplements:
+            failures[_binding_failure_code(error)] = capacity.feasible_supplements
+        return RedLivingDexDevelopmentSupplementBindingCapacity(
+            capacity=capacity,
+            binding_ready_supplements=0,
+            binding_failure_counts=tuple(sorted(failures.items())),
+        )
     for supplement in _feasible_shared_supplements(shared, policy=policy):
         try:
-            _bind_red_living_dex_development_supplement_plan(
+            _join_red_supplement(
                 supplement,
-                eligible_red=eligible_red,
+                red_by_scenario=red_by_scenario,
                 context_identities=context_identities,
-                bindings=bindings,
             )
         except RedLivingDexDevelopmentSupplementPlanError as error:
             failures[_binding_failure_code(error)] += 1
