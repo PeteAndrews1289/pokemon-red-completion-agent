@@ -17,7 +17,9 @@
 > rows have the contractually correct null `decision_id` because the high-level goal choice is a
 > standalone decision, not a scope wrapped around every action. The completed gameplay will not be
 > retried. The reader repair requires all rows to remain explicitly unlinked and rejects forged
-> links. Publish and green that repair, admit the immutable episode, then continue trials 2–8. See
+> links. It also authenticates the episode's actual historical source as published ancestry and
+> hashes the historical runner blob instead of rebinding old gameplay to the newer reader. Publish
+> and green that repair, admit the immutable episode, then continue trials 2–8. See
 > the [path-free execution result](docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
 
 > **Previous product focus (September 3, 2026): repair one pre-input calibration indexing defect,

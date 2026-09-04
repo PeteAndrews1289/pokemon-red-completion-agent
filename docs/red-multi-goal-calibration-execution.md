@@ -51,8 +51,10 @@ the specialist controller rows correctly carry `decision_id: null`. They are not
 terminal report.
 
 The gameplay episode is immutable and must not replay. The admission repair requires null links on
-every controller row and rejects any non-null forged link. After that source is published and
-green, reopen and admit the existing episode; only then continue trial 2. See the
+every controller row and rejects any non-null forged link. It also authenticates the claim's source
+as published ancestry and checks the claimed runner digest against the exact historical Git blob,
+so a repaired reader never rewrites execution provenance. After that source is published and green,
+reopen and admit the existing episode; only then continue trial 2. See the
 [trial-1 execution result](evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
 
 ## Claim order

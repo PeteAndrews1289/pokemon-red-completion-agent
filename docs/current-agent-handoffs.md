@@ -13,8 +13,9 @@ preflight passed, and `develop_team` completed in 2,009 actions / 162,918 frames
 change, no specimen loss, and no teacher. The first admission attempt rejected only because the
 reader expected specialist controller rows to link to a standalone goal decision; the established
 trajectory contract gives those rows null links. Codex owns the narrow admission repair, exact-head
-publication, and reader-only admission of the immutable trial-1 episode. Do not replay trial 1 or
-begin trial 2 until it is admitted.
+publication, historical source/runner authentication, and reader-only admission of the immutable
+trial-1 episode. The claim source must be published ancestry and its runner digest must match the
+exact historical Git blob. Do not replay trial 1 or begin trial 2 until it is admitted.
 
 Main `24d8671a` and CI `33818021962` qualified the first runner. Production preflight passed with
 zero effects, but trial 0 failed before a decision or execution because the runner confused the

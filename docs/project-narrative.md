@@ -13,6 +13,11 @@ marker; it divides the timeline without wrapping thousands of specialist actions
 scope. Every action, step, and frame still reconciled. The run stays immutable while the reader is
 corrected to require the actual contract—explicit null links—and to reject invented ones.
 
+The repair also keeps the provenance honest across its own publication boundary. It verifies that
+the controller revision named by the immutable claim is an ancestor of the published reader and
+that its digest matches the exact historical Git blob. Improving the evidence reader therefore
+does not rewrite which code actually played the game.
+
 ## September 3: the first frozen question caught an indexing assumption before it moved
 
 The execution code passed its full repository gate and the production preflight authenticated all

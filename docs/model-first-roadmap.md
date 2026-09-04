@@ -21,6 +21,11 @@ standalone decision, so its specialist controller rows correctly have null decis
 current patch requires exactly that established shape and rejects forged links. Publish, green,
 admit the immutable episode, and only then continue trial 2. No replay is permitted.
 
+Because the reader is repaired after execution, admission also retains the episode's real source
+lineage: the claim source must be in the published reader head's ancestry, and the claimed runner
+digest must equal the runner blob at that historical commit. Admission is a new reader of old
+evidence, not a relabelling of the evidence as newly executed.
+
 The execution runner merged as main `24d8671a` and passed CI run `33818021962`. Its production
 preflight authenticated four roots and nine frozen trials with zero actions, frames, predictions,
 or teacher queries. Trial 0 then failed before any decision or execution record. The plan's

@@ -17,6 +17,13 @@ train anything.”
 timeline; it does not own every low-level action as a nested scope. All counts matched, so we kept
 the run immutable and repaired the reader instead of replaying the game.”
 
+**Visual:** Put the original controller commit behind the episode and the newer reader commit in
+front. Draw an ancestry check between them and compare the controller file to a fingerprint.
+
+**Voiceover:** “A newer reader cannot pretend it ran the older episode. It verifies that the real
+controller commit is in published history and that the exact historical controller matches the
+claim before it accepts a single outcome.”
+
 ## New scene: choice zero was not the same choice
 
 **Visual:** Show a compact menu labeled **AVAILABLE: STORY · DEVELOP · RESTORE** beside a full

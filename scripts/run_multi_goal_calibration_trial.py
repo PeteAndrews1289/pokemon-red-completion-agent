@@ -6,8 +6,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
+import subprocess
 import sys
 from contextlib import suppress
 from pathlib import Path
@@ -93,22 +95,13 @@ INVENTORY_RESULT_PATH = (
 FREEZER_PATH = SCRIPTS_ROOT / "freeze_multi_goal_calibration_campaign.py"
 DEVELOPMENT_RUNNER_PATH = SCRIPTS_ROOT / "run_repeatable_goal_manager_development.py"
 CALIBRATION_ADMISSION_PATH = (
-    PROJECT_ROOT
-    / "src"
-    / "pokemon_red_completion"
-    / "multi_goal_calibration_admission.py"
+    PROJECT_ROOT / "src" / "pokemon_red_completion" / "multi_goal_calibration_admission.py"
 )
 CALIBRATION_EXECUTION_PATH = (
-    PROJECT_ROOT
-    / "src"
-    / "pokemon_red_completion"
-    / "multi_goal_calibration_execution.py"
+    PROJECT_ROOT / "src" / "pokemon_red_completion" / "multi_goal_calibration_execution.py"
 )
 CALIBRATION_OUTCOME_PATH = (
-    PROJECT_ROOT
-    / "src"
-    / "pokemon_red_completion"
-    / "multi_goal_calibration_outcome.py"
+    PROJECT_ROOT / "src" / "pokemon_red_completion" / "multi_goal_calibration_outcome.py"
 )
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -175,8 +168,7 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         runner_path.parent != SCRIPTS_ROOT.resolve()
         or runner_sha256 != _sha(args.expected_runner_sha256, "runner")
         or freezer_sha256 != _sha(args.expected_freezer_sha256, "freezer")
-        or development_sha256
-        != _sha(args.expected_development_runner_sha256, "development runner")
+        or development_sha256 != _sha(args.expected_development_runner_sha256, "development runner")
     ):
         raise RunMultiGoalCalibrationError("executable_attestation")
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
@@ -188,8 +180,7 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         or _GIT_COMMIT.fullmatch(source.git_commit) is None
         or working_source_bundle_sha256(PROJECT_ROOT)
         != _sha(args.expected_source_bundle_sha256, "source bundle")
-        or build_runtime_identity().sha256
-        != _sha(args.expected_runtime_sha256, "runtime")
+        or build_runtime_identity().sha256 != _sha(args.expected_runtime_sha256, "runtime")
         or goal_manager_development_numpy_runtime_sha256()
         != _sha(args.expected_numpy_runtime_sha256, "NumPy runtime")
         or composition_skill_manifest(PROJECT_ROOT).get("manifest_sha256")
@@ -239,8 +230,7 @@ def _load_campaign(
     )
     if (
         campaign.freezer_runner_sha256 != readiness.freezer_sha256
-        or campaign.development_runner_sha256
-        != readiness.development_runner_sha256
+        or campaign.development_runner_sha256 != readiness.development_runner_sha256
         or campaign.runtime_sha256 != base.runtime.sha256
         or campaign.numpy_runtime_sha256 != base.numpy_runtime_sha256
         or campaign.skill_manifest_sha256 != base.skill_manifest_sha256
@@ -296,24 +286,17 @@ def _verify_roots_reservable(
             and _SHA256.fullmatch(observed_runner) is not None
             and isinstance(observed_source, str)
             and _GIT_COMMIT.fullmatch(observed_source) is not None
-            and observed.get("schema")
-            == "pokemon.red.fresh-composition-root-claim.v1"
-            and observed.get("root_consumption_sha256")
-            == root.physical_root_sha256
+            and observed.get("schema") == "pokemon.red.fresh-composition-root-claim.v1"
+            and observed.get("root_consumption_sha256") == root.physical_root_sha256
             and observed.get("execution_identity_sha256")
             == campaign.root_reservation_execution_identity(observed_runner)
         )
         observed_identity = {
-            key: value
-            for key, value in observed.items()
-            if key != "root_consumption_sha256"
+            key: value for key, value in observed.items() if key != "root_consumption_sha256"
         }
         if any(observed.get(key) != value for key, value in expected.items()) and not (
             authentic_inherited
-            and (
-                inherited_identity is None
-                or observed_identity == inherited_identity
-            )
+            and (inherited_identity is None or observed_identity == inherited_identity)
         ):
             raise RunMultiGoalCalibrationError("closed_root_collision")
         if authentic_inherited:
@@ -373,12 +356,11 @@ def _preflight(
     campaign_path, campaign, store = _load_campaign(args, readiness)
     trial, _root = _selected_root(campaign, readiness, args.trial_ordinal)
     _verify_roots_reservable(campaign, readiness, registry)
-    if (
-        store.inspect_episode_state(trial.episode_id).status != "absent"
-        or not development._trial_claim_is_available(
-            registry,
-            trial.trial_claim_sha256,
-        )
+    if store.inspect_episode_state(
+        trial.episode_id
+    ).status != "absent" or not development._trial_claim_is_available(
+        registry,
+        trial.trial_claim_sha256,
     ):
         raise RunMultiGoalCalibrationError("trial_already_consumed")
     protected = _protected_paths(readiness, campaign_path, trial.root_ordinal)
@@ -405,12 +387,11 @@ def _execute(
 ) -> dict[str, object]:
     campaign_path, campaign, store = _load_campaign(args, readiness)
     trial, root = _selected_root(campaign, readiness, args.trial_ordinal)
-    if (
-        store.inspect_episode_state(trial.episode_id).status != "absent"
-        or not development._trial_claim_is_available(
-            registry,
-            trial.trial_claim_sha256,
-        )
+    if store.inspect_episode_state(
+        trial.episode_id
+    ).status != "absent" or not development._trial_claim_is_available(
+        registry,
+        trial.trial_claim_sha256,
     ):
         raise RunMultiGoalCalibrationError("trial_already_consumed")
     protected = _protected_paths(readiness, campaign_path, trial.root_ordinal)
@@ -588,21 +569,38 @@ def _admit(
         raise RunMultiGoalCalibrationError("campaign_authentication")
     entry = readiness.development.entries[entry_index]
     context_entry = readiness.development.candidate.catalog.entry(entry.slot_id)
-    execution_identity = campaign.trial_execution_identity(
-        trial.trial_ordinal,
-        readiness.runner_sha256,
-    )
     try:
         claim = development._read_trial_claim(registry, trial.trial_claim_sha256)
     except Exception as error:
         raise RunMultiGoalCalibrationError("trial_claim_authentication") from error
-    if claim != {
-        "execution_identity_sha256": execution_identity,
-        "runner_sha256": readiness.runner_sha256,
-        "schema": "pokemon.red.repeatable-goal-manager-trial-claim.v1",
-        "source_commit": readiness.development.source.git_commit,
-        "trial_claim_sha256": trial.trial_claim_sha256,
-    }:
+    claim_source_commit = claim.get("source_commit") if isinstance(claim, dict) else None
+    claim_runner_sha256 = claim.get("runner_sha256") if isinstance(claim, dict) else None
+    execution_identity = (
+        campaign.trial_execution_identity(trial.trial_ordinal, claim_runner_sha256)
+        if isinstance(claim_runner_sha256, str)
+        and _SHA256.fullmatch(claim_runner_sha256) is not None
+        else ""
+    )
+    if (
+        not isinstance(claim_source_commit, str)
+        or _GIT_COMMIT.fullmatch(claim_source_commit) is None
+        or claim
+        != {
+            "execution_identity_sha256": execution_identity,
+            "runner_sha256": claim_runner_sha256,
+            "schema": "pokemon.red.repeatable-goal-manager-trial-claim.v1",
+            "source_commit": claim_source_commit,
+            "trial_claim_sha256": trial.trial_claim_sha256,
+        }
+        or not _claim_source_is_published_ancestor(
+            claim_source_commit,
+            readiness.development.source.git_commit,
+        )
+        or not _claim_runner_matches_source(
+            claim_source_commit,
+            claim_runner_sha256,
+        )
+    ):
         raise RunMultiGoalCalibrationError("trial_claim_authentication")
     state = store.inspect_episode_state(trial.episode_id)
     if state.status != "complete":
@@ -621,21 +619,15 @@ def _admit(
                 readiness.development.candidate.catalog.catalog_sha256
             ),
             expected_context_id=context_entry.context_id,
-            expected_binding_manifest_sha256=str(
-                root_record["binding_manifest_sha256"]
-            ),
+            expected_binding_manifest_sha256=str(root_record["binding_manifest_sha256"]),
             expected_state_sha256=str(root_record["state_sha256"]),
             expected_envelope_sha256=str(root_record["envelope_sha256"]),
             expected_question_sha256=str(root_record["question_sha256"]),
-            expected_policy_context_sha256=str(
-                root_record["policy_context_sha256"]
-            ),
-            expected_available_menu_sha256=str(
-                root_record["available_menu_sha256"]
-            ),
+            expected_policy_context_sha256=str(root_record["policy_context_sha256"]),
+            expected_available_menu_sha256=str(root_record["available_menu_sha256"]),
             expected_selected_available_ordinal=trial.selected_candidate_index,
             expected_selected_goal_kind=trial.selected_goal_kind,
-            expected_source_commit=readiness.development.source.git_commit,
+            expected_source_commit=claim_source_commit,
             expected_trial_ordinal=trial.trial_ordinal,
         )
     except MultiGoalCalibrationAdmissionError as error:
@@ -650,6 +642,71 @@ def _admit(
         "teacher_queries": 0,
         "trial_ordinal": trial.trial_ordinal,
     }
+
+
+def _claim_source_is_published_ancestor(
+    claim_source_commit: str,
+    reader_source_commit: str,
+) -> bool:
+    """Return whether an immutable episode's source is in the reader's published history."""
+
+    if (
+        _GIT_COMMIT.fullmatch(claim_source_commit) is None
+        or _GIT_COMMIT.fullmatch(reader_source_commit) is None
+    ):
+        return False
+    try:
+        result = subprocess.run(
+            (
+                "git",
+                "merge-base",
+                "--is-ancestor",
+                claim_source_commit,
+                reader_source_commit,
+            ),
+            cwd=PROJECT_ROOT,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+            timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return result.returncode == 0
+
+
+def _claim_runner_matches_source(
+    claim_source_commit: str,
+    claim_runner_sha256: object,
+) -> bool:
+    """Authenticate the historical controller that wrote the immutable episode."""
+
+    if (
+        _GIT_COMMIT.fullmatch(claim_source_commit) is None
+        or not isinstance(claim_runner_sha256, str)
+        or _SHA256.fullmatch(claim_runner_sha256) is None
+    ):
+        return False
+    try:
+        result = subprocess.run(
+            (
+                "git",
+                "show",
+                f"{claim_source_commit}:scripts/run_multi_goal_calibration_trial.py",
+            ),
+            cwd=PROJECT_ROOT,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+            timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return (
+        result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest() == claim_runner_sha256
+    )
 
 
 def _episode_metadata(
@@ -684,9 +741,7 @@ def _episode_metadata(
         "calibration": {
             "assignment_probability": 1.0,
             "maximum_decisions": 1,
-            "outcome_objective": (
-                "selected-semantic-option-multioutcome-calibration-v1"
-            ),
+            "outcome_objective": ("selected-semantic-option-multioutcome-calibration-v1"),
             "teacher_queries": 0,
             "trial_ordinal": trial.trial_ordinal,
         },
@@ -787,9 +842,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = _admit(args, readiness, registry)
     except Exception as error:
         stage = (
-            error.stage
-            if isinstance(error, RunMultiGoalCalibrationError)
-            else "unexpected_failure"
+            error.stage if isinstance(error, RunMultiGoalCalibrationError) else "unexpected_failure"
         )
         print(json.dumps(_failure_receipt(stage), sort_keys=True))
         return 2

@@ -8,8 +8,10 @@
 > **2,009 actions / 162,918 frames**, preserved all 15 specimens, and resolved available ordinal 1
 > to full-question index 3. Admission rejected a reader-only assumption that specialist controller
 > rows should link to the standalone goal decision. Their null links, row count, steps, and frame
-> sum match the established trajectory contract. Publish and green the null-link admission repair,
-> admit the immutable episode without replay, then continue trial 2. See the
+> sum match the established trajectory contract. The same repair requires the claimed execution
+> source to be published ancestry and its runner digest to match the exact historical Git blob.
+> Publish and green the admission repair, admit the immutable episode without replay, then continue
+> trial 2. See the
 > [execution result](evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
 
 > **September 3 multi-goal trial-0 result:** main `24d8671a` passed CI run `33818021962`, and the

@@ -31,6 +31,12 @@ immutable trial-1 episode without controller input. Only after admission may the
 training target or trial 2 begin. See the
 [execution result](docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
 
+The repaired reader must preserve historical execution identity too. Admission runs under a newer
+revision than the controller that produced trial 1, so it requires the claim source to be an
+ancestor of the published reader head and hashes the runner blob at that exact historical commit.
+It checks the episode against that historical source and execution identity; it never relabels old
+controller output as newly executed.
+
 The runner subsequently merged as exact main `24d8671a3f5d0c7353826a8481bd7280dd3176a0`
 under green CI run `33818021962`. Its production preflight returned `trial_ready` with zero
 controller actions, frames, model predictions, teacher queries, or private path fields. Trial 0

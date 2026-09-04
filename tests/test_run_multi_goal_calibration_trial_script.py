@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import runpy
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -15,9 +16,7 @@ from pokemon_red_completion.multi_goal_calibration_execution import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = runpy.run_path(
-    str(PROJECT_ROOT / "scripts" / "run_multi_goal_calibration_trial.py")
-)
+SCRIPT = runpy.run_path(str(PROJECT_ROOT / "scripts" / "run_multi_goal_calibration_trial.py"))
 
 
 def _sha(label: str) -> str:
@@ -103,9 +102,7 @@ def test_reservation_claims_every_open_root_once(monkeypatch: pytest.MonkeyPatch
     SCRIPT["_reserve_all_roots"](campaign, readiness, Path("registry"))
 
     assert len(writes) == 1
-    assert writes[0]["root_consumption_sha256"] == (
-        campaign.roots[0].physical_root_sha256
-    )
+    assert writes[0]["root_consumption_sha256"] == (campaign.roots[0].physical_root_sha256)
     assert writes[0]["runner_sha256"] == readiness.runner_sha256
 
 
@@ -279,6 +276,7 @@ def test_admit_authenticates_claim_before_loading_episode(
     campaign = _campaign()
     readiness = _readiness()
     trial = campaign.trials[0]
+    claim_source_commit = "1" * 40
     execution_identity = campaign.trial_execution_identity(
         0,
         readiness.runner_sha256,
@@ -295,9 +293,7 @@ def test_admit_authenticates_claim_before_loading_episode(
             return object()
 
     admitted = SimpleNamespace(
-        public_dict=lambda: {
-            "schema": "pokemon.red.multi-goal-calibration-admission.v1"
-        }
+        public_dict=lambda: {"schema": "pokemon.red.multi-goal-calibration-admission.v1"}
     )
     globals_ = SCRIPT["_admit"].__globals__
     monkeypatch.setitem(
@@ -312,17 +308,31 @@ def test_admit_authenticates_claim_before_loading_episode(
             "execution_identity_sha256": execution_identity,
             "runner_sha256": readiness.runner_sha256,
             "schema": "pokemon.red.repeatable-goal-manager-trial-claim.v1",
-            "source_commit": readiness.development.source.git_commit,
+            "source_commit": claim_source_commit,
             "trial_claim_sha256": trial.trial_claim_sha256,
         },
     )
     monkeypatch.setitem(globals_, "_protected_paths", lambda *_args: ())
     monkeypatch.setitem(globals_, "_require_unchanged", lambda *_args: None)
+    monkeypatch.setitem(
+        globals_,
+        "_claim_source_is_published_ancestor",
+        lambda predecessor, current: (
+            predecessor == claim_source_commit
+            and current == readiness.development.source.git_commit
+        ),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_claim_runner_matches_source",
+        lambda source, runner: source == claim_source_commit and runner == readiness.runner_sha256,
+    )
 
     def admit(_reader: object, **kwargs: object) -> SimpleNamespace:
         events.append("admit")
         assert kwargs["expected_execution_identity_sha256"] == execution_identity
         assert kwargs["expected_trial_claim_sha256"] == trial.trial_claim_sha256
+        assert kwargs["expected_source_commit"] == claim_source_commit
         return admitted
 
     monkeypatch.setitem(globals_, "admit_multi_goal_calibration_episode", admit)
@@ -369,3 +379,105 @@ def test_admit_rejects_a_foreign_trial_claim_before_opening_episode(
             readiness,
             Path("registry"),
         )
+
+
+def test_admit_rejects_a_non_ancestor_claim_before_opening_episode(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    campaign = _campaign()
+    readiness = _readiness()
+    trial = campaign.trials[0]
+    execution_identity = campaign.trial_execution_identity(
+        0,
+        readiness.runner_sha256,
+    )
+
+    class _Store:
+        def inspect_episode_state(self, _episode_id: str) -> SimpleNamespace:
+            raise AssertionError("episode must remain unopened")
+
+    globals_ = SCRIPT["_admit"].__globals__
+    monkeypatch.setitem(
+        globals_,
+        "_load_campaign",
+        lambda *_args: (Path("plan.json"), campaign, _Store()),
+    )
+    monkeypatch.setitem(
+        globals_["development"].__dict__,
+        "_read_trial_claim",
+        lambda *_args: {
+            "execution_identity_sha256": execution_identity,
+            "runner_sha256": readiness.runner_sha256,
+            "schema": "pokemon.red.repeatable-goal-manager-trial-claim.v1",
+            "source_commit": "3" * 40,
+            "trial_claim_sha256": trial.trial_claim_sha256,
+        },
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_claim_source_is_published_ancestor",
+        lambda *_args: False,
+    )
+    monkeypatch.setitem(
+        globals_,
+        "_claim_runner_matches_source",
+        lambda *_args: True,
+    )
+
+    with pytest.raises(
+        SCRIPT["RunMultiGoalCalibrationError"],
+        match="trial_claim_authentication",
+    ):
+        SCRIPT["_admit"](
+            SimpleNamespace(trial_ordinal=0),
+            readiness,
+            Path("registry"),
+        )
+
+
+def test_claim_source_ancestry_is_checked_by_git(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[object, ...]] = []
+
+    def run(*args: object, **kwargs: object) -> SimpleNamespace:
+        calls.append((args, kwargs))
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(subprocess, "run", run)
+
+    assert SCRIPT["_claim_source_is_published_ancestor"]("1" * 40, "2" * 40)
+    command = calls[0][0][0]
+    assert command == (
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "1" * 40,
+        "2" * 40,
+    )
+    assert calls[0][1]["cwd"] == PROJECT_ROOT
+
+
+def test_claim_runner_is_authenticated_from_historical_source(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runner = b"historical runner\n"
+    runner_sha256 = hashlib.sha256(runner).hexdigest()
+    calls: list[tuple[object, ...]] = []
+
+    def run(*args: object, **kwargs: object) -> SimpleNamespace:
+        calls.append((args, kwargs))
+        return SimpleNamespace(returncode=0, stdout=runner)
+
+    monkeypatch.setattr(subprocess, "run", run)
+
+    assert SCRIPT["_claim_runner_matches_source"]("1" * 40, runner_sha256)
+    command = calls[0][0][0]
+    assert command == (
+        "git",
+        "show",
+        f"{'1' * 40}:scripts/run_multi_goal_calibration_trial.py",
+    )
+    assert calls[0][1]["cwd"] == PROJECT_ROOT
+
+    assert not SCRIPT["_claim_runner_matches_source"]("1" * 40, _sha("wrong"))
