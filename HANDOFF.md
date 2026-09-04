@@ -1,6 +1,25 @@
 # Handoff
 
-## Current checkpoint: real acquisition choices exposed binding-failure recovery
+## Current checkpoint: bounded multi-decision acquisition works; new roots are next
+
+The binding-retention repair merged as main `7133d171654ecf7b0686509678803b3059b6cf7b`
+under green exact-main CI `33848221585`. Pair 006 then used the first action-free eligible unused
+validation capture in canonical catalog order. Both the fitted manager and completion-first baseline
+made three `acquire_species` decisions. The first two added two retained specimens, reduced the
+missing-specimen count by two, and added one living/registered species. The third produced an
+independently metered `binding_failed`; both arms reobserved, found unchanged semantic context, and
+stopped cleanly instead of crashing. Each arm used 508 actions / 30,348 frames. The result is
+`equivalent`, with zero teacher use or collection loss. Pair 006 is consumed and must not replay.
+
+This closes the same-bank player-engineering rehearsal: repeated verified Pokédex progress and typed
+failure handling both work, but the model has not beaten deterministic ordering and the seven-row fit
+still comes from the historical bank. The active gate is a prospective lineage-disjoint Red
+curriculum with at least eight train and four untouched development roots, disjoint by upstream
+episode and physical state, covering at least four train and three development goal families. Fit
+only train outcomes and compare once on untouched development. See the
+[pair-006 result](docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json).
+
+## Previous checkpoint: real acquisition choices exposed binding-failure recovery
 
 The forced-singleton repair merged as main `65246348c8357c020e48dd1ffe8a6c20ab9acad0`
 under green exact-main CI `33844066128`. Fresh pair 005 then started from a different three-option

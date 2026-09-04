@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the player catches twice and fails without falling over
+
+The repaired player started both authorities from the same fresh Red snapshot. Each made three
+real acquisition decisions. The first two caught and retained new specimens, shrinking the
+living-Pokédex deficit by two and registering one species that was not previously represented in
+the collection. The third attempt could not complete, but this time its exact 178-action /
+7,056-frame cost became a typed failure. A fresh observation showed the semantic context had not
+changed, so the player stopped cleanly instead of crashing or retrying blindly.
+
+The fitted model and deterministic baseline were identical across all three decisions and each used
+508 actions / 30,348 frames. That tie is still valuable engineering evidence: the agent can now make
+repeated strategic choices, produce verified Pokédex progress, and survive an ordinary failed skill.
+It is not evidence that learning improved the choices. The next chapter therefore leaves the old
+state bank behind and prospectively separates new Red experiences into train and untouched
+development lineages before any outcomes are known.
+
 ## September 4: two catches work, then a recorded failure still crashes composition
 
 With automatic prerequisites separated from strategic credit, a fresh Red rehearsal finally gave

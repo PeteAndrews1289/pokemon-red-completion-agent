@@ -3,6 +3,17 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 4 recovery qualification:** binding-failure retention merged as exact main
+> `7133d171` under green CI `33848221585`. Pair 006 completed both arms with two verified captures
+> and one typed unchanged-context stop. Each arm used **508 actions / 30,348 frames**, added two
+> retained specimens, and added one living/registered species. The verdict is `equivalent`; no
+> promotion, fit or transfer claim follows.
+>
+> Same-bank rehearsal is now closed. Build a prospective lineage-disjoint Red curriculum with at
+> least 8 train / 4 untouched development roots and 4 / 3 goal-family coverage, freeze selection
+> before outcomes, fit train only, and compare once on development. See the
+> [pair-006 result](evidence/red-calibration-player-pair-006-result-2026-09-04.json).
+
 > **September 4 acquisition rehearsal:** the singleton repair merged as exact main `65246348`
 > under green CI `33844066128`. Pair 005 gave the fitted manager three genuine acquisition choices.
 > Two succeeded with fresh collection checks; the third durably recorded `binding_failed`. Total

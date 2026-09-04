@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the same failure no longer kills the player
+
+**Visual:** Split one Red state into **FITTED MODEL** and **BASELINE**. In both lanes, turn two
+`ACQUIRE` cards green, then one red: **88 / 8,124 → 242 / 15,168 → BINDING FAILED 178 / 7,056**.
+Finish at **508 ACTIONS · 30,348 FRAMES · +2 SPECIMENS · +1 LIVING SPECIES**.
+
+**Voiceover:** “The repair worked. Both players caught twice, then met the same failed acquisition.
+Instead of crashing, the system recorded the exact cost, observed the game again, and stopped
+because nothing relevant had changed.”
+
+**Visual:** Stamp **EQUIVALENT — NO PROMOTION**, then move twelve blank root cards into separate
+lanes: **8 TRAIN** and **4 UNTOUCHED DEVELOPMENT**. Add locks labelled **UPSTREAM LINEAGE** and
+**PHYSICAL STATE BYTES** between the lanes.
+
+**Voiceover:** “The agent can now make repeated choices and preserve failures, but matching a
+baseline on old classroom states is not generalization. Next we create genuinely new situations,
+train on eight, and reserve four for the comparison the model has not seen.”
+
 ## New scene: the model catches twice, then the composition layer drops the failure
 
 **Visual:** Show a three-option menu—**ACQUIRE · RESTORE · EXPLORE**—and three model decision cards.

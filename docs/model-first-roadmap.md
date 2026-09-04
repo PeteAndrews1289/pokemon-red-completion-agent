@@ -1,6 +1,20 @@
 # Model-first development roadmap
 
-## Current checkpoint: outcome training has begun; retain failed skills without crashing play
+## Current checkpoint: multi-decision play works; move learning onto prospective roots
+
+Exact main `7133d171` passed CI `33848221585`, and Pair 006 completed from the first eligible unused
+validation capture in canonical order. Both authorities made three acquisition decisions: two
+verified captures reduced the living-Pokédex deficit by two, then an independently metered binding
+failure was retained and settled by the unchanged-context rule. Both arms used 508 actions / 30,348
+frames, so the result is equivalent rather than learned advantage.
+
+The reusable player seam is now demonstrated, but the fitted model remains a seven-outcome
+same-bank calibration. The next model-first step is not another rehearsal. Build at least eight new
+train and four untouched development lineages, freeze partitions before outcomes, collect bounded
+semantic-goal outcomes, fit train only, and compare once on development. Crystal remains deferred
+until Red shows an advantage on genuinely untouched situations.
+
+## Previous checkpoint: outcome training has begun; retain failed skills without crashing play
 
 The forced-singleton seam is published as exact main `65246348` under green CI `33844066128`.
 Pair 005 then reached real model authority: three consecutive `acquire_species` choices from a

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish bounded retention of independently metered binding failures, then use a fresh paired same-bank Red development scenario to test recovery and continued strategic play. Pairs 004 and 005 are terminal and may not replay.
+- Next decision: Build and qualify a prospective lineage-disjoint Red context curriculum with eight train and four untouched development roots; fit only train outcomes and reserve development for one honest comparison. Pairs 004 through 006 are terminal and may not replay.
 
 ### Mandatory mission check
 
@@ -51,9 +51,9 @@ Not the product:
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
 | Causal Train Example · train | 111 | 111 |
-| Composition Attempt · development | 5 | 5 |
-| Verified Composition Episode · development | 3 | 3 |
-| Development Episode · development | 22 | 22 |
+| Composition Attempt · development | 6 | 6 |
+| Verified Composition Episode · development | 4 | 4 |
+| Development Episode · development | 24 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-binding-failure-retention-reorientation-v1** · status **active** · evidence [falsification](docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json)
+**2026-09-04-prospective-red-curriculum-reorientation-v1** · status **active** · evidence [verified composition episode](docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Long-horizon players must learn from failed skills without crashing or silently relabeling them. Typed failure retention and bounded replanning are reusable across capture, battle, navigation and future game adapters. |
-| Learning output | Pair 005 is one partial composition attempt and one challenger development episode: three genuine acquisition choices, two verified successes, then one durable binding_failed outcome after 614 actions and 34920 frames. It adds zero paired verdicts, targets, fits, unseen comparisons, authority or transfer results. |
-| Authority delta | The fitted manager made three genuine acquire_species decisions. Two succeeded with fresh semantic observations and living-collection guards; the third durably recorded binding_failed. No production promotion, admitted target, refit, paired verdict or transfer result followed. |
-| Transfer result | None. Crystal remains deferred. Pair 005 is same-bank Red development evidence and supports no cross-title claim. |
-| Blocker | The generic goal runtime records a binding exception as a typed failure and then rethrows it. Pair 005 therefore stopped after the challenger arm and before its post-failure observation or baseline, even though its first two acquisition goals succeeded. |
-| Decision | Retain an executor exception as an independently metered typed failure inside the bounded research player, then let the existing fresh-observation and changed-context recovery rules settle it. Do not weaken the generic runtime, hide evidence defects, or replay pair 005. Qualify on a fresh pair and different context. |
-| Next session | Implement and publish bounded binding-failure retention, then use one fresh pair identity on a different mechanically eligible same-bank Red player context. Preserve pairs 004 and 005 without replay. |
-| Next falsifier | A ROM-free test must show that a binding exception is converted into exact independently metered failure evidence, reobserved, and either recovered from through a different goal or settled by the unchanged-context rule without private error leakage. Then use a fresh pair and different Red context. |
-| Stop condition | Never replay pairs 004 or 005. Stop on teacher choice or fallback, route-specific exception handling, private error leakage, false success, missing post-failure observation, collection regression, budget mismatch, swallowed evidence defect, or any attempt to count the partial run as a paired comparison or training target. |
+| Product alignment | The bounded player now executes repeated living-Pokedex progress and survives an ordinary skill failure. The next missing product evidence is learning from genuinely new situations, which is the necessary bridge from a Red classroom toward robust Red play and later title transfer. |
+| Learning output | Pair 006 is one complete composition attempt, two durable development arms and one verified learned composition. Each arm made three acquisition decisions in 508 actions / 30348 frames: two successes added two retained specimens, reduced the missing-specimen count by two and added one living/registered species; the third retained binding_failed and stopped cleanly. The pair is equivalent and adds no target, fit, unseen comparison, promotion or transfer result. |
+| Authority delta | The fitted manager completed three genuine decisions without a crash: two verified acquisitions followed by one typed binding failure and a clean unchanged-context stop. It exactly matched the baseline, so production authority remains unchanged and no new target or refit is justified. |
+| Transfer result | None. Crystal remains deferred. Pair 006 proves a reusable bounded failure seam inside Red but remains same-bank evidence and supports no cross-title claim. |
+| Blocker | The engineering seam now works, but all fitted-model evidence still comes from the same historical context bank and Pair 006 agreed exactly with deterministic ordering. Repeating more same-bank agreements cannot establish a useful learned advantage or support transfer. |
+| Decision | Close the same-bank rehearsal loop and build a prospective lineage-disjoint Red curriculum: at least eight train and four untouched development roots, disjoint by upstream episode and physical state, covering at least four train and three development goal families. Fit only train outcomes and compare once on untouched development. |
+| Next session | Implement and qualify the smallest title-neutral prospective Red context-capture and partition contract that can supply eight train plus four untouched development lineages without reusing the historical bank. |
+| Next falsifier | An action-free prospective plan must bind at least eight train and four development roots with disjoint upstream and physical lineages before outcomes exist, while covering at least four train and three development goal families. Any overlap, outcome-informed selection or unavailable semantic menu rejects the plan. |
+| Stop condition | Never replay pairs 004, 005 or 006 or treat action-free inventory as training. Stop on reused historical state bytes, shared upstream lineage across partitions, outcome- or prediction-informed root selection, teacher-choice targets, private-path leakage, collection regression, or any claim of Red generalization before untouched development comparison. |
 
 ### Stop conditions
 
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **26**.
+Current evidence entries: **27**.

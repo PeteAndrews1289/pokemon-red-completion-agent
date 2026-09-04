@@ -1,0 +1,136 @@
+{
+  "arms": {
+    "baseline": {
+      "actions": 508,
+      "authority_decisions": 3,
+      "authority_id": "completion-first-teacher",
+      "decisions": [
+        {
+          "actions": 88,
+          "failure_reason": null,
+          "frames": 8124,
+          "goal": "acquire_species",
+          "ordinal": 1,
+          "status": "succeeded"
+        },
+        {
+          "actions": 242,
+          "failure_reason": null,
+          "frames": 15168,
+          "goal": "acquire_species",
+          "ordinal": 2,
+          "status": "succeeded"
+        },
+        {
+          "actions": 178,
+          "failure_reason": "binding_failed",
+          "frames": 7056,
+          "goal": "acquire_species",
+          "ordinal": 3,
+          "status": "failed"
+        }
+      ],
+      "forced_singleton_steps": 0,
+      "frames": 30348,
+      "living_species_gained": 1,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 2,
+      "retained_captures_gained": 2,
+      "stop_reason": "failure_context_unchanged",
+      "trajectory_manifest_sha256": "3d5e118cf5f8529c87adff81889ffdf1d73b44616cfb1ece1bd359cfbfa5c7f9"
+    },
+    "calibration_model": {
+      "actions": 508,
+      "authority_decisions": 3,
+      "authority_id": "multi-goal-calibration-shadow",
+      "decisions": [
+        {
+          "actions": 88,
+          "failure_reason": null,
+          "frames": 8124,
+          "goal": "acquire_species",
+          "ordinal": 1,
+          "status": "succeeded"
+        },
+        {
+          "actions": 242,
+          "failure_reason": null,
+          "frames": 15168,
+          "goal": "acquire_species",
+          "ordinal": 2,
+          "status": "succeeded"
+        },
+        {
+          "actions": 178,
+          "failure_reason": "binding_failed",
+          "frames": 7056,
+          "goal": "acquire_species",
+          "ordinal": 3,
+          "status": "failed"
+        }
+      ],
+      "forced_singleton_steps": 0,
+      "frames": 30348,
+      "living_species_gained": 1,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 2,
+      "retained_captures_gained": 2,
+      "stop_reason": "failure_context_unchanged",
+      "trajectory_manifest_sha256": "eaf46e469df341559832fdb8281f6d6a0210b1ba1378c315430f8274a3018b97"
+    }
+  },
+  "comparison": {
+    "authority_disagreement": false,
+    "decision_basis": "equal_progress_and_cost",
+    "equal_starting_collection": true,
+    "equal_starting_semantic_state": true,
+    "equal_starting_state": true,
+    "living_collection_regressions": 0,
+    "model_strategic_decisions": 3,
+    "pair_id": "red-calibration-player-pair-006",
+    "result_file_sha256": "00c282e939cc04f5114584f4aca5a439217cef3a1031a4574651b2911bb5ebd8",
+    "verdict": "equivalent"
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 1,
+    "development_episode_attempts_added": 2,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 1
+  },
+  "interpretation": {
+    "finding": "Both authorities completed two independently verified captures, then retained the same metered binding failure as a typed outcome and stopped cleanly because the semantic context had not changed.",
+    "generalization_claim": false,
+    "next_falsifier": "Build a prospective lineage-disjoint Red curriculum and test whether outcome fitting changes semantic goal selection on untouched development roots rather than collecting more same-bank agreements.",
+    "production_authority_promoted": false,
+    "replay_authorized": false,
+    "training_claim": "The fitted manager executed multi-decision play successfully, but this same-bank equivalent development pair adds no training target or model update."
+  },
+  "model": {
+    "candidate_model_canonical_sha256": "70a72bdb084fbfe3ae8eccf68b582a3503ebbc5f07428616ddeb4e9d78416bcb",
+    "candidate_model_file_sha256": "5fc8106d7223824f1bbb422c23f89a1f18cc071edc144ef8971fc85d84cd6f40",
+    "fit_summary_file_sha256": "01281fb58901b4557ef0a2c626c39b89607cfc837734fa6d96a77d61b139e4d2",
+    "same_bank_calibration_only": true
+  },
+  "scope": {
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red.calibration-player-pair-result.v2",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33848221585,
+    "source_bundle_sha256": "4bf9cd454a72ff701d830187a7a8f4199847f428eef02ba945cf25ea2d508ca4",
+    "source_commit": "7133d171654ecf7b0686509678803b3059b6cf7b"
+  },
+  "status": "complete_equivalent_verified_progress_and_typed_stop"
+}
