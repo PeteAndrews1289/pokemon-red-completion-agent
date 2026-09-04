@@ -23,11 +23,20 @@ from pathlib import Path
 from pokemon_red_completion.claim_first_admission import (
     claim_first_availability_snapshot_lease,
 )
+from pokemon_red_completion.living_dex_capture_curriculum import (
+    LivingDexCapturePartition,
+)
 from pokemon_red_completion.living_dex_causal_curriculum import (
     RED_DIRECT_CAUSAL_OPTION_KINDS,
 )
 from pokemon_red_completion.living_dex_causal_journal import (
     load_living_dex_authenticated_causal_examples,
+)
+from pokemon_red_completion.living_dex_clustered_curriculum import (
+    LivingDexClusteredScenarioCapability,
+)
+from pokemon_red_completion.living_dex_development_supplement import (
+    LivingDexDevelopmentSupplementCapability,
 )
 from pokemon_red_completion.living_dex_goal_model_record import (
     load_living_dex_goal_model_record_bytes,
@@ -37,6 +46,9 @@ from pokemon_red_completion.living_dex_option_value import (
     living_dex_option_train_dataset_sha256,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+from pokemon_red_completion.red_living_dex_causal_inventory import (
+    RedLivingDexCausalRootCapability,
+)
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     validate_red_living_dex_clustered_private_plan,
 )
@@ -378,6 +390,58 @@ def audit_red_living_dex_development_supply(
         ) from None
 
 
+def build_red_living_dex_development_supplement_capabilities(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+) -> tuple[LivingDexDevelopmentSupplementCapability, ...]:
+    """Project authenticated Red development edges into the shared planner."""
+
+    if isinstance(capabilities, (str, bytes)) or not isinstance(
+        capabilities,
+        Sequence,
+    ):
+        raise TypeError("Red development supplement capabilities need a sequence")
+    projected: list[LivingDexDevelopmentSupplementCapability] = []
+    for capability in capabilities:
+        if not isinstance(capability, RedLivingDexCausalRootCapability):
+            raise TypeError("Red development supplement capability differs")
+        capability.__post_init__()
+        root = capability.root
+        if (
+            root.cluster_partition != "development"
+            or capability.slot.partition is not LivingDexCapturePartition.DEVELOPMENT
+        ):
+            continue
+        if (
+            not root.prospective_independence_authenticated
+            or root.independence_lineage_sha256 is None
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "Red development supplement lineage is unauthenticated"
+            )
+        shared = LivingDexClusteredScenarioCapability(
+            lineage_sha256=root.independence_lineage_sha256,
+            physical_root_sha256=root.root.physical_root_sha256,
+            partition="development",
+            template_sha256=capability.slot.slot_sha256,
+            available_option_kinds=capability.slot.available_option_kinds,
+        )
+        projected.append(
+            LivingDexDevelopmentSupplementCapability(
+                lineage_sha256=shared.lineage_sha256,
+                physical_root_sha256=shared.physical_root_sha256,
+                scenario_sha256=shared.scenario_sha256,
+                family_scope_id=capability.slot.family_scope_id,
+                location_scope_id=capability.slot.location_scope_id,
+                available_option_kinds=shared.available_option_kinds,
+            )
+        )
+    if not projected:
+        raise RedLivingDexDevelopmentSupplyError(
+            "Red development supplement has no eligible capabilities"
+        )
+    return tuple(sorted(projected, key=lambda item: item.scenario_sha256))
+
+
 def _load_plan_development_roots(
     store: PrivateArtifactRoot,
     binding: RedLivingDexClusteredTrainPlanBinding,
@@ -485,4 +549,5 @@ __all__ = [
     "RedLivingDexDevelopmentSupplyError",
     "RedLivingDexDevelopmentSupplyResult",
     "audit_red_living_dex_development_supply",
+    "build_red_living_dex_development_supplement_capabilities",
 ]

@@ -14,6 +14,14 @@ from pokemon_red_completion.claim_first_admission import (
     ClaimFirstRootPair,
     claim_first_pair_registry,
 )
+from pokemon_red_completion.living_dex_causal_curriculum import (
+    RED_DIRECT_CAUSAL_OPTION_KINDS,
+)
+from pokemon_red_completion.living_dex_development_supplement import (
+    LivingDexDevelopmentSupplementPolicy,
+    select_living_dex_development_supplement,
+)
+from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
     RedLivingDexClusteredTrainPlanBinding,
@@ -21,6 +29,7 @@ from pokemon_red_completion.red_living_dex_clustered_train_runner import (
 from pokemon_red_completion.red_living_dex_development_supply import (
     RedLivingDexDevelopmentSupplyError,
     audit_red_living_dex_development_supply,
+    build_red_living_dex_development_supplement_capabilities,
 )
 
 
@@ -230,3 +239,45 @@ def test_audit_fails_closed_on_model_record_or_duplicate_semantic_drift(
             expected_model_record_sha256=model_record.summary.record_sha256,
             bindings=(bindings[0], mutated),
         )
+
+
+def test_red_adapter_projects_only_authenticated_development_capabilities() -> None:
+    frozen, _binding = _successor_clustered_fixture()
+    capabilities = tuple(item.capability for item in frozen.assignments)
+
+    projected = build_red_living_dex_development_supplement_capabilities(
+        capabilities
+    )
+    policy = LivingDexDevelopmentSupplementPolicy(
+        new_roots=3,
+        minimum_surviving_roots=2,
+        minimum_new_families=3,
+        minimum_new_locations=3,
+        held_root_count=2,
+        required_total_roots=4,
+        held_option_kinds=(
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.EVOLVE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.RESUPPLY,
+            LivingDexOptionKind.UNLOCK_ACCESS,
+            LivingDexOptionKind.EXPLORE,
+        ),
+        required_option_kinds=RED_DIRECT_CAUSAL_OPTION_KINDS,
+    )
+    plan = select_living_dex_development_supplement(
+        projected,
+        policy=policy,
+    )
+
+    assert len(projected) == 4
+    assert len(plan.assignments) == 3
+    assert all(
+        item.family_scope_id.startswith("development-family")
+        and item.location_scope_id.startswith("development-location")
+        for item in plan.assignments
+    )
+    assert sum(
+        LivingDexOptionKind.MANAGE_STORAGE in item.available_option_kinds
+        for item in plan.assignments
+    ) >= 2
