@@ -3,6 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 4 Red binding diagnosis:** PR 210 merged as exact main `c1fb1bca` and CI
+> `33896140351/1` passed. The protected aggregate binding census failed closed at
+> `binding_capacity_diagnosis` with zero effects. The title-neutral planner was not the cause: its
+> 429 legal supplements remain valid. The Red adapter incorrectly attempted to project otherwise
+> eligible train capabilities through a development-only projection before evaluating those plans.
+>
+> Publish and green the narrow development-partition filter and rerun the aggregate census once
+> from repaired exact main. Require a positive Red-bindable count before freezing a new supplement
+> identity. Never retry the terminal original freeze; do not score, claim, act, teach, open an
+> outcome, run Crystal, or replay the game during this repair gate. See the
+> [failure evidence](evidence/red-living-dex-development-supplement-binding-diagnostic-failure-v1-2026-09-04.json).
+
 > **September 4 recovery qualification:** binding-failure retention merged as exact main
 > `7133d171` under green CI `33848221585`. Pair 006 completed both arms with two verified captures
 > and one typed unchanged-context stop. Each arm used **508 actions / 30,348 frames**, added two

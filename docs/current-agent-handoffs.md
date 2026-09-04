@@ -1,5 +1,19 @@
 # Current agent handoffs
 
+## Current override: Codex owns the narrow Red partition-binding repair
+
+Exact main `c1fb1bca` passed CI `33896140351/1`, then the protected binding census failed closed at
+`binding_capacity_diagnosis` with zero effects. The shared capacity result remains 13 eligible
+roots and 429 legal supplements. Code review and a production-shaped regression isolated the
+adapter defect: the shared development projection skips train capabilities, while the Red binding
+map tried to project every otherwise eligible capability as development.
+
+Codex owns publication and green CI for the narrow development-partition filter, followed by one
+repaired aggregate-only census. If and only if that result proves at least one complete Red
+binding, freeze a new supplement identity and independently preflight it before model or controller
+use. Do not retry the terminal freeze, weaken the portable policy, rebuild training supply, expose
+private identities, open Crystal or sealed Red, or run a full replay.
+
 ## Current override: Codex owns the Red binding discrepancy
 
 PR 209 is exact main `61b5cc4b` under green CI `33887050869/1`. Its protected aggregate census

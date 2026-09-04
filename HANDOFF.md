@@ -1,5 +1,30 @@
 # Handoff
 
+## Current checkpoint: the Red adapter mixed train roots into a development-only join
+
+PR 210 merged as exact main `c1fb1bca00ab113d67b362609102ff5464616049`; exact-main CI
+`33896140351/1` passed all 6,687 selected hosted tests. Its protected binding census then failed
+closed at `binding_capacity_diagnosis` with every effect counter at zero. The 429 shared
+supplements remain valid; the failure occurred before a binding count or plan existed.
+
+The defect is now reproduced. The title-neutral projection correctly omits non-development
+capabilities, but the Red binder rebuilt its lookup from every otherwise eligible capability and
+attempted to project train capabilities as development. A narrow filter now applies the same
+development partition contract at the Red adapter boundary. A regression mixes train and
+development capabilities, proves that the binding census matches the development-only result, and
+proves that a three-root plan still freezes from the valid subset.
+
+The complete local gate passes **6,688 tests** with one intentional skip and one expected failure
+marker; the 63-test focused slice, lint, 364-file type check, privacy/documentation checks and four
+generated registries are also green. See the
+[local qualification](docs/evidence/red-living-dex-development-supplement-partition-filter-local-qualification-v1-2026-09-04.json).
+
+Publish and green this repair, then rerun the aggregate-only census from repaired exact main. Only
+if that census reports a positive bindable count may a **new** supplement identity be frozen. Never
+retry the terminal original freeze. No model prediction, teacher query, claim, outcome, controller
+action, emulator frame, authority promotion, Crystal task, or full replay occurred here. See the
+[failure and diagnosis evidence](docs/evidence/red-living-dex-development-supplement-binding-diagnostic-failure-v1-2026-09-04.json).
+
 ## Current checkpoint: the exact three-root supplement freezer is locally qualified
 
 The action-free supplement freezer now derives private exclusion sets from the complete train

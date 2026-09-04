@@ -1,0 +1,55 @@
+{
+  "claim_boundary": {
+    "supported": "The narrow Red development-partition binding repair is locally qualified. A production-shaped mixed train/development regression proves that non-development capabilities are ignored at the Red binding-map boundary, the aggregate binding result matches a development-only input, and the valid subset can still freeze a three-root private plan. The complete non-integration suite, focused gate, lint, type checking, documentation, public-artifact checks, product-focus checks, and all generated registries passed.",
+    "unsupported": [
+      "repair_published",
+      "hosted_ci_green",
+      "production_binding_capacity_ready",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "qualification": {
+    "documentation_check": "passed",
+    "focused_tests": 63,
+    "full_suite_deselected": 3,
+    "full_suite_expected_failures": 1,
+    "full_suite_passed": 6688,
+    "full_suite_skipped": 1,
+    "generated_registries_reproduced": 4,
+    "lint": "passed",
+    "product_focus_check": "passed",
+    "public_artifact_check": "passed",
+    "typed_source_files": 364,
+    "type_check": "passed"
+  },
+  "schema": "pokemon.red.living-dex-development-supplement-partition-filter-local-qualification-evidence.v1",
+  "source": {
+    "base_commit": "c1fb1bca00ab113d67b362609102ff5464616049",
+    "source_bundle_sha256": "44989864fec27fe22bf0d1187ba6e39068b0b644c071f43f66a8b726708e06d7"
+  },
+  "status": "red_development_partition_filter_locally_qualified",
+  "zero_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "training_targets": 0,
+    "unselected_action_targets": 0
+  }
+}

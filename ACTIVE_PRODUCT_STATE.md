@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the aggregate-only Red binding census, run it once from protected exact main, and repair only the measured shared-plan-to-Red-context join under a new supplement identity. Do not retry the terminal freeze. Pairs 004 through 006 remain terminal.
+- Next decision: Publish and green the narrow Red development-partition binding repair, rerun the aggregate-only census once from repaired exact main, and freeze only a new supplement identity if at least one Red binding is proven. Do not retry the terminal freeze. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-supplement-binding-diagnostic-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supplement-capacity-result-v1-2026-09-04.json)
+**2026-09-04-development-supplement-binding-repair-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supplement-binding-diagnostic-failure-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Isolating the portable-plan-to-title-specific-binding seam preserves the cross-title architecture and avoids manufacturing redundant Red data when the actual failure is integration. |
-| Learning output | No learning counter changed. The measurable engineering result is that 13 eligible roots and 429 complete supplements exist, ruling out missing supply and policy-level diversity or option coverage as the terminal freeze cause. |
-| Authority delta | No authority changed. The eighteen-example model remains shadow-only. The capacity census made no prediction, claim, outcome, action or frame; deterministic skills retain all controller authority. |
+| Product alignment | The repair keeps the title-neutral planner unchanged and fixes only Red's adapter boundary, preserving the architecture needed to reuse semantic planning in later games. |
+| Learning output | No learning counter changed. The engineering result is a reproduced partition-boundary defect and a narrow regression-tested repair; the 13 eligible roots and 429 complete shared supplements remain available. |
+| Authority delta | No authority changed. The eighteen-example model remains shadow-only. The failed binding census made no prediction, claim, outcome, action or frame; deterministic skills retain all controller authority. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The protected census found 429 fully feasible shared supplements, so the terminal freeze failure is downstream of supply and policy capacity. The exact Red binding rejection substage has not yet been isolated. |
-| Decision | Reuse the freezer's own Red binding constructor in an aggregate-only census over all feasible shared supplements, report fixed rejection categories without identities, and repair only the measured join defect under a new plan identity. |
-| Next session | Complete and publish the aggregate binding diagnostic, require exact-main green CI, run one protected census, and implement only the measured Red binding repair. |
-| Next falsifier | One published aggregate binding census must show whether any of the 429 feasible shared supplements can pass the exact Red context-and-recipe constructor and, if not, which fixed rejection category blocks them. |
-| Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover, private identity or path output, any plan selection/publication, model prediction/fit, teacher query, root claim, controller release, or retry of the terminal freeze. The binding diagnostic may construct candidates in memory only to count shared-constructor acceptances; it may not choose or persist one. Never replay pairs 004, 005 or 006. |
+| Blocker | The exact-main binding census failed inside the Red binding-capacity function. Code review and a production-shaped regression isolated the mismatch: shared projection ignored non-development capabilities, but the Red binder attempted to project them as development before considering the 429 feasible supplements. |
+| Decision | Publish the narrow Red development-partition filter under green CI, then rerun the aggregate-only binding census from repaired exact main. Freeze a successor supplement only after that census proves at least one complete Red binding. |
+| Next session | Publish and green the narrow partition filter, rerun the aggregate binding census once from repaired exact main, and freeze a new supplement identity only if the binding result is ready. |
+| Next falsifier | A repaired exact-main aggregate census must complete and report at least one Red-bindable supplement while retaining zero predictions, claims, outcomes, actions, frames, teachers, and private output fields. |
+| Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover in a selected supplement, private identity or path output, any diagnostic plan selection/publication, model prediction/fit, teacher query, root claim, controller release, or retry of the terminal freeze. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 
