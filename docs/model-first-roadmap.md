@@ -1,6 +1,28 @@
 # Model-first development roadmap
 
-## Current checkpoint: the measured three-root freezer is locally qualified
+## Current checkpoint: the first freeze is terminal; diagnose capacity without choosing
+
+PR 208 merged as exact main `5345ee3d` and both pull-request and exact-main CI passed. The sole
+action-free three-root freeze then failed closed at `supplement_selection`. It created no plan,
+claims, predictions, outcomes, controller actions, or emulator frames. That exact invocation is
+terminal and will not be retried. Its result says the full fixed contract was infeasible in the
+observed bank; it does not yet say whether the limiting factor was root count, family/location
+diversity, storage coverage, or their intersection.
+
+The next bounded sequence is:
+
+1. publish an aggregate-only capacity census that uses the freezer's exact eligibility and policy;
+2. adversarially prove it cannot select or publish a plan, score or fit a model, query a teacher,
+   claim a root, reveal an identity/path, or execute controller input;
+3. require green hosted and exact-main CI;
+4. run one protected read-only census over the authenticated bank;
+5. preserve its path-free aggregate result and choose the minimum evidence-backed successor;
+6. only then freeze new development supply under a new identity and preflight it before outcomes.
+
+The model remains the immutable eighteen-example title-neutral shadow scorer. No authority or
+learning counter changed. Crystal, sealed Red, and full replay remain closed.
+
+## Previous checkpoint: the measured three-root freezer is locally qualified
 
 The project now has a dedicated action-free freezer for the exact gap established by the published
 supply audit. It reconstructs private train and historical-root exclusions, rejects lineage,

@@ -1,6 +1,22 @@
 # Current agent handoffs
 
-## Current override: Codex owns held-development salvage and the minimum supplement
+## Current override: Codex owns the terminal freeze diagnosis and measured successor
+
+PR 208 is exact main `5345ee3d` under green CI `33878230427/1`. The one permitted
+action-free three-root freeze then failed closed at `supplement_selection`. It created no plan,
+claimed no root, opened no outcome, made no prediction, and executed no controller action or
+emulator frame. That exact freeze is terminal and must not be retried. The failure does not prove
+that supply is absent; it only proves that the fixed selector found no admissible supplement.
+
+Codex owns one new aggregate-only capacity diagnostic. It may reopen authenticated context state to
+count eligible roots, families, locations, option-kind coverage, candidate triples, and feasible
+triples. It must not expose private identities or paths, publish/select a plan, query a teacher,
+score or fit a model, claim a root, or release controller input. Publish and qualify this diagnostic,
+then run one protected census from exact green main. The measured constraint—not speculation—will
+determine whether the successor changes supply or policy. Crystal, sealed Red, and full replay
+remain closed.
+
+## Previous override: Codex owns held-development salvage and the minimum supplement
 
 The eighteen-example title-neutral causal model is trained and published as shadow-only. A local
 action-free audit found that the original and successor clustered schedules name the same four

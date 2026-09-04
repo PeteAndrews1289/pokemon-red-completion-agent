@@ -12,6 +12,7 @@ from pokemon_red_completion.red_living_dex_development_supplement_plan import (
     RedLivingDexDevelopmentSupplementBindings,
     RedLivingDexDevelopmentSupplementPlanError,
     RedLivingDexDevelopmentSupplementPrivatePlan,
+    audit_red_living_dex_development_supplement_capacity,
     freeze_red_living_dex_development_supplement_plan,
 )
 from pokemon_red_completion.red_living_dex_development_supply import (
@@ -26,7 +27,7 @@ def _sha(value: object) -> str:
 
 
 @cache
-def _plan(*, reverse_capabilities: bool = False) -> RedLivingDexDevelopmentSupplementPrivatePlan:
+def _inputs(*, reverse_capabilities: bool = False):  # type: ignore[no-untyped-def]
     historical, _binding = _successor_clustered_fixture()
     red_capabilities = tuple(
         item.capability
@@ -108,6 +109,14 @@ def _plan(*, reverse_capabilities: bool = False) -> RedLivingDexDevelopmentSuppl
         historical_roots=roots,
         available_roots=roots[:2],
     )
+    return red_capabilities, supply, contexts, bindings
+
+
+@cache
+def _plan(*, reverse_capabilities: bool = False) -> RedLivingDexDevelopmentSupplementPrivatePlan:
+    red_capabilities, supply, contexts, bindings = _inputs(
+        reverse_capabilities=reverse_capabilities
+    )
     return freeze_red_living_dex_development_supplement_plan(
         red_capabilities,
         supply=supply,
@@ -170,3 +179,37 @@ def test_plan_rejects_assignment_reorder_and_red_capability_substitution() -> No
         match="does not join",
     ):
         replace(first, capability=plan.assignments[1].capability)
+
+
+def test_capacity_audit_reports_feasibility_without_private_identity() -> None:
+    capabilities, supply, _contexts, _bindings = _inputs()
+    result = audit_red_living_dex_development_supplement_capacity(
+        capabilities,
+        supply=supply,
+    )
+    public = result.public_dict()
+    encoded = json.dumps(public, sort_keys=True)
+
+    assert result.eligible_capabilities == 4
+    assert result.eligible_physical_roots == 4
+    assert result.feasible_supplements > 0
+    assert result.selection_ready is True
+    assert public["status"] == "supplement_capacity_ready"
+    assert all(
+        item.capability.root.root.physical_root_sha256 not in encoded
+        for item in _plan().assignments
+    )
+
+
+def test_capacity_audit_distinguishes_insufficient_root_count() -> None:
+    capabilities, supply, _contexts, _bindings = _inputs()
+    result = audit_red_living_dex_development_supplement_capacity(
+        capabilities[:2],
+        supply=supply,
+    )
+
+    assert result.eligible_physical_roots == 2
+    assert result.candidate_root_sets == 0
+    assert result.candidate_scenario_combinations == 0
+    assert result.feasible_supplements == 0
+    assert result.selection_ready is False

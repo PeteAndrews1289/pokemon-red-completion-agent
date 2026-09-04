@@ -11,12 +11,14 @@ from __future__ import annotations
 import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from itertools import combinations, product
 
 from pokemon_red_completion.living_dex_causal_curriculum import (
     RED_DIRECT_CAUSAL_OPTION_KINDS,
 )
 from pokemon_red_completion.living_dex_development_supplement import (
     LivingDexDevelopmentSupplementCapability,
+    LivingDexDevelopmentSupplementError,
     LivingDexDevelopmentSupplementPlan,
     LivingDexDevelopmentSupplementPolicy,
     select_living_dex_development_supplement,
@@ -49,6 +51,86 @@ _COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 class RedLivingDexDevelopmentSupplementPlanError(ValueError):
     """A Red supplement does not exactly bind its title-neutral selection."""
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexDevelopmentSupplementCapacity:
+    """Aggregate-only feasibility census for the measured Red supplement."""
+
+    eligible_capabilities: int
+    eligible_lineages: int
+    eligible_physical_roots: int
+    eligible_families: int
+    eligible_locations: int
+    candidate_root_sets: int
+    candidate_scenario_combinations: int
+    feasible_supplements: int
+    option_kind_root_counts: tuple[tuple[str, int], ...]
+
+    def __post_init__(self) -> None:
+        counts = (
+            self.eligible_capabilities,
+            self.eligible_lineages,
+            self.eligible_physical_roots,
+            self.eligible_families,
+            self.eligible_locations,
+            self.candidate_root_sets,
+            self.candidate_scenario_combinations,
+            self.feasible_supplements,
+        )
+        if any(type(value) is not int or value < 0 for value in counts):  # noqa: E721
+            raise RedLivingDexDevelopmentSupplementPlanError("supplement capacity counts differ")
+        expected_kinds = tuple(item.value for item in RED_DIRECT_CAUSAL_OPTION_KINDS)
+        if (
+            not isinstance(self.option_kind_root_counts, tuple)
+            or tuple(item[0] for item in self.option_kind_root_counts) != expected_kinds
+            or any(
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or type(item[1]) is not int  # noqa: E721
+                or item[1] < 0
+                for item in self.option_kind_root_counts
+            )
+        ):
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement capacity option counts differ"
+            )
+        if self.feasible_supplements > self.candidate_scenario_combinations:
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement capacity feasibility differs"
+            )
+
+    @property
+    def selection_ready(self) -> bool:
+        return self.feasible_supplements > 0
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "candidate_root_sets": self.candidate_root_sets,
+            "candidate_scenario_combinations": self.candidate_scenario_combinations,
+            "controller_actions": 0,
+            "eligible_capabilities": self.eligible_capabilities,
+            "eligible_families": self.eligible_families,
+            "eligible_lineages": self.eligible_lineages,
+            "eligible_locations": self.eligible_locations,
+            "eligible_physical_roots": self.eligible_physical_roots,
+            "feasible_supplements": self.feasible_supplements,
+            "model_fits": 0,
+            "model_predictions": 0,
+            "option_kind_root_counts": dict(self.option_kind_root_counts),
+            "outcomes_opened": 0,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "root_claims": 0,
+            "schema": "pokemon.red.living-dex-development-supplement-capacity.v1",
+            "selection_ready": self.selection_ready,
+            "status": (
+                "supplement_capacity_ready"
+                if self.selection_ready
+                else "supplement_capacity_insufficient"
+            ),
+            "teacher_queries": 0,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -272,45 +354,10 @@ def freeze_red_living_dex_development_supplement_plan(
         raise RedLivingDexDevelopmentSupplementPlanError(
             "supplement freeze does not match the exact measured gap"
         )
-    held_kinds = tuple(
-        kind
-        for kind in RED_DIRECT_CAUSAL_OPTION_KINDS
-        if kind.value in result.available_option_kinds
-    )
-    policy = LivingDexDevelopmentSupplementPolicy(
-        new_roots=result.minimum_new_roots_to_freeze,
-        minimum_surviving_roots=(
-            result.minimum_new_roots_to_freeze - result.setup_censor_allowance
-        ),
-        minimum_new_families=result.minimum_new_roots_to_freeze,
-        minimum_new_locations=result.minimum_new_roots_to_freeze,
-        held_root_count=result.available_development_roots,
-        required_total_roots=result.required_development_roots,
-        held_option_kinds=held_kinds,
-        required_option_kinds=RED_DIRECT_CAUSAL_OPTION_KINDS,
-    )
+    policy = _supplement_policy(supply)
+    eligible_red = _eligible_red_capabilities(capabilities, supply=supply)
     historical_lineages = {item.lineage_sha256 for item in supply.historical_roots}
     historical_physical = {item.physical_root_sha256 for item in supply.historical_roots}
-    historical_states = {
-        (item.state_sha256, item.envelope_sha256) for item in supply.historical_roots
-    }
-    eligible_red: list[RedLivingDexCausalRootCapability] = []
-    for capability in capabilities:
-        if not isinstance(capability, RedLivingDexCausalRootCapability):
-            raise TypeError("supplement freeze capability differs")
-        capability.__post_init__()
-        root = capability.root
-        lineage = root.independence_lineage_sha256
-        state = (root.root.state_sha256, root.root.envelope_sha256)
-        if (
-            lineage is not None
-            and lineage not in supply.train_lineages
-            and lineage not in historical_lineages
-            and root.root.physical_root_sha256 not in historical_physical
-            and state not in supply.train_states
-            and state not in historical_states
-        ):
-            eligible_red.append(capability)
     shared = build_red_living_dex_development_supplement_capabilities(tuple(eligible_red))
     supplement = select_living_dex_development_supplement(
         shared,
@@ -357,6 +404,130 @@ def freeze_red_living_dex_development_supplement_plan(
     )
 
 
+def audit_red_living_dex_development_supplement_capacity(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+    *,
+    supply: RedLivingDexDevelopmentSupplyInventory,
+) -> RedLivingDexDevelopmentSupplementCapacity:
+    """Measure why the fixed supplement can or cannot be selected."""
+
+    if isinstance(capabilities, (str, bytes)) or not isinstance(capabilities, Sequence):
+        raise TypeError("supplement capacity needs a capability sequence")
+    if not isinstance(supply, RedLivingDexDevelopmentSupplyInventory):
+        raise TypeError("supplement capacity needs its authenticated supply")
+    supply.__post_init__()
+    policy = _supplement_policy(supply)
+    eligible_red = _eligible_red_capabilities(capabilities, supply=supply)
+    shared = build_red_living_dex_development_supplement_capabilities(eligible_red)
+    by_root: dict[str, list[LivingDexDevelopmentSupplementCapability]] = {}
+    for item in shared:
+        by_root.setdefault(item.physical_root_sha256, []).append(item)
+    root_groups = tuple(
+        tuple(sorted(by_root[root], key=lambda item: item.scenario_sha256))
+        for root in sorted(by_root)
+    )
+    candidate_root_sets = 0
+    candidate_scenario_combinations = 0
+    feasible_supplements = 0
+    for groups in combinations(root_groups, policy.new_roots):
+        candidate_root_sets += 1
+        for candidate_tuple in product(*groups):
+            candidate_scenario_combinations += 1
+            ordered = tuple(sorted(candidate_tuple, key=lambda item: item.scenario_sha256))
+            try:
+                LivingDexDevelopmentSupplementPlan(policy, ordered)
+            except LivingDexDevelopmentSupplementError:
+                continue
+            feasible_supplements += 1
+    return RedLivingDexDevelopmentSupplementCapacity(
+        eligible_capabilities=len(shared),
+        eligible_lineages=len({item.lineage_sha256 for item in shared}),
+        eligible_physical_roots=len(by_root),
+        eligible_families=len({item.family_scope_id for item in shared}),
+        eligible_locations=len({item.location_scope_id for item in shared}),
+        candidate_root_sets=candidate_root_sets,
+        candidate_scenario_combinations=candidate_scenario_combinations,
+        feasible_supplements=feasible_supplements,
+        option_kind_root_counts=tuple(
+            (
+                kind.value,
+                len(
+                    {
+                        item.physical_root_sha256
+                        for item in shared
+                        if kind in item.available_option_kinds
+                    }
+                ),
+            )
+            for kind in RED_DIRECT_CAUSAL_OPTION_KINDS
+        ),
+    )
+
+
+def _supplement_policy(
+    supply: RedLivingDexDevelopmentSupplyInventory,
+) -> LivingDexDevelopmentSupplementPolicy:
+    result = supply.result
+    if (
+        result.supply_ready
+        or result.minimum_new_roots_to_freeze != 3
+        or result.available_development_roots != 2
+        or result.development_root_shortfall != 2
+        or result.setup_censor_allowance != 1
+        or result.missing_option_kinds != ("manage_storage",)
+    ):
+        raise RedLivingDexDevelopmentSupplementPlanError(
+            "supplement capacity does not match the exact measured gap"
+        )
+    held_kinds = tuple(
+        kind
+        for kind in RED_DIRECT_CAUSAL_OPTION_KINDS
+        if kind.value in result.available_option_kinds
+    )
+    return LivingDexDevelopmentSupplementPolicy(
+        new_roots=result.minimum_new_roots_to_freeze,
+        minimum_surviving_roots=(
+            result.minimum_new_roots_to_freeze - result.setup_censor_allowance
+        ),
+        minimum_new_families=result.minimum_new_roots_to_freeze,
+        minimum_new_locations=result.minimum_new_roots_to_freeze,
+        held_root_count=result.available_development_roots,
+        required_total_roots=result.required_development_roots,
+        held_option_kinds=held_kinds,
+        required_option_kinds=RED_DIRECT_CAUSAL_OPTION_KINDS,
+    )
+
+
+def _eligible_red_capabilities(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+    *,
+    supply: RedLivingDexDevelopmentSupplyInventory,
+) -> tuple[RedLivingDexCausalRootCapability, ...]:
+    historical_lineages = {item.lineage_sha256 for item in supply.historical_roots}
+    historical_physical = {item.physical_root_sha256 for item in supply.historical_roots}
+    historical_states = {
+        (item.state_sha256, item.envelope_sha256) for item in supply.historical_roots
+    }
+    eligible: list[RedLivingDexCausalRootCapability] = []
+    for capability in capabilities:
+        if not isinstance(capability, RedLivingDexCausalRootCapability):
+            raise TypeError("supplement capacity capability differs")
+        capability.__post_init__()
+        root = capability.root
+        lineage = root.independence_lineage_sha256
+        state = (root.root.state_sha256, root.root.envelope_sha256)
+        if (
+            lineage is not None
+            and lineage not in supply.train_lineages
+            and lineage not in historical_lineages
+            and root.root.physical_root_sha256 not in historical_physical
+            and state not in supply.train_states
+            and state not in historical_states
+        ):
+            eligible.append(capability)
+    return tuple(eligible)
+
+
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise RedLivingDexDevelopmentSupplementPlanError(f"supplement {subject} differs")
@@ -369,8 +540,10 @@ __all__ = [
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_SCHEMA",
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_STATUS",
     "RedLivingDexDevelopmentSupplementBindings",
+    "RedLivingDexDevelopmentSupplementCapacity",
     "RedLivingDexDevelopmentSupplementFrozenScenario",
     "RedLivingDexDevelopmentSupplementPlanError",
     "RedLivingDexDevelopmentSupplementPrivatePlan",
+    "audit_red_living_dex_development_supplement_capacity",
     "freeze_red_living_dex_development_supplement_plan",
 ]

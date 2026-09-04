@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the envelope stays empty—and the counter explains why
+
+**Visual:** The three blank cards approach the sealed envelope, but a red
+`SUPPLEMENT_SELECTION · FAILED CLOSED` stamp stops them. Keep every effect dial at zero:
+**CLAIMS · PREDICTIONS · OUTCOMES · ACTIONS · FRAMES**.
+
+**Voiceover:** “The first real freeze did not find a legal three-root set. We did not rerun it or
+lower the bar after seeing the result. The empty envelope became permanent evidence.”
+
+**Visual:** Replace the selector with a transparent counter. Show only aggregate gauges for roots,
+families, locations, storage coverage, candidate triples and feasible triples. Blur every save name
+and identity.
+
+**Voiceover:** “The next tool cannot choose a level or touch the controller. It only measures which
+constraint made the set impossible. That tells us whether to create new situations or correct an
+over-tight rule before spending another frame.”
+
 ## New scene: turn the three blank cards into a sealed plan
 
 **Visual:** Feed a large pile of root cards through three filters—**TRAIN LINEAGE**, **HISTORICAL

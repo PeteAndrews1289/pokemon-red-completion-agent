@@ -7,6 +7,18 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the sealed envelope stayed empty
+
+The qualified freezer reached the real context bank and found no three-root set satisfying every
+constraint at once. It stopped before choosing a plan or touching the game: zero predictions, zero
+claims, zero outcomes, zero actions, and zero frames. The attempt is now permanent evidence rather
+than something to rerun until it passes.
+
+The next instrument deliberately cannot choose. It counts how many independent roots, families,
+locations, storage-capable roots, candidate triples, and fully feasible triples actually exist,
+then reports only those totals. That turns an opaque “selection failed” into a measured design
+decision while keeping private saves and the held exam untouched.
+
 ## Current engineering checkpoint: the model and the rule get identical worlds
 
 The next experiment now has a fair starting line. One launcher opens the same authenticated Red

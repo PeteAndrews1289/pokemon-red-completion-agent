@@ -1,0 +1,70 @@
+{
+  "claim_boundary": {
+    "supported": "The aggregate-only Red development-supplement capacity diagnostic is locally qualified. It reuses the exact measured supply gap, train/history exclusions, and fixed supplement policy while exposing only aggregate feasibility counts. Its public interface contains no plan selector, publisher, model scorer or fitter, teacher, claim writer, controller, or retry flag.",
+    "unsupported": [
+      "production_capacity_census_completed",
+      "supplement_constraint_identified",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "gates": {
+    "focused_and_protocol_tests": {
+      "passed": 70,
+      "status": "passed"
+    },
+    "full_non_integration_suite": {
+      "deselected": 3,
+      "passed": 6685,
+      "skipped": 1,
+      "status": "passed",
+      "xfailed": 1
+    },
+    "generated_registries_reproduced": 4,
+    "mypy_source_files": 364,
+    "product_focus": "passed",
+    "ruff": "passed"
+  },
+  "implementation": {
+    "aggregate_fields": [
+      "eligible_capabilities",
+      "eligible_lineages",
+      "eligible_physical_roots",
+      "eligible_families",
+      "eligible_locations",
+      "option_kind_root_counts",
+      "candidate_root_sets",
+      "candidate_scenario_combinations",
+      "feasible_supplements"
+    ],
+    "capacity_schema": "pokemon.red.living-dex-development-supplement-capacity.v1",
+    "result_schema": "pokemon.red.living-dex-development-supplement-capacity-audit-result.v1"
+  },
+  "next_gate": "Publish the diagnostic, require green pull-request and exact-main CI, then perform one protected aggregate-only production census. Do not retry the terminal freeze.",
+  "schema": "pokemon.red.living-dex-development-supplement-capacity-diagnostic-local-qualification.v1",
+  "source": {
+    "base_commit": "5345ee3d1b062806f45a33a2d4db337cd106c541",
+    "working_source_bundle_sha256": "7d6bd2a2bfd37e0ef7748cb2f6eaacc401cb0df7ff3c7e7ff4206a42e3b3b1ad"
+  },
+  "status": "locally_qualified_awaiting_publication",
+  "zero_effect_design": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  }
+}
