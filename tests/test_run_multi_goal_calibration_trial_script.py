@@ -277,9 +277,10 @@ def test_admit_authenticates_claim_before_loading_episode(
     readiness = _readiness()
     trial = campaign.trials[0]
     claim_source_commit = "1" * 40
+    claim_runner_sha256 = _sha("historical-execution-runner")
     execution_identity = campaign.trial_execution_identity(
         0,
-        readiness.runner_sha256,
+        claim_runner_sha256,
     )
     events: list[str] = []
 
@@ -306,7 +307,7 @@ def test_admit_authenticates_claim_before_loading_episode(
         "_read_trial_claim",
         lambda *_args: {
             "execution_identity_sha256": execution_identity,
-            "runner_sha256": readiness.runner_sha256,
+            "runner_sha256": claim_runner_sha256,
             "schema": "pokemon.red.repeatable-goal-manager-trial-claim.v1",
             "source_commit": claim_source_commit,
             "trial_claim_sha256": trial.trial_claim_sha256,
@@ -325,7 +326,8 @@ def test_admit_authenticates_claim_before_loading_episode(
     monkeypatch.setitem(
         globals_,
         "_claim_runner_matches_source",
-        lambda source, runner: source == claim_source_commit and runner == readiness.runner_sha256,
+        lambda source, runner: source == claim_source_commit
+        and runner == claim_runner_sha256,
     )
 
     def admit(_reader: object, **kwargs: object) -> SimpleNamespace:
