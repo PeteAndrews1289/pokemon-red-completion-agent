@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: choice zero was not the same choice
+
+**Visual:** Show a compact menu labeled **AVAILABLE: STORY · DEVELOP · RESTORE** beside a full
+nine-row policy question with unavailable rows greyed out. Highlight compact ordinal **0** on
+**STORY**, then highlight full-row index **0** on **ACQUIRE**. Freeze the emulator at
+**DECISIONS 0 · EXECUTIONS 0 · TERMINAL STEP 0**.
+
+**Voiceover:** “The safety boundary did exactly what it was supposed to do. The frozen plan counted
+only available choices, while the live model kept a stable nine-goal vocabulary. Choice zero did
+not mean the same thing on both sides, so the run stopped before moving.”
+
+**Visual:** Route the compact ordinal through **AVAILABLE INDICES**, verify the semantic label, and
+land on the correct full row. Stamp trial 0 **INVALID — NO RETRY** and leave cards 1–8 untouched.
+
+**Voiceover:** “We preserved the failure, reproduced it without controller input, and fixed the
+interface instead of changing the outcome. The reader now independently verifies the translation
+before any result can become training data.”
+
 ## New scene: four saves, nine fair questions
 
 **Visual:** Put four save-state cards on screen: **DEVELOP TEAM ×1 · EVOLVE ×1 · STORAGE ×2**.

@@ -1,0 +1,19 @@
+{
+  "campaign_plan_sha256": "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267",
+  "ci_run_id": 33818021962,
+  "controller_execution_records": 0,
+  "decision_records": 0,
+  "failure_manifest_sha256": "61299b8618bd6dc2a0719b7c4aa6f2a49b634303858163b798908fa13c056855",
+  "failure_stage": "calibration_runtime",
+  "finding": "The frozen selected_candidate_index encoded an ordinal within the available-goal menu, while the forced policy treated it as an index in the complete nine-goal question.",
+  "model_predictions": 0,
+  "private_path_fields": 0,
+  "reproduced_action_free": true,
+  "retry_allowed": false,
+  "schema": "pokemon.red.multi-goal-calibration-trial-failure-result.v1",
+  "source_commit": "24d8671a3f5d0c7353826a8481bd7280dd3176a0",
+  "status": "invalid_preinput_trial",
+  "teacher_queries": 0,
+  "terminal_step_index": 0,
+  "trial_ordinal": 0
+}

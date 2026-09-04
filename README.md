@@ -6,7 +6,23 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): the first multi-goal calibration denominator is
+> **Current product focus (September 3, 2026): repair one pre-input calibration indexing defect,
+> then collect the untouched arms.** The execution runner merged as main `24d8671a`, passed CI run
+> `33818021962`, and its production preflight authenticated all four roots and nine trials with
+> **0 controller actions, 0 emulator frames, 0 teacher queries, and 0 model predictions**. Trial 0
+> then failed closed before a decision or execution record: its frozen index was the ordinal within
+> the available-goal menu, while the policy interpreted it as a full nine-goal question index.
+> Action-free reproduction isolated the mismatch; trial 0 is invalid and will not retry.
+>
+> The repair now resolves the frozen available-menu ordinal to the matching full-question index,
+> rejects a semantic-kind mismatch before input, reconstructs the same mapping independently at
+> admission, and accepts the four roots' authenticated reservation by the predecessor runner. The
+> remaining eight trial claims are untouched. Publish and green this repair, preflight trial 1,
+> then execute and admit trials 1–8 without replacement before the train-only fit. See the
+> [failure result](docs/evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json) and
+> [execution contract](docs/red-multi-goal-calibration-execution.md).
+
+> **Previous product focus (September 3, 2026): the first multi-goal calibration denominator is
 > frozen.** Published main `71cf96ad` passed CI, then one action-free freeze selected exactly four
 > still-open Red train roots: one team-development, one evolution and two storage. It scheduled
 > every model-controlled option from the identical root reset, producing **nine** single-decision
@@ -14,7 +30,7 @@
 >
 > The freeze used **0 controller actions, 0 emulator frames, 0 teacher queries, 0 model
 > predictions, 0 outcomes and 0 trial claims**. The claim-first forced-candidate runner and a
-> separate strict outcome-admission reader are now implemented and locally qualified. Next publish
+> separate strict outcome-admission reader were implemented and locally qualified. The next step was to publish
 > them under green exact-head CI, run one action-free production preflight, then execute and admit
 > these nine trials without replacement and fit only completed
 > train outcomes. This is calibration evidence, not independent generalization or Crystal transfer.

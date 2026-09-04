@@ -11,7 +11,22 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: nine Red semantic interventions frozen before outcomes
+## Current checkpoint: trial 0 found an index-boundary defect before controller input
+
+The execution runner merged as main `24d8671a` and passed CI run `33818021962`. Its production
+preflight authenticated four roots and nine frozen trials with zero actions, frames, predictions,
+or teacher queries. Trial 0 then failed before any decision or execution record. The plan's
+historical candidate field is an ordinal within the available-goal menu; the policy had interpreted
+it as an index in the full nine-goal question. Action-free reproduction confirmed the mismatch.
+
+Trial 0 is invalid and will not retry. The repair resolves the ordinal through the authenticated
+question, checks the semantic kind before dispatch, reconstructs the mapping independently during
+admission, and recognizes the four existing root reservations as belonging to the same campaign.
+After publication and green CI, preflight trial 1 and execute/admit only trials 1–8. Then fit on the
+admitted train outcomes and reorient before multi-decision play. This preserves the Red-first path
+to transferable living-Pokédex control without spending more roots on a known encoding defect.
+
+## Previous checkpoint: nine Red semantic interventions frozen before outcomes
 
 Published main `71cf96ad` passed CI and the compact action-free freezer selected four open train
 roots: one team-development, one evolution and two storage. It froze every model-controlled option
@@ -20,7 +35,7 @@ evolution 1 and storage 2. The freeze performed zero actions, frames, claims, pr
 queries or outcome access. Its path-free evidence is
 [red-multi-goal-calibration-freeze-result-2026-09-03.json](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
 
-The claim-first forced-candidate runner and separate strict episode-admission boundary are now
+The claim-first forced-candidate runner and separate strict episode-admission boundary were
 implemented and locally qualified. The execution path reserves the complete four-root campaign and
 claims one trial before input; the admission path reconstructs the arm, verified outcome,
 living-collection transition and controller cost from the immutable streams instead of trusting the
