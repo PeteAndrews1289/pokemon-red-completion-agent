@@ -1,6 +1,20 @@
 # Current agent handoffs
 
-## Current override: Codex owns fitted-model player integration and rehearsal
+## Current override: Codex owns forced-bridge repair and a fresh paired rehearsal
+
+The fitted-model integration is published as exact main `8ec5c2d5` under green CI `33839775994`.
+Pair 004 is consumed: both arms completed `restore_team` in 188 actions / 17,136 frames, preserved
+15/15 specimens, then stopped at an exactly-one-goal menu. The verdict is `equivalent`; there was
+no model-controlled strategic choice, Pokédex progress, authority change, or transfer result.
+
+Codex owns the title-neutral forced-singleton seam, its focused and repository-wide validation,
+publication, and exact-main CI. The seam must not invoke or credit learned authority, must not
+create teacher imitation targets, and must preserve initial-choice, failure, durability, budget,
+and collection guards. After green exact-main CI, Codex may run one fresh pair identity from a
+different mechanically selected bounded-player-unconsumed same-bank Red context. Pair 004 may not
+replay. External agents remain optional read-only reviewers and do not block routine development.
+
+## Previous override: Codex owns fitted-model player integration and rehearsal
 
 The nine-trial calibration is terminal: seven independently admitted outcomes across four roots
 produced one authenticated train-only model update; trials 0 and 5 are permanent invalid no-retry

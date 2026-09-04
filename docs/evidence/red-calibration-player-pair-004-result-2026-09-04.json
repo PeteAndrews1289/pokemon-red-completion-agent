@@ -1,0 +1,87 @@
+{
+  "arms": {
+    "baseline": {
+      "actions": 188,
+      "authority_id": "completion-first-teacher",
+      "completion_satisfied": false,
+      "decisions": 1,
+      "frames": 17136,
+      "required_specimens_reduced": 0,
+      "selected_goal": "restore_team",
+      "specimens_after": 15,
+      "specimens_before": 15,
+      "status": "durable_terminal",
+      "stop_reason": "insufficient_available_goals",
+      "trajectory_manifest_sha256": "f3916eeb0e3364deda2a6a30029c76de6b1a857b04ebbde23858de3692dbb3a8"
+    },
+    "calibration_model": {
+      "actions": 188,
+      "authority_id": "multi-goal-calibration-shadow",
+      "completion_satisfied": false,
+      "decisions": 1,
+      "frames": 17136,
+      "required_specimens_reduced": 0,
+      "selected_goal": "restore_team",
+      "specimens_after": 15,
+      "specimens_before": 15,
+      "status": "durable_terminal",
+      "stop_reason": "insufficient_available_goals",
+      "trajectory_manifest_sha256": "46128596f4f625da550e04b7489186aaaece5719eb7f7f35116149ee88a55e3b"
+    }
+  },
+  "comparison": {
+    "authority_disagreement": false,
+    "decision_basis": "equal_progress_and_cost",
+    "equal_starting_collection": true,
+    "equal_starting_semantic_state": true,
+    "equal_starting_state": true,
+    "living_collection_regressions": 0,
+    "model_strategic_decisions": 0,
+    "pair_id": "red-calibration-player-pair-004",
+    "result_file_sha256": "634f69a39fd58674f9d01f4891b576e0d8d53c66d722a040cb8f058925ca0180",
+    "safety_override_decisions": 2,
+    "verdict": "equivalent"
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 1,
+    "development_episode_attempts_added": 2,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0
+  },
+  "interpretation": {
+    "finding": "The authenticated fitted model entered the causal bounded-player arm, but the mechanically selected same-bank context exercised only deterministic recovery before the composition loop stopped on a singleton goal menu.",
+    "generalization_claim": false,
+    "next_falsifier": "Teach the title-neutral player to execute one legal singleton as a forced bridge without attributing it to model authority, then use a fresh bounded-player pair identity and a different unconsumed same-bank context.",
+    "production_authority_promoted": false,
+    "replay_authorized": false,
+    "training_claim": "The prior seven-outcome fit remains authentic; this pair adds no new target or update."
+  },
+  "model": {
+    "candidate_model_canonical_sha256": "70a72bdb084fbfe3ae8eccf68b582a3503ebbc5f07428616ddeb4e9d78416bcb",
+    "candidate_model_file_sha256": "5fc8106d7223824f1bbb422c23f89a1f18cc071edc144ef8971fc85d84cd6f40",
+    "fit_summary_file_sha256": "01281fb58901b4557ef0a2c626c39b89607cfc837734fa6d96a77d61b139e4d2",
+    "same_bank_calibration_only": true
+  },
+  "scope": {
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red.calibration-player-pair-result.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33839775994,
+    "source_bundle_sha256": "fd17bd7dfceea7c08416737363a0a749e92872c5c7b72b6fdf7ec9e5ef192dc5",
+    "source_commit": "8ec5c2d56c3f71de1e050f4631e58b0e5ed3b85d"
+  },
+  "status": "complete_equivalent_singleton_stop"
+}

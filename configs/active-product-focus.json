@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "The first gameplay-outcome update of the semantic goal manager is complete, but it is authenticated as shadow_calibration_only. Deterministic skills and safety constraints retain all controller authority until an unused Red development context measures the fitted manager prospectively.",
-        "blocker": "The seven-outcome classroom is same-bank calibration across only four physical roots. Its lower training loss proves that the fitting path works, not that the policy generalizes. The next missing evidence is a multi-decision player episode from a bounded-player-unconsumed same-bank Red context.",
-        "decision": "Publish and green strict calibration-model loading plus bounded-player shadow integration. Then run one paired up-to-four-decision Red development rehearsal from a bounded-player-unconsumed same-bank context, retaining model choices, typed executor outcomes, ledger progress, deterministic comparison and all safety interventions.",
+        "authority_delta": "The fitted manager received bounded causal authority, but only the deterministic restore_team safety choice executed before both arms reached a singleton menu. No strategic model decision, production promotion, new target or refit resulted.",
+        "blocker": "The title-neutral composition loop stops when fewer than two goals are available. After recovery, one legal manage_storage bridge remained, so both arms terminated after one decision without Pokedex progress. This prevents short scenarios from reaching later strategic branch points.",
+        "decision": "Implement a title-neutral forced-singleton continuation that executes exactly one legal goal without attributing that forced step to learned authority, reobserves, and preserves all existing budget, failure and collection guards. Do not replay pair 004. Qualify the repair on a fresh pair identity and a different bounded-player-unconsumed same-bank context.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json",
-          "sha256": "22eebf59f1b82f17f95f54328714cfee2a70dcc8ee11d3f2df3a731568497473"
+          "kind": "falsification",
+          "path": "docs/evidence/red-calibration-player-pair-004-result-2026-09-04.json",
+          "sha256": "3602457d8ca03b5e2df817285cf72d1bc3180ab08844dcfeee4dae8238e60b40"
         },
-        "learning_output": "Seven admitted teacher-free outcomes from four authenticated Red roots now form the fixed classroom: four successes and three failures across develop_team, advance_story, evolve_species and manage_storage. One authenticated update reduced weighted training loss from 1.252677 to 1.248107 while maximum guard-menu KL remained 0.001712 below the 0.01 cap. Cumulative causal train examples advance from 108 to 111 and model fits from 9 to 10.",
-        "next_falsifier": "Load the exact fitted model and fit summary through the fail-closed player boundary, then run one unused Red development context for at most four decisions. Fail on identity mismatch, private-path retention, collection regression, untyped executor failure, budget overrun, or no independently observable ledger progress.",
-        "next_session_goal": "Publish and green the authenticated calibration shadow integration, then execute and admit one paired multi-decision Red development rehearsal from a bounded-player-unconsumed same-bank context.",
-        "product_alignment": "This is the first completed update in which a title-neutral strategic model learns from whether its own selected goals actually changed the game. Connecting that exact model to the bounded player tests reusable choice and recovery without adding a Red walkthrough or weakening deterministic safety.",
-        "session_id": "2026-09-04-calibration-fit-player-integration-v1",
+        "learning_output": "Pair 004 is one complete composition attempt and two durable development-arm episodes. Both restored the team in 188 actions and 17136 frames with all 15 specimens preserved, then stopped on a singleton menu. The result is equivalent and adds zero strategic model decisions, Pokedex progress, targets, fits, unseen comparisons or authority.",
+        "next_falsifier": "A ROM-free composition test must show that one available goal executes as a forced bridge, is recorded separately from learned decisions, consumes the shared budget, and reobserves. Then a fresh bounded Red pair must either reach a genuine two-plus-goal decision or terminate with a typed reason after the forced step.",
+        "next_session_goal": "Implement and publish forced-singleton continuation, then use one fresh pair identity on the next mechanically eligible same-bank Red player context. Preserve pair 004 without replay.",
+        "product_alignment": "Executing forced legal bridges is a reusable hierarchical-agent capability: it lets the player traverse deterministic recovery and bookkeeping states to reach strategic choices without teaching route-specific actions or crediting the model for choices it did not make.",
+        "session_id": "2026-09-04-singleton-continuation-reorientation-v1",
         "status": "active",
-        "stop_condition": "Stop this lane on any model or summary identity mismatch, use of a previously claimed context, private path in a public artifact, collection regression, swallowed failure, unbounded execution, teacher choice or fallback, or a result that cannot distinguish model behavior from deterministic ordering. Do not patch a route around a failed strategic choice.",
-        "transfer_result": "None. Crystal remains deliberately deferred. This same-bank Red fit cannot support a transfer claim; it only qualifies the exact model for a prospective unused-Red rehearsal before any separately designed cross-title test."
+        "stop_condition": "Never replay pair 004 or count a singleton as learned authority. Stop on more than one legal forced candidate, teacher choice or fallback, route-specific logic, identity-bearing policy features, collection regression, budget bypass, swallowed failure, or a fresh pair that still cannot reach a strategic branch after one generic repair.",
+        "transfer_result": "None. Crystal remains deferred. The singleton limitation is title-neutral composition work, but pair 004 is same-bank Red evidence and supports no cross-title claim."
       },
       "learned_authority": {
         "current": "A semantic goal manager has now been updated once from seven teacher-free Red gameplay outcomes spanning four goal kinds and four roots. It may score choices only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because the classroom is same-bank and small.",
@@ -63,7 +63,7 @@
         },
         {
           "kind": "composition_attempt",
-          "minimum": 3,
+          "minimum": 4,
           "partition": "development"
         },
         {
@@ -73,18 +73,18 @@
         },
         {
           "kind": "development_episode",
-          "minimum": 19,
+          "minimum": 21,
           "partition": "development"
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Publish and green the exact calibration model/summary loader and bounded-player shadow integration, then compare the fitted manager with deterministic ordering for up to four decisions on one bounded-player-unconsumed same-bank Red development context. Use the result to decide whether to collect a prospectively disjoint Red train/development curriculum; do not promote from calibration.",
+      "next_decision": "Publish a generic forced-singleton continuation that does not credit the model, then run one fresh paired same-bank Red development scenario to determine whether the fitted manager can reach and act at a genuine multi-option branch. Pair 004 is terminal and may not replay.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
         "causal_train_examples": 111,
-        "composition_attempts": 3,
-        "development_episode_attempts": 19,
+        "composition_attempts": 4,
+        "development_episode_attempts": 21,
         "evidence": [
           {
             "kind": "unseen_comparison",
@@ -205,6 +205,11 @@
             "kind": "causal_train_example",
             "path": "docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json",
             "sha256": "22eebf59f1b82f17f95f54328714cfee2a70dcc8ee11d3f2df3a731568497473"
+          },
+          {
+            "kind": "composition_attempt",
+            "path": "docs/evidence/red-calibration-player-pair-004-result-2026-09-04.json",
+            "sha256": "3602457d8ca03b5e2df817285cf72d1bc3180ab08844dcfeee4dae8238e60b40"
           }
         ],
         "model_fits": 10,

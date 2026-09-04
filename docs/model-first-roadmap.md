@@ -1,6 +1,23 @@
 # Model-first development roadmap
 
-## Current checkpoint: outcome training has begun; bind the first fitted model to play
+## Current checkpoint: outcome training has begun; preserve strategic credit through prerequisites
+
+The fitted-model integration is published at exact main `8ec5c2d5` under green CI `33839775994`.
+The first paired rehearsal, pair 004, was valid but uninformative: both arms completed the mandatory
+`restore_team` goal in 188 actions / 17,136 frames, preserved all 15 specimens, then encountered a
+one-option menu and stopped. The verdict is `equivalent`. No model-controlled strategic decision
+or Pokédex progress occurred, so this is a falsification of the continuation seam—not a policy
+evaluation. The pair is consumed.
+
+The immediate repair is generic and title-neutral. After an episode has begun with a genuine
+multi-option choice, one legal follow-up goal may execute as a `forced_singleton` bridge under the
+same durability, budget, verifier, and living-collection checks. Its trajectory and public result
+must explicitly say it was forced; it must not invoke the learned authority or become an imitation
+target. Zero options still stop, the initial state still requires a genuine choice, and a failed
+goal cannot be repeated through this seam. Publish and green the repair, then use a fresh pair and
+different mechanically selected Red context. Crystal and full replay remain deferred.
+
+## Previous checkpoint: outcome training has begun; bind the first fitted model to play
 
 The calibration denominator is terminal. Seven admitted, teacher-free outcomes from four Red roots
 contain four successes and three failures across four semantic goal families; trials 0 and 5 are

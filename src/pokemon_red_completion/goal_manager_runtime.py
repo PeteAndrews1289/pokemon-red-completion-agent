@@ -24,6 +24,7 @@ from pokemon_red_completion.goal_manager import (
     GoalManagerError,
     GoalManagerQuestion,
     GoalOpportunity,
+    GoalSelectionMode,
     GoalSituation,
     bind_goal_selection,
 )
@@ -300,6 +301,7 @@ def execute_goal_manager_decision(
     trajectory: GoalManagerTrajectoryObserver,
     require_durable_decision: bool = False,
     selection_guard: GoalSelectionGuard | None = None,
+    selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY,
 ) -> GoalManagerExecutionResult:
     """Choose, record, execute and independently verify exactly one goal."""
 
@@ -313,6 +315,8 @@ def execute_goal_manager_decision(
         raise TypeError("require_durable_decision must be a bool")
     if selection_guard is not None and not callable(selection_guard):
         raise TypeError("selection_guard must be callable")
+    if not isinstance(selection_mode, GoalSelectionMode):
+        raise TypeError("selection_mode must be GoalSelectionMode")
     question = trajectory.ordered_question(situation, binding_set.opportunities)
     selected = authority.select(question)
     if isinstance(selected, BoundGoalSelection):
@@ -348,6 +352,7 @@ def execute_goal_manager_decision(
         question,
         selected_index,
         behavior_policy=behavior_policy,
+        selection_mode=selection_mode,
     )
     decision_recorded = trajectory.pending_was_recorded
     if require_durable_decision and not decision_recorded:

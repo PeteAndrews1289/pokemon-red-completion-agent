@@ -13,6 +13,7 @@ from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
     GoalOpportunity,
+    GoalSelectionMode,
     GoalSituation,
 )
 from pokemon_red_completion.goal_manager_trajectory import (
@@ -216,6 +217,22 @@ def test_failure_and_interruption_are_retained_without_imitation_labels(
 
     assert example.outcome_status is status
     assert example.failure_reason is reason
+    assert example.teacher_choice_target is None
+
+
+def test_forced_singleton_is_never_an_imitation_target() -> None:
+    observer, _recorder, sink = _observer()
+    question = observer.ordered_question(_situation(), _opportunities())
+    pending = observer.record_selection(
+        question,
+        0,
+        selection_mode=GoalSelectionMode.FORCED_SINGLETON,
+    )
+    observer.record_outcome(pending, status=GoalDecisionOutcome.SUCCEEDED)
+
+    example = load_goal_manager_episode(_reader_from_sink(sink)).examples[0]
+
+    assert example.selection_mode is GoalSelectionMode.FORCED_SINGLETON
     assert example.teacher_choice_target is None
 
 
