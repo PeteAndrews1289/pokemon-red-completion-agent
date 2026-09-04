@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: the first real strategic outcome batch takes shape
+
+The repaired reader admitted the earlier team-development run without moving the game. Three more
+one-shot interventions then turned the campaign into a genuine comparison: team development
+succeeded again in 1,179 actions, while story advancement and evolution each reached the same
+6,000-action limit. Every run began from an authenticated reset, used no teacher, and preserved all
+15 specimens. The model will learn from what actually worked, not from a scripted preference.
+
+The next trial revealed a subtler data problem. Its skill failed before issuing any controller
+action and the system durably wrote `binding_failed`, but the general runtime rethrew the private
+exception—as it should for normal callers—leaving the calibration artifact partial. Rather than
+retrying or deleting the failure, the project preserved it and added a calibration-local adapter
+that converts an executor exception into an independently metered typed failure without changing
+the frozen skills or generic runtime. This prevents a
+training set made artificially optimistic by retaining successes while losing immediate failures.
+
 ## September 3: the repaired choice worked; the reader misunderstood its timeline
 
 With the index boundary repaired, the next frozen arm selected team development and completed it.

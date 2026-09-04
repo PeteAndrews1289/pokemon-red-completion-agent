@@ -119,17 +119,25 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     budgets = _mapping(state.document, "session_budget_percent")
     time_box = _mapping(lane, "time_box")
-    composition_target = outputs[0][2]
-    verified_composition_target = outputs[1][2]
-    development_episode_target = outputs[2][2]
+    output_targets = {label: minimum for label, _current, minimum in outputs}
+    try:
+        composition_target = output_targets["Composition Attempt · development"]
+        verified_composition_target = output_targets[
+            "Verified Composition Episode · development"
+        ]
+        development_episode_target = output_targets["Development Episode · development"]
+    except KeyError as exc:
+        raise ProgressDashboardError(
+            f"product focus dashboard is missing required output {exc.args[0]}"
+        ) from exc
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
         run_status="waiting",
         stage="Red semantic goal curriculum · hybrid control",
         message=(
-            "First causal-player advantage: the model completed develop_team in 1,119 actions; "
-            "completion-first ordering exhausted 6,000 actions before evolve_species completed. "
-            "One development win is recorded; multi-goal curriculum design is next."
+            "Red multi-goal calibration has four admitted outcomes across two independent roots: "
+            "two develop_team successes and two equal-cap alternative-goal failures. A typed "
+            "binding-failure retention repair is the gate before untouched trials 6-8."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red multi-goal curriculum · Crystal transfer deferred",
@@ -152,8 +160,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             sealed_completed=development_episodes,
             sealed_total=development_episode_target,
             predictions_committed=False,
-            heading="First causal Red player advantage",
-            eyebrow="Integration gate closed · one development win · curriculum next",
+            heading="Red multi-goal calibration",
+            eyebrow="Four outcomes · binding repair · three untouched trials",
             counter_labels=(
                 "Composition attempts",
                 "Verified composition episodes",
@@ -203,13 +211,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
             (
-                "Preflight · Four live Red preflights passed · menu widths 2/3/4/3 · "
-                "planner agreement 4/4 · actions 0 · frames 0"
+                "Calibration · 4 admitted outcomes · 2 successes · 2 bounded failures · "
+                "2 consumed unusable trials · trials 6-8 untouched"
             ),
             (
-                "Player result · same state · model develop_team succeeded in 1,119 actions · "
-                "control evolve_species hit 6,000-action bound · learned advantage · private "
-                "bindings excluded"
+                "Observed comparisons · develop_team succeeded on both roots · advance_story "
+                "and evolve_species each reached the same 6,000-action cap · no collection "
+                "regressions"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "

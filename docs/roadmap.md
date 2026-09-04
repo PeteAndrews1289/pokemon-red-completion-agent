@@ -3,6 +3,15 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 fixed-batch progress:** main `d25b0975` passed CI `33824286498`; trial 1 admitted
+> reader-only, and trials 2–4 executed once and admitted. The batch now has two successful
+> `develop_team` targets and two equal-cap negative alternatives, with no teacher use or collection
+> regression. Trial 5 durably recorded `binding_failed` before controller input but remained a
+> partial artifact because the generic runtime rethrew the private exception. It is consumed and
+> may not retry. Publish the calibration-only negative-retention repair, then execute/admit only
+> untouched trials 6–8 and fit the completed admitted outcomes. See the
+> [progress result](evidence/red-multi-goal-calibration-progress-2026-09-03.json).
+
 > **September 3 trial-1 execution:** the index repair merged as main `06d602bb` under CI
 > `33821766312`. Zero-effect preflight passed; `develop_team` then succeeded with semantic change in
 > **2,009 actions / 162,918 frames**, preserved all 15 specimens, and resolved available ordinal 1

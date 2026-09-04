@@ -1,5 +1,24 @@
 # Handoff
 
+## Current checkpoint: four outcomes admitted; retain typed binding failures
+
+PR 197 merged as main `d25b0975a55507631a9cfe168b9f0f8e1d73ef59` after CI run
+`33824286498` passed. Reader-only admission then accepted immutable trial 1 without controller
+input. Trials 2–4 were executed once and admitted: `develop_team` succeeded in 1,179 actions /
+98,347 frames, while `advance_story` and `evolve_species` each failed at the equal 6,000-action /
+273,453-frame cap. Together with trial 1, the campaign now has four usable targets: two positive
+team-development outcomes and two negative alternatives, all with zero teacher use and no specimen
+loss.
+
+Trial 5 selected `advance_story`, durably recorded `binding_failed`, and stopped before any
+controller execution. The generic runtime rethrew the private binding exception after recording the
+typed failure, so the outer runner retained a five-record partial artifact instead of a complete
+negative example. Trial 5 is permanently consumed and may not retry. The active repair adds an
+explicit calibration-only adapter that converts an executor exception into an independently
+metered typed failure while preserving the frozen skills and generic runtime's fail-fast behavior.
+Publish and green that repair before untouched
+trials 6–8. See the [campaign progress](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json).
+
 Originally written 2026-08-07 and updated through 2026-09-03 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about

@@ -6,6 +6,20 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 3, 2026): retain every typed calibration outcome, then finish
+> the fixed batch.** Main `d25b0975` passed CI `33824286498`; immutable trial 1 admitted without
+> gameplay. Trials 2–4 then produced three more admitted targets. Across trials 1–4,
+> `develop_team` succeeded twice, while `advance_story` and `evolve_species` failed at the equal
+> action cap. All preserved the living collection and used no teacher.
+>
+> Trial 5 recorded `binding_failed` before any controller action but remained partial because the
+> generic runtime deliberately rethrows private binding exceptions. It is consumed and will not
+> retry. A narrow calibration-only adapter now converts an executor exception into an independently
+> metered typed failure while the frozen skills and all other callers remain unchanged and
+> fail-fast. Publish and green it, then run only
+> untouched trials 6–8 and fit the completed admitted batch. See the
+> [path-free progress result](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json).
+
 > **Current product focus (September 3, 2026): admit the first successful multi-goal training
 > outcome without replaying it.** The index repair merged as main `06d602bb` under green CI
 > `33821766312`. Trial-1 preflight passed with zero effects, then the frozen `develop_team` arm

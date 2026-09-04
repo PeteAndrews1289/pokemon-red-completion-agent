@@ -1,0 +1,70 @@
+{
+  "admission_reader_ci_run_id": 33824286498,
+  "admission_reader_source_commit": "d25b0975a55507631a9cfe168b9f0f8e1d73ef59",
+  "admitted_failed_outcomes": 2,
+  "admitted_outcomes": 4,
+  "admitted_succeeded_outcomes": 2,
+  "campaign_plan_sha256": "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267",
+  "collection_regressions": 0,
+  "consumed_unusable_trials": 2,
+  "model_predictions": 0,
+  "private_path_fields": 0,
+  "schema": "pokemon.red.multi-goal-calibration-progress.v1",
+  "status": "binding-failure-retention-repair-pending",
+  "teacher_queries": 0,
+  "trials": [
+    {
+      "controller_actions": 0,
+      "disposition": "invalid-no-retry",
+      "goal_kind": "advance_story",
+      "trial_ordinal": 0
+    },
+    {
+      "actions_executed": 2009,
+      "admission": "admitted",
+      "frames_executed": 162918,
+      "goal_kind": "develop_team",
+      "manifest_sha256": "881c17980fd948a72be9ee32e06f534716336f67356f6f7362e449df561a7203",
+      "reward": 1.0,
+      "trial_ordinal": 1
+    },
+    {
+      "actions_executed": 1179,
+      "admission": "admitted",
+      "frames_executed": 98347,
+      "goal_kind": "develop_team",
+      "manifest_sha256": "7830a8f865bec0c2056c416a9b01e5d3cfa028fe66fae5387965693681e2f6a4",
+      "reward": 1.0,
+      "trial_ordinal": 2
+    },
+    {
+      "actions_executed": 6000,
+      "admission": "admitted",
+      "frames_executed": 273453,
+      "goal_kind": "advance_story",
+      "manifest_sha256": "ed095a2a05e70a937ae96ce780697ae43a261a65116dcc2e47e416d5ef31cccc",
+      "reward": -1.0,
+      "trial_ordinal": 3
+    },
+    {
+      "actions_executed": 6000,
+      "admission": "admitted",
+      "frames_executed": 273453,
+      "goal_kind": "evolve_species",
+      "manifest_sha256": "39fe4e2d628edb20749d061de2a538b473688b8745c23d47a77fc0f559ffd09b",
+      "reward": -1.0,
+      "trial_ordinal": 4
+    },
+    {
+      "controller_actions": 0,
+      "decision_records": 1,
+      "disposition": "invalid-no-retry",
+      "execution_records": 0,
+      "failure_reason": "binding_failed",
+      "goal_kind": "advance_story",
+      "partial_manifest_file_sha256": "2970f8dbde06c6e9b98c4345e7c553a2792ec325cb7376bb03b6814b3ae4f712",
+      "trial_ordinal": 5
+    }
+  ],
+  "untouched_trials": 3
+}

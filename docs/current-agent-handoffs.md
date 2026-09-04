@@ -1,5 +1,16 @@
 # Current agent handoffs
 
+## Current override: Codex owns binding-failure retention and trials 6–8
+
+Main `d25b0975` passed CI `33824286498`. Trials 1–4 are independently admitted: two
+`develop_team` successes and two equal-budget negative alternatives, with zero teacher use and no
+collection regression. Trial 5 recorded `binding_failed` before controller input but is a consumed
+partial artifact because the generic runtime rethrew after recording the failure. Codex owns the
+calibration-local adapter that retains an independently metered typed negative without changing
+frozen skills, publication, and the remaining untouched trials 6–8. Normal callers must remain
+fail-fast; trial 5 must not replay. Antigravity and Claude remain
+read-only reviewers at the next fit or promotion boundary, not editors of this worktree.
+
 Status: active operating assignment as of 2026-09-03. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
