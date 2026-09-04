@@ -1,6 +1,25 @@
 # Handoff
 
-## Current checkpoint: the held Red model path exists without reopening train history
+## Current checkpoint: exact-main audit preserved two exam roots; three new roots remain
+
+PR 207 merged as exact main `481b31d9fd2e2df97f8199ecda80346630da5ec1`, and push CI
+`33866844485/1` passed all 6,637 selected hosted tests. The protected action-free audit then
+reopened only the complete train corpus, exact model record, two historical schedule records, and
+the account claim ledger. It reproduced the local finding exactly: 18 authenticated train
+examples, four unique historical development roots, two unavailable, and **two still clean**. The
+surviving pair has zero lineage or state overlap with train and spans six of seven portable option
+kinds; only `manage_storage` is missing. See the
+[path-free result](docs/evidence/red-living-dex-development-supply-audit-v1-2026-09-04.json).
+
+The measured minimum is now fixed: retain those two roots and freeze exactly three new independent
+development roots—two needed to reach the four-root floor plus one setup-censor spare. The new set
+must preserve coverage after any one setup loss and include `manage_storage`. No ROM, outcome,
+prediction, fit, teacher, controller action, claim, Crystal task, or authority promotion occurred
+in the audit. PR 208 contains the separate model-led development bridge; after it is green and
+merged, build and publish the dedicated action-free supplement freezer, run zero-effect preflight,
+then allow one model-selected branch per successfully admitted root. Do not refit on development.
+
+## Previous checkpoint: the held Red model path exists without reopening train history
 
 The eighteen-example title-neutral option model is still shadow-only and no held outcome has been
 opened. The follow-on branch now implements the smallest bridge needed to evaluate it: an

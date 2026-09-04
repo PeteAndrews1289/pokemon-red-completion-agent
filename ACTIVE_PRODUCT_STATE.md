@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Merge and reproduce the action-free held-root audit. If exactly two remain clean, preserve them, publish the separate development-only execution bridge, and freeze three independent supplement roots with manage_storage coverage before comparing the existing model once without refitting. Pairs 004 through 006 remain terminal.
+- Next decision: Preserve the two exact-main-authenticated held roots, publish the separate development-only execution bridge, and freeze exactly three independent supplement roots with manage_storage coverage before comparing the existing model once without refitting. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-execution-bridge-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
+**2026-09-04-exact-development-supply-audit-v1** · status **active** · evidence [qualification](docs/evidence/red-living-dex-development-supply-audit-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session moved the fitted title-neutral policy closer to real play: it can now be wired to a held Red semantic menu without modifying train history, leaking private identities, copying a teacher, or feeding development back into fitting. |
-| Learning output | No learning counter changed in this engineering session. The measurable gain is a ROM-free verified path from one held Red setup through an exact title-neutral model choice to one selected factual outcome, with zero teacher targets and terminal no-retry recovery. Real development execution remains unopened. |
-| Authority delta | No authority changed. The eighteen-example model remains shadow-only. A separate development-only decision and execution journal now exists locally, but no held Red outcome has been opened and deterministic skills retain all controller authority. |
+| Product alignment | The audit avoids rebuilding training data the fitted model no longer needs and directs the next Red work toward genuinely unseen semantic decisions that test transferable living-Pokedex planning. |
+| Learning output | No learning counter changed. The exact-main zero-effect audit converted uncertain supply into a measured gap: two clean roots preserved, two unavailable, three new roots required, and manage_storage identified as the sole missing option kind. |
+| Authority delta | No authority changed. The eighteen-example model remains shadow-only. Exact-main supply authentication and the separate development bridge opened no held Red outcome; deterministic skills retain all controller authority. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The aggregate-only supply auditor is awaiting a repeated hosted CI run after its last stale generated-registry golden was repaired. The expected two clean historical roots are preserved; three outcome-blind independent supplement roots with manage_storage coverage still need to be frozen before model-led development can execute. |
-| Decision | Keep qualified train code byte-for-byte immutable. Merge and reproduce the action-free supply audit from exact main, publish the separate development bridge, then freeze exactly three independent supplement roots and run action-free admission before opening any model-selected outcome. |
-| Next session | Green and merge the action-free supply audit, reproduce it from protected exact main, publish the development-only bridge, and freeze the measured three-root supplement without opening outcomes. |
-| Next falsifier | From clean published main, the auditor must first reproduce the two-clean-root result with zero effects. Then the separate bridge must authenticate the exact model and a held development row, reject train rows and root substitution before claim, and recover claim/release interruptions without a second runtime. |
+| Blocker | The protected exact-main audit proved that two clean historical roots remain and that manage_storage is the only missing option kind. A dedicated action-free freezer must now bind exactly three new independent supplement roots before model-led development can execute. |
+| Decision | Preserve the two authenticated held roots, green and merge the separate development bridge, then freeze exactly three new independent roots across three families and locations with manage_storage coverage surviving any one setup censor. Preflight before opening one selected outcome per admitted root. |
+| Next session | Green and merge the development-only bridge, implement and qualify the dedicated supplement freezer, then freeze and preflight exactly the measured three-root supplement without opening outcomes. |
+| Next falsifier | A dedicated freezer must action-free authenticate enough Red capability edges to select exactly three lineage- and state-independent development roots across three families and locations, with complete seven-kind coverage surviving any one new setup censor. |
 | Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover, outcome-informed root selection, root overlap, private-identity policy features, development entering fit, or any retry after a claimed setup. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions

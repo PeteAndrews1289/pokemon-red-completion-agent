@@ -1,6 +1,33 @@
 # Model-first development roadmap
 
-## Current checkpoint: the model-led Red development bridge is locally complete
+## Current checkpoint: the exact supply gap is measured; freeze three roots, not a classroom
+
+PR 207 is exact main `481b31d9` under green CI `33866844485/1`. Its protected action-free audit
+authenticated the complete eighteen-example train corpus, exact shadow model, both historical
+development schedules and the account claim ledger. The two schedules duplicate the same four
+roots; two are unavailable and two remain untouched. The surviving roots are lineage- and
+state-disjoint from train and cover `acquire`, `develop`, `evolve`, `explore`, `resupply`, and
+`unlock_access`. `manage_storage` is the sole missing portable option kind.
+
+This converts an estimate into a fixed engineering target:
+
+1. green and merge PR 208's separate development-only model execution bridge;
+2. implement and adversarially qualify a dedicated action-free supplement freezer;
+3. freeze exactly three new independent development roots across three families and locations,
+   with `manage_storage` coverage surviving any one setup censor;
+4. join the preserved two roots and new plan through zero-effect admission and exact-model
+   preflight;
+5. execute each successfully admitted root once, retaining every setup censor and selected factual
+   outcome;
+6. compare the immutable model with its frozen control without fitting on development, then
+   reorient before any authority change.
+
+The audit itself used zero ROM reads, emulator frames, predictions, outcomes, teachers, fits,
+controller actions, or claims. Four or more resulting development outcomes will be an integration
+falsifier, not a statistically strong promotion study. Crystal, sealed Red, and full replay remain
+closed.
+
+## Previous checkpoint: the model-led Red development bridge is locally complete
 
 The project can now carry one frozen held Red row through a separate development-only path without
 modifying the qualified train consumer. The path authenticates the complete schedule and exact root,

@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the project counts the exam seats before building more classrooms
+
+The published audit answered a question the project had repeatedly blurred: how much genuinely
+untouched Red evaluation supply already exists? It authenticated the eighteen training experiences,
+the exact fitted model, both historical schedules, and the claim ledger without opening the game or
+an outcome. The two schedules turned out to repeat the same four roots. Two are gone; two remain
+clean and share neither lineage nor state with training.
+
+Those two surviving roots already span six kinds of strategic work. Storage management is the one
+missing kind. That makes the next purchase precise: three new roots, not another ten-example
+classroom—two to reach the four-root evaluation floor and one spare in case setup fails. This is a
+small result in gameplay terms and a large result in project discipline: the next emulator work is
+now tied to a measured information gap rather than to a desire for a bigger run.
+
 ## September 4: the exam runner stops rewriting the classroom
 
 Opening the held Red rows looked like a small extension to the train runner. It was not. The first

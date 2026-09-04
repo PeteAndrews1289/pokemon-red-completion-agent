@@ -1,0 +1,81 @@
+{
+  "claim_boundary": {
+    "supported": "Exact-main action-free authentication found two available Red development roots that are lineage- and state-disjoint from all eighteen authenticated train examples. The pair covers six of seven portable option kinds; manage_storage is the sole missing kind. Exactly three new independent roots are required to reach the four-root development floor while tolerating one setup censor.",
+    "unsupported": [
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_development_examples_added": 0
+  },
+  "result": {
+    "authority": "non_authoritative_shadow_only",
+    "available_development_lineages": 2,
+    "available_development_roots": 2,
+    "available_option_kinds": [
+      "acquire",
+      "develop",
+      "evolve",
+      "explore",
+      "resupply",
+      "unlock_access"
+    ],
+    "development_root_shortfall": 2,
+    "duplicate_schedule_assignments": 4,
+    "lineage_overlap_with_train": 0,
+    "minimum_new_roots_to_freeze": 3,
+    "missing_option_kinds": [
+      "manage_storage"
+    ],
+    "model": {
+      "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+      "record_sha256": "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb",
+      "settled_examples": 18
+    },
+    "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+    "required_development_roots": 4,
+    "scheduled_development_assignments": 8,
+    "schedules_authenticated": 2,
+    "setup_censor_allowance": 1,
+    "state_overlap_with_train": 0,
+    "status": "development_supply_shortfall",
+    "train_examples_authenticated": 18,
+    "unavailable_development_roots": 2,
+    "unique_development_roots": 4
+  },
+  "schema": "pokemon.red.living-dex-development-supply-audit-evidence.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33866844485,
+    "source_bundle_sha256": "329868c643437d787b3dfa1c58db209f6db14d4576eb3ae91bca3af1edcbbac2",
+    "source_commit": "481b31d9fd2e2df97f8199ecda80346630da5ec1"
+  },
+  "status": "two_held_roots_preserved_three_root_supplement_required",
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  }
+}

@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: count the untouched exam before making new levels
+
+**Visual:** Two historical schedule cards collapse into four unique root cards. Turn two gray as
+consumed and leave two green. Fan six option badges across the survivors, then leave
+**MANAGE STORAGE** as the only empty badge.
+
+**Voiceover:** “Before generating more gameplay, we asked what untouched evidence was actually
+left. Two schedules pointed at the same four starting states. Two were already spent; two remained
+independent of every training example.”
+
+**Visual:** Add exactly three blank root cards: **+2 TO REACH FOUR · +1 SETUP SPARE**. Keep the
+counters fixed at **ROM 0 · PREDICTIONS 0 · OUTCOMES 0 · CLAIMS 0**.
+
+**Voiceover:** “The audit turned weeks of machinery into one concrete shopping list: three new
+development roots, including storage management. No new classroom, no invented data, and no game
+run until the missing information is frozen.”
+
 ## New scene: the exam gets its own one-shot controller
 
 **Visual:** Split the pipeline into two immutable lanes: **TRAIN — QUALIFIED / LOCKED** and
