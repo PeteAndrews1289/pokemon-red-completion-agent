@@ -332,7 +332,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
         {"kind": "causal_train_example", "minimum": 111, "partition": "train"},
-        {"kind": "composition_attempt", "minimum": 3, "partition": "development"},
+        {"kind": "composition_attempt", "minimum": 4, "partition": "development"},
         {
             "kind": "verified_composition_episode",
             "minimum": 3,
@@ -340,7 +340,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         },
         {
             "kind": "development_episode",
-            "minimum": 19,
+            "minimum": 21,
             "partition": "development",
         },
     ]
@@ -348,15 +348,15 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert focus_progress_fraction(state) == pytest.approx(1.0)
     assert focus_scorecard(state) == (
         ("Causal Train Example · train", 111, 111),
-        ("Composition Attempt · development", 3, 3),
+        ("Composition Attempt · development", 4, 4),
         ("Verified Composition Episode · development", 3, 3),
-        ("Development Episode · development", 19, 19),
+        ("Development Episode · development", 21, 21),
     )
     assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
     assert state.progress["model_fits"] == 10
-    assert state.progress["composition_attempts"] == 3
+    assert state.progress["composition_attempts"] == 4
     assert state.progress["unseen_comparisons"] == 9
-    assert state.progress["development_episode_attempts"] == 19
+    assert state.progress["development_episode_attempts"] == 21
     assert state.progress["verified_outcome_examples"] == 61
     assert state.progress["verified_composition_episodes"] == 3
     assert state.progress["causal_train_examples"] == 111
@@ -1551,9 +1551,9 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
 
     assert rows == (
         "Causal Train Example · train: 111/111",
-        "Composition Attempt · development: 3/3",
+        "Composition Attempt · development: 4/4",
         "Verified Composition Episode · development: 3/3",
-        "Development Episode · development: 19/19",
+        "Development Episode · development: 21/21",
     )
 
 
@@ -1626,7 +1626,7 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 19, 12),
+        ("Development Episode · development", 21, 12),
         ("Verified Outcome Example · development", 61, 12),
         ("Verified Composition Episode · development", 3, 2),
     )
@@ -2043,25 +2043,25 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["actions"] == 0
     assert "Red semantic goal curriculum" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 3,
-        "total": 3,
+        "completed": 4,
+        "total": 4,
     }
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 19, "total": 19}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 21, "total": 21}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
         "zero_shot": "Composition attempts",
         "adaptation": "Verified composition episodes",
         "sealed_test": "Development episodes",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
-    assert public["model"]["decisions"] == 3  # type: ignore[index]
+    assert public["model"]["decisions"] == 4  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "fixed heuristic 20/20" in encoded
     assert "Red multi-goal calibration" in encoded
     assert "four admitted outcomes" in encoded
-    assert "Composition Attempt 3/3" in encoded
+    assert "Composition Attempt 4/4" in encoded
     assert "Verified Composition Episode 3/3" in encoded
-    assert "Development Episode 19/19" in encoded
+    assert "Development Episode 21/21" in encoded
     assert "Composition attempts" in encoded
     assert "Verified composition episodes" in encoded
     assert "Development episodes" in encoded

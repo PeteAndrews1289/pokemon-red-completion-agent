@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the first player comparison reveals that prerequisites are not decisions
+
+The authenticated fitted model entered its first paired Red rehearsal from the same reset as the
+deterministic baseline. Both players saw an urgent recovery need, restored the team in 188 actions
+and 17,136 frames, preserved all 15 living specimens, and reached the same state. That is an honest
+tie—not evidence that the model is better, and not yet evidence that it can make a strategic
+choice while playing.
+
+The next observation contained exactly one legal objective. The player stopped because its safety
+rule expected at least two options before every goal. This exposed an important separation: choosing
+among alternatives is a policy decision, while taking the sole legal prerequisite is workflow.
+The repair records those prerequisite steps as forced bridges, keeps them out of learned and
+teacher credit, and preserves every budget and collection-safety check. A fresh comparison can now
+reach the next real branch without teaching the model that automatic work was its idea.
+
 ## September 4: the model finally learns from its own gameplay outcomes
 
 The fixed classroom closed with seven usable experiences across four authenticated moments in Red:

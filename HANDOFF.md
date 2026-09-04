@@ -1,6 +1,25 @@
 # Handoff
 
-## Current checkpoint: the first strategic outcome model is fitted; player rehearsal is next
+## Current checkpoint: the first fitted-model rehearsal found a generic continuation gap
+
+The exact fitted-model player integration merged as main
+`8ec5c2d56c3f71de1e050f4631e58b0e5ed3b85d` under green exact-main CI run
+`33839775994`. Pair `red-calibration-player-pair-004` then ran once from the mechanically first
+eligible bounded-player-unconsumed same-bank context. Both arms selected and completed
+`restore_team` in 188 actions / 17,136 frames, preserved all 15 specimens and ended with identical
+state and cost. The comparison is therefore `equivalent`; it is not a promotion or generalization
+result. The pair is consumed and must not replay.
+
+The rehearsal exposed the next cheapest blocker: after restoration, exactly one legal goal
+remained, and the generic player stopped because it required a two-option menu at every step. No
+strategic learned choice or Pokédex progress occurred. The active repair permits an exactly-one-goal
+follow-up to execute as a separately labelled `forced_singleton` bridge. It does not call or credit
+the learned authority, cannot become a teacher imitation target, retains the same budgets and
+living-collection checks, and still requires the episode to begin with a genuine choice. Publish
+and green this generic repair, then use a fresh pair identity and a different mechanically selected
+context. See the [pair-004 result](docs/evidence/red-calibration-player-pair-004-result-2026-09-04.json).
+
+## Previous checkpoint: the first strategic outcome model is fitted
 
 The fixed calibration campaign is complete: seven independently admitted, teacher-free outcomes
 from four authenticated Red roots, containing four successes and three failures across
@@ -13,11 +32,9 @@ PR 200 merged as main `6fc4b59f5dc8f450a15044c23b181518486ef96c`; exact-main CI 
 frozen **0.01** cap. The fitted candidate is canonical model `70a72bdb…16bcb`; it is explicitly
 same-bank calibration and has **no production authority**.
 
-The active branch adds a strict path-free loader for the exact model/fit-summary pair and connects
-it to the paired bounded player as `multi-goal-calibration-shadow`. The next gate is publication,
-green exact-main CI, and one up-to-four-decision paired Red rehearsal from a mechanically selected,
-bounded-player-unconsumed same-bank development context. Deterministic skills and safety remain authoritative;
-Crystal, sealed Red, full replay, and promotion remain closed. See the
+The strict path-free loader and paired-player binding are published as
+`multi-goal-calibration-shadow`. Deterministic skills and safety remain authoritative; Crystal,
+sealed Red, full replay, and promotion remain closed. See the
 [campaign and fit result](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json).
 
 Originally written 2026-08-07 and updated through 2026-09-04 for the agent taking over. Read this

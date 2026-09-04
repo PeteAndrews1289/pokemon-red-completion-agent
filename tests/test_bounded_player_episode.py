@@ -17,6 +17,7 @@ from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
     GoalOpportunity,
+    GoalSelectionMode,
     GoalSituation,
     GoalUnavailableReason,
 )
@@ -53,6 +54,15 @@ class _SnapshotProvider:
 class _Executor:
     def execute(self, action: object) -> object:
         return action
+
+
+@dataclass
+class _CountingAuthority:
+    calls: int = 0
+
+    def select(self, question):  # type: ignore[no-untyped-def]
+        self.calls += 1
+        return CompletionFirstGoalTeacher().select(question)
 
 
 @dataclass
@@ -119,6 +129,7 @@ def _observer(
     observer_acts: bool = False,
     no_goals_after_first: bool = False,
     exhaust_budget: bool = False,
+    singleton_after_first: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -128,14 +139,18 @@ def _observer(
             state["actions"] += 1
         stage = state["stage"]
         policy_stage = 0 if same_failure_context and stage == 1 else stage
-        available = (
-            set()
-            if no_goals_after_first and stage >= 1
-            else
-            {GoalKind.RESTORE_TEAM, GoalKind.MANAGE_STORAGE, GoalKind.ADVANCE_STORY}
-            if policy_stage == 0 or repeated_failure
-            else {GoalKind.MANAGE_STORAGE, GoalKind.ADVANCE_STORY}
-        )
+        if no_goals_after_first and stage >= 1:
+            available = set()
+        elif singleton_after_first and stage >= 1:
+            available = {GoalKind.MANAGE_STORAGE}
+        elif policy_stage == 0 or repeated_failure:
+            available = {
+                GoalKind.RESTORE_TEAM,
+                GoalKind.MANAGE_STORAGE,
+                GoalKind.ADVANCE_STORY,
+            }
+        else:
+            available = {GoalKind.MANAGE_STORAGE, GoalKind.ADVANCE_STORY}
         opportunities = tuple(
             GoalOpportunity(
                 binding_ref=f"private:red:{kind.value}",
@@ -292,6 +307,39 @@ def test_successful_step_can_settle_before_an_unavailable_followup_menu() -> Non
     assert state["actions"] == 5
     assert len(sink.decisions) == len(sink.events) == 1
     trajectory.require_settled()
+
+
+def test_single_available_followup_is_a_forced_bridge_not_model_authority() -> None:
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(
+        fail_first=False,
+        singleton_after_first=True,
+    )
+    authority = _CountingAuthority()
+
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=authority,
+        authority_id="learned-goal-manager",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+    )
+
+    assert result.stop_reason is BoundedPlayerStopReason.COMPLETION_REACHED
+    assert authority.calls == 1
+    assert result.authority_decisions == 1
+    assert result.forced_singleton_steps == 1
+    assert [step.selection_mode for step in result.steps] == [
+        GoalSelectionMode.AUTHORITY,
+        GoalSelectionMode.FORCED_SINGLETON,
+    ]
+    assert state["actions"] == 10
+    assert len(sink.decisions) == len(sink.events) == 2
+    assert [
+        decision.context.metadata["selection_mode"]
+        for decision in sink.decisions
+    ] == ["authority", "forced_singleton"]
 
 
 def test_recovery_cannot_repeat_the_failed_semantic_goal() -> None:

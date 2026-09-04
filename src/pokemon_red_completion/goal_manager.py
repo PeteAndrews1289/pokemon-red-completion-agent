@@ -60,6 +60,13 @@ class GoalKind(StrEnum):
     EXPLORE = "explore"
 
 
+class GoalSelectionMode(StrEnum):
+    """Whether a choice came from an authority or a forced one-option bridge."""
+
+    AUTHORITY = "authority"
+    FORCED_SINGLETON = "forced_singleton"
+
+
 GOAL_KIND_NEEDS: Mapping[GoalKind, tuple[GoalNeed, ...]] = MappingProxyType(
     {
         GoalKind.ADVANCE_STORY: (GoalNeed.STORY_PROGRESS,),
@@ -529,6 +536,7 @@ class GoalManagerExample:
     behavior_base_probability: float | None = None
     behavior_exploration_mix: float | None = None
     behavior_temperature: float | None = None
+    selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
 
     def __post_init__(self) -> None:
         for field_name in (
@@ -544,6 +552,8 @@ class GoalManagerExample:
                 raise GoalManagerError(f"{field_name} must be non-empty")
         if self.partition not in _PARTITIONS:
             raise GoalManagerError("goal-manager partition is unsupported")
+        if not isinstance(self.selection_mode, GoalSelectionMode):
+            raise GoalManagerError("goal-manager selection mode is invalid")
         if type(self.decision_index) is not int or self.decision_index < 0:  # noqa: E721
             raise GoalManagerError("goal-manager decision index is invalid")
         if not isinstance(self.question, GoalManagerQuestion):
@@ -646,7 +656,8 @@ class GoalManagerExample:
     @property
     def teacher_choice_target(self) -> int | None:
         if (
-            self.actor == "deterministic_teacher"
+            self.selection_mode is GoalSelectionMode.AUTHORITY
+            and self.actor == "deterministic_teacher"
             and self.outcome_status is GoalDecisionOutcome.SUCCEEDED
         ):
             return self.selected_candidate_index

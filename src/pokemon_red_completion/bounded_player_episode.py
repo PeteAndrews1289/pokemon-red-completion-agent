@@ -19,6 +19,8 @@ from pokemon_red_completion.goal_manager import (
     GoalDecisionOutcome,
     GoalFailureReason,
     GoalKind,
+    GoalManagerQuestion,
+    GoalSelectionMode,
 )
 from pokemon_red_completion.goal_manager_composition_runtime import (
     CompositionBudgetCheckpoint,
@@ -57,7 +59,12 @@ class BoundedPlayerStopReason(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class BoundedPlayerLimits:
-    """Small explicit envelope for one resumable player episode."""
+    """Small explicit envelope for one resumable player episode.
+
+    ``min_available_goals`` is the minimum menu width required to invoke the
+    learned or baseline authority.  After at least one genuine choice, an
+    exactly-one-option menu may execute as a separately labelled forced bridge.
+    """
 
     max_decisions: int = 2
     max_replans: int = 1
@@ -106,6 +113,7 @@ class BoundedPlayerStep:
     available_menu_sha256: str
     collection_before: LivingCollectionCheckpoint
     collection_after: LivingCollectionCheckpoint
+    selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -122,6 +130,7 @@ class BoundedPlayerStep:
             "policy_context_sha256": self.policy_context_sha256,
             "recovery_attempt": self.recovery_attempt,
             "selected_kind": self.selected_kind.value,
+            "selection_mode": self.selection_mode.value,
             "semantic_state_changed": self.semantic_state_changed,
             "status": self.status.value,
         }
@@ -140,11 +149,27 @@ class BoundedPlayerResult:
     def recovery_attempts(self) -> int:
         return sum(step.recovery_attempt for step in self.steps)
 
+    @property
+    def authority_decisions(self) -> int:
+        return sum(
+            step.selection_mode is GoalSelectionMode.AUTHORITY
+            for step in self.steps
+        )
+
+    @property
+    def forced_singleton_steps(self) -> int:
+        return sum(
+            step.selection_mode is GoalSelectionMode.FORCED_SINGLETON
+            for step in self.steps
+        )
+
     def public_dict(self) -> dict[str, object]:
         return {
             "authority_id": self.authority_id,
+            "authority_decisions": self.authority_decisions,
             "completion_satisfied": self.completion_satisfied,
             "decisions": len(self.steps),
+            "forced_singleton_steps": self.forced_singleton_steps,
             "private_binding_fields": 0,
             "private_path_fields": 0,
             "recovery_attempts": self.recovery_attempts,
@@ -160,6 +185,20 @@ class BoundedPlayerResult:
 
 PlayerObserver = Callable[[], GoalManagerCompositionObservation]
 CompletionPredicate = Callable[[GoalManagerCompositionObservation], bool]
+
+
+@dataclass(frozen=True, slots=True)
+class _ForcedSingletonAuthority:
+    """Select the sole legal goal without consulting learned authority."""
+
+    def select(self, question: GoalManagerQuestion) -> int:
+        if not isinstance(question, GoalManagerQuestion):
+            raise TypeError("question must be a GoalManagerQuestion")
+        if len(question.available_indices) != 1:
+            raise BoundedPlayerError(
+                "forced singleton authority requires exactly one available goal"
+            )
+        return question.available_indices[0]
 
 
 def run_bounded_player_episode(
@@ -213,7 +252,12 @@ def run_bounded_player_episode(
             opportunity.availability is GoalAvailability.AVAILABLE
             for opportunity in current.binding_set.opportunities
         )
-        if available_count < limits.min_available_goals:
+        forced_singleton = (
+            available_count == 1
+            and limits.min_available_goals > 1
+            and bool(steps)
+        )
+        if available_count < limits.min_available_goals and not forced_singleton:
             if not steps:
                 raise BoundedPlayerError(
                     "bounded player lacks a genuine semantic choice"
@@ -245,13 +289,23 @@ def run_bounded_player_episode(
                 completion_satisfied=False,
             )
 
+        selection_mode = (
+            GoalSelectionMode.FORCED_SINGLETON
+            if forced_singleton
+            else GoalSelectionMode.AUTHORITY
+        )
+        selected_authority: GoalDecisionAuthority = (
+            _ForcedSingletonAuthority() if forced_singleton else authority
+        )
+
         execution = execute_goal_manager_decision(
             situation=current.situation,
             binding_set=current.binding_set,
-            authority=authority,
+            authority=selected_authority,
             trajectory=trajectory,
             require_durable_decision=True,
             selection_guard=_different_goal_guard(failed_kind),
+            selection_mode=selection_mode,
         )
         _require_settled_execution(execution)
         executed_budget = budget_meter.checkpoint()
@@ -314,6 +368,7 @@ def run_bounded_player_episode(
                 available_menu_sha256=question.available_menu_sha256,
                 collection_before=current.collection,
                 collection_after=after.collection,
+                selection_mode=selection_mode,
             )
         )
         if recovery_attempt:

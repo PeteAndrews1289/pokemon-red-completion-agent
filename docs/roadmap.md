@@ -3,6 +3,18 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 4 paired rehearsal result:** exact main `8ec5c2d5` passed CI `33839775994`.
+> Pair 004 completed both arms once: each restored the team in **188 actions / 17,136 frames**,
+> preserved **15/15 specimens**, and produced an `equivalent` comparison. The learned scorer never
+> received a genuine strategic choice after recovery because only one legal goal remained; the
+> player stopped at its two-option threshold. Pair 004 is consumed and grants no promotion.
+>
+> Implement the title-neutral repair: an exactly-one-option follow-up may run as a separately
+> labelled forced bridge, never as a learned or teacher target. Keep initial-choice, failure,
+> budget, durability, and living-collection guards unchanged. Publish and green it, then run a new
+> pair identity from a different mechanically selected context. See the
+> [result](evidence/red-calibration-player-pair-004-result-2026-09-04.json).
+
 > **September 4 first authentic strategic fit:** all nine frozen trials are terminal. Seven usable
 > outcomes across four roots contain four successes and three failures; two trials are permanent
 > invalid no-retry records. One train-only update reduced weighted loss from **1.252677 to

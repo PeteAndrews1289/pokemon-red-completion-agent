@@ -21,6 +21,7 @@ from pokemon_red_completion.goal_manager import (
     GoalManagerExample,
     GoalManagerQuestion,
     GoalOpportunity,
+    GoalSelectionMode,
     GoalSituation,
     bind_goal_selection,
 )
@@ -114,6 +115,7 @@ def goal_manager_decision_record(
     assignment_id: str,
     source_commit: str,
     behavior_policy: Mapping[str, object] | None = None,
+    selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY,
 ) -> DecisionRecord:
     """Encode an identity-free choice before its selected goal executes."""
 
@@ -126,6 +128,8 @@ def goal_manager_decision_record(
             "goal-manager snapshot environment differs from its assignment"
         )
     bind_goal_selection(pending.question, pending.selected_candidate_index)
+    if not isinstance(selection_mode, GoalSelectionMode):
+        raise GoalManagerTrajectoryError("goal-manager selection mode is invalid")
     metadata: dict[str, object] = {
         "assignment_id": assignment_id,
         "collection_id": collection_id,
@@ -135,6 +139,7 @@ def goal_manager_decision_record(
         "policy_input": pending.question.policy_input,
         "root_lineage_id": root_lineage_id,
         "skill_id": GOAL_MANAGER_SKILL_ID,
+        "selection_mode": selection_mode.value,
         "source_commit": source_commit,
     }
     if behavior_policy is not None:
@@ -287,6 +292,7 @@ class GoalManagerTrajectoryObserver:
         selected_candidate_index: int,
         *,
         behavior_policy: Mapping[str, object] | None = None,
+        selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY,
     ) -> PendingGoalManagerDecision:
         """Write the choice before returning execution authority to its caller."""
 
@@ -325,6 +331,7 @@ class GoalManagerTrajectoryObserver:
                 assignment_id=self.assignment_id,
                 source_commit=self.source_commit,
                 behavior_policy=behavior_policy,
+                selection_mode=selection_mode,
             )
         )
         self._next_decision_index += 1
@@ -555,6 +562,20 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
             question = GoalManagerQuestion.from_policy_input(policy_input)
         except GoalManagerError as error:
             raise GoalManagerTrajectoryError(str(error)) from error
+        try:
+            selection_mode = GoalSelectionMode(
+                _string(
+                    decision_metadata.get(
+                        "selection_mode",
+                        GoalSelectionMode.AUTHORITY.value,
+                    ),
+                    subject="goal-manager selection mode",
+                )
+            )
+        except (TypeError, ValueError) as error:
+            raise GoalManagerTrajectoryError(
+                "goal-manager selection mode is invalid"
+            ) from error
         (
             behavior_policy_id,
             behavior_probability,
@@ -630,6 +651,7 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
                 behavior_base_probability=behavior_base_probability,
                 behavior_exploration_mix=behavior_exploration_mix,
                 behavior_temperature=behavior_temperature,
+                selection_mode=selection_mode,
             )
         )
     if events_by_decision:

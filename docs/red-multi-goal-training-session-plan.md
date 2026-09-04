@@ -7,10 +7,12 @@ authenticated roots and four goal kinds. Trials 0 and 5 are permanently invalid 
 One authenticated outcome update reduced weighted loss from 1.252677 to 1.248107 while preserving
 the guard distribution within the 0.01 KL cap. The fitted model remains same-bank and shadow-only.
 
-The live task is to publish its strict path-free loader and bounded-player integration, then use one
-bounded-player-unconsumed same-bank Red development context for a paired, up-to-four-decision rehearsal. The result determines
-whether a prospectively disjoint 8-train/4-development curriculum is justified; it cannot promote
-authority or make a Crystal claim by itself.
+The strict loader and player integration are now published. Pair 004 validly completed restoration
+in both arms but stopped when only one legal follow-up remained, so it produced an equivalent
+comparison with no strategic model decision. The live task is the generic forced-singleton bridge:
+execute a sole legal prerequisite without invoking or crediting learned authority, publish and
+green that seam, then use a fresh pair and a different mechanically selected context. The result
+cannot promote authority or make a Crystal claim by itself.
 
 ## Mission
 
@@ -55,16 +57,17 @@ This distinction no longer blocks all useful learning. It changes the label on t
    assumption; publish that null-link repair and admit the immutable episode before trial 2.
 4. **Complete — fit the semantic goal model.** Seven outcomes produced one authenticated bounded
    update. Identity, coordinates, route strings and teacher selections remain outside the features.
-5. **Active — exercise multi-decision play.** Let the fitted manager choose two to four consecutive goals,
-   reobserve after each skill and recover through typed failures while the living-Pokédex ledger
-   verifies progress. Pair it with deterministic ordering from the same unconsumed player context.
+5. **Active — exercise multi-decision play.** Pair 004 completed identical recovery in both arms,
+   then stopped at a singleton menu. Add the forced bridge with explicit non-model attribution,
+   publish it, and use a fresh context so the fitted manager can reach a genuine multi-option
+   choice. Reobserve after every skill; preserve typed failures and living-Pokédex verification.
 6. **Build the independent gate in parallel with evidence, not ceremony.** Before promotion or
    Crystal, obtain at least eight prospective train and four development lineages, disjoint by
    upstream episode and physical root, covering at least four and three strategic families.
 
 ## Immediate stop rules
 
-- Never reuse consumed pairs 001–003 or any already claimed physical root.
+- Never reuse consumed pairs 001–004 or any already claimed physical root.
 - Do not select contexts because the current model disagrees with a baseline or because their
   outcomes are convenient.
 - Do not call same-bank diagnostics held out, independent or transferable.
@@ -74,7 +77,8 @@ This distinction no longer blocks all useful learning. It changes the label on t
 
 ## Expected cadence
 
-The first fit is complete. Strict player integration and one short paired rehearsal should fit in
-the current session plus CI/runtime latency. A useful result opens prospective independent Red data
-collection; a failed result should expose one strategic, binding, or recovery limitation without a
-full replay. Full Red autonomy and living-Pokédex completion remain later milestones.
+The first fit and first paired rehearsal are complete. The generic singleton repair, publication,
+CI, and one fresh short pair are the current bounded session. A useful result opens prospective
+independent Red data collection; another failed result must identify one reusable strategic,
+binding, or recovery limitation without a full replay. Full Red autonomy and living-Pokédex
+completion remain later milestones.

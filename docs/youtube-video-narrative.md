@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: a fair tie exposes the difference between choice and workflow
+
+**Visual:** Split the same Red save into **FITTED MODEL** and **DETERMINISTIC BASELINE**. Run both
+counters to **RESTORE TEAM · 188 ACTIONS · 17,136 FRAMES · 15/15 SPECIMENS**, then stamp
+**EQUIVALENT — NO PROMOTION**.
+
+**Voiceover:** “The first comparison did exactly one useful thing in both arms: recover the party.
+That was a valid run, but it did not test learned strategy. Safety made the opening decision, and
+the next screen offered only one legal objective.”
+
+**Visual:** Show one remaining goal passing through a lane labelled **FORCED BRIDGE**, bypassing a
+locked **MODEL CREDIT** counter. Keep **BUDGET · VERIFIER · LIVING POKÉDEX GUARD** illuminated.
+
+**Voiceover:** “A single legal prerequisite is not something a model chooses among. The repaired
+player can execute it, but records it separately and never trains on it as model or teacher credit.
+That lets the next fresh run reach a real strategic fork without faking intelligence.”
+
 ## New scene: the first model update, then back into the game
 
 **Visual:** Nine frozen trial cards settle into **7 ADMITTED · 2 INVALID / NO RETRY**. Sort the
