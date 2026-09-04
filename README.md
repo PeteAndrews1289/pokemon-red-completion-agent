@@ -6,7 +6,21 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 3, 2026): repair one pre-input calibration indexing defect,
+> **Current product focus (September 3, 2026): admit the first successful multi-goal training
+> outcome without replaying it.** The index repair merged as main `06d602bb` under green CI
+> `33821766312`. Trial-1 preflight passed with zero effects, then the frozen `develop_team` arm
+> succeeded in **2,009 actions / 162,918 frames**, changed semantic state, preserved all **15**
+> living specimens, and used zero teacher queries. Frozen available-menu ordinal 1 correctly
+> resolved to full-question index 3.
+>
+> Independent admission rejected only its controller-link assumption: the 2,009 specialist action
+> rows have the contractually correct null `decision_id` because the high-level goal choice is a
+> standalone decision, not a scope wrapped around every action. The completed gameplay will not be
+> retried. The reader repair requires all rows to remain explicitly unlinked and rejects forged
+> links. Publish and green that repair, admit the immutable episode, then continue trials 2–8. See
+> the [path-free execution result](docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
+
+> **Previous product focus (September 3, 2026): repair one pre-input calibration indexing defect,
 > then collect the untouched arms.** The execution runner merged as main `24d8671a`, passed CI run
 > `33818021962`, and its production preflight authenticated all four roots and nine trials with
 > **0 controller actions, 0 emulator frames, 0 teacher queries, and 0 model predictions**. Trial 0

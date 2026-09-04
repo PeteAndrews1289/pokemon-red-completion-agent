@@ -42,6 +42,19 @@ their campaign-bound execution identity, but it may not overwrite them. Trials 1
 unclaimed and form the usable denominator after the index repair. The path-free evidence is in
 [the trial-0 failure result](evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json).
 
+The index repair merged as main `06d602bb` under green CI `33821766312`. Trial-1 preflight passed
+at zero effects, and its `develop_team` arm completed in 2,009 actions / 162,918 frames with semantic
+change and no specimen loss. The resolved full-question index was 3. Independent admission then
+found a reader-only contract mismatch: goal-manager choices are standalone decision records, so
+the specialist controller rows correctly carry `decision_id: null`. They are not inside a
+`RecordingExecutor` decision scope. All 2,009 row indices and their 162,918-frame sum match the
+terminal report.
+
+The gameplay episode is immutable and must not replay. The admission repair requires null links on
+every controller row and rejects any non-null forged link. After that source is published and
+green, reopen and admit the existing episode; only then continue trial 2. See the
+[trial-1 execution result](evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
+
 ## Claim order
 
 Before the first controller input, the runner must:

@@ -13,6 +13,14 @@ composition, and a frozen portable contract before Crystal execution opens.
 
 ## Current checkpoint: trial 0 found an index-boundary defect before controller input
 
+The repair passed CI and trial 1 has now produced the first complete new gameplay outcome:
+`develop_team` succeeded with verified semantic change in 2,009 actions / 162,918 frames while all
+15 specimens were preserved. Its frozen available-menu ordinal correctly resolved to full-question
+index 3. Independent admission exposed a separate reader-only mismatch: the high-level goal is a
+standalone decision, so its specialist controller rows correctly have null decision links. The
+current patch requires exactly that established shape and rejects forged links. Publish, green,
+admit the immutable episode, and only then continue trial 2. No replay is permitted.
+
 The execution runner merged as main `24d8671a` and passed CI run `33818021962`. Its production
 preflight authenticated four roots and nine frozen trials with zero actions, frames, predictions,
 or teacher queries. Trial 0 then failed before any decision or execution record. The plan's

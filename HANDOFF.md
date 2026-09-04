@@ -16,6 +16,21 @@ horizon and Crystal-ready definition),
 
 ## 2026-09-03: four roots and nine equal-reset interventions are frozen
 
+The index repair then merged as main `06d602bb15018d39ea39beb36e7a52ac5a4fbb78` under green CI
+`33821766312`. Trial-1 preflight authenticated the inherited campaign reservations with zero
+effects. Trial 1 executed the frozen `develop_team` arm successfully: available-menu ordinal 1
+resolved to full-question index 3; semantic state changed in 2,009 actions / 162,918 frames; all 15
+specimens were preserved; teacher use remained zero. Do not replay this completed trial.
+
+The first independent admission correctly reauthenticated the episode but rejected its execution
+accounting because it expected every specialist controller row to carry the standalone
+goal-manager decision ID. Existing trajectory semantics deliberately leave those 2,009 rows
+unlinked; all counts and the frame sum agree exactly. The current narrow repair requires every row
+to have `decision_id: null` and rejects any forged link. Publish and green it, then admit the
+immutable trial-1 episode without controller input. Only after admission may the result become a
+training target or trial 2 begin. See the
+[execution result](docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
+
 The runner subsequently merged as exact main `24d8671a3f5d0c7353826a8481bd7280dd3176a0`
 under green CI run `33818021962`. Its production preflight returned `trial_ready` with zero
 controller actions, frames, model predictions, teacher queries, or private path fields. Trial 0

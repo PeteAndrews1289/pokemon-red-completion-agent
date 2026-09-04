@@ -38,6 +38,9 @@ This distinction no longer blocks all useful learning. It changes the label on t
    repair, then restore the exact state for each untouched candidate and execute one
    semantic goal through the deterministic skill layer, and retain success, typed failure, ledger
    delta, actions, frames and resource cost. No teacher chooses the answer.
+   The repair subsequently merged and trial 1 completed `develop_team` in 2,009 actions / 162,918
+   frames with no specimen loss. Admission found a reader-only standalone-decision linkage
+   assumption; publish that null-link repair and admit the immutable episode before trial 2.
 4. **Fit the semantic goal model.** Train only on completed calibration outcomes. Keep identity,
    coordinates, route strings and teacher selections out of model features.
 5. **Run same-bank diagnostics.** Commit predictions first, then execute untouched diagnostic

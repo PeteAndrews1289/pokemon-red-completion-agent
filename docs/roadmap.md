@@ -3,6 +3,15 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 trial-1 execution:** the index repair merged as main `06d602bb` under CI
+> `33821766312`. Zero-effect preflight passed; `develop_team` then succeeded with semantic change in
+> **2,009 actions / 162,918 frames**, preserved all 15 specimens, and resolved available ordinal 1
+> to full-question index 3. Admission rejected a reader-only assumption that specialist controller
+> rows should link to the standalone goal decision. Their null links, row count, steps, and frame
+> sum match the established trajectory contract. Publish and green the null-link admission repair,
+> admit the immutable episode without replay, then continue trial 2. See the
+> [execution result](evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json).
+
 > **September 3 multi-goal trial-0 result:** main `24d8671a` passed CI run `33818021962`, and the
 > exact production preflight returned `trial_ready` with zero actions, frames, predictions, or
 > teacher queries. Trial 0 then failed before a decision or execution record because the frozen
