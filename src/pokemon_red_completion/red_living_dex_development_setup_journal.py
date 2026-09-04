@@ -458,6 +458,7 @@ def _claim_and_execute(
         )
     _trip(failpoint, "after_local_claim", frozen)
     before_setup = meter.checkpoint()
+    capture_published = False
     try:
         frozen.reauthenticate(plan_loader(), root=root)
         if meter.checkpoint() != before_setup:
@@ -511,8 +512,11 @@ def _claim_and_execute(
             kind="capture",
             document=capture.private_dict(),
         )
+        capture_published = True
         _trip(failpoint, "after_capture", frozen)
     except BaseException as error:
+        if capture_published:
+            raise
         actions, frames = before_setup.action_frame_delta(meter.checkpoint())
         interrupted = not isinstance(error, Exception)
         terminal = _failed_terminal(

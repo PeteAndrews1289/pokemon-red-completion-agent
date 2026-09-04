@@ -97,6 +97,45 @@ def test_release_interruption_is_terminal_and_never_reexecutes(tmp_path: Path) -
     assert harness.executions == []
 
 
+def test_durable_result_survives_interruption_before_terminal(tmp_path: Path) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, harness = _development_scenario()
+    model = _model()
+
+    def failpoint(stage: str) -> None:
+        if stage == "after_result":
+            raise KeyboardInterrupt
+
+    with pytest.raises(KeyboardInterrupt):
+        execute_living_dex_policy_development(
+            scenario,
+            model,
+            utility=DEFAULT_LIVING_DEX_GOAL_UTILITY,
+            expected_model_sha256=model.model_sha256,
+            store=store,
+            claim_registry=registry,
+            failpoint=failpoint,
+        )
+    assert len(harness.executions) == 1
+
+    recovered = execute_living_dex_policy_development(
+        scenario,
+        model,
+        utility=DEFAULT_LIVING_DEX_GOAL_UTILITY,
+        expected_model_sha256=model.model_sha256,
+        store=store,
+        claim_registry=registry,
+    )
+    assert recovered.disposition is (
+        LivingDexPolicyDevelopmentDisposition.RECOVERED_COMPLETE
+    )
+    assert recovered.terminal.status is (
+        LivingDexPolicyDevelopmentTerminalStatus.COMPLETE
+    )
+    assert recovered.result is not None
+    assert len(harness.executions) == 1
+
+
 def test_preinput_failure_is_terminal_without_outcome_or_retry(tmp_path: Path) -> None:
     store, registry = _store_and_registry(tmp_path)
     train, harness = _scenario("development-construction", resolver_failure=True)

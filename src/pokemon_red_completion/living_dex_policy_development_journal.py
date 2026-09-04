@@ -451,6 +451,7 @@ def _execute_selected(
 ) -> LivingDexPolicyDevelopmentReceipt:
     gate = LivingDexControllerGate()
     released = False
+    result_published = False
     try:
         with scenario.resolve_selected(decision.selected_candidate_index, gate) as arm:
             _validate_resolved_arm(scenario, decision, arm, gate, before)
@@ -527,8 +528,11 @@ def _execute_selected(
                 kind="living_dex_policy_development_result",
                 record=result.private_dict(),
             )
+            result_published = True
             _trip(failpoint, "after_result")
     except BaseException as error:
+        if result_published:
+            raise
         if released:
             with suppress(Exception):
                 _publish_terminal(
