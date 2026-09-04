@@ -45,12 +45,15 @@
     "pass_rule": "One exact published invocation must authenticate the same supply evidence and model, select exactly three eligible roots, publish and reopen one immutable private plan, and report zero claims, predictions, outcomes, teachers, or controller actions."
   },
   "qualification": {
-    "development_bridge_and_supplement_tests_passed": 45,
+    "development_bridge_and_supplement_tests_passed": 46,
+    "full_non_integration_tests_passed": 6678,
+    "full_non_integration_tests_skipped": 1,
+    "full_non_integration_tests_xfailed": 1,
     "generated_registry_reproduction_checks_passed": 4,
     "lint_passed": true,
     "protocol_and_golden_tests_passed": 49,
     "supplement_plan_and_script_tests_passed": 8,
-    "typed_source_files_checked": 2
+    "typed_source_files_checked": 364
   },
   "schema": "pokemon.red.living-dex-development-supplement-freezer-local-qualification.v1",
   "source": {
