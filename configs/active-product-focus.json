@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "qualification",
           "path": "docs/evidence/red-living-dex-development-supplement-freezer-local-qualification-v1-2026-09-04.json",
-          "sha256": "82a47f0f29a55f37d0dd71036bcda6252e05fb0f1a8247a21892ea78a3b912c1"
+          "sha256": "4972e3658bb1ddd4259ba17aec166fe0a4895524e7273588685311a64b0f6283"
         },
         "learning_output": "No learning counter changed. The measurable engineering output is a locally qualified, development-only freezer that can create exactly the three independent Red roots required by the published audit without scoring a model or opening an outcome.",
         "next_falsifier": "After green exact-main CI, one protected action-free invocation must either publish and reopen a three-root plan satisfying every exclusion and censor-safe coverage rule or retain an insufficient-capacity failure without weakening the contract.",

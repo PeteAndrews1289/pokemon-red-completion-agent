@@ -54,9 +54,9 @@
   },
   "schema": "pokemon.red.living-dex-development-supplement-freezer-local-qualification.v1",
   "source": {
-    "candidate_commit": "1109e3c5750e294dda702a3d51d32259ad712611",
+    "candidate_commit": "f601a81d17a8a0b668d976553211c597e62bcaa2",
     "published": false,
-    "working_source_bundle_sha256": "adc56ce002dcd76d5d5208074a622cb8b6e398480aeeda2abd6e5dff6177a929"
+    "working_source_bundle_sha256": "327aeedff06a364660b97d838e3bf319504f12b7c65dc47e1e4c0ae7dcb82881"
   },
   "status": "locally_qualified_publication_and_exact_head_ci_required",
   "zero_effects": {
