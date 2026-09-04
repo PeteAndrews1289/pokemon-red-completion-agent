@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the implemented claim-first forced-candidate runner and independent admission boundary; run one action-free production preflight, then execute and admit the frozen nine-trial Red calibration campaign without replacement and fit completed train outcomes only. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
+- Next decision: Publish and green the available-menu-ordinal repair, preflight trial 1 with the authenticated predecessor root reservations, then execute and admit only untouched trials 1-8 and fit completed train outcomes. Trial 0 is invalid and cannot retry. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
 
 ### Mandatory mission check
 
@@ -61,18 +61,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-multi-goal-calibration-runner-engineering-v1** · status **active** · evidence [qualification](docs/evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json)
+**2026-09-03-multi-goal-calibration-index-repair-v1** · status **active** · evidence [falsification](docs/evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now has a fixed, outcome-blind Red calibration denominator across four strategic goal kinds. Executing it will produce real causal option evidence for the semantic manager while keeping deterministic mechanics and the later independent transfer standard intact. |
-| Learning output | This engineering session adds no outcome, fit, comparison or authority counter. It implements one-shot forced-arm execution and a separate reader that reconstructs assignment, outcome, collection transition, and controller cost from the immutable episode instead of trusting the runner summary. |
+| Product alignment | The campaign remains a fixed Red calibration classroom for learning which semantic completion objective to choose. Repairing the semantic-index boundary prevents unavailable goals from being mistaken for frozen arms while preserving deterministic mechanics and the later independent Red-to-Crystal standard. |
+| Learning output | No training target, fit, comparison, or authority counter was added. Trial 0 is retained as one invalid pre-input attempt: zero decision records, zero execution records, terminal step zero. The action-free diagnosis identified an interface error rather than a game-skill outcome. |
 | Authority delta | No new authority is granted. Pair 003 remains the first teacher-free strategic win, but the 81-context census proves only byte-distinct calibration breadth; it does not turn the old nominal development partition into an independent evaluation set. |
 | Transfer result | None. Crystal remains unexecuted. The frozen campaign is same-bank Red calibration; the future transfer gate still requires prospectively disjoint Red lineages and a title-neutral feature/action projection. |
-| Blocker | The claim-first forced-candidate runner and independent episode admission boundary are implemented and locally qualified, but they are not yet published under green exact-head CI. Therefore none of the nine frozen options may execute. Independent upstream lineage also remains unproven for the older development bank. |
-| Decision | Publish and green the forced-candidate runner plus independent admission boundary. Run one action-free exact-head production preflight, then execute and admit the nine train trials without replacement, fit completed outcomes only, and retain the later 8-train/4-development independent gate before promotion or Crystal. |
-| Next session | Publish and green the runner and independent admission boundary; run one action-free production preflight; then begin the nine frozen train trials without replacement only from that exact source. |
-| Next falsifier | Require green exact-head CI, then prove one production preflight can authenticate the frozen plan and current runner with zero input before trial ordinal zero is claimed. |
+| Blocker | Main 24d8671a and CI 33818021962 qualified the first runner, and production preflight passed at zero effects. Trial 0 then exposed an available-menu-ordinal versus full-question-index mismatch before any decision or execution record. Trial 0 is invalid and cannot retry; the repair must publish and green before the eight untouched claims execute. Independent upstream lineage also remains unproven for the older development bank. |
+| Decision | Publish and green the narrow index-boundary repair, which resolves the frozen available-menu ordinal through the authenticated question and independently reconstructs it at admission. Then preflight trial 1, execute and admit only untouched trials 1-8 without replacement, fit completed outcomes only, and retain the later 8-train/4-development independent gate before promotion or Crystal. |
+| Next session | Publish and green the available-menu-ordinal repair; run action-free trial-1 preflight; then execute and independently admit untouched trials 1-8 without replacement. |
+| Next falsifier | Require green exact-head CI for the index repair, then prove trial-1 production preflight accepts the authenticated predecessor root reservations and still reports zero effects before the untouched trial is claimed. |
 | Stop condition | Never retry pairs 001-003 or any claimed physical root. Calibration may use only prospectively frozen open train roots and may not be described as held out. Stop on teacher-choice targets, disagreement or outcome-selected contexts, identity-bearing model features, collection regression, unbounded execution, or any Crystal/transfer claim from same-bank evidence. |
 
 ### Stop conditions

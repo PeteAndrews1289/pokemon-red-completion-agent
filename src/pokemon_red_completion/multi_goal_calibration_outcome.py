@@ -39,9 +39,15 @@ class MultiGoalCalibrationOutcomeError(RuntimeError):
 
 @dataclass(slots=True)
 class ForcedCalibrationPolicy:
-    """Select one preregistered candidate and expose its one-hot assignment law."""
+    """Select one preregistered available-menu arm and expose its assignment law.
 
-    selected_candidate_index: int
+    ``selected_available_ordinal`` is the ordinal used by the frozen campaign: its
+    position within ``question.available_indices``. Goal-manager questions retain
+    all nine semantic opportunities, including unavailable ones, so that ordinal
+    must be resolved to the full-question candidate index before binding.
+    """
+
+    selected_available_ordinal: int
     selected_goal_kind: GoalKind
     expected_question_sha256: str
     expected_policy_context_sha256: str
@@ -52,10 +58,11 @@ class ForcedCalibrationPolicy:
         init=False,
         repr=False,
     )
+    _resolved_candidate_index: int | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
-        if type(self.selected_candidate_index) is not int or (  # noqa: E721
-            self.selected_candidate_index < 0
+        if type(self.selected_available_ordinal) is not int or (  # noqa: E721
+            self.selected_available_ordinal < 0
         ):
             raise MultiGoalCalibrationOutcomeError(
                 "forced calibration candidate index is invalid"
@@ -85,19 +92,26 @@ class ForcedCalibrationPolicy:
             raise MultiGoalCalibrationOutcomeError(
                 "forced calibration policy may decide only once"
             )
+        available = question.available_indices
         if (
             question.ordered_policy_input_sha256 != self.expected_question_sha256
             or question.policy_context_sha256 != self.expected_policy_context_sha256
             or question.available_menu_sha256 != self.expected_available_menu_sha256
-            or self.selected_candidate_index not in question.available_indices
-            or question.opportunities[self.selected_candidate_index].kind
+            or self.selected_available_ordinal >= len(available)
+        ):
+            raise MultiGoalCalibrationOutcomeError(
+                "forced calibration question differs from the frozen arm"
+            )
+        resolved_candidate_index = available[self.selected_available_ordinal]
+        if (
+            question.opportunities[resolved_candidate_index].kind
             is not self.selected_goal_kind
         ):
             raise MultiGoalCalibrationOutcomeError(
                 "forced calibration question differs from the frozen arm"
             )
         probabilities = [0.0] * len(question.opportunities)
-        probabilities[self.selected_candidate_index] = 1.0
+        probabilities[resolved_candidate_index] = 1.0
         self._last_metadata = {
             "schema": "pokemon.core.goal-manager-behavior-policy.v1",
             "behavior_policy_id": FORCED_CALIBRATION_POLICY_ID,
@@ -107,8 +121,17 @@ class ForcedCalibrationPolicy:
             "exploration_mix": 0.0,
             "temperature": 1.0,
         }
+        self._resolved_candidate_index = resolved_candidate_index
         self.decisions += 1
-        return bind_goal_selection(question, self.selected_candidate_index)
+        return bind_goal_selection(question, resolved_candidate_index)
+
+    @property
+    def resolved_candidate_index(self) -> int:
+        if self._resolved_candidate_index is None:
+            raise MultiGoalCalibrationOutcomeError(
+                "forced calibration candidate index is unresolved"
+            )
+        return self._resolved_candidate_index
 
     def selection_metadata(self) -> Mapping[str, object]:
         if self._last_metadata is None:
@@ -188,7 +211,7 @@ def run_forced_calibration_outcome(
     if (
         not execution.decision_recorded
         or not execution.outcome_recorded
-        or execution.selected_candidate_index != policy.selected_candidate_index
+        or execution.selected_candidate_index != policy.resolved_candidate_index
         or execution.selected_kind is not policy.selected_goal_kind
     ):
         raise MultiGoalCalibrationOutcomeError(
@@ -233,7 +256,7 @@ def run_forced_calibration_outcome(
         )
     trajectory.require_settled()
     return MultiGoalCalibrationOutcome(
-        selected_candidate_index=execution.selected_candidate_index,
+        selected_candidate_index=policy.resolved_candidate_index,
         selected_goal_kind=execution.selected_kind,
         status=execution.verification.status,
         actions_executed=actions,

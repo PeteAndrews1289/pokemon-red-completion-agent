@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: the first frozen question caught an indexing assumption before it moved
+
+The execution code passed its full repository gate and the production preflight authenticated all
+nine planned interventions without touching the controller. The first real trial then stopped at
+step zero. The frozen plan numbered the choices that were actually available; the live goal manager
+kept all nine semantic goal rows and marked unavailable ones. Treating those two numbering systems
+as identical made “choice zero” refer to two different goals.
+
+The failed attempt was preserved and will not be replayed. An action-free reconstruction showed
+that no decision or execution had occurred and isolated the mismatch. The repair now translates
+the frozen available-choice ordinal through the live question, checks the semantic label before any
+input, records the resolved full-question index, and makes the independent reader derive the same
+translation. It is a small defect with an important lesson: semantic identity must cross a policy
+boundary explicitly; array position is not identity.
+
 ## September 3: four moments become nine controlled questions
 
 The inventory made the old save bank usable without overselling it. The next step turned four

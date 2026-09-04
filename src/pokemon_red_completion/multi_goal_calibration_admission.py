@@ -94,7 +94,7 @@ def admit_multi_goal_calibration_episode(
     expected_question_sha256: str,
     expected_policy_context_sha256: str,
     expected_available_menu_sha256: str,
-    expected_selected_candidate_index: int,
+    expected_selected_available_ordinal: int,
     expected_selected_goal_kind: GoalKind,
     expected_source_commit: str,
     expected_trial_ordinal: int,
@@ -126,6 +126,14 @@ def admit_multi_goal_calibration_episode(
 
     example = dataset.examples[0]
     question = example.question
+    if (
+        type(expected_selected_available_ordinal) is not int  # noqa: E721
+        or not 0 <= expected_selected_available_ordinal < len(question.available_indices)
+    ):
+        raise MultiGoalCalibrationAdmissionError("calibration arm differs")
+    expected_selected_candidate_index = question.available_indices[
+        expected_selected_available_ordinal
+    ]
     probabilities = tuple(
         1.0 if index == expected_selected_candidate_index else 0.0
         for index in range(len(question.opportunities))

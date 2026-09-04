@@ -16,7 +16,24 @@ horizon and Crystal-ready definition),
 
 ## 2026-09-03: four roots and nine equal-reset interventions are frozen
 
-The follow-up execution boundary is now implemented locally. It authenticates the exact frozen
+The runner subsequently merged as exact main `24d8671a3f5d0c7353826a8481bd7280dd3176a0`
+under green CI run `33818021962`. Its production preflight returned `trial_ready` with zero
+controller actions, frames, model predictions, teacher queries, or private path fields. Trial 0
+then failed at `calibration_runtime` before any decision or execution record. Action-free forensics
+proved the cause: the plan's historical `selected_candidate_index` stores an ordinal within the
+available-goal menu, while the first policy treated it as a full nine-row question index. For the
+first root, ordinal 0 meant `advance_story`; full-question index 0 was `acquire_species`, and
+`advance_story` was index 1. Trial 0 is permanently invalid and may not retry.
+
+The current repair resolves the frozen ordinal through `question.available_indices`, verifies the
+semantic kind before dispatch, emits a one-hot law over the resolved full question, and makes the
+independent admission reader reconstruct the same mapping. It also authenticates the existing four
+root reservations as predecessor claims for the same campaign rather than attempting to overwrite
+them. The remaining eight trial claims are untouched. Next publish and green the repair, preflight
+trial 1, then execute/admit trials 1–8 without replacement. See the
+[path-free failure result](docs/evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json).
+
+The original follow-up execution boundary was implemented locally. It authenticates the exact frozen
 campaign and current published source, reserves all four physical roots before input, claims each
 trial before opening its episode, restores the selected root independently, and executes only the
 preregistered semantic option. A separate admission reader reopens the immutable episode and

@@ -3,14 +3,24 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **September 3 multi-goal trial-0 result:** main `24d8671a` passed CI run `33818021962`, and the
+> exact production preflight returned `trial_ready` with zero actions, frames, predictions, or
+> teacher queries. Trial 0 then failed before a decision or execution record because the frozen
+> candidate field is an available-menu ordinal while the policy treated it as a full-question
+> index. Action-free reproduction proved the mismatch. Trial 0 is invalid and may not retry.
+>
+> The narrow repair resolves that ordinal through `question.available_indices`, verifies the
+> semantic kind before input, reconstructs the mapping independently at admission, and
+> authenticates the four predecessor root reservations as belonging to the same campaign. Publish,
+> green, preflight trial 1, then execute/admit untouched trials 1–8 and fit admitted train outcomes.
+> See the [path-free failure result](evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json).
+
 > **September 3 multi-goal calibration freeze:** exact main `71cf96ad` passed CI, then one
 > action-free freeze selected four open train roots—one team-development, one evolution and two
 > storage—and froze nine equal-reset single-decision interventions. Counts are story 4,
 > team-development 2, evolution 1 and storage 2. It created no claim, outcome, prediction, teacher
-> query, controller action or emulator frame. The claim-first forced-candidate runner and independent
-> episode admission reader are now implemented and pass 22 focused tests. Next publish and green
-> that exact source, run one action-free production preflight, execute and admit the nine trials
-> without replacement, and fit completed train outcomes only. See
+> query, controller action or emulator frame. This denominator remains fixed; the trial-0 result
+> and repair above supersede the historical next-step text. See
 > the [path-free freeze result](evidence/red-multi-goal-calibration-freeze-result-2026-09-03.json).
 
 > **September 3 multi-goal lineage inventory:** the action-free audit authenticated **81/81**

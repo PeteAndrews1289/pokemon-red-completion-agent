@@ -109,7 +109,7 @@ def test_reservation_claims_every_open_root_once(monkeypatch: pytest.MonkeyPatch
     assert writes[0]["runner_sha256"] == readiness.runner_sha256
 
 
-def test_reservation_accepts_only_its_own_existing_claim(
+def test_reservation_accepts_an_authenticated_same_campaign_claim(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     campaign = _campaign()
@@ -131,11 +131,29 @@ def test_reservation_accepts_only_its_own_existing_claim(
 
     SCRIPT["_verify_roots_reservable"](campaign, readiness, Path("registry"))
 
+    inherited_runner = _sha("predecessor-runner")
+    inherited = {
+        "execution_identity_sha256": (
+            campaign.root_reservation_execution_identity(inherited_runner)
+        ),
+        "root_consumption_sha256": campaign.roots[0].physical_root_sha256,
+        "runner_sha256": inherited_runner,
+        "schema": "pokemon.red.fresh-composition-root-claim.v1",
+        "source_commit": "3" * 40,
+    }
+    monkeypatch.setitem(
+        SCRIPT["_verify_roots_reservable"].__globals__,
+        "read_root_claim",
+        lambda *_args: inherited,
+    )
+
+    SCRIPT["_verify_roots_reservable"](campaign, readiness, Path("registry"))
+
     monkeypatch.setitem(
         SCRIPT["_verify_roots_reservable"].__globals__,
         "read_root_claim",
         lambda *_args: {
-            **expected,
+            **inherited,
             "execution_identity_sha256": _sha("foreign-campaign"),
         },
     )

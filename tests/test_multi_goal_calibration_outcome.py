@@ -182,13 +182,13 @@ def _policy(
         situation=observation.situation,
         opportunities=observation.binding_set.opportunities,
     )
-    selected_index = next(
-        index
-        for index in question.available_indices
+    selected_available_ordinal = next(
+        ordinal
+        for ordinal, index in enumerate(question.available_indices)
         if question.opportunities[index].kind is selected_kind
     )
     return ForcedCalibrationPolicy(
-        selected_candidate_index=selected_index,
+        selected_available_ordinal=selected_available_ordinal,
         selected_goal_kind=selected_kind,
         expected_question_sha256=question.ordered_policy_input_sha256,
         expected_policy_context_sha256=question.policy_context_sha256,
@@ -199,7 +199,19 @@ def _policy(
 def test_forced_arm_executes_exactly_one_preregistered_choice() -> None:
     ordering = "8" * 64
     observe, meter = _observe_factory()
-    policy = _policy(observe(), ordering_assignment_id=ordering)
+    observation = observe()
+    question = ordered_goal_manager_question(
+        assignment_id=ordering,
+        decision_index=0,
+        situation=observation.situation,
+        opportunities=observation.binding_set.opportunities,
+    )
+    expected_index = next(
+        index
+        for index in question.available_indices
+        if question.opportunities[index].kind is GoalKind.ADVANCE_STORY
+    )
+    policy = _policy(observation, ordering_assignment_id=ordering)
     trajectory, sink = _trajectory(ordering_assignment_id=ordering)
 
     result = run_forced_calibration_outcome(
@@ -210,6 +222,11 @@ def test_forced_arm_executes_exactly_one_preregistered_choice() -> None:
     )
 
     assert result.selected_goal_kind is GoalKind.ADVANCE_STORY
+    assert result.selected_candidate_index == expected_index
+    assert (
+        sink.decisions[0].action["selected_candidate_index"]
+        == result.selected_candidate_index
+    )
     assert result.actions_executed == 2
     assert result.frames_executed == 20
     assert result.semantic_state_changed
@@ -264,6 +281,49 @@ def test_forced_arm_rejects_a_kind_substitution_before_binding_input() -> None:
 
     assert meter.state["actions"] == 0
     assert sink.decisions == ()
+
+
+def test_forced_arm_resolves_available_ordinal_to_full_question_index() -> None:
+    ordering = "8" * 64
+    observe, meter = _observe_factory()
+    observation = observe()
+    question = ordered_goal_manager_question(
+        assignment_id=ordering,
+        decision_index=0,
+        situation=observation.situation,
+        opportunities=observation.binding_set.opportunities,
+    )
+    selected_kind = GoalKind.ADVANCE_STORY
+    selected_full_index = next(
+        index
+        for index in question.available_indices
+        if question.opportunities[index].kind is selected_kind
+    )
+    selected_available_ordinal = question.available_indices.index(selected_full_index)
+    assert selected_available_ordinal != selected_full_index
+    policy = _policy(
+        observation,
+        ordering_assignment_id=ordering,
+        selected_kind=selected_kind,
+    )
+    trajectory, sink = _trajectory(ordering_assignment_id=ordering)
+
+    result = run_forced_calibration_outcome(
+        observe=observe,
+        policy=policy,
+        trajectory=trajectory,
+        budget_meter=meter,
+    )
+
+    assert result.selected_candidate_index == selected_full_index
+    assert (
+        sink.decisions[0].action["selected_candidate_index"]
+        == selected_full_index
+    )
+    probabilities = sink.decisions[0].context.metadata["behavior_policy"][
+        "candidate_probabilities"
+    ]
+    assert probabilities[selected_full_index] == 1.0
 
 
 def test_forced_arm_rejects_self_reported_cost_drift() -> None:

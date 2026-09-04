@@ -276,12 +276,48 @@ def _verify_roots_reservable(
     registry: Path,
 ) -> None:
     expected = _root_claim_record(campaign, readiness)
+    inherited_identity: dict[str, object] | None = None
     for root in campaign.roots:
         if root_claim_is_available(registry, root.physical_root_sha256):
             continue
         observed = read_root_claim(registry, root.physical_root_sha256)
-        if any(observed.get(key) != value for key, value in expected.items()):
+        observed_runner = observed.get("runner_sha256")
+        observed_source = observed.get("source_commit")
+        authentic_inherited = (
+            set(observed)
+            == {
+                "execution_identity_sha256",
+                "root_consumption_sha256",
+                "runner_sha256",
+                "schema",
+                "source_commit",
+            }
+            and isinstance(observed_runner, str)
+            and _SHA256.fullmatch(observed_runner) is not None
+            and isinstance(observed_source, str)
+            and _GIT_COMMIT.fullmatch(observed_source) is not None
+            and observed.get("schema")
+            == "pokemon.red.fresh-composition-root-claim.v1"
+            and observed.get("root_consumption_sha256")
+            == root.physical_root_sha256
+            and observed.get("execution_identity_sha256")
+            == campaign.root_reservation_execution_identity(observed_runner)
+        )
+        observed_identity = {
+            key: value
+            for key, value in observed.items()
+            if key != "root_consumption_sha256"
+        }
+        if any(observed.get(key) != value for key, value in expected.items()) and not (
+            authentic_inherited
+            and (
+                inherited_identity is None
+                or observed_identity == inherited_identity
+            )
+        ):
             raise RunMultiGoalCalibrationError("closed_root_collision")
+        if authentic_inherited:
+            inherited_identity = observed_identity
 
 
 def _reserve_all_roots(
@@ -461,7 +497,7 @@ def _execute(
                 ordering_assignment_id=root.assignment.assignment_id,
             )
             policy = ForcedCalibrationPolicy(
-                selected_candidate_index=trial.selected_candidate_index,
+                selected_available_ordinal=trial.selected_candidate_index,
                 selected_goal_kind=trial.selected_goal_kind,
                 expected_question_sha256=root.question_sha256,
                 expected_policy_context_sha256=root.policy_context_sha256,
@@ -597,7 +633,7 @@ def _admit(
             expected_available_menu_sha256=str(
                 root_record["available_menu_sha256"]
             ),
-            expected_selected_candidate_index=trial.selected_candidate_index,
+            expected_selected_available_ordinal=trial.selected_candidate_index,
             expected_selected_goal_kind=trial.selected_goal_kind,
             expected_source_commit=readiness.development.source.git_commit,
             expected_trial_ordinal=trial.trial_ordinal,

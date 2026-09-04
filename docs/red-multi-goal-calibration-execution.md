@@ -22,6 +22,26 @@ roots and nine single-decision arms:
 Every arm is restored from its root's identical captured state. Recovery and restoration remain
 deterministic safety behavior and are not learned arms in this campaign.
 
+The historical JSON field `selected_candidate_index` is an available-menu ordinal, not an index
+into all nine question rows. The execution policy resolves that ordinal through the frozen
+question's `available_indices`, verifies the resolved row has the frozen semantic kind, and only
+then binds it. The trajectory and terminal record retain the resolved full-question index. The
+independent reader reconstructs this mapping rather than trusting the executor.
+
+## First production result and repair
+
+Main `24d8671a` passed CI run `33818021962`. The production preflight returned `trial_ready` for
+four roots and nine trials with zero actions, frames, predictions, teacher queries, and private
+path fields. Trial 0 then failed before any decision or execution record because the first runner
+incorrectly treated the available-menu ordinal as the full-question index. Its failed terminal is
+at step zero. An action-free replay reproduced the exact mismatch without controller input.
+
+Trial 0 is permanently invalid and must not retry. Its four root claims remain a valid reservation
+for this exact campaign. A successor runner may authenticate those reservations by recomputing
+their campaign-bound execution identity, but it may not overwrite them. Trials 1–8 remain
+unclaimed and form the usable denominator after the index repair. The path-free evidence is in
+[the trial-0 failure result](evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json).
+
 ## Claim order
 
 Before the first controller input, the runner must:
@@ -30,8 +50,8 @@ Before the first controller input, the runner must:
    model, catalog, context plan, runtime, skill manifest, ROM, inventory result and private store;
 2. reobserve the selected root without input and reproduce its frozen question, menu and binding
    manifest;
-3. verify that all four physical roots are either unclaimed or already reserved by this exact
-   campaign and exact execution runner;
+3. verify that all four physical roots are either unclaimed or carry one identical, recomputable
+   reservation for this exact campaign (including a predecessor runner);
 4. durably reserve all four roots for the campaign; and
 5. durably claim the selected trial before beginning its private episode.
 
@@ -42,7 +62,8 @@ its episode is partial, interrupted, failed or invalid.
 ## Execution boundary
 
 The policy receives the ordinary identity-free goal question but is not free to choose. It must
-select the preregistered candidate index and matching semantic kind. The recorded assignment law is
+select the preregistered available-menu ordinal and matching semantic kind, resolve it to the
+full-question candidate index, and bind only that row. The recorded assignment law is
 one-hot with probability 1.0; the runner does not query the previous model or a teacher to choose an
 arm. The deterministic binding then executes under the existing per-decision action and frame
 bounds.
@@ -67,7 +88,7 @@ Strict independent admission is implemented as a separate reader. It requires th
 claim and execution identity, reconstructs the one-hot forced assignment, checks the frozen
 question and semantic arm, validates the Red living-collection ledger and transition, reconciles
 the complete execution stream with the reported action/frame totals, and only then derives a
-signed outcome target. The next gate is publication plus green exact-head CI, followed by one
-action-free production preflight and the nine no-replacement executions. A train-only outcome fit
+signed outcome target. The next gate is publication plus green exact-head CI for the index repair,
+followed by one action-free trial-1 preflight and the eight untouched no-replacement executions. A train-only outcome fit
 follows complete admitted trials. No calibration result may be described as held out or
 transferable.

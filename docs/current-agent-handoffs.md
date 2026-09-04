@@ -8,6 +8,15 @@ Status: active operating assignment as of 2026-09-03. This document applies the 
 
 ## Current override: Codex owns calibration training plus independent-root follow-through
 
+Main `24d8671a` and CI `33818021962` qualified the first runner. Production preflight passed with
+zero effects, but trial 0 failed before a decision or execution because the runner confused the
+plan's available-menu ordinal with the full-question candidate index. Trial 0 is invalid and must
+not retry. Codex owns the narrow published repair: resolve the ordinal through
+`question.available_indices`, verify semantic kind before input, reconstruct that mapping in the
+independent admission reader, and authenticate the campaign's existing root reservations. After
+green CI, preflight trial 1 and execute/admit only untouched trials 1–8. The failure is evidence,
+not permission to redesign the denominator around outcomes.
+
 PR 193 is merged as exact main `71cf96ad` under green CI `33811894949`. The one permitted
 action-free freeze succeeded and produced a private plan with four open train roots and nine unique
 single-decision trials: story 4, team development 2, evolution 1 and storage 2. It used zero claims,

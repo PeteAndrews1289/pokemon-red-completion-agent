@@ -13,6 +13,7 @@ from pokemon_red_completion.goal_manager import (
     GoalManagerQuestion,
     GoalOpportunity,
     GoalSituation,
+    GoalUnavailableReason,
 )
 from pokemon_red_completion.goal_manager_composition_runtime import (
     LivingCollectionCheckpoint,
@@ -64,6 +65,14 @@ def _question() -> GoalManagerQuestion:
         situation=GoalSituation(*([0.5] * 9)),
         opportunities=(
             GoalOpportunity(
+                binding_ref="private:acquire",
+                kind=GoalKind.ACQUIRE_SPECIES,
+                availability=GoalAvailability.UNAVAILABLE,
+                estimated_effort=None,
+                estimated_risk=None,
+                unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET,
+            ),
+            GoalOpportunity(
                 binding_ref="private:story",
                 kind=GoalKind.ADVANCE_STORY,
                 availability=GoalAvailability.AVAILABLE,
@@ -93,11 +102,11 @@ def _dataset() -> CollectedGoalManagerDataset:
         actor="forced_calibration_arm",
         policy_id=FORCED_CALIBRATION_POLICY_ID,
         question=question,
-        selected_candidate_index=0,
+        selected_candidate_index=1,
         outcome_status=GoalDecisionOutcome.SUCCEEDED,
         behavior_policy_id=FORCED_CALIBRATION_POLICY_ID,
         behavior_probability=1.0,
-        behavior_candidate_probabilities=(1.0, 0.0),
+        behavior_candidate_probabilities=(0.0, 1.0, 0.0),
         behavior_base_probability=0.0,
         behavior_exploration_mix=0.0,
         behavior_temperature=1.0,
@@ -208,7 +217,7 @@ def _reader() -> _Reader:
                             "frames_executed": 10,
                             "policy_context_sha256": question.policy_context_sha256,
                             "schema": "pokemon.red.multi-goal-calibration-outcome.v1",
-                            "selected_candidate_index": 0,
+                            "selected_candidate_index": 1,
                             "selected_goal_kind": "advance_story",
                             "semantic_state_changed": True,
                             "status": "succeeded",
@@ -252,7 +261,7 @@ def _admit(monkeypatch: pytest.MonkeyPatch, reader: _Reader):
         expected_question_sha256=question.ordered_policy_input_sha256,
         expected_policy_context_sha256=question.policy_context_sha256,
         expected_available_menu_sha256=question.available_menu_sha256,
-        expected_selected_candidate_index=0,
+        expected_selected_available_ordinal=0,
         expected_selected_goal_kind=GoalKind.ADVANCE_STORY,
         expected_source_commit=SOURCE,
         expected_trial_ordinal=0,
@@ -308,7 +317,11 @@ def test_admission_rejects_a_non_one_hot_assignment(
 ) -> None:
     dataset = _dataset()
     example = dataset.examples[0]
-    object.__setattr__(example, "behavior_candidate_probabilities", (0.5, 0.5))
+    object.__setattr__(
+        example,
+        "behavior_candidate_probabilities",
+        (0.0, 0.5, 0.5),
+    )
     monkeypatch.setattr(
         "pokemon_red_completion.multi_goal_calibration_admission.load_goal_manager_episode",
         lambda _reader: dataset,
@@ -331,7 +344,7 @@ def test_admission_rejects_a_non_one_hot_assignment(
             expected_question_sha256=question.ordered_policy_input_sha256,
             expected_policy_context_sha256=question.policy_context_sha256,
             expected_available_menu_sha256=question.available_menu_sha256,
-            expected_selected_candidate_index=0,
+            expected_selected_available_ordinal=0,
             expected_selected_goal_kind=GoalKind.ADVANCE_STORY,
             expected_source_commit=SOURCE,
             expected_trial_ordinal=0,

@@ -30,9 +30,12 @@ This distinction no longer blocks all useful learning. It changes the label on t
    development, one evolution and two storage roots. Schedule every model-controlled candidate as
    a separate one-decision intervention from the identical reset. Recovery and restoration remain
    deterministic safety overrides.
-3. **Implemented locally; publication pending — collect bounded Red outcomes.** The claim-first
-   forced-candidate runner and independent episode reader pass their focused gate. Publish and
-   qualify the exact source, then restore the exact state for each candidate and execute one
+3. **Index repair implemented locally; publication pending — collect bounded Red outcomes.** The
+   first runner passed CI and production preflight, but trial 0 exposed a pre-input mismatch between
+   available-menu ordinals and full-question indices. Trial 0 is invalid and cannot retry. The
+   repair resolves the ordinal by semantic question structure, independently reconstructs it at
+   admission, and preserves the predecessor campaign reservation. Publish and qualify the exact
+   repair, then restore the exact state for each untouched candidate and execute one
    semantic goal through the deterministic skill layer, and retain success, typed failure, ledger
    delta, actions, frames and resource cost. No teacher chooses the answer.
 4. **Fit the semantic goal model.** Train only on completed calibration outcomes. Keep identity,
@@ -58,10 +61,10 @@ This distinction no longer blocks all useful learning. It changes the label on t
 
 ## Expected cadence
 
-The action-free inventory is complete. The scheduler and freezer passed the full local gate, PR 193
-passed CI and merged as main `71cf96ad`, and the private plan freeze succeeded with four roots and
-nine trials at zero protected effects. The next gate is the bounded claim-first execution runner.
-Once that runner is published and green and its action-free production preflight passes, the first
-new outcome batch and model fit should take one additional work session;
+The inventory, freeze, runner publication, and first production preflight are complete. Trial 0
+failed before a decision or execution record and exposed one indexing defect; it is retained as an
+invalid no-retry attempt. Once the repair is published and green, trials 1–8 and their independent
+admission should produce the first new outcome batch. The model fit should then take one additional
+work session;
 useful multi-goal comparisons should follow within one to two further sessions. Full Red autonomy
 and living-Pokédex completion remain later milestones, not claims attached to this pilot.
