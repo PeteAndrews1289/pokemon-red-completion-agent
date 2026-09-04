@@ -6,23 +6,17 @@ from dataclasses import replace
 import pytest
 from test_red_living_dex_clustered_train_runner import _successor_clustered_fixture
 
-from pokemon_red_completion.living_dex_causal_curriculum import (
-    RED_DIRECT_CAUSAL_OPTION_KINDS,
-)
-from pokemon_red_completion.living_dex_development_supplement import (
-    LivingDexDevelopmentSupplementPolicy,
-    select_living_dex_development_supplement,
-)
-from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_development_supplement_plan import (
     RedLivingDexDevelopmentSupplementBindings,
-    RedLivingDexDevelopmentSupplementFrozenScenario,
     RedLivingDexDevelopmentSupplementPlanError,
     RedLivingDexDevelopmentSupplementPrivatePlan,
+    freeze_red_living_dex_development_supplement_plan,
 )
 from pokemon_red_completion.red_living_dex_development_supply import (
-    build_red_living_dex_development_supplement_capabilities,
+    RedLivingDexDevelopmentRoot,
+    RedLivingDexDevelopmentSupplyInventory,
+    RedLivingDexDevelopmentSupplyResult,
 )
 
 
@@ -37,64 +31,84 @@ def _plan() -> RedLivingDexDevelopmentSupplementPrivatePlan:
         for item in historical.assignments
         if item.assignment.capability.partition == "development"
     )
-    shared = build_red_living_dex_development_supplement_capabilities(
-        red_capabilities
-    )
-    policy = LivingDexDevelopmentSupplementPolicy(
-        new_roots=3,
-        minimum_surviving_roots=2,
-        minimum_new_families=3,
-        minimum_new_locations=3,
-        held_root_count=2,
-        required_total_roots=4,
-        held_option_kinds=(
-            LivingDexOptionKind.ACQUIRE,
-            LivingDexOptionKind.EVOLVE,
-            LivingDexOptionKind.DEVELOP,
-            LivingDexOptionKind.RESUPPLY,
-            LivingDexOptionKind.UNLOCK_ACCESS,
-            LivingDexOptionKind.EXPLORE,
-        ),
-        required_option_kinds=RED_DIRECT_CAUSAL_OPTION_KINDS,
-    )
-    supplement = select_living_dex_development_supplement(
-        shared,
-        policy=policy,
-    )
-    by_scenario = {
-        projected.scenario_sha256: capability
-        for capability, projected in zip(red_capabilities, shared, strict=True)
-    }
     contexts = {
-        item.assignment.capability.scenario_sha256: item.context_identity_sha256
+        item.capability.root.root.root_consumption_sha256: item.context_identity_sha256
         for item in historical.assignments
         if item.assignment.capability.partition == "development"
     }
-    frozen = tuple(
-        RedLivingDexDevelopmentSupplementFrozenScenario(
-            ordinal=ordinal,
-            assignment=assignment,
-            capability=by_scenario[assignment.scenario_sha256],
-            context_identity_sha256=contexts[assignment.scenario_sha256],
-        )
-        for ordinal, assignment in enumerate(supplement.assignments)
+    bindings = RedLivingDexDevelopmentSupplementBindings(
+        source_commit="a" * 40,
+        source_bundle_sha256=_sha("source-bundle"),
+        rom_sha256=_sha("rom"),
+        goal_registry_sha256=_sha("goal-registry"),
+        route_registry_sha256=_sha("route-registry"),
+        context_catalog_sha256=_sha("context-catalog"),
+        context_plan_sha256=_sha("context-plan"),
+        runtime_identity_sha256=_sha("runtime"),
+        supply_audit_evidence_sha256=_sha("supply-audit"),
+        model_sha256=_sha("model"),
+        model_record_sha256=_sha("model-record"),
     )
-    return RedLivingDexDevelopmentSupplementPrivatePlan(
-        bindings=RedLivingDexDevelopmentSupplementBindings(
-            source_commit="a" * 40,
-            source_bundle_sha256=_sha("source-bundle"),
-            rom_sha256=_sha("rom"),
-            goal_registry_sha256=_sha("goal-registry"),
-            route_registry_sha256=_sha("route-registry"),
-            context_catalog_sha256=_sha("context-catalog"),
-            context_plan_sha256=_sha("context-plan"),
-            runtime_identity_sha256=_sha("runtime"),
-            supply_audit_evidence_sha256=_sha("supply-audit"),
-            model_sha256=_sha("model"),
-            model_record_sha256=_sha("model-record"),
+    roots = tuple(
+        RedLivingDexDevelopmentRoot(
+            lineage_sha256=_sha(("held-lineage", ordinal)),
+            logical_root_sha256=_sha(("held-logical", ordinal)),
+            physical_root_sha256=_sha(("held-physical", ordinal)),
+            state_sha256=_sha(("held-state", ordinal)),
+            envelope_sha256=_sha(("held-envelope", ordinal)),
+            option_kinds=frozenset(
+                {
+                    "acquire",
+                    "develop",
+                    "evolve",
+                    "explore",
+                    "resupply",
+                    "unlock_access",
+                }
+            ),
+        )
+        for ordinal in range(4)
+    )
+    supply = RedLivingDexDevelopmentSupplyInventory(
+        result=RedLivingDexDevelopmentSupplyResult(
+            authenticated_train_examples=18,
+            model_sha256=bindings.model_sha256,
+            model_record_sha256=bindings.model_record_sha256,
+            model_settled_examples=18,
+            schedules_authenticated=2,
+            scheduled_development_assignments=8,
+            unique_development_roots=4,
+            duplicate_schedule_assignments=4,
+            available_development_roots=2,
+            unavailable_development_roots=2,
+            available_development_lineages=2,
+            available_option_kinds=(
+                "acquire",
+                "develop",
+                "evolve",
+                "explore",
+                "resupply",
+                "unlock_access",
+            ),
+            lineage_overlap_with_train=0,
+            state_overlap_with_train=0,
         ),
-        supplement=supplement,
-        assignments=frozen,
+        train_lineages=frozenset(_sha(("train-lineage", ordinal)) for ordinal in range(18)),
+        train_states=frozenset(
+            (
+                _sha(("train-state", ordinal)),
+                _sha(("train-envelope", ordinal)),
+            )
+            for ordinal in range(18)
+        ),
+        historical_roots=roots,
+        available_roots=roots[:2],
+    )
+    return freeze_red_living_dex_development_supplement_plan(
+        red_capabilities,
+        supply=supply,
+        context_identities=contexts,
+        bindings=bindings,
     )
 
 

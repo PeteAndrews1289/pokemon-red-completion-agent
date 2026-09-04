@@ -9,17 +9,24 @@ model scores, behavior choices, outcomes, claims, or controller authority.
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
+from pokemon_red_completion.living_dex_causal_curriculum import (
+    RED_DIRECT_CAUSAL_OPTION_KINDS,
+)
 from pokemon_red_completion.living_dex_development_supplement import (
     LivingDexDevelopmentSupplementCapability,
     LivingDexDevelopmentSupplementPlan,
+    LivingDexDevelopmentSupplementPolicy,
+    select_living_dex_development_supplement,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_inventory import (
     RedLivingDexCausalRootCapability,
 )
 from pokemon_red_completion.red_living_dex_development_supply import (
+    RedLivingDexDevelopmentSupplyInventory,
     build_red_living_dex_development_supplement_capabilities,
 )
 
@@ -61,13 +68,8 @@ class RedLivingDexDevelopmentSupplementBindings:
     model_record_sha256: str
 
     def __post_init__(self) -> None:
-        if (
-            not isinstance(self.source_commit, str)
-            or _COMMIT.fullmatch(self.source_commit) is None
-        ):
-            raise RedLivingDexDevelopmentSupplementPlanError(
-                "supplement source commit differs"
-            )
+        if not isinstance(self.source_commit, str) or _COMMIT.fullmatch(self.source_commit) is None:
+            raise RedLivingDexDevelopmentSupplementPlanError("supplement source commit differs")
         for value, subject in (
             (self.source_bundle_sha256, "source bundle"),
             (self.rom_sha256, "ROM"),
@@ -94,9 +96,7 @@ class RedLivingDexDevelopmentSupplementBindings:
             "runtime_identity_sha256": self.runtime_identity_sha256,
             "source_bundle_sha256": self.source_bundle_sha256,
             "source_commit": self.source_commit,
-            "supply_audit_evidence_sha256": (
-                self.supply_audit_evidence_sha256
-            ),
+            "supply_audit_evidence_sha256": (self.supply_audit_evidence_sha256),
         }
 
 
@@ -124,9 +124,7 @@ class RedLivingDexDevelopmentSupplementFrozenScenario:
         self.assignment.__post_init__()
         self.capability.__post_init__()
         _require_sha256(self.context_identity_sha256, "context identity")
-        projected = build_red_living_dex_development_supplement_capabilities(
-            (self.capability,)
-        )
+        projected = build_red_living_dex_development_supplement_capabilities((self.capability,))
         if len(projected) != 1 or projected[0] != self.assignment:
             raise RedLivingDexDevelopmentSupplementPlanError(
                 "supplement assignment does not join its Red capability"
@@ -232,19 +230,135 @@ class RedLivingDexDevelopmentSupplementPrivatePlan:
             "model_sha256": self.bindings.model_sha256,
             "private_identity_fields": 0,
             "private_path_fields": 0,
-            "schema": (
-                "pokemon.red.living-dex-development-supplement-freeze-result.v1"
-            ),
+            "schema": ("pokemon.red.living-dex-development-supplement-freeze-result.v1"),
             "status": "authenticated_action_free_development_supplement_frozen",
             "training_targets": 0,
         }
 
 
+def freeze_red_living_dex_development_supplement_plan(
+    capabilities: Sequence[RedLivingDexCausalRootCapability],
+    *,
+    supply: RedLivingDexDevelopmentSupplyInventory,
+    context_identities: Mapping[str, str],
+    bindings: RedLivingDexDevelopmentSupplementBindings,
+) -> RedLivingDexDevelopmentSupplementPrivatePlan:
+    """Select and bind only the measured, outcome-blind Red supply gap."""
+
+    if isinstance(capabilities, (str, bytes)) or not isinstance(
+        capabilities,
+        Sequence,
+    ):
+        raise TypeError("supplement freeze needs a capability sequence")
+    if not isinstance(supply, RedLivingDexDevelopmentSupplyInventory):
+        raise TypeError("supplement freeze needs its authenticated supply")
+    if not isinstance(context_identities, Mapping):
+        raise TypeError("supplement freeze needs context identities")
+    if not isinstance(bindings, RedLivingDexDevelopmentSupplementBindings):
+        raise TypeError("supplement freeze needs its bindings")
+    supply.__post_init__()
+    bindings.__post_init__()
+    result = supply.result
+    if (
+        result.supply_ready
+        or result.minimum_new_roots_to_freeze != 3
+        or result.available_development_roots != 2
+        or result.development_root_shortfall != 2
+        or result.setup_censor_allowance != 1
+        or result.missing_option_kinds != ("manage_storage",)
+        or result.model_sha256 != bindings.model_sha256
+        or result.model_record_sha256 != bindings.model_record_sha256
+    ):
+        raise RedLivingDexDevelopmentSupplementPlanError(
+            "supplement freeze does not match the exact measured gap"
+        )
+    held_kinds = tuple(
+        kind
+        for kind in RED_DIRECT_CAUSAL_OPTION_KINDS
+        if kind.value in result.available_option_kinds
+    )
+    policy = LivingDexDevelopmentSupplementPolicy(
+        new_roots=result.minimum_new_roots_to_freeze,
+        minimum_surviving_roots=(
+            result.minimum_new_roots_to_freeze - result.setup_censor_allowance
+        ),
+        minimum_new_families=result.minimum_new_roots_to_freeze,
+        minimum_new_locations=result.minimum_new_roots_to_freeze,
+        held_root_count=result.available_development_roots,
+        required_total_roots=result.required_development_roots,
+        held_option_kinds=held_kinds,
+        required_option_kinds=RED_DIRECT_CAUSAL_OPTION_KINDS,
+    )
+    historical_lineages = {item.lineage_sha256 for item in supply.historical_roots}
+    historical_physical = {item.physical_root_sha256 for item in supply.historical_roots}
+    historical_states = {
+        (item.state_sha256, item.envelope_sha256) for item in supply.historical_roots
+    }
+    eligible_red: list[RedLivingDexCausalRootCapability] = []
+    for capability in capabilities:
+        if not isinstance(capability, RedLivingDexCausalRootCapability):
+            raise TypeError("supplement freeze capability differs")
+        capability.__post_init__()
+        root = capability.root
+        lineage = root.independence_lineage_sha256
+        state = (root.root.state_sha256, root.root.envelope_sha256)
+        if (
+            lineage is not None
+            and lineage not in supply.train_lineages
+            and lineage not in historical_lineages
+            and root.root.physical_root_sha256 not in historical_physical
+            and state not in supply.train_states
+            and state not in historical_states
+        ):
+            eligible_red.append(capability)
+    shared = build_red_living_dex_development_supplement_capabilities(tuple(eligible_red))
+    supplement = select_living_dex_development_supplement(
+        shared,
+        policy=policy,
+        excluded_lineages=frozenset(supply.train_lineages | historical_lineages),
+        excluded_physical_roots=frozenset(historical_physical),
+    )
+    red_by_scenario: dict[str, RedLivingDexCausalRootCapability] = {}
+    for capability, projected in zip(eligible_red, shared, strict=True):
+        if projected.scenario_sha256 in red_by_scenario:
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement freeze repeats a Red scenario"
+            )
+        red_by_scenario[projected.scenario_sha256] = capability
+    frozen: list[RedLivingDexDevelopmentSupplementFrozenScenario] = []
+    used_contexts: set[str] = set()
+    for ordinal, assignment in enumerate(supplement.assignments):
+        try:
+            capability = red_by_scenario[assignment.scenario_sha256]
+            context_identity = context_identities[capability.root.root.root_consumption_sha256]
+        except (KeyError, TypeError):
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement freeze cannot join its Red context"
+            ) from None
+        _require_sha256(context_identity, "context identity")
+        if context_identity in used_contexts:
+            raise RedLivingDexDevelopmentSupplementPlanError(
+                "supplement freeze repeats a Red context"
+            )
+        used_contexts.add(context_identity)
+        frozen.append(
+            RedLivingDexDevelopmentSupplementFrozenScenario(
+                ordinal=ordinal,
+                assignment=assignment,
+                capability=capability,
+                context_identity_sha256=context_identity,
+            )
+        )
+    return RedLivingDexDevelopmentSupplementPrivatePlan(
+        bindings=bindings,
+        supplement=supplement,
+        assignments=tuple(frozen),
+    )
+
+
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedLivingDexDevelopmentSupplementPlanError(
-            f"supplement {subject} differs"
-        )
+        raise RedLivingDexDevelopmentSupplementPlanError(f"supplement {subject} differs")
     return value
 
 
@@ -257,4 +371,5 @@ __all__ = [
     "RedLivingDexDevelopmentSupplementFrozenScenario",
     "RedLivingDexDevelopmentSupplementPlanError",
     "RedLivingDexDevelopmentSupplementPrivatePlan",
+    "freeze_red_living_dex_development_supplement_plan",
 ]
