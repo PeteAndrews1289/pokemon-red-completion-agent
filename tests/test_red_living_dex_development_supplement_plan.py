@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import replace
+from functools import cache
 
 import pytest
 from test_red_living_dex_clustered_train_runner import _successor_clustered_fixture
@@ -24,6 +25,7 @@ def _sha(value: object) -> str:
     return canonical_sha256({"value": value})
 
 
+@cache
 def _plan(*, reverse_capabilities: bool = False) -> RedLivingDexDevelopmentSupplementPrivatePlan:
     historical, _binding = _successor_clustered_fixture()
     red_capabilities = tuple(

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import replace
+from functools import cache
 from types import SimpleNamespace
 
 import pytest
@@ -38,8 +39,14 @@ def _sha(value: object) -> str:
     return canonical_sha256({"value": value})
 
 
-def _bindings_for_same_plan(store):  # type: ignore[no-untyped-def]
+@cache
+def _historical_plan():  # type: ignore[no-untyped-def]
     plan, _binding = _successor_clustered_fixture()
+    return plan
+
+
+def _bindings_for_same_plan(store):  # type: ignore[no-untyped-def]
+    plan = _historical_plan()
     bindings = []
     for ordinal in range(2):
         record = store.publish_sealed_record(
@@ -285,7 +292,7 @@ def test_audit_fails_closed_on_model_record_or_duplicate_semantic_drift(
 
 
 def test_red_adapter_projects_only_authenticated_development_capabilities() -> None:
-    frozen, _binding = _successor_clustered_fixture()
+    frozen = _historical_plan()
     capabilities = tuple(item.capability for item in frozen.assignments)
 
     projected = build_red_living_dex_development_supplement_capabilities(
