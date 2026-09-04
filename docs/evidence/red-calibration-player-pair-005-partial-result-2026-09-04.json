@@ -1,0 +1,82 @@
+{
+  "challenger_arm": {
+    "actions": 614,
+    "authority_id": "multi-goal-calibration-shadow",
+    "decisions": [
+      {
+        "actions": 140,
+        "failure_reason": null,
+        "frames": 9060,
+        "goal": "acquire_species",
+        "ordinal": 1,
+        "post_step_collection_guard_passed": true,
+        "status": "succeeded"
+      },
+      {
+        "actions": 224,
+        "failure_reason": null,
+        "frames": 12372,
+        "goal": "acquire_species",
+        "ordinal": 2,
+        "post_step_collection_guard_passed": true,
+        "status": "succeeded"
+      },
+      {
+        "actions": 250,
+        "failure_reason": "binding_failed",
+        "frames": 13488,
+        "goal": "acquire_species",
+        "ordinal": 3,
+        "post_step_collection_guard_passed": false,
+        "status": "failed"
+      }
+    ],
+    "durable_goal_outcomes": 3,
+    "frames": 34920,
+    "partial_episode_manifest_file_sha256": "299edd5b89a4599ec1a92ac671a50511d789c56573e7ba47f9de158c3e7021c6",
+    "terminal_status": "failed_partial"
+  },
+  "comparison": {
+    "baseline_actions": 0,
+    "baseline_started": false,
+    "pair_id": "red-calibration-player-pair-005",
+    "paired_verdict": null,
+    "replay_allowed": false
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 1,
+    "development_episode_attempts_added": 1,
+    "model_fits_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0
+  },
+  "interpretation": {
+    "finding": "The fitted manager made three genuine acquisition decisions. Two completed with fresh semantic observations and living-collection guards; the third durably recorded binding_failed, but the binding exception escaped the bounded player before its post-step observation or the baseline arm.",
+    "generalization_claim": false,
+    "next_falsifier": "Retain independently metered binding exceptions as typed bounded-player failures so the existing changed-context recovery or terminal rule can settle them, then use a fresh pair and different unconsumed context.",
+    "production_authority_promoted": false,
+    "training_claim": "This partial pair adds no admitted training target or model update."
+  },
+  "scope": {
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "model_strategic_decisions": 3,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red.calibration-player-partial-result.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33844066128,
+    "source_bundle_sha256": "e0db969e0a1ab36c89af5cddad04b14b12419970f9f0b6d09679da322f6a8bb1",
+    "source_commit": "65246348c8357c020e48dd1ffe8a6c20ab9acad0"
+  },
+  "status": "partial_challenger_binding_failure"
+}

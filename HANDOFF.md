@@ -1,6 +1,24 @@
 # Handoff
 
-## Current checkpoint: the first fitted-model rehearsal found a generic continuation gap
+## Current checkpoint: real acquisition choices exposed binding-failure recovery
+
+The forced-singleton repair merged as main `65246348c8357c020e48dd1ffe8a6c20ab9acad0`
+under green exact-main CI `33844066128`. Fresh pair 005 then started from a different three-option
+acquisition context. The fitted manager made three genuine `acquire_species` decisions. The first
+two succeeded and passed fresh semantic and living-collection checks in 140 actions / 9,060 frames
+and 224 actions / 12,372 frames. The third durably recorded `binding_failed` after another 250
+actions / 13,488 frames. Total challenger work was 614 actions / 34,920 frames with zero teacher
+use. The generic runtime rethrew the already-recorded binding exception, so the post-failure
+observation and baseline never ran. Pair 005 is consumed, has no paired verdict, and must not replay.
+
+The active repair is bounded-player-local and title-neutral: convert a binding executor exception
+into an exact independently metered failed report, then apply the existing fresh observation,
+collection guard, unchanged-context stop and one-different-goal recovery rules. Interruptions,
+durability failures, invalid reports and evidence defects remain fail-closed; the generic runtime
+is unchanged. Publish and green this repair, then use a fresh pair and different context. See the
+[pair-005 partial result](docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json).
+
+## Previous checkpoint: the first fitted-model rehearsal found a generic continuation gap
 
 The exact fitted-model player integration merged as main
 `8ec5c2d56c3f71de1e050f4631e58b0e5ed3b85d` under green exact-main CI run

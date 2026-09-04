@@ -120,12 +120,18 @@ _CALIBRATION_PLAYER_RESULT_PATH = (
 _CALIBRATION_PLAYER_RESULT_SHA256 = (
     "3602457d8ca03b5e2df817285cf72d1bc3180ab08844dcfeee4dae8238e60b40"
 )
+_CALIBRATION_PLAYER_PARTIAL_RESULT_PATH = (
+    "docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json"
+)
+_CALIBRATION_PLAYER_PARTIAL_RESULT_SHA256 = (
+    "aebd493ee22397c8833ec2894c6ede0eabe15dac093f9c2edbfae395eb7c0d74"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
-    "composition_attempts": 4,
-    "development_episode_attempts": 21,
+    "composition_attempts": 5,
+    "development_episode_attempts": 22,
     "model_fits": 10,
     "outcome_questions": {"development": 56, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
@@ -1004,7 +1010,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 8:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 9:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1217,6 +1223,34 @@ def _validate_projected_counters(
     if not isinstance(calibration_player, Mapping):
         raise ProductFocusError("calibration player evidence is invalid")
     _validate_calibration_player_projection(calibration_player)
+    partial_player_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 8],
+        subject="projected calibration player partial evidence",
+    )
+    if partial_player_evidence != {
+        "kind": "composition_attempt",
+        "path": _CALIBRATION_PLAYER_PARTIAL_RESULT_PATH,
+        "sha256": _CALIBRATION_PLAYER_PARTIAL_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    partial_player_path = (
+        root / _CALIBRATION_PLAYER_PARTIAL_RESULT_PATH
+    ).resolve()
+    try:
+        partial_player = json.loads(
+            partial_player_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError(
+            "calibration player partial evidence is invalid"
+        ) from None
+    if not isinstance(partial_player, Mapping):
+        raise ProductFocusError("calibration player partial evidence is invalid")
+    _validate_calibration_player_partial_projection(partial_player)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1604,6 +1638,113 @@ def _validate_calibration_player_projection(receipt: Mapping[str, object]) -> No
         "teacher_queries": 0,
     }:
         raise ProductFocusError("calibration player protected boundary differs")
+
+
+def _validate_calibration_player_partial_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project pair 005 as one partial attempt, never as a comparison or fit."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.calibration-player-partial-result.v1"
+        or receipt.get("status") != "partial_challenger_binding_failure"
+    ):
+        raise ProductFocusError("calibration player partial status differs")
+    comparison = _mapping(
+        receipt,
+        "comparison",
+        subject="calibration player partial evidence",
+    )
+    if comparison != {
+        "baseline_actions": 0,
+        "baseline_started": False,
+        "pair_id": "red-calibration-player-pair-005",
+        "paired_verdict": None,
+        "replay_allowed": False,
+    }:
+        raise ProductFocusError("calibration player partial comparison differs")
+    arm = _mapping(
+        receipt,
+        "challenger_arm",
+        subject="calibration player partial evidence",
+    )
+    if {
+        "authority_id": arm.get("authority_id"),
+        "terminal_status": arm.get("terminal_status"),
+        "durable_goal_outcomes": arm.get("durable_goal_outcomes"),
+        "actions": arm.get("actions"),
+        "frames": arm.get("frames"),
+        "partial_episode_manifest_file_sha256": arm.get(
+            "partial_episode_manifest_file_sha256"
+        ),
+    } != {
+        "authority_id": "multi-goal-calibration-shadow",
+        "terminal_status": "failed_partial",
+        "durable_goal_outcomes": 3,
+        "actions": 614,
+        "frames": 34920,
+        "partial_episode_manifest_file_sha256": (
+            "299edd5b89a4599ec1a92ac671a50511d789c56573e7ba47f9de158c3e7021c6"
+        ),
+    }:
+        raise ProductFocusError("calibration player partial arm differs")
+    decisions = _sequence(
+        arm,
+        "decisions",
+        subject="calibration player partial arm",
+    )
+    if [
+        (
+            _mapping_value(item, subject="calibration player partial decision").get(
+                "goal"
+            ),
+            _mapping_value(item, subject="calibration player partial decision").get(
+                "status"
+            ),
+            _mapping_value(item, subject="calibration player partial decision").get(
+                "failure_reason"
+            ),
+        )
+        for item in decisions
+    ] != [
+        ("acquire_species", "succeeded", None),
+        ("acquire_species", "succeeded", None),
+        ("acquire_species", "failed", "binding_failed"),
+    ]:
+        raise ProductFocusError("calibration player partial decisions differ")
+    counters = _mapping(
+        receipt,
+        "counter_treatment",
+        subject="calibration player partial evidence",
+    )
+    if counters != {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 0,
+        "composition_attempts_added": 1,
+        "development_episode_attempts_added": 1,
+        "model_fits_added": 0,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_composition_episodes_added": 0,
+    }:
+        raise ProductFocusError("calibration player partial counters differ")
+    scope = _mapping(
+        receipt,
+        "scope",
+        subject="calibration player partial evidence",
+    )
+    if scope != {
+        "crystal_accesses": 0,
+        "full_game_replays": 0,
+        "model_strategic_decisions": 3,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "sealed_red_accesses": 0,
+        "teacher_fallbacks": 0,
+        "teacher_queries": 0,
+    }:
+        raise ProductFocusError("calibration player partial boundary differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:

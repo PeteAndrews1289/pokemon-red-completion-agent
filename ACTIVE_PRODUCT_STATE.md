@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish a generic forced-singleton continuation that does not credit the model, then run one fresh paired same-bank Red development scenario to determine whether the fitted manager can reach and act at a genuine multi-option branch. Pair 004 is terminal and may not replay.
+- Next decision: Publish bounded retention of independently metered binding failures, then use a fresh paired same-bank Red development scenario to test recovery and continued strategic play. Pairs 004 and 005 are terminal and may not replay.
 
 ### Mandatory mission check
 
@@ -51,9 +51,9 @@ Not the product:
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
 | Causal Train Example · train | 111 | 111 |
-| Composition Attempt · development | 4 | 4 |
+| Composition Attempt · development | 5 | 5 |
 | Verified Composition Episode · development | 3 | 3 |
-| Development Episode · development | 21 | 21 |
+| Development Episode · development | 22 | 22 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-singleton-continuation-reorientation-v1** · status **active** · evidence [falsification](docs/evidence/red-calibration-player-pair-004-result-2026-09-04.json)
+**2026-09-04-binding-failure-retention-reorientation-v1** · status **active** · evidence [falsification](docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Executing forced legal bridges is a reusable hierarchical-agent capability: it lets the player traverse deterministic recovery and bookkeeping states to reach strategic choices without teaching route-specific actions or crediting the model for choices it did not make. |
-| Learning output | Pair 004 is one complete composition attempt and two durable development-arm episodes. Both restored the team in 188 actions and 17136 frames with all 15 specimens preserved, then stopped on a singleton menu. The result is equivalent and adds zero strategic model decisions, Pokedex progress, targets, fits, unseen comparisons or authority. |
-| Authority delta | The fitted manager received bounded causal authority, but only the deterministic restore_team safety choice executed before both arms reached a singleton menu. No strategic model decision, production promotion, new target or refit resulted. |
-| Transfer result | None. Crystal remains deferred. The singleton limitation is title-neutral composition work, but pair 004 is same-bank Red evidence and supports no cross-title claim. |
-| Blocker | The title-neutral composition loop stops when fewer than two goals are available. After recovery, one legal manage_storage bridge remained, so both arms terminated after one decision without Pokedex progress. This prevents short scenarios from reaching later strategic branch points. |
-| Decision | Implement a title-neutral forced-singleton continuation that executes exactly one legal goal without attributing that forced step to learned authority, reobserves, and preserves all existing budget, failure and collection guards. Do not replay pair 004. Qualify the repair on a fresh pair identity and a different bounded-player-unconsumed same-bank context. |
-| Next session | Implement and publish forced-singleton continuation, then use one fresh pair identity on the next mechanically eligible same-bank Red player context. Preserve pair 004 without replay. |
-| Next falsifier | A ROM-free composition test must show that one available goal executes as a forced bridge, is recorded separately from learned decisions, consumes the shared budget, and reobserves. Then a fresh bounded Red pair must either reach a genuine two-plus-goal decision or terminate with a typed reason after the forced step. |
-| Stop condition | Never replay pair 004 or count a singleton as learned authority. Stop on more than one legal forced candidate, teacher choice or fallback, route-specific logic, identity-bearing policy features, collection regression, budget bypass, swallowed failure, or a fresh pair that still cannot reach a strategic branch after one generic repair. |
+| Product alignment | Long-horizon players must learn from failed skills without crashing or silently relabeling them. Typed failure retention and bounded replanning are reusable across capture, battle, navigation and future game adapters. |
+| Learning output | Pair 005 is one partial composition attempt and one challenger development episode: three genuine acquisition choices, two verified successes, then one durable binding_failed outcome after 614 actions and 34920 frames. It adds zero paired verdicts, targets, fits, unseen comparisons, authority or transfer results. |
+| Authority delta | The fitted manager made three genuine acquire_species decisions. Two succeeded with fresh semantic observations and living-collection guards; the third durably recorded binding_failed. No production promotion, admitted target, refit, paired verdict or transfer result followed. |
+| Transfer result | None. Crystal remains deferred. Pair 005 is same-bank Red development evidence and supports no cross-title claim. |
+| Blocker | The generic goal runtime records a binding exception as a typed failure and then rethrows it. Pair 005 therefore stopped after the challenger arm and before its post-failure observation or baseline, even though its first two acquisition goals succeeded. |
+| Decision | Retain an executor exception as an independently metered typed failure inside the bounded research player, then let the existing fresh-observation and changed-context recovery rules settle it. Do not weaken the generic runtime, hide evidence defects, or replay pair 005. Qualify on a fresh pair and different context. |
+| Next session | Implement and publish bounded binding-failure retention, then use one fresh pair identity on a different mechanically eligible same-bank Red player context. Preserve pairs 004 and 005 without replay. |
+| Next falsifier | A ROM-free test must show that a binding exception is converted into exact independently metered failure evidence, reobserved, and either recovered from through a different goal or settled by the unchanged-context rule without private error leakage. Then use a fresh pair and different Red context. |
+| Stop condition | Never replay pairs 004 or 005. Stop on teacher choice or fallback, route-specific exception handling, private error leakage, false success, missing post-failure observation, collection regression, budget mismatch, swallowed evidence defect, or any attempt to count the partial run as a paired comparison or training target. |
 
 ### Stop conditions
 
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **25**.
+Current evidence entries: **26**.

@@ -130,6 +130,7 @@ def _observer(
     no_goals_after_first: bool = False,
     exhaust_budget: bool = False,
     singleton_after_first: bool = False,
+    binding_failure: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -181,6 +182,9 @@ def _observer(
                 if exhaust_budget:
                     state["stage"] += 1
                     raise GoalExecutionBudgetExhausted("private budget detail")
+                if binding_failure and before == 0:
+                    state["stage"] += 1
+                    raise RuntimeError("private binding detail")
                 if not unchanged_success:
                     state["stage"] += 1
                 return GoalExecutionReport(
@@ -426,6 +430,30 @@ def test_budget_exhaustion_is_a_durable_verified_failure() -> None:
     assert state["actions"] == 5
     assert len(sink.decisions) == len(sink.events) == 1
     trajectory.require_settled()
+
+
+def test_binding_exception_is_retained_and_replanned_without_private_detail() -> None:
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(binding_failure=True)
+
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+    )
+
+    assert result.stop_reason is BoundedPlayerStopReason.COMPLETION_REACHED
+    assert [step.failure_reason for step in result.steps] == [
+        GoalFailureReason.BINDING_FAILED,
+        None,
+    ]
+    assert [step.recovery_attempt for step in result.steps] == [False, True]
+    assert state["actions"] == 10
+    assert len(sink.decisions) == len(sink.events) == 2
+    assert "private binding detail" not in json.dumps(result.public_dict())
 
 
 def test_observation_may_not_hide_controller_input() -> None:

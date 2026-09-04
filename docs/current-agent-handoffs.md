@@ -1,6 +1,20 @@
 # Current agent handoffs
 
-## Current override: Codex owns forced-bridge repair and a fresh paired rehearsal
+## Current override: Codex owns bounded binding-failure retention and a fresh pair
+
+The forced-bridge repair is published as exact main `65246348` under green CI `33844066128`.
+Pair 005 is consumed: the fitted manager made three genuine `acquire_species` choices; two succeeded
+with fresh semantic and living-collection checks, and the third durably recorded `binding_failed`.
+The challenger used 614 actions / 34,920 frames. The exception escaped before reobservation or the
+baseline arm, so there is no paired verdict, target, fit, promotion or transfer result.
+
+Codex owns the bounded-player-local failure-retention wrapper, validation, publication and exact-main
+CI. It may turn only a binding executor exception into an independently metered failed report so
+existing recovery logic can run. Interruptions, durability, invalid reports and evidence defects
+remain fail-closed; generic runtime behavior remains unchanged. Pair 005 may not replay. After
+green exact-main CI, use a fresh pair identity and different mechanically selected context.
+
+## Previous override: Codex owns forced-bridge repair and a fresh paired rehearsal
 
 The fitted-model integration is published as exact main `8ec5c2d5` under green CI `33839775994`.
 Pair 004 is consumed: both arms completed `restore_team` in 188 actions / 17,136 frames, preserved
