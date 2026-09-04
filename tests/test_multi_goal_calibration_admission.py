@@ -230,7 +230,7 @@ def _reader() -> _Reader:
                 {
                     "episode_id": EPISODE,
                     "step_index": 0,
-                    "decision_id": f"{EPISODE}:goal-manager:0",
+                    "decision_id": None,
                     "frames": 10,
                     "status": "success",
                 }
@@ -296,6 +296,16 @@ def test_admission_rejects_execution_counter_drift(
 ) -> None:
     reader = _reader()
     reader.streams["executions"][0]["frames"] = 9
+
+    with pytest.raises(MultiGoalCalibrationAdmissionError, match="accounting"):
+        _admit(monkeypatch, reader)
+
+
+def test_admission_rejects_a_forged_controller_decision_link(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _reader()
+    reader.streams["executions"][0]["decision_id"] = f"{EPISODE}:goal-manager:0"
 
     with pytest.raises(MultiGoalCalibrationAdmissionError, match="accounting"):
         _admit(monkeypatch, reader)

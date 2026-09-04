@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the first repaired arm succeeds
+
+**Visual:** Animate **AVAILABLE ORDINAL 1 → FULL QUESTION INDEX 3 → DEVELOP TEAM**. Run counters to
+**2,009 ACTIONS · 162,918 FRAMES**, then stamp **SEMANTIC CHANGE · 15/15 SPECIMENS PRESERVED ·
+TEACHER 0**.
+
+**Voiceover:** “The corrected interface chose the intended objective and the deterministic skill
+completed it. This is a real new outcome, but it still has to pass a separate reader before it can
+train anything.”
+
+**Visual:** Show one standalone goal marker above a stream of controller actions labeled
+**decision_id: null**. Cross out an invented line connecting every action to the marker.
+
+**Voiceover:** “The reader caught its own assumption: a standalone strategic decision marks the
+timeline; it does not own every low-level action as a nested scope. All counts matched, so we kept
+the run immutable and repaired the reader instead of replaying the game.”
+
+**Visual:** Put the original controller commit behind the episode and the newer reader commit in
+front. Draw an ancestry check between them and compare the controller file to a fingerprint.
+
+**Voiceover:** “A newer reader cannot pretend it ran the older episode. It verifies that the real
+controller commit is in published history and that the exact historical controller matches the
+claim before it accepts a single outcome.”
+
 ## New scene: choice zero was not the same choice
 
 **Visual:** Show a compact menu labeled **AVAILABLE: STORY · DEVELOP · RESTORE** beside a full

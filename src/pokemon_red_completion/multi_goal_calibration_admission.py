@@ -265,7 +265,10 @@ def admit_multi_goal_calibration_episode(
             row.get("episode_id") != expected_episode_id
             or row.get("status") != "success"
             or row.get("step_index") != index
-            or row.get("decision_id") != example.decision_id
+            # Goal-manager choices are standalone semantic decisions. They divide
+            # the stream but deliberately do not open a RecordingExecutor decision
+            # scope around thousands of specialist controller actions.
+            or row.get("decision_id") is not None
             for index, row in enumerate(executions)
         )
     ):

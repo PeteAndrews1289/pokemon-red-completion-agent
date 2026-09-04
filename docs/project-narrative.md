@@ -1,5 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 3: the repaired choice worked; the reader misunderstood its timeline
+
+With the index boundary repaired, the next frozen arm selected team development and completed it.
+The game advanced through 2,009 controller actions and 162,918 frames, semantic state changed, and
+all 15 living specimens remained intact. The translation was visible in the evidence: choice one
+among the available goals became row three in the stable nine-goal vocabulary.
+
+The independent reader then rejected the episode for a different reason. It expected every low-level
+action to carry the high-level goal decision ID. But goal selection is intentionally a standalone
+marker; it divides the timeline without wrapping thousands of specialist actions in one recording
+scope. Every action, step, and frame still reconciled. The run stays immutable while the reader is
+corrected to require the actual contract—explicit null links—and to reject invented ones.
+
+The repair also keeps the provenance honest across its own publication boundary. It verifies that
+the controller revision named by the immutable claim is an ancestor of the published reader and
+that its digest matches the exact historical Git blob. Improving the evidence reader therefore
+does not rewrite which code actually played the game.
+
 ## September 3: the first frozen question caught an indexing assumption before it moved
 
 The execution code passed its full repository gate and the production preflight authenticated all

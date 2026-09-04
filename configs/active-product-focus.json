@@ -34,18 +34,18 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "No new authority is granted. Pair 003 remains the first teacher-free strategic win, but the 81-context census proves only byte-distinct calibration breadth; it does not turn the old nominal development partition into an independent evaluation set.",
-        "blocker": "Main 24d8671a and CI 33818021962 qualified the first runner, and production preflight passed at zero effects. Trial 0 then exposed an available-menu-ordinal versus full-question-index mismatch before any decision or execution record. Trial 0 is invalid and cannot retry; the repair must publish and green before the eight untouched claims execute. Independent upstream lineage also remains unproven for the older development bank.",
-        "decision": "Publish and green the narrow index-boundary repair, which resolves the frozen available-menu ordinal through the authenticated question and independently reconstructs it at admission. Then preflight trial 1, execute and admit only untouched trials 1-8 without replacement, fit completed outcomes only, and retain the later 8-train/4-development independent gate before promotion or Crystal.",
+        "blocker": "Main 06d602bb and CI 33821766312 qualified the index repair. Trial 1 completed develop_team with semantic change in 2009 actions and 162918 frames while preserving all 15 specimens, but admission rejected a false requirement that specialist rows link to the standalone goal decision. The repaired reader must also authenticate the episode's historical source and runner rather than rebind it to the newer reader. The episode is not training data until both repairs publish and pass CI.",
+        "decision": "Publish and green the narrow admission repair, require every specialist controller row in this standalone-goal episode to have a null decision_id, reject forged non-null links, and admit a historical episode only when its source is in the published reader ancestry and its runner digest matches the exact historical Git blob. Reopen and admit the immutable trial-1 episode without gameplay, then continue untouched trials 2-8 and fit completed admitted outcomes only.",
         "evidence": {
-          "kind": "falsification",
-          "path": "docs/evidence/red-multi-goal-calibration-trial-00-failure-2026-09-03.json",
-          "sha256": "bcb21799a164d373286bfdf769fbe03c9c1186104973f407dcea3cbee0dd0f4e"
+          "kind": "qualification",
+          "path": "docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json",
+          "sha256": "9097060d6201d1cf6b941d8c7a20d6a534602cf23d63eb291759783646a0b24b"
         },
-        "learning_output": "No training target, fit, comparison, or authority counter was added. Trial 0 is retained as one invalid pre-input attempt: zero decision records, zero execution records, terminal step zero. The action-free diagnosis identified an interface error rather than a game-skill outcome.",
-        "next_falsifier": "Require green exact-head CI for the index repair, then prove trial-1 production preflight accepts the authenticated predecessor root reservations and still reports zero effects before the untouched trial is claimed.",
-        "next_session_goal": "Publish and green the available-menu-ordinal repair; run action-free trial-1 preflight; then execute and independently admit untouched trials 1-8 without replacement.",
-        "product_alignment": "The campaign remains a fixed Red calibration classroom for learning which semantic completion objective to choose. Repairing the semantic-index boundary prevents unavailable goals from being mistaken for frozen arms while preserving deterministic mechanics and the later independent Red-to-Crystal standard.",
-        "session_id": "2026-09-03-multi-goal-calibration-index-repair-v1",
+        "learning_output": "Trial 1 produced one complete candidate outcome but it is not yet an admitted training target and changes no learning counter. The develop_team arm succeeded in 2009 actions and 162918 frames, changed semantic state, preserved 15 of 15 specimens, and used zero teacher queries.",
+        "next_falsifier": "Require green exact-head CI for the null-link and historical-lineage admission repair, then reopen the existing trial-1 episode and prove its one decision, 2009 unlinked execution rows, 162918-frame sum, historical runner/source binding, terminal, collection ledger, and one-hot arm all admit without controller input.",
+        "next_session_goal": "Publish and green the standalone-decision admission repair; admit immutable trial 1 reader-only; then preflight and execute trial 2 if admission succeeds.",
+        "product_alignment": "The first repaired Red intervention completed a real team-development objective with verified state change and collection preservation. Making independent admission match the established standalone-decision timeline converts that immutable gameplay into trustworthy semantic goal-selection evidence without replay or title-specific model features.",
+        "session_id": "2026-09-03-multi-goal-trial-01-admission-repair-v1",
         "status": "active",
         "stop_condition": "Never retry pairs 001-003 or any claimed physical root. Calibration may use only prospectively frozen open train roots and may not be described as held out. Stop on teacher-choice targets, disagreement or outcome-selected contexts, identity-bearing model features, collection regression, unbounded execution, or any Crystal/transfer claim from same-bank evidence.",
         "transfer_result": "None. Crystal remains unexecuted. The frozen campaign is same-bank Red calibration; the future transfer gate still requires prospectively disjoint Red lineages and a title-neutral feature/action projection."
@@ -73,7 +73,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Publish and green the available-menu-ordinal repair, preflight trial 1 with the authenticated predecessor root reservations, then execute and admit only untouched trials 1-8 and fit completed train outcomes. Trial 0 is invalid and cannot retry. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.",
+      "next_decision": "Publish and green the standalone-decision admission repair, reopen and admit immutable trial 1 without gameplay, then continue untouched trials 2-8 and fit completed admitted train outcomes. Trials 0 and 1 may not replay. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
