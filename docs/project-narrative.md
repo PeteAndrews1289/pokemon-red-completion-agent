@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: the exam runner stops rewriting the classroom
+
+Opening the held Red rows looked like a small extension to the train runner. It was not. The first
+implementation made old setup code understand the development suffix, and the repository's exact
+historical evidence rejected the change. That failure clarified the correct architecture: training
+and evaluation share semantic interfaces, but a qualified one-shot consumer is immutable evidence.
+
+The replacement is a separate development path. It authenticates a frozen Red setup without moving
+the game, claims both root identities before a runtime can exist, and treats every claimed
+interruption as terminal. Once setup succeeds, the fitted model receives an identity-free menu,
+scores each available candidate once, seals the complete score vector and choice, and only then
+releases the selected branch. The resulting outcome is evaluation evidence, never another training
+label.
+
+The work deliberately produced no flattering gameplay number. Its ROM-free fixtures catch plan and
+root substitution, train/development crossover, wrong-model use, power loss after claim, and power
+loss after controller release. A successful real development branch remains unopened until the
+aggregate supply audit is green and the measured three-root supplement exists. The important gain
+is that the model now has an honest path toward acting in Red without erasing the provenance that
+made its eighteen training experiences trustworthy.
+
 ## September 4: the model finally receives every collected causal lesson
 
 After the first multi-decision player rehearsal, the project stepped back far enough to reconcile

@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the exam gets its own one-shot controller
+
+**Visual:** Split the pipeline into two immutable lanes: **TRAIN — QUALIFIED / LOCKED** and
+**DEVELOPMENT — NEW VERSIONED RUNNER**. Show an attempted bridge touching the train lane, then let an
+exact-evidence alarm push it back out.
+
+**Voiceover:** “The easiest patch would have rewritten the code that created the training evidence.
+The repository refused. Evaluation needed its own runner, not a new interpretation of history.”
+
+**Visual:** Animate **PLAN + LOGICAL ROOT + PHYSICAL ROOT → CLAIMED**, then place a lock before the
+emulator. After the lock, show **MODEL SCORES ALL AVAILABLE GOALS ONCE → CHOICE SEALED → ONE BRANCH
+RELEASED**. A lightning-bolt interruption on either side resolves to **NO RETRY**.
+
+**Voiceover:** “The model cannot touch the game until the exact held setup is claimed. Its full
+decision is written before input, only one branch runs, and the outcome cannot flow back into
+training. If power disappears after the claim, the exam is lost rather than quietly made easier.”
+
+**Visual:** Keep the counters at **ROM RUNS 0 · HELD OUTCOMES 0 · NEW LABELS 0 · AUTHORITY 0**, then
+place two preserved root cards beside three blank supplement cards, with **MANAGE STORAGE** glowing
+on the new set.
+
+**Voiceover:** “This session built the trustworthy execution path; it did not grade the model. The
+next real evidence comes from two surviving held roots plus the smallest independent supplement.”
+
 ## New scene: the data was ahead of the model—and the model catches up
 
 The visible player test caught two Pokémon and then handled a failed third attempt without crashing.

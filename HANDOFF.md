@@ -1,5 +1,29 @@
 # Handoff
 
+## Current checkpoint: the held Red model path exists without reopening train history
+
+The eighteen-example title-neutral option model is still shadow-only and no held outcome has been
+opened. The follow-on branch now implements the smallest bridge needed to evaluate it: an
+outcome-blind three-root supplement planner, development-only clustered selection, a canonical Red
+setup admission, a one-shot crash-safe setup journal, an exact model decision journal, and their Red
+composition. The qualified train setup and claim-first runner remain byte-for-byte unchanged.
+
+The new boundary claims logical and physical roots before a controller-capable runtime can exist,
+never retries after that claim, commits the complete model score vector before selected-arm input,
+records only the selected factual outcome, and emits no training target. ROM-free tests cover train
+partition exclusion, root and plan substitution, exact model mismatch, canonical-byte detachment,
+post-claim power loss, post-release power loss, and recovery without a second runtime. The supplied
+development fixtures intentionally fail setup availability, so the Red composition's successful
+live path remains unexecuted rather than being simulated into a claim.
+
+PR 207 contains the aggregate-only supply auditor. Its second hosted run exposed one stale strategic
+registry golden after all source-bound registries were regenerated; that final golden is repaired
+and CI is running again. Once it is green, merge it, reproduce the action-free audit from exact main,
+then rebase and publish this bridge. If the audit still reports two clean historical roots, freeze
+exactly three new independent roots with `manage_storage` coverage. Only then may the existing model
+make one development choice per admitted root. Do not refit on development, replace a failed setup,
+open Crystal or sealed Red, or run a full game.
+
 ## Current checkpoint: two held exam roots survived; generate only the measured gap
 
 The eighteen-example title-neutral causal model is fitted and remains shadow-only. A local

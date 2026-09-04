@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and reproduce the action-free audit of the held Red development roots. If exactly two remain clean as locally observed, preserve them and freeze three new independent development roots with manage_storage coverage, then compare the existing eighteen-example model once without refitting. Pairs 004 through 006 remain terminal.
+- Next decision: Merge and reproduce the action-free held-root audit. If exactly two remain clean, preserve them, publish the separate development-only execution bridge, and freeze three independent supplement roots with manage_storage coverage before comparing the existing model once without refitting. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-supply-salvage-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
+**2026-09-04-development-execution-bridge-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now reuses every valid asset instead of restarting its curriculum. Two clean unseen Red roots are preserved, and only the measured gap needed to test the title-neutral model will be generated before any Crystal work or broader authority decision. |
-| Learning output | One immutable corpus-addressed model was fitted from all eighteen authenticated Red train outcomes, ten more than its predecessor and spanning all seven supported portable option kinds. It changed three of eighteen train-menu choices and reduced weighted training MSE from 0.000337943754007985 to 0.0000006106826230221792 with zero development reads or game effects. This is a real model fit, not a generalization result. |
-| Authority delta | No authority changed. The newly fitted eighteen-example causal living-Pokedex model remains non-authoritative and shadow-only until fresh lineage-disjoint Red development situations show useful behavior. |
+| Product alignment | The session moved the fitted title-neutral policy closer to real play: it can now be wired to a held Red semantic menu without modifying train history, leaking private identities, copying a teacher, or feeding development back into fitting. |
+| Learning output | No learning counter changed in this engineering session. The measurable gain is a ROM-free verified path from one held Red setup through an exact title-neutral model choice to one selected factual outcome, with zero teacher targets and terminal no-retry recovery. Real development execution remains unopened. |
+| Authority delta | No authority changed. The eighteen-example model remains shadow-only. A separate development-only decision and execution journal now exists locally, but no held Red outcome has been opened and deterministic skills retain all controller authority. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | A local action-free audit found that the original and successor schedules reserved the same four development roots. Two remain clean and lineage-disjoint from all eighteen train rows; two are consumed. The clean pair spans six option kinds but lacks manage_storage, leaving a two-root evaluation shortfall rather than a new train-data shortfall. |
-| Decision | Publish and exact-CI qualify the aggregate-only development-supply auditor, reproduce the two-clean-root result from protected main, then preserve those roots and freeze exactly three new independent development roots: two required plus one setup-censor allowance, with manage_storage coverage. Build a development-only model-led outcome gate; do not refit before the untouched comparison. |
-| Next session | Publish and run the exact action-free development-supply audit, then implement the smallest outcome-blind three-root supplement and development-only model-led evaluation boundary without consuming the two clean historical roots. |
-| Next falsifier | From clean published main, the auditor must reproduce eighteen authenticated train rows, the exact updated model, four unique held roots across two schedules, zero train overlap, exactly two available roots, a two-root shortfall and manage_storage as the sole missing option kind, with zero ROM, outcome, prediction, fit or controller effect. |
-| Stop condition | Stop on model-record authentication failure, controller input during shadow binding, outcome-informed root selection, train/development lineage overlap, family-coverage failure, private-path leakage, or any attempt to replace a failed setup adaptively. Never replay pairs 004, 005 or 006. |
+| Blocker | The aggregate-only supply auditor is awaiting a repeated hosted CI run after its last stale generated-registry golden was repaired. The expected two clean historical roots are preserved; three outcome-blind independent supplement roots with manage_storage coverage still need to be frozen before model-led development can execute. |
+| Decision | Keep qualified train code byte-for-byte immutable. Merge and reproduce the action-free supply audit from exact main, publish the separate development bridge, then freeze exactly three independent supplement roots and run action-free admission before opening any model-selected outcome. |
+| Next session | Green and merge the action-free supply audit, reproduce it from protected exact main, publish the development-only bridge, and freeze the measured three-root supplement without opening outcomes. |
+| Next falsifier | From clean published main, the auditor must first reproduce the two-clean-root result with zero effects. Then the separate bridge must authenticate the exact model and a held development row, reject train rows and root substitution before claim, and recover claim/release interruptions without a second runtime. |
+| Stop condition | Stop on audit mismatch, model-record authentication failure, train/development crossover, outcome-informed root selection, root overlap, private-identity policy features, development entering fit, or any retry after a claimed setup. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 

@@ -1,5 +1,29 @@
 # Model-first development roadmap
 
+## Current checkpoint: the model-led Red development bridge is locally complete
+
+The project can now carry one frozen held Red row through a separate development-only path without
+modifying the qualified train consumer. The path authenticates the complete schedule and exact root,
+claims before controller-capable construction, creates a validated Red setup, projects its menu into
+the title-neutral option model, commits every candidate prediction and the selected index, executes
+only that selected branch, and preserves its independently observed outcome without creating a
+training target. Claimed interruptions are terminal and recovery cannot reopen a runtime.
+
+This is an engineering milestone, not a generalization result. No ROM, development outcome, model
+authority, Crystal task, or full replay was opened while building it. The exact next sequence is:
+
+1. green and merge the action-free held-supply auditor;
+2. reproduce its expected two-clean-root result from protected exact main;
+3. publish and green the development bridge;
+4. freeze exactly three outcome-blind independent supplement roots, including `manage_storage`;
+5. run action-free admission and model-identity preflight over the preserved two plus new supply;
+6. execute one model-selected development branch per admitted root, retaining setup censors;
+7. compare the frozen model with its preregistered control and reorient before any authority change.
+
+Stop if the audit changes, any root overlaps train, a private identity reaches policy features, a
+claimed setup is retried, or a development result enters fitting. Crystal remains deliberately
+deferred until this same portable decision seam earns useful Red evidence.
+
 ## Current checkpoint: salvage the held exam before building another classroom
 
 The complete eighteen-example causal model is fitted and immutable. A local action-free audit then
