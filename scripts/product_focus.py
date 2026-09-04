@@ -108,10 +108,16 @@ _CAUSAL_PLAYER_RESULT_PATH = (
 _CAUSAL_PLAYER_RESULT_SHA256 = (
     "4b4466756b33bc0a41fc711e608f992a8f0a43fc80360c01f6a5685bf0683bbb"
 )
+_MULTI_GOAL_CALIBRATION_PROGRESS_PATH = (
+    "docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json"
+)
+_MULTI_GOAL_CALIBRATION_PROGRESS_SHA256 = (
+    "e66caa75910b8ef7ec03736f0a6c9edd829eb5c1447bb4eeb3369f0502633b61"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 104,
+    "causal_train_examples": 108,
     "composition_attempts": 3,
     "development_episode_attempts": 19,
     "model_fits": 9,
@@ -992,7 +998,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 6:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 7:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1086,7 +1092,7 @@ def _validate_projected_counters(
         raise ProductFocusError("first authentic battle evidence is invalid")
     _validate_first_authentic_battle_projection(first_authentic)
     expected_utility_evidence = _mapping_value(
-        evidence[-3],
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 3],
         subject="projected expected-utility battle evidence",
     )
     if expected_utility_evidence != {
@@ -1110,7 +1116,7 @@ def _validate_projected_counters(
         raise ProductFocusError("expected-utility battle evidence is invalid")
     _validate_expected_utility_battle_projection(expected_utility)
     player_evidence = _mapping_value(
-        evidence[-2],
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 4],
         subject="projected paired bounded-player evidence",
     )
     if player_evidence != {
@@ -1134,7 +1140,7 @@ def _validate_projected_counters(
         raise ProductFocusError("paired bounded-player evidence is invalid")
     _validate_paired_bounded_player_projection(player)
     causal_player_evidence = _mapping_value(
-        evidence[-1],
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 5],
         subject="projected causal player evidence",
     )
     if causal_player_evidence != {
@@ -1157,6 +1163,30 @@ def _validate_projected_counters(
     if not isinstance(causal_player, Mapping):
         raise ProductFocusError("causal player evidence is invalid")
     _validate_causal_player_projection(causal_player)
+    calibration_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 6],
+        subject="projected multi-goal calibration evidence",
+    )
+    if calibration_evidence != {
+        "kind": "causal_train_example",
+        "path": _MULTI_GOAL_CALIBRATION_PROGRESS_PATH,
+        "sha256": _MULTI_GOAL_CALIBRATION_PROGRESS_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    calibration_path = (root / _MULTI_GOAL_CALIBRATION_PROGRESS_PATH).resolve()
+    try:
+        calibration = json.loads(
+            calibration_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("multi-goal calibration evidence is invalid") from None
+    if not isinstance(calibration, Mapping):
+        raise ProductFocusError("multi-goal calibration evidence is invalid")
+    _validate_multi_goal_calibration_projection(calibration)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1313,6 +1343,87 @@ def _validate_causal_player_projection(receipt: Mapping[str, object]) -> None:
         or scope.get("private_binding_fields") != 0
     ):
         raise ProductFocusError("causal player protected boundary differs")
+
+
+def _validate_multi_goal_calibration_projection(receipt: Mapping[str, object]) -> None:
+    """Project only independently admitted fixed-arm outcomes into train counters."""
+
+    if {
+        "schema": receipt.get("schema"),
+        "status": receipt.get("status"),
+        "admission_reader_ci_run_id": receipt.get("admission_reader_ci_run_id"),
+        "admission_reader_source_commit": receipt.get(
+            "admission_reader_source_commit"
+        ),
+        "campaign_plan_sha256": receipt.get("campaign_plan_sha256"),
+        "admitted_outcomes": receipt.get("admitted_outcomes"),
+        "admitted_succeeded_outcomes": receipt.get(
+            "admitted_succeeded_outcomes"
+        ),
+        "admitted_failed_outcomes": receipt.get("admitted_failed_outcomes"),
+        "consumed_unusable_trials": receipt.get("consumed_unusable_trials"),
+        "untouched_trials": receipt.get("untouched_trials"),
+        "collection_regressions": receipt.get("collection_regressions"),
+        "teacher_queries": receipt.get("teacher_queries"),
+        "model_predictions": receipt.get("model_predictions"),
+        "private_path_fields": receipt.get("private_path_fields"),
+    } != {
+        "schema": "pokemon.red.multi-goal-calibration-progress.v1",
+        "status": "binding-failure-retention-repair-pending",
+        "admission_reader_ci_run_id": 33824286498,
+        "admission_reader_source_commit": (
+            "d25b0975a55507631a9cfe168b9f0f8e1d73ef59"
+        ),
+        "campaign_plan_sha256": (
+            "1fc47b008d5159ea42d81286f1989be4ca3e70d9d99a1427507c87d4a02b3267"
+        ),
+        "admitted_outcomes": 4,
+        "admitted_succeeded_outcomes": 2,
+        "admitted_failed_outcomes": 2,
+        "consumed_unusable_trials": 2,
+        "untouched_trials": 3,
+        "collection_regressions": 0,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+        "private_path_fields": 0,
+    }:
+        raise ProductFocusError("multi-goal calibration projection differs")
+    trials = _sequence(receipt, "trials", subject="multi-goal calibration evidence")
+    if len(trials) != 6:
+        raise ProductFocusError("multi-goal calibration trial denominator differs")
+    expected = (
+        (0, "advance_story", "invalid-no-retry", None, 0),
+        (1, "develop_team", None, "admitted", 2009),
+        (2, "develop_team", None, "admitted", 1179),
+        (3, "advance_story", None, "admitted", 6000),
+        (4, "evolve_species", None, "admitted", 6000),
+        (5, "advance_story", "invalid-no-retry", None, 0),
+    )
+    observed = tuple(
+        (
+            _mapping_value(item, subject="multi-goal calibration trial").get(
+                "trial_ordinal"
+            ),
+            _mapping_value(item, subject="multi-goal calibration trial").get(
+                "goal_kind"
+            ),
+            _mapping_value(item, subject="multi-goal calibration trial").get(
+                "disposition"
+            ),
+            _mapping_value(item, subject="multi-goal calibration trial").get(
+                "admission"
+            ),
+            _mapping_value(item, subject="multi-goal calibration trial").get(
+                "actions_executed",
+                _mapping_value(item, subject="multi-goal calibration trial").get(
+                    "controller_actions"
+                ),
+            ),
+        )
+        for item in trials
+    )
+    if observed != expected:
+        raise ProductFocusError("multi-goal calibration trial projection differs")
 
 
 def _validate_battle_cycle_projection(receipt: Mapping[str, object]) -> None:

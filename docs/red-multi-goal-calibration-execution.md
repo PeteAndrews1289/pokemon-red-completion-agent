@@ -1,5 +1,16 @@
 # Red multi-goal calibration execution
 
+## Current execution state
+
+Trials 1–4 are complete and admitted: two team-development successes plus one story and one
+evolution failure at the equal 6,000-action cap. Trial 5 durably recorded `binding_failed` with one
+decision, zero execution rows and zero controller actions, then remained partial because the
+generic runtime rethrew the private exception. It is permanently consumed. A calibration-local
+adapter now turns an executor exception into an independently metered typed failure before it
+reaches the unchanged generic runtime; the frozen skills and generic goal execution remain
+fail-fast. Only untouched trials 6–8 may proceed after
+this repair publishes and passes CI.
+
 ## Purpose
 
 Execute the nine prospectively frozen Red train interventions without letting a model, teacher,
@@ -85,8 +96,9 @@ bounds.
 
 An independent observer and counter must agree with the binding report. A successful skill must
 change semantic state and satisfy the living-collection transition contract. A verified bounded
-failure remains an outcome. A programming exception produces a failed private artifact rather than
-a training target.
+failure remains an outcome. An exception outside the calibration executor adapter produces a
+failed private artifact rather than a training target. The adapter rethrows typed action-budget
+exhaustion unchanged.
 
 ## Durable evidence
 

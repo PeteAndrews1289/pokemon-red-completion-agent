@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: failures have to survive too
+
+**Visual:** Show four cards entering a training set: two green `DEVELOP TEAM` cards and two red
+cards labeled `STORY · 6,000 ACTION CAP` and `EVOLVE · 6,000 ACTION CAP`. Keep a counter at
+**TEACHER 0 · SPECIMENS 15/15**.
+
+**Voiceover:** “Now the model has something real to learn: from the same kinds of authenticated
+states, one strategic objective worked and alternatives did not. These are outcomes, not copied
+teacher answers.”
+
+**Visual:** A fifth card records `binding_failed · controller actions 0`, then catches on the edge
+of the dataset. Stamp it **PRESERVED · NO RETRY**, and add an opt-in arrow labeled
+**CALIBRATION NEGATIVE** while the normal error path stays red.
+
+**Voiceover:** “The next failure exposed survivorship bias. The engine had recorded a valid typed
+failure but still raised the underlying exception, so the calibration file stayed partial. We kept
+the failed trial immutable and changed only the research wrapper, allowing future failures to teach
+the model while production callers still fail fast.”
+
 ## New scene: the first repaired arm succeeds
 
 **Visual:** Animate **AVAILABLE ORDINAL 1 → FULL QUESTION INDEX 3 → DEVELOP TEAM**. Run counters to

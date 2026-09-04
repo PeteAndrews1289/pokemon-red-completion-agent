@@ -11,9 +11,11 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
     GoalDecisionOutcome,
+    GoalFailureReason,
     GoalKind,
     GoalManagerQuestion,
     bind_goal_selection,
@@ -27,7 +29,13 @@ from pokemon_red_completion.goal_manager_composition_runtime import (
     LivingCollectionCheckpoint,
     require_living_collection_transition,
 )
-from pokemon_red_completion.goal_manager_runtime import execute_goal_manager_decision
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
+    GoalExecutionReport,
+    GoalVerification,
+    execute_goal_manager_decision,
+)
 from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectoryObserver
 
 FORCED_CALIBRATION_POLICY_ID = "pokemon.core.goal-manager.forced-calibration-arm.v1"
@@ -35,6 +43,62 @@ FORCED_CALIBRATION_POLICY_ID = "pokemon.core.goal-manager.forced-calibration-arm
 
 class MultiGoalCalibrationOutcomeError(RuntimeError):
     """Raised when a frozen calibration arm crosses its declared boundary."""
+
+
+def _retain_executor_failure(
+    binding: ExecutableGoalBinding,
+    budget_meter: CompositionBudgetMeter,
+) -> ExecutableGoalBinding:
+    """Convert one executor exception into an exactly metered typed failure.
+
+    This adapter is deliberately calibration-local. The frozen deterministic skill
+    sources and the generic runtime retain their original fail-fast behavior.
+    """
+
+    failed = False
+
+    def execute() -> GoalExecutionReport:
+        nonlocal failed
+        before = budget_meter.checkpoint()
+        try:
+            return binding.execute()
+        except GoalExecutionBudgetExhausted:
+            raise
+        except Exception:
+            after = budget_meter.checkpoint()
+            failed = True
+            return GoalExecutionReport(
+                actions_executed=after.controller_actions - before.controller_actions,
+                frames_executed=after.emulator_frames - before.emulator_frames,
+                evidence={},
+            )
+
+    def verify(report: GoalExecutionReport) -> GoalVerification:
+        if failed:
+            return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
+        return binding.verify(report)
+
+    return ExecutableGoalBinding(
+        binding_ref=binding.binding_ref,
+        kind=binding.kind,
+        estimated_effort=binding.estimated_effort,
+        estimated_risk=binding.estimated_risk,
+        execute=execute,
+        verify=verify,
+    )
+
+
+def _retaining_binding_set(
+    binding_set: GoalBindingSet,
+    budget_meter: CompositionBudgetMeter,
+) -> GoalBindingSet:
+    return GoalBindingSet(
+        opportunities=binding_set.opportunities,
+        bindings=tuple(
+            _retain_executor_failure(binding, budget_meter)
+            for binding in binding_set.bindings
+        ),
+    )
 
 
 @dataclass(slots=True)
@@ -203,7 +267,7 @@ def run_forced_calibration_outcome(
         )
     execution = execute_goal_manager_decision(
         situation=before.situation,
-        binding_set=before.binding_set,
+        binding_set=_retaining_binding_set(before.binding_set, budget_meter),
         authority=policy,
         trajectory=trajectory,
         require_durable_decision=True,

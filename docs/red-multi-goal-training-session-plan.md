@@ -1,5 +1,14 @@
 # Red multi-goal training session plan
 
+## Live progress update
+
+The admission repair merged as main `d25b0975` under CI `33824286498`. Trials 1–4 now contribute
+four admitted targets: two team-development successes and two equal-cap negative alternatives.
+Trial 5 is a permanently consumed zero-controller partial after a durably recorded binding failure.
+Publish the calibration-only binding-failure retention option, then execute/admit only untouched
+trials 6–8. The fixed denominator may shrink through permanent failures; it may not be repaired by
+replay or outcome-selected replacement.
+
 ## Mission
 
 The product is a transferable player that can finish Pokémon games and build a living Pokédex.

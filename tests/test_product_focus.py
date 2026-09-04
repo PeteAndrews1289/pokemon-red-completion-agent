@@ -331,6 +331,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
+        {"kind": "causal_train_example", "minimum": 108, "partition": "train"},
         {"kind": "composition_attempt", "minimum": 3, "partition": "development"},
         {
             "kind": "verified_composition_episode",
@@ -346,6 +347,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == pytest.approx(1.0)
     assert focus_scorecard(state) == (
+        ("Causal Train Example · train", 108, 108),
         ("Composition Attempt · development", 3, 3),
         ("Verified Composition Episode · development", 3, 3),
         ("Development Episode · development", 19, 19),
@@ -357,7 +359,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert state.progress["development_episode_attempts"] == 19
     assert state.progress["verified_outcome_examples"] == 61
     assert state.progress["verified_composition_episodes"] == 3
-    assert state.progress["causal_train_examples"] == 104
+    assert state.progress["causal_train_examples"] == 108
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -1548,6 +1550,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
+        "Causal Train Example · train: 108/108",
         "Composition Attempt · development: 3/3",
         "Verified Composition Episode · development: 3/3",
         "Development Episode · development: 19/19",
@@ -1639,7 +1642,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 104, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 108, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
@@ -2054,8 +2057,8 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["model"]["decisions"] == 3  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "fixed heuristic 20/20" in encoded
-    assert "First causal Red player advantage" in encoded
-    assert "Integration gate closed" in encoded
+    assert "Red multi-goal calibration" in encoded
+    assert "four admitted outcomes" in encoded
     assert "Composition Attempt 3/3" in encoded
     assert "Verified Composition Episode 3/3" in encoded
     assert "Development Episode 19/19" in encoded
@@ -2065,13 +2068,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "fixed heuristic 20/20" in encoded
     assert "no more one-turn data campaigns" in encoded
     assert "semantic goal manager" in encoded
-    assert "Player result" in encoded
-    assert "model develop_team succeeded" in encoded
-    assert "control evolve_species hit 6,000-action bound" in encoded
-    assert "learned advantage" in encoded
-    assert "Four live Red preflights passed" in encoded
-    assert "planner agreement 4/4" in encoded
-    assert "menu widths 2/3/4/3" in encoded
+    assert "Observed comparisons" in encoded
+    assert "develop_team succeeded on both roots" in encoded
+    assert "advance_story and evolve_species each reached the same 6,000-action cap" in encoded
+    assert "4 admitted outcomes" in encoded
+    assert "2 consumed unusable trials" in encoded
+    assert "trials 6-8 untouched" in encoded
     assert "deterministic code keeps mechanics and safety" in encoded
     assert "completion-ledger delta" in encoded
     assert "authenticated snapshots" in encoded

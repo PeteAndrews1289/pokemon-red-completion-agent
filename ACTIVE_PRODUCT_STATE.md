@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and green the standalone-decision admission repair, reopen and admit immutable trial 1 without gameplay, then continue untouched trials 2-8 and fit completed admitted train outcomes. Trials 0 and 1 may not replay. Same-bank development is diagnostic only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
+- Next decision: Publish and green calibration-only binding-failure retention, then execute and admit untouched trials 6-8 and fit the completed fixed-denominator train outcomes. Trials 0-5 may not replay. Same-bank evidence is calibration only; require prospective 8-train and 4-development lineage evidence before promotion or Crystal transfer.
 
 ### Mandatory mission check
 
@@ -50,6 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Causal Train Example · train | 108 | 108 |
 | Composition Attempt · development | 3 | 3 |
 | Verified Composition Episode · development | 3 | 3 |
 | Development Episode · development | 19 | 19 |
@@ -61,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-03-multi-goal-trial-01-admission-repair-v1** · status **active** · evidence [qualification](docs/evidence/red-multi-goal-calibration-trial-01-execution-2026-09-03.json)
+**2026-09-03-multi-goal-binding-failure-retention-v1** · status **active** · evidence [qualification](docs/evidence/red-multi-goal-calibration-progress-2026-09-03.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The first repaired Red intervention completed a real team-development objective with verified state change and collection preservation. Making independent admission match the established standalone-decision timeline converts that immutable gameplay into trustworthy semantic goal-selection evidence without replay or title-specific model features. |
-| Learning output | Trial 1 produced one complete candidate outcome but it is not yet an admitted training target and changes no learning counter. The develop_team arm succeeded in 2009 actions and 162918 frames, changed semantic state, preserved 15 of 15 specimens, and used zero teacher queries. |
-| Authority delta | No new authority is granted. Pair 003 remains the first teacher-free strategic win, but the 81-context census proves only byte-distinct calibration breadth; it does not turn the old nominal development partition into an independent evaluation set. |
+| Product alignment | The paired roots now measure which semantic objective actually works from the same state instead of copying a teacher ranking. Retaining typed binding failures closes survivorship bias in those outcome labels and directly improves the evidence used to train title-neutral goal choice. |
+| Learning output | Four new causal train outcomes are admitted from two authenticated Red roots. Team development succeeded in 2009 and 1179 actions; story advancement and evolution each failed at the equal 6000-action cap. All four used zero teacher queries and preserved every specimen. The cumulative causal-train-example counter advances from 104 to 108. |
+| Authority delta | No new production authority is granted. The calibration now contains two teacher-free team-development successes and two equal-budget negative alternatives from two roots. This is real outcome training evidence, but it is too small and same-bank to justify promotion. |
 | Transfer result | None. Crystal remains unexecuted. The frozen campaign is same-bank Red calibration; the future transfer gate still requires prospectively disjoint Red lineages and a title-neutral feature/action projection. |
-| Blocker | Main 06d602bb and CI 33821766312 qualified the index repair. Trial 1 completed develop_team with semantic change in 2009 actions and 162918 frames while preserving all 15 specimens, but admission rejected a false requirement that specialist rows link to the standalone goal decision. The repaired reader must also authenticate the episode's historical source and runner rather than rebind it to the newer reader. The episode is not training data until both repairs publish and pass CI. |
-| Decision | Publish and green the narrow admission repair, require every specialist controller row in this standalone-goal episode to have a null decision_id, reject forged non-null links, and admit a historical episode only when its source is in the published reader ancestry and its runner digest matches the exact historical Git blob. Reopen and admit the immutable trial-1 episode without gameplay, then continue untouched trials 2-8 and fit completed admitted outcomes only. |
-| Next session | Publish and green the standalone-decision admission repair; admit immutable trial 1 reader-only; then preflight and execute trial 2 if admission succeeds. |
-| Next falsifier | Require green exact-head CI for the null-link and historical-lineage admission repair, then reopen the existing trial-1 episode and prove its one decision, 2009 unlinked execution rows, 162918-frame sum, historical runner/source binding, terminal, collection ledger, and one-hot arm all admit without controller input. |
+| Blocker | Trials 1-4 are independently admitted: develop_team succeeded twice, while advance_story and evolve_species each exhausted the 6000-action cap; all preserved the collection. Trial 5 recorded binding_failed before any controller action, but the generic runtime rethrew after durably recording that typed failure, leaving a partial artifact. Trial 5 is permanently consumed. Future binding failures need explicit calibration-only retention so negative examples are not systematically lost. |
+| Decision | Publish and green the narrow calibration-only binding-failure retention option while preserving fail-fast behavior for every other caller. Then preflight, execute and admit untouched trials 6-8 without replacement, record the fixed denominator, and fit only the completed admitted train outcomes. |
+| Next session | Publish and green binding-failure retention; execute and admit untouched trials 6-8; then build the fixed-denominator train-only fit input. |
+| Next falsifier | Require green exact-head CI for calibration-only binding-failure retention, then run untouched storage trial 6 once. It must either complete with an admissible typed outcome or prove another predeclared stop condition without losing the failure or issuing undeclared input. |
 | Stop condition | Never retry pairs 001-003 or any claimed physical root. Calibration may use only prospectively frozen open train roots and may not be described as held out. Stop on teacher-choice targets, disagreement or outcome-selected contexts, identity-bearing model features, collection regression, unbounded execution, or any Crystal/transfer claim from same-bank evidence. |
 
 ### Stop conditions
@@ -216,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **23**.
+Current evidence entries: **24**.

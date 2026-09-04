@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import json
 from collections.abc import Callable
 from dataclasses import dataclass
 
 import pytest
 
+from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
+    GoalDecisionOutcome,
     GoalKind,
     GoalOpportunity,
     GoalSituation,
@@ -116,6 +119,9 @@ def _trajectory(
 def _observe_factory(
     *,
     report_actions: int = 2,
+    binding_failure: bool = False,
+    binding_failure_actions: int = 0,
+    budget_failure: bool = False,
 ) -> tuple[Callable[[], GoalManagerCompositionObservation], _Meter]:
     state = {"stage": 0, "actions": 0, "frames": 0}
     available = {GoalKind.ADVANCE_STORY, GoalKind.MANAGE_STORAGE}
@@ -143,6 +149,14 @@ def _observe_factory(
 
         def binding(kind: GoalKind) -> ExecutableGoalBinding:
             def execute() -> GoalExecutionReport:
+                if budget_failure:
+                    raise GoalExecutionBudgetExhausted("private budget detail")
+                if binding_failure:
+                    if binding_failure_actions:
+                        state["stage"] += 1
+                        state["actions"] += binding_failure_actions
+                        state["frames"] += binding_failure_actions * 10
+                    raise RuntimeError("private binding failure")
                 state["stage"] += 1
                 state["actions"] += 2
                 state["frames"] += 20
@@ -342,6 +356,72 @@ def test_forced_arm_rejects_self_reported_cost_drift() -> None:
             trajectory=trajectory,
             budget_meter=meter,
         )
+
+
+def test_forced_arm_retains_a_binding_failure_as_a_negative_outcome() -> None:
+    ordering = "8" * 64
+    observe, meter = _observe_factory(binding_failure=True)
+    policy = _policy(observe(), ordering_assignment_id=ordering)
+    trajectory, sink = _trajectory(ordering_assignment_id=ordering)
+
+    result = run_forced_calibration_outcome(
+        observe=observe,
+        policy=policy,
+        trajectory=trajectory,
+        budget_meter=meter,
+    )
+
+    assert result.status is GoalDecisionOutcome.FAILED
+    assert result.actions_executed == 0
+    assert result.frames_executed == 0
+    assert result.semantic_state_changed is False
+    assert len(sink.decisions) == len(sink.events) == 1
+    assert sink.events[0].payload["failure_reason"] == "binding_failed"
+    assert "private binding failure" not in json.dumps(result.public_dict())
+
+
+def test_binding_failure_uses_independent_cost_and_state_accounting() -> None:
+    ordering = "8" * 64
+    observe, meter = _observe_factory(
+        binding_failure=True,
+        binding_failure_actions=3,
+    )
+    policy = _policy(observe(), ordering_assignment_id=ordering)
+    trajectory, sink = _trajectory(ordering_assignment_id=ordering)
+
+    result = run_forced_calibration_outcome(
+        observe=observe,
+        policy=policy,
+        trajectory=trajectory,
+        budget_meter=meter,
+    )
+
+    assert result.status is GoalDecisionOutcome.FAILED
+    assert result.actions_executed == 3
+    assert result.frames_executed == 30
+    assert result.semantic_state_changed is True
+    assert sink.events[0].payload["failure_reason"] == "binding_failed"
+
+
+def test_binding_adapter_preserves_the_typed_budget_failure() -> None:
+    ordering = "8" * 64
+    observe, meter = _observe_factory(budget_failure=True)
+    policy = _policy(observe(), ordering_assignment_id=ordering)
+    trajectory, sink = _trajectory(ordering_assignment_id=ordering)
+
+    result = run_forced_calibration_outcome(
+        observe=observe,
+        policy=policy,
+        trajectory=trajectory,
+        budget_meter=meter,
+    )
+
+    assert result.status is GoalDecisionOutcome.FAILED
+    assert result.actions_executed == 0
+    assert result.frames_executed == 0
+    assert result.semantic_state_changed is False
+    assert len(sink.decisions) == len(sink.events) == 1
+    assert sink.events[0].payload["failure_reason"] == "execution_budget_exhausted"
 
 
 def test_forced_policy_cannot_be_reused() -> None:
