@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from pokemon_red_completion.living_dex_goal_model_record import (
     LIVING_DEX_CAUSAL_INTEGRATION_MODEL_RECORD_SCHEMA,
     LivingDexGoalModelRecordError,
     load_living_dex_goal_model_record,
+    load_living_dex_goal_model_record_bytes,
 )
 from pokemon_red_completion.living_dex_option_value import (
     LIVING_DEX_OPTION_FEATURE_NAMES,
@@ -79,6 +81,19 @@ def test_strict_loader_rejoins_nested_model_and_path_free_provenance(
     assert public["model_sha256"] == model.model_sha256
     assert public["settled_examples"] == 8
     assert str(tmp_path) not in json.dumps(public, sort_keys=True)
+
+
+def test_strict_bytes_loader_rejoins_the_same_immutable_record() -> None:
+    model = _model()
+    payload = json.dumps(_record(model), sort_keys=True).encode("ascii")
+
+    loaded = load_living_dex_goal_model_record_bytes(
+        payload,
+        expected_model_sha256=model.model_sha256,
+    )
+
+    assert loaded.model.to_dict() == model.to_dict()
+    assert loaded.file_sha256 == hashlib.sha256(payload).hexdigest()
 
 
 @pytest.mark.parametrize(

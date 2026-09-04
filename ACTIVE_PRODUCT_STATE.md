@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Bind the exact eighteen-example causal model to bounded-player shadow scoring, then freeze and qualify the concrete prospective Red short-scenario supply under the existing 10+5 setup and 8+4 settled-minimum contract. Fit only new train outcomes and compare once on untouched development. Pairs 004 through 006 remain terminal.
+- Next decision: Publish and reproduce the action-free audit of the held Red development roots. If exactly two remain clean as locally observed, preserve them and freeze three new independent development roots with manage_storage coverage, then compare the existing eighteen-example model once without refitting. Pairs 004 through 006 remain terminal.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Strictly load the exact eighteen-example model into bounded-player shadow scoring, then freeze a concrete outcome-blind Red short-scenario supply under the existing purpose-built capture contract. Stop before gameplay if the model record cannot authenticate or the supply cannot guarantee at least eight train and four lineage-disjoint untouched development roots across the required semantic families. |
+| Cheapest falsifier | Authenticate the exact eighteen-example model, both historical frozen development schedules, the complete train corpus and the account claim ledger without a ROM or outcome read. Preserve any clean lineage-disjoint roots and freeze only the measured development shortfall plus one setup-censor allowance; do not rebuild train supply that the completed model no longer needs. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-prospective-short-scenario-supply-engineering-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
+**2026-09-04-development-supply-salvage-v1** · status **active** · evidence [model fit](docs/evidence/red-living-dex-causal-model-update-result-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project has now used every authentic causal Red lesson already collected. The next work buys genuinely new independent experience for the same title-neutral semantic model, preserving the path from Red curriculum to Crystal transfer and eventually multi-game living-Pokedex completion. |
+| Product alignment | The project now reuses every valid asset instead of restarting its curriculum. Two clean unseen Red roots are preserved, and only the measured gap needed to test the title-neutral model will be generated before any Crystal work or broader authority decision. |
 | Learning output | One immutable corpus-addressed model was fitted from all eighteen authenticated Red train outcomes, ten more than its predecessor and spanning all seven supported portable option kinds. It changed three of eighteen train-menu choices and reduced weighted training MSE from 0.000337943754007985 to 0.0000006106826230221792 with zero development reads or game effects. This is a real model fit, not a generalization result. |
 | Authority delta | No authority changed. The newly fitted eighteen-example causal living-Pokedex model remains non-authoritative and shadow-only until fresh lineage-disjoint Red development situations show useful behavior. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The complete eighteen-example Red train corpus is now fitted, but it contains no fresh development partition. Its lower training error and three changed train-menu choices cannot establish generalization or justify controller authority; the missing asset is concrete independent short-scenario supply, not another model refit. |
-| Decision | Bind the exact updated model record to bounded-player shadow scoring, then reuse the published purpose-built capture, routed-goal and durable setup contracts to freeze the smallest concrete Red short-scenario supply with ten train and five development slots, yielding at least eight train and four untouched development roots after allowed setup attrition. Fit train only and compare once on development. |
-| Next session | Publish the model-update result, bind its exact record to shadow scoring, and implement the concrete prospective Red short-scenario supply plan without rebuilding existing generic contracts or opening gameplay. |
-| Next falsifier | The existing strict loader must accept only the exact updated record and action-free bounded-player shadow scoring must produce finite rankings without controller effects. A concrete outcome-blind short-scenario plan must then satisfy the published 10+5 setup denominator, 8+4 settled minimum, family breadth and train/development lineage disjointness before any gameplay opens. |
+| Blocker | A local action-free audit found that the original and successor schedules reserved the same four development roots. Two remain clean and lineage-disjoint from all eighteen train rows; two are consumed. The clean pair spans six option kinds but lacks manage_storage, leaving a two-root evaluation shortfall rather than a new train-data shortfall. |
+| Decision | Publish and exact-CI qualify the aggregate-only development-supply auditor, reproduce the two-clean-root result from protected main, then preserve those roots and freeze exactly three new independent development roots: two required plus one setup-censor allowance, with manage_storage coverage. Build a development-only model-led outcome gate; do not refit before the untouched comparison. |
+| Next session | Publish and run the exact action-free development-supply audit, then implement the smallest outcome-blind three-root supplement and development-only model-led evaluation boundary without consuming the two clean historical roots. |
+| Next falsifier | From clean published main, the auditor must reproduce eighteen authenticated train rows, the exact updated model, four unique held roots across two schedules, zero train overlap, exactly two available roots, a two-root shortfall and manage_storage as the sole missing option kind, with zero ROM, outcome, prediction, fit or controller effect. |
 | Stop condition | Stop on model-record authentication failure, controller input during shadow binding, outcome-informed root selection, train/development lineage overlap, family-coverage failure, private-path leakage, or any attempt to replace a failed setup adaptively. Never replay pairs 004, 005 or 006. |
 
 ### Stop conditions

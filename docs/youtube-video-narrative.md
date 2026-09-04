@@ -5775,3 +5775,17 @@ sealed streams and checks the selected arm, verified outcome, living-Pokédex le
 and frame count before emitting +1 or -1. Keep **TRIALS EXECUTED 0/9** visible during the
 engineering scene. The honest payoff is not another green test—it is that the upcoming training
 rows cannot be selected after seeing outcomes or accepted from a self-reported summary.
+
+## Scene: reuse the exam room instead of rebuilding the school
+
+- Start with **18 AUTHENTIC TRAIN OUTCOMES → 1 SHADOW MODEL**, then show the proposed **10+5 NEW
+  CAPTURE CAMPAIGN**.
+- Interrupt it with a read-only ledger audit: **2 HISTORICAL SCHEDULES → SAME 4 DEVELOPMENT ROOTS**.
+- Mark two roots **CONSUMED** and two **CLEAN + TRAIN-DISJOINT**. Keep **ROM 0 · OUTCOMES 0 ·
+  PREDICTIONS 0 · ACTIONS 0** on screen.
+- Light up the six concepts still represented and leave **MANAGE STORAGE** dark.
+- Replace the 15-slot rebuild with **3 NEW ROOTS: 2 REQUIRED + 1 SETUP SPARE**.
+- Narration: “Good provenance should save work as often as it rejects work. The ledger told us
+  exactly what remained usable.”
+- End on the next honest test: four or more untouched Red decisions, model choices committed before
+  outcomes, no refit on the exam set, and Crystal still locked.

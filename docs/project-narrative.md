@@ -8869,3 +8869,22 @@ because the training pipeline should not believe a success merely because the co
 the emulator printed “success.” Twenty-two focused checks now attack substitution, retry,
 provenance, assignment-probability, collection-ledger, and counter drift. The source still must be
 published and pass exact-head CI before trial zero can touch the controller.
+
+## September 4: the cheapest new dataset was partly already there
+
+After fitting every one of the eighteen authentic causal train outcomes, the apparent next step
+was another 10+5 capture campaign. Before spending that time, an action-free audit asked a narrower
+question: what happened to the development roots deliberately held back by the two earlier
+clustered schedules?
+
+Both schedules turned out to name the same four roots. Two had been consumed elsewhere, but two
+were still clean and did not share a lineage or state with any fitted train example. Together they
+cover acquisition, development, evolution, exploration, resupply and access unlocking; storage is
+the only missing concept. That turns a proposed fifteen-slot rebuild into a three-root supplement:
+two roots to reach the four-example development floor and one spare for a setup censor.
+
+The systems lesson is economical as much as experimental. Provenance is useful not only for
+rejecting bad evidence; it can also prove which old assets are still safe to reuse. The audit opens
+no cartridge or outcome and makes no prediction. Its next job is to survive publication and exact
+main CI, then preserve those two clean roots while the missing storage-aware supply and model-led
+development runner are built around them.
