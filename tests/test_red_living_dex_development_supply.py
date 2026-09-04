@@ -30,6 +30,7 @@ from pokemon_red_completion.red_living_dex_development_supply import (
     RedLivingDexDevelopmentSupplyError,
     audit_red_living_dex_development_supply,
     build_red_living_dex_development_supplement_capabilities,
+    inventory_red_living_dex_development_supply,
 )
 
 
@@ -196,6 +197,48 @@ def test_audit_reports_ready_when_four_independent_roots_remain(
     assert result.supply_ready is True
     assert result.minimum_new_roots_to_freeze == 0
     assert result.public_dict()["status"] == "development_supply_ready"
+
+
+def test_private_inventory_reproduces_public_counts_without_serializing_ids(
+    tmp_path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = _store(tmp_path)
+    registry = _registry(tmp_path)
+    bindings, document = _bindings_for_same_plan(store)
+    dataset_sha256 = _sha("train-dataset")
+    model, model_record = _publish_model(store, dataset_sha256)
+    rows = _train_rows()
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_living_dex_development_supply."
+        "load_living_dex_authenticated_causal_examples",
+        lambda _store: rows,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_living_dex_development_supply."
+        "living_dex_option_train_dataset_sha256",
+        lambda _rows: dataset_sha256,
+    )
+    development = [
+        row for row in document["assignments"] if row["partition"] == "development"
+    ]
+    _consume_root(registry, development[0], 0)
+    _consume_root(registry, development[1], 1)
+
+    inventory = inventory_red_living_dex_development_supply(
+        store,
+        claim_registry=registry,
+        expected_model_sha256=model.model_sha256,
+        expected_model_record_sha256=model_record.summary.record_sha256,
+        bindings=bindings,
+    )
+
+    assert len(inventory.train_lineages) == 18
+    assert len(inventory.train_states) == 18
+    assert len(inventory.historical_roots) == 4
+    assert len(inventory.available_roots) == 2
+    assert inventory.result.minimum_new_roots_to_freeze == 3
+    assert not hasattr(inventory, "public_dict")
 
 
 def test_audit_fails_closed_on_model_record_or_duplicate_semantic_drift(

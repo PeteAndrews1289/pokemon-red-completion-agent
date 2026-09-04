@@ -268,6 +268,60 @@ class RedLivingDexDevelopmentSupplyResult:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedLivingDexDevelopmentSupplyInventory:
+    """Private exclusion inventory retained only by an action-free freezer."""
+
+    result: RedLivingDexDevelopmentSupplyResult
+    train_lineages: frozenset[str]
+    train_states: frozenset[tuple[str, str]]
+    historical_roots: tuple[RedLivingDexDevelopmentRoot, ...]
+    available_roots: tuple[RedLivingDexDevelopmentRoot, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.result, RedLivingDexDevelopmentSupplyResult):
+            raise TypeError("development supply inventory needs its public result")
+        self.result.__post_init__()
+        if (
+            not isinstance(self.train_lineages, frozenset)
+            or not self.train_lineages
+            or any(_SHA256.fullmatch(item) is None for item in self.train_lineages)
+            or not isinstance(self.train_states, frozenset)
+            or not self.train_states
+            or any(
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or any(_SHA256.fullmatch(value) is None for value in item)
+                for item in self.train_states
+            )
+            or not isinstance(self.historical_roots, tuple)
+            or not isinstance(self.available_roots, tuple)
+            or any(
+                not isinstance(item, RedLivingDexDevelopmentRoot)
+                for item in (*self.historical_roots, *self.available_roots)
+            )
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "development supply private inventory differs"
+            )
+        for root in (*self.historical_roots, *self.available_roots):
+            root.__post_init__()
+        historical = {item.deduplication_key for item in self.historical_roots}
+        available = {item.deduplication_key for item in self.available_roots}
+        if (
+            len(historical) != len(self.historical_roots)
+            or len(available) != len(self.available_roots)
+            or not available.issubset(historical)
+            or len(self.historical_roots) != self.result.unique_development_roots
+            or len(self.available_roots) != self.result.available_development_roots
+            or len(self.train_lineages) > self.result.authenticated_train_examples
+            or len(self.train_states) > self.result.authenticated_train_examples
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "development supply private inventory does not match its result"
+            )
+
+
 def audit_red_living_dex_development_supply(
     store: PrivateArtifactRoot,
     *,
@@ -387,6 +441,102 @@ def audit_red_living_dex_development_supply(
     except BaseException:
         raise RedLivingDexDevelopmentSupplyError(
             "development supply authentication failed"
+        ) from None
+
+
+def inventory_red_living_dex_development_supply(
+    store: PrivateArtifactRoot,
+    *,
+    claim_registry: Path,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+    bindings: Sequence[RedLivingDexClusteredTrainPlanBinding] = (
+        FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN,
+        FROZEN_RED_LIVING_DEX_CLUSTERED_SUCCESSOR_TRAIN_PLAN,
+    ),
+) -> RedLivingDexDevelopmentSupplyInventory:
+    """Reopen the authenticated supply only to derive private exclusions.
+
+    The public audit remains the authority for counts and model identity.  This
+    second pass exposes no public serializer and verifies that its private root
+    sets reproduce every relevant public count before a freezer may use them.
+    """
+
+    result = audit_red_living_dex_development_supply(
+        store,
+        claim_registry=claim_registry,
+        expected_model_sha256=expected_model_sha256,
+        expected_model_record_sha256=expected_model_record_sha256,
+        bindings=bindings,
+    )
+    try:
+        authenticated = load_living_dex_authenticated_causal_examples(store)
+        train_lineages = frozenset(
+            item.identity.lineage_sha256 for item in authenticated
+        )
+        train_states = frozenset(
+            (item.identity.state_sha256, item.identity.envelope_sha256)
+            for item in authenticated
+        )
+        plan_roots: list[RedLivingDexDevelopmentRoot] = []
+        for binding in bindings:
+            plan_roots.extend(_load_plan_development_roots(store, binding))
+        historical = _deduplicate_roots(plan_roots)
+        root_pairs = tuple(
+            (root.logical_root_sha256, root.physical_root_sha256)
+            for root in historical
+        )
+        with claim_first_availability_snapshot_lease(claim_registry) as lease:
+            availability = lease.observe(root_pairs)
+        available_pairs = {
+            (item.logical_root_sha256, item.physical_root_sha256)
+            for item in availability.observations
+            if item.available
+        }
+        available = tuple(
+            root
+            for root in historical
+            if (root.logical_root_sha256, root.physical_root_sha256)
+            in available_pairs
+        )
+        inventory = RedLivingDexDevelopmentSupplyInventory(
+            result=result,
+            train_lineages=train_lineages,
+            train_states=train_states,
+            historical_roots=historical,
+            available_roots=available,
+        )
+        if (
+            len(train_lineages & {item.lineage_sha256 for item in historical})
+            != result.lineage_overlap_with_train
+            or len(
+                train_states
+                & {
+                    (item.state_sha256, item.envelope_sha256)
+                    for item in historical
+                }
+            )
+            != result.state_overlap_with_train
+            or tuple(
+                sorted(
+                    {
+                        kind
+                        for root in available
+                        for kind in root.option_kinds
+                    }
+                )
+            )
+            != result.available_option_kinds
+        ):
+            raise RedLivingDexDevelopmentSupplyError(
+                "development supply private inventory reproduction differs"
+            )
+        return inventory
+    except RedLivingDexDevelopmentSupplyError:
+        raise
+    except BaseException:
+        raise RedLivingDexDevelopmentSupplyError(
+            "development supply private inventory authentication failed"
         ) from None
 
 
@@ -546,8 +696,10 @@ __all__ = [
     "MINIMUM_DEVELOPMENT_ROOTS",
     "RED_LIVING_DEX_DEVELOPMENT_SUPPLY_RESULT_SCHEMA",
     "RedLivingDexDevelopmentRoot",
+    "RedLivingDexDevelopmentSupplyInventory",
     "RedLivingDexDevelopmentSupplyError",
     "RedLivingDexDevelopmentSupplyResult",
     "audit_red_living_dex_development_supply",
     "build_red_living_dex_development_supplement_capabilities",
+    "inventory_red_living_dex_development_supply",
 ]
