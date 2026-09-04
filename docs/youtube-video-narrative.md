@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the wrong students were sent through the exam doorway
+
+**Visual:** Show blue **TRAIN** cards and gold **DEVELOPMENT** cards entering a shared sorter. The
+sorter correctly sends only gold cards toward **RED CONTEXT + RECIPE**, but a second Red-specific
+lookup sweeps both colors back together and jams on the first blue card. Keep every game-effect
+counter at zero.
+
+**Voiceover:** “The 429 plans were real. A one-line boundary mismatch stopped us before testing any
+of them: the portable planner separated training from evaluation, while Red's adapter accidentally
+recombined them.”
+
+**Visual:** Add a gold-only filter at the Red boundary, then show a mixed-input regression passing.
+Leave the final **PUBLISHED CENSUS** light off.
+
+**Voiceover:** “We fixed the adapter, not the portable model. The next published census must prove
+the doorway works before any new plan, prediction, or gameplay is allowed.”
+
 ## New scene: 429 legal envelopes point to one broken doorway
 
 **Visual:** The aggregate counter fills: **13 ROOTS · 25 SCENARIOS · 4 FAMILIES · 4 LOCATIONS ·

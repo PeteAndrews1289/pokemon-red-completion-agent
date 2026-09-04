@@ -1,0 +1,59 @@
+{
+  "claim_boundary": {
+    "supported": "One protected exact-main binding census authenticated the Red inputs and failed closed inside binding-capacity diagnosis with zero model, claim, outcome, teacher, controller, or emulator effects. Code review plus a production-shaped regression test isolated a partition mismatch: the shared development projection correctly ignored non-development capabilities, while the Red binder attempted to project every otherwise eligible capability as development. The narrow repair filters the Red binding map by the same development partition contract.",
+    "unsupported": [
+      "binding_repair_published",
+      "binding_capacity_remeasured",
+      "new_development_roots_frozen",
+      "development_outcomes_collected",
+      "model_generalization_demonstrated",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_execution",
+      "cross_title_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "diagnosis": {
+    "production_shape_regression_added": true,
+    "repair_scope": "red_development_binding_partition_filter",
+    "shared_capacity_remains": 429,
+    "shared_projection_behavior": "non_development_capabilities_ignored",
+    "title_binding_behavior_before_repair": "non_development_capabilities_projected_as_development"
+  },
+  "next_gate": {
+    "action": "Publish the narrow partition filter under green CI, then rerun the aggregate-only binding census from repaired exact main before freezing any successor plan.",
+    "prohibition": "Do not retry the terminal original freeze, select or publish a supplement from diagnostic code, or release model or controller authority before the repaired census succeeds."
+  },
+  "result": {
+    "private_plan_created": false,
+    "stage": "binding_capacity_diagnosis",
+    "status": "failed_closed"
+  },
+  "schema": "pokemon.red.living-dex-development-supplement-binding-diagnostic-failure-evidence.v1",
+  "source": {
+    "exact_main_ci_attempt": 1,
+    "exact_main_ci_conclusion": "success",
+    "exact_main_ci_run": 33896140351,
+    "source_bundle_sha256": "abecb247acf8b8023c78182ebebde7681e34e1d7b41d6df8d9b16403dab16dda",
+    "source_commit": "c1fb1bca00ab113d67b362609102ff5464616049"
+  },
+  "status": "terminal_zero_effect_binding_diagnostic_failure_repair_identified",
+  "zero_effects": {
+    "behavior_commitments": 0,
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_observed": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "provider_executions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0,
+    "training_targets": 0,
+    "unselected_action_targets": 0
+  }
+}

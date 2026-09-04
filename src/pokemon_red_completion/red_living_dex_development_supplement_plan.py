@@ -14,6 +14,9 @@ from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from itertools import combinations, product
 
+from pokemon_red_completion.living_dex_capture_curriculum import (
+    LivingDexCapturePartition,
+)
 from pokemon_red_completion.living_dex_causal_curriculum import (
     RED_DIRECT_CAUSAL_OPTION_KINDS,
 )
@@ -452,6 +455,11 @@ def _bind_red_living_dex_development_supplement_plan(
         if not isinstance(capability, RedLivingDexCausalRootCapability):
             raise TypeError("supplement Red binding capability differs")
         capability.__post_init__()
+        if (
+            capability.root.cluster_partition != "development"
+            or capability.slot.partition is not LivingDexCapturePartition.DEVELOPMENT
+        ):
+            continue
         projected = build_red_living_dex_development_supplement_capabilities((capability,))[0]
         if projected.scenario_sha256 in red_by_scenario:
             raise RedLivingDexDevelopmentSupplementPlanError(

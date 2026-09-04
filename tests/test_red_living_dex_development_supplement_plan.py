@@ -234,6 +234,38 @@ def test_binding_capacity_uses_the_same_red_binding_boundary() -> None:
     assert all(value not in encoded for value in contexts.values())
 
 
+def test_red_binding_ignores_authenticated_non_development_capabilities() -> None:
+    historical, _binding = _successor_clustered_fixture()
+    all_capabilities = tuple(item.capability for item in historical.assignments)
+    development_capabilities, supply, contexts, bindings = _inputs()
+
+    expected = audit_red_living_dex_development_supplement_binding_capacity(
+        development_capabilities,
+        supply=supply,
+        context_identities=contexts,
+        bindings=bindings,
+    )
+    observed = audit_red_living_dex_development_supplement_binding_capacity(
+        all_capabilities,
+        supply=supply,
+        context_identities=contexts,
+        bindings=bindings,
+    )
+    plan = freeze_red_living_dex_development_supplement_plan(
+        all_capabilities,
+        supply=supply,
+        context_identities=contexts,
+        bindings=bindings,
+    )
+
+    assert observed == expected
+    assert len(plan.assignments) == 3
+    assert all(
+        item.capability.slot.partition.value == "development"
+        for item in plan.assignments
+    )
+
+
 def test_binding_capacity_aggregates_missing_context_rejections() -> None:
     capabilities, supply, _contexts, bindings = _inputs()
     result = audit_red_living_dex_development_supplement_binding_capacity(

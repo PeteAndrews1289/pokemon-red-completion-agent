@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: one missing filter jammed all 429 legal plans
+
+The second protected census failed before it could count a single Red binding, again without
+touching the controller or model. This time the source made the discrepancy concrete. The portable
+planner had correctly removed train situations from its development menu, but Red's adapter built
+its reverse lookup by asking every otherwise eligible situation—including train situations—to
+become a development situation. The first train row raised an error, so none of the 429 valid plans
+ever reached the doorway.
+
+The repair is intentionally local. The portable vocabulary and selection policy do not change;
+the Red adapter simply applies the same partition boundary before reconstructing an exact context
+and recipe. A new regression recreates the mixed production inventory that the earlier decorative
+development-only fixture missed. The full local suite passed 6,688 tests, along with the registry,
+privacy, documentation, lint and type gates. Publication, hosted tests, and a fresh aggregate census
+come next. Only a positive bindable count will permit a new plan identity; this diagnosis creates
+no training example and grants the model no authority.
+
 ## September 4: 429 legal supplements move the bug from supply to binding
 
 The protected capacity census authenticated all 81 contexts without advancing the emulator. After

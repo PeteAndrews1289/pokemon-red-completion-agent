@@ -7,6 +7,18 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one wrong doorway label blocked every legal exam
+
+The next counter stopped before it could test the 429 legal combinations. The reason was smaller
+than the long wait suggested: Red's adapter sent both training and development situations through
+a doorway that accepts development situations only. The portable planner had already separated
+them correctly; the game-specific join had not.
+
+The fix leaves the shared model vocabulary alone and filters only the Red adapter. A regression now
+mixes both partitions, matching the real bank instead of the tidy fixture that missed the bug. The
+controller and model remain off until the repaired published census proves that at least one legal
+exam can be bound end to end.
+
 ## Current checkpoint: thirteen roots, 429 legal exams, one broken doorway
 
 The read-only census found that the bank was not the problem. Thirteen independent roots can host
