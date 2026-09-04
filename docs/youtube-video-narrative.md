@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the data was ahead of the model
+
+The visible player test caught two Pokémon and then handled a failed third attempt without crashing.
+But the more important discovery came afterward: the project already held 18 authenticated causal
+living-Pokédex outcomes across seven reusable goal families, while the causal model had been frozen
+after only eight. Ten hard-won experiences had never been incorporated.
+
+That changes the next scene from “collect more data” to “use the data honestly.” The new update fits
+only actions the system actually took, reads no held development outcomes, publishes an immutable
+model artifact, and reloads it through the same interface used by the game-playing agent. In a dry
+comparison the updated model changes three of the 18 known menu decisions. The claim stays modest:
+the student changed after seeing more experience; fresh Red situations still decide whether it
+learned anything that travels.
+
 ## New scene: the same failure no longer kills the player
 
 **Visual:** Split one Red state into **FITTED MODEL** and **BASELINE**. In both lanes, turn two

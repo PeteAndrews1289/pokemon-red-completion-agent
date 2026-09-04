@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: ten lessons were waiting for the model
+
+After the first multi-decision player rehearsal, the project stepped back far enough to reconcile
+its learning artifacts. That audit found 18 authenticated causal living-Pokédex experiences across
+seven kinds of strategic work—catching, evolving, developing the team, managing storage,
+resupplying, unlocking access and exploring. The model being exercised in the bounded player had
+learned from only the first eight. Ten expensive Red outcomes were already sitting in the classroom
+without ever reaching the student.
+
+The repair is deliberately less theatrical than another emulator run: fit the complete train-only
+denominator, preserve every selected-arm consequence, publish a new immutable model keyed to those
+exact data, and reload it through the same boundary the player uses. A dry run shows the update
+changes three choices on the 18 known menus. That is evidence that the added experience matters,
+not evidence that the model will generalize. Fresh, lineage-disjoint Red situations remain the next
+test before more authority or Crystal transfer.
+
 ## September 4: the player catches twice and fails without falling over
 
 The repaired player started both authorities from the same fresh Red snapshot. Each made three

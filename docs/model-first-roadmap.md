@@ -1,5 +1,26 @@
 # Model-first development roadmap
 
+## Current checkpoint: update the causal model before buying more experience
+
+The Pair-006 reorientation correctly closed same-bank player comparisons, but its next instruction
+would have rebuilt a curriculum contract that already exists. The deeper audit also found **18
+authenticated settled causal train outcomes** in the living-Pokedex store, spanning all seven
+currently supported portable option kinds. The only loadable model from that stream was fitted at
+the eight-example integration milestone. Ten later outcomes were collected but never incorporated.
+
+The immediate gate is therefore a deterministic, corpus-addressed refit over the complete 18-row
+train denominator. The updater must refuse development access and corpus filtering, preserve
+selected-arm-only targets, produce finite diagnostics, publish and byte-reload an immutable record
+through the existing player loader, and keep authority at zero. A dry fit changes three choices on
+the 18 train menus; that makes the update behaviorally nontrivial, but neither that fact nor lower
+training error demonstrates generalization.
+
+After the exact model artifact exists, resume the prospective requirement rather than inventing a
+second contract: reuse the published purpose-built capture schema, supply at least eight new train
+and four untouched development roots through bounded short scenarios, keep upstream and physical
+lineages disjoint across partitions, fit train only, and compare once on development. Crystal stays
+deferred until this Red comparison earns a promotion decision.
+
 ## Current checkpoint: multi-decision play works; move learning onto prospective roots
 
 Exact main `7133d171` passed CI `33848221585`, and Pair 006 completed from the first eligible unused
