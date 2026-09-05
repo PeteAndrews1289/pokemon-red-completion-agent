@@ -1,5 +1,39 @@
 # Handoff
 
+## Latest checkpoint: the reset-aware train runner is implemented; private freeze is pending
+
+The action-free schedule freezer and capacity result are published on PR 224. Its first complete
+GitHub run passed 6,812 tests and failed only one stale strategic-navigation golden identity; the
+three exact expected identities were refreshed and their focused suite passes 5/5. Auto-merge is
+armed behind the replacement full check. No gameplay, outcome, model fit, paired-development root,
+Crystal state or full-game replay was opened.
+
+The follow-on train-only implementation now closes the two design gaps that would otherwise waste
+the ten examples. First, its title-neutral behavior policy gives the preregistered focus kind 98
+integer tickets while retaining one ticket for every other executable option and zero for masked
+options. The complete propensity vector and single CSPRNG draw remain durable, so this is targeted
+curriculum sampling rather than an unlabeled forced action. Second, it explicitly models the ten
+train episodes as reset trials clustered under two underlying Red states. Each base state receives
+one account-wide campaign reservation and each frozen reset slot receives one no-reroll trial claim;
+the causal identity retains the shared state/envelope hashes and adds the reset claim rather than
+pretending that ten independent worlds exist.
+
+The Red runner can address train slots only. It durably retains setup claim, validated capture and
+terminal state; on restart, a completed capture is recovered without controller re-entry, while a
+claimed slot interrupted before capture becomes a permanent censored setup. Only after setup does
+the selected-arm causal journal open one focus-weighted option and independently retain its factual
+outcome. Development slots, teachers, counterfactual labels, fitting, Crystal and full replay have
+no runner interface. The private-plan reader separately requires canonical bytes, every frozen
+source/model/runtime/catalog digest, and equality with a freshly rederived Red binding.
+
+Focused verification currently includes 50 causal/reset tests, 4 runner-boundary tests and 4
+private-plan authentication tests, with Ruff and Mypy clean. The next exact sequence is: let PR 224
+auto-merge; freeze the 10+8 private schedule once from exact main; rebase and publish the runner;
+add its authenticated command/dashboard shell; collect the ten train outcomes; require at least
+eight settled rows including three acquisition and three party-development rows; fit once; then
+open the eight paired development roots for model-versus-deterministic control. This produces the
+first targeted strategic update. It is not yet an autonomous full-game player or a Crystal transfer.
+
 ## Latest checkpoint: repeatable Red training capacity is ready without spending the exam
 
 The fresh-only result below was correct but applied an evaluation rule to ordinary training. The
@@ -10140,3 +10174,31 @@ succeed, what verified collection or team effect occurred, and at what cost? Unl
 may remain `incomparable`; do not invent a scalar winner, promote authority, fit on this development
 result, access sealed Red or Crystal, or run a full replay. Use the result to design the smallest
 lineage-disjoint multi-goal training curriculum.
+
+## Targeted Red schedule frozen and production launcher implemented — 2026-09-05
+
+PR 224 passed all **6,812** non-integration tests in GitHub CI run `33993395345/1` and merged as
+exact main `63d08eeec05e5d2f7663764824c93f5707b58373`. From that clean source, the action-free
+freezer authenticated the private context bank and wrote exactly one external plan with SHA-256
+`715c40528b5494a5be194b73a1f8e2eac6a3fc4a802ef34d5de405bcf53269af`. The plan binds ten
+train resets across two declared base-state clusters and eight untouched development roots. Its Red
+binding is `cdf5136730067f2f59ce414e53f52a8be3d78d94c695e061583945e36ecc95b5`; the freeze used
+zero controller actions, zero emulator frames, zero outcomes, zero predictions and zero fits.
+
+The follow-on branch now contains the complete execution bridge:
+
+- a 98:1 full-support targeted behavior policy with every legal non-focus option retaining nonzero
+  probability;
+- one base-root reservation plus one durable no-reroll claim per declared reset;
+- a reset-aware selected-arm runner with crash-safe setup capture and terminal recovery;
+- a strict private-plan reader and a non-executable restart descriptor;
+- fresh action-free Red mechanics replay before any frozen recipe becomes executable;
+- an ordered campaign coordinator that can address train slots only; and
+- a view-only dashboard with live frames, slot/reset/focus, cluster count, action/frame totals,
+  settled versus censored outcomes, the locked development denominator and model-fit count.
+
+No real slot has been claimed and no model has been fitted. Next publish this launcher branch,
+refresh the source-bound registries, require green CI, run its action-free preflight against the
+frozen plan, then execute or recover all ten train slots in order. Audit the settled minimums before
+one train-only fit. Development outcomes remain unopened until predictions are committed; Crystal,
+sealed Red and full-game learned authority remain deferred.

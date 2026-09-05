@@ -6120,3 +6120,34 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
   development as the sparse concepts.
 - End on the honest next build: create fresh title-neutral Red situations, prove their independence,
   then freeze the 10+8 denominator before any outcome is known.
+
+## Scene: stop treating the classroom like the exam
+
+- Reframe the capacity board: **2 AUTHENTIC TRAIN STATES × 5 DECLARED RESETS = 10 LESSONS** while
+  **8 UNTOUCHED DEVELOPMENT STATES** remain the exam.
+- Keep the cluster label visible. Never animate the ten resets as ten independent worlds.
+- Show the four lesson families: **CAPTURE 4 · DEVELOP PARTY 4 · STORAGE 1 · RESUPPLY 1**.
+- Visualize the behavior wheel as **FOCUS 98 · EACH OTHER LEGAL OPTION 1 · MASKED 0** and retain the
+  exact probability beside the chosen action.
+- Before movement, stamp the base checkpoint **CAMPAIGN RESERVED**, then stamp the individual reset
+  **TRIAL CLAIMED — NO REROLL**.
+- Split recovery paths: a durable setup capture resumes without replay; a power loss after claim but
+  before capture becomes **CENSORED**, not a replacement example.
+- End with the honest status card: **RUNNER ENGINEERED · REAL OUTCOMES 0/10 · FITS 0 · DEVELOPMENT
+  ROOTS UNOPENED**. The next visible milestone is ten collected Red lessons and one bounded fit, not
+  Crystal or a full-game victory claim.
+
+## Scene: the frozen board becomes a live observatory
+
+- Open on GitHub CI turning green: **6,812 TESTS · EXACT MAIN 63d08eee**.
+- Cut to the private freeze as a zero-effect operation: **10 TRAIN RESETS · 2 BASE STATES · 8
+  UNTOUCHED DEVELOPMENT STATES · ACTIONS 0 · FRAMES 0**.
+- Show the restart boundary: a thin non-executable index finds the state, then cartridge-derived Red
+  mechanics rebuild the route and provider recipe before the controller unlocks.
+- Reveal the live dashboard fields: **SLOT · RESET · FOCUS · CLUSTER · ACTIONS · FRAMES · SETTLED ·
+  CENSORED · DEVELOPMENT LOCKED · FITS 0**, alongside the emulator frame.
+- Put the label **CAUSAL DATA COLLECTION — NOT MODEL PLAY** above the screen. Do not imply that the
+  curriculum focus is a model prediction.
+- End the engineering scene on **REAL OUTCOMES 0/10** and the next visible action-free preflight.
+  The following scene begins only when the published launcher passes CI and the first durable reset
+  claim is written.

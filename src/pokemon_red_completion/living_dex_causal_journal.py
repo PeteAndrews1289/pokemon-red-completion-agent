@@ -166,6 +166,7 @@ class LivingDexCausalIdentity:
     observer_binding_sha256: str
     effect_meter_binding_sha256: str
     runner_sha256: str
+    repeatable_trial_claim_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.source_commit, str) or _GIT_COMMIT.fullmatch(
@@ -189,6 +190,11 @@ class LivingDexCausalIdentity:
             (self.runner_sha256, "runner"),
         ):
             _require_sha256(value, subject=subject)
+        if self.repeatable_trial_claim_sha256 is not None:
+            _require_sha256(
+                self.repeatable_trial_claim_sha256,
+                subject="repeatable trial claim",
+            )
 
     @property
     def identity_sha256(self) -> str:
@@ -196,7 +202,7 @@ class LivingDexCausalIdentity:
 
     @property
     def logical_root_sha256(self) -> str:
-        return canonical_sha256(
+        base = canonical_sha256(
             {
                 "lineage_sha256": self.lineage_sha256,
                 "menu_sha256": self.menu_sha256,
@@ -208,17 +214,43 @@ class LivingDexCausalIdentity:
                 "setup_terminal_sha256": self.setup_terminal_sha256,
             }
         )
+        if self.repeatable_trial_claim_sha256 is None:
+            return base
+        return canonical_sha256(
+            {
+                "base_logical_root_sha256": base,
+                "repeatable_trial_claim_sha256": (
+                    self.repeatable_trial_claim_sha256
+                ),
+                "schema": (
+                    "pokemon.core.living-dex-causal-repeatable-logical-instance.v1"
+                ),
+            }
+        )
 
     @property
     def physical_root_sha256(self) -> str:
-        """Collide identical constructed bytes even under another lineage."""
+        """Collide bytes unless an explicit preregistered reset owns the trial."""
 
-        return canonical_sha256(
+        base = canonical_sha256(
             {
                 "envelope_sha256": self.envelope_sha256,
                 "purpose": "one-selected-arm-causal-example",
                 "schema": "pokemon.core.living-dex-causal-physical-root.v1",
                 "state_sha256": self.state_sha256,
+            }
+        )
+        if self.repeatable_trial_claim_sha256 is None:
+            return base
+        return canonical_sha256(
+            {
+                "base_physical_root_sha256": base,
+                "repeatable_trial_claim_sha256": (
+                    self.repeatable_trial_claim_sha256
+                ),
+                "schema": (
+                    "pokemon.core.living-dex-causal-repeatable-physical-instance.v1"
+                ),
             }
         )
 
@@ -260,7 +292,7 @@ class LivingDexCausalIdentity:
         )
 
     def private_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "binding_roster_sha256": self.binding_roster_sha256,
             "effect_meter_binding_sha256": self.effect_meter_binding_sha256,
             "envelope_sha256": self.envelope_sha256,
@@ -277,6 +309,11 @@ class LivingDexCausalIdentity:
             "source_commit": self.source_commit,
             "state_sha256": self.state_sha256,
         }
+        if self.repeatable_trial_claim_sha256 is not None:
+            result["repeatable_trial_claim_sha256"] = (
+                self.repeatable_trial_claim_sha256
+            )
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -379,6 +416,7 @@ class LivingDexCausalBehaviorDecision:
             len(self.integer_weights),
             self.available_indices,
             commitment=self.commitment,
+            integer_weights=self.integer_weights,
         )
         if (
             self.integer_weights != expected[0]
@@ -484,6 +522,7 @@ class LivingDexCausalScenario:
     effect_meter: LivingDexCausalEffectMeter
     resolve_selected: LivingDexCausalArmResolver
     observe_after: LivingDexCausalObserver
+    behavior_integer_weights: tuple[int, ...] | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.identity, LivingDexCausalIdentity):
@@ -513,6 +552,12 @@ class LivingDexCausalScenario:
             raise TypeError("causal scenario meter returned an invalid checkpoint")
         if not callable(self.resolve_selected) or not callable(self.observe_after):
             raise TypeError("causal scenario needs resolver and observer callables")
+        if self.behavior_integer_weights is not None:
+            _validate_behavior_integer_weights(
+                len(self.menu.candidates),
+                self.menu.available_indices,
+                self.behavior_integer_weights,
+            )
         if (
             self.identity.partition not in {"train", "development"}
             or self.identity.menu_sha256 != self.menu.policy_sha256
@@ -1076,6 +1121,7 @@ def _ensure_behavior_selection(
         len(scenario.menu.candidates),
         scenario.menu.available_indices,
         commitment=commitment,
+        integer_weights=scenario.behavior_integer_weights,
     )
     expected = LivingDexCausalBehaviorDecision(
         commitment,
@@ -1104,6 +1150,7 @@ def _behavior_decision_values(
     available_indices: Sequence[int],
     *,
     commitment: LivingDexCausalBehaviorCommitment,
+    integer_weights: Sequence[int] | None = None,
 ) -> tuple[tuple[int, ...], tuple[float, ...], int]:
     if type(candidate_count) is not int or candidate_count < 2:  # noqa: E721
         raise LivingDexCausalJournalError("causal behavior candidate census differs")
@@ -1119,12 +1166,51 @@ def _behavior_decision_values(
         raise LivingDexCausalJournalError("causal behavior availability differs")
     if not isinstance(commitment, LivingDexCausalBehaviorCommitment):
         raise TypeError("causal behavior replay needs its commitment")
-    weights = tuple(1 if index in available else 0 for index in range(candidate_count))
+    weights = (
+        tuple(1 if index in available else 0 for index in range(candidate_count))
+        if integer_weights is None
+        else _validate_behavior_integer_weights(
+            candidate_count,
+            available,
+            integer_weights,
+        )
+    )
     total = sum(weights)
     probabilities = tuple(weight / total for weight in weights)
     ticket = int(commitment.draw_seed_sha256, 16) % total
-    selected = available[ticket]
+    cumulative = 0
+    selected: int | None = None
+    for index, weight in enumerate(weights):
+        cumulative += weight
+        if weight > 0 and ticket < cumulative:
+            selected = index
+            break
+    if selected is None:  # pragma: no cover - guarded by positive exact support
+        raise LivingDexCausalJournalError("causal behavior ticket did not resolve")
     return weights, probabilities, selected
+
+
+def _validate_behavior_integer_weights(
+    candidate_count: int,
+    available_indices: Sequence[int],
+    integer_weights: Sequence[int],
+) -> tuple[int, ...]:
+    """Return one exact full-support distribution over the available rows."""
+
+    available = tuple(available_indices)
+    weights = tuple(integer_weights)
+    if (
+        len(weights) != candidate_count
+        or any(type(weight) is not int or weight < 0 for weight in weights)  # noqa: E721
+        or any(
+            (weights[index] > 0) is (index not in available)
+            for index in range(candidate_count)
+        )
+    ):
+        raise LivingDexCausalJournalError(
+            "causal behavior weights lack exact available-row support"
+        )
+    return weights
 
 
 def _load_construction_attempts(
@@ -2383,25 +2469,28 @@ def _validate_execution_start(
 def _restore_causal_identity(
     document: Mapping[str, object],
 ) -> LivingDexCausalIdentity:
+    expected_keys = {
+        "binding_roster_sha256",
+        "effect_meter_binding_sha256",
+        "envelope_sha256",
+        "lineage_sha256",
+        "menu_sha256",
+        "observer_binding_sha256",
+        "origin_observation_sha256",
+        "partition",
+        "runner_sha256",
+        "schema",
+        "setup_attestation_sha256",
+        "setup_pair_claim_sha256",
+        "setup_terminal_sha256",
+        "source_commit",
+        "state_sha256",
+    }
+    if "repeatable_trial_claim_sha256" in document:
+        expected_keys.add("repeatable_trial_claim_sha256")
     _exact_keys(
         document,
-        {
-            "binding_roster_sha256",
-            "effect_meter_binding_sha256",
-            "envelope_sha256",
-            "lineage_sha256",
-            "menu_sha256",
-            "observer_binding_sha256",
-            "origin_observation_sha256",
-            "partition",
-            "runner_sha256",
-            "schema",
-            "setup_attestation_sha256",
-            "setup_pair_claim_sha256",
-            "setup_terminal_sha256",
-            "source_commit",
-            "state_sha256",
-        },
+        expected_keys,
         subject="causal identity",
     )
     if document["schema"] != LIVING_DEX_CAUSAL_IDENTITY_SCHEMA:
@@ -2442,6 +2531,14 @@ def _restore_causal_identity(
             subject="effect meter binding",
         ),
         runner_sha256=_string(document["runner_sha256"], subject="runner"),
+        repeatable_trial_claim_sha256=(
+            None
+            if "repeatable_trial_claim_sha256" not in document
+            else _string(
+                document["repeatable_trial_claim_sha256"],
+                subject="repeatable trial claim",
+            )
+        ),
     )
     if identity.private_dict() != dict(document):
         raise LivingDexCausalJournalError("causal identity does not replay")
