@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon.red.development-five-root-preflight-failure-evidence.v1",
+  "status": "failed_closed_before_prediction_or_gameplay",
+  "source": {
+    "git_commit": "a4d7c5a72adb59b24c0871589e4602236b377c56",
+    "source_bundle_sha256": "d658dd0b9367930ac291195495ac5d0e8dc54887d045dd34847d9b6a7245b208",
+    "command_sha256": "186db4a49f55297eedafb4a7a32518b4c3dd9ab59383911dfc88a65ea2a44b72",
+    "exact_ci_run": 33936419853,
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success"
+  },
+  "observed_result": {
+    "stage": "development_batch_preflight",
+    "cases_ready": 0,
+    "root_claims": 0,
+    "model_predictions": 0,
+    "model_fits": 0,
+    "development_outcomes_opened": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_queries": 0
+  },
+  "diagnosis": {
+    "kind": "command_bootstrap_defect",
+    "finding": "The V1 command authenticated source and private inputs but did not prepare the reviewed staged third-party runtime closure required by the production preflight.",
+    "basis": "The production runtime authenticator requires one staged site-packages tree plus its authenticated import finder. V1 created neither; the strict historical command creates both before invocation.",
+    "not_established": [
+      "root_identity_failure",
+      "model_identity_failure",
+      "plan_identity_failure",
+      "gameplay_failure",
+      "model_quality_failure"
+    ]
+  },
+  "retry_policy": "Do not retry the V1 executable. Publish a separately qualified strict-bootstrap successor under a new source and command identity, require green exact-main CI, then permit one successor zero-effect preflight.",
+  "claim_boundary": "This result is a command-bootstrap falsification only. It consumed no root claim, prediction, outcome, controller action, emulator frame, training target, authority promotion, sealed Red access or Crystal access."
+}

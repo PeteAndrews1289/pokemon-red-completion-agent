@@ -173,3 +173,19 @@ more expensive model for genuinely ambiguous architecture or promotion audits un
 show a repeatable quality difference.
 
 Evidence: [local five-root command qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
+### Sol correction after publication
+
+PR 214 and exact-main CI passed, but the first action-free five-root invocation failed at the
+production batch boundary with every protected counter at zero. Read-only diagnosis found that
+the new lightweight command had not staged the authenticated third-party dependency closure that
+the production runtime checker requires. The unit suite verified argument and effect boundaries
+but did not execute the real command bootstrap, so this was a genuine coverage gap.
+
+Sol did not retry the executable or blame the roots/model. It retained the failure as evidence and
+replaced the command bootstrap with the proven strict pattern already used by the historical train
+consumer, while leaving that historical script byte-for-byte unchanged. This is useful negative
+evidence in the comparison: Sol found and repaired its own architectural shortcut only after the
+real boundary falsified it. No claim about model quality or gameplay follows.
+
+Evidence: [V1 five-root preflight failure](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).

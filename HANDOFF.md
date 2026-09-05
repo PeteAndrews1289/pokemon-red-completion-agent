@@ -1,5 +1,23 @@
 # Handoff
 
+## Latest checkpoint: V1 preflight falsified its command bootstrap; strict successor in progress
+
+PR 214 merged as exact main `a4d7c5a72adb59b24c0871589e4602236b377c56`; PR CI
+`33935227320/1` and main CI `33936419853/1` passed. The one V1 five-root preflight then failed
+closed at `development_batch_preflight`. Every protected counter remained zero: no root claim,
+prediction, outcome, controller action, frame, fit or teacher query occurred.
+
+The failure is a command-bootstrap defect. V1 entered the production preflight without creating
+the reviewed staged third-party runtime closure and authenticated import finder that the production
+runtime boundary requires. It does not establish a root, plan, model or gameplay failure. Do not
+retry V1. See the [failure evidence](docs/evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
+The successor now uses the proven strict bootstrap before any project import: exact committed
+script/source/main-CI authentication, NumPy sentinel, staged dependency closure, authenticated
+finder, and post-preflight source/runtime checks. Preserve the historical train command
+byte-for-byte. Qualify, publish and require new exact-main CI before one successor zero-effect
+preflight. Stop again on any mismatch or nonzero effect; no gameplay is authorized by this repair.
+
 ## Latest checkpoint: the exact five-root command is locally qualified
 
 The dedicated source-authenticated command now binds the complete eighteen-example train-only model record to exactly five

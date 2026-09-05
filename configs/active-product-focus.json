@@ -29,25 +29,25 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Publish the locally qualified five-root command, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input.",
+      "cheapest_falsifier": "Publish the strict-bootstrap successor, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. The eighteen-example model remains non-authoritative and no development prediction has run. The command can reach the existing selected-outcome executor only after the five-root exact-main preflight passes.",
-        "blocker": "The concrete five-root command and full local plan/model/root joins are qualified. Publication on main, green exact-main CI, the strict zero-effect invocation and a real production-resolver rehearsal remain before model-selected development play.",
-        "decision": "Freeze the case set to historical ordinals 10 and 11 plus supplement ordinals 0 through 2. Publish once, run the strict five-root preflight, then exercise bounded model-selected development choices through the existing journals without refitting on development.",
+        "authority_delta": "No authority changed. The eighteen-example model remains non-authoritative and no development prediction ran. V1 failed before a root claim, outcome, controller action or emulator frame.",
+        "blocker": "The sole V1 preflight failed because its command did not stage the authenticated dependency closure required by the production runtime boundary. The strict-bootstrap successor must be qualified, published and pass new exact-main CI before another preflight identity exists.",
+        "decision": "Retain the exact five-case design and V1 zero-effect failure. Replace only the command bootstrap with the proven isolated source/runtime pattern; never retry the V1 executable or alter the historical train command.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json",
-          "sha256": "b9ede1493d4837a7bdb888ac4870f1e124dd489dd0cddb0ee3f177dfdb081e1d"
+          "kind": "falsification",
+          "path": "docs/evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json",
+          "sha256": "30480932b34483eb3b1ff45cd567e0bf482b178c7adcf5290bb8e7ed63490131"
         },
-        "learning_output": "No learning counter changed. The complete eighteen-example train-only model record authenticated against its dataset, all five declared state/envelope pairs joined their frozen roots, and 72 focused command/adapter/runtime tests passed without a model prediction or protected effect.",
-        "next_falsifier": "The dedicated source-authenticated command must reproduce the five source, plan, model, context, recipe and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero.",
-        "next_session_goal": "Complete full repository gates, publish and merge the five-root command, require green exact-main CI, then run exactly one strict five-root zero-effect preflight. If it passes, rehearse the real production resolver before opening bounded model-selected outcomes.",
-        "product_alignment": "The command turns five independent Red situations into an executable test of portable living-Pokedex objective selection while keeping train rows inaccessible and Crystal deferred. It is the final action-free bridge before measured model behavior.",
-        "session_id": "2026-09-04-development-five-root-command-local-qualification-v1",
+        "learning_output": "No learning counter changed. V1 produced a command-bootstrap falsification with zero predictions, claims, outcomes, actions, frames, fits or teacher queries.",
+        "next_falsifier": "The strict-bootstrap successor must reproduce the five source, plan, model, context, recipe, runtime and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero.",
+        "next_session_goal": "Qualify the strict successor bootstrap, publish and merge it, require green exact-main CI, then run exactly one successor five-root zero-effect preflight. A pass permits production-resolver rehearsal; a failure is retained without another retry.",
+        "product_alignment": "Repairing the production command bootstrap is the shortest path to testing portable living-Pokedex objective selection on five independent Red situations. It adds no curriculum and keeps Crystal deferred.",
+        "session_id": "2026-09-05-development-five-root-preflight-v1-falsification",
         "status": "active",
-        "stop_condition": "Stop before predictions, claims or controller input until the published exact-main five-root preflight passes. Stop on plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any attempt to substitute another case. Never refit on development, repeat the completed census/freeze, or replay pairs 004, 005 or 006.",
+        "stop_condition": "Never retry the V1 executable. Stop before predictions, claims or controller input until one published exact-main successor preflight passes. Stop on bootstrap/runtime/plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any substituted case. Never refit on development, repeat the census/freeze, or replay pairs 004, 005 or 006.",
         "transfer_result": "None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim."
       },
       "learned_authority": {
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "The concrete five-root command is locally qualified against the exact model and all five private root files. Publish it on main, require green exact-main CI and pass one strict zero-effect preflight; then rehearse the production resolver and run bounded model-selected development choices through the existing journals.",
+      "next_decision": "V1 failed closed because its command lacked the authenticated runtime stage. Qualify and publish the strict-bootstrap successor, require green exact-main CI, and pass one successor zero-effect preflight before production-resolver rehearsal or model-selected development play.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

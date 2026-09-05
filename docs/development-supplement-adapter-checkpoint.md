@@ -1,5 +1,18 @@
 # Development supplement adapter checkpoint
 
+## Operational update: V1 command bootstrap failed closed
+
+PR 214 and exact-main CI passed, but the one V1 five-root command stopped at the production
+preflight with zero effects. Its source/private checks succeeded far enough to enter the batch;
+the command had not staged the authenticated third-party runtime closure required by that batch's
+production runtime check. Do not retry V1 or reinterpret this as a root/model/gameplay result.
+
+The successor copies the proven strict command bootstrap without changing the historical train
+command: exact script/source/CI authentication before project imports, NumPy sentinel, staged
+dependency closure, authenticated import finder, and post-preflight reauthentication. It still
+has no ROM or controller surface. Publish and qualify the new identity before one successor
+preflight. See [failure evidence](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
 ## Scope and result
 
 This is maintenance for the already-fitted eighteen-example living-Pokedex option model.

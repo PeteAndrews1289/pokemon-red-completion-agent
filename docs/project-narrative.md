@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the airlock caught its own missing runtime stage
+
+PR 214 and exact-main CI passed, but the first five-root preflight still failed closed before a
+prediction or game action. The roots and model were not disproved: the lightweight command had
+never created the authenticated dependency stage required by the production runtime boundary.
+That is precisely the kind of integration error the airlock is meant to expose.
+
+We retained the zero-effect failure and did not retry it. The successor adopts the mature strict
+bootstrap already proven by the training command—exact script/source/CI authentication before
+project imports, a NumPy sentinel, a copied and rehashed PyBoy runtime closure, an authenticated
+import finder, and post-run rechecks—without changing the historical command. It must earn a new
+green main identity before one successor preflight. See the [V1 failure](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
 ## September 4: five real exam cards finally reach one executable doorway
 
 The project now has one dedicated source-authenticated command for the five declared Red development situations. It cannot

@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the airlock says no
+
+**Visual:** After CI turns green, show the five cards entering the airlock. Stop them at a new lock
+labelled **AUTHENTICATED RUNTIME STAGE**, while every action/prediction/frame dial stays at zero.
+
+**Voiceover:** “The first real preflight failed—and that was useful. The saved games and model were
+not rejected. My new command had skipped the hardened step that copies, hashes and controls every
+runtime dependency. We kept the failure, refused to retry that executable, and rebuilt the command
+around the already-proven strict bootstrap.”
+
+Show **V1 RETIRED**, then a distinct **STRICT SUCCESSOR** path. Do not show gameplay or claim that
+the model failed. Reference the [zero-effect V1 failure](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
 ## New scene: five exam cards, one locked airlock
 
 **Visual:** Place five gold development cards on screen: **2 PRESERVED + 3 SUPPLEMENT**. Route all
