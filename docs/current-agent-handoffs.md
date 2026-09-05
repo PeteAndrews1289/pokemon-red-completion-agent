@@ -1,5 +1,17 @@
 # Current agent handoffs
 
+## Codex successor repair — qualify a real strict runtime bootstrap
+
+PR 214 is main `a4d7c5a7`; PR and main CI passed. The sole V1 five-root preflight failed closed at
+`development_batch_preflight` with every protected counter zero because its command did not stage
+the authenticated dependency closure required by the production runtime checker. V1 may not retry.
+
+Codex owns the strict successor: preserve the train command unchanged, authenticate the new script,
+source and exact-main CI before project imports, stage and rehash the reviewed runtime, install its
+finder, run the same five-case zero-effect batch, and post-check source/runtime. Publish under a new
+identity before one successor preflight. External review is unnecessary unless the repair changes
+the five-case design or authority boundary. See [failure evidence](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
 ## Codex implementation checkpoint — publish, preflight, then play
 
 Codex implemented the strict production wrapper and dedicated five-root development command. The frozen case set is

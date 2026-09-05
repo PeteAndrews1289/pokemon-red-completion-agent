@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 from pathlib import Path
 from types import ModuleType
@@ -13,6 +14,7 @@ from pokemon_red_completion.red_living_dex_development_batch import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT_PATH = PROJECT_ROOT / "scripts/preflight_red_living_dex_development_batch.py"
+TRAIN_SCRIPT_PATH = PROJECT_ROOT / "scripts/run_red_living_dex_causal_campaign.py"
 _COMMIT = "a" * 40
 _DIGEST = "b" * 64
 
@@ -21,6 +23,14 @@ def _load_script() -> ModuleType:
     spec = importlib.util.spec_from_file_location(
         "preflight_red_living_dex_development_batch_script", SCRIPT_PATH
     )
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_path(path: Path, name: str) -> ModuleType:
+    spec = importlib.util.spec_from_file_location(name, path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -96,6 +106,56 @@ def test_command_exposes_only_exact_action_free_batch_arguments() -> None:
         "controller.step(",
     ):
         assert forbidden not in source
+    bootstrap = source.index("_BOOTSTRAP_IDENTITY = _authenticate_current_source")
+    project_import = source.index(
+        "from pokemon_red_completion.execution_runtime_closure import"
+    )
+    runtime_stage = source.index(
+        "_RUNTIME_STAGE = prepare_authenticated_runtime_stage"
+    )
+    assert bootstrap < project_import < runtime_stage
+    assert (
+        'SCRIPT_RELATIVE_PATH = "scripts/preflight_red_living_dex_development_batch.py"'
+        in source
+    )
+
+
+def test_successor_reuses_the_qualified_train_bootstrap_without_weakening_it() -> None:
+    successor = _load_script()
+    historical = _load_path(TRAIN_SCRIPT_PATH, "qualified_historical_train_script")
+    functions = (
+        "_minimal_git_environment",
+        "_read_regular",
+        "_require_interpreter",
+        "_require_environment",
+        "_tracked_source_inventory",
+        "_committed_red_source_bundle_sha256",
+        "_require_exact_green_ci",
+        "_require_source_state",
+        "_authenticate_current_source",
+        "_install_numpy_sentinel",
+        "_require_project_import_boundary",
+        "_enable_authenticated_project",
+        "_enable_authenticated_third_party_search",
+        "_remove_numpy_sentinel_for_postclaim_runtime",
+    )
+    for name in functions:
+        assert inspect.getsource(getattr(successor, name)) == inspect.getsource(
+            getattr(historical, name)
+        )
+    constants = (
+        "_BOOTSTRAP_PYTHON",
+        "_BOOTSTRAP_PYTHON_SHA256",
+        "_BOOTSTRAP_GIT",
+        "_BOOTSTRAP_GIT_SHA256",
+        "_BOOTSTRAP_CA_BUNDLE",
+        "_BOOTSTRAP_CA_BUNDLE_SHA256",
+        "_GITHUB_REPOSITORY",
+        "_CI_WORKFLOW_NAME",
+        "_CI_WORKFLOW_PATH",
+    )
+    for name in constants:
+        assert getattr(successor, name) == getattr(historical, name)
 
 
 @pytest.mark.parametrize(
@@ -133,10 +193,6 @@ def test_main_authenticates_then_preflights_without_effects(
     sentinel_store = object()
     sentinel_assignments = tuple(object() for _ in range(5))
 
-    def source(_args: object) -> tuple[str, str, int, int]:
-        calls.append("source")
-        return (_COMMIT, _DIGEST, 123, 1)
-
     def open_root(*_args: object, **_kwargs: object) -> object:
         calls.append("store")
         return sentinel_store
@@ -151,14 +207,15 @@ def test_main_authenticates_then_preflights_without_effects(
         assert kwargs["assignments"] is sentinel_assignments
         return _Receipt()
 
-    monkeypatch.setattr(module, "_authenticate_source", source)
+    monkeypatch.setattr(module, "_BOOTSTRAP_IDENTITY", (_COMMIT, _DIGEST, 123, 1))
     monkeypatch.setattr(module, "open_private_root", open_root)
     monkeypatch.setattr(module, "_assignments", assignments)
     monkeypatch.setattr(module, "preflight_red_living_dex_development_batch", preflight)
+    monkeypatch.setattr(module, "_require_source_state", lambda **_kwargs: None)
 
     assert module.main(_arguments(tmp_path)) == 0
     result = json.loads(capsys.readouterr().out)
-    assert calls == ["source", "store", "roots", "preflight"]
+    assert calls == ["store", "roots", "preflight"]
     assert result["cases_ready"] == 5
     assert result["status"] == "five_development_roots_ready_without_effects"
     assert result["controller_actions"] == 0
@@ -172,10 +229,7 @@ def test_source_failure_cannot_open_private_store(
 ) -> None:
     module = _load_script()
 
-    def fail(_args: object) -> tuple[str, str, int, int]:
-        raise module.DevelopmentBatchCommandError("source_authentication")
-
-    monkeypatch.setattr(module, "_authenticate_source", fail)
+    monkeypatch.setattr(module, "_BOOTSTRAP_IDENTITY", None)
     monkeypatch.setattr(
         module,
         "open_private_root",
@@ -183,6 +237,6 @@ def test_source_failure_cannot_open_private_store(
     )
     assert module.main(_arguments(tmp_path)) == 1
     result = json.loads(capsys.readouterr().out)
-    assert result["stage"] == "source_authentication"
+    assert result["stage"] == "bootstrap_source_authentication"
     assert result["controller_actions"] == 0
     assert result["model_predictions"] == 0

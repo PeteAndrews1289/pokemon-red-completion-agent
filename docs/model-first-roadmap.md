@@ -1,5 +1,17 @@
 # Model-first development roadmap
 
+## Latest checkpoint: replace the failed V1 command bootstrap, not the five-case design
+
+Exact main `a4d7c5a7` passed CI `33936419853/1`, then the sole V1 five-root preflight failed
+closed at `development_batch_preflight` with every effect counter at zero. The command had not
+staged the reviewed dependency closure required by the production runtime authenticator. This
+falsifies V1's bootstrap, not the five roots, immutable model or development design.
+
+Do not retry V1. The bounded successor work is to adopt the already-proven isolated source/runtime
+bootstrap, publish it under a new script/source identity, require green exact-main CI, and run one
+successor zero-effect preflight. Only its success permits a real production-resolver rehearsal.
+See the [failure evidence](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
 ## Latest checkpoint: publish the locally qualified five-root command
 
 The dedicated development command now admits only historical ordinals 10 and 11 plus supplement ordinals 0 through 2.

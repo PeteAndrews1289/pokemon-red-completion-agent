@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The concrete five-root command is locally qualified against the exact model and all five private root files. Publish it on main, require green exact-main CI and pass one strict zero-effect preflight; then rehearse the production resolver and run bounded model-selected development choices through the existing journals.
+- Next decision: V1 failed closed because its command lacked the authenticated runtime stage. Qualify and publish the strict-bootstrap successor, require green exact-main CI, and pass one successor zero-effect preflight before production-resolver rehearsal or model-selected development play.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish the locally qualified five-root command, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input. |
+| Cheapest falsifier | Publish the strict-bootstrap successor, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-five-root-command-local-qualification-v1** · status **active** · evidence [qualification](docs/evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json)
+**2026-09-05-development-five-root-preflight-v1-falsification** · status **active** · evidence [falsification](docs/evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The command turns five independent Red situations into an executable test of portable living-Pokedex objective selection while keeping train rows inaccessible and Crystal deferred. It is the final action-free bridge before measured model behavior. |
-| Learning output | No learning counter changed. The complete eighteen-example train-only model record authenticated against its dataset, all five declared state/envelope pairs joined their frozen roots, and 72 focused command/adapter/runtime tests passed without a model prediction or protected effect. |
-| Authority delta | No authority changed. The eighteen-example model remains non-authoritative and no development prediction has run. The command can reach the existing selected-outcome executor only after the five-root exact-main preflight passes. |
+| Product alignment | Repairing the production command bootstrap is the shortest path to testing portable living-Pokedex objective selection on five independent Red situations. It adds no curriculum and keeps Crystal deferred. |
+| Learning output | No learning counter changed. V1 produced a command-bootstrap falsification with zero predictions, claims, outcomes, actions, frames, fits or teacher queries. |
+| Authority delta | No authority changed. The eighteen-example model remains non-authoritative and no development prediction ran. V1 failed before a root claim, outcome, controller action or emulator frame. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The concrete five-root command and full local plan/model/root joins are qualified. Publication on main, green exact-main CI, the strict zero-effect invocation and a real production-resolver rehearsal remain before model-selected development play. |
-| Decision | Freeze the case set to historical ordinals 10 and 11 plus supplement ordinals 0 through 2. Publish once, run the strict five-root preflight, then exercise bounded model-selected development choices through the existing journals without refitting on development. |
-| Next session | Complete full repository gates, publish and merge the five-root command, require green exact-main CI, then run exactly one strict five-root zero-effect preflight. If it passes, rehearse the real production resolver before opening bounded model-selected outcomes. |
-| Next falsifier | The dedicated source-authenticated command must reproduce the five source, plan, model, context, recipe and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero. |
-| Stop condition | Stop before predictions, claims or controller input until the published exact-main five-root preflight passes. Stop on plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any attempt to substitute another case. Never refit on development, repeat the completed census/freeze, or replay pairs 004, 005 or 006. |
+| Blocker | The sole V1 preflight failed because its command did not stage the authenticated dependency closure required by the production runtime boundary. The strict-bootstrap successor must be qualified, published and pass new exact-main CI before another preflight identity exists. |
+| Decision | Retain the exact five-case design and V1 zero-effect failure. Replace only the command bootstrap with the proven isolated source/runtime pattern; never retry the V1 executable or alter the historical train command. |
+| Next session | Qualify the strict successor bootstrap, publish and merge it, require green exact-main CI, then run exactly one successor five-root zero-effect preflight. A pass permits production-resolver rehearsal; a failure is retained without another retry. |
+| Next falsifier | The strict-bootstrap successor must reproduce the five source, plan, model, context, recipe, runtime and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero. |
+| Stop condition | Never retry the V1 executable. Stop before predictions, claims or controller input until one published exact-main successor preflight passes. Stop on bootstrap/runtime/plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any substituted case. Never refit on development, repeat the census/freeze, or replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 
