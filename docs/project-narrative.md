@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the model finally has a bounded, observable doorway into Red
+
+The five saved situations no longer stop at readiness. The new runner can select the first eligible
+case in a fixed prospective order, durably claim it, delay cartridge construction until every
+binding passes, let the title-neutral model rank semantic completion options, and hand only the
+chosen option to a deterministic mechanic skill. A process-wide meter stops the entire episode at
+20,000 actions or two million frames rather than resetting when a skill opens a fresh emulator.
+
+The less visible reliability work matters just as much. A private outer terminal lets an
+interrupted process resume the claimed case but prevents a completed case from silently replaying.
+The live browser timeline cannot control the game, and even an observer exception is unable to
+change controller behavior. The focused audit is green, but this is still an execution-boundary
+milestone: no real saved game has been claimed and the model has not yet demonstrated a successful
+living-Pokédex decision. The next scene is deliberately small—publish, green CI, one live case,
+then judge the evidence before scaling.
+
 ## September 5: the five saved situations finally clear the repeatable doorway
 
 Moving ordinary development back to the internal checkout worked. In just over three seconds, the

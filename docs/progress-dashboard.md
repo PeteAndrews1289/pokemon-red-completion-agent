@@ -5,6 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
+The live development timeline is now implemented and locally qualified. Its active rail is
+**5 AUTHENTICATED RED CASES → FIRST ELIGIBLE ONLY → DURABLE CLAIM → DELAYED ROM OPEN → TITLE-NEUTRAL
+MODEL CHOICE → ONE DETERMINISTIC SKILL → FACTUAL LEDGER TERMINAL → STOP + REORIENT**. Show the hard
+limits as **20,000 ACTIONS / 2,000,000 FRAMES**, retain one cumulative frame clock across fresh
+emulator instances, and label model authority **SHADOW ONLY**.
+
+The page has no controller endpoints. If the browser closes or its frame observer fails, the
+controller continues unchanged; if the process loses power after a terminal is retained, restart
+skips that case without replay. Local qualification is **134 TESTS GREEN**, but all real effect
+counters remain zero until publication and the first case. Never render this checkpoint as live
+training or completed gameplay.
+
 The repeatable five-case readiness rail is now green: **5/5 INPUTS READY · 5/5 CLAIM PAIRS
 AVAILABLE · EXACT 18-EXAMPLE MODEL REOPENED · LIVE PREDICTIONS/ACTIONS/FRAMES/OUTCOMES 0**. The
 synthetic resolver rail is also green: **DELAYED CONSTRUCTION · ONE SELECTED PROVIDER · TERMINAL

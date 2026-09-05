@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: one model choice, one skill, one honest result
+
+**Visual:** Five saved-game cards enter a fixed-order queue. Only the first card can reach a locked
+controller. Place two large counters above it—**20,000 ACTIONS** and **2,000,000 FRAMES**—and show a
+single cumulative timeline continuing when the emulator window changes. Beside it, show the model
+ranking semantic goals while a deterministic skill handles button-level mechanics.
+
+**Voiceover:** “We now have the missing doorway into real behavior. The model is allowed to choose
+what completion objective is worth pursuing, while tested deterministic skills handle how to do
+it. The run is bounded across the whole process, claimed before controller input, recoverable after
+a crash, and visible on a dashboard that cannot control or disturb the game.”
+
+Keep the real outcome panel blank and stamp the scene **LOCALLY QUALIFIED — NOT YET EXECUTED**.
+Then show the next sequence: **PUBLISH → GREEN MAIN → FIRST ELIGIBLE CASE → TERMINAL → REORIENT**.
+Do not depict training, Pokédex progress or model authority until the real ledger provides it.
+
 ## New scene: five green cards, controller still disconnected
 
 **Visual:** Show **2 HISTORICAL + 3 SUPPLEMENT = 5/5 READY**, the exact model badge, and five open

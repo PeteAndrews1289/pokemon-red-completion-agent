@@ -1,5 +1,22 @@
 # Model-first development roadmap
 
+## Latest checkpoint: publish the bounded live runner, then permit one case
+
+The one-case Red development runner and view-only timeline are locally qualified. It preserves the
+five-input fixed order, delays ROM construction until after a durable claim, enforces a shared
+20,000-action/2,000,000-frame budget across every deterministic skill, and retains a private outer
+terminal for safe recovery without replay. Dashboard failure cannot alter controller execution.
+The runner exposes no teacher, development fitting, Crystal, full replay, arbitrary case selector
+or mutable limit. The focused gate passes 134 tests plus lint and typing. See the
+[qualification](evidence/red-repeatable-development-live-runner-local-qualification-v1-2026-09-05.json).
+
+Next regenerate every source-bound registry, pass the complete repository gate, publish and merge,
+and require green exact-main CI. Reorient once against the private roots and exact launch identity.
+Then execute only the first fixed-order eligible root and stop on its retained terminal—whether a
+typed setup censor or a factual model-selected ledger outcome. Use that evidence to decide whether
+to repair a reusable component, run the next root, or reject the lane. Do not fit on development,
+patch a route for the case, open Crystal or run a full game.
+
 ## Latest checkpoint: five inputs ready; build the bounded live runner
 
 The repeatable internal-source/external-private command passed all five unclaimed development roots

@@ -28,6 +28,7 @@ from pokemon_red_completion.claim_first_admission import (
     ClaimFirstRootPair,
 )
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
+from pokemon_red_completion.emulator import EmulatorFrameObserver
 from pokemon_red_completion.execution_runtime_closure import (
     ExecutionRuntimeClosureError,
     authenticate_execution_runtime_closure,
@@ -65,6 +66,7 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
     RedLivingDexFrozenRecipeAccess,
+    RedLivingDexProductionRuntimeLimits,
     RedLivingDexProductionSetupResolver,
 )
 from pokemon_red_completion.red_living_dex_runtime_contract import (
@@ -155,6 +157,11 @@ class _LateProductionResolver:
 
     rom_path: Path = field(repr=False)
     producer_execution_identity: RedLivingDexSetupExecutionIdentity = field(repr=False)
+    runtime_limits: RedLivingDexProductionRuntimeLimits | None = field(
+        default=None,
+        repr=False,
+    )
+    frame_observer: EmulatorFrameObserver | None = field(default=None, repr=False)
     _delegate: RedLivingDexProductionSetupResolver | None = field(
         default=None,
         init=False,
@@ -179,6 +186,8 @@ class _LateProductionResolver:
                 rom_path=self.rom_path,
                 rom_bytes=_read_stable_red_rom(self.rom_path),
                 producer_execution_identity=self.producer_execution_identity,
+                runtime_limits=self.runtime_limits,
+                frame_observer=self.frame_observer,
             )
         return self._delegate(
             frozen,

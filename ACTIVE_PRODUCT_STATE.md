@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Five real inputs and the immutable model pass repeatable readiness, and the synthetic resolver reaches a selected model outcome. Build and qualify the bounded single-case live runner plus dashboard, then reorient before the first fixed-order unclaimed Red development execution.
+- Next decision: The bounded one-case Red runner and view-only dashboard are locally qualified. Publish them, require green exact-main CI, then run only the first fixed-order eligible development root and judge its retained terminal behavior before continuing.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-repeatable-development-readiness-and-rehearsal** · status **active** · evidence [qualification](docs/evidence/red-development-repeatable-readiness-and-rehearsal-v1-2026-09-05.json)
+**2026-09-05-repeatable-development-live-runner-qualification** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-live-runner-local-qualification-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Five real Red situations now reach one repeatable pre-runtime doorway, and the synthetic resolver path reaches an actual model-selected semantic option. The next work converts that into measured bounded behavior, the evidence needed to decide whether title-neutral living-Pokedex planning deserves more authority and later Crystal transfer testing. |
-| Learning output | No learning counter changed. Five real development inputs became repeatably ready, and a synthetic rehearsal proved one selected model choice, one provider execution and terminal recovery without a second execution. These are qualifications, not outcomes. |
-| Authority delta | No authority changed. The five real inputs joined the immutable eighteen-example model, but their readiness pass made zero predictions and the successful model-selected resolver exercise used only synthetic cartridge state. |
+| Product alignment | The project now has a recoverable, observable doorway from the title-neutral option model into bounded Red behavior. The next useful evidence is not more infrastructure or teacher data; it is whether one real semantic choice can advance the living-Pokedex ledger through an existing deterministic skill. |
+| Learning output | No learning counter changed. The deliverable is an execution boundary: one fixed-order case, hard 20000-action and 2000000-frame process-wide limits, delayed ROM construction, durable outer terminal recovery and a view-only dashboard. |
+| Authority delta | No authority changed. The runner qualification made zero real predictions, claims, controller actions, emulator frames, outcomes or fits; the eighteen-example model remains shadow-only. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | A repeatable real-input execution command and live timeline are not yet connected to the staged production runtime. The data/model/root supply is ready; the remaining work is controller-capable integration and observability, not another corpus or bootstrap. |
-| Decision | Keep the strict-bootstrap lane closed. Qualify one repeatable live development runner with delayed ROM construction, durable claim-before-input recovery, bounded action/frame limits and a view-only dashboard. Execute roots in a fixed prospective order and stop after the first terminal result for reorientation. |
-| Next session | Implement and ROM-free qualify the repeatable single-case execution command and view-only progress timeline. Preserve staged runtime authentication and claim-before-input durability, publish the code, then reorient once more before running the first fixed-order unclaimed development case. |
+| Blocker | The bounded live runner is locally qualified but not yet published or validated from exact main. Controller input remains closed until that publication gate is green and one final source-to-private-input reorientation confirms the launch identity. |
+| Decision | Publish the fixed-order single-case runner, require green pull-request and exact-main CI, then execute only the first eligible Red development root. Stop on its first retained terminal result and judge behavior before allowing another root. |
+| Next session | Complete repository validation, publish and merge the runner, require green exact-main CI, reorient against the five private roots, then launch only the first fixed-order eligible development case and retain its terminal behavior evidence. |
 | Next falsifier | The first fixed-order live development case must either retain a typed setup censor or reach a multi-option title-neutral model choice, execute only the selected deterministic skill, and retain a factual ledger outcome under hard action/frame bounds without teacher fallback or replay. |
-| Stop condition | Never retry V1, V2 or the final strict successor. Stop live qualification on a plan/model/context/recipe/root/runtime mismatch, private output, consumed-root reuse, teacher fallback, missing hard bounds, non-durable claim or substituted ordering. Stop after the first terminal live case for reorientation. Never fit on development, repeat the census/freeze, open Crystal or run a full replay. |
+| Stop condition | Stop publication on any failed check or generated-registry mismatch. Stop execution on source/CI/model/context/recipe/root/runtime mismatch, private output, consumed-root reuse, teacher fallback, missing hard bounds, non-durable claim or substituted ordering. Stop after the first retained live terminal. Never fit on development, repeat the census/freeze, open Crystal or run a full replay. |
 
 ### Stop conditions
 

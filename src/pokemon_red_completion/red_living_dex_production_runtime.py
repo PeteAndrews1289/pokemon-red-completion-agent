@@ -26,7 +26,11 @@ from pokemon_red_completion.captured_progress import (
 )
 from pokemon_red_completion.claim_first_admission import ClaimFirstRootPair
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
-from pokemon_red_completion.emulator import CausallyMeteredEmulator, PyBoyAdapter
+from pokemon_red_completion.emulator import (
+    CausallyMeteredEmulator,
+    EmulatorFrameObserver,
+    PyBoyAdapter,
+)
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
 from pokemon_red_completion.gen1_field_moves import (
     Gen1FieldMovePort,
@@ -106,6 +110,25 @@ class RedLivingDexProductionRuntimeError(RuntimeError):
     """The postclaim Red resolver or one isolated runtime differs."""
 
 
+@dataclass(frozen=True, slots=True)
+class RedLivingDexProductionRuntimeLimits:
+    """Process-wide controller limits shared by every isolated arm."""
+
+    maximum_controller_actions: int
+    maximum_emulator_frames: int
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.maximum_controller_actions) is not int  # noqa: E721
+            or self.maximum_controller_actions <= 0
+            or type(self.maximum_emulator_frames) is not int  # noqa: E721
+            or self.maximum_emulator_frames <= 0
+        ):
+            raise RedLivingDexProductionRuntimeError(
+                "production runtime limits must be positive"
+            )
+
+
 class RedLivingDexFrozenRecipeAccess(Protocol):
     """Authenticated recipe access shared by train and development admissions."""
 
@@ -124,6 +147,8 @@ class RedLivingDexProductionSetupResolver:
     rom_path: Path
     rom_bytes: bytes
     producer_execution_identity: RedLivingDexSetupExecutionIdentity
+    runtime_limits: RedLivingDexProductionRuntimeLimits | None = None
+    frame_observer: EmulatorFrameObserver | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.rom_path, Path):
@@ -140,6 +165,18 @@ class RedLivingDexProductionSetupResolver:
         ):
             raise TypeError("production resolver needs its producer identity")
         self.producer_execution_identity.__post_init__()
+        if self.runtime_limits is not None:
+            if not isinstance(
+                self.runtime_limits,
+                RedLivingDexProductionRuntimeLimits,
+            ):
+                raise TypeError("production resolver limits differ")
+            self.runtime_limits.__post_init__()
+        if self.frame_observer is not None and not isinstance(
+            self.frame_observer,
+            EmulatorFrameObserver,
+        ):
+            raise TypeError("production resolver frame observer differs")
 
     def __call__(
         self,
@@ -160,12 +197,23 @@ class RedLivingDexProductionSetupResolver:
             meter=meter,
         )
 
-    def build_emulator(self) -> Any:
+    def build_emulator(self, meter: RedLivingDexSetupEffectMeter) -> Any:
+        if type(meter) is not RedLivingDexSetupEffectMeter:
+            raise TypeError("production resolver needs the concrete effect meter")
+        observer = (
+            None
+            if self.frame_observer is None
+            else _MeteredFrameObserver(
+                self.frame_observer,
+                meter=meter,
+            )
+        )
         return PyBoyAdapter(
             self.rom_path,
             watch=False,
             speed=None,
             expected_rom=POKEMON_RED_US_REV_0,
+            frame_observer=observer,
         )
 
 
@@ -244,7 +292,7 @@ class _ProductionResolverScope(AbstractContextManager[RedLivingDexResolvedSetupS
 
     def _observe_claimed_root(self) -> RedLivingDexClaimedRootObservation:
         with ExitStack() as observer_stack:
-            raw = self.resolver.build_emulator()
+            raw = self.resolver.build_emulator(self.meter)
             _register_emulator(observer_stack, raw)
             _start_emulator(raw)
             before = self.meter.checkpoint()
@@ -330,10 +378,14 @@ class _ProductionArmFactory:
     ) -> _ProductionArm:
         if purpose not in {"construction", "candidate", "final_restore"}:
             raise RedLivingDexProductionRuntimeError("production setup arm purpose differs")
-        raw = self._resolver.build_emulator()
+        raw = self._resolver.build_emulator(self._meter)
         _register_emulator(self._stack, raw)
         _start_emulator(raw)
-        metered = _MeteredEmulator(raw, self._meter)
+        metered = _build_metered_emulator(
+            raw,
+            self._meter,
+            limits=self._resolver.runtime_limits,
+        )
         reader = PokemonRedStateReader(metered)
         controller = FrameSafeExecutor(
             metered,
@@ -343,6 +395,7 @@ class _ProductionArmFactory:
             controller,
             emulator=metered,
             meter=self._meter,
+            limits=self._resolver.runtime_limits,
         )
         actions = _FieldAwareCountingExecutor(
             metered_actions,
@@ -385,7 +438,7 @@ class _ProductionArm:
     purpose: str
     ordinal: int
     sequence: int
-    emulator: _MeteredEmulator
+    emulator: CausallyMeteredEmulator
     reader: PokemonRedStateReader
     actions: _FieldAwareCountingExecutor
     traversal_observer: Gen1TraversalObserver
@@ -501,32 +554,131 @@ class _ProductionArm:
         return parse_goal_manager_context_capture(state, envelope_bytes)
 
 
-class _MeteredEmulator(CausallyMeteredEmulator):
-    """Bind the generic primitive boundary to this campaign's effect meter."""
+@dataclass(slots=True)
+class _MeteredFrameObserver:
+    """Translate each fresh emulator onto the shared metered frame timeline."""
 
-    __slots__ = ()
+    delegate: EmulatorFrameObserver
+    meter: RedLivingDexSetupEffectMeter
+    _disabled: bool = False
+    _last_logical_frame: int = 0
+    _pending_projection: int | None = None
 
-    def __init__(self, delegate: Any, meter: RedLivingDexSetupEffectMeter) -> None:
-        super().__init__(delegate, record_frames=meter.record_emulator_frames)
+    def __post_init__(self) -> None:
+        if not isinstance(self.delegate, EmulatorFrameObserver):
+            raise TypeError("metered frame observer needs a frame observer")
+        if type(self.meter) is not RedLivingDexSetupEffectMeter:
+            raise TypeError("metered frame observer needs the concrete effect meter")
+
+    def wants_frame(self, logical_frame: int) -> bool:
+        if self._disabled:
+            return False
+        try:
+            projected = self._project(logical_frame)
+            self._last_logical_frame = logical_frame
+            wanted = self.delegate.wants_frame(projected)
+            self._pending_projection = projected if wanted else None
+            return wanted
+        except Exception:
+            self._disabled = True
+            self._pending_projection = None
+            return False
+
+    def publish_frame(
+        self,
+        width: int,
+        height: int,
+        rgb: bytes,
+        logical_frame: int,
+    ) -> None:
+        if self._disabled:
+            return
+        try:
+            if (
+                self._pending_projection is None
+                or logical_frame != self._last_logical_frame
+            ):
+                raise ValueError("unrequested frame")
+            projected = self._pending_projection
+            self._pending_projection = None
+            self.delegate.publish_frame(
+                width,
+                height,
+                rgb,
+                projected,
+            )
+        except Exception:
+            # Rendering is intentionally outside the controller trust boundary.
+            # A broken or closed dashboard can remove observability, never alter
+            # the selected skill's execution or factual outcome.
+            self._disabled = True
+            self._pending_projection = None
+
+    def _project(self, logical_frame: int) -> int:
+        if (
+            type(logical_frame) is not int  # noqa: E721
+            or logical_frame < self._last_logical_frame
+        ):
+            raise TypeError("emulator logical frame differs")
+        return (
+            self.meter.emulator_frames
+            + logical_frame
+            - self._last_logical_frame
+        )
+
+
+def _build_metered_emulator(
+    delegate: Any,
+    meter: RedLivingDexSetupEffectMeter,
+    *,
+    limits: RedLivingDexProductionRuntimeLimits | None = None,
+) -> CausallyMeteredEmulator:
+    """Bind campaign accounting to the emulator-owned primitive boundary."""
+
+    def admit_frames(frames: int) -> None:
+        if limits is not None and (
+            type(frames) is not int  # noqa: E721
+            or frames < 0
+            or meter.emulator_frames + frames > limits.maximum_emulator_frames
+        ):
+            raise RedLivingDexProductionRuntimeError(
+                "production emulator frame bound exhausted"
+            )
+
+    return CausallyMeteredEmulator(
+        delegate,
+        record_frames=meter.record_emulator_frames,
+        admit_frames=admit_frames,
+    )
 
 
 class _AttemptMeteredActionExecutor:
     """Reserve action authority first and reconcile frames even on failure."""
 
-    __slots__ = ("_delegate", "_emulator", "_meter")
+    __slots__ = ("_delegate", "_emulator", "_limits", "_meter")
 
     def __init__(
         self,
         delegate: Any,
         *,
-        emulator: _MeteredEmulator,
+        emulator: CausallyMeteredEmulator,
         meter: RedLivingDexSetupEffectMeter,
+        limits: RedLivingDexProductionRuntimeLimits | None = None,
     ) -> None:
         self._delegate = delegate
         self._emulator = emulator
         self._meter = meter
+        self._limits = limits
 
     def execute(self, action: MacroAction) -> object:
+        if (
+            self._limits is not None
+            and self._meter.controller_actions
+            >= self._limits.maximum_controller_actions
+        ):
+            raise RedLivingDexProductionRuntimeError(
+                "production controller action bound exhausted"
+            )
         before_frame = self._emulator.frame_count
         before_meter_frames = self._meter.emulator_frames
         self._meter.record_controller_actions()
@@ -568,7 +720,7 @@ class _FieldAwareCountingExecutor(CountingExecutor):
         raw: _AttemptMeteredActionExecutor,
         *,
         reader: PokemonRedStateReader,
-        emulator: _MeteredEmulator,
+        emulator: CausallyMeteredEmulator,
         cut_block_swaps: dict[int, int],
     ) -> None:
         super().__init__(raw)  # type: ignore[arg-type]
@@ -625,5 +777,6 @@ __all__ = [
     "RED_LIVING_DEX_RUNTIME_FACTORY_SHA256",
     "RED_LIVING_DEX_TITLE_ADAPTER_SHA256",
     "RedLivingDexProductionRuntimeError",
+    "RedLivingDexProductionRuntimeLimits",
     "RedLivingDexProductionSetupResolver",
 ]

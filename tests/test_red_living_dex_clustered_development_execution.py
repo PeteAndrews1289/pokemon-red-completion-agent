@@ -296,7 +296,15 @@ def test_production_execution_constructs_rom_resolver_only_after_full_join(
     sentinel_resolver = object()
     sentinel_receipt = object()
 
-    def build_resolver(*, rom_path: Path, producer_execution_identity: object) -> object:
+    def build_resolver(
+        *,
+        rom_path: Path,
+        producer_execution_identity: object,
+        runtime_limits: object,
+        frame_observer: object,
+    ) -> object:
+        assert runtime_limits is None
+        assert frame_observer is None
         constructed.append((rom_path, producer_execution_identity))
         return sentinel_resolver
 
