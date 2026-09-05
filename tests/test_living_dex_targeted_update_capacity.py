@@ -79,6 +79,58 @@ def test_exact_matching_accepts_complete_disjoint_capacity() -> None:
     assert public["outcomes_opened"] == 0
     assert public["model_fits"] == 0
     assert public["private_identity_fields"] == 0
+    assert public["maximum_train_replays_per_context"] == 1
+
+
+def test_repeatable_train_matching_reuses_two_roots_without_reusing_development() -> None:
+    rows = (
+        _context(
+            0,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        _context(
+            1,
+            "train",
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        *_sufficient()[10:],
+    )
+
+    result = audit_living_dex_targeted_update_capacity(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    assert result.capacity_sufficient
+    assert result.train_contexts == 2
+    assert result.train_maximum_matching == 10
+    assert result.development_maximum_matching == 8
+    assert result.public_dict()["maximum_train_replays_per_context"] == 5
+
+
+def test_repeatable_train_bound_cannot_hide_one_root_bottleneck() -> None:
+    rows = (_sufficient()[0], *_sufficient()[10:])
+
+    result = audit_living_dex_targeted_update_capacity(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    assert not result.capacity_sufficient
+    assert result.train_maximum_matching <= 5
+
+
+def test_repeatable_train_bound_is_bounded() -> None:
+    with pytest.raises(LivingDexTargetedCapacityError, match="replay bound"):
+        audit_living_dex_targeted_update_capacity(
+            _sufficient(),
+            maximum_train_replays_per_context=33,
+        )
 
 
 def test_matching_detects_shared_kind_bottleneck_not_just_raw_count() -> None:

@@ -99,11 +99,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-model-sha256", required=True)
     parser.add_argument("--expected-model-record-sha256", required=True)
     parser.add_argument(
-        "--reuse-authenticated-train",
+        "--repeatable-train",
         action="store_true",
         help=(
-            "include previously consumed, authenticated train roots for a "
-            "repeatable training-only capacity audit; development stays held out"
+            "allow up to five reset episodes per authenticated train root while "
+            "development remains one-shot and held out"
         ),
     )
     return parser
@@ -162,11 +162,6 @@ def main(argv: list[str] | None = None) -> int:
                 runtime=runtime,
                 claim_registry=claim_registry,
                 state=state,
-                replayable_train_lineages=(
-                    supply.train_lineages
-                    if args.reuse_authenticated_train
-                    else frozenset()
-                ),
             )
             candidates = (
                 *candidates,
@@ -190,12 +185,11 @@ def main(argv: list[str] | None = None) -> int:
             )
             result = audit_red_living_dex_targeted_update_capacity(
                 capabilities,
-                excluded_lineages=(
-                    exclusions.development_lineages
-                    if args.reuse_authenticated_train
-                    else exclusions.excluded_lineages
-                ),
+                excluded_lineages=exclusions.excluded_lineages,
                 excluded_physical_roots=exclusions.development_physical_roots,
+                maximum_train_replays_per_context=(
+                    5 if args.repeatable_train else 1
+                ),
             )
             stage = "protected_input_integrity"
             _support("_require_integrity")(
@@ -221,19 +215,14 @@ def main(argv: list[str] | None = None) -> int:
                     "collection_authorized": False,
                     "development_reuse_enabled": False,
                     "exclusions": exclusions.public_dict(),
-                    "historical_train_reuse_enabled": bool(
-                        args.reuse_authenticated_train
-                    ),
+                    "repeatable_train_enabled": bool(args.repeatable_train),
                     "provider_executions": state.provider_executions,
-                    "replayed_train_contexts": int(
-                        getattr(state, "replayed_train_contexts", 0)
-                    ),
                     "rom_sha256": rom_sha256,
                     "schema": RESULT_SCHEMA,
                     "source_catalog_partition_reused_as_prospective_label": False,
                     "training_source_policy": (
-                        "repeatable_authenticated_train_only"
-                        if args.reuse_authenticated_train
+                        "bounded_resets_from_authenticated_train_only"
+                        if args.repeatable_train
                         else "fresh_unclaimed_only"
                     ),
                     "status": (

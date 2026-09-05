@@ -386,6 +386,7 @@ def audit_red_living_dex_targeted_update_capacity(
     excluded_lineages: frozenset[str] = frozenset(),
     excluded_physical_roots: frozenset[str] = frozenset(),
     policy: LivingDexTargetedCapacityPolicy | None = None,
+    maximum_train_replays_per_context: int = 1,
 ) -> LivingDexTargetedCapacityResult:
     """Audit the post-five-case Red bank without choosing, claiming, or executing."""
 
@@ -396,6 +397,7 @@ def audit_red_living_dex_targeted_update_capacity(
             excluded_physical_roots=excluded_physical_roots,
         ),
         policy=policy,
+        maximum_train_replays_per_context=maximum_train_replays_per_context,
     )
 
 

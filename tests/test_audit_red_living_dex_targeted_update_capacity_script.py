@@ -61,7 +61,7 @@ def test_parser_has_inventory_inputs_but_no_action_or_fit_controls() -> None:
     parsed = AUDITOR["_parser"]().parse_args(_args())
 
     assert parsed.private_root == Path("/private/artifacts")
-    assert parsed.reuse_authenticated_train is False
+    assert parsed.repeatable_train is False
     for field in (
         "candidate_index",
         "execute",
@@ -148,7 +148,6 @@ def test_main_emits_only_aggregate_targeted_capacity(
         model_predictions=0,
         provider_executions=0,
         root_claims=0,
-        replayed_train_contexts=0,
         teacher_queries=0,
     )
     globals_ = AUDITOR["main"].__globals__
@@ -211,7 +210,7 @@ def test_main_emits_only_aggregate_targeted_capacity(
     assert document["controller_actions"] == 0
     assert document["outcomes_opened"] == 0
     assert document["provider_executions"] == 0
-    assert document["historical_train_reuse_enabled"] is False
+    assert document["repeatable_train_enabled"] is False
     assert document["development_reuse_enabled"] is False
     assert document["training_source_policy"] == "fresh_unclaimed_only"
     assert "/private" not in encoded
@@ -219,28 +218,24 @@ def test_main_emits_only_aggregate_targeted_capacity(
     assert "b" * 64 not in encoded
 
 
-def test_repeatable_train_mode_reuses_only_authenticated_train_lineages(
+def test_repeatable_train_mode_changes_only_the_train_reset_bound(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     _candidate_capabilities, supply, _contexts, bindings = _inputs()
-    train_lineages = frozenset({"d" * 64, "e" * 64})
     development_lineages = frozenset({"f" * 64})
-    supply = SimpleNamespace(
-        train_lineages=train_lineages,
-    )
+    supply = SimpleNamespace()
     exclusions = SimpleNamespace(
-        excluded_lineages=train_lineages | development_lineages,
+        excluded_lineages=frozenset({"d" * 64}) | development_lineages,
         development_lineages=development_lineages,
         development_physical_roots=frozenset({"1" * 64}),
         public_dict=lambda: {
-            "train_lineages_excluded": len(train_lineages),
+            "train_lineages_excluded": 1,
             "development_lineages_excluded": len(development_lineages),
             "private_identity_fields": 0,
         },
     )
-    observed_replayable: frozenset[str] | None = None
-    observed_exclusions: frozenset[str] | None = None
+    observed_replay_bound: int | None = None
 
     def support(name: str):  # type: ignore[no-untyped-def]
         if name == "_authenticate_source":
@@ -257,11 +252,7 @@ def test_repeatable_train_mode_reuses_only_authenticated_train_lineages(
         if name == "_authenticate_supplemental_roots":
             return lambda *_args: ()
         if name == "_observe_candidates":
-            def observe(*_args: object, **kwargs: object) -> tuple[object, ...]:
-                nonlocal observed_replayable
-                observed_replayable = kwargs["replayable_train_lineages"]  # type: ignore[assignment]
-                return ()
-            return observe
+            return lambda *_args, **_kwargs: ()
         if name == "_observe_supplemental_candidates":
             return lambda *_args, **_kwargs: ()
         if name == "_require_integrity":
@@ -281,7 +272,6 @@ def test_repeatable_train_mode_reuses_only_authenticated_train_lineages(
         model_fits=0,
         model_predictions=0,
         provider_executions=0,
-        replayed_train_contexts=2,
         root_claims=0,
         teacher_queries=0,
     )
@@ -336,20 +326,19 @@ def test_repeatable_train_mode_reuses_only_authenticated_train_lineages(
     )
 
     def audit(*_args: object, **kwargs: object) -> object:
-        nonlocal observed_exclusions
-        observed_exclusions = kwargs["excluded_lineages"]  # type: ignore[assignment]
+        nonlocal observed_replay_bound
+        observed_replay_bound = kwargs["maximum_train_replays_per_context"]  # type: ignore[assignment]
+        assert kwargs["excluded_lineages"] == exclusions.excluded_lineages
         return result
 
     monkeypatch.setitem(globals_, "audit_red_living_dex_targeted_update_capacity", audit)
 
-    assert AUDITOR["main"]([*_args(), "--reuse-authenticated-train"]) == 0
+    assert AUDITOR["main"]([*_args(), "--repeatable-train"]) == 0
     document = json.loads(capsys.readouterr().out)
-    assert observed_replayable == train_lineages
-    assert observed_exclusions == development_lineages
-    assert document["historical_train_reuse_enabled"] is True
+    assert observed_replay_bound == 5
+    assert document["repeatable_train_enabled"] is True
     assert document["development_reuse_enabled"] is False
-    assert document["replayed_train_contexts"] == 2
-    assert document["training_source_policy"] == "repeatable_authenticated_train_only"
+    assert document["training_source_policy"] == "bounded_resets_from_authenticated_train_only"
     encoded = json.dumps(document, sort_keys=True)
     assert "d" * 64 not in encoded
     assert "f" * 64 not in encoded

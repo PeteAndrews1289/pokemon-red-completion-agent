@@ -175,6 +175,7 @@ class LivingDexTargetedCapacityResult:
     development_compatible_context_counts: tuple[
         tuple[LivingDexOptionKind, int], ...
     ]
+    maximum_train_replays_per_context: int
     reasons: tuple[str, ...]
 
     @property
@@ -199,6 +200,9 @@ class LivingDexTargetedCapacityResult:
             "emulator_frames": 0,
             "model_fits": 0,
             "model_predictions": 0,
+            "maximum_train_replays_per_context": (
+                self.maximum_train_replays_per_context
+            ),
             "outcomes_opened": 0,
             "policy": self.policy.public_dict(),
             "policy_sha256": self.policy.policy_sha256,
@@ -225,6 +229,7 @@ def audit_living_dex_targeted_update_capacity(
     contexts: Iterable[LivingDexTargetedCapacityContext],
     *,
     policy: LivingDexTargetedCapacityPolicy | None = None,
+    maximum_train_replays_per_context: int = 1,
 ) -> LivingDexTargetedCapacityResult:
     """Match each frozen semantic demand to a distinct untouched lineage."""
 
@@ -241,11 +246,22 @@ def audit_living_dex_targeted_update_capacity(
     if not isinstance(active, LivingDexTargetedCapacityPolicy):
         raise TypeError("targeted capacity policy differs")
     active.__post_init__()
+    if (
+        type(maximum_train_replays_per_context) is not int  # noqa: E721
+        or not 1 <= maximum_train_replays_per_context <= 32
+    ):
+        raise LivingDexTargetedCapacityError(
+            "targeted capacity train replay bound differs"
+        )
     train = tuple(row for row in rows if row.partition == "train")
     development = tuple(row for row in rows if row.partition == "development")
     train_demands = _expand_demands(active.train_focus_kind_counts)
     development_demands = _expand_demands(active.development_focus_kind_counts)
-    train_matching = _maximum_matching(train_demands, train)
+    train_matching = _maximum_matching(
+        train_demands,
+        train,
+        maximum_uses_per_context=maximum_train_replays_per_context,
+    )
     development_matching = _maximum_matching(development_demands, development)
     reasons: list[str] = []
     if train_matching < len(train_demands):
@@ -267,6 +283,7 @@ def audit_living_dex_targeted_update_capacity(
             development,
             active.development_focus_kind_counts,
         ),
+        maximum_train_replays_per_context=maximum_train_replays_per_context,
         reasons=tuple(reasons),
     )
 
@@ -317,10 +334,17 @@ def _compatible_counts(
 def _maximum_matching(
     demands: tuple[LivingDexOptionKind, ...],
     contexts: tuple[LivingDexTargetedCapacityContext, ...],
+    *,
+    maximum_uses_per_context: int = 1,
 ) -> int:
-    """Return exact one-context-per-demand cardinality by augmenting paths."""
+    """Return exact bounded-context demand cardinality by augmenting paths."""
 
-    context_to_demand: dict[int, int] = {}
+    context_slots = tuple(
+        context_index
+        for context_index in range(len(contexts))
+        for _ in range(maximum_uses_per_context)
+    )
+    context_slot_to_demand: dict[int, int] = {}
     ordered = tuple(
         sorted(
             range(len(demands)),
@@ -334,13 +358,14 @@ def _maximum_matching(
 
     def augment(demand_index: int, seen: set[int]) -> bool:
         kind = demands[demand_index]
-        for context_index, context in enumerate(contexts):
-            if context_index in seen or kind not in context.available_option_kinds:
+        for slot_index, context_index in enumerate(context_slots):
+            context = contexts[context_index]
+            if slot_index in seen or kind not in context.available_option_kinds:
                 continue
-            seen.add(context_index)
-            prior = context_to_demand.get(context_index)
+            seen.add(slot_index)
+            prior = context_slot_to_demand.get(slot_index)
             if prior is None or augment(prior, seen):
-                context_to_demand[context_index] = demand_index
+                context_slot_to_demand[slot_index] = demand_index
                 return True
         return False
 
