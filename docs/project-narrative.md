@@ -9240,3 +9240,24 @@ This is the final data-generation bridge before the first targeted option-model 
 make the agent an autonomous Pokémon master. It creates the compact, auditable experience needed to
 test whether the agent is learning reusable completion strategy rather than merely inheriting Red's
 scripted route.
+
+## September 5: the lesson plan became executable
+
+The schedule freezer passed 6,812 GitHub tests and then performed its one permitted private read.
+It restored the authenticated Red checkpoints without advancing a frame and froze ten lessons from
+two repeatable base states while preserving eight unrelated states as the exam. The plan itself is
+now immutable; no outcome was available when acquisition, party development, storage and resupply
+focuses were assigned.
+
+The production bridge also changed what a restart means. A schedule may reveal a hash-authenticated,
+non-executable index so the same cartridge states can be found after their base reservation exists,
+but every route and provider recipe must be freshly re-derived from Red mechanics before controller
+authority appears. During execution, the dashboard shows the live game, slot, reset, curriculum
+focus, shared-state cluster, actions, frames, settled examples, censors, locked exam rows and fits.
+It explicitly says **causal data collection—not model play** until a model is actually fitted.
+
+The honest board is now: **SCHEDULE 10/10 FROZEN · REAL OUTCOMES 0/10 · DEVELOPMENT OPENED 0/8 ·
+FITS 0**. The next engineering work publishes and greens the launcher, then runs one action-free
+preflight and starts the ordered train campaign. The mission has not changed: teach portable
+strategic choice above deterministic game skills so the eventual system can finish multiple games
+and build a living Pokédex. Crystal is intentionally not on this immediate critical path.

@@ -5663,3 +5663,30 @@ Mission check: this removes an ambiguous blocker without spending gameplay. The 
 training opportunity rather than more evaluator infrastructure. Crystal and full-game replay stay
 deferred; the learned target remains transferable semantic goal selection for eventual multi-game
 living-Pokédex completion.
+
+## Execution gate now in progress — September 5, 2026
+
+- [x] Publish the repeatable-capacity freezer and pass GitHub CI: 6,812 tests on run
+  `33993395345/1`, merged main `63d08eee`.
+- [x] Freeze the private 10-train/8-development denominator with zero actions, frames, outcomes,
+  predictions or fits; plan SHA-256 `715c4052…269af`.
+- [x] Implement full-support targeted randomization, honest shared-root reset claims, crash recovery,
+  train-only coordination, fresh mechanics replay and a live descriptive dashboard.
+- [ ] Regenerate the source-bound registries for the launcher branch, run focused/full local gates,
+  publish it and require green GitHub CI.
+- [ ] Run the action-free production preflight against the exact private plan. It may restore and
+  read scheduled roots but may not claim a reset or advance an emulator frame.
+- [ ] Execute or recover the ten train slots in frozen order. Preserve failures and interruptions as
+  censored terminals; do not replace or reroll them.
+- [ ] Require at least eight settled train examples, including at least three acquisition and three
+  party-development examples, before fitting.
+- [ ] Fit exactly once from authenticated train examples only, then commit updated-model and fixed
+  control choices for all eight development roots before opening any of them.
+- [ ] Evaluate paired development outcomes. Keep authority shadow-only unless the preregistered
+  comparison justifies promotion.
+- [ ] Reorient against the product mission before any Crystal port: story completion plus living-
+  Pokédex planning, with deterministic skills beneath portable learned semantic choice.
+
+This is now an execution-and-evidence gate, not another teacher-route hardening loop. Red outcome
+collection is the immediate critical path. Crystal remains a later transfer test, not a dependency
+for fitting the next Red model.

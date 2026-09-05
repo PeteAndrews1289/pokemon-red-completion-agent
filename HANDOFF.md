@@ -10174,3 +10174,31 @@ succeed, what verified collection or team effect occurred, and at what cost? Unl
 may remain `incomparable`; do not invent a scalar winner, promote authority, fit on this development
 result, access sealed Red or Crystal, or run a full replay. Use the result to design the smallest
 lineage-disjoint multi-goal training curriculum.
+
+## Targeted Red schedule frozen and production launcher implemented — 2026-09-05
+
+PR 224 passed all **6,812** non-integration tests in GitHub CI run `33993395345/1` and merged as
+exact main `63d08eeec05e5d2f7663764824c93f5707b58373`. From that clean source, the action-free
+freezer authenticated the private context bank and wrote exactly one external plan with SHA-256
+`715c40528b5494a5be194b73a1f8e2eac6a3fc4a802ef34d5de405bcf53269af`. The plan binds ten
+train resets across two declared base-state clusters and eight untouched development roots. Its Red
+binding is `cdf5136730067f2f59ce414e53f52a8be3d78d94c695e061583945e36ecc95b5`; the freeze used
+zero controller actions, zero emulator frames, zero outcomes, zero predictions and zero fits.
+
+The follow-on branch now contains the complete execution bridge:
+
+- a 98:1 full-support targeted behavior policy with every legal non-focus option retaining nonzero
+  probability;
+- one base-root reservation plus one durable no-reroll claim per declared reset;
+- a reset-aware selected-arm runner with crash-safe setup capture and terminal recovery;
+- a strict private-plan reader and a non-executable restart descriptor;
+- fresh action-free Red mechanics replay before any frozen recipe becomes executable;
+- an ordered campaign coordinator that can address train slots only; and
+- a view-only dashboard with live frames, slot/reset/focus, cluster count, action/frame totals,
+  settled versus censored outcomes, the locked development denominator and model-fit count.
+
+No real slot has been claimed and no model has been fitted. Next publish this launcher branch,
+refresh the source-bound registries, require green CI, run its action-free preflight against the
+frozen plan, then execute or recover all ten train slots in order. Audit the settled minimums before
+one train-only fit. Development outcomes remain unopened until predictions are committed; Crystal,
+sealed Red and full-game learned authority remain deferred.

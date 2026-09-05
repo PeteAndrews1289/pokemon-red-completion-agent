@@ -6136,3 +6136,18 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
 - End with the honest status card: **RUNNER ENGINEERED · REAL OUTCOMES 0/10 · FITS 0 · DEVELOPMENT
   ROOTS UNOPENED**. The next visible milestone is ten collected Red lessons and one bounded fit, not
   Crystal or a full-game victory claim.
+
+## Scene: the frozen board becomes a live observatory
+
+- Open on GitHub CI turning green: **6,812 TESTS · EXACT MAIN 63d08eee**.
+- Cut to the private freeze as a zero-effect operation: **10 TRAIN RESETS · 2 BASE STATES · 8
+  UNTOUCHED DEVELOPMENT STATES · ACTIONS 0 · FRAMES 0**.
+- Show the restart boundary: a thin non-executable index finds the state, then cartridge-derived Red
+  mechanics rebuild the route and provider recipe before the controller unlocks.
+- Reveal the live dashboard fields: **SLOT · RESET · FOCUS · CLUSTER · ACTIONS · FRAMES · SETTLED ·
+  CENSORED · DEVELOPMENT LOCKED · FITS 0**, alongside the emulator frame.
+- Put the label **CAUSAL DATA COLLECTION — NOT MODEL PLAY** above the screen. Do not imply that the
+  curriculum focus is a model prediction.
+- End the engineering scene on **REAL OUTCOMES 0/10** and the next visible action-free preflight.
+  The following scene begins only when the published launcher passes CI and the first durable reset
+  claim is written.
