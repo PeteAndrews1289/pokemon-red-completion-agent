@@ -9220,3 +9220,23 @@ development—not another model architecture or full-game teacher repair. The sy
 future exam bank, changed no learning counter, and turned a vague “not ready” into a bounded supply
 task. That is the next step toward a strategic policy that can generalize within Red before transfer
 to Crystal and later living-Pokédex completion.
+
+## September 5: two Red states became a legitimate ten-lesson curriculum
+
+The fresh-only audit had applied exam rules to the classroom. Training does not need ten independent
+worlds when the question is how different semantic choices behave from a controlled starting state;
+it needs honest clustering, explicit randomization and a separate exam. The revised design therefore
+reserves two real Red checkpoints, schedules five resets from each, and leaves eight unrelated
+development checkpoints untouched.
+
+The implementation records that distinction instead of papering it over. Each underlying state is
+reserved once, every reset has its own durable no-reroll trial claim, and the shared state bytes stay
+in provenance. A full-support behavior policy heavily favors the scheduled lesson—capture, party
+development, storage or resupply—while recording the exact probability of every executable
+alternative. Interrupted setup cannot turn into a convenient retry, and development rows cannot
+enter the training runner at all.
+
+This is the final data-generation bridge before the first targeted option-model update. It does not
+make the agent an autonomous Pokémon master. It creates the compact, auditable experience needed to
+test whether the agent is learning reusable completion strategy rather than merely inheriting Red's
+scripted route.

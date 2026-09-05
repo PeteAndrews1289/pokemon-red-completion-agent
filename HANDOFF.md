@@ -1,5 +1,39 @@
 # Handoff
 
+## Latest checkpoint: the reset-aware train runner is implemented; private freeze is pending
+
+The action-free schedule freezer and capacity result are published on PR 224. Its first complete
+GitHub run passed 6,812 tests and failed only one stale strategic-navigation golden identity; the
+three exact expected identities were refreshed and their focused suite passes 5/5. Auto-merge is
+armed behind the replacement full check. No gameplay, outcome, model fit, paired-development root,
+Crystal state or full-game replay was opened.
+
+The follow-on train-only implementation now closes the two design gaps that would otherwise waste
+the ten examples. First, its title-neutral behavior policy gives the preregistered focus kind 98
+integer tickets while retaining one ticket for every other executable option and zero for masked
+options. The complete propensity vector and single CSPRNG draw remain durable, so this is targeted
+curriculum sampling rather than an unlabeled forced action. Second, it explicitly models the ten
+train episodes as reset trials clustered under two underlying Red states. Each base state receives
+one account-wide campaign reservation and each frozen reset slot receives one no-reroll trial claim;
+the causal identity retains the shared state/envelope hashes and adds the reset claim rather than
+pretending that ten independent worlds exist.
+
+The Red runner can address train slots only. It durably retains setup claim, validated capture and
+terminal state; on restart, a completed capture is recovered without controller re-entry, while a
+claimed slot interrupted before capture becomes a permanent censored setup. Only after setup does
+the selected-arm causal journal open one focus-weighted option and independently retain its factual
+outcome. Development slots, teachers, counterfactual labels, fitting, Crystal and full replay have
+no runner interface. The private-plan reader separately requires canonical bytes, every frozen
+source/model/runtime/catalog digest, and equality with a freshly rederived Red binding.
+
+Focused verification currently includes 50 causal/reset tests, 4 runner-boundary tests and 4
+private-plan authentication tests, with Ruff and Mypy clean. The next exact sequence is: let PR 224
+auto-merge; freeze the 10+8 private schedule once from exact main; rebase and publish the runner;
+add its authenticated command/dashboard shell; collect the ten train outcomes; require at least
+eight settled rows including three acquisition and three party-development rows; fit once; then
+open the eight paired development roots for model-versus-deterministic control. This produces the
+first targeted strategic update. It is not yet an autonomous full-game player or a Crystal transfer.
+
 ## Latest checkpoint: repeatable Red training capacity is ready without spending the exam
 
 The fresh-only result below was correct but applied an evaluation rule to ordinary training. The

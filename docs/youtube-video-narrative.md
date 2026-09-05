@@ -6120,3 +6120,19 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
   development as the sparse concepts.
 - End on the honest next build: create fresh title-neutral Red situations, prove their independence,
   then freeze the 10+8 denominator before any outcome is known.
+
+## Scene: stop treating the classroom like the exam
+
+- Reframe the capacity board: **2 AUTHENTIC TRAIN STATES × 5 DECLARED RESETS = 10 LESSONS** while
+  **8 UNTOUCHED DEVELOPMENT STATES** remain the exam.
+- Keep the cluster label visible. Never animate the ten resets as ten independent worlds.
+- Show the four lesson families: **CAPTURE 4 · DEVELOP PARTY 4 · STORAGE 1 · RESUPPLY 1**.
+- Visualize the behavior wheel as **FOCUS 98 · EACH OTHER LEGAL OPTION 1 · MASKED 0** and retain the
+  exact probability beside the chosen action.
+- Before movement, stamp the base checkpoint **CAMPAIGN RESERVED**, then stamp the individual reset
+  **TRIAL CLAIMED — NO REROLL**.
+- Split recovery paths: a durable setup capture resumes without replay; a power loss after claim but
+  before capture becomes **CENSORED**, not a replacement example.
+- End with the honest status card: **RUNNER ENGINEERED · REAL OUTCOMES 0/10 · FITS 0 · DEVELOPMENT
+  ROOTS UNOPENED**. The next visible milestone is ten collected Red lessons and one bounded fit, not
+  Crystal or a full-game victory claim.

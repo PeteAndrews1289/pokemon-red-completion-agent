@@ -1,5 +1,40 @@
 # Model-first development roadmap
 
+## Active checkpoint: publish the reset-aware runner and collect the ten Red lessons
+
+The capacity question is closed: two authenticated Red train states support ten bounded reset
+episodes, and at least eight independent development states remain unopened for comparison. The
+schedule freezer is waiting behind PR 224's replacement full check after the preceding run passed
+6,812 tests and exposed one corrected stale golden identity. The private 10+8 allocation has not yet
+been written and no real outcome or fit has occurred.
+
+The train-only core is now implemented. It uses an explicit 98:1 full-support semantic behavior
+policy so the four acquisition and four party-development slots overwhelmingly exercise their
+intended skill without hiding alternate propensities. It also separates base-state reservation from
+reset-trial identity: the two physical starts remain visible as two clusters, while each of the ten
+prospectively frozen resets receives a durable one-shot claim and recovery record. The causal
+journal can therefore accept reset evidence without either blocking the second reset or falsely
+counting it as an independent world. A strict private-plan reader binds the future command to exact
+canonical schedule bytes and freshly rederived Red recipes.
+
+The remaining gates before the first targeted fit are concrete:
+
+1. Auto-merge PR 224 after the replacement check and freeze the private 10+8 schedule from exact
+   main without gameplay.
+2. Rebase, qualify and publish the train runner plus a view-only live command/dashboard.
+3. Execute the ten train slots in frozen order. Preserve every claimed failure or interruption in
+   the denominator; never replace a bad outcome or open development.
+4. Fit exactly once only if at least eight outcomes settle, including at least three acquisition
+   and three party-development examples. The fit must combine the complete prior 18-row train
+   corpus with every settled new train row.
+5. Freeze both challenger and deterministic-control decisions before running either arm on the
+   eight separate development roots. Report paired outcomes and clustered uncertainty honestly.
+
+This phase teaches high-level completion choices—when to capture, develop the party, manage storage
+or resupply—while deterministic skills still execute the mechanics. Passing it is a prerequisite
+for sustained Red play and later Crystal transfer, not proof of story completion or a living
+Pokédex by itself.
+
 ## Active checkpoint: repeatable targeted training, then a real paired control
 
 The fresh-only census exposed a process mistake: ordinary training had inherited the one-shot
