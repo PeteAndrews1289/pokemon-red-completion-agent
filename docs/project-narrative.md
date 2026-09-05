@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the five saved situations finally clear the repeatable doorway
+
+Moving ordinary development back to the internal checkout worked. In just over three seconds, the
+system reopened the exact model trained on 18 causal Red examples, joined two preserved and three
+supplemental development situations, and confirmed that all five remain unclaimed. It did this
+without a prediction or emulator frame. A synthetic production rehearsal then carried a successful
+setup through a genuine model-selected option and deterministic provider, retained its terminal,
+and recovered without executing the provider twice.
+
+This is the useful boundary between plumbing and behavior. The saved games are ready and the
+execution seam works in simulation, but the model has not yet acted in any of these five games.
+The next deliverable is one observable, bounded live development choice—not another corpus,
+teacher route, exact-source wrapper or full replay.
+
+## September 5: the external drive crossed a deliberate trust boundary
+
+The final hardened successor passed main CI, but its one readiness launch stopped before building
+even one development assignment. During disk cleanup, both the clean code checkout and the private
+saved-game corpus had moved onto the T7. The artifact guard deliberately requires those two trust
+domains to live on different devices, so it rejected the layout with every gameplay and learning
+counter at zero.
+
+That is useful negative evidence, but also a clear process correction. The typed storage error was
+collapsed into `unexpected_failure`, and three generations of exact-source wrappers had displaced
+measured learner work. We retained the result, closed the strict-bootstrap lane, and moved ordinary
+development back to the internal code checkout with the private corpus external. The five exam
+situations are still unclaimed. The next milestone is not another wrapper: it is repeatable
+five-case readiness, production-resolver rehearsal, and then bounded model-selected Red outcomes.
+
 ## September 5: the airlock rejected the launcher itself
 
 The strict replacement passed main CI and reproduced its exact 1,477-file runtime closure, but its

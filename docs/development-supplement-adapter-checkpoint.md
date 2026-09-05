@@ -1,5 +1,30 @@
 # Development supplement adapter checkpoint
 
+## Operational update: repeatable input readiness and resolver rehearsal pass
+
+The internal-worktree repeatable reader reopened all five unclaimed roots and the exact 18-example
+model in 3.22 seconds with zero protected effects. Three focused synthetic tests then covered
+delayed production-resolver construction, successful model-selected provider execution, failed
+setup exclusion and terminal recovery without a second provider execution. This qualifies the
+input and simulated execution seams only; no real cartridge prediction or outcome occurred.
+
+The remaining gate is one repeatable single-case live command with a view-only timeline, staged
+runtime authentication, fixed prospective order, hard bounds and claim-before-input recovery.
+Publish and reorient before using controller input. See the [qualification evidence](evidence/red-development-repeatable-readiness-and-rehearsal-v1-2026-09-05.json).
+
+## Operational update: strict bootstrap closed on a storage-boundary rejection
+
+The final successor merged as main `3a849a12`, passed CI `33943983942/1`, and launched once under
+the canonical locale. It failed closed with zero effects because the clean execution worktree and
+private corpus were both on the T7. `open_private_root` correctly requires a different storage
+device from the repository and rejected the layout before constructing any assignment. The exact
+strict identity is consumed; do not retry it or publish another wrapper.
+
+All five roots remain unclaimed. Continue from the internal-disk worktree through a repeatable
+development entry point that reuses this adapter and gives the storage error a typed public stage.
+Pass five-root zero-effect readiness and synthetic production-resolver rehearsal before a separate
+decision on bounded controller input. See the [rejection evidence](evidence/red-development-five-root-preflight-storage-boundary-rejection-v1-2026-09-05.json).
+
 ## Operational update: V2 host invocation rejected before the airlock
 
 The strict runtime repair merged at `90b90d22`; exact-main CI passed and the clean worktree staged

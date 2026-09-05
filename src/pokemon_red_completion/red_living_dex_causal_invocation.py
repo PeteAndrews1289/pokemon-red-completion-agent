@@ -61,6 +61,7 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     RedLivingDexFrozenProducerBinding,
     RedLivingDexProducerSlotLoader,
     authenticate_red_living_dex_producer_slot,
+    require_red_living_dex_current_consumer,
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
     RedLivingDexFrozenRecipeAccess,
@@ -121,6 +122,19 @@ def bind_red_living_dex_authenticated_consumer(
         binding.exact_ci_attempt,
     ):
         raise RedLivingDexCausalInvocationError("bootstrap_source_authentication")
+    return RedLivingDexAuthenticatedConsumer(
+        binding,
+        _AUTHENTICATED_CONSUMER_AUTHORITY,
+    )
+
+
+def authenticate_red_living_dex_current_consumer(
+    project_root: Path,
+    binding: RedLivingDexCurrentConsumerBinding,
+) -> RedLivingDexAuthenticatedConsumer:
+    """Authenticate a normal clean published consumer for repeatable development."""
+
+    require_red_living_dex_current_consumer(project_root, binding)
     return RedLivingDexAuthenticatedConsumer(
         binding,
         _AUTHENTICATED_CONSUMER_AUTHORITY,
@@ -450,6 +464,7 @@ __all__ = [
     "RedLivingDexCausalInvocationError",
     "RedLivingDexLateProductionResolver",
     "authenticate_red_living_dex_execution_runtime",
+    "authenticate_red_living_dex_current_consumer",
     "bind_red_living_dex_authenticated_consumer",
     "execute_red_living_dex_causal_campaign",
 ]

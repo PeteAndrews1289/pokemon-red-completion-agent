@@ -1,5 +1,34 @@
 # Current agent handoffs
 
+## Codex live-runner integration — readiness is green, stop before execution
+
+The internal-source/external-private repeatable check passed all five unclaimed development inputs
+against the exact 18-example model. The synthetic production-resolver slice also passed, including
+one model-selected provider execution and recovery without replay. No real prediction, claim,
+action, frame or outcome occurred. See the [qualification](evidence/red-development-repeatable-readiness-and-rehearsal-v1-2026-09-05.json).
+
+Codex now owns the repeatable single-case execution command and view-only progress timeline. Keep
+the authenticated staged runtime, delayed ROM open, claim-before-input journal, hard bounds and
+fixed case order. ROM-free tests must prove storage separation, no teacher interface, terminal
+recovery and no second execution. Publish and reorient before controller input; no external review
+is needed until a real terminal behavior result exists.
+
+## Codex repeatable development lane — stop wrapping, reach measured behavior
+
+The final strict successor is consumed. Main `3a849a12` and CI `33943983942/1` were green, but the
+clean execution worktree and private corpus were both on the T7. The private-artifact guard
+therefore rejected the source/private same-device layout before any assignment, claim, prediction
+or game effect; its unhandled typed error collapsed to `unexpected_failure`. All five roots remain
+unclaimed. See the [path-free evidence](evidence/red-development-five-root-preflight-storage-boundary-rejection-v1-2026-09-05.json).
+
+Codex owns the replacement development loop from the internal-disk source worktree. Reuse the
+existing five-root admission, immutable eighteen-example model, production resolver and outcome
+journals; add a repeatable development entry point and an explicit storage-boundary stage. Pass a
+zero-effect readiness check, then a synthetic production-resolver rehearsal, and reorient before
+controller input. Do not build another exact-source bootstrap, repeat supply discovery, fit on
+development, open Crystal or run a full replay. External reviewers are unnecessary until behavior
+evidence or an authority decision exists.
+
 ## Codex final bootstrap successor — publish once, then stop or advance
 
 Strict V2 merged as main `90b90d22`, passed exact-main CI and reproduced the reviewed 1,477-file

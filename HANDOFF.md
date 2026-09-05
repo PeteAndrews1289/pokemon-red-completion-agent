@@ -1,5 +1,49 @@
 # Handoff
 
+## Latest checkpoint: five real inputs are ready; synthetic resolver rehearsal passes
+
+The new repeatable development readiness command ran from the internal-disk checkout with the
+private corpus on T7. In 3.22 seconds it reopened the immutable 18-example train-only model and all
+five independent development roots—two historical and three supplement—and confirmed every claim
+pair remains available. Predictions, claims, outcomes, actions, frames, fits and teacher queries
+were all zero. A three-test synthetic rehearsal then proved delayed resolver construction, one
+actual model-selected provider execution, failed-setup exclusion, and terminal recovery without a
+second provider execution. See the [qualification evidence](docs/evidence/red-development-repeatable-readiness-and-rehearsal-v1-2026-09-05.json).
+
+The publication tree passes Ruff, Mypy across 367 source modules, all four source-bound registry
+reproductions, documentation/privacy/focus checks, and the complete local suite: **6,742 passed, 1
+skipped, 3 deselected and 1 expected failure in 17m43s**. The first complete-suite attempt was
+stopped after one expected stale registry golden appeared; regenerating the source-bound registries
+and updating their independent vectors resolved it before this clean full run.
+
+This is not a real gameplay or learning result. Next implement and ROM-free qualify a repeatable
+single-case execution command plus view-only timeline. It must stage the authenticated production
+runtime, claim before input, enforce hard action/frame limits, retain setup censors and factual
+ledger outcomes, and expose no teacher fallback. Use a fixed prospective case order; stop after the
+first terminal live case and reorient. Never fit on these development outcomes.
+
+## Latest checkpoint: final strict preflight consumed by storage-boundary rejection
+
+PR 216 merged as exact main `3a849a12288d38d489f5bd95faa1c5598cde48fd`; main CI
+`33943983942/1` passed the complete suite in 19 minutes 1 second. The one final canonical-locale
+five-root preflight then failed closed as `unexpected_failure` with every protected counter at
+zero. It made no prediction, root claim, outcome, controller action, emulator frame, model fit or
+teacher query.
+
+Read-only diagnosis established that the clean execution worktree and private corpus were both on
+the T7. The private-artifact boundary correctly requires source and private data on separate
+devices and rejected the root before constructing an assignment. The command should have mapped
+`PrivateArtifactError` to a specific public stage, but that observability gap does not justify a
+fourth strict wrapper. Do not retry V1, V2 or this final successor. See the
+[storage-boundary rejection](docs/evidence/red-development-five-root-preflight-storage-boundary-rejection-v1-2026-09-05.json).
+
+All five development roots remain unclaimed. Continue through an ordinary repeatable development
+entry point from this internal-disk worktree while the private corpus remains on the external T7.
+Exact source/CI binding is no longer required for this development iteration. First pass a
+zero-effect five-root readiness check with explicit storage diagnostics, then rehearse the real
+production resolver synthetically. Reorient before the first controller-capable development
+choice. Preserve deterministic safety and never fit on development outcomes.
+
 ## Latest checkpoint: strict V2 invocation rejected before source admission
 
 The strict successor merged as exact main `90b90d2205535e4a3ed294b522331f0c41dccc27` and exact-main

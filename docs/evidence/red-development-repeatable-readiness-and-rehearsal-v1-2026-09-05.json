@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon.red.development-repeatable-readiness-and-rehearsal-evidence.v1",
+  "status": "five_inputs_ready_and_synthetic_resolver_rehearsal_passed",
+  "rigor": "development_repeatable",
+  "input_readiness": {
+    "cases_ready": 5,
+    "claims_available": 5,
+    "historical_cases_ready": 2,
+    "supplement_cases_ready": 3,
+    "partition": "development",
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "model_record_sha256": "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb",
+    "wall_seconds": 3.2214995,
+    "exact_source_ci_binding": false,
+    "runtime_authenticated": false,
+    "production_resolver_rehearsed": false
+  },
+  "synthetic_rehearsal": {
+    "tests_passed": 3,
+    "wall_seconds": 45.38,
+    "delayed_resolver_construction_verified": true,
+    "successful_setup_reached_actual_model_choice": true,
+    "selected_provider_executions": 1,
+    "terminal_recovery_reused_result_without_second_provider_execution": true,
+    "failed_setup_blocked_model_outcome": true,
+    "training_targets_emitted": 0
+  },
+  "protected_effects_on_real_inputs": {
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "privacy": {
+    "private_identity_fields": 0,
+    "private_path_fields": 0
+  },
+  "predecessor_rejection_sha256": "465217c6f2e1f1dea5b6e7fa4bd61c6393f42a758f8ae2390bc3d47f6e16fa37",
+  "next_gate": "Reorient before controller input, then qualify one repeatable bounded development execution with live runtime observability and durable factual outcome retention.",
+  "claim_boundary": "The five real inputs and immutable model joined, while the production-resolver behavior was exercised only with synthetic cartridge state. No real model prediction, gameplay, outcome, fit, authority promotion, sealed Red access, Crystal access or transfer result occurred."
+}

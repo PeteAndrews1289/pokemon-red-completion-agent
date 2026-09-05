@@ -29,6 +29,7 @@ from pokemon_red_completion.red_living_dex_causal_campaign import (
 )
 from pokemon_red_completion.red_living_dex_causal_invocation import (
     RedLivingDexCausalInvocationError,
+    authenticate_red_living_dex_current_consumer,
     bind_red_living_dex_authenticated_consumer,
     execute_red_living_dex_causal_campaign,
 )
@@ -94,6 +95,25 @@ def _authenticated_consumer():  # type: ignore[no-untyped-def]
             binding.exact_ci_attempt,
         ),
     )
+
+
+def test_repeatable_consumer_requires_clean_published_source_and_green_ci(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    binding = _consumer()
+    calls: list[tuple[Path, object]] = []
+    monkeypatch.setattr(
+        invocation,
+        "require_red_living_dex_current_consumer",
+        lambda root, expected: calls.append((root, expected)),
+    )
+
+    consumer = authenticate_red_living_dex_current_consumer(tmp_path, binding)
+
+    assert calls == [(tmp_path, binding)]
+    assert consumer.binding == binding
+    consumer.__post_init__()
 
 
 def test_direct_invocation_surface_has_no_plan_identity_resolver_or_registry_injection() -> None:

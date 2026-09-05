@@ -1,0 +1,42 @@
+{
+  "schema": "pokemon.red.development-five-root-preflight-storage-boundary-rejection-evidence.v1",
+  "status": "failed_closed_before_assignment_admission",
+  "source": {
+    "git_commit": "3a849a12288d38d489f5bd95faa1c5598cde48fd",
+    "source_bundle_sha256": "d658dd0b9367930ac291195495ac5d0e8dc54887d045dd34847d9b6a7245b208",
+    "command_sha256": "1a5d5215b3c74a467bb11083f2efe2586b1c247b54c12da835f957f9a36aeddc",
+    "exact_ci_run": 33943983942,
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success"
+  },
+  "observed_result": {
+    "schema": "pokemon.red.living-dex-development-batch-preflight-failure.v2",
+    "stage": "unexpected_failure",
+    "status": "failed_closed",
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "diagnosis": {
+    "kind": "private_source_storage_device_collision",
+    "finding": "The clean execution worktree and the private artifact root were both located on the same external storage device. The private-artifact guard requires the repository and private root to resolve to different storage devices and rejected the root before any assignment was constructed.",
+    "basis": "A post-failure metadata-only device check established identical device identities. A read-only development import reproduced PrivateArtifactError while opening the private root and constructed zero assignments. All ten selected files remained owner-only regular files with their previously authenticated content hashes.",
+    "diagnostic_gap": "PrivateArtifactError was not in the command's explicit sanitized exception map, so the valid storage-boundary rejection was reported only as unexpected_failure.",
+    "not_established": [
+      "selected_root_identity_failure",
+      "plan_identity_failure",
+      "model_identity_failure",
+      "runtime_closure_failure",
+      "gameplay_failure",
+      "model_quality_failure"
+    ]
+  },
+  "retry_policy": "Do not retry this exact source, CI and five-root preflight identity. The declared final bootstrap successor is consumed and the strict-bootstrap lane is closed. Preserve the five still-unclaimed development roots and continue through an ordinary repeatable development runner from an internal-disk source worktree, where the private corpus remains on a distinct device.",
+  "claim_boundary": "This is a storage-boundary rejection, not a model result. It produced no prediction, claim, outcome, controller action, emulator frame, fit, teacher query, training target, authority promotion, sealed Red access or Crystal access."
+}

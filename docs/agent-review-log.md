@@ -3,6 +3,19 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Final strict-preflight storage-boundary adjudication — Codex 2026-09-05
+
+The reviewer-approved source merged as main `3a849a12` and passed CI `33943983942/1`. Its one final
+preflight produced a path-free `unexpected_failure` envelope with every protected counter zero.
+Read-only diagnosis established a same-device source/private layout on the T7; the private store's
+separation guard rejected it before assignment construction. This resolves the reviewers' live
+environment unknown without changing their source-level GO verdicts.
+
+Codex accepts the guardrail and rejects another strict successor. The missing typed mapping for
+`PrivateArtifactError` becomes a requirement of the repeatable development command, not a reason
+to repeat exact-source qualification. All five roots remain unclaimed. No review is needed again
+until a production-resolver rehearsal or bounded model-selected outcome exists.
+
 ## Five-root strict-bootstrap review — Claude and Codex 2026-09-05
 
 Claude performed a High-effort read-only review of the strict V2 command before invocation and

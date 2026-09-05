@@ -5,7 +5,29 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
-The current September 5 gate is still pre-game: strict V2 passed main CI and runtime-closure
+The repeatable five-case readiness rail is now green: **5/5 INPUTS READY · 5/5 CLAIM PAIRS
+AVAILABLE · EXACT 18-EXAMPLE MODEL REOPENED · LIVE PREDICTIONS/ACTIONS/FRAMES/OUTCOMES 0**. The
+synthetic resolver rail is also green: **DELAYED CONSTRUCTION · ONE SELECTED PROVIDER · TERMINAL
+RECOVERY WITHOUT REPLAY**. Keep both explicitly labelled qualification.
+
+The next dashboard implementation should show the fixed-order single-case live runner before it is
+used: case state, runtime readiness, claim state, semantic candidates, chosen option, selected
+deterministic skill, actions, frames, ledger delta, intervention/censor and terminal recovery. The
+page remains view-only. Publish and reorient before any controller input.
+
+The final strict September 5 preflight is now closed, not pending. Main and CI were green, but the
+clean execution checkout and private corpus had both been placed on the T7. The source/private
+isolation guard rejected that layout before assignment admission, and every prediction, claim,
+action, frame, outcome, fit and teacher counter stayed zero. The dashboard should show **STRICT
+BOOTSTRAP CLOSED · FIVE ROOTS STILL UNCLAIMED**, not a model or gameplay failure.
+
+The active display target is a repeatable development timeline launched from the internal-disk
+worktree with the private corpus on T7. First show five-case readiness and production-resolver
+rehearsal. After a separate controller-capable reorientation, show per case: semantic candidates,
+shadow model choice, deterministic chosen skill, ledger before/after, actions, frames, recovery and
+terminal outcome. Never label readiness or rehearsal as training.
+
+The earlier September 5 gate was pre-game: strict V2 passed main CI and runtime-closure
 authentication, but its host launcher supplied a locale that violated the pinned interpreter flags.
 That launch stopped before source or private admission. The final successor exposes the distinct
 interpreter-authentication failure, then gets one canonical-locale zero-effect preflight. The
