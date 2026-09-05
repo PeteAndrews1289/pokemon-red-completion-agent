@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: 99.55% confidence meets a real failure
+
+**Visual:** Split the screen into two decision cards. Card one reads **RESUPPLY · 99.73% → SUCCESS
+· BALLS 1→5**. Card two reads **ACQUIRE · 99.55% → FAILED · LEDGER +0**. Show the second route
+reaching the encounter area, then stop on a broad `RedAreaExecutionError` label rather than inventing
+a cause.
+
+**Voiceover:** “The model finally made real strategic choices. One worked exactly as predicted. The
+next was a valuable failure: it was extremely confident, the deterministic acquisition skill still
+failed, and the Pokédex did not move. We preserved that outcome, refused to retry or train on the
+test, and fixed the diagnostic seam so the next failure tells us whether the reusable problem is
+routing, encounters, capture mechanics, storage or a hard bound.”
+
+End on **2/5 TERMINAL · 3 AVAILABLE · SHADOW ONLY**, then show sanitized reason codes flowing into
+the audit while private paths, coordinates and species labels are blocked. Do not depict a model
+update, authority promotion, Crystal transfer or Pokédex completion.
+
 ## New scene: zero frames can still be a useful result
 
 **Visual:** The dashboard opens, then the controller stays locked at **0 ACTIONS · 0 FRAMES · 5/5

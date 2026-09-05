@@ -1,5 +1,25 @@
 # Current agent handoffs
 
+## Codex failure-diagnostics session — publish before consuming case three
+
+Two live Red development cases from exact main `31e0d925` / CI `33959029027/1` are terminal. The
+model-selected resupply option succeeded and improved inventory; the model-selected acquisition
+option failed despite 0.9955 predicted success. This is one positive and one negative authentic
+development outcome, no fit, no teacher, no authority promotion and no transfer claim. Three cases
+remain. See the [path-free evidence](evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json).
+
+Codex is implementing sanitized component-reason retention across the area, encounter, capture,
+flee, storage and corridor contracts. The generic adapter accepts a canonical reason from any
+provider and maps everything else to `execution_failed`; it never retains the exception message.
+Codex owns tests, historical-terminal compatibility, registries, publication, exact-main CI and the
+next one-case stop. External review is unnecessary for this bounded observability repair. The next
+useful reviewer milestone is after the remaining three outcomes or before any fit/promotion
+decision. Do not allow a Route 16 exception, species identity or coordinate into policy logic.
+
+The local gate is green: 6,769 tests, full package typing, touched-script typing, lint, focus/docs
+checks and all registry reproductions. A real action-free reopen reports two retained terminals,
+three available claims and no incomplete claim.
+
 ## Codex runtime-stage repair — publish before the next live case
 
 The first live command on main `21bc4994` failed before claim or input because the repeatable runner

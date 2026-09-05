@@ -5,6 +5,14 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
+The live rail now has two durable results: **CASE 1 · RESUPPLY · 99.73% PREDICTED · SUCCESS · +4
+CAPTURE ITEMS**, followed by **CASE 2 · ACQUIRE · 99.55% PREDICTED · FAILED · NO LEDGER GAIN**.
+Display the second as an overconfident development failure, not a training update. Show **2/5
+TERMINAL · 3 AVAILABLE · 0 TEACHERS · 0 FITS · SHADOW AUTHORITY**. Its historical trace can name
+only `RedAreaExecutionError`; the active repair adds a sanitized component-reason field for future
+cases without revealing paths, coordinates or identities. Case three remains closed until that
+repair is published and green.
+
 The live development timeline is now implemented and locally qualified. Its active rail is
 **5 AUTHENTICATED RED CASES → FIRST ELIGIBLE ONLY → DURABLE CLAIM → DELAYED ROM OPEN → TITLE-NEUTRAL
 MODEL CHOICE → ONE DETERMINISTIC SKILL → FACTUAL LEDGER TERMINAL → STOP + REORIENT**. Show the hard

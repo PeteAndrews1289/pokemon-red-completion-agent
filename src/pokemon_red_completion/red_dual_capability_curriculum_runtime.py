@@ -360,10 +360,16 @@ class SemanticVenueAreaExecutor:
 
     def seek_encounter(self) -> None:
         if self.encountered_species_ref() is not None:
-            raise RedAreaExecutionError("semantic venue cannot seek during an encounter")
+            raise RedAreaExecutionError(
+                "semantic venue cannot seek during an encounter",
+                reason_code="seek_requested_during_encounter",
+            )
         moved = self.walker(self.actions, self.reader, self.emulator)
         if moved not in {0, 1}:
-            raise RedAreaExecutionError("semantic venue walker returned an invalid step count")
+            raise RedAreaExecutionError(
+                "semantic venue walker returned an invalid step count",
+                reason_code="venue_walker_invalid_step_count",
+            )
 
     def capture_encounter(self, species_ref: str) -> bool | None:
         return self.delegate.capture_encounter(species_ref)
@@ -800,7 +806,10 @@ def run_red_target_capture(
     """Seek one repeatable target under hard bounds, even when it is redundant."""
 
     if not isinstance(source_id, str) or not source_id:
-        raise RedAreaExecutionError("target capture source is absent")
+        raise RedAreaExecutionError(
+            "target capture source is absent",
+            reason_code="target_capture_source_missing",
+        )
     method = RED_ACQUISITION_CATALOG.method_for(target_species_ref)
     if (
         method.kind is not RedAcquisitionKind.WILD
@@ -808,17 +817,26 @@ def run_red_target_capture(
         or not method.repeatable
         or method.transforms_precursor
     ):
-        raise RedAreaExecutionError("target is not a repeatable wild member of this source")
+        raise RedAreaExecutionError(
+            "target is not a repeatable wild member of this source",
+            reason_code="target_capture_source_mismatch",
+        )
     for name, value in (
         ("maximum_actions", maximum_actions),
         ("maximum_encounters", maximum_encounters),
     ):
         if type(value) is not int or value <= 0:  # noqa: E721
-            raise RedAreaExecutionError(f"{name} must be positive")
+            raise RedAreaExecutionError(
+                f"{name} must be positive",
+                reason_code="target_capture_bound_invalid",
+            )
     initial = executor.read_collection()
     before_counts = Counter(specimen.species_ref for specimen in initial.specimens)
     if initial.party_size >= initial.party_limit and not initial.current_box_has_room:
-        raise RedAreaExecutionError("target capture has no immediate retained-specimen slot")
+        raise RedAreaExecutionError(
+            "target capture has no immediate retained-specimen slot",
+            reason_code="target_capture_storage_unavailable",
+        )
     encounters_seen = 0
     flees = 0
     for action_index in range(maximum_actions):
@@ -834,7 +852,10 @@ def run_red_target_capture(
         if encountered != target_species_ref:
             executor.flee_encounter()
             if executor.encountered_species_ref() is not None:
-                raise RedAreaExecutionError("target capture flee did not settle")
+                raise RedAreaExecutionError(
+                    "target capture flee did not settle",
+                    reason_code="flee_postcondition_failed",
+                )
             flees += 1
             continue
         retained = executor.capture_encounter(target_species_ref)
@@ -842,7 +863,10 @@ def run_red_target_capture(
         after_counts = Counter(specimen.species_ref for specimen in after.specimens)
         if retained is False:
             if after_counts != before_counts or executor.encountered_species_ref() is not None:
-                raise RedAreaExecutionError("failed target capture changed the collection")
+                raise RedAreaExecutionError(
+                    "failed target capture changed the collection",
+                    reason_code="capture_retry_postcondition_failed",
+                )
             flees += 1
             continue
         if (
@@ -859,7 +883,10 @@ def run_red_target_capture(
             )
             or executor.encountered_species_ref() is not None
         ):
-            raise RedAreaExecutionError("target capture did not retain exactly one bound precursor")
+            raise RedAreaExecutionError(
+                "target capture did not retain exactly one bound precursor",
+                reason_code="capture_retention_postcondition_failed",
+            )
         return RedTargetCaptureReport(
             source_id=source_id,
             target_species_ref=target_species_ref,
@@ -870,7 +897,10 @@ def run_red_target_capture(
             before_target_count=before_counts[target_species_ref],
             after_target_count=after_counts[target_species_ref],
         )
-    raise RedAreaExecutionError("target capture exhausted its action or encounter bound")
+    raise RedAreaExecutionError(
+        "target capture exhausted its action or encounter bound",
+        reason_code="target_capture_bound_exhausted",
+    )
 
 
 def _require_route_start(plan: RoutePlan, current: TraversalSnapshot) -> None:

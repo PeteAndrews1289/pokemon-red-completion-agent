@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the model made two real choices—and confidence finally met reality
+
+The first saved situation gave the model three semantic options. It chose resupply with 99.73%
+predicted success, and the deterministic mart skill delivered: capture inventory rose from one to
+five while resource pressure fell from 0.9 to 0.5. In the second situation, the model chose species
+acquisition with 99.55% predicted success. The route reached its destination, but the area skill
+failed after 393 actions and 22,140 frames without adding a species or unlocking progress.
+
+That miss matters more than another green simulation. The system has now demonstrated both a useful
+composition and a sharply overconfident failure under real game mechanics. We did not relabel the
+failure, retry it, ask the teacher, or train on the development result. Instead, the next repair
+preserves a safe semantic reason—encounter limit, missing evidence, capture postcondition, corridor
+stall, storage pressure, and so on—without recording private messages or route identities. That
+turns the remaining cases into evidence capable of improving reusable Pokémon skills rather than
+fuel for one more location-specific workaround.
+
 ## September 5: the first live launch failed before the game—and saved the experiment
 
 The newly published runner opened its dashboard, then stopped with zero controller actions and zero

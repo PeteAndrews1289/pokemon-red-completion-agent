@@ -176,7 +176,7 @@ def test_repeatable_input_readiness_joins_five_unclaimed_roots_without_runtime(
 
     public = receipt.public_dict()
     assert len(opened) == 5
-    assert public["status"] == "five_development_inputs_ready_without_runtime_or_effects"
+    assert public["status"] == "five_development_inputs_joined_without_runtime_or_effects"
     assert public["claims_available"] == 5
     assert public["runtime_authenticated"] is False
     assert public["production_resolver_rehearsed"] is False
@@ -185,7 +185,7 @@ def test_repeatable_input_readiness_joins_five_unclaimed_roots_without_runtime(
     assert meter.checkpoint() == before
 
 
-def test_repeatable_input_readiness_rejects_consumed_root(
+def test_repeatable_input_inspection_counts_consumed_root_without_reopening_it(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -220,12 +220,14 @@ def test_repeatable_input_readiness_rejects_consumed_root(
         lambda *_args: next(availability),
     )
 
-    with pytest.raises(RedLivingDexDevelopmentBatchError, match="unavailable"):
-        inspect_red_living_dex_development_batch_inputs(
-            _store(tmp_path),
-            assignments=assignments,
-            meter=RedLivingDexSetupEffectMeter(),
-        )
+    receipt = inspect_red_living_dex_development_batch_inputs(
+        _store(tmp_path),
+        assignments=assignments,
+        meter=RedLivingDexSetupEffectMeter(),
+    )
+
+    assert receipt.claims_available == 4
+    assert receipt.public_dict()["claims_available"] == 4
 
 
 def test_batch_shape_rejects_train_crossover_before_model_authentication(

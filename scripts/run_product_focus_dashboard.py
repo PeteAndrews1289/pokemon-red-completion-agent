@@ -135,9 +135,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage="Red semantic goal curriculum · hybrid control",
         message=(
-            "Red multi-goal calibration has four admitted outcomes across two independent roots: "
-            "two develop_team successes and two equal-cap alternative-goal failures. A typed "
-            "binding-failure retention repair is the gate before untouched trials 6-8."
+            "The first two live living-Pokedex choices are durable: resupply succeeded, while "
+            "acquisition failed despite 99.55% predicted success. Structured component-failure "
+            "retention is the gate before the three remaining cases."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red multi-goal curriculum · Crystal transfer deferred",
@@ -158,10 +158,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             adaptation_completed=verified_compositions,
             adaptation_total=verified_composition_target,
             sealed_completed=development_episodes,
-            sealed_total=development_episode_target,
+            sealed_total=max(development_episodes, development_episode_target),
             predictions_committed=False,
-            heading="Red multi-goal calibration",
-            eyebrow="Four outcomes · binding repair · three untouched trials",
+            heading="Red bounded living-Pokedex development",
+            eyebrow="Two live outcomes · one success · one overconfident failure",
             counter_labels=(
                 "Composition attempts",
                 "Verified composition episodes",

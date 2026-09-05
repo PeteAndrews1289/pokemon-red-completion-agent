@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the locally qualified runtime-stage repair, require green exact-main CI, recheck the five untouched cases action-free, then run only the first fixed-order eligible development root and judge its retained terminal behavior before continuing.
+- Next decision: Publish safe structured component-failure retention, require green exact-main CI and historical-terminal recovery, then execute only the next fixed-order bounded development case and judge its factual outcome before fitting or any authority decision.
 
 ### Mandatory mission check
 
@@ -53,7 +53,7 @@ Not the product:
 | Causal Train Example · train | 111 | 111 |
 | Composition Attempt · development | 6 | 6 |
 | Verified Composition Episode · development | 4 | 4 |
-| Development Episode · development | 24 | 24 |
+| Development Episode · development | 26 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-repeatable-development-runtime-stage-repair** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-runtime-stage-repair-local-qualification-v1-2026-09-05.json)
+**2026-09-05-repeatable-development-first-two-outcomes-and-failure-diagnostics** · status **active** · evidence [verified outcome example](docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project preserved its first five real behavior opportunities by rejecting an incomplete and drifted emulator dependency boundary before input. The next useful evidence remains whether one semantic model choice can advance the living-Pokedex ledger through a deterministic skill. |
-| Learning output | No learning counter changed. The zero-effect launch falsified the runtime bootstrap; the repair installs and rehashes the reviewed closure before controller-capable imports while preserving the fixed-order case, hard limits, delayed ROM, durable recovery and view-only dashboard. |
-| Authority delta | No authority changed. The first published live invocation made zero claims, predictions, controller actions, emulator frames, outcomes, fits or teacher queries; all five development cases remain available and the eighteen-example model remains shadow-only. |
+| Product alignment | The first two live cases directly tested whether the shared model can choose useful living-Pokedex work and hand it to deterministic skills. One success validates the resupply composition seam; one overconfident acquisition failure exposes the next reusable capability gap instead of inviting a Route 16 patch. |
+| Learning output | Two durable model-choice/outcome pairs were added. Resupply succeeded and improved capture inventory; acquisition failed with no completion or dependency gain. This moves development episodes from 24 to 26 and verified outcome examples from 61 to 63 while leaving composition, fitting, authority and transfer unchanged. |
+| Authority delta | No authority changed. The immutable eighteen-example option model made two teacher-free development selections, but it remains shadow-only: one succeeded and one failed despite 0.9955 predicted success. Development outcomes may diagnose and calibrate but may not enter fitting. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The live invocation exposed a missing clean dependency-stage bootstrap before gameplay. A local repair is qualified, but controller input remains closed until complete validation, publication, green exact-main CI and one action-free five-root readiness reopen. |
-| Decision | Publish the runtime-stage repair, require green pull-request and exact-main CI, reopen all five cases action-free, then execute only the first eligible Red development root. Stop on its first retained terminal result and judge behavior before allowing another root. |
-| Next session | Complete repository and registry validation, publish and merge the runtime-stage repair, require green exact-main CI, reorient action-free against the five private roots, then launch only the first fixed-order eligible development case and retain its terminal behavior evidence. |
-| Next falsifier | The first fixed-order live development case must either retain a typed setup censor or reach a multi-option title-neutral model choice, execute only the selected deterministic skill, and retain a factual ledger outcome under hard action/frame bounds without teacher fallback or replay. |
-| Stop condition | Stop publication on any failed check or generated-registry mismatch. Stop execution on source/CI/model/context/recipe/root/runtime mismatch, private output, consumed-root reuse, teacher fallback, missing hard bounds, non-durable claim or substituted ordering. An invocation with controller input is terminal and may not retry. Stop after the first retained live terminal. Never fit on development, repeat the census/freeze, open Crystal or run a full replay. |
+| Blocker | The acquisition failure retained only the broad RedAreaExecutionError type. Without a stable sanitized component reason, another acquisition-root execution could consume evidence without distinguishing routing, encounter, capture, inventory, storage or bounded-progress failure. |
+| Decision | Publish structured reusable provider-failure reason retention, require green exact-main CI and prove both existing terminals still reopen. Then run the next fixed-order bounded case only if the new trace can preserve the exact component reason; stop again at its durable terminal and compare calibration and ledger progress. |
+| Next session | Complete the ROM-free failure-reason repair, document the two live outcomes, regenerate all source registries, run complete validation, publish and require green exact-main CI, recheck the three remaining cases and two historical terminals action-free, then execute at most one next fixed-order case. |
+| Next falsifier | A provider exception carrying one canonical reason must survive the complete durable action-trace path without message, path, coordinate or identity leakage; malformed or untyped exceptions must collapse to execution_failed, and both V1 terminals must remain recoverable. |
+| Stop condition | Stop on any historical-record incompatibility, private-message retention, reason-code ambiguity, failed check or registry mismatch. After publication, stop execution on any source/runtime/model mismatch, consumed-root reuse, teacher fallback, missing bounds or non-durable claim. Never fit on these development outcomes, patch one route or species, open Crystal, sealed Red or a full replay. |
 
 ### Stop conditions
 
@@ -218,4 +218,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **28**.
+Current evidence entries: **29**.

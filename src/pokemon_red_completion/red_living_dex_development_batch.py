@@ -156,6 +156,7 @@ class RedLivingDexDevelopmentBatchInputReceipt:
 
     model_sha256: str
     model_record_sha256: str
+    claims_available: int
     selections: tuple[RedLivingDexClusteredDevelopmentSelection, ...] = field(
         repr=False
     )
@@ -166,6 +167,8 @@ class RedLivingDexDevelopmentBatchInputReceipt:
             or _SHA256.fullmatch(self.model_sha256) is None
             or not isinstance(self.model_record_sha256, str)
             or _SHA256.fullmatch(self.model_record_sha256) is None
+            or type(self.claims_available) is not int  # noqa: E721
+            or not 0 <= self.claims_available <= 5
             or not isinstance(self.selections, tuple)
             or len(self.selections) != 5
             or any(
@@ -199,7 +202,7 @@ class RedLivingDexDevelopmentBatchInputReceipt:
     def public_dict(self) -> dict[str, object]:
         return {
             "cases_ready": 5,
-            "claims_available": 5,
+            "claims_available": self.claims_available,
             "controller_actions": 0,
             "development_outcomes_opened": 0,
             "emulator_frames": 0,
@@ -217,7 +220,7 @@ class RedLivingDexDevelopmentBatchInputReceipt:
             "root_claims": 0,
             "runtime_authenticated": False,
             "schema": "pokemon.red.living-dex-development-batch-input-readiness.v1",
-            "status": "five_development_inputs_ready_without_runtime_or_effects",
+            "status": "five_development_inputs_joined_without_runtime_or_effects",
             "supplement_cases_ready": 3,
             "teacher_queries": 0,
             "training_targets_emitted": 0,
@@ -255,6 +258,7 @@ def inspect_red_living_dex_development_batch_inputs(
     )
     claim_registry = fixed_account_claim_registry_root()
     selections: list[RedLivingDexClusteredDevelopmentSelection] = []
+    claims_available = 0
     for assignment in _canonical_assignments(assignments):
         selection, _document = load_red_living_dex_development_selection(
             store,
@@ -262,14 +266,12 @@ def inspect_red_living_dex_development_batch_inputs(
             binding=assignment.binding,
         )
         _exact_root_loader(assignment)(selection)
-        if not observe_claim_first_pair_availability(
+        if observe_claim_first_pair_availability(
             claim_registry,
             selection.logical_root_sha256,
             selection.physical_root_sha256,
         ):
-            raise RedLivingDexDevelopmentBatchError(
-                "development batch root pair is unavailable"
-            )
+            claims_available += 1
         selections.append(selection)
     if meter.checkpoint() != before:
         raise RedLivingDexDevelopmentBatchError(
@@ -278,6 +280,7 @@ def inspect_red_living_dex_development_batch_inputs(
     return RedLivingDexDevelopmentBatchInputReceipt(
         model_sha256=model_record.model.model_sha256,
         model_record_sha256=model_record.file_sha256,
+        claims_available=claims_available,
         selections=tuple(selections),
     )
 
