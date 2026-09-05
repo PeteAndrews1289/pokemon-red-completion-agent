@@ -32,6 +32,7 @@ from pokemon_red_completion.red_living_dex_development_supply import (
     audit_red_living_dex_development_supply,
     build_red_living_dex_development_supplement_capabilities,
     inventory_red_living_dex_development_supply,
+    load_red_living_dex_development_model,
 )
 
 
@@ -112,6 +113,35 @@ def _consume_root(registry, row: dict[str, object], ordinal: int) -> None:  # ty
     )
     with claim_first_pair_registry(registry) as transaction:
         transaction.claim(claim)
+
+
+def test_model_loader_authenticates_the_complete_train_only_corpus(
+    tmp_path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = _store(tmp_path)
+    dataset_sha256 = _sha("train-dataset")
+    model, sealed = _publish_model(store, dataset_sha256)
+    rows = _train_rows()
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_living_dex_development_supply."
+        "load_living_dex_authenticated_causal_examples",
+        lambda _store: rows,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_living_dex_development_supply."
+        "living_dex_option_train_dataset_sha256",
+        lambda _rows: dataset_sha256,
+    )
+
+    loaded = load_red_living_dex_development_model(
+        store,
+        expected_model_sha256=model.model_sha256,
+        expected_model_record_sha256=sealed.summary.record_sha256,
+    )
+
+    assert loaded.model.to_dict() == model.to_dict()
+    assert loaded.file_sha256 == sealed.summary.record_sha256
 
 
 def test_audit_deduplicates_schedules_and_reports_only_the_true_shortfall(

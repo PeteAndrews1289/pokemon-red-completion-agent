@@ -1,14 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Latest checkpoint: supplement adapter and positive-path rehearsal
+## New scene: five exam cards, one locked airlock
 
-The development-only reader now authenticates all three real stored supplement rows. Its shared
-admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
-This is engineering evidence, not live gameplay or new learning. The concrete five-root command
-and cartridge preflight remain unfinished; no prospective root has been consumed.
-See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
-and the remaining execution sequence. In particular, the shared plan digest and complete Red
-plan digest are different identities. Do not repeat the completed census or freeze.
+**Visual:** Place five gold development cards on screen: **2 PRESERVED + 3 SUPPLEMENT**. Route all
+five through locks labelled **SOURCE**, **PLAN**, **ROOT**, **RUNTIME** and **18-EXAMPLE MODEL**.
+Keep the emulator screen dark and every effect dial at zero.
+
+**Voiceover:** “We stopped generating more situations and connected the five we already had. The
+dedicated development command cannot reach training rows or swap in an easier case. It authenticates every piece before
+the game can open.”
+
+Show the first file check stopping at **PRIVATE PERMISSIONS**, then the same ten files changing to
+owner-only and all five roots joining. Add **72 FOCUSED TESTS + 7 COMMAND TESTS PASS**. Do not show model movement yet.
+
+**Voiceover:** “That was a real safety failure, not a gameplay failure. After fixing it, all five
+saved states matched—and the training command stayed byte-for-byte unchanged—but the model still
+made zero predictions. We first have to publish this exact
+source, pass CI, and run a zero-effect preflight. Only then do the cards become model-played tests.”
+
+Reference the [local qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
 
 ## New scene: 429 green bindings, then an honest connection gap
 

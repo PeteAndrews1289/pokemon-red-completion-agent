@@ -1,14 +1,24 @@
 # Handoff
 
-## Latest checkpoint: supplement adapter and positive-path rehearsal
+## Latest checkpoint: the exact five-root command is locally qualified
 
-The development-only reader now authenticates all three real stored supplement rows. Its shared
-admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
-This is engineering evidence, not live gameplay or new learning. The concrete five-root command
-and cartridge preflight remain unfinished; no prospective root has been consumed.
-See the [adapter checkpoint](docs/development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
-and the remaining execution sequence. In particular, the shared plan digest and complete Red
-plan digest are different identities. Do not repeat the completed census or freeze.
+The dedicated source-authenticated command now binds the complete eighteen-example train-only model record to exactly five
+development cases: historical plan ordinals 10 and 11 plus supplement ordinals 0, 1 and 2. The
+production wrapper authenticates current-source capability, a freshly reopened sealed plan, the
+selected root, staged runtime identity and immutable model record before it can construct the cold
+ROM resolver. Train ordinals remain inaccessible.
+
+All five real state/envelope pairs joined their frozen plan identities after their file permissions
+were tightened to owner-only. The model record independently reopened with 18 settled train rows.
+The focused command/adapter/runtime slice passes **72 tests**, with **7 additional dedicated-command tests**; lint and typing pass. Every protected
+effect remains zero. See the [local qualification](docs/evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json)
+and [adapter checkpoint](docs/development-supplement-adapter-checkpoint.md).
+
+This is not yet the executable preflight or model play. Finish repository gates, publish and merge
+the source, require green exact-main CI, then invoke the dedicated command once in five-root
+preflight mode. Only a zero-effect success permits the real production-resolver rehearsal and
+bounded model-selected development outcomes. Do not repeat the census/freeze, substitute another
+root, fit on development, open Crystal or run a full replay.
 
 ## Current checkpoint: census and three-root freeze succeeded; wire the supplement consumer
 

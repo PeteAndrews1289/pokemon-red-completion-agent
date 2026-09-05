@@ -1,14 +1,18 @@
 # Model-first development roadmap
 
-## Latest checkpoint: supplement adapter and positive-path rehearsal
+## Latest checkpoint: publish the locally qualified five-root command
 
-The development-only reader now authenticates all three real stored supplement rows. Its shared
-admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
-This is engineering evidence, not live gameplay or new learning. The concrete five-root command
-and cartridge preflight remain unfinished; no prospective root has been consumed.
-See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
-and the remaining execution sequence. In particular, the shared plan digest and complete Red
-plan digest are different identities. Do not repeat the completed census or freeze.
+The dedicated development command now admits only historical ordinals 10 and 11 plus supplement ordinals 0 through 2.
+It authenticates the complete train-only corpus and immutable eighteen-example model record,
+reopens each exact plan, joins five independent state/envelope pairs and constructs no ROM resolver
+during preflight. The focused slice passes 72 tests plus 7 command-boundary tests, lint and typing; the five real private root
+files also match their frozen identities. No prediction, claim, outcome, action or frame occurred.
+See the [local qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
+Next run the full repository gates, publish and merge, require green exact-main CI, then invoke the
+source-authenticated five-root preflight once. Stop on any mismatch or nonzero protected effect. A passing
+preflight permits the production-resolver rehearsal and bounded selected outcomes, not fitting,
+promotion, Crystal access or a full replay.
 
 ## Current checkpoint: the missing work is supplement execution, not supply
 

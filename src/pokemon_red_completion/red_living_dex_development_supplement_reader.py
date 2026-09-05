@@ -106,6 +106,30 @@ class RedLivingDexDevelopmentSupplementBinding:
         return 3
 
 
+FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT = (
+    RedLivingDexDevelopmentSupplementBinding(
+        private_plan_sha256=(
+            "a9f138d2eebe1508ea615d447e615083e1eace68710f81463b3e06478984558d"
+        ),
+        supplement_plan_sha256=(
+            "e17e7781250014ffcff338b9f0fabe3d00e66a0f1d9b7bb5d93683040fab880a"
+        ),
+        plan_manifest_sha256=(
+            "3ac8b47a573dad76ccce593e780d93752576c74df97484bf7958dbedcddd8a79"
+        ),
+        plan_record_sha256=(
+            "647e6d9f6ab6639527d48e16a45d4a45a62aa9afcd555ec6621f1e807fc574a4"
+        ),
+        model_sha256=(
+            "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56"
+        ),
+        model_record_sha256=(
+            "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb"
+        ),
+    )
+)
+
+
 def validate_red_living_dex_development_supplement(
     document: Mapping[str, object],
     *,

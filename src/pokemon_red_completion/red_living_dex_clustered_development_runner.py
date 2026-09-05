@@ -12,7 +12,10 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+from pokemon_red_completion.private_artifacts import (
+    PrivateArtifactRoot,
+    PrivateSealedRecord,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     validate_red_living_dex_clustered_private_plan,
@@ -254,6 +257,26 @@ def load_red_living_dex_development_selection(
 ) -> tuple[RedLivingDexClusteredDevelopmentSelection, Mapping[str, object]]:
     """Reopen the exact immutable private record before interpreting any row."""
 
+    selection, _record, document = reopen_red_living_dex_development_selection(
+        store,
+        ordinal,
+        binding=binding,
+    )
+    return selection, document
+
+
+def reopen_red_living_dex_development_selection(
+    store: PrivateArtifactRoot,
+    ordinal: int,
+    *,
+    binding: RedLivingDexDevelopmentPlanBinding,
+) -> tuple[
+    RedLivingDexClusteredDevelopmentSelection,
+    PrivateSealedRecord,
+    Mapping[str, object],
+]:
+    """Reopen the record and retain its object identity for recovery checks."""
+
     if not isinstance(store, PrivateArtifactRoot):
         raise TypeError("development selection needs its private store")
     if not isinstance(
@@ -271,6 +294,7 @@ def load_red_living_dex_development_selection(
     document = record.read()
     return (
         authenticate_red_living_dex_development_selection(document, ordinal, binding=binding),
+        record,
         document,
     )
 
@@ -300,4 +324,5 @@ __all__ = [
     "authenticate_red_living_dex_development_selection",
     "load_red_living_dex_development_selection",
     "RedLivingDexDevelopmentPlanBinding",
+    "reopen_red_living_dex_development_selection",
 ]

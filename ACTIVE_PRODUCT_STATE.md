@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The supplement adapter is implemented and rehearsed. Finish the concrete five-root command and production resolver check, obtain focused review and zero-effect preflight, then run bounded model-selected development choices through the existing journals. Do not repeat the census/freeze or fabricate train rows.
+- Next decision: The concrete five-root command is locally qualified against the exact model and all five private root files. Publish it on main, require green exact-main CI and pass one strict zero-effect preflight; then rehearse the production resolver and run bounded model-selected development choices through the existing journals.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Wire the qualified supplement reader to a concrete five-root command and rehearse the production resolver, then preflight the three supplement roots plus two preserved historical roots against the exact eighteen-example model without predictions, outcomes, claims or controller input. Do not repeat the census or freeze. |
+| Cheapest falsifier | Publish the locally qualified five-root command, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-04-development-supplement-adapter-reorientation-v1** · status **active** · evidence [qualification](docs/evidence/red-development-supplement-adapter-rehearsal-v1-2026-09-04.json)
+**2026-09-04-development-five-root-command-local-qualification-v1** · status **active** · evidence [qualification](docs/evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The repair and frozen supply unblock a real independent test of portable living-Pokedex objective selection. The next work connects those situations to learned decisions; Crystal remains deferred while shared semantic interfaces are preserved. |
-| Learning output | No learning counter changed. Three of three actual stored supplement rows authenticate under separate shared-plan and complete Red-plan commitments. A ROM-free positive-path test reaches actual model scoring, the selected-option journal and recovery without rerunning a runtime. |
-| Authority delta | No authority changed. The eighteen-example model remains shadow-only. The positive-path test exercises actual scoring and terminal recovery in a simulated environment only; the real supplement metadata check opened no state files, predictions, outcomes, claims or gameplay. |
+| Product alignment | The command turns five independent Red situations into an executable test of portable living-Pokedex objective selection while keeping train rows inaccessible and Crystal deferred. It is the final action-free bridge before measured model behavior. |
+| Learning output | No learning counter changed. The complete eighteen-example train-only model record authenticated against its dataset, all five declared state/envelope pairs joined their frozen roots, and 72 focused command/adapter/runtime tests passed without a model prediction or protected effect. |
+| Authority delta | No authority changed. The eighteen-example model remains non-authoritative and no development prediction has run. The command can reach the existing selected-outcome executor only after the five-root exact-main preflight passes. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The strict supplement reader and shared admission path are implemented. The concrete five-root command, full source/model/context join and production resolver rehearsal remain unfinished; no live readiness is claimed. |
-| Decision | Stop supply diagnosis. Reuse the existing development setup journal and model-selected outcome executor behind a strict supplement reader/admission interface; never fabricate train rows. Qualify and preflight the declared five roots, then obtain bounded model-selected development outcomes without refitting on them. |
-| Next session | Implement the concrete five-root command using the completed reader and existing journals. Rehearse production integration, obtain focused independent review, preflight the declared roots and reach observable model-selected development behavior. Do not repeat the census or freeze. |
-| Next falsifier | A production-resolver rehearsal and concrete five-root preflight must authenticate the exact plans, recipes, model record, context files, source and disjoint unclaimed lineages without gameplay or predictions. Then retain factual outcomes from admitted bounded model choices. |
-| Stop condition | Stop before predictions, claims or controller input until the supplement admission path is qualified and the five-root preflight passes. Stop on plan/model/context/source mismatch, train crossover, fabricated train rows, private output, consumed-root reuse, teacher fallback or a second diagnostic-only expansion. Never refit on development, repeat the completed freeze, or replay pairs 004, 005 or 006. |
+| Blocker | The concrete five-root command and full local plan/model/root joins are qualified. Publication on main, green exact-main CI, the strict zero-effect invocation and a real production-resolver rehearsal remain before model-selected development play. |
+| Decision | Freeze the case set to historical ordinals 10 and 11 plus supplement ordinals 0 through 2. Publish once, run the strict five-root preflight, then exercise bounded model-selected development choices through the existing journals without refitting on development. |
+| Next session | Complete full repository gates, publish and merge the five-root command, require green exact-main CI, then run exactly one strict five-root zero-effect preflight. If it passes, rehearse the real production resolver before opening bounded model-selected outcomes. |
+| Next falsifier | The dedicated source-authenticated command must reproduce the five source, plan, model, context, recipe and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero. |
+| Stop condition | Stop before predictions, claims or controller input until the published exact-main five-root preflight passes. Stop on plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any attempt to substitute another case. Never refit on development, repeat the completed census/freeze, or replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 

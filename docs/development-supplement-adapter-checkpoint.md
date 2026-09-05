@@ -42,20 +42,31 @@ four registry reproductions pass. Hosted full-suite CI is not included in these 
 4. Availability inspection may create a coordination lock. A lock is not a root claim; the test
    checks the claim records and protected-effect meter instead of assuming an empty directory.
 
+## Production integration update
+
+The dedicated development command is now locally qualified. It hardcodes the only two surviving unique
+historical cases—original-plan ordinals 10 and 11—and all three supplement ordinals. It authenticates
+the complete train-only corpus and immutable model record, requires fresh sealed-plan objects on
+reauthentication, and delays ROM-resolver construction until the current source, staged runtime,
+plan, recipe, root and model identities all join. A five-root batch rejects train crossover,
+substitution and duplicate lineage/root/state identities.
+
+All five real state/envelope pairs match their selections. Their old `0644` permissions initially
+failed the production private-file boundary; the ten files are now owner-only and reauthenticate.
+The focused slice passes **72 tests**, plus **7 dedicated-command tests**, lint and typing with zero predictions, claims, outcomes,
+actions, frames or teacher queries. See the [local command qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
 ## Remaining work — do not call this live readiness
 
-1. Implement the concrete five-root command: authenticate the exact model record and its train
-   corpus, reopen the two preserved historical selections plus three supplement selections,
-   resolve only those selected context/state/profile files, and check source/runtime/recipe
-   joins and disjoint unclaimed lineages. Keep the completed census and freeze untouched.
-2. Exercise the production resolver with the complete admission interface, including positive
-   setup, selected outcome, interruption and recovery. The current successful rehearsal uses a
-   simulated resolver; it is not cartridge integration evidence.
-3. Run the zero-effect five-root preflight before consuming any root. Publication/source checks
-   belong at the concrete command boundary; low-level dataclasses are not proof of clean source
-   or green CI.
-4. Execute only admitted bounded development choices, preserve each factual result or setup
-   censor, and compare with the declared control. Never fit on these development outcomes.
+1. Complete every repository gate, publish and merge the implementation, and require green
+   exact-main CI. The source-authenticated command intentionally refuses an unpublished or dirty source.
+2. Invoke the dedicated five-root command once. It must reproduce all five plan/model/context/root joins
+   with zero protected effects. Stop on any mismatch; do not substitute or rerun supply discovery.
+3. Exercise the real production resolver with the complete development admission interface,
+   including positive setup, selected outcome, interruption and terminal recovery.
+4. Execute only admitted bounded development choices and preserve each factual result or setup
+   censor. Compare model/control menu choices diagnostically; selected-only outcomes cannot
+   establish an unplayed control's outcome or model superiority. Never fit on development.
 5. Reorient on measured gameplay, not test counts. Crystal and full replay remain deferred.
 
 ## Review decision
@@ -63,7 +74,9 @@ four registry reproductions pass. Hosted full-suite CI is not included in these 
 A focused independent review is useful before the five real cases are consumed. Use two lanes:
 one attacks successful production integration and terminal recovery; the other checks that the
 outcomes can answer a useful learning question. A large whole-repository audit is not justified
-yet. Claude and Antigravity have not been asked to review this checkpoint in this session.
+yet. The subsequent [focused review and adjudication](development-supplement-focused-audit.md)
+records Claude's source review and Antigravity's compact architecture review. Neither substitutes
+for the still-required production resolver rehearsal or five-root preflight.
 
 The permanent end goal remains a transferable player and living collection across games,
 versions, trades and legitimate event inputs. No learning counter or gameplay authority advances

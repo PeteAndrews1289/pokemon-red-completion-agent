@@ -18,6 +18,36 @@ inherited work, machine/runtime differences and CI waits. Faster generated text,
 more documentation alone do not establish better value. API prices do not establish subscription
 usage debits. No account quota or billing data is inferred from elapsed time.
 
+## 2026-09-04: focused external audit and budgeting guidance
+
+Claude completed a High-effort read-only source review; Antigravity completed compact architecture
+reviews using explicit Gemini 3.8 Flash High. Codex checked their material claims against source
+and [recorded accepted/rejected findings](development-supplement-focused-audit.md). Review agreement
+is not proof of correctness: Claude's failed-plan-fixture description was inaccurate, and
+Antigravity retracted unsupported claims after receiving actual feature/journal excerpts.
+
+The adapter suite was independently rerun: 24 passed in 55.74 seconds. The initial command omitted
+the source import path and failed during collection. This repeats an earlier command-setup error
+and counts as rework, not evidence of a coding-model advantage. No live experiment or fit ran.
+Assistant token counts and the user's actual account debit remain unknown.
+
+Official documentation checked on this date supplies a budgeting reference, not a task-token ratio:
+
+- [ChatGPT credit rates](https://learn.chatgpt.com/docs/pricing): Astra input/cached/output rates
+  are 250/25/1,250 credits per million tokens; Sol rates are 100/10/500. Equal token mixes at
+  standard speed therefore cost 2.5 times as many credits on Astra.
+- [Fast mode](https://learn.chatgpt.com/docs/agent-configuration/speed) adds a 2.5 multiplier for
+  both Astra and GPT-5.6 where supported. Astra Fast is therefore 6.25 times Sol Standard for an
+  equal token mix; Sol Fast and Astra Standard have equal published per-token credit rates.
+- These ratios do not establish how many tokens either model uses to finish the same task, or
+  an exact weekly allowance ratio. Context, reasoning, retries, tools and caching affect usage.
+
+Budget recommendation (judgment, not measured superiority): Sol High with Fast off for normal
+integration sessions; Astra High for bounded difficult diagnoses and milestone audits; avoid
+Max/Ultra as the default for long sessions. Antigravity High handles compact independent design
+challenges, with Claude reserved for source/evidence audits at meaningful boundaries. Do not
+request large duplicated audits after every maintenance edit.
+
 ## 2026-09-04: supplement-consumer implementation session
 
 Starting revision: `52cb0dcc`. The preceding GPT-6 session had already identified this adapter
@@ -103,3 +133,43 @@ sessions and their observed usage before changing the default solely on this res
 
 Evidence: [binding result](evidence/red-living-dex-development-supplement-binding-result-v1-2026-09-04.json),
 [freeze result](evidence/red-living-dex-development-supplement-freeze-result-v1-2026-09-04.json).
+
+## 2026-09-04: GPT-5.6 Sol production-integration session
+
+**Inherited state:** GPT-6 had implemented and locally rehearsed the supplement reader/admission
+adapter, then a focused Claude/Antigravity audit found no blocking defect in that scope. The
+concrete command, exact model-record join, five-root batch and production bootstrap were still
+unfinished.
+
+**Sol delivered so far:** adds a production development wrapper that authenticates a freshly
+reopened sealed plan, current-source consumer, staged producer runtime, selected root and immutable
+model record before constructing the cold ROM resolver. It extracts one train-corpus/model loader,
+freezes the case set to historical ordinals 10 and 11 plus supplement ordinals 0 through 2. An
+initial attempt to extend the already-qualified train command was rejected because it changed the
+script digest bound by historical evidence. Sol restored that command byte-for-byte and added a
+separate source-authenticated, ROM-free five-root development preflight. All five actual private
+state/envelope pairs join after correcting their overly broad file permissions.
+
+The combined focused slice passes **72 tests in 234.16 seconds**; the new command adds **7 focused
+boundary tests**, and lint plus typing pass for the changed source. The exact private model
+record reauthenticated against all 18 train-only examples. No gameplay, prediction, claim, outcome,
+fit, controller action or emulator frame occurred.
+
+**Corrections:** an initial large patch needed inspection before follow-up edits; import ordering
+was corrected mechanically. A new model-loader test initially used dataclass equality on NumPy
+arrays and was changed to compare canonical model documents. Synthetic batch fixtures initially
+overlapped roots across old and supplement plans, so the test moved to independent fixture roots.
+The first real file join failed closed on `0644` capture permissions; only the ten selected files
+were changed to owner-only and the join then passed.
+The full gate also caught that extending the historical train CLI invalidated its qualified script
+identity. That extension was removed, its evidence test passes unchanged, and development now has
+its own command rather than rewriting historical evidence.
+
+**Current judgment:** this is a strong Sol implementation result on a well-bounded seam, but it is
+not a controlled comparison with GPT-6. The task inherited mature architecture, exact bindings and
+review findings. Token usage and weekly account debit remain unavailable, so no cost ratio can be
+measured from the repository. Continue using Sol High for ordinary implementation and reserve the
+more expensive model for genuinely ambiguous architecture or promotion audits unless later sessions
+show a repeatable quality difference.
+
+Evidence: [local five-root command qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).

@@ -19,8 +19,14 @@ from pokemon_red_completion.claim_first_admission import (
     ClaimFirstExecutionIdentity,
     observe_claim_first_pair_availability,
 )
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    fixed_account_claim_registry_root,
+)
 from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexCaptureSetupStatus,
+)
+from pokemon_red_completion.living_dex_goal_model_record import (
+    LivingDexGoalModelRecord,
 )
 from pokemon_red_completion.living_dex_goal_policy import (
     DEFAULT_LIVING_DEX_GOAL_UTILITY,
@@ -38,12 +44,18 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_adapter import (
     build_red_living_dex_causal_scenario_from_capture,
 )
+from pokemon_red_completion.red_living_dex_causal_invocation import (
+    RedLivingDexAuthenticatedConsumer,
+    RedLivingDexLateProductionResolver,
+    authenticate_red_living_dex_execution_runtime,
+)
 from pokemon_red_completion.red_living_dex_claim_first_campaign import (
     RedLivingDexResolvedSetupSlot,
 )
 from pokemon_red_completion.red_living_dex_clustered_development_runner import (
     RedLivingDexClusteredDevelopmentSelection,
     RedLivingDexDevelopmentPlanBinding,
+    reopen_red_living_dex_development_selection,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
     RedLivingDexClusteredTrainPlanBinding,
@@ -61,6 +73,13 @@ from pokemon_red_completion.red_living_dex_development_setup_journal import (
 )
 from pokemon_red_completion.red_living_dex_development_supplement_reader import (
     RedLivingDexDevelopmentSupplementBinding,
+)
+from pokemon_red_completion.red_living_dex_runtime_contract import (
+    RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
+    RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
+)
+from pokemon_red_completion.red_living_dex_setup_identity import (
+    compose_red_living_dex_setup_execution_identity,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
@@ -86,6 +105,11 @@ RED_LIVING_DEX_CLUSTERED_DEVELOPMENT_EXECUTION_SHA256 = canonical_sha256(
 )
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+
+RedLivingDexDevelopmentRootLoader = Callable[
+    [RedLivingDexClusteredDevelopmentSelection],
+    RedLivingDexAuthenticatedSetupRoot,
+]
 
 
 class RedLivingDexClusteredDevelopmentExecutionError(RuntimeError):
@@ -418,6 +442,254 @@ def preflight_red_living_dex_clustered_development_assignment(
     )
 
 
+def execute_red_living_dex_development_assignment(
+    project_root: Path,
+    store: PrivateArtifactRoot,
+    *,
+    consumer: RedLivingDexAuthenticatedConsumer,
+    ordinal: int,
+    root_loader: RedLivingDexDevelopmentRootLoader,
+    rom_path: Path,
+    meter: RedLivingDexSetupEffectMeter,
+    model_record: LivingDexGoalModelRecord,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+    binding: RedLivingDexDevelopmentPlanBinding,
+) -> RedLivingDexClusteredDevelopmentReceipt:
+    """Execute or recover one authenticated development row in production."""
+
+    if not isinstance(rom_path, Path):
+        raise TypeError("Red development invocation needs its Red ROM Path")
+    prepared = _prepare_red_living_dex_development_invocation(
+        project_root,
+        store,
+        consumer=consumer,
+        ordinal=ordinal,
+        root_loader=root_loader,
+        meter=meter,
+        model_record=model_record,
+        expected_model_sha256=expected_model_sha256,
+        expected_model_record_sha256=expected_model_record_sha256,
+        binding=binding,
+    )
+    resolver = RedLivingDexLateProductionResolver(
+        rom_path=rom_path,
+        producer_execution_identity=prepared.producer_execution_identity,
+    )
+    return run_red_living_dex_clustered_development_assignment(
+        selection=prepared.selection,
+        binding=binding,
+        store=store,
+        plan_loader=prepared.load_plan,
+        root=prepared.root,
+        producer_execution_identity=prepared.producer_execution_identity,
+        outer_execution_identity=prepared.outer_execution_identity,
+        resolver=resolver,
+        meter=meter,
+        claim_registry=prepared.claim_registry,
+        model=prepared.model,
+        expected_model_sha256=expected_model_sha256,
+    )
+
+
+def preflight_red_living_dex_development_assignment(
+    project_root: Path,
+    store: PrivateArtifactRoot,
+    *,
+    consumer: RedLivingDexAuthenticatedConsumer,
+    ordinal: int,
+    root_loader: RedLivingDexDevelopmentRootLoader,
+    meter: RedLivingDexSetupEffectMeter,
+    model_record: LivingDexGoalModelRecord,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+    binding: RedLivingDexDevelopmentPlanBinding,
+) -> RedLivingDexClusteredDevelopmentPreflightReceipt:
+    """Authenticate one production development row without a ROM or prediction."""
+
+    before = meter.checkpoint()
+    prepared = _prepare_red_living_dex_development_invocation(
+        project_root,
+        store,
+        consumer=consumer,
+        ordinal=ordinal,
+        root_loader=root_loader,
+        meter=meter,
+        model_record=model_record,
+        expected_model_sha256=expected_model_sha256,
+        expected_model_record_sha256=expected_model_record_sha256,
+        binding=binding,
+    )
+    result = preflight_red_living_dex_clustered_development_assignment(
+        selection=prepared.selection,
+        binding=binding,
+        plan_document=prepared.load_plan(),
+        root=prepared.root,
+        producer_execution_identity=prepared.producer_execution_identity,
+        outer_execution_identity=prepared.outer_execution_identity,
+        meter=meter,
+        claim_registry=prepared.claim_registry,
+        model=prepared.model,
+        expected_model_sha256=expected_model_sha256,
+    )
+    if meter.checkpoint() != before:
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development production preflight changed protected effects"
+        )
+    return result
+
+
+@dataclass(frozen=True, slots=True)
+class _PreparedRedLivingDexDevelopmentInvocation:
+    selection: RedLivingDexClusteredDevelopmentSelection
+    root: RedLivingDexAuthenticatedSetupRoot
+    producer_execution_identity: RedLivingDexSetupExecutionIdentity
+    outer_execution_identity: ClaimFirstExecutionIdentity
+    claim_registry: Path
+    model: LivingDexOptionValueModel
+    load_plan: Callable[[], Mapping[str, object]]
+
+
+def _prepare_red_living_dex_development_invocation(
+    project_root: Path,
+    store: PrivateArtifactRoot,
+    *,
+    consumer: RedLivingDexAuthenticatedConsumer,
+    ordinal: int,
+    root_loader: RedLivingDexDevelopmentRootLoader,
+    meter: RedLivingDexSetupEffectMeter,
+    model_record: LivingDexGoalModelRecord,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+    binding: RedLivingDexDevelopmentPlanBinding,
+) -> _PreparedRedLivingDexDevelopmentInvocation:
+    """Join current source, exact plan/model, one root and the staged runtime."""
+
+    if not isinstance(project_root, Path):
+        raise TypeError("Red development invocation needs a project Path")
+    if not isinstance(store, PrivateArtifactRoot):
+        raise TypeError("Red development invocation needs its private store")
+    if not isinstance(consumer, RedLivingDexAuthenticatedConsumer):
+        raise TypeError("Red development invocation needs its authenticated consumer")
+    consumer.__post_init__()
+    if not callable(root_loader):
+        raise TypeError("Red development invocation needs one selected-root loader")
+    if type(meter) is not RedLivingDexSetupEffectMeter:
+        raise TypeError("Red development invocation needs its protected-effect meter")
+    if not isinstance(model_record, LivingDexGoalModelRecord):
+        raise TypeError("Red development invocation needs its authenticated model record")
+    model_record.__post_init__()
+    model = model_record.model
+    model.__post_init__()
+    expected_model = _require_sha256(expected_model_sha256, "model")
+    expected_model_record = _require_sha256(
+        expected_model_record_sha256,
+        "model record",
+    )
+    if (
+        model.model_sha256 != expected_model
+        or model_record.file_sha256 != expected_model_record
+    ):
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development model identity differs"
+        )
+    if not isinstance(
+        binding, (RedLivingDexClusteredTrainPlanBinding, RedLivingDexDevelopmentSupplementBinding)
+    ):
+        raise TypeError("Red development invocation needs its plan binding")
+    binding.__post_init__()
+    if isinstance(binding, RedLivingDexDevelopmentSupplementBinding) and (
+        binding.model_sha256 != expected_model
+        or binding.model_record_sha256 != expected_model_record
+    ):
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development model identity differs"
+        )
+
+    selection, first_record, first_document = reopen_red_living_dex_development_selection(
+        store,
+        ordinal,
+        binding=binding,
+    )
+    root = root_loader(selection)
+    if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
+        raise TypeError("Red development root loader returned another type")
+    root.__post_init__()
+    _require_root_join(selection, root)
+    runtime = authenticate_red_living_dex_execution_runtime(
+        project_root,
+        _require_sha256(
+            first_document.get("runtime_identity_sha256"),
+            "producer runtime identity",
+        ),
+    )
+    producer_identity = compose_red_living_dex_setup_execution_identity(
+        source_commit=_require_source_commit(first_document.get("source_commit")),
+        source_bundle_sha256=_require_sha256(
+            first_document.get("source_bundle_sha256"),
+            "producer source bundle",
+        ),
+        route_registry_sha256=_require_sha256(
+            first_document.get("route_registry_sha256"),
+            "producer route registry",
+        ),
+        runtime_identity=runtime,
+    )
+    current = consumer.binding
+    outer = ClaimFirstExecutionIdentity(
+        source_commit=current.source_commit,
+        source_bundle_sha256=current.source_bundle_sha256,
+        exact_ci_run=current.exact_ci_run,
+        exact_ci_attempt=current.exact_ci_attempt,
+        producer_execution_identity_sha256=producer_identity.identity_sha256,
+        producer_plan_sha256=selection.private_plan_sha256,
+        producer_private_plan_sha256=selection.private_plan_sha256,
+        producer_manifest_sha256=binding.plan_manifest_sha256,
+        slot_sha256=selection.slot_sha256,
+        recipe_sha256=selection.recipe_sha256,
+        logical_root_sha256=selection.logical_root_sha256,
+        physical_root_sha256=selection.physical_root_sha256,
+        title_adapter_sha256=RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
+        runtime_factory_sha256=RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
+        runner_sha256=RED_LIVING_DEX_DEVELOPMENT_SETUP_RUNNER_SHA256,
+    )
+    previous_record = first_record
+
+    def load_plan() -> Mapping[str, object]:
+        nonlocal previous_record
+        current_selection, current_record, current_document = (
+            reopen_red_living_dex_development_selection(
+                store,
+                ordinal,
+                binding=binding,
+            )
+        )
+        if current_selection != selection or current_record is previous_record:
+            raise RedLivingDexClusteredDevelopmentExecutionError(
+                "Red development plan reauthentication differs"
+            )
+        previous_record = current_record
+        return current_document
+
+    return _PreparedRedLivingDexDevelopmentInvocation(
+        selection=selection,
+        root=root,
+        producer_execution_identity=producer_identity,
+        outer_execution_identity=outer,
+        claim_registry=fixed_account_claim_registry_root(),
+        model=model,
+        load_plan=load_plan,
+    )
+
+
+def _require_source_commit(value: object) -> str:
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40}", value) is None:
+        raise RedLivingDexClusteredDevelopmentExecutionError(
+            "Red development producer source commit differs"
+        )
+    return value
+
+
 def _require_outer_join(
     selection: RedLivingDexClusteredDevelopmentSelection,
     *,
@@ -484,6 +756,9 @@ __all__ = [
     "RedLivingDexClusteredDevelopmentExecutionError",
     "RedLivingDexClusteredDevelopmentPreflightReceipt",
     "RedLivingDexClusteredDevelopmentReceipt",
+    "RedLivingDexDevelopmentRootLoader",
+    "execute_red_living_dex_development_assignment",
+    "preflight_red_living_dex_development_assignment",
     "preflight_red_living_dex_clustered_development_assignment",
     "run_red_living_dex_clustered_development_assignment",
 ]
