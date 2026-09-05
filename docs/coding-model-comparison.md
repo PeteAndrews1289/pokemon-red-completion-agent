@@ -4,6 +4,29 @@ Purpose: assess whether GPT-6 improves useful project progress enough to justify
 relative to GPT-5.6 Sol. These are observations from development, not a controlled benchmark.
 The coding assistant and the trained Pokemon policy are different models.
 
+## 2026-09-05: Sol bounded live-runner qualification
+
+Starting point: GPT-5.6 Sol inherited the green five-input readiness and synthetic production
+rehearsal. It completed the fixed-order one-case runner, process-wide action/frame meter, delayed
+ROM construction, power-loss outer terminal and view-only live timeline. A self-audit identified
+and corrected a meaningful trust-boundary issue: dashboard observer exceptions are now swallowed
+at the observability boundary and cannot change controller execution or the episode outcome.
+
+The final focused gate passes 134 tests in 186.76 seconds; the complete local gate passes 6,754
+tests in 18m02s with one intentional skip and one expected failure. Ruff passes and Mypy checks 369 source
+files. Registry regeneration correctly changed source-bound identities. The first protocol run
+exposed one stale derived assignment golden, while an earlier test command omitted the repository
+import path and failed during collection; both count as local rework and neither exercised product
+behavior. The first full-suite attempt also caught a low-level `tick` call outside the repository's
+emulator/executor boundary; frame admission now lives inside the generic metered emulator and its
+boundary regression passes. The previously merged readiness change passed main CI `33947934647/1` in 26 minutes 46
+seconds, but the new runner has not yet been published or tested by GitHub.
+
+Judgment: this is positive evidence for Sol on a bounded implementation session because it reached
+a concrete controller-capable boundary and caught its own observability coupling. It is not yet a
+cost comparison or gameplay result. Exact assistant token use and weekly quota debit remain
+unknown, and no real root, prediction, frame, outcome, fit or authority changed.
+
 ## 2026-09-05: Sol final-preflight storage diagnosis
 
 Starting point: GPT-5.6 Sol inherited the merged interpreter-diagnostic successor. Exact-main CI

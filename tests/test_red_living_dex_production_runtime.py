@@ -7,11 +7,13 @@ import pytest
 
 from pokemon_red_completion import red_living_dex_production_runtime as runtime
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.emulator import CausallyMeteredEmulator
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.red_living_dex_production_runtime import (
     RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
     RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
     RedLivingDexProductionRuntimeError,
+    RedLivingDexProductionRuntimeLimits,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexSetupEffectMeter,
@@ -59,7 +61,7 @@ class _FakeEmulator:
 
 
 class _TickThenFail:
-    def __init__(self, emulator: runtime._MeteredEmulator) -> None:
+    def __init__(self, emulator: CausallyMeteredEmulator) -> None:
         self.emulator = emulator
 
     def execute(self, _action: MacroAction) -> None:
@@ -68,7 +70,7 @@ class _TickThenFail:
 
 
 class _TickThenSucceed:
-    def __init__(self, emulator: runtime._MeteredEmulator) -> None:
+    def __init__(self, emulator: CausallyMeteredEmulator) -> None:
         self.emulator = emulator
 
     def execute(self, action: MacroAction) -> MacroAction:
@@ -78,7 +80,7 @@ class _TickThenSucceed:
 
 def test_action_is_reserved_and_frames_are_reconciled_when_delegate_fails() -> None:
     meter = RedLivingDexSetupEffectMeter()
-    emulator = runtime._MeteredEmulator(_FakeEmulator(), meter)
+    emulator = runtime._build_metered_emulator(_FakeEmulator(), meter)
     attempted = runtime._AttemptMeteredActionExecutor(
         _TickThenFail(emulator),
         emulator=emulator,
@@ -96,7 +98,7 @@ def test_action_is_reserved_and_frames_are_reconciled_when_delegate_fails() -> N
 
 def test_successful_action_has_identical_validator_and_effect_counts() -> None:
     meter = RedLivingDexSetupEffectMeter()
-    emulator = runtime._MeteredEmulator(_FakeEmulator(), meter)
+    emulator = runtime._build_metered_emulator(_FakeEmulator(), meter)
     attempted = runtime._AttemptMeteredActionExecutor(
         _TickThenSucceed(emulator),
         emulator=emulator,
@@ -108,6 +110,92 @@ def test_successful_action_has_identical_validator_and_effect_counts() -> None:
 
     assert counted.actions_executed == meter.controller_actions == 1
     assert meter.emulator_frames == 5
+
+
+def test_process_wide_limits_reject_input_before_it_crosses_the_boundary() -> None:
+    limits = RedLivingDexProductionRuntimeLimits(
+        maximum_controller_actions=1,
+        maximum_emulator_frames=5,
+    )
+    meter = RedLivingDexSetupEffectMeter()
+    raw = _FakeEmulator()
+    emulator = runtime._build_metered_emulator(raw, meter, limits=limits)
+    attempted = runtime._AttemptMeteredActionExecutor(
+        _TickThenSucceed(emulator),
+        emulator=emulator,
+        meter=meter,
+        limits=limits,
+    )
+
+    attempted.execute(MacroAction(MacroActionKind.MOVE, "right"))
+    with pytest.raises(RedLivingDexProductionRuntimeError, match="action bound"):
+        attempted.execute(MacroAction(MacroActionKind.MOVE, "left"))
+    with pytest.raises(RedLivingDexProductionRuntimeError, match="frame bound"):
+        emulator.tick(1)
+
+    assert raw.frame_count == 5
+    assert meter.controller_actions == 1
+    assert meter.emulator_frames == 5
+
+
+def test_frame_observer_projects_fresh_emulators_onto_one_monotonic_timeline() -> None:
+    class Observer:
+        def __init__(self) -> None:
+            self.requested: list[int] = []
+            self.published: list[int] = []
+
+        def wants_frame(self, logical_frame: int) -> bool:
+            self.requested.append(logical_frame)
+            return True
+
+        def publish_frame(
+            self,
+            _width: int,
+            _height: int,
+            _rgb: bytes,
+            logical_frame: int,
+        ) -> None:
+            self.published.append(logical_frame)
+
+    observer = Observer()
+    meter = RedLivingDexSetupEffectMeter()
+    meter.record_emulator_frames(120)
+    translated = runtime._MeteredFrameObserver(observer, meter=meter)
+
+    assert translated.wants_frame(7) is True
+    translated.publish_frame(1, 1, b"\x00\x00\x00", 7)
+
+    assert observer.requested == [127]
+    assert observer.published == [127]
+
+    meter.record_emulator_frames(7)
+    next_emulator = runtime._MeteredFrameObserver(observer, meter=meter)
+    assert next_emulator.wants_frame(2) is True
+    next_emulator.publish_frame(1, 1, b"\x00\x00\x00", 2)
+    assert observer.requested == [127, 129]
+    assert observer.published == [127, 129]
+
+
+def test_frame_observer_failure_cannot_change_controller_execution() -> None:
+    class BrokenObserver:
+        def wants_frame(self, _logical_frame: int) -> bool:
+            raise RuntimeError("dashboard closed")
+
+        def publish_frame(
+            self,
+            _width: int,
+            _height: int,
+            _rgb: bytes,
+            _logical_frame: int,
+        ) -> None:
+            raise RuntimeError("dashboard closed")
+
+    meter = RedLivingDexSetupEffectMeter()
+    translated = runtime._MeteredFrameObserver(BrokenObserver(), meter=meter)
+
+    assert translated.wants_frame(5) is False
+    assert translated.wants_frame(10) is False
+    translated.publish_frame(1, 1, b"\x00\x00\x00", 10)
 
 
 @pytest.mark.parametrize("exception", (None, RuntimeError("ordinary"), KeyboardInterrupt()))

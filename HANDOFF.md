@@ -1,5 +1,27 @@
 # Handoff
 
+## Latest checkpoint: bounded live runner is locally qualified, not yet executed
+
+The repeatable Red development runner is implemented around the five authenticated inputs and the
+immutable 18-example title-neutral option model. One invocation can address only the first
+fixed-order eligible case, opens the ROM only after a durable claim, and stops after one terminal.
+Hard process-wide ceilings are fixed at **20,000 controller actions and 2,000,000 emulator frames**.
+An outer terminal ledger prioritizes recovery of a claimed incomplete case and skips a retained
+terminal without replay after restart.
+
+The new dashboard is view-only and follows cumulative frames even when deterministic skills use
+fresh emulator instances. Dashboard failure is isolated from the controller, so closing the page
+cannot alter execution or its outcome. The runner exposes no teacher, development-fit, Crystal,
+full-replay, case-selector or limit-override interface. The focused audit passes **134 tests in
+186.76 seconds**, Ruff, and Mypy across 369 source files. See the [local qualification](docs/evidence/red-repeatable-development-live-runner-local-qualification-v1-2026-09-05.json).
+The complete local gate passes **6,754 tests, with one intentional skip, one expected failure and
+three integration deselections, in 18m02s**.
+
+No real root was claimed and no real prediction, controller action, frame, outcome, fit or
+authority change occurred. Publish this branch, require green pull-request and exact-main CI, then
+reorient once against the private inputs. Execute only the first fixed-order eligible development
+case and stop at its first retained terminal result. Never fit on development or open Crystal.
+
 ## Latest checkpoint: five real inputs are ready; synthetic resolver rehearsal passes
 
 The new repeatable development readiness command ran from the internal-disk checkout with the

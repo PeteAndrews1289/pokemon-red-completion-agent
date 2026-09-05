@@ -1,0 +1,58 @@
+{
+  "schema": "pokemon.red.repeatable-development-live-runner-local-qualification.v1",
+  "status": "locally_qualified_not_executed",
+  "rigor": "development_repeatable",
+  "runner": {
+    "cases_addressable": 5,
+    "cases_per_invocation": 1,
+    "ordering": "fixed_prospective",
+    "case_selector_exposed": false,
+    "controller_action_limit": 20000,
+    "emulator_frame_limit": 2000000,
+    "limits_cli_mutable": false,
+    "rom_construction": "after_durable_claim",
+    "teacher_interface_exposed": false,
+    "development_fit_interface_exposed": false,
+    "crystal_interface_exposed": false,
+    "full_replay_interface_exposed": false
+  },
+  "recovery": {
+    "claimed_incomplete_case_prioritized": true,
+    "retained_outer_terminal_skipped_without_replay": true,
+    "terminal_identity_validated": true,
+    "no_retry_after_controller_input": true
+  },
+  "observability": {
+    "view_only_dashboard": true,
+    "cumulative_frames_across_fresh_emulators": true,
+    "controller_endpoints": 0,
+    "observer_failure_can_change_controller_execution": false,
+    "qualification_labeled_as_training": false
+  },
+  "verification": {
+    "focused_tests_passed": 134,
+    "focused_test_wall_seconds": 186.76,
+    "controller_primitive_boundary": "passed",
+    "full_repository_tests_passed": 6754,
+    "full_repository_tests_skipped": 1,
+    "full_repository_tests_xfailed": 1,
+    "full_repository_tests_deselected": 3,
+    "full_repository_test_wall_seconds": 1082.02,
+    "ruff": "passed",
+    "mypy": "passed_369_source_files",
+    "generated_registries_reproduced": true
+  },
+  "protected_effects": {
+    "controller_actions": 0,
+    "development_outcomes_opened": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_claims": 0,
+    "teacher_queries": 0
+  },
+  "authority_delta": "none",
+  "transfer_result": "none",
+  "claim_boundary": "This qualifies the local execution boundary, recovery ledger and view-only timeline. It does not demonstrate gameplay, a model-selected real outcome, learner improvement, Red completion or Crystal transfer.",
+  "next_gate": "Publish the runner, require green pull-request and exact-main CI, reorient, then execute only the first fixed-order eligible Red development root and stop at its first retained terminal result."
+}

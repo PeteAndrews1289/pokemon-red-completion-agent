@@ -19,6 +19,7 @@ from pokemon_red_completion.claim_first_admission import (
     ClaimFirstExecutionIdentity,
     observe_claim_first_pair_availability,
 )
+from pokemon_red_completion.emulator import EmulatorFrameObserver
 from pokemon_red_completion.goal_manager_composition_qualification import (
     fixed_account_claim_registry_root,
 )
@@ -73,6 +74,9 @@ from pokemon_red_completion.red_living_dex_development_setup_journal import (
 )
 from pokemon_red_completion.red_living_dex_development_supplement_reader import (
     RedLivingDexDevelopmentSupplementBinding,
+)
+from pokemon_red_completion.red_living_dex_production_runtime import (
+    RedLivingDexProductionRuntimeLimits,
 )
 from pokemon_red_completion.red_living_dex_runtime_contract import (
     RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
@@ -455,6 +459,8 @@ def execute_red_living_dex_development_assignment(
     expected_model_sha256: str,
     expected_model_record_sha256: str,
     binding: RedLivingDexDevelopmentPlanBinding,
+    runtime_limits: RedLivingDexProductionRuntimeLimits | None = None,
+    frame_observer: EmulatorFrameObserver | None = None,
 ) -> RedLivingDexClusteredDevelopmentReceipt:
     """Execute or recover one authenticated development row in production."""
 
@@ -475,6 +481,8 @@ def execute_red_living_dex_development_assignment(
     resolver = RedLivingDexLateProductionResolver(
         rom_path=rom_path,
         producer_execution_identity=prepared.producer_execution_identity,
+        runtime_limits=runtime_limits,
+        frame_observer=frame_observer,
     )
     return run_red_living_dex_clustered_development_assignment(
         selection=prepared.selection,

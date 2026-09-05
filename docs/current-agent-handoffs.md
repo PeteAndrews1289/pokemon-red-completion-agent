@@ -1,5 +1,21 @@
 # Current agent handoffs
 
+## Codex publication handoff — live runner qualified, first behavior case still closed
+
+Codex has implemented and locally qualified the fixed-order one-case Red development runner,
+process-wide 20,000-action/2,000,000-frame ceiling, power-loss terminal ledger and view-only live
+timeline. The audit passes 134 focused tests, lint and typing; dashboard failure cannot affect the
+controller, and a retained terminal cannot replay. See the [qualification](evidence/red-repeatable-development-live-runner-local-qualification-v1-2026-09-05.json).
+The complete local gate also passes 6,754 tests in 18m02s with one intentional skip and one expected
+failure.
+
+Codex owns registry regeneration, full validation, publication and exact-main CI. After that green
+gate, reorient once and run only the first eligible private development root. Stop after one typed
+setup censor or one model-selected factual ledger terminal. There is no external review task at
+this ordinary implementation boundary; Claude and Antigravity become useful again after real
+behavior evidence or before an authority/transfer decision. Development outcomes may not enter
+training, and Crystal and full replay remain closed.
+
 ## Codex live-runner integration — readiness is green, stop before execution
 
 The internal-source/external-private repeatable check passed all five unclaimed development inputs

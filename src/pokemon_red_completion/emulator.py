@@ -82,16 +82,20 @@ class CausallyMeteredEmulator:
     then raises.  Controller-action admission remains the executor's job.
     """
 
-    __slots__ = ("_delegate", "_record_frames")
+    __slots__ = ("_admit_frames", "_delegate", "_record_frames")
 
     def __init__(
         self,
         delegate: Any,
         *,
         record_frames: Callable[[int], None],
+        admit_frames: Callable[[int], None] | None = None,
     ) -> None:
         if not callable(record_frames):
             raise TypeError("metered emulator needs a frame recorder")
+        if admit_frames is not None and not callable(admit_frames):
+            raise TypeError("metered emulator frame admission differs")
+        self._admit_frames = admit_frames
         self._delegate = delegate
         self._record_frames = record_frames
 
@@ -110,6 +114,8 @@ class CausallyMeteredEmulator:
         return value
 
     def tick(self, frames: int) -> None:
+        if self._admit_frames is not None:
+            self._admit_frames(frames)
         before = self.frame_count
         try:
             self._delegate.tick(frames)
