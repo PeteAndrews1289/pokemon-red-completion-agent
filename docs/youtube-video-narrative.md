@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: same emulator code, two packaging fingerprints
+
+**Visual:** Two 1,477-file runtime stacks appear side by side. Highlight only two rows:
+**PYBOY CONSOLE WRAPPER** and **WHEEL RECORD**. Above both, keep **CPYTHON 3.14.3 · PYBOY 2.7.0 ·
+IMPORTED CODE DIFFERENCES 0**. The controller and model counters remain at zero.
+
+**Voiceover:** “The next case did not fail at Pokémon. It caught a virtual-environment packaging
+difference before consuming the save. The emulator code was identical, but the generated command
+wrapper and its installer record had different bytes. We reviewed and admitted that exact complete
+closure—not a wildcard—and kept every other runtime mutation blocked.”
+
+End on **2 TERMINALS · 3 AVAILABLE · 0 INCOMPLETE**, followed by **PUBLISH → GREEN MAIN → ONE
+SUPPLEMENTAL CASE → AUDIT**. Do not depict a prediction, gameplay result, model update or Pokédex
+gain from this failed-closed launch.
+
 ## New scene: 99.55% confidence meets a real failure
 
 **Visual:** Split the screen into two decision cards. Card one reads **RESUPPLY · 99.73% → SUCCESS

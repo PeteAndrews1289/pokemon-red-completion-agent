@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: two identical emulators had different packaging fingerprints
+
+The diagnostic repair reached green main, but the next saved situation stopped before the model or
+controller ran. The reason was precise: the supplemental plan had been frozen from one virtual
+environment while execution staged another. Both used CPython 3.14.3 and PyBoy 2.7.0, and every
+imported PyBoy file matched. The only differences were a generated command-line wrapper and the
+wheel record that listed it.
+
+Rather than discard a saved situation or weaken authentication, we reconstructed that complete
+1,477-file environment and added its exact digest beside the historical one. Any third inventory
+still fails. This is a small but important systems lesson: reproducibility checks must distinguish
+behavior-bearing code from installer-generated variation while still proving the complete runtime
+they actually execute. All three remaining Red situations survived untouched, ready for the next
+real model choice after publication and CI.
+
 ## September 5: the model made two real choices—and confidence finally met reality
 
 The first saved situation gave the model three semantic options. It chose resupply with 99.73%

@@ -1,5 +1,25 @@
 # Model-first development roadmap
 
+## Active checkpoint: publish the exact supplemental runtime, then resume case three
+
+Main `3d443e73` and CI `33964453122/1` passed the structured failure-reason repair. The next launch
+failed closed before claim because the supplemental plan's frozen runtime identity did not equal the
+historical execution closure identity. All three remaining cases are still available; no prediction
+or gameplay occurred.
+
+The mismatch is now isolated to two environment-generated wheel files: the `pyboy` console wrapper
+and its `RECORD` entry. CPython, PyBoy version, imported code and the other 1,475 closure files are
+identical. The local repair explicitly accepts the historical closure `3dd20373...` and the complete
+supplemental closure `2702710f...`; all other inventories remain rejected. The latter reconstructs
+the exact frozen runtime identity `38d3d36a...`. The complete local gate passes 6,770 tests, lint,
+typing, privacy/docs/focus checks and registry regeneration.
+
+Publish and require green exact-main CI. Reopen inventory action-free, then run at most one
+fixed-order supplemental case using the matching reviewed closure. If it reaches a model decision,
+retain one factual terminal and reorient on calibration, ledger change and typed component failure.
+If it stops before claim, repair the generic boundary without consuming or refreezing the input.
+No teacher, development fit, Crystal, sealed Red, route patch or full replay is open.
+
 ## Active checkpoint: one success, one overconfident failure; preserve the reason next time
 
 The first two fixed-order cases have now produced real development evidence. The title-neutral

@@ -39,6 +39,15 @@ EXECUTION_RUNTIME_CLOSURE_SCHEMA = "pokemon-red-execution-runtime-closure-v1"
 EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256 = (
     "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62"
 )
+# The development supplement was frozen from the same Python 3.14.3 and PyBoy
+# 2.7.0 wheel bytes, installed in a different virtual environment.  Wheel
+# installation makes the generated ``bin/pyboy`` wrapper and the matching
+# ``RECORD`` row environment-specific even though neither is imported by the
+# emulator.  Preserve both complete, reviewed byte inventories instead of
+# weakening authentication or rewriting the already-frozen development plan.
+ADDITIONAL_EXECUTION_RUNTIME_CLOSURE_SHA256S = (
+    "2702710fc7e679e4e061d69a084b7f0d91e3bb2a0319a43ff6814fd7af785783",
+)
 
 _MAXIMUM_DISTRIBUTION_FILES = 4_096
 _MAXIMUM_FILE_BYTES = 128 * 1024 * 1024
@@ -262,7 +271,10 @@ def authenticate_execution_runtime_closure(
     """Require the reviewed closure digest and return its import allowlist."""
 
     closure = inspect_execution_runtime_closure(site_packages)
-    if closure.sha256 != EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256:
+    if closure.sha256 not in {
+        EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256,
+        *ADDITIONAL_EXECUTION_RUNTIME_CLOSURE_SHA256S,
+    }:
         raise ExecutionRuntimeClosureError("runtime dependency closure differs")
     return closure
 
@@ -912,6 +924,7 @@ __all__ = [
     "ExecutionRuntimeClosure",
     "ExecutionRuntimeClosureError",
     "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256",
+    "ADDITIONAL_EXECUTION_RUNTIME_CLOSURE_SHA256S",
     "activate_authenticated_runtime_stage",
     "authenticate_execution_runtime_closure",
     "inspect_execution_runtime_closure",

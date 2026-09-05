@@ -78,6 +78,33 @@ def test_mutated_distribution_byte_fails_exact_closure_authentication(
         runtime.authenticate_execution_runtime_closure(site)
 
 
+def test_explicit_additional_reviewed_closure_is_accepted(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    site = _fake_site(tmp_path, monkeypatch)
+    alternate = runtime.inspect_execution_runtime_closure(site).sha256
+    monkeypatch.setattr(
+        runtime,
+        "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256",
+        "0" * 64,
+    )
+    monkeypatch.setattr(
+        runtime,
+        "ADDITIONAL_EXECUTION_RUNTIME_CLOSURE_SHA256S",
+        (alternate,),
+    )
+
+    assert runtime.authenticate_execution_runtime_closure(site).sha256 == alternate
+
+    (site / "pyboy/__init__.py").write_text("VALUE = 2\n", encoding="ascii")
+    with pytest.raises(
+        runtime.ExecutionRuntimeClosureError,
+        match="closure differs",
+    ):
+        runtime.authenticate_execution_runtime_closure(site)
+
+
 @pytest.mark.parametrize(
     "relative",
     ("pyboy.py", "pyboy/hidden.py", "pyboy/__pycache__/poison.pyc"),
