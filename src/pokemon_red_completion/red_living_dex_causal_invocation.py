@@ -30,6 +30,7 @@ from pokemon_red_completion.claim_first_admission import (
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.emulator import EmulatorFrameObserver
 from pokemon_red_completion.execution_runtime_closure import (
+    AuthenticatedRuntimeFinder,
     ExecutionRuntimeClosureError,
     authenticate_execution_runtime_closure,
     require_authenticated_runtime_finder,
@@ -317,8 +318,16 @@ def authenticate_red_living_dex_execution_runtime(
     """Return the staged runtime after matching one frozen path-free digest."""
 
     try:
+        if not isinstance(project_root, Path):
+            raise TypeError("runtime authentication needs a project Path")
         expected = require_sha256(expected_runtime_identity_sha256)
-        original_site = (project_root / ".venv/lib/python3.14/site-packages").resolve(strict=True)
+        finders = tuple(
+            item for item in sys.meta_path if isinstance(item, AuthenticatedRuntimeFinder)
+        )
+        if len(finders) != 1:
+            raise ExecutionRuntimeClosureError("authenticated runtime finder differs")
+        finder = finders[0]
+        staged_site = finder.site_packages.resolve(strict=True)
         candidates = tuple(
             Path(item).resolve(strict=True)
             for item in sys.path
@@ -327,13 +336,12 @@ def authenticate_red_living_dex_execution_runtime(
             and Path(item).is_absolute()
             and item.endswith("/venv/lib/python3.14/site-packages")
         )
-        staged = tuple(path for path in candidates if path != original_site)
-        if len(staged) != 1 or original_site in candidates:
+        if candidates != (staged_site,):
             raise ExecutionRuntimeClosureError("runtime stage path differs")
-        closure = authenticate_execution_runtime_closure(staged[0])
+        closure = authenticate_execution_runtime_closure(staged_site)
         require_authenticated_runtime_finder(closure)
         require_loaded_runtime_origins(closure)
-        distribution = metadata.PathDistribution(staged[0] / "pyboy-2.7.0.dist-info")
+        distribution = metadata.PathDistribution(staged_site / "pyboy-2.7.0.dist-info")
         identity = build_runtime_identity_from(
             python_executable=sys.executable,
             python_implementation=platform.python_implementation(),

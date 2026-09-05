@@ -7,6 +7,7 @@ import argparse
 import json
 import re
 import sys
+import sysconfig
 import threading
 import time
 import webbrowser
@@ -16,6 +17,28 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
+
+_ACTIVE_RUNTIME = None
+if __name__ == "__main__":
+    try:
+        from pokemon_red_completion.execution_runtime_closure import (
+            activate_authenticated_runtime_stage,
+        )
+
+        _runtime_parser = argparse.ArgumentParser(add_help=False)
+        _runtime_parser.add_argument("--runtime-site-packages", type=Path)
+        _runtime_args, _runtime_unknown = _runtime_parser.parse_known_args()
+        _runtime_source = _runtime_args.runtime_site_packages or Path(
+            sysconfig.get_path("purelib")
+        )
+        _ACTIVE_RUNTIME = activate_authenticated_runtime_stage(_runtime_source.resolve(strict=True))
+    except BaseException:
+        print(
+            '{"private_path_fields":0,"schema":"pokemon.red.repeatable-living-dex-development-case-failure.v1",'
+            '"stage":"runtime_stage_bootstrap","status":"failed_closed"}',
+            flush=True,
+        )
+        raise SystemExit(2) from None
 
 from pokemon_red_completion.claim_first_admission import (  # noqa: E402
     observe_claim_first_pair_availability,
@@ -42,6 +65,7 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_published_source,
 )
 from pokemon_red_completion.red_living_dex_causal_invocation import (  # noqa: E402
+    RedLivingDexCausalInvocationError,
     authenticate_red_living_dex_current_consumer,
 )
 from pokemon_red_completion.red_living_dex_claim_first_invocation import (  # noqa: E402
@@ -113,6 +137,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", required=True, type=Path)
     parser.add_argument("--exact-ci-run", required=True, type=int)
     parser.add_argument("--exact-ci-attempt", default=1, type=int)
+    parser.add_argument(
+        "--runtime-site-packages",
+        type=Path,
+        help="reviewed PyBoy dependency closure (defaults to the active environment)",
+    )
     parser.add_argument("--port", default=DEFAULT_PORT, type=int)
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--hold-seconds", default=15, type=int)
@@ -380,6 +409,11 @@ def main(argv: list[str] | None = None) -> int:
         except BaseException as error:
             checkpoint = meter.checkpoint()
             interrupted = isinstance(error, (KeyboardInterrupt, SystemExit))
+            failure_stage = (
+                error.stage
+                if isinstance(error, RedLivingDexCausalInvocationError)
+                else stage
+            )
             state.publish(
                 red_living_dex_development_dashboard_snapshot(
                     checkpoint=checkpoint,
@@ -408,7 +442,7 @@ def main(argv: list[str] | None = None) -> int:
                     "model_fits": checkpoint.model_fits,
                     "private_path_fields": 0,
                     "schema": FAILURE_SCHEMA,
-                    "stage": stage,
+                    "stage": failure_stage,
                     "status": "interrupted" if interrupted else "failed_closed",
                     "teacher_queries": checkpoint.teacher_queries,
                     "training_targets_emitted": 0,
@@ -526,3 +560,6 @@ if __name__ == "__main__":
             }
         )
         raise SystemExit(2) from None
+    finally:
+        if _ACTIVE_RUNTIME is not None:
+            _ACTIVE_RUNTIME.close()

@@ -17,6 +17,13 @@ skips that case without replay. Local qualification is **134 TESTS GREEN**, but 
 counters remain zero until publication and the first case. Never render this checkpoint as live
 training or completed gameplay.
 
+The first published live launch is now a retained zero-effect infrastructure result: **DASHBOARD
+READY → RUNTIME IDENTITY REJECTED → 0 CLAIMS · 0 ACTIONS · 0 FRAMES · 5 CASES STILL AVAILABLE**.
+It must not appear as a model loss. The local repair adds a pre-import runtime card showing whether
+the exact reviewed dependency closure staged successfully; it emits no filesystem path and offers
+no controller action. After publication and green CI, the next live page may advance beyond this
+card for exactly one fixed-order case.
+
 The repeatable five-case readiness rail is now green: **5/5 INPUTS READY · 5/5 CLAIM PAIRS
 AVAILABLE · EXACT 18-EXAMPLE MODEL REOPENED · LIVE PREDICTIONS/ACTIONS/FRAMES/OUTCOMES 0**. The
 synthetic resolver rail is also green: **DELAYED CONSTRUCTION · ONE SELECTED PROVIDER · TERMINAL

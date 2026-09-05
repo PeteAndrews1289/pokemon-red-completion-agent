@@ -1,5 +1,22 @@
 # Current agent handoffs
 
+## Codex runtime-stage repair — publish before the next live case
+
+The first live command on main `21bc4994` failed before claim or input because the repeatable runner
+had not installed the clean dependency stage required by its own production authenticator. All five
+cases remain available and every protected effect stayed zero. The local repair now stages the exact
+reviewed closure before controller-capable imports, removes unrelated third-party paths, rejects
+preloaded third-party code, and reports the sanitized inner runtime failure stage. It also correctly
+refused an upgraded NumPy 2.5.2 utility environment and passed a cold bootstrap against the preserved
+reviewed 2.5.1 closure. The complete amended tree passes 6,758 tests in 18m02s, full lint and typing,
+documentation/privacy checks and all four regenerated source registries.
+
+Codex owns full validation, source-registry regeneration, publication, exact-main CI and an
+action-free five-root readiness reopen. After those gates, run only the first fixed-order case and
+stop at its terminal for another reorientation. Reviewers are not needed for this narrow repair;
+they become useful after real behavior evidence or before authority changes. No teacher, model fit,
+Crystal execution, sealed test or full replay is in scope. See the [path-free qualification](evidence/red-repeatable-development-runtime-stage-repair-local-qualification-v1-2026-09-05.json).
+
 ## Codex publication handoff — live runner qualified, first behavior case still closed
 
 Codex has implemented and locally qualified the fixed-order one-case Red development runner,
