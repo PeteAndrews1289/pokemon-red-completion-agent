@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: four successes exposed a model that was not ready
+
+The first glance at the bounded Red batch looked encouraging: four of five selected skills passed.
+The probability audit told a more useful story. At a 50% threshold the model was right on only
+three cases, with a Brier score of 0.398 and log loss of 2.459. It treated one failed acquisition as
+almost certain and one successful party-development action as almost impossible. The mean predicted
+success happened to match the observed 80% rate, but only because the opposing errors cancelled.
+
+That changed the next development step. Instead of promoting the model or running another full
+game, the project now targets ten new train-only situations at the two exposed weaknesses, retains
+storage and supply coverage, and compares the resulting immutable model against an existing
+title-neutral heuristic on eight separate paired Red situations. Both policies commit before
+outcomes, and none of the five diagnostic cases can become a training label. The goal is not to
+make the dashboard look green; it is to make the next result capable of proving the model wrong.
+
 ## September 5: five real choices replaced another replay
 
 The bounded Red queue is complete. Instead of replaying the whole game, the system restored five

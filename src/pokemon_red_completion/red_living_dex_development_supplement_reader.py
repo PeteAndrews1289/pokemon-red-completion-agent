@@ -17,6 +17,7 @@ from pokemon_red_completion.living_dex_development_supplement import (
     LivingDexDevelopmentSupplementPolicy,
 )
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
+from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
@@ -235,6 +236,43 @@ def validate_red_living_dex_development_supplement(
     except (KeyError, TypeError, ValueError, OverflowError):
         raise RedLivingDexDevelopmentSupplementReadError(
             "development supplement authentication failed"
+        ) from None
+
+
+def load_red_living_dex_development_supplement(
+    store: PrivateArtifactRoot,
+    *,
+    binding: RedLivingDexDevelopmentSupplementBinding = (
+        FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT
+    ),
+) -> LivingDexDevelopmentSupplementPlan:
+    """Reopen the exact frozen plan without claims, behavior, outcomes, or action."""
+
+    if not isinstance(store, PrivateArtifactRoot):
+        raise TypeError("development supplement load needs a private artifact root")
+    if not isinstance(binding, RedLivingDexDevelopmentSupplementBinding):
+        raise TypeError("development supplement load needs its exact binding")
+    binding.__post_init__()
+    try:
+        record = store.find_sealed_record(
+            binding.record_id,
+            expected_kind=binding.record_kind,
+        )
+        if (
+            record is None
+            or record.summary.manifest_sha256 != binding.plan_manifest_sha256
+            or record.summary.record_sha256 != binding.plan_record_sha256
+        ):
+            raise ValueError("record")
+        return validate_red_living_dex_development_supplement(
+            record.read(),
+            binding=binding,
+        )
+    except RedLivingDexDevelopmentSupplementReadError:
+        raise
+    except BaseException:
+        raise RedLivingDexDevelopmentSupplementReadError(
+            "development supplement record authentication failed"
         ) from None
 
 

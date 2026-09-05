@@ -17,6 +17,7 @@ collection.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from pokemon_red_completion.living_dex_capture_curriculum import (
@@ -36,6 +37,13 @@ from pokemon_red_completion.living_dex_clustered_curriculum import (
     LivingDexClusteredScenarioCapability,
     LivingDexClusterPartition,
     schedule_living_dex_clustered_curriculum,
+)
+from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
+from pokemon_red_completion.living_dex_targeted_update_capacity import (
+    LivingDexTargetedCapacityContext,
+    LivingDexTargetedCapacityPolicy,
+    LivingDexTargetedCapacityResult,
+    audit_living_dex_targeted_update_capacity,
 )
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
@@ -59,6 +67,7 @@ from pokemon_red_completion.red_living_dex_wild_corridor import (
 RED_LIVING_DEX_CAUSAL_INVENTORY_SCHEMA = (
     "pokemon.red.living-dex-causal-action-free-inventory.v1"
 )
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class RedLivingDexCausalInventoryError(ValueError):
@@ -304,6 +313,88 @@ def schedule_red_living_dex_clustered_integration(
         )
     return schedule_living_dex_clustered_curriculum(
         tuple(adapted),
+        policy=policy,
+    )
+
+
+def red_living_dex_targeted_capacity_contexts(
+    capabilities: tuple[RedLivingDexCausalRootCapability, ...],
+    *,
+    excluded_lineages: frozenset[str] = frozenset(),
+    excluded_physical_roots: frozenset[str] = frozenset(),
+) -> tuple[LivingDexTargetedCapacityContext, ...]:
+    """Collapse exact Red root-template edges into untouched shared contexts."""
+
+    if not isinstance(capabilities, tuple) or any(
+        not isinstance(item, RedLivingDexCausalRootCapability)
+        for item in capabilities
+    ):
+        raise TypeError("Red targeted capacity capabilities differ")
+    for excluded in (excluded_lineages, excluded_physical_roots):
+        if not isinstance(excluded, frozenset) or any(
+            not isinstance(item, str) or _SHA256.fullmatch(item) is None
+            for item in excluded
+        ):
+            raise RedLivingDexCausalInventoryError(
+                "Red targeted capacity exclusions differ"
+            )
+    grouped: dict[tuple[str, str, str], set[LivingDexOptionKind]] = {}
+    for capability in capabilities:
+        capability.__post_init__()
+        root = capability.root
+        lineage = root.independence_lineage_sha256
+        partition = root.cluster_partition
+        slot_partition = (
+            "train"
+            if capability.slot.partition is LivingDexCapturePartition.TRAIN
+            else "development"
+        )
+        if (
+            lineage is None
+            or partition not in {"train", "development"}
+            or partition != slot_partition
+            or not root.prospective_independence_authenticated
+            or not root.root_claim_available
+            or lineage in excluded_lineages
+            or root.root.physical_root_sha256 in excluded_physical_roots
+        ):
+            continue
+        key = (lineage, root.root.physical_root_sha256, partition)
+        grouped.setdefault(key, set()).update(capability.slot.available_option_kinds)
+    contexts = tuple(
+        LivingDexTargetedCapacityContext(
+            lineage_sha256=lineage,
+            physical_root_sha256=physical,
+            partition=partition,  # type: ignore[arg-type]
+            available_option_kinds=tuple(
+                kind for kind in LivingDexOptionKind if kind in kinds
+            ),
+        )
+        for (lineage, physical, partition), kinds in sorted(grouped.items())
+        if len(kinds) >= 2
+    )
+    if len({item.lineage_sha256 for item in contexts}) != len(contexts):
+        raise RedLivingDexCausalInventoryError(
+            "Red targeted capacity repeats an upstream lineage"
+        )
+    return contexts
+
+
+def audit_red_living_dex_targeted_update_capacity(
+    capabilities: tuple[RedLivingDexCausalRootCapability, ...],
+    *,
+    excluded_lineages: frozenset[str] = frozenset(),
+    excluded_physical_roots: frozenset[str] = frozenset(),
+    policy: LivingDexTargetedCapacityPolicy | None = None,
+) -> LivingDexTargetedCapacityResult:
+    """Audit the post-five-case Red bank without choosing, claiming, or executing."""
+
+    return audit_living_dex_targeted_update_capacity(
+        red_living_dex_targeted_capacity_contexts(
+            capabilities,
+            excluded_lineages=excluded_lineages,
+            excluded_physical_roots=excluded_physical_roots,
+        ),
         policy=policy,
     )
 
@@ -575,5 +666,7 @@ __all__ = [
     "RedLivingDexCausalInventoryError",
     "RedLivingDexCausalRootCapability",
     "audit_red_living_dex_causal_inventory",
+    "audit_red_living_dex_targeted_update_capacity",
     "census_red_living_dex_causal_inventory",
+    "red_living_dex_targeted_capacity_contexts",
 ]

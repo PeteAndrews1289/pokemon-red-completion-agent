@@ -29,6 +29,7 @@ from pokemon_red_completion.red_living_dex_development_setup_admission import (
 from pokemon_red_completion.red_living_dex_development_supplement_reader import (
     RedLivingDexDevelopmentSupplementBinding,
     RedLivingDexDevelopmentSupplementReadError,
+    load_red_living_dex_development_supplement,
     validate_red_living_dex_development_supplement,
 )
 
@@ -98,6 +99,7 @@ def test_sealed_record_reopen_authenticates_manifest_and_bytes(tmp_path: Path) -
         plan_record_sha256=record.summary.record_sha256,
     )
     selected, document = load_red_living_dex_development_selection(store, 1, binding=binding)
+    assert load_red_living_dex_development_supplement(store, binding=binding) == plan.supplement
     assert document == json.loads(json.dumps(plan.private_dict()))
     assert selected.ordinal == 1
     for field in (
@@ -109,6 +111,11 @@ def test_sealed_record_reopen_authenticates_manifest_and_bytes(tmp_path: Path) -
         with pytest.raises(RedLivingDexClusteredDevelopmentRunnerError):
             load_red_living_dex_development_selection(
                 store, 1, binding=replace(binding, **{field: "f" * 64})
+            )
+        with pytest.raises(RedLivingDexDevelopmentSupplementReadError):
+            load_red_living_dex_development_supplement(
+                store,
+                binding=replace(binding, **{field: "f" * 64}),
             )
 
 

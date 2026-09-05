@@ -1,5 +1,37 @@
 # Model-first development roadmap
 
+## Active checkpoint: targeted train correction, then a real paired control
+
+The five-case development audit is complete and action-free. It reproduces all five committed
+success probabilities and factual outcomes: four successes, one failure, **60%** threshold
+accuracy, Brier **0.397811** and clipped log loss **2.458979**. The apparently accurate aggregate
+mean hides opposite errors: acquisition was 99.55% confident on a failure, while party development
+was assigned about 0.10% success and then passed its independent verifier. Two resupply successes
+look locally calibrated but `n=2` supports no population claim. The same-case 80% constant is a
+post-hoc scale diagnostic, not a control.
+
+The next gate is frozen in
+[the train/control design](red-living-dex-train-and-paired-control-v1.md): first prove action-free
+capacity for ten new train lineages—four acquisition, four party development, one storage and one
+resupply—and eight separate paired development lineages. Fit the complete settled train denominator
+only if at least eight rows settle, including at least three acquisition and three development
+rows. Then compare the immutable update once against the existing title-neutral
+`CompletionFirstGoalTeacher` from independently reset copies of the same eight development roots,
+with both policy decisions committed before either outcome.
+
+No learning counter advances from the audit. Do not fit the five development rows, tune the control,
+replace an outcome-known root, manufacture independence from timing/RNG siblings, open private
+outcomes during capacity work, invoke a teacher, run sealed Red or Crystal, or start a full replay.
+The immediate implementation task is the zero-effect capacity audit; an insufficient supply result
+rejects or resizes the design before gameplay.
+
+Implementation checkpoint: the exact allocation matcher, Red cartridge capability adapter,
+authenticated prior-lineage exclusion join and production action-free audit command are locally
+complete. The combined dashboard/capacity/calibration checks pass **168 tests**, with Ruff and Mypy
+clean. This is engineering readiness only. Publish the coherent source once, require green CI, then
+run one production capacity census from that exact source. Only a sufficient result opens schedule
+freezing; an insufficient result changes the proposed denominator before any gameplay is spent.
+
 ## Active checkpoint: close five-case calibration and design the next honest comparison
 
 All five declared repeatable Red development contexts are now durable terminals under published

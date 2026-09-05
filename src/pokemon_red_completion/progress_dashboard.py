@@ -476,6 +476,61 @@ class DashboardExperimentState:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardWorkState:
+    """Human-readable, path-free status for the current engineering session."""
+
+    status: str = "idle"
+    headline: str = "No engineering session is active"
+    detail: str = "The dashboard is available and waiting for the next project update."
+    current_step: str = "Waiting"
+    next_step: str = "Start the next bounded project session"
+    completed_units: int = 0
+    total_units: int = 0
+    updated_at_utc: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.status not in {
+            "idle",
+            "working",
+            "testing",
+            "waiting",
+            "blocked",
+            "complete",
+        }:
+            raise ProgressDashboardError("work status is unknown")
+        _plain_text(self.headline, subject="work headline", maximum=120)
+        _plain_text(self.detail, subject="work detail", maximum=240)
+        _plain_text(self.current_step, subject="current work step", maximum=120)
+        _plain_text(self.next_step, subject="next work step", maximum=160)
+        completed = _count(self.completed_units, subject="completed work units")
+        total = _count(self.total_units, subject="total work units")
+        if completed > total:
+            raise ProgressDashboardError("completed work units cannot exceed total")
+        if self.updated_at_utc is not None and re.fullmatch(
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z",
+            self.updated_at_utc,
+        ) is None:
+            raise ProgressDashboardError("work update timestamp is invalid")
+
+    @property
+    def progress(self) -> float | None:
+        return self.completed_units / self.total_units if self.total_units else None
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": self.status,
+            "headline": self.headline,
+            "detail": self.detail,
+            "current_step": self.current_step,
+            "next_step": self.next_step,
+            "completed_units": self.completed_units,
+            "total_units": self.total_units,
+            "progress": self.progress,
+            "updated_at_utc": self.updated_at_utc,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardSnapshot:
     """One identity-safe, human-facing status update."""
 
@@ -500,6 +555,7 @@ class DashboardSnapshot:
     experiment: DashboardExperimentState = DashboardExperimentState()
     learning_components: tuple[DashboardLearningComponent, ...] = ()
     live_evaluation: DashboardLiveEvaluationState | None = None
+    work: DashboardWorkState = DashboardWorkState()
     events: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -564,6 +620,9 @@ class DashboardSnapshot:
                 raise ProgressDashboardError("live teacher queries must match model state")
             if self.live_evaluation.teacher_fallbacks != self.model.fallbacks:
                 raise ProgressDashboardError("live teacher fallbacks must match model state")
+        if not isinstance(self.work, DashboardWorkState):
+            raise ProgressDashboardError("dashboard work state is invalid")
+        self.work.__post_init__()
         if len(self.events) > _MAX_EVENTS:
             raise ProgressDashboardError("dashboard event history is too long")
         for event in self.events:
@@ -603,6 +662,7 @@ class DashboardSnapshot:
                 if self.live_evaluation is not None
                 else None
             ),
+            "work": self.work.public_dict(),
             "events": list(self.events),
             "private_path_fields": 0,
             "raw_address_fields": 0,
@@ -946,9 +1006,22 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
   .events { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; max-height: 150px; overflow: auto; }
   .events li { padding-left: 13px; position: relative; color: #aebfb5; font-size: 12px; line-height: 1.4; }
   .events li::before { content: ""; position: absolute; left: 0; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: #5bdc93; }
+  .work-card { margin-top: 13px; padding: 14px; border: 1px solid #29483a; border-radius: 13px; background: linear-gradient(135deg, #0a1712, #10241b); }
+  .work-headline { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+  .work-detail { margin: 6px 0 12px; color: #b8cbbf; line-height: 1.45; font-size: 14px; }
+  .work-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
+  .work-step { padding: 10px; border-radius: 10px; background: #08120f; border: 1px solid #20382e; }
+  .work-step span { display: block; color: #83998b; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+  .work-step b { display: block; margin-top: 5px; font-size: 13px; line-height: 1.35; }
+  .status-pill { padding: 5px 8px; border-radius: 99px; color: #b6c7bd; background: #22342c; font: 700 11px ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
+  .status-pill.working, .status-pill.testing { color: #07100d; background: #77e2a6; }
+  .status-pill.blocked { color: white; background: #b74343; }
+  .status-pill.complete { color: #07100d; background: #baf268; }
+  .mission { margin: 10px 0 0; color: #c8d9cf; font-size: 14px; line-height: 1.5; }
+  .legend { color: #83998b; font-size: 12px; line-height: 1.45; margin-top: 10px; }
   @media (max-width: 920px) { #observatory { padding: 14px; } .layout { grid-template-columns: 1fr; } .screen-panel { padding: 12px; } }
   @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 500px) { .component { grid-template-columns: 1fr; grid-template-areas: "name" "status" "samples" "score" "digest"; } .component-digest { text-align: left; } .triplet { grid-template-columns: 1fr 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
+  @media (max-width: 500px) { .component { grid-template-columns: 1fr; grid-template-areas: "name" "status" "samples" "score" "digest"; } .component-digest { text-align: left; } .triplet, .work-steps { grid-template-columns: 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
 </style>
 <header class="top">
   <div><div class="eyebrow" id="eyebrow">Transfer learning run</div><h1>Pokémon Learning Observatory</h1></div>
@@ -965,6 +1038,24 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
     </div>
   </section>
   <div class="right">
+    <section class="panel section">
+      <div class="section-head"><h2>Work happening now</h2><span class="status-pill" id="work-status">idle</span></div>
+      <div class="work-card">
+        <h3 class="work-headline" id="work-headline">No engineering session is active</h3>
+        <p class="work-detail" id="work-detail">Waiting for the next project update.</p>
+        <div class="bar"><i id="work-bar"></i></div>
+        <div class="counter-row muted" style="margin-top:7px"><span id="work-count">No fixed unit count</span><span id="work-updated">Not updated</span></div>
+        <div class="work-steps">
+          <div class="work-step"><span>Current step</span><b id="work-current">Waiting</b></div>
+          <div class="work-step"><span>Next step</span><b id="work-next">Start the next bounded project session</b></div>
+        </div>
+      </div>
+    </section>
+    <section class="panel section">
+      <div class="section-head"><h2>Mission and current boundary</h2><span class="view-only">RED FIRST</span></div>
+      <p class="mission">Build an agent that can complete Pokémon games and maintain a living Pokédex. The learned layer chooses portable semantic goals; deterministic skills retain movement, battle, capture, menus, verification and safety.</p>
+      <p class="legend">Current boundary: Red development only. Learned authority is shadow-only. Crystal transfer, sealed evaluation and full-game replay stay closed until fresh Red evidence supports promotion.</p>
+    </section>
     <section class="panel section">
       <div class="section-head"><h2>Current decision</h2><span class="view-only">VIEW ONLY</span></div>
       <div class="model-choice" id="choice">Waiting for context</div>
@@ -1043,6 +1134,14 @@ function componentRow(component) {
   const digest = document.createElement("div"); digest.className = "component-digest"; digest.textContent = `model ${component.model_sha256.slice(0, 10)}`;
   row.append(name, authority, samples, score, digest); return row;
 }
+function relativeTime(timestamp) {
+  if (!timestamp) return "Not updated";
+  const seconds = Math.max(0, Math.floor((Date.now() - Date.parse(timestamp)) / 1000));
+  if (!Number.isFinite(seconds)) return "Update time unavailable";
+  if (seconds < 60) return `${seconds}s ago`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  return `${Math.floor(seconds / 3600)}h ago`;
+}
 function render(data) {
   safeText("game", data.game);
   safeText("connection", data.run_status);
@@ -1053,6 +1152,14 @@ function render(data) {
   safeText("choice", data.model.choice || "Waiting for context"); safeText("candidate", data.model.candidate); safeText("mode", data.model.mode);
   safeText("confidence", data.model.confidence == null ? "confidence —" : `confidence ${pct(data.model.confidence)}`);
   safeText("decisions", fmt(data.model.decisions)); safeText("teacher", fmt(data.model.teacher_queries)); safeText("fallbacks", fmt(data.model.fallbacks));
+  const work = data.work || {};
+  safeText("work-status", work.status || "idle"); el("work-status").className = `status-pill ${work.status || "idle"}`;
+  safeText("work-headline", work.headline); safeText("work-detail", work.detail);
+  safeText("work-current", work.current_step); safeText("work-next", work.next_step);
+  const workProgress = work.progress == null ? 0 : Number(work.progress);
+  el("work-bar").style.width = pct(workProgress);
+  safeText("work-count", work.total_units ? `${fmt(work.completed_units)} / ${fmt(work.total_units)} units` : "No fixed unit count");
+  safeText("work-updated", relativeTime(work.updated_at_utc));
   safeText("eyebrow", data.experiment.eyebrow || "Transfer learning run");
   safeText("experiment-heading", data.experiment.heading || "Transfer experiment");
   safeText("phase", data.experiment.phase.replaceAll("_", " "));
@@ -1120,6 +1227,7 @@ __all__ = [
     "DashboardPartyMember",
     "DashboardSnapshot",
     "DashboardState",
+    "DashboardWorkState",
     "ProgressDashboardError",
     "ProgressDashboardServer",
     "encode_rgb_png",
