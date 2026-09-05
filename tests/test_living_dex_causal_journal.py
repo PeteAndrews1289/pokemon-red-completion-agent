@@ -139,6 +139,7 @@ def _scenario(
     title_shape: str = "red-shaped",
     resolver_failure: bool = False,
     behavior_integer_weights: tuple[int, ...] | None = None,
+    repeatable_trial_claim_sha256: str | None = None,
 ) -> tuple[LivingDexCausalScenario, _Harness]:
     menu = _menu(f"private.{label}")
     bindings = tuple(_sha((label, candidate.binding_ref)) for candidate in menu.candidates)
@@ -172,6 +173,7 @@ def _scenario(
         observer_binding_sha256=_sha((label, "observer")),
         effect_meter_binding_sha256=meter.binding_sha256,
         runner_sha256=_sha((label, "runner")),
+        repeatable_trial_claim_sha256=repeatable_trial_claim_sha256,
     )
 
     @contextmanager
@@ -249,6 +251,17 @@ def test_settled_selected_arm_round_trips_without_a_second_execution(
     assert receipt.example.menu.candidates[0].binding_ref == "policy-row-0"
     assert harness.resolver_calls == [receipt.example.selected_candidate_index]
     assert harness.executions == [receipt.example.selected_candidate_index]
+    assert harness.observations == ["observed"]
+
+    recovered = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+    assert recovered.disposition is LivingDexCausalDisposition.RECOVERED_COMPLETE
+    assert recovered.example == receipt.example
+    assert harness.resolver_calls == [receipt.example.selected_candidate_index]
+    assert harness.executions == [receipt.example.selected_candidate_index]
 
 
 def test_focus_weighted_behavior_is_full_support_replayable_and_durable(
@@ -318,17 +331,50 @@ def test_existing_selection_cannot_be_reinterpreted_under_changed_weights(
             claim_registry=registry,
         )
     assert harness.executions == [receipt.example.selected_candidate_index]
-    assert harness.observations == ["observed"]
 
-    recovered = materialize_living_dex_causal_example(
-        scenario,
-        store=store,
+
+def test_preregistered_resets_have_distinct_claims_without_hiding_shared_bytes(
+    tmp_path: Path,
+) -> None:
+    shared_state = _sha("shared-reset-state")
+    shared_envelope = _sha("shared-reset-envelope")
+    first, _ = _scenario(
+        "repeatable-reset",
+        state=shared_state,
+        envelope=shared_envelope,
+        repeatable_trial_claim_sha256=_sha("trial-0"),
+    )
+    second, _ = _scenario(
+        "repeatable-reset",
+        state=shared_state,
+        envelope=shared_envelope,
+        repeatable_trial_claim_sha256=_sha("trial-1"),
+    )
+
+    assert first.identity.state_sha256 == second.identity.state_sha256
+    assert first.identity.envelope_sha256 == second.identity.envelope_sha256
+    assert first.identity.logical_root_sha256 != second.identity.logical_root_sha256
+    assert first.identity.physical_root_sha256 != second.identity.physical_root_sha256
+
+    first_store, registry = _store_and_registry(tmp_path / "first")
+    second_store, _ = _store_and_registry(tmp_path / "second")
+    first_receipt = materialize_living_dex_causal_example(
+        first,
+        store=first_store,
         claim_registry=registry,
     )
-    assert recovered.disposition is LivingDexCausalDisposition.RECOVERED_COMPLETE
-    assert recovered.example == receipt.example
-    assert harness.resolver_calls == [receipt.example.selected_candidate_index]
-    assert harness.executions == [receipt.example.selected_candidate_index]
+    second_receipt = materialize_living_dex_causal_example(
+        second,
+        store=second_store,
+        claim_registry=registry,
+    )
+    assert first_receipt.example is not None
+    assert second_receipt.example is not None
+
+
+def test_default_identity_encoding_stays_backward_compatible() -> None:
+    scenario, _ = _scenario("legacy-identity")
+    assert "repeatable_trial_claim_sha256" not in scenario.identity.private_dict()
 
 
 def test_complete_causal_example_family_reopens_with_all_private_joins(

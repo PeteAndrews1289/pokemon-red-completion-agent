@@ -166,6 +166,7 @@ class LivingDexCausalIdentity:
     observer_binding_sha256: str
     effect_meter_binding_sha256: str
     runner_sha256: str
+    repeatable_trial_claim_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.source_commit, str) or _GIT_COMMIT.fullmatch(
@@ -189,6 +190,11 @@ class LivingDexCausalIdentity:
             (self.runner_sha256, "runner"),
         ):
             _require_sha256(value, subject=subject)
+        if self.repeatable_trial_claim_sha256 is not None:
+            _require_sha256(
+                self.repeatable_trial_claim_sha256,
+                subject="repeatable trial claim",
+            )
 
     @property
     def identity_sha256(self) -> str:
@@ -196,7 +202,7 @@ class LivingDexCausalIdentity:
 
     @property
     def logical_root_sha256(self) -> str:
-        return canonical_sha256(
+        base = canonical_sha256(
             {
                 "lineage_sha256": self.lineage_sha256,
                 "menu_sha256": self.menu_sha256,
@@ -208,17 +214,43 @@ class LivingDexCausalIdentity:
                 "setup_terminal_sha256": self.setup_terminal_sha256,
             }
         )
+        if self.repeatable_trial_claim_sha256 is None:
+            return base
+        return canonical_sha256(
+            {
+                "base_logical_root_sha256": base,
+                "repeatable_trial_claim_sha256": (
+                    self.repeatable_trial_claim_sha256
+                ),
+                "schema": (
+                    "pokemon.core.living-dex-causal-repeatable-logical-instance.v1"
+                ),
+            }
+        )
 
     @property
     def physical_root_sha256(self) -> str:
-        """Collide identical constructed bytes even under another lineage."""
+        """Collide bytes unless an explicit preregistered reset owns the trial."""
 
-        return canonical_sha256(
+        base = canonical_sha256(
             {
                 "envelope_sha256": self.envelope_sha256,
                 "purpose": "one-selected-arm-causal-example",
                 "schema": "pokemon.core.living-dex-causal-physical-root.v1",
                 "state_sha256": self.state_sha256,
+            }
+        )
+        if self.repeatable_trial_claim_sha256 is None:
+            return base
+        return canonical_sha256(
+            {
+                "base_physical_root_sha256": base,
+                "repeatable_trial_claim_sha256": (
+                    self.repeatable_trial_claim_sha256
+                ),
+                "schema": (
+                    "pokemon.core.living-dex-causal-repeatable-physical-instance.v1"
+                ),
             }
         )
 
@@ -260,7 +292,7 @@ class LivingDexCausalIdentity:
         )
 
     def private_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "binding_roster_sha256": self.binding_roster_sha256,
             "effect_meter_binding_sha256": self.effect_meter_binding_sha256,
             "envelope_sha256": self.envelope_sha256,
@@ -277,6 +309,11 @@ class LivingDexCausalIdentity:
             "source_commit": self.source_commit,
             "state_sha256": self.state_sha256,
         }
+        if self.repeatable_trial_claim_sha256 is not None:
+            result["repeatable_trial_claim_sha256"] = (
+                self.repeatable_trial_claim_sha256
+            )
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -2432,25 +2469,28 @@ def _validate_execution_start(
 def _restore_causal_identity(
     document: Mapping[str, object],
 ) -> LivingDexCausalIdentity:
+    expected_keys = {
+        "binding_roster_sha256",
+        "effect_meter_binding_sha256",
+        "envelope_sha256",
+        "lineage_sha256",
+        "menu_sha256",
+        "observer_binding_sha256",
+        "origin_observation_sha256",
+        "partition",
+        "runner_sha256",
+        "schema",
+        "setup_attestation_sha256",
+        "setup_pair_claim_sha256",
+        "setup_terminal_sha256",
+        "source_commit",
+        "state_sha256",
+    }
+    if "repeatable_trial_claim_sha256" in document:
+        expected_keys.add("repeatable_trial_claim_sha256")
     _exact_keys(
         document,
-        {
-            "binding_roster_sha256",
-            "effect_meter_binding_sha256",
-            "envelope_sha256",
-            "lineage_sha256",
-            "menu_sha256",
-            "observer_binding_sha256",
-            "origin_observation_sha256",
-            "partition",
-            "runner_sha256",
-            "schema",
-            "setup_attestation_sha256",
-            "setup_pair_claim_sha256",
-            "setup_terminal_sha256",
-            "source_commit",
-            "state_sha256",
-        },
+        expected_keys,
         subject="causal identity",
     )
     if document["schema"] != LIVING_DEX_CAUSAL_IDENTITY_SCHEMA:
@@ -2491,6 +2531,14 @@ def _restore_causal_identity(
             subject="effect meter binding",
         ),
         runner_sha256=_string(document["runner_sha256"], subject="runner"),
+        repeatable_trial_claim_sha256=(
+            None
+            if "repeatable_trial_claim_sha256" not in document
+            else _string(
+                document["repeatable_trial_claim_sha256"],
+                subject="repeatable trial claim",
+            )
+        ),
     )
     if identity.private_dict() != dict(document):
         raise LivingDexCausalJournalError("causal identity does not replay")
