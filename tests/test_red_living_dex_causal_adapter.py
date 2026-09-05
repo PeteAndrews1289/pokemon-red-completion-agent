@@ -366,7 +366,7 @@ def test_selected_failure_trace_retains_only_canonical_reason_code(
 
     def fail_selected_provider(*_args: object, **_kwargs: object) -> None:
         raise RedAreaExecutionError(
-            "/Users/private/Pokemon Red.gb: Route 16 failed",
+            "sensitive-location-value: Route 16 failed",
             reason_code="route_step_no_progress",
         )
 
@@ -380,7 +380,7 @@ def test_selected_failure_trace_retains_only_canonical_reason_code(
 
     assert trace["execution_exception_type"] == "RedAreaExecutionError"
     assert trace["execution_failure_reason_code"] == "route_step_no_progress"
-    assert "/Users/private" not in str(trace)
+    assert "sensitive-location-value" not in str(trace)
     assert "Route 16" not in str(trace)
 
 
@@ -392,7 +392,7 @@ def test_selected_failure_trace_rejects_untrusted_reason_code(
     import pokemon_red_completion.red_living_dex_causal_adapter as adapter
 
     class UntrustedProviderError(RuntimeError):
-        reason_code = "/Users/private/Pokemon Red.gb"
+        reason_code = "sensitive-location-value"
 
     def fail_selected_provider(*_args: object, **_kwargs: object) -> None:
         raise UntrustedProviderError("Route 16 private failure")
@@ -407,6 +407,6 @@ def test_selected_failure_trace_rejects_untrusted_reason_code(
 
     assert trace["execution_exception_type"] == "UntrustedProviderError"
     assert trace["execution_failure_reason_code"] == "execution_failed"
-    assert "/Users/private" not in str(trace)
+    assert "sensitive-location-value" not in str(trace)
     assert "Pokemon Red.gb" not in str(trace)
     assert "Route 16" not in str(trace)
