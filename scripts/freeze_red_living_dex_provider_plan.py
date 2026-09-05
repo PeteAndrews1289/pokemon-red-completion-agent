@@ -136,6 +136,7 @@ class _DiagnosticState:
     authenticated_contexts: int = 0
     contexts_considered: int = 0
     consumed_contexts: int = 0
+    replayed_train_contexts: int = 0
     ineligible_control_contexts: int = 0
     states_restored: int = 0
     observations_completed: int = 0
@@ -162,6 +163,7 @@ class _DiagnosticState:
             "authenticated_supplemental_roots": self.authenticated_supplemental_roots,
             "contexts_considered": self.contexts_considered,
             "consumed_contexts": self.consumed_contexts,
+            "replayed_train_contexts": self.replayed_train_contexts,
             "consumed_supplemental_roots": self.consumed_supplemental_roots,
             "controller_actions": self.controller_actions,
             "eligible_root_pool": self.eligible_root_pool,
@@ -479,6 +481,7 @@ def _observe_candidates(
     runtime: RuntimeIdentity,
     claim_registry: Path,
     state: _DiagnosticState,
+    replayable_train_lineages: frozenset[str] = frozenset(),
 ) -> tuple[RedLivingDexActionFreeRootObservation, ...]:
     """Observe one pooled root inventory without inheriting old partitions.
 
@@ -488,6 +491,11 @@ def _observe_candidates(
     here would silently make a different experiment.
     """
 
+    if not isinstance(replayable_train_lineages, frozenset) or any(
+        not isinstance(item, str) or len(item) != 64
+        for item in replayable_train_lineages
+    ):
+        raise ProviderPlanFreezeError("private_input_authentication")
     candidates: list[RedLivingDexActionFreeRootObservation] = []
     for private in contexts:
         state.contexts_considered += 1
@@ -505,8 +513,19 @@ def _observe_candidates(
             raise ProviderPlanFreezeError("private_input_authentication")
         if assignment.partition not in {"train", "validation"}:
             raise ProviderPlanFreezeError("private_input_authentication")
+        lineage_sha256 = canonical_sha256(
+            {
+                "root_lineage_id": assignment.root_lineage_id,
+                "schema": "pokemon.red.private-provider-capacity-lineage.v1",
+            }
+        )
+        replayable_train = (
+            assignment.partition == "train"
+            and lineage_sha256 in replayable_train_lineages
+        )
         currently_available = root_claim_is_available(claim_registry, claimed_root)
-        if not initially_available or not currently_available:
+        replayed = not initially_available or not currently_available
+        if replayed and not replayable_train:
             state.consumed_contexts += 1
             continue
 
@@ -532,10 +551,12 @@ def _observe_candidates(
             state_bytes=capture.state_bytes,
             envelope_bytes=envelope_bytes,
         )
-        if not root_claim_is_available(
+        physical_root_available = root_claim_is_available(
             claim_registry,
             root.physical_root_sha256,
-        ):
+        )
+        replayed = replayed or not physical_root_available
+        if not physical_root_available and not replayable_train:
             state.consumed_contexts += 1
             continue
 
@@ -559,14 +580,7 @@ def _observe_candidates(
             runtime=runtime,
             state=state,
             observe_goal=observe_catalog_goal,
-            independence_lineage_sha256=canonical_sha256(
-                {
-                    "root_lineage_id": assignment.root_lineage_id,
-                    "schema": (
-                        "pokemon.red.private-provider-capacity-lineage.v1"
-                    ),
-                }
-            ),
+            independence_lineage_sha256=lineage_sha256,
             prospective_independence_authenticated=True,
             cluster_partition=(
                 "train" if assignment.partition == "train" else "development"
@@ -576,6 +590,8 @@ def _observe_candidates(
             state.ineligible_control_contexts += 1
             continue
         candidates.append(observation)
+        if replayed:
+            state.replayed_train_contexts += 1
         state.eligible_root_pool += 1
         if assignment.partition == "train":
             state.source_train_roots += 1

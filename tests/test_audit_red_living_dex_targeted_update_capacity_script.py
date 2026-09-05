@@ -61,6 +61,7 @@ def test_parser_has_inventory_inputs_but_no_action_or_fit_controls() -> None:
     parsed = AUDITOR["_parser"]().parse_args(_args())
 
     assert parsed.private_root == Path("/private/artifacts")
+    assert parsed.reuse_authenticated_train is False
     for field in (
         "candidate_index",
         "execute",
@@ -83,6 +84,7 @@ def test_main_emits_only_aggregate_targeted_capacity(
     _candidate_capabilities, supply, _contexts, bindings = _inputs()
     exclusions = SimpleNamespace(
         excluded_lineages=frozenset({"a" * 64}),
+        development_lineages=frozenset({"c" * 64}),
         development_physical_roots=frozenset({"b" * 64}),
         public_dict=lambda: {
             "train_lineages_excluded": 18,
@@ -146,6 +148,7 @@ def test_main_emits_only_aggregate_targeted_capacity(
         model_predictions=0,
         provider_executions=0,
         root_claims=0,
+        replayed_train_contexts=0,
         teacher_queries=0,
     )
     globals_ = AUDITOR["main"].__globals__
@@ -208,9 +211,148 @@ def test_main_emits_only_aggregate_targeted_capacity(
     assert document["controller_actions"] == 0
     assert document["outcomes_opened"] == 0
     assert document["provider_executions"] == 0
+    assert document["historical_train_reuse_enabled"] is False
+    assert document["development_reuse_enabled"] is False
+    assert document["training_source_policy"] == "fresh_unclaimed_only"
     assert "/private" not in encoded
     assert "a" * 64 not in encoded
     assert "b" * 64 not in encoded
+
+
+def test_repeatable_train_mode_reuses_only_authenticated_train_lineages(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    _candidate_capabilities, supply, _contexts, bindings = _inputs()
+    train_lineages = frozenset({"d" * 64, "e" * 64})
+    development_lineages = frozenset({"f" * 64})
+    supply = SimpleNamespace(
+        train_lineages=train_lineages,
+    )
+    exclusions = SimpleNamespace(
+        excluded_lineages=train_lineages | development_lineages,
+        development_lineages=development_lineages,
+        development_physical_roots=frozenset({"1" * 64}),
+        public_dict=lambda: {
+            "train_lineages_excluded": len(train_lineages),
+            "development_lineages_excluded": len(development_lineages),
+            "private_identity_fields": 0,
+        },
+    )
+    observed_replayable: frozenset[str] | None = None
+    observed_exclusions: frozenset[str] | None = None
+
+    def support(name: str):  # type: ignore[no-untyped-def]
+        if name == "_authenticate_source":
+            return lambda _args: (bindings.source_commit, bindings.source_bundle_sha256)
+        if name == "_authenticate_inputs":
+            return lambda *_args: (
+                Path("/private/red.gb"),
+                bindings.rom_sha256,
+                b"rom",
+                (object(),),
+                bindings.context_catalog_sha256,
+                bindings.context_plan_sha256,
+            )
+        if name == "_authenticate_supplemental_roots":
+            return lambda *_args: ()
+        if name == "_observe_candidates":
+            def observe(*_args: object, **kwargs: object) -> tuple[object, ...]:
+                nonlocal observed_replayable
+                observed_replayable = kwargs["replayable_train_lineages"]  # type: ignore[assignment]
+                return ()
+            return observe
+        if name == "_observe_supplemental_candidates":
+            return lambda *_args, **_kwargs: ()
+        if name == "_require_integrity":
+            return lambda *_args, **_kwargs: None
+        raise AssertionError(name)
+
+    @contextmanager
+    def lease(_registry: Path, *, exclusive: bool) -> Iterator[None]:
+        assert exclusive is False
+        yield
+
+    state = SimpleNamespace(
+        authenticated_contexts=0,
+        authenticated_supplemental_roots=0,
+        controller_actions=0,
+        emulator_frames=0,
+        model_fits=0,
+        model_predictions=0,
+        provider_executions=0,
+        replayed_train_contexts=2,
+        root_claims=0,
+        teacher_queries=0,
+    )
+    result = SimpleNamespace(
+        capacity_sufficient=True,
+        public_dict=lambda: {
+            "capacity_sufficient": True,
+            "controller_actions": 0,
+            "outcomes_opened": 0,
+            "private_identity_fields": 0,
+            "root_claims": 0,
+        },
+    )
+    globals_ = AUDITOR["main"].__globals__
+    monkeypatch.setitem(globals_, "_support", support)
+    monkeypatch.setitem(globals_["_PROVIDER_SUPPORT"], "_DiagnosticState", lambda: state)
+    monkeypatch.setitem(globals_, "open_private_root", lambda *_args, **_kwargs: object())
+    monkeypatch.setitem(
+        globals_,
+        "inventory_red_living_dex_development_supply",
+        lambda *_args, **_kwargs: supply,
+    )
+    monkeypatch.setitem(
+        globals_, "load_red_living_dex_development_supplement", lambda _store: object()
+    )
+    monkeypatch.setitem(
+        globals_, "build_red_living_dex_targeted_exclusions", lambda *_args: exclusions
+    )
+    monkeypatch.setitem(globals_, "build_runtime_identity", lambda: object())
+    monkeypatch.setitem(globals_, "require_pyboy_import_origins", lambda _runtime: None)
+    monkeypatch.setitem(
+        globals_,
+        "load_strategic_navigation_scenario_registry",
+        lambda _root: SimpleNamespace(registry_sha256=bindings.route_registry_sha256),
+    )
+    monkeypatch.setitem(
+        globals_,
+        "StrategicScenarioRouteWorld",
+        SimpleNamespace(from_rom=lambda _rom: object()),
+    )
+    monkeypatch.setitem(globals_, "derive_red_living_dex_provider_corridors", lambda _world: ())
+    checkpoint = object()
+    monkeypatch.setitem(
+        globals_,
+        "RedLivingDexSetupEffectMeter",
+        lambda: SimpleNamespace(checkpoint=lambda: checkpoint),
+    )
+    monkeypatch.setitem(globals_, "open_fixed_account_claim_registry", lambda: Path("claims"))
+    monkeypatch.setitem(globals_, "fixed_account_claim_registry_lease", lease)
+    monkeypatch.setitem(
+        globals_, "enumerate_red_living_dex_causal_capabilities", lambda *_args, **_kwargs: ()
+    )
+
+    def audit(*_args: object, **kwargs: object) -> object:
+        nonlocal observed_exclusions
+        observed_exclusions = kwargs["excluded_lineages"]  # type: ignore[assignment]
+        return result
+
+    monkeypatch.setitem(globals_, "audit_red_living_dex_targeted_update_capacity", audit)
+
+    assert AUDITOR["main"]([*_args(), "--reuse-authenticated-train"]) == 0
+    document = json.loads(capsys.readouterr().out)
+    assert observed_replayable == train_lineages
+    assert observed_exclusions == development_lineages
+    assert document["historical_train_reuse_enabled"] is True
+    assert document["development_reuse_enabled"] is False
+    assert document["replayed_train_contexts"] == 2
+    assert document["training_source_policy"] == "repeatable_authenticated_train_only"
+    encoded = json.dumps(document, sort_keys=True)
+    assert "d" * 64 not in encoded
+    assert "f" * 64 not in encoded
 
 
 def test_failure_receipt_sanitizes_private_exception(
