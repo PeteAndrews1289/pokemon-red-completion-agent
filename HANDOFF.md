@@ -1,5 +1,33 @@
 # Handoff
 
+## Latest checkpoint: all five bounded Red development cases are terminal
+
+Published main `d0e06af37589f0583c6232f8816b22b906d6f2c9` passed exact-main CI
+`33969161241/1`. The three supplemental contexts then executed in fixed order under the exact
+reviewed runtime closure `2702710f...`. All five declared contexts are now durably terminal:
+**5 retained · 0 available · 0 incomplete**. No case may be replayed.
+
+The supplemental model choices produced three settled outcomes. Acquisition succeeded in 290
+post-decision actions and 21,216 frames, raising the living collection **13→14** and registered
+collection **17→18** while consuming four capture items and one storage slot. Party development
+returned a verifier-accepted terminal in 1,274 actions and 102,015 frames, with a small improvement
+in team-readiness pressure but no public collection or dependency gain. The model had predicted
+only 0.10% success, so this is a material underconfidence example. The final resupply succeeded in
+41 actions and 3,396 frames, raising capture items **3→7** and reducing resource pressure
+**0.7→0.3**. Every case retained zero irreversible loss.
+
+Together with the first two cases, this is five authentic model-choice/outcome pairs, not a fit,
+comparison victory or authority promotion. Counters advance to **29 development episodes · 66
+verified outcome examples · 61 development outcome questions**. Teachers, targets, fits, authority,
+Crystal, sealed Red and full replays remain zero for this gate. See the
+[path-free supplemental result](docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json).
+
+Next publish this consolidated record and require green exact-main CI. Then perform an action-free
+combined calibration audit over all five opened contexts and design the smallest train-only update
+plus a separately lineage-disjoint Red comparison against deterministic completion ordering. Never
+fit these development outcomes, manufacture independence from them, patch one route/species, invoke
+a teacher, open Crystal or start a full replay.
+
 ## Latest checkpoint: supplemental runtime packaging mismatch is repaired locally
 
 The failure-reason repair merged as main `3d443e7382be329c80501a3dc23c03192d64b0bd` and exact-main

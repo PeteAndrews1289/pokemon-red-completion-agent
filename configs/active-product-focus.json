@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. The option model remains shadow-only, no development example entered fitting, and the failed runtime gate produced no model prediction or gameplay.",
-        "blocker": "The three supplemental cases were frozen from a byte-identical Python/PyBoy code installation whose environment-generated console wrapper and RECORD bytes differ from the historical reviewed closure. Exact runtime authentication correctly stopped before claim; execution now requires publication and exact-main CI of the narrow second reviewed closure identity.",
-        "decision": "Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI, and reconfirm three claims remain available. Then execute only the next fixed-order bounded case and stop at its durable factual terminal for calibration, ledger and typed component-reason audit.",
+        "authority_delta": "No authority changed. The immutable eighteen-example option model remains shadow-only; the five development outcomes are calibration evidence and are forbidden from train fitting or promotion.",
+        "blocker": "All five declared development contexts are now consumed and terminal. The combined results expose both severe overconfidence on one failed acquisition and severe underconfidence on one verifier-accepted party-development action, while providing no paired deterministic baseline or lineage-disjoint evaluation large enough to support model advantage.",
+        "decision": "Close the five-case execution gate and publish its three supplemental outcomes. Next audit prediction error by semantic option kind and specify the smallest train-only update plus a separately lineage-disjoint Red evaluation against deterministic completion ordering; do not manufacture independence from these opened contexts.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-repeatable-development-supplement-runtime-compatibility-v1-2026-09-05.json",
-          "sha256": "9c262c71cebee2f39190b374899ad0b6dfbd2600870325b0654a7e1447c19a57"
+          "kind": "verified_outcome_example",
+          "path": "docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json",
+          "sha256": "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
         },
-        "learning_output": "No learning counter changed. The failed-closed launch consumed zero claims and made zero predictions or controller actions; local qualification preserves all three untouched cases while making their frozen runtime reproducible.",
-        "next_falsifier": "The supplemental reviewed closure must authenticate to runtime identity 38d3d36a... with zero imported-code differences, while any unlisted byte mutation still fails. Exact-main execution must then reach either one durable model-selected terminal or one typed predecision stop without retry.",
-        "next_session_goal": "Publish the exact two-closure allowlist and regenerated registries, require green exact-main CI, run an action-free inventory, then execute at most one next fixed-order supplemental case using its matching reviewed runtime and audit the retained result.",
-        "product_alignment": "This repair removes an environment-packaging false negative without changing model behavior or deterministic skills. It protects scarce Red development contexts so the project can measure goal selection and living-Pokedex progress instead of discarding them on virtual-environment wrapper bytes.",
-        "session_id": "2026-09-05-supplement-runtime-identity-compatibility",
+        "learning_output": "Three more authentic model-choice/outcome pairs advance the cumulative totals to 29 development episodes and 66 verified outcome examples. Acquisition raised living 13 to 14 and registered 17 to 18; resupply raised capture items 3 to 7; party development returned a verified terminal without collection or dependency gain.",
+        "next_falsifier": "A path-free combined calibration audit must reproduce all five committed predictions and factual outcomes, identify which errors are learnable from train-only evidence, and show that a proposed fresh Red comparison has real upstream lineage separation and a deterministic baseline before any fit or controller-authority change.",
+        "next_session_goal": "Publish and exact-main green the five-case outcome record, then build an action-free combined calibration report and prospective train/evaluation design. Stop before new controller input, fitting, sealed Red, Crystal or a full replay.",
+        "product_alignment": "The five bounded cases exercised semantic recovery, acquisition and party-development choices through reusable deterministic skills. One case added a living specimen and another restored capture supplies, directly testing capabilities required by a multi-game living Pokedex while retaining honest calibration failures.",
+        "session_id": "2026-09-05-five-case-development-outcomes-complete",
         "status": "active",
-        "stop_condition": "Stop on any closure beyond the two exact reviewed digests, imported-code difference, failed source/CI/model join, consumed-root reuse, teacher fallback, missing bound or non-durable claim. Never refreeze the supplemental plan, fit on development, patch one route or species, open Crystal, sealed Red or a full replay.",
-        "transfer_result": "None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim."
+        "stop_condition": "Stop if the next design reuses any of the five opened development contexts as unseen evidence, fits on development, lacks an explicit deterministic control, invents lineage independence, patches one route or species, invokes a teacher, opens Crystal or sealed Red, or starts a full replay.",
+        "transfer_result": "None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim."
       },
       "learned_authority": {
         "current": "A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation.",
@@ -78,13 +78,13 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI and clean claim inventory, then execute only the next fixed-order bounded development case and judge its factual outcome before fitting or any authority decision.",
+      "next_decision": "Publish the completed five-case development evidence, then use an action-free calibration audit to choose the smallest train-only update and a separately lineage-disjoint Red comparison against deterministic completion ordering before fitting or any authority decision.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
         "causal_train_examples": 111,
         "composition_attempts": 6,
-        "development_episode_attempts": 26,
+        "development_episode_attempts": 29,
         "evidence": [
           {
             "kind": "unseen_comparison",
@@ -230,11 +230,16 @@
             "kind": "verified_outcome_example",
             "path": "docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json",
             "sha256": "f15413be01fc942643923fd4bc563f655acf89ff88f038aa2495e9c1b5c712ca"
+          },
+          {
+            "kind": "verified_outcome_example",
+            "path": "docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json",
+            "sha256": "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
           }
         ],
         "model_fits": 11,
         "outcome_questions": {
-          "development": 58,
+          "development": 61,
           "train": 103
         },
         "synthetic_rootless_atomic_goal_episodes": 8,
@@ -244,7 +249,7 @@
         "transfer_results": 0,
         "unseen_comparisons": 9,
         "verified_composition_episodes": 4,
-        "verified_outcome_examples": 63
+        "verified_outcome_examples": 66
       },
       "prohibited_actions": [
         "unexecuted_counterfactual_target",

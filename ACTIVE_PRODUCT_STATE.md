@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI and clean claim inventory, then execute only the next fixed-order bounded development case and judge its factual outcome before fitting or any authority decision.
+- Next decision: Publish the completed five-case development evidence, then use an action-free calibration audit to choose the smallest train-only update and a separately lineage-disjoint Red comparison against deterministic completion ordering before fitting or any authority decision.
 
 ### Mandatory mission check
 
@@ -53,7 +53,7 @@ Not the product:
 | Causal Train Example · train | 111 | 111 |
 | Composition Attempt · development | 6 | 6 |
 | Verified Composition Episode · development | 4 | 4 |
-| Development Episode · development | 26 | 24 |
+| Development Episode · development | 29 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-supplement-runtime-identity-compatibility** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-supplement-runtime-compatibility-v1-2026-09-05.json)
+**2026-09-05-five-case-development-outcomes-complete** · status **active** · evidence [verified outcome example](docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This repair removes an environment-packaging false negative without changing model behavior or deterministic skills. It protects scarce Red development contexts so the project can measure goal selection and living-Pokedex progress instead of discarding them on virtual-environment wrapper bytes. |
-| Learning output | No learning counter changed. The failed-closed launch consumed zero claims and made zero predictions or controller actions; local qualification preserves all three untouched cases while making their frozen runtime reproducible. |
-| Authority delta | No authority changed. The option model remains shadow-only, no development example entered fitting, and the failed runtime gate produced no model prediction or gameplay. |
-| Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The three supplemental cases were frozen from a byte-identical Python/PyBoy code installation whose environment-generated console wrapper and RECORD bytes differ from the historical reviewed closure. Exact runtime authentication correctly stopped before claim; execution now requires publication and exact-main CI of the narrow second reviewed closure identity. |
-| Decision | Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI, and reconfirm three claims remain available. Then execute only the next fixed-order bounded case and stop at its durable factual terminal for calibration, ledger and typed component-reason audit. |
-| Next session | Publish the exact two-closure allowlist and regenerated registries, require green exact-main CI, run an action-free inventory, then execute at most one next fixed-order supplemental case using its matching reviewed runtime and audit the retained result. |
-| Next falsifier | The supplemental reviewed closure must authenticate to runtime identity 38d3d36a... with zero imported-code differences, while any unlisted byte mutation still fails. Exact-main execution must then reach either one durable model-selected terminal or one typed predecision stop without retry. |
-| Stop condition | Stop on any closure beyond the two exact reviewed digests, imported-code difference, failed source/CI/model join, consumed-root reuse, teacher fallback, missing bound or non-durable claim. Never refreeze the supplemental plan, fit on development, patch one route or species, open Crystal, sealed Red or a full replay. |
+| Product alignment | The five bounded cases exercised semantic recovery, acquisition and party-development choices through reusable deterministic skills. One case added a living specimen and another restored capture supplies, directly testing capabilities required by a multi-game living Pokedex while retaining honest calibration failures. |
+| Learning output | Three more authentic model-choice/outcome pairs advance the cumulative totals to 29 development episodes and 66 verified outcome examples. Acquisition raised living 13 to 14 and registered 17 to 18; resupply raised capture items 3 to 7; party development returned a verified terminal without collection or dependency gain. |
+| Authority delta | No authority changed. The immutable eighteen-example option model remains shadow-only; the five development outcomes are calibration evidence and are forbidden from train fitting or promotion. |
+| Transfer result | None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim. |
+| Blocker | All five declared development contexts are now consumed and terminal. The combined results expose both severe overconfidence on one failed acquisition and severe underconfidence on one verifier-accepted party-development action, while providing no paired deterministic baseline or lineage-disjoint evaluation large enough to support model advantage. |
+| Decision | Close the five-case execution gate and publish its three supplemental outcomes. Next audit prediction error by semantic option kind and specify the smallest train-only update plus a separately lineage-disjoint Red evaluation against deterministic completion ordering; do not manufacture independence from these opened contexts. |
+| Next session | Publish and exact-main green the five-case outcome record, then build an action-free combined calibration report and prospective train/evaluation design. Stop before new controller input, fitting, sealed Red, Crystal or a full replay. |
+| Next falsifier | A path-free combined calibration audit must reproduce all five committed predictions and factual outcomes, identify which errors are learnable from train-only evidence, and show that a proposed fresh Red comparison has real upstream lineage separation and a deterministic baseline before any fit or controller-authority change. |
+| Stop condition | Stop if the next design reuses any of the five opened development contexts as unseen evidence, fits on development, lacks an explicit deterministic control, invents lineage independence, patches one route or species, invokes a teacher, opens Crystal or sealed Red, or starts a full replay. |
 
 ### Stop conditions
 
@@ -218,4 +218,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **29**.
+Current evidence entries: **30**.

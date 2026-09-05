@@ -1,5 +1,28 @@
 # Model-first development roadmap
 
+## Active checkpoint: close five-case calibration and design the next honest comparison
+
+All five declared repeatable Red development contexts are now durable terminals under published
+main `d0e06af3` and exact-main CI `33969161241/1`. The three supplemental outcomes added one real
+species acquisition, one verifier-accepted party-development action and one capture-supply
+restoration. The full five-case set contains four verified successes and one factual failure, but
+also severe calibration errors in both directions: 99.55% on the failed acquisition and about
+0.10% on the accepted party-development action. This is useful development evidence, not a model
+advantage or promotion result.
+
+Publish the [path-free supplemental result](evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json),
+advance only the three supported development/outcome counters, and require green exact-main CI.
+Then build an action-free combined calibration report that binds all five committed predictions to
+their factual outcomes by semantic option kind. Use it to specify the smallest train-only update
+and an explicit deterministic control on separately lineage-disjoint Red contexts. The next design
+must state its sample/lineage power and stop rule before any new controller input.
+
+Do not fit on the five opened development outcomes, relabel them as unseen, rerun a terminal,
+manufacture independence from timing variants, invoke a teacher, open Crystal or sealed Red, or
+start a full game. The next authority question is whether a newly trained semantic goal model beats
+deterministic completion ordering on fresh Red contexts—not whether this five-case scorer happened
+to complete four isolated skills.
+
 ## Active checkpoint: publish the exact supplemental runtime, then resume case three
 
 Main `3d443e73` and CI `33964453122/1` passed the structured failure-reason repair. The next launch
