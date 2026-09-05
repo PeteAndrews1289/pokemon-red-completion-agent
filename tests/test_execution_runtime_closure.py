@@ -237,3 +237,46 @@ def test_runtime_stage_cannot_be_constructed_over_an_arbitrary_directory(
             tmp_path.resolve(),
             runtime._RUNTIME_STAGE_AUTHORITY,
         )
+
+
+def test_activation_replaces_only_source_site_and_restores_interpreter_state(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    site = _fake_site(tmp_path, monkeypatch)
+    expected = runtime.inspect_execution_runtime_closure(site).sha256
+    monkeypatch.setattr(runtime, "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256", expected)
+    project_path = str((tmp_path / "project").resolve())
+    monkeypatch.setattr(runtime.sys, "path", [project_path, str(site)])
+    previous_meta_path = list(runtime.sys.meta_path)
+
+    active = runtime.activate_authenticated_runtime_stage(site)
+    staged_site = active.closure.site_packages
+
+    assert runtime.sys.path == [project_path, str(staged_site)]
+    assert runtime.sys.meta_path[0] is active.finder
+    runtime.require_authenticated_runtime_finder(active.closure)
+    active.close()
+
+    assert runtime.sys.path == [project_path, str(site)]
+    assert runtime.sys.meta_path == previous_meta_path
+    assert not staged_site.parents[3].exists()
+
+
+def test_activation_rejects_an_additional_third_party_search_root(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    site = _fake_site(tmp_path, monkeypatch)
+    foreign = tmp_path / "foreign/site-packages"
+    foreign.mkdir(parents=True)
+    foreign_module = ModuleType("foreign_runtime")
+    foreign_module.__file__ = str(foreign / "foreign_runtime.py")
+    Path(foreign_module.__file__).write_text("VALUE = 1\n", encoding="ascii")
+    monkeypatch.setitem(sys.modules, "foreign_runtime", foreign_module)
+    monkeypatch.setattr(runtime.sys, "path", [str(site), str(foreign)])
+
+    with pytest.raises(runtime.ExecutionRuntimeClosureError, match="module loaded before"):
+        runtime.activate_authenticated_runtime_stage(site)
+
+    assert runtime.sys.path == [str(site), str(foreign)]

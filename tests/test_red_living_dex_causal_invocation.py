@@ -20,6 +20,10 @@ from test_red_living_dex_setup_recipe import _ArmFactory
 
 from pokemon_red_completion import red_living_dex_causal_invocation as invocation
 from pokemon_red_completion.claim_first_admission import ClaimFirstExecutionIdentity
+from pokemon_red_completion.execution_runtime_closure import (
+    AuthenticatedRuntimeFinder,
+    ExecutionRuntimeClosure,
+)
 from pokemon_red_completion.living_dex_causal_journal import (
     LivingDexCausalDisposition,
 )
@@ -290,14 +294,17 @@ def test_runtime_authentication_checks_stage_origins_and_sealed_pyboy_identity(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     project_root = tmp_path / "project"
-    original = project_root / ".venv/lib/python3.14/site-packages"
     staged = tmp_path / "stage/venv/lib/python3.14/site-packages"
-    original.mkdir(parents=True)
     (staged / "pyboy-2.7.0.dist-info").mkdir(parents=True)
     expected = _sha("sealed-runtime")
     closure = object()
     calls: list[str] = []
     monkeypatch.setattr(invocation.sys, "path", [str(staged)])
+    monkeypatch.setattr(
+        invocation.sys,
+        "meta_path",
+        [AuthenticatedRuntimeFinder(ExecutionRuntimeClosure((), staged))],
+    )
     monkeypatch.setattr(
         invocation,
         "authenticate_execution_runtime_closure",

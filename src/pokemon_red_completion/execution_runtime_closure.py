@@ -359,6 +359,108 @@ class AuthenticatedRuntimeFinder(importlib.abc.MetaPathFinder):
         return spec
 
 
+@dataclass(slots=True)
+class ActivatedAuthenticatedRuntimeStage:
+    """One installed clean runtime stage with reversible interpreter state."""
+
+    stage: AuthenticatedRuntimeStage
+    finder: AuthenticatedRuntimeFinder
+    _previous_sys_path: tuple[str, ...] = field(repr=False)
+    _previous_meta_path: tuple[object, ...] = field(repr=False)
+    _closed: bool = field(default=False, init=False, repr=False)
+
+    @property
+    def closure(self) -> ExecutionRuntimeClosure:
+        return self.stage.closure
+
+    def close(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        sys.path[:] = self._previous_sys_path
+        sys.meta_path[:] = self._previous_meta_path  # type: ignore[assignment]
+        self.stage.close()
+
+    def __enter__(self) -> ActivatedAuthenticatedRuntimeStage:
+        if self._closed:
+            raise ExecutionRuntimeClosureError("activated runtime stage is already closed")
+        return self
+
+    def __exit__(self, *_exc: object) -> None:
+        self.close()
+
+
+def activate_authenticated_runtime_stage(
+    source_site_packages: Path,
+) -> ActivatedAuthenticatedRuntimeStage:
+    """Install only the reviewed third-party closure for later controller use.
+
+    This is intentionally small enough for a command to call before importing
+    any controller-capable project module.  The source virtual environment is
+    removed from module search, the clean stage is installed behind one exact
+    finder, and already-loaded third-party runtime modules are rejected.
+    """
+
+    source = _require_directory(source_site_packages, subject="runtime site-packages")
+    if any(isinstance(item, AuthenticatedRuntimeFinder) for item in sys.meta_path):
+        raise ExecutionRuntimeClosureError("authenticated runtime finder already exists")
+    previous_path = tuple(sys.path)
+    previous_meta_path = tuple(sys.meta_path)
+    third_party_paths: list[Path] = []
+    try:
+        for item in previous_path:
+            if not isinstance(item, str) or not item:
+                continue
+            candidate = Path(item)
+            if not candidate.is_absolute() or candidate.name not in {
+                "site-packages",
+                "dist-packages",
+            }:
+                continue
+            third_party_paths.append(candidate.resolve(strict=True))
+        for module in tuple(sys.modules.values()):
+            raw_origin = getattr(module, "__file__", None)
+            if not isinstance(raw_origin, str) or not Path(raw_origin).is_absolute():
+                continue
+            try:
+                origin = Path(raw_origin).resolve(strict=True)
+            except OSError:
+                raise ExecutionRuntimeClosureError(
+                    "loaded third-party origin is unavailable"
+                ) from None
+            if any(origin.is_relative_to(root) for root in third_party_paths):
+                raise ExecutionRuntimeClosureError("third-party module loaded before runtime stage")
+        stage = prepare_authenticated_runtime_stage(source)
+        finder = AuthenticatedRuntimeFinder(stage.closure)
+        sys.path[:] = [
+            item
+            for item in previous_path
+            if not (
+                isinstance(item, str)
+                and item
+                and Path(item).is_absolute()
+                and Path(item).name in {"site-packages", "dist-packages"}
+            )
+        ]
+        sys.path.append(str(stage.closure.site_packages))
+        sys.meta_path.insert(0, finder)
+        require_authenticated_runtime_finder(stage.closure)
+        require_loaded_runtime_origins(stage.closure)
+        return ActivatedAuthenticatedRuntimeStage(
+            stage,
+            finder,
+            previous_path,
+            previous_meta_path,
+        )
+    except BaseException:
+        sys.path[:] = previous_path
+        sys.meta_path[:] = previous_meta_path  # type: ignore[assignment]
+        if "stage" in locals():
+            with suppress(BaseException):
+                stage.close()
+        raise
+
+
 def require_authenticated_runtime_finder(
     closure: ExecutionRuntimeClosure,
 ) -> None:
@@ -804,12 +906,16 @@ def require_sha256(value: object) -> str:
 
 
 __all__ = [
+    "ActivatedAuthenticatedRuntimeStage",
     "AuthenticatedRuntimeFinder",
+    "AuthenticatedRuntimeStage",
     "ExecutionRuntimeClosure",
     "ExecutionRuntimeClosureError",
     "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256",
+    "activate_authenticated_runtime_stage",
     "authenticate_execution_runtime_closure",
     "inspect_execution_runtime_closure",
+    "prepare_authenticated_runtime_stage",
     "require_loaded_runtime_origins",
     "require_authenticated_runtime_finder",
     "require_sha256",

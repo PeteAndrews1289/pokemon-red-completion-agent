@@ -1,5 +1,31 @@
 # Handoff
 
+## Latest checkpoint: first live launch preserved all five cases; runtime-stage repair is local
+
+The first invocation from exact main `21bc499409f3fc961576cae03fbfc1085dbb08ff` and green CI
+`33953858337/1` stopped before gameplay. It recorded zero claims, predictions, controller actions,
+frames, outcomes, fits and teacher queries; an action-free reopen confirmed all five development
+cases remain available. This was not a model or Pokémon failure. The repeatable command demanded a
+clean authenticated PyBoy dependency stage but had not installed one, and its generic outer stage
+hid the exact `runtime_identity_authentication` cause.
+
+The local successor installs the reviewed dependency closure before any controller-capable project
+import, removes every other third-party search path, rejects already-loaded third-party modules,
+and derives runtime admission from the one authenticated finder rather than a checkout-local
+`.venv`. A caller may identify a preserved runtime source, but its path grants no trust: all bytes
+must reproduce closure `3dd20373…c62`. This also caught the utility environment's NumPy drift from
+reviewed 2.5.1 to 2.5.2 instead of silently accepting it. The focused gate is **28 tests**, Ruff,
+Mypy and a cold real-runtime bootstrap. See the [repair qualification](docs/evidence/red-repeatable-development-runtime-stage-repair-local-qualification-v1-2026-09-05.json).
+After regenerating the source-bound registries and updating their independent public golden
+bindings, the complete amended tree passes **6,758 tests, with four intentional skips and one
+expected failure, in 18m02s**.
+
+Next pass the complete repository and registry gates, publish, require green exact-main CI, and
+reopen readiness action-free. Only then launch the first fixed-order eligible case and stop at its
+terminal. The earlier zero-effect invocation did not consume a case; the next launch is a new
+published implementation, not a replay after controller input. Never fit on development, invoke a
+teacher, open Crystal or run a full replay.
+
 ## Latest checkpoint: bounded live runner is locally qualified, not yet executed
 
 The repeatable Red development runner is implemented around the five authenticated inputs and the

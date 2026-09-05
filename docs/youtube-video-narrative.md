@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: zero frames can still be a useful result
+
+**Visual:** The dashboard opens, then the controller stays locked at **0 ACTIONS · 0 FRAMES · 5/5
+CASES AVAILABLE**. Split the runtime rail into **REVIEWED NUMPY 2.5.1** and **ACTIVE NUMPY 2.5.2**;
+the latter hits a red authentication gate before the cartridge appears.
+
+**Voiceover:** “Our first live launch did not fail at Pokémon. It caught two integration facts before
+the model moved: the new command had not installed its clean dependency stage, and my general-purpose
+environment had upgraded one reviewed library. Because no case was claimed, nothing was consumed.”
+
+Show the replacement copying and hashing the reviewed dependency closure, removing other package
+paths and installing a restrictive import finder. End on **PUBLISH → GREEN CI → ONE LIVE CASE →
+TERMINAL → REORIENT**. Do not depict a retry, training update, model authority or Pokédex progress.
+
 ## New scene: one model choice, one skill, one honest result
 
 **Visual:** Five saved-game cards enter a fixed-order queue. Only the first card can reach a locked

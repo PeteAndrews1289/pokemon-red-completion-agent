@@ -1,5 +1,27 @@
 # Model-first development roadmap
 
+## Latest checkpoint: repair the real runtime boundary, then resume one case
+
+The first live invocation from main `21bc4994` and green CI `33953858337/1` failed before claim,
+prediction, controller input or frame. All five development cases remain available. The diagnosed
+cause was the repeatable command's missing authenticated dependency stage, not a model, context or
+deterministic-skill failure. The active utility environment had also drifted to NumPy 2.5.2 while
+the reviewed closure remains 2.5.1; the exact guard rejected it.
+
+The local repair stages and rehashes the reviewed closure before controller-capable imports, removes
+other third-party search roots, rejects preloaded third-party modules, and makes the one authenticated
+finder—not a checkout-local virtual-environment path—the runtime authority. It preserves the exact
+inner failure stage and changes no model, case order, action/frame bound or learning rule. See the
+[local repair qualification](evidence/red-repeatable-development-runtime-stage-repair-local-qualification-v1-2026-09-05.json).
+The final local publication gate passes 6,758 tests in 18m02s, Ruff, Mypy over 369 source modules,
+documentation/privacy checks and every regenerated source-bound registry.
+
+Next run the full suite and every generated-registry check, publish, require green exact-main CI,
+and run the five-root readiness command with zero effects. Then launch only the first eligible case
+against the preserved reviewed runtime and stop at its terminal. If it fails after input, retain the
+terminal and do not retry; if it fails before claim/input, diagnose the reusable boundary without
+calling it a model result. No development fit, teacher, Crystal, sealed Red or full replay.
+
 ## Latest checkpoint: publish the bounded live runner, then permit one case
 
 The one-case Red development runner and view-only timeline are locally qualified. It preserves the

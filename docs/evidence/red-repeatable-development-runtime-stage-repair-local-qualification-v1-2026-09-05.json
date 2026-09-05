@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon.red.repeatable-development-runtime-stage-repair-local-qualification.v1",
+  "status": "locally_qualified_not_retried",
+  "first_live_attempt": {
+    "source_commit": "21bc499409f3fc961576cae03fbfc1085dbb08ff",
+    "exact_ci_run": 33953858337,
+    "exact_ci_attempt": 1,
+    "terminal": "failed_closed",
+    "reported_stage": "bounded_development_execution",
+    "diagnosed_stage": "runtime_identity_authentication",
+    "exception_type": "RedLivingDexCausalInvocationError",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_predictions": 0,
+    "development_outcomes_opened": 0,
+    "model_fits": 0,
+    "teacher_queries": 0,
+    "root_claims": 0,
+    "cases_still_available": 5
+  },
+  "finding": "The repeatable command required an authenticated clean PyBoy dependency stage but did not install one before importing the controller-capable runtime. The active utility environment had also moved from reviewed NumPy 2.5.1 to unreviewed NumPy 2.5.2; exact closure authentication rejected that drift before gameplay.",
+  "repair": {
+    "authenticated_stage_installed_before_controller_imports": true,
+    "source_runtime_bytes_copied_and_rehashed": true,
+    "unrelated_third_party_search_paths_removed": true,
+    "already_loaded_third_party_modules_rejected": true,
+    "exact_authenticated_finder_required": true,
+    "runtime_authentication_derived_from_finder_owned_stage": true,
+    "explicit_reviewed_runtime_source_supported": true,
+    "runtime_source_path_emitted": false,
+    "exact_inner_runtime_failure_stage_preserved": true,
+    "interpreter_state_restored_on_close": true
+  },
+  "verification": {
+    "focused_tests_passed": 28,
+    "full_repository_tests_passed": 6758,
+    "full_repository_tests_skipped": 4,
+    "full_repository_tests_xfailed": 1,
+    "full_repository_test_wall_seconds": 1082.82,
+    "ruff": "passed",
+    "mypy": "passed_369_source_files",
+    "generated_registries_reproduced": true,
+    "cold_real_runtime_bootstrap": "passed_against_reviewed_closure",
+    "reviewed_runtime_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "private_paths_emitted": 0
+  },
+  "authority_delta": "none",
+  "transfer_result": "none",
+  "claim_boundary": "This evidence qualifies the repaired dependency bootstrap and explains a zero-effect live rejection. It is not a model prediction, gameplay result, training example, authority promotion, Red completion result or Crystal transfer result.",
+  "next_gate": "Run complete repository validation, publish and require green exact-main CI, recheck all five claim pairs action-free, then execute only the first fixed-order eligible development case and stop at its terminal."
+}

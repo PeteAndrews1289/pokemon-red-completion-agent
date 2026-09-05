@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the first live launch failed before the game—and saved the experiment
+
+The newly published runner opened its dashboard, then stopped with zero controller actions and zero
+frames. All five saved situations were still unclaimed. The model had not made a bad choice; the
+command had simply forgotten to install the clean dependency stage that its own production boundary
+requires. At the same time, the everyday utility environment had upgraded NumPy from the reviewed
+2.5.1 build to 2.5.2. Exact authentication caught both facts instead of allowing a subtly different
+emulator stack to generate evidence.
+
+The repair makes that boundary reusable: before controller-capable modules import, it copies and
+rehashes only the reviewed PyBoy closure, removes other third-party locations, installs one
+restrictive import finder and rejects anything loaded too early. The runtime is identified by bytes,
+not by living beside the checkout. The next scene remains the same honest test—publish this repair,
+green CI, then let exactly one fixed-order Red situation reach a model-selected semantic goal and a
+factual Pokédex-ledger terminal.
+
 ## September 5: the model finally has a bounded, observable doorway into Red
 
 The five saved situations no longer stop at readiness. The new runner can select the first eligible

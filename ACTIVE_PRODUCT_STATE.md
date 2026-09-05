@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The bounded one-case Red runner and view-only dashboard are locally qualified. Publish them, require green exact-main CI, then run only the first fixed-order eligible development root and judge its retained terminal behavior before continuing.
+- Next decision: Publish the locally qualified runtime-stage repair, require green exact-main CI, recheck the five untouched cases action-free, then run only the first fixed-order eligible development root and judge its retained terminal behavior before continuing.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-repeatable-development-live-runner-qualification** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-live-runner-local-qualification-v1-2026-09-05.json)
+**2026-09-05-repeatable-development-runtime-stage-repair** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-runtime-stage-repair-local-qualification-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The project now has a recoverable, observable doorway from the title-neutral option model into bounded Red behavior. The next useful evidence is not more infrastructure or teacher data; it is whether one real semantic choice can advance the living-Pokedex ledger through an existing deterministic skill. |
-| Learning output | No learning counter changed. The deliverable is an execution boundary: one fixed-order case, hard 20000-action and 2000000-frame process-wide limits, delayed ROM construction, durable outer terminal recovery and a view-only dashboard. |
-| Authority delta | No authority changed. The runner qualification made zero real predictions, claims, controller actions, emulator frames, outcomes or fits; the eighteen-example model remains shadow-only. |
+| Product alignment | The project preserved its first five real behavior opportunities by rejecting an incomplete and drifted emulator dependency boundary before input. The next useful evidence remains whether one semantic model choice can advance the living-Pokedex ledger through a deterministic skill. |
+| Learning output | No learning counter changed. The zero-effect launch falsified the runtime bootstrap; the repair installs and rehashes the reviewed closure before controller-capable imports while preserving the fixed-order case, hard limits, delayed ROM, durable recovery and view-only dashboard. |
+| Authority delta | No authority changed. The first published live invocation made zero claims, predictions, controller actions, emulator frames, outcomes, fits or teacher queries; all five development cases remain available and the eighteen-example model remains shadow-only. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The bounded live runner is locally qualified but not yet published or validated from exact main. Controller input remains closed until that publication gate is green and one final source-to-private-input reorientation confirms the launch identity. |
-| Decision | Publish the fixed-order single-case runner, require green pull-request and exact-main CI, then execute only the first eligible Red development root. Stop on its first retained terminal result and judge behavior before allowing another root. |
-| Next session | Complete repository validation, publish and merge the runner, require green exact-main CI, reorient against the five private roots, then launch only the first fixed-order eligible development case and retain its terminal behavior evidence. |
+| Blocker | The live invocation exposed a missing clean dependency-stage bootstrap before gameplay. A local repair is qualified, but controller input remains closed until complete validation, publication, green exact-main CI and one action-free five-root readiness reopen. |
+| Decision | Publish the runtime-stage repair, require green pull-request and exact-main CI, reopen all five cases action-free, then execute only the first eligible Red development root. Stop on its first retained terminal result and judge behavior before allowing another root. |
+| Next session | Complete repository and registry validation, publish and merge the runtime-stage repair, require green exact-main CI, reorient action-free against the five private roots, then launch only the first fixed-order eligible development case and retain its terminal behavior evidence. |
 | Next falsifier | The first fixed-order live development case must either retain a typed setup censor or reach a multi-option title-neutral model choice, execute only the selected deterministic skill, and retain a factual ledger outcome under hard action/frame bounds without teacher fallback or replay. |
-| Stop condition | Stop publication on any failed check or generated-registry mismatch. Stop execution on source/CI/model/context/recipe/root/runtime mismatch, private output, consumed-root reuse, teacher fallback, missing hard bounds, non-durable claim or substituted ordering. Stop after the first retained live terminal. Never fit on development, repeat the census/freeze, open Crystal or run a full replay. |
+| Stop condition | Stop publication on any failed check or generated-registry mismatch. Stop execution on source/CI/model/context/recipe/root/runtime mismatch, private output, consumed-root reuse, teacher fallback, missing hard bounds, non-durable claim or substituted ordering. An invocation with controller input is terminal and may not retry. Stop after the first retained live terminal. Never fit on development, repeat the census/freeze, open Crystal or run a full replay. |
 
 ### Stop conditions
 
