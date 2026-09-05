@@ -16,7 +16,7 @@ from contextlib import AbstractContextManager, ExitStack
 from dataclasses import dataclass, replace
 from pathlib import Path
 from types import TracebackType
-from typing import Any
+from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
@@ -63,9 +63,6 @@ from pokemon_red_completion.red_living_dex_runtime_contract import (
     RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
     RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
 )
-from pokemon_red_completion.red_living_dex_setup_admission import (
-    FrozenRedLivingDexSetupSlot,
-)
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RedLivingDexAuthenticatedSetupRoot,
     RedLivingDexSetupEffectMeter,
@@ -109,6 +106,17 @@ class RedLivingDexProductionRuntimeError(RuntimeError):
     """The postclaim Red resolver or one isolated runtime differs."""
 
 
+class RedLivingDexFrozenRecipeAccess(Protocol):
+    """Authenticated recipe access shared by train and development admissions."""
+
+    def __post_init__(self) -> None: ...
+
+    @property
+    def template_ordinal(self) -> int: ...
+
+    def require_resolved_recipe(self, recipe: RedLivingDexSetupSlotRecipe) -> None: ...
+
+
 @dataclass(frozen=True, slots=True)
 class RedLivingDexProductionSetupResolver:
     """Cold callable returning one controller-capable postclaim scope."""
@@ -135,7 +143,7 @@ class RedLivingDexProductionSetupResolver:
 
     def __call__(
         self,
-        frozen: FrozenRedLivingDexSetupSlot,
+        frozen: RedLivingDexFrozenRecipeAccess,
         root: RedLivingDexAuthenticatedSetupRoot,
         pair_claim: ClaimFirstRootPair,
         *,
@@ -164,7 +172,7 @@ class RedLivingDexProductionSetupResolver:
 @dataclass(slots=True)
 class _ProductionResolverScope(AbstractContextManager[RedLivingDexResolvedSetupSlot]):
     resolver: RedLivingDexProductionSetupResolver
-    frozen: FrozenRedLivingDexSetupSlot
+    frozen: RedLivingDexFrozenRecipeAccess
     root: RedLivingDexAuthenticatedSetupRoot
     pair_claim: ClaimFirstRootPair
     meter: RedLivingDexSetupEffectMeter
@@ -179,10 +187,8 @@ class _ProductionResolverScope(AbstractContextManager[RedLivingDexResolvedSetupS
         self.root.__post_init__()
         self.pair_claim.__post_init__()
         if (
-            self.pair_claim.logical_root_sha256
-            != self.root.root_consumption_sha256
-            or self.pair_claim.physical_root_sha256
-            != self.root.physical_root_sha256
+            self.pair_claim.logical_root_sha256 != self.root.root_consumption_sha256
+            or self.pair_claim.physical_root_sha256 != self.root.physical_root_sha256
         ):
             raise RedLivingDexProductionRuntimeError(
                 "production resolver received another claimed root"
@@ -209,16 +215,12 @@ class _ProductionResolverScope(AbstractContextManager[RedLivingDexResolvedSetupS
                 stack=stack,
                 root=self.root,
                 world=world,
-                producer_execution_identity=(
-                    self.resolver.producer_execution_identity
-                ),
+                producer_execution_identity=(self.resolver.producer_execution_identity),
                 meter=self.meter,
             )
             return RedLivingDexResolvedSetupSlot(
                 recipe=recipe,
-                producer_execution_identity=(
-                    self.resolver.producer_execution_identity
-                ),
+                producer_execution_identity=(self.resolver.producer_execution_identity),
                 arm_factory=factory,
                 title_adapter_sha256=RED_LIVING_DEX_TITLE_ADAPTER_SHA256,
                 runtime_factory_sha256=RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
@@ -327,9 +329,7 @@ class _ProductionArmFactory:
         ordinal: int,
     ) -> _ProductionArm:
         if purpose not in {"construction", "candidate", "final_restore"}:
-            raise RedLivingDexProductionRuntimeError(
-                "production setup arm purpose differs"
-            )
+            raise RedLivingDexProductionRuntimeError("production setup arm purpose differs")
         raw = self._resolver.build_emulator()
         _register_emulator(self._stack, raw)
         _start_emulator(raw)
@@ -348,9 +348,7 @@ class _ProductionArmFactory:
             metered_actions,
             reader=reader,
             emulator=metered,
-            cut_block_swaps={
-                swap.before: swap.after for swap in self._world.rules.cut_block_swaps
-            },
+            cut_block_swaps={swap.before: swap.after for swap in self._world.rules.cut_block_swaps},
         )
         traversal = Gen1TraversalObserver(
             reader,
@@ -401,9 +399,7 @@ class _ProductionArm:
         return canonical_sha256(
             {
                 "ordinal": self.ordinal,
-                "producer_execution_identity_sha256": (
-                    self.execution_identity.identity_sha256
-                ),
+                "producer_execution_identity_sha256": (self.execution_identity.identity_sha256),
                 "purpose": self.purpose,
                 "recipe_sha256": self.recipe.recipe_sha256,
                 "runtime_factory_sha256": RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
@@ -437,9 +433,7 @@ class _ProductionArm:
         )
         return replace(
             provisional,
-            observation_sha256=(
-                red_living_dex_setup_fresh_observation_sha256(provisional)
-            ),
+            observation_sha256=(red_living_dex_setup_fresh_observation_sha256(provisional)),
         )
 
     def build_route(
@@ -597,18 +591,14 @@ class _FieldAwareCountingExecutor(CountingExecutor):
 def _register_emulator(stack: ExitStack, emulator: Any) -> None:
     close = getattr(emulator, "close", None)
     if not callable(close):
-        raise RedLivingDexProductionRuntimeError(
-            "production emulator lacks a close boundary"
-        )
+        raise RedLivingDexProductionRuntimeError("production emulator lacks a close boundary")
     stack.callback(close)
 
 
 def _start_emulator(emulator: Any) -> None:
     start = getattr(emulator, "start", None)
     if not callable(start):
-        raise RedLivingDexProductionRuntimeError(
-            "production emulator lacks a start boundary"
-        )
+        raise RedLivingDexProductionRuntimeError("production emulator lacks a start boundary")
     frame_before = getattr(emulator, "frame_count", None)
     pressed_before = getattr(emulator, "pressed_buttons", None)
     started = start()

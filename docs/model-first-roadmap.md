@@ -1,5 +1,19 @@
 # Model-first development roadmap
 
+## Latest checkpoint: publish the locally qualified five-root command
+
+The dedicated development command now admits only historical ordinals 10 and 11 plus supplement ordinals 0 through 2.
+It authenticates the complete train-only corpus and immutable eighteen-example model record,
+reopens each exact plan, joins five independent state/envelope pairs and constructs no ROM resolver
+during preflight. The focused slice passes 72 tests plus 7 command-boundary tests, lint and typing; the five real private root
+files also match their frozen identities. No prediction, claim, outcome, action or frame occurred.
+See the [local qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
+Next run the full repository gates, publish and merge, require green exact-main CI, then invoke the
+source-authenticated five-root preflight once. Stop on any mismatch or nonzero protected effect. A passing
+preflight permits the production-resolver rehearsal and bounded selected outcomes, not fitting,
+promotion, Crystal access or a full replay.
+
 ## Current checkpoint: the missing work is supplement execution, not supply
 
 The repaired census and one three-root freeze both succeeded on green main `7d654cdf`.

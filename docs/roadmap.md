@@ -1,5 +1,15 @@
 # Roadmap
 
+## Latest checkpoint: supplement adapter and positive-path rehearsal
+
+The development-only reader now authenticates all three real stored supplement rows. Its shared
+admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
+This is engineering evidence, not live gameplay or new learning. The concrete five-root command
+and cartridge preflight remain unfinished; no prospective root has been consumed.
+See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
+and the remaining execution sequence. In particular, the shared plan digest and complete Red
+plan digest are different identities. Do not repeat the completed census or freeze.
+
 > **September 4 completed supply gate:** Green main `7d654cdf` proved 429/429 Red bindings and
 > froze/reopened three new development roots. No claims, gameplay or learning occurred. The next
 > task is the missing development-only supplement reader/admission adapter and a five-root

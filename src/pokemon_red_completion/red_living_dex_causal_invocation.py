@@ -63,6 +63,7 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     authenticate_red_living_dex_producer_slot,
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
+    RedLivingDexFrozenRecipeAccess,
     RedLivingDexProductionSetupResolver,
 )
 from pokemon_red_completion.red_living_dex_runtime_contract import (
@@ -148,7 +149,7 @@ class _LateProductionResolver:
 
     def __call__(
         self,
-        frozen: FrozenRedLivingDexSetupSlot,
+        frozen: RedLivingDexFrozenRecipeAccess,
         root: RedLivingDexAuthenticatedSetupRoot,
         pair_claim: ClaimFirstRootPair,
         *,

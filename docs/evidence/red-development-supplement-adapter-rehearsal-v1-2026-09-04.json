@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon.red.development-supplement-adapter-rehearsal-evidence.v1",
+  "status": "local_adapter_rehearsal_not_live_readiness",
+  "base_source_commit": "52cb0dcc4581cbd78a7dab02bf9744274c64e34a",
+  "private_metadata_rehearsal": {
+    "stored_supplement_rows_authenticated": 3,
+    "shared_supplement_plan_sha256": "e17e7781250014ffcff338b9f0fabe3d00e66a0f1d9b7bb5d93683040fab880a",
+    "red_private_plan_sha256": "a9f138d2eebe1508ea615d447e615083e1eace68710f81463b3e06478984558d",
+    "plan_manifest_sha256": "3ac8b47a573dad76ccce593e780d93752576c74df97484bf7958dbedcddd8a79",
+    "plan_record_sha256": "647e6d9f6ab6639527d48e16a45d4a45a62aa9afcd555ec6621f1e807fc574a4",
+    "state_files_opened": 0,
+    "rom_reads": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_predictions": 0,
+    "model_fits": 0,
+    "teacher_queries": 0,
+    "root_claims": 0,
+    "development_outcomes_opened": 0
+  },
+  "positive_path_test": {
+    "environment": "rom_free_simulated_game_state",
+    "model_parameters": "synthetic_fixture_not_trained_checkpoint",
+    "passed": true,
+    "elapsed_seconds": 30.0,
+    "setup_complete": true,
+    "real_model_scorer_exercised": true,
+    "selected_option_journal_exercised": true,
+    "terminal_recovery_without_new_runtime": true,
+    "training_targets_emitted": 0
+  },
+  "claim_boundary": "Adapter qualification only. No real learned decision, outcome, fit, root consumption, authority promotion, Crystal execution or full replay.",
+  "remaining": [
+    "concrete five-root command and source/model/context authentication",
+    "production resolver positive-path rehearsal",
+    "five-root zero-effect preflight",
+    "bounded selected development outcomes and comparison"
+  ]
+}

@@ -30,6 +30,7 @@ from pokemon_red_completion.living_dex_causal_curriculum import (
     RED_DIRECT_CAUSAL_OPTION_KINDS,
 )
 from pokemon_red_completion.living_dex_causal_journal import (
+    LivingDexAuthenticatedCausalExample,
     load_living_dex_authenticated_causal_examples,
 )
 from pokemon_red_completion.living_dex_clustered_curriculum import (
@@ -39,6 +40,7 @@ from pokemon_red_completion.living_dex_development_supplement import (
     LivingDexDevelopmentSupplementCapability,
 )
 from pokemon_red_completion.living_dex_goal_model_record import (
+    LivingDexGoalModelRecord,
     load_living_dex_goal_model_record_bytes,
 )
 from pokemon_red_completion.living_dex_option_value import (
@@ -312,6 +314,69 @@ class RedLivingDexDevelopmentSupplyInventory:
             )
 
 
+def load_red_living_dex_development_model(
+    store: PrivateArtifactRoot,
+    *,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+) -> LivingDexGoalModelRecord:
+    """Authenticate the exact train-only corpus and its immutable fitted model."""
+
+    if not isinstance(store, PrivateArtifactRoot):
+        raise TypeError("development model load needs a private artifact root")
+    if (
+        not isinstance(expected_model_sha256, str)
+        or _SHA256.fullmatch(expected_model_sha256) is None
+        or not isinstance(expected_model_record_sha256, str)
+        or _SHA256.fullmatch(expected_model_record_sha256) is None
+    ):
+        raise RedLivingDexDevelopmentSupplyError("expected model identity differs")
+    try:
+        authenticated = load_living_dex_authenticated_causal_examples(store)
+        return _authenticate_development_model_for_corpus(
+            store,
+            authenticated,
+            expected_model_sha256=expected_model_sha256,
+            expected_model_record_sha256=expected_model_record_sha256,
+        )
+    except RedLivingDexDevelopmentSupplyError:
+        raise
+    except BaseException:
+        raise RedLivingDexDevelopmentSupplyError(
+            "development model authentication failed"
+        ) from None
+
+
+def _authenticate_development_model_for_corpus(
+    store: PrivateArtifactRoot,
+    authenticated: tuple[LivingDexAuthenticatedCausalExample, ...],
+    *,
+    expected_model_sha256: str,
+    expected_model_record_sha256: str,
+) -> LivingDexGoalModelRecord:
+    if not authenticated or any(item.identity.partition != "train" for item in authenticated):
+        raise RedLivingDexDevelopmentSupplyError("causal corpus is not train-only")
+    rows = tuple(item.example for item in authenticated)
+    dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
+    sealed = store.find_sealed_record(
+        f"lc-update-model-{dataset_sha256}",
+        expected_kind="living_dex_causal_integration_model",
+    )
+    if sealed is None or sealed.summary.record_sha256 != expected_model_record_sha256:
+        raise RedLivingDexDevelopmentSupplyError("causal model record differs")
+    model_record = load_living_dex_goal_model_record_bytes(
+        sealed.read_bytes(),
+        expected_model_sha256=expected_model_sha256,
+    )
+    if (
+        model_record.file_sha256 != expected_model_record_sha256
+        or model_record.model.train_dataset_sha256 != dataset_sha256
+        or model_record.model.settled_examples != len(authenticated)
+    ):
+        raise RedLivingDexDevelopmentSupplyError("causal model corpus join differs")
+    return model_record
+
+
 def audit_red_living_dex_development_supply(
     store: PrivateArtifactRoot,
     *,
@@ -341,29 +406,12 @@ def audit_red_living_dex_development_supply(
 
     try:
         authenticated = load_living_dex_authenticated_causal_examples(store)
-        if not authenticated or any(item.identity.partition != "train" for item in authenticated):
-            raise RedLivingDexDevelopmentSupplyError("causal corpus is not train-only")
-        rows = tuple(item.example for item in authenticated)
-        dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
-        model_record = store.find_sealed_record(
-            f"lc-update-model-{dataset_sha256}",
-            expected_kind="living_dex_causal_integration_model",
-        )
-        if (
-            model_record is None
-            or model_record.summary.record_sha256 != expected_model_record_sha256
-        ):
-            raise RedLivingDexDevelopmentSupplyError("causal model record differs")
-        model = load_living_dex_goal_model_record_bytes(
-            model_record.read_bytes(),
+        model = _authenticate_development_model_for_corpus(
+            store,
+            authenticated,
             expected_model_sha256=expected_model_sha256,
+            expected_model_record_sha256=expected_model_record_sha256,
         )
-        if (
-            model.file_sha256 != expected_model_record_sha256
-            or model.model.train_dataset_sha256 != dataset_sha256
-            or model.model.settled_examples != len(authenticated)
-        ):
-            raise RedLivingDexDevelopmentSupplyError("causal model corpus join differs")
 
         plan_roots: list[RedLivingDexDevelopmentRoot] = []
         for binding in bindings:
@@ -645,4 +693,5 @@ __all__ = [
     "audit_red_living_dex_development_supply",
     "build_red_living_dex_development_supplement_capabilities",
     "inventory_red_living_dex_development_supply",
+    "load_red_living_dex_development_model",
 ]

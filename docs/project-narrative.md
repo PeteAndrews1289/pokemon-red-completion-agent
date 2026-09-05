@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 4: five real exam cards finally reach one executable doorway
+
+The project now has one dedicated source-authenticated command for the five declared Red development situations. It cannot
+address a train row or choose a substitute: the old supply contributes ordinals 10 and 11, and the
+new supplement contributes 0, 1 and 2. Before a ROM can even be read, the production path joins the
+published source, freshly reopened plan, exact recipe and root, staged runtime identity, and the
+immutable model record fitted from all 18 authenticated train-only examples. The previously
+qualified training command remains byte-for-byte unchanged.
+
+The five real state/envelope pairs all match. The first file check correctly stopped because these
+old captures were readable beyond the owner account; tightening those ten files to owner-only made
+the same check pass. Seventy-two focused tests now cover the command, model-record join, plan
+reopening, train exclusion, delayed resolver construction and zero-effect batch contract, with
+seven additional tests at the new command boundary. The full local repository gate passed 6,732 tests.
+
+This is still the airlock, not the flight. Nothing was predicted, claimed or played. The source must
+be published on main and pass exact-main CI before the source-authenticated five-root preflight can run. Only
+then can the model make bounded choices whose outcomes teach us whether its portable completion
+reasoning works outside its training roots. See the [local qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
 ## September 4: the binding gate finally produced a usable plan
 
 The performance repair passed both hosted suites, each with 6,691 passing tests, and merged as

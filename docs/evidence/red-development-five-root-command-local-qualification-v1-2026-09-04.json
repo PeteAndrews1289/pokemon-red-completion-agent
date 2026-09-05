@@ -1,0 +1,50 @@
+{
+  "schema": "pokemon.red.development-five-root-command-local-qualification-evidence.v1",
+  "status": "local_command_qualified_publication_required_before_preflight",
+  "scope": {
+    "historical_plan_ordinals": [
+      10,
+      11
+    ],
+    "supplement_plan_ordinals": [
+      0,
+      1,
+      2
+    ],
+    "authenticated_root_files": 5,
+    "independent_lineages_required": 5,
+    "train_ordinals_addressable": 0
+  },
+  "model": {
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "record_sha256": "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb",
+    "authenticated_train_examples": 18,
+    "authority": "non_authoritative_integration_only"
+  },
+  "local_verification": {
+    "focused_tests_passed": 72,
+    "dedicated_command_tests_passed": 7,
+    "full_repository_tests_passed": 6732,
+    "full_repository_tests_skipped": 1,
+    "full_repository_tests_expected_failure": 1,
+    "lint_passed": true,
+    "type_check_passed": true,
+    "production_plan_reopen_tested": true,
+    "model_record_join_tested": true,
+    "delayed_rom_resolver_construction_tested": true,
+    "five_real_state_envelope_pairs_authenticated": true,
+    "historical_train_command_preserved_byte_for_byte": true
+  },
+  "protected_effects": {
+    "root_claims": 0,
+    "model_predictions": 0,
+    "model_fits": 0,
+    "development_outcomes_opened": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_queries": 0,
+    "crystal_accesses": 0
+  },
+  "remaining_gate": "Publish the implementation on main, require green exact-main CI, then invoke the dedicated source-authenticated command once in five-root preflight mode. The preflight must reproduce all five joins with zero protected effects before any model-selected development execution.",
+  "claim_boundary": "Local engineering and private file authentication only. This is not the executable five-root preflight, a learned choice, gameplay, model fitting, authority promotion, sealed Red evaluation or Crystal transfer evidence."
+}

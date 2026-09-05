@@ -1,5 +1,25 @@
 # Handoff
 
+## Latest checkpoint: the exact five-root command is locally qualified
+
+The dedicated source-authenticated command now binds the complete eighteen-example train-only model record to exactly five
+development cases: historical plan ordinals 10 and 11 plus supplement ordinals 0, 1 and 2. The
+production wrapper authenticates current-source capability, a freshly reopened sealed plan, the
+selected root, staged runtime identity and immutable model record before it can construct the cold
+ROM resolver. Train ordinals remain inaccessible.
+
+All five real state/envelope pairs joined their frozen plan identities after their file permissions
+were tightened to owner-only. The model record independently reopened with 18 settled train rows.
+The focused command/adapter/runtime slice passes **72 tests**, with **7 additional dedicated-command tests**; lint and typing pass. Every protected
+effect remains zero. See the [local qualification](docs/evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json)
+and [adapter checkpoint](docs/development-supplement-adapter-checkpoint.md).
+
+This is not yet the executable preflight or model play. Finish repository gates, publish and merge
+the source, require green exact-main CI, then invoke the dedicated command once in five-root
+preflight mode. Only a zero-effect success permits the real production-resolver rehearsal and
+bounded model-selected development outcomes. Do not repeat the census/freeze, substitute another
+root, fit on development, open Crystal or run a full replay.
+
 ## Current checkpoint: census and three-root freeze succeeded; wire the supplement consumer
 
 PR 212 merged at `7d654cdf8419a116ab8716b6b1b03a91069ae292`. PR CI `33913706704/1`

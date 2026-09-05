@@ -1,5 +1,39 @@
 # Current agent handoffs
 
+## Codex implementation checkpoint — publish, preflight, then play
+
+Codex implemented the strict production wrapper and dedicated five-root development command. The frozen case set is
+historical ordinals 10 and 11 plus supplement ordinals 0, 1 and 2; train rows and substitutions are
+not addressable. The complete 18-row train corpus and model record authenticate, all five actual
+state/envelope pairs join, and 72 focused tests plus 7 dedicated-command tests, full repository
+validation, lint and typing pass with zero protected
+effects. See the [local qualification](evidence/red-development-five-root-command-local-qualification-v1-2026-09-04.json).
+
+Next publish/merge, require green exact-main CI and run the source-authenticated
+five-root zero-effect preflight. If and only if it passes, exercise the real production resolver and
+bounded model-selected outcomes. External review is not needed for another implementation loop;
+reserve Claude and Antigravity for the resulting behavior evidence or an authority decision.
+
+## Focused review completed — proceed with production integration
+
+Claude's read-only source review and Antigravity's High-effort compact architecture review of
+`850f02f0` are complete. Codex's [adjudication](development-supplement-focused-audit.md) corrects
+reviewer inaccuracies and records the remaining boundary tests. The adapter tests were rerun:
+24 passed in 55.74 seconds. No protected case, prediction, gameplay or fit occurred.
+Codex owns the concrete five-root command and production success/interruption rehearsal. Preserve
+zero-prediction preflight; compare model/control choices without inventing control outcomes. No
+additional broad audit is required before ordinary implementation. Existing execution gates remain.
+
+## Latest checkpoint: supplement adapter and positive-path rehearsal
+
+The development-only reader now authenticates all three real stored supplement rows. Its shared
+admission path reaches model scoring and terminal recovery in a ROM-free positive-path test.
+This is engineering evidence, not live gameplay or new learning. The concrete five-root command
+and cartridge preflight remain unfinished; no prospective root has been consumed.
+See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for exact bindings, integration findings, reviewer roles
+and the remaining execution sequence. In particular, the shared plan digest and complete Red
+plan digest are different identities. Do not repeat the completed census or freeze.
+
 ## Current override: supply is frozen; Codex owns the missing development-only consumer
 
 PR 212 is merged and both CI runs passed 6,691 tests. The census proved 429/429 bindings in under

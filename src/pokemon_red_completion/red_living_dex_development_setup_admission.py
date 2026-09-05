@@ -18,13 +18,20 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_clustered_development_runner import (
     RedLivingDexClusteredDevelopmentRunnerError,
     RedLivingDexClusteredDevelopmentSelection,
-    authenticate_red_living_dex_clustered_development_selection,
+    RedLivingDexDevelopmentPlanBinding,
+    authenticate_red_living_dex_development_selection,
 )
 from pokemon_red_completion.red_living_dex_clustered_schedule_plan import (
     RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
     RedLivingDexClusteredTrainPlanBinding,
+)
+from pokemon_red_completion.red_living_dex_development_supplement_plan import (
+    RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_SCHEMA,
+)
+from pokemon_red_completion.red_living_dex_development_supplement_reader import (
+    RedLivingDexDevelopmentSupplementBinding,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
     RED_LIVING_DEX_SETUP_SLOT_RECIPE_SCHEMA,
@@ -95,7 +102,7 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
     """Canonical whole-plan proof plus one detached development recipe."""
 
     selection: RedLivingDexClusteredDevelopmentSelection
-    binding: RedLivingDexClusteredTrainPlanBinding = field(repr=False)
+    binding: RedLivingDexDevelopmentPlanBinding = field(repr=False)
     producer_execution_identity_sha256: str = field(repr=False)
     producer_runtime_identity_sha256: str = field(repr=False)
     admission_contract_sha256: str = field(
@@ -113,7 +120,10 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
         ):
             raise TypeError("development setup needs a held selection")
         self.selection.__post_init__()
-        if not isinstance(self.binding, RedLivingDexClusteredTrainPlanBinding):
+        if not isinstance(
+            self.binding,
+            (RedLivingDexClusteredTrainPlanBinding, RedLivingDexDevelopmentSupplementBinding),
+        ):
             raise TypeError("development setup needs its plan binding")
         self.binding.__post_init__()
         for value, subject in (
@@ -125,31 +135,31 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
             (self.admission_contract_sha256, "admission contract"),
         ):
             _require_sha256(value, subject)
-        if (
-            self.admission_contract_sha256
-            != RED_LIVING_DEX_DEVELOPMENT_SETUP_ADMISSION_SHA256
-        ):
+        if self.admission_contract_sha256 != RED_LIVING_DEX_DEVELOPMENT_SETUP_ADMISSION_SHA256:
             raise RedLivingDexDevelopmentSetupAdmissionError(
                 "development setup admission contract differs"
             )
         plan = _decode_canonical(self._plan_payload, "producer plan")
         recipe = _decode_canonical(self._recipe_payload, "recipe")
         identity = self.producer_execution_identity()
-        current = authenticate_red_living_dex_clustered_development_selection(
+        current = authenticate_red_living_dex_development_selection(
             plan,
             self.selection.ordinal,
             binding=self.binding,
         )
         if current != self.selection:
-            raise RedLivingDexDevelopmentSetupAdmissionError(
-                "development setup selection differs"
-            )
+            raise RedLivingDexDevelopmentSetupAdmissionError("development setup selection differs")
         _require_plan_identity_join(
             plan,
             identity,
             runtime_identity_sha256=self.producer_runtime_identity_sha256,
         )
         _require_selected_recipe_join(plan, self.selection, recipe)
+
+    @property
+    def template_ordinal(self) -> int:
+        """Expose the authenticated recipe template to the shared Red runtime."""
+        return self.selection.template_ordinal
 
     @property
     def plan_payload(self) -> bytes:
@@ -169,10 +179,8 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
         )
         if (
             set(document) != _EXECUTION_KEYS
-            or document.get("schema")
-            != RED_LIVING_DEX_SETUP_EXECUTION_IDENTITY_SCHEMA
-            or canonical_sha256(document)
-            != self.producer_execution_identity_sha256
+            or document.get("schema") != RED_LIVING_DEX_SETUP_EXECUTION_IDENTITY_SCHEMA
+            or canonical_sha256(document) != self.producer_execution_identity_sha256
         ):
             raise RedLivingDexDevelopmentSetupAdmissionError(
                 "development setup producer identity differs"
@@ -241,9 +249,7 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
             binding=self.binding,
             root=root,
             producer_execution_identity=self.producer_execution_identity(),
-            expected_runtime_identity_sha256=(
-                self.producer_runtime_identity_sha256
-            ),
+            expected_runtime_identity_sha256=(self.producer_runtime_identity_sha256),
         )
         if current != self:
             raise RedLivingDexDevelopmentSetupAdmissionError(
@@ -257,11 +263,9 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
         if (
             recipe.recipe_sha256 != self.selection.recipe_sha256
             or recipe.slot_sha256 != self.selection.slot_sha256
-            or recipe.root_consumption_sha256
-            != self.selection.logical_root_sha256
+            or recipe.root_consumption_sha256 != self.selection.logical_root_sha256
             or recipe.root_state_sha256 != self.selection.root_state_sha256
-            or recipe.root_envelope_sha256
-            != self.selection.root_envelope_sha256
+            or recipe.root_envelope_sha256 != self.selection.root_envelope_sha256
             or _canonical_payload(recipe.private_dict()) != self._recipe_payload
         ):
             raise RedLivingDexDevelopmentSetupAdmissionError(
@@ -273,9 +277,7 @@ class FrozenRedLivingDexDevelopmentSetupSlot:
             "admission_contract_sha256": self.admission_contract_sha256,
             "controller_api": False,
             "model_predictions": 0,
-            "ordinal_within_development": (
-                self.selection.ordinal - self.selection.train_scenarios
-            ),
+            "ordinal_within_development": (self.selection.ordinal - self.selection.train_scenarios),
             "partition": "development",
             "private_identity_fields": 0,
             "private_path_fields": 0,
@@ -290,7 +292,7 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
     plan_document: Mapping[str, object],
     *,
     selection: RedLivingDexClusteredDevelopmentSelection,
-    binding: RedLivingDexClusteredTrainPlanBinding,
+    binding: RedLivingDexDevelopmentPlanBinding,
     root: RedLivingDexAuthenticatedSetupRoot,
     producer_execution_identity: RedLivingDexSetupExecutionIdentity,
     expected_runtime_identity_sha256: str,
@@ -305,7 +307,9 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
     ):
         raise TypeError("development setup admission needs a held selection")
     selection.__post_init__()
-    if not isinstance(binding, RedLivingDexClusteredTrainPlanBinding):
+    if not isinstance(
+        binding, (RedLivingDexClusteredTrainPlanBinding, RedLivingDexDevelopmentSupplementBinding)
+    ):
         raise TypeError("development setup admission needs a plan binding")
     binding.__post_init__()
     if not isinstance(root, RedLivingDexAuthenticatedSetupRoot):
@@ -324,7 +328,7 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
     try:
         plan_payload = _canonical_payload(dict(plan_document))
         plan = _decode_canonical(plan_payload, "producer plan")
-        current = authenticate_red_living_dex_clustered_development_selection(
+        current = authenticate_red_living_dex_development_selection(
             plan,
             selection.ordinal,
             binding=binding,
@@ -339,9 +343,7 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
             "development setup producer plan differs"
         ) from None
     if current != selection:
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            "development setup selection differs"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError("development setup selection differs")
     _require_plan_identity_join(
         plan,
         producer_execution_identity,
@@ -349,9 +351,7 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
     )
     assignments = plan.get("assignments")
     if not isinstance(assignments, list):
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            "development setup assignments differ"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError("development setup assignments differ")
     selected = assignments[selection.ordinal]
     if not isinstance(selected, dict) or not isinstance(
         selected.get("recipe"),
@@ -367,15 +367,11 @@ def authenticate_frozen_red_living_dex_development_setup_slot(
     return FrozenRedLivingDexDevelopmentSetupSlot(
         selection=selection,
         binding=binding,
-        producer_execution_identity_sha256=(
-            producer_execution_identity.identity_sha256
-        ),
+        producer_execution_identity_sha256=(producer_execution_identity.identity_sha256),
         producer_runtime_identity_sha256=runtime_identity,
         _plan_payload=plan_payload,
         _recipe_payload=_canonical_payload(recipe),
-        _producer_execution_payload=_canonical_payload(
-            producer_execution_identity.private_dict()
-        ),
+        _producer_execution_payload=_canonical_payload(producer_execution_identity.private_dict()),
     )
 
 
@@ -386,7 +382,11 @@ def _require_plan_identity_join(
     runtime_identity_sha256: str,
 ) -> None:
     if (
-        plan.get("schema") != RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA
+        plan.get("schema")
+        not in (
+            RED_LIVING_DEX_CLUSTERED_PRIVATE_PLAN_SCHEMA,
+            RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT_PRIVATE_PLAN_SCHEMA,
+        )
         or plan.get("source_commit") != identity.source_commit
         or plan.get("source_bundle_sha256") != identity.source_bundle_sha256
         or plan.get("route_registry_sha256") != identity.route_registry_sha256
@@ -408,9 +408,7 @@ def _require_root_join(
         or root.state_sha256 != selection.root_state_sha256
         or root.envelope_sha256 != selection.root_envelope_sha256
     ):
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            "development setup root differs"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError("development setup root differs")
 
 
 def _require_selected_recipe_join(
@@ -420,9 +418,7 @@ def _require_selected_recipe_join(
 ) -> None:
     assignments = plan.get("assignments")
     if not isinstance(assignments, list):
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            "development setup assignments differ"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError("development setup assignments differ")
     selected = assignments[selection.ordinal]
     if not isinstance(selected, Mapping):
         raise RedLivingDexDevelopmentSetupAdmissionError(
@@ -436,11 +432,9 @@ def _require_selected_recipe_join(
         or selected.get("recipe_sha256") != selection.recipe_sha256
         or selected.get("template_sha256") != selection.slot_sha256
         or recipe.get("slot_sha256") != selection.slot_sha256
-        or recipe.get("root_consumption_sha256")
-        != selection.logical_root_sha256
+        or recipe.get("root_consumption_sha256") != selection.logical_root_sha256
         or recipe.get("root_state_sha256") != selection.root_state_sha256
-        or recipe.get("root_envelope_sha256")
-        != selection.root_envelope_sha256
+        or recipe.get("root_envelope_sha256") != selection.root_envelope_sha256
     ):
         raise RedLivingDexDevelopmentSetupAdmissionError(
             "development setup selected recipe differs"
@@ -480,17 +474,13 @@ def _decode_canonical(payload: bytes, subject: str) -> dict[str, object]:
 
 def _require_sha256(value: object, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            f"development setup {subject} differs"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError(f"development setup {subject} differs")
     return value
 
 
 def _string(value: object, subject: str) -> str:
     if not isinstance(value, str) or not value:
-        raise RedLivingDexDevelopmentSetupAdmissionError(
-            f"development setup {subject} differs"
-        )
+        raise RedLivingDexDevelopmentSetupAdmissionError(f"development setup {subject} differs")
     return value
 
 
