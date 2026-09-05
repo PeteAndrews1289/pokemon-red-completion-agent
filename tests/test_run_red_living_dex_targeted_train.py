@@ -25,6 +25,8 @@ def test_targeted_train_command_has_no_development_fit_or_teacher_entrypoint() -
     assert "run_red_living_dex_targeted_train_campaign" in source
     assert "authenticate_red_living_dex_targeted_schedule_plan" in source
     assert "DashboardFrameObserver" in source
+    assert "MAXIMUM_CAMPAIGN_CONTROLLER_ACTIONS = 200_000" in source
+    assert "MAXIMUM_CAMPAIGN_EMULATOR_FRAMES = 20_000_000" in source
     assert '"development_slots_opened": 0' in source
 
 

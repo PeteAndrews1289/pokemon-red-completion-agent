@@ -63,6 +63,7 @@ from pokemon_red_completion.red_living_dex_claim_first_invocation import (
     authenticate_red_living_dex_current_consumer,
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
+    RedLivingDexProductionRuntimeLimits,
     RedLivingDexProductionSetupResolver,
 )
 from pokemon_red_completion.red_living_dex_provider_plan import (
@@ -112,6 +113,8 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 RESULT_SCHEMA = "pokemon.red.living-dex-targeted-train-campaign-result.v1"
 FAILURE_SCHEMA = "pokemon.red.living-dex-targeted-train-campaign-failure.v1"
 DEFAULT_PORT = 8768
+MAXIMUM_CAMPAIGN_CONTROLLER_ACTIONS = 200_000
+MAXIMUM_CAMPAIGN_EMULATOR_FRAMES = 20_000_000
 _MAXIMUM_PLAN_BYTES = 1024 * 1024
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -333,6 +336,10 @@ def main(argv: list[str] | None = None) -> int:
             rom_path=rom_path,
             rom_bytes=rom_bytes,
             producer_execution_identity=execution_identity,
+            runtime_limits=RedLivingDexProductionRuntimeLimits(
+                maximum_controller_actions=MAXIMUM_CAMPAIGN_CONTROLLER_ACTIONS,
+                maximum_emulator_frames=MAXIMUM_CAMPAIGN_EMULATOR_FRAMES,
+            ),
             frame_observer=observer,
         )
         store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
