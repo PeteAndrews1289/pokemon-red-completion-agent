@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "falsification",
           "path": "docs/evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json",
-          "sha256": "f1d06ddc6668e0dd68aaf689d8da1e777ddeed563d21243f6f6273188a9825e7"
+          "sha256": "de1438da525b76fa9d4a6b856d6c7f6a63d4659b01f1b2da0d62aadfed7bcf1a"
         },
         "learning_output": "No learning counter changed. V2 was rejected by the interpreter flag gate before any project or private input became reachable; it produced no prediction, claim, outcome, action, frame, fit or teacher query.",
         "next_falsifier": "The interpreter-diagnostic successor must run under the canonical locale and reproduce the five source, plan, model, context, recipe, runtime and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero.",

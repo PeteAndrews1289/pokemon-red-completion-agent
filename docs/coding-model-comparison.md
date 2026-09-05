@@ -23,8 +23,8 @@ usage debits. No account quota or billing data is inferred from elapsed time.
 Starting point: GPT-5.6 Sol inherited its own published V1 runtime-staging defect, replaced the
 command with the mature strict bootstrap, passed 50 focused tests and the full local gate, merged
 through PR 215, and passed exact-main CI `33939561868/1` in 26 minutes 4 seconds. The exact
-1,477-file production dependency closure reproduced its reviewed digest. Claude independently
-returned GO with no P0 or blocking P1.
+1,477-file production dependency closure reproduced its reviewed digest. Claude and Antigravity
+3.8 Flash High independently returned GO with no P0 or blocking P1.
 
 The first strict invocation was rejected before source authentication because Codex launched the
 pinned interpreter under `LANG=C` and `LC_ALL=C`, yielding `utf8_mode=1` instead of the required

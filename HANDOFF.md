@@ -4,8 +4,8 @@
 
 The strict successor merged as exact main `90b90d2205535e4a3ed294b522331f0c41dccc27` and exact-main
 CI `33939561868/1` passed in 26 minutes 4 seconds. Its exact 1,477-file production dependency
-closure also reproduced the reviewed digest in a clean main worktree. Claude independently returned
-GO with no P0 or blocking P1 before invocation.
+closure also reproduced the reviewed digest in a clean main worktree. Claude and Antigravity 3.8
+Flash High independently returned GO with no P0 or blocking P1 on the source boundary.
 
 The first host invocation nevertheless failed closed at the earliest bootstrap boundary. The
 isolated launcher supplied `LANG=C` and `LC_ALL=C`, causing pinned CPython 3.14 to start with
