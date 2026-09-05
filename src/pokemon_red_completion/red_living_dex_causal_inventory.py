@@ -43,8 +43,11 @@ from pokemon_red_completion.living_dex_targeted_update_capacity import (
     LivingDexTargetedCapacityContext,
     LivingDexTargetedCapacityPolicy,
     LivingDexTargetedCapacityResult,
+    LivingDexTargetedSchedule,
     audit_living_dex_targeted_update_capacity,
+    freeze_living_dex_targeted_schedule,
 )
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
 )
@@ -64,9 +67,7 @@ from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridor,
 )
 
-RED_LIVING_DEX_CAUSAL_INVENTORY_SCHEMA = (
-    "pokemon.red.living-dex-causal-action-free-inventory.v1"
-)
+RED_LIVING_DEX_CAUSAL_INVENTORY_SCHEMA = "pokemon.red.living-dex-causal-action-free-inventory.v1"
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
@@ -101,8 +102,7 @@ class RedLivingDexCausalRootCapability:
             or self.recipe.slot_sha256 != self.slot.slot_sha256
             or self.recipe.root_state_sha256 != self.root.root.state_sha256
             or self.recipe.root_envelope_sha256 != self.root.root.envelope_sha256
-            or self.recipe.root_consumption_sha256
-            != self.root.root.root_consumption_sha256
+            or self.recipe.root_consumption_sha256 != self.root.root.root_consumption_sha256
         ):
             raise RedLivingDexCausalInventoryError(
                 "causal inventory capability does not join its root and template"
@@ -170,12 +170,8 @@ class RedLivingDexCausalInventoryAudit:
             "reasons": list(self.reasons),
             "root_claims": 0,
             "roots_observed": self.roots_observed,
-            "roots_with_any_compatible_template": (
-                self.roots_with_any_compatible_template
-            ),
-            "roots_without_compatible_template": (
-                self.roots_without_compatible_template
-            ),
+            "roots_with_any_compatible_template": (self.roots_with_any_compatible_template),
+            "roots_without_compatible_template": (self.roots_without_compatible_template),
             "schema": RED_LIVING_DEX_CAUSAL_INVENTORY_SCHEMA,
             "teacher_queries": 0,
             "train_context_deficit": self.train_context_deficit,
@@ -184,6 +180,78 @@ class RedLivingDexCausalInventoryAudit:
                 self.train_template_compatible_root_counts
             ),
             "unqualified_lineage_roots": self.unqualified_lineage_roots,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexTargetedScheduleBinding:
+    """One title-neutral schedule joined to deterministic Red setup recipes."""
+
+    schedule: LivingDexTargetedSchedule
+    capabilities: tuple[RedLivingDexCausalRootCapability, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.schedule, LivingDexTargetedSchedule):
+            raise TypeError("Red targeted binding needs a schedule")
+        self.schedule.__post_init__()
+        if (
+            not isinstance(self.capabilities, tuple)
+            or len(self.capabilities) != len(self.schedule.slots)
+            or any(
+                not isinstance(item, RedLivingDexCausalRootCapability) for item in self.capabilities
+            )
+        ):
+            raise RedLivingDexCausalInventoryError("Red targeted schedule capabilities differ")
+        for slot, capability in zip(
+            self.schedule.slots,
+            self.capabilities,
+            strict=True,
+        ):
+            capability.__post_init__()
+            expected_partition = (
+                "train"
+                if capability.slot.partition is LivingDexCapturePartition.TRAIN
+                else "development"
+            )
+            if (
+                slot.partition != expected_partition
+                or slot.lineage_sha256 != capability.root.independence_lineage_sha256
+                or slot.physical_root_sha256 != capability.root.root.physical_root_sha256
+                or slot.focus_kind not in capability.slot.available_option_kinds
+            ):
+                raise RedLivingDexCausalInventoryError(
+                    "Red targeted schedule capability join differs"
+                )
+
+    @property
+    def binding_sha256(self) -> str:
+        return canonical_sha256(self.private_dict())
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "bindings": [
+                {
+                    "recipe": capability.recipe.private_dict(),
+                    "slot_sha256": slot.slot_sha256,
+                    "template_ordinal": capability.template_ordinal,
+                }
+                for slot, capability in zip(
+                    self.schedule.slots,
+                    self.capabilities,
+                    strict=True,
+                )
+            ],
+            "schedule": self.schedule.private_dict(),
+            "schema": ("pokemon.red.private-living-dex-targeted-update-schedule-binding.v1"),
+        }
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **self.schedule.public_dict(),
+            "binding_sha256": self.binding_sha256,
+            "cartridge_specific_policy_features": 0,
+            "red_recipes_bound": len(self.capabilities),
+            "schema": "pokemon.red.living-dex-targeted-update-schedule-binding.v1",
         }
 
 
@@ -233,14 +301,10 @@ def enumerate_red_living_dex_causal_capabilities(
             raise TypeError("Red causal inventory needs protected-effect checkpoints")
         checkpoint.__post_init__()
     if effects_before != effects_after:
-        raise RedLivingDexCausalInventoryError(
-            "Red causal inventory crossed a protected effect"
-        )
+        raise RedLivingDexCausalInventoryError("Red causal inventory crossed a protected effect")
     _require_unique_roots_and_lineages(roots)
     plan = build_red_living_dex_prospective_capture_plan()
-    qualified_roots = tuple(
-        root for root in roots if root.prospective_independence_authenticated
-    )
+    qualified_roots = tuple(root for root in roots if root.prospective_independence_authenticated)
     capabilities: list[RedLivingDexCausalRootCapability] = []
     for root in sorted(
         qualified_roots,
@@ -281,8 +345,7 @@ def schedule_red_living_dex_clustered_integration(
     """
 
     if not isinstance(capabilities, tuple) or any(
-        not isinstance(item, RedLivingDexCausalRootCapability)
-        for item in capabilities
+        not isinstance(item, RedLivingDexCausalRootCapability) for item in capabilities
     ):
         raise TypeError("Red clustered integration needs capability tuples")
     adapted: list[LivingDexClusteredScenarioCapability] = []
@@ -326,18 +389,14 @@ def red_living_dex_targeted_capacity_contexts(
     """Collapse exact Red root-template edges into untouched shared contexts."""
 
     if not isinstance(capabilities, tuple) or any(
-        not isinstance(item, RedLivingDexCausalRootCapability)
-        for item in capabilities
+        not isinstance(item, RedLivingDexCausalRootCapability) for item in capabilities
     ):
         raise TypeError("Red targeted capacity capabilities differ")
     for excluded in (excluded_lineages, excluded_physical_roots):
         if not isinstance(excluded, frozenset) or any(
-            not isinstance(item, str) or _SHA256.fullmatch(item) is None
-            for item in excluded
+            not isinstance(item, str) or _SHA256.fullmatch(item) is None for item in excluded
         ):
-            raise RedLivingDexCausalInventoryError(
-                "Red targeted capacity exclusions differ"
-            )
+            raise RedLivingDexCausalInventoryError("Red targeted capacity exclusions differ")
     grouped: dict[tuple[str, str, str], set[LivingDexOptionKind]] = {}
     for capability in capabilities:
         capability.__post_init__()
@@ -366,17 +425,13 @@ def red_living_dex_targeted_capacity_contexts(
             lineage_sha256=lineage,
             physical_root_sha256=physical,
             partition=partition,  # type: ignore[arg-type]
-            available_option_kinds=tuple(
-                kind for kind in LivingDexOptionKind if kind in kinds
-            ),
+            available_option_kinds=tuple(kind for kind in LivingDexOptionKind if kind in kinds),
         )
         for (lineage, physical, partition), kinds in sorted(grouped.items())
         if len(kinds) >= 2
     )
     if len({item.lineage_sha256 for item in contexts}) != len(contexts):
-        raise RedLivingDexCausalInventoryError(
-            "Red targeted capacity repeats an upstream lineage"
-        )
+        raise RedLivingDexCausalInventoryError("Red targeted capacity repeats an upstream lineage")
     return contexts
 
 
@@ -398,6 +453,60 @@ def audit_red_living_dex_targeted_update_capacity(
         ),
         policy=policy,
         maximum_train_replays_per_context=maximum_train_replays_per_context,
+    )
+
+
+def freeze_red_living_dex_targeted_schedule(
+    capabilities: tuple[RedLivingDexCausalRootCapability, ...],
+    *,
+    excluded_lineages: frozenset[str] = frozenset(),
+    excluded_physical_roots: frozenset[str] = frozenset(),
+    policy: LivingDexTargetedCapacityPolicy | None = None,
+    maximum_train_replays_per_context: int = 1,
+) -> RedLivingDexTargetedScheduleBinding:
+    """Freeze semantic slots first, then bind the lowest compatible Red recipe."""
+
+    contexts = red_living_dex_targeted_capacity_contexts(
+        capabilities,
+        excluded_lineages=excluded_lineages,
+        excluded_physical_roots=excluded_physical_roots,
+    )
+    schedule = freeze_living_dex_targeted_schedule(
+        contexts,
+        policy=policy,
+        maximum_train_replays_per_context=maximum_train_replays_per_context,
+    )
+    selected: list[RedLivingDexCausalRootCapability] = []
+    for slot in schedule.slots:
+        compatible = tuple(
+            capability
+            for capability in capabilities
+            if capability.root.independence_lineage_sha256 == slot.lineage_sha256
+            and capability.root.root.physical_root_sha256 == slot.physical_root_sha256
+            and slot.focus_kind in capability.slot.available_option_kinds
+            and (
+                "train"
+                if capability.slot.partition is LivingDexCapturePartition.TRAIN
+                else "development"
+            )
+            == slot.partition
+        )
+        if not compatible:
+            raise RedLivingDexCausalInventoryError(
+                "Red targeted schedule lacks a compatible recipe"
+            )
+        selected.append(
+            min(
+                compatible,
+                key=lambda item: (
+                    item.template_ordinal,
+                    item.recipe.recipe_sha256,
+                ),
+            )
+        )
+    return RedLivingDexTargetedScheduleBinding(
+        schedule=schedule,
+        capabilities=tuple(selected),
     )
 
 
@@ -426,30 +535,21 @@ def audit_red_living_dex_causal_inventory(
     for capability in capabilities:
         capability.__post_init__()
     _require_unique_roots_and_lineages(roots)
-    qualified_roots = tuple(
-        root for root in roots if root.prospective_independence_authenticated
-    )
-    physical_roots = tuple(
-        root.root.physical_root_sha256 for root in qualified_roots
-    )
+    qualified_roots = tuple(root for root in roots if root.prospective_independence_authenticated)
+    physical_roots = tuple(root.root.physical_root_sha256 for root in qualified_roots)
     root_set = set(physical_roots)
     if any(
-        capability.root.root.physical_root_sha256 not in root_set
-        for capability in capabilities
+        capability.root.root.physical_root_sha256 not in root_set for capability in capabilities
     ):
-        raise RedLivingDexCausalInventoryError(
-            "causal capability names a root outside the census"
-        )
+        raise RedLivingDexCausalInventoryError("causal capability names a root outside the census")
     if any(
-        not capability.root.prospective_independence_authenticated
-        for capability in capabilities
+        not capability.root.prospective_independence_authenticated for capability in capabilities
     ):
         raise RedLivingDexCausalInventoryError(
             "causal capability uses an unqualified independence lineage"
         )
     capability_keys = tuple(
-        (item.root.root.physical_root_sha256, item.template_ordinal)
-        for item in capabilities
+        (item.root.root.physical_root_sha256, item.template_ordinal) for item in capabilities
     )
     if len(set(capability_keys)) != len(capability_keys):
         raise RedLivingDexCausalInventoryError(
@@ -461,9 +561,7 @@ def audit_red_living_dex_causal_inventory(
         slot for slot in plan.slots if slot.partition is LivingDexCapturePartition.TRAIN
     )
     development_slots = tuple(
-        slot
-        for slot in plan.slots
-        if slot.partition is LivingDexCapturePartition.DEVELOPMENT
+        slot for slot in plan.slots if slot.partition is LivingDexCapturePartition.DEVELOPMENT
     )
     if plan.slots != (*train_slots, *development_slots):
         raise RedLivingDexCausalInventoryError(
@@ -474,18 +572,14 @@ def audit_red_living_dex_causal_inventory(
         tuple(slot.available_option_kinds for slot in development_slots),
         design=active_design,
     )
-    compatible_by_template: dict[int, set[str]] = {
-        index: set() for index in range(len(plan.slots))
-    }
+    compatible_by_template: dict[int, set[str]] = {index: set() for index in range(len(plan.slots))}
     for capability in capabilities:
         compatible_by_template[capability.template_ordinal].add(
             capability.root.root.physical_root_sha256
         )
 
     logical_train = tuple(item for item in schedule.slots if item.partition == "train")
-    logical_development = tuple(
-        item for item in schedule.slots if item.partition == "development"
-    )
+    logical_development = tuple(item for item in schedule.slots if item.partition == "development")
     train_matching = _maximum_matching(
         logical_train,
         compatible_by_template,
@@ -511,12 +605,9 @@ def audit_red_living_dex_causal_inventory(
     }
     pressure_counts = _pressure_value_counts(qualified_roots)
     train_deficit = active_design.prospective_train_contexts - train_matching
-    development_deficit = (
-        active_design.prospective_development_contexts - development_matching
-    )
+    development_deficit = active_design.prospective_development_contexts - development_matching
     combined_required = (
-        active_design.prospective_train_contexts
-        + active_design.prospective_development_contexts
+        active_design.prospective_train_contexts + active_design.prospective_development_contexts
     )
     combined_deficit = combined_required - combined_matching
     reasons: list[str] = []
@@ -529,8 +620,7 @@ def audit_red_living_dex_causal_inventory(
     if any(not compatible_by_template[index] for index in range(len(plan.slots))):
         reasons.append("uncovered_menu_template")
     if any(
-        count < active_design.minimum_train_pressure_values_per_axis
-        for count in pressure_counts
+        count < active_design.minimum_train_pressure_values_per_axis for count in pressure_counts
     ):
         reasons.append("insufficient_observed_pressure_variation")
 
@@ -538,25 +628,20 @@ def audit_red_living_dex_causal_inventory(
         design_sha256=active_design.design_sha256,
         capacity_schedule_sha256=schedule.schedule_sha256,
         roots_observed=len(roots),
-        distinct_physical_roots=len(
-            {root.root.physical_root_sha256 for root in roots}
-        ),
+        distinct_physical_roots=len({root.root.physical_root_sha256 for root in roots}),
         distinct_independence_lineages=len(
             {root.independence_lineage_sha256 for root in qualified_roots}
         ),
         independence_qualified_roots=len(qualified_roots),
         unqualified_lineage_roots=len(roots) - len(qualified_roots),
         roots_with_any_compatible_template=len(roots_with_edges),
-        roots_without_compatible_template=(
-            len(qualified_roots) - len(roots_with_edges)
-        ),
+        roots_without_compatible_template=(len(qualified_roots) - len(roots_with_edges)),
         compatibility_edges=len(capabilities),
         train_template_compatible_root_counts=tuple(
             len(compatible_by_template[index]) for index in range(len(train_slots))
         ),
         development_template_compatible_root_counts=tuple(
-            len(compatible_by_template[index])
-            for index in range(len(train_slots), len(plan.slots))
+            len(compatible_by_template[index]) for index in range(len(train_slots), len(plan.slots))
         ),
         train_maximum_matching=train_matching,
         development_maximum_matching=development_matching,
@@ -630,10 +715,7 @@ def _pressure_value_counts(
         "party_pressure",
         "knowledge_pressure",
     )
-    return tuple(
-        len({float(getattr(context, name)) for context in contexts})
-        for name in names
-    )
+    return tuple(len({float(getattr(context, name)) for context in contexts}) for name in names)
 
 
 def _require_unique_roots_and_lineages(
@@ -646,17 +728,13 @@ def _require_unique_roots_and_lineages(
     ):
         materialized = tuple(values)
         if len(set(materialized)) != len(materialized):
-            raise RedLivingDexCausalInventoryError(
-                f"Red causal inventory repeats a {subject}"
-            )
+            raise RedLivingDexCausalInventoryError(f"Red causal inventory repeats a {subject}")
     qualified_lineages = tuple(
         root.independence_lineage_sha256
         for root in roots
         if root.prospective_independence_authenticated
     )
-    if None in qualified_lineages or len(set(qualified_lineages)) != len(
-        qualified_lineages
-    ):
+    if None in qualified_lineages or len(set(qualified_lineages)) != len(qualified_lineages):
         raise RedLivingDexCausalInventoryError(
             "Red causal inventory repeats an independence lineage"
         )
@@ -667,8 +745,10 @@ __all__ = [
     "RedLivingDexCausalInventoryAudit",
     "RedLivingDexCausalInventoryError",
     "RedLivingDexCausalRootCapability",
+    "RedLivingDexTargetedScheduleBinding",
     "audit_red_living_dex_causal_inventory",
     "audit_red_living_dex_targeted_update_capacity",
     "census_red_living_dex_causal_inventory",
+    "freeze_red_living_dex_targeted_schedule",
     "red_living_dex_targeted_capacity_contexts",
 ]

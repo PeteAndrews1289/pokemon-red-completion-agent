@@ -24,6 +24,7 @@ LIVING_DEX_TARGETED_CAPACITY_POLICY_SCHEMA = (
 LIVING_DEX_TARGETED_CAPACITY_RESULT_SCHEMA = (
     "pokemon.core.living-dex-targeted-update-capacity-result.v1"
 )
+LIVING_DEX_TARGETED_SCHEDULE_SCHEMA = "pokemon.core.living-dex-targeted-update-schedule.v1"
 
 LivingDexTargetedPartition = Literal["train", "development"]
 
@@ -59,8 +60,7 @@ class LivingDexTargetedCapacityContext:
             or len(self.available_option_kinds) < 2
             or len(set(self.available_option_kinds)) != len(self.available_option_kinds)
             or any(
-                not isinstance(kind, LivingDexOptionKind)
-                for kind in self.available_option_kinds
+                not isinstance(kind, LivingDexOptionKind) for kind in self.available_option_kinds
             )
             or tuple(sorted(self.available_option_kinds, key=_KIND_ORDER.__getitem__))
             != self.available_option_kinds
@@ -93,8 +93,7 @@ class LivingDexTargetedCapacityPolicy:
             or self.maximum_train_setup_censors < 0
             or type(self.minimum_settled_train) is not int  # noqa: E721
             or self.minimum_settled_train <= 0
-            or self.minimum_settled_train
-            > sum(train.values()) - self.maximum_train_setup_censors
+            or self.minimum_settled_train > sum(train.values()) - self.maximum_train_setup_censors
             or any(minimums[kind] > train[kind] for kind in minimums)
             or sum(development.values()) < 2
         ):
@@ -150,8 +149,7 @@ class LivingDexTargetedCapacityPolicy:
             "maximum_train_setup_censors": self.maximum_train_setup_censors,
             "minimum_settled_train": self.minimum_settled_train,
             "minimum_settled_train_by_kind": {
-                kind.value: count
-                for kind, count in self.minimum_settled_train_by_kind
+                kind.value: count for kind, count in self.minimum_settled_train_by_kind
             },
             "schema": LIVING_DEX_TARGETED_CAPACITY_POLICY_SCHEMA,
             "train_focus_kind_counts": {
@@ -172,9 +170,7 @@ class LivingDexTargetedCapacityResult:
     train_maximum_matching: int
     development_maximum_matching: int
     train_compatible_context_counts: tuple[tuple[LivingDexOptionKind, int], ...]
-    development_compatible_context_counts: tuple[
-        tuple[LivingDexOptionKind, int], ...
-    ]
+    development_compatible_context_counts: tuple[tuple[LivingDexOptionKind, int], ...]
     maximum_train_replays_per_context: int
     reasons: tuple[str, ...]
 
@@ -189,8 +185,7 @@ class LivingDexTargetedCapacityResult:
             "contexts_observed": self.contexts_observed,
             "controller_actions": 0,
             "development_compatible_context_counts": {
-                kind.value: count
-                for kind, count in self.development_compatible_context_counts
+                kind.value: count for kind, count in self.development_compatible_context_counts
             },
             "development_context_deficit": (
                 self.policy.development_roots - self.development_maximum_matching
@@ -200,9 +195,7 @@ class LivingDexTargetedCapacityResult:
             "emulator_frames": 0,
             "model_fits": 0,
             "model_predictions": 0,
-            "maximum_train_replays_per_context": (
-                self.maximum_train_replays_per_context
-            ),
+            "maximum_train_replays_per_context": (self.maximum_train_replays_per_context),
             "outcomes_opened": 0,
             "policy": self.policy.public_dict(),
             "policy_sha256": self.policy.policy_sha256,
@@ -213,15 +206,148 @@ class LivingDexTargetedCapacityResult:
             "schema": LIVING_DEX_TARGETED_CAPACITY_RESULT_SCHEMA,
             "teacher_queries": 0,
             "train_compatible_context_counts": {
-                kind.value: count
-                for kind, count in self.train_compatible_context_counts
+                kind.value: count for kind, count in self.train_compatible_context_counts
             },
-            "train_context_deficit": (
-                self.policy.train_roots - self.train_maximum_matching
-            ),
+            "train_context_deficit": (self.policy.train_roots - self.train_maximum_matching),
             "train_contexts": self.train_contexts,
             "train_maximum_matching": self.train_maximum_matching,
             "training_targets_emitted": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexTargetedScheduleSlot:
+    """One prospectively assigned semantic question and reset identity."""
+
+    partition: LivingDexTargetedPartition
+    focus_kind: LivingDexOptionKind
+    lineage_sha256: str
+    physical_root_sha256: str
+    reset_ordinal: int
+
+    def __post_init__(self) -> None:
+        if self.partition not in {"train", "development"}:
+            raise LivingDexTargetedCapacityError("targeted schedule partition differs")
+        if not isinstance(self.focus_kind, LivingDexOptionKind):
+            raise TypeError("targeted schedule focus kind differs")
+        for value in (self.lineage_sha256, self.physical_root_sha256):
+            if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+                raise LivingDexTargetedCapacityError("targeted schedule identity differs")
+        if type(self.reset_ordinal) is not int or self.reset_ordinal < 0:  # noqa: E721
+            raise LivingDexTargetedCapacityError("targeted schedule reset ordinal differs")
+        if self.partition == "development" and self.reset_ordinal != 0:
+            raise LivingDexTargetedCapacityError(
+                "development schedule cannot contain a reset replay"
+            )
+
+    @property
+    def slot_sha256(self) -> str:
+        return canonical_sha256(self.private_dict())
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "focus_kind": self.focus_kind.value,
+            "lineage_sha256": self.lineage_sha256,
+            "partition": self.partition,
+            "physical_root_sha256": self.physical_root_sha256,
+            "reset_ordinal": self.reset_ordinal,
+            "schema": "pokemon.core.living-dex-targeted-update-schedule-slot.v1",
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexTargetedSchedule:
+    """Complete train/reset and one-shot development allocation."""
+
+    policy: LivingDexTargetedCapacityPolicy
+    maximum_train_replays_per_context: int
+    slots: tuple[LivingDexTargetedScheduleSlot, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.policy, LivingDexTargetedCapacityPolicy):
+            raise TypeError("targeted schedule policy differs")
+        self.policy.__post_init__()
+        if (
+            type(self.maximum_train_replays_per_context) is not int  # noqa: E721
+            or not 1 <= self.maximum_train_replays_per_context <= 32
+        ):
+            raise LivingDexTargetedCapacityError("targeted schedule train replay bound differs")
+        if not isinstance(self.slots, tuple) or any(
+            not isinstance(slot, LivingDexTargetedScheduleSlot) for slot in self.slots
+        ):
+            raise TypeError("targeted schedule slots differ")
+        for slot in self.slots:
+            slot.__post_init__()
+        train = tuple(slot for slot in self.slots if slot.partition == "train")
+        development = tuple(slot for slot in self.slots if slot.partition == "development")
+        if (
+            len(train) != self.policy.train_roots
+            or len(development) != self.policy.development_roots
+            or Counter(slot.focus_kind for slot in train)
+            != Counter(dict(self.policy.train_focus_kind_counts))
+            or Counter(slot.focus_kind for slot in development)
+            != Counter(dict(self.policy.development_focus_kind_counts))
+        ):
+            raise LivingDexTargetedCapacityError("targeted schedule denominator differs")
+        train_lineages = Counter(slot.lineage_sha256 for slot in train)
+        if any(
+            count > self.maximum_train_replays_per_context for count in train_lineages.values()
+        ) or any(
+            sorted(slot.reset_ordinal for slot in train if slot.lineage_sha256 == lineage)
+            != list(range(count))
+            for lineage, count in train_lineages.items()
+        ):
+            raise LivingDexTargetedCapacityError("targeted schedule exceeds its train reset bound")
+        development_lineages = [slot.lineage_sha256 for slot in development]
+        development_roots = [slot.physical_root_sha256 for slot in development]
+        if (
+            len(set(development_lineages)) != len(development_lineages)
+            or len(set(development_roots)) != len(development_roots)
+            or set(train_lineages) & set(development_lineages)
+            or {slot.physical_root_sha256 for slot in train} & set(development_roots)
+            or len({slot.slot_sha256 for slot in self.slots}) != len(self.slots)
+        ):
+            raise LivingDexTargetedCapacityError(
+                "targeted schedule violates train/development separation"
+            )
+
+    @property
+    def schedule_sha256(self) -> str:
+        return canonical_sha256(self.private_dict())
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "maximum_train_replays_per_context": (self.maximum_train_replays_per_context),
+            "policy_sha256": self.policy.policy_sha256,
+            "schema": LIVING_DEX_TARGETED_SCHEDULE_SCHEMA,
+            "slots": [slot.private_dict() for slot in self.slots],
+        }
+
+    def public_dict(self) -> dict[str, object]:
+        train = tuple(slot for slot in self.slots if slot.partition == "train")
+        development = tuple(slot for slot in self.slots if slot.partition == "development")
+        return {
+            "behavior_commitments": 0,
+            "controller_actions": 0,
+            "development_replays": 0,
+            "development_roots": len(development),
+            "emulator_frames": 0,
+            "maximum_train_replays_per_context": (self.maximum_train_replays_per_context),
+            "model_fits": 0,
+            "model_predictions": 0,
+            "outcomes_opened": 0,
+            "policy_sha256": self.policy.policy_sha256,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "root_claims": 0,
+            "schedule_sha256": self.schedule_sha256,
+            "schema": LIVING_DEX_TARGETED_SCHEDULE_SCHEMA,
+            "teacher_queries": 0,
+            "train_focus_kind_counts": {
+                kind.value: count for kind, count in self.policy.train_focus_kind_counts
+            },
+            "train_resets": len(train),
+            "train_roots": len({slot.lineage_sha256 for slot in train}),
         }
 
 
@@ -250,9 +376,7 @@ def audit_living_dex_targeted_update_capacity(
         type(maximum_train_replays_per_context) is not int  # noqa: E721
         or not 1 <= maximum_train_replays_per_context <= 32
     ):
-        raise LivingDexTargetedCapacityError(
-            "targeted capacity train replay bound differs"
-        )
+        raise LivingDexTargetedCapacityError("targeted capacity train replay bound differs")
     train = tuple(row for row in rows if row.partition == "train")
     development = tuple(row for row in rows if row.partition == "development")
     train_demands = _expand_demands(active.train_focus_kind_counts)
@@ -285,6 +409,71 @@ def audit_living_dex_targeted_update_capacity(
         ),
         maximum_train_replays_per_context=maximum_train_replays_per_context,
         reasons=tuple(reasons),
+    )
+
+
+def freeze_living_dex_targeted_schedule(
+    contexts: Iterable[LivingDexTargetedCapacityContext],
+    *,
+    policy: LivingDexTargetedCapacityPolicy | None = None,
+    maximum_train_replays_per_context: int = 1,
+) -> LivingDexTargetedSchedule:
+    """Deterministically freeze one complete outcome-blind allocation."""
+
+    rows = tuple(contexts)
+    result = audit_living_dex_targeted_update_capacity(
+        rows,
+        policy=policy,
+        maximum_train_replays_per_context=maximum_train_replays_per_context,
+    )
+    if not result.capacity_sufficient:
+        raise LivingDexTargetedCapacityError(
+            "targeted schedule cannot freeze insufficient capacity"
+        )
+    active = result.policy
+    train_contexts = tuple(row for row in rows if row.partition == "train")
+    development_contexts = tuple(row for row in rows if row.partition == "development")
+    train_demands = _expand_demands(active.train_focus_kind_counts)
+    development_demands = _expand_demands(active.development_focus_kind_counts)
+    train_assignment = _matching_assignments(
+        train_demands,
+        train_contexts,
+        maximum_uses_per_context=maximum_train_replays_per_context,
+    )
+    development_assignment = _matching_assignments(
+        development_demands,
+        development_contexts,
+        maximum_uses_per_context=1,
+    )
+    reset_counts: Counter[str] = Counter()
+    slots: list[LivingDexTargetedScheduleSlot] = []
+    for partition, demands, contexts_for_partition, assignment in (
+        ("train", train_demands, train_contexts, train_assignment),
+        (
+            "development",
+            development_demands,
+            development_contexts,
+            development_assignment,
+        ),
+    ):
+        for demand_index, kind in enumerate(demands):
+            context = contexts_for_partition[assignment[demand_index]]
+            reset_ordinal = reset_counts[context.lineage_sha256] if partition == "train" else 0
+            if partition == "train":
+                reset_counts[context.lineage_sha256] += 1
+            slots.append(
+                LivingDexTargetedScheduleSlot(
+                    partition=partition,  # type: ignore[arg-type]
+                    focus_kind=kind,
+                    lineage_sha256=context.lineage_sha256,
+                    physical_root_sha256=context.physical_root_sha256,
+                    reset_ordinal=reset_ordinal,
+                )
+            )
+    return LivingDexTargetedSchedule(
+        policy=active,
+        maximum_train_replays_per_context=maximum_train_replays_per_context,
+        slots=tuple(slots),
     )
 
 
@@ -339,6 +528,23 @@ def _maximum_matching(
 ) -> int:
     """Return exact bounded-context demand cardinality by augmenting paths."""
 
+    return len(
+        _matching_assignments(
+            demands,
+            contexts,
+            maximum_uses_per_context=maximum_uses_per_context,
+        )
+    )
+
+
+def _matching_assignments(
+    demands: tuple[LivingDexOptionKind, ...],
+    contexts: tuple[LivingDexTargetedCapacityContext, ...],
+    *,
+    maximum_uses_per_context: int,
+) -> dict[int, int]:
+    """Map demand index to context index under one deterministic reset cap."""
+
     context_slots = tuple(
         context_index
         for context_index in range(len(contexts))
@@ -369,15 +575,24 @@ def _maximum_matching(
                 return True
         return False
 
-    return sum(augment(index, set()) for index in ordered)
+    for index in ordered:
+        augment(index, set())
+    return {
+        demand_index: context_slots[slot_index]
+        for slot_index, demand_index in context_slot_to_demand.items()
+    }
 
 
 __all__ = [
     "LIVING_DEX_TARGETED_CAPACITY_POLICY_SCHEMA",
     "LIVING_DEX_TARGETED_CAPACITY_RESULT_SCHEMA",
+    "LIVING_DEX_TARGETED_SCHEDULE_SCHEMA",
     "LivingDexTargetedCapacityContext",
     "LivingDexTargetedCapacityError",
     "LivingDexTargetedCapacityPolicy",
     "LivingDexTargetedCapacityResult",
+    "LivingDexTargetedSchedule",
+    "LivingDexTargetedScheduleSlot",
     "audit_living_dex_targeted_update_capacity",
+    "freeze_living_dex_targeted_schedule",
 ]
