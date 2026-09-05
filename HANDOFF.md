@@ -1,5 +1,43 @@
 # Handoff
 
+## Latest checkpoint: repeatable Red training capacity is ready without spending the exam
+
+The fresh-only result below was correct but applied an evaluation rule to ordinary training. The
+project now explicitly separates the two: authenticated train states may be reset under a bounded
+curriculum, while development states remain one-shot, lineage-disjoint and unavailable to fitting.
+
+The new action-free census authenticated all 81 contexts and found that the two eligible train
+roots can fill the complete ten-episode demand when capped at five resets per root: four
+acquisition, four party-development, one storage and one resupply episode. Ten untouched
+development roots still fill all eight paired-control slots with no reuse. The census performed
+zero controller actions, emulator frames, predictions, outcomes, claims, teacher queries or fits.
+It is capacity evidence, not a model update.
+
+Next implement one outcome-blind freezer that binds the ten reset identities plus eight distinct
+development roots. The train runner must retain the complete denominator and may fit only if at
+least eight outcomes settle, including three acquisition and three development examples. Do not
+open the paired roots until the immutable fit exists. See the
+[repeatable capacity result](docs/evidence/red-living-dex-repeatable-train-capacity-result-2026-09-05.json).
+
+## Previous checkpoint: paired Red supply was ready; fresh-only train supply was short by eight roots
+
+PR 223 passed its complete check and merged as exact main
+`481accfd049bf2dc3e6cc30888e6fcd8e2167ed7`. Exact-main CI run `33985137655/1` then passed
+**6,801 tests, four skips and one expected failure**. The production capacity census ran once from
+that clean source and authenticated all 81 retained contexts without a controller action, emulator
+frame, model prediction, outcome open, root claim, teacher query, provider execution or fit.
+
+After excluding all 18 historical train lineages, seven scheduled development lineages and seven
+development physical roots, 12 untouched contexts remained. The development bank is sufficient:
+10 roots admit an exact matching for all eight paired-control slots. The train bank is not:
+two roots match only two of ten required slots, leaving a deficit of eight. Train compatibility is
+acquisition 1, party development 1, storage 2 and resupply 2. Do not relabel the held-out bank as
+training data; that would spend the comparison before the model is fit.
+
+That result originally pointed toward eight new clean-power worlds. The repeatable-training
+reorientation above supersedes that expensive next step while preserving the result as evidence of
+fresh-only scarcity. See the [fresh-only capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json).
+
 ## Latest checkpoint: five-case calibration quantified; next gate is targeted training supply
 
 The five-case aggregate is reproducible from the two tracked public outcome receipts with no
@@ -24,10 +62,9 @@ the existing 18 train lineages, all seven historically scheduled development lin
 cartridge-derived capabilities and protected inputs; removes those lineages and development
 physical roots; and solves the declared kind allocation as an exact disjoint matching problem.
 Its focused dashboard/capacity/calibration suite passes **168 tests**, with Ruff and Mypy clean.
-It has not yet run over the production inventory because the executable source must first be
-published and pass one coherent CI gate. Stop on upstream overlap, insufficient targeted-kind
-coverage or an opened outcome. No fit, controller input, private freeze, teacher, sealed Red,
-Crystal or full replay is open yet.
+The production result above is now the binding capacity verdict. Stop on upstream overlap,
+insufficient targeted-kind coverage or an opened outcome. No fit, controller input, private freeze,
+teacher, sealed Red, Crystal or full replay is open yet.
 
 The local view-only dashboard at `http://127.0.0.1:8768/` now answers two different questions:
 the evidence-backed experiment panel says where the learner stands, while **Work happening now**

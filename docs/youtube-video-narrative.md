@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: training is allowed to reset; the exam is not
+
+**Visual:** Start with **FRESH-ONLY TRAIN 2/10 · EVALUATION 8/8**, then separate the screen into
+two lanes. In the training lane, show two authenticated save states branching into five bounded
+reset episodes each: **ACQUIRE ×4 · DEVELOP ×4 · STORAGE ×1 · RESUPPLY ×1**. In the evaluation
+lane, keep eight distinct save cards sealed and label them **NO REPLAY · NO FIT**.
+
+**Voiceover:** “We found that our experiment rules were blocking the learning loop. Resetting a
+training environment is normal; pretending each reset is a new independent world is not. So we
+bounded the reuse, labeled it honestly, and kept the real exam separate.”
+
+Resolve the board to **TRAIN CAPACITY 10/10 · PAIRED EXAM 8/8** with **ACTIONS 0 · FRAMES 0 ·
+OUTCOMES 0 · FITS 0**. End on **FREEZE SCHEDULE → COLLECT TRAIN OUTCOMES → FIT ONCE → OPEN PAIRED
+EXAM**. Do not depict model improvement yet; capacity is readiness, not training.
+
 ## New scene: five choices, one new specimen, and confidence in both directions
 
 **Visual:** Resolve the fixed queue to **5/5 TERMINAL · 0 RETRIES**. Lay out five semantic cards:
@@ -6094,3 +6109,14 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
   exactly what remained usable.”
 - End on the next honest test: four or more untouched Red decisions, model choices committed before
   outcomes, no refit on the exam set, and Crystal still locked.
+
+## Scene: the exam exists, but the lesson set is eight states short
+
+- Start with the action-free funnel: **81 AUTHENTICATED CONTEXTS → 12 UNTOUCHED ELIGIBLE ROOTS**.
+- Split it into **PAIRED EVALUATION 8/8 READY** and **TARGETED TRAIN 2/10 READY**.
+- Keep **ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · FITS 0** visible throughout the census.
+- Reject the shortcut of moving held-out roots into train; animate it as erasing the exam.
+- Highlight the actual deficit: **8 NEW INDEPENDENT TRAIN ROOTS**, with acquisition and party
+  development as the sparse concepts.
+- End on the honest next build: create fresh title-neutral Red situations, prove their independence,
+  then freeze the 10+8 denominator before any outcome is known.

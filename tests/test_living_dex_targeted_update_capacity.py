@@ -10,6 +10,7 @@ from pokemon_red_completion.living_dex_targeted_update_capacity import (
     LivingDexTargetedCapacityError,
     LivingDexTargetedCapacityPolicy,
     audit_living_dex_targeted_update_capacity,
+    freeze_living_dex_targeted_schedule,
 )
 
 
@@ -79,6 +80,135 @@ def test_exact_matching_accepts_complete_disjoint_capacity() -> None:
     assert public["outcomes_opened"] == 0
     assert public["model_fits"] == 0
     assert public["private_identity_fields"] == 0
+    assert public["maximum_train_replays_per_context"] == 1
+
+
+def test_repeatable_train_matching_reuses_two_roots_without_reusing_development() -> None:
+    rows = (
+        _context(
+            0,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        _context(
+            1,
+            "train",
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        *_sufficient()[10:],
+    )
+
+    result = audit_living_dex_targeted_update_capacity(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    assert result.capacity_sufficient
+    assert result.train_contexts == 2
+    assert result.train_maximum_matching == 10
+    assert result.development_maximum_matching == 8
+    assert result.public_dict()["maximum_train_replays_per_context"] == 5
+
+
+def test_repeatable_train_bound_cannot_hide_one_root_bottleneck() -> None:
+    rows = (_sufficient()[0], *_sufficient()[10:])
+
+    result = audit_living_dex_targeted_update_capacity(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    assert not result.capacity_sufficient
+    assert result.train_maximum_matching <= 5
+
+
+def test_repeatable_train_bound_is_bounded() -> None:
+    with pytest.raises(LivingDexTargetedCapacityError, match="replay bound"):
+        audit_living_dex_targeted_update_capacity(
+            _sufficient(),
+            maximum_train_replays_per_context=33,
+        )
+
+
+def test_freeze_builds_complete_private_schedule_and_path_free_public_receipt() -> None:
+    rows = (
+        _context(
+            0,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        _context(
+            1,
+            "train",
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        *_sufficient()[10:],
+    )
+
+    schedule = freeze_living_dex_targeted_schedule(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    train = tuple(slot for slot in schedule.slots if slot.partition == "train")
+    development = tuple(slot for slot in schedule.slots if slot.partition == "development")
+    assert len(train) == 10
+    assert len(development) == 8
+    assert {slot.lineage_sha256 for slot in train} == {
+        rows[0].lineage_sha256,
+        rows[1].lineage_sha256,
+    }
+    assert sorted(
+        slot.reset_ordinal for slot in train if slot.lineage_sha256 == rows[0].lineage_sha256
+    ) == list(range(5))
+    assert sorted(
+        slot.reset_ordinal for slot in train if slot.lineage_sha256 == rows[1].lineage_sha256
+    ) == list(range(5))
+    assert len({slot.lineage_sha256 for slot in development}) == 8
+    public = schedule.public_dict()
+    encoded = str(public)
+    assert public["train_resets"] == 10
+    assert public["train_roots"] == 2
+    assert public["development_roots"] == 8
+    assert public["development_replays"] == 0
+    assert public["outcomes_opened"] == 0
+    assert all(row.lineage_sha256 not in encoded for row in rows)
+
+
+def test_freeze_rejects_incomplete_capacity() -> None:
+    with pytest.raises(LivingDexTargetedCapacityError, match="insufficient"):
+        freeze_living_dex_targeted_schedule(
+            (_sufficient()[0], *_sufficient()[10:]),
+            maximum_train_replays_per_context=5,
+        )
+
+
+def test_schedule_validation_rejects_development_replay_or_cross_partition_overlap() -> None:
+    schedule = freeze_living_dex_targeted_schedule(_sufficient())
+    development_index = next(
+        index for index, slot in enumerate(schedule.slots) if slot.partition == "development"
+    )
+    with pytest.raises(LivingDexTargetedCapacityError, match="development"):
+        replace(
+            schedule.slots[development_index],
+            reset_ordinal=1,
+        )
+
+    mutated = list(schedule.slots)
+    mutated[development_index] = replace(
+        mutated[development_index],
+        lineage_sha256=schedule.slots[0].lineage_sha256,
+    )
+    with pytest.raises(LivingDexTargetedCapacityError, match="separation"):
+        replace(schedule, slots=tuple(mutated))
 
 
 def test_matching_detects_shared_kind_bottleneck_not_just_raw_count() -> None:

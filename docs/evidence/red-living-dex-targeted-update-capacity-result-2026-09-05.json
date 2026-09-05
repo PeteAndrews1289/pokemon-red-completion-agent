@@ -1,0 +1,95 @@
+{
+  "authenticated_contexts": 81,
+  "authenticated_supplemental_roots": 0,
+  "behavior_commitments": 0,
+  "capacity_sufficient": false,
+  "ci": {
+    "attempt": 1,
+    "conclusion": "success",
+    "run_id": 33985137655
+  },
+  "collection_authorized": false,
+  "contexts_observed": 12,
+  "controller_actions": 0,
+  "development_compatible_context_counts": {
+    "acquire": 7,
+    "develop": 6,
+    "evolve": 3,
+    "manage_storage": 9,
+    "resupply": 6,
+    "unlock_access": 1
+  },
+  "development_context_deficit": 0,
+  "development_contexts": 10,
+  "development_maximum_matching": 8,
+  "emulator_frames": 0,
+  "exclusions": {
+    "controller_actions": 0,
+    "development_lineages_excluded": 7,
+    "development_physical_roots_excluded": 7,
+    "historical_development_roots": 4,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "outcomes_opened": 0,
+    "private_identity_fields": 0,
+    "root_claims": 0,
+    "supplemental_development_roots": 3,
+    "teacher_queries": 0,
+    "train_lineages_excluded": 18
+  },
+  "model_fits": 0,
+  "model_predictions": 0,
+  "outcomes_opened": 0,
+  "policy": {
+    "development_focus_kind_counts": {
+      "acquire": 2,
+      "develop": 2,
+      "evolve": 1,
+      "manage_storage": 1,
+      "resupply": 1,
+      "unlock_access": 1
+    },
+    "development_roots": 8,
+    "maximum_train_setup_censors": 2,
+    "minimum_settled_train": 8,
+    "minimum_settled_train_by_kind": {
+      "acquire": 3,
+      "develop": 3
+    },
+    "schema": "pokemon.core.living-dex-targeted-update-capacity-policy.v1",
+    "train_focus_kind_counts": {
+      "acquire": 4,
+      "develop": 4,
+      "manage_storage": 1,
+      "resupply": 1
+    },
+    "train_roots": 10
+  },
+  "policy_sha256": "b7f0be3667b0e3da45639091589f094d797f43093cd862a379ac462a5bb93816",
+  "private_identity_fields": 0,
+  "private_path_fields": 0,
+  "provider_executions": 0,
+  "reasons": [
+    "insufficient_train_kind_compatible_lineages"
+  ],
+  "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+  "root_claims": 0,
+  "schema": "pokemon.red.living-dex-targeted-update-capacity-audit-result.v1",
+  "source": {
+    "commit": "481accfd049bf2dc3e6cc30888e6fcd8e2167ed7",
+    "source_bundle_sha256": "2d2b0cc9063da6a315899459b3b11a1eaa0e3e8ce8fd9596f71e59b6b6e0b605"
+  },
+  "source_catalog_partition_reused_as_prospective_label": false,
+  "status": "targeted_update_capacity_insufficient",
+  "teacher_queries": 0,
+  "train_compatible_context_counts": {
+    "acquire": 1,
+    "develop": 1,
+    "manage_storage": 2,
+    "resupply": 2
+  },
+  "train_context_deficit": 8,
+  "train_contexts": 2,
+  "train_maximum_matching": 2,
+  "training_targets_emitted": 0
+}
