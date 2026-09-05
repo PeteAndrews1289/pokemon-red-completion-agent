@@ -18,6 +18,7 @@ from pokemon_red_completion.progress_dashboard import (
     DashboardPartyMember,
     DashboardSnapshot,
     DashboardState,
+    DashboardWorkState,
     ProgressDashboardError,
     ProgressDashboardServer,
     encode_rgb_png,
@@ -91,6 +92,7 @@ def test_dashboard_snapshot_is_path_free_and_reports_observer_only_status() -> N
     encoded = json.dumps(document, sort_keys=True)
 
     assert document["controller_endpoints"] == 0
+    assert document["work"]["status"] == "idle"  # type: ignore[index]
     assert document["model"]["teacher_queries"] == 0  # type: ignore[index]
     assert document["experiment"]["zero_shot"] == {  # type: ignore[index]
         "completed": 9,
@@ -143,6 +145,42 @@ def test_dashboard_supports_red_training_counter_labels() -> None:
         "adaptation": "Held-out gates passed",
         "sealed_test": "Full Red shadow runs",
     }
+
+
+def test_dashboard_work_state_reports_live_engineering_progress_without_paths() -> None:
+    work = DashboardWorkState(
+        status="working",
+        headline="Building the next training gate",
+        detail="Checking untouched Red roots without executing the game.",
+        current_step="Bind authenticated exclusions",
+        next_step="Run the aggregate capacity census",
+        completed_units=2,
+        total_units=4,
+        updated_at_utc="2026-09-05T19:30:00Z",
+    )
+    document = DashboardSnapshot(
+        game="Pokémon Red",
+        run_status="running",
+        stage="Capacity audit",
+        message="Action-free inventory work is in progress.",
+        work=work,
+    ).public_dict()
+
+    assert document["work"] == {
+        "status": "working",
+        "headline": "Building the next training gate",
+        "detail": "Checking untouched Red roots without executing the game.",
+        "current_step": "Bind authenticated exclusions",
+        "next_step": "Run the aggregate capacity census",
+        "completed_units": 2,
+        "total_units": 4,
+        "progress": 0.5,
+        "updated_at_utc": "2026-09-05T19:30:00Z",
+    }
+    assert "/Users/" not in json.dumps(document)
+
+    with pytest.raises(ProgressDashboardError, match="timestamp"):
+        DashboardWorkState(updated_at_utc="yesterday")
 
 
 def test_dashboard_exposes_path_free_learning_evidence_and_live_scorecard() -> None:
@@ -299,6 +337,10 @@ def test_loopback_dashboard_serves_status_video_and_no_control_methods() -> None
 
     assert "Pokémon Learning Observatory" in html
     assert "VIEW ONLY" in html
+    assert "Work happening now" in html
+    assert "Mission and current boundary" in html
+    assert "Current step" in html
+    assert "Next step" in html
     assert "Learned stack" in html
     assert "held-out evidence" in html
     assert "Live shadow scorecard" in html

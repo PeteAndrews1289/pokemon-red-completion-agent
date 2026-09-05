@@ -1,5 +1,41 @@
 # Handoff
 
+## Latest checkpoint: five-case calibration quantified; next gate is targeted training supply
+
+The five-case aggregate is reproducible from the two tracked public outcome receipts with no
+private access, emulator, new prediction, teacher or fit. The shadow model's four successes in five
+attempts conceal poor probability quality: **60% threshold accuracy · Brier 0.397811 · clipped log
+loss 2.458979**. Acquisition produced one success and one failure at mean predicted success 99.78%;
+party development succeeded despite a 0.10% prediction; two resupply choices succeeded near their
+99.73% mean prediction. Counts of one or two per kind are diagnostic only.
+
+The same-case 80% constant scores better, but it was derived after seeing these outcomes and is not
+a valid baseline. The existing `CompletionFirstGoalTeacher` is the prospective title-neutral
+control. The frozen next design uses ten new train roots—four acquisition, four party development,
+one storage and one resupply—with at most two setup censors and an eight-settled minimum. A later
+fit must include the complete 18-row prefix plus every settled new train row and no development
+row. Evaluation uses independently reset model/control copies of at least eight separate
+lineage-disjoint Red development roots, with both decisions committed before either outcome.
+
+See the [calibration audit](docs/evidence/red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json)
+and [prospective design](docs/red-living-dex-train-and-paired-control-v1.md). The action-free
+10-train/8-development capacity auditor is now implemented and locally qualified: it authenticates
+the existing 18 train lineages, all seven historically scheduled development lineages, the
+cartridge-derived capabilities and protected inputs; removes those lineages and development
+physical roots; and solves the declared kind allocation as an exact disjoint matching problem.
+Its focused dashboard/capacity/calibration suite passes **168 tests**, with Ruff and Mypy clean.
+It has not yet run over the production inventory because the executable source must first be
+published and pass one coherent CI gate. Stop on upstream overlap, insufficient targeted-kind
+coverage or an opened outcome. No fit, controller input, private freeze, teacher, sealed Red,
+Crystal or full replay is open yet.
+
+The local view-only dashboard at `http://127.0.0.1:8768/` now answers two different questions:
+the evidence-backed experiment panel says where the learner stands, while **Work happening now**
+reports the current engineering status, active step, next step, bounded-unit progress and age of
+the latest update. Its ignored `.dashboard-status/product-focus.json` record contains only
+path-free descriptive text and counters. The server reloads both focus and work state every second,
+and still exposes GET-only observer routes with zero controller endpoints.
+
 ## Latest checkpoint: all five bounded Red development cases are terminal
 
 Published main `d0e06af37589f0583c6232f8816b22b906d6f2c9` passed exact-main CI

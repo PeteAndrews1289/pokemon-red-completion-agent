@@ -5,18 +5,43 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
-The live rail now has five durable results: **RESUPPLY SUCCESS · ACQUIRE FAILURE · ACQUIRE SUCCESS ·
-PARTY DEVELOPMENT SUCCESS · RESUPPLY SUCCESS**. Show **5/5 TERMINAL · 0 AVAILABLE · 0 INCOMPLETE ·
-0 TEACHERS · 0 FITS · SHADOW AUTHORITY**. The two acquisition contexts produced different factual
-outcomes; the successful one raised living **13→14** and registered **17→18**. The two resupply
-contexts restored capture items **1→5** and **3→7**. Party development was verifier-accepted but
-added no public collection/dependency gain.
+The dashboard now separates **project evidence** from **current engineering work**. The top-left
+stage summarizes the active experimental gate and never implies that code editing is emulator
+training. The **Work happening now** card reports `idle`, `working`, `testing`, `waiting`, `blocked`
+or `complete`, with a plain-language headline, current step, next step, bounded progress and the age
+of the last update. It refreshes automatically once per second from the ignored, path-free local
+record `.dashboard-status/product-focus.json`; no browser refresh is needed.
 
-The calibration panel should put the two largest misses side by side: **ACQUIRE · 99.55% → FAILED**
-and **DEVELOP TEAM · 0.10% → VERIFIED SUCCESS**. Display these as development calibration, never as
-training or an authority promotion. The next visible stage is **CONSOLIDATE → AUDIT CALIBRATION BY
-OPTION KIND → DESIGN TRAIN-ONLY UPDATE + FRESH RED CONTROL**. Crystal, sealed Red and full replay
-remain locked.
+Agents update that record at the beginning, material checkpoints and end of a work session with:
+
+```bash
+python scripts/update_product_focus_dashboard_status.py \
+  --status working \
+  --headline "Building the next Red evidence gate" \
+  --detail "Plain-language description of the bounded work in progress." \
+  --current-step "What is happening now" \
+  --next-step "What happens after this" \
+  --completed-units 2 \
+  --total-units 5
+```
+
+The record is operational context, not experimental evidence, and is intentionally not committed.
+If it is absent the panel truthfully shows idle; if malformed it fails to a visible blocked state
+while the last safe project evidence remains intact. The dashboard remains loopback-only and
+view-only: `GET /`, `GET /api/status`, `GET /frame.png` and `GET /healthz` are the only useful
+routes, while write methods are rejected.
+
+The completed five-case rail is **RESUPPLY SUCCESS · ACQUIRE FAILURE · ACQUIRE SUCCESS · PARTY
+DEVELOPMENT SUCCESS · RESUPPLY SUCCESS**. Show **5/5 TERMINAL · 0 AVAILABLE · 0 INCOMPLETE · 0
+TEACHERS · 0 FITS · SHADOW AUTHORITY**. The successful acquisition raised living **13→14** and
+registered **17→18**; the two resupply cases restored capture items **1→5** and **3→7**.
+
+The new calibration summary is **60% THRESHOLD ACCURACY · BRIER 0.397811 · LOG LOSS 2.458979**.
+Put the two largest misses side by side: **ACQUIRE · 99.55% → FAILED** and **DEVELOP TEAM · 0.10%
+→ VERIFIED SUCCESS**. The observed-rate constant is labelled **POST-HOC SCALE CHECK—NOT A
+CONTROL**. The next visible rail is **CAPACITY AUDIT → 10 TRAIN ROOTS (4 ACQUIRE / 4 DEVELOP / 1
+STORAGE / 1 RESUPPLY) → TRAIN-ONLY REFIT → 8 FRESH PAIRED RED ROOTS → MODEL VS FROZEN
+COMPLETION-FIRST CONTROL**. Crystal, sealed Red and full replay remain locked.
 
 The live development timeline is now implemented and locally qualified. Its active rail is
 **5 AUTHENTICATED RED CASES → FIRST ELIGIBLE ONLY → DURABLE CLAIM → DELAYED ROM OPEN → TITLE-NEUTRAL
