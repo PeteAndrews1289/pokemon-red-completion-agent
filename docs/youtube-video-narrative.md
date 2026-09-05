@@ -287,6 +287,24 @@ on the new set.
 **Voiceover:** “This session built the trustworthy execution path; it did not grade the model. The
 next real evidence comes from two surviving held roots plus the smallest independent supplement.”
 
+## New scene: four green outcomes still failed the confidence test
+
+**Visual:** Start with **4/5 SUCCEEDED**, then split the score into **ACQUIRE 99.55% → FAILED** and
+**DEVELOP 0.10% → SUCCESS**. Replace the flattering success count with **60% THRESHOLD ACCURACY ·
+BRIER 0.398 · LOG LOSS 2.459**. Put a red **POST-HOC—NOT A CONTROL** stamp over an 80% constant.
+
+**Voiceover:** “Four skills completed, but the confidence audit caught opposite errors cancelling
+each other. The model was nearly certain when acquisition failed and nearly certain party training
+would fail when it passed. A good-looking average was hiding a bad decision model.”
+
+**Visual:** Lay out ten train cards—**4 ACQUIRE · 4 DEVELOP · 1 STORAGE · 1 RESUPPLY**—then eight
+fresh Red roots, each split into **MODEL** and **FROZEN COMPLETION-FIRST CONTROL**. Lock both policy
+choices before either outcome.
+
+**Voiceover:** “The correction is deliberately small and honest: train only on new Red lineages
+targeted at the exposed weaknesses, then compare once against a deterministic title-neutral control
+on separate paired states. No diagnostic outcome becomes a label, and no full replay is needed.”
+
 ## New scene: the data was ahead of the model—and the model catches up
 
 The visible player test caught two Pokémon and then handled a failed third attempt without crashing.

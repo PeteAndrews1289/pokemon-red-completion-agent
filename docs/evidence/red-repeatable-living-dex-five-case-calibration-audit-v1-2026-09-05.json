@@ -1,0 +1,188 @@
+{
+  "adjudication": {
+    "supported": [
+      "The five committed selected-arm success probabilities reproduce against five durable factual development outcomes.",
+      "The shadow model has material two-sided calibration error: one highly confident acquisition failure and one highly confident party-development false negative.",
+      "The existing title-neutral CompletionFirstGoalTeacher is a suitable prospectively frozen deterministic control for a new paired Red comparison."
+    ],
+    "unsupported": [
+      "model_advantage",
+      "post_hoc_comparator_advantage",
+      "population_calibration",
+      "fresh_generalization",
+      "model_fit_on_development",
+      "learned_gameplay_authority",
+      "sealed_red_evaluation",
+      "crystal_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "cases": [
+    {
+      "ordinal": 0,
+      "predicted_verified_success": 0.997284733145678,
+      "selected_option_kind": "resupply",
+      "verified_success": true
+    },
+    {
+      "ordinal": 1,
+      "predicted_verified_success": 0.9955409661234467,
+      "selected_option_kind": "acquire_species",
+      "verified_success": false
+    },
+    {
+      "ordinal": 2,
+      "predicted_verified_success": 1.0,
+      "selected_option_kind": "acquire_species",
+      "verified_success": true
+    },
+    {
+      "ordinal": 3,
+      "predicted_verified_success": 0.001031585425314896,
+      "selected_option_kind": "develop_team",
+      "verified_success": true
+    },
+    {
+      "ordinal": 4,
+      "predicted_verified_success": 0.9973107694039359,
+      "selected_option_kind": "resupply",
+      "verified_success": true
+    }
+  ],
+  "diagnostic": {
+    "log_loss_epsilon": 1e-15,
+    "overall": {
+      "brier_score": 0.3978108626366309,
+      "clipped_log_loss": 2.458978676252554,
+      "mean_prediction": 0.7982336108196751,
+      "observations": 5,
+      "observed_success_rate": 0.8,
+      "signed_calibration_error": -0.001766389180324901,
+      "successes": 4,
+      "threshold_accuracy_at_0_5": 0.6
+    },
+    "per_option_kind": {
+      "acquire_species": {
+        "brier_score": 0.4955509076150028,
+        "clipped_log_loss": 2.706411578011229,
+        "mean_prediction": 0.9977704830617233,
+        "observations": 2,
+        "observed_success_rate": 0.5,
+        "signed_calibration_error": 0.49777048306172333,
+        "successes": 1,
+        "threshold_accuracy_at_0_5": 0.5
+      },
+      "develop_team": {
+        "brier_score": 0.99793789331786,
+        "clipped_log_loss": 6.8766584122898315,
+        "mean_prediction": 0.001031585425314896,
+        "observations": 1,
+        "observed_success_rate": 1.0,
+        "signed_calibration_error": -0.9989684145746851,
+        "successes": 1,
+        "threshold_accuracy_at_0_5": 0.0
+      },
+      "resupply": {
+        "brier_score": 7.3023176444934005e-06,
+        "clipped_log_loss": 0.0027059064752411877,
+        "mean_prediction": 0.9972977512748069,
+        "observations": 2,
+        "observed_success_rate": 1.0,
+        "signed_calibration_error": -0.0027022487251930905,
+        "successes": 2,
+        "threshold_accuracy_at_0_5": 1.0
+      }
+    }
+  },
+  "effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_examples_read_for_fit": 0,
+    "emulator_frames": 0,
+    "model_fits": 0,
+    "new_model_predictions": 0,
+    "outcomes_opened": 0,
+    "teacher_queries": 0,
+    "training_targets_emitted": 0
+  },
+  "model": {
+    "authority": "shadow_development_only",
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "training_examples": 18
+  },
+  "next_gate": {
+    "deterministic_control": {
+      "effort_penalty": 0.2,
+      "recovery_gate": 0.5,
+      "resource_gate": 0.75,
+      "risk_penalty": 0.35,
+      "safety_gate": 0.55,
+      "schema": "pokemon.core.completion-first-goal-teacher.v1",
+      "storage_gate": 0.75,
+      "uses_binding_identity": false,
+      "uses_candidate_position": false,
+      "uses_title_identity": false
+    },
+    "evaluation": {
+      "arms_per_root": 2,
+      "development_outcomes_may_train": false,
+      "minimum_lineage_disjoint_roots": 8,
+      "policies": [
+        "updated_title_neutral_option_value_model",
+        "completion_first_goal_teacher_v1"
+      ],
+      "policy_choices_committed_before_outcomes": true,
+      "same_authenticated_initial_state_per_pair": true,
+      "timing_or_rng_siblings_create_independence": false
+    },
+    "train_only_update": {
+      "complete_settled_denominator_must_fit": true,
+      "development_rows_permitted": 0,
+      "minimum_settled_acquire_species": 3,
+      "minimum_settled_develop_team": 3,
+      "minimum_settled_total": 8,
+      "prospective_roots": 10,
+      "prospective_selected_kind_counts": {
+        "acquire_species": 4,
+        "develop_team": 4,
+        "manage_storage": 1,
+        "resupply": 1
+      },
+      "setup_censor_allowance": 2,
+      "upstream_lineage_reuse_permitted": false
+    }
+  },
+  "post_hoc_constant_rate_diagnostic": {
+    "comparator_chosen_before_outcomes": false,
+    "eligible_for_advantage_claim": false,
+    "metrics": {
+      "brier_score": 0.16,
+      "clipped_log_loss": 0.5004024235381879,
+      "mean_prediction": 0.8,
+      "observations": 5,
+      "observed_success_rate": 0.8,
+      "signed_calibration_error": 0.0,
+      "successes": 4,
+      "threshold_accuracy_at_0_5": 0.8
+    },
+    "probability": 0.8,
+    "purpose": "Scale check only; the probability equals the observed rate of these same five cases."
+  },
+  "recorded_on": "2026-09-05",
+  "schema": "pokemon.red.repeatable-living-dex-five-case-calibration-audit.v1",
+  "source_evidence": [
+    {
+      "cases": 2,
+      "path": "docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json",
+      "sha256": "f15413be01fc942643923fd4bc563f655acf89ff88f038aa2495e9c1b5c712ca"
+    },
+    {
+      "cases": 3,
+      "path": "docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json",
+      "sha256": "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
+    }
+  ],
+  "status": "five_case_development_calibration_audited_action_free"
+}

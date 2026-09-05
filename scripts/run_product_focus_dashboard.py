@@ -16,11 +16,14 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from product_focus import (  # noqa: E402
     ProductFocusState,
-    focus_progress_fraction,
     focus_scorecard,
     load_product_focus,
 )
 
+from pokemon_red_completion.dashboard_work_status import (  # noqa: E402
+    DashboardWorkStatusError,
+    load_dashboard_work_status,
+)
 from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DASHBOARD_DEFAULT_PORT,
     DashboardExperimentState,
@@ -28,11 +31,13 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DashboardModelState,
     DashboardSnapshot,
     DashboardState,
+    DashboardWorkState,
     ProgressDashboardError,
     ProgressDashboardServer,
 )
 
 DEFAULT_PRODUCT_FOCUS_PORT = DASHBOARD_DEFAULT_PORT + 3
+DEFAULT_WORK_STATUS_PATH = PROJECT_ROOT / ".dashboard-status" / "product-focus.json"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -40,10 +45,15 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--port", type=int, default=DEFAULT_PRODUCT_FOCUS_PORT)
     parser.add_argument("--duration-seconds", type=int, default=0)
     parser.add_argument("--no-browser", action="store_true")
+    parser.add_argument("--work-status-file", type=Path, default=DEFAULT_WORK_STATUS_PATH)
     return parser
 
 
-def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnapshot:
+def product_focus_dashboard_snapshot(
+    state: ProductFocusState,
+    *,
+    work: DashboardWorkState | None = None,
+) -> DashboardSnapshot:
     lane = state.active_lane
     product = state.product
     progress = state.progress
@@ -74,7 +84,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
         "additional_v3_trial_execution": "V3 execution",
         "campaign_execution": "campaign",
@@ -117,58 +126,63 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         boundary_labels.get(value, value.replace("_", " "))
         for value in _text_list(lane, "prohibited_actions")
     )
-    budgets = _mapping(state.document, "session_budget_percent")
-    time_box = _mapping(lane, "time_box")
-    output_targets = {label: minimum for label, _current, minimum in outputs}
-    try:
-        composition_target = output_targets["Composition Attempt · development"]
-        verified_composition_target = output_targets[
-            "Verified Composition Episode · development"
-        ]
-        development_episode_target = output_targets["Development Episode · development"]
-    except KeyError as exc:
-        raise ProgressDashboardError(
-            f"product focus dashboard is missing required output {exc.args[0]}"
-        ) from exc
     return DashboardSnapshot(
         game="Cross-game Pokemon agent",
-        run_status="waiting",
-        stage="Red semantic goal curriculum · hybrid control",
+        run_status=_run_status_for_work(work),
+        stage="Targeted Red update · supply validation before training",
         message=(
-            "All five live living-Pokedex choices are durable. Calibration missed both ways: "
-            "acquisition failed at 99.55% predicted success; party development succeeded near "
-            "0.10%. Living moved 13 to 14. Authority stays shadow-only."
+            "Five model-directed Red cases are terminal: four verified successes and one "
+            "failure. The next gate must prove 10 untouched training roots and 8 separate "
+            "paired evaluation roots before any new gameplay or fit."
         ),
-        stage_progress=focus_progress_fraction(state),
-        location="Red multi-goal curriculum · Crystal transfer deferred",
-        collection_target=composition_target,
+        stage_progress=_stage_progress(work),
+        location="Engineering gate · action-free inventory · Crystal transfer deferred",
+        registered_species=18,
+        living_species=14,
+        collection_target=151,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Semantic goal manager · deterministic skill executors",
-            choice="First strategic advantage · deterministic ordering retained · learner shadow",
+            candidate="18-example title-neutral living-Pokédex option model",
+            choice="No live choice · building the next train/control evidence gate",
             confidence=None,
-            decisions=composition_attempts,
+            decisions=5,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
             phase="catalog",
-            zero_shot_completed=composition_attempts,
-            zero_shot_total=composition_target,
-            adaptation_completed=verified_compositions,
-            adaptation_total=verified_composition_target,
-            sealed_completed=development_episodes,
-            sealed_total=max(development_episodes, development_episode_target),
+            zero_shot_completed=0,
+            zero_shot_total=1,
+            adaptation_completed=0,
+            adaptation_total=10,
+            sealed_completed=0,
+            sealed_total=8,
             predictions_committed=False,
-            heading="Red bounded living-Pokedex development",
-            eyebrow="Two live outcomes · one success · one overconfident failure",
+            heading="Next model update",
+            eyebrow="Living-Pokédex mission · Red curriculum",
             counter_labels=(
-                "Composition attempts",
-                "Verified composition episodes",
-                "Development episodes",
+                "Action-free capacity gate",
+                "New train-only roots",
+                "Fresh paired model/control roots",
             ),
         ),
         learning_components=(
+            DashboardLearningComponent(
+                name="Living-Pokédex option model",
+                scope=(
+                    "Ranks title-neutral acquisition, party, storage, supply and access goals"
+                ),
+                status="shadow",
+                authority="shadow_only",
+                train_examples=18,
+                validation_examples=5,
+                validation_correct=3,
+                baseline_correct=None,
+                model_sha256=(
+                    "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56"
+                ),
+                independent_validation_units=5,
+            ),
             DashboardLearningComponent(
                 name="One-turn battle scorer",
                 scope="Expected utility across seven cartridge RNG timings",
@@ -188,17 +202,26 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 paired_two_sided_exact_p=0.5,
             ),
         ),
+        work=work or DashboardWorkState(),
         events=(
+            "Current gate · validate untouched 10-train / 8-paired-development capacity",
+            (
+                "Five-case result · 4/5 verified successes · 60% threshold accuracy · "
+                "Brier 0.397811 · log loss 2.458979"
+            ),
+            (
+                "Largest errors · acquisition failed at 99.55% predicted success · party "
+                "development succeeded at 0.10%"
+            ),
+            (
+                "Gameplay gains · living collection 13→14 · registered 17→18 · capture "
+                "supplies restored twice"
+            ),
             f"Product · {_text(product, 'goal')}",
             _event("Capability", _text(lane, "capability")),
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
-            "Battle verdict · prior 17/20 · challenger 18/20 · fixed heuristic 20/20",
-            (
-                "Battle decision · deterministic heuristic retains action authority · learned "
-                "scorer remains visible in shadow · no more one-turn data campaigns"
-            ),
             (
                 f"Cross-family totals · train examples {causal_train_examples} · logical "
                 f"atomic {atomic_episodes} · attempts {development_episodes} · verified outcomes "
@@ -210,14 +233,14 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "Player stack · semantic goal manager · deterministic navigation, battle, "
                 "capture, party and inventory skills · fresh-ledger verification · typed recovery"
             ),
+            "Training boundary · five development cases are calibration only and cannot fit",
             (
-                "Calibration · 4 admitted outcomes · 2 successes · 2 bounded failures · "
-                "2 consumed unusable trials · trials 6-8 untouched"
+                "Prospective train set · 4 acquisition · 4 party development · 1 storage · "
+                "1 resupply · at least 8 settled"
             ),
             (
-                "Observed comparisons · develop_team succeeded on both roots · advance_story "
-                "and evolve_species each reached the same 6,000-action cap · no collection "
-                "regressions"
+                "Prospective evaluation · at least 8 fresh paired roots · updated model vs "
+                "frozen completion-first deterministic control"
             ),
             (
                 "Authority boundary · the model may rank supported semantic goals only after a "
@@ -232,17 +255,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Next falsifier", _text(reorientation, "next_falsifier")),
             f"Authority promotions {authority_promotions} · transfer results {transfer_results}",
             _event("Closed", prohibited),
-            (
-                f"Session budget · data {_count(budgets, 'data_and_scenarios')}% · model "
-                f"{_count(budgets, 'model_and_evaluation')}% · maintenance "
-                f"{_count(budgets, 'maintenance_and_docs')}%"
-            ),
-            (
-                f"Time box · {_count(time_box, 'maximum_sessions')} "
-                f"{'session' if _count(time_box, 'maximum_sessions') == 1 else 'sessions'} / "
-                f"{_count(time_box, 'maximum_hours')} hours"
-            ),
-            _event("Stop conditions", f"{stop_conditions[0]} / {stop_conditions[1]}"),
             _event("Next decision", _text(lane, "next_decision")),
             (
                 "Player contract · authenticated snapshots · title-neutral semantic goals · "
@@ -250,6 +262,25 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
         ),
     )
+
+
+def _run_status_for_work(work: DashboardWorkState | None) -> str:
+    if work is None:
+        return "waiting"
+    return {
+        "idle": "waiting",
+        "working": "running",
+        "testing": "running",
+        "waiting": "waiting",
+        "blocked": "blocked",
+        "complete": "passed",
+    }[work.status]
+
+
+def _stage_progress(work: DashboardWorkState | None) -> float:
+    if work is not None and work.progress is not None:
+        return work.progress
+    return 0.0
 
 
 def _mapping(source: object, key: str) -> Mapping[str, object]:
@@ -295,7 +326,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.duration_seconds < 0:
         raise ProgressDashboardError("dashboard duration must be non-negative")
     focus = load_product_focus()
-    snapshot = product_focus_dashboard_snapshot(focus)
+    try:
+        work = load_dashboard_work_status(args.work_status_file)
+    except DashboardWorkStatusError:
+        work = DashboardWorkState(
+            status="blocked",
+            headline="Dashboard status record needs attention",
+            detail="The project evidence is safe, but the live work update could not be read.",
+            current_step="Validate the local observer status",
+            next_step="Resume automatic work updates",
+        )
+    snapshot = product_focus_dashboard_snapshot(focus, work=work)
     state = DashboardState(snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
@@ -337,8 +378,27 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_browser:
             webbrowser.open(dashboard.url)
         started = time.monotonic()
+        last_refresh = 0.0
         try:
             while args.duration_seconds == 0 or time.monotonic() - started < args.duration_seconds:
+                now = time.monotonic()
+                if now - last_refresh >= 1.0:
+                    last_refresh = now
+                    try:
+                        focus = load_product_focus()
+                        work = load_dashboard_work_status(args.work_status_file)
+                    except (DashboardWorkStatusError, ProgressDashboardError):
+                        work = DashboardWorkState(
+                            status="blocked",
+                            headline="Dashboard refresh needs attention",
+                            detail=(
+                                "The last safe snapshot remains visible while the local status "
+                                "record is checked."
+                            ),
+                            current_step="Validate the observer inputs",
+                            next_step="Resume automatic dashboard updates",
+                        )
+                    state.publish(product_focus_dashboard_snapshot(focus, work=work))
                 time.sleep(0.5)
         except KeyboardInterrupt:
             pass

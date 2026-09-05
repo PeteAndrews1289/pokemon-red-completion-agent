@@ -151,6 +151,13 @@ _REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_PATH = (
 _REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_SHA256 = (
     "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
 )
+_REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_PATH = (
+    "docs/evidence/"
+    "red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json"
+)
+_REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_SHA256 = (
+    "5ee7494d1562b31620820548f73e8e9e5d612122dd1ade70e9a24a7a1c35ee60"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
@@ -1007,6 +1014,14 @@ def _validate_progress_evidence(
         "evidence",
         subject="latest reorientation",
     )
+    if _text(reorientation, "session_id", subject="latest reorientation") == (
+        "2026-09-05-five-case-calibration-audited"
+    ) and reorientation_evidence != {
+        "kind": "falsification",
+        "path": _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_PATH,
+        "sha256": _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_SHA256,
+    }:
+        raise ProductFocusError("five-case calibration reorientation evidence differs")
     evidence_to_check = tuple((item, "progress evidence") for item in evidence) + (
         (reorientation_evidence, "reorientation evidence"),
     )
@@ -1018,6 +1033,27 @@ def _validate_progress_evidence(
         digest = hashlib.sha256(target.read_bytes()).hexdigest()
         if digest != _text(item, "sha256", subject=subject):
             raise ProductFocusError(f"{subject} file digest differs")
+    if (
+        _text(reorientation_evidence, "path", subject="reorientation evidence")
+        == _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_PATH
+    ):
+        try:
+            calibration = json.loads(
+                (
+                    root / _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_PATH
+                ).read_text(encoding="ascii"),
+                object_pairs_hook=_unique_json_object,
+                parse_constant=_reject_json_constant,
+            )
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+            raise ProductFocusError(
+                "repeatable living-Dex calibration audit is invalid"
+            ) from None
+        if not isinstance(calibration, Mapping):
+            raise ProductFocusError(
+                "repeatable living-Dex calibration audit is invalid"
+            )
+        _validate_repeatable_living_dex_calibration_audit_projection(calibration)
 
 
 def _validate_projected_counters(
@@ -1663,6 +1699,126 @@ def _validate_repeatable_living_dex_supplement_projection(
         "verified_outcome_examples_added": 3,
     }:
         raise ProductFocusError("repeatable living-Dex supplement counters differ")
+
+
+def _validate_repeatable_living_dex_calibration_audit_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Bind the action-free five-case diagnostic and its no-authority conclusion."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.repeatable-living-dex-five-case-calibration-audit.v1"
+        or receipt.get("status")
+        != "five_case_development_calibration_audited_action_free"
+        or receipt.get("recorded_on") != "2026-09-05"
+    ):
+        raise ProductFocusError("repeatable living-Dex calibration audit status differs")
+    diagnostic = _mapping(
+        receipt,
+        "diagnostic",
+        subject="repeatable living-Dex calibration audit",
+    )
+    if diagnostic != {
+        "log_loss_epsilon": 1e-15,
+        "overall": {
+            "brier_score": 0.3978108626366309,
+            "clipped_log_loss": 2.458978676252554,
+            "mean_prediction": 0.7982336108196751,
+            "observations": 5,
+            "observed_success_rate": 0.8,
+            "signed_calibration_error": -0.001766389180324901,
+            "successes": 4,
+            "threshold_accuracy_at_0_5": 0.6,
+        },
+        "per_option_kind": {
+            "acquire_species": {
+                "brier_score": 0.4955509076150028,
+                "clipped_log_loss": 2.706411578011229,
+                "mean_prediction": 0.9977704830617233,
+                "observations": 2,
+                "observed_success_rate": 0.5,
+                "signed_calibration_error": 0.49777048306172333,
+                "successes": 1,
+                "threshold_accuracy_at_0_5": 0.5,
+            },
+            "develop_team": {
+                "brier_score": 0.99793789331786,
+                "clipped_log_loss": 6.8766584122898315,
+                "mean_prediction": 0.001031585425314896,
+                "observations": 1,
+                "observed_success_rate": 1.0,
+                "signed_calibration_error": -0.9989684145746851,
+                "successes": 1,
+                "threshold_accuracy_at_0_5": 0.0,
+            },
+            "resupply": {
+                "brier_score": 7.3023176444934005e-06,
+                "clipped_log_loss": 0.0027059064752411877,
+                "mean_prediction": 0.9972977512748069,
+                "observations": 2,
+                "observed_success_rate": 1.0,
+                "signed_calibration_error": -0.0027022487251930905,
+                "successes": 2,
+                "threshold_accuracy_at_0_5": 1.0,
+            },
+        },
+    }:
+        raise ProductFocusError("repeatable living-Dex calibration metrics differ")
+    effects = _mapping(
+        receipt,
+        "effects",
+        subject="repeatable living-Dex calibration audit",
+    )
+    if effects != {
+        "authority_promotions": 0,
+        "controller_actions": 0,
+        "crystal_accesses": 0,
+        "development_examples_read_for_fit": 0,
+        "emulator_frames": 0,
+        "model_fits": 0,
+        "new_model_predictions": 0,
+        "outcomes_opened": 0,
+        "teacher_queries": 0,
+        "training_targets_emitted": 0,
+    }:
+        raise ProductFocusError("repeatable living-Dex calibration effects differ")
+    comparator = _mapping(
+        receipt,
+        "post_hoc_constant_rate_diagnostic",
+        subject="repeatable living-Dex calibration audit",
+    )
+    if (
+        comparator.get("probability") != 0.8
+        or comparator.get("comparator_chosen_before_outcomes") is not False
+        or comparator.get("eligible_for_advantage_claim") is not False
+    ):
+        raise ProductFocusError("repeatable living-Dex post-hoc comparator differs")
+    next_gate = _mapping(
+        receipt,
+        "next_gate",
+        subject="repeatable living-Dex calibration audit",
+    )
+    train = _mapping_value(
+        next_gate.get("train_only_update"),
+        subject="repeatable living-Dex calibration train gate",
+    )
+    evaluation = _mapping_value(
+        next_gate.get("evaluation"),
+        subject="repeatable living-Dex calibration evaluation gate",
+    )
+    if (
+        train.get("prospective_roots") != 10
+        or train.get("minimum_settled_total") != 8
+        or train.get("development_rows_permitted") != 0
+        or train.get("upstream_lineage_reuse_permitted") is not False
+        or evaluation.get("minimum_lineage_disjoint_roots") != 8
+        or evaluation.get("arms_per_root") != 2
+        or evaluation.get("development_outcomes_may_train") is not False
+        or evaluation.get("policy_choices_committed_before_outcomes") is not True
+        or evaluation.get("timing_or_rng_siblings_create_independence") is not False
+    ):
+        raise ProductFocusError("repeatable living-Dex calibration next gate differs")
 
 
 def _validate_causal_model_update_projection(

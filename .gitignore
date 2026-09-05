@@ -49,3 +49,4 @@ mypy_errors.txt
 
 # Agent scratch scripts: kept on disk, never committed.
 scratch/
+.dashboard-status/

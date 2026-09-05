@@ -20,6 +20,7 @@ from product_focus import (  # noqa: E402
     _validate_calibration_player_partial_projection,
     _validate_calibration_player_recovery_projection,
     _validate_paired_bounded_player_projection,
+    _validate_repeatable_living_dex_calibration_audit_projection,
     _validate_repeatable_living_dex_first_two_projection,
     _validate_repeatable_living_dex_supplement_projection,
     canonical_focus_json,
@@ -57,6 +58,11 @@ REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT = (
     PROJECT_ROOT
     / "docs/evidence"
     / "red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json"
+)
+REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -504,6 +510,41 @@ def test_repeatable_living_dex_supplement_projection_binds_three_outcomes() -> N
     changed_counter["counter_treatment"]["authority_promotions_added"] = 1
     with pytest.raises(ProductFocusError, match="supplement counters differ"):
         _validate_repeatable_living_dex_supplement_projection(changed_counter)
+
+
+def test_repeatable_living_dex_calibration_audit_binds_metrics_and_boundary() -> None:
+    receipt = json.loads(
+        REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT.read_text(encoding="ascii")
+    )
+
+    _validate_repeatable_living_dex_calibration_audit_projection(receipt)
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+    changed_metric = deepcopy(receipt)
+    changed_metric["diagnostic"]["overall"]["brier_score"] = 0.1
+    with pytest.raises(ProductFocusError, match="calibration metrics differ"):
+        _validate_repeatable_living_dex_calibration_audit_projection(changed_metric)
+
+    changed_effect = deepcopy(receipt)
+    changed_effect["effects"]["model_fits"] = 1
+    with pytest.raises(ProductFocusError, match="calibration effects differ"):
+        _validate_repeatable_living_dex_calibration_audit_projection(changed_effect)
+
+    changed_control = deepcopy(receipt)
+    changed_control["post_hoc_constant_rate_diagnostic"][
+        "eligible_for_advantage_claim"
+    ] = True
+    with pytest.raises(ProductFocusError, match="post-hoc comparator differs"):
+        _validate_repeatable_living_dex_calibration_audit_projection(changed_control)
+
+    changed_gate = deepcopy(receipt)
+    changed_gate["next_gate"]["evaluation"][
+        "timing_or_rng_siblings_create_independence"
+    ] = True
+    with pytest.raises(ProductFocusError, match="calibration next gate differs"):
+        _validate_repeatable_living_dex_calibration_audit_projection(changed_gate)
 
 
 @pytest.mark.parametrize(
@@ -2157,48 +2198,49 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(1.0)
+    assert public["stage_progress"] == pytest.approx(0.0)
     assert public["actions"] == 0
-    assert "Red semantic goal curriculum" in public["stage"]
+    assert "supply validation before training" in public["stage"]
     assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 6,
-        "total": 6,
+        "completed": 0,
+        "total": 1,
     }
-    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 29, "total": 29}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 10}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 8}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
-        "zero_shot": "Composition attempts",
-        "adaptation": "Verified composition episodes",
-        "sealed_test": "Development episodes",
+        "zero_shot": "Action-free capacity gate",
+        "adaptation": "New train-only roots",
+        "sealed_test": "Fresh paired model/control roots",
     }
     assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
-    assert public["model"]["decisions"] == 6  # type: ignore[index]
-    encoded = json.dumps(public, sort_keys=True)
-    assert "fixed heuristic 20/20" in encoded
-    assert "Red bounded living-Pokedex development" in encoded
-    assert "All five live living-Pokedex choices" in encoded
-    assert "99.55% predicted success" in encoded
-    assert "party development succeeded near 0.10%" in encoded
+    assert public["model"]["decisions"] == 5  # type: ignore[index]
+    encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
+    assert "Next model update" in encoded
+    assert "Five model-directed Red cases are terminal" in encoded
+    assert "acquisition failed at 99.55% predicted success" in encoded
+    assert "party development succeeded at 0.10%" in encoded
+    assert "Brier 0.397811" in encoded
+    assert "log loss 2.458979" in encoded
+    assert "living collection 13→14" in encoded
+    assert "registered 17→18" in encoded
     assert "Composition Attempt 6/6" in encoded
     assert "Verified Composition Episode 4/4" in encoded
     assert "Development Episode 29/24" in encoded
-    assert "Composition attempts" in encoded
-    assert "Verified composition episodes" in encoded
-    assert "Development episodes" in encoded
-    assert "fixed heuristic 20/20" in encoded
-    assert "no more one-turn data campaigns" in encoded
+    assert "Action-free capacity gate" in encoded
+    assert "New train-only roots" in encoded
+    assert "Fresh paired model/control roots" in encoded
     assert "semantic goal manager" in encoded
-    assert "Observed comparisons" in encoded
-    assert "develop_team succeeded on both roots" in encoded
-    assert "advance_story and evolve_species each reached the same 6,000-action cap" in encoded
-    assert "4 admitted outcomes" in encoded
-    assert "2 consumed unusable trials" in encoded
-    assert "trials 6-8 untouched" in encoded
+    assert "five development cases are calibration only and cannot fit" in encoded
+    assert "4 acquisition" in encoded
+    assert "8 fresh paired roots" in encoded
     assert "deterministic code keeps mechanics and safety" in encoded
     assert "completion-ledger delta" in encoded
     assert "authenticated snapshots" in encoded
     assert "title-neutral semantic goals" in encoded
     assert "teacher labels 0" in encoded
+    assert "Living-Pokédex option model" in encoded
+    assert '"train_examples": 18' in encoded
+    assert '"validation_examples": 5' in encoded
     assert "Authority promotions 0" in encoded
     assert "transfer results 0" in encoded
     assert "logical atomic 0" in encoded

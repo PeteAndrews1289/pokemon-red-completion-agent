@@ -6,6 +6,22 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (September 5, 2026): prove the next Red training supply before spending
+> gameplay.** Five authentic shadow decisions are now one reproducible calibration set: four skills
+> succeeded and one failed, but threshold accuracy was only **3/5**, with Brier score **0.397811**
+> and log loss **2.458979**. The model was extremely confident about one failed acquisition and
+> extremely pessimistic about one successful party-development action. These are development
+> diagnostics, not new training rows.
+>
+> The next experiment is deliberately narrower: find **10 untouched train roots** (4 acquisition,
+> 4 party development, 1 storage, 1 resupply), then reserve **8 different development roots** for
+> a paired comparison with the frozen completion-first deterministic control. The zero-effect
+> capacity auditor and a more descriptive view-only dashboard are locally green; no new gameplay,
+> fit, authority promotion, sealed Red evaluation, or Crystal execution has occurred. See the
+> [prospective design](docs/red-living-dex-train-and-paired-control-v1.md),
+> [model-first roadmap](docs/model-first-roadmap.md), and
+> [dashboard guide](docs/progress-dashboard.md).
+
 > **Current product focus (September 3, 2026): retain every typed calibration outcome, then finish
 > the fixed batch.** Main `d25b0975` passed CI `33824286498`; immutable trial 1 admitted without
 > gameplay. Trials 2–4 then produced three more admitted targets. Across trials 1–4,
