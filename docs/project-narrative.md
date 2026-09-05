@@ -9191,3 +9191,17 @@ rejecting bad evidence; it can also prove which old assets are still safe to reu
 no cartridge or outcome and makes no prediction. Its next job is to survive publication and exact
 main CI, then preserve those two clean roots while the missing storage-aware supply and model-led
 development runner are built around them.
+
+## September 5: the evaluator was ready before the training set
+
+The next capacity audit authenticated 81 retained Red contexts without advancing the game. It found
+enough untouched development roots for every slot in an eight-case paired comparison, but only two
+usable train roots for a ten-root targeted update. That result prevented a tempting shortcut:
+relabeling the held-out states as training data would have produced a fit while quietly deleting the
+ability to test it.
+
+The bottleneck is now explicit—eight new independent train roots, especially acquisition and party
+development—not another model architecture or full-game teacher repair. The system preserved its
+future exam bank, changed no learning counter, and turned a vague “not ready” into a bounded supply
+task. That is the next step toward a strategic policy that can generalize within Red before transfer
+to Crystal and later living-Pokédex completion.

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Prove action-free capacity for the frozen ten-root targeted train update and eight-root paired Red model/control evaluation. Only a complete lineage-disjoint supply pass may proceed to one immutable schedule and train-only outcome collection.
+- Next decision: Create and action-free qualify at least eight new independent Red train roots while preserving the already-sufficient paired bank. Only a complete 10-train/8-development exact matching may freeze the schedule and begin train-only outcome collection.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Run one action-free capacity audit for ten upstream-disjoint train roots and eight separate paired-development roots under the frozen kind allocation. Reject or resize the proposed update before gameplay if the supply, lineage separation, targeted acquisition/development coverage or fixed CompletionFirstGoalTeacher control cannot be satisfied. |
+| Cheapest falsifier | Inventory a prospective fresh-root source without opening outcomes and require at least eight new lineage- and physical-root-disjoint Red train states, including enough acquisition and party-development menus to close the measured 8-root deficit. Reject the source before collection if the exact 10+8 matching still fails. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-five-case-calibration-audited** · status **active** · evidence [falsification](docs/evidence/red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json)
+**2026-09-05-targeted-capacity-measured** · status **active** · evidence [falsification](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The audit converts five isolated Red observations into a focused learning plan for title-neutral acquisition, party, storage and supply decisions, then evaluates those decisions against an existing portable deterministic control. It spends the next gameplay budget on model-relevant evidence rather than another one-arm demonstration. |
-| Learning output | No counter advances from this action-free audit. It reproduces five existing outcome pairs and quantifies the reason authority remains zero: 60% threshold accuracy, Brier 0.397811 and log loss 2.458979, with opposing acquisition overconfidence and party-development underconfidence. |
-| Authority delta | No authority changed. The immutable eighteen-example option model remains shadow-only; the five development outcomes are calibration evidence and are forbidden from train fitting or promotion. |
+| Product alignment | The measured deficit directs the next gameplay budget toward genuinely new strategic experiences while preserving a credible paired exam. It avoids another route repair, model rewrite or false train/test relabeling. |
+| Learning output | No counter advances. The exact-main action-free census authenticated 81 contexts and measured a complete 8/8 paired-development matching but only 2/10 targeted train matching, with zero controller, frame, claim, prediction, outcome, teacher or fit effects. |
+| Authority delta | No authority changed. The census emitted no target and opened no outcome. The immutable eighteen-example option model remains shadow-only, and the ten untouched development roots remain reserved for paired evaluation. |
 | Transfer result | None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim. |
-| Blocker | The five-case audit measures severe two-sided confidence error but supplies no fit-eligible row and no prospective control comparison. The next model update therefore requires new train-only lineages, and model advantage requires separate paired Red roots whose policies are committed before outcomes. |
-| Decision | Target one ten-root train-only correction - four acquisition, four party development, one storage and one resupply - then compare the updated model with the frozen CompletionFirstGoalTeacher on at least eight lineage-disjoint paired development roots. First prove that complete supply exists action-free; stop rather than reuse or relabel an opened context. |
-| Next session | Implement and mutation-test the zero-effect capacity audit for the frozen ten-train/eight-development design, using existing public catalog and lineage contracts. Stop before freezing private roots, controller input, fitting, teacher use, sealed Red, Crystal or a full replay. |
-| Next falsifier | An action-free supply audit must find ten outcome-unopened train roots with the frozen 4/4/1/1 kind allocation plus eight separate development roots suitable for paired model/control execution. Any train/development upstream overlap, opened outcome or insufficient targeted kind coverage rejects this design before controller input. |
-| Stop condition | Stop if the capacity design cannot supply all declared train and paired-development lineages without reuse, if it changes the frozen control or kind allocation after outcomes, or if implementation requires a route/species patch, teacher, private outcome open, fit, sealed Red, Crystal or full replay. |
+| Blocker | The production census found only two eligible train roots against ten required, leaving an eight-root deficit. Acquisition and party development each have only one compatible train root. The paired development bank is already sufficient at 8/8. |
+| Decision | Preserve the ten-root development bank as the exam set. Prospectively create at least eight genuinely new, title-neutral Red train roots with acquisition and party-development coverage, prove independence before outcomes, and rerun exact matching before freezing the 10+8 schedule. |
+| Next session | Design and qualify the smallest title-neutral fresh-root producer that yields eight or more independent Red train states, emphasizing acquisition and party development. Preserve the ready development bank and stop before outcome collection or fitting. |
+| Next falsifier | A prospective fresh-root inventory must add at least eight independent eligible train roots and close the frozen semantic matching without consuming, relabeling or overlapping the ten-root development bank. Failure stops before outcomes. |
+| Stop condition | Stop if fresh supply overlaps any excluded or held-out lineage/physical root, cannot close all ten train slots, requires relabeling the development bank, or drifts into a route/species patch, outcome-conditioned selection, sealed Red, Crystal or full replay. |
 
 ### Stop conditions
 

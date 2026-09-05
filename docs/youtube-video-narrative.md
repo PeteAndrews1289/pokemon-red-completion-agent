@@ -6094,3 +6094,14 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
   exactly what remained usable.”
 - End on the next honest test: four or more untouched Red decisions, model choices committed before
   outcomes, no refit on the exam set, and Crystal still locked.
+
+## Scene: the exam exists, but the lesson set is eight states short
+
+- Start with the action-free funnel: **81 AUTHENTICATED CONTEXTS → 12 UNTOUCHED ELIGIBLE ROOTS**.
+- Split it into **PAIRED EVALUATION 8/8 READY** and **TARGETED TRAIN 2/10 READY**.
+- Keep **ACTIONS 0 · FRAMES 0 · OUTCOMES 0 · FITS 0** visible throughout the census.
+- Reject the shortcut of moving held-out roots into train; animate it as erasing the exam.
+- Highlight the actual deficit: **8 NEW INDEPENDENT TRAIN ROOTS**, with acquisition and party
+  development as the sparse concepts.
+- End on the honest next build: create fresh title-neutral Red situations, prove their independence,
+  then freeze the 10+8 denominator before any outcome is known.

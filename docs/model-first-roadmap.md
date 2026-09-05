@@ -5582,3 +5582,33 @@ improve the scenario distribution, not revive a Red-specific route factory. The 
 product still requires bounded battle competence, navigation, party development, collection
 planning, and then frozen Red-to-Crystal transfer evidence. Counters remain train 19, fits 6,
 verified development 6, unseen comparisons 4, authority 0 and transfer 0.
+
+## Current checkpoint — targeted Red capacity census
+
+Exact main `481accfd049bf2dc3e6cc30888e6fcd8e2167ed7` passed CI run `33985137655/1` with
+6,801 tests, four skips and one expected failure. Its production census authenticated all 81
+retained contexts and observed 12 untouched eligible contexts after removing 18 historical train
+lineages, seven scheduled development lineages and seven development physical roots. Protected
+effects remained exactly zero.
+
+The paired bank is ready: ten untouched development roots can satisfy the declared eight-root
+matching across acquisition, development, evolution, storage, resupply and access unlocking. The
+train bank is not: only two untouched train roots remain and the exact matching reaches 2/10,
+leaving an eight-root deficit. Only one train root supports acquisition and one supports party
+development. The census emitted no target and granted no collection or fitting authority.
+
+Next sequence:
+
+1. Preserve the ten-root development bank as held-out evidence; never relabel it as train.
+2. Build a prospective title-neutral producer for at least eight independent Red train roots,
+   prioritizing acquisition and party-development menus.
+3. Prove new lineage and physical-root separation before opening outcomes.
+4. Rerun the exact matching census with the expanded train bank and unchanged development bank.
+5. Only a complete 10-train/8-development matching may freeze the schedule.
+6. Collect the frozen train denominator, fit once, commit both model and deterministic-control
+   decisions, then open paired development outcomes.
+
+Mission check: this removes an ambiguous blocker without spending gameplay. The next work creates
+training opportunity rather than more evaluator infrastructure. Crystal and full-game replay stay
+deferred; the learned target remains transferable semantic goal selection for eventual multi-game
+living-Pokédex completion.

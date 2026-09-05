@@ -1,5 +1,27 @@
 # Handoff
 
+## Latest checkpoint: paired Red supply is ready; targeted train supply is short by eight roots
+
+PR 223 passed its complete check and merged as exact main
+`481accfd049bf2dc3e6cc30888e6fcd8e2167ed7`. Exact-main CI run `33985137655/1` then passed
+**6,801 tests, four skips and one expected failure**. The production capacity census ran once from
+that clean source and authenticated all 81 retained contexts without a controller action, emulator
+frame, model prediction, outcome open, root claim, teacher query, provider execution or fit.
+
+After excluding all 18 historical train lineages, seven scheduled development lineages and seven
+development physical roots, 12 untouched contexts remained. The development bank is sufficient:
+10 roots admit an exact matching for all eight paired-control slots. The train bank is not:
+two roots match only two of ten required slots, leaving a deficit of eight. Train compatibility is
+acquisition 1, party development 1, storage 2 and resupply 2. Do not relabel the held-out bank as
+training data; that would spend the comparison before the model is fit.
+
+The next implementation lane is a prospective, title-neutral fresh-root producer for eight or more
+independent Red train states, emphasizing acquisition and party development while retaining one
+storage and one resupply slot. It must prove lineage and physical-root novelty action-free before
+outcomes, preserve the existing 10-root development bank, and stop if the new capacity matching is
+still incomplete. Only after that census passes should the full 10+8 schedule freeze. See the
+[path-free capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json).
+
 ## Latest checkpoint: five-case calibration quantified; next gate is targeted training supply
 
 The five-case aggregate is reproducible from the two tracked public outcome receipts with no
@@ -24,10 +46,9 @@ the existing 18 train lineages, all seven historically scheduled development lin
 cartridge-derived capabilities and protected inputs; removes those lineages and development
 physical roots; and solves the declared kind allocation as an exact disjoint matching problem.
 Its focused dashboard/capacity/calibration suite passes **168 tests**, with Ruff and Mypy clean.
-It has not yet run over the production inventory because the executable source must first be
-published and pass one coherent CI gate. Stop on upstream overlap, insufficient targeted-kind
-coverage or an opened outcome. No fit, controller input, private freeze, teacher, sealed Red,
-Crystal or full replay is open yet.
+The production result above is now the binding capacity verdict. Stop on upstream overlap,
+insufficient targeted-kind coverage or an opened outcome. No fit, controller input, private freeze,
+teacher, sealed Red, Crystal or full replay is open yet.
 
 The local view-only dashboard at `http://127.0.0.1:8768/` now answers two different questions:
 the evidence-backed experiment panel says where the learner stands, while **Work happening now**
