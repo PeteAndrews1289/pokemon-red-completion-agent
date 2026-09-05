@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: the launcher never reached the airlock
+
+**Visual:** Show a command card stamped **C LOCALE → UTF-8 MODE 1**, stopping before the SOURCE
+lock. Keep all five private cards behind a second unopened door and every effect dial at zero.
+
+**Voiceover:** “The hardened command was ready, but my supposedly clean launcher changed a Python
+runtime flag. The command rejected the launcher before it could even inspect the project or saved
+games. The real defect was that one generic error label made an interpreter mismatch look like a
+source failure.”
+
+Then change the public label to **INTERPRETER AUTHENTICATION**, show **V2 RETAINED — NO RETRY**, and
+route a distinct final successor through a reproduced locale. Do not imply that the model, roots or
+runtime failed, and do not show model movement until a later bounded outcome actually runs.
+
 ## New scene: the airlock says no
 
 **Visual:** After CI turns green, show the five cards entering the airlock. Stop them at a new lock

@@ -120,6 +120,24 @@ def test_command_exposes_only_exact_action_free_batch_arguments() -> None:
     )
 
 
+def test_interpreter_rejection_is_distinct_from_authenticated_source_failure() -> None:
+    source = SCRIPT_PATH.read_text(encoding="utf-8")
+    assert (
+        "_EARLY_INTERPRETER_FAILURE = (\n"
+        "    '{\"stage\":\"bootstrap_interpreter_authentication\","
+        "\"status\":\"failed_closed\"}\\n'\n"
+        ")"
+    ) in source
+    flag_check = source.index("if __name__ == \"__main__\" and (\n    sys.flags.debug")
+    interpreter_failure = source.index(
+        "sys.stdout.write(_EARLY_INTERPRETER_FAILURE)", flag_check
+    )
+    source_authentication = source.index(
+        "_BOOTSTRAP_IDENTITY = _authenticate_current_source", interpreter_failure
+    )
+    assert flag_check < interpreter_failure < source_authentication
+
+
 def test_successor_reuses_the_qualified_train_bootstrap_without_weakening_it() -> None:
     successor = _load_script()
     historical = _load_path(TRAIN_SCRIPT_PATH, "qualified_historical_train_script")

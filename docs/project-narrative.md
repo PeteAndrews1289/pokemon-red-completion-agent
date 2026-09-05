@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the airlock rejected the launcher itself
+
+The strict replacement passed main CI and reproduced its exact 1,477-file runtime closure, but its
+first launch still stopped before source authentication. The isolated host command had forced the
+C locale; on CPython 3.14 that enables UTF-8 mode, while the reviewed bootstrap deliberately pins
+the opposite flag. Not one private capture was opened, and the model never ran.
+
+The useful lesson was observability: one generic bootstrap label had hidden the difference between
+an invalid interpreter and invalid source. We retained the rejected launch and gave interpreter
+failure its own public, path-free stage. The final successor keeps the same five situations and
+model and must pass once under the reproduced locale before the first bounded model choice. This is
+not progress to dramatize as gameplay; it is the last airlock repair before gameplay evidence.
+
 ## September 5: the airlock caught its own missing runtime stage
 
 PR 214 and exact-main CI passed, but the first five-root preflight still failed closed before a

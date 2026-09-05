@@ -1,5 +1,18 @@
 # Development supplement adapter checkpoint
 
+## Operational update: V2 host invocation rejected before the airlock
+
+The strict runtime repair merged at `90b90d22`; exact-main CI passed and the clean worktree staged
+the expected 1,477-file closure. The host launcher then supplied the C locale, putting CPython 3.14
+in `utf8_mode=1` rather than the command's qualified `utf8_mode=0`. The early undifferentiated
+bootstrap envelope rejected it before source authentication, project imports or any private file.
+
+V2 is retained and will not rerun. The final successor adds a distinct
+`bootstrap_interpreter_authentication` stage so this class of operator failure cannot masquerade as
+source failure, while leaving the production and five-case contracts unchanged. Qualify it, publish
+it, require exact-main CI and invoke once under the reproduced `en_US.UTF-8` locale. See the
+[V2 rejection evidence](evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
+
 ## Operational update: V1 command bootstrap failed closed
 
 PR 214 and exact-main CI passed, but the one V1 five-root command stopped at the production

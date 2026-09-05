@@ -18,6 +18,26 @@ inherited work, machine/runtime differences and CI waits. Faster generated text,
 more documentation alone do not establish better value. API prices do not establish subscription
 usage debits. No account quota or billing data is inferred from elapsed time.
 
+## 2026-09-05: Sol strict-bootstrap invocation correction
+
+Starting point: GPT-5.6 Sol inherited its own published V1 runtime-staging defect, replaced the
+command with the mature strict bootstrap, passed 50 focused tests and the full local gate, merged
+through PR 215, and passed exact-main CI `33939561868/1` in 26 minutes 4 seconds. The exact
+1,477-file production dependency closure reproduced its reviewed digest. Claude and Antigravity
+3.8 Flash High independently returned GO with no P0 or blocking P1.
+
+The first strict invocation was rejected before source authentication because Codex launched the
+pinned interpreter under `LANG=C` and `LC_ALL=C`, yielding `utf8_mode=1` instead of the required
+zero. This is operator rework attributable to the Sol session, not a model/root/runtime failure.
+The source's generic early failure label also obscured the cause. V2 is retained without retry; the
+minimal final successor adds a distinct interpreter-authentication stage and a canonical reproduced
+locale. No learner counter, prediction, gameplay action or authority changed.
+
+Current judgment: Sol remains appropriate for this bounded correction, but this session is negative
+evidence against claiming superior efficiency. It delivered a substantial trust-boundary repair,
+then lost another hosted cycle to an avoidable launch-contract mistake. Exact assistant tokens and
+weekly account debit remain unavailable, so no token-use ratio can be claimed.
+
 ## 2026-09-04: focused external audit and budgeting guidance
 
 Claude completed a High-effort read-only source review; Antigravity completed compact architecture

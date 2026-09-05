@@ -1,5 +1,20 @@
 # Model-first development roadmap
 
+## Latest checkpoint: one final, observable bootstrap successor
+
+Exact main `90b90d22` and CI `33939561868/1` passed, and the exact reviewed 1,477-file runtime
+closure staged successfully. The first strict V2 invocation was still rejected before source or
+private admission because the host launcher forced the C locale, which starts CPython 3.14 in
+UTF-8 mode while this qualified bootstrap requires `utf8_mode=0`. No private file or protected
+effect became reachable.
+
+Do not rerun V2. The final successor gives interpreter-flag rejection its own sanitized stage and
+uses the reproduced `en_US.UTF-8` host locale. After focused qualification, publication and green
+exact-main CI, invoke it once against the same five roots. A pass advances immediately to a cold
+production-resolver rehearsal and bounded model scoring; any failure ends this bootstrap lane.
+This remains maintenance for the existing eighteen-example model, not another curriculum or a
+Crystal task. See the [V2 rejection](evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
+
 ## Latest checkpoint: replace the failed V1 command bootstrap, not the five-case design
 
 Exact main `a4d7c5a7` passed CI `33936419853/1`, then the sole V1 five-root preflight failed

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: V1 failed closed because its command lacked the authenticated runtime stage. Qualify and publish the strict-bootstrap successor, require green exact-main CI, and pass one successor zero-effect preflight before production-resolver rehearsal or model-selected development play.
+- Next decision: V2's invalid host locale was rejected before source or private admission. Qualify and publish the interpreter-diagnostic successor, require green exact-main CI, and pass its single canonical-locale zero-effect preflight before production-resolver rehearsal or model-selected development play.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Publish the strict-bootstrap successor, require green exact-main CI, then preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input. |
+| Cheapest falsifier | Publish the interpreter-diagnostic successor, require green exact-main CI, then invoke it once under the canonical en_US.UTF-8 host locale to preflight historical ordinals 10 and 11 plus supplement ordinals 0 through 2 against the exact eighteen-example model with zero predictions, outcomes, claims or controller input. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-development-five-root-preflight-v1-falsification** · status **active** · evidence [falsification](docs/evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json)
+**2026-09-05-development-five-root-preflight-v2-bootstrap-rejection** · status **active** · evidence [falsification](docs/evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Repairing the production command bootstrap is the shortest path to testing portable living-Pokedex objective selection on five independent Red situations. It adds no curriculum and keeps Crystal deferred. |
-| Learning output | No learning counter changed. V1 produced a command-bootstrap falsification with zero predictions, claims, outcomes, actions, frames, fits or teacher queries. |
-| Authority delta | No authority changed. The eighteen-example model remains non-authoritative and no development prediction ran. V1 failed before a root claim, outcome, controller action or emulator frame. |
+| Product alignment | Distinguishing an invalid host interpreter from source failure prevents another opaque bootstrap cycle and is the smallest remaining maintenance unblock before portable living-Pokedex objective scoring on five independent Red situations. It adds no curriculum and keeps Crystal deferred. |
+| Learning output | No learning counter changed. V2 was rejected by the interpreter flag gate before any project or private input became reachable; it produced no prediction, claim, outcome, action, frame, fit or teacher query. |
+| Authority delta | No authority changed. The eighteen-example model remains non-authoritative and no development prediction ran. V2 was rejected before source authentication, project imports, private-root access, a root claim, outcome, controller action or emulator frame. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The sole V1 preflight failed because its command did not stage the authenticated dependency closure required by the production runtime boundary. The strict-bootstrap successor must be qualified, published and pass new exact-main CI before another preflight identity exists. |
-| Decision | Retain the exact five-case design and V1 zero-effect failure. Replace only the command bootstrap with the proven isolated source/runtime pattern; never retry the V1 executable or alter the historical train command. |
-| Next session | Qualify the strict successor bootstrap, publish and merge it, require green exact-main CI, then run exactly one successor five-root zero-effect preflight. A pass permits production-resolver rehearsal; a failure is retained without another retry. |
-| Next falsifier | The strict-bootstrap successor must reproduce the five source, plan, model, context, recipe, runtime and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero. |
-| Stop condition | Never retry the V1 executable. Stop before predictions, claims or controller input until one published exact-main successor preflight passes. Stop on bootstrap/runtime/plan/model/context/source mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any substituted case. Never refit on development, repeat the census/freeze, or replay pairs 004, 005 or 006. |
+| Blocker | The first strict-bootstrap invocation used LANG=C and LC_ALL=C, which started the pinned CPython with utf8_mode=1 instead of the command's qualified utf8_mode=0 contract. The undifferentiated early failure label obscured that operator error until a read-only flag reproduction. |
+| Decision | Retain the V2 rejected invocation without rerunning its source identity. Give the successor a distinct interpreter-authentication failure stage, preserve the exact five-case and runtime design, publish it under a new source identity, and invoke it only under the reproduced en_US.UTF-8 locale. This is the final bootstrap successor for this lane. |
+| Next session | Qualify and publish the minimal interpreter-diagnostic successor, require green exact-main CI, reconstruct the same authenticated runtime closure, then invoke exactly one canonical-locale five-root zero-effect preflight. A pass permits production-resolver rehearsal; any failure ends this bootstrap lane without another successor. |
+| Next falsifier | The interpreter-diagnostic successor must run under the canonical locale and reproduce the five source, plan, model, context, recipe, runtime and unclaimed-root joins from published main and green CI while every protected-effect counter remains zero. |
+| Stop condition | Never retry the V1 or V2 source identities. Stop this bootstrap lane permanently if the one interpreter-diagnostic successor fails. Stop before predictions, claims or controller input until its published exact-main preflight passes. Stop on interpreter/source/runtime/plan/model/context mismatch, train crossover, private output, consumed-root reuse, teacher fallback or any substituted case. Never refit on development, repeat the census/freeze, or replay pairs 004, 005 or 006. |
 
 ### Stop conditions
 

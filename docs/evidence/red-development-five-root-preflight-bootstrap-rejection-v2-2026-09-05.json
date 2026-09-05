@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon.red.development-five-root-preflight-bootstrap-rejection-evidence.v1",
+  "status": "failed_closed_before_source_or_private_admission",
+  "source": {
+    "git_commit": "90b90d2205535e4a3ed294b522331f0c41dccc27",
+    "source_bundle_sha256": "d658dd0b9367930ac291195495ac5d0e8dc54887d045dd34847d9b6a7245b208",
+    "command_sha256": "62b3416ee32d43c406902045094c28d25c109123d919aa23ce84004bab4fd974",
+    "exact_ci_run": 33939561868,
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success"
+  },
+  "observed_result": {
+    "stage": "bootstrap_source_authentication",
+    "status": "failed_closed",
+    "project_imports_reached": false,
+    "private_root_opened": false,
+    "selected_roots_opened": 0,
+    "protected_effects_reachable": false
+  },
+  "diagnosis": {
+    "kind": "operator_invocation_locale_mismatch",
+    "finding": "The isolated host invocation set LANG=C and LC_ALL=C. CPython 3.14 consequently started with utf8_mode=1, while the published command requires the qualified interpreter flag set with utf8_mode=0.",
+    "basis": "A read-only invocation of the exact pinned interpreter reproduced utf8_mode=1 under the rejected locale and utf8_mode=0 under LANG=en_US.UTF-8 plus LC_ALL=en_US.UTF-8. The command rejected the flag set before source authentication, project imports, runtime staging or private-root access.",
+    "not_established": [
+      "source_identity_failure",
+      "runtime_closure_failure",
+      "root_identity_failure",
+      "model_identity_failure",
+      "plan_identity_failure",
+      "gameplay_failure",
+      "model_quality_failure"
+    ]
+  },
+  "review": {
+    "claude_verdict_before_invocation": "GO with no P0 or blocking P1; execution-time source, CI, runtime and private joins remained unknown to that review",
+    "antigravity_verdict_after_rejection": "GO with no P0 or P1; the read-only Gemini 3.8 Flash High review independently confirmed the staged runtime, exact five-case boundary, zero-effect contract, private isolation and train-development separation while leaving live CI, private joins and receipt emission to execution",
+    "codex_adjudication": "The review remains valid for source structure. Its nonblocking observation that bootstrap failures were diagnostically conflated is accepted because the rejected invocation demonstrated that ambiguity."
+  },
+  "retry_policy": "Do not rerun the rejected V2 source identity. Publish a prospectively qualified command identity that distinguishes interpreter-flag rejection from source rejection, require new exact-main CI, and use the canonical en_US.UTF-8 host locale. Stop the lane if that one successor does not pass.",
+  "claim_boundary": "This result is an invocation-bootstrap rejection only. It opened no private file and could not reach a root claim, prediction, outcome, controller action, emulator frame, fit, teacher query, training target, authority promotion, sealed Red access or Crystal access."
+}
