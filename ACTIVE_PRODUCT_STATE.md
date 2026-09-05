@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the completed five-case development evidence, then use an action-free calibration audit to choose the smallest train-only update and a separately lineage-disjoint Red comparison against deterministic completion ordering before fitting or any authority decision.
+- Next decision: Prove action-free capacity for the frozen ten-root targeted train update and eight-root paired Red model/control evaluation. Only a complete lineage-disjoint supply pass may proceed to one immutable schedule and train-only outcome collection.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Qualify a repeatable single-case live runner and view-only timeline, then execute the first fixed-order eligible development root once. Reject the lane if setup cannot reach a model-scored multi-option menu, if the chosen deterministic skill cannot produce a factual ledger result, or if recovery cannot retain the terminal without replay. |
+| Cheapest falsifier | Run one action-free capacity audit for ten upstream-disjoint train roots and eight separate paired-development roots under the frozen kind allocation. Reject or resize the proposed update before gameplay if the supply, lineage separation, targeted acquisition/development coverage or fixed CompletionFirstGoalTeacher control cannot be satisfied. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-five-case-development-outcomes-complete** · status **active** · evidence [verified outcome example](docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json)
+**2026-09-05-five-case-calibration-audited** · status **active** · evidence [falsification](docs/evidence/red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The five bounded cases exercised semantic recovery, acquisition and party-development choices through reusable deterministic skills. One case added a living specimen and another restored capture supplies, directly testing capabilities required by a multi-game living Pokedex while retaining honest calibration failures. |
-| Learning output | Three more authentic model-choice/outcome pairs advance the cumulative totals to 29 development episodes and 66 verified outcome examples. Acquisition raised living 13 to 14 and registered 17 to 18; resupply raised capture items 3 to 7; party development returned a verified terminal without collection or dependency gain. |
+| Product alignment | The audit converts five isolated Red observations into a focused learning plan for title-neutral acquisition, party, storage and supply decisions, then evaluates those decisions against an existing portable deterministic control. It spends the next gameplay budget on model-relevant evidence rather than another one-arm demonstration. |
+| Learning output | No counter advances from this action-free audit. It reproduces five existing outcome pairs and quantifies the reason authority remains zero: 60% threshold accuracy, Brier 0.397811 and log loss 2.458979, with opposing acquisition overconfidence and party-development underconfidence. |
 | Authority delta | No authority changed. The immutable eighteen-example option model remains shadow-only; the five development outcomes are calibration evidence and are forbidden from train fitting or promotion. |
 | Transfer result | None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim. |
-| Blocker | All five declared development contexts are now consumed and terminal. The combined results expose both severe overconfidence on one failed acquisition and severe underconfidence on one verifier-accepted party-development action, while providing no paired deterministic baseline or lineage-disjoint evaluation large enough to support model advantage. |
-| Decision | Close the five-case execution gate and publish its three supplemental outcomes. Next audit prediction error by semantic option kind and specify the smallest train-only update plus a separately lineage-disjoint Red evaluation against deterministic completion ordering; do not manufacture independence from these opened contexts. |
-| Next session | Publish and exact-main green the five-case outcome record, then build an action-free combined calibration report and prospective train/evaluation design. Stop before new controller input, fitting, sealed Red, Crystal or a full replay. |
-| Next falsifier | A path-free combined calibration audit must reproduce all five committed predictions and factual outcomes, identify which errors are learnable from train-only evidence, and show that a proposed fresh Red comparison has real upstream lineage separation and a deterministic baseline before any fit or controller-authority change. |
-| Stop condition | Stop if the next design reuses any of the five opened development contexts as unseen evidence, fits on development, lacks an explicit deterministic control, invents lineage independence, patches one route or species, invokes a teacher, opens Crystal or sealed Red, or starts a full replay. |
+| Blocker | The five-case audit measures severe two-sided confidence error but supplies no fit-eligible row and no prospective control comparison. The next model update therefore requires new train-only lineages, and model advantage requires separate paired Red roots whose policies are committed before outcomes. |
+| Decision | Target one ten-root train-only correction - four acquisition, four party development, one storage and one resupply - then compare the updated model with the frozen CompletionFirstGoalTeacher on at least eight lineage-disjoint paired development roots. First prove that complete supply exists action-free; stop rather than reuse or relabel an opened context. |
+| Next session | Implement and mutation-test the zero-effect capacity audit for the frozen ten-train/eight-development design, using existing public catalog and lineage contracts. Stop before freezing private roots, controller input, fitting, teacher use, sealed Red, Crystal or a full replay. |
+| Next falsifier | An action-free supply audit must find ten outcome-unopened train roots with the frozen 4/4/1/1 kind allocation plus eight separate development roots suitable for paired model/control execution. Any train/development upstream overlap, opened outcome or insufficient targeted kind coverage rejects this design before controller input. |
+| Stop condition | Stop if the capacity design cannot supply all declared train and paired-development lineages without reuse, if it changes the frozen control or kind allocation after outcomes, or if implementation requires a route/species patch, teacher, private outcome open, fit, sealed Red, Crystal or full replay. |
 
 ### Stop conditions
 
