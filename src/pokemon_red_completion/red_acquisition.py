@@ -285,6 +285,29 @@ class RedAreaDecision:
 class RedAreaExecutionError(RuntimeError):
     """The semantic area executor violated a bounded acquisition contract."""
 
+    def __init__(self, message: str, *, reason_code: str = "area_execution_failed") -> None:
+        if not isinstance(message, str) or not message:
+            raise TypeError("area execution error needs a message")
+        if not _is_failure_reason_code(reason_code):
+            raise ValueError("area execution reason code must be canonical snake case")
+        super().__init__(message)
+        self.reason_code = reason_code
+
+
+def _is_failure_reason_code(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and bool(value)
+        and value[0].isalpha()
+        and value[0].islower()
+        and all(
+            character.islower() or character.isdigit() or character == "_"
+            for character in value
+        )
+        and "__" not in value
+        and not value.endswith("_")
+    )
+
 
 class RedAreaExecutor(Protocol):
     """Narrow game-adapter port used by the reusable source survey loop."""
@@ -581,13 +604,17 @@ def run_red_area_survey(
                 encounters_seen += 1
                 if encounters_seen > policy.max_encounters:
                     raise RedAreaExecutionError(
-                        f"{source_id} exceeded {policy.max_encounters} encountered Pokémon"
+                        f"{source_id} exceeded {policy.max_encounters} encountered Pokémon",
+                        reason_code="encounter_limit_exceeded",
                     )
             continue
         if decision.directive is RedAreaDirective.CAPTURE_ENCOUNTER:
             species_ref = decision.species_ref
             if species_ref is None:
-                raise RedAreaExecutionError("capture directive omitted its species")
+                raise RedAreaExecutionError(
+                    "capture directive omitted its species",
+                    reason_code="capture_directive_missing_species",
+                )
             before = Counter(item.species_ref for item in observation.specimens)[species_ref]
             captured = executor.capture_encounter(species_ref)
             after_observation = executor.read_collection()
@@ -595,13 +622,15 @@ def run_red_area_survey(
             if captured is False:
                 if after != before or executor.encountered_species_ref() is not None:
                     raise RedAreaExecutionError(
-                        f"{source_id} capture retry changed collection or kept its encounter"
+                        f"{source_id} capture retry changed collection or kept its encounter",
+                        reason_code="capture_retry_postcondition_failed",
                     )
                 flees += 1
                 continue
             if after != before + 1 or executor.encountered_species_ref() is not None:
                 raise RedAreaExecutionError(
-                    f"{source_id} capture did not retain exactly one {species_ref}"
+                    f"{source_id} capture did not retain exactly one {species_ref}",
+                    reason_code="capture_retention_postcondition_failed",
                 )
             captures += 1
             if policy.capture_quota is not None and captures >= policy.capture_quota:
@@ -624,12 +653,18 @@ def run_red_area_survey(
         if decision.directive is RedAreaDirective.FLEE_ENCOUNTER:
             executor.flee_encounter()
             if executor.encountered_species_ref() is not None:
-                raise RedAreaExecutionError(f"{source_id} flee did not end the encounter")
+                raise RedAreaExecutionError(
+                    f"{source_id} flee did not end the encounter",
+                    reason_code="flee_postcondition_failed",
+                )
             flees += 1
             continue
         if decision.directive is RedAreaDirective.SWITCH_BOX:
             if decision.box_index is None:
-                raise RedAreaExecutionError("switch-box directive omitted its destination")
+                raise RedAreaExecutionError(
+                    "switch-box directive omitted its destination",
+                    reason_code="box_switch_directive_missing_destination",
+                )
             before_species = Counter(item.species_ref for item in observation.specimens)
             executor.switch_box(decision.box_index)
             after_observation = executor.read_collection()
@@ -639,17 +674,25 @@ def run_red_area_survey(
                 or before_species != after_species
             ):
                 raise RedAreaExecutionError(
-                    f"{source_id} box switch changed the retained collection"
+                    f"{source_id} box switch changed the retained collection",
+                    reason_code="box_switch_postcondition_failed",
                 )
             box_switches += 1
             continue
         if decision.directive is RedAreaDirective.MAKE_STORAGE_ROOM:
             raise RedAreaExecutionError(
-                f"{source_id} cannot continue because all verified storage is full"
+                f"{source_id} cannot continue because all verified storage is full",
+                reason_code="verified_storage_full",
             )
-        raise RedAreaExecutionError(f"unsupported area directive {decision.directive}")
+        raise RedAreaExecutionError(
+            f"unsupported area directive {decision.directive}",
+            reason_code="unsupported_area_directive",
+        )
 
-    raise RedAreaExecutionError(f"{source_id} exceeded {policy.max_actions} semantic actions")
+    raise RedAreaExecutionError(
+        f"{source_id} exceeded {policy.max_actions} semantic actions",
+        reason_code="semantic_action_limit_exceeded",
+    )
 
 
 def _plan_one_more(

@@ -1,5 +1,35 @@
 # Handoff
 
+## Latest checkpoint: two real choices retained; diagnose acquisition failures before case three
+
+Exact main `31e0d92588640416bfc656f1125707807b43898e` passed CI `33959029027/1`,
+reopened all five development cases, and executed the first two in fixed order. The immutable
+18-example option model chose `resupply` at 0.9973 predicted success in the first context. The
+deterministic mart provider succeeded in 41 post-decision actions and 3,396 frames, raised capture
+items from one to five, and reduced resource pressure from 0.9 to 0.5. The second choice selected
+`acquire_species` at 0.9955 predicted success. Routing succeeded, but the area-survey provider
+raised `RedAreaExecutionError` after 393 actions and 22,140 frames with no verified completion or
+dependency gain. Both terminals are durable and nonretryable; three cases remain.
+
+This is two genuine model-choice/outcome pairs, not training or promotion. Counters advance to 26
+development episodes and 63 verified outcome examples; composition, fits, authority and transfer
+do not move. The second result is an important calibration failure, but its V1 trace retained only
+the broad exception type. See the [path-free two-result evidence](docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json).
+
+The active repair gives every reusable area/capture contract failure a canonical reason code and
+copies only that sanitized code into the durable private trace. Messages, paths, coordinates and
+species identities are excluded; arbitrary or malformed provider errors become
+`execution_failed`. Codex owns qualification, registry regeneration, publication, green exact-main
+CI and action-free proof that both historical terminals still recover. Only then may the next
+fixed-order case run once. Do not patch Route 16, fit on development, invoke a teacher, open
+Crystal or run a full replay.
+
+Local qualification is complete: **6,769 tests passed, four skipped and one expected failure in
+18m07s**; Ruff, Mypy across 369 package modules plus all touched scripts, documentation/focus checks
+and all four registry reproductions are green. The real action-free inventory reopened all five
+inputs and reported **2 retained terminals · 3 available claims · 0 incomplete claims**, with every
+protected effect at zero.
+
 ## Latest checkpoint: first live launch preserved all five cases; runtime-stage repair is local
 
 The first invocation from exact main `21bc499409f3fc961576cae03fbfc1085dbb08ff` and green CI

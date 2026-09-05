@@ -24,6 +24,7 @@ from pokemon_red_completion.private_artifacts import (
     initialize_private_root,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_living_dex_capture_plan import (
     build_red_living_dex_prospective_capture_plan,
 )
@@ -354,3 +355,58 @@ def test_cold_runtime_hidden_protected_effect_is_target_free(
     assert len(factory.arms) == arms_before
     assert meter.checkpoint().model_predictions == 1
     assert meter.provider_executions == 0
+
+
+def test_selected_failure_trace_retains_only_canonical_reason_code(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    scenario, _capture, _factory, _meter, _store, _registry = _red_scenario(tmp_path)
+    import pokemon_red_completion.red_living_dex_causal_adapter as adapter
+
+    def fail_selected_provider(*_args: object, **_kwargs: object) -> None:
+        raise RedAreaExecutionError(
+            "/Users/private/Pokemon Red.gb: Route 16 failed",
+            reason_code="route_step_no_progress",
+        )
+
+    monkeypatch.setattr(adapter, "_execute_selected_provider", fail_selected_provider)
+    gate = LivingDexControllerGate()
+    with scenario.resolve_selected(0, gate) as arm:
+        gate.authorize_controller_input()
+        with pytest.raises(RedAreaExecutionError):
+            arm.execute(gate)
+        trace = arm.action_trace()
+
+    assert trace["execution_exception_type"] == "RedAreaExecutionError"
+    assert trace["execution_failure_reason_code"] == "route_step_no_progress"
+    assert "/Users/private" not in str(trace)
+    assert "Route 16" not in str(trace)
+
+
+def test_selected_failure_trace_rejects_untrusted_reason_code(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    scenario, _capture, _factory, _meter, _store, _registry = _red_scenario(tmp_path)
+    import pokemon_red_completion.red_living_dex_causal_adapter as adapter
+
+    class UntrustedProviderError(RuntimeError):
+        reason_code = "/Users/private/Pokemon Red.gb"
+
+    def fail_selected_provider(*_args: object, **_kwargs: object) -> None:
+        raise UntrustedProviderError("Route 16 private failure")
+
+    monkeypatch.setattr(adapter, "_execute_selected_provider", fail_selected_provider)
+    gate = LivingDexControllerGate()
+    with scenario.resolve_selected(0, gate) as arm:
+        gate.authorize_controller_input()
+        with pytest.raises(UntrustedProviderError):
+            arm.execute(gate)
+        trace = arm.action_trace()
+
+    assert trace["execution_exception_type"] == "UntrustedProviderError"
+    assert trace["execution_failure_reason_code"] == "execution_failed"
+    assert "/Users/private" not in str(trace)
+    assert "Pokemon Red.gb" not in str(trace)
+    assert "Route 16" not in str(trace)

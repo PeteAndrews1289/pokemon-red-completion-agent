@@ -1,5 +1,26 @@
 # Model-first development roadmap
 
+## Active checkpoint: one success, one overconfident failure; preserve the reason next time
+
+The first two fixed-order cases have now produced real development evidence. The title-neutral
+model chose resupply and the deterministic skill improved inventory in the first case. It then
+assigned 0.9955 success probability to acquisition in the second case, but the selected area skill
+failed after successful routing and produced no ledger gain. Both outcomes are durable and
+nonretryable; three cases remain. This is exactly the kind of negative evidence the development
+loop needs, not a reason to fit on the development partition or patch one route.
+
+Before case three, publish one bounded observability repair: every area/capture contract failure
+receives a stable semantic reason, and the shared selected-arm adapter retains only that reason or
+`execution_failed`. Pass ROM-free mutation-sensitive tests, reopen both V1 terminals unchanged,
+regenerate source registries, merge and require green exact-main CI. Then execute only the next
+fixed-order case and stop at its terminal. If acquisition fails again, the reason decides whether
+the reusable skill needs repair or the option model needs better train-only evidence. No teacher,
+development fit, Crystal, sealed Red, route-specific patch or full replay is open.
+
+The repair's complete local gate passes 6,769 tests in 18m07s, lint, package and touched-script
+typing, documentation/focus checks and every registry reproduction. An action-free private reopen
+confirms two retained terminals, three available claims and zero incomplete claims.
+
 ## Latest checkpoint: repair the real runtime boundary, then resume one case
 
 The first live invocation from main `21bc4994` and green CI `33953858337/1` failed before claim,

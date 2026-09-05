@@ -20,6 +20,7 @@ from product_focus import (  # noqa: E402
     _validate_calibration_player_partial_projection,
     _validate_calibration_player_recovery_projection,
     _validate_paired_bounded_player_projection,
+    _validate_repeatable_living_dex_first_two_projection,
     canonical_focus_json,
     focus_progress_fraction,
     focus_scorecard,
@@ -45,6 +46,11 @@ CALIBRATION_PLAYER_PARTIAL_RESULT = (
 CALIBRATION_PLAYER_RECOVERY_RESULT = (
     PROJECT_ROOT
     / "docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json"
+)
+REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -360,14 +366,14 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         ("Causal Train Example · train", 111, 111),
         ("Composition Attempt · development", 6, 6),
         ("Verified Composition Episode · development", 4, 4),
-        ("Development Episode · development", 24, 24),
+        ("Development Episode · development", 26, 24),
     )
-    assert state.progress["outcome_questions"] == {"development": 56, "train": 103}
+    assert state.progress["outcome_questions"] == {"development": 58, "train": 103}
     assert state.progress["model_fits"] == 11
     assert state.progress["composition_attempts"] == 6
     assert state.progress["unseen_comparisons"] == 9
-    assert state.progress["development_episode_attempts"] == 24
-    assert state.progress["verified_outcome_examples"] == 61
+    assert state.progress["development_episode_attempts"] == 26
+    assert state.progress["verified_outcome_examples"] == 63
     assert state.progress["verified_composition_episodes"] == 4
     assert state.progress["causal_train_examples"] == 111
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
@@ -441,6 +447,31 @@ def test_calibration_player_recovery_projection_binds_progress_and_typed_stop() 
     with pytest.raises(ProductFocusError, match="recovery decisions differ"):
         _validate_calibration_player_recovery_projection(changed_arm)
 
+
+def test_repeatable_living_dex_first_two_projection_binds_both_outcomes() -> None:
+    receipt = json.loads(
+        REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT.read_text(encoding="ascii")
+    )
+
+    _validate_repeatable_living_dex_first_two_projection(receipt)
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+    changed_success = deepcopy(receipt)
+    changed_success["cases"][0]["verified_success"] = False
+    with pytest.raises(ProductFocusError, match="first result differs"):
+        _validate_repeatable_living_dex_first_two_projection(changed_success)
+
+    changed_failure = deepcopy(receipt)
+    changed_failure["cases"][1]["completion_gain"] = 1.0
+    with pytest.raises(ProductFocusError, match="second result differs"):
+        _validate_repeatable_living_dex_first_two_projection(changed_failure)
+
+    changed_counter = deepcopy(receipt)
+    changed_counter["counter_treatment"]["composition_attempts_added"] = 2
+    with pytest.raises(ProductFocusError, match="counters differ"):
+        _validate_repeatable_living_dex_first_two_projection(changed_counter)
 
 @pytest.mark.parametrize(
     "counter",
@@ -1607,7 +1638,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
         "Causal Train Example · train: 111/111",
         "Composition Attempt · development: 6/6",
         "Verified Composition Episode · development: 4/4",
-        "Development Episode · development: 24/24",
+        "Development Episode · development: 26/24",
     )
 
 
@@ -1680,8 +1711,8 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 24, 12),
-        ("Verified Outcome Example · development", 61, 12),
+        ("Development Episode · development", 26, 12),
+        ("Verified Outcome Example · development", 63, 12),
         ("Verified Composition Episode · development", 4, 2),
     )
 
@@ -2101,7 +2132,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
         "total": 6,
     }
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 24, "total": 24}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 26, "total": 26}  # type: ignore[index]
     assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
         "zero_shot": "Composition attempts",
         "adaptation": "Verified composition episodes",
@@ -2111,11 +2142,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["model"]["decisions"] == 6  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "fixed heuristic 20/20" in encoded
-    assert "Red multi-goal calibration" in encoded
-    assert "four admitted outcomes" in encoded
+    assert "Red bounded living-Pokedex development" in encoded
+    assert "first two live living-Pokedex choices" in encoded
+    assert "99.55% predicted success" in encoded
     assert "Composition Attempt 6/6" in encoded
     assert "Verified Composition Episode 4/4" in encoded
-    assert "Development Episode 24/24" in encoded
+    assert "Development Episode 26/24" in encoded
     assert "Composition attempts" in encoded
     assert "Verified composition episodes" in encoded
     assert "Development episodes" in encoded

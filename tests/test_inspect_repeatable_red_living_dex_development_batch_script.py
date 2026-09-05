@@ -92,8 +92,90 @@ def test_command_emits_path_free_repeatable_readiness(
         "inspect_red_living_dex_development_batch_inputs",
         lambda *_args, **_kwargs: SimpleNamespace(public_dict=lambda: public),
     )
+    monkeypatch.setattr(
+        module,
+        "_execution_inventory",
+        lambda *_args: {
+            "cases_remaining": 3,
+            "claims_available": 3,
+            "incomplete_claims": 0,
+            "terminals_retained": 2,
+        },
+    )
 
     assert module.main(_argv(tmp_path)) == 0
     result = json.loads(capsys.readouterr().out)
-    assert result == public
+    assert result == {
+        "cases_remaining": 3,
+        "claims_available": 3,
+        "incomplete_claims": 0,
+        "private_identity_fields": 0,
+        "private_path_fields": 0,
+        "schema": "pokemon.red.repeatable-development-input-readiness.v2",
+        "status": "five_development_inputs_joined_with_execution_inventory",
+        "terminals_retained": 2,
+    }
     assert str(tmp_path) not in json.dumps(result)
+
+
+def test_execution_inventory_distinguishes_terminals_available_and_incomplete(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _module()
+    assignments = tuple(
+        SimpleNamespace(
+            ordinal=index,
+            root=SimpleNamespace(
+                root_consumption_sha256=f"logical-{index}",
+                physical_root_sha256=f"physical-{index}",
+            ),
+        )
+        for index in range(5)
+    )
+    monkeypatch.setattr(module, "fixed_account_claim_registry_root", lambda: object())
+    monkeypatch.setattr(
+        module,
+        "find_red_living_dex_development_run_terminal",
+        lambda _store, assignment: object() if assignment.ordinal < 2 else None,
+    )
+    monkeypatch.setattr(
+        module,
+        "observe_claim_first_pair_availability",
+        lambda _registry, logical, _physical: logical in {
+            "logical-2",
+            "logical-3",
+        },
+    )
+
+    assert module._execution_inventory(object(), assignments) == {
+        "cases_remaining": 3,
+        "claims_available": 2,
+        "incomplete_claims": 1,
+        "terminals_retained": 2,
+    }
+
+
+def test_execution_inventory_rejects_terminal_with_available_claim(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _module()
+    assignment = SimpleNamespace(
+        root=SimpleNamespace(
+            root_consumption_sha256="logical",
+            physical_root_sha256="physical",
+        )
+    )
+    monkeypatch.setattr(module, "fixed_account_claim_registry_root", lambda: object())
+    monkeypatch.setattr(
+        module,
+        "find_red_living_dex_development_run_terminal",
+        lambda *_args: object(),
+    )
+    monkeypatch.setattr(
+        module,
+        "observe_claim_first_pair_availability",
+        lambda *_args: True,
+    )
+
+    with pytest.raises(Exception, match="terminal_claim_state"):
+        module._execution_inventory(object(), (assignment,))

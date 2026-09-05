@@ -1,0 +1,106 @@
+{
+  "schema": "pokemon.red.repeatable-living-dex-development-first-two-results.v1",
+  "status": "two_terminal_development_outcomes_retained_one_success_one_failure",
+  "recorded_on": "2026-09-05",
+  "source_verification": {
+    "source_commit": "31e0d92588640416bfc656f1125707807b43898e",
+    "github_ci_run": 33959029027,
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "reviewed_runtime_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62"
+  },
+  "model": {
+    "model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "training_examples": 18,
+    "authority": "shadow_development_only"
+  },
+  "cases": [
+    {
+      "ordinal": 0,
+      "source_goal_label": "restore_team",
+      "candidate_count": 3,
+      "selected_candidate_index": 2,
+      "selected_option_kind": "resupply",
+      "predicted_verified_success": 0.997284733145678,
+      "provider_contract": "RedMartResupplyGoalProvider",
+      "execution_status": "returned",
+      "verified_success": true,
+      "controller_actions_after_decision": 41,
+      "emulator_frames_after_decision": 3396,
+      "resource_pressure_before": 0.9,
+      "resource_pressure_after": 0.5,
+      "capture_item_count_before": 1,
+      "capture_item_count_after": 5,
+      "living_collection_before": 13,
+      "living_collection_after": 13,
+      "registered_collection_before": 18,
+      "registered_collection_after": 18,
+      "durable_terminal": true,
+      "retry_allowed": false
+    },
+    {
+      "ordinal": 1,
+      "source_goal_label": "advance_story",
+      "candidate_count": 3,
+      "selected_candidate_index": 0,
+      "selected_option_kind": "acquire_species",
+      "predicted_verified_success": 0.9955409661234467,
+      "provider_contract": "RedAreaSurveyGoalProvider",
+      "transport_kind": "routed",
+      "execution_status": "raised_exception",
+      "execution_exception_type": "RedAreaExecutionError",
+      "verified_success": false,
+      "controller_actions_after_decision": 393,
+      "emulator_frames_after_decision": 22140,
+      "completion_gain": 0.0,
+      "dependency_unlock_gain": 0.0,
+      "durable_terminal": true,
+      "retry_allowed": false,
+      "diagnostic_limit": "The V1 private trace retained the exception type but not a structured component reason. No route- or species-specific cause is inferred."
+    }
+  ],
+  "aggregate": {
+    "model_predictions": 2,
+    "durable_development_outcomes": 2,
+    "verified_successes": 1,
+    "verified_failures": 1,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "training_targets_emitted": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "cases_remaining": 3
+  },
+  "counter_treatment": {
+    "development_episode_attempts_added": 2,
+    "verified_outcome_examples_added": 2,
+    "outcome_questions_development_added": 2,
+    "composition_attempts_added": 0,
+    "verified_composition_episodes_added": 0,
+    "causal_train_examples_added": 0,
+    "model_fits_added": 0,
+    "unseen_comparisons_added": 0,
+    "authority_promotions_added": 0,
+    "transfer_results_added": 0
+  },
+  "adjudication": {
+    "supported": [
+      "The immutable model selected one option in each of two authentic multi-option Red development contexts without teacher input.",
+      "The selected deterministic resupply skill produced a durable verified resource improvement in one context.",
+      "The selected deterministic acquisition skill produced a durable factual failure in the other context.",
+      "The failed prediction was materially overconfident in this context and is useful negative calibration evidence."
+    ],
+    "unsupported": [
+      "model_advantage",
+      "fresh_generalization",
+      "multi_decision_composition",
+      "model_fit_on_development",
+      "gameplay_authority_promotion",
+      "sealed_red_evaluation",
+      "crystal_transfer",
+      "full_game_completion",
+      "living_pokedex_completion"
+    ]
+  },
+  "next_gate": "Publish canonical failure-reason retention for provider exceptions, recover both historical terminals unchanged, require green exact-main CI, then use the next bounded case only to diagnose or falsify reusable skill behavior."
+}

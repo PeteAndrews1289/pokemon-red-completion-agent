@@ -138,14 +138,20 @@ _CAUSAL_MODEL_UPDATE_RESULT_PATH = (
 _CAUSAL_MODEL_UPDATE_RESULT_SHA256 = (
     "fdc1d211e60c5acc961bf7b561ef2461231b544121904f61668d9c24e0153b52"
 )
+_REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_PATH = (
+    "docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json"
+)
+_REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_SHA256 = (
+    "f15413be01fc942643923fd4bc563f655acf89ff88f038aa2495e9c1b5c712ca"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
     "composition_attempts": 6,
-    "development_episode_attempts": 24,
+    "development_episode_attempts": 26,
     "model_fits": 11,
-    "outcome_questions": {"development": 56, "train": 103},
+    "outcome_questions": {"development": 58, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
     "synthetic_rootless_train_outcomes": 8,
@@ -153,7 +159,7 @@ _PROJECTED_COUNTERS = {
     "transfer_results": 0,
     "unseen_comparisons": 9,
     "verified_composition_episodes": 4,
-    "verified_outcome_examples": 61,
+    "verified_outcome_examples": 63,
 }
 
 
@@ -1022,7 +1028,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 11:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 12:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1315,11 +1321,143 @@ def _validate_projected_counters(
     if not isinstance(causal_model_update, Mapping):
         raise ProductFocusError("causal model update evidence is invalid")
     _validate_causal_model_update_projection(causal_model_update)
+    first_two_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 11],
+        subject="projected repeatable living-Dex first-two evidence",
+    )
+    if first_two_evidence != {
+        "kind": "verified_outcome_example",
+        "path": _REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_PATH,
+        "sha256": _REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    first_two_path = (root / _REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_PATH).resolve()
+    try:
+        first_two = json.loads(
+            first_two_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError(
+            "repeatable living-Dex first-two evidence is invalid"
+        ) from None
+    if not isinstance(first_two, Mapping):
+        raise ProductFocusError("repeatable living-Dex first-two evidence is invalid")
+    _validate_repeatable_living_dex_first_two_projection(first_two)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
             "active learning counters differ from their typed evidence projection"
         )
+
+
+def _validate_repeatable_living_dex_first_two_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project two durable shadow decisions without inventing composition or authority."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.repeatable-living-dex-development-first-two-results.v1"
+        or receipt.get("status")
+        != "two_terminal_development_outcomes_retained_one_success_one_failure"
+        or receipt.get("recorded_on") != "2026-09-05"
+    ):
+        raise ProductFocusError("repeatable living-Dex first-two status differs")
+    cases = _sequence(receipt, "cases", subject="repeatable living-Dex first-two evidence")
+    if len(cases) != 2:
+        raise ProductFocusError("repeatable living-Dex first-two cases differ")
+    first = _mapping_value(cases[0], subject="repeatable living-Dex first case")
+    second = _mapping_value(cases[1], subject="repeatable living-Dex second case")
+    if {
+        "ordinal": first.get("ordinal"),
+        "selected_option_kind": first.get("selected_option_kind"),
+        "execution_status": first.get("execution_status"),
+        "verified_success": first.get("verified_success"),
+        "controller_actions_after_decision": first.get("controller_actions_after_decision"),
+        "emulator_frames_after_decision": first.get("emulator_frames_after_decision"),
+        "capture_item_count_before": first.get("capture_item_count_before"),
+        "capture_item_count_after": first.get("capture_item_count_after"),
+        "durable_terminal": first.get("durable_terminal"),
+        "retry_allowed": first.get("retry_allowed"),
+    } != {
+        "ordinal": 0,
+        "selected_option_kind": "resupply",
+        "execution_status": "returned",
+        "verified_success": True,
+        "controller_actions_after_decision": 41,
+        "emulator_frames_after_decision": 3396,
+        "capture_item_count_before": 1,
+        "capture_item_count_after": 5,
+        "durable_terminal": True,
+        "retry_allowed": False,
+    }:
+        raise ProductFocusError("repeatable living-Dex first result differs")
+    if {
+        "ordinal": second.get("ordinal"),
+        "selected_option_kind": second.get("selected_option_kind"),
+        "execution_status": second.get("execution_status"),
+        "execution_exception_type": second.get("execution_exception_type"),
+        "verified_success": second.get("verified_success"),
+        "controller_actions_after_decision": second.get("controller_actions_after_decision"),
+        "emulator_frames_after_decision": second.get("emulator_frames_after_decision"),
+        "completion_gain": second.get("completion_gain"),
+        "dependency_unlock_gain": second.get("dependency_unlock_gain"),
+        "durable_terminal": second.get("durable_terminal"),
+        "retry_allowed": second.get("retry_allowed"),
+    } != {
+        "ordinal": 1,
+        "selected_option_kind": "acquire_species",
+        "execution_status": "raised_exception",
+        "execution_exception_type": "RedAreaExecutionError",
+        "verified_success": False,
+        "controller_actions_after_decision": 393,
+        "emulator_frames_after_decision": 22140,
+        "completion_gain": 0.0,
+        "dependency_unlock_gain": 0.0,
+        "durable_terminal": True,
+        "retry_allowed": False,
+    }:
+        raise ProductFocusError("repeatable living-Dex second result differs")
+    aggregate = _mapping(
+        receipt,
+        "aggregate",
+        subject="repeatable living-Dex first-two evidence",
+    )
+    if aggregate != {
+        "authority_promotions": 0,
+        "cases_remaining": 3,
+        "durable_development_outcomes": 2,
+        "model_fits": 0,
+        "model_predictions": 2,
+        "teacher_fallbacks": 0,
+        "teacher_queries": 0,
+        "training_targets_emitted": 0,
+        "verified_failures": 1,
+        "verified_successes": 1,
+    }:
+        raise ProductFocusError("repeatable living-Dex first-two aggregate differs")
+    counters = _mapping(
+        receipt,
+        "counter_treatment",
+        subject="repeatable living-Dex first-two evidence",
+    )
+    if counters != {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 0,
+        "composition_attempts_added": 0,
+        "development_episode_attempts_added": 2,
+        "model_fits_added": 0,
+        "outcome_questions_development_added": 2,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_composition_episodes_added": 0,
+        "verified_outcome_examples_added": 2,
+    }:
+        raise ProductFocusError("repeatable living-Dex first-two counters differ")
 
 
 def _validate_causal_model_update_projection(

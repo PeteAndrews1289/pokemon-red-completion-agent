@@ -80,6 +80,7 @@ RED_LIVING_DEX_CAUSAL_OUTCOME_PROVENANCE_SCHEMA = (
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+_FAILURE_REASON_CODE = re.compile(r"[a-z][a-z0-9]*(?:_[a-z0-9]+)*\Z")
 
 
 class RedLivingDexCausalAdapterError(RuntimeError):
@@ -122,6 +123,7 @@ class _SelectedRuntimeState:
     report: GoalExecutionReport | None = None
     route_report_sha256: str | None = None
     execution_exception_type: str | None = None
+    execution_failure_reason_code: str | None = None
     provenance_failed: bool = False
 
 
@@ -371,6 +373,7 @@ def build_red_living_dex_causal_scenario_from_capture(
                         )
                     except BaseException as error:
                         state.execution_exception_type = type(error).__name__
+                        state.execution_failure_reason_code = _failure_reason_code(error)
                         if state.binding is None:
                             state.provenance_failed = True
                         raise
@@ -579,6 +582,7 @@ def _observe_selected_runtime(
         "before_observation": state.before.observation.public_dict(),
         "before_observation_sha256": state.before.observation_sha256,
         "execution_exception_type": state.execution_exception_type,
+        "execution_failure_reason_code": state.execution_failure_reason_code,
         "goal_report_sha256": (
             None if state.report is None else _goal_report_sha256(state.report)
         ),
@@ -681,6 +685,7 @@ def _action_trace(
         "controller_actions": actions,
         "emulator_frames": frames,
         "execution_exception_type": state.execution_exception_type,
+        "execution_failure_reason_code": state.execution_failure_reason_code,
         "goal_report_sha256": (
             None if state.report is None else _goal_report_sha256(state.report)
         ),
@@ -691,6 +696,15 @@ def _action_trace(
             capture.fork_proofs[selected_index].private_dict()
         ),
     }
+
+
+def _failure_reason_code(error: BaseException) -> str:
+    """Retain a bounded provider reason without retaining its private message."""
+
+    value = getattr(error, "reason_code", None)
+    if isinstance(value, str) and _FAILURE_REASON_CODE.fullmatch(value):
+        return value
+    return "execution_failed"
 
 
 def _goal_report_sha256(report: GoalExecutionReport) -> str:

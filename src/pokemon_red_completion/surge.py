@@ -2216,7 +2216,10 @@ def _weakening_attack_allowed(
     if directive is not CaptureDirective.WEAKEN_TARGET:
         return False
     if attacks_completed >= attack_budget:
-        raise RedAreaExecutionError("capture still requires weakening after its attack budget")
+        raise RedAreaExecutionError(
+            "capture still requires weakening after its attack budget",
+            reason_code="weakening_attack_budget_exhausted",
+        )
     return True
 
 
@@ -2291,31 +2294,43 @@ class LiveWildEncounterExecutor:
         if not raw.battle_state:
             return None
         if raw.enemy_species_id is None:
-            raise RedAreaExecutionError(f"{self._label} battle lacks an enemy species")
+            raise RedAreaExecutionError(
+                f"{self._label} battle lacks an enemy species",
+                reason_code="encounter_species_missing",
+            )
         try:
             return red_species_ref(red_internal_species_number(raw.enemy_species_id))
         except ValueError as error:
             raise RedAreaExecutionError(
-                f"{self._label} battle exposed invalid species {raw.enemy_species_id:#04x}"
+                f"{self._label} battle exposed invalid species {raw.enemy_species_id:#04x}",
+                reason_code="encounter_species_invalid",
             ) from error
 
     def seek_encounter(self) -> None:
         raise RedAreaExecutionError(
-            f"{self._label} has no encounter route; a semantic venue walker must seek"
+            f"{self._label} has no encounter route; a semantic venue walker must seek",
+            reason_code="encounter_route_missing",
         )
 
     def capture_encounter(self, species_ref: str) -> bool:
         encountered = self.encountered_species_ref()
         if encountered != species_ref:
             raise RedAreaExecutionError(
-                f"{self._label} capture expected {species_ref}, encountered {encountered}"
+                f"{self._label} capture expected {species_ref}, encountered {encountered}",
+                reason_code="capture_target_mismatch",
             )
         raw = self._reader.read()
         if raw.enemy_species_id is None:
-            raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
+            raise RedAreaExecutionError(
+                f"{self._label} capture lacks an enemy species",
+                reason_code="capture_species_missing",
+            )
         policy = _wild_capture_policy(raw.enemy_species_id)
         if raw.enemy_hp is None or raw.enemy_max_hp is None:
-            raise RedAreaExecutionError(f"{self._label} capture lacks enemy HP evidence")
+            raise RedAreaExecutionError(
+                f"{self._label} capture lacks enemy HP evidence",
+                reason_code="capture_hp_evidence_missing",
+            )
         weakening_budget = _wild_capture_weakening_budget(
             raw.enemy_species_id,
             raw.enemy_hp,
@@ -2363,7 +2378,8 @@ class LiveWildEncounterExecutor:
                 )
             except RedAreaExecutionError as error:
                 raise RedAreaExecutionError(
-                    f"{self._label} exceeded its bounded weakening attack budget"
+                    f"{self._label} exceeded its bounded weakening attack budget",
+                    reason_code="weakening_attack_budget_exhausted",
                 ) from error
             if not attack_allowed:
                 break
@@ -2388,15 +2404,22 @@ class LiveWildEncounterExecutor:
     def flee_encounter(self) -> None:
         raw = self._reader.read()
         if not raw.battle_state:
-            raise RedAreaExecutionError(f"{self._label} cannot flee without an encounter")
+            raise RedAreaExecutionError(
+                f"{self._label} cannot flee without an encounter",
+                reason_code="flee_without_encounter",
+            )
         balls = _ordinary_capture_ball_inventory(_bag(self._emulator))
         _flee(self._emulator, self._executor, self._reader, raw)
         if _ordinary_capture_ball_inventory(_bag(self._emulator)) != balls:
-            raise RedAreaExecutionError(f"{self._label} flee changed ordinary capture balls")
+            raise RedAreaExecutionError(
+                f"{self._label} flee changed ordinary capture balls",
+                reason_code="flee_inventory_postcondition_failed",
+            )
 
     def switch_box(self, box_index: int) -> None:
         raise RedAreaExecutionError(
-            f"{self._label} cannot switch to box {box_index} without leaving the source"
+            f"{self._label} cannot switch to box {box_index} without leaving the source",
+            reason_code="box_switch_requires_source_exit",
         )
 
 
@@ -2431,7 +2454,10 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
 
     def seek_encounter(self) -> None:
         if self.encountered_species_ref() is not None:
-            raise RedAreaExecutionError(f"{self._label} cannot seek during an encounter")
+            raise RedAreaExecutionError(
+                f"{self._label} cannot seek during an encounter",
+                reason_code="seek_requested_during_encounter",
+            )
         if not self._directions:
             self._start_leg()
         self._advance_one_direction()
@@ -2448,12 +2474,16 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
             raw = self._advance_one_direction()
             if raw.battle_state:
                 self.flee_encounter()
-        raise RedAreaExecutionError(f"{self._label} could not normalize to its starting endpoint")
+        raise RedAreaExecutionError(
+            f"{self._label} could not normalize to its starting endpoint",
+            reason_code="corridor_normalization_failed",
+        )
 
     def _start_leg(self) -> None:
         if self._completed_legs >= self._max_legs:
             raise RedAreaExecutionError(
-                f"{self._label} exceeded {self._max_legs} bounded survey legs"
+                f"{self._label} exceeded {self._max_legs} bounded survey legs",
+                reason_code="survey_leg_limit_exceeded",
             )
         directions = (
             _inverse_directions(self._forward_directions)
@@ -2490,7 +2520,8 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
                 self._completed_legs += 1
         elif not raw.battle_state:
             raise RedAreaExecutionError(
-                f"{self._label} route step neither moved nor entered battle"
+                f"{self._label} route step neither moved nor entered battle",
+                reason_code="route_step_no_progress",
             )
         return raw
 

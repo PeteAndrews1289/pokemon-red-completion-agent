@@ -15,14 +15,22 @@ SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+from pokemon_red_completion.claim_first_admission import (  # noqa: E402
+    observe_claim_first_pair_availability,
+)
+from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
+    fixed_account_claim_registry_root,
+)
 from pokemon_red_completion.private_artifacts import (  # noqa: E402
     PrivateArtifactError,
+    PrivateArtifactRoot,
     open_private_root,
 )
 from pokemon_red_completion.red_living_dex_clustered_development_runner import (  # noqa: E402
     RedLivingDexClusteredDevelopmentRunnerError,
 )
 from pokemon_red_completion.red_living_dex_development_batch import (  # noqa: E402
+    RedLivingDexDevelopmentBatchAssignment,
     RedLivingDexDevelopmentBatchError,
     inspect_red_living_dex_development_batch_inputs,
 )
@@ -31,6 +39,9 @@ from pokemon_red_completion.red_living_dex_development_input import (  # noqa: E
     RedLivingDexDevelopmentInputError,
     load_red_living_dex_development_batch_assignments,
     source_private_storage_is_separate,
+)
+from pokemon_red_completion.red_living_dex_development_run_ledger import (  # noqa: E402
+    find_red_living_dex_development_run_terminal,
 )
 from pokemon_red_completion.red_living_dex_development_supply import (  # noqa: E402
     RedLivingDexDevelopmentSupplyError,
@@ -105,7 +116,11 @@ def main(argv: list[str] | None = None) -> int:
         )
         if meter.checkpoint() != RedLivingDexSetupEffectMeter().checkpoint():
             raise RedLivingDexDevelopmentInputError("forbidden_effect")
-        print(_encoded(receipt.public_dict()))
+        result = receipt.public_dict()
+        result.update(_execution_inventory(store, assignments))
+        result["schema"] = "pokemon.red.repeatable-development-input-readiness.v2"
+        result["status"] = "five_development_inputs_joined_with_execution_inventory"
+        print(_encoded(result))
         return 0
     except RedLivingDexDevelopmentInputError as error:
         stage = error.stage
@@ -135,6 +150,37 @@ def main(argv: list[str] | None = None) -> int:
     }
     print(_encoded(failure))
     return 1
+
+
+def _execution_inventory(
+    store: PrivateArtifactRoot,
+    assignments: tuple[RedLivingDexDevelopmentBatchAssignment, ...],
+) -> dict[str, int]:
+    registry = fixed_account_claim_registry_root()
+    available = 0
+    terminals = 0
+    incomplete = 0
+    for assignment in assignments:
+        terminal = find_red_living_dex_development_run_terminal(store, assignment)
+        claim_available = observe_claim_first_pair_availability(
+            registry,
+            assignment.root.root_consumption_sha256,
+            assignment.root.physical_root_sha256,
+        )
+        if terminal is not None:
+            if claim_available:
+                raise RedLivingDexDevelopmentInputError("terminal_claim_state")
+            terminals += 1
+        elif claim_available:
+            available += 1
+        else:
+            incomplete += 1
+    return {
+        "cases_remaining": len(assignments) - terminals,
+        "claims_available": available,
+        "incomplete_claims": incomplete,
+        "terminals_retained": terminals,
+    }
 
 
 def _encoded(value: dict[str, object]) -> str:

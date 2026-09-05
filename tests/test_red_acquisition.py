@@ -464,12 +464,22 @@ def test_area_capture_quantum_must_be_a_positive_integer(capture_quota: object) 
 def test_area_executor_enforces_its_encounter_bound() -> None:
     executor = _RouteOneSurveySimulation((21, 21, 16, 19))
 
-    with pytest.raises(RedAreaExecutionError, match="exceeded 1 encountered"):
+    with pytest.raises(RedAreaExecutionError, match="exceeded 1 encountered") as raised:
         run_red_area_survey(
             "wild:Route1:grass",
             executor,
             policy=RedAreaExecutionPolicy(max_actions=20, max_encounters=1),
         )
+    assert raised.value.reason_code == "encounter_limit_exceeded"
+
+
+@pytest.mark.parametrize(
+    "reason_code",
+    ("", "PrivatePath", "private-path", "private__path", "private_path_", 1),
+)
+def test_area_failure_reason_must_be_canonical_snake_case(reason_code: object) -> None:
+    with pytest.raises((TypeError, ValueError)):
+        RedAreaExecutionError("bounded failure", reason_code=reason_code)  # type: ignore[arg-type]
 
 
 def test_planner_seeks_a_direct_source_and_stops_for_a_retained_target() -> None:

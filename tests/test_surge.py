@@ -1453,8 +1453,9 @@ def test_live_wild_encounter_executor_has_no_navigation_contract() -> None:
 
     assert not hasattr(live, "_forward_directions")
     assert not hasattr(live, "_directions")
-    with pytest.raises(RedAreaExecutionError, match="semantic venue walker must seek"):
+    with pytest.raises(RedAreaExecutionError, match="semantic venue walker must seek") as raised:
         live.seek_encounter()
+    assert raised.value.reason_code == "encounter_route_missing"
 
 
 class _PartyMoveMemory:
@@ -1517,12 +1518,13 @@ def test_weakening_budget_allows_a_terminal_replan_after_the_last_attack() -> No
         attacks_completed=10,
         attack_budget=10,
     )
-    with pytest.raises(RedAreaExecutionError, match="still requires weakening"):
+    with pytest.raises(RedAreaExecutionError, match="still requires weakening") as raised:
         _weakening_attack_allowed(
             CaptureDirective.WEAKEN_TARGET,
             attacks_completed=10,
             attack_budget=10,
         )
+    assert raised.value.reason_code == "weakening_attack_budget_exhausted"
 
 
 def test_weakening_settle_cancels_a_returned_move_menu() -> None:
