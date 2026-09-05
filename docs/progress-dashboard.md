@@ -5,6 +5,14 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
+The current September 5 gate is still pre-game: strict V2 passed main CI and runtime-closure
+authentication, but its host launcher supplied a locale that violated the pinned interpreter flags.
+That launch stopped before source or private admission. The final successor exposes the distinct
+interpreter-authentication failure, then gets one canonical-locale zero-effect preflight. The
+dashboard must show this as **bootstrap qualification**, not training, gameplay or model failure.
+If the preflight passes, the next observable surface is a five-case bounded development timeline
+showing semantic choice, deterministic skill, ledger delta, intervention and terminal outcome.
+
 The immediate September 3 gate connects the existing authentic causal living-Dex model to the
 bounded player in **shadow only**. The model was trained on eight teacher-free selected-arm Red
 interventions and predicts nine outcome dimensions, but it has never controlled a player episode.

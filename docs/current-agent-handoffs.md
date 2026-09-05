@@ -1,5 +1,19 @@
 # Current agent handoffs
 
+## Codex final bootstrap successor — publish once, then stop or advance
+
+Strict V2 merged as main `90b90d22`, passed exact-main CI and reproduced the reviewed 1,477-file
+runtime closure. Its first invocation was rejected before source authentication because the host
+launcher forced the C locale and therefore `utf8_mode=1`; the qualified bootstrap requires zero.
+No private input or protected effect was reachable. V1 and V2 may not retry.
+
+Codex owns the final successor, which changes only the diagnostic boundary so interpreter rejection
+cannot masquerade as source failure. Claude and Antigravity 3.8 Flash High independently returned
+GO with no P0 or blocking P1 on the strict source design. Publish this identity, require exact-main
+CI, reconstruct the same runtime closure, and invoke once under `LANG=en_US.UTF-8` plus
+`LC_ALL=en_US.UTF-8`. A pass advances to production-resolver rehearsal; any failure ends this
+bootstrap lane. See the [V2 rejection](evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
+
 ## Codex successor repair — qualify a real strict runtime bootstrap
 
 PR 214 is main `a4d7c5a7`; PR and main CI passed. The sole V1 five-root preflight failed closed at
