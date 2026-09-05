@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: five choices, one new specimen, and confidence in both directions
+
+**Visual:** Resolve the fixed queue to **5/5 TERMINAL · 0 RETRIES**. Lay out five semantic cards:
+**RESUPPLY ✓ · ACQUIRE ✗ · ACQUIRE ✓ · DEVELOP TEAM ✓ · RESUPPLY ✓**. On the successful acquisition,
+animate **LIVING 13→14 · REGISTERED 17→18 · STORAGE 231→230**. On the final supply card, show
+**BALLS 3→7 · RESOURCE PRESSURE 0.7→0.3**.
+
+**Voiceover:** “We stopped replaying Pokémon Red and asked five smaller, harder questions. The
+model chose the objective; deterministic skills handled the buttons; an independent observer judged
+what changed. One choice caught and retained a new species, one rebuilt capture supplies, and one
+failed honestly.”
+
+Then split the screen: **ACQUIRE · 99.55% → FAILED** versus **DEVELOP TEAM · 0.10% → VERIFIED**.
+Say: “Four successes out of five do not grant authority. The model was badly calibrated in both
+directions.” Keep **TEACHERS 0 · TARGETS 0 · FITS 0 · AUTHORITY 0 · CRYSTAL 0** visible. End on
+**TRAIN-ONLY CORRECTION → FRESH RED CONTROL → EARN AUTHORITY**, not a full replay or Crystal demo.
+
 ## New scene: same emulator code, two packaging fingerprints
 
 **Visual:** Two 1,477-file runtime stacks appear side by side. Highlight only two rows:

@@ -135,9 +135,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage="Red semantic goal curriculum · hybrid control",
         message=(
-            "The first two live living-Pokedex choices are durable: resupply succeeded, while "
-            "acquisition failed despite 99.55% predicted success. Structured component-failure "
-            "retention is the gate before the three remaining cases."
+            "All five live living-Pokedex choices are durable. Calibration missed both ways: "
+            "acquisition failed at 99.55% predicted success; party development succeeded near "
+            "0.10%. Living moved 13 to 14. Authority stays shadow-only."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Red multi-goal curriculum · Crystal transfer deferred",

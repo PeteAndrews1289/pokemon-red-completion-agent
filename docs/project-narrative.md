@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: five real choices replaced another replay
+
+The bounded Red queue is complete. Instead of replaying the whole game, the system restored five
+authenticated situations, let the same immutable model rank title-neutral completion goals, and
+handed each selected goal to a deterministic mechanic skill. Every decision and outcome survived
+as a nonretryable terminal, including one failure; nothing was selected again after seeing how it
+turned out.
+
+The final three situations added breadth. An acquisition choice caught and retained a new species,
+moving the living collection from 13 to 14 and the registered collection from 17 to 18. A party
+development choice finished safely, although the public ledger did not expose a collection or
+dependency gain. A resupply choice restored four capture items. These are small actions, but they
+exercise the loop a transferable collector needs: observe needs, choose a semantic objective,
+execute through reusable mechanics, and verify the world afterward.
+
+The most useful result is that success did not make the model look uniformly good. It had been
+99.55% confident in the acquisition that failed, yet only about 0.10% confident in the party action
+the verifier accepted. We now have real calibration evidence instead of another polished teacher
+run. The model still has no controller authority, no development example enters training, and
+Crystal remains closed. The next task is to turn these errors into a train-only curriculum and then
+test the replacement against deterministic goal ordering on genuinely fresh Red lineages.
+
 ## September 5: two identical emulators had different packaging fingerprints
 
 The diagnostic repair reached green main, but the next saved situation stopped before the model or

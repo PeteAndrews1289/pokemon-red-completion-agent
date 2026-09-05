@@ -5,13 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
-The live rail now has two durable results: **CASE 1 · RESUPPLY · 99.73% PREDICTED · SUCCESS · +4
-CAPTURE ITEMS**, followed by **CASE 2 · ACQUIRE · 99.55% PREDICTED · FAILED · NO LEDGER GAIN**.
-Display the second as an overconfident development failure, not a training update. Show **2/5
-TERMINAL · 3 AVAILABLE · 0 TEACHERS · 0 FITS · SHADOW AUTHORITY**. Its historical trace can name
-only `RedAreaExecutionError`; the active repair adds a sanitized component-reason field for future
-cases without revealing paths, coordinates or identities. Case three remains closed until that
-repair is published and green.
+The live rail now has five durable results: **RESUPPLY SUCCESS · ACQUIRE FAILURE · ACQUIRE SUCCESS ·
+PARTY DEVELOPMENT SUCCESS · RESUPPLY SUCCESS**. Show **5/5 TERMINAL · 0 AVAILABLE · 0 INCOMPLETE ·
+0 TEACHERS · 0 FITS · SHADOW AUTHORITY**. The two acquisition contexts produced different factual
+outcomes; the successful one raised living **13→14** and registered **17→18**. The two resupply
+contexts restored capture items **1→5** and **3→7**. Party development was verifier-accepted but
+added no public collection/dependency gain.
+
+The calibration panel should put the two largest misses side by side: **ACQUIRE · 99.55% → FAILED**
+and **DEVELOP TEAM · 0.10% → VERIFIED SUCCESS**. Display these as development calibration, never as
+training or an authority promotion. The next visible stage is **CONSOLIDATE → AUDIT CALIBRATION BY
+OPTION KIND → DESIGN TRAIN-ONLY UPDATE + FRESH RED CONTROL**. Crystal, sealed Red and full replay
+remain locked.
 
 The live development timeline is now implemented and locally qualified. Its active rail is
 **5 AUTHENTICATED RED CASES → FIRST ELIGIBLE ONLY → DURABLE CLAIM → DELAYED ROM OPEN → TITLE-NEUTRAL

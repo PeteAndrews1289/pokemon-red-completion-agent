@@ -144,14 +144,21 @@ _REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_PATH = (
 _REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT_SHA256 = (
     "f15413be01fc942643923fd4bc563f655acf89ff88f038aa2495e9c1b5c712ca"
 )
+_REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_PATH = (
+    "docs/evidence/"
+    "red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json"
+)
+_REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_SHA256 = (
+    "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
     "composition_attempts": 6,
-    "development_episode_attempts": 26,
+    "development_episode_attempts": 29,
     "model_fits": 11,
-    "outcome_questions": {"development": 58, "train": 103},
+    "outcome_questions": {"development": 61, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
     "synthetic_rootless_train_outcomes": 8,
@@ -159,7 +166,7 @@ _PROJECTED_COUNTERS = {
     "transfer_results": 0,
     "unseen_comparisons": 9,
     "verified_composition_episodes": 4,
-    "verified_outcome_examples": 63,
+    "verified_outcome_examples": 66,
 }
 
 
@@ -1028,7 +1035,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 12:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 13:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1347,6 +1354,36 @@ def _validate_projected_counters(
     if not isinstance(first_two, Mapping):
         raise ProductFocusError("repeatable living-Dex first-two evidence is invalid")
     _validate_repeatable_living_dex_first_two_projection(first_two)
+    supplement_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 12],
+        subject="projected repeatable living-Dex supplement evidence",
+    )
+    if supplement_evidence != {
+        "kind": "verified_outcome_example",
+        "path": _REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_PATH,
+        "sha256": _REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    supplement_path = (
+        root / _REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT_PATH
+    ).resolve()
+    try:
+        supplement = json.loads(
+            supplement_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError(
+            "repeatable living-Dex supplement evidence is invalid"
+        ) from None
+    if not isinstance(supplement, Mapping):
+        raise ProductFocusError(
+            "repeatable living-Dex supplement evidence is invalid"
+        )
+    _validate_repeatable_living_dex_supplement_projection(supplement)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1458,6 +1495,174 @@ def _validate_repeatable_living_dex_first_two_projection(
         "verified_outcome_examples_added": 2,
     }:
         raise ProductFocusError("repeatable living-Dex first-two counters differ")
+
+
+def _validate_repeatable_living_dex_supplement_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project three supplemental outcomes without claiming fit or authority."""
+
+    if (
+        receipt.get("schema")
+        != "pokemon.red.repeatable-living-dex-development-supplement-results.v1"
+        or receipt.get("status")
+        != "three_supplemental_terminal_development_outcomes_retained"
+        or receipt.get("recorded_on") != "2026-09-05"
+    ):
+        raise ProductFocusError("repeatable living-Dex supplement status differs")
+    cases = _sequence(
+        receipt,
+        "cases",
+        subject="repeatable living-Dex supplement evidence",
+    )
+    if len(cases) != 3:
+        raise ProductFocusError("repeatable living-Dex supplement cases differ")
+    observed_cases: list[dict[str, object]] = []
+    for item in cases:
+        case = _mapping_value(item, subject="repeatable living-Dex supplement case")
+        observed_cases.append(
+            {
+                "ordinal": case.get("ordinal"),
+                "selected_candidate_index": case.get("selected_candidate_index"),
+                "selected_option_kind": case.get("selected_option_kind"),
+                "predicted_verified_success": case.get("predicted_verified_success"),
+                "execution_status": case.get("execution_status"),
+                "execution_failure_reason_code": case.get(
+                    "execution_failure_reason_code"
+                ),
+                "verified_success": case.get("verified_success"),
+                "controller_actions_after_decision": case.get(
+                    "controller_actions_after_decision"
+                ),
+                "emulator_frames_after_decision": case.get(
+                    "emulator_frames_after_decision"
+                ),
+                "completion_gain": case.get("completion_gain"),
+                "dependency_unlock_gain": case.get("dependency_unlock_gain"),
+                "living_collection_before": case.get("living_collection_before"),
+                "living_collection_after": case.get("living_collection_after"),
+                "registered_collection_before": case.get(
+                    "registered_collection_before"
+                ),
+                "registered_collection_after": case.get(
+                    "registered_collection_after"
+                ),
+                "capture_item_count_before": case.get("capture_item_count_before"),
+                "capture_item_count_after": case.get("capture_item_count_after"),
+                "irreversible_loss": case.get("irreversible_loss"),
+                "durable_terminal": case.get("durable_terminal"),
+                "retry_allowed": case.get("retry_allowed"),
+            }
+        )
+    if observed_cases != [
+        {
+            "ordinal": 2,
+            "selected_candidate_index": 0,
+            "selected_option_kind": "acquire_species",
+            "predicted_verified_success": 1.0,
+            "execution_status": "returned",
+            "execution_failure_reason_code": None,
+            "verified_success": True,
+            "controller_actions_after_decision": 290,
+            "emulator_frames_after_decision": 21216,
+            "completion_gain": 0.008333333333333333,
+            "dependency_unlock_gain": 0.0,
+            "living_collection_before": 13,
+            "living_collection_after": 14,
+            "registered_collection_before": 17,
+            "registered_collection_after": 18,
+            "capture_item_count_before": 5,
+            "capture_item_count_after": 1,
+            "irreversible_loss": 0.0,
+            "durable_terminal": True,
+            "retry_allowed": False,
+        },
+        {
+            "ordinal": 3,
+            "selected_candidate_index": 0,
+            "selected_option_kind": "develop_team",
+            "predicted_verified_success": 0.001031585425314896,
+            "execution_status": "returned",
+            "execution_failure_reason_code": None,
+            "verified_success": True,
+            "controller_actions_after_decision": 1274,
+            "emulator_frames_after_decision": 102015,
+            "completion_gain": 0.0,
+            "dependency_unlock_gain": 0.0,
+            "living_collection_before": 13,
+            "living_collection_after": 13,
+            "registered_collection_before": 17,
+            "registered_collection_after": 17,
+            "capture_item_count_before": 4,
+            "capture_item_count_after": 4,
+            "irreversible_loss": 0.0,
+            "durable_terminal": True,
+            "retry_allowed": False,
+        },
+        {
+            "ordinal": 4,
+            "selected_candidate_index": 2,
+            "selected_option_kind": "resupply",
+            "predicted_verified_success": 0.9973107694039359,
+            "execution_status": "returned",
+            "execution_failure_reason_code": None,
+            "verified_success": True,
+            "controller_actions_after_decision": 41,
+            "emulator_frames_after_decision": 3396,
+            "completion_gain": 0.0,
+            "dependency_unlock_gain": 0.0,
+            "living_collection_before": 13,
+            "living_collection_after": 13,
+            "registered_collection_before": 17,
+            "registered_collection_after": 17,
+            "capture_item_count_before": 3,
+            "capture_item_count_after": 7,
+            "irreversible_loss": 0.0,
+            "durable_terminal": True,
+            "retry_allowed": False,
+        },
+    ]:
+        raise ProductFocusError("repeatable living-Dex supplement cases differ")
+    aggregate = _mapping(
+        receipt,
+        "aggregate",
+        subject="repeatable living-Dex supplement evidence",
+    )
+    if aggregate != {
+        "authority_promotions": 0,
+        "cases_remaining": 0,
+        "controller_actions_after_decision": 1605,
+        "durable_development_outcomes": 3,
+        "emulator_frames_after_decision": 126627,
+        "incomplete_claims": 0,
+        "model_fits": 0,
+        "model_predictions": 3,
+        "teacher_fallbacks": 0,
+        "teacher_queries": 0,
+        "terminals_retained": 5,
+        "training_targets_emitted": 0,
+        "verified_failures": 0,
+        "verified_successes": 3,
+    }:
+        raise ProductFocusError("repeatable living-Dex supplement aggregate differs")
+    counters = _mapping(
+        receipt,
+        "counter_treatment",
+        subject="repeatable living-Dex supplement evidence",
+    )
+    if counters != {
+        "authority_promotions_added": 0,
+        "causal_train_examples_added": 0,
+        "composition_attempts_added": 0,
+        "development_episode_attempts_added": 3,
+        "model_fits_added": 0,
+        "outcome_questions_development_added": 3,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+        "verified_composition_episodes_added": 0,
+        "verified_outcome_examples_added": 3,
+    }:
+        raise ProductFocusError("repeatable living-Dex supplement counters differ")
 
 
 def _validate_causal_model_update_projection(
