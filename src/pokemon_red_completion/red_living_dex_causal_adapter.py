@@ -223,6 +223,7 @@ def build_red_living_dex_causal_scenario_from_capture(
     causal_source_commit: str,
     causal_runner_sha256: str,
     upstream_lineage_sha256: str | None = None,
+    behavior_integer_weights: tuple[int, ...] | None = None,
 ) -> LivingDexCausalScenario:
     """Bind one capture while keeping every Red runtime behind selection."""
 
@@ -412,6 +413,7 @@ def build_red_living_dex_causal_scenario_from_capture(
         causal_meter,
         resolve_selected,
         observe_after,
+        behavior_integer_weights,
     )
 
 

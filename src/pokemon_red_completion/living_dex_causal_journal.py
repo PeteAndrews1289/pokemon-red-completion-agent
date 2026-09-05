@@ -379,6 +379,7 @@ class LivingDexCausalBehaviorDecision:
             len(self.integer_weights),
             self.available_indices,
             commitment=self.commitment,
+            integer_weights=self.integer_weights,
         )
         if (
             self.integer_weights != expected[0]
@@ -484,6 +485,7 @@ class LivingDexCausalScenario:
     effect_meter: LivingDexCausalEffectMeter
     resolve_selected: LivingDexCausalArmResolver
     observe_after: LivingDexCausalObserver
+    behavior_integer_weights: tuple[int, ...] | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.identity, LivingDexCausalIdentity):
@@ -513,6 +515,12 @@ class LivingDexCausalScenario:
             raise TypeError("causal scenario meter returned an invalid checkpoint")
         if not callable(self.resolve_selected) or not callable(self.observe_after):
             raise TypeError("causal scenario needs resolver and observer callables")
+        if self.behavior_integer_weights is not None:
+            _validate_behavior_integer_weights(
+                len(self.menu.candidates),
+                self.menu.available_indices,
+                self.behavior_integer_weights,
+            )
         if (
             self.identity.partition not in {"train", "development"}
             or self.identity.menu_sha256 != self.menu.policy_sha256
@@ -1076,6 +1084,7 @@ def _ensure_behavior_selection(
         len(scenario.menu.candidates),
         scenario.menu.available_indices,
         commitment=commitment,
+        integer_weights=scenario.behavior_integer_weights,
     )
     expected = LivingDexCausalBehaviorDecision(
         commitment,
@@ -1104,6 +1113,7 @@ def _behavior_decision_values(
     available_indices: Sequence[int],
     *,
     commitment: LivingDexCausalBehaviorCommitment,
+    integer_weights: Sequence[int] | None = None,
 ) -> tuple[tuple[int, ...], tuple[float, ...], int]:
     if type(candidate_count) is not int or candidate_count < 2:  # noqa: E721
         raise LivingDexCausalJournalError("causal behavior candidate census differs")
@@ -1119,12 +1129,51 @@ def _behavior_decision_values(
         raise LivingDexCausalJournalError("causal behavior availability differs")
     if not isinstance(commitment, LivingDexCausalBehaviorCommitment):
         raise TypeError("causal behavior replay needs its commitment")
-    weights = tuple(1 if index in available else 0 for index in range(candidate_count))
+    weights = (
+        tuple(1 if index in available else 0 for index in range(candidate_count))
+        if integer_weights is None
+        else _validate_behavior_integer_weights(
+            candidate_count,
+            available,
+            integer_weights,
+        )
+    )
     total = sum(weights)
     probabilities = tuple(weight / total for weight in weights)
     ticket = int(commitment.draw_seed_sha256, 16) % total
-    selected = available[ticket]
+    cumulative = 0
+    selected: int | None = None
+    for index, weight in enumerate(weights):
+        cumulative += weight
+        if weight > 0 and ticket < cumulative:
+            selected = index
+            break
+    if selected is None:  # pragma: no cover - guarded by positive exact support
+        raise LivingDexCausalJournalError("causal behavior ticket did not resolve")
     return weights, probabilities, selected
+
+
+def _validate_behavior_integer_weights(
+    candidate_count: int,
+    available_indices: Sequence[int],
+    integer_weights: Sequence[int],
+) -> tuple[int, ...]:
+    """Return one exact full-support distribution over the available rows."""
+
+    available = tuple(available_indices)
+    weights = tuple(integer_weights)
+    if (
+        len(weights) != candidate_count
+        or any(type(weight) is not int or weight < 0 for weight in weights)  # noqa: E721
+        or any(
+            (weights[index] > 0) is (index not in available)
+            for index in range(candidate_count)
+        )
+    ):
+        raise LivingDexCausalJournalError(
+            "causal behavior weights lack exact available-row support"
+        )
+    return weights
 
 
 def _load_construction_attempts(

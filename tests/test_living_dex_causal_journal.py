@@ -138,6 +138,7 @@ def _scenario(
     envelope: str | None = None,
     title_shape: str = "red-shaped",
     resolver_failure: bool = False,
+    behavior_integer_weights: tuple[int, ...] | None = None,
 ) -> tuple[LivingDexCausalScenario, _Harness]:
     menu = _menu(f"private.{label}")
     bindings = tuple(_sha((label, candidate.binding_ref)) for candidate in menu.candidates)
@@ -224,6 +225,7 @@ def _scenario(
             meter,
             resolve_selected,
             observe_after,
+            behavior_integer_weights,
         ),
         harness,
     )
@@ -246,6 +248,75 @@ def test_settled_selected_arm_round_trips_without_a_second_execution(
     assert receipt.public_dict()["causal_train_example_recorded"] is True
     assert receipt.example.menu.candidates[0].binding_ref == "policy-row-0"
     assert harness.resolver_calls == [receipt.example.selected_candidate_index]
+    assert harness.executions == [receipt.example.selected_candidate_index]
+
+
+def test_focus_weighted_behavior_is_full_support_replayable_and_durable(
+    tmp_path: Path,
+) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, harness = _scenario(
+        "focus-weighted",
+        behavior_integer_weights=(98, 1, 0),
+    )
+
+    receipt = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+    assert receipt.example is not None
+    assert receipt.example.behavior_probabilities == (98 / 99, 1 / 99, 0.0)
+    assert receipt.example.selected_candidate_index in (0, 1)
+    assert harness.executions == [receipt.example.selected_candidate_index]
+
+    recovered = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+    assert recovered.example == receipt.example
+    assert harness.executions == [receipt.example.selected_candidate_index]
+
+
+@pytest.mark.parametrize(
+    "weights",
+    (
+        (1, 0, 0),
+        (1, 1, 1),
+        (1, 1),
+        (1, -1, 0),
+    ),
+)
+def test_focus_weighted_behavior_rejects_missing_or_excess_support(
+    weights: tuple[int, ...],
+) -> None:
+    with pytest.raises(LivingDexCausalJournalError, match="exact available-row support"):
+        _scenario("invalid-focus-weights", behavior_integer_weights=weights)
+
+
+def test_existing_selection_cannot_be_reinterpreted_under_changed_weights(
+    tmp_path: Path,
+) -> None:
+    store, registry = _store_and_registry(tmp_path)
+    scenario, harness = _scenario(
+        "changed-focus-weights",
+        behavior_integer_weights=(98, 1, 0),
+    )
+    receipt = materialize_living_dex_causal_example(
+        scenario,
+        store=store,
+        claim_registry=registry,
+    )
+    assert receipt.example is not None
+
+    changed = replace(scenario, behavior_integer_weights=(1, 98, 0))
+    with pytest.raises(LivingDexCausalJournalError, match="stored causal behavior selection"):
+        materialize_living_dex_causal_example(
+            changed,
+            store=store,
+            claim_registry=registry,
+        )
     assert harness.executions == [receipt.example.selected_candidate_index]
     assert harness.observations == ["observed"]
 
