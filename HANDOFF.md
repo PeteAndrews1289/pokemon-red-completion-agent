@@ -1,5 +1,31 @@
 # Handoff
 
+## Latest checkpoint: supplemental runtime packaging mismatch is repaired locally
+
+The failure-reason repair merged as main `3d443e7382be329c80501a3dc23c03192d64b0bd` and exact-main
+CI `33964453122/1` passed. The next fixed-order launch then stopped at
+`runtime_identity_authentication` with **zero claims, predictions, actions, frames, teachers, fits
+or targets**. An immediate action-free reopen still reported **2 retained terminals · 3 available
+claims · 0 incomplete claims**. The third case was not consumed and this is not a model outcome.
+
+The three supplemental cases were frozen under runtime identity `38d3d36a...`, while the first
+reviewed execution closure produces historical identity `028fc193...`. Exact comparison found the
+same CPython 3.14.3 executable, PyBoy 2.7.0 version, and imported PyBoy code. Only the generated
+`bin/pyboy` console wrapper and its matching wheel `RECORD` bytes differed between virtual
+environments. A second complete 1,477-file closure was reconstructed and authenticates exactly as
+closure `2702710f...` and frozen runtime `38d3d36a...`.
+
+The local repair admits only the two complete reviewed closure digests; arbitrary mutations still
+fail closed. Registries and independent golden values are regenerated. Ruff, Mypy across 369 source
+files, privacy/docs/focus checks, 29 targeted runtime tests, and the complete suite are green:
+**6,770 passed, one skipped, three deselected and one expected failure in 18m34s**. See the
+[path-free qualification](docs/evidence/red-repeatable-development-supplement-runtime-compatibility-v1-2026-09-05.json).
+
+Next publish this repair, require green exact-main CI, rerun the zero-effect inventory, and execute
+only the first remaining case with the supplemental reviewed closure. Stop at one durable terminal
+and audit calibration, ledger progress, action/frame cost and the typed component reason. Do not
+refreeze the plan, fit on development, invoke a teacher, open Crystal or run a full replay.
+
 ## Latest checkpoint: two real choices retained; diagnose acquisition failures before case three
 
 Exact main `31e0d92588640416bfc656f1125707807b43898e` passed CI `33959029027/1`,

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish safe structured component-failure retention, require green exact-main CI and historical-terminal recovery, then execute only the next fixed-order bounded development case and judge its factual outcome before fitting or any authority decision.
+- Next decision: Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI and clean claim inventory, then execute only the next fixed-order bounded development case and judge its factual outcome before fitting or any authority decision.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-repeatable-development-first-two-outcomes-and-failure-diagnostics** · status **active** · evidence [verified outcome example](docs/evidence/red-repeatable-living-dex-development-first-two-results-v1-2026-09-05.json)
+**2026-09-05-supplement-runtime-identity-compatibility** · status **active** · evidence [qualification](docs/evidence/red-repeatable-development-supplement-runtime-compatibility-v1-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The first two live cases directly tested whether the shared model can choose useful living-Pokedex work and hand it to deterministic skills. One success validates the resupply composition seam; one overconfident acquisition failure exposes the next reusable capability gap instead of inviting a Route 16 patch. |
-| Learning output | Two durable model-choice/outcome pairs were added. Resupply succeeded and improved capture inventory; acquisition failed with no completion or dependency gain. This moves development episodes from 24 to 26 and verified outcome examples from 61 to 63 while leaving composition, fitting, authority and transfer unchanged. |
-| Authority delta | No authority changed. The immutable eighteen-example option model made two teacher-free development selections, but it remains shadow-only: one succeeded and one failed despite 0.9955 predicted success. Development outcomes may diagnose and calibrate but may not enter fitting. |
+| Product alignment | This repair removes an environment-packaging false negative without changing model behavior or deterministic skills. It protects scarce Red development contexts so the project can measure goal selection and living-Pokedex progress instead of discarding them on virtual-environment wrapper bytes. |
+| Learning output | No learning counter changed. The failed-closed launch consumed zero claims and made zero predictions or controller actions; local qualification preserves all three untouched cases while making their frozen runtime reproducible. |
+| Authority delta | No authority changed. The option model remains shadow-only, no development example entered fitting, and the failed runtime gate produced no model prediction or gameplay. |
 | Transfer result | None. Crystal remains deferred. The option vocabulary is title-neutral, but the update is Red train-only and cannot support a transfer claim. |
-| Blocker | The acquisition failure retained only the broad RedAreaExecutionError type. Without a stable sanitized component reason, another acquisition-root execution could consume evidence without distinguishing routing, encounter, capture, inventory, storage or bounded-progress failure. |
-| Decision | Publish structured reusable provider-failure reason retention, require green exact-main CI and prove both existing terminals still reopen. Then run the next fixed-order bounded case only if the new trace can preserve the exact component reason; stop again at its durable terminal and compare calibration and ledger progress. |
-| Next session | Complete the ROM-free failure-reason repair, document the two live outcomes, regenerate all source registries, run complete validation, publish and require green exact-main CI, recheck the three remaining cases and two historical terminals action-free, then execute at most one next fixed-order case. |
-| Next falsifier | A provider exception carrying one canonical reason must survive the complete durable action-trace path without message, path, coordinate or identity leakage; malformed or untyped exceptions must collapse to execution_failed, and both V1 terminals must remain recoverable. |
-| Stop condition | Stop on any historical-record incompatibility, private-message retention, reason-code ambiguity, failed check or registry mismatch. After publication, stop execution on any source/runtime/model mismatch, consumed-root reuse, teacher fallback, missing bounds or non-durable claim. Never fit on these development outcomes, patch one route or species, open Crystal, sealed Red or a full replay. |
+| Blocker | The three supplemental cases were frozen from a byte-identical Python/PyBoy code installation whose environment-generated console wrapper and RECORD bytes differ from the historical reviewed closure. Exact runtime authentication correctly stopped before claim; execution now requires publication and exact-main CI of the narrow second reviewed closure identity. |
+| Decision | Publish the byte-exact supplemental runtime compatibility repair, require green exact-main CI, and reconfirm three claims remain available. Then execute only the next fixed-order bounded case and stop at its durable factual terminal for calibration, ledger and typed component-reason audit. |
+| Next session | Publish the exact two-closure allowlist and regenerated registries, require green exact-main CI, run an action-free inventory, then execute at most one next fixed-order supplemental case using its matching reviewed runtime and audit the retained result. |
+| Next falsifier | The supplemental reviewed closure must authenticate to runtime identity 38d3d36a... with zero imported-code differences, while any unlisted byte mutation still fails. Exact-main execution must then reach either one durable model-selected terminal or one typed predecision stop without retry. |
+| Stop condition | Stop on any closure beyond the two exact reviewed digests, imported-code difference, failed source/CI/model join, consumed-root reuse, teacher fallback, missing bound or non-durable claim. Never refreeze the supplemental plan, fit on development, patch one route or species, open Crystal, sealed Red or a full replay. |
 
 ### Stop conditions
 

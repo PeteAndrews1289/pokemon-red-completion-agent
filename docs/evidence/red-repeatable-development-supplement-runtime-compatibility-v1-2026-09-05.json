@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon.red.repeatable-development-supplement-runtime-compatibility.v1",
+  "status": "exact_packaging_variant_qualified_locally_without_consuming_a_case",
+  "recorded_on": "2026-09-05",
+  "failed_closed_observation": {
+    "source_commit": "3d443e7382be329c80501a3dc23c03192d64b0bd",
+    "github_ci_run": 33964453122,
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "stage": "runtime_identity_authentication",
+    "root_claims": 0,
+    "model_predictions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_queries": 0,
+    "model_fits": 0,
+    "training_targets_emitted": 0
+  },
+  "inventory_after_failure": {
+    "terminals_retained": 2,
+    "claims_available": 3,
+    "incomplete_claims": 0,
+    "cases_remaining": 3
+  },
+  "runtime_comparison": {
+    "historical_reviewed_closure_sha256": "3dd2037389febcf59a9b45f1f9c705b54889eea0d2445c3a61a1f19600992c62",
+    "historical_runtime_identity_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "supplement_reviewed_closure_sha256": "2702710fc7e679e4e061d69a084b7f0d91e3bb2a0319a43ff6814fd7af785783",
+    "supplement_runtime_identity_sha256": "38d3d36a6859959d7860380b5a6748d84314038885b4f6a8ca50a1a675b53189",
+    "python_implementation": "CPython",
+    "python_version": "3.14.3",
+    "pyboy_version": "2.7.0",
+    "closure_file_count": 1477,
+    "differing_pyboy_distribution_files": [
+      "console_scripts/up-3/pyboy",
+      "pyboy-2.7.0.dist-info/RECORD"
+    ],
+    "imported_pyboy_code_differences": 0,
+    "admission_rule": "Only the two complete reviewed closure digests are accepted; every other byte inventory remains rejected."
+  },
+  "local_qualification": {
+    "supplement_closure_authenticated": true,
+    "supplement_runtime_identity_matched_frozen_plan": true,
+    "targeted_runtime_tests_passed": 29,
+    "complete_tests_passed": 6770,
+    "complete_tests_skipped": 1,
+    "complete_tests_deselected": 3,
+    "complete_tests_xfailed": 1,
+    "ruff": "passed",
+    "mypy_source_files": 369,
+    "public_artifact_check": "passed",
+    "documentation_check": "passed",
+    "registry_regeneration_check": "passed"
+  },
+  "authority": {
+    "model_authority_changed": false,
+    "development_outcome_created": false,
+    "sealed_red_opened": false,
+    "crystal_opened": false,
+    "full_replay_opened": false
+  },
+  "next_gate": "Publish the byte-exact compatibility repair, require green exact-main CI, recheck the three untouched claims action-free, then execute at most one fixed-order development case."
+}
