@@ -422,24 +422,6 @@ def _ensure_setup_capture(
                 arm_factory=resolved.arm_factory,
                 meter=meter,
             )
-        _require_capture_join(assignment, capture, setup_execution_identity)
-        store.publish_sealed_record(
-            capture_id,
-            kind=_SETUP_CAPTURE_KIND,
-            record=capture.private_dict(),
-        )
-        terminal = _publish_terminal(
-            store,
-            terminal_id,
-            trial,
-            status=RedLivingDexTargetedSetupStatus.COMPLETE,
-            capture_sha256=canonical_sha256(capture.private_dict()),
-        )
-        return (
-            RedLivingDexTargetedSetupStatus.COMPLETE,
-            capture,
-            canonical_sha256(terminal),
-        )
     except BaseException as error:
         status = (
             RedLivingDexTargetedSetupStatus.FAILED
@@ -456,6 +438,24 @@ def _ensure_setup_capture(
         if not isinstance(error, Exception):
             raise
         return status, None, canonical_sha256(terminal)
+    _require_capture_join(assignment, capture, setup_execution_identity)
+    store.publish_sealed_record(
+        capture_id,
+        kind=_SETUP_CAPTURE_KIND,
+        record=capture.private_dict(),
+    )
+    terminal = _publish_terminal(
+        store,
+        terminal_id,
+        trial,
+        status=RedLivingDexTargetedSetupStatus.COMPLETE,
+        capture_sha256=canonical_sha256(capture.private_dict()),
+    )
+    return (
+        RedLivingDexTargetedSetupStatus.COMPLETE,
+        capture,
+        canonical_sha256(terminal),
+    )
 
 
 def _publish_terminal(
