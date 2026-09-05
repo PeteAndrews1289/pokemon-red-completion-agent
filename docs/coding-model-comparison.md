@@ -4,6 +4,22 @@ Purpose: assess whether GPT-6 improves useful project progress enough to justify
 relative to GPT-5.6 Sol. These are observations from development, not a controlled benchmark.
 The coding assistant and the trained Pokemon policy are different models.
 
+## 2026-09-05: Sol final-preflight storage diagnosis
+
+Starting point: GPT-5.6 Sol inherited the merged interpreter-diagnostic successor. Exact-main CI
+`33943983942/1` passed in 19 minutes 1 second. Its one canonical-locale launch then rejected with
+all protected effects at zero. Sol isolated the cause through file metadata and one read-only
+development import: the clean execution checkout and private artifact root were both on the T7,
+which violates the repository's deliberate separate-device boundary.
+
+The quick diagnosis is positive evidence for Sol on bounded operational debugging. The failed
+launch is still operator/infrastructure rework and counts against session efficiency; it is not a
+model, data or ROM failure. Codex closed the strict-bootstrap lane rather than spend another CI
+cycle on a wrapper and reoriented toward repeatable model-behavior development from the internal
+checkout. That path passed five real inputs in 3.22 seconds, three synthetic resolver tests in 45.38
+seconds, 37 focused source tests in 65.11 seconds, and the complete 6,742-test gate in 17m43s. Exact
+assistant token counts and weekly quota debit remain unavailable.
+
 ## What to record each session
 
 - Task and starting revision; whether the diagnosis/design was inherited.

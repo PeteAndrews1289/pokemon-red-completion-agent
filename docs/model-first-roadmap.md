@@ -1,5 +1,34 @@
 # Model-first development roadmap
 
+## Latest checkpoint: five inputs ready; build the bounded live runner
+
+The repeatable internal-source/external-private command passed all five unclaimed development roots
+and the immutable 18-example model in 3.22 seconds with zero protected effects. A three-test
+synthetic resolver rehearsal also passed: construction remained delayed until the complete join,
+one successful model choice executed one provider, failed setup opened no outcome, and recovery did
+not execute again. See the [qualification](evidence/red-development-repeatable-readiness-and-rehearsal-v1-2026-09-05.json).
+
+Next implement a repeatable single-case live command and view-only timeline. Preserve staged
+runtime authentication, delayed ROM access, claim-before-input durability, hard action/frame
+bounds, fixed prospective case order and typed setup/outcome terminals. ROM-free tests precede
+publication. Reorient once more before controller input, then stop after the first terminal result.
+Do not fit on development, seek a preferred outcome, open Crystal or run a full replay.
+
+## Latest checkpoint: close strict bootstrap and use the development tier
+
+The interpreter-diagnostic successor merged as main `3a849a12`; exact-main CI `33943983942/1`
+passed. Its single canonical-locale preflight then stopped with every protected counter zero. The
+clean execution worktree and private corpus were both on the T7, so the private-store guard rejected
+their same-device layout before constructing an assignment. The five roots remain unclaimed. See
+the [storage-boundary evidence](evidence/red-development-five-root-preflight-storage-boundary-rejection-v1-2026-09-05.json).
+
+Do not build or run another strict successor. Resume from the internal-disk source worktree under
+ordinary repeatable development rigor: authenticate the exact five root/plan/model/recipe joins,
+give storage separation its own stage, and keep resolver construction delayed until readiness
+passes. Then run one synthetic production-resolver rehearsal and reorient before controller input.
+The first live step should be one bounded model-selected development choice with factual ledger
+measurement, not another freeze, teacher run, fit, CI-only repair, Crystal task or full replay.
+
 ## Latest checkpoint: one final, observable bootstrap successor
 
 Exact main `90b90d22` and CI `33939561868/1` passed, and the exact reviewed 1,477-file runtime

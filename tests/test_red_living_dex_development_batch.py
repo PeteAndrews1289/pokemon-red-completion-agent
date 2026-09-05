@@ -23,6 +23,7 @@ from pokemon_red_completion.red_living_dex_clustered_development_runner import (
 from pokemon_red_completion.red_living_dex_development_batch import (
     RedLivingDexDevelopmentBatchAssignment,
     RedLivingDexDevelopmentBatchError,
+    inspect_red_living_dex_development_batch_inputs,
     preflight_red_living_dex_development_batch,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
@@ -125,6 +126,106 @@ def test_batch_preflight_authenticates_exactly_two_historical_and_three_suppleme
     assert receipt.public_dict()["model_predictions"] == 0
     assert receipt.public_dict()["controller_actions"] == 0
     assert meter.checkpoint() == before
+
+
+def test_repeatable_input_readiness_joins_five_unclaimed_roots_without_runtime(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    assignments, expected, historical_binding, supplement_binding = _assignments()
+    model_record = _model_record()
+    opened: list[tuple[str, int]] = []
+    meter = RedLivingDexSetupEffectMeter()
+    before = meter.checkpoint()
+    monkeypatch.setattr(
+        batch,
+        "_HISTORICAL_CASES",
+        ((historical_binding, 10), (historical_binding, 11)),
+    )
+    monkeypatch.setattr(
+        batch,
+        "FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT",
+        supplement_binding,
+    )
+    monkeypatch.setattr(
+        batch,
+        "load_red_living_dex_development_model",
+        lambda *_args, **_kwargs: model_record,
+    )
+
+    def load(_store: object, ordinal: int, *, binding: Any) -> tuple[Any, dict]:
+        assert hasattr(binding, "private_plan_sha256")
+        key = (binding.private_plan_sha256, ordinal)
+        selection, _root = expected[key]
+        opened.append(key)
+        return selection, {"runtime_identity_sha256": "a" * 64}
+
+    monkeypatch.setattr(batch, "load_red_living_dex_development_selection", load)
+    monkeypatch.setattr(batch, "fixed_account_claim_registry_root", lambda: tmp_path)
+    monkeypatch.setattr(
+        batch,
+        "observe_claim_first_pair_availability",
+        lambda *_args: True,
+    )
+
+    receipt = inspect_red_living_dex_development_batch_inputs(
+        _store(tmp_path),
+        assignments=assignments,
+        meter=meter,
+    )
+
+    public = receipt.public_dict()
+    assert len(opened) == 5
+    assert public["status"] == "five_development_inputs_ready_without_runtime_or_effects"
+    assert public["claims_available"] == 5
+    assert public["runtime_authenticated"] is False
+    assert public["production_resolver_rehearsed"] is False
+    assert public["exact_source_ci_binding"] is False
+    assert public["model_predictions"] == 0
+    assert meter.checkpoint() == before
+
+
+def test_repeatable_input_readiness_rejects_consumed_root(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    assignments, expected, historical_binding, supplement_binding = _assignments()
+    model_record = _model_record()
+    monkeypatch.setattr(
+        batch,
+        "_HISTORICAL_CASES",
+        ((historical_binding, 10), (historical_binding, 11)),
+    )
+    monkeypatch.setattr(
+        batch,
+        "FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT",
+        supplement_binding,
+    )
+    monkeypatch.setattr(
+        batch,
+        "load_red_living_dex_development_model",
+        lambda *_args, **_kwargs: model_record,
+    )
+
+    def load(_store: object, ordinal: int, *, binding: Any) -> tuple[Any, dict]:
+        selection, _root = expected[(binding.private_plan_sha256, ordinal)]
+        return selection, {}
+
+    availability = iter((True, True, False, True, True))
+    monkeypatch.setattr(batch, "load_red_living_dex_development_selection", load)
+    monkeypatch.setattr(batch, "fixed_account_claim_registry_root", lambda: tmp_path)
+    monkeypatch.setattr(
+        batch,
+        "observe_claim_first_pair_availability",
+        lambda *_args: next(availability),
+    )
+
+    with pytest.raises(RedLivingDexDevelopmentBatchError, match="unavailable"):
+        inspect_red_living_dex_development_batch_inputs(
+            _store(tmp_path),
+            assignments=assignments,
+            meter=RedLivingDexSetupEffectMeter(),
+        )
 
 
 def test_batch_shape_rejects_train_crossover_before_model_authentication(

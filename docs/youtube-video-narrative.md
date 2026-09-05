@@ -1,5 +1,32 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: five green cards, controller still disconnected
+
+**Visual:** Show **2 HISTORICAL + 3 SUPPLEMENT = 5/5 READY**, the exact model badge, and five open
+claim indicators. Keep the controller cable unplugged and all live effect dials at zero. Beside it,
+show a translucent simulated cartridge where one model choice reaches one deterministic provider,
+then a restart reuses the terminal instead of acting twice.
+
+**Voiceover:** “Once development moved back to the right trust boundary, all five saved situations
+joined in seconds. The simulation proved the full handoff from semantic model choice to safe skill
+execution and crash recovery. But the real controller is still disconnected. Our next honest demo
+is one bounded live choice with its goal, actions, frames and Pokédex ledger change visible.”
+
+## New scene: one drive, two trust domains
+
+**Visual:** Show the clean code checkout and five private save cards both landing on a T7 icon.
+Place a red bar between them labelled **SOURCE AND PRIVATE DATA MUST BE SEPARATE**. Keep every
+prediction, claim, action, frame and outcome dial at zero.
+
+**Voiceover:** “The final readiness check did exactly what a guardrail should do: it noticed that
+disk cleanup had put my code and private saved games on the same physical drive, and it refused to
+continue before constructing a single test case. The saves were not consumed and the model did not
+fail—but the error label was too generic, and the wrapper work had become the bottleneck.”
+
+Then move only the code back to the internal disk, stamp the strict path **CLOSED — NO RETRY**, and
+route the same five unclaimed cards toward **REPEATABLE DEVELOPMENT → RESOLVER REHEARSAL → BOUNDED
+MODEL CHOICES**. This is the narrative pivot from provenance theater back to measured behavior.
+
 ## New scene: the launcher never reached the airlock
 
 **Visual:** Show a command card stamped **C LOCALE → UTF-8 MODE 1**, stopping before the SOURCE

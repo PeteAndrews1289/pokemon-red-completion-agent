@@ -502,6 +502,20 @@ def _require_current_consumer(
     _require_exact_green_ci(expected)
 
 
+def require_red_living_dex_current_consumer(
+    project_root: Path,
+    expected: RedLivingDexCurrentConsumerBinding,
+) -> None:
+    """Authenticate one clean published consumer through its exact green CI run."""
+
+    if not isinstance(project_root, Path):
+        raise TypeError("current consumer authentication needs a project Path")
+    if not isinstance(expected, RedLivingDexCurrentConsumerBinding):
+        raise TypeError("current consumer authentication needs its typed binding")
+    expected.__post_init__()
+    _require_current_consumer(project_root, expected)
+
+
 def _require_exact_green_ci(expected: RedLivingDexCurrentConsumerBinding) -> None:
     path = (
         f"/repos/{_GITHUB_REPOSITORY}/actions/runs/{expected.exact_ci_run}"
@@ -597,6 +611,7 @@ __all__ = [
     "RedLivingDexProducerSlotLoader",
     "authenticate_red_living_dex_current_consumer",
     "authenticate_red_living_dex_producer_slot",
+    "require_red_living_dex_current_consumer",
     "execute_red_living_dex_claim_first_invocation",
     "preflight_red_living_dex_claim_first_invocation",
 ]

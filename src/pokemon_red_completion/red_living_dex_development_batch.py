@@ -12,6 +12,12 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from pokemon_red_completion.claim_first_admission import (
+    observe_claim_first_pair_availability,
+)
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    fixed_account_claim_registry_root,
+)
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.red_living_dex_causal_invocation import (
     RedLivingDexAuthenticatedConsumer,
@@ -19,6 +25,10 @@ from pokemon_red_completion.red_living_dex_causal_invocation import (
 from pokemon_red_completion.red_living_dex_clustered_development_execution import (
     RedLivingDexClusteredDevelopmentPreflightReceipt,
     preflight_red_living_dex_development_assignment,
+)
+from pokemon_red_completion.red_living_dex_clustered_development_runner import (
+    RedLivingDexClusteredDevelopmentSelection,
+    load_red_living_dex_development_selection,
 )
 from pokemon_red_completion.red_living_dex_clustered_train_runner import (
     FROZEN_RED_LIVING_DEX_CLUSTERED_TRAIN_PLAN,
@@ -138,6 +148,138 @@ class RedLivingDexDevelopmentBatchPreflightReceipt:
             "teacher_queries": 0,
             "training_targets_emitted": 0,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class RedLivingDexDevelopmentBatchInputReceipt:
+    """Five real inputs joined without source bootstrap, runtime, or gameplay."""
+
+    model_sha256: str
+    model_record_sha256: str
+    selections: tuple[RedLivingDexClusteredDevelopmentSelection, ...] = field(
+        repr=False
+    )
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.model_sha256, str)
+            or _SHA256.fullmatch(self.model_sha256) is None
+            or not isinstance(self.model_record_sha256, str)
+            or _SHA256.fullmatch(self.model_record_sha256) is None
+            or not isinstance(self.selections, tuple)
+            or len(self.selections) != 5
+            or any(
+                not isinstance(item, RedLivingDexClusteredDevelopmentSelection)
+                for item in self.selections
+            )
+        ):
+            raise RedLivingDexDevelopmentBatchError(
+                "development batch input receipt differs"
+            )
+        for item in self.selections:
+            item.__post_init__()
+        if (
+            sum(item.plan_kind == "clustered" for item in self.selections) != 2
+            or sum(item.plan_kind == "supplement" for item in self.selections) != 3
+            or len({item.upstream_lineage_sha256 for item in self.selections}) != 5
+            or len({item.logical_root_sha256 for item in self.selections}) != 5
+            or len({item.physical_root_sha256 for item in self.selections}) != 5
+            or len(
+                {
+                    (item.root_state_sha256, item.root_envelope_sha256)
+                    for item in self.selections
+                }
+            )
+            != 5
+        ):
+            raise RedLivingDexDevelopmentBatchError(
+                "development batch input roots are not five independent cases"
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "cases_ready": 5,
+            "claims_available": 5,
+            "controller_actions": 0,
+            "development_outcomes_opened": 0,
+            "emulator_frames": 0,
+            "exact_source_ci_binding": False,
+            "historical_cases_ready": 2,
+            "model_fits": 0,
+            "model_predictions": 0,
+            "model_record_sha256": self.model_record_sha256,
+            "model_sha256": self.model_sha256,
+            "partition": "development",
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "production_resolver_rehearsed": False,
+            "rigor": "development_repeatable",
+            "root_claims": 0,
+            "runtime_authenticated": False,
+            "schema": "pokemon.red.living-dex-development-batch-input-readiness.v1",
+            "status": "five_development_inputs_ready_without_runtime_or_effects",
+            "supplement_cases_ready": 3,
+            "teacher_queries": 0,
+            "training_targets_emitted": 0,
+        }
+
+
+def inspect_red_living_dex_development_batch_inputs(
+    store: PrivateArtifactRoot,
+    *,
+    assignments: tuple[RedLivingDexDevelopmentBatchAssignment, ...],
+    meter: RedLivingDexSetupEffectMeter,
+) -> RedLivingDexDevelopmentBatchInputReceipt:
+    """Join the five development inputs in the repeatable, pre-runtime tier."""
+
+    if not isinstance(store, PrivateArtifactRoot):
+        raise TypeError("development batch input inspection needs its private store")
+    if not isinstance(assignments, tuple) or len(assignments) != 5:
+        raise RedLivingDexDevelopmentBatchError(
+            "development batch needs exactly five assignments"
+        )
+    if any(not isinstance(item, RedLivingDexDevelopmentBatchAssignment) for item in assignments):
+        raise TypeError("development batch contains another assignment type")
+    if type(meter) is not RedLivingDexSetupEffectMeter:
+        raise TypeError("development batch input inspection needs its protected-effect meter")
+    for item in assignments:
+        item.__post_init__()
+    _require_frozen_batch_shape(assignments)
+    before = meter.checkpoint()
+    model_record = load_red_living_dex_development_model(
+        store,
+        expected_model_sha256=(FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT.model_sha256),
+        expected_model_record_sha256=(
+            FROZEN_RED_LIVING_DEX_DEVELOPMENT_SUPPLEMENT.model_record_sha256
+        ),
+    )
+    claim_registry = fixed_account_claim_registry_root()
+    selections: list[RedLivingDexClusteredDevelopmentSelection] = []
+    for assignment in _canonical_assignments(assignments):
+        selection, _document = load_red_living_dex_development_selection(
+            store,
+            assignment.ordinal,
+            binding=assignment.binding,
+        )
+        _exact_root_loader(assignment)(selection)
+        if not observe_claim_first_pair_availability(
+            claim_registry,
+            selection.logical_root_sha256,
+            selection.physical_root_sha256,
+        ):
+            raise RedLivingDexDevelopmentBatchError(
+                "development batch root pair is unavailable"
+            )
+        selections.append(selection)
+    if meter.checkpoint() != before:
+        raise RedLivingDexDevelopmentBatchError(
+            "development batch input inspection changed protected effects"
+        )
+    return RedLivingDexDevelopmentBatchInputReceipt(
+        model_sha256=model_record.model.model_sha256,
+        model_record_sha256=model_record.file_sha256,
+        selections=tuple(selections),
+    )
 
 
 def preflight_red_living_dex_development_batch(
@@ -273,6 +415,8 @@ __all__ = [
     "RED_LIVING_DEX_DEVELOPMENT_BATCH_PREFLIGHT_SCHEMA",
     "RedLivingDexDevelopmentBatchAssignment",
     "RedLivingDexDevelopmentBatchError",
+    "RedLivingDexDevelopmentBatchInputReceipt",
     "RedLivingDexDevelopmentBatchPreflightReceipt",
+    "inspect_red_living_dex_development_batch_inputs",
     "preflight_red_living_dex_development_batch",
 ]
