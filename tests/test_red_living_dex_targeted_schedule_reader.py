@@ -7,6 +7,7 @@ from dataclasses import replace
 import pytest
 from test_red_living_dex_targeted_update_capacity import _repeatable_capabilities
 
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_inventory import (
     freeze_red_living_dex_targeted_schedule,
 )
@@ -15,6 +16,7 @@ from pokemon_red_completion.red_living_dex_targeted_schedule_reader import (
     RedLivingDexTargetedScheduleExpectations,
     RedLivingDexTargetedScheduleReaderError,
     authenticate_red_living_dex_targeted_schedule_plan,
+    load_red_living_dex_targeted_schedule_descriptor,
 )
 
 
@@ -63,6 +65,24 @@ def test_private_schedule_authenticates_every_envelope_and_fresh_binding() -> No
     )
 
     assert restored is binding
+
+
+def test_descriptor_can_locate_roots_but_carries_no_executable_recipe() -> None:
+    binding, _document, payload = _payload()
+
+    descriptor = load_red_living_dex_targeted_schedule_descriptor(
+        payload,
+        expected_plan_sha256=hashlib.sha256(payload).hexdigest(),
+        expectations=_expectations(),
+    )
+
+    assert descriptor.binding_sha256 == binding.binding_sha256
+    assert descriptor.schedule == binding.schedule
+    assert len(descriptor.capabilities) == len(binding.capabilities)
+    assert descriptor.capabilities[0].recipe_sha256 == canonical_sha256(
+        binding.capabilities[0].recipe.private_dict()
+    )
+    assert not hasattr(descriptor.capabilities[0], "recipe")
 
 
 def test_private_schedule_rejects_metadata_or_binding_reinterpretation() -> None:
