@@ -115,6 +115,18 @@ class LivingDexRepeatableRootReservation:
             source_commit=self.source_commit,
         )
 
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "logical_root_sha256": self.logical_root_sha256,
+            "physical_root_sha256": self.physical_root_sha256,
+            "reservation_claim_sha256": self.pair_claim.claim_sha256,
+            "reservation_slot_sha256": self.reservation_slot_sha256,
+            "runner_sha256": self.runner_sha256,
+            "schedule_sha256": self.schedule_sha256,
+            "schema": LIVING_DEX_REPEATABLE_ROOT_RESERVATION_SCHEMA,
+            "source_commit": self.source_commit,
+        }
+
 
 @dataclass(frozen=True, slots=True)
 class LivingDexRepeatableTrialClaim:
@@ -160,6 +172,16 @@ class LivingDexRepeatableTrialClaim:
                 "trial_claim_sha256": self.trial_claim_sha256,
             }
         )
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            "execution_identity_sha256": self.execution_identity_sha256,
+            "reservation": self.reservation.private_dict(),
+            "reset_ordinal": self.reset_ordinal,
+            "schedule_slot_sha256": self.schedule_slot_sha256,
+            "schema": LIVING_DEX_REPEATABLE_TRIAL_CLAIM_SCHEMA,
+            "trial_claim_sha256": self.trial_claim_sha256,
+        }
 
 
 def ensure_living_dex_repeatable_root_reservation(
