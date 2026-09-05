@@ -1,5 +1,26 @@
 # Handoff
 
+## Latest checkpoint: strict V2 invocation rejected before source admission
+
+The strict successor merged as exact main `90b90d2205535e4a3ed294b522331f0c41dccc27` and exact-main
+CI `33939561868/1` passed in 26 minutes 4 seconds. Its exact 1,477-file production dependency
+closure also reproduced the reviewed digest in a clean main worktree. Claude independently returned
+GO with no P0 or blocking P1 before invocation.
+
+The first host invocation nevertheless failed closed at the earliest bootstrap boundary. The
+isolated launcher supplied `LANG=C` and `LC_ALL=C`, causing pinned CPython 3.14 to start with
+`utf8_mode=1`; the command requires the qualified `utf8_mode=0` flag set. It therefore did not
+authenticate source, import project code, stage the runtime or open the private root. No prediction,
+claim, outcome, action, frame, fit, teacher query or training target was reachable. Do not rerun the
+V2 source identity. See the [V2 bootstrap rejection](docs/evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
+
+The final bounded successor changes the opaque early failure to the distinct public stage
+`bootstrap_interpreter_authentication`; it does not change the five cases, model, runtime, plan,
+private admission or historical train command. Qualify, publish and require exact-main CI, then
+invoke it once under `LANG=en_US.UTF-8` and `LC_ALL=en_US.UTF-8`, which reproduces
+`utf8_mode=0`. If that successor fails, end the bootstrap lane rather than add another wrapper or
+retry. A success permits only production-resolver rehearsal, not gameplay authority or Crystal.
+
 ## Latest checkpoint: V1 preflight falsified its command bootstrap; strict successor in progress
 
 PR 214 merged as exact main `a4d7c5a72adb59b24c0871589e4602236b377c56`; PR CI

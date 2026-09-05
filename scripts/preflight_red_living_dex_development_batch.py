@@ -14,6 +14,9 @@ from __future__ import annotations
 
 import sys
 
+_EARLY_INTERPRETER_FAILURE = (
+    '{"stage":"bootstrap_interpreter_authentication","status":"failed_closed"}\n'
+)
 _EARLY_BOOTSTRAP_FAILURE = '{"stage":"bootstrap_source_authentication","status":"failed_closed"}\n'
 if __name__ == "__main__" and (
     sys.flags.debug != 0
@@ -38,7 +41,7 @@ if __name__ == "__main__" and (
     or bool(sys._xoptions)
     or bool(sys.warnoptions)
 ):
-    sys.stdout.write(_EARLY_BOOTSTRAP_FAILURE)
+    sys.stdout.write(_EARLY_INTERPRETER_FAILURE)
     raise SystemExit(1)
 
 import os

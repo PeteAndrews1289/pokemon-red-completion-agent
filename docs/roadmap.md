@@ -1,5 +1,14 @@
 # Roadmap
 
+## September 5 bootstrap stop and final successor
+
+Strict V2 merged and passed exact-main CI, but its first launcher forced CPython into
+`utf8_mode=1` and was rejected before source authentication or private access. Retain that result
+without rerunning it. Publish the minimal interpreter-diagnostic successor, require green main CI,
+and invoke once under the reproduced `en_US.UTF-8` locale. A pass advances to production-resolver
+rehearsal; any failure ends the bootstrap lane. See the [active product state](../ACTIVE_PRODUCT_STATE.md)
+and [V2 evidence](evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
+
 ## Latest checkpoint: supplement adapter and positive-path rehearsal
 
 The development-only reader now authenticates all three real stored supplement rows. Its shared
