@@ -29,12 +29,19 @@ The reproducible aggregate is
 
 ## Train-only correction
 
-Freeze ten new, upstream-lineage-disjoint Red train roots before opening any outcome:
+Freeze ten bounded reset episodes over the two authenticated Red train roots before opening any
+outcome. No root may supply more than five episodes, and each reset receives a distinct prospective
+trial identity:
 
 - four acquisition-focused roots;
 - four party-development-focused roots;
 - one storage-management root;
 - one resupply root.
+
+This is deliberately not a claim that ten independent worlds exist. It is ordinary repeatable
+training over two disclosed upstream lineages; statistical uncertainty and weighting must remain
+cluster-aware. The held-out development bank remains lineage-disjoint from both roots and is never
+reset for training.
 
 The fixed denominator tolerates at most two setup censors. Every settled selected-arm outcome is
 included; rows are never selected by result. A fit may occur only if at least eight rows settle,
@@ -85,10 +92,10 @@ outcomes and call the retry fresh.
 
 ## Implementation order
 
-1. Build one action-free inventory that proves ten eligible train roots plus eight separate
-   development roots exist with the declared kind coverage.
-2. Freeze the complete train and paired-development schedule once, including censor rules and the
-   exact deterministic control definition.
+1. Build one action-free inventory that proves two authenticated train roots can supply ten bounded
+   reset episodes plus eight separate development roots with the declared kind coverage.
+2. Freeze the complete reset-train and paired-development schedule once, including the five-reset
+   per-root cap, censor rules and exact deterministic control definition.
 3. Collect the ten train assignments once; retain every terminal.
 4. Run the existing complete-denominator fitter once if the frozen admission gate passes.
 5. Commit both policy decisions for every development pair before opening outcomes.
@@ -101,7 +108,8 @@ outcomes and call the retry fresh.
 Stop this gate immediately if it requires any of the following:
 
 - fitting one of the five development outcomes;
-- reusing an upstream lineage across train and development;
+- reusing an upstream lineage across train and development, or exceeding five train resets on one
+  lineage;
 - treating a timing/RNG copy as an independent root;
 - changing the deterministic control after an outcome;
 - selecting rows, kinds or roots based on success;

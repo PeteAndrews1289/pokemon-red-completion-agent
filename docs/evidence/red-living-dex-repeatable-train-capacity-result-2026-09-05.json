@@ -1,0 +1,65 @@
+{
+  "authenticated_contexts": 81,
+  "behavior_commitments": 0,
+  "capacity_sufficient": true,
+  "collection_authorized": false,
+  "contexts_observed": 12,
+  "controller_actions": 0,
+  "development_context_deficit": 0,
+  "development_contexts": 10,
+  "development_maximum_matching": 8,
+  "development_reuse_enabled": false,
+  "emulator_frames": 0,
+  "maximum_train_replays_per_context": 5,
+  "model_fits": 0,
+  "model_predictions": 0,
+  "outcomes_opened": 0,
+  "policy": {
+    "development_focus_kind_counts": {
+      "acquire": 2,
+      "develop": 2,
+      "evolve": 1,
+      "manage_storage": 1,
+      "resupply": 1,
+      "unlock_access": 1
+    },
+    "development_roots": 8,
+    "maximum_train_setup_censors": 2,
+    "minimum_settled_train": 8,
+    "minimum_settled_train_by_kind": {
+      "acquire": 3,
+      "develop": 3
+    },
+    "train_focus_kind_counts": {
+      "acquire": 4,
+      "develop": 4,
+      "manage_storage": 1,
+      "resupply": 1
+    },
+    "train_roots": 10
+  },
+  "private_identity_fields": 0,
+  "private_path_fields": 0,
+  "provider_executions": 0,
+  "reasons": [],
+  "repeatable_train_enabled": true,
+  "root_claims": 0,
+  "schema": "pokemon.red.living-dex-repeatable-train-capacity-result.v1",
+  "source": {
+    "commit": "817bd78e37c07d7ac4d931adaf86d22e6982eee5",
+    "source_bundle_sha256": "b3f46c69a9ddf1d00cbdcf578c2a3d12ee3eb0f8762524dee1fbfbbfef998350"
+  },
+  "status": "repeatable_train_capacity_ready",
+  "teacher_queries": 0,
+  "train_compatible_context_counts": {
+    "acquire": 1,
+    "develop": 1,
+    "manage_storage": 2,
+    "resupply": 2
+  },
+  "train_context_deficit": 0,
+  "train_contexts": 2,
+  "train_maximum_matching": 10,
+  "training_source_policy": "bounded_resets_from_authenticated_train_only",
+  "training_targets_emitted": 0
+}

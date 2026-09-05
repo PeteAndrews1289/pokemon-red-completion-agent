@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Create and action-free qualify at least eight new independent Red train roots while preserving the already-sufficient paired bank. Only a complete 10-train/8-development exact matching may freeze the schedule and begin train-only outcome collection.
+- Next decision: Freeze the complete 10-episode bounded-reset train schedule and eight-root paired-development schedule. Only a reproducible, outcome-blind freeze may begin train-only outcome collection; development remains untouched until after the fit.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit. |
-| Cheapest falsifier | Inventory a prospective fresh-root source without opening outcomes and require at least eight new lineage- and physical-root-disjoint Red train states, including enough acquisition and party-development menus to close the measured 8-root deficit. Reject the source before collection if the exact 10+8 matching still fails. |
+| Cheapest falsifier | Freeze a complete bounded-reset training schedule over the two authenticated train roots, capped at five episodes per root, while allocating eight distinct untouched development roots. Reject the lane before gameplay if any train slot, semantic kind, reset identity, or development separation cannot be reproduced exactly. |
 | Time box | 1 session / 8 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-05-targeted-capacity-measured** · status **active** · evidence [falsification](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json)
+**2026-09-05-repeatable-train-capacity-ready** · status **active** · evidence [qualification](docs/evidence/red-living-dex-repeatable-train-capacity-result-2026-09-05.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The measured deficit directs the next gameplay budget toward genuinely new strategic experiences while preserving a credible paired exam. It avoids another route repair, model rewrite or false train/test relabeling. |
-| Learning output | No counter advances. The exact-main action-free census authenticated 81 contexts and measured a complete 8/8 paired-development matching but only 2/10 targeted train matching, with zero controller, frame, claim, prediction, outcome, teacher or fit effects. |
+| Product alignment | Repeatable training resets are normal curriculum learning; only evaluation needs one-shot lineage separation. This pivot uses existing Red states to produce model lessons now, preserves a credible disjoint exam, and avoids another multi-day clean-power teacher factory. |
+| Learning output | No counter advances. The action-free repeatable census authenticated 81 contexts and measured 10/10 bounded-reset train capacity plus 8/8 distinct paired-development capacity, with zero controller, frame, claim, prediction, outcome, teacher or fit effects. |
 | Authority delta | No authority changed. The census emitted no target and opened no outcome. The immutable eighteen-example option model remains shadow-only, and the ten untouched development roots remain reserved for paired evaluation. |
 | Transfer result | None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim. |
-| Blocker | The production census found only two eligible train roots against ten required, leaving an eight-root deficit. Acquisition and party development each have only one compatible train root. The paired development bank is already sufficient at 8/8. |
-| Decision | Preserve the ten-root development bank as the exam set. Prospectively create at least eight genuinely new, title-neutral Red train roots with acquisition and party-development coverage, prove independence before outcomes, and rerun exact matching before freezing the 10+8 schedule. |
-| Next session | Design and qualify the smallest title-neutral fresh-root producer that yields eight or more independent Red train states, emphasizing acquisition and party development. Preserve the ready development bank and stop before outcome collection or fitting. |
-| Next falsifier | A prospective fresh-root inventory must add at least eight independent eligible train roots and close the frozen semantic matching without consuming, relabeling or overlapping the ten-root development bank. Failure stops before outcomes. |
-| Stop condition | Stop if fresh supply overlaps any excluded or held-out lineage/physical root, cannot close all ten train slots, requires relabeling the development bank, or drifts into a route/species patch, outcome-conditioned selection, sealed Red, Crystal or full replay. |
+| Blocker | Capacity is no longer the blocker. Two authenticated train roots can supply ten bounded reset episodes at a five-per-root cap, while ten untouched development roots independently fill all eight paired evaluation slots. The missing work is the repeatable schedule and train-only execution rail. |
+| Decision | Treat ordinary training as repeatable curriculum learning rather than sealed evaluation. Freeze ten train episodes across the two authenticated training roots, never more than five per root, and keep the eight development roots one-shot and untouched. Then collect the complete train denominator, fit once if its prespecified settlement floors pass, and evaluate once on the separate paired bank. |
+| Next session | Implement and qualify the repeatable train/paired-development schedule freezer, then build the train-only bounded outcome runner. Preserve the ready development bank and stop before fitting until the complete train denominator is retained. |
+| Next falsifier | The schedule freezer must allocate four acquisition, four party-development, one storage and one resupply episode across exactly two train roots with no more than five resets each, plus eight distinct held-out development roots. Any overlap or missing kind closes the schedule before gameplay. |
+| Stop condition | Stop if the schedule exceeds five episodes on either train root, reuses a development root, chooses any slot from an outcome, cannot retain reset identity, or drifts into a route/species patch, teacher label, sealed Red, Crystal or full replay. |
 
 ### Stop conditions
 
@@ -83,7 +83,8 @@ outputs.
 - The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.
 - Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.
 - Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.
-- No routine clean-power teacher factory, teacher-route hardening, another one-turn outcome campaign, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane.
+- Authenticated train roots may be reset only under the new bounded repeatable curriculum. Prior one-shot trial identities remain consumed, and no development root may be replayed or used for fitting.
+- No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane.
 
 ### Hard boundaries for this lane
 

@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: training is allowed to reset; the exam is not
+
+**Visual:** Start with **FRESH-ONLY TRAIN 2/10 · EVALUATION 8/8**, then separate the screen into
+two lanes. In the training lane, show two authenticated save states branching into five bounded
+reset episodes each: **ACQUIRE ×4 · DEVELOP ×4 · STORAGE ×1 · RESUPPLY ×1**. In the evaluation
+lane, keep eight distinct save cards sealed and label them **NO REPLAY · NO FIT**.
+
+**Voiceover:** “We found that our experiment rules were blocking the learning loop. Resetting a
+training environment is normal; pretending each reset is a new independent world is not. So we
+bounded the reuse, labeled it honestly, and kept the real exam separate.”
+
+Resolve the board to **TRAIN CAPACITY 10/10 · PAIRED EXAM 8/8** with **ACTIONS 0 · FRAMES 0 ·
+OUTCOMES 0 · FITS 0**. End on **FREEZE SCHEDULE → COLLECT TRAIN OUTCOMES → FIT ONCE → OPEN PAIRED
+EXAM**. Do not depict model improvement yet; capacity is readiness, not training.
+
 ## New scene: five choices, one new specimen, and confidence in both directions
 
 **Visual:** Resolve the fixed queue to **5/5 TERMINAL · 0 RETRIES**. Lay out five semantic cards:

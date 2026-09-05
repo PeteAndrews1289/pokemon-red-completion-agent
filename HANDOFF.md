@@ -1,6 +1,25 @@
 # Handoff
 
-## Latest checkpoint: paired Red supply is ready; targeted train supply is short by eight roots
+## Latest checkpoint: repeatable Red training capacity is ready without spending the exam
+
+The fresh-only result below was correct but applied an evaluation rule to ordinary training. The
+project now explicitly separates the two: authenticated train states may be reset under a bounded
+curriculum, while development states remain one-shot, lineage-disjoint and unavailable to fitting.
+
+The new action-free census authenticated all 81 contexts and found that the two eligible train
+roots can fill the complete ten-episode demand when capped at five resets per root: four
+acquisition, four party-development, one storage and one resupply episode. Ten untouched
+development roots still fill all eight paired-control slots with no reuse. The census performed
+zero controller actions, emulator frames, predictions, outcomes, claims, teacher queries or fits.
+It is capacity evidence, not a model update.
+
+Next implement one outcome-blind freezer that binds the ten reset identities plus eight distinct
+development roots. The train runner must retain the complete denominator and may fit only if at
+least eight outcomes settle, including three acquisition and three development examples. Do not
+open the paired roots until the immutable fit exists. See the
+[repeatable capacity result](docs/evidence/red-living-dex-repeatable-train-capacity-result-2026-09-05.json).
+
+## Previous checkpoint: paired Red supply was ready; fresh-only train supply was short by eight roots
 
 PR 223 passed its complete check and merged as exact main
 `481accfd049bf2dc3e6cc30888e6fcd8e2167ed7`. Exact-main CI run `33985137655/1` then passed
@@ -15,12 +34,9 @@ two roots match only two of ten required slots, leaving a deficit of eight. Trai
 acquisition 1, party development 1, storage 2 and resupply 2. Do not relabel the held-out bank as
 training data; that would spend the comparison before the model is fit.
 
-The next implementation lane is a prospective, title-neutral fresh-root producer for eight or more
-independent Red train states, emphasizing acquisition and party development while retaining one
-storage and one resupply slot. It must prove lineage and physical-root novelty action-free before
-outcomes, preserve the existing 10-root development bank, and stop if the new capacity matching is
-still incomplete. Only after that census passes should the full 10+8 schedule freeze. See the
-[path-free capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json).
+That result originally pointed toward eight new clean-power worlds. The repeatable-training
+reorientation above supersedes that expensive next step while preserving the result as evidence of
+fresh-only scarcity. See the [fresh-only capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json).
 
 ## Latest checkpoint: five-case calibration quantified; next gate is targeted training supply
 

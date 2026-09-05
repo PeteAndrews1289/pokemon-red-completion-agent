@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: training stopped pretending to be an exam
+
+The first capacity audit said the evaluation side was ready but training needed eight new worlds.
+That sounded rigorous, but it applied a sealed-test rule to ordinary learning. Models are normally
+trained by resetting known environments and trying multiple actions; what must remain independent
+is the test set. The project now makes that separation explicit.
+
+Two authenticated Red training states may each supply at most five reset episodes. Together they
+cover ten planned lessons: four acquisition choices, four party-development choices, one storage
+choice and one resupply choice. Ten untouched development roots still supply eight paired tests and
+cannot be replayed or fitted. The action-free census passed 10/10 training and 8/8 evaluation with
+zero model predictions, actions, frames, outcomes or fits. The next work is finally concrete:
+freeze those reset identities, collect the training outcomes, fit once, and let the untouched bank
+decide whether the updated model is actually better.
+
 ## September 5: four successes exposed a model that was not ready
 
 The first glance at the bounded Red batch looked encouraging: four of five selected skills passed.

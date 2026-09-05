@@ -6,20 +6,21 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 5, 2026): create eight new independent Red training roots.**
+> **Current product focus (September 5, 2026): freeze repeatable Red training, preserve a real exam.**
 > Five authentic shadow decisions are now one reproducible calibration set: four skills
 > succeeded and one failed, but threshold accuracy was only **3/5**, with Brier score **0.397811**
 > and log loss **2.458979**. The model was extremely confident about one failed acquisition and
 > extremely pessimistic about one successful party-development action. These are development
 > diagnostics, not new training rows.
 >
-> The exact-main, zero-action capacity census authenticated all 81 retained contexts. The held-out
-> side is ready: 10 untouched development roots can fill all **8 paired evaluation slots**. The
-> training side is not: only **2** eligible train roots remain, leaving an **8-root deficit** and
-> only one compatible acquisition and one compatible party-development root. The next lane must
-> create genuinely new title-neutral train situations without consuming the exam bank. No new
-> gameplay, fit, authority promotion, sealed Red evaluation, or Crystal execution occurred. See the
-> [capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json),
+> The fresh-only census initially found just two eligible train roots. Instead of launching another
+> multi-day teacher factory, the training contract now treats those authenticated states as normal
+> resettable curriculum: at most five episodes per root. The action-free result fills all **10/10
+> train slots**—four acquisition, four party development, one storage and one resupply—while ten
+> untouched development roots still fill all **8/8 paired evaluation slots**. Development is never
+> replayed or fitted. No gameplay, outcome, fit, authority promotion, sealed Red evaluation, or
+> Crystal execution occurred. See the
+> [repeatable capacity result](docs/evidence/red-living-dex-repeatable-train-capacity-result-2026-09-05.json),
 > [prospective design](docs/red-living-dex-train-and-paired-control-v1.md),
 > [model-first roadmap](docs/model-first-roadmap.md), and
 > [dashboard guide](docs/progress-dashboard.md).

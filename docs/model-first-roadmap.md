@@ -1,6 +1,22 @@
 # Model-first development roadmap
 
-## Active checkpoint: targeted train correction, then a real paired control
+## Active checkpoint: repeatable targeted training, then a real paired control
+
+The fresh-only census exposed a process mistake: ordinary training had inherited the one-shot
+independence rule that belongs to evaluation. Only two untouched train roots remained, but ten
+untouched development roots already supported all eight paired checks. A bounded-reset census now
+allows at most five train episodes from either authenticated train root and fills the complete
+10-slot semantic demand—four acquisition, four party development, one storage and one resupply—
+while development remains one-shot, disjoint and unopened. This is standard curriculum learning,
+not an independence claim about ten worlds.
+
+The next gate is an outcome-blind schedule freeze. It must bind exactly ten reset identities across
+the two training roots, cap each root at five, retain the complete denominator, and separately bind
+eight distinct development roots without opening them. Then run train only, fit once if at least
+eight outcomes settle including three acquisition and three development examples, and compare the
+immutable result once against deterministic completion ordering on the paired bank. No clean-power
+teacher factory, development replay, outcome-selected schedule, Crystal task or full-game run is
+part of this lane.
 
 The five-case development audit is complete and action-free. It reproduces all five committed
 success probabilities and factual outcomes: four successes, one failure, **60%** threshold
