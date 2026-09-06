@@ -21,6 +21,7 @@ from pokemon_red_completion.living_dex_player_exploration import EXPLORATION_POL
 from pokemon_red_completion.provenance import canonical_sha256
 
 TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
+CONTINUATION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v3"
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,9 +30,12 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        if document.get("schema") != TRAINING_PLAN_SCHEMA or document.get("partition") != "train":
+        continuation = document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
+        if document.get("schema") not in {
+            TRAINING_PLAN_SCHEMA, CONTINUATION_TRAINING_PLAN_SCHEMA,
+        } or document.get("partition") != "train":
             raise ValueError("player training declaration differs")
-        if set(document) != {
+        expected_fields = {
             "schema",
             "episode_id",
             "partition",
@@ -53,7 +57,13 @@ class RedPlayerTrainingPlan:
             "independent_evaluation",
             "historical_trial_retry",
             "episode_retry_after_input",
-        }:
+        }
+        if continuation:
+            expected_fields.update({
+                "origin_state_sha256", "origin_envelope_sha256", "restore_profile_sha256",
+                "continuation_episode_id", "continuation_checkpoint_sha256",
+            })
+        if set(document) != expected_fields:
             raise ValueError("player training declaration fields differ")
         if any(
             document[key] is not False
@@ -73,7 +83,10 @@ class RedPlayerTrainingPlan:
             value = document[name]
             if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40}", value) is None:
                 raise ValueError("player training source differs")
-        for name in ("episode_id", "root_lineage_id"):
+        identities: tuple[str, ...] = ("episode_id", "root_lineage_id")
+        if continuation:
+            identities += ("continuation_episode_id",)
+        for name in identities:
             value = document[name]
             if (
                 not isinstance(value, str)
@@ -93,6 +106,40 @@ class RedPlayerTrainingPlan:
     @property
     def plan_sha256(self) -> str:
         return canonical_sha256(dict(self.document))
+
+
+def continue_red_player_training(
+    original: RedPlayerTrainingPlan,
+    *,
+    capture: GoalManagerContextCapture,
+    root_lineage_id: str,
+    episode_id: str,
+    checkpoint_sha256: str,
+    restore_profile_sha256: str,
+    execution_profile_sha256: str,
+) -> RedPlayerTrainingPlan:
+    """Bind an already authenticated train origin to its verified saved endpoint.
+
+    The runner authenticates the completed checkpoint chain before calling this.
+    This does not convert any earlier diagnostic choices into training targets.
+    """
+    if (
+        original.document["schema"] != TRAINING_PLAN_SCHEMA
+        or original.document["root_lineage_id"] != root_lineage_id
+    ):
+        raise ValueError("continued training origin differs")
+    return RedPlayerTrainingPlan({
+        **original.document,
+        "schema": CONTINUATION_TRAINING_PLAN_SCHEMA,
+        "origin_state_sha256": original.document["state_sha256"],
+        "origin_envelope_sha256": original.document["envelope_sha256"],
+        "state_sha256": capture.state_sha256,
+        "envelope_sha256": capture.envelope_sha256,
+        "profile_sha256": execution_profile_sha256,
+        "restore_profile_sha256": restore_profile_sha256,
+        "continuation_episode_id": episode_id,
+        "continuation_checkpoint_sha256": checkpoint_sha256,
+    })
 
 
 def declare_red_player_training(

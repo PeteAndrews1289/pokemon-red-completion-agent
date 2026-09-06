@@ -108,7 +108,9 @@ from pokemon_red_completion.red_goal_context import (  # noqa: E402
 )
 from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
     RedGoalContextProfile,
+    build_acquisition_replanning_profile_payload,
     load_red_goal_context_profile,
+    parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_player_checkpoint import (  # noqa: E402
     CHECKPOINT_KIND,
@@ -127,6 +129,7 @@ from pokemon_red_completion.red_player_model import (  # noqa: E402
 from pokemon_red_completion.red_player_training import RedPlayerTrainingTrajectory  # noqa: E402
 from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
     RedPlayerTrainingPlan,
+    continue_red_player_training,
     declare_red_player_training,
 )
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
@@ -187,6 +190,7 @@ class _Readiness:
     continuation: RedPlayerCheckpoint | None = None
     continuation_chain: tuple[tuple[str, str], ...] = ()
     continuation_root_lineage_id: str | None = None
+    restore_profile: RedGoalContextProfile | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -337,6 +341,10 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help="single-arm prospective training; no comparison claim",
     )
+    parser.add_argument(
+        "--expand-local-development", action="store_true",
+        help="after verified restore, add the existing four-battle local development skill",
+    )
     parser.add_argument("--training-seed", type=int, default=None)
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument("--expected-training-catalog-sha256", default=None)
@@ -486,12 +494,14 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         tuple(item) for item in getattr(args, "continue_from_checkpoint", ())
     )
     if continuation_chain and (
-        getattr(args, "train_player", False)
-        or args.challenger != CAUSAL_ARM_ID
+        args.challenger != CAUSAL_ARM_ID
         or getattr(args, "context_origin", None) != "training"
         or not getattr(args, "save_terminal_checkpoints", False)
     ):
         raise PairedRedBoundedPlayerRunError("continuation_scope")
+    expand_local = getattr(args, "expand_local_development", False)
+    if type(expand_local) is not bool or (expand_local and not continuation_chain):
+        raise PairedRedBoundedPlayerRunError("profile_transition_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
@@ -654,11 +664,30 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             rom_path,
         ),
     )
-    return _continue_readiness(readiness, continuation_chain)
+    expanded_profile = (
+        parse_red_goal_context_profile(build_acquisition_replanning_profile_payload(profile))
+        if expand_local else None
+    )
+    readiness = _continue_readiness(
+        readiness, continuation_chain, expanded_profile=expanded_profile,
+    )
+    if readiness.training_plan is not None and readiness.continuation is not None:
+        assert readiness.restore_profile is not None
+        assert readiness.continuation_root_lineage_id is not None
+        ancestor_id, ancestor_sha = readiness.continuation_chain[-1]
+        readiness = replace(readiness, training_plan=continue_red_player_training(
+            readiness.training_plan, capture=readiness.capture,
+            root_lineage_id=readiness.continuation_root_lineage_id,
+            episode_id=ancestor_id, checkpoint_sha256=ancestor_sha,
+            restore_profile_sha256=readiness.restore_profile.profile_sha256,
+            execution_profile_sha256=readiness.profile.profile_sha256,
+        ))
+    return readiness
 
 
 def _continue_readiness(
     readiness: _Readiness, chain: tuple[tuple[str, str], ...],
+    *, expanded_profile: RedGoalContextProfile | None = None,
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
@@ -666,6 +695,15 @@ def _continue_readiness(
         if episode_id in seen:
             raise PairedRedBoundedPlayerRunError("continuation_duplicate_ancestor")
         seen.add(episode_id)
+        header = readiness.private_root.open_episode(episode_id).read_header()
+        metadata = header.get("metadata")
+        if (
+            expanded_profile is not None and isinstance(metadata, Mapping)
+            and metadata.get("profile_sha256") == expanded_profile.profile_sha256
+        ):
+            # Only the explicit mechanical expansion is admitted; no arbitrary
+            # saved profile and no implicit rollback to an earlier profile.
+            readiness = replace(readiness, profile=expanded_profile)
         checkpoint = open_red_player_checkpoint(
             readiness.private_root, episode_id=episode_id,
             expected_record_sha256=record_sha256, original_parent=readiness.capture,
@@ -673,8 +711,6 @@ def _continue_readiness(
             expected_rom_sha256=readiness.rom_sha256,
             expected_context_origin=readiness.context_origin,
         )
-        header = readiness.private_root.open_episode(episode_id).read_header()
-        metadata = header.get("metadata")
         split = metadata.get("split") if isinstance(metadata, Mapping) else None
         if not isinstance(split, Mapping) or split.get("partition") != "train":
             raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
@@ -689,6 +725,11 @@ def _continue_readiness(
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
+    if chain:
+        readiness = replace(
+            readiness, restore_profile=readiness.profile,
+            profile=expanded_profile or readiness.profile,
+        )
     return readiness
 
 
@@ -702,7 +743,7 @@ def _continuation_header(readiness: _Readiness) -> dict[str, object]:
         ],
         "split": {"root_lineage_id": readiness.continuation_root_lineage_id, "partition": "train"},
         "independent_root": False,
-        "training_eligible": False,
+        "training_eligible": readiness.training_plan is not None,
     }
 
 
@@ -713,7 +754,8 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
     initial_frame = emulator.frame_count
     controller = ReadOnlyController(emulator)
     runtime = build_red_goal_context_runtime(
-        profile=readiness.profile, capture=readiness.capture, emulator=controller,
+        profile=getattr(readiness, "restore_profile", None) or readiness.profile,
+        capture=readiness.capture, emulator=controller,
         reader=PokemonRedStateReader(controller),
     )
     actions = CountingExecutor(
@@ -1258,7 +1300,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             viewer=viewer,
         )
         comparison_document: dict[str, object]
-        if readiness.continuation is not None:
+        if readiness.continuation is not None and readiness.training_plan is None:
             comparison_document = {
                 "schema": "pokemon.red.bounded-player-continuation-result.v1",
                 **_continuation_header(readiness),
@@ -1282,6 +1324,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         else:
             comparison_document = {
                 "schema": "pokemon.red.bounded-player-training-result.v1",
+                **_continuation_header(readiness),
                 "episode_id": _episode_id(readiness.pair_id, readiness.challenger_arm_id),
                 "plan_sha256": readiness.training_plan.plan_sha256,
                 "trajectory_manifest_sha256": learned.trajectory_manifest_sha256,

@@ -25,8 +25,12 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_adapter import (
     red_living_dex_outcome_from_observations,
 )
+from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_training import TRAINING_EVENT, TRAINING_EVENT_SCHEMA
-from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
+from pokemon_red_completion.red_player_training_plan import (
+    CONTINUATION_TRAINING_PLAN_SCHEMA,
+    RedPlayerTrainingPlan,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +67,7 @@ def load_red_player_training_episode(
     )
     if sealed is None or sealed.read() != dict(plan.document):
         raise ValueError("prospective player training declaration is missing")
+    _require_continuation_origin(store, plan)
     reader = store.open_episode(episode_id)
     if reader.manifest_sha256 != expected_manifest_sha256:
         raise ValueError("player training episode identity differs")
@@ -228,3 +233,31 @@ def _mapping(value: object) -> Mapping[str, object]:
     if not isinstance(value, Mapping):
         raise ValueError("player training document must be a mapping")
     return value
+
+
+def _require_continuation_origin(store: PrivateArtifactRoot, plan: RedPlayerTrainingPlan) -> None:
+    """Join the new sampled episode to the completed saved parent, never its old choices."""
+    if plan.document["schema"] != CONTINUATION_TRAINING_PLAN_SCHEMA:
+        return
+    ancestor_id = cast(str, plan.document["continuation_episode_id"])
+    record = store.find_sealed_record(
+        checkpoint_record_id(ancestor_id), expected_kind=CHECKPOINT_KIND,
+    )
+    if (
+        record is None
+        or record.summary.record_sha256 != plan.document["continuation_checkpoint_sha256"]
+    ):
+        raise ValueError("continued training checkpoint differs")
+    checkpoint = record.read()
+    parent = store.open_episode(ancestor_id)
+    metadata = _mapping(parent.read_header().get("metadata"))
+    split = _mapping(metadata.get("split"))
+    if (
+        checkpoint.get("episode_id") != ancestor_id
+        or checkpoint.get("trajectory_manifest_sha256") != parent.manifest_sha256
+        or checkpoint.get("state_sha256") != plan.document["state_sha256"]
+        or checkpoint.get("profile_sha256") != plan.document["restore_profile_sha256"]
+        or split.get("partition") != "train"
+        or split.get("root_lineage_id") != plan.document["root_lineage_id"]
+    ):
+        raise ValueError("continued training lineage or saved input differs")

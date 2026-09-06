@@ -8,7 +8,8 @@ from test_paired_red_bounded_player_script import SCRIPT
 from test_red_player_training import _plan
 
 
-def test_training_runs_one_arm_after_declaration_and_never_compares(monkeypatch):
+@pytest.mark.parametrize("continued", [False, True])
+def test_training_runs_one_arm_after_declaration_and_never_compares(monkeypatch, continued):
     module = runpy.run_path(str(SCRIPT))
     run = module["_run"]
     namespace = run.__globals__
@@ -17,7 +18,9 @@ def test_training_runs_one_arm_after_declaration_and_never_compares(monkeypatch)
     readiness = SimpleNamespace(
         pair_id="native-training-test",
         training_plan=plan,
-        continuation=None,
+        continuation=object() if continued else None,
+        continuation_chain=(("old-train-endpoint", "f" * 64),) if continued else (),
+        continuation_root_lineage_id=plan.document["root_lineage_id"] if continued else None,
         protected_paths=(),
         rom_path=Path("unused"),
         context_origin="training",
@@ -67,4 +70,9 @@ def test_training_runs_one_arm_after_declaration_and_never_compares(monkeypatch)
     assert arms == [module["CAUSAL_ARM_ID"]]
     assert result["model_fitted"] is False and result["independent_evaluation"] is False
     assert result["evidence_scope"] == "prospective_correlated_training"
+    assert result["schema"] == "pokemon.red.bounded-player-training-result.v1"
+    if continued:
+        assert result["training_eligible"] is True
+        assert result["independent_root"] is False
+        assert result["plan_sha256"] == plan.plan_sha256
     assert writes == [result]

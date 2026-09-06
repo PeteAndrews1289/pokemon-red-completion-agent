@@ -111,15 +111,72 @@ def test_two_saved_segments_retain_the_first_lineage(case):
     assert second.continuation_root_lineage_id == "original-training-root"
 
 
+def test_expansion_preserves_original_restore_and_can_continue_expanded_child(case):
+    readiness, ancestor = _completed(case)
+    expanded = SimpleNamespace(profile_sha256="e" * 64)
+    first = runner._continue_readiness(readiness, (ancestor,), expanded_profile=expanded)
+    assert first.restore_profile is readiness.profile
+    assert first.profile is expanded
+    store, arguments, _ = case
+    child = capture_red_player_terminal(**{
+        **arguments, "parent": first.capture, "episode_id": "expanded-parent",
+        "profile_sha256": expanded.profile_sha256,
+    })
+    _complete(store, child, alter_header=runner._continuation_header(first))
+    record = publish_red_player_checkpoint(store, child)
+    resumed = runner._continue_readiness(
+        readiness, (ancestor, ("expanded-parent", record["record_sha256"])),
+        expanded_profile=expanded,
+    )
+    assert resumed.restore_profile is expanded
+    assert resumed.profile is expanded
+    assert resumed.continuation_root_lineage_id == "original-training-root"
+
+
+def test_training_continuation_binds_actual_saved_state_not_original_bytes(case):
+    from test_goal_resource_quote import _supply_model
+    from test_red_player_training import _plan
+
+    from pokemon_red_completion.red_player_training_dataset import _require_continuation_origin
+    from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
+
+    readiness, ancestor = _completed(case)
+    continued = runner._continue_readiness(readiness, (ancestor,))
+    original = RedPlayerTrainingPlan({
+        **_plan(_supply_model()).document, "root_lineage_id": "original-training-root",
+    })
+    plan = runner.continue_red_player_training(
+        original, capture=continued.capture, root_lineage_id="original-training-root",
+        episode_id=ancestor[0], checkpoint_sha256=ancestor[1],
+        restore_profile_sha256=readiness.profile.profile_sha256,
+        execution_profile_sha256="e" * 64,
+    )
+    assert plan.document["state_sha256"] == continued.capture.state_sha256
+    assert plan.document["origin_state_sha256"] == original.document["state_sha256"]
+    assert plan.document["profile_sha256"] == "e" * 64
+    assert plan.document["restore_profile_sha256"] == readiness.profile.profile_sha256
+    _require_continuation_origin(readiness.private_root, plan)
+    for field in ("root_lineage_id", "state_sha256", "restore_profile_sha256",
+                  "continuation_checkpoint_sha256"):
+        changed = RedPlayerTrainingPlan({
+            **plan.document, field: "foreign-root" if field == "root_lineage_id" else "0" * 64,
+        })
+        with pytest.raises(ValueError, match="continued training"):
+            _require_continuation_origin(readiness.private_root, changed)
+
+
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])
 def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, damage):
     readiness, ancestor = _completed(case)
     readiness = runner._continue_readiness(readiness, (ancestor,))
+    original_profile = readiness.profile
+    readiness = replace(readiness, profile=SimpleNamespace(profile_sha256="e" * 64))
     emulator = SimpleNamespace(frame_count=12, pressed_buttons=frozenset())
     seen = []
 
     def runtime(**kwargs):
         assert isinstance(kwargs["emulator"], ReadOnlyController)
+        assert kwargs["profile"] is original_profile
         seen.append("readonly")
         return object()
 
@@ -146,7 +203,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
 
 
 @pytest.mark.parametrize("override", [
-    {"train_player": True}, {"context_origin": "development"},
+    {"context_origin": "development"},
     {"save_terminal_checkpoints": False}, {"challenger": runner.BASELINE_ARM_ID},
 ])
 def test_unsupported_continuation_scope_fails_before_source_or_rom(override):
@@ -159,6 +216,21 @@ def test_unsupported_continuation_scope_fails_before_source_or_rom(override):
         },
     )
     with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="continuation_scope"):
+        runner._prepare(args)
+
+
+def test_training_continuation_passes_scope_but_still_requires_source_check(monkeypatch):
+    args = SimpleNamespace(
+        pair_id="sampled-continuation", continue_from_checkpoint=[("old", "a" * 64)],
+        train_player=True, context_origin="training", save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID, expand_local_development=True,
+    )
+
+    def source(*_a, **_k):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
         runner._prepare(args)
 
 
