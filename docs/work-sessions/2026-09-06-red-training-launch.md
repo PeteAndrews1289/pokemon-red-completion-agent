@@ -138,3 +138,34 @@ eight scheduled roots were found in the authenticated 81-context catalog. No res
 trial claim, model prediction, fit or fit-basis publication occurred. This is candidate diagnostic
 evidence, not exact-source CI admission; qualify the published consumer before the real launch.
 See [the path-free result](../evidence/red-training-reserve-reader-repair-2026-09-06.json).
+
+## Actual run, fit and post-fit audit — complete
+
+PR 230 passed full CI `34018035809` (6,899 passed, four skipped, one expected failure) and merged
+as `e9b381d0`. Exact-main CI `34019391472` attempt 1 passed. The one-use launch helper stopped
+before dispatch because GitHub had automatically removed the merged feature branch. Fetching
+the permanent PR head reference verified the identical tested/merged tree; the real command was
+then dispatched once from the clean qualified source. No consumed gameplay trial was retried.
+
+The original eight-lesson plan completed: six factual rows across three roots, two setup censors
+from a fourth, 20,312 controller actions and 1,127,136 frames. New actual choices were acquisition
+two, development three and resupply one. Five succeeded, one acquisition failed, and both setup
+censors remain excluded from labels. Four paired roots and one reserve remain unexecuted.
+
+The unchanged factual admission gate passed and the existing fitter executed **once**, retaining
+all 23 baseline examples plus six new rows. The model now includes **29** examples, versus 18 in
+the named prior. The intervening five rows were earlier collected but not fitted. Weighted train
+MSE changed from 0.0069591 to 0.0050046, and three training-menu choices changed. Collection used
+the focus policy, not the fitted model; gameplay model predictions were zero. No development,
+teacher, sealed Red, Crystal, counterfactual target or authority-promotion effect occurred.
+
+Independent read-only reload authenticated all 29 causal rows, every baseline fingerprint, all
+eight setup terminals and the new model/manifest/record. It added no predictions, fits or input.
+Both setup failures have the same root, phase, coarse class and action/frame counts, but lack
+the original exception. Their exact cause remains unknown. Full corpus inspection also shows
+no successful evolution, exploration, storage or access-unlocking examples yet.
+
+See [real result](../evidence/red-retired-bank-train-and-fit-result-2026-09-06.json),
+[audit](../audits/red-goal-model-post-fit-2026-09-06.md) and
+[next bounded-play session](2026-09-06-red-closed-loop-next.md). The live process and its temporary
+dashboard stopped normally. This session closes at a saved, audited model; do not relaunch it.

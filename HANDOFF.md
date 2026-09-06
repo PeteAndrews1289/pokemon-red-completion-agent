@@ -1,6 +1,50 @@
 # Handoff
 
-## Resume here — September 6 training-launch repair
+## Resume here — September 6 real fit complete; bounded learned play next
+
+Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the current
+[roadmap](docs/model-first-roadmap.md) and
+[next-session plan](docs/work-sessions/2026-09-06-red-closed-loop-next.md).
+
+**Do not relaunch the completed eight-lesson campaign.** All eight train trials are terminal.
+The process exited successfully after one actual fit, and its temporary live dashboard stopped
+normally. The overview work card reports completion; its older hard-coded aggregate labels still
+need replacement by an actual job/result feed. Private operator details are in `SESSION-RESUME.md`.
+
+- Qualified executable: merged PR 230, `e9b381d0bafb114ce3a0ad08b4ed77d95926bb97`, exact-main
+  CI `34019391472` attempt 1. Both the PR and main passed the full test check.
+- Actual collection: eight terminals, six causal train rows, two censored setup failures,
+  20,312 controller actions and 1,127,136 frames. Settled rows span three roots; the two setup
+  failures share a fourth root. Do not describe resets as independent worlds.
+- New outcomes: acquisition two (one success, one failure), development three (all successful),
+  resupply one (successful). Preserve the negative acquisition and both setup censors.
+- Exactly one real fit: **29 examples**, comprising the old fitted 18, five previously unfitted
+  rows and six new rows. Read-only audit verified all 23 pre-run rows unchanged, the new model,
+  its manifest, record and full dataset binding.
+- Artifact SHA: `bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a`.
+  Record SHA: `d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010`.
+  This is the **living-Dex option-value scorer**, not the older goal manager or battle head.
+- Weighted training MSE fell from 0.0069591 to 0.0050046; three training-menu choices changed.
+  Collection made zero gameplay model predictions. The model remains shadow-only; no independent
+  comparison, full-player authority, sealed Red or Crystal result is claimed.
+- Four paired roots and one reserve remain unexecuted. Their four-root comparison is descriptive.
+  The old ten-trial campaign, all new terminals, original plan and fit must not retry or refreeze.
+
+Evidence: [campaign and fit](docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json),
+[independent reload](docs/evidence/red-retired-bank-post-fit-audit-2026-09-06.json),
+[audit findings](docs/audits/red-goal-model-post-fit-2026-09-06.md).
+
+Next: use this artifact for the declared short comparison and successive model-selected Red
+goals. Reuse deterministic execution, refresh state and the living ledger between goals, and show
+the actual policy, outcomes, resources and failures. Future failure records need actionable private
+exception detail: both setup censors currently say only `construction_route/unexpected_error`,
+so their precise cause is unknown. Do not retry them to recover a traceback.
+
+The cumulative cross-family scorecard is its previous verified ledger, not the current option
+corpus. Use **29** for this learner. No Claude or Antigravity audit was requested or performed in
+this session; do not imply external sign-off. Older checkpoints below are retained history only.
+
+## Historical checkpoint — September 6 training-launch repair
 
 Use [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the current
 [roadmap](docs/model-first-roadmap.md), not older checkpoints below.

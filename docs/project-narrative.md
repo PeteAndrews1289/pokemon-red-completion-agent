@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: real game outcomes reached the learner
+
+The eight-lesson batch is complete, and the existing living-Dex option-value model was fitted
+once on 29 real examples. Eighteen were already in its prior fit; five had been collected earlier
+but not yet fitted; six came from this run. Independent read-only audit verified every earlier
+row remained unchanged and authenticated the new artifact and dataset.
+
+Five new outcomes succeeded: one acquisition, three party-development tasks and one resupply.
+One acquisition failed and remains a valid negative example. Two other lessons failed during
+setup and were excluded from fitting, not relabeled as failed Pokémon decisions. All eight
+attempts remain visible. The run used 20,312 controller actions and 1,127,136 emulator frames.
+
+This is meaningful but narrow progress. The model is a small learned semantic option scorer,
+not an LLM and not yet a self-sufficient player. Training error fell about 28% and three choices
+changed on training menus; those are calibration results, not proof of unseen competence. The
+collection policy still selected lessons and deterministic skills executed them. The next visible
+milestone is several consecutive goals chosen by the fitted model, with fresh state and verified
+living-collection progress between them.
+
+The audit also makes the remaining weakness concrete: this corpus still lacks successful
+evolution, exploration, storage and access-unlocking examples. Both setup censors came from one
+starting root, and their coarse records lost the exact exception. Future diagnostics must explain
+failures without reopening consumed trials. Red remains the immediate proving ground; portable
+semantics and later Crystal adaptation still serve the multi-game living-Pokédex objective.
+
+Evidence: [real run and fit](evidence/red-retired-bank-train-and-fit-result-2026-09-06.json) and
+[post-fit audit](audits/red-goal-model-post-fit-2026-09-06.md). The earlier sections retain the
+understanding at each checkpoint; their future-tense launch instructions are now history.
+
 ## September 6: close the gap between collecting lessons and updating the learner
 
 The recovery audit led to three bounded repairs, not another learning system. The launcher now

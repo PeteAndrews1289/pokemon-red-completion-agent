@@ -1,0 +1,174 @@
+{
+  "all_outcomes_by_kind_and_success": [
+    {
+      "examples": 1,
+      "kind": "acquire",
+      "verified_success": false
+    },
+    {
+      "examples": 6,
+      "kind": "acquire",
+      "verified_success": true
+    },
+    {
+      "examples": 3,
+      "kind": "develop",
+      "verified_success": false
+    },
+    {
+      "examples": 3,
+      "kind": "develop",
+      "verified_success": true
+    },
+    {
+      "examples": 5,
+      "kind": "evolve",
+      "verified_success": false
+    },
+    {
+      "examples": 3,
+      "kind": "explore",
+      "verified_success": false
+    },
+    {
+      "examples": 4,
+      "kind": "manage_storage",
+      "verified_success": false
+    },
+    {
+      "examples": 3,
+      "kind": "resupply",
+      "verified_success": true
+    },
+    {
+      "examples": 1,
+      "kind": "unlock_access",
+      "verified_success": false
+    }
+  ],
+  "all_train_lineages": 22,
+  "baseline_examples_retained_unchanged": 23,
+  "baseline_verified_successes": 7,
+  "claim_boundary": "train calibration only; no independent gameplay or transfer result",
+  "controller_actions": 0,
+  "failed_setup_root_count": 1,
+  "model_fits": 0,
+  "model_predictions": 0,
+  "model_record_authenticated": true,
+  "model_record_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+  "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+  "new_examples": 6,
+  "new_lineages": 3,
+  "new_model_manifest_authenticated": true,
+  "new_outcomes_by_kind_and_success": [
+    {
+      "examples": 1,
+      "kind": "acquire",
+      "verified_success": false
+    },
+    {
+      "examples": 1,
+      "kind": "acquire",
+      "verified_success": true
+    },
+    {
+      "examples": 3,
+      "kind": "develop",
+      "verified_success": true
+    },
+    {
+      "examples": 1,
+      "kind": "resupply",
+      "verified_success": true
+    }
+  ],
+  "new_verified_failures": 1,
+  "new_verified_successes": 5,
+  "original_exception_detail_in_setup_terminals": false,
+  "private_identity_fields": 0,
+  "private_path_fields": 0,
+  "schema": "pokemon.red.retired-bank-post-fit-audit.v1",
+  "setup_terminals_authenticated": [
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "acquire",
+      "ordinal": 0,
+      "retry_allowed": false,
+      "setup_controller_actions": 2148,
+      "setup_emulator_frames": 109910,
+      "status": "complete"
+    },
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "acquire",
+      "ordinal": 1,
+      "retry_allowed": false,
+      "setup_controller_actions": 2110,
+      "setup_emulator_frames": 105986,
+      "status": "complete"
+    },
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "develop",
+      "ordinal": 2,
+      "retry_allowed": false,
+      "setup_controller_actions": 2073,
+      "setup_emulator_frames": 100970,
+      "status": "complete"
+    },
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "develop",
+      "ordinal": 3,
+      "retry_allowed": false,
+      "setup_controller_actions": 2073,
+      "setup_emulator_frames": 100970,
+      "status": "complete"
+    },
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "develop",
+      "ordinal": 4,
+      "retry_allowed": false,
+      "setup_controller_actions": 2110,
+      "setup_emulator_frames": 105986,
+      "status": "complete"
+    },
+    {
+      "failure_class": "unexpected_error",
+      "failure_phase": "construction_route",
+      "focus_kind": "develop",
+      "ordinal": 5,
+      "retry_allowed": false,
+      "setup_controller_actions": 1071,
+      "setup_emulator_frames": 54984,
+      "status": "failed"
+    },
+    {
+      "failure_class": "unexpected_error",
+      "failure_phase": "construction_route",
+      "focus_kind": "manage_storage",
+      "ordinal": 6,
+      "retry_allowed": false,
+      "setup_controller_actions": 1071,
+      "setup_emulator_frames": 54984,
+      "status": "failed"
+    },
+    {
+      "failure_class": null,
+      "failure_phase": null,
+      "focus_kind": "resupply",
+      "ordinal": 7,
+      "retry_allowed": false,
+      "setup_controller_actions": 1539,
+      "setup_emulator_frames": 84985,
+      "status": "complete"
+    }
+  ],
+  "total_examples": 29
+}
