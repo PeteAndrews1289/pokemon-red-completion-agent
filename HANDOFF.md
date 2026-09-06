@@ -41,6 +41,13 @@ execution command accepts a separately qualified consumer. Operator paths are in
 `SESSION-RESUME.md`, not this repository. The launch command includes its own pre-input checks;
 an additional standalone preflight is optional and must not be counted as gameplay.
 
+Latest verification follow-up: run `34011586581` passed 6,386 tests but stopped on one additional
+strategic-navigation occurrence of the historical/current fixture mismatch. That fixture is now
+prospective and includes source-drift rejection. The whole protocol family and end-of-suite group
+must pass together before republishing. This changes tests, not the frozen plan or runtime bundle.
+The expanded sweep is complete: **716 passed in 68.92 seconds**. Qualify the published consumer,
+then proceed with the same eight lessons and admitted fit; do not recreate their plan.
+
 ## Historical checkpoint — September 6 recovery audit
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then

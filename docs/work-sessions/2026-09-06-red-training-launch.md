@@ -78,3 +78,11 @@ includes rejecting changed current source while still accepting the original his
 The next output remains eight actual lessons and an admitted fit, not additional experiment
 design. Reuse the frozen producer with the separately qualified consumer, and use the command's
 built-in action-free checks rather than repeating the expensive inventory unnecessarily.
+
+The two-worker CI follow-up (`34011586581`) stopped after 23m19s with 6,386 tests passed and one
+more occurrence of the same fixture error in strategic navigation. The initial fixture sweep was
+incomplete. Its prospective test registry now uses the generator inside an isolated repository,
+with a negative assertion that a later committed source change is rejected. The actual historical
+navigation registry and production loader are unchanged. Before another publication, run the
+entire protocol family plus the remaining navigation/training/end-of-suite group together.
+That sweep passed all 716 tests in 68.92 seconds. The production source bundle is unchanged.

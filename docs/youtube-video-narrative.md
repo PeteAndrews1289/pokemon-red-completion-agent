@@ -25,6 +25,10 @@ For the CI repair, show a historical fingerprint beside its original revision an
 tests in a separate box. Explain that faster, fail-fast verification shortens engineering feedback
 but does not itself teach Pokémon. Only actual game outcomes advance the learning counter.
 
+Keep the failed parallel run in the account: 6,386 tests passed before another historical-fixture
+error stopped it. The follow-up sweep passed 716 tests. This is a debugging correction, not a
+gameplay milestone; avoid a montage that implies the model was training throughout that wait.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.

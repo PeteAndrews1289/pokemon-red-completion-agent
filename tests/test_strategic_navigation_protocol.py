@@ -4,6 +4,7 @@ import hashlib
 import json
 import shutil
 import subprocess
+import sys
 from dataclasses import replace
 from pathlib import Path
 
@@ -184,20 +185,29 @@ def test_parser_rejects_noncanonical_duplicate_or_drifted_registry() -> None:
 def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None:
     repository = tmp_path / "repository"
     repository.mkdir()
+    shutil.copy2(PROJECT_ROOT / ".gitignore", repository / ".gitignore")
     shutil.copy2(PROJECT_ROOT / "pyproject.toml", repository / "pyproject.toml")
     shutil.copytree(
         PROJECT_ROOT / "src",
         repository / "src",
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
     )
-    for relative in (
-        STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
-        STRATEGIC_NAVIGATION_REGISTRY_DIGEST_RELATIVE_PATH,
-    ):
-        target = repository / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(PROJECT_ROOT / relative, target)
+    # The tracked registry is historical. Generate a prospective fixture for
+    # this test source; never overwrite or rebind the actual frozen registry.
+    (repository / "configs").mkdir()
+    (repository / "scripts").mkdir()
+    shutil.copy2(
+        PROJECT_ROOT / "scripts/regenerate_strategic_navigation_registry.py",
+        repository / "scripts/regenerate_strategic_navigation_registry.py",
+    )
     subprocess.run(["git", "init", "-q"], cwd=repository, check=True)
+    subprocess.run(
+        [sys.executable, "scripts/regenerate_strategic_navigation_registry.py"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     subprocess.run(["git", "add", "."], cwd=repository, check=True)
     subprocess.run(
         [
@@ -220,7 +230,24 @@ def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None
 
     assert (
         loaded.registry_sha256
-        == parse_strategic_navigation_registry(REGISTRY_PATH.read_bytes()).registry_sha256
+        == parse_strategic_navigation_registry(
+            (repository / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+        ).registry_sha256
     )
     assert loaded.execution.source_commit is not None
     assert loaded.rehearsal_assignment().source_commit == loaded.execution.source_commit
+
+    project_file = repository / "pyproject.toml"
+    project_file.write_text(project_file.read_text() + "\n# later implementation\n")
+    subprocess.run(["git", "add", "."], cwd=repository, check=True)
+    subprocess.run(
+        [
+            "git", "-c", "user.name=Strategic Collection Test",
+            "-c", "user.email=strategic@example.invalid",
+            "-c", "commit.gpgsign=false", "commit", "-qm", "later implementation",
+        ],
+        cwd=repository,
+        check=True,
+    )
+    with pytest.raises(StrategicNavigationProtocolError, match="does not match"):
+        load_committed_strategic_navigation_registry(repository)

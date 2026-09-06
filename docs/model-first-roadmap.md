@@ -31,6 +31,12 @@ historical-registry test failures. Those tests now distinguish a frozen historic
 a newly generated test registry; production authentication remains strict. The same full test
 selection uses two file-grouped workers, fail-fast reporting and a 60-minute safety ceiling.
 
+The parallel follow-up, run `34011586581`, passed 6,386 tests before stopping on another instance
+of that fixture error in strategic navigation. Its correction extends the same isolated-test
+approach and adds source-drift rejection. Sweep the full protocol family and end-of-suite group
+before republishing; the frozen plan, production source bundle and next learning steps are unchanged.
+The expanded local sweep passed all 716 tests in 68.92 seconds; publication qualification is next.
+
 ### Execute next; do not reopen the architecture
 
 1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and

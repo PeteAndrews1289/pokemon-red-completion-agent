@@ -29,6 +29,11 @@ boundaries without relaxing production checks and switched the same test selecti
 with immediate failure reporting. The purpose of this repair is shorter feedback on a reusable
 learning loop, not counting CI as AI progress.
 
+The first parallel run found one more historical/current fixture mismatch near its end. We owned
+that incomplete sweep, corrected the navigation fixture without altering the real frozen registry,
+and ran the entire protocol family and end-of-suite group: all 716 tests passed. No simulated test
+or publication attempt was credited as another game lesson.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still
