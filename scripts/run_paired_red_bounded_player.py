@@ -901,6 +901,20 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
     return public
 
 
+def _require_safe_checkpoint_boundary(
+    runtime: RedGoalContextRuntime,
+    meter: CompositionIndependentBudgetMeter,
+) -> None:
+    before = meter.checkpoint()
+    observation = runtime.adapter.observe()
+    if (
+        meter.checkpoint() != before
+        or not observation.input_ready
+        or observation.raw.battle_state
+    ):
+        raise PairedRedBoundedPlayerRunError("terminal_checkpoint_unsafe_boundary")
+
+
 def _run_arm(
     readiness: _Readiness,
     *,
@@ -1020,11 +1034,16 @@ def _run_arm(
                     "maximum_frames": limits.max_frames_per_decision,
                 }
             )
+            if (
+                readiness.continuation is not None
+                and not readiness.continuation_root_lineage_id
+            ):
+                raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(
                 episode_id=episode_id,
                 root_lineage_id=cast(str, readiness.training_plan.document["root_lineage_id"])
                 if readiness.training_plan is not None
-                else readiness.continuation_root_lineage_id
+                else cast(str, readiness.continuation_root_lineage_id)
                 if readiness.continuation is not None
                 else canonical_sha256(
                     {
@@ -1085,6 +1104,7 @@ def _run_arm(
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
             if readiness.save_terminal_checkpoints:
+                _require_safe_checkpoint_boundary(runtime, meter)
                 terminal_checkpoint = capture_red_player_terminal(
                     emulator=emulator,
                     meter=meter,
@@ -1326,6 +1346,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if challenger_authority.last_decision is None:
             raise PairedRedBoundedPlayerRunError("causal_outcome_decision")
         summary["living_dex_causal_shadow"] = {
+            "counts_include_unexecuted_proposals": True,
+            "settled_authority_goal_count": learned.episode.authority_decisions,
+            "unexecuted_proposal_count": (
+                challenger_authority.decisions - learned.episode.authority_decisions
+            ),
             "decision_count": challenger_authority.decisions,
             "decisions": [
                 decision.public_dict() for decision in challenger_authority.decision_history

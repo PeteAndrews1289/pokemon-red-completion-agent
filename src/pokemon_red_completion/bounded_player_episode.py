@@ -51,6 +51,10 @@ class BoundedPlayerError(RuntimeError):
     """Raised when the bounded player crosses an authority or evidence boundary."""
 
 
+class _RepeatedRecoveryGoal(BoundedPlayerError):
+    """The actor proposed a prohibited retry before a new decision or input."""
+
+
 _PUBLIC_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
 
 
@@ -61,6 +65,7 @@ class BoundedPlayerStopReason(StrEnum):
     DECISION_LIMIT = "decision_limit"
     VERIFIED_FAILURE = "verified_failure"
     FAILURE_CONTEXT_UNCHANGED = "failure_context_unchanged"
+    RECOVERY_GOAL_REPEATED = "recovery_goal_repeated"
     INSUFFICIENT_AVAILABLE_GOALS = "insufficient_available_goals"
 
 
@@ -375,17 +380,35 @@ def run_bounded_player_episode(
             _ForcedSingletonAuthority() if forced_singleton else authority
         )
 
-        execution = execute_goal_manager_decision(
-            situation=current.situation,
-            binding_set=_retaining_binding_set(
-                current.binding_set, budget_meter, failure_observer
-            ),
-            authority=selected_authority,
-            trajectory=trajectory,
-            require_durable_decision=True,
-            selection_guard=_different_goal_guard(failed_kind),
-            selection_mode=selection_mode,
-        )
+        before_selection = budget_meter.checkpoint()
+        before_decision_index = trajectory.next_decision_index
+        try:
+            execution = execute_goal_manager_decision(
+                situation=current.situation,
+                binding_set=_retaining_binding_set(
+                    current.binding_set, budget_meter, failure_observer
+                ),
+                authority=selected_authority,
+                trajectory=trajectory,
+                require_durable_decision=True,
+                selection_guard=_different_goal_guard(failed_kind),
+                selection_mode=selection_mode,
+            )
+        except _RepeatedRecoveryGoal:
+            # This guard runs before recording or executing another choice. Do
+            # not hide other authority/evidence errors or replace the actor.
+            trajectory.require_settled()
+            if (
+                budget_meter.checkpoint() != before_selection
+                or trajectory.next_decision_index != before_decision_index
+            ):
+                raise BoundedPlayerError("rejected recovery selection changed state") from None
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED,
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         _require_settled_execution(execution)
         executed_budget = budget_meter.checkpoint()
         actions = executed_budget.controller_actions - last_budget.controller_actions
@@ -544,7 +567,7 @@ def _different_goal_guard(
 ) -> Callable[[object], None]:
     def guard(selection: object) -> None:
         if failed_kind is not None and getattr(selection, "kind", None) is failed_kind:
-            raise BoundedPlayerError(
+            raise _RepeatedRecoveryGoal(
                 "bounded player repeated the failed goal during recovery"
             )
 

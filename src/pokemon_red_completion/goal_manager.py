@@ -126,6 +126,7 @@ class GoalFailureReason(StrEnum):
     """Portable failure and censor reasons retained beside a chosen goal."""
 
     BINDING_FAILED = "binding_failed"
+    SEARCH_EXHAUSTED = "search_exhausted"
     EXECUTION_BUDGET_EXHAUSTED = "execution_budget_exhausted"
     EXTERNAL_INTERRUPTION = "external_interruption"
     OUTCOME_NOT_VERIFIED = "outcome_not_verified"

@@ -11,6 +11,7 @@ from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
+    GoalFailureReason,
     GoalKind,
     GoalUnavailableReason,
 )
@@ -29,6 +30,7 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
 from pokemon_red_completion.red_acquisition import (
+    RedAreaExecutionError,
     RedAreaExecutionPolicy,
     summarize_red_area_survey,
 )
@@ -501,6 +503,42 @@ def test_area_survey_provider_captures_and_independently_reloads_collection() ->
         "wild:Route1:grass",
         adapter.observe().collection_observation,
     ).missing_species_refs
+
+
+@pytest.mark.parametrize("unsafe", [False, True])
+def test_area_survey_labels_verified_no_find_without_claiming_success(unsafe) -> None:
+    reader = _Reader(raw=_raw(poke_balls=20), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+
+    class ExhaustedArea(_AreaExecutor):
+        def seek_encounter(self):
+            self.actions.execute(MacroAction(MacroActionKind.WAIT))
+            raise RedAreaExecutionError("bounded search", reason_code="survey_leg_limit_exceeded")
+
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:Route1:grass", area_executor=ExhaustedArea(reader, actions),
+        actions=actions, emulator=port, adapter=adapter,
+    )
+    offer = provider.offer(adapter.observe())
+    assert offer.binding is not None
+    report = offer.binding.execute()
+    if unsafe:
+        reader.ready = False
+    verdict = offer.binding.verify(report)
+    assert verdict.status.value == "failed"
+    assert verdict.failure_reason is (
+        GoalFailureReason.OUTCOME_NOT_VERIFIED if unsafe else GoalFailureReason.SEARCH_EXHAUSTED
+    )
+    assert report.evidence["search_exhausted"] is True
+    assert report.evidence["captures"] == 0
+    assert report.evidence["encounters_seen"] == 0
+    assert (
+        report.evidence["initial_missing_specimens"] == report.evidence["final_missing_specimens"]
+    )
+    assert report.actions_executed == 1
+    assert report.frames_executed > 0
 
 
 def test_area_survey_verifies_one_required_duplicate_precursor() -> None:

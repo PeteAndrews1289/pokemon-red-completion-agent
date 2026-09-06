@@ -15,7 +15,7 @@ from pokemon_red_completion.bounded_player_episode import (
     BoundedPlayerStopReason,
 )
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import CompositionBudgetCheckpoint
 from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manager_context_capture
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
@@ -156,6 +156,34 @@ def test_binary_save_with_path_like_base64_round_trips_through_real_private_stor
     checkpoint = _open(store, arguments, summary)
     assert checkpoint.capture.state_bytes == state
     assert checkpoint.capture.state_sha256 == hashlib.sha256(state).hexdigest()
+
+
+def test_settled_unsuccessful_search_retains_negative_outcome_and_safe_checkpoint(case):
+    store, arguments, observation = case
+    result = arguments["result"]
+    arguments["result"] = replace(
+        result,
+        stop_reason=BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED,
+        steps=(replace(
+            result.steps[0], selected_kind=GoalKind.ACQUIRE_SPECIES,
+            status=GoalDecisionOutcome.FAILED,
+            failure_reason=GoalFailureReason.SEARCH_EXHAUSTED,
+        ),),
+    )
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document)
+    summary = recover_completed_red_player_checkpoint(store, arguments["episode_id"])
+    checkpoint = _open(store, arguments, summary)
+    checkpoint.require_restored_observation(observation)
+    assert checkpoint.capture.state_bytes == b"actual-terminal-state"
+    terminal = document["terminal_result"]
+    assert terminal["completion_satisfied"] is False
+    assert terminal["stop_reason"] == "recovery_goal_repeated"
+    assert terminal["total_actions"] == 2
+    assert terminal["total_frames"] == 37
+    assert terminal["steps"][0]["status"] == "failed"
+    assert terminal["steps"][0]["failure_reason"] == "search_exhausted"
+    assert summary["training_example"] is False
 
 
 def test_legacy_checkpoint_payload_remains_readable_at_original_address(case):

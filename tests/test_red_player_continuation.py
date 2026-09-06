@@ -17,6 +17,25 @@ from pokemon_red_completion.red_player_checkpoint import (
 case = checkpoint_case
 
 
+@pytest.mark.parametrize("ready,battle,acts", [
+    (True, False, False), (False, False, False), (True, True, False), (True, False, True),
+])
+def test_checkpoint_boundary_requires_action_free_ready_overworld(ready, battle, acts):
+    count = [0]
+
+    def observe():
+        count[0] += int(acts)
+        return SimpleNamespace(input_ready=ready, raw=SimpleNamespace(battle_state=battle))
+
+    runtime = SimpleNamespace(adapter=SimpleNamespace(observe=observe))
+    meter = SimpleNamespace(checkpoint=lambda: count[0])
+    if ready and not battle and not acts:
+        runner._require_safe_checkpoint_boundary(runtime, meter)
+    else:
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="unsafe_boundary"):
+            runner._require_safe_checkpoint_boundary(runtime, meter)
+
+
 def _readiness(store, arguments):
     return runner._Readiness(
         pair_id="continuation-child", source_commit="1" * 40,

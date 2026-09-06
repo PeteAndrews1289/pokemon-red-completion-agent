@@ -1113,6 +1113,7 @@ class RedAreaSurveyGoalProvider:
                     "semantic_actions": report.actions_executed,
                     "encounters_seen": report.encounters_seen,
                     "captures": report.captures,
+                    "search_exhausted": report.search_exhausted,
                     "source_normalized": self.normalize_after_capture is not None,
                     "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
@@ -1147,6 +1148,22 @@ class RedAreaSurveyGoalProvider:
             remaining = set(after_survey.missing_species_refs)
             remaining_specimens = after_survey.missing_specimen_count
             captures = report.evidence.get("captures")
+            if (
+                report.evidence.get("search_exhausted") is True
+                and type(captures) is int  # noqa: E721
+                and captures == 0
+                and remaining == initial_missing
+                and remaining_specimens == initial_missing_specimens
+                and after.collection.collection.pokedex_owned_count == before_owned
+                and after.collection.collection.living_count == before_living
+                and report.actions_executed > 0
+                and not after.raw.battle_state
+                and after.input_ready
+                and all(member.hp > 0 for member in after.party.members)
+                and report.evidence.get("initial_missing_specimens") == initial_missing_specimens
+                and report.evidence.get("final_missing_specimens") == remaining_specimens
+            ):
+                return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
             if (
                 not remaining <= initial_missing
                 or remaining_specimens >= initial_missing_specimens

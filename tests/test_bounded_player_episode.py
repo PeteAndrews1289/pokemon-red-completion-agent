@@ -347,17 +347,61 @@ def test_single_available_followup_is_a_forced_bridge_not_model_authority() -> N
 
 
 def test_recovery_cannot_repeat_the_failed_semantic_goal() -> None:
-    trajectory, _sink = _trajectory()
-    observe, meter, _state = _observer(repeated_failure=True)
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(repeated_failure=True)
 
-    with pytest.raises(BoundedPlayerError, match="repeated the failed goal"):
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+    )
+    assert result.stop_reason is BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED
+    assert not result.completion_satisfied
+    assert len(result.steps) == len(sink.decisions) == len(sink.events) == 1
+    assert result.steps[0].failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+    assert result.steps[0].semantic_state_changed
+    assert result.steps[0].collection_after == observe().collection
+    assert result.recovery_attempts == 0
+    assert (state["actions"], state["frames"]) == (5, 50)
+    trajectory.require_settled()
+
+
+def test_rejected_recovery_must_not_hide_authority_side_effects() -> None:
+    trajectory, _sink = _trajectory()
+    observe, meter, state = _observer(repeated_failure=True)
+
+    class ActingAuthority:
+        def select(self, question):
+            if state["stage"]:
+                state["actions"] += 1
+            return CompletionFirstGoalTeacher().select(question)
+
+    with pytest.raises(BoundedPlayerError, match="rejected recovery selection changed state"):
         run_bounded_player_episode(
             observe=observe,
-            authority=CompletionFirstGoalTeacher(),
+            authority=ActingAuthority(),
             authority_id="completion-first-v1",
             trajectory=trajectory,
             budget_meter=meter,
             completion_satisfied=_complete,
+        )
+
+
+def test_unrelated_authority_failure_is_not_a_safe_recovery_stop() -> None:
+    trajectory, _sink = _trajectory()
+    observe, meter, _state = _observer(repeated_failure=True)
+
+    class BrokenAuthority:
+        def select(self, question):
+            raise BoundedPlayerError("unrelated selection defect")
+
+    with pytest.raises(BoundedPlayerError, match="unrelated selection defect"):
+        run_bounded_player_episode(
+            observe=observe, authority=BrokenAuthority(), authority_id="broken",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=_complete,
         )
 
 

@@ -170,6 +170,14 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         from_state_reader=lambda _reader: None,
     ))
     monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
+    monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_kwargs:
+        SimpleNamespace(adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
+            input_ready=True, raw=SimpleNamespace(battle_state=False),
+        )))
+    )
+    monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k:
+        SimpleNamespace(checkpoint=lambda: (0, 0))
+    )
 
     def capture(**kwargs):
         assert "close" not in order and kwargs["result"] is result
