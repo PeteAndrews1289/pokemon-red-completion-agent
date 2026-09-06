@@ -17,6 +17,7 @@ def test_training_runs_one_arm_after_declaration_and_never_compares(monkeypatch)
     readiness = SimpleNamespace(
         pair_id="native-training-test",
         training_plan=plan,
+        continuation=None,
         protected_paths=(),
         rom_path=Path("unused"),
         context_origin="training",

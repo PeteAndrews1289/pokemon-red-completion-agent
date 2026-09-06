@@ -1,5 +1,16 @@
 # Model-first development roadmap
 
+## Agreed milestones — Red competence, then measured adaptation
+
+The user-confirmed sequence is sustained Red play, repeatable model-directed story completion,
+Red living collection under explicit version/trade/event boundaries, then adaptation to a compatible
+unfamiliar Red ROM modification before Crystal. Compare initial performance and subsequent learning
+against an otherwise identical learner without Red training. A win on familiar Red is not proof of
+transfer; interface compatibility work is distinct from teaching a replacement walkthrough.
+The long-term product remains transferable play and living collections across games.
+The [active continuation session](work-sessions/2026-09-06-fit31-continuation.md) implements only
+the first milestone; it does not start hack support, Crystal, or a new teacher.
+
 ## Current — actual native player learning complete; use the 31-example model next
 
 The [bounded session](work-sessions/2026-09-06-resource-cost-learning.md) produced a real

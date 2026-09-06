@@ -12,7 +12,7 @@ import stat
 import sys
 from collections.abc import Mapping
 from contextlib import ExitStack, suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, cast
 
@@ -112,8 +112,10 @@ from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
 )
 from pokemon_red_completion.red_player_checkpoint import (  # noqa: E402
     CHECKPOINT_KIND,
+    RedPlayerCheckpoint,
     capture_red_player_terminal,
     checkpoint_record_id,
+    open_red_player_checkpoint,
     publish_red_player_checkpoint,
 )
 from pokemon_red_completion.red_player_model import (  # noqa: E402
@@ -182,6 +184,9 @@ class _Readiness:
     save_terminal_checkpoints: bool = False
     quote_resource_costs: bool = False
     training_plan: RedPlayerTrainingPlan | None = None
+    continuation: RedPlayerCheckpoint | None = None
+    continuation_chain: tuple[tuple[str, str], ...] = ()
+    continuation_root_lineage_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -322,6 +327,11 @@ def _completion_predicate(
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pair-id", required=True)
+    parser.add_argument(
+        "--continue-from-checkpoint", nargs=2, action="append", default=[],
+        metavar=("EPISODE", "SHA256"),
+        help="single-arm diagnostic continuation; repeat in ancestor order from --state/--envelope",
+    )
     parser.add_argument(
         "--train-player",
         action="store_true",
@@ -472,6 +482,16 @@ def _challenger_arguments(
 def _prepare(args: argparse.Namespace) -> _Readiness:
     if not isinstance(args.pair_id, str) or _PAIR_ID.fullmatch(args.pair_id) is None:
         raise PairedRedBoundedPlayerRunError("pair_id")
+    continuation_chain = tuple(
+        tuple(item) for item in getattr(args, "continue_from_checkpoint", ())
+    )
+    if continuation_chain and (
+        getattr(args, "train_player", False)
+        or args.challenger != CAUSAL_ARM_ID
+        or getattr(args, "context_origin", None) != "training"
+        or not getattr(args, "save_terminal_checkpoints", False)
+    ):
+        raise PairedRedBoundedPlayerRunError("continuation_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
@@ -601,7 +621,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         episode_id = _episode_id(args.pair_id, arm_id)
         if private_root.inspect_episode_state(episode_id).status != "absent":
             raise PairedRedBoundedPlayerRunError("pair_id_already_used")
-    return _Readiness(
+    readiness = _Readiness(
         pair_id=args.pair_id,
         routed_resource_goals=routed_resource_goals,
         quote_resource_costs=quote_resource_costs,
@@ -634,6 +654,81 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             rom_path,
         ),
     )
+    return _continue_readiness(readiness, continuation_chain)
+
+
+def _continue_readiness(
+    readiness: _Readiness, chain: tuple[tuple[str, str], ...],
+) -> _Readiness:
+    """Authenticate each completed ancestor without inventing an independent root."""
+    seen: set[str] = set()
+    for episode_id, record_sha256 in chain:
+        if episode_id in seen:
+            raise PairedRedBoundedPlayerRunError("continuation_duplicate_ancestor")
+        seen.add(episode_id)
+        checkpoint = open_red_player_checkpoint(
+            readiness.private_root, episode_id=episode_id,
+            expected_record_sha256=record_sha256, original_parent=readiness.capture,
+            expected_profile_sha256=readiness.profile.profile_sha256,
+            expected_rom_sha256=readiness.rom_sha256,
+            expected_context_origin=readiness.context_origin,
+        )
+        header = readiness.private_root.open_episode(episode_id).read_header()
+        metadata = header.get("metadata")
+        split = metadata.get("split") if isinstance(metadata, Mapping) else None
+        if not isinstance(split, Mapping) or split.get("partition") != "train":
+            raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
+        lineage = split.get("root_lineage_id")
+        if not isinstance(lineage, str) or not lineage or (
+            readiness.continuation_root_lineage_id is not None
+            and readiness.continuation_root_lineage_id != lineage
+        ):
+            raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
+        readiness = replace(
+            readiness, capture=checkpoint.capture, continuation=checkpoint,
+            continuation_root_lineage_id=lineage,
+            continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
+        )
+    return readiness
+
+
+def _continuation_header(readiness: _Readiness) -> dict[str, object]:
+    if readiness.continuation is None:
+        return {}
+    return {
+        "continuation_chain": [
+            {"episode_id": episode, "checkpoint_record_sha256": sha}
+            for episode, sha in readiness.continuation_chain
+        ],
+        "split": {"root_lineage_id": readiness.continuation_root_lineage_id, "partition": "train"},
+        "independent_root": False,
+        "training_eligible": False,
+    }
+
+
+def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) -> None:
+    """Check the actual live restore through read-only controls, before enabling play."""
+    if readiness.continuation is None:
+        return
+    initial_frame = emulator.frame_count
+    controller = ReadOnlyController(emulator)
+    runtime = build_red_goal_context_runtime(
+        profile=readiness.profile, capture=readiness.capture, emulator=controller,
+        reader=PokemonRedStateReader(controller),
+    )
+    actions = CountingExecutor(
+        FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
+    )
+    observation = _player_observer(
+        runtime, actions, _route_world(readiness), readiness.quote_resource_costs,
+    )()
+    readiness.continuation.require_restored_observation(observation)
+    if (
+        actions.actions_executed
+        or emulator.frame_count != initial_frame
+        or emulator.pressed_buttons
+    ):
+        raise PairedRedBoundedPlayerRunError("continuation_restore_effect")
 
 
 def _episode_id(pair_id: str, arm_id: str) -> str:
@@ -768,6 +863,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
     world = _route_world(readiness)
     with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(readiness.capture.state_bytes)
+        _verify_continuation_restore(readiness, emulator)
         initial_frame_count = emulator.frame_count
         controller = ReadOnlyController(emulator)
         reader = PokemonRedStateReader(controller)
@@ -841,6 +937,7 @@ def _run_arm(
             metadata={
                 **_context_scope(readiness),
                 **_training_header(readiness, arm_id),
+                **_continuation_header(readiness),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
                 "arm_id": arm_id,
@@ -866,6 +963,7 @@ def _run_arm(
             frame_observer=viewer,
         ) as emulator:
             emulator.load_state_bytes(readiness.capture.state_bytes)
+            _verify_continuation_restore(readiness, emulator)
             frames = WindowedFrameBudgetController(
                 emulator,
                 maximum_frames_per_window=limits.max_frames_per_decision,
@@ -926,6 +1024,8 @@ def _run_arm(
                 episode_id=episode_id,
                 root_lineage_id=cast(str, readiness.training_plan.document["root_lineage_id"])
                 if readiness.training_plan is not None
+                else readiness.continuation_root_lineage_id
+                if readiness.continuation is not None
                 else canonical_sha256(
                     {
                         "schema": "pokemon.red.paired-bounded-player-root.v1",
@@ -933,7 +1033,9 @@ def _run_arm(
                         "envelope_sha256": readiness.capture.envelope_sha256,
                     }
                 ),
-                partition="train" if readiness.training_plan is not None else "development",
+                partition="train" if (
+                    readiness.training_plan is not None or readiness.continuation is not None
+                ) else "development",
                 environment_id=GAME_ID,
                 actor=arm_id,
                 policy_id=_policy_id(readiness, arm_id),
@@ -1136,7 +1238,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             viewer=viewer,
         )
         comparison_document: dict[str, object]
-        if readiness.training_plan is None:
+        if readiness.continuation is not None:
+            comparison_document = {
+                "schema": "pokemon.red.bounded-player-continuation-result.v1",
+                **_continuation_header(readiness),
+                "episode_id": _episode_id(readiness.pair_id, readiness.challenger_arm_id),
+                "trajectory_manifest_sha256": learned.trajectory_manifest_sha256,
+                "episode": learned.episode.public_dict(),
+                "model_fitted": False,
+                "independent_evaluation": False,
+            }
+        elif readiness.training_plan is None:
             baseline = _run_arm(
                 readiness,
                 arm_id=BASELINE_ARM_ID,
@@ -1189,7 +1301,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         checkpoint_summaries = []
         for arm_id in (
             (readiness.challenger_arm_id,)
-            if readiness.training_plan is not None
+            if readiness.training_plan is not None or readiness.continuation is not None
             else (readiness.challenger_arm_id, BASELINE_ARM_ID)
         ):
             record = readiness.private_root.find_sealed_record(

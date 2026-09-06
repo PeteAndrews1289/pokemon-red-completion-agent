@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Next demonstration: keep the progress, change the decisions
+
+The next segment should show the actual 31-example checkpoint continuing from a saved game,
+with learned, forced and safety choices labelled separately. Report collection progress alongside
+money spent and failures. Do not present saved footage as live or greedy diagnostics as training.
+
+The planned story arc ends the Red stage with an adaptation challenge: an unfamiliar compatible
+ROM modification, comparing prior Red learning against starting without it. Initial success is
+different from learning during the challenge. Pete proposed this intermediate milestone before
+Crystal to make transfer concrete; no hack execution or transfer result exists yet.
+
 ## September 6: the player feeds its own experience back into learning
 
 **Explain:** “The player was succeeding at shopping but spending too much. We added the price

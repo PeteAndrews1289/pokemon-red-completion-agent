@@ -1,5 +1,16 @@
 # Current agent handoffs
 
+## Active — saved-state continuation, not another reset campaign
+
+Codex is implementing the [four-goal 31-example continuation](work-sessions/2026-09-06-fit31-continuation.md).
+The model/checkpoint are already fitted and saved. Qualify the thin consumer, run once, measure
+collection/spending and exact model-versus-scripted choices, then retain the next state and audit.
+No model fit or independent superiority claim follows from this diagnostic.
+If later requested, reviewers should focus on whether supported learned decisions occur and make
+useful progress, not propose a new provenance framework. No reviewer has been invoked this session.
+The newly agreed first transfer demonstration is a compatible Red modification, followed by Crystal;
+neither is active implementation work yet.
+
 ## Current — native learning loop works; demonstrate useful continuation next
 
 Read the [audit](audits/red-native-player-learning-2026-09-06.md) and

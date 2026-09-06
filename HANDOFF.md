@@ -1,5 +1,21 @@
 # Handoff
 
+## Active — 31-example saved-state continuation
+
+The [current session](docs/work-sessions/2026-09-06-fit31-continuation.md) connects the completed
+native R1 B endpoint to one single-arm diagnostic chain, at most four goals. The runner now accepts
+an ordered chain of checkpoint episode/hash pairs, inherits the original training lineage, checks
+fresh semantic and ledger agreement before enabling input, and saves the next endpoint. Greedy
+continuation decisions are not admitted to fitting. Targeted tests pass; broad local qualification
+is in progress. No actual continuation has launched at this checkpoint.
+
+User-confirmed milestones: sustained Red play, model-directed Red story completion and living
+collection, then measurable adaptation to a compatible unfamiliar Red modification before Crystal.
+This does not authorize hack/Crystal execution now. Codex owns implementation; external auditors
+have not been invoked. Native R1 B and all earlier attempts remain closed, not replay candidates.
+
+Earlier completed-session details follow.
+
 ## Current — native learning complete: 31 examples, bounded continuation next
 
 Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the

@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## Current: make learned progress persist, then test adaptation
+
+The player now has a real 31-example outcome model, including two newly sampled choices and all
+29 earlier rows. Its predecessor completed a four-goal collection sequence and saved the resulting
+game. The next demonstration is using that updated model to continue the actual saved progress,
+not replaying a familiar start and calling another successful route learning.
+
+Pete sharpened the delivery milestones: useful sustained Red play, model-directed story completion
+and living collection, then a compatible unfamiliar Red ROM modification before Crystal. The hack
+will test whether Red experience reduces subsequent learning, with initial performance separated
+from adaptation. It is a planned experiment, not a capability the current model has demonstrated.
+The larger objective remains living collections across games; a fixed teacher walkthrough is not
+the finished product. Older checkpoints below retain their original claims and limitations.
+
 ## September 6: collecting survives a supply trip—but efficiency is still unfinished
 
 The next chain connected the existing navigation, shop and capture skills around fresh state.

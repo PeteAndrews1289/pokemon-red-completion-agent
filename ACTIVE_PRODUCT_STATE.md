@@ -11,7 +11,7 @@ they conflict with this page.
 
 Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.
 
-**Environment role:** Red is the first curriculum and Crystal is the first transfer test; neither title is the product.
+**Environment role:** Red is the first curriculum; a compatible unfamiliar Red modification is the first planned adaptation test, followed by Crystal. No single title is the product.
 
 Success means:
 
@@ -42,7 +42,7 @@ Not the product:
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
 | Authority now | The current goal-value checkpoint contains 31 examples: two sampled player outcomes plus all 29 retained rows. The behavior checkpoint with 29 examples completed four goals and retained two needed specimens (+1 living species), but overspent. The updated model changes one in-sample preference from shopping to acquisition; it has not executed a new live chain. Historical cross-family counters below are not its dataset size. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
+| Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
 | Time box | 1 session / 4 hours |
 
