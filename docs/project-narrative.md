@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: moving the fitted model into actual decisions
+
+After the 29-example update, the missing piece was not another model. The saved roots described
+choices reachable by navigation, not just the actions visible at the raw save. The new bounded
+consumer preserves those routed choices and uses the existing mechanics executor. It saves the
+learned and deterministic control choices before either acts, then observes their real outcomes
+from the same origin. Four roots remain a descriptive check, not proof of superiority.
+
+The implementation and 104 focused checks are complete at this checkpoint; real results follow
+separately. Failure records now keep the exception and source location, interrupted actions cannot
+silently retry, and the spectator view identifies who is choosing. This is progress toward a
+model-led living Pokédex loop, not a claim that the small scorer already plays a complete game.
+
 ## September 6: a viewer that explains what is actually learning
 
 The old overview mixed current work with counts from previous experiments. The redesigned local

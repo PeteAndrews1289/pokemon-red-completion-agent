@@ -1,5 +1,14 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Next footage: the trained scorer makes a choice
+
+Show the frozen menu and both recorded choices, then the separate **model** and **control** arms
+starting from the same state. Explain that deterministic navigation and battle skills implement
+the selected goal. The model chooses the objective; it is not generating every button press.
+Retain failed goals, costs and collection losses on screen. Four scenarios are an engineering
+comparison, not evidence of complete-game autonomy or cross-game transfer. The implementation is
+ready and tested; record actual results before narrating any outcome.
+
 ## September 6 spectator scene: make the decisions visible
 
 **Visual:** Use the redesigned local dashboard in Focus view. A genuine game feed is the main

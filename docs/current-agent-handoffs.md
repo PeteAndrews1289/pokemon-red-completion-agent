@@ -1,5 +1,17 @@
 # Current agent handoffs
 
+## Active implementation — routed Red model/control consumer
+
+Read the [current session record](work-sessions/2026-09-06-routed-model-play.md). Codex is connecting
+the saved 29-example model to the four frozen routed development scenarios, with paired durable
+choices and the existing selected-arm executor. The 104 focused checks pass. Consult the latest
+durable result before assuming real execution has occurred or starting another process.
+
+Codex owns execution and the subsequent fresh-state goal chain. If requested, Claude should
+challenge the paired metric, feature comparison and absence of fitting on development; Antigravity
+should challenge same-origin restoration, recovery and observer/controller separation. Both remain
+read-only and advisory. Neither was invoked in this session, and no approval is implied.
+
 ## Resume checkpoint — September 6
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md), the current

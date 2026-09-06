@@ -1,5 +1,32 @@
 # Handoff
 
+## Active session — September 6 routed model/control execution
+
+The missing four-root consumer is implemented in
+`scripts/run_red_living_dex_retired_bank_paired.py`. It authenticates the existing retired-bank
+plan, rederives all recipes, and addresses only development slots 8–11. It uses the unchanged
+saved 29-example model. Before input, verify the current session's actual result; implementation
+and tests alone are not gameplay evidence. The focused integration group passed 104 tests.
+
+Both choices are committed before either selected arm opens. The consumer reuses production setup
+and causal execution, retains failures and actionable private diagnostics, and never retries an
+attempted setup or arm. Recovery may finish only the never-started other arm; completed pairs
+reopen without another prediction or input. The fixed deterministic control is separate and never
+replaces a model choice. All four roots remain in the descriptive denominator, with utility and
+irreversible loss separately reported.
+
+This is bounded **development**: clean published source, local verification and strict
+model/ROM/runtime/plan authentication, without another exact-main CI prerequisite. Old trials
+retain their original constraints. No development fitting, full-player promotion, sealed Red,
+Crystal or full replay is authorized. The live feed uses 8769 behind the overview on 8768 and
+identifies setup versus model/control. View failure cannot replace gameplay. Follow the
+[session record](docs/work-sessions/2026-09-06-routed-model-play.md).
+
+PR 232's first CI run failed on one stale Crystal-dashboard expectation for the new
+`collection.observed` field after 6,880 passes. The one-line assertion fix was pushed as
+`e24d0b0b`; 15 relevant dashboard tests subsequently passed. No Crystal game was opened. Keep
+publication checks separate from the Red learning lane and do not restart the completed fit.
+
 ## Resume here — September 6 spectator viewer and bounded-chain integration
 
 The saved learner remains the **29-example living-Dex scorer** below. No new real input,

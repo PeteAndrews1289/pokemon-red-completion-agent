@@ -1,5 +1,20 @@
 # Model-first development roadmap
 
+## Active implementation — routed choices become bounded Red actions
+
+The four-root consumer connects the unchanged 29-example model to the existing routed setup and
+selected-arm executor. This is a descriptive development run, not a new training factory or a
+powered promotion exam. Both policies commit before either outcome; the fixed control cannot
+choose for the model. Recovery preserves attempted arms, setup failures and the four-root
+denominator. Focused integration passed 104 tests; no new live result is claimed at this checkpoint.
+
+Next execute from one clean published source after local verification. Routine development does
+not wait for a second exact-main CI cycle. Preserve source/input identities, old one-shot
+constraints, privacy and safety. Then reorient using actual results and connect the next
+three-choice fresh-state goal chain. Expand missing Red mechanics from observed needs. Crystal
+remains deferred while shared semantic state/actions remain intact. See the
+[current work session](work-sessions/2026-09-06-routed-model-play.md).
+
 ## Implementation checkpoint — September 6 spectator view and goal-chain control
 
 The local viewer now uses the saved 29-example fit receipt rather than stale hard-coded experiment
