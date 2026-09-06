@@ -29,6 +29,12 @@ Keep the failed parallel run in the account: 6,386 tests passed before another h
 error stopped it. The follow-up sweep passed 716 tests. This is a debugging correction, not a
 gameplay milestone; avoid a montage that implies the model was training throughout that wait.
 
+**Order-dependent follow-up:** The full PR run passed 6,891 tests, but the identical main revision
+exposed a fake-runtime fixture contaminated by a previously imported real emulator. Show that
+ordering being reproduced, then a scoped fixture restoring the original modules afterward.
+The security check was correct; the test's assumed empty interpreter was not. Keep the learning
+counter unchanged until actual outcomes and a saved model update exist.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.

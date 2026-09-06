@@ -37,6 +37,13 @@ approach and adds source-drift rejection. Sweep the full protocol family and end
 before republishing; the frozen plan, production source bundle and next learning steps are unchanged.
 The expanded local sweep passed all 716 tests in 68.92 seconds; publication qualification is next.
 
+PR 228 subsequently passed all 6,891 tests and merged as `2d074a18`; PR 227 is included and closed.
+The identical main tree exposed an order-dependent synthetic-runtime fixture in run `34013912794`.
+The failure is reproduced and corrected without changing production authentication: both serial
+import orders pass 50 tests and the parallel runtime/invocation set passes 84. Qualify this test-only
+follow-up under the existing repository rules, then execute the same frozen lessons. Do not restart
+the freeze, alter the learner, or turn this into a broader runtime redesign.
+
 ### Execute next; do not reopen the architecture
 
 1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and

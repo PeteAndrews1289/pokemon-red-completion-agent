@@ -24,6 +24,13 @@ def _fake_site(
     *,
     extra_record_names: tuple[str, ...] = (),
 ) -> Path:
+    # This fixture describes a synthetic one-package runtime. A previous test
+    # may have imported the real emulator/SDL runtime in this worker. Remove
+    # only those cached modules for this fixture and restore them at teardown;
+    # negative tests install their own foreign modules after this clean baseline.
+    for name in tuple(sys.modules):
+        if name.partition(".")[0] in {"pyboy", "sdl2"}:
+            monkeypatch.delitem(sys.modules, name)
     site = (tmp_path / "site-packages").resolve()
     package = site / "pyboy"
     metadata = site / "pyboy-1.0.dist-info"
@@ -222,7 +229,10 @@ def test_authenticated_finder_and_postcheck_reject_out_of_closure_module(
         foreign.__file__ = str((tmp_path / "foreign.py").resolve())
         Path(foreign.__file__).write_text("VALUE = 3\n", encoding="ascii")
         monkeypatch.setitem(sys.modules, "pyboy.foreign", foreign)
-        with pytest.raises(runtime.ExecutionRuntimeClosureError):
+        with pytest.raises(
+            runtime.ExecutionRuntimeClosureError,
+            match="loaded runtime origin was not authenticated",
+        ):
             runtime.require_loaded_runtime_origins(stage.closure)
 
 
@@ -266,28 +276,44 @@ def test_runtime_stage_cannot_be_constructed_over_an_arbitrary_directory(
         )
 
 
+@pytest.mark.parametrize("preloaded_runtime", (False, True))
 def test_activation_replaces_only_source_site_and_restores_interpreter_state(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
+    preloaded_runtime: bool,
 ) -> None:
-    site = _fake_site(tmp_path, monkeypatch)
-    expected = runtime.inspect_execution_runtime_closure(site).sha256
-    monkeypatch.setattr(runtime, "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256", expected)
-    project_path = str((tmp_path / "project").resolve())
-    monkeypatch.setattr(runtime.sys, "path", [project_path, str(site)])
-    previous_meta_path = list(runtime.sys.meta_path)
+    if preloaded_runtime:
+        foreign_file = (tmp_path / "previously_imported_runtime.py").resolve()
+        foreign_file.write_text("VALUE = 1\n", encoding="ascii")
+        for name in ("pyboy", "pyboy.previous", "sdl2", "sdl2.dll"):
+            foreign = ModuleType(name)
+            foreign.__file__ = str(foreign_file)
+            monkeypatch.setitem(sys.modules, name, foreign)
+    previous_modules = {
+        name: module for name, module in sys.modules.items()
+        if name.partition(".")[0] in {"pyboy", "sdl2"}
+    }
+    with pytest.MonkeyPatch.context() as fixture_patch:
+        site = _fake_site(tmp_path, fixture_patch)
+        assert not any(name in sys.modules for name in previous_modules)
+        expected = runtime.inspect_execution_runtime_closure(site).sha256
+        fixture_patch.setattr(runtime, "EXPECTED_EXECUTION_RUNTIME_CLOSURE_SHA256", expected)
+        project_path = str((tmp_path / "project").resolve())
+        fixture_patch.setattr(runtime.sys, "path", [project_path, str(site)])
+        previous_meta_path = list(runtime.sys.meta_path)
 
-    active = runtime.activate_authenticated_runtime_stage(site)
-    staged_site = active.closure.site_packages
+        active = runtime.activate_authenticated_runtime_stage(site)
+        staged_site = active.closure.site_packages
 
-    assert runtime.sys.path == [project_path, str(staged_site)]
-    assert runtime.sys.meta_path[0] is active.finder
-    runtime.require_authenticated_runtime_finder(active.closure)
-    active.close()
+        assert runtime.sys.path == [project_path, str(staged_site)]
+        assert runtime.sys.meta_path[0] is active.finder
+        runtime.require_authenticated_runtime_finder(active.closure)
+        active.close()
 
-    assert runtime.sys.path == [project_path, str(site)]
-    assert runtime.sys.meta_path == previous_meta_path
-    assert not staged_site.parents[3].exists()
+        assert runtime.sys.path == [project_path, str(site)]
+        assert runtime.sys.meta_path == previous_meta_path
+        assert not staged_site.parents[3].exists()
+    assert all(sys.modules[name] is module for name, module in previous_modules.items())
 
 
 def test_activation_rejects_an_additional_third_party_search_root(
