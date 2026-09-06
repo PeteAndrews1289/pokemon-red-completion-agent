@@ -105,6 +105,102 @@ def test_runner_uses_shared_player_and_frame_safe_controller_boundary() -> None:
     assert "release" not in calls
     assert "save_state" not in calls
     assert "save_state_bytes" not in calls
+    assert "capture_red_player_terminal" in calls
+    assert "publish_red_player_checkpoint" in calls
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, enabled):
+    from pokemon_red_completion.bounded_player_episode import (
+        BoundedPlayerResult,
+        BoundedPlayerStopReason,
+    )
+
+    module = runpy.run_path(str(SCRIPT))
+    run_arm = module["_run_arm"]
+    namespace = run_arm.__globals__
+    order = []
+    observation = _observation(storage=4)
+    result = BoundedPlayerResult(
+        module["CAUSAL_ARM_ID"], BoundedPlayerStopReason.DECISION_LIMIT, (), False,
+    )
+
+    class Emulator:
+        def __enter__(self):
+            order.append("open")
+            return self
+
+        def __exit__(self, *_args):
+            order.append("close")
+
+        def load_state_bytes(self, _state):
+            order.append("restore")
+
+    def append(stream, record, **kwargs):
+        assert stream == "checkpoint" and record == {"captured": True}
+        assert kwargs == {"durable": True}
+        assert "close" not in order
+        order.append("durable_state")
+
+    def complete():
+        assert "close" in order
+        order.append("trajectory_complete")
+        return SimpleNamespace(manifest_sha256="9" * 64)
+
+    writer = SimpleNamespace(append=append, complete=complete, abort=lambda _reason: None)
+    sink = SimpleNamespace(
+        write_episode_header=lambda **_kwargs: None,
+        record_event=lambda _event: None, finalize=lambda: None,
+    )
+    for name in (
+        "WindowedFrameBudgetController", "PokemonRedStateReader",
+        "build_red_goal_context_runtime", "FrameSafeExecutor", "HardCompositionActionLimiter",
+        "CountingExecutor", "CompositionIndependentBudgetMeter", "ViewerGoalTrajectory",
+    ):
+        monkeypatch.setitem(namespace, name, lambda *_args, **_kwargs: SimpleNamespace())
+    monkeypatch.setitem(namespace, "_LiveObserver", lambda **_kwargs: SimpleNamespace(
+        starting_observation=observation,
+    ))
+    monkeypatch.setitem(namespace, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
+    monkeypatch.setitem(namespace, "EpisodeTrajectorySink", lambda *_args, **_kwargs: sink)
+    monkeypatch.setitem(namespace, "RecordingExecutor", lambda **_kwargs: SimpleNamespace(
+        next_step_index=0, recording_failures=(),
+    ))
+    monkeypatch.setitem(namespace, "PokemonRedObservationEncoder", SimpleNamespace(
+        from_state_reader=lambda _reader: None,
+    ))
+    monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
+
+    def capture(**kwargs):
+        assert "close" not in order and kwargs["result"] is result
+        assert kwargs["context_origin"] == "training"
+        order.append("capture")
+        return {"captured": True}
+
+    def publish(_store, document):
+        assert order[-1] == "trajectory_complete" and document == {"captured": True}
+        order.append("publish")
+
+    monkeypatch.setitem(namespace, "capture_red_player_terminal", capture)
+    monkeypatch.setitem(namespace, "publish_red_player_checkpoint", publish)
+    readiness = SimpleNamespace(
+        pair_id="checkpoint-wire", decision_limit=4, context_origin="training",
+        source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
+        model_sha256="4" * 64, rom_path=Path("unused-rom"),
+        capture=SimpleNamespace(
+            state_sha256="5" * 64, envelope_sha256="6" * 64, state_bytes=b"authenticated",
+        ),
+        profile=SimpleNamespace(profile_sha256="7" * 64),
+        private_root=SimpleNamespace(begin_episode=lambda _id: writer),
+        challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
+        routed_resource_goals=False, save_terminal_checkpoints=enabled,
+    )
+    arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
+    assert arm.episode is result
+    assert order == (
+        ["open", "restore", "capture", "durable_state", "close", "trajectory_complete", "publish"]
+        if enabled else ["open", "restore", "close", "trajectory_complete"]
+    )
 
 
 def test_runner_help_names_the_repeatable_pair_inputs() -> None:
@@ -128,6 +224,7 @@ def test_runner_help_names_the_repeatable_pair_inputs() -> None:
     assert "--expected-calibration-summary-file-sha256" in result.stdout
     assert "--decision-limit" in result.stdout
     assert "--out" in result.stdout
+    assert "--save-terminal-checkpoints" in result.stdout
 
 
 def test_challenger_arguments_keep_legacy_and_causal_models_disjoint() -> None:
@@ -517,7 +614,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False,
+        routed_resource_goals=False, save_terminal_checkpoints=False,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())

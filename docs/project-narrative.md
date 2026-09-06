@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: collecting survives a supply trip—but efficiency is still unfinished
+
+The next chain connected the existing navigation, shop and capture skills around fresh state.
+It bought supplies, retained two needed specimens, and bought supplies again. Living species rose
+13 to 14; one of the retained Pokémon was a duplicate needed for a future evolution. That is the
+living-Pokédex distinction: a duplicate is not automatically wasted work. Two decisions came from
+the unchanged learned scorer; the others were deterministic safety or a single-supported option.
+
+All four hybrid goals succeeded, but the result was not a clean policy victory. The control caught
+the same specimens before hitting its final search limit. The hybrid also spent almost all its
+money, ending with 19 balls and 649 money. Reliable preparation still competes with collection in
+the current objective. We retained that limitation instead of advertising four successes as mastery.
+
+The next small engineering bridge makes future terminal game states durable and presents this
+completed sequence as saved evidence in the spectator dashboard. That is not another model fit.
+The real learner still has 29 examples; upcoming training must add prospectively declared factual
+contrasts, not retroactively relabel diagnostic play. The [session record](work-sessions/2026-09-06-durable-player-continuation.md)
+keeps the completed result, unfinished persistence work and next learning step separate.
+
 ## September 6: the model catches one—and reveals the next missing link
 
 The next check finally turned a model-selected goal into a new living specimen. From a known

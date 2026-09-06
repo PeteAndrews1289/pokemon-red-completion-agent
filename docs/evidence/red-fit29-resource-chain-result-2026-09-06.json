@@ -1,0 +1,649 @@
+{
+  "baseline": {
+    "arm_id": "completion-first-teacher",
+    "episode": {
+      "authority_decisions": 4,
+      "authority_id": "completion-first-teacher",
+      "completion_satisfied": false,
+      "decisions": 4,
+      "forced_singleton_steps": 0,
+      "private_binding_fields": 0,
+      "private_path_fields": 0,
+      "recovery_attempts": 0,
+      "schema": "pokemon.core.bounded-player-episode-result.v1",
+      "status": "durable_terminal",
+      "steps": [
+        {
+          "actions_executed": 79,
+          "available_goal_count": 4,
+          "available_menu_sha256": "b658f8a507d575e1aef5ff35a93c1c6e54151b2ee9cd3c32ebffb891fe91ccfe",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 1,
+          "failure_reason": null,
+          "frames_executed": 5040,
+          "policy_context_sha256": "757c4c94a10361191b2a9778cb3eb20764b245e5d11f84f1352874d9cdca2206",
+          "recovery_attempt": false,
+          "selected_kind": "resupply",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 244,
+          "available_goal_count": 2,
+          "available_menu_sha256": "41a90de9b79eddf879135c11cca807cfeeeaa41cb2ecddaa4895279bfac220fc",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 2,
+          "failure_reason": null,
+          "frames_executed": 14484,
+          "policy_context_sha256": "706a2560ebca4b2ee28ba9bb3ac7d0b3ead934e1805ace9797265ddddc8c57f9",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 254,
+          "available_goal_count": 3,
+          "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 3,
+          "failure_reason": null,
+          "frames_executed": 15804,
+          "policy_context_sha256": "25b0c74c95211b90daac687d180077b6eb702579b634c03833d96251b8e5e8be",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 196,
+          "available_goal_count": 4,
+          "available_menu_sha256": "b658f8a507d575e1aef5ff35a93c1c6e54151b2ee9cd3c32ebffb891fe91ccfe",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 4,
+          "failure_reason": "binding_failed",
+          "frames_executed": 8664,
+          "policy_context_sha256": "5581bbf9a1b44415b357ae20187d3a3a31b8f0d47fea535635c232b0cc7e34f2",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": false,
+          "status": "failed"
+        }
+      ],
+      "stop_reason": "verified_failure",
+      "teacher_fallbacks": 0,
+      "total_actions": 773,
+      "total_frames": 43992
+    },
+    "progress": {
+      "completion_satisfied": false,
+      "controller_actions": 773,
+      "emulator_frames": 43992,
+      "living_species_gained": 1,
+      "recovery_attempts": 0,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 2,
+      "retained_captures_gained": 2,
+      "storage_headroom_gained": -2,
+      "successful_decisions": 3,
+      "successful_goal_counts": {
+        "acquire_species": 2,
+        "advance_story": 0,
+        "develop_team": 0,
+        "evolve_species": 0,
+        "explore": 0,
+        "manage_storage": 0,
+        "recover_control": 0,
+        "restore_team": 0,
+        "resupply": 1
+      }
+    },
+    "starting_collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "starting_semantic_state_sha256": "437a62719920a423d88b5f4126d585749052d03f6c6465c75a954e6a5efbb0ad",
+    "starting_state_sha256": "e15c44a75527e38ef28961490714f47c48e8dcbeae7116b7843852aca6056ea0",
+    "trajectory_manifest_sha256": "3f8ad686eea2f8f227e925b8c05531b36fc85159f96ca7c337bd497b824a41b7"
+  },
+  "challenger_arm_id": "living-dex-causal-shadow",
+  "context_origin": "training",
+  "continue_after_progress": true,
+  "crystal_accesses": 0,
+  "decision_basis": "verified_progress_dominance",
+  "decision_limit": 4,
+  "evidence_scope": "training_context_integration_only",
+  "full_game_replays": 0,
+  "independent_generalization_claim": false,
+  "learned": {
+    "arm_id": "living-dex-causal-shadow",
+    "episode": {
+      "authority_decisions": 4,
+      "authority_id": "living-dex-causal-shadow",
+      "completion_satisfied": false,
+      "decisions": 4,
+      "forced_singleton_steps": 0,
+      "private_binding_fields": 0,
+      "private_path_fields": 0,
+      "recovery_attempts": 0,
+      "schema": "pokemon.core.bounded-player-episode-result.v1",
+      "status": "durable_terminal",
+      "steps": [
+        {
+          "actions_executed": 79,
+          "available_goal_count": 4,
+          "available_menu_sha256": "b658f8a507d575e1aef5ff35a93c1c6e54151b2ee9cd3c32ebffb891fe91ccfe",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 1,
+          "failure_reason": null,
+          "frames_executed": 5040,
+          "policy_context_sha256": "757c4c94a10361191b2a9778cb3eb20764b245e5d11f84f1352874d9cdca2206",
+          "recovery_attempt": false,
+          "selected_kind": "resupply",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 244,
+          "available_goal_count": 2,
+          "available_menu_sha256": "41a90de9b79eddf879135c11cca807cfeeeaa41cb2ecddaa4895279bfac220fc",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 2,
+          "failure_reason": null,
+          "frames_executed": 14484,
+          "policy_context_sha256": "706a2560ebca4b2ee28ba9bb3ac7d0b3ead934e1805ace9797265ddddc8c57f9",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 254,
+          "available_goal_count": 3,
+          "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 3,
+          "failure_reason": null,
+          "frames_executed": 15804,
+          "policy_context_sha256": "25b0c74c95211b90daac687d180077b6eb702579b634c03833d96251b8e5e8be",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 79,
+          "available_goal_count": 4,
+          "available_menu_sha256": "b658f8a507d575e1aef5ff35a93c1c6e54151b2ee9cd3c32ebffb891fe91ccfe",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 106,
+            "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+            "retained_captures": 14,
+            "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+            "storage_headroom": 9,
+            "total_living_specimens": 17,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 4,
+          "failure_reason": null,
+          "frames_executed": 5040,
+          "policy_context_sha256": "5581bbf9a1b44415b357ae20187d3a3a31b8f0d47fea535635c232b0cc7e34f2",
+          "recovery_attempt": false,
+          "selected_kind": "resupply",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        }
+      ],
+      "stop_reason": "decision_limit",
+      "teacher_fallbacks": 0,
+      "total_actions": 656,
+      "total_frames": 40368
+    },
+    "progress": {
+      "completion_satisfied": false,
+      "controller_actions": 656,
+      "emulator_frames": 40368,
+      "living_species_gained": 1,
+      "recovery_attempts": 0,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 2,
+      "retained_captures_gained": 2,
+      "storage_headroom_gained": -2,
+      "successful_decisions": 4,
+      "successful_goal_counts": {
+        "acquire_species": 2,
+        "advance_story": 0,
+        "develop_team": 0,
+        "evolve_species": 0,
+        "explore": 0,
+        "manage_storage": 0,
+        "recover_control": 0,
+        "restore_team": 0,
+        "resupply": 2
+      }
+    },
+    "starting_collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "starting_semantic_state_sha256": "437a62719920a423d88b5f4126d585749052d03f6c6465c75a954e6a5efbb0ad",
+    "starting_state_sha256": "e15c44a75527e38ef28961490714f47c48e8dcbeae7116b7843852aca6056ea0",
+    "trajectory_manifest_sha256": "a38b7d3c744cc15a5350b39f4b7f8ee5cf8252f7b625fbd57c572c448037a56e"
+  },
+  "living_dex_causal_shadow": {
+    "decision_count": 4,
+    "decisions": [
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": null,
+        "mode": "deterministic_safety",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [],
+        "selected_candidate_index": 1,
+        "selected_kind": "resupply"
+      },
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": null,
+        "mode": "deterministic_unsupported",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [],
+        "selected_candidate_index": 4,
+        "selected_kind": "acquire_species"
+      },
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": "d6075e32b42dc40523c5317660efe5ecd2c616efc44c7f369ef8d06fd940e9d8",
+        "mode": "model_shadow",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [
+          {
+            "goal_candidate_index": 7,
+            "goal_kind": "acquire_species",
+            "predicted_outcomes": {
+              "action_cost": 0.0012496996123883865,
+              "completion_gain": 0.004955234234316008,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.00013448451898103743,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0042469506469666445,
+              "resource_cost": 0.043487417553123,
+              "storage_cost": 0.0014568372647686728,
+              "verified_success": 0.5884830729578923
+            },
+            "utility": 2.3467707623385445
+          },
+          {
+            "goal_candidate_index": 8,
+            "goal_kind": "explore",
+            "predicted_outcomes": {
+              "action_cost": 0.0025194101581826243,
+              "completion_gain": 0.00011372671864936547,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.0001951911519935068,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0008106791807397014,
+              "resource_cost": 0.0,
+              "storage_cost": 0.00025725906518639575,
+              "verified_success": 0.0
+            },
+            "utility": -0.001007802985571313
+          }
+        ],
+        "selected_candidate_index": 7,
+        "selected_kind": "acquire_species"
+      },
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": "b38f2002e9e0982c1749b633946115de0824d414fc41e968e8c6276f19746693",
+        "mode": "model_shadow",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [
+          {
+            "goal_candidate_index": 1,
+            "goal_kind": "explore",
+            "predicted_outcomes": {
+              "action_cost": 0.0025194101581826243,
+              "completion_gain": 0.00011372671864936547,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.0001951911519935068,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0008106791807397014,
+              "resource_cost": 0.0,
+              "storage_cost": 0.00025725906518639575,
+              "verified_success": 0.0
+            },
+            "utility": -0.001007802985571313
+          },
+          {
+            "goal_candidate_index": 3,
+            "goal_kind": "resupply",
+            "predicted_outcomes": {
+              "action_cost": 0.0,
+              "completion_gain": 0.0017500321060576062,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.0,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.005829738570685955,
+              "resource_cost": 0.033142368424474614,
+              "storage_cost": 0.0,
+              "verified_success": 1.0
+            },
+            "utility": 3.984599205641307
+          },
+          {
+            "goal_candidate_index": 8,
+            "goal_kind": "acquire_species",
+            "predicted_outcomes": {
+              "action_cost": 0.0019136129958861364,
+              "completion_gain": 0.003902703429959565,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.00021142454405302695,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0027857528899088335,
+              "resource_cost": 0.021881882371893945,
+              "storage_cost": 0.003109295307986008,
+              "verified_success": 0.4914960852843441
+            },
+            "utility": 1.9659099480737832
+          }
+        ],
+        "selected_candidate_index": 3,
+        "selected_kind": "resupply"
+      }
+    ],
+    "deterministic_decision_count": 2,
+    "model_decision_count": 2,
+    "model_record": {
+      "authority": "non_authoritative_integration_only",
+      "exact_ci_attempt": 1,
+      "exact_ci_run": 34019391472,
+      "file_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+      "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+      "private_path_fields": 0,
+      "settled_examples": 29,
+      "source_bundle_sha256": "646c047db37ec2dce90355029d2df2f87d1bb2dd4f654952dc862aff87b4df3a",
+      "source_commit": "e9b381d0bafb114ce3a0ad08b4ed77d95926bb97",
+      "train_dataset_sha256": "2d41c536942a2e76297823a9f79e426f52f177e98cd225230ec044e7072152ff"
+    },
+    "production_authority": false
+  },
+  "model_file_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+  "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+  "pair_id": "red-fit29-resource-chain-train010-v1",
+  "preflight": {
+    "actions_executed": 0,
+    "assignment_id": "red-fit29-resource-chain-train010-v1",
+    "authority_disagreement": false,
+    "available_goal_count": 4,
+    "available_goal_kinds": [
+      "explore",
+      "resupply",
+      "acquire_species",
+      "restore_team"
+    ],
+    "available_menu_sha256": "b658f8a507d575e1aef5ff35a93c1c6e54151b2ee9cd3c32ebffb891fe91ccfe",
+    "choices": [
+      {
+        "authority_id": "living-dex-causal-shadow",
+        "selected_candidate_index": 1,
+        "selected_kind": "resupply"
+      },
+      {
+        "authority_id": "completion-first-teacher",
+        "selected_candidate_index": 1,
+        "selected_kind": "resupply"
+      }
+    ],
+    "collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "emulator_frames": 0,
+    "episode_created": false,
+    "living_dex_causal_shadow": {
+      "decision": {
+        "binding_identity_fields": 0,
+        "menu_sha256": null,
+        "mode": "deterministic_safety",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [],
+        "selected_candidate_index": 1,
+        "selected_kind": "resupply"
+      },
+      "production_authority": false
+    },
+    "policy_context_sha256": "757c4c94a10361191b2a9778cb3eb20764b245e5d11f84f1352874d9cdca2206",
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "schema": "pokemon.red.bounded-player-preflight.v1",
+    "semantic_state_sha256": "437a62719920a423d88b5f4126d585749052d03f6c6465c75a954e6a5efbb0ad",
+    "status": "ready"
+  },
+  "private_binding_fields": 0,
+  "private_path_fields": 0,
+  "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+  "routed_resource_goals": true,
+  "schema": "pokemon.core.paired-bounded-player-result.v1",
+  "sealed_red_accesses": 0,
+  "source_bundle_sha256": "f530855554d176c52622c1798d08c9ec6687dc0fb9801bd2efaf80686122815b",
+  "source_commit": "8318ca11f32dde2a1b3d3f08045e9c6f14b9e973",
+  "status": "complete",
+  "teacher_fallbacks": 0,
+  "teacher_queries": 0,
+  "verdict": "learned_advantage",
+  "viewer_instrumentation_failures": 0
+}

@@ -573,6 +573,79 @@ class DashboardTrainingState:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardRunStep:
+    goal: str
+    authority: str
+    status: str
+    actions: int
+    frames: int
+    new_living_species: int
+    needed_specimens_gained: int
+
+    def __post_init__(self) -> None:
+        _plain_text(self.goal, subject="saved goal", maximum=40)
+        if self.authority not in {"model", "safety", "unsupported", "forced"}:
+            raise ProgressDashboardError("saved step authority differs")
+        if self.status not in {"succeeded", "failed", "interrupted"}:
+            raise ProgressDashboardError("saved step status differs")
+        for key in ("actions", "frames", "new_living_species", "needed_specimens_gained"):
+            _count(getattr(self, key), subject=key)
+
+
+@dataclass(frozen=True, slots=True)
+class DashboardRunRecap:
+    """Receipt-backed historical play, completely separate from live freshness."""
+
+    heading: str
+    scope: str
+    limitation: str
+    steps: tuple[DashboardRunStep, ...]
+    living_before: int
+    living_after: int
+    money_before: int
+    money_after: int
+    capture_items_before: int
+    capture_items_after: int
+    controller_actions: int
+    emulator_frames: int
+    control_successes: int
+    control_decisions: int
+    control_failed: bool
+
+    def __post_init__(self) -> None:
+        _plain_text(self.heading, subject="saved run heading", maximum=80)
+        _plain_text(self.scope, subject="saved run scope", maximum=160)
+        _plain_text(self.limitation, subject="saved run limitation", maximum=240)
+        if not isinstance(self.steps, tuple) or not 1 <= len(self.steps) <= 4:
+            raise ProgressDashboardError("saved run step count differs")
+        for step in self.steps:
+            if not isinstance(step, DashboardRunStep):
+                raise ProgressDashboardError("saved run step must be typed")
+            step.__post_init__()
+        for key in (
+            "living_before", "living_after", "money_before", "money_after",
+            "capture_items_before", "capture_items_after", "controller_actions",
+            "emulator_frames", "control_successes", "control_decisions",
+        ):
+            _count(getattr(self, key), subject=key)
+        if (
+            sum(step.actions for step in self.steps) != self.controller_actions
+            or sum(step.frames for step in self.steps) != self.emulator_frames
+            or sum(step.new_living_species for step in self.steps)
+            != self.living_after - self.living_before
+            or self.control_successes > self.control_decisions
+            or not isinstance(self.control_failed, bool)
+        ):
+            raise ProgressDashboardError("saved run accounting differs")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **asdict(self), "live": False, "training_data": False,
+            "independent_generalization_claim": False,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardSnapshot:
     """One identity-safe, human-facing status update."""
 
@@ -601,6 +674,7 @@ class DashboardSnapshot:
     events: tuple[str, ...] = ()
     collection_observed: bool = True
     training: DashboardTrainingState | None = None
+    last_run: DashboardRunRecap | None = None
 
     def __post_init__(self) -> None:
         _plain_text(self.game, subject="game", maximum=64)
@@ -610,6 +684,10 @@ class DashboardSnapshot:
             if not isinstance(self.training, DashboardTrainingState):
                 raise ProgressDashboardError("training evidence must be typed")
             self.training.__post_init__()
+        if self.last_run is not None:
+            if not isinstance(self.last_run, DashboardRunRecap):
+                raise ProgressDashboardError("saved run must be typed")
+            self.last_run.__post_init__()
         if self.run_status not in {"waiting", "running", "paused", "passed", "failed", "blocked"}:
             raise ProgressDashboardError("run status is unknown")
         _plain_text(self.stage, subject="stage", maximum=96)
@@ -715,6 +793,7 @@ class DashboardSnapshot:
             ),
             "work": self.work.public_dict(),
             "training": self.training.public_dict() if self.training is not None else None,
+            **({"last_run": self.last_run.public_dict()} if self.last_run is not None else {}),
             "events": list(self.events),
             "private_path_fields": 0,
             "raw_address_fields": 0,
@@ -1031,7 +1110,25 @@ button:focus-visible { outline:3px solid var(--lime); outline-offset:4px; }
 .telemetry span { display:block; color:var(--muted); font:12px var(--mono); text-transform:uppercase; letter-spacing:.07em; }
 .telemetry b { display:block; margin-top:5px; font-size:21px; letter-spacing:-.03em; font-weight:550; }
 .telemetry .signal { color:var(--lime); }
-.layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr); grid-template-areas:"screen decision" "screen work" "party training" "goals stack" "events events" "mission mission"; gap:18px; align-items:start; }
+.layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr); grid-template-areas:"screen decision" "screen work" "recap recap" "party training" "goals stack" "events events" "mission mission"; gap:18px; align-items:start; }
+#recap-panel { grid-area:recap; border-top:2px solid var(--lime); }
+.recap-heading { display:flex; align-items:start; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+.recap-heading h2 { margin:0 0 7px; }
+.recap-heading p { margin:0; }
+.recap-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:22px 0; }
+.recap-metrics span { display:block; font-size:14px; color:var(--muted); margin-bottom:6px; }
+.recap-metrics b { font-size:clamp(20px,2.5vw,30px); font-variant-numeric:tabular-nums; }
+.recap-metrics .cash { color:var(--accent); }
+.recap-steps { list-style:none; padding:0; margin:18px 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.recap-step { background:#171c26; border:1px solid var(--line); border-top:3px solid #6b768b; border-radius:6px; padding:16px; min-width:0; }
+.recap-step.model { border-top-color:var(--lime); }
+.recap-step.safety { border-top-color:var(--accent); }
+.recap-step strong { display:block; font-size:17px; margin:12px 0 8px; }
+.recap-step small { display:block; color:var(--muted); font-size:13px; line-height:1.6; }
+.recap-step .gain { color:var(--lime); font-size:14px; margin:12px 0 5px; }
+.recap-step .authority { font:500 12px/1.4 ui-monospace,monospace; text-transform:uppercase; letter-spacing:.05em; }
+.recap-foot { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:14px; }
+.recap-caution { color:#d5d9e3; font-size:14px; line-height:1.6; border-left:2px solid var(--accent); padding-left:12px; margin-bottom:0; }
 .right { display:contents; }
 .panel { min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
 .section { padding:22px; }
@@ -1123,10 +1220,11 @@ button:focus-visible { outline:3px solid var(--lime); outline-offset:4px; }
 .fit-track i { display:block; height:100%; background:var(--accent); }
 .fit-row.after .fit-track i { background:var(--lime); }
 .fit-note { color:var(--muted); font-size:13px; line-height:1.5; }
-.viewer-mode .layout { grid-template-areas:"screen decision" "screen work" "party training"; }
+.viewer-mode .layout { grid-template-areas:"screen decision" "screen work" "recap recap" "party training"; }
 .viewer-mode #learning-components-panel,.viewer-mode #goals-panel,.viewer-mode #activity-panel,.viewer-mode #mission-panel,.viewer-mode #live-evaluation-panel { display:none; }
 @media(min-width:1200px) { .party { grid-template-columns:repeat(3,minmax(0,1fr)); } }
-@media(max-width:950px) { #observatory { padding:18px; } .layout,.viewer-mode .layout { grid-template-columns:1fr; grid-template-areas:"screen" "decision" "work" "party" "training" "goals" "stack" "events" "mission"; } .screen-bezel { max-width:500px; } .top { align-items:flex-start; } .telemetry { grid-template-columns:1fr 1fr; } .telemetry > div:nth-child(2) { border-right:0; } .telemetry > div:nth-child(-n+2) { border-bottom:1px solid var(--line); } }
+@media(max-width:950px) { #observatory { padding:18px; } .layout,.viewer-mode .layout { grid-template-columns:1fr; grid-template-areas:"screen" "decision" "work" "recap" "party" "training" "goals" "stack" "events" "mission"; } .screen-bezel { max-width:500px; } .top { align-items:flex-start; } .telemetry { grid-template-columns:1fr 1fr; } .telemetry > div:nth-child(2) { border-right:0; } .telemetry > div:nth-child(-n+2) { border-bottom:1px solid var(--line); } .recap-steps,.recap-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:460px) { .recap-steps { grid-template-columns:1fr; } }
 @media(max-width:540px) { #observatory { padding:12px; } .top { flex-direction:column; gap:15px; } .section,.screen-panel { padding:16px; } .screen-shell { padding:8px; } .party,.triplet { grid-template-columns:1fr; } .goal { grid-template-columns:115px 1fr 40px; gap:8px; } .score-grid { grid-template-columns:1fr 1fr; } .telemetry > div { padding:12px; } .telemetry b { font-size:18px; } }
 @media(prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
 </style>
@@ -1151,6 +1249,18 @@ button:focus-visible { outline:3px solid var(--lime); outline-offset:4px; }
     </div>
   </section>
   <div class="right">
+    <section class="panel section" id="recap-panel" hidden>
+      <div class="recap-heading"><div><h2 id="recap-heading">Last completed run</h2><p class="muted" id="recap-scope">Saved evidence, not live</p></div><span class="view-only">SAVED RUN / NOT LIVE</span></div>
+      <div class="recap-metrics">
+        <div><span>Goals completed</span><b id="recap-completed">—</b></div>
+        <div><span>Living species</span><b id="recap-living">—</b></div>
+        <div><span>Capture supplies</span><b id="recap-balls">—</b></div>
+        <div><span>Money remaining</span><b class="cash" id="recap-money">—</b></div>
+      </div>
+      <ol class="recap-steps" id="recap-steps" aria-label="Goals in the saved run"></ol>
+      <div class="recap-foot muted"><span id="recap-authority">—</span><span id="recap-cost">—</span></div>
+      <p class="recap-caution" id="recap-limitation"></p>
+    </section>
     <section class="panel section" id="work-panel">
       <div class="section-head"><h2>Work happening now</h2><span class="status-pill" id="work-status">idle</span></div>
       <div class="work-card">
@@ -1306,6 +1416,28 @@ function render(data) {
   safeText("level-cap", observed ? data.collection.level_cap : "—");
   safeText("resources", observed ? `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots` : "No live inventory observation");
   const training = data.training;
+  const recap = data.last_run;
+  el("recap-panel").hidden = !recap;
+  if (recap) {
+    safeText("recap-heading", recap.heading); safeText("recap-scope", recap.scope);
+    safeText("recap-limitation", recap.limitation);
+    safeText("recap-completed", `${recap.steps.filter(s => s.status === "succeeded").length} / ${recap.steps.length}`);
+    safeText("recap-living", `${fmt(recap.living_before)} → ${fmt(recap.living_after)}`);
+    safeText("recap-balls", `${fmt(recap.capture_items_before)} → ${fmt(recap.capture_items_after)}`);
+    safeText("recap-money", `${fmt(recap.money_before)} → ${fmt(recap.money_after)}`);
+    safeText("recap-authority", `${recap.steps.filter(s => s.authority === "model").length} model-ranked choices · others safety or unsupported-choice bridges`);
+    safeText("recap-cost", `${fmt(recap.controller_actions)} actions · ${fmt(recap.emulator_frames)} frames · recorded, not currently running`);
+    const labels = { model:"Model-ranked", safety:"Safety rule", unsupported:"Single supported kind", forced:"Forced bridge" };
+    el("recap-steps").replaceChildren(...recap.steps.map((step, index) => {
+      const card = document.createElement("li"); card.className = `recap-step ${step.authority}`;
+      const authority = document.createElement("span"); authority.className = "authority"; authority.textContent = `${index + 1} / ${labels[step.authority]}`;
+      const goal = document.createElement("strong"); goal.textContent = step.goal.replaceAll("_", " ");
+      const status = document.createElement("small"); status.textContent = `${step.status} · ${fmt(step.actions)} actions`;
+      const gain = document.createElement("div"); gain.className = "gain";
+      gain.textContent = step.new_living_species ? `+${step.new_living_species} living species` : step.needed_specimens_gained ? `+${step.needed_specimens_gained} needed duplicate` : "Resource maintenance";
+      card.append(authority, goal, status, gain); return card;
+    }));
+  }
   const primary = data.learning_components[0];
   safeText("headline-samples", primary ? `${fmt(primary.train_examples)} examples` : "Not reported");
   safeText("headline-scope", primary ? primary.authority.replaceAll("_", " ") : data.model.mode.replaceAll("_", " "));

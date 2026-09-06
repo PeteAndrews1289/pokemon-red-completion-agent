@@ -108,6 +108,12 @@ from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
     RedGoalContextProfile,
     load_red_goal_context_profile,
 )
+from pokemon_red_completion.red_player_checkpoint import (  # noqa: E402
+    CHECKPOINT_KIND,
+    capture_red_player_terminal,
+    checkpoint_record_id,
+    publish_red_player_checkpoint,
+)
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
 from pokemon_red_completion.red_trajectory import (  # noqa: E402
     PokemonRedObservationEncoder,
@@ -160,6 +166,7 @@ class _Readiness:
     dashboard_port: int | None = None
     context_origin: str = "unspecified"
     routed_resource_goals: bool = False
+    save_terminal_checkpoints: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -300,6 +307,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--envelope", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
     parser.add_argument(
+        "--save-terminal-checkpoints",
+        action="store_true",
+        help="retain private end states joined to completed trajectories; never auto-resume",
+    )
+    parser.add_argument(
         "--routed-resource-goals",
         action="store_true",
         help="opt in to fresh walking routes to declared capture and supply destinations",
@@ -428,6 +440,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     routed_resource_goals = getattr(args, "routed_resource_goals", False)
     if type(routed_resource_goals) is not bool:
         raise PairedRedBoundedPlayerRunError("routed_resource_goals")
+    save_terminal_checkpoints = getattr(args, "save_terminal_checkpoints", False)
+    if type(save_terminal_checkpoints) is not bool:
+        raise PairedRedBoundedPlayerRunError("save_terminal_checkpoints")
     dashboard_port = getattr(args, "dashboard_port", None)
     if dashboard_port is not None and (
         type(dashboard_port) is not int or not 1024 <= dashboard_port <= 65535
@@ -515,6 +530,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     return _Readiness(
         pair_id=args.pair_id,
         routed_resource_goals=routed_resource_goals,
+        save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=working_source_bundle_sha256(PROJECT_ROOT),
         rom_path=rom_path,
@@ -681,6 +697,7 @@ def _run_arm(
     writer: EpisodeWriter | None = None
     sink: EpisodeTrajectorySink | None = None
     recorder: RecordingExecutor[Any, Any] | None = None
+    terminal_checkpoint: dict[str, object] | None = None
     try:
         if viewer is not None:
             viewer.safely(
@@ -715,6 +732,7 @@ def _run_arm(
                 "model_sha256": readiness.model_sha256,
                 "continue_after_progress": readiness.continue_after_progress,
                 "routed_resource_goals": readiness.routed_resource_goals,
+                "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }
@@ -822,6 +840,22 @@ def _run_arm(
             )
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
+            if readiness.save_terminal_checkpoints:
+                terminal_checkpoint = capture_red_player_terminal(
+                    emulator=emulator,
+                    meter=meter,
+                    observe=observer,
+                    parent=readiness.capture,
+                    result=result,
+                    episode_id=episode_id,
+                    profile_sha256=readiness.profile.profile_sha256,
+                    rom_sha256=readiness.rom_sha256,
+                    model_sha256=readiness.model_sha256,
+                    source_commit=readiness.source_commit,
+                    source_bundle_sha256=readiness.source_bundle_sha256,
+                    context_origin=readiness.context_origin,
+                )
+                writer.append("checkpoint", terminal_checkpoint, durable=True)
         starting = observer.starting_observation
         if starting is None:
             raise PairedRedBoundedPlayerRunError("starting_observation")
@@ -839,6 +873,8 @@ def _run_arm(
         )
         sink.finalize()
         artifact = writer.complete()
+        if terminal_checkpoint is not None:
+            publish_red_player_checkpoint(readiness.private_root, terminal_checkpoint)
         if viewer is not None:
             viewer.safely("finished", result)
         return PairedBoundedPlayerArm(
@@ -989,6 +1025,23 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "crystal_accesses": 0,
         "full_game_replays": 0,
     }
+    if readiness.save_terminal_checkpoints:
+        checkpoint_summaries = []
+        for arm_id in (readiness.challenger_arm_id, BASELINE_ARM_ID):
+            record = readiness.private_root.find_sealed_record(
+                checkpoint_record_id(_episode_id(readiness.pair_id, arm_id)),
+                expected_kind=CHECKPOINT_KIND,
+            )
+            if record is None:
+                raise PairedRedBoundedPlayerRunError("terminal_checkpoint_missing")
+            checkpoint_summaries.append({
+                "arm_id": arm_id,
+                "record_sha256": record.summary.record_sha256,
+                "independent_root": False,
+                "training_example": False,
+                "automatic_resume_authorized": False,
+            })
+        summary["terminal_checkpoints"] = checkpoint_summaries
     if readiness.causal_record is not None:
         if not isinstance(challenger_authority, LivingDexGoalShadowPolicy):
             raise PairedRedBoundedPlayerRunError("challenger_model_identity")

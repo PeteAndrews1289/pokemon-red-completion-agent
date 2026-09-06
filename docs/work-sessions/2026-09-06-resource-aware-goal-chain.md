@@ -1,5 +1,18 @@
 # Resource-aware goal chain — September 6
 
+## Closed: the actual four-goal result
+
+Execution from `8318ca11` is complete. The hybrid finished all four goals in 656 actions /
+40,368 frames, retaining two needed specimens: one new living species and one duplicate precursor.
+Exactly two choices were model-ranked; the others were safety and single-supported decisions.
+The control gained the same specimens but failed its fourth search. The hybrid overspent on its
+second supply visit, ending with 19 balls and 649 money. Do not advertise the comparator's raw
+`learned_advantage` as an independent win. Both trajectories and all 84,360 total frames authenticate.
+
+The [next-session reorientation](2026-09-06-durable-player-continuation.md) contains the result,
+claims, continuation/viewer bridge and next training priorities. The model remains fitted on 29
+examples; these diagnostic outcomes do not enter fitting. All preparation below is historical.
+
 ## Reorientation: the first chain is closed
 
 The known-training-context integration from `7762e591` terminated normally after two

@@ -24,6 +24,8 @@ from pokemon_red_completion.progress_dashboard import (
     DashboardLiveEvaluationState,
     DashboardModelState,
     DashboardPartyMember,
+    DashboardRunRecap,
+    DashboardRunStep,
     DashboardSnapshot,
     DashboardState,
     DashboardTrainingState,
@@ -92,6 +94,15 @@ def snapshot_from_public_status(document: object) -> DashboardSnapshot:
             (int(key), value["correct"], value["total"]) for key, value in counts.items()
         )
         components.append(_typed(DashboardLearningComponent, component))
+    recap = None
+    if data.get("last_run") is not None:
+        saved = dict(_object(data["last_run"]))
+        if any(saved.get(key) is not False for key in (
+            "live", "training_data", "independent_generalization_claim",
+        )) or not isinstance(saved.get("steps"), list) or len(saved["steps"]) > 4:
+            raise ProgressDashboardError("saved run claim boundary differs")
+        saved["steps"] = tuple(_typed(DashboardRunStep, step) for step in saved["steps"])
+        recap = _typed(DashboardRunRecap, saved)
     snapshot = DashboardSnapshot(
         game=data["game"],
         run_status=data["run_status"],
@@ -131,6 +142,7 @@ def snapshot_from_public_status(document: object) -> DashboardSnapshot:
             if data.get("training") is not None
             else None
         ),
+        last_run=recap,
         work=_typed(DashboardWorkState, data["work"]),
         events=tuple(data["events"]),
     )
@@ -228,6 +240,8 @@ class DashboardRelayState(DashboardState):
                 now = time.monotonic()
                 result = snapshot.public_dict()
                 result["work"] = self._snapshot.work.public_dict()
+                if self._snapshot.last_run is not None:
+                    result["last_run"] = self._snapshot.last_run.public_dict()
                 # Keep the saved training chart only when the live producer
                 # identifies that exact fitted artifact and sample count.
                 training = self._snapshot.training

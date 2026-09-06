@@ -1,6 +1,35 @@
 # Handoff
 
-## Current — resource-aware collection chain
+## Current — resource-aware chain COMPLETE; durable continuation and viewer recap
+
+The run from published `8318ca11` completed. The hybrid finished four goals in 656 actions /
+40,368 frames: safety supply, single-supported acquisition, model-ranked acquisition and
+model-ranked supply. Two needed specimens were retained: one new living species and one duplicate
+precursor. Living species rose 13 to 14; registered species 18 to 19; required specimens remaining
+108 to 106. Only two choices were model-ranked. There were no hybrid component failures or losses.
+
+The control gained the same specimens but failed its fourth search at the unchanged 64-leg bound.
+The raw `learned_advantage` verdict is confounded, not an independent win. The hybrid spent 12,000
+money on two ten-ball purchases and ended with 19 balls / 649 money. All 1,429 actions and 84,360
+frames authenticate; neither arm enters fitting. No emulator is running. Both pair IDs are closed.
+
+The current [bounded maintenance session](docs/work-sessions/2026-09-06-durable-player-continuation.md)
+adds opt-in private terminal checkpoints and a saved-run viewer recap. Checkpoints retain original
+lineage, join complete trajectories, and require fresh semantic/ledger checks; no automatic replay
+or train admission follows. Completed historical runs have no end saves and must not be replayed
+to manufacture them. The recap separates saved results from live frames and the 29-example fit.
+
+PR 234 merged after green CI `34037386287`; PR 233 was consolidated intact. No external reviewer
+was invoked. Next: prospectively scoped train-only resource contrasts and missing Red mechanics,
+using existing selected-outcome/fitting contracts and retaining every prior example and failure.
+An objective change must be prospective; do not silently tune the old utility on diagnostics.
+
+Latest source audit: candidate resource cost is currently encoded as zero, goal resource pressure
+uses item headroom rather than money, and the causal resource-cost target excludes money spent.
+Before more supply fitting, resolve that representation/objective gap explicitly; known purchase
+costs can remain deterministic quotes beside learned success/progress. Never relabel old rows.
+
+## Historical — resource-aware collection chain preparation
 
 The known-training chain from `7762e591` is complete: one genuinely model-selected capture
 increased living species **13 → 14**, then the last ball was gone. The second choice was a

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The first known-training chain caught one species but exhausted its last ball; local-only bindings could not offer resupply. Connect the existing routed transport and destination skills to refreshed capture/supply goals, then run a four-step training-context integration. No new model or CI gate is needed.
+- Next decision: The resource-aware hybrid completed four goals and retained two needed specimens, but only two choices were model-ranked and extra supply spending left little money. Preserve future terminal states and saved viewer evidence, then collect a prospectively bounded train-only contrast curriculum using the existing learner. Do not retrofit these diagnostics into fitting.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The unchanged 29-example living-Dex scorer has caused three real routed side goals and one known-training-context capture. That capture increased living species from 13 to 14. The next exploration was a deterministic unsupported choice and failed; no sustained three-choice collection chain or independent superiority exists. |
+| Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
 | Cheapest falsifier | Use the saved 29-example living-Dex option scorer for at least three successive supported Red goal choices in one bounded development episode. Reobserve semantic state and the living ledger after each execution; stop on stale choices, unverified progress, or an undisclosed replacement policy. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-known-train-chain-complete** · status **closed** · evidence [development episode](docs/evidence/red-fit29-known-train-chain-result-2026-09-06.json)
+**2026-09-06-resource-chain-complete** · status **closed** · evidence [development episode](docs/evidence/red-fit29-resource-chain-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | One model-chosen acquisition increased the living collection. The missing reusable capability is resource-aware continuation across destinations, not another full teacher run. |
-| Learning output | The four-step-bounded known-training integration stopped after two decisions per actor: successful acquisition followed by exhausted exploration. Both trajectories authenticated; 704 controller actions and 31,344 frames reconcile. No new fit or train rows. |
-| Authority delta | Exactly one model-ranked acquisition succeeded, adding one living and registered species. The second choice was deterministic_unsupported, not another learned decision. The 29-example artifact is unchanged. |
-| Transfer result | Known-training-context integration only, not an unseen estimate. Both actors gained the same one living species. No Crystal, sealed Red or full replay. |
-| Blocker | The capture used the last ball. Acquisition then correctly became missing_resource, while resupply was missing_capability because only local providers were bound. Exploration reached its 64-leg cap. |
-| Decision | Preserve this pair and its diagnostics. Add an opt-in refreshed route-to-capture/supply seam using existing transport, fresh destination binding and safety limits. Do not change the old route, search cap or model utility. |
-| Next session | Qualify shared local/remote resource prerequisites and route-backed refreshed goals, then run one prospectively declared four-step known-training-context integration. Keep safety choices distinct from learned choices. |
-| Next falsifier | After the supply or capture skill, does the next real observation offer feasible completion goals, and can the unchanged scorer cause successive verified captures within the existing budgets? |
-| Stop condition | Preserve the old pair, all four retired paired roots and all eight training trials. No new fitting on diagnostic outcomes, no root relabeling for independence, no full replay or Crystal. Stop on unavailable route, unsupported field action, stale observation or hard budget. |
+| Product alignment | Navigation, resupply and capture now compose around fresh state. Two needed specimens include a new living species and a duplicate precursor; future continuation should retain this progress rather than reset it. |
+| Learning output | The known-training hybrid finished four goals in 656 actions / 40,368 frames. The control finished three and failed its fourth search. Both complete trajectories authenticate: 1,429 actions / 84,360 frames. No new fit or train rows. |
+| Authority delta | Two actual model-ranked choices, one deterministic safety choice and one single-supported bridge. The 29-example model remains unchanged; no controller or full-player promotion follows. |
+| Transfer result | Same known training lineage only. Both actors gained the same two needed specimens and one living species. The raw learned_advantage verdict is confounded by control failure and incomplete money accounting; it is not independent superiority. |
+| Blocker | Progress was not retained as an emulator end save in this historical runner. The hybrid bought twenty balls, used two and ended with nineteen, spending 12,000 of 12,649 money. More reliable maintenance is not necessarily better collection. |
+| Decision | Add bounded opt-in terminal-state retention and a saved viewer recap, without replaying completed trials. Then declare real train-only resource contrasts and missing Red mechanics through existing collector/fitter contracts; do not retune the old result or invent training provenance. |
+| Next session | Qualify terminal checkpoints joined to complete trajectories and original lineage, with no automatic retry or live-frame claim. Next plan a small selected-outcome train curriculum retaining all prior rows, failure targets and actual behavior probabilities. |
+| Next falsifier | Can a retained terminal reopen with exact state, original training lineage and fresh semantic/ledger agreement, while completed evidence remains separate from live frames? Then do new train contrasts reduce waste while sustaining needed-specimen progress? |
+| Stop condition | No replay to manufacture missing old end saves, no fitting the diagnostic chains, no relabeling roots as independent, and no Crystal, sealed evaluation or full replay. Stop on changed counters, invalid state/trajectory joins or the two-hour maintenance time box. |
 
 ### Stop conditions
 

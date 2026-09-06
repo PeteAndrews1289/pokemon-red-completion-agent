@@ -1,0 +1,11 @@
+{
+  "audit": {
+    "path": "docs/evidence/red-fit29-resource-chain-readonly-audit-2026-09-06.json",
+    "sha256": "01b6369c81d3693252268433700912d0b17d6ee19bdd46bc9c4b82d91a382f53"
+  },
+  "result": {
+    "path": "docs/evidence/red-fit29-resource-chain-result-2026-09-06.json",
+    "sha256": "62880947a029bfd282e12ea3ca8499ea480b4b82723a6d418afe5070b377ced4"
+  },
+  "schema": "pokemon.dashboard.gameplay-evidence-reference.v1"
+}

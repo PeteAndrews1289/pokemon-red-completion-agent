@@ -11,6 +11,7 @@ import time
 import webbrowser
 from collections.abc import Mapping
 from pathlib import Path
+from typing import cast
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -31,6 +32,8 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DashboardExperimentState,
     DashboardLearningComponent,
     DashboardModelState,
+    DashboardRunRecap,
+    DashboardRunStep,
     DashboardSnapshot,
     DashboardTrainingState,
     DashboardWorkState,
@@ -64,26 +67,132 @@ def _load_learning_evidence(
             raise ValueError
         if reference["schema"] != "pokemon.dashboard.learning-evidence-reference.v1":
             raise ValueError
-        relative = Path(reference["path"])
-        if relative.is_absolute() or ".." in relative.parts:
-            raise ValueError
-        target = (repository_root / relative).resolve(strict=True)
-        if (
-            not target.is_relative_to(repository_root.resolve())
-            or target.stat().st_size > 1_000_000
-        ):
-            raise ValueError
-        payload = target.read_bytes()
-        if hashlib.sha256(payload).hexdigest() != reference["sha256"]:
-            raise ValueError
-        result = json.loads(payload)
-        if not isinstance(result, dict):
-            raise ValueError
-        return result
+        return _read_public_receipt(reference, repository_root=repository_root)
     except (OSError, ValueError, TypeError, KeyError) as error:
         raise ProgressDashboardError(
             "dashboard learning evidence is unavailable or changed"
         ) from error
+
+
+def _read_public_receipt(
+    reference: Mapping[str, object], *, repository_root: Path,
+) -> Mapping[str, object]:
+    relative = Path(_text(reference, "path"))
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError("receipt path differs")
+    target = (repository_root / relative).resolve(strict=True)
+    if not target.is_relative_to(repository_root.resolve()) or target.stat().st_size > 1_000_000:
+        raise ValueError("receipt boundary differs")
+    payload = target.read_bytes()
+    if len(payload) > 1_000_000 or hashlib.sha256(payload).hexdigest() != reference["sha256"]:
+        raise ValueError("receipt bytes differ")
+    result = json.loads(payload)
+    if not isinstance(result, dict):
+        raise ValueError("receipt document differs")
+    return result
+
+
+def _load_run_recap(
+    path: Path = PROJECT_ROOT / "configs" / "dashboard-gameplay-evidence.json",
+    *, repository_root: Path = PROJECT_ROOT,
+) -> DashboardRunRecap:
+    try:
+        reference = json.loads(path.read_text(encoding="utf-8"))
+        if reference.get("schema") != "pokemon.dashboard.gameplay-evidence-reference.v1":
+            raise ValueError
+        result_ref, audit_ref = _mapping(reference, "result"), _mapping(reference, "audit")
+        result = _read_public_receipt(result_ref, repository_root=repository_root)
+        audit = _read_public_receipt(audit_ref, repository_root=repository_root)
+        if audit.get("result_file_sha256") != result_ref.get("sha256"):
+            raise ValueError
+        return _run_recap_projection(result, audit)
+    except (OSError, ValueError, TypeError, KeyError, AttributeError) as error:
+        raise ProgressDashboardError("saved gameplay evidence is unavailable or changed") from error
+
+
+def _run_recap_projection(
+    result: Mapping[str, object], audit: Mapping[str, object],
+) -> DashboardRunRecap:
+    if (
+        result.get("schema") != "pokemon.core.paired-bounded-player-result.v1"
+        or result.get("status") != "complete"
+        or result.get("context_origin") != "training"
+        or result.get("independent_generalization_claim") is not False
+        or audit.get("schema") != "pokemon.red.resource-chain-readonly-audit.v1"
+        or audit.get("status") != "verified"
+        or audit.get("source_commit") != result.get("source_commit")
+        or audit.get("new_fits") != 0 or audit.get("new_train_examples") != 0
+        or audit.get("independent_generalization_claim") is not False
+    ):
+        raise ProgressDashboardError("saved gameplay scope differs")
+    arms = audit.get("arms")
+    if not isinstance(arms, list) or len(arms) != 2:
+        raise ProgressDashboardError("saved gameplay audit denominator differs")
+    audited = {_text(item, "arm"): item for item in arms}
+    if set(audited) != {"learned", "baseline"}:
+        raise ProgressDashboardError("saved gameplay audit arms differ")
+    for arm in ("learned", "baseline"):
+        public_arm = _mapping(result, arm)
+        episode = _mapping(public_arm, "episode")
+        checked = audited[arm]
+        if (
+            checked.get("manifest_sha256") != public_arm.get("trajectory_manifest_sha256")
+            or checked.get("controller_actions") != episode.get("total_actions")
+            or checked.get("emulator_frames") != episode.get("total_frames")
+            or checked.get("goal_decisions") != episode.get("decisions")
+        ):
+            raise ProgressDashboardError("saved gameplay trajectory join differs")
+    learned, baseline = _mapping(result, "learned"), _mapping(result, "baseline")
+    episode, control = _mapping(learned, "episode"), _mapping(baseline, "episode")
+    decisions = _mapping(result, "living_dex_causal_shadow").get("decisions")
+    steps = episode.get("steps")
+    if (
+        not isinstance(steps, list) or not isinstance(decisions, list)
+        or len(steps) != len(decisions)
+    ):
+        raise ProgressDashboardError("saved gameplay actor decisions differ")
+    rows = []
+    modes = {"model_shadow": "model", "deterministic_safety": "safety",
+             "deterministic_unsupported": "unsupported"}
+    for step, decision in zip(steps, decisions, strict=True):
+        kind = _text(step, "selected_kind")
+        mode = _text(decision, "mode")
+        if kind != decision.get("selected_kind") or mode not in modes:
+            raise ProgressDashboardError("saved gameplay selection join differs")
+        before, after = _mapping(step, "collection_before"), _mapping(step, "collection_after")
+        rows.append(DashboardRunStep(
+            goal=kind, authority=modes[mode], status=_text(step, "status"),
+            actions=_count(step, "actions_executed"), frames=_count(step, "frames_executed"),
+            new_living_species=_count(after, "living_species") - _count(before, "living_species"),
+            needed_specimens_gained=(
+                _count(before, "required_specimens_remaining")
+                - _count(after, "required_specimens_remaining")
+            ),
+        ))
+    if not rows or len(rows) != _count(episode, "decisions"):
+        raise ProgressDashboardError("saved gameplay step denominator differs")
+    resources = _mapping(audited["learned"], "resources")
+    return DashboardRunRecap(
+        heading="Last completed Red collecting run",
+        scope="Saved evidence · known-training integration · not a live emulator",
+        limitation=(
+            "The control collected the same two specimens but failed its final search. "
+            "The hybrid bought extra supplies and spent most of its money. "
+            "This is not an independent model win."
+        ),
+        steps=tuple(rows),
+        living_before=_count(_mapping(learned, "starting_collection"), "living_species"),
+        living_after=_count(_mapping(steps[-1], "collection_after"), "living_species"),
+        money_before=_count(resources, "money_before"),
+        money_after=_count(resources, "money_after"),
+        capture_items_before=_count(resources, "capture_items_before"),
+        capture_items_after=_count(resources, "capture_items_after"),
+        controller_actions=_count(episode, "total_actions"),
+        emulator_frames=_count(episode, "total_frames"),
+        control_successes=_count(audited["baseline"], "successful_goals"),
+        control_decisions=_count(control, "decisions"),
+        control_failed=_text(control, "stop_reason") == "verified_failure",
+    )
 
 
 def _training_projection(
@@ -126,8 +235,8 @@ def _training_projection(
         total_lessons=_count(readiness, "train_slots"),
         setup_censors=_count(readiness, "setup_censors"),
         fit_count=_count(fit, "fit_executions"),
-        weighted_mse_before=error["prior_weighted_mse"],
-        weighted_mse_after=error["updated_weighted_mse"],
+        weighted_mse_before=cast(float, error["prior_weighted_mse"]),
+        weighted_mse_after=cast(float, error["updated_weighted_mse"]),
         training_choice_changes=_count(fit, "policy_disagreements_on_train_menus"),
     )
     component = DashboardLearningComponent(
@@ -150,6 +259,7 @@ def product_focus_dashboard_snapshot(
     *,
     work: DashboardWorkState | None = None,
     evidence: Mapping[str, object] | None = None,
+    recap: DashboardRunRecap | None = None,
 ) -> DashboardSnapshot:
     """Project current evidence, without borrowing old gameplay counts as live state."""
     lane = state.active_lane
@@ -198,6 +308,7 @@ def product_focus_dashboard_snapshot(
         ),
         learning_components=(component,),
         training=training,
+        last_run=recap,
         work=work or DashboardWorkState(),
         events=(
             f"Saved model · {training.samples_before} → {training.samples_after} real examples",
@@ -289,7 +400,8 @@ def main(argv: list[str] | None = None) -> int:
             next_step="Resume automatic work updates",
         )
     evidence = _load_learning_evidence()
-    snapshot = product_focus_dashboard_snapshot(focus, work=work, evidence=evidence)
+    recap = _load_run_recap()
+    snapshot = product_focus_dashboard_snapshot(focus, work=work, evidence=evidence, recap=recap)
     if args.port == args.live_port:
         raise ProgressDashboardError("overview and live observer ports must differ")
     state = DashboardRelayState(snapshot, live_port=args.live_port)
@@ -345,6 +457,7 @@ def main(argv: list[str] | None = None) -> int:
                         candidate_evidence = _load_learning_evidence()
                         _training_projection(candidate_evidence)
                         evidence = candidate_evidence
+                        recap = _load_run_recap()
                     except (DashboardWorkStatusError, ProgressDashboardError):
                         work = DashboardWorkState(
                             status="blocked",
@@ -357,7 +470,9 @@ def main(argv: list[str] | None = None) -> int:
                             next_step="Resume automatic dashboard updates",
                         )
                     state.publish(
-                        product_focus_dashboard_snapshot(focus, work=work, evidence=evidence)
+                        product_focus_dashboard_snapshot(
+                            focus, work=work, evidence=evidence, recap=recap
+                        )
                     )
                     state.poll()
                 time.sleep(0.5)
