@@ -28,6 +28,63 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+@pytest.mark.parametrize("probe_during_observation", [False, True])
+def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
+    monkeypatch, probe_during_observation,
+):
+    module = runpy.run_path(str(SCRIPT))
+    observe_type = module["_LiveObserver"]
+    namespace = observe_type.__call__.__globals__
+    hard_type = module["HardCompositionActionLimiter"]
+    count_type = module["CountingExecutor"]
+    calls, skill_ports = [], []
+    outer = hard_type(
+        SimpleNamespace(execute=lambda action: calls.append(action)),
+        maximum_actions_per_decision=1, maximum_episode_actions=1,
+    )
+    meter = SimpleNamespace(
+        checkpoint=lambda: outer.attempted_actions,
+        begin_decision_window=outer.begin_decision_window,
+    )
+
+    def player(_runtime, actions, *_args):
+        assert isinstance(actions.delegate, hard_type)
+        skill_ports.append(actions)
+
+        class Bridge:
+            last_live_observation = None
+
+            def __call__(self):
+                if probe_during_observation:
+                    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+                        actions.execute("must-not-reach-game")
+                return _observation(storage=9)
+
+        return Bridge()
+
+    monkeypatch.setitem(namespace, "_player_observer", player)
+    observer = observe_type(
+        runtime=object(), actions=count_type(outer), meter=meter,
+        maximum_actions_per_decision=1,
+    )
+    if probe_during_observation:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
+            observer()
+        assert calls == []
+        assert outer.attempted_actions == 0
+    else:
+        observer()
+        skill_ports[-1].execute("first")
+        observer()  # a new local guard must not reset the episode total
+        from pokemon_red_completion.goal_manager_composition_qualification import (
+            CompositionActionBudgetExhausted,
+        )
+        with pytest.raises(CompositionActionBudgetExhausted):
+            skill_ports[-1].execute("over-budget")
+        assert calls == ["first"]
+        assert outer.attempted_actions == 1
+
+
 def _call_names() -> tuple[str, ...]:
     tree = ast.parse(SCRIPT.read_text(encoding="utf-8"))
     names: list[str] = []

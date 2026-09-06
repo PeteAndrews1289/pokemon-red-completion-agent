@@ -242,14 +242,23 @@ class _LiveObserver:
     viewer: BoundedPlayerDashboard | None = None
     route_world: StrategicScenarioRouteWorld | None = None
     quote_resource_costs: bool = False
+    maximum_actions_per_decision: int = 6_000
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
             self.meter.begin_decision_window()
         before = self.meter.checkpoint()
         deferred = _DeferredActionExecutor(self.actions)
+        # Preserve the concrete hard-limited skill interface around the
+        # observation gate. The original episode-wide limiter remains below
+        # the gate; this fresh per-offer limiter cannot reset that total.
+        skill_actions = CountingExecutor(HardCompositionActionLimiter(
+            deferred,
+            maximum_actions_per_decision=self.maximum_actions_per_decision,
+            maximum_episode_actions=self.maximum_actions_per_decision,
+        ))
         bridge = _player_observer(
-            self.runtime, CountingExecutor(deferred), self.route_world, self.quote_resource_costs
+            self.runtime, skill_actions, self.route_world, self.quote_resource_costs
         )
         observation = bridge()
         if self.meter.checkpoint() != before or deferred.attempted_while_disabled:
@@ -1059,6 +1068,7 @@ def _run_arm(
                 viewer=viewer,
                 route_world=_route_world(readiness),
                 quote_resource_costs=readiness.quote_resource_costs,
+                maximum_actions_per_decision=limits.max_actions_per_decision,
             )
             trajectory_class = (
                 ViewerGoalTrajectory

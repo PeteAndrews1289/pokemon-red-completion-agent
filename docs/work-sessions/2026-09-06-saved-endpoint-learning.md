@@ -31,3 +31,17 @@ If the episode yields admissible new experience, fit once with all 31 earlier ro
 Then allow one new diagnostic continuation `red-endpoint-fit-followup-20260906-a-causal`, at most
 two decisions, from the resulting saved endpoint with the new model. No fitting of its greedy
 choices and no independent-evaluation claim. Stop after its first terminal result.
+
+## Zero-input amendment
+
+The first episode selected development but performed **zero controller actions / zero frames**:
+the existing skill's concrete limiter check could not see the limiter behind the observation
+gate. Its complete archive and checkpoint remain preserved; admission excludes its zero-input row.
+The observation wrapper now exposes a genuine per-offer limiter while retaining the original
+episode limiter and action-free observation gate. No guard is removed.
+
+One corrected identity `red-endpoint-learning-20260906-r1-a-causal` keeps seed 2026090601, the
+same saved parent/profile expansion and unchanged dose. This remains at most one controller-started
+learning episode, not an after-input retry or favorable-outcome search. The fit must inventory the
+zero-input first episode too. If this corrected episode fails to produce admissible experience,
+stop the batch rather than launch another successor.
