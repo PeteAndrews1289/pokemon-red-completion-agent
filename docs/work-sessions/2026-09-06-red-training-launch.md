@@ -21,7 +21,8 @@
 2. Share factual, complete-denominator admission between dashboard and fitting.
 3. Bind the intended current prior and all 23 retained train examples to the existing fitter;
    prove immutable fit recovery. Do not build another learner or general protocol framework.
-4. Qualify/publish the coherent source. Freeze and preflight the proposed 4/4/2 allocation.
+4. Qualify/publish the coherent source. Reuse the actual frozen 4/4/1 allocation (the initial
+   projection was 4/4/2); preflight before input.
 5. Collect the eight declared training lessons, then fit once if the actual-outcome gate passes.
 6. Record model/data changes and the next bounded model-control test; synchronize handoff,
    roadmap, dashboard and narrative. No full-game replay or Crystal execution in this session.
@@ -55,3 +56,25 @@ depended on fitting the incomplete batch first. A bounded follow-up separates tr
 from evaluation readiness, authenticates the named prior independently, and preserves every train
 lineage plus all seven historical/supplemental development roots. Thirteen additional tests pass;
 the production read-only recheck succeeds. This follow-up joins the same PR before new gameplay.
+
+## Private freeze and publication bottleneck
+
+The real successor plan is now frozen: four train roots, eight lessons, four paired roots and
+one reserve. The initial projection of two reserves did not survive the usable-bank inventory;
+no training denominator, paired denominator or reset allowance changed. The plan exists on two
+physical disks and produced zero controller actions, claims, outcomes or fits.
+
+CI run 34008794304 timed out at 45 minutes after reporting five earlier failures in three old
+registry test files. The test fixtures incorrectly applied historical source-bound fingerprints
+to current source. The repair keeps the old golden vector tied to its original commit and creates
+isolated prospective registries for current-source acceptance and drift rejection; production
+loaders remain unchanged. The selection-only fixture parses semantic assignments. CI retains all
+selected tests, uses two file-grouped workers with BLAS threads capped at one, stops on the first
+failure, disables crashed-worker retry and reports its slowest tests. Its safety ceiling is now
+60 minutes. The 93 focused learning/recovery tests passed in 212.52 seconds under this parallel setup.
+All 56 tests in the three affected registry/selection files then passed in 56.16 seconds; this
+includes rejecting changed current source while still accepting the original historical revision.
+
+The next output remains eight actual lessons and an admitted fit, not additional experiment
+design. Reuse the frozen producer with the separately qualified consumer, and use the command's
+built-in action-free checks rather than repeating the expensive inventory unnecessarily.

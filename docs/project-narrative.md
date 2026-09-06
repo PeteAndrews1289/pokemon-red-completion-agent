@@ -21,6 +21,14 @@ keeps every old lesson and the frozen prior without requiring a premature fit. T
 zero game frames; 13 further tests and a real-data inventory check verified the repair. This was a
 data-flow integration error, not a Pokémon navigation failure.
 
+The real freeze then succeeded: eight training lessons across four roots, four separate paired
+roots and one reserve. No game input or fitting was counted at preparation. Publication exposed
+another source of wasted time: old tests compared frozen historical fingerprints with current
+code, while a serial test run continued until its 45-minute timeout. We corrected the fixture
+boundaries without relaxing production checks and switched the same test selection to two workers
+with immediate failure reporting. The purpose of this repair is shorter feedback on a reusable
+learning loop, not counting CI as AI progress.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still

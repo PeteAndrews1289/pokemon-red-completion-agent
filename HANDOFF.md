@@ -15,9 +15,10 @@ Use [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the current
   See [qualification](docs/evidence/red-training-launch-local-qualification-2026-09-06.json).
   Real readers reconfirmed 23 train examples and the intended 18-example prior. Unit-test fits
   are synthetic verification, not production progress.
-- Next: publish the coherent stack via PR 228, qualify its exact main, freeze/preflight 4/4/2,
-  collect eight lessons and fit automatically only if the factual gate passes. No new private
-  freeze, controller input or real model fit has occurred at this local checkpoint.
+- Next: qualify the PR 228 stack and its exact main, reuse the completed private 4/4/1 freeze,
+  collect eight lessons and fit automatically only if the factual gate passes. The real freeze
+  succeeded with four train roots, four paired roots and one reserve; input and real fitting
+  remain zero. See the [freeze receipt](docs/evidence/red-training-retired-bank-freeze-2026-09-06.json).
 - Preserve the old ten terminal slots and all five new lessons. Do not reset claims, consume
   paired/reserve roots, open sealed Red, run Crystal or launch a full-game teacher replay.
 - After a real fit, update counters only from its evidence and prepare bounded model control.
@@ -30,6 +31,15 @@ prior (`--prior-model-record-id` is now required there too). The production read
 19 train lineages plus seven historical/supplemental development roots. Thirteen additional tests
 pass, including proof that the original evaluation model loader still rejects a stale corpus.
 No private plan or root claim was created by the failed preparation. Publish this in the same PR.
+
+Publication follow-up: CI 34008794304 reached its 45-minute timeout, with five earlier failures
+in historical registry tests. The fix preserves the original golden vector at its original source,
+uses isolated generated registries to test source drift, and keeps selection-only fixtures semantic.
+No production authentication is relaxed. CI now runs the same selection with two file-grouped
+workers and fails fast. Do not refreeze the already saved plan: its producer is `4aaa07a5`, and the
+execution command accepts a separately qualified consumer. Operator paths are in the private
+`SESSION-RESUME.md`, not this repository. The launch command includes its own pre-input checks;
+an additional standalone preflight is optional and must not be counted as gameplay.
 
 ## Historical checkpoint — September 6 recovery audit
 

@@ -22,12 +22,22 @@ strict. Thirteen additional tests and the real-data exclusion recheck passed; se
 [the pre-input repair evidence](evidence/red-training-inventory-unfitted-corpus-repair-2026-09-06.json).
 The failed preparation published no plan and consumed no input or root claim.
 
+The successor freeze subsequently succeeded with **four train roots, four paired roots and one
+reserve**, not the projected two reserves. Its eight lessons and two-resets-per-root cap are
+unchanged. [The path-free freeze receipt](evidence/red-training-retired-bank-freeze-2026-09-06.json)
+records zero input, claims, outcomes and fits. Preserve this plan; do not recreate it after a
+publication-only change. CI run 34008794304 timed out at 45 minutes after also reporting five
+historical-registry test failures. Those tests now distinguish a frozen historical registry from
+a newly generated test registry; production authentication remains strict. The same full test
+selection uses two file-grouped workers, fail-fast reporting and a 60-minute safety ceiling.
+
 ### Execute next; do not reopen the architecture
 
 1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and
    one batched publication, not another series of tiny CI-only changes.
-2. Freeze and action-free preflight the prospective 4-train/4-paired/2-reserve allocation. Before
-   input, retain the 23-row corpus fingerprint and intended current prior. Re-entry must preserve
+2. Reuse the completed 4-train/4-paired/1-reserve freeze. The live command performs action-free
+   preflight before input and retains the 23-row corpus fingerprint and intended current prior.
+   Re-entry must preserve
    both; the ten old terminal trials remain consumed.
 3. Collect all eight bounded train lessons. Automatically fit the existing option scorer if all
    eight are terminal and at least six settle, including actual acquisition >=1 and development
@@ -48,8 +58,8 @@ gate fails; do not create a new teacher factory or claim that simulated test out
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first, then the
 [recovery audit and exit criteria](audits/recovery-and-training-readiness-2026-09-06.md).
-This section is the only current sequence. All subsequent checkpoints are retained history,
-even when their old headings say “active.”
+This section and all subsequent checkpoints are retained history, even when their old headings
+say “active.” The training-launch checkpoint above is the current sequence.
 
 The goal remains a learned player that completes stories and builds a living Pokédex across
 games. Red comes first; Crystal execution is deferred, not removed from the architecture.

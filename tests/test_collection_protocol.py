@@ -134,7 +134,18 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
 
 
 def test_final_campaign_identity_has_public_golden_values() -> None:
-    payload = REGISTRY_PATH.read_bytes()
+    # These are historical golden values. The current registry intentionally
+    # changes when executable source changes; never update this vector to match it.
+    payload = subprocess.run(
+        [
+            "git", "show",
+            "40c847c6f4b71e119cbea5cbe38fd009b30a1d00:"
+            + COLLECTION_REGISTRY_RELATIVE_PATH,
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
     registry = parse_collection_registry(payload)
     first = registry.assignment("red-battle-v95-01-train")
 

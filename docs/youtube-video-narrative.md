@@ -19,6 +19,12 @@ arrow: **MUST ALREADY BE TRAINED BEFORE COLLECTING TRAINING DATA**. Replace it w
 checks for **ALL TRAINING EXCLUSIONS** and **NAMED PRIOR MODEL**. Label this an action-free inventory
 repair, not gameplay or a new learning result; the stricter evaluation rule stays in place.
 
+**Preparation follow-up:** Show **8 LESSONS / 4 TRAIN ROOTS · 4 PAIRED ROOTS · 1 RESERVE** with
+**FROZEN, NOT YET PLAYED**. The estimated second reserve was unavailable; it was not fabricated.
+For the CI repair, show a historical fingerprint beside its original revision and current-source
+tests in a separate box. Explain that faster, fail-fast verification shortens engineering feedback
+but does not itself teach Pokémon. Only actual game outcomes advance the learning counter.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.
