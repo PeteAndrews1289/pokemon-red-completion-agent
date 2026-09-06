@@ -15,7 +15,7 @@ from __future__ import annotations
 import math
 import re
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import cast
 
@@ -23,6 +23,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pokemon_red_completion.goal_manager import GoalSituation
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.provenance import canonical_sha256
 
 LIVING_DEX_OPTION_CONTEXT_SCHEMA = "pokemon.core.living-dex-option-context.v1"
@@ -122,6 +123,37 @@ LIVING_DEX_OPTION_FEATURE_NAMES = (
     *_CANDIDATE_FEATURE_NAMES,
     *_INTERACTION_FEATURE_NAMES,
 )
+
+# Presence is separate from measured zero. Counts cover only tracking's lifetime;
+# no feature claims that earlier, unrecorded searches did not happen.
+LIVING_DEX_HISTORY_FEATURE_NAMES = (
+    "search.tracked",
+    "search.attempts",
+    "search.exhausted",
+    "search.actions",
+    "search.frames",
+)
+
+
+def option_feature_names(version: int) -> tuple[str, ...]:
+    if type(version) is not int or version not in (1, 2):
+        raise LivingDexOptionValueError("living-Dex feature version differs")
+    return LIVING_DEX_OPTION_FEATURE_NAMES + (
+        LIVING_DEX_HISTORY_FEATURE_NAMES if version == 2 else ()
+    )
+
+
+def _history_vector(history: GoalSearchHistory | None) -> tuple[float, ...]:
+    if history is None:
+        return (0.0,) * len(LIVING_DEX_HISTORY_FEATURE_NAMES)
+    return (
+        1.0,
+        history.attempts / (history.attempts + 1),
+        history.exhausted / (history.exhausted + 1),
+        history.actions / (history.actions + 1000),
+        history.frames / (history.frames + 60000),
+    )
+
 
 LIVING_DEX_OPTION_OUTCOME_NAMES = (
     "verified_success",
@@ -344,10 +376,8 @@ def living_dex_option_features_from_semantic_facts(
         values["maximum_completion_units"] <= 0
         or values["maximum_controller_actions"] <= 0
         or values["completion_units"] > values["maximum_completion_units"]
-        or values["immediate_dependency_unlocks"]
-        > values["incomplete_dependency_frontier"]
-        or values["irreversible_constraints_exposed"]
-        > values["irreversible_constraint_count"]
+        or values["immediate_dependency_unlocks"] > values["incomplete_dependency_frontier"]
+        or values["irreversible_constraints_exposed"] > values["irreversible_constraint_count"]
     ):
         raise LivingDexOptionValueError("semantic option count bounds differ")
     return LivingDexOptionFeatures(
@@ -397,8 +427,13 @@ class LivingDexOptionCandidate:
     features: LivingDexOptionFeatures
     availability: LivingDexOptionAvailability
     unavailable_reason: LivingDexOptionUnavailableReason | None = None
+    search_history: GoalSearchHistory | None = None
 
     def __post_init__(self) -> None:
+        if self.search_history is not None and not isinstance(
+            self.search_history, GoalSearchHistory
+        ):
+            raise LivingDexOptionValueError("living-Dex search history differs")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise LivingDexOptionValueError("living-Dex option needs a binding reference")
         if not isinstance(self.features, LivingDexOptionFeatures):
@@ -411,18 +446,29 @@ class LivingDexOptionCandidate:
                     "available living-Dex option has an unavailable reason"
                 )
         elif not isinstance(self.unavailable_reason, LivingDexOptionUnavailableReason):
-            raise LivingDexOptionValueError(
-                "masked living-Dex option needs an unavailable reason"
-            )
+            raise LivingDexOptionValueError("masked living-Dex option needs an unavailable reason")
+
+    def vector(
+        self, context: LivingDexOptionContext, *, feature_version: int = 1
+    ) -> tuple[float, ...]:
+        option_feature_names(feature_version)
+        if feature_version == 1 and self.search_history is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore search history")
+        return self.features.vector(context) + (
+            _history_vector(self.search_history) if feature_version == 2 else ()
+        )
 
     def policy_dict(self, context: LivingDexOptionContext) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "availability": self.availability.value,
             "features": self.features.policy_dict(context),
             "unavailable_reason": (
                 None if self.unavailable_reason is None else self.unavailable_reason.value
             ),
         }
+        if self.search_history is not None:
+            result["search_history"] = self.search_history.public_dict()
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -458,16 +504,27 @@ class LivingDexOptionMenu:
     def policy_sha256(self) -> str:
         return canonical_sha256(self.policy_dict())
 
-    def candidate_vector(self, index: int) -> tuple[float, ...]:
+    def candidate_vector(
+        self, index: int, *, feature_version: int | None = None
+    ) -> tuple[float, ...]:
         if type(index) is not int or not 0 <= index < len(self.candidates):  # noqa: E721
             raise LivingDexOptionValueError("living-Dex candidate index is invalid")
-        return self.candidates[index].features.vector(self.context)
+        version = self.feature_version if feature_version is None else feature_version
+        return self.candidates[index].vector(self.context, feature_version=version)
+
+    @property
+    def feature_version(self) -> int:
+        return 2 if any(row.search_history is not None for row in self.candidates) else 1
 
     def policy_dict(self) -> dict[str, object]:
         return {
             "candidates": [candidate.policy_dict(self.context) for candidate in self.candidates],
             "context": self.context.policy_dict(),
-            "schema": LIVING_DEX_OPTION_MENU_SCHEMA,
+            "schema": (
+                LIVING_DEX_OPTION_MENU_SCHEMA
+                if self.feature_version == 1
+                else "pokemon.core.living-dex-option-menu.v2"
+            ),
         }
 
 
@@ -499,9 +556,7 @@ class LivingDexObservedOutcome:
             for name in target_names:
                 value = getattr(self, name)
                 if value is None:
-                    raise LivingDexOptionValueError(
-                        f"settled living-Dex outcome needs {name}"
-                    )
+                    raise LivingDexOptionValueError(f"settled living-Dex outcome needs {name}")
                 object.__setattr__(self, name, _unit_interval(value, subject=name))
         else:
             if not isinstance(self.censor_reason, LivingDexCensorReason):
@@ -524,9 +579,7 @@ class LivingDexObservedOutcome:
     def public_dict(self) -> dict[str, object]:
         target = self.target_vector
         return {
-            "censor_reason": (
-                None if self.censor_reason is None else self.censor_reason.value
-            ),
+            "censor_reason": (None if self.censor_reason is None else self.censor_reason.value),
             "schema": LIVING_DEX_OPTION_OUTCOME_SCHEMA,
             "status": self.status.value,
             "target_names": list(LIVING_DEX_OPTION_OUTCOME_NAMES),
@@ -546,9 +599,10 @@ class LivingDexObservedArmExample:
     outcome: LivingDexObservedOutcome
 
     def __post_init__(self) -> None:
-        if not isinstance(self.decision_sha256, str) or _SHA256.fullmatch(
-            self.decision_sha256
-        ) is None:
+        if (
+            not isinstance(self.decision_sha256, str)
+            or _SHA256.fullmatch(self.decision_sha256) is None
+        ):
             raise LivingDexOptionValueError("living-Dex decision identity differs")
         if self.partition not in _PARTITIONS:
             raise LivingDexOptionValueError("living-Dex example partition differs")
@@ -559,10 +613,9 @@ class LivingDexObservedArmExample:
             or self.selected_candidate_index not in self.menu.available_indices
         ):
             raise LivingDexOptionValueError("living-Dex selected candidate is unavailable")
-        if (
-            not isinstance(self.behavior_probabilities, tuple)
-            or len(self.behavior_probabilities) != len(self.menu.candidates)
-        ):
+        if not isinstance(self.behavior_probabilities, tuple) or len(
+            self.behavior_probabilities
+        ) != len(self.menu.candidates):
             raise LivingDexOptionValueError("living-Dex behavior distribution differs")
         probabilities = tuple(
             _unit_interval(value, subject="behavior probability")
@@ -573,9 +626,7 @@ class LivingDexObservedArmExample:
         for index, probability in enumerate(probabilities):
             if index in self.menu.available_indices:
                 if probability <= 0.0:
-                    raise LivingDexOptionValueError(
-                        "living-Dex behavior policy lacks full support"
-                    )
+                    raise LivingDexOptionValueError("living-Dex behavior policy lacks full support")
             elif probability != 0.0:
                 raise LivingDexOptionValueError(
                     "masked living-Dex option received behavior probability"
@@ -713,9 +764,10 @@ class LivingDexOptionValueModel:
     censored_examples: int
     ridge: float
     maximum_importance_weight: float
+    feature_version: int = 1
 
     def __post_init__(self) -> None:
-        width = len(LIVING_DEX_OPTION_FEATURE_NAMES)
+        width = len(option_feature_names(self.feature_version))
         targets = len(LIVING_DEX_OPTION_OUTCOME_NAMES)
         arrays = tuple(
             np.asarray(value, dtype=np.float64)
@@ -736,9 +788,10 @@ class LivingDexOptionValueModel:
             or np.any(scale <= 0.0)
         ):
             raise LivingDexOptionValueError("living-Dex option model parameters differ")
-        if not isinstance(self.train_dataset_sha256, str) or _SHA256.fullmatch(
-            self.train_dataset_sha256
-        ) is None:
+        if (
+            not isinstance(self.train_dataset_sha256, str)
+            or _SHA256.fullmatch(self.train_dataset_sha256) is None
+        ):
             raise LivingDexOptionValueError("living-Dex train dataset identity differs")
         if (
             type(self.settled_examples) is not int  # noqa: E721
@@ -777,7 +830,9 @@ class LivingDexOptionValueModel:
             raise TypeError("context must be a LivingDexOptionContext")
         if not isinstance(candidate, LivingDexOptionCandidate):
             raise TypeError("candidate must be a LivingDexOptionCandidate")
-        vector = np.asarray(candidate.features.vector(context), dtype=np.float64)
+        vector = np.asarray(
+            candidate.vector(context, feature_version=self.feature_version), dtype=np.float64
+        )
         normalized = (vector - self.feature_mean) / self.feature_scale
         raw = self.intercept + normalized @ self.coefficients
         return LivingDexPredictedOutcome.from_vector(np.clip(raw, 0.0, 1.0).tolist())
@@ -814,15 +869,23 @@ class LivingDexOptionValueModel:
             "censored_examples": self.censored_examples,
             "coefficients": self.coefficients.tolist(),
             "feature_mean": self.feature_mean.tolist(),
-            "feature_names": list(LIVING_DEX_OPTION_FEATURE_NAMES),
+            "feature_names": list(option_feature_names(self.feature_version)),
             "feature_scale": self.feature_scale.tolist(),
             "intercept": self.intercept.tolist(),
             "maximum_importance_weight": self.maximum_importance_weight,
-            "normalization": LIVING_DEX_OPTION_NORMALIZATION,
+            "normalization": (
+                LIVING_DEX_OPTION_NORMALIZATION
+                if self.feature_version == 1
+                else "pokemon.core.living-dex-option-normalization.v2"
+            ),
             "objective": LIVING_DEX_OPTION_OBJECTIVE,
             "outcome_names": list(LIVING_DEX_OPTION_OUTCOME_NAMES),
             "ridge": self.ridge,
-            "schema": LIVING_DEX_OPTION_MODEL_SCHEMA,
+            "schema": (
+                LIVING_DEX_OPTION_MODEL_SCHEMA
+                if self.feature_version == 1
+                else "pokemon.core.living-dex-option-value-model.v2"
+            ),
             "settled_examples": self.settled_examples,
             "train_dataset_sha256": self.train_dataset_sha256,
         }
@@ -853,12 +916,23 @@ class LivingDexOptionValueModel:
         censored_examples = value.get("censored_examples")
         ridge = value.get("ridge")
         maximum_importance_weight = value.get("maximum_importance_weight")
+        version = 2 if value.get("schema") == "pokemon.core.living-dex-option-value-model.v2" else 1
         if (
-            value.get("schema") != LIVING_DEX_OPTION_MODEL_SCHEMA
+            value.get("schema")
+            != (
+                LIVING_DEX_OPTION_MODEL_SCHEMA
+                if version == 1
+                else "pokemon.core.living-dex-option-value-model.v2"
+            )
             or value.get("objective") != LIVING_DEX_OPTION_OBJECTIVE
-            or value.get("normalization") != LIVING_DEX_OPTION_NORMALIZATION
+            or value.get("normalization")
+            != (
+                LIVING_DEX_OPTION_NORMALIZATION
+                if version == 1
+                else "pokemon.core.living-dex-option-normalization.v2"
+            )
             or not isinstance(feature_names, list)
-            or tuple(feature_names) != LIVING_DEX_OPTION_FEATURE_NAMES
+            or tuple(feature_names) != option_feature_names(version)
             or not isinstance(outcome_names, list)
             or tuple(outcome_names) != LIVING_DEX_OPTION_OUTCOME_NAMES
             or not isinstance(train_dataset_sha256, str)
@@ -881,6 +955,7 @@ class LivingDexOptionValueModel:
                 censored_examples=censored_examples,
                 ridge=float(ridge),
                 maximum_importance_weight=float(maximum_importance_weight),
+                feature_version=version,
             )
         except (KeyError, TypeError, ValueError):
             raise LivingDexOptionValueError("living-Dex model document is invalid") from None
@@ -896,9 +971,10 @@ class LivingDexOptionValueFitReport:
     distinct_selected_feature_rows: int
     weighted_mse_before: float
     weighted_mse_after: float
+    feature_version: int = 1
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "censored_examples": self.censored_examples,
             "counterfactual_targets": 0,
             "distinct_selected_feature_rows": self.distinct_selected_feature_rows,
@@ -913,6 +989,10 @@ class LivingDexOptionValueFitReport:
             "weighted_mse_after": self.weighted_mse_after,
             "weighted_mse_before": self.weighted_mse_before,
         }
+        if self.feature_version == 2:
+            result["feature_version"] = 2
+            result["missing_history"] = "unknown_not_unattempted"
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -957,6 +1037,27 @@ def uniform_behavior_probabilities(menu: LivingDexOptionMenu) -> tuple[float, ..
     )
 
 
+def upgrade_option_value_model_for_search_history(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Zero-pad a retained model, without fitting or claiming learned history.
+
+    This bootstrap permits prospective collection of history-bearing experience.
+    All old predictions, training identity and counts remain unchanged. History
+    effects become learned only through a subsequent observed-outcome fit.
+    """
+    if model.feature_version == 2:
+        return model
+    width = len(LIVING_DEX_HISTORY_FEATURE_NAMES)
+    return replace(
+        model,
+        feature_version=2,
+        coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
 def living_dex_option_train_dataset_sha256(
     examples: Iterable[LivingDexObservedArmExample],
 ) -> str:
@@ -986,6 +1087,7 @@ def fit_living_dex_option_value(
     *,
     ridge: float = DEFAULT_OPTION_VALUE_RIDGE,
     maximum_importance_weight: float = DEFAULT_MAX_IMPORTANCE_WEIGHT,
+    feature_version: int = 1,
 ) -> LivingDexOptionValueFit:
     """Fit all outcome heads using only settled selected-arm train evidence."""
 
@@ -1002,15 +1104,22 @@ def fit_living_dex_option_value(
             key=lambda row: row.decision_sha256,
         )
     )
-    settled = tuple(
-        row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED
-    )
+    settled = tuple(row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
     if len(settled) < 2:
         raise LivingDexOptionValueError(
             "living-Dex option fit needs two settled selected-arm examples"
         )
     dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
-    features = np.asarray([row.selected_vector for row in settled], dtype=np.float64)
+    option_feature_names(feature_version)
+    if any(row.menu.feature_version > feature_version for row in rows):
+        raise LivingDexOptionValueError("legacy fitter cannot ignore search history")
+    features = np.asarray(
+        [
+            row.menu.candidate_vector(row.selected_candidate_index, feature_version=feature_version)
+            for row in settled
+        ],
+        dtype=np.float64,
+    )
     targets = np.asarray(
         [row.outcome.target_vector for row in settled],
         dtype=np.float64,
@@ -1050,6 +1159,7 @@ def fit_living_dex_option_value(
         censored_examples=len(rows) - len(settled),
         ridge=ridge_value,
         maximum_importance_weight=cap,
+        feature_version=feature_version,
     )
     report = LivingDexOptionValueFitReport(
         train_dataset_sha256=dataset_sha256,
@@ -1057,9 +1167,10 @@ def fit_living_dex_option_value(
         settled_examples=len(settled),
         censored_examples=len(rows) - len(settled),
         successful_examples=sum(bool(row.outcome.verified_success) for row in settled),
-        distinct_selected_feature_rows=len({row.selected_vector for row in settled}),
+        distinct_selected_feature_rows=len({tuple(row) for row in features}),
         weighted_mse_before=before,
         weighted_mse_after=after,
+        feature_version=feature_version,
     )
     return LivingDexOptionValueFit(model, report)
 
@@ -1075,9 +1186,7 @@ def evaluate_living_dex_option_value(
     if not isinstance(model, LivingDexOptionValueModel):
         raise TypeError("model must be a LivingDexOptionValueModel")
     rows = _validated_examples(examples, expected_partition=expected_partition)
-    settled = tuple(
-        row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED
-    )
+    settled = tuple(row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
     if not settled:
         raise LivingDexOptionValueError("living-Dex evaluation has no settled outcomes")
     targets = np.asarray(
@@ -1100,8 +1209,7 @@ def evaluate_living_dex_option_value(
     )
     squared = (targets - predictions) ** 2
     per_outcome = tuple(
-        float(np.average(squared[:, index], weights=weights))
-        for index in range(squared.shape[1])
+        float(np.average(squared[:, index], weights=weights)) for index in range(squared.shape[1])
     )
     return LivingDexOptionValueEvaluation(
         partition=expected_partition,

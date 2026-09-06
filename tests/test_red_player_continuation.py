@@ -17,6 +17,23 @@ from pokemon_red_completion.red_player_checkpoint import (
 case = checkpoint_case
 
 
+def test_history_tracking_starts_only_for_explicit_successor_and_preserves_parent():
+    readiness = SimpleNamespace(continuation=None, causal_record=None)
+    assert runner._execution_search_memory(readiness) is None
+    readiness.causal_record = SimpleNamespace(model=SimpleNamespace(feature_version=1))
+    assert runner._execution_search_memory(readiness) is None
+    readiness.causal_record.model.feature_version = 2
+    memory = runner._execution_search_memory(readiness)
+    assert memory.private_dict()["entries"] == {}
+    memory.record("source", "a" * 64, exhausted=True, actions=30, frames=600)
+    readiness.continuation = SimpleNamespace(search_memory=memory.private_dict())
+    restored = runner._execution_search_memory(readiness)
+    assert restored is not memory and restored.private_dict() == memory.private_dict()
+    assert restored.lookup("source", "a" * 64).exhausted == 1
+    assert restored.lookup("different", "a" * 64).attempts == 0
+
+
+
 @pytest.mark.parametrize("ready,battle,acts", [
     (True, False, False), (False, False, False), (True, True, False), (True, False, True),
 ])

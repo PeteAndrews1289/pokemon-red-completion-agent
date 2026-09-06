@@ -143,11 +143,13 @@ class LivingDexGoalCandidateScore:
             "utility": self.utility,
         }
         if self.resource_quote is not None:
-            result.update({
-                "resource_quote": self.resource_quote.public_dict(),
-                "known_resource_cost_penalty": self.known_resource_cost_penalty,
-                "predicted_utility": self.utility + self.known_resource_cost_penalty,
-            })
+            result.update(
+                {
+                    "resource_quote": self.resource_quote.public_dict(),
+                    "known_resource_cost_penalty": self.known_resource_cost_penalty,
+                    "predicted_utility": self.utility + self.known_resource_cost_penalty,
+                }
+            )
         return result
 
 
@@ -199,10 +201,12 @@ class LivingDexGoalShadowDecision:
             "selected_kind": self.selected_kind.value,
         }
         if self.economic_input_sha256 is not None:
-            result.update({
-                "economic_input_sha256": self.economic_input_sha256,
-                "economic_contract": "known-spend-and-excess-reserve-v1",
-            })
+            result.update(
+                {
+                    "economic_input_sha256": self.economic_input_sha256,
+                    "economic_contract": "known-spend-and-excess-reserve-v1",
+                }
+            )
         return result
 
 
@@ -242,7 +246,9 @@ class LivingDexGoalShadowPolicy:
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
         if not isinstance(question, GoalManagerQuestion):
             raise TypeError("question must be a GoalManagerQuestion")
-        if any(item.search_history is not None for item in question.opportunities):
+        if self.model.feature_version == 1 and any(
+            item.search_history is not None for item in question.opportunities
+        ):
             raise LivingDexGoalPolicyError(
                 "history-bearing goals require a history-trained model; "
                 "legacy scorer cannot ignore history"
@@ -300,6 +306,7 @@ class LivingDexGoalShadowPolicy:
                         binding_ref=f"policy-row-{len(projected)}",
                         features=features,
                         availability=LivingDexOptionAvailability.AVAILABLE,
+                        search_history=opportunity.search_history,
                     ),
                 )
             )

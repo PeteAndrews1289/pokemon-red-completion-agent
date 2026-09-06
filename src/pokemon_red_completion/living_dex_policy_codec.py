@@ -21,6 +21,7 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import cast
 
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.living_dex_option_value import (
     LIVING_DEX_OPTION_CONTEXT_SCHEMA,
     LIVING_DEX_OPTION_FEATURE_NAMES,
@@ -106,7 +107,10 @@ def restore_living_dex_policy_menu(
     """Restore a learner-visible policy menu with inert references by default."""
 
     _exact_keys(document, {"candidates", "context", "schema"}, subject="policy menu")
-    if document["schema"] != LIVING_DEX_OPTION_MENU_SCHEMA:
+    if document["schema"] not in (
+        LIVING_DEX_OPTION_MENU_SCHEMA,
+        "pokemon.core.living-dex-option-menu.v2",
+    ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
     context = _restore_context(context_document)
@@ -162,7 +166,8 @@ def _restore_candidate(
 ) -> LivingDexOptionCandidate:
     _exact_keys(
         document,
-        {"availability", "features", "unavailable_reason"},
+        {"availability", "features", "unavailable_reason"}
+        | ({"search_history"} if "search_history" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -211,6 +216,11 @@ def _restore_candidate(
             features,
             availability,
             reason,
+            (
+                GoalSearchHistory.from_public_dict(document["search_history"])
+                if "search_history" in document
+                else None
+            ),
         )
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None

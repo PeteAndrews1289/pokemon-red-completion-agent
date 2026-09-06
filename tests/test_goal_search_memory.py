@@ -129,7 +129,8 @@ def test_child_memory_must_retain_prior_records_and_cannot_regress():
 
 
 @pytest.mark.parametrize("reason,expected", [("search_exhausted", 1), ("outcome_not_verified", 0)])
-def test_player_records_only_metered_settled_searches(reason, expected):
+@pytest.mark.parametrize("stable_source", [None, "private-stable-source"])
+def test_player_records_only_metered_settled_searches(reason, expected, stable_source):
     from test_bounded_player_episode import _observer, _trajectory
 
     from pokemon_red_completion.bounded_player_episode import run_bounded_player_episode
@@ -143,6 +144,7 @@ def test_player_records_only_metered_settled_searches(reason, expected):
         obs = base()
         bindings = tuple(replace(
             binding, kind=GoalKind.ACQUIRE_SPECIES,
+            search_source_ref=stable_source,
             verify=lambda _: GoalVerification.failed(GoalFailureReason(reason)),
         ) if binding.kind is GoalKind.RESTORE_TEAM else binding
             for binding in obs.binding_set.bindings)
@@ -164,9 +166,35 @@ def test_player_records_only_metered_settled_searches(reason, expected):
         search_memory=memory,
     )
     assert len(result.steps) == 1 and state["actions"] == 5
-    history = memory.lookup("private:red:restore_team", "3" * 64)
+    history = memory.lookup(stable_source or "private:red:restore_team", "3" * 64)
     assert history.attempts == history.exhausted == expected
     assert (history.actions, history.frames) == ((5, 50) if expected else (0, 0))
+
+
+def test_observer_reuses_source_memory_when_execution_binding_changes():
+    memory = GoalSearchMemory()
+    memory.record("stable-source", "3" * 64, exhausted=True, actions=50, frames=500)
+    bindings = _binding_set()
+    acquire = next(b for b in bindings.bindings if b.kind is GoalKind.ACQUIRE_SPECIES)
+    from pokemon_red_completion.goal_manager_runtime import GoalBindingSet
+
+    for execution_ref in ("origin-a", "origin-b"):
+        changed = replace(acquire, binding_ref=execution_ref, search_source_ref="stable-source")
+        current = GoalBindingSet(
+            tuple(changed.opportunity if row.kind is GoalKind.ACQUIRE_SPECIES else row
+                  for row in bindings.opportunities),
+            tuple(changed if row.kind is GoalKind.ACQUIRE_SPECIES else row
+                  for row in bindings.bindings),
+        )
+        observer = RedBoundedPlayerObserver(
+            SimpleNamespace(adapter=SimpleNamespace(observe=_live)),
+            CountingExecutor(SimpleNamespace()), collection_projector=lambda _: _collection(),
+            enumerate_bindings=lambda _, value=current: value, search_memory=memory,
+        )
+        observed = observer().binding_set.require(execution_ref)
+        assert observed.search_history == GoalSearchHistory(1, 1, 50, 500)
+        question = GoalManagerQuestion(_live().situation, observer().binding_set.opportunities)
+        assert "stable-source" not in str(question.policy_input)
 
 
 def test_memory_checkpoint_authenticates_and_restores_independent_mutable_copy(case):

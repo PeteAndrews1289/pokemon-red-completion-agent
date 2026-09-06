@@ -16,6 +16,7 @@ from pokemon_red_completion.red_player_model import (
 )
 from pokemon_red_completion.red_player_training_fit import (
     RedPlayerEpisodeInput,
+    bootstrap_red_player_search_history,
     fit_red_player_update,
 )
 
@@ -25,11 +26,12 @@ def _prior(rows):
     return LivingDexGoalModelRecord(model, "a" * 64, "b" * 40, "c" * 64, 1, 1)
 
 
-def _fit(tmp_path, monkeypatch, *, failure=False):
+def _fit(tmp_path, monkeypatch, *, failure=False, history=False):
     store, plan, behavior, completed = _episode(
         tmp_path,
         status=GoalDecisionOutcome.FAILED if failure else GoalDecisionOutcome.SUCCEEDED,
         return_inputs=True,
+        history=history,
     )
     rows = tuple(
         _example(
@@ -60,10 +62,13 @@ def _fit(tmp_path, monkeypatch, *, failure=False):
 
 
 @pytest.mark.parametrize("failure", [False, True])
+@pytest.mark.parametrize("history", [False, True])
 def test_fit_uses_real_episode_reader_and_retains_prior_rows_including_negative(
-    tmp_path, monkeypatch, failure
+    tmp_path, monkeypatch, failure, history
 ):
-    store, rows, prior, request, result = _fit(tmp_path, monkeypatch, failure=failure)
+    store, rows, prior, request, result = _fit(
+        tmp_path, monkeypatch, failure=failure, history=history
+    )
     assert result["new_settled_examples"] == 1
     assert result["fit_report"]["settled_examples"] == 3
     assert result["controller_actions"] == result["authority_promotions"] == 0
@@ -74,6 +79,7 @@ def test_fit_uses_real_episode_reader_and_retains_prior_rows_including_negative(
         record.read_bytes(), expected_model_sha256=model_hash
     )
     assert isinstance(loaded, RedPlayerModelRecord)
+    assert loaded.model.feature_version == (2 if history else 1)
     assert set(canonical_sha256(row.public_dict()) for row in rows).issubset(
         loaded.retained_example_sha256
     )
@@ -102,4 +108,63 @@ def test_native_model_rejects_missing_retained_row_and_wrong_expected_weights(
     with pytest.raises(ValueError):
         load_player_goal_model_record_bytes(
             json.dumps(document).encode(), expected_model_sha256=model_hash
+        )
+
+
+def test_history_bootstrap_authenticates_actual_retained_corpus_without_refitting(
+    tmp_path, monkeypatch
+):
+    store, _, _, _, result = _fit(tmp_path, monkeypatch)
+    model_hash = result["model"]["model_sha256"]
+    record = store.find_sealed_record(f"rp-model-{model_hash}", expected_kind="red_player_model")
+    prior = load_player_goal_model_record_bytes(
+        record.read_bytes(), expected_model_sha256=model_hash
+    )
+    monkeypatch.setattr(
+        fitting,
+        "fit_living_dex_option_value",
+        lambda *_args, **_kwargs: pytest.fail("bootstrap must not fit"),
+    )
+    before = record.read_bytes()
+    report = bootstrap_red_player_search_history(
+        store, prior=prior, source_commit="e" * 40, source_bundle_sha256="f" * 64
+    )
+    assert report["new_examples"] == report["fits"] == report["controller_actions"] == 0
+    assert report["retained_examples"] == report["unknown_history_examples"] == 3
+    assert report["history_effect_learned"] is False and record.read_bytes() == before
+    upgraded_hash = report["model"]["model_sha256"]
+    upgraded_record = store.find_sealed_record(
+        f"rp-model-{upgraded_hash}", expected_kind="red_player_model"
+    )
+    upgraded = load_player_goal_model_record_bytes(
+        upgraded_record.read_bytes(), expected_model_sha256=upgraded_hash
+    )
+    assert upgraded.model.feature_version == 2
+    assert upgraded.corpus_sha256 == prior.corpus_sha256
+    assert upgraded.retained_example_sha256 == prior.retained_example_sha256
+    with pytest.raises(ValueError, match="legacy"):
+        bootstrap_red_player_search_history(
+            store, prior=upgraded, source_commit="e" * 40, source_bundle_sha256="f" * 64
+        )
+
+
+@pytest.mark.parametrize("damage", ["fingerprint", "dataset"])
+def test_history_bootstrap_refuses_mismatched_retained_evidence(tmp_path, monkeypatch, damage):
+    from dataclasses import replace
+
+    store, _, _, _, result = _fit(tmp_path, monkeypatch)
+    model_hash = result["model"]["model_sha256"]
+    record = store.find_sealed_record(f"rp-model-{model_hash}", expected_kind="red_player_model")
+    prior = load_player_goal_model_record_bytes(
+        record.read_bytes(), expected_model_sha256=model_hash
+    )
+    if damage == "fingerprint":
+        prior = replace(
+            prior, retained_example_sha256=("0" * 64, *prior.retained_example_sha256[1:])
+        )
+    else:
+        prior = replace(prior, model=replace(prior.model, train_dataset_sha256="0" * 64))
+    with pytest.raises(ValueError, match="retained"):
+        bootstrap_red_player_search_history(
+            store, prior=prior, source_commit="e" * 40, source_bundle_sha256="f" * 64
         )

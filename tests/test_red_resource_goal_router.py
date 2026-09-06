@@ -334,6 +334,16 @@ def test_capture_route_uses_same_resources_and_verifies_retained_specimens(fixtu
     before = f.adapter.observe().collection.collection.living_count
     result = f.router.enumerate(f.adapter.observe())
     assert len(result.bindings) == 1 and result.bindings[0].kind is GoalKind.ACQUIRE_SPECIES
+    original_raw = f.reader.raw
+    f.reader.raw = replace(original_raw, player_x=2)
+    refreshed = f.router.enumerate(f.adapter.observe()).bindings[0]
+    assert refreshed.binding_ref != result.bindings[0].binding_ref
+    assert refreshed.search_memory_source == result.bindings[0].search_memory_source
+    f.reader.raw = replace(original_raw, player_x=4)
+    local = f.router.enumerate(f.adapter.observe()).bindings[0]
+    assert local.search_memory_source == refreshed.search_memory_source
+    assert local.search_memory_source == "pokemon.red:acquisition:wild:Route1:grass"
+    f.reader.raw = original_raw
     report = result.bindings[0].execute()
     assert result.bindings[0].verify(report).status.value == "succeeded"
     assert f.adapter.observe().collection.collection.living_count > before

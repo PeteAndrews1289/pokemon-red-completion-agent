@@ -3,16 +3,20 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
+from typing import cast
 
 from pokemon_red_completion.living_dex_causal_journal import (
     load_living_dex_authenticated_causal_examples,
+    restore_living_dex_observed_arm_example,
 )
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
 from pokemon_red_completion.living_dex_option_value import (
     evaluate_living_dex_option_value,
     fit_living_dex_option_value,
     living_dex_option_train_dataset_sha256,
+    upgrade_option_value_model_for_search_history,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
@@ -96,8 +100,14 @@ def fit_red_player_update(
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
-    fit = fit_living_dex_option_value(rows)
-    prior_error = evaluate_living_dex_option_value(prior.model, rows, expected_partition="train")
+    feature_version = max(prior.model.feature_version, *(row.menu.feature_version for row in rows))
+    fit = fit_living_dex_option_value(rows, feature_version=feature_version)
+    baseline_model = (
+        upgrade_option_value_model_for_search_history(prior.model)
+        if feature_version == 2
+        else prior.model
+    )
+    prior_error = evaluate_living_dex_option_value(baseline_model, rows, expected_partition="train")
     updated_error = evaluate_living_dex_option_value(fit.model, rows, expected_partition="train")
     document = {
         "schema": PLAYER_MODEL_SCHEMA,
@@ -129,5 +139,77 @@ def fit_red_player_update(
         "new_settled_examples": fit.model.settled_examples - prior.model.settled_examples,
         "prior_rows_retained": True,
         "controller_actions": 0,
+        "authority_promotions": 0,
+    }
+
+
+def bootstrap_red_player_search_history(
+    store: PrivateArtifactRoot,
+    *,
+    prior: RedPlayerModelRecord,
+    source_commit: str,
+    source_bundle_sha256: str,
+) -> dict[str, object]:
+    """Publish an authenticated zero-history-weight initialization, not a fit.
+
+    Preserve every existing example byte/target and the original corpus record.
+    This enables prospective collection, not improved history-aware judgment.
+    """
+    if not isinstance(prior, RedPlayerModelRecord) or prior.model.feature_version != 1:
+        raise ValueError("history bootstrap requires a legacy native player record")
+    if (
+        re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
+        or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
+    ):
+        raise ValueError("history bootstrap source identity differs")
+    corpus_record = store.find_sealed_record(
+        f"rp-corpus-{prior.corpus_sha256}", expected_kind="red_player_training_corpus"
+    )
+    if corpus_record is None:
+        raise ValueError("history bootstrap corpus missing")
+    corpus = corpus_record.read()
+    if canonical_sha256(corpus) != prior.corpus_sha256:
+        raise ValueError("history bootstrap corpus identity differs")
+    examples = corpus.get("examples")
+    if not isinstance(examples, list) or any(not isinstance(row, Mapping) for row in examples):
+        raise ValueError("history bootstrap corpus examples differ")
+    rows = tuple(
+        restore_living_dex_observed_arm_example(cast(Mapping[str, object], row)) for row in examples
+    )
+    hashes = tuple(sorted(canonical_sha256(row.public_dict()) for row in rows))
+    if (
+        hashes != tuple(sorted(prior.retained_example_sha256))
+        or (living_dex_option_train_dataset_sha256(rows) != prior.model.train_dataset_sha256)
+        or any(row.menu.feature_version != 1 for row in rows)
+    ):
+        raise ValueError("history bootstrap corpus differs from retained model")
+    model = upgrade_option_value_model_for_search_history(prior.model)
+    document = {
+        "schema": PLAYER_MODEL_SCHEMA,
+        "authority": "bounded_development_only",
+        "model": model.to_dict(),
+        "model_sha256": model.model_sha256,
+        "source_commit": source_commit,
+        "source_bundle_sha256": source_bundle_sha256,
+        "corpus_sha256": prior.corpus_sha256,
+        "prior_model_sha256": prior.model.model_sha256,
+        "retained_example_sha256": list(hashes),
+    }
+    record = store.publish_sealed_record(
+        f"rp-model-{model.model_sha256}", kind="red_player_model", record=document
+    )
+    loaded = load_player_goal_model_record_bytes(
+        record.read_bytes(), expected_model_sha256=model.model_sha256
+    )
+    return {
+        "schema": "pokemon.red.search-history-bootstrap.v1",
+        "model": loaded.public_dict(),
+        "initialization": "retained-head-with-zero-history-coefficients",
+        "retained_examples": len(rows),
+        "unknown_history_examples": len(rows),
+        "new_examples": 0,
+        "fits": 0,
+        "controller_actions": 0,
+        "history_effect_learned": False,
         "authority_promotions": 0,
     }

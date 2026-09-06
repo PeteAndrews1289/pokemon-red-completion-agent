@@ -16,7 +16,11 @@ from pokemon_red_completion.goal_manager import (
     GoalOpportunity,
 )
 from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectoryObserver
-from pokemon_red_completion.living_dex_option_value import LivingDexOutcomeStatus
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
+from pokemon_red_completion.living_dex_option_value import (
+    LivingDexOutcomeStatus,
+    upgrade_option_value_model_for_search_history,
+)
 from pokemon_red_completion.living_dex_player_exploration import (
     EXPLORATION_POLICY_ID,
     ExploringLivingDexGoalPolicy,
@@ -87,10 +91,14 @@ def _episode(
     mutate=None,
     return_inputs=False,
     unsupported_restore=False,
+    history=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
-    policy = ExploringLivingDexGoalPolicy(_supply_model(), seed=17)
+    model = _supply_model()
+    if history:
+        model = upgrade_option_value_model_for_search_history(model)
+    policy = ExploringLivingDexGoalPolicy(model, seed=17)
     plan = _plan(policy.model)
     store.publish_sealed_record(
         f"rp-plan-{plan.plan_sha256}", kind="red_player_training_plan", record=dict(plan.document)
@@ -124,10 +132,26 @@ def _episode(
     sink.write_episode_header(metadata=metadata)
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
+    if history:
+        source = replace(
+            source,
+            opportunities=tuple(
+                replace(item, search_history=GoalSearchHistory(2, 1, 200, 6000))
+                if item.kind is GoalKind.ACQUIRE_SPECIES
+                else item
+                for item in source.opportunities
+            ),
+        )
     if unsupported_restore:
-        source = replace(source, opportunities=(*source.opportunities, GoalOpportunity(
-            "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0
-        )))
+        source = replace(
+            source,
+            opportunities=(
+                *source.opportunities,
+                GoalOpportunity(
+                    "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0
+                ),
+            ),
+        )
     if safety:
         source = replace(source, situation=replace(source.situation, resource_pressure=0.99))
     facts = [_facts(source)]

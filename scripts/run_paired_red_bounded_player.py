@@ -796,6 +796,21 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         raise PairedRedBoundedPlayerRunError("continuation_restore_effect")
 
 
+def _execution_search_memory(readiness: _Readiness) -> GoalSearchMemory | None:
+    """Start tracking only with an explicit V2 model; preserve restored history.
+
+    Legacy checkpoint authentication happens first, against its original inputs.
+    Empty new tracking does not claim knowledge of searches before this boundary.
+    """
+    saved = getattr(readiness.continuation, "search_memory", None)
+    if saved is not None:
+        return GoalSearchMemory.from_private_dict(saved)
+    record = getattr(readiness, "causal_record", None)
+    if record is not None and record.model.feature_version == 2:
+        return GoalSearchMemory()
+    return None
+
+
 def _episode_id(pair_id: str, arm_id: str) -> str:
     suffix_by_arm = {
         LEARNED_ARM_ID: "learned",
@@ -1075,12 +1090,7 @@ def _run_arm(
             meter = CompositionIndependentBudgetMeter(hard_actions, frames)
             if viewer is not None:
                 viewer.safely("bind_budget", meter.checkpoint)
-            search_memory = (
-                GoalSearchMemory.from_private_dict(readiness.continuation.search_memory)
-                if readiness.continuation is not None
-                and readiness.continuation.search_memory is not None
-                else None
-            )
+            search_memory = _execution_search_memory(readiness)
             observer = _LiveObserver(
                 runtime=runtime,
                 actions=actions,

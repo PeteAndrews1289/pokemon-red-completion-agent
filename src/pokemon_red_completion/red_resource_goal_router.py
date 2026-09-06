@@ -166,6 +166,10 @@ class RedResourceGoalRouter:
                     self.maximum_controller_actions, self.maximum_emulator_frames
                 ),
             ).binding()
+            if isinstance(provider, RedAreaSurveyGoalProvider):
+                binding = replace(
+                    binding, search_source_ref=f"pokemon.red:acquisition:{provider.source_id}"
+                )
             replacements[binding.binding_ref] = binding
             opportunities[index] = binding.opportunity
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):

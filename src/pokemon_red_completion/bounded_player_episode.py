@@ -465,7 +465,9 @@ def run_bounded_player_episode(
             )
         ):
             search_memory.record(
-                question.opportunities[execution.selected_candidate_index].binding_ref,
+                current.binding_set.require(
+                    question.opportunities[execution.selected_candidate_index].binding_ref
+                ).search_memory_source,
                 current.collection.required_specimens_sha256,
                 exhausted=not execution.passed, actions=actions, frames=frames,
             )
