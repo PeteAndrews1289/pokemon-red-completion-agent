@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The resource-aware hybrid completed four goals and retained two needed specimens, but only two choices were model-ranked and extra supply spending left little money. Preserve future terminal states and saved viewer evidence, then collect a prospectively bounded train-only contrast curriculum using the existing learner. Do not retrofit these diagnostics into fitting.
+- Next decision: Terminal checkpoint storage/reader and the truthful saved-run viewer are implemented and locally qualified. Before more supply fitting, resolve the economic representation gap: candidate costs are zero and the current observed target excludes money. Prefer explicit known-cost/reserve quotes alongside learned success and progress, then collect a small prospective train-only contrast batch without relabeling old examples.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
-| Cheapest falsifier | Use the saved 29-example living-Dex option scorer for at least three successive supported Red goal choices in one bounded development episode. Reobserve semantic state and the living ledger after each execution; stop on stale choices, unverified progress, or an undisclosed replacement policy. |
+| Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
 | Time box | 1 session / 4 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-resource-chain-complete** · status **closed** · evidence [development episode](docs/evidence/red-fit29-resource-chain-result-2026-09-06.json)
+**2026-09-06-durable-player-viewer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-player-checkpoint-readonly-qualification-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Navigation, resupply and capture now compose around fresh state. Two needed specimens include a new living species and a duplicate precursor; future continuation should retain this progress rather than reset it. |
-| Learning output | The known-training hybrid finished four goals in 656 actions / 40,368 frames. The control finished three and failed its fourth search. Both complete trajectories authenticate: 1,429 actions / 84,360 frames. No new fit or train rows. |
-| Authority delta | Two actual model-ranked choices, one deterministic safety choice and one single-supported bridge. The 29-example model remains unchanged; no controller or full-player promotion follows. |
-| Transfer result | Same known training lineage only. Both actors gained the same two needed specimens and one living species. The raw learned_advantage verdict is confounded by control failure and incomplete money accounting; it is not independent superiority. |
-| Blocker | Progress was not retained as an emulator end save in this historical runner. The hybrid bought twenty balls, used two and ended with nineteen, spending 12,000 of 12,649 money. More reliable maintenance is not necessarily better collection. |
-| Decision | Add bounded opt-in terminal-state retention and a saved viewer recap, without replaying completed trials. Then declare real train-only resource contrasts and missing Red mechanics through existing collector/fitter contracts; do not retune the old result or invent training provenance. |
-| Next session | Qualify terminal checkpoints joined to complete trajectories and original lineage, with no automatic retry or live-frame claim. Next plan a small selected-outcome train curriculum retaining all prior rows, failure targets and actual behavior probabilities. |
-| Next falsifier | Can a retained terminal reopen with exact state, original training lineage and fresh semantic/ledger agreement, while completed evidence remains separate from live frames? Then do new train contrasts reduce waste while sustaining needed-specimen progress? |
-| Stop condition | No replay to manufacture missing old end saves, no fitting the diagnostic chains, no relabeling roots as independent, and no Crystal, sealed evaluation or full replay. Stop on changed counters, invalid state/trajectory joins or the two-hour maintenance time box. |
+| Product alignment | The prior model-assisted chain retained two needed specimens. Future terminal progress can now be stored with its original lineage, and the viewer keeps real completed choices and costs visible after the live producer closes. |
+| Learning output | Maintenance only: 335 focused checks and a real serializer round trip passed, with zero controller actions, frames, predictions, fits or train rows during qualification. The actual model remains fitted on 29 examples; both earlier diagnostic chains remain terminal. |
+| Authority delta | No new learned authority. Optional end-state retention and its reader unblock a later bounded continuation, but a controller-capable continuation consumer is not implemented. Checkpoints are not new independent roots or fitting examples. |
+| Transfer result | Checkpoint round trips preserve original provenance and require fresh semantic/ledger agreement. This is recovery engineering, not cross-game or independent gameplay evidence. Crystal and sealed Red remain closed. |
+| Blocker | A source audit found candidate resource cost is encoded as zero; resource pressure uses item headroom; the causal cost target measures consumed items, not money spent. More easy shopping examples alone cannot teach economical choices. Old historical runs have no end saves. |
+| Decision | Close the persistence/viewer session. Address only the necessary prospective cost/reserve representation before new supply training, preferably with known-cost quotes rather than a new model architecture. Preserve all old rows and diagnostics; do not silently redefine their targets. |
+| Next session | Build and falsify the smallest versioned, identity-free known-cost/reserve treatment, then use existing selected-outcome collection and fitting for a tiny prospectively declared train batch. Retain negative outcomes, actual behavior probabilities and prior rows. Keep CI in the background. |
+| Next falsifier | Can the player distinguish affordable-but-wasteful restocking from a needed reserve refill using real pre-action facts, while old projections/results remain unchanged and new outcomes count only executed choices? |
+| Stop condition | One bounded session, with actual new learning evidence as the next output. Stop rather than build another broad campaign factory, recapture old ended runs, reinterpret old consumable-only cost labels, fit development diagnostics or fabricate full-support behavior. No Crystal, sealed or full replay. |
 
 ### Stop conditions
 
