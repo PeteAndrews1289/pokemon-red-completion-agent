@@ -1,0 +1,18 @@
+{
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "living_ledger_roundtrip_equal": true,
+  "model_fits": 0,
+  "model_predictions": 0,
+  "new_training_examples": 0,
+  "private_path_fields": 0,
+  "rom_adjacent_artifacts_unchanged": true,
+  "runtime_scope": "local_working_implementation_read_only",
+  "schema": "pokemon.red.checkpoint-serializer-readonly-qualification.v1",
+  "semantic_roundtrip_equal": true,
+  "source_basis": "408bd0e28e03210d80e15602a357c20b3ff86e6f",
+  "state_bytes": 167677,
+  "state_roundtrip_equal": true,
+  "status": "passed",
+  "terminal_checkpoints_published": 0
+}

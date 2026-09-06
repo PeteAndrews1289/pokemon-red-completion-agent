@@ -78,6 +78,69 @@ def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() ->
     assert projection.samples_before == 20
 
 
+def test_saved_run_recap_uses_actual_choices_resources_and_denominator() -> None:
+    recap = OVERVIEW["_load_run_recap"]()
+    assert [step.goal for step in recap.steps] == [
+        "resupply", "acquire_species", "acquire_species", "resupply",
+    ]
+    assert [step.authority for step in recap.steps] == [
+        "safety", "unsupported", "model", "model",
+    ]
+    assert (recap.living_before, recap.living_after) == (13, 14)
+    assert (recap.money_before, recap.money_after) == (12649, 649)
+    assert (recap.capture_items_before, recap.capture_items_after) == (1, 19)
+    assert (recap.controller_actions, recap.emulator_frames) == (656, 40368)
+    assert sum(step.needed_specimens_gained for step in recap.steps) == 2
+    assert (recap.control_successes, recap.control_decisions, recap.control_failed) == (3, 4, True)
+    assert recap.public_dict()["live"] is False
+    assert recap.public_dict()["training_data"] is False
+    assert recap.public_dict()["independent_generalization_claim"] is False
+
+
+def test_recap_never_makes_a_live_frame_or_overwrites_current_collection() -> None:
+    recap = OVERVIEW["_load_run_recap"]()
+    state = DashboardState(replace(_snapshot(), last_run=recap, collection_observed=False))
+    status = json.loads(state.status_bytes()[0])
+    assert status["dashboard"]["frame_ready"] is False
+    assert status["dashboard"]["frame_age_seconds"] is None
+    assert status["collection"]["observed"] is False
+    assert status["last_run"]["living_after"] == 14
+    assert snapshot_from_public_status(status).last_run == recap
+    status["last_run"]["live"] = True
+    with pytest.raises(ProgressDashboardError, match="claim boundary"):
+        snapshot_from_public_status(status)
+
+
+@pytest.mark.parametrize("change", ["source", "arm", "action", "decision", "fit", "scope"])
+def test_saved_recap_rejects_broken_receipt_joins(change: str) -> None:
+    result_path = ROOT / "docs/evidence/red-fit29-resource-chain-result-2026-09-06.json"
+    audit_path = ROOT / "docs/evidence/red-fit29-resource-chain-readonly-audit-2026-09-06.json"
+    result, audit = json.loads(result_path.read_text()), json.loads(audit_path.read_text())
+    if change == "source":
+        audit["source_commit"] = "0" * 40
+    elif change == "arm":
+        audit["arms"][0]["manifest_sha256"] = "0" * 64
+    elif change == "action":
+        result["learned"]["episode"]["steps"][0]["actions_executed"] += 1
+    elif change == "decision":
+        result["living_dex_causal_shadow"]["decisions"][0]["selected_kind"] = "explore"
+    elif change == "fit":
+        audit["new_train_examples"] = 1
+    else:
+        result["context_origin"] = "development"
+    with pytest.raises(ProgressDashboardError):
+        OVERVIEW["_run_recap_projection"](result, audit)
+
+
+def test_saved_recap_loader_refuses_an_unjoined_audit(tmp_path: Path) -> None:
+    reference = json.loads((ROOT / "configs/dashboard-gameplay-evidence.json").read_text())
+    reference["audit"]["sha256"] = "0" * 64
+    path = tmp_path / "reference.json"
+    path.write_text(json.dumps(reference))
+    with pytest.raises(ProgressDashboardError, match="changed"):
+        OVERVIEW["_load_run_recap"](path)
+
+
 @pytest.mark.parametrize(
     "changes",
     [

@@ -1,6 +1,21 @@
 # Current agent handoffs
 
-## Current — resource-aware goal continuation
+## Current — four-goal resource chain audited; persistence and next training contrasts
+
+The [latest session](work-sessions/2026-09-06-durable-player-continuation.md) records the actual
+four-step hybrid success: two retained specimens, one new living species, two model-ranked choices,
+one deterministic safety choice and one unsupported-choice bridge. The control made the same
+collection gain but failed its fourth search. Keep the failed control and overspending visible;
+the raw comparator verdict is not independent policy superiority. All private streams authenticate.
+
+Codex owns the optional terminal-checkpoint seam and receipt-backed dashboard recap, then a
+prospective train-only curriculum using existing collector/fitter contracts. Never fit these
+diagnostic chains or replay them to obtain missing end saves. The saved model remains at 29 rows.
+No reviewers were invoked. If requested, Claude should challenge incentive/normalization and
+train admission; Antigravity should challenge durable state/lineage restoration and live-versus-
+saved viewer isolation. They remain read-only/advisory, not routine execution gates.
+
+## Historical — resource-aware goal continuation
 
 The first known-training chain is terminal: one model-ranked capture (+1 living, +1 registered),
 then one deterministic exploration failure after the last ball was spent. Both actors tied.

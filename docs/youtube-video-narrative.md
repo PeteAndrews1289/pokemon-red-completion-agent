@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6: the first complete supply-and-collect sequence
+
+**Saved-result graphic:** four cards—**SAFETY: RESUPPLY**, **SUPPORTED BRIDGE: CAPTURE**,
+**MODEL: CAPTURE**, **MODEL: RESUPPLY**. Show **2 NEEDED SPECIMENS · 1 NEW LIVING SPECIES**,
+with **LIVING 13 → 14** and **MONEY 12,649 → 649** equally visible. This is saved evidence;
+do not imply that footage or an end-state save exists for this historical run.
+
+**Voiceover:** “The pieces are finally composing: buy supplies, go back to collecting, and react
+to the new state. It retained a new species and a duplicate we'll need for evolution. But it also
+overspent, and the simpler controller collected just as much before its last search failed.
+That's why we show the choices and costs—not just a green success counter.”
+
+Label **KNOWN TRAINING CONTEXT · TWO MODEL-RANKED CHOICES · NOT FULL-GAME AUTONOMY**.
+The next viewer extension preserves this story after live runs finish; future checkpoints support
+continuing real progress. No additional fit or cross-game transfer is claimed in this segment.
+
 ## September 6: one real model-chosen catch, then an honest stopping point
 
 **Show:** the saved result **MODEL CHOICE: ACQUIRE · LIVING SPECIES 13 → 14**. Label it

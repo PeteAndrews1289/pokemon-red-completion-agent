@@ -1,0 +1,60 @@
+{
+  "arms": [
+    {
+      "arm": "learned",
+      "component_failure_count": 0,
+      "controller_actions": 656,
+      "emulator_frames": 40368,
+      "goal_decisions": 4,
+      "living_species_gained": 1,
+      "manifest_sha256": "a38b7d3c744cc15a5350b39f4b7f8ee5cf8252f7b625fbd57c572c448037a56e",
+      "required_specimens_reduced": 2,
+      "resources": {
+        "capture_items_after": 19,
+        "capture_items_before": 1,
+        "money_after": 649,
+        "money_before": 12649
+      },
+      "retained_specimens_gained": 2,
+      "stop_reason": "decision_limit",
+      "successful_goals": 4,
+      "verified_streams": 5
+    },
+    {
+      "arm": "baseline",
+      "component_failure_count": 1,
+      "controller_actions": 773,
+      "emulator_frames": 43992,
+      "goal_decisions": 4,
+      "living_species_gained": 1,
+      "manifest_sha256": "3f8ad686eea2f8f227e925b8c05531b36fc85159f96ca7c337bd497b824a41b7",
+      "required_specimens_reduced": 2,
+      "resources": {
+        "capture_items_after": 9,
+        "capture_items_before": 1,
+        "money_after": 6649,
+        "money_before": 12649
+      },
+      "retained_specimens_gained": 2,
+      "stop_reason": "verified_failure",
+      "successful_goals": 3,
+      "verified_streams": 5
+    }
+  ],
+  "audit_controller_actions": 0,
+  "audit_emulator_frames": 0,
+  "control_failure_confounds_advantage": true,
+  "deterministic_safety_choices": 1,
+  "deterministic_unsupported_choices": 1,
+  "independent_generalization_claim": false,
+  "model_ranked_choices": 2,
+  "new_fits": 0,
+  "new_train_examples": 0,
+  "private_path_fields": 0,
+  "result_file_sha256": "62880947a029bfd282e12ea3ca8499ea480b4b82723a6d418afe5070b377ced4",
+  "schema": "pokemon.red.resource-chain-readonly-audit.v1",
+  "source_commit": "8318ca11f32dde2a1b3d3f08045e9c6f14b9e973",
+  "status": "verified",
+  "total_controller_actions": 1429,
+  "total_emulator_frames": 84360
+}

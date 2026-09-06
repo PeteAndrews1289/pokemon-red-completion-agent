@@ -1,6 +1,36 @@
 # Model-first development roadmap
 
-## Current checkpoint — one model-chosen catch; resource-aware continuation next
+## Current checkpoint — four goals compose; make the progress durable and learn from useful contrasts
+
+The unchanged 29-example scorer now participates in an actual four-goal collecting chain. The
+hybrid retained two needed specimens, increasing living species 13 to 14 and reducing required
+specimens 108 to 106. Two choices were model-ranked; supply safety and one single-supported goal
+were deterministic. The control collected the same specimens but failed its final search. Neither
+independent superiority nor efficient spending is established: the hybrid ended with 19 balls and
+649 money after spending 12,000. Both diagnostic chains remain terminal and excluded from fitting.
+
+1. Close the [durable continuation / saved recap session](work-sessions/2026-09-06-durable-player-continuation.md).
+   Qualify optional end-state storage joined to completed trajectories. The dashboard should show
+   real past choices and costs after the producer closes, without pretending anything is live.
+2. Declare the next small **train-only selected-outcome curriculum before input**. Prioritize
+   resource-state contrasts and missing evolution/storage successes over easy supply examples.
+   First address the audited cost gap: candidate cost is currently zero and observed resource cost
+   excludes money. Consider explicit known-cost quotes/reserve constraints before adding a new
+   learned target. Never reinterpret the old consumable-cost examples as money-aware labels.
+   Reuse the existing outcome model and full-support collector/fitter, preserve all 29 prior rows,
+   negative outcomes and original lineages. Do not retrofit diagnostic rows as fitting data.
+3. Use retained end states for bounded sequential play. Fresh observations and the living ledger
+   must survive restoration. This is same-lineage integration, not independent evaluation.
+4. Audit collection progress **and money/costs** before changing model authority. If the fixed
+   utility rewards maintenance over completion, design that change prospectively. Sustained Red
+   competence comes before Crystal, with the title-neutral interfaces preserved throughout.
+
+Model training has started, but the learner is still a small goal-value scorer—not an autonomous
+full-game player. Routine locally-qualified development does not wait on duplicate main CI.
+
+All checkpoints below are historical.
+
+## Historical checkpoint — one model-chosen catch; resource-aware continuation next
 
 The first known-training chain caught one species through a real model-ranked goal, then lost
 capture availability because it had used its last ball. Local-only skills could not offer a

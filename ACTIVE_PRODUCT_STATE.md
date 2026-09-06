@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The first known-training chain caught one species but exhausted its last ball; local-only bindings could not offer resupply. Connect the existing routed transport and destination skills to refreshed capture/supply goals, then run a four-step training-context integration. No new model or CI gate is needed.
+- Next decision: Terminal checkpoint storage/reader and the truthful saved-run viewer are implemented and locally qualified. Before more supply fitting, resolve the economic representation gap: candidate costs are zero and the current observed target excludes money. Prefer explicit known-cost/reserve quotes alongside learned success and progress, then collect a small prospective train-only contrast batch without relabeling old examples.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The unchanged 29-example living-Dex scorer has caused three real routed side goals and one known-training-context capture. That capture increased living species from 13 to 14. The next exploration was a deterministic unsupported choice and failed; no sustained three-choice collection chain or independent superiority exists. |
+| Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
-| Cheapest falsifier | Use the saved 29-example living-Dex option scorer for at least three successive supported Red goal choices in one bounded development episode. Reobserve semantic state and the living ledger after each execution; stop on stale choices, unverified progress, or an undisclosed replacement policy. |
+| Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
 | Time box | 1 session / 4 hours |
 
 ### Cumulative cross-family learning outputs
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-known-train-chain-complete** · status **closed** · evidence [development episode](docs/evidence/red-fit29-known-train-chain-result-2026-09-06.json)
+**2026-09-06-durable-player-viewer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-player-checkpoint-readonly-qualification-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | One model-chosen acquisition increased the living collection. The missing reusable capability is resource-aware continuation across destinations, not another full teacher run. |
-| Learning output | The four-step-bounded known-training integration stopped after two decisions per actor: successful acquisition followed by exhausted exploration. Both trajectories authenticated; 704 controller actions and 31,344 frames reconcile. No new fit or train rows. |
-| Authority delta | Exactly one model-ranked acquisition succeeded, adding one living and registered species. The second choice was deterministic_unsupported, not another learned decision. The 29-example artifact is unchanged. |
-| Transfer result | Known-training-context integration only, not an unseen estimate. Both actors gained the same one living species. No Crystal, sealed Red or full replay. |
-| Blocker | The capture used the last ball. Acquisition then correctly became missing_resource, while resupply was missing_capability because only local providers were bound. Exploration reached its 64-leg cap. |
-| Decision | Preserve this pair and its diagnostics. Add an opt-in refreshed route-to-capture/supply seam using existing transport, fresh destination binding and safety limits. Do not change the old route, search cap or model utility. |
-| Next session | Qualify shared local/remote resource prerequisites and route-backed refreshed goals, then run one prospectively declared four-step known-training-context integration. Keep safety choices distinct from learned choices. |
-| Next falsifier | After the supply or capture skill, does the next real observation offer feasible completion goals, and can the unchanged scorer cause successive verified captures within the existing budgets? |
-| Stop condition | Preserve the old pair, all four retired paired roots and all eight training trials. No new fitting on diagnostic outcomes, no root relabeling for independence, no full replay or Crystal. Stop on unavailable route, unsupported field action, stale observation or hard budget. |
+| Product alignment | The prior model-assisted chain retained two needed specimens. Future terminal progress can now be stored with its original lineage, and the viewer keeps real completed choices and costs visible after the live producer closes. |
+| Learning output | Maintenance only: 335 focused checks and a real serializer round trip passed, with zero controller actions, frames, predictions, fits or train rows during qualification. The actual model remains fitted on 29 examples; both earlier diagnostic chains remain terminal. |
+| Authority delta | No new learned authority. Optional end-state retention and its reader unblock a later bounded continuation, but a controller-capable continuation consumer is not implemented. Checkpoints are not new independent roots or fitting examples. |
+| Transfer result | Checkpoint round trips preserve original provenance and require fresh semantic/ledger agreement. This is recovery engineering, not cross-game or independent gameplay evidence. Crystal and sealed Red remain closed. |
+| Blocker | A source audit found candidate resource cost is encoded as zero; resource pressure uses item headroom; the causal cost target measures consumed items, not money spent. More easy shopping examples alone cannot teach economical choices. Old historical runs have no end saves. |
+| Decision | Close the persistence/viewer session. Address only the necessary prospective cost/reserve representation before new supply training, preferably with known-cost quotes rather than a new model architecture. Preserve all old rows and diagnostics; do not silently redefine their targets. |
+| Next session | Build and falsify the smallest versioned, identity-free known-cost/reserve treatment, then use existing selected-outcome collection and fitting for a tiny prospectively declared train batch. Retain negative outcomes, actual behavior probabilities and prior rows. Keep CI in the background. |
+| Next falsifier | Can the player distinguish affordable-but-wasteful restocking from a needed reserve refill using real pre-action facts, while old projections/results remain unchanged and new outcomes count only executed choices? |
+| Stop condition | One bounded session, with actual new learning evidence as the next output. Stop rather than build another broad campaign factory, recapture old ended runs, reinterpret old consumable-only cost labels, fit development diagnostics or fabricate full-support behavior. No Crystal, sealed or full replay. |
 
 ### Stop conditions
 
