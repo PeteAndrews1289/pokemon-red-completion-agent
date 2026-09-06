@@ -1,8 +1,8 @@
 # Handoff
 
-## In-progress successor: retire four unopened roots, keep four paired and two reserve
+## In-progress successor: the diverse Red classroom now has a strict train consumer
 
-The faster post-campaign route is implemented locally but has not been executed. It explicitly
+The faster post-campaign route is implemented but has not been executed. It explicitly
 retires four still-unopened Red development roots into training before any outcome is read. Those
 roots permanently forfeit unseen-evaluation status. A title-neutral exact matcher then assigns
 eight train lessons with at most two resets per root, preserves four separate roots for paired
@@ -13,10 +13,23 @@ The Red adapter binds the retired roots to train templates while retaining their
 `development` source partition as provenance; it never claims that provenance remains an exam.
 An action-free production freezer authenticates source, runtime, ROM, catalog, prior exclusions,
 model and account-wide claim availability before writing a create-only private plan. It exposes no
-controller, teacher, outcome, prediction or fit interface. Local focused verification is 21 tests
-with Ruff and Mypy clean. Next authenticate this stacked change after PR 226 merges, publish it,
-run its zero-effect production freeze once, then build the train-only reader/runner. No root has
-been retired yet and the previous development bank is unchanged.
+controller, teacher, outcome, prediction or fit interface. It is published as PR 227, stacked on
+the diagnostic/diversity repair in PR 226; both full CI jobs are running.
+
+The next stacked change adds the missing execution trust boundary without widening the campaign.
+A strict reader requires canonical private-plan bytes plus exact source, ROM, model, catalog,
+runtime and route identities. It exposes recipe hashes rather than executable recipes. The new
+consumer must then reobserve the formerly-validation roots with zero controller effects, confirm
+they remain unclaimed, rebuild every recipe from cartridge mechanics and reproduce the exact Red
+binding before it can expose only the eight train slots to the existing no-reroll causal runner.
+The four paired slots and two reserves have no execution argument. The dashboard now reports the
+frozen fit floor—six settled rows including one acquisition and three party-development rows—so a
+terminal campaign cannot be mistaken for a trainable one.
+
+Reader and command tests are green locally, along with Ruff and Mypy for the changed files. Next
+publish this consumer after PR 227, run a zero-effect preflight from green exact main, freeze the
+private retirement once, and only then collect the eight train outcomes. No root has been retired,
+no outcome has been opened, and no model has been fitted by this successor work.
 
 ## Latest checkpoint: the first targeted campaign ran; root confounding blocked the fit
 

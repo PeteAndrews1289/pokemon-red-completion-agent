@@ -11,8 +11,11 @@ We chose the latter. Four outcomes-unseen states become training permanently; fo
 two stay in reserve. The system records that trade before it reads an outcome, so none of the
 training states can later be marketed as generalization.”
 
-End on **PUBLISH → ZERO-EFFECT FREEZE → TRAIN-ONLY CONSUMER → 8 OUTCOMES → FIT IF 6+ SETTLE**.
-Label the scene **IMPLEMENTED, NOT EXECUTED** and do not depict a new fit or controller authority.
+Before the run, show **PRIVATE PLAN = HASH INDEX, NOT EXECUTION AUTHORITY**, followed by
+**ZERO-FRAME REOBSERVATION → CURRENT CLAIM CHECK → CARTRIDGE REBUILD → EXACT RECIPE MATCH**. On the
+dashboard, separate **8/8 TERMINAL** from **FIT READY: 6+ SETTLED · ACQUIRE 1+ · DEVELOP 3+**.
+End on **PUBLISH → ZERO-EFFECT FREEZE → PREFLIGHT → 8 OUTCOMES → FIT ONLY IF READY**. Label the
+scene **IMPLEMENTED, NOT EXECUTED** and do not depict a new fit or controller authority.
 
 ## New scene: ten lessons reveal two different classrooms
 

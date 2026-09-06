@@ -9,12 +9,16 @@ lessons, four disjoint roots for a paired check, and two untouched reserves. Eac
 reset at most twice, and the schedule still has to satisfy the independent-lineage/root and
 cross-family diversity gate.
 
-The local action-free planner and Red recipe binder are complete. The remaining order is:
+The action-free planner and Red recipe binder are on PR 227. A stacked strict reader and train-only
+consumer are now implemented locally: the reader carries hashes only; the consumer reobserves the
+source-validation roots, checks current account-wide claim availability, rebuilds cartridge recipes
+and authenticates the exact frozen binding before the existing no-reroll runner becomes reachable.
+The dashboard separately shows campaign completion and fit-gate readiness. The remaining order is:
 
 1. merge the setup-diagnostic/diversity repair on PR 226;
 2. rebase and publish the retirement freezer, then require green exact-main CI;
 3. freeze the 4-train/4-paired/2-reserve split once with zero controller effects;
-4. implement and authenticate its train-only consumer;
+4. publish the train-only consumer and pass a zero-effect preflight;
 5. collect eight fixed train outcomes and require at least six settled, including one acquisition
    and three party-development rows;
 6. fit once from the complete admitted train corpus, then run the four paired roots once;

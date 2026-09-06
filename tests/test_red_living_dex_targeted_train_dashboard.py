@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import pytest
+from test_red_living_dex_targeted_bank_retirement import _capabilities
 from test_red_living_dex_targeted_update_capacity import _repeatable_capabilities
 
 from pokemon_red_completion.red_living_dex_causal_inventory import (
@@ -10,6 +11,9 @@ from pokemon_red_completion.red_living_dex_causal_inventory import (
 )
 from pokemon_red_completion.red_living_dex_setup_trust import (
     RedLivingDexSetupProtectedEffectCheckpoint,
+)
+from pokemon_red_completion.red_living_dex_targeted_bank_retirement import (
+    plan_red_living_dex_targeted_bank_retirement,
 )
 from pokemon_red_completion.red_living_dex_targeted_train_dashboard import (
     RedLivingDexTargetedTrainDashboardError,
@@ -61,6 +65,7 @@ def test_targeted_dashboard_describes_collection_without_training_overclaim() ->
     assert "not fitted yet" in encoded
     assert "not model play" in encoded
     assert "98:1" in encoded
+    assert "settled 0 of 8; acquire 0 of 3, develop 0 of 3" in encoded
     assert assignment.slot.lineage_sha256 not in encoded
     assert assignment.slot.physical_root_sha256 not in encoded
     assert "/" not in encoded
@@ -75,6 +80,24 @@ def test_targeted_dashboard_rejects_false_completion() -> None:
             _binding(),
             RedLivingDexTargetedTrainDashboardProgress(status="passed"),
         )
+
+
+def test_targeted_dashboard_describes_the_smaller_root_diverse_successor() -> None:
+    binding = plan_red_living_dex_targeted_bank_retirement(
+        _capabilities()
+    ).binding
+
+    snapshot = red_living_dex_targeted_train_dashboard_snapshot(
+        binding,
+        RedLivingDexTargetedTrainDashboardProgress(),
+    )
+
+    encoded = str(snapshot.public_dict())
+    assert snapshot.experiment.zero_shot_total == 8
+    assert snapshot.experiment.adaptation_total == 4
+    assert "8 train resets across 4 shared base-state clusters" in encoded
+    assert "settled 0 of 6; acquire 0 of 1, develop 0 of 3" in encoded
+    assert "Fit gate: blocked" in encoded
 
 
 def test_targeted_dashboard_projects_bounded_setup_diagnostics() -> None:

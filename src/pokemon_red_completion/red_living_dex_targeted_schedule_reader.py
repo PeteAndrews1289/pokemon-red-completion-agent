@@ -175,8 +175,33 @@ def load_red_living_dex_targeted_schedule_descriptor(
         expected_plan_sha256=expected_plan_sha256,
         expectations=expectations,
     )
+    return parse_red_living_dex_targeted_binding_descriptor(
+        document["binding"],
+        expected_binding_sha256=str(document["binding_sha256"]),
+        policy=LivingDexTargetedCapacityPolicy.v1(),
+    )
+
+
+def parse_red_living_dex_targeted_binding_descriptor(
+    value: object,
+    *,
+    expected_binding_sha256: str,
+    policy: LivingDexTargetedCapacityPolicy,
+) -> RedLivingDexTargetedScheduleDescriptor:
+    """Parse one exact Red binding under an explicitly authenticated policy."""
+
+    if not isinstance(policy, LivingDexTargetedCapacityPolicy):
+        raise TypeError("targeted private plan policy differs")
+    policy.__post_init__()
+    if (
+        not isinstance(expected_binding_sha256, str)
+        or _SHA256.fullmatch(expected_binding_sha256) is None
+    ):
+        raise RedLivingDexTargetedScheduleReaderError(
+            "targeted descriptor binding differs"
+        )
     try:
-        binding = _mapping(document["binding"])
+        binding = _mapping(value)
         if set(binding) != {"bindings", "schedule", "schema"} or binding.get(
             "schema"
         ) != "pokemon.red.private-living-dex-targeted-update-schedule-binding.v1":
@@ -189,7 +214,6 @@ def load_red_living_dex_targeted_schedule_descriptor(
             "slots",
         } or schedule_document.get("schema") != LIVING_DEX_TARGETED_SCHEDULE_SCHEMA:
             raise ValueError
-        policy = LivingDexTargetedCapacityPolicy.v1()
         if schedule_document.get("policy_sha256") != policy.policy_sha256:
             raise ValueError
         raw_slots = schedule_document["slots"]
@@ -246,7 +270,7 @@ def load_red_living_dex_targeted_schedule_descriptor(
             if row["slot_sha256"] != slot.slot_sha256:
                 raise ValueError
         descriptor = RedLivingDexTargetedScheduleDescriptor(
-            binding_sha256=str(document["binding_sha256"]),
+            binding_sha256=expected_binding_sha256,
             schedule=schedule,
             capabilities=tuple(capabilities),
         )
@@ -414,4 +438,5 @@ __all__ = [
     "RedLivingDexTargetedScheduleReaderError",
     "authenticate_red_living_dex_targeted_schedule_plan",
     "load_red_living_dex_targeted_schedule_descriptor",
+    "parse_red_living_dex_targeted_binding_descriptor",
 ]

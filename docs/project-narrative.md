@@ -14,6 +14,14 @@ roots. This weakens the immediate exam but strengthens the data the model actual
 another multi-day infrastructure loop before the first targeted fit. The retirement planner is
 implemented and tested; no state has been retired, executed or fitted yet.
 
+The execution path now has a deliberately narrow handoff. A private plan is only a hash-authenticated
+index; it cannot itself execute a stored recipe. Before training, the consumer must restore each
+addressed source-validation state without advancing a frame, verify that both its logical and
+physical claims remain unused, regenerate its possible Red actions from cartridge mechanics, and
+match the exact frozen recipe hashes. Only the eight training rows then become addressable. The
+paired and reserve roots remain unreachable from the command, and the dashboard will call fitting
+blocked unless six outcomes settle with the required acquisition and party-development coverage.
+
 ## September 5: the first targeted lessons found a bad classroom
 
 The first targeted Red campaign finally pressed buttons for learning data. All ten reset slots

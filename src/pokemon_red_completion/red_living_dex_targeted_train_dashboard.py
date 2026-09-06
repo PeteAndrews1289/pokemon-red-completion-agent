@@ -119,6 +119,21 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         )
 
     settled = sum(_settled_train_example(item) for item in progress.receipts)
+    settled_by_kind = Counter(
+        item.assignment.slot.focus_kind
+        for item in progress.receipts
+        if _settled_train_example(item)
+    )
+    minimum_by_kind = dict(
+        binding.schedule.policy.minimum_settled_train_by_kind
+    )
+    fit_gate_met = (
+        settled >= binding.schedule.policy.minimum_settled_train
+        and all(
+            settled_by_kind[kind] >= minimum
+            for kind, minimum in minimum_by_kind.items()
+        )
+    )
     censored = len(progress.receipts) - settled
     setup_failed = sum(
         item.setup_status is RedLivingDexTargetedSetupStatus.FAILED
@@ -174,7 +189,11 @@ def red_living_dex_targeted_train_dashboard_snapshot(
             f"examples and {censored} censored or interrupted slots."
         )
         current_step = "Train outcome campaign sealed"
-        next_step = "Audit sufficiency, then fit once from train examples only"
+        next_step = (
+            "Audit provenance, then fit once from train examples only"
+            if fit_gate_met
+            else "Do not fit; the frozen evidence sufficiency gate was not met"
+        )
     else:
         stage = "Targeted Red outcome collection ready"
         message = (
@@ -190,6 +209,11 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         "Behavior policy: 98:1 focus weighting with nonzero support for every legal option",
         f"Focus roster: {_format_focus_counts(focus_counts)}",
         f"Outcomes: {settled} settled; {censored} censored or interrupted",
+        (
+            f"Fit gate: {'ready' if fit_gate_met else 'blocked'} — settled "
+            f"{settled} of {binding.schedule.policy.minimum_settled_train}; "
+            f"{_format_minimum_progress(settled_by_kind, minimum_by_kind)}"
+        ),
         (
             f"Setup failures: {setup_failed}; setup interruptions: "
             f"{setup_interrupted}; causal interruptions: {causal_interrupted}"
@@ -297,6 +321,16 @@ def _format_diagnostic_counts(counts: Counter[str]) -> str:
     if not counts:
         return "none recorded"
     return ", ".join(f"{name} {counts[name]}" for name in sorted(counts))
+
+
+def _format_minimum_progress(
+    settled: Counter[LivingDexOptionKind],
+    minimums: dict[LivingDexOptionKind, int],
+) -> str:
+    return ", ".join(
+        f"{kind.value} {settled[kind]} of {minimum}"
+        for kind, minimum in minimums.items()
+    )
 
 
 __all__ = [
