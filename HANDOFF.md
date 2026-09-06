@@ -1,5 +1,23 @@
 # Handoff
 
+## In-progress successor: retire four unopened roots, keep four paired and two reserve
+
+The faster post-campaign route is implemented locally but has not been executed. It explicitly
+retires four still-unopened Red development roots into training before any outcome is read. Those
+roots permanently forfeit unseen-evaluation status. A title-neutral exact matcher then assigns
+eight train lessons with at most two resets per root, preserves four separate roots for paired
+development, and leaves two more unopened reserves. The train split must use four lineages and four
+physical roots, with acquisition and party-development each represented on multiple roots.
+
+The Red adapter binds the retired roots to train templates while retaining their original
+`development` source partition as provenance; it never claims that provenance remains an exam.
+An action-free production freezer authenticates source, runtime, ROM, catalog, prior exclusions,
+model and account-wide claim availability before writing a create-only private plan. It exposes no
+controller, teacher, outcome, prediction or fit interface. Local focused verification is 21 tests
+with Ruff and Mypy clean. Next authenticate this stacked change after PR 226 merges, publish it,
+run its zero-effect production freeze once, then build the train-only reader/runner. No root has
+been retired yet and the previous development bank is unchanged.
+
 ## Latest checkpoint: the first targeted campaign ran; root confounding blocked the fit
 
 Published main `57a2479aea0b6668e834aecfdca156c9dff68b20` passed exact-main GitHub CI

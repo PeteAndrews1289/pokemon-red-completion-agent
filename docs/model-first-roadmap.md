@@ -1,5 +1,29 @@
 # Model-first development roadmap
 
+## Active successor: exchange some exam capacity for diverse training now
+
+To shorten the path to a fitted Red goal scorer, the next design deliberately retires four of the
+ten still-unopened development roots into training. This is not a relabeling trick: the four roots
+lose evaluation status permanently. The prospective split uses four retired roots for eight train
+lessons, four disjoint roots for a paired check, and two untouched reserves. Each train root may
+reset at most twice, and the schedule still has to satisfy the independent-lineage/root and
+cross-family diversity gate.
+
+The local action-free planner and Red recipe binder are complete. The remaining order is:
+
+1. merge the setup-diagnostic/diversity repair on PR 226;
+2. rebase and publish the retirement freezer, then require green exact-main CI;
+3. freeze the 4-train/4-paired/2-reserve split once with zero controller effects;
+4. implement and authenticate its train-only consumer;
+5. collect eight fixed train outcomes and require at least six settled, including one acquisition
+   and three party-development rows;
+6. fit once from the complete admitted train corpus, then run the four paired roots once;
+7. use the two reserves only for failures defined before execution, never to replace a bad outcome.
+
+This reduces the statistical strength of the immediate Red comparison from eight roots to four,
+but reaches varied learning data much sooner. A later fresh-root producer must rebuild a larger
+evaluation bank before any strong generalization or Crystal-transfer claim.
+
 ## Active checkpoint: diversify the Red classroom before fitting
 
 The first ten-slot targeted campaign is terminal. It produced five causal train examples in 8,879

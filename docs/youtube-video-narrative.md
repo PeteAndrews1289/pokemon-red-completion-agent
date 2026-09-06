@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Planned scene: spend four exam cards to build a better classroom
+
+**Visual:** Show ten unopened Red cards. Move four into **TRAIN—EVALUATION STATUS FORFEITED**, four
+into **PAIRED CHECK**, and two into **RESERVE**. Fan the training cards into eight lesson slots with
+**MAX 2 PER ROOT · 4 LINEAGES · ACQUIRE ON 2+ · DEVELOP ON 2+**. Keep all gameplay counters at zero.
+
+**Voiceover:** “We could wait for several more full teacher runs, or make a smaller honest exam now.
+We chose the latter. Four outcomes-unseen states become training permanently; four stay paired and
+two stay in reserve. The system records that trade before it reads an outcome, so none of the
+training states can later be marketed as generalization.”
+
+End on **PUBLISH → ZERO-EFFECT FREEZE → TRAIN-ONLY CONSUMER → 8 OUTCOMES → FIT IF 6+ SETTLE**.
+Label the scene **IMPLEMENTED, NOT EXECUTED** and do not depict a new fit or controller authority.
+
 ## New scene: ten lessons reveal two different classrooms
 
 **Visual:** Fill a board with **10/10 TERMINAL · 8,879 ACTIONS · 468,149 FRAMES**. Split the ten

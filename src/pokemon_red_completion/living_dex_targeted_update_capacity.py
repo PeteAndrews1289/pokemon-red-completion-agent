@@ -134,6 +134,31 @@ class LivingDexTargetedCapacityPolicy:
             ),
         )
 
+    @classmethod
+    def retired_bank_v2(cls) -> LivingDexTargetedCapacityPolicy:
+        """Return the smaller correction/evaluation design after bank retirement."""
+
+        return cls(
+            train_focus_kind_counts=(
+                (LivingDexOptionKind.ACQUIRE, 2),
+                (LivingDexOptionKind.DEVELOP, 4),
+                (LivingDexOptionKind.MANAGE_STORAGE, 1),
+                (LivingDexOptionKind.RESUPPLY, 1),
+            ),
+            development_focus_kind_counts=(
+                (LivingDexOptionKind.ACQUIRE, 1),
+                (LivingDexOptionKind.DEVELOP, 1),
+                (LivingDexOptionKind.MANAGE_STORAGE, 1),
+                (LivingDexOptionKind.RESUPPLY, 1),
+            ),
+            maximum_train_setup_censors=2,
+            minimum_settled_train=6,
+            minimum_settled_train_by_kind=(
+                (LivingDexOptionKind.ACQUIRE, 1),
+                (LivingDexOptionKind.DEVELOP, 3),
+            ),
+        )
+
     @property
     def policy_sha256(self) -> str:
         return canonical_sha256(self.public_dict())
@@ -534,6 +559,7 @@ def freeze_living_dex_targeted_schedule(
     *,
     policy: LivingDexTargetedCapacityPolicy | None = None,
     maximum_train_replays_per_context: int = 1,
+    root_diversity_policy: LivingDexTargetedRootDiversityPolicy | None = None,
 ) -> LivingDexTargetedSchedule:
     """Deterministically freeze one complete outcome-blind allocation."""
 
@@ -552,10 +578,19 @@ def freeze_living_dex_targeted_schedule(
     development_contexts = tuple(row for row in rows if row.partition == "development")
     train_demands = _expand_demands(active.train_focus_kind_counts)
     development_demands = _expand_demands(active.development_focus_kind_counts)
-    train_assignment = _matching_assignments(
-        train_demands,
-        train_contexts,
-        maximum_uses_per_context=maximum_train_replays_per_context,
+    train_assignment = (
+        _matching_assignments(
+            train_demands,
+            train_contexts,
+            maximum_uses_per_context=maximum_train_replays_per_context,
+        )
+        if root_diversity_policy is None
+        else _diverse_matching_assignments(
+            train_demands,
+            train_contexts,
+            maximum_uses_per_context=maximum_train_replays_per_context,
+            policy=root_diversity_policy,
+        )
     )
     development_assignment = _matching_assignments(
         development_demands,
@@ -587,11 +622,17 @@ def freeze_living_dex_targeted_schedule(
                     reset_ordinal=reset_ordinal,
                 )
             )
-    return LivingDexTargetedSchedule(
+    schedule = LivingDexTargetedSchedule(
         policy=active,
         maximum_train_replays_per_context=maximum_train_replays_per_context,
         slots=tuple(slots),
     )
+    if root_diversity_policy is not None:
+        require_living_dex_targeted_schedule_root_diversity(
+            schedule,
+            policy=root_diversity_policy,
+        )
+    return schedule
 
 
 def audit_living_dex_targeted_schedule_root_diversity(
@@ -781,6 +822,88 @@ def _matching_assignments(
         demand_index: context_slots[slot_index]
         for slot_index, demand_index in context_slot_to_demand.items()
     }
+
+
+def _diverse_matching_assignments(
+    demands: tuple[LivingDexOptionKind, ...],
+    contexts: tuple[LivingDexTargetedCapacityContext, ...],
+    *,
+    maximum_uses_per_context: int,
+    policy: LivingDexTargetedRootDiversityPolicy,
+) -> dict[int, int]:
+    """Return the first exact assignment satisfying the prospective diversity gate."""
+
+    policy.__post_init__()
+    maximum_use = min(
+        maximum_uses_per_context,
+        policy.maximum_train_slots_per_lineage,
+        policy.maximum_train_slots_per_physical_root,
+    )
+    order = tuple(
+        sorted(
+            range(len(demands)),
+            key=lambda index: (
+                sum(
+                    demands[index] in context.available_option_kinds
+                    for context in contexts
+                ),
+                _KIND_ORDER[demands[index]],
+                index,
+            ),
+        )
+    )
+    uses = [0] * len(contexts)
+    assigned: dict[int, int] = {}
+    roots_by_kind: dict[LivingDexOptionKind, set[str]] = {
+        kind: set() for kind, _minimum in policy.minimum_physical_roots_by_focus_kind
+    }
+
+    def complete() -> bool:
+        used = {index for index, count in enumerate(uses) if count}
+        return (
+            len(used) >= policy.minimum_train_lineages
+            and len(used) >= policy.minimum_train_physical_roots
+            and all(
+                len(roots_by_kind[kind]) >= minimum
+                for kind, minimum in policy.minimum_physical_roots_by_focus_kind
+            )
+        )
+
+    def search(position: int) -> bool:
+        if position == len(order):
+            return complete()
+        demand_index = order[position]
+        kind = demands[demand_index]
+        for context_index, context in enumerate(contexts):
+            if (
+                uses[context_index] >= maximum_use
+                or kind not in context.available_option_kinds
+            ):
+                continue
+            uses[context_index] += 1
+            assigned[demand_index] = context_index
+            tracked = kind in roots_by_kind
+            if tracked:
+                roots_by_kind[kind].add(context.physical_root_sha256)
+            if search(position + 1):
+                return True
+            if tracked and not any(
+                demands[index] is kind
+                and contexts[assigned[index]].physical_root_sha256
+                == context.physical_root_sha256
+                for index in assigned
+                if index != demand_index
+            ):
+                roots_by_kind[kind].discard(context.physical_root_sha256)
+            del assigned[demand_index]
+            uses[context_index] -= 1
+        return False
+
+    if not search(0):
+        raise LivingDexTargetedCapacityError(
+            "targeted schedule cannot satisfy root diversity"
+        )
+    return dict(assigned)
 
 
 __all__ = [

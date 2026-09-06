@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: we chose a smaller exam to reach a real lesson sooner
+
+After the two-root campaign failed its diversity test, the fastest clean-power answer would have
+been several more full teacher runs. Instead, the next design makes a transparent trade: four of
+ten unopened Red evaluation states will become training states before their outcomes are known.
+They can never be described as unseen evaluation again. Four other states remain paired checks and
+two stay in reserve.
+
+The resulting curriculum has eight lessons across four histories, with no history used more than
+twice. The matcher will refuse a split unless acquisition and party development both span multiple
+roots. This weakens the immediate exam but strengthens the data the model actually needs—and avoids
+another multi-day infrastructure loop before the first targeted fit. The retirement planner is
+implemented and tested; no state has been retired, executed or fitted yet.
+
 ## September 5: the first targeted lessons found a bad classroom
 
 The first targeted Red campaign finally pressed buttons for learning data. All ten reset slots

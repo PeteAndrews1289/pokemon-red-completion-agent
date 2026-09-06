@@ -9,6 +9,7 @@ from pokemon_red_completion.living_dex_targeted_update_capacity import (
     LivingDexTargetedCapacityContext,
     LivingDexTargetedCapacityError,
     LivingDexTargetedCapacityPolicy,
+    LivingDexTargetedRootDiversityPolicy,
     audit_living_dex_targeted_schedule_root_diversity,
     audit_living_dex_targeted_update_capacity,
     freeze_living_dex_targeted_schedule,
@@ -251,6 +252,89 @@ def test_root_diversity_guard_accepts_independent_train_roots() -> None:
         LivingDexOptionKind.ACQUIRE: 4,
         LivingDexOptionKind.DEVELOP: 4,
     }
+
+
+def test_diverse_freezer_distributes_repeatable_lessons_across_four_roots() -> None:
+    policy = LivingDexTargetedCapacityPolicy.retired_bank_v2()
+    train = tuple(
+        _context(
+            index,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        )
+        for index in range(4)
+    )
+    development = tuple(
+        _context(
+            index + 4,
+            "development",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        )
+        for index in range(4)
+    )
+
+    schedule = freeze_living_dex_targeted_schedule(
+        (*train, *development),
+        policy=policy,
+        maximum_train_replays_per_context=2,
+        root_diversity_policy=LivingDexTargetedRootDiversityPolicy.v1(),
+    )
+    diversity = require_living_dex_targeted_schedule_root_diversity(schedule)
+
+    assert diversity.train_lineages == 4
+    assert diversity.train_physical_roots == 4
+    assert diversity.maximum_slots_on_one_lineage == 2
+    assert diversity.maximum_slots_on_one_physical_root == 2
+    roots_by_kind = dict(diversity.physical_roots_by_focus_kind)
+    assert roots_by_kind[LivingDexOptionKind.ACQUIRE] >= 2
+    assert roots_by_kind[LivingDexOptionKind.DEVELOP] >= 2
+
+
+def test_diverse_freezer_rejects_two_root_capacity_even_when_arithmetic_fits() -> None:
+    policy = LivingDexTargetedCapacityPolicy.retired_bank_v2()
+    train = (
+        _context(
+            0,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        _context(
+            1,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+    )
+    development = tuple(
+        _context(
+            index + 2,
+            "development",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        )
+        for index in range(4)
+    )
+
+    with pytest.raises(LivingDexTargetedCapacityError, match="root diversity"):
+        freeze_living_dex_targeted_schedule(
+            (*train, *development),
+            policy=policy,
+            maximum_train_replays_per_context=4,
+            root_diversity_policy=LivingDexTargetedRootDiversityPolicy.v1(),
+        )
 
 
 def test_schedule_validation_rejects_development_replay_or_cross_partition_overlap() -> None:
