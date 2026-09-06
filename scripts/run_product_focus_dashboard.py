@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -20,6 +21,7 @@ from product_focus import (  # noqa: E402
     load_product_focus,
 )
 
+from pokemon_red_completion.dashboard_relay import DashboardRelayState  # noqa: E402
 from pokemon_red_completion.dashboard_work_status import (  # noqa: E402
     DashboardWorkStatusError,
     load_dashboard_work_status,
@@ -30,7 +32,7 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DashboardLearningComponent,
     DashboardModelState,
     DashboardSnapshot,
-    DashboardState,
+    DashboardTrainingState,
     DashboardWorkState,
     ProgressDashboardError,
     ProgressDashboardServer,
@@ -46,220 +48,170 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--duration-seconds", type=int, default=0)
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--work-status-file", type=Path, default=DEFAULT_WORK_STATUS_PATH)
+    parser.add_argument("--live-port", type=int, default=8769)
     return parser
+
+
+def _load_learning_evidence(
+    path: Path = PROJECT_ROOT / "configs" / "dashboard-learning-evidence.json",
+    *,
+    repository_root: Path = PROJECT_ROOT,
+) -> Mapping[str, object]:
+    """Load only the hash-pinned public receipt, never a private model or save."""
+    try:
+        reference = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(reference, dict) or set(reference) != {"schema", "path", "sha256"}:
+            raise ValueError
+        if reference["schema"] != "pokemon.dashboard.learning-evidence-reference.v1":
+            raise ValueError
+        relative = Path(reference["path"])
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ValueError
+        target = (repository_root / relative).resolve(strict=True)
+        if (
+            not target.is_relative_to(repository_root.resolve())
+            or target.stat().st_size > 1_000_000
+        ):
+            raise ValueError
+        payload = target.read_bytes()
+        if hashlib.sha256(payload).hexdigest() != reference["sha256"]:
+            raise ValueError
+        result = json.loads(payload)
+        if not isinstance(result, dict):
+            raise ValueError
+        return result
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        raise ProgressDashboardError(
+            "dashboard learning evidence is unavailable or changed"
+        ) from error
+
+
+def _training_projection(
+    evidence: Mapping[str, object],
+) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
+    if (
+        evidence.get("schema") != "pokemon.red.living-dex-retired-bank-train-campaign-result.v1"
+        or evidence.get("status") != "retired_bank_train_campaign_terminal"
+    ):
+        raise ProgressDashboardError("dashboard completed campaign evidence differs")
+    fit = _mapping(evidence, "fit_result")
+    if (
+        fit.get("status") != "train_only_causal_model_update_complete"
+        or fit.get("authority") != "non_authoritative_shadow_only"
+        or fit.get("authority_promotions") != 0
+        or fit.get("development_examples_read") != 0
+        or fit.get("transfer_claimed") is not False
+    ):
+        raise ProgressDashboardError("dashboard training claim boundary differs")
+    model = _mapping(fit, "model")
+    error = _mapping(fit, "training_error")
+    readiness = _mapping(evidence, "readiness")
+    total = _count(model, "total_examples")
+    added = _count(model, "added_settled_examples")
+    new = _count(evidence, "causal_train_examples_recorded")
+    if (
+        readiness.get("ready") is not True
+        or _count(readiness, "settled_examples") != new
+        or _count(model, "settled_examples") != total
+        or _count(evidence, "model_fits") != _count(fit, "fit_executions")
+    ):
+        raise ProgressDashboardError("dashboard training receipt joins differ")
+    training = DashboardTrainingState(
+        samples_before=total - added,
+        samples_after=total,
+        newly_collected=new,
+        previously_unfitted=added - new,
+        successful_examples=_count(fit, "successful_examples"),
+        terminal_lessons=_count(evidence, "train_slots_terminal"),
+        total_lessons=_count(readiness, "train_slots"),
+        setup_censors=_count(readiness, "setup_censors"),
+        fit_count=_count(fit, "fit_executions"),
+        weighted_mse_before=error["prior_weighted_mse"],
+        weighted_mse_after=error["updated_weighted_mse"],
+        training_choice_changes=_count(fit, "policy_disagreements_on_train_menus"),
+    )
+    component = DashboardLearningComponent(
+        name="Living-Pokédex goal scorer",
+        scope="Chooses collection objectives; deterministic skills execute game mechanics",
+        status="shadow",
+        authority="shadow_only",
+        train_examples=total,
+        validation_examples=0,
+        validation_correct=0,
+        baseline_correct=None,
+        model_sha256=_text(model, "model_sha256"),
+        independent_validation_units=0,
+    )
+    return training, component
 
 
 def product_focus_dashboard_snapshot(
     state: ProductFocusState,
     *,
     work: DashboardWorkState | None = None,
+    evidence: Mapping[str, object] | None = None,
 ) -> DashboardSnapshot:
+    """Project current evidence, without borrowing old gameplay counts as live state."""
     lane = state.active_lane
-    product = state.product
-    progress = state.progress
-    authority = _mapping(lane, "learned_authority")
     reorientation = _mapping(lane, "latest_reorientation")
-    outcomes = _mapping(progress, "outcome_questions")
-    train_outcomes = _count(outcomes, "train")
-    development_outcomes = _count(outcomes, "development")
-    fits = _count(progress, "model_fits")
-    unseen = _count(progress, "unseen_comparisons")
-    authority_promotions = _count(progress, "authority_promotions")
-    transfer_results = _count(progress, "transfer_results")
-    development_episodes = _count(progress, "development_episode_attempts")
-    verified_outcomes = _count(progress, "verified_outcome_examples")
-    atomic_episodes = _count(progress, "atomic_goal_episodes")
-    causal_train_examples = _count(progress, "causal_train_examples")
-    composition_attempts = _count(progress, "composition_attempts")
-    verified_compositions = _count(progress, "verified_composition_episodes")
-    outputs = focus_scorecard(state)
-    output_event = (
-        " · ".join(
-            f"{label.split(' ·', 1)[0]} {current}/{minimum}"
-            for label, current, minimum in outputs
-        )
-        if outputs
-        else (
-            f"Cumulative learning · train outcomes {train_outcomes} · development outcomes "
-            f"{development_outcomes} · fits {fits} · comparisons {unseen}"
-        )
+    training, component = _training_projection(
+        evidence if evidence is not None else _load_learning_evidence()
     )
-    boundary_labels = {
-        "additional_v3_trial_execution": "V3 execution",
-        "campaign_execution": "campaign",
-        "comparison_execution": "compare",
-        "consumed_trial_retry": "retry",
-        "unexecuted_counterfactual_target": "unexecuted counterfactual target",
-        "crystal_execution": "Crystal",
-        "development_payload_decode": "dev decode",
-        "development_payload_disclosure": "dev disclosure",
-        "full_game_replay": "replay",
-        "gameplay_execution": "gameplay",
-        "identity_bearing_policy_feature": "identity-bearing feature",
-        "live_model_prediction": "prediction",
-        "live_private_artifact_access": "live private artifacts",
-        "model_fit": "fit",
-        "model_prediction": "prediction",
-        "model_refit": "refit",
-        "outcome_balanced_row_selection": "outcome-balanced selection",
-        "private_development_outcome_opening": "dev outcomes",
-        "private_artifact_access": "private artifacts",
-        "private_input_access": "private",
-        "public_manifest_freeze": "manifest",
-        "red_preflight_execution": "preflight",
-        "rom_access": "ROM",
-        "routine_clean_power_teacher_factory": "clean-power teacher factory",
-        "scenario_selection": "scenario",
-        "sealed_red_evaluation": "sealed",
-        "sealed_or_benchmark_root_use": "sealed/benchmark roots",
-        "reused_v1_context_execution": "V1 context reuse",
-        "scenario_substitution_after_selection": "post-choice substitution",
-        "teacher_choice_or_fallback": "teacher choice/fallback",
-        "teacher_route_hardening": "teacher",
-        "transfer_claim": "transfer claim",
-        "unpowered_model_quality_claim": "unpowered quality claim",
-        "unmeasured_action_target": "unmeasured-action target",
-        "v4_freeze_or_trial_execution": "V4 freeze/trial",
-        "v4_trial_execution_before_reorientation": "V4 execution",
-    }
-    prohibited = " / ".join(
-        boundary_labels.get(value, value.replace("_", " "))
-        for value in _text_list(lane, "prohibited_actions")
+    output_event = "Historical cross-family ledger · " + " · ".join(
+        f"{label.split(' ·', 1)[0]} {current}/{minimum}"
+        for label, current, minimum in focus_scorecard(state)
     )
     return DashboardSnapshot(
-        game="Cross-game Pokemon agent",
+        game="Pokémon Red",
         run_status=_run_status_for_work(work),
-        stage="Targeted Red update · supply validation before training",
+        stage=_event("Now", work.headline, maximum=96) if work else "Latest Red learning result",
         message=(
-            "Five model-directed Red cases are terminal: four verified successes and one "
-            "failure. The next gate must prove 10 untouched training roots and 8 separate "
-            "paired evaluation roots before any new gameplay or fit."
+            work.detail
+            if work
+            else "The goal scorer is fitted. Next: several model-chosen objectives with verified "
+            "collection progress. This overview is not a running emulator."
         ),
         stage_progress=_stage_progress(work),
-        location="Engineering gate · action-free inventory · Crystal transfer deferred",
-        registered_species=18,
-        living_species=14,
+        location=None,
+        collection_observed=False,
         collection_target=151,
         model=DashboardModelState(
             mode="shadow",
-            candidate="18-example title-neutral living-Pokédex option model",
-            choice="No live choice · building the next train/control evidence gate",
-            confidence=None,
-            decisions=5,
+            candidate=f"{training.samples_after}-example living-Pokédex goal scorer",
+            choice="No live choice — trained artifact awaiting bounded play",
+            decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="catalog",
-            zero_shot_completed=0,
-            zero_shot_total=1,
-            adaptation_completed=0,
-            adaptation_total=10,
-            sealed_completed=0,
-            sealed_total=8,
+            phase="complete",
+            zero_shot_completed=training.samples_after,
+            zero_shot_total=training.samples_after,
+            adaptation_completed=training.newly_collected,
+            adaptation_total=training.total_lessons,
+            sealed_completed=training.setup_censors,
+            sealed_total=training.total_lessons,
             predictions_committed=False,
-            heading="Next model update",
-            eyebrow="Living-Pokédex mission · Red curriculum",
-            counter_labels=(
-                "Action-free capacity gate",
-                "New train-only roots",
-                "Fresh paired model/control roots",
-            ),
+            heading="Latest completed learning cycle",
+            eyebrow="Red field lab / Living Pokédex project",
+            counter_labels=("Examples in this model", "New factual outcomes", "Setup censors"),
         ),
-        learning_components=(
-            DashboardLearningComponent(
-                name="Living-Pokédex option model",
-                scope=(
-                    "Ranks title-neutral acquisition, party, storage, supply and access goals"
-                ),
-                status="shadow",
-                authority="shadow_only",
-                train_examples=18,
-                validation_examples=5,
-                validation_correct=3,
-                baseline_correct=None,
-                model_sha256=(
-                    "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56"
-                ),
-                independent_validation_units=5,
-            ),
-            DashboardLearningComponent(
-                name="One-turn battle scorer",
-                scope="Expected utility across seven cartridge RNG timings",
-                status="shadow",
-                authority="shadow_only",
-                train_examples=20,
-                validation_examples=20,
-                validation_correct=18,
-                baseline_correct=20,
-                baseline_id="legal fixed heuristic",
-                model_sha256=(
-                    "19ac6d3db3305c2e9979f1f31f0d70f4d7ae3df2737b64585313812aef7619db"
-                ),
-                independent_validation_units=4,
-                paired_wins=0,
-                paired_losses=2,
-                paired_two_sided_exact_p=0.5,
-            ),
-        ),
+        learning_components=(component,),
+        training=training,
         work=work or DashboardWorkState(),
         events=(
-            "Current gate · validate untouched 10-train / 8-paired-development capacity",
-            (
-                "Five-case result · 4/5 verified successes · 60% threshold accuracy · "
-                "Brier 0.397811 · log loss 2.458979"
-            ),
-            (
-                "Largest errors · acquisition failed at 99.55% predicted success · party "
-                "development succeeded at 0.10%"
-            ),
-            (
-                "Gameplay gains · living collection 13→14 · registered 17→18 · capture "
-                "supplies restored twice"
-            ),
-            f"Product · {_text(product, 'goal')}",
-            _event("Capability", _text(lane, "capability")),
-            _event("Authority now", _text(authority, "current")),
-            _event("Authority target", _text(authority, "target")),
-            output_event,
-            (
-                f"Cross-family totals · train examples {causal_train_examples} · logical "
-                f"atomic {atomic_episodes} · attempts {development_episodes} · verified outcomes "
-                f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
-                f"{composition_attempts} · verified compositions {verified_compositions}"
-            ),
-            _event("Reorientation", _text(reorientation, "decision")),
-            (
-                "Player stack · semantic goal manager · deterministic navigation, battle, "
-                "capture, party and inventory skills · fresh-ledger verification · typed recovery"
-            ),
-            "Training boundary · five development cases are calibration only and cannot fit",
-            (
-                "Prospective train set · 4 acquisition · 4 party development · 1 storage · "
-                "1 resupply · at least 8 settled"
-            ),
-            (
-                "Prospective evaluation · at least 8 fresh paired roots · updated model vs "
-                "frozen completion-first deterministic control"
-            ),
-            (
-                "Authority boundary · the model may rank supported semantic goals only after a "
-                "fresh comparison · deterministic code keeps mechanics and safety"
-            ),
-            (
-                "Episode measures · completion-ledger delta · captures · quest progress · "
-                "resource cost · faints · recoveries · replans"
-            ),
-            _event("Current blocker", _text(reorientation, "blocker")),
+            f"Saved model · {training.samples_before} → {training.samples_after} real examples",
+            f"New data · {training.newly_collected} outcomes; "
+            f"{training.setup_censors} setup censors",
+            f"Retained earlier data · {training.previously_unfitted} previously unfitted examples",
+            f"Training calibration · {training.training_choice_changes} changed menu choices",
+            "Training error is not an unseen gameplay score; the updated model remains shadow-only",
+            "No live party or collection ledger is attached; missing observations show as unknown",
             _event("Next session", _text(reorientation, "next_session_goal")),
-            _event("Next falsifier", _text(reorientation, "next_falsifier")),
-            f"Authority promotions {authority_promotions} · transfer results {transfer_results}",
-            _event("Closed", prohibited),
-            _event("Next decision", _text(lane, "next_decision")),
-            (
-                "Player contract · authenticated snapshots · title-neutral semantic goals · "
-                "typed skill results · fresh completion ledger · teacher labels 0"
-            ),
+            _event("Current limitation", _text(reorientation, "blocker")),
+            _event("Mission", _text(state.product, "goal")),
+            _event("Evidence", output_event),
+            "Red first · Crystal adaptation later · multi-game living Pokédex is the product",
         ),
     )
 
@@ -336,8 +288,11 @@ def main(argv: list[str] | None = None) -> int:
             current_step="Validate the local observer status",
             next_step="Resume automatic work updates",
         )
-    snapshot = product_focus_dashboard_snapshot(focus, work=work)
-    state = DashboardState(snapshot)
+    evidence = _load_learning_evidence()
+    snapshot = product_focus_dashboard_snapshot(focus, work=work, evidence=evidence)
+    if args.port == args.live_port:
+        raise ProgressDashboardError("overview and live observer ports must differ")
+    state = DashboardRelayState(snapshot, live_port=args.live_port)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
             json.dumps(
@@ -387,6 +342,9 @@ def main(argv: list[str] | None = None) -> int:
                     try:
                         focus = load_product_focus()
                         work = load_dashboard_work_status(args.work_status_file)
+                        candidate_evidence = _load_learning_evidence()
+                        _training_projection(candidate_evidence)
+                        evidence = candidate_evidence
                     except (DashboardWorkStatusError, ProgressDashboardError):
                         work = DashboardWorkState(
                             status="blocked",
@@ -398,7 +356,10 @@ def main(argv: list[str] | None = None) -> int:
                             current_step="Validate the observer inputs",
                             next_step="Resume automatic dashboard updates",
                         )
-                    state.publish(product_focus_dashboard_snapshot(focus, work=work))
+                    state.publish(
+                        product_focus_dashboard_snapshot(focus, work=work, evidence=evidence)
+                    )
+                    state.poll()
                 time.sleep(0.5)
         except KeyboardInterrupt:
             pass

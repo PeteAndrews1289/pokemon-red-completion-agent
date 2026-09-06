@@ -338,16 +338,20 @@ def test_loopback_dashboard_serves_status_video_and_no_control_methods() -> None
     assert "Pokémon Learning Observatory" in html
     assert "VIEW ONLY" in html
     assert "Work happening now" in html
-    assert "Mission and current boundary" in html
+    assert "The mission" in html
+    assert "viewer-toggle" in html
+    assert "prefers-reduced-motion" in html
+    assert "framePresentation" in html
+    assert "Training error / before &amp; after" in html
     assert "Current step" in html
     assert "Next step" in html
-    assert "Learned stack" in html
-    assert "held-out evidence" in html
+    assert "Model evidence" in html
+    assert "limits included" in html
     assert "Live shadow scorecard" in html
     assert "independent val units" in html
     assert "historical unclassified" in html
     assert "candidate audit" in html
-    assert 'grid-template-areas: "name name" "status samples" "score digest"' in html
+    assert 'grid-template-areas:"name name" "status samples" "score score" "digest digest"' in html
     assert "candidate ${exactScore" in html
     assert status["dashboard"]["view_only"] is True
     assert status["dashboard"]["frame_ready"] is True

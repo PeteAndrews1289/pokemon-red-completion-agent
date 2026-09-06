@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import (
@@ -54,12 +54,14 @@ class RedBoundedPlayerObserver:
     runtime: RedGoalContextRuntime
     actions: CountingExecutor
     collection_projector: CollectionProjector = living_collection_checkpoint
+    last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
         if not callable(self.collection_projector):
             raise TypeError("collection_projector must be callable")
 
     def __call__(self) -> GoalManagerCompositionObservation:
+        self.last_live_observation = None
         live = self.runtime.adapter.observe()
         if not isinstance(live, RedGoalObservation):
             raise RedBoundedPlayerError("Red adapter returned an invalid observation")
@@ -74,12 +76,14 @@ class RedBoundedPlayerObserver:
             binding_set=binding_set,
             collection=collection,
         )
-        return GoalManagerCompositionObservation(
+        result = GoalManagerCompositionObservation(
             semantic_state_sha256=canonical_sha256(semantic_document),
             situation=live.situation,
             binding_set=binding_set,
             collection=collection,
         )
+        self.last_live_observation = live
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -245,9 +249,7 @@ def red_bounded_player_semantic_document(
         # not construct GoalManagerQuestion, whose stricter contract correctly
         # requires at least one selectable candidate when a policy is actually
         # asked to choose.
-        "candidates": [
-            item.policy_dict() for item in binding_set.opportunities
-        ],
+        "candidates": [item.policy_dict() for item in binding_set.opportunities],
         "schema": "pokemon.core.goal-manager-input.v1",
         "situation": live.situation.policy_dict(),
     }

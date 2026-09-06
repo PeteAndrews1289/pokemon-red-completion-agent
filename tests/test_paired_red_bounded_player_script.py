@@ -259,6 +259,41 @@ def test_progress_predicate_uses_a_fresh_verified_collection_delta() -> None:
     assert predicate(_observation(storage=3)) is True
 
 
+@pytest.mark.parametrize("continue_chain,expected", [(False, 2), (True, 3)])
+def test_declared_chain_keeps_playing_after_progress_without_changing_default(
+    continue_chain: bool,
+    expected: int,
+) -> None:
+    from test_bounded_player_episode import _CountingAuthority, _observer, _trajectory
+
+    from pokemon_red_completion.bounded_player_episode import (
+        BoundedPlayerLimits,
+        run_bounded_player_episode,
+    )
+
+    module = runpy.run_path(str(SCRIPT))
+    readiness = SimpleNamespace(
+        challenger_arm_id=module["CAUSAL_ARM_ID"],
+        continue_after_progress=continue_chain,
+    )
+    observe, meter, state = _observer(fail_first=False)
+    trajectory, _sink = _trajectory()
+    authority = _CountingAuthority()
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=authority,
+        authority_id="synthetic-chain-check",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=module["_completion_predicate"](readiness),
+        limits=BoundedPlayerLimits(max_decisions=3, max_replans=2),
+    )
+    assert len(result.steps) == authority.calls == expected
+    assert state["observations"] == expected + 1
+    assert state["actions"] == expected * 5
+    assert all(step.semantic_state_changed for step in result.steps)
+
+
 def test_calibration_rehearsal_stops_only_on_living_dex_completion() -> None:
     module = runpy.run_path(str(SCRIPT))
     predicate = module["_LivingDexCompletionPredicate"]()
@@ -326,9 +361,7 @@ def test_public_output_must_be_new_external_and_not_rom_adjacent(tmp_path: Path)
     rom = rom_dir / "red.gb"
     rom.write_bytes(b"rom")
 
-    assert output(result_dir / "pair.json", rom_path=rom) == (
-        result_dir / "pair.json"
-    ).resolve()
+    assert output(result_dir / "pair.json", rom_path=rom) == (result_dir / "pair.json").resolve()
     with pytest.raises(RuntimeError, match="output_isolation"):
         output(rom_dir / "pair.json", rom_path=rom)
     existing = result_dir / "existing.json"

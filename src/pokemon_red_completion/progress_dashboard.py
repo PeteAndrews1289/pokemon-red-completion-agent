@@ -22,7 +22,7 @@ import threading
 import time
 import zlib
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from types import TracebackType
@@ -531,6 +531,48 @@ class DashboardWorkState:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardTrainingState:
+    """Completed training evidence, never a claim of live or held-out performance."""
+
+    samples_before: int
+    samples_after: int
+    newly_collected: int
+    previously_unfitted: int
+    successful_examples: int
+    terminal_lessons: int
+    total_lessons: int
+    setup_censors: int
+    fit_count: int
+    weighted_mse_before: float
+    weighted_mse_after: float
+    training_choice_changes: int
+
+    def __post_init__(self) -> None:
+        for key, value in asdict(self).items():
+            if key.startswith("weighted_mse"):
+                if (
+                    isinstance(value, bool) or not isinstance(value, (int, float))
+                    or not math.isfinite(value) or value < 0
+                ):
+                    raise ProgressDashboardError("training error must be finite and non-negative")
+            else:
+                _count(value, subject=f"training {key}")
+        if (
+            self.samples_after
+            != self.samples_before + self.previously_unfitted + self.newly_collected
+            or self.successful_examples > self.samples_after
+            or self.terminal_lessons != self.total_lessons
+            or self.setup_censors + self.newly_collected != self.terminal_lessons
+            or self.fit_count != 1
+            or self.training_choice_changes > self.samples_after
+        ):
+            raise ProgressDashboardError("completed training evidence accounting differs")
+
+    def public_dict(self) -> dict[str, object]:
+        return {**asdict(self), "evidence_scope": "training_only", "held_out_claim": False}
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardSnapshot:
     """One identity-safe, human-facing status update."""
 
@@ -557,9 +599,17 @@ class DashboardSnapshot:
     live_evaluation: DashboardLiveEvaluationState | None = None
     work: DashboardWorkState = DashboardWorkState()
     events: tuple[str, ...] = ()
+    collection_observed: bool = True
+    training: DashboardTrainingState | None = None
 
     def __post_init__(self) -> None:
         _plain_text(self.game, subject="game", maximum=64)
+        if not isinstance(self.collection_observed, bool):
+            raise ProgressDashboardError("collection observation flag must be boolean")
+        if self.training is not None:
+            if not isinstance(self.training, DashboardTrainingState):
+                raise ProgressDashboardError("training evidence must be typed")
+            self.training.__post_init__()
         if self.run_status not in {"waiting", "running", "paused", "passed", "failed", "blocked"}:
             raise ProgressDashboardError("run status is unknown")
         _plain_text(self.stage, subject="stage", maximum=96)
@@ -641,6 +691,7 @@ class DashboardSnapshot:
             "stage_progress": float(self.stage_progress),
             "location": self.location,
             "collection": {
+                "observed": self.collection_observed,
                 "registered": self.registered_species,
                 "living": self.living_species,
                 "level_cap": self.level_cap_species,
@@ -663,6 +714,7 @@ class DashboardSnapshot:
                 else None
             ),
             "work": self.work.public_dict(),
+            "training": self.training.public_dict() if self.training is not None else None,
             "events": list(self.events),
             "private_path_fields": 0,
             "raw_address_fields": 0,
@@ -706,8 +758,16 @@ def encode_rgb_png(width: int, height: int, rgb: bytes) -> bytes:
 class DashboardState:
     """Thread-safe latest-value store shared by the run and local HTTP server."""
 
-    def __init__(self, snapshot: DashboardSnapshot | None = None) -> None:
+    def __init__(
+        self,
+        snapshot: DashboardSnapshot | None = None,
+        *,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> None:
         self._lock = threading.Lock()
+        self._clock = clock
+        self._snapshot_updated_at = clock()
+        self._frame_updated_at: float | None = None
         self._snapshot = snapshot or waiting_dashboard_snapshot()
         self._snapshot_version = 1
         self._frame_png = encode_rgb_png(
@@ -724,6 +784,7 @@ class DashboardState:
         with self._lock:
             self._snapshot = snapshot
             self._snapshot_version += 1
+            self._snapshot_updated_at = self._clock()
 
     def publish_png(self, payload: bytes, *, logical_frame: int) -> None:
         if (
@@ -739,14 +800,21 @@ class DashboardState:
             self._frame_png = payload
             self._logical_frame = logical_frame
             self._frame_version += 1
+            self._frame_updated_at = self._clock()
 
     def status_bytes(self) -> tuple[bytes, int]:
         with self._lock:
             document = self._snapshot.public_dict()
+            now = self._clock()
             document["dashboard"] = {
                 "snapshot_version": self._snapshot_version,
                 "frame_version": self._frame_version,
                 "frame_ready": self._frame_version > 0,
+                "frame_age_seconds": (
+                    max(0.0, now - self._frame_updated_at)
+                    if self._frame_updated_at is not None else None
+                ),
+                "snapshot_age_seconds": max(0.0, now - self._snapshot_updated_at),
                 "logical_frame": self._logical_frame,
                 "view_only": True,
             }
@@ -934,111 +1002,156 @@ class ProgressDashboardServer:
         self.close()
 
 
-_DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-scale=1">
+_DASHBOARD_HTML = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pokémon Learning Observatory</title>
-<main id="observatory">
+</head><body>
+<main id="observatory" aria-label="Pokémon live learning dashboard">
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: #07100d; color: #eff8ee; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  #observatory { min-height: 100vh; padding: 24px; background: radial-gradient(circle at 15% 0%, #17342a 0, transparent 34rem), #07100d; }
-  .top { max-width: 1440px; margin: 0 auto 18px; display: flex; align-items: end; justify-content: space-between; gap: 16px; }
-  .eyebrow { color: #77e2a6; font: 700 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
-  h1 { margin: 4px 0 0; font-size: clamp(24px, 4vw, 42px); letter-spacing: -.04em; }
-  .live { display: flex; gap: 9px; align-items: center; color: #bcd0c4; font-size: 13px; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: #86938b; box-shadow: 0 0 0 4px #ffffff0a; }
-  .dot.running { background: #5af09a; box-shadow: 0 0 18px #5af09aaa; }
-  .dot.failed, .dot.blocked { background: #ff7a7a; }
-  .layout { max-width: 1440px; margin: auto; display: grid; grid-template-columns: minmax(420px, 1.2fr) minmax(400px, .8fr); gap: 18px; align-items: start; }
-  .panel { background: #0d1915ee; border: 1px solid #294338; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 70px #0008; }
-  .screen-panel { padding: 18px; }
-  .screen-shell { padding: 18px; border-radius: 22px 22px 42px 22px; background: linear-gradient(145deg, #b8bec0, #686f72); box-shadow: inset 0 0 0 1px #edf1f288, 0 12px 30px #0008; }
-  .screen-bezel { position: relative; aspect-ratio: 160 / 144; border-radius: 10px 10px 26px 10px; overflow: hidden; background: #111715; border: 14px solid #343c3e; }
-  #game-frame { width: 100%; height: 100%; object-fit: fill; image-rendering: pixelated; display: block; }
-  .frame-label { position: absolute; top: 8px; right: 9px; padding: 4px 7px; border-radius: 6px; background: #06100dcc; color: #77e2a6; font: 700 10px ui-monospace, monospace; letter-spacing: .1em; }
-  .stage { margin-top: 18px; }
-  .stage-row, .section-head, .metric-row, .party-top, .goal-row, .counter-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .stage strong { font-size: 18px; }
-  .muted { color: #93a79b; }
-  .message { margin: 7px 0 12px; color: #c9d9cf; line-height: 1.45; }
-  .bar { height: 8px; overflow: hidden; border-radius: 99px; background: #213229; }
-  .bar > i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #4fd58c, #baf268); transition: width .3s ease; }
-  .right { display: grid; gap: 18px; }
-  .section { padding: 17px 18px; }
-  .section h2 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
-  .view-only { color: #77e2a6; font: 700 10px ui-monospace, monospace; letter-spacing: .12em; }
-  .model-choice { margin: 13px 0 4px; font-size: 24px; font-weight: 750; letter-spacing: -.03em; }
-  .model-meta { color: #a9bcb0; font-size: 13px; }
-  .triplet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 14px; }
-  .metric { padding: 11px; border: 1px solid #263e34; border-radius: 11px; background: #0a1411; }
-  .metric b { display: block; font-size: 22px; margin-top: 4px; }
-  .metric span { color: #8da096; font-size: 11px; }
-  .counter { margin-top: 13px; }
-  .counter-row { font-size: 12px; margin-bottom: 5px; }
-  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 13px; }
-  .score { min-width: 0; padding: 10px; border-left: 2px solid #355647; background: #0a1411; }
-  .score span { display: block; color: #8da096; font-size: 10px; }
-  .score b { display: block; margin-top: 3px; font-size: 18px; }
-  .score-detail { margin-top: 10px; color: #8da096; font: 11px/1.5 ui-monospace, monospace; }
-  .components { display: grid; gap: 8px; margin-top: 13px; }
-  .component { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); grid-template-areas: "name name" "status samples" "score digest"; gap: 8px 14px; align-items: start; padding: 9px 0; border-top: 1px solid #22372e; font-size: 11px; }
-  .component:first-child { border-top: 0; }
-  .component > * { min-width: 0; overflow-wrap: anywhere; }
-  .component-name { grid-area: name; }
-  .component-name strong, .component-name span { display: block; }
-  .component-name span { margin-top: 3px; color: #82978a; line-height: 1.35; }
-  .component-status { grid-area: status; color: #77e2a6; text-transform: uppercase; letter-spacing: .08em; }
-  .component-stat { color: #b6c8bd; font-family: ui-monospace, monospace; }
-  .component-samples { grid-area: samples; }
-  .component-score { grid-area: score; }
-  .component-digest { grid-area: digest; color: #82978a; font-family: ui-monospace, monospace; text-align: right; }
-  .party { display: grid; gap: 9px; margin-top: 13px; }
-  .party-member { padding: 10px 11px; border: 1px solid #223a30; border-radius: 11px; background: #0a1411; }
-  .party-top strong { font-size: 13px; }
-  .party-top span { color: #9db0a4; font: 12px ui-monospace, monospace; }
-  .hp { height: 5px; margin-top: 8px; border-radius: 9px; background: #25352d; overflow: hidden; }
-  .hp i { display: block; height: 100%; background: #5ee69a; }
-  .goals { display: grid; gap: 8px; margin-top: 13px; }
-  .goal { display: grid; grid-template-columns: 128px 1fr 42px; gap: 8px; align-items: center; font-size: 12px; color: #aebfb5; }
-  .goal.selected { color: #f4ffe8; font-weight: 700; }
-  .goal.unavailable { opacity: .36; }
-  .goal .bar { height: 6px; }
-  .events { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; max-height: 150px; overflow: auto; }
-  .events li { padding-left: 13px; position: relative; color: #aebfb5; font-size: 12px; line-height: 1.4; }
-  .events li::before { content: ""; position: absolute; left: 0; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: #5bdc93; }
-  .work-card { margin-top: 13px; padding: 14px; border: 1px solid #29483a; border-radius: 13px; background: linear-gradient(135deg, #0a1712, #10241b); }
-  .work-headline { margin: 0; font-size: 18px; letter-spacing: -.02em; }
-  .work-detail { margin: 6px 0 12px; color: #b8cbbf; line-height: 1.45; font-size: 14px; }
-  .work-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
-  .work-step { padding: 10px; border-radius: 10px; background: #08120f; border: 1px solid #20382e; }
-  .work-step span { display: block; color: #83998b; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
-  .work-step b { display: block; margin-top: 5px; font-size: 13px; line-height: 1.35; }
-  .status-pill { padding: 5px 8px; border-radius: 99px; color: #b6c7bd; background: #22342c; font: 700 11px ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
-  .status-pill.working, .status-pill.testing { color: #07100d; background: #77e2a6; }
-  .status-pill.blocked { color: white; background: #b74343; }
-  .status-pill.complete { color: #07100d; background: #baf268; }
-  .mission { margin: 10px 0 0; color: #c8d9cf; font-size: 14px; line-height: 1.5; }
-  .legend { color: #83998b; font-size: 12px; line-height: 1.45; margin-top: 10px; }
-  @media (max-width: 920px) { #observatory { padding: 14px; } .layout { grid-template-columns: 1fr; } .screen-panel { padding: 12px; } }
-  @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 500px) { .component { grid-template-columns: 1fr; grid-template-areas: "name" "status" "samples" "score" "digest"; } .component-digest { text-align: left; } .triplet, .work-steps { grid-template-columns: 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
+:root { color-scheme:dark; --bg:#0b0d13; --panel:#121620; --line:#2b303d; --muted:#a1a9ba; --text:#f4f5f8; --accent:#ff815c; --lime:#c2f785; --mono:ui-monospace,SFMono-Regular,Menlo,monospace; }
+* { box-sizing:border-box; }
+[hidden] { display:none !important; }
+body { margin:0; color:var(--text); background:var(--bg); font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+#observatory { max-width:1640px; margin:auto; padding:26px 34px 48px; }
+.top { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:24px; padding-bottom:22px; border-bottom:1px solid var(--line); }
+.eyebrow { color:var(--accent); font:600 12px/1.5 var(--mono); letter-spacing:.13em; text-transform:uppercase; }
+h1 { margin:5px 0 0; font-size:clamp(22px,2.7vw,36px); font-weight:650; line-height:1.2; letter-spacing:-.045em; }
+h2 { margin:0; font-size:17px; font-weight:600; letter-spacing:-.02em; }
+.live { display:flex; align-items:center; flex-wrap:wrap; gap:10px; color:var(--muted); font:13px var(--mono); }
+.dot { width:8px; height:8px; background:var(--muted); border-radius:50%; }
+.dot.running { background:var(--lime); box-shadow:0 0 0 5px #c2f78512; }
+.dot.failed,.dot.blocked { background:var(--accent); }
+button { color:var(--text); background:#1b202d; border:1px solid #42495a; border-radius:6px; padding:9px 13px; font:500 14px/1.4 ui-sans-serif,system-ui,sans-serif; cursor:pointer; }
+button:hover { border-color:var(--accent); }
+button:focus-visible { outline:3px solid var(--lime); outline-offset:4px; }
+.telemetry { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid var(--line); border-radius:10px; background:#10141c; margin-bottom:22px; }
+.telemetry > div { padding:14px 20px; border-right:1px solid var(--line); }
+.telemetry > div:last-child { border-right:0; }
+.telemetry span { display:block; color:var(--muted); font:12px var(--mono); text-transform:uppercase; letter-spacing:.07em; }
+.telemetry b { display:block; margin-top:5px; font-size:21px; letter-spacing:-.03em; font-weight:550; }
+.telemetry .signal { color:var(--lime); }
+.layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr); grid-template-areas:"screen decision" "screen work" "party training" "goals stack" "events events" "mission mission"; gap:18px; align-items:start; }
+.right { display:contents; }
+.panel { min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.section { padding:22px; }
+.screen-panel { grid-area:screen; padding:20px; border-top:3px solid var(--accent); background:#10141b; }
+#decision-panel { grid-area:decision; border-top:3px solid var(--lime); }
+#work-panel { grid-area:work; }
+#collection-panel { grid-area:party; }
+#experiment-panel { grid-area:training; }
+#learning-components-panel { grid-area:stack; }
+#goals-panel { grid-area:goals; }
+#activity-panel { grid-area:events; }
+#mission-panel { grid-area:mission; background:transparent; border-color:var(--line); }
+#live-evaluation-panel { grid-column:1 / -1; }
+.screen-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:var(--muted); font:12px var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+.screen-heading b { color:var(--accent); font-weight:500; }
+.screen-shell { padding:18px; background:#080b10; border:1px solid #222734; border-radius:6px; }
+.screen-bezel { position:relative; width:min(100%,560px); aspect-ratio:160/144; margin:auto; overflow:hidden; background:#11171a; }
+#game-frame { display:block; width:100%; height:100%; object-fit:contain; image-rendering:pixelated; }
+.frame-label { position:absolute; bottom:12px; left:12px; padding:6px 9px; border-radius:3px; background:#080b11ed; color:var(--lime); font:600 12px var(--mono); letter-spacing:.07em; }
+.frame-empty { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center; background:#0b1019; border:1px dashed #3e4758; }
+.frame-empty .empty-number { font:500 clamp(46px,7vw,82px)/1 var(--mono); color:#354154; margin-bottom:22px; letter-spacing:-.09em; }
+.frame-empty strong { font-size:23px; letter-spacing:-.03em; }
+.frame-empty p { max-width:320px; color:var(--muted); font-size:15px; }
+.frame-empty small { color:var(--accent); font:12px var(--mono); letter-spacing:.07em; }
+.stage { padding:20px 2px 0; }
+.stage-row,.section-head,.metric-row,.party-top,.goal-row,.counter-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.stage strong { font-size:18px; line-height:1.35; }
+.muted { color:var(--muted); }
+.message { margin:10px 0 15px; color:#bec5d2; line-height:1.55; }
+.bar { height:5px; overflow:hidden; border-radius:2px; background:#2b303c; }
+.bar > i { display:block; height:100%; width:0; background:var(--lime); transition:width .25s ease; }
+.view-only { color:var(--muted); font:12px var(--mono); letter-spacing:.06em; }
+.model-choice { margin:18px 0 10px; font-size:clamp(22px,2.5vw,32px); line-height:1.18; font-weight:550; letter-spacing:-.045em; overflow-wrap:anywhere; }
+.model-meta { color:var(--muted); font:13px/1.6 var(--mono); }
+.triplet { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:20px; }
+.metric { min-width:0; border-top:1px solid var(--line); padding-top:12px; }
+.metric b { display:block; font:500 24px/1.4 var(--mono); margin-top:5px; letter-spacing:-.05em; }
+.metric span { color:var(--muted); font-size:13px; }
+.counter { margin-top:16px; }
+.counter-row { font-size:14px; margin-bottom:7px; }
+.score-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:16px; }
+.score { padding:12px; background:#0d1119; border-left:2px solid var(--accent); }
+.score span { display:block; color:var(--muted); font-size:13px; }
+.score b { display:block; margin-top:5px; font-size:22px; }
+.score-detail { margin-top:12px; color:var(--muted); font:13px/1.6 var(--mono); }
+.components { display:grid; gap:12px; margin-top:14px; }
+.component { display:grid; grid-template-columns:1fr 1fr; gap:10px 15px; grid-template-areas:"name name" "status samples" "score score" "digest digest"; padding:13px 0; border-top:1px solid var(--line); font-size:13px; }
+.component > * { min-width:0; overflow-wrap:anywhere; }
+.component-name { grid-area:name; }
+.component-name strong,.component-name span { display:block; }
+.component-name strong { font-size:16px; }
+.component-name span { margin-top:5px; color:var(--muted); }
+.component-status { grid-area:status; color:var(--lime); }
+.component-stat { color:#bdc6d5; font:13px/1.5 var(--mono); }
+.component-samples { grid-area:samples; }
+.component-score { grid-area:score; }
+.component-digest { grid-area:digest; color:var(--muted); font:12px var(--mono); }
+.party { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:18px; }
+.party-member { padding:13px; background:#0d1119; border:1px solid #252d3b; border-radius:6px; }
+.party-top { align-items:start; flex-direction:column; gap:5px; }
+.party-top strong { font-size:15px; }
+.party-top span { color:var(--muted); font:12px var(--mono); }
+.hp { height:5px; margin-top:12px; background:#2b303c; overflow:hidden; border-radius:2px; }
+.hp i { display:block; height:100%; background:var(--lime); }
+.goals { display:grid; gap:14px; margin-top:20px; }
+.goal { display:grid; grid-template-columns:142px 1fr 42px; align-items:center; gap:12px; color:var(--muted); font-size:14px; }
+.goal.selected { color:var(--lime); font-weight:650; }
+.goal.unavailable { opacity:.55; }
+.events { margin:18px 0 0; padding:0; list-style:none; display:grid; gap:0; max-height:290px; overflow:auto; counter-reset:steps; }
+.events li { padding:12px 12px 12px 48px; position:relative; color:#c5ccda; font-size:14px; border-top:1px solid #242b38; line-height:1.6; counter-increment:steps; }
+.events li::before { content:counter(steps,decimal-leading-zero); position:absolute; top:14px; left:8px; color:var(--accent); font:12px var(--mono); }
+.work-card { margin-top:15px; }
+.work-headline { margin:0; font-size:19px; font-weight:550; letter-spacing:-.025em; }
+.work-detail { color:var(--muted); font-size:15px; margin:9px 0 15px; line-height:1.55; }
+.work-steps { display:grid; gap:10px; margin-top:15px; }
+.work-step { padding-left:12px; border-left:2px solid #394356; }
+.work-step span { display:block; color:var(--muted); font:12px var(--mono); text-transform:uppercase; letter-spacing:.06em; }
+.work-step b { display:block; margin-top:4px; font-size:14px; font-weight:500; line-height:1.45; }
+.status-pill { background:#262c3a; color:#b6c4d7; padding:5px 8px; border-radius:4px; font:600 12px var(--mono); text-transform:uppercase; }
+.status-pill.working,.status-pill.testing { color:#101610; background:var(--lime); }
+.status-pill.blocked { color:#121012; background:var(--accent); }
+.status-pill.complete { color:var(--lime); background:#233128; }
+.mission { margin:12px 0 0; color:#bdc6d5; font-size:16px; }
+.legend { color:var(--muted); font-size:14px; margin-top:12px; line-height:1.55; }
+.fit-chart { margin-top:23px; padding-top:18px; border-top:1px solid var(--line); }
+.fit-chart h3 { margin:0 0 12px; font-size:15px; font-weight:550; }
+.fit-row { display:grid; grid-template-columns:52px 1fr 85px; align-items:center; gap:10px; margin:10px 0; font:12px var(--mono); color:var(--muted); }
+.fit-track { height:12px; background:#242b36; }
+.fit-track i { display:block; height:100%; background:var(--accent); }
+.fit-row.after .fit-track i { background:var(--lime); }
+.fit-note { color:var(--muted); font-size:13px; line-height:1.5; }
+.viewer-mode .layout { grid-template-areas:"screen decision" "screen work" "party training"; }
+.viewer-mode #learning-components-panel,.viewer-mode #goals-panel,.viewer-mode #activity-panel,.viewer-mode #mission-panel,.viewer-mode #live-evaluation-panel { display:none; }
+@media(min-width:1200px) { .party { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:950px) { #observatory { padding:18px; } .layout,.viewer-mode .layout { grid-template-columns:1fr; grid-template-areas:"screen" "decision" "work" "party" "training" "goals" "stack" "events" "mission"; } .screen-bezel { max-width:500px; } .top { align-items:flex-start; } .telemetry { grid-template-columns:1fr 1fr; } .telemetry > div:nth-child(2) { border-right:0; } .telemetry > div:nth-child(-n+2) { border-bottom:1px solid var(--line); } }
+@media(max-width:540px) { #observatory { padding:12px; } .top { flex-direction:column; gap:15px; } .section,.screen-panel { padding:16px; } .screen-shell { padding:8px; } .party,.triplet { grid-template-columns:1fr; } .goal { grid-template-columns:115px 1fr 40px; gap:8px; } .score-grid { grid-template-columns:1fr 1fr; } .telemetry > div { padding:12px; } .telemetry b { font-size:18px; } }
+@media(prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
 </style>
 <header class="top">
-  <div><div class="eyebrow" id="eyebrow">Transfer learning run</div><h1>Pokémon Learning Observatory</h1></div>
-  <div class="live"><span id="status-dot" class="dot"></span><span id="connection">Connecting</span><span>·</span><span id="game">Pokémon Crystal 1.1</span></div>
+  <div><div class="eyebrow" id="eyebrow">Red field lab / Living Pokédex project</div><h1>Pokémon Learning Observatory</h1></div>
+  <div class="live"><span id="status-dot" class="dot"></span><span id="connection">Connecting</span><span>·</span><span id="game">Waiting for session</span><button id="viewer-toggle" type="button" aria-pressed="false">Focus view</button></div>
 </header>
+<div class="telemetry" aria-label="Current evidence summary">
+<div><span>Model experience</span><b id="headline-samples">—</b></div>
+<div><span>Actor status</span><b class="signal" id="headline-actor">Waiting</b></div>
+<div><span>Game connection</span><b id="headline-game">Not connected</b></div>
+<div><span>Model scope</span><b id="headline-scope">Checking evidence</b></div>
+</div>
 <div class="layout">
-  <section class="panel screen-panel">
-    <div class="screen-shell"><div class="screen-bezel"><img id="game-frame" src="/frame.png" alt="Emulator frame"><span class="frame-label" id="frame-label">NO LIVE RUN</span></div></div>
+  <section class="panel screen-panel"><div class="screen-heading"><b>01 / Game feed</b><span>Read-only observer</span></div>
+    <div class="screen-shell"><div class="screen-bezel"><img id="game-frame" src="/frame.png" alt="Emulator frame"><div class="frame-empty" id="frame-empty"><span class="empty-number" aria-hidden="true">[ · · · ]</span><strong id="empty-heading">No live game connected</strong><p id="empty-detail">Saved learning results remain visible. This screen lights up only when an emulator publishes real frames.</p><small>NO SIMULATED ACTIVITY</small></div><span class="frame-label" id="frame-label">NO LIVE RUN</span></div></div>
     <div class="stage">
       <div class="stage-row"><strong id="stage">Waiting</strong><span class="muted" id="stage-percent">0%</span></div>
       <p class="message" id="message">Waiting for an authenticated emulator session.</p>
       <div class="bar"><i id="stage-bar"></i></div>
-      <div class="metric-row muted" style="font-size:12px;margin-top:10px"><span id="location">Location unavailable</span><span><span id="actions">0</span> actions · <span id="frames">0</span> frames</span></div>
+      <div class="metric-row muted" style="font-size:14px;margin-top:12px;flex-wrap:wrap"><span id="location">Location unavailable</span><span><span id="actions">0</span> actions · <span id="frames">0</span> frames</span></div>
     </div>
   </section>
   <div class="right">
-    <section class="panel section">
+    <section class="panel section" id="work-panel">
       <div class="section-head"><h2>Work happening now</h2><span class="status-pill" id="work-status">idle</span></div>
       <div class="work-card">
         <h3 class="work-headline" id="work-headline">No engineering session is active</h3>
@@ -1051,13 +1164,13 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
         </div>
       </div>
     </section>
-    <section class="panel section">
-      <div class="section-head"><h2>Mission and current boundary</h2><span class="view-only">RED FIRST</span></div>
+    <section class="panel section" id="mission-panel">
+      <div class="section-head"><h2>The mission</h2><span class="view-only">RED FIRST</span></div>
       <p class="mission">Build an agent that can complete Pokémon games and maintain a living Pokédex. The learned layer chooses portable semantic goals; deterministic skills retain movement, battle, capture, menus, verification and safety.</p>
-      <p class="legend">Current boundary: Red development only. Learned authority is shadow-only. Crystal transfer, sealed evaluation and full-game replay stay closed until fresh Red evidence supports promotion.</p>
+      <p class="legend">Authority is shown per model and per session. Training error is not an unseen gameplay score. Version exclusives, trades and event requirements remain explicit parts of the long-term collection goal.</p>
     </section>
-    <section class="panel section">
-      <div class="section-head"><h2>Current decision</h2><span class="view-only">VIEW ONLY</span></div>
+    <section class="panel section" id="decision-panel">
+      <div class="section-head"><h2>02 / Current decision</h2><span class="view-only">VIEW ONLY</span></div>
       <div class="model-choice" id="choice">Waiting for context</div>
       <div class="model-meta"><span id="candidate">Red frozen goal manager</span> · <span id="mode">waiting</span> · <span id="confidence">—</span></div>
       <div class="triplet">
@@ -1076,25 +1189,25 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
       </div>
       <div class="score-detail" id="evaluation-detail">Waiting for the first live decision.</div>
     </section>
-    <section class="panel section">
+    <section class="panel section" id="experiment-panel">
       <div class="section-head"><h2 id="experiment-heading">Transfer experiment</h2><span class="muted" id="phase">qualification</span></div>
-      <div id="experiment"></div>
+      <div id="experiment"></div><div class="fit-chart" id="fit-chart" hidden><h3>Training error / before &amp; after</h3><div class="fit-row"><span>Before</span><div class="fit-track"><i id="fit-before-bar"></i></div><span id="fit-before">—</span></div><div class="fit-row after"><span>After</span><div class="fit-track"><i id="fit-after-bar"></i></div><span id="fit-after">—</span></div><p class="fit-note" id="fit-note">In-sample calibration, not independent playing ability.</p></div>
     </section>
     <section class="panel section" id="learning-components-panel" hidden>
-      <div class="section-head"><h2>Learned stack</h2><span class="muted">held-out evidence</span></div>
+      <div class="section-head"><h2>Model evidence</h2><span class="muted">limits included</span></div>
       <div class="components" id="learning-components"></div>
     </section>
-    <section class="panel section">
-      <div class="section-head"><h2>Collection and party</h2><span class="muted" id="resources">0 balls · 0 free slots</span></div>
+    <section class="panel section" id="collection-panel">
+      <div class="section-head"><h2>03 / Collection and party</h2><span class="muted" id="resources">Not observed</span></div>
       <div class="triplet">
         <div class="metric"><span>Registered</span><b id="registered">0</b></div>
-        <div class="metric"><span>Living</span><b id="living">0</b></div>
+        <div class="metric"><span>Retained species</span><b id="living">0</b></div>
         <div class="metric"><span>Level 100</span><b id="level-cap">0</b></div>
       </div>
       <div class="party" id="party"><span class="muted">Party unavailable</span></div>
     </section>
-    <section class="panel section"><div class="section-head"><h2>Goal pressures</h2><span class="muted">identity-free model input</span></div><div class="goals" id="goals"><span class="muted">Waiting for semantic state</span></div></section>
-    <section class="panel section"><div class="section-head"><h2>Recent evidence</h2><span class="muted" id="speed">0×</span></div><ul class="events" id="events"></ul></section>
+    <section class="panel section" id="goals-panel"><div class="section-head"><h2>What matters next</h2><span class="muted">identity-free model input</span></div><div class="goals" id="goals"><span class="muted">Waiting for semantic state</span></div></section>
+    <section class="panel section" id="activity-panel"><div class="section-head"><h2>Session evidence</h2><span class="muted" id="speed">0×</span></div><ul class="events" id="events"></ul></section>
   </div>
 </div>
 <script>
@@ -1142,6 +1255,14 @@ function relativeTime(timestamp) {
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   return `${Math.floor(seconds / 3600)}h ago`;
 }
+function framePresentation(data) {
+  const signal = data.dashboard;
+  if (!signal.frame_ready) return {label:"NO LIVE RUN", connection:"No emulator"};
+  if (data.run_status !== "running") return {label:"LAST FRAME / SESSION ENDED", connection:"Session ended"};
+  if (signal.frame_age_seconds == null || signal.frame_age_seconds >= 3 || signal.snapshot_age_seconds >= 5)
+    return {label:"LAST FRAME / WAITING FOR UPDATE", connection:"Feed paused"};
+  return {label:"LIVE FRAME", connection:"Live emulator"};
+}
 function render(data) {
   safeText("game", data.game);
   safeText("connection", data.run_status);
@@ -1179,8 +1300,25 @@ function render(data) {
   }
   const componentPanel = el("learning-components-panel"); const components = el("learning-components");
   componentPanel.hidden = !data.learning_components.length; components.replaceChildren(...data.learning_components.map(componentRow));
-  safeText("registered", `${data.collection.registered}/${data.collection.target}`); safeText("living", data.collection.living); safeText("level-cap", data.collection.level_cap);
-  safeText("resources", `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots`);
+  const observed = data.collection.observed !== false;
+  safeText("registered", observed ? `${data.collection.registered}/${data.collection.target}` : "—");
+  safeText("living", observed ? data.collection.living : "—");
+  safeText("level-cap", observed ? data.collection.level_cap : "—");
+  safeText("resources", observed ? `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots` : "No live inventory observation");
+  const training = data.training;
+  const primary = data.learning_components[0];
+  safeText("headline-samples", primary ? `${fmt(primary.train_examples)} examples` : "Not reported");
+  safeText("headline-scope", primary ? primary.authority.replaceAll("_", " ") : data.model.mode.replaceAll("_", " "));
+  safeText("headline-actor", data.model.decisions && data.run_status === "running" ? data.model.mode.replaceAll("_", " ") : "No live choice");
+  el("fit-chart").hidden = !training;
+  if (training) {
+    const scale = Math.max(training.weighted_mse_before, training.weighted_mse_after, 1e-9);
+    safeText("fit-before", Number(training.weighted_mse_before).toFixed(6));
+    safeText("fit-after", Number(training.weighted_mse_after).toFixed(6));
+    el("fit-before-bar").style.width = pct(training.weighted_mse_before / scale);
+    el("fit-after-bar").style.width = pct(training.weighted_mse_after / scale);
+    safeText("fit-note", `${training.newly_collected} new examples + ${training.previously_unfitted} earlier unfitted. ${training.training_choice_changes} changed training-menu choices. In-sample calibration, not unseen gameplay ability.`);
+  }
   const party = el("party"); party.replaceChildren();
   if (!data.party.length) { const empty = document.createElement("span"); empty.className = "muted"; empty.textContent = "Party unavailable"; party.append(empty); }
   data.party.forEach(member => {
@@ -1198,17 +1336,30 @@ function render(data) {
   });
   const events = el("events"); events.replaceChildren(); data.events.slice().reverse().forEach(event => { const li = document.createElement("li"); li.textContent = event; events.append(li); });
   safeText("speed", `${Number(data.emulation_speed || 0).toFixed(1)}× emulation`);
-  safeText("frame-label", data.dashboard.frame_ready ? "LIVE FRAME" : "NO LIVE RUN");
+  const feed = framePresentation(data);
+  safeText("frame-label", feed.label); safeText("headline-game", feed.connection);
+  el("frame-empty").hidden = Boolean(data.dashboard.frame_ready);
   const frameVersion = Number(data.dashboard.frame_version);
   if (frameVersion !== lastFrame) { lastFrame = frameVersion; el("game-frame").src = `/frame.png?v=${frameVersion}`; }
 }
 async function refresh() {
-  try { const response = await fetch("/api/status", {cache:"no-store"}); if (!response.ok) throw new Error(); render(await response.json()); }
-  catch { safeText("connection", "disconnected"); el("status-dot").className = "dot failed"; }
+  try { const response = await fetch("/api/status", {cache:"no-store", signal:AbortSignal.timeout(4000)}); if (!response.ok) throw new Error(); render(await response.json()); }
+  catch {
+    safeText("connection", "disconnected"); el("status-dot").className = "dot failed";
+    safeText("frame-label", "CONNECTION LOST / LAST FRAME"); safeText("headline-game", "Disconnected");
+    safeText("headline-actor", "Not observable");
+  } finally { setTimeout(refresh, 500); }
 }
-refresh(); setInterval(refresh, 350);
+el("viewer-toggle").addEventListener("click", () => {
+  const enabled = document.body.classList.toggle("viewer-mode");
+  el("viewer-toggle").setAttribute("aria-pressed", String(enabled));
+  safeText("viewer-toggle", enabled ? "Full detail" : "Focus view");
+});
+refresh();
 </script>
 </main>
+</body>
+</html>
 """.encode()
 
 
@@ -1228,6 +1379,7 @@ __all__ = [
     "DashboardSnapshot",
     "DashboardState",
     "DashboardWorkState",
+    "DashboardTrainingState",
     "ProgressDashboardError",
     "ProgressDashboardServer",
     "encode_rgb_png",

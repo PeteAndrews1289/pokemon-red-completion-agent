@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon.red.bounded-player-spectator-qualification.v1",
+  "status": "focused_qualification_passed_publication_pending",
+  "source_bundle_sha256": "e6c169148e02b4f7ff764a6d940dc0b58556f5c3b72174821ba1cdfc5ae80675",
+  "verification": {
+    "focused_tests_passed": 205,
+    "end_of_suite_tests_passed": 553,
+    "test_groups_overlap": true,
+    "typed_source_files": 387,
+    "lint_passed": true,
+    "documentation_checks_passed": true,
+    "public_artifact_check_passed": true,
+    "javascript_syntax_passed": true,
+    "loopback_http_verified": true,
+    "browser_visual_audit_performed": false,
+    "pre_final_broad_regression": {
+      "passed": 6433,
+      "failed": 1,
+      "skipped": 1,
+      "expected_failures": 1,
+      "interrupted": true,
+      "finding": "unnecessarily_regenerated_frozen_navigation_registry",
+      "repair": "restored_historical_registry_bytes_without_changing_test_assertions",
+      "full_suite_pass_claimed": false
+    }
+  },
+  "implemented": [
+    "receipt_backed_training_projection",
+    "spectator_layout_and_focus_mode",
+    "loopback_only_live_relay_and_disconnect_fallback",
+    "frame_freshness_and_explicit_unknown_observations",
+    "same_model_training_chart_retention_during_live_play",
+    "optional_bounded_chain_after_first_progress",
+    "durable_choice_and_outcome_viewer_notifications",
+    "separate_model_safety_singleton_and_control_labels",
+    "final_metered_cost_without_required_last_video_frame"
+  ],
+  "current_model": {
+    "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+    "record_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+    "fitted_examples": 29,
+    "existing_player_loader_verified": true,
+    "authority": "shadow_only"
+  },
+  "session_effects": {
+    "real_game_model_predictions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "new_game_outcomes": 0,
+    "new_production_fits": 0,
+    "sealed_red_accesses": 0,
+    "crystal_executions": 0,
+    "full_game_replays": 0,
+    "authority_promotions": 0
+  },
+  "remaining": "Authenticate and connect the four frozen routed-provider development scenarios; preserve both pre-outcome commitments and complete denominator before successive model-chosen goals.",
+  "private_path_fields": 0,
+  "external_review_performed": false
+}

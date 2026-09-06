@@ -4,15 +4,21 @@
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md), the current
 [roadmap](model-first-roadmap.md), and the [recovery audit](audits/recovery-and-training-readiness-2026-09-06.md).
-PRs 227/228 are published but pending; main contains PR 226. The last campaign has ten durable
-terminals and five new settled rows. The authenticated corpus has 23 rows; the existing model
-used 18. No successor freeze, execution or fit is claimed.
+PRs through 231 are merged. The subsequent eight-lesson campaign and one actual model fit are
+complete: six factual new rows, two setup censors, and 29 total fitted examples with all 23 prior
+rows unchanged. Preserve all consumed trials. No independent result for the updated model exists.
 
-Codex's next session is the bounded recovery/admission repair, not a campaign launch. Claude's
-optional review lane is statistical/corpus integrity; Antigravity's is command interruption and
-claim ownership. Both remain advisory/read-only. No reviewer was consulted for this audit.
-Use the exact source heads and private recovery index documented in the root handoff. Preserve
-all terminal identities, the existing model, five unfitted examples and the proposed allocation.
+Codex owns the [spectator/bounded-play session](work-sessions/2026-09-06-bounded-play-and-spectator-dashboard.md).
+The redesigned viewer and optional short-chain mode are implemented; four frozen routed-provider
+development scenarios still need their exact setup/paired-execution connection. Do not mistake raw
+single-option saves for those conditioned questions or relax train-only access. The model format
+already loads through the existing player interface; no new learner is needed.
+
+Claude's optional review role is model/corpus identity, paired decision timing and claims of learned
+authority. Antigravity's optional role is player/viewer isolation, refreshed observations, failure
+retention and interrupted-job recovery. Both remain advisory/read-only; they do not need to repeat
+the full CI suite or redesign the roadmap. No reviewer was consulted in this session. Follow the
+root handoff and private operator resume index for exact source and artifact identities.
 
 All following handoffs are retained history; their “next” instructions are superseded.
 

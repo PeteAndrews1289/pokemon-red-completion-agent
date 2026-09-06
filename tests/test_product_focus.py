@@ -2194,68 +2194,32 @@ def test_tracked_public_evidence_reader_is_qualified_without_protected_effects()
 
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
-    snapshot = DASHBOARD["product_focus_dashboard_snapshot"](state)
-    public = snapshot.public_dict()
-
+    public = DASHBOARD["product_focus_dashboard_snapshot"](state).public_dict()
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(0.0)
     assert public["actions"] == 0
-    assert "supply validation before training" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {  # type: ignore[index]
-        "completed": 0,
-        "total": 1,
-    }
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 10}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["counter_labels"] == {  # type: ignore[index]
-        "zero_shot": "Action-free capacity gate",
-        "adaptation": "New train-only roots",
-        "sealed_test": "Fresh paired model/control roots",
-    }
-    assert public["experiment"]["predictions_committed"] is False  # type: ignore[index]
-    assert public["model"]["decisions"] == 5  # type: ignore[index]
+    assert public["stage_progress"] == 0
+    assert public["model"]["decisions"] == 0
+    assert public["model"]["teacher_queries"] == 0
+    assert public["model"]["fallbacks"] == 0
+    assert public["model"]["mode"] == "shadow"
+    assert public["collection"]["observed"] is False
+    assert public["training"]["samples_before"] == 18
+    assert public["training"]["samples_after"] == 29
+    assert public["training"]["newly_collected"] == 6
+    assert public["training"]["previously_unfitted"] == 5
+    assert public["training"]["setup_censors"] == 2
+    assert public["training"]["held_out_claim"] is False
+    assert public["experiment"]["predictions_committed"] is False
+    assert public["learning_components"][0]["validation_examples"] == 0
+    assert public["learning_components"][0]["model_sha256"] == (
+        "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a"
+    )
     encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
-    assert "Next model update" in encoded
-    assert "Five model-directed Red cases are terminal" in encoded
-    assert "acquisition failed at 99.55% predicted success" in encoded
-    assert "party development succeeded at 0.10%" in encoded
-    assert "Brier 0.397811" in encoded
-    assert "log loss 2.458979" in encoded
-    assert "living collection 13→14" in encoded
-    assert "registered 17→18" in encoded
-    assert "Composition Attempt 6/6" in encoded
-    assert "Verified Composition Episode 4/4" in encoded
-    assert "Development Episode 29/24" in encoded
-    assert "Action-free capacity gate" in encoded
-    assert "New train-only roots" in encoded
-    assert "Fresh paired model/control roots" in encoded
-    assert "semantic goal manager" in encoded
-    assert "five development cases are calibration only and cannot fit" in encoded
-    assert "4 acquisition" in encoded
-    assert "8 fresh paired roots" in encoded
-    assert "deterministic code keeps mechanics and safety" in encoded
-    assert "completion-ledger delta" in encoded
-    assert "authenticated snapshots" in encoded
-    assert "title-neutral semantic goals" in encoded
-    assert "teacher labels 0" in encoded
-    assert "Living-Pokédex option model" in encoded
-    assert '"train_examples": 18' in encoded
-    assert '"validation_examples": 5' in encoded
-    assert "Authority promotions 0" in encoded
-    assert "transfer results 0" in encoded
-    assert "logical atomic 0" in encoded
-    assert "Capacity passed" not in encoded
-    assert "private schedule freeze" not in encoded
-    assert "Unfitted powered causal" not in encoded
-    assert "Lineage-clustered causal curriculum" not in encoded
-    assert "Passed census" not in encoded
-    assert "schedule 35c00f38" not in encoded
-    assert "integration 8 outcomes" not in encoded
-    assert "actual Red feature rank 16" not in encoded
-    assert "bounded cluster weights" not in encoded
-    assert "random + cost-only + myopic" not in encoded
-    assert public["model"]["teacher_queries"] == 0  # type: ignore[index]
-    assert public["model"]["fallbacks"] == 0  # type: ignore[index]
+    assert "29-example living-Pokédex goal scorer" in encoded
+    assert "Historical cross-family ledger" in encoded
+    assert "supply validation before training" not in encoded
+    assert "10 untouched" not in encoded
+    assert "Brier 0.397811" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

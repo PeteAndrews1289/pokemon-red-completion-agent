@@ -5,6 +5,41 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 
+## Spectator view — September 6
+
+The current page uses a dark, high-contrast field-lab layout with a large pixel-accurate game area,
+six party cards, collection counters, model choice and score events, a session feed, and a compact
+before/after training chart. **Focus view** reduces secondary detail for a presentation; keyboard
+focus, small-screen layouts and reduced-motion preferences are supported.
+
+Training data comes from a SHA-256-bound public receipt referenced by
+`configs/dashboard-learning-evidence.json`. It currently shows **18 → 29 fitted examples**, six new
+outcomes, five earlier unfitted rows, two setup censors and one completed fit. The training-error
+chart is explicitly **training only**, not unseen accuracy. Future fits update this evidence
+reference rather than editing counts in the page. Unknown live party or collection data is shown
+as unavailable, not zero. Never use historical counts to pretend a game is currently running.
+
+The stable overview listens on loopback port **8768**. It polls only the fixed loopback live feed
+on **8769**, validates its public payload, rejects private paths/control fields/redirects, and
+returns to the saved overview when that producer ends. Frame age and snapshot age determine the
+live indicator. Current engineering work remains visible independently of game activity.
+
+For a prospectively admitted repeatable bounded-player episode, the existing command accepts
+`--dashboard-port 8769` and optional `--continue-after-progress --decision-limit 3`. The latter
+keeps an episode running after its first collection gain, subject to its existing budgets, safety,
+freshness and failure stops. It is not permission to reuse a consumed trial or bypass a frozen
+scenario's setup. This interface is implemented and ROM-free tested; the updated 29-example
+artifact has **not yet** completed its live three-choice episode.
+
+Live selections appear only after the durable choice record succeeds. The view distinguishes a
+model choice, deterministic safety/unsupported selection, forced singleton and deterministic
+comparison. Utility scores are not confidence probabilities. Party, HP and collection are from
+the **last verified decision boundary**; rendered frames can update between those observations.
+Viewer failures are reported and disable instrumentation without changing controller behavior.
+No ROMs, saves, model files or private paths are published; this is not a hosted public website.
+
+## Current engineering status
+
 The dashboard now separates **project evidence** from **current engineering work**. The top-left
 stage summarizes the active experimental gate and never implies that code editing is emulator
 training. The **Work happening now** card reports `idle`, `working`, `testing`, `waiting`, `blocked`
@@ -30,6 +65,10 @@ If it is absent the panel truthfully shows idle; if malformed it fails to a visi
 while the last safe project evidence remains intact. The dashboard remains loopback-only and
 view-only: `GET /`, `GET /api/status`, `GET /frame.png` and `GET /healthz` are the only useful
 routes, while write methods are rejected.
+
+## Historical display specifications
+
+The following checkpoints are retained narrative, not the current dashboard counts or next steps.
 
 The completed five-case rail is **RESUPPLY SUCCESS · ACQUIRE FAILURE · ACQUIRE SUCCESS · PARTY
 DEVELOPMENT SUCCESS · RESUPPLY SUCCESS**. Show **5/5 TERMINAL · 0 AVAILABLE · 0 INCOMPLETE · 0

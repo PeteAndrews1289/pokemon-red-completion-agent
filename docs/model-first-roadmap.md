@@ -1,5 +1,20 @@
 # Model-first development roadmap
 
+## Implementation checkpoint — September 6 spectator view and goal-chain control
+
+The local viewer now uses the saved 29-example fit receipt rather than stale hard-coded experiment
+counts. It provides a large game area, presentation focus mode, party/collection panels, ranked
+choice events, live/stale/disconnected labels and separate engineering status. The existing paired
+player can publish to it and can explicitly continue after the first progress signal. Focused
+verification covers 205 tests; this is engineering evidence, not another fit or live model result.
+
+The next exact seam is the four frozen **routed provider** scenarios: their setup and remote
+candidate routes must feed the existing selected-arm executor. Two underlying raw saves expose
+only a single local option, so handing them directly to the generic player changes the question.
+Keep the declared denominator and model/control pre-outcome commitments. No new learner, discarded
+setup, train-only guard relaxation, easier replacement roots or full teacher replay is justified.
+See the [current session handoff](work-sessions/2026-09-06-bounded-play-and-spectator-dashboard.md).
+
 ## Current checkpoint — September 6 real training and post-fit audit complete
 
 **The eight-lesson Red batch ran and the existing option model was fitted once.** It now includes
