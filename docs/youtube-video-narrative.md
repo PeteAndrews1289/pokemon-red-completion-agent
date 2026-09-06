@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 scene: the history survived, but readiness needed another look
+
+**Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.
+Show **23 AUTHENTICATED TRAIN ROWS · MODEL FIT ON 18 · 10/10 CAMPAIGN TERMINALS** beside an
+archive/recovery card. Then separate **19 REGRESSION TESTS PASSED** from **COMMAND RESTART AND
+READINESS GAPS FOUND**. Do not show an invented live game or new training curve.
+
+**Voiceover:** “The lost chat did not mean lost work. We recovered the published code and checked
+the saved lessons. But a passing component test was not enough: the new launcher could block its
+own recovery, and the dashboard could mistake a planned lesson for the action actually taken.
+The next step is to repair those boundaries and connect the real admission rules to our existing
+learner. Only then do we collect the next eight lessons.”
+
+End on **REPAIR → 8 LESSONS → SMALL REFIT → DESCRIPTIVE RED CHECK → MULTI-GOAL PLAY**.
+Keep **CRYSTAL DEFERRED · MULTI-GAME LIVING POKÉDEX STILL THE GOAL** visible. Earlier planned scenes
+remain historical concepts; they do not establish current readiness or completed functionality.
+
 ## Planned scene: spend four exam cards to build a better classroom
 
 **Visual:** Show ten unopened Red cards. Move four into **TRAIN—EVALUATION STATUS FORFEITED**, four

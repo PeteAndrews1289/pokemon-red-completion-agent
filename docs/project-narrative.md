@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: preserve the work, then test the boundary between components
+
+A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still
+published. The private readers authenticated 23 causal train examples, all ten latest setup
+terminals and the existing model trained on 18 examples. We archived the code history, private
+store, claim ledger and an older untracked reviewer patch without rewriting prior outcomes.
+
+Nineteen focused tests passed, yet the audit found a gap between component correctness and the
+real command: the core runner could recover, but its new launcher rejected already-reserved
+roots before reaching recovery. The dashboard also counted intended lesson types rather than
+factual actions, and the existing fitter lacked the successor's campaign-level admission binding.
+These are open engineering findings, not fixed capabilities or new training results.
+
+We corrected a second problem in the process itself: old handoffs kept calling different plans
+“active.” One current roadmap now supersedes that preserved history. The next work is a bounded
+repair, eight varied lessons, one existing-scorer update and a descriptive four-root Red check.
+Useful multi-goal collection behavior comes next; cross-game living-Pokédex competence remains
+the destination. This audit produced no model authority, new fit or Crystal result.
+
+Earlier narrative entries below describe the understanding at their date. For execution readiness,
+use [the current audit](audits/recovery-and-training-readiness-2026-09-06.md), not an older plan.
+
 ## September 5: we chose a smaller exam to reach a real lesson sooner
 
 After the two-root campaign failed its diversity test, the fastest clean-power answer would have

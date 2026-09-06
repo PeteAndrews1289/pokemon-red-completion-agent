@@ -1,6 +1,38 @@
 # Handoff
 
-## In-progress successor: the diverse Red classroom now has a strict train consumer
+## Resume here — September 6 recovery audit
+
+Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Follow the top of
+[the roadmap](docs/model-first-roadmap.md) and the
+[recovery audit](docs/audits/recovery-and-training-readiness-2026-09-06.md).
+
+Verified source is preserved through PR 228 (`40c847c6`); PR 226 is merged at remote main
+`27432fd9`, while PR 227 (`cfac33eb`) and PR 228 remain pending. Refresh GitHub before merging;
+do not rely on a local branch named main or a generic project shortcut. This audit is on
+`codex/recovery-audit-20260906`, based on PR 228; retain it when integrating the stack.
+
+The previous ten-slot campaign is terminal, not interrupted: 5 settled train rows, 5 setup
+censors, no targeted fit. Production readers authenticate 23 total causal train rows, all ten
+setup terminals and the existing eighteen-example immutable model. All refs/detached heads were
+bundled; the active private store, fixed-account claim ledger and the one pre-existing untracked
+reviewer patch were archived. Exact private locations/hashes are in the local recovery index;
+never publish that index or restore an old claim ledger over a newer live one.
+
+Next: repair same-campaign command recovery, factual-kind/complete-denominator readiness, and
+schedule/current-prior admission to the existing fitter. Nineteen focused tests pass, but two
+ROM-free probes expose the command and dashboard gaps. Neither gap is fixed by this audit.
+Only after the repair is qualified should the prospective 4/4/2 bank be frozen/preflighted and
+eight new lessons collected. No new root, cartridge input, teacher, prediction, fit, sealed Red,
+Crystal or authority promotion occurred in this audit. Preserve all five valid lessons;
+never rerun the old campaign or label the four-root paired check statistically powered.
+
+Everything below is historical, including older “latest” and “active” headings. Those entries are
+preserved as evidence, not competing next-step instructions.
+
+## Historical checkpoints — superseded
+
+## Historical successor: the diverse Red classroom now has a strict train consumer
 
 The faster post-campaign route is implemented but has not been executed. It explicitly
 retires four still-unopened Red development roots into training before any outcome is read. Those
@@ -31,7 +63,7 @@ publish this consumer after PR 227, run a zero-effect preflight from green exact
 private retirement once, and only then collect the eight train outcomes. No root has been retired,
 no outcome has been opened, and no model has been fitted by this successor work.
 
-## Latest checkpoint: the first targeted campaign ran; root confounding blocked the fit
+## Historical checkpoint: the first targeted campaign ran; root confounding blocked the fit
 
 Published main `57a2479aea0b6668e834aecfdca156c9dff68b20` passed exact-main GitHub CI
 `33997530000/1`. Its action-free preflight reported ten train slots and zero controller actions,
@@ -61,7 +93,7 @@ schedule that passes both arithmetic capacity and diversity; collect train outco
 only if the settled/kind thresholds pass. This is genuine targeted outcome collection, not yet a
 new fitted model, autonomous Red play, Crystal transfer, or living-Pokédex completion.
 
-## Latest checkpoint: the reset-aware train runner is implemented; private freeze is pending
+## Historical checkpoint: the reset-aware train runner is implemented; private freeze is pending
 
 The action-free schedule freezer and capacity result are published on PR 224. Its first complete
 GitHub run passed 6,812 tests and failed only one stale strategic-navigation golden identity; the
@@ -95,7 +127,7 @@ eight settled rows including three acquisition and three party-development rows;
 open the eight paired development roots for model-versus-deterministic control. This produces the
 first targeted strategic update. It is not yet an autonomous full-game player or a Crystal transfer.
 
-## Latest checkpoint: repeatable Red training capacity is ready without spending the exam
+## Historical checkpoint: repeatable Red training capacity is ready without spending the exam
 
 The fresh-only result below was correct but applied an evaluation rule to ordinary training. The
 project now explicitly separates the two: authenticated train states may be reset under a bounded
@@ -133,7 +165,7 @@ That result originally pointed toward eight new clean-power worlds. The repeatab
 reorientation above supersedes that expensive next step while preserving the result as evidence of
 fresh-only scarcity. See the [fresh-only capacity result](docs/evidence/red-living-dex-targeted-update-capacity-result-2026-09-05.json).
 
-## Latest checkpoint: five-case calibration quantified; next gate is targeted training supply
+## Historical checkpoint: five-case calibration quantified; next gate is targeted training supply
 
 The five-case aggregate is reproducible from the two tracked public outcome receipts with no
 private access, emulator, new prediction, teacher or fit. The shadow model's four successes in five
@@ -168,7 +200,7 @@ the latest update. Its ignored `.dashboard-status/product-focus.json` record con
 path-free descriptive text and counters. The server reloads both focus and work state every second,
 and still exposes GET-only observer routes with zero controller endpoints.
 
-## Latest checkpoint: all five bounded Red development cases are terminal
+## Historical checkpoint: all five bounded Red development cases are terminal
 
 Published main `d0e06af37589f0583c6232f8816b22b906d6f2c9` passed exact-main CI
 `33969161241/1`. The three supplemental contexts then executed in fixed order under the exact
@@ -196,7 +228,7 @@ plus a separately lineage-disjoint Red comparison against deterministic completi
 fit these development outcomes, manufacture independence from them, patch one route/species, invoke
 a teacher, open Crystal or start a full replay.
 
-## Latest checkpoint: supplemental runtime packaging mismatch is repaired locally
+## Historical checkpoint: supplemental runtime packaging mismatch is repaired locally
 
 The failure-reason repair merged as main `3d443e7382be329c80501a3dc23c03192d64b0bd` and exact-main
 CI `33964453122/1` passed. The next fixed-order launch then stopped at
@@ -222,7 +254,7 @@ only the first remaining case with the supplemental reviewed closure. Stop at on
 and audit calibration, ledger progress, action/frame cost and the typed component reason. Do not
 refreeze the plan, fit on development, invoke a teacher, open Crystal or run a full replay.
 
-## Latest checkpoint: two real choices retained; diagnose acquisition failures before case three
+## Historical checkpoint: two real choices retained; diagnose acquisition failures before case three
 
 Exact main `31e0d92588640416bfc656f1125707807b43898e` passed CI `33959029027/1`,
 reopened all five development cases, and executed the first two in fixed order. The immutable
@@ -252,7 +284,7 @@ and all four registry reproductions are green. The real action-free inventory re
 inputs and reported **2 retained terminals · 3 available claims · 0 incomplete claims**, with every
 protected effect at zero.
 
-## Latest checkpoint: first live launch preserved all five cases; runtime-stage repair is local
+## Historical checkpoint: first live launch preserved all five cases; runtime-stage repair is local
 
 The first invocation from exact main `21bc499409f3fc961576cae03fbfc1085dbb08ff` and green CI
 `33953858337/1` stopped before gameplay. It recorded zero claims, predictions, controller actions,
@@ -278,7 +310,7 @@ terminal. The earlier zero-effect invocation did not consume a case; the next la
 published implementation, not a replay after controller input. Never fit on development, invoke a
 teacher, open Crystal or run a full replay.
 
-## Latest checkpoint: bounded live runner is locally qualified, not yet executed
+## Historical checkpoint: bounded live runner is locally qualified, not yet executed
 
 The repeatable Red development runner is implemented around the five authenticated inputs and the
 immutable 18-example title-neutral option model. One invocation can address only the first
@@ -300,7 +332,7 @@ authority change occurred. Publish this branch, require green pull-request and e
 reorient once against the private inputs. Execute only the first fixed-order eligible development
 case and stop at its first retained terminal result. Never fit on development or open Crystal.
 
-## Latest checkpoint: five real inputs are ready; synthetic resolver rehearsal passes
+## Historical checkpoint: five real inputs are ready; synthetic resolver rehearsal passes
 
 The new repeatable development readiness command ran from the internal-disk checkout with the
 private corpus on T7. In 3.22 seconds it reopened the immutable 18-example train-only model and all
@@ -322,7 +354,7 @@ runtime, claim before input, enforce hard action/frame limits, retain setup cens
 ledger outcomes, and expose no teacher fallback. Use a fixed prospective case order; stop after the
 first terminal live case and reorient. Never fit on these development outcomes.
 
-## Latest checkpoint: final strict preflight consumed by storage-boundary rejection
+## Historical checkpoint: final strict preflight consumed by storage-boundary rejection
 
 PR 216 merged as exact main `3a849a12288d38d489f5bd95faa1c5598cde48fd`; main CI
 `33943983942/1` passed the complete suite in 19 minutes 1 second. The one final canonical-locale
@@ -344,7 +376,7 @@ zero-effect five-root readiness check with explicit storage diagnostics, then re
 production resolver synthetically. Reorient before the first controller-capable development
 choice. Preserve deterministic safety and never fit on development outcomes.
 
-## Latest checkpoint: strict V2 invocation rejected before source admission
+## Historical checkpoint: strict V2 invocation rejected before source admission
 
 The strict successor merged as exact main `90b90d2205535e4a3ed294b522331f0c41dccc27` and exact-main
 CI `33939561868/1` passed in 26 minutes 4 seconds. Its exact 1,477-file production dependency
@@ -365,7 +397,7 @@ invoke it once under `LANG=en_US.UTF-8` and `LC_ALL=en_US.UTF-8`, which reproduc
 `utf8_mode=0`. If that successor fails, end the bootstrap lane rather than add another wrapper or
 retry. A success permits only production-resolver rehearsal, not gameplay authority or Crystal.
 
-## Latest checkpoint: V1 preflight falsified its command bootstrap; strict successor in progress
+## Historical checkpoint: V1 preflight falsified its command bootstrap; strict successor in progress
 
 PR 214 merged as exact main `a4d7c5a72adb59b24c0871589e4602236b377c56`; PR CI
 `33935227320/1` and main CI `33936419853/1` passed. The one V1 five-root preflight then failed
@@ -383,7 +415,7 @@ finder, and post-preflight source/runtime checks. Preserve the historical train 
 byte-for-byte. Qualify, publish and require new exact-main CI before one successor zero-effect
 preflight. Stop again on any mismatch or nonzero effect; no gameplay is authorized by this repair.
 
-## Latest checkpoint: the exact five-root command is locally qualified
+## Historical checkpoint: the exact five-root command is locally qualified
 
 The dedicated source-authenticated command now binds the complete eighteen-example train-only model record to exactly five
 development cases: historical plan ordinals 10 and 11 plus supplement ordinals 0, 1 and 2. The

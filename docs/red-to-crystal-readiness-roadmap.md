@@ -1,6 +1,20 @@
 # Red-to-Crystal readiness roadmap
 
-Status: active mission-level execution plan as of 2026-08-31, adopted after independent Claude and
+## September 6 orientation
+
+The long-term destination and title-neutral architecture below remain in force. The immediate
+sequence is now the [current model-first roadmap](model-first-roadmap.md), governed by
+[ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md). The
+[recovery audit](audits/recovery-and-training-readiness-2026-09-06.md) preserved source through
+PR 228, authenticated 23 causal train rows and the existing eighteen-example option model, and
+identified command-recovery/readiness/fitter-admission repairs before the next eight lessons.
+
+The prospective 4/4/2 bank is an engineering training/check allocation, not a powered transfer
+exam. After the next small fit, demonstrate useful bounded multi-goal Red collection and recovery
+before porting the adapter to Crystal. Keep the shared state, action, dependency and collection
+interfaces portable while Red improves. Do not reopen older supply campaigns from this document.
+
+Historical adoption: mission-level plan as of 2026-08-31, adopted after independent Claude and
 Antigravity review and Codex adjudication. Read
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), and the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md) first. The active product state still controls

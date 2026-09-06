@@ -1,5 +1,23 @@
 # Current agent handoffs
 
+## Resume checkpoint — September 6
+
+Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md), the current
+[roadmap](model-first-roadmap.md), and the [recovery audit](audits/recovery-and-training-readiness-2026-09-06.md).
+PRs 227/228 are published but pending; main contains PR 226. The last campaign has ten durable
+terminals and five new settled rows. The authenticated corpus has 23 rows; the existing model
+used 18. No successor freeze, execution or fit is claimed.
+
+Codex's next session is the bounded recovery/admission repair, not a campaign launch. Claude's
+optional review lane is statistical/corpus integrity; Antigravity's is command interruption and
+claim ownership. Both remain advisory/read-only. No reviewer was consulted for this audit.
+Use the exact source heads and private recovery index documented in the root handoff. Preserve
+all terminal identities, the existing model, five unfitted examples and the proposed allocation.
+
+All following handoffs are retained history; their “next” instructions are superseded.
+
+## Historical handoffs
+
 ## Codex failure-diagnostics session — publish before consuming case three
 
 Two live Red development cases from exact main `31e0d925` / CI `33959029027/1` are terminal. The
