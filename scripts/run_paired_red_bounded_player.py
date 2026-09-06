@@ -63,13 +63,15 @@ from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
 )
 from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
     LivingDexGoalModelRecord,
-    load_living_dex_goal_model_record,
 )
 from pokemon_red_completion.living_dex_goal_policy import (  # noqa: E402
     LivingDexGoalShadowPolicy,
 )
 from pokemon_red_completion.living_dex_paired_development import (  # noqa: E402
     private_failure_diagnostic,
+)
+from pokemon_red_completion.living_dex_player_exploration import (  # noqa: E402
+    ExploringLivingDexGoalPolicy,
 )
 from pokemon_red_completion.multi_goal_calibration_model import (  # noqa: E402
     MultiGoalCalibrationModel,
@@ -114,6 +116,17 @@ from pokemon_red_completion.red_player_checkpoint import (  # noqa: E402
     checkpoint_record_id,
     publish_red_player_checkpoint,
 )
+from pokemon_red_completion.red_player_model import (  # noqa: E402
+    RedPlayerModelRecord,
+)
+from pokemon_red_completion.red_player_model import (  # noqa: E402
+    load_player_goal_model_record as load_living_dex_goal_model_record,
+)
+from pokemon_red_completion.red_player_training import RedPlayerTrainingTrajectory  # noqa: E402
+from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
+    RedPlayerTrainingPlan,
+    declare_red_player_training,
+)
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
 from pokemon_red_completion.red_trajectory import (  # noqa: E402
     PokemonRedObservationEncoder,
@@ -154,7 +167,7 @@ class _Readiness:
     profile: RedGoalContextProfile
     challenger_arm_id: str
     legacy_model: GoalManagerLinearModel | None
-    causal_record: LivingDexGoalModelRecord | None
+    causal_record: LivingDexGoalModelRecord | RedPlayerModelRecord | None
     calibration_record: MultiGoalCalibrationModel | None
     model_file_sha256: str
     model_sha256: str
@@ -167,6 +180,8 @@ class _Readiness:
     context_origin: str = "unspecified"
     routed_resource_goals: bool = False
     save_terminal_checkpoints: bool = False
+    quote_resource_costs: bool = False
+    training_plan: RedPlayerTrainingPlan | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -217,13 +232,16 @@ class _LiveObserver:
     starting_observation: GoalManagerCompositionObservation | None = None
     viewer: BoundedPlayerDashboard | None = None
     route_world: StrategicScenarioRouteWorld | None = None
+    quote_resource_costs: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
             self.meter.begin_decision_window()
         before = self.meter.checkpoint()
         deferred = _DeferredActionExecutor(self.actions)
-        bridge = _player_observer(self.runtime, CountingExecutor(deferred), self.route_world)
+        bridge = _player_observer(
+            self.runtime, CountingExecutor(deferred), self.route_world, self.quote_resource_costs
+        )
         observation = bridge()
         if self.meter.checkpoint() != before or deferred.attempted_while_disabled:
             raise PairedRedBoundedPlayerRunError("action_free_observation")
@@ -240,8 +258,15 @@ def _player_observer(
     runtime: RedGoalContextRuntime,
     actions: CountingExecutor,
     world: StrategicScenarioRouteWorld | None,
+    quote_resource_costs: bool = False,
 ) -> RedBoundedPlayerObserver:
-    router = None if world is None else RedResourceGoalRouter(runtime, actions, world)
+    router = (
+        None
+        if world is None
+        else RedResourceGoalRouter(
+            runtime, actions, world, quote_resource_costs=quote_resource_costs
+        )
+    )
     return RedBoundedPlayerObserver(
         runtime=runtime,
         actions=actions,
@@ -298,6 +323,14 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pair-id", required=True)
     parser.add_argument(
+        "--train-player",
+        action="store_true",
+        help="single-arm prospective training; no comparison claim",
+    )
+    parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument("--training-catalog", type=Path, default=None)
+    parser.add_argument("--expected-training-catalog-sha256", default=None)
+    parser.add_argument(
         "--context-origin",
         choices=("training", "development", "unspecified"),
         default="unspecified",
@@ -315,6 +348,11 @@ def _parser() -> argparse.ArgumentParser:
         "--routed-resource-goals",
         action="store_true",
         help="opt in to fresh walking routes to declared capture and supply destinations",
+    )
+    parser.add_argument(
+        "--quote-resource-costs",
+        action="store_true",
+        help="opt in to known-money/reserve scoring without changing old model features or labels",
     )
     parser.add_argument(
         "--challenger",
@@ -440,6 +478,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     routed_resource_goals = getattr(args, "routed_resource_goals", False)
     if type(routed_resource_goals) is not bool:
         raise PairedRedBoundedPlayerRunError("routed_resource_goals")
+    quote_resource_costs = getattr(args, "quote_resource_costs", False)
+    if type(quote_resource_costs) is not bool or (
+        quote_resource_costs and (not routed_resource_goals or args.challenger != CAUSAL_ARM_ID)
+    ):
+        raise PairedRedBoundedPlayerRunError("quote_resource_costs")
     save_terminal_checkpoints = getattr(args, "save_terminal_checkpoints", False)
     if type(save_terminal_checkpoints) is not bool:
         raise PairedRedBoundedPlayerRunError("save_terminal_checkpoints")
@@ -476,7 +519,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     )
     model_file_sha256 = _sha256(model_path)
     legacy_model: GoalManagerLinearModel | None = None
-    causal_record: LivingDexGoalModelRecord | None = None
+    causal_record: LivingDexGoalModelRecord | RedPlayerModelRecord | None = None
     calibration_record: MultiGoalCalibrationModel | None = None
     extra_protected_paths: tuple[Path, ...] = ()
     if args.challenger == LEARNED_ARM_ID:
@@ -523,6 +566,37 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         repository_root=PROJECT_ROOT,
         allow_same_device=True,
     )
+    training_plan = None
+    bundle = working_source_bundle_sha256(PROJECT_ROOT)
+    if getattr(args, "train_player", False):
+        if (
+            context_origin != "training"
+            or not quote_resource_costs
+            or not isinstance(args.training_catalog, Path)
+        ):
+            raise PairedRedBoundedPlayerRunError("training_mode_arguments")
+        catalog_path = _regular_external(
+            args.training_catalog, subject="training_catalog", rom_path=rom_path
+        )
+        training_plan = declare_red_player_training(
+            repository_root=PROJECT_ROOT,
+            catalog_path=catalog_path,
+            expected_catalog_sha256=args.expected_training_catalog_sha256,
+            capture=capture,
+            profile_sha256=profile.profile_sha256,
+            model_sha256=model_sha256,
+            source_commit=source.git_commit,
+            source_bundle_sha256=bundle,
+            episode_id=_episode_id(args.pair_id, args.challenger),
+            seed=args.training_seed,
+            decision_limit=args.decision_limit,
+        )
+        extra_protected_paths = (*extra_protected_paths, catalog_path)
+    elif any(
+        getattr(args, name, None) is not None
+        for name in ("training_seed", "training_catalog", "expected_training_catalog_sha256")
+    ):
+        raise PairedRedBoundedPlayerRunError("training_mode_arguments")
     for arm_id in (args.challenger, BASELINE_ARM_ID):
         episode_id = _episode_id(args.pair_id, arm_id)
         if private_root.inspect_episode_state(episode_id).status != "absent":
@@ -530,9 +604,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     return _Readiness(
         pair_id=args.pair_id,
         routed_resource_goals=routed_resource_goals,
+        quote_resource_costs=quote_resource_costs,
+        training_plan=training_plan,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
-        source_bundle_sha256=working_source_bundle_sha256(PROJECT_ROOT),
+        source_bundle_sha256=bundle,
         rom_path=rom_path,
         rom_sha256=rom.sha256,
         capture=capture,
@@ -578,11 +654,43 @@ def _context_scope(readiness: _Readiness) -> dict[str, object]:
     return {
         "context_origin": readiness.context_origin,
         "evidence_scope": (
-            "training_context_integration_only"
+            "prospective_correlated_training"
+            if readiness.training_plan is not None
+            else "training_context_integration_only"
             if readiness.context_origin == "training"
             else "descriptive_development_only"
         ),
         "independent_generalization_claim": False,
+    }
+
+
+def _training_header(readiness: _Readiness, arm_id: str) -> dict[str, object]:
+    plan = readiness.training_plan
+    if plan is None:
+        return {}
+    if arm_id != CAUSAL_ARM_ID:
+        raise PairedRedBoundedPlayerRunError("training_actor")
+    return {
+        "player_training_plan": dict(plan.document),
+        "player_training_plan_sha256": plan.plan_sha256,
+        "policy": {"actor": arm_id, "policy_id": _policy_id(readiness, arm_id)},
+        "split": {"root_lineage_id": plan.document["root_lineage_id"], "partition": "train"},
+        "goal_manager": {
+            "collection_id": readiness.pair_id,
+            "assignment_id": f"{readiness.pair_id}-{arm_id}",
+            "source_commit": readiness.source_commit,
+            **{
+                key: plan.document[key]
+                for key in (
+                    "context_catalog_sha256",
+                    "context_id",
+                    "binding_manifest_sha256",
+                    "state_sha256",
+                    "envelope_sha256",
+                )
+            },
+        },
+        "binding_manifest_scope": "original_catalog_origin_only; current profile separately bound",
     }
 
 
@@ -602,6 +710,11 @@ def _challenger_authority(readiness: _Readiness) -> GoalDecisionAuthority:
             or readiness.calibration_record is not None
         ):
             raise PairedRedBoundedPlayerRunError("challenger_model_identity")
+        if readiness.training_plan is not None:
+            return ExploringLivingDexGoalPolicy(
+                readiness.causal_record.model,
+                seed=cast(int, readiness.training_plan.document["seed"]),
+            )
         return LivingDexGoalShadowPolicy(readiness.causal_record.model)
     if readiness.challenger_arm_id == CALIBRATION_ARM_ID:
         if (
@@ -622,7 +735,14 @@ def _policy_id(readiness: _Readiness, arm_id: str) -> str:
     if arm_id == LEARNED_ARM_ID:
         return f"goal-manager-{readiness.model_sha256[:16]}"
     if arm_id == CAUSAL_ARM_ID:
-        return f"living-dex-goal-{readiness.model_sha256[:16]}"
+        suffix = (
+            "-exploration-economics-v1"
+            if readiness.training_plan is not None
+            else "-economics-v1"
+            if readiness.quote_resource_costs
+            else ""
+        )
+        return f"living-dex-goal-{readiness.model_sha256[:16]}{suffix}"
     if arm_id == CALIBRATION_ARM_ID:
         return f"calibration-goal-{readiness.model_sha256[:16]}"
     raise PairedRedBoundedPlayerRunError("challenger_identity")
@@ -662,7 +782,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
         )
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
         result = preflight_red_bounded_player(
-            observe=_player_observer(runtime, actions, world),
+            observe=_player_observer(runtime, actions, world, readiness.quote_resource_costs),
             budget_meter=meter,
             assignment_id=readiness.pair_id,
             authorities=(
@@ -720,6 +840,7 @@ def _run_arm(
         sink.write_episode_header(
             metadata={
                 **_context_scope(readiness),
+                **_training_header(readiness, arm_id),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
                 "arm_id": arm_id,
@@ -732,6 +853,7 @@ def _run_arm(
                 "model_sha256": readiness.model_sha256,
                 "continue_after_progress": readiness.continue_after_progress,
                 "routed_resource_goals": readiness.routed_resource_goals,
+                "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
@@ -782,17 +904,36 @@ def _run_arm(
                 meter=meter,
                 viewer=viewer,
                 route_world=_route_world(readiness),
+                quote_resource_costs=readiness.quote_resource_costs,
             )
-            trajectory = ViewerGoalTrajectory(
+            trajectory_class = (
+                ViewerGoalTrajectory
+                if readiness.training_plan is None
+                else RedPlayerTrainingTrajectory
+            )
+            training_kwargs: dict[str, Any] = (
+                {}
+                if readiness.training_plan is None
+                else {
+                    "observe_training": runtime.adapter.observe,
+                    "training_meter": meter,
+                    "training_plan_sha256": readiness.training_plan.plan_sha256,
+                    "maximum_actions": limits.max_actions_per_decision,
+                    "maximum_frames": limits.max_frames_per_decision,
+                }
+            )
+            trajectory = trajectory_class(
                 episode_id=episode_id,
-                root_lineage_id=canonical_sha256(
+                root_lineage_id=cast(str, readiness.training_plan.document["root_lineage_id"])
+                if readiness.training_plan is not None
+                else canonical_sha256(
                     {
                         "schema": "pokemon.red.paired-bounded-player-root.v1",
                         "state_sha256": readiness.capture.state_sha256,
                         "envelope_sha256": readiness.capture.envelope_sha256,
                     }
                 ),
-                partition="development",
+                partition="train" if readiness.training_plan is not None else "development",
                 environment_id=GAME_ID,
                 actor=arm_id,
                 policy_id=_policy_id(readiness, arm_id),
@@ -806,6 +947,7 @@ def _run_arm(
                 viewer=viewer,
                 displayed_authority=authority,
                 learned_actor=arm_id != BASELINE_ARM_ID,
+                **training_kwargs,
             )
             component_failures = 0
 
@@ -969,6 +1111,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
     preflight = _action_free_preflight(readiness)
     challenger_authority = _challenger_authority(readiness)
+    if readiness.training_plan is not None:
+        readiness.private_root.publish_sealed_record(
+            f"rp-plan-{readiness.training_plan.plan_sha256}",
+            kind="red_player_training_plan",
+            record=dict(readiness.training_plan.document),
+        )
     with ExitStack() as resources:
         viewer = None
         if readiness.dashboard_port is not None:
@@ -987,17 +1135,28 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             authority=challenger_authority,
             viewer=viewer,
         )
-        baseline = _run_arm(
-            readiness,
-            arm_id=BASELINE_ARM_ID,
-            authority=CompletionFirstGoalTeacher(),
-            viewer=viewer,
-        )
-    comparison: PairedBoundedPlayerComparison = compare_paired_bounded_player_arms(
-        pair_id=readiness.pair_id,
-        learned=learned,
-        baseline=baseline,
-    )
+        comparison_document: dict[str, object]
+        if readiness.training_plan is None:
+            baseline = _run_arm(
+                readiness,
+                arm_id=BASELINE_ARM_ID,
+                authority=CompletionFirstGoalTeacher(),
+                viewer=viewer,
+            )
+            comparison: PairedBoundedPlayerComparison = compare_paired_bounded_player_arms(
+                pair_id=readiness.pair_id, learned=learned, baseline=baseline
+            )
+            comparison_document = comparison.public_dict()
+        else:
+            comparison_document = {
+                "schema": "pokemon.red.bounded-player-training-result.v1",
+                "episode_id": _episode_id(readiness.pair_id, readiness.challenger_arm_id),
+                "plan_sha256": readiness.training_plan.plan_sha256,
+                "trajectory_manifest_sha256": learned.trajectory_manifest_sha256,
+                "episode": learned.episode.public_dict(),
+                "model_fitted": False,
+                "independent_evaluation": False,
+            }
     protected_after = {
         str(index): _sha256(path) for index, path in enumerate(readiness.protected_paths)
     }
@@ -1006,7 +1165,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
         raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
     summary = {
-        **comparison.public_dict(),
+        **comparison_document,
         **_context_scope(readiness),
         "preflight": preflight,
         "source_commit": readiness.source_commit,
@@ -1018,6 +1177,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "decision_limit": readiness.decision_limit,
         "continue_after_progress": readiness.continue_after_progress,
         "routed_resource_goals": readiness.routed_resource_goals,
+        "quote_resource_costs": readiness.quote_resource_costs,
         "viewer_instrumentation_failures": 0 if viewer is None else viewer.failure_count,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,
@@ -1027,20 +1187,26 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     }
     if readiness.save_terminal_checkpoints:
         checkpoint_summaries = []
-        for arm_id in (readiness.challenger_arm_id, BASELINE_ARM_ID):
+        for arm_id in (
+            (readiness.challenger_arm_id,)
+            if readiness.training_plan is not None
+            else (readiness.challenger_arm_id, BASELINE_ARM_ID)
+        ):
             record = readiness.private_root.find_sealed_record(
                 checkpoint_record_id(_episode_id(readiness.pair_id, arm_id)),
                 expected_kind=CHECKPOINT_KIND,
             )
             if record is None:
                 raise PairedRedBoundedPlayerRunError("terminal_checkpoint_missing")
-            checkpoint_summaries.append({
-                "arm_id": arm_id,
-                "record_sha256": record.summary.record_sha256,
-                "independent_root": False,
-                "training_example": False,
-                "automatic_resume_authorized": False,
-            })
+            checkpoint_summaries.append(
+                {
+                    "arm_id": arm_id,
+                    "record_sha256": record.summary.record_sha256,
+                    "independent_root": False,
+                    "training_example": False,
+                    "automatic_resume_authorized": False,
+                }
+            )
         summary["terminal_checkpoints"] = checkpoint_summaries
     if readiness.causal_record is not None:
         if not isinstance(challenger_authority, LivingDexGoalShadowPolicy):

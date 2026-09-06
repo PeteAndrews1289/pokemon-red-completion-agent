@@ -1,5 +1,18 @@
 # Model-first development roadmap
 
+## Active session — economic choices to actual player-derived learning
+
+The [current bounded session](work-sessions/2026-09-06-resource-cost-learning.md) adds explicit
+funds, purchase costs and reserve quotes beside the unchanged 29-example model. It connects
+prospective stochastic player choices directly to the existing outcome learner. Two four-goal
+training episodes are declared; they reuse one known train lineage and cannot support an
+independent quality claim. No new real fit is claimed until its result is recorded here.
+
+Next: qualify the seam, collect both episodes, retain negative outcomes and prior examples, fit,
+then inspect predictions and actual collection/spending. Do not create another setup factory.
+Afterward, prioritize sustained bounded Red collecting and missing evolution/storage mechanics;
+Crystal remains deferred. Preserve title-neutral state/action interfaces throughout.
+
 ## Current checkpoint — four goals compose; make the progress durable and learn from useful contrasts
 
 The unchanged 29-example scorer now participates in an actual four-goal collecting chain. The

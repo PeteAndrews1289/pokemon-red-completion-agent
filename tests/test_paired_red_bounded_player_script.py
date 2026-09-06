@@ -194,6 +194,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=enabled,
+        quote_resource_costs=False, training_plan=None,
     )
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
@@ -325,10 +326,13 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
     readiness = SimpleNamespace(
         challenger_arm_id=causal_id,
         model_sha256="b" * 64,
+        quote_resource_costs=False, training_plan=None,
     )
 
     assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
     assert policy_id(readiness, baseline_id) == baseline_id
+    readiness.quote_resource_costs = True
+    assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb-economics-v1"
 
 
 def test_one_to_four_decisions_scale_episode_budgets_and_replans() -> None:
@@ -512,7 +516,11 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     factory = module["_player_observer"]
     sentinel = object()
     router = SimpleNamespace(enumerate=lambda _live: sentinel)
-    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", lambda *args: router)
+    received = []
+    def build_router(*args, **kwargs):
+        received.append(kwargs)
+        return router
+    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", build_router)
     monkeypatch.setitem(
         factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
     )
@@ -520,6 +528,8 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     routed = factory(object(), object(), object())
     assert local["enumerate_bindings"] is None
     assert routed["enumerate_bindings"](object()) is sentinel
+    factory(object(), object(), object(), True)
+    assert received == [{"quote_resource_costs": False}, {"quote_resource_costs": True}]
 
 
 def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_path):
@@ -541,7 +551,7 @@ def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_
 @pytest.mark.parametrize("origin", ("training", "development", "unspecified"))
 def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> None:
     module = runpy.run_path(str(SCRIPT))
-    scope = module["_context_scope"](SimpleNamespace(context_origin=origin))
+    scope = module["_context_scope"](SimpleNamespace(context_origin=origin, training_plan=None))
     assert scope == {
         "context_origin": origin,
         "evidence_scope": (
@@ -615,6 +625,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=False,
+        quote_resource_costs=False, training_plan=None,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())

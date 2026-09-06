@@ -36,6 +36,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 from pokemon_red_completion.goal_manager_state import headroom_satisfaction
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _buy_mart_item,
@@ -666,6 +667,37 @@ class RedMartResupplyGoalProvider:
         if projected <= observation.evidence.resources:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
         return RedGoalSkillAvailability.available()
+
+    def resource_quote(self, observation: RedGoalObservation) -> GoalResourceQuote:
+        """Quote the exact fixed purchase using fresh funds and reserve counts.
+
+        This neither changes quantities nor sends input. Execution still checks
+        exact bag and money deltas independently at the actual clerk boundary.
+        """
+        funds = observation.raw.player_money
+        if funds is None or not self.resource_availability(observation).executable:
+            raise RedGoalSkillError("cannot quote an unavailable Mart purchase")
+        if any(item.item not in _CAPTURE_ITEMS | _RECOVERY_ITEMS for item in self.purchases):
+            raise RedGoalSkillError("Mart quote has an unsupported resource class")
+        reserves = []
+        for resource, items, count, target in (
+            (
+                "capture", _CAPTURE_ITEMS, observation.capture_item_count,
+                self.adapter.config.desired_capture_items,
+            ),
+            (
+                "recovery", _RECOVERY_ITEMS, observation.recovery_item_count,
+                self.adapter.config.desired_recovery_items,
+            ),
+        ):
+            purchased = sum(item.quantity for item in self.purchases if item.item in items)
+            if purchased:
+                reserves.append(GoalResourceReserve(resource, count, target, purchased))
+        return GoalResourceQuote(
+            available_funds=funds,
+            purchase_cost=sum(item.quantity * item.unit_price for item in self.purchases),
+            reserves=tuple(reserves),
+        )
 
     def _projected_resources(
         self,

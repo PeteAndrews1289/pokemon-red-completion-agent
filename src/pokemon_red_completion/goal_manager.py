@@ -21,6 +21,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from types import MappingProxyType
 
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 from pokemon_red_completion.provenance import canonical_sha256
 
 _PARTITIONS = frozenset(
@@ -253,6 +254,7 @@ class GoalOpportunity:
     estimated_effort: float | None = None
     estimated_risk: float | None = None
     unavailable_reason: GoalUnavailableReason | None = None
+    resource_quote: GoalResourceQuote | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
@@ -261,6 +263,12 @@ class GoalOpportunity:
             raise GoalManagerError("goal opportunity kind is unsupported")
         if not isinstance(self.availability, GoalAvailability):
             raise GoalManagerError("goal opportunity availability is unsupported")
+        if self.resource_quote is not None and (
+            not isinstance(self.resource_quote, GoalResourceQuote)
+            or self.availability is not GoalAvailability.AVAILABLE
+            or self.kind is not GoalKind.RESUPPLY
+        ):
+            raise GoalManagerError("resource quote requires an available resupply goal")
         if self.availability is GoalAvailability.AVAILABLE:
             if self.estimated_effort is None or self.estimated_risk is None:
                 raise GoalManagerError(
@@ -295,7 +303,7 @@ class GoalOpportunity:
     def policy_dict(self) -> dict[str, object]:
         """Return the model-facing view, intentionally omitting the binding."""
 
-        return {
+        result: dict[str, object] = {
             "addressed_needs": [need.value for need in self.addressed_needs],
             "availability": self.availability.value,
             "estimated_effort": self.estimated_effort,
@@ -305,6 +313,9 @@ class GoalOpportunity:
                 None if self.unavailable_reason is None else self.unavailable_reason.value
             ),
         }
+        if self.resource_quote is not None:
+            result["resource_quote"] = self.resource_quote.public_dict()
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -338,7 +349,9 @@ class GoalManagerQuestion:
 
         if (
             set(value) != {"candidates", "schema", "situation"}
-            or value.get("schema") != "pokemon.core.goal-manager-input.v1"
+            or value.get("schema") not in {
+                "pokemon.core.goal-manager-input.v1", "pokemon.core.goal-manager-input.v2"
+            }
         ):
             raise GoalManagerError("goal-manager policy input schema is invalid")
         situation_raw = value.get("situation")
@@ -369,14 +382,21 @@ class GoalManagerQuestion:
             raise GoalManagerError("goal-manager candidate collection is invalid")
         opportunities: list[GoalOpportunity] = []
         for index, raw in enumerate(candidates_raw):
-            if not isinstance(raw, Mapping) or set(raw) != {
+            expected_keys = {
                 "addressed_needs",
                 "availability",
                 "estimated_effort",
                 "estimated_risk",
                 "kind",
                 "unavailable_reason",
-            }:
+            }
+            if (
+                isinstance(raw, Mapping)
+                and value["schema"] == "pokemon.core.goal-manager-input.v2"
+                and "resource_quote" in raw
+            ):
+                expected_keys.add("resource_quote")
+            if not isinstance(raw, Mapping) or set(raw) != expected_keys:
                 raise GoalManagerError("goal-manager candidate schema is invalid")
             kind_raw = raw.get("kind")
             availability_raw = raw.get("availability")
@@ -405,12 +425,19 @@ class GoalManagerQuestion:
                     estimated_effort=raw.get("estimated_effort"),
                     estimated_risk=raw.get("estimated_risk"),
                     unavailable_reason=reason,
+                    resource_quote=(
+                        GoalResourceQuote.from_public_dict(raw["resource_quote"])
+                        if "resource_quote" in raw else None
+                    ),
                 )
             )
-        return cls(
+        result = cls(
             situation=GoalSituation(**pressures),
             opportunities=tuple(opportunities),
         )
+        if result.policy_input["schema"] != value["schema"]:
+            raise GoalManagerError("resource quote input version differs")
+        return result
 
     @property
     def available_indices(self) -> tuple[int, ...]:
@@ -429,7 +456,11 @@ class GoalManagerQuestion:
                 "candidates": tuple(
                     MappingProxyType(item.policy_dict()) for item in self.opportunities
                 ),
-                "schema": "pokemon.core.goal-manager-input.v1",
+                "schema": (
+                    "pokemon.core.goal-manager-input.v2"
+                    if any(item.resource_quote is not None for item in self.opportunities)
+                    else "pokemon.core.goal-manager-input.v1"
+                ),
                 "situation": MappingProxyType(self.situation.policy_dict()),
             }
         )

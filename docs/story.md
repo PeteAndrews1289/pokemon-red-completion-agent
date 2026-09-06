@@ -1,5 +1,17 @@
 # The story: teaching a model to actually play Pokémon
 
+## September 6: teaching from the player's own choices
+
+The 29-example scorer has participated in a real supply-and-capture chain, but overspending
+revealed a blind spot: success at shopping is not the same as sensible resource use. This session
+adds explicit price/reserve facts beside learned predictions, preserving the old labels. It also
+connects newly sampled player choices to the existing fitter, so both successful and failed
+actions can become experience without another scripted setup campaign. This paragraph records
+implementation intent; the upcoming two-episode batch and fit are not yet completed results.
+
+The engineering distinction matters: the model learns observed success/progress/cost outcomes;
+a deterministic quote supplies known prices. Neither is full-game autonomy or demonstrated transfer.
+
 ## Latest checkpoint: supplement adapter and positive-path rehearsal
 
 The development-only reader now authenticates all three real stored supplement rows. Its shared

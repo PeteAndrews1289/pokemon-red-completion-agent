@@ -31,6 +31,7 @@ from pokemon_red_completion.goal_manager import (
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -191,6 +192,7 @@ class ExecutableGoalBinding:
     estimated_risk: float
     execute: GoalExecutor
     verify: GoalVerifier
+    resource_quote: GoalResourceQuote | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
@@ -210,6 +212,7 @@ class ExecutableGoalBinding:
             availability=GoalAvailability.AVAILABLE,
             estimated_effort=self.estimated_effort,
             estimated_risk=self.estimated_risk,
+            resource_quote=self.resource_quote,
         )
 
 

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Terminal checkpoint storage/reader and the truthful saved-run viewer are implemented and locally qualified. Before more supply fitting, resolve the economic representation gap: candidate costs are zero and the current observed target excludes money. Prefer explicit known-cost/reserve quotes alongside learned success and progress, then collect a small prospective train-only contrast batch without relabeling old examples.
+- Next decision: In progress: qualify explicit known-cost/reserve quotes and a native player-to-learner adapter, then collect the two prospectively declared four-goal training episodes and fit the existing model with all prior rows retained. Sampling is distinct from safety and forced choices; outcomes come from actual execution. No new real fit is claimed yet. The 29-example checkpoint and all historical terminals remain unchanged; do not build another setup factory or wait for duplicate CI.
 
 ### Mandatory mission check
 

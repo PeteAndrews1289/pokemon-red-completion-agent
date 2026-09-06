@@ -33,6 +33,7 @@ from pokemon_red_completion.living_dex_goal_policy import (
     LivingDexGoalDecisionMode,
     LivingDexGoalShadowPolicy,
 )
+from pokemon_red_completion.living_dex_player_exploration import ExploringLivingDexGoalPolicy
 from pokemon_red_completion.progress_dashboard import (
     DashboardExperimentState,
     DashboardFrameObserver,
@@ -217,6 +218,12 @@ class BoundedPlayerDashboard:
                 raise ValueError("viewer decision does not match the committed policy choice")
             model_choice = decision.mode is LivingDexGoalDecisionMode.MODEL_SHADOW
             actor = "Model" if model_choice else "Deterministic safety / unsupported"
+            if model_choice and isinstance(authority, ExploringLivingDexGoalPolicy):
+                actor = (
+                    "Model + exploration"
+                    if authority.training_eligible
+                    else "Model (non-exploratory)"
+                )
             if model_choice:
                 for score in sorted(decision.scores, key=lambda value: -value.utility):
                     self._events.append(

@@ -1,5 +1,21 @@
 # Handoff
 
+## In progress — September 6 economic quotes and native player training
+
+Read [this session plan](docs/work-sessions/2026-09-06-resource-cost-learning.md) first.
+The cost/reserve treatment is implemented and under local qualification. It leaves old model
+features and all prior targets unchanged. The next output is two short, prospectively declared
+train-only player episodes and a retained-corpus fit—not another teacher or setup campaign.
+No new gameplay or real fit has occurred at this implementation checkpoint; the active model
+still has 29 examples. PR 235 merged; this work is on the next native-training branch.
+
+Native sampling is explicitly distinguished from greedy ranking, safety and forced choices.
+The trajectory reader replays the sampling distribution, joins actual execution intervals and
+reconstructs observed targets. Historical diagnostics are never retrofitted into this dataset.
+Only Codex is implementing; no external review or subagent approval is claimed.
+
+All prior sections below describe earlier checkpoints unless confirmed by a newer result.
+
 ## Current — resource-aware chain COMPLETE; durable continuation and viewer recap
 
 The run from published `8318ca11` completed. The hybrid finished four goals in 656 actions /

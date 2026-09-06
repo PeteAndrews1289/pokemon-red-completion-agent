@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6: the next learning loop (implementation, not a result yet)
+
+**Explain:** “The player was succeeding at shopping but spending too much. We added the price
+and reserve information it was missing, without pretending the old data contained it. Next we
+let it sample real choices and learn from the outcomes—including failures.”
+
+Show **MODEL + EXPLORATION** only for sampled decisions; show **SAFETY** and **FORCED OPTION**
+separately. Training counters must change only after authenticated new examples and an actual fit.
+The upcoming batch reuses one known training state. Never caption it as an unseen-game test,
+independent victory, learned money prediction, or an autonomous full-game player.
+
 ## September 6: the first complete supply-and-collect sequence
 
 **Saved-result graphic:** four cards—**SAFETY: RESUPPLY**, **SUPPORTED BRIDGE: CAPTURE**,

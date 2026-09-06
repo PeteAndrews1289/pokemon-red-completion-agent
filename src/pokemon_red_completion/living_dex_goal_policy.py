@@ -12,6 +12,10 @@ the same living-Dex feature vocabulary used by the causal learner and scored
 with one explicit, immutable utility contract.  The policy is intentionally
 shadow-only until held Red outcomes demonstrate an advantage over the
 deterministic completion-first manager.
+
+Version-2 questions may additionally carry a known purchase quote. Its spend
+and excess-reserve charge is disclosed beside (not fitted into or substituted
+for) the original outcome predictions. Unquoted questions retain exact V1 behavior.
 """
 
 from __future__ import annotations
@@ -29,6 +33,7 @@ from pokemon_red_completion.goal_manager import (
     bind_goal_selection,
 )
 from pokemon_red_completion.goal_manager_runtime import CompletionFirstGoalTeacher
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 from pokemon_red_completion.living_dex_option_value import (
     LIVING_DEX_OPTION_OUTCOME_NAMES,
     LivingDexOptionAvailability,
@@ -93,6 +98,8 @@ class LivingDexGoalCandidateScore:
     goal_candidate_index: int
     utility: float
     predicted_outcomes: tuple[float, ...]
+    resource_quote: GoalResourceQuote | None = None
+    known_resource_cost_penalty: float = 0.0
 
     def __post_init__(self) -> None:
         if not isinstance(self.goal_kind, GoalKind):
@@ -101,6 +108,17 @@ class LivingDexGoalCandidateScore:
             raise LivingDexGoalPolicyError("shadow score candidate index differs")
         if not isinstance(self.utility, float) or not math.isfinite(self.utility):
             raise LivingDexGoalPolicyError("shadow utility is not finite")
+        if (
+            not isinstance(self.known_resource_cost_penalty, float)
+            or not math.isfinite(self.known_resource_cost_penalty)
+            or self.known_resource_cost_penalty < 0
+            or (self.resource_quote is None and self.known_resource_cost_penalty != 0)
+            or (
+                self.resource_quote is not None
+                and not isinstance(self.resource_quote, GoalResourceQuote)
+            )
+        ):
+            raise LivingDexGoalPolicyError("known resource cost differs")
         if (
             not isinstance(self.predicted_outcomes, tuple)
             or len(self.predicted_outcomes) != 9
@@ -112,7 +130,7 @@ class LivingDexGoalCandidateScore:
             raise LivingDexGoalPolicyError("shadow outcome prediction differs")
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "goal_candidate_index": self.goal_candidate_index,
             "goal_kind": self.goal_kind.value,
             "predicted_outcomes": dict(
@@ -124,6 +142,13 @@ class LivingDexGoalCandidateScore:
             ),
             "utility": self.utility,
         }
+        if self.resource_quote is not None:
+            result.update({
+                "resource_quote": self.resource_quote.public_dict(),
+                "known_resource_cost_penalty": self.known_resource_cost_penalty,
+                "predicted_utility": self.utility + self.known_resource_cost_penalty,
+            })
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -136,6 +161,7 @@ class LivingDexGoalShadowDecision:
     model_sha256: str
     menu_sha256: str | None
     scores: tuple[LivingDexGoalCandidateScore, ...]
+    economic_input_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.mode, LivingDexGoalDecisionMode):
@@ -146,6 +172,11 @@ class LivingDexGoalShadowDecision:
             raise LivingDexGoalPolicyError("shadow selected index differs")
         if not isinstance(self.model_sha256, str) or _SHA256.fullmatch(self.model_sha256) is None:
             raise LivingDexGoalPolicyError("shadow model identity differs")
+        if self.economic_input_sha256 is not None and (
+            not isinstance(self.economic_input_sha256, str)
+            or _SHA256.fullmatch(self.economic_input_sha256) is None
+        ):
+            raise LivingDexGoalPolicyError("economic input identity differs")
         if self.mode is LivingDexGoalDecisionMode.MODEL_SHADOW:
             if not isinstance(self.menu_sha256, str) or _SHA256.fullmatch(self.menu_sha256) is None:
                 raise LivingDexGoalPolicyError("shadow menu identity differs")
@@ -157,7 +188,7 @@ class LivingDexGoalShadowDecision:
             raise LivingDexGoalPolicyError("deterministic choice retained model output")
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "binding_identity_fields": 0,
             "menu_sha256": self.menu_sha256,
             "mode": self.mode.value,
@@ -167,6 +198,12 @@ class LivingDexGoalShadowDecision:
             "selected_candidate_index": self.selected_candidate_index,
             "selected_kind": self.selected_kind.value,
         }
+        if self.economic_input_sha256 is not None:
+            result.update({
+                "economic_input_sha256": self.economic_input_sha256,
+                "economic_contract": "known-spend-and-excess-reserve-v1",
+            })
+        return result
 
 
 @dataclass(slots=True)
@@ -180,6 +217,8 @@ class LivingDexGoalShadowPolicy:
     model_decisions: int = field(default=0, init=False)
     deterministic_decisions: int = field(default=0, init=False)
     last_decision: LivingDexGoalShadowDecision | None = field(default=None, init=False)
+    last_menu: LivingDexOptionMenu | None = field(default=None, init=False, repr=False)
+    last_menu_indices: tuple[int, ...] = field(default=(), init=False, repr=False)
     _decision_history: list[LivingDexGoalShadowDecision] = field(
         default_factory=list,
         init=False,
@@ -203,6 +242,8 @@ class LivingDexGoalShadowPolicy:
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
         if not isinstance(question, GoalManagerQuestion):
             raise TypeError("question must be a GoalManagerQuestion")
+        self.last_menu = None
+        self.last_menu_indices = ()
         deterministic = self.safety.select(question)
         deterministic_safety_gate = (
             deterministic.kind in {GoalKind.RECOVER_CONTROL, GoalKind.RESTORE_TEAM}
@@ -265,6 +306,8 @@ class LivingDexGoalShadowPolicy:
             )
 
         menu = LivingDexOptionMenu(context, tuple(item[2] for item in projected))
+        self.last_menu = menu
+        self.last_menu_indices = tuple(item[0] for item in projected)
         utilities = self.model.scores(menu, self.utility)
         scored: list[LivingDexGoalCandidateScore] = []
         for menu_index, (question_index, kind, candidate) in enumerate(projected):
@@ -272,12 +315,16 @@ class LivingDexGoalShadowPolicy:
             if utility is None or not math.isfinite(utility):
                 raise LivingDexGoalPolicyError("living-Dex model returned an invalid score")
             outcome = self.model.predict_candidate(context, candidate)
+            quote = question.opportunities[question_index].resource_quote
+            penalty = 0.0 if quote is None else self.utility.resource_cost_weight * quote.cost_units
             scored.append(
                 LivingDexGoalCandidateScore(
                     goal_kind=kind,
                     goal_candidate_index=question_index,
-                    utility=float(utility),
+                    utility=float(utility) - penalty,
                     predicted_outcomes=outcome.vector(),
+                    resource_quote=quote,
+                    known_resource_cost_penalty=penalty,
                 )
             )
         selected = max(scored, key=lambda item: (item.utility, item.goal_kind.value))
@@ -291,6 +338,11 @@ class LivingDexGoalShadowPolicy:
             model_sha256=self.model.model_sha256,
             menu_sha256=menu.policy_sha256,
             scores=tuple(scored),
+            economic_input_sha256=(
+                question.ordered_policy_input_sha256
+                if any(item.resource_quote is not None for item in question.opportunities)
+                else None
+            ),
         )
         self.last_decision = decision
         self._decision_history.append(decision)

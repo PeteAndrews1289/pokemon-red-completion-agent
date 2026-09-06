@@ -1,5 +1,13 @@
 # Three-agent coordination
 
+## Active implementation — September 6 native player training
+
+Codex owns the [economic/native-training session](docs/work-sessions/2026-09-06-resource-cost-learning.md),
+qualification and publication. No external reviewer or subagent was invoked. If later requested,
+Claude should challenge retained-data fitting and correlated-root claims; Antigravity should
+challenge quote freshness, controller bounds, and whether live labels match the actual actor.
+Neither reviewer should revive historical campaigns or expand this session into Crystal/full play.
+
 ## Current ownership — September 6 post-fit bounded-play integration
 
 The real Red batch and single fit are complete; the living-Dex option scorer now contains 29

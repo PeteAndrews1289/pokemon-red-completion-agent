@@ -257,7 +257,11 @@ def red_bounded_player_semantic_document(
         # requires at least one selectable candidate when a policy is actually
         # asked to choose.
         "candidates": [item.policy_dict() for item in binding_set.opportunities],
-        "schema": "pokemon.core.goal-manager-input.v1",
+        "schema": (
+            "pokemon.core.goal-manager-input.v2"
+            if any(item.resource_quote is not None for item in binding_set.opportunities)
+            else "pokemon.core.goal-manager-input.v1"
+        ),
         "situation": live.situation.policy_dict(),
     }
     return {

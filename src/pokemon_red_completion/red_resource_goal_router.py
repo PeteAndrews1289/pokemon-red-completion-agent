@@ -17,8 +17,12 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1TraversalObserver,
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
-from pokemon_red_completion.goal_manager import GoalAvailability, GoalUnavailableReason
-from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
+from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
+    GoalExecutionReport,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
@@ -70,6 +74,7 @@ class RedResourceGoalRouter:
     world: StrategicScenarioRouteWorld
     maximum_controller_actions: int = 6_000
     maximum_emulator_frames: int = 600_000
+    quote_resource_costs: bool = False
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -165,7 +170,44 @@ class RedResourceGoalRouter:
             opportunities[index] = binding.opportunity
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
-        return GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        return self._with_quotes(result, observation) if self.quote_resource_costs else result
+
+    def _with_quotes(
+        self, bindings: GoalBindingSet, observation: RedGoalObservation
+    ) -> GoalBindingSet:
+        """Bind exact costs to the same opportunity and executable skill."""
+        quoted = []
+        for binding in bindings.bindings:
+            if binding.kind is GoalKind.RESUPPLY:
+                provider = self.runtime.provider_for(binding.kind, self.actions)
+                if not isinstance(provider, RedMartResupplyGoalProvider):
+                    raise RedResourceGoalRoutingError("resource-cost quote needs a Mart provider")
+                binding = self._quoted_binding(binding, provider, observation)
+            quoted.append(binding)
+        by_ref = {item.binding_ref: item.opportunity for item in quoted}
+        return GoalBindingSet(
+            tuple(by_ref.get(item.binding_ref, item) for item in bindings.opportunities),
+            tuple(quoted),
+        )
+
+    def _quoted_binding(
+        self,
+        binding: ExecutableGoalBinding,
+        provider: RedMartResupplyGoalProvider,
+        observation: RedGoalObservation,
+    ) -> ExecutableGoalBinding:
+        quote = provider.resource_quote(observation)
+
+        def execute() -> GoalExecutionReport:
+            # Reject stale economic facts before transport or menu input. The
+            # destination skill separately verifies actual inventory/money deltas.
+            current = provider.resource_quote(self.runtime.adapter.observe())
+            if current != quote:
+                raise RedResourceGoalRoutingError("resource quote changed before execution")
+            return binding.execute()
+
+        return replace(binding, resource_quote=quote, execute=execute)
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
