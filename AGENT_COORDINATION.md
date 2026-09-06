@@ -1,6 +1,24 @@
 # Three-agent coordination
 
-## Current ownership — September 6 recovery/admission repair
+## Current ownership — September 6 post-fit bounded-play integration
+
+The real Red batch and single fit are complete; the living-Dex option scorer now contains 29
+examples. Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the
+[post-fit audit](docs/audits/red-goal-model-post-fit-2026-09-06.md) and
+[next-session plan](docs/work-sessions/2026-09-06-red-closed-loop-next.md).
+
+- **Codex:** own implementation, integration, publication and final judgment. Bind the exact
+  fitted artifact to bounded model-selected goals, fresh state/ledger verification and the live
+  view. Do not reopen the consumed training batch or substitute another model's choices.
+- **Claude, only when requested/available:** read-only review of selected-arm learning, negative
+  retention, clustered evidence and the distinction between calibration and useful play.
+- **Antigravity, only when requested/available:** read-only challenge of model/executor authority,
+  stale observations, specimen retention, actionable failure diagnostics and portable semantics.
+
+No external reviewer or subagent was invoked in this work session. Their absence does not hold up
+the next bounded development work, and no review may authorize retries or unsupported claims.
+
+## Historical ownership — September 6 recovery/admission repair
 
 Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the current
 [roadmap](docs/model-first-roadmap.md), and the

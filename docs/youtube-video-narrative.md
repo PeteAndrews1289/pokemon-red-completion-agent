@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 result scene: a real model update, not another readiness check
+
+**Visual:** Use authentic collection footage labeled **DATA COLLECTION — DETERMINISTIC SKILLS**.
+Show **8 ATTEMPTS → 6 FACTUAL LESSONS + 2 SETUP CENSORS**, then
+**18 PREVIOUSLY FITTED + 5 EARLIER UNFITTED + 6 NEW = 29 TRAINING EXAMPLES**.
+
+**Voiceover:** “We finally connected the actual game outcomes to the existing goal model. This
+batch taught it from five successful tasks and one failed acquisition. Two setups failed before
+a learning decision, so we kept those failures visible without inventing labels. The saved model
+now includes all twenty-nine examples, and we checked that none of the earlier lessons vanished.”
+
+Show **3 SUCCESSFUL PARTY-DEVELOPMENT LESSONS**, then a clearly labeled training diagnostic:
+**TRAINING ERROR DOWN ~28% · 3 CHANGED TRAINING-MENU CHOICES**. Do not show this as held-out
+accuracy or footage of model-controlled gameplay. No learning happened during the preceding CI wait.
+
+**Voiceover:** “This is still a small model choosing among game objectives, not a Pokémon-playing
+LLM. The next test is whether those learned choices produce useful progress over several goals
+in a row. Movement and battle mechanics remain explicit deterministic skills underneath it.”
+
+End on **NEXT: MODEL CHOOSES → SKILL EXECUTES → FRESH STATE → VERIFIED COLLECTION PROGRESS**.
+Keep **RED FIRST · CRYSTAL LATER · MULTI-GAME LIVING POKÉDEX IS THE GOAL** visible. The actual batch
+is finished; its live window should not be presented as still running. Earlier scene plans below
+are historical and must not override these verified results.
+
 ## September 6 scene: connect the lesson journal to the existing model
 
 **Visual:** Show **RESTART RECOVERY → ACTUAL OUTCOMES → EXISTING FITTER**. Beside it, label

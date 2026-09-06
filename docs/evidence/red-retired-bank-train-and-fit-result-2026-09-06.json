@@ -1,0 +1,80 @@
+{
+  "causal_train_examples_recorded": 6,
+  "controller_actions": 20312,
+  "development_slots_opened": 0,
+  "emulator_frames": 1127136,
+  "fit_requested": true,
+  "fit_result": {
+    "authority": "non_authoritative_shadow_only",
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "counterfactual_targets": 0,
+    "crystal_accesses": 0,
+    "development_examples_read": 0,
+    "distinct_selected_feature_rows": 24,
+    "emulator_frames": 0,
+    "fit_executions": 1,
+    "model": {
+      "added_settled_examples": 11,
+      "manifest_sha256": "c6a5652b08a92c4c3b9f966a2a799c9edec3b4aef31ce4eff80882877d3bfa60",
+      "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+      "prior_model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+      "record_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+      "settled_examples": 29,
+      "total_examples": 29
+    },
+    "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+    "policy_disagreements_on_train_menus": 3,
+    "private_identity_fields": 0,
+    "private_path_fields": 0,
+    "recovered_existing_artifact": false,
+    "schema": "pokemon.red.living-dex-causal-model-update-result.v1",
+    "selected_arm_error_predictions": 58,
+    "selected_kind_count": 7,
+    "source": {
+      "exact_ci_attempt": 1,
+      "exact_ci_run": 34019391472,
+      "source_bundle_sha256": "646c047db37ec2dce90355029d2df2f87d1bb2dd4f654952dc862aff87b4df3a",
+      "source_commit": "e9b381d0bafb114ce3a0ad08b4ed77d95926bb97",
+      "source_published": true,
+      "worktree_dirty": false
+    },
+    "status": "train_only_causal_model_update_complete",
+    "successful_examples": 12,
+    "teacher_queries": 0,
+    "training_error": {
+      "prior_weighted_mse": 0.006959065524958734,
+      "updated_weighted_mse": 0.005004556974872811
+    },
+    "transfer_claimed": false,
+    "unselected_action_targets": 0
+  },
+  "gameplay_model_predictions": 0,
+  "model_fits": 1,
+  "private_path_fields": 0,
+  "readiness": {
+    "ready": true,
+    "reasons": [],
+    "schema": "pokemon.red.targeted-train-factual-readiness.v1",
+    "settled_by_actual_kind": {
+      "acquire": 2,
+      "develop": 3,
+      "evolve": 0,
+      "explore": 0,
+      "manage_storage": 0,
+      "resupply": 1,
+      "trade": 0,
+      "unlock_access": 0
+    },
+    "settled_examples": 6,
+    "settled_root_count": 3,
+    "setup_censors": 2,
+    "terminal_slots": 8,
+    "train_slots": 8
+  },
+  "runner_sha256": "ea52eaaae716df325ef588e92c5dca7011466ea2f4b98ab30c0927bf4b57566c",
+  "schema": "pokemon.red.living-dex-retired-bank-train-campaign-result.v1",
+  "status": "retired_bank_train_campaign_terminal",
+  "teacher_queries": 0,
+  "train_slots_terminal": 8
+}

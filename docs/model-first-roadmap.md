@@ -1,6 +1,55 @@
 # Model-first development roadmap
 
-## Current checkpoint — September 6 training-launch repair
+## Current checkpoint — September 6 real training and post-fit audit complete
+
+**The eight-lesson Red batch ran and the existing option model was fitted once.** It now includes
+29 real train examples, up from 18: five earlier unfitted rows plus six new rows. All 23 pre-run
+rows are retained unchanged. This is a small semantic goal-value model, not a newly trained LLM
+or an autonomous full-game player.
+
+- Eight trials are terminal: six factual outcomes across three starting roots, two setup censors
+  from a fourth root. Five new outcomes succeeded; one acquisition outcome failed and was retained.
+- The new factual kinds are acquisition two, party development three, and resupply one. These are
+  the first three successful development examples in this particular learner's corpus.
+- One actual CPU fit reduced weighted **training** MSE by about 28% and changed three choices on
+  training menus. Neither measurement establishes unseen gameplay improvement.
+- Collection used the disclosed focus policy and deterministic skills, not model-controlled play.
+  The updated artifact remains shadow-only. Development, sealed Red and Crystal were not opened.
+- PR 230 is merged as `e9b381d0`; exact-main CI `34019391472/1` qualified the executable. No more
+  collection or fitting is pending for this plan. All eight trials must remain terminal.
+
+Read the [actual result](evidence/red-retired-bank-train-and-fit-result-2026-09-06.json),
+[post-fit audit](audits/red-goal-model-post-fit-2026-09-06.md), and
+[next-session implementation plan](work-sessions/2026-09-06-red-closed-loop-next.md).
+
+### Next output: the fitted model chooses what to do
+
+1. **Use the saved artifact, not another fit.** Bind its identity and preserve the complete corpus.
+   The older semantic goal manager and separate battle scorer are not interchangeable actors.
+2. **Make the declared short Red comparison descriptive.** Use the four disjoint paired roots
+   without fitting on them or replacing bad results. This is an engineering check, not a powered
+   superiority claim or a prerequisite for full-game replay.
+3. **Connect at least three successive model-chosen goals.** Reuse existing deterministic skills,
+   reobserve after every action, and verify retained specimens, dependency progress, resources,
+   costs and recovery. Explicitly declare bounded development control; do not silently promote
+   the shadow artifact or substitute a teacher's choice.
+4. **Fix only blockers that prevent useful play or diagnosis.** Two setup failures retained only
+   `construction_route/unexpected_error`, losing their exact exception. Preserve their terminals;
+   add actionable private diagnostics for future executions without retrying these cases. Tie the
+   dashboard to the actual actor and job; old hard-coded overview counts are not current evidence.
+5. **Expand missing Red competence, then test Crystal.** This corpus has no successful evolution,
+   exploration, storage or access-unlocking examples. Build needed experience through short
+   supported scenarios, not a new teacher walkthrough. Broader puzzles, trades, version/event
+   availability and sustained living-Pokédex progress follow; cross-game transfer remains the goal.
+
+Time-box the next development session to two–four hours, with a real bounded episode as early as
+practical. Reuse qualified code across legitimate data batches where its existing contracts allow
+it. One coherent code publication is appropriate; CI passes are not the learning milestone.
+
+## Historical checkpoint — September 6 training-launch repair
+
+The launch and fit described below as future work are now complete. Preserve this debugging
+history, but follow the current checkpoint above.
 
 **Latest:** PRs 228/229 are merged and exact-main CI `34015856963` passed (`ba5a01d0`). The real
 launch was rejected before input by an inconsistent two-reserve reader assumption; its valid
