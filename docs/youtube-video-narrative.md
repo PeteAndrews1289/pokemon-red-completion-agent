@@ -1,5 +1,15 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest footage context — a fit is not a victory
+
+Show the counter moving from 31 to 32 actual examples, then show the unchanged unsuccessful
+search choice. Explain that the player learned from a real negative outcome but did not yet
+make better decisions. Both runs stop safely and retain their saves. The next engineering target
+is remembered search history plus productive collection alternatives, not another scripted win.
+Do not describe this as a full-game model or cross-game transfer. [Audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
 ## September 6 scene — a useful failure, not a fake success
 
 Show the unchanged 215-action / 8244-frame no-catch search beside the new typed stop and verified

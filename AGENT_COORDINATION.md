@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+
+## Current ownership — saved-state fit closed; productive alternatives next
+
+Codex completed [the saved-endpoint learning audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md):
+31 to 32 examples, all prior rows retained, unchanged unsuccessful post-fit search choice.
+No external reviewer or subagent was invoked. If requested, Claude should challenge whether
+search-history features and actual alternatives improve decisions rather than merely grow data;
+Antigravity should challenge saved-history freshness, bounded recovery and false exclusions.
+Both are read-only advisers; neither is a prerequisite CI/campaign gate. Older sections are history.
+
+
 ## Current ownership — recovery qualified; next session must return to learning
 
 Codex implemented and verified [safe search stopping](docs/audits/red-search-recovery-2026-09-06.md).

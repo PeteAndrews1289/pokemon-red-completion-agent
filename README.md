@@ -2,11 +2,11 @@
 
 ## Latest development checkpoint
 
-The learned-player prototype now preserves an unsuccessful search as a negative outcome with a
-verified, restorable game state. The bounded regression used 215 actions / 8244 frames and caught
-nothing; this is a recovery improvement, **not** a new learning or game-completion claim. The model
-still contains 31 examples. Next is a short sampled learning contrast from the saved endpoint.
-See the [audit and next steps](docs/audits/red-search-recovery-2026-09-06.md).
+The goal-value learner now has **32 real examples**, retaining all 31 earlier rows and learning
+from a sampled unsuccessful search and its costs. Saved-state training and a post-fit continuation
+both ran. The follow-up still searched without a catch, so improved sustained play is **not yet
+demonstrated**. Next: persistent search memory and a useful collection alternative.
+See the [audit and next steps](docs/audits/red-saved-endpoint-learning-2026-09-06.md).
 
 > **Working on this repository?** Read [MISSION.md](MISSION.md),
 > [NORTH_STAR.md](NORTH_STAR.md), the generated
@@ -14,7 +14,7 @@ See the [audit and next steps](docs/audits/red-search-recovery-2026-09-06.md).
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 6, 2026): the player now feeds its own observed outcomes to learning.**
+> **Earlier September 6 milestone: the player began feeding its own observed outcomes to learning.**
 > A four-goal Red episode completed and saved its terminal state. Two genuinely sampled goal
 > outcomes were fitted with all 29 prior examples, producing a **31-example goal-value model**.
 > The run retained two needed specimens, including one new living species, but still overspent.

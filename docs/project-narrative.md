@@ -1,5 +1,15 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6 — the loop trains, but the choice did not improve
+
+Saved-state continuation now feeds actual sampled outcomes into the learner without forgetting
+its old data. A failed search added one negative example: 31 became 32. Yet the updated scorer
+still chose another unsuccessful search. This is an important distinction between a working
+training pipeline and a competent player. The next lesson needs persistent search memory and a
+useful collection alternative, not repeated local searches. [Evidence and audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
 ## September 6 — not finding a Pokemon should not erase the session
 
 An unchanged search again found no needed catch, but now its negative result, fresh collection

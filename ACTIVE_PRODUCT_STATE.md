@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Safe unsuccessful-search retention is verified in real gameplay. Reuse the saved endpoint for a short, prospectively sampled capture-versus-local-development learning contrast, preserving original lineage and all 31 existing rows. Add only the explicit profile-transition/training continuation seam needed for that lesson; do not grind the established party or run another guardrail/CI-only session.
+- Next decision: Persist title-neutral search history across saves and expose a genuinely useful collection alternative before another bounded sampled lesson. Do not repeat acquisition-only searches, grind the established party or build a new teacher.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The model still contains 31 examples. Search recovery now retains a verified save and ledger after 215 actions / 8244 frames without a catch. One executed choice was deterministic; one model-ranked recovery proposal was rejected before input. Zero new fits or training rows. Local development is now verified available read-only at the saved endpoint, not executed. |
+| Authority now | The goal-value model now contains 32 examples after one sampled negative search was fitted with all 31 prior rows retained. The post-fit greedy continuation still chose acquisition and caught nothing. Final state restores correctly; no improved sustained play or collection gain is established. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | At the verified saved endpoint, can the existing collector execute genuine sampled goal choices, retain no-find outcomes and costs, and fit new evidence without a teacher replay, a silent profile substitution, loss of prior rows or a false independent-root claim? |
+| Cheapest falsifier | Can a resumed chooser distinguish exhausted from genuinely changed opportunities and choose between two actually executable collection goals without raw identities, a fixed route or rewriting old examples? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-unsuccessful-search-recovery** · status **closed** · evidence [qualification](docs/evidence/red-search-recovery-result-2026-09-06.json)
+**2026-09-06-saved-endpoint-learning** · status **closed** · evidence [model fit](docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Unsuccessful searches are normal during living-collection play. Their negative outcomes and usable state now survive. Return to learned useful choices; required-precursor development/evolution is preferable to overleveling an established party. |
-| Learning output | Zero new training examples or fits. Same known-state search: 215 actions, 8244 frames, no catches. Unlike the prior failure, a fresh unchanged collection ledger and terminal save now survive and restore exactly. No independent gameplay improvement is claimed. |
-| Authority delta | No new executed learned choice, fit or training row. One model proposal was rejected by the anti-loop guard; policy-call counts explicitly include unexecuted proposals. The existing 31-example model is unchanged. |
-| Transfer result | Known-state same-lineage engineering regression only. Read-only expanded-profile availability is not execution or generalization. Useful Red competence still precedes the unfamiliar compatible Red modification and Crystal. |
-| Blocker | The saved endpoint has local development available under an existing expanded profile, but profile transition and sampled training continuation are not yet connected. Evolution/storage remain unavailable here. Search history is not yet a learned input. |
-| Decision | Close the successful engineering qualification. Next work must produce a small genuine selected-outcome learning lesson from the saved state, not another receipt or CI loop. Treat development as a bounded contrast, not a new arbitrary party-level goal. |
-| Next session | Verify the old checkpoint profile before a separately declared expanded local-development profile; connect the existing sampled collector, retain original lineage and 31 prior rows, collect a short fixed-dose contrast, audit/fit settled outcomes and qualify a new bounded continuation. |
-| Next falsifier | At the verified saved endpoint, can the existing collector execute genuine sampled goal choices, retain no-find outcomes and costs, and fit new evidence without a teacher replay, a silent profile substitution, loss of prior rows or a false independent-root claim? |
-| Stop condition | The single new regression is closed with a durable typed stop and verified saved endpoint. No automatic replay or additional input, fitting, sealed Red, hack, Crystal or full-game execution. Next session is bounded to four hours and must target measured learner outcomes. |
+| Product alignment | A continued-play learning loop now works, but a living collection needs productive choices rather than endlessly repeated searches. Prioritize search memory and real collection alternatives. |
+| Learning output | One settled negative outcome, 330 actions / 21804 frames. One fit retains all 31 prior rows and yields 32. The excluded initial launch used zero input. Greedy follow-up: 198 actions / 8700 frames, zero catches and zero fitting rows. |
+| Authority delta | One actual sampled goal outcome and one fit, 31 to 32 examples. One greedy model goal executed in follow-up; no full-player promotion or independent advantage. |
+| Transfer result | Same original Red train lineage only. No independent root, gameplay superiority or transfer claim. Sustained Red competence still precedes a compatible unfamiliar Red modification and Crystal. |
+| Blocker | The follow-up still chose acquisition after an exhausted search. Search history does not persist as a learned input; the useful capture/development contrast was not realized. Evolution/storage remain unavailable here. |
+| Decision | Close the fit and sole diagnostic. Make prior search effort visible and expose a useful collection alternative before collecting more local-search examples. |
+| Next session | Persist title-neutral search history across saves and expose a genuinely useful collection alternative before another bounded sampled lesson. Do not repeat acquisition-only searches, grind the established party or build a new teacher. |
+| Next falsifier | Can a resumed chooser distinguish exhausted from genuinely changed opportunities and choose between two actually executable collection goals without raw identities, a fixed route or rewriting old examples? |
+| Stop condition | Both learning identities and the sole post-fit diagnostic are closed. Do not replay them. Next session is four hours maximum; reassess after 90 minutes without a useful alternative. No full replay, sealed Red, hack or Crystal execution. |
 
 ### Stop conditions
 

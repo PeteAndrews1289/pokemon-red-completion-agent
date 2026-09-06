@@ -45,3 +45,12 @@ same saved parent/profile expansion and unchanged dose. This remains at most one
 learning episode, not an after-input retry or favorable-outcome search. The fit must inventory the
 zero-input first episode too. If this corrected episode fails to produce admissible experience,
 stop the batch rather than launch another successor.
+
+## Closed outcome
+
+The corrected episode added one settled negative search example (330 actions / 21,804 frames).
+One fit retained all earlier data and updated 31 to 32 examples. The sole greedy post-fit
+continuation searched again (198 actions / 8700 frames), caught nothing and stopped safely.
+Both executed attempts saved their endpoints; the final save was verified action-free.
+No new living species or improved gameplay choice is claimed. All identities are closed.
+Read the [audit and next session](../audits/red-saved-endpoint-learning-2026-09-06.md).

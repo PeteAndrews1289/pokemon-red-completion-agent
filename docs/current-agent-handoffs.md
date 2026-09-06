@@ -1,5 +1,17 @@
 # Current agent handoffs
 
+## Current — saved-endpoint training completed, not sustained competence
+
+Read [the audit](audits/red-saved-endpoint-learning-2026-09-06.md). Codex updated the goal-value
+model 31 to 32 examples with one sampled failed search and all earlier data retained. A greedy
+follow-up still searched unsuccessfully. Final state is verified and retained; no collection gain.
+Next: semantic search history across saves and one useful collection alternative. Do not retry
+closed launches, fit the diagnostic, grind the established party or wait on external audit/CI.
+Claude (if requested): challenge learning utility. Antigravity (if requested): challenge history
+freshness and safe continuation. Neither was invoked this session. Older sections are historical.
+
+
+
 ## Current — search-recovery endpoint retained
 
 Use [the recovery audit](audits/red-search-recovery-2026-09-06.md) and active state. New regression

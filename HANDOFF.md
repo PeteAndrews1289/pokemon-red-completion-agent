@@ -1,5 +1,18 @@
 # Handoff
 
+
+## Current — 32-example update complete; search memory is next
+
+Read [the saved-endpoint audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md).
+The sampled continuation added one failed-search outcome and actual costs; the fit retained all
+31 old rows and now contains 32. Its greedy follow-up still searched without a catch. Final
+state restores action-free; collection remains 14 living / 19 registered / 17 specimens.
+All three identities are closed, including the initial zero-input exclusion. No diagnostic was
+fitted. Next: persisted semantic search history and a genuinely useful alternative, not another
+acquisition-only loop, arbitrary grinding or CI gate. Private OPERATOR has exact model/save IDs.
+Codex owns implementation. No external audit occurred. Earlier handoffs are historical.
+
+
 ## Current — unsuccessful-search recovery verified; return to sampled learning
 
 Read [the September 6 recovery audit](docs/audits/red-search-recovery-2026-09-06.md).

@@ -1,5 +1,25 @@
 # Model-first development roadmap
 
+
+## Current — 32 examples; break the unproductive search cycle
+
+The [saved-endpoint learning audit](audits/red-saved-endpoint-learning-2026-09-06.md) closes a real
+31-to-32 fit with all prior rows retained. One failed search taught actual costs; the sole post-fit
+continuation still searched without a catch. Useful gameplay improvement is not established.
+
+1. Persist title-neutral search history across saves and expose recent effort/no-progress to
+   selection. Preserve the anti-loop guard and version feature changes without relabeling history.
+2. Prove exhausted versus genuinely changed opportunities remain distinguishable in a resumed
+   ROM-free scenario; then expose an actually executable collection alternative.
+3. Prefer another eligible encounter source or required-precursor storage/evolution, not arbitrary
+   leveling. Collect a short, declared two-alternative lesson only after both are executable.
+4. Fit distinct observed evidence and test a bounded continuation. Stop an acquisition-only loop.
+
+One session / four hours; reassess after 90 minutes without a useful alternative. Red competence
+still precedes unfamiliar compatible Red-modification adaptation and Crystal. Older sections below
+are history, not permission to reopen consumed attempts.
+
+
 ## Current — recovery verified; resume useful selected-outcome learning
 
 The [search-recovery session](audits/red-search-recovery-2026-09-06.md) reproduced the no-catch

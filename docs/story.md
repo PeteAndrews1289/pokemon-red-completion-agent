@@ -1,5 +1,15 @@
 # The story: teaching a model to actually play Pokémon
 
+## September 6: negative evidence is not automatically better judgment
+
+We connected saved-state play to a real 31-to-32 model update, preserving every old example and
+teaching the cost of a failed search. The subsequent player still searched without a catch.
+The honest milestone is a functioning learning loop, not improved sustained competence. Next is
+remembering exhausted searches and offering useful collection alternatives. No specimens were
+lost. [Session audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
 ## September 6 — retaining an honest unsuccessful outcome
 
 The recovery repair reproduced the same no-catch search and retained its exact endpoint instead
