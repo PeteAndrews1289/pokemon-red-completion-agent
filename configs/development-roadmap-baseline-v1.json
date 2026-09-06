@@ -1,0 +1,63 @@
+{
+  "baseline_id": "red-first-v1",
+  "adopted": "2026-09-06",
+  "mission": "A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.",
+  "stages": [
+    {
+      "id": "foundation",
+      "title": "Build the learning loop",
+      "goal": "Observe, act, verify, save and learn from actual outcomes.",
+      "exit": "Authenticated saved-state collection, retained-data fitting and a bounded post-fit continuation.",
+      "scope": "Teacher and deterministic mechanics support learning; they are not the final player."
+    },
+    {
+      "id": "adaptive-red",
+      "title": "Make useful Red decisions",
+      "goal": "Remember failed searches and choose productive alternatives.",
+      "exit": "A history-aware learner chooses between useful executable goals, learns from the result and continues productively.",
+      "scope": "Search history must inform learned choices, not a scripted rule forcing another goal."
+    },
+    {
+      "id": "sustained-red",
+      "title": "Sustain model-directed play",
+      "goal": "Combine navigation, battles, captures, resources and recovery.",
+      "exit": "Repeated multi-goal progress across varied Red situations, with measured costs, interventions and recovery.",
+      "scope": "Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence."
+    },
+    {
+      "id": "red-story",
+      "title": "Finish Red with the model",
+      "goal": "Plan quests, prerequisites and puzzles through the Champion.",
+      "exit": "Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.",
+      "scope": "Teacher completion already exists. It does not satisfy this learned-player milestone."
+    },
+    {
+      "id": "red-collection",
+      "title": "Build the Red-era living Dex",
+      "goal": "Capture and retain specimens; evolve, store and trade as needed.",
+      "exit": "Verified living collection against an explicit Red/Blue, trade and event availability contract.",
+      "scope": "Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers."
+    },
+    {
+      "id": "red-hack",
+      "title": "Adapt to an unfamiliar Red hack",
+      "goal": "Test changed encounters, rules or difficulty in a compatible hack.",
+      "exit": "Report initial performance and learning gains against an otherwise identical learner without Red experience.",
+      "scope": "Compatibility is checked separately. Red competence does not guarantee an immediate win."
+    },
+    {
+      "id": "crystal",
+      "title": "Transfer and learn Crystal",
+      "goal": "Reuse shared skills while learning new mechanics and progression.",
+      "exit": "Measured transfer and adaptation, followed by model-led story and declared living-collection completion.",
+      "scope": "Add the title adapter, time-dependent encounters, breeding and new mechanics; not another fixed walkthrough."
+    },
+    {
+      "id": "cross-generation",
+      "title": "Accumulate a cross-game living Dex",
+      "goal": "Carry competence and specimen lineage into later mainline games.",
+      "exit": "Per-title story and supported-mechanic completion plus verified cross-version collection and transfer records.",
+      "scope": "Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies."
+    }
+  ]
+}

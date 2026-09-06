@@ -1,5 +1,14 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## A stable visual reference for the whole project
+
+The [development infographic](development-roadmap.md) now separates verified foundations, the
+current learned-play gap and the entire planned cross-title journey. The baseline keeps goals
+and exit criteria stable; session reviews explain changes without presenting maintenance as
+new model competence. North Star closeout rules require the map, handoff and narratives to stay
+aligned after each completed session and substantial verified progress. Material deviations
+are recorded, not hidden. This is a communication improvement; the learner remains at 32 examples.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

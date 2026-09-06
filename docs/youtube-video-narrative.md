@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Recurring visual chapter — where are we on the map?
+
+Use the [development infographic](development-roadmap.md) as the recurring opening and closing
+shot for a substantial work session. Show the unchanged long-term route first, then zoom into
+the current milestone. Explain the observable result: what the model did, what the code merely
+enabled, what failed and what remains unproved. Keep the dated session check-in visible.
+
+The current honest frame is a 32-example goal-value learner and working search-memory plumbing,
+not a model that already completes Red. Two of five acceptance items for useful memory-aware
+play are verified; 40% is not Red completion or a forecast. This infographic update itself
+adds no training, controller authority or gameplay result.
+
+After substantial verified progress or session closeout, refresh the map and this narrative
+together. If the route changes, show the before/after decision and its reason using the
+[deviation log](roadmap-decisions.md), rather than quietly rewriting the story. Red competence
+and living collection precede an unfamiliar compatible Red hack, then Crystal and later games.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

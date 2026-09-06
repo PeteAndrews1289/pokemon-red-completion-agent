@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon.development-roadmap-state.v1",
+  "baseline_id": "red-first-v1",
+  "as_of_session": "2026-09-06-search-memory",
+  "current_stage": "adaptive-red",
+  "stages": {
+    "foundation": {"status":"verified","evidence":"docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"},
+    "adaptive-red": {"status":"current","evidence":"docs/evidence/red-search-memory-qualification-2026-09-06.json"},
+    "sustained-red": {"status":"planned","evidence":null},
+    "red-story": {"status":"planned","evidence":null},
+    "red-collection": {"status":"planned","evidence":null},
+    "red-hack": {"status":"planned","evidence":null},
+    "crystal": {"status":"planned","evidence":null},
+    "cross-generation": {"status":"planned","evidence":null}
+  },
+  "milestone": {
+    "title":"Useful memory-aware play",
+    "items":[
+      {"id":"saved-loop","label":"Saved-state learning loop","done":true,"evidence":"docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"},
+      {"id":"memory","label":"Persisted search-history contract","done":true,"evidence":"docs/evidence/red-search-memory-qualification-2026-09-06.json"},
+      {"id":"history-model","label":"Model trained to use history","done":false,"evidence":null},
+      {"id":"alternatives","label":"Two useful executable alternatives","done":false,"evidence":null},
+      {"id":"useful-followup","label":"Productive lesson and follow-up","done":false,"evidence":null}
+    ]
+  },
+  "reviews":[
+    {"session":"2026-09-06-search-memory","result":"Memory contract qualified; model remains at 32 examples. No new gameplay or fit.","deviation":"None from the Red-first sequence. This session was an engineering prerequisite, not learned progress.","next":"History-aware learner, useful alternatives, then a short measured lesson."}
+  ]
+}

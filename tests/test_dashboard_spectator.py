@@ -28,6 +28,13 @@ ROOT = Path(__file__).resolve().parents[1]
 OVERVIEW = runpy.run_path(str(ROOT / "scripts/run_product_focus_dashboard.py"))
 
 
+def _native_learning_fixture() -> dict:
+    # Historical numerical assertions must not follow the advancing live pointer.
+    return json.loads(
+        (ROOT / "docs/evidence/red-native-player-learning-result-2026-09-06.json").read_text()
+    )
+
+
 def _snapshot() -> DashboardSnapshot:
     return DashboardSnapshot(
         game="Pokémon Red",
@@ -83,7 +90,7 @@ def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() ->
 
 
 def test_native_player_fit_display_uses_retained_model_error_not_zero_initialization():
-    receipt = OVERVIEW["_load_learning_evidence"]()
+    receipt = _native_learning_fixture()
     assert receipt["schema"] == "pokemon.red.native-player-learning-session.v1"
     training, component = OVERVIEW["_training_projection"](receipt)
     assert (training.samples_before, training.samples_after) == (29, 31)
@@ -102,7 +109,7 @@ def test_native_player_fit_display_uses_retained_model_error_not_zero_initializa
     ("prior_rows_retained", False), ("authority_promotions", 1),
 ])
 def test_native_player_fit_display_rejects_false_learning_claims(field, value):
-    receipt = copy.deepcopy(OVERVIEW["_load_learning_evidence"]())
+    receipt = _native_learning_fixture()
     receipt["fit"][field] = value
     with pytest.raises(ProgressDashboardError):
         OVERVIEW["_training_projection"](receipt)
@@ -146,6 +153,7 @@ def test_main_loop_retains_last_verified_view_during_focus_digest_refresh(monkey
             pass
 
     monkeypatch.setitem(namespace, "load_product_focus", load)
+    monkeypatch.setitem(namespace, "_load_learning_evidence", _native_learning_fixture)
     monkeypatch.setitem(namespace, "load_dashboard_work_status", lambda _: DashboardWorkState())
     monkeypatch.setitem(namespace, "DashboardRelayState", Relay)
     monkeypatch.setitem(namespace, "ProgressDashboardServer", Server)
@@ -238,7 +246,7 @@ def test_saved_recap_loader_refuses_an_unjoined_audit(tmp_path: Path) -> None:
     ],
 )
 def test_training_summary_rejects_false_accounting(changes: dict) -> None:
-    training, _ = OVERVIEW["_training_projection"](OVERVIEW["_load_learning_evidence"]())
+    training, _ = OVERVIEW["_training_projection"](_native_learning_fixture())
     with pytest.raises(ProgressDashboardError):
         replace(training, **changes)
 

@@ -1,5 +1,10 @@
 # Pokémon Red Completion Agent
 
+[**Development infographic: the full roadmap and our current position →**](docs/development-roadmap.md)
+
+Verified capabilities, stable exit criteria and planned work are shown separately. The displayed
+percentage belongs only to its named checklist—not overall game or project completion.
+
 ## Latest development checkpoint
 
 Search-history storage and observation are now implemented and tested across saved continuations.

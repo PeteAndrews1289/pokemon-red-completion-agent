@@ -51,6 +51,37 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 
 ## Default development loop
 
+### Fixed visual roadmap and session closeout
+
+Use the [development infographic](docs/development-roadmap.md) and its
+[stable baseline](configs/development-roadmap-baseline-v1.json) to locate each substantial task
+within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
+Red-era living collection, an unfamiliar compatible Red modification, Crystal, then later titles.
+This baseline is subordinate to the mission and this contract; it does not authorize execution.
+
+After **every completed work session**, and during a longer session after a substantial verified
+capability, fit, gameplay result or blocker changes our position:
+
+1. Update the active state and the [roadmap status](configs/development-roadmap-state.json).
+   Preserve earlier reviews; record what changed, whether it deviated from the plan, and why.
+2. Regenerate the infographic and its accessible Markdown with
+   `python scripts/development_roadmap.py --write`. Inspect the visual after layout/content changes.
+3. Refresh the handoff, next steps and YouTube/project narrative with the same factual result.
+   Update this North Star only when requirements, operating rules or the agreed sequence change;
+   do not rewrite its goals merely to make a session look successful.
+4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
+   mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
+
+Stage exit criteria stay stable. Material changes require an explicit entry in
+[roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
+the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
+a difficult milestone with an easier one or count teacher completion as learned completion.
+Any percentage must name its checklist and denominator; do not report a whole-project percentage
+or turn equal checklist weights into a remaining-time estimate. Progress without a new learning
+result must remain visibly classified as engineering or documentation.
+
+### Runtime learning loop
+
 Use authenticated development checkpoints and short randomized scenarios:
 
 1. restore a relevant state;

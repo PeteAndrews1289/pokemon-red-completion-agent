@@ -1,5 +1,13 @@
 # Three-agent coordination
 
+## Shared roadmap reference
+
+Use the [development infographic](docs/development-roadmap.md) and its fixed stage exits when
+reviewing progress. Codex updates status/reviews and handoffs at session closeout and after
+substantial verified milestones. Reviewers should identify deviations and explain their impact
+on the end product, not turn each visual refresh into a new approval gate. No external reviewer
+was invoked for this documentation work. The active coding priority is unchanged.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

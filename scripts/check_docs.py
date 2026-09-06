@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from check_product_focus import check_product_focus
+from development_roadmap import check_roadmap
 from product_focus import ProductFocusError
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +39,11 @@ def main() -> int:
         check_product_focus()
     except ProductFocusError as error:
         problems.append(f"active product focus: {error}")
+
+    try:
+        check_roadmap()
+    except (ValueError, KeyError, OSError) as error:
+        problems.append(f"development roadmap: {error}")
 
     if problems:
         print("\n".join(problems))

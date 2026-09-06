@@ -1,5 +1,10 @@
 # Model-first development roadmap
 
+Start with the [full development infographic and stable exit criteria](development-roadmap.md).
+It is the compact visual reference for the sequence below, not a new authority or execution gate.
+Update its status after a completed session or substantial verified result; preserve baseline
+goals and log material deviations. The current coding task remains history-aware useful Red play.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

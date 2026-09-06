@@ -1,5 +1,18 @@
 # Handoff
 
+## Visual orientation and required closeout
+
+Start with the [development infographic](docs/development-roadmap.md), then the active state.
+The stable baseline covers the full Red-first-to-cross-generation journey; the current marker
+is phase 02, with two of five items verified for useful memory-aware play. The 40% is not a
+full-project estimate. No new learning is claimed by this documentation update.
+
+After a completed session or substantial verified milestone, update the roadmap status/review,
+regenerate the graphic and accessible page, and refresh this handoff plus project/YouTube
+narratives. The North Star now specifies this closeout. Explain deviations against the baseline
+in `docs/roadmap-decisions.md`; do not silently move the goals. Reuse the existing docs check.
+The actual next coding task remains the history-aware learner and useful alternatives.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

@@ -1,5 +1,14 @@
 # Red-to-Crystal readiness roadmap
 
+## Current visual baseline supersedes the historical sequence below
+
+Use the [development infographic](development-roadmap.md), [North Star](../NORTH_STAR.md) and
+[active state](../ACTIVE_PRODUCT_STATE.md). The agreed order is useful and sustained Red play,
+model-led Red story completion, a declared Red-era living collection, an unfamiliar compatible
+Red hack, Crystal, then later generations. Crystal is no longer the first planned transfer test.
+The older counters, powered-campaign gates and forecasts below are historical, not the current
+work queue or permission to reopen consumed runs. Shared architectural goals remain relevant.
+
 ## September 6 orientation
 
 The long-term destination and title-neutral architecture below remain in force. The immediate

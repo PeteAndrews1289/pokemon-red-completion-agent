@@ -1,5 +1,15 @@
 # Current agent handoffs
 
+## Required shared visual reference
+
+Use the [development infographic](development-roadmap.md) to locate the current task in the full
+product journey. Codex maintains its status after each completed session and substantial verified
+progress, alongside handoffs and narratives. Reviewers, when requested, should challenge actual
+milestone progress and any deviation from the stable goals; they need not approve every update.
+No reviewer was invoked for the infographic. The next coding task is unchanged: history-aware
+learning with useful collection alternatives. Do not interpret the checklist's 40% as full Red
+or cross-game completion. Follow the North Star closeout contract.
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
