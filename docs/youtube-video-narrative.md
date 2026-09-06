@@ -12,8 +12,8 @@ bad experimental design. Every usable outcome came from one save and every setup
 the other. Because each save had also been assigned different kinds of goals, training now would
 teach the model which classroom worked—not which Pokémon objective was valuable.”
 
-Replace the two large stacks with at least four smaller root cards. Overlay **MAX 3 LESSONS PER
-ROOT · ACQUIRE ON 2+ ROOTS · DEVELOP ON 2+ ROOTS**. Then show failure receipts containing only
+Replace the two large stacks with at least four smaller lineage/root cards. Overlay **MAX 3 LESSONS
+PER LINEAGE OR ROOT · ACQUIRE ON 2+ ROOTS · DEVELOP ON 2+ ROOTS**. Then show failure receipts containing only
 **PHASE · CLASS · ACTIONS · FRAMES**, while a raw exception and local path are crossed out. End on
 **SOURCE DIVERSE ROOTS → FREEZE SUCCESSOR → COLLECT ONCE → FIT ONLY IF 8+ SETTLE**. Do not depict a
 new model, autonomous Red completion, Crystal transfer or Pokédex completion from this campaign.

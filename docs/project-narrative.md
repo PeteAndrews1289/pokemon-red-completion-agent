@@ -17,9 +17,10 @@ five of the required eight examples.
 The repair makes that failure cheaper and nonrepeatable. Future setup censors say which bounded
 phase failed, what broad class of failure occurred, and how many actions and frames were spent,
 without preserving a private path or exception message. More importantly, a new diversity gate
-rejects any successor classroom that concentrates the ten lessons on two starts or assigns an
-entire strategic family to one root. The next model update must learn across varied histories—the
-same property it will eventually need when moving from Red into Crystal and later games.
+rejects any successor classroom that concentrates the ten lessons on two starts or lineages, or
+assigns an entire strategic family to one root. The next model update must learn across varied
+histories—the same property it will eventually need when moving from Red into Crystal and later
+games.
 
 ## September 5: training stopped pretending to be an exam
 

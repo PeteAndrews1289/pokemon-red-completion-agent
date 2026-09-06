@@ -19,7 +19,8 @@ causal rows, but fitting now would teach a confounded and low-diversity sample. 
 The follow-up branch adds two protections. Future setup terminals retain only a bounded failure
 phase, bounded failure class, and per-attempt action/frame totals; raw exception messages and
 private paths remain absent, and historical V1 terminals stay readable. A title-neutral diversity
-audit now requires at least four physical train roots, no more than three of ten slots on one root,
+audit now requires at least four train lineages and physical roots, no more than three of ten slots
+on one lineage or root,
 and acquisition plus party-development coverage across at least two physical roots each. The
 historical two-root schedule intentionally fails all three checks; a ten-root fixture passes.
 

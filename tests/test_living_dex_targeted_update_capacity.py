@@ -219,10 +219,14 @@ def test_root_diversity_guard_rejects_the_two_root_confounded_design() -> None:
     result = audit_living_dex_targeted_schedule_root_diversity(schedule)
 
     assert not result.diversity_sufficient
+    assert result.train_lineages == 2
     assert result.train_physical_roots == 2
+    assert result.maximum_slots_on_one_lineage == 5
     assert result.maximum_slots_on_one_physical_root == 5
     assert result.reasons == (
+        "insufficient_distinct_train_lineages",
         "insufficient_distinct_train_physical_roots",
+        "excessive_train_slot_lineage_concentration",
         "excessive_train_slot_root_concentration",
         "insufficient_focus_kind_root_diversity",
     )
@@ -239,7 +243,9 @@ def test_root_diversity_guard_accepts_independent_train_roots() -> None:
     )
 
     assert result.diversity_sufficient
+    assert result.train_lineages == 10
     assert result.train_physical_roots == 10
+    assert result.maximum_slots_on_one_lineage == 1
     assert result.maximum_slots_on_one_physical_root == 1
     assert dict(result.physical_roots_by_focus_kind) == {
         LivingDexOptionKind.ACQUIRE: 4,

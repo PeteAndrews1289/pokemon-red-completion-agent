@@ -13,9 +13,9 @@ The next sequence is:
 
 1. Publish setup diagnostics that retain only bounded phase/class/action/frame data and continue to
    authenticate historical V1 terminals without rewriting them.
-2. Require a successor schedule to use at least four train physical roots, place no more than three
-   slots on one root, and spread both acquisition and party-development lessons across at least two
-   roots each.
+2. Require a successor schedule to use at least four train lineages and physical roots, place no
+   more than three slots on one lineage or root, and spread both acquisition and party-development
+   lessons across at least two roots each.
 3. Build or authenticate enough fresh train roots to satisfy that guard without consuming the
    untouched paired-development bank.
 4. Freeze and preflight one successor train schedule. If either capacity or diversity fails, stop

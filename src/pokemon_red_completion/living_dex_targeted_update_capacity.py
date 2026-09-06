@@ -225,7 +225,9 @@ class LivingDexTargetedCapacityResult:
 class LivingDexTargetedRootDiversityPolicy:
     """Minimum independent-root coverage for a successor train schedule."""
 
+    minimum_train_lineages: int
     minimum_train_physical_roots: int
+    maximum_train_slots_per_lineage: int
     maximum_train_slots_per_physical_root: int
     minimum_physical_roots_by_focus_kind: tuple[
         tuple[LivingDexOptionKind, int], ...
@@ -237,8 +239,12 @@ class LivingDexTargetedRootDiversityPolicy:
             subject="targeted root diversity",
         )
         if (
-            type(self.minimum_train_physical_roots) is not int  # noqa: E721
+            type(self.minimum_train_lineages) is not int  # noqa: E721
+            or self.minimum_train_lineages < 2
+            or type(self.minimum_train_physical_roots) is not int  # noqa: E721
             or self.minimum_train_physical_roots < 2
+            or type(self.maximum_train_slots_per_lineage) is not int  # noqa: E721
+            or self.maximum_train_slots_per_lineage < 1
             or type(self.maximum_train_slots_per_physical_root) is not int  # noqa: E721
             or self.maximum_train_slots_per_physical_root < 1
             or any(value < 2 for value in minimums.values())
@@ -252,7 +258,9 @@ class LivingDexTargetedRootDiversityPolicy:
         """Prevent the root/focus confounding observed in the first campaign."""
 
         return cls(
+            minimum_train_lineages=4,
             minimum_train_physical_roots=4,
+            maximum_train_slots_per_lineage=3,
             maximum_train_slots_per_physical_root=3,
             minimum_physical_roots_by_focus_kind=(
                 (LivingDexOptionKind.ACQUIRE, 2),
@@ -266,6 +274,7 @@ class LivingDexTargetedRootDiversityPolicy:
 
     def public_dict(self) -> dict[str, object]:
         return {
+            "maximum_train_slots_per_lineage": self.maximum_train_slots_per_lineage,
             "maximum_train_slots_per_physical_root": (
                 self.maximum_train_slots_per_physical_root
             ),
@@ -273,6 +282,7 @@ class LivingDexTargetedRootDiversityPolicy:
                 kind.value: count
                 for kind, count in self.minimum_physical_roots_by_focus_kind
             },
+            "minimum_train_lineages": self.minimum_train_lineages,
             "minimum_train_physical_roots": self.minimum_train_physical_roots,
             "schema": LIVING_DEX_TARGETED_ROOT_DIVERSITY_POLICY_SCHEMA,
         }
@@ -284,7 +294,9 @@ class LivingDexTargetedRootDiversityResult:
 
     policy: LivingDexTargetedRootDiversityPolicy
     train_slots: int
+    train_lineages: int
     train_physical_roots: int
+    maximum_slots_on_one_lineage: int
     maximum_slots_on_one_physical_root: int
     physical_roots_by_focus_kind: tuple[tuple[LivingDexOptionKind, int], ...]
     reasons: tuple[str, ...]
@@ -298,6 +310,7 @@ class LivingDexTargetedRootDiversityResult:
             "controller_actions": 0,
             "diversity_sufficient": self.diversity_sufficient,
             "emulator_frames": 0,
+            "maximum_slots_on_one_lineage": self.maximum_slots_on_one_lineage,
             "maximum_slots_on_one_physical_root": (
                 self.maximum_slots_on_one_physical_root
             ),
@@ -313,6 +326,7 @@ class LivingDexTargetedRootDiversityResult:
             "reasons": list(self.reasons),
             "schema": LIVING_DEX_TARGETED_ROOT_DIVERSITY_RESULT_SCHEMA,
             "teacher_queries": 0,
+            "train_lineages": self.train_lineages,
             "train_physical_roots": self.train_physical_roots,
             "train_slots": self.train_slots,
         }
@@ -595,6 +609,7 @@ def audit_living_dex_targeted_schedule_root_diversity(
         raise TypeError("targeted root diversity policy differs")
     active.__post_init__()
     train = tuple(slot for slot in schedule.slots if slot.partition == "train")
+    lineage_concentration = Counter(slot.lineage_sha256 for slot in train)
     concentration = Counter(slot.physical_root_sha256 for slot in train)
     kind_counts = tuple(
         (
@@ -610,8 +625,14 @@ def audit_living_dex_targeted_schedule_root_diversity(
         for kind, _minimum in active.minimum_physical_roots_by_focus_kind
     )
     reasons: list[str] = []
+    if len(lineage_concentration) < active.minimum_train_lineages:
+        reasons.append("insufficient_distinct_train_lineages")
     if len(concentration) < active.minimum_train_physical_roots:
         reasons.append("insufficient_distinct_train_physical_roots")
+    if lineage_concentration and max(lineage_concentration.values()) > (
+        active.maximum_train_slots_per_lineage
+    ):
+        reasons.append("excessive_train_slot_lineage_concentration")
     if concentration and max(concentration.values()) > (
         active.maximum_train_slots_per_physical_root
     ):
@@ -625,7 +646,11 @@ def audit_living_dex_targeted_schedule_root_diversity(
     return LivingDexTargetedRootDiversityResult(
         policy=active,
         train_slots=len(train),
+        train_lineages=len(lineage_concentration),
         train_physical_roots=len(concentration),
+        maximum_slots_on_one_lineage=(
+            max(lineage_concentration.values()) if lineage_concentration else 0
+        ),
         maximum_slots_on_one_physical_root=(
             max(concentration.values()) if concentration else 0
         ),
