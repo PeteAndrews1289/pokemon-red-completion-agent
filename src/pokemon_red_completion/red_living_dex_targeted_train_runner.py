@@ -46,11 +46,14 @@ from pokemon_red_completion.red_living_dex_claim_first_campaign import (
     RedLivingDexResolvedSetupSlot,
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
+    RedLivingDexProductionRuntimeError,
     RedLivingDexProductionSetupResolver,
 )
 from pokemon_red_completion.red_living_dex_setup_recipe import (
+    RED_LIVING_DEX_SETUP_PHASES,
     RedLivingDexAuthenticatedSetupRoot,
     RedLivingDexSetupEffectMeter,
+    RedLivingDexSetupRecipeError,
     RedLivingDexSetupSlotRecipe,
     RedLivingDexValidatedSetupCapture,
     restore_red_living_dex_validated_setup_capture,
@@ -81,6 +84,18 @@ _SETUP_CLAIM_KIND = "red_living_dex_targeted_setup_claim"
 _SETUP_CAPTURE_KIND = "red_living_dex_targeted_setup_capture"
 _SETUP_TERMINAL_KIND = "red_living_dex_targeted_setup_terminal"
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+_TARGETED_SETUP_FAILURE_PHASES = RED_LIVING_DEX_SETUP_PHASES | {
+    "claim_recovery",
+    "resolver_reauthentication",
+    "setup_capture_validation",
+}
+_TARGETED_SETUP_FAILURE_CLASSES = {
+    "process_interruption",
+    "production_runtime_error",
+    "setup_recipe_error",
+    "targeted_runner_error",
+    "unexpected_error",
+}
 
 
 class RedLivingDexTargetedTrainRunnerError(RuntimeError):
@@ -164,6 +179,8 @@ class RedLivingDexTargetedTrainReceipt:
     assignment: RedLivingDexTargetedTrainAssignment = field(repr=False)
     setup_status: RedLivingDexTargetedSetupStatus
     causal: LivingDexCausalReceipt | None
+    setup_failure_phase: str | None = None
+    setup_failure_class: str | None = None
 
     def __post_init__(self) -> None:
         self.assignment.__post_init__()
@@ -187,6 +204,33 @@ class RedLivingDexTargetedTrainReceipt:
             raise RedLivingDexTargetedTrainRunnerError(
                 "failed targeted setup opened a causal outcome"
             )
+        if (
+            self.setup_failure_phase is not None
+            and self.setup_failure_phase not in _TARGETED_SETUP_FAILURE_PHASES
+        ):
+            raise RedLivingDexTargetedTrainRunnerError(
+                "targeted setup failure phase differs"
+            )
+        if (
+            self.setup_status is RedLivingDexTargetedSetupStatus.COMPLETE
+            and (
+                self.setup_failure_phase is not None
+                or self.setup_failure_class is not None
+            )
+        ):
+            raise RedLivingDexTargetedTrainRunnerError(
+                "complete targeted setup retained failure diagnostics"
+            )
+        if self.setup_status is not RedLivingDexTargetedSetupStatus.COMPLETE and (
+            (self.setup_failure_phase is None) != (self.setup_failure_class is None)
+            or (
+                self.setup_failure_class is not None
+                and self.setup_failure_class not in _TARGETED_SETUP_FAILURE_CLASSES
+            )
+        ):
+            raise RedLivingDexTargetedTrainRunnerError(
+                "targeted setup failure diagnostics differ"
+            )
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -197,7 +241,9 @@ class RedLivingDexTargetedTrainReceipt:
             "counterfactual_targets": 0,
             "model_fits": 0,
             "model_predictions": 0,
-            "schema": "pokemon.red.living-dex-targeted-reset-train-receipt.v1",
+            "schema": "pokemon.red.living-dex-targeted-reset-train-receipt.v2",
+            "setup_failure_class": self.setup_failure_class,
+            "setup_failure_phase": self.setup_failure_phase,
             "setup_status": self.setup_status.value,
             "teacher_queries": 0,
         }
@@ -268,7 +314,13 @@ def run_red_living_dex_targeted_train_assignment(
     frozen = _FrozenTargetedRecipe(assignment.capability)
     root = assignment.capability.root.root
     with store.collection_session(_COLLECTION_ID):
-        setup_status, capture, setup_terminal_sha256 = _ensure_setup_capture(
+        (
+            setup_status,
+            capture,
+            setup_terminal_sha256,
+            setup_failure_phase,
+            setup_failure_class,
+        ) = _ensure_setup_capture(
             assignment,
             trial=trial,
             claim_disposition=claim_disposition,
@@ -280,7 +332,13 @@ def run_red_living_dex_targeted_train_assignment(
             store=store,
         )
     if capture is None:
-        return RedLivingDexTargetedTrainReceipt(assignment, setup_status, None)
+        return RedLivingDexTargetedTrainReceipt(
+            assignment,
+            setup_status,
+            None,
+            setup_failure_phase,
+            setup_failure_class,
+        )
 
     @contextmanager
     def resolve_runtime():  # type: ignore[no-untyped-def]
@@ -319,6 +377,8 @@ def run_red_living_dex_targeted_train_assignment(
         assignment,
         RedLivingDexTargetedSetupStatus.COMPLETE,
         causal,
+        None,
+        None,
     )
 
 
@@ -337,6 +397,8 @@ def _ensure_setup_capture(
     RedLivingDexTargetedSetupStatus,
     RedLivingDexValidatedSetupCapture | None,
     str,
+    str | None,
+    str | None,
 ]:
     suffix = trial.trial_claim_sha256[:32]
     claim_id = f"lrt-setup-claim-{suffix}"
@@ -358,7 +420,13 @@ def _ensure_setup_capture(
                 raise RedLivingDexTargetedTrainRunnerError(
                     "noncomplete targeted setup retained a capture"
                 )
-            return status, None, canonical_sha256(terminal)
+            return (
+                status,
+                None,
+                canonical_sha256(terminal),
+                _optional_failure_phase(terminal),
+                _optional_failure_class(terminal),
+            )
         if capture_record is None:
             raise RedLivingDexTargetedTrainRunnerError(
                 "complete targeted setup lost its capture"
@@ -367,7 +435,7 @@ def _ensure_setup_capture(
             capture_record.read()
         )
         _require_capture_join(assignment, capture, setup_execution_identity)
-        return status, capture, canonical_sha256(terminal)
+        return status, capture, canonical_sha256(terminal), None, None
 
     if capture_record is not None:
         capture = restore_red_living_dex_validated_setup_capture(
@@ -380,11 +448,17 @@ def _ensure_setup_capture(
             trial,
             status=RedLivingDexTargetedSetupStatus.COMPLETE,
             capture_sha256=canonical_sha256(capture.private_dict()),
+            failure_phase=None,
+            failure_class=None,
+            setup_controller_actions=capture.attestation.setup_controller_actions,
+            setup_emulator_frames=capture.attestation.setup_emulator_frames,
         )
         return (
             RedLivingDexTargetedSetupStatus.COMPLETE,
             capture,
             canonical_sha256(terminal),
+            None,
+            None,
         )
 
     if claim_disposition is LivingDexRepeatableClaimDisposition.RECOVERED:
@@ -394,11 +468,17 @@ def _ensure_setup_capture(
             trial,
             status=RedLivingDexTargetedSetupStatus.INTERRUPTED,
             capture_sha256=None,
+            failure_phase="claim_recovery",
+            failure_class="process_interruption",
+            setup_controller_actions=0,
+            setup_emulator_frames=0,
         )
         return (
             RedLivingDexTargetedSetupStatus.INTERRUPTED,
             None,
             canonical_sha256(terminal),
+            "claim_recovery",
+            "process_interruption",
         )
 
     store.publish_sealed_record(
@@ -406,6 +486,8 @@ def _ensure_setup_capture(
         kind=_SETUP_CLAIM_KIND,
         record=trial.private_dict(),
     )
+    setup_before = meter.checkpoint()
+    phase = ["resolver_reauthentication"]
     try:
         with resolver(
             frozen,
@@ -414,6 +496,7 @@ def _ensure_setup_capture(
             meter=meter,
         ) as resolved:
             _require_resolved(resolved, frozen, setup_execution_identity)
+            phase[0] = "setup_capture_validation"
             capture = validate_red_living_dex_setup_recipe(
                 assignment.capability.slot,
                 resolved.recipe,
@@ -421,6 +504,7 @@ def _ensure_setup_capture(
                 root=root,
                 arm_factory=resolved.arm_factory,
                 meter=meter,
+                phase_observer=lambda value: phase.__setitem__(0, value),
             )
     except BaseException as error:
         status = (
@@ -434,10 +518,24 @@ def _ensure_setup_capture(
             trial,
             status=status,
             capture_sha256=None,
+            failure_phase=phase[0],
+            failure_class=_setup_failure_class(error),
+            setup_controller_actions=(
+                meter.controller_actions - setup_before.controller_actions
+            ),
+            setup_emulator_frames=(
+                meter.emulator_frames - setup_before.emulator_frames
+            ),
         )
         if not isinstance(error, Exception):
             raise
-        return status, None, canonical_sha256(terminal)
+        return (
+            status,
+            None,
+            canonical_sha256(terminal),
+            phase[0],
+            _setup_failure_class(error),
+        )
     _require_capture_join(assignment, capture, setup_execution_identity)
     store.publish_sealed_record(
         capture_id,
@@ -450,11 +548,17 @@ def _ensure_setup_capture(
         trial,
         status=RedLivingDexTargetedSetupStatus.COMPLETE,
         capture_sha256=canonical_sha256(capture.private_dict()),
+        failure_phase=None,
+        failure_class=None,
+        setup_controller_actions=capture.attestation.setup_controller_actions,
+        setup_emulator_frames=capture.attestation.setup_emulator_frames,
     )
     return (
         RedLivingDexTargetedSetupStatus.COMPLETE,
         capture,
         canonical_sha256(terminal),
+        None,
+        None,
     )
 
 
@@ -465,11 +569,19 @@ def _publish_terminal(
     *,
     status: RedLivingDexTargetedSetupStatus,
     capture_sha256: str | None,
+    failure_phase: str | None,
+    failure_class: str | None,
+    setup_controller_actions: int,
+    setup_emulator_frames: int,
 ) -> Mapping[str, object]:
     terminal: dict[str, object] = {
         "capture_sha256": capture_sha256,
+        "failure_class": failure_class,
+        "failure_phase": failure_phase,
         "retry_allowed": False,
-        "schema": "pokemon.red.private-living-dex-targeted-setup-terminal.v1",
+        "schema": "pokemon.red.private-living-dex-targeted-setup-terminal.v2",
+        "setup_controller_actions": setup_controller_actions,
+        "setup_emulator_frames": setup_emulator_frames,
         "status": status.value,
         "trial_claim_sha256": trial.trial_claim_sha256,
     }
@@ -485,13 +597,34 @@ def _restore_terminal(
     document: Mapping[str, object],
     trial: LivingDexRepeatableTrialClaim,
 ) -> Mapping[str, object]:
-    if set(document) != {
+    v1_fields = {
         "capture_sha256",
         "retry_allowed",
         "schema",
         "status",
         "trial_claim_sha256",
-    }:
+    }
+    v2_fields = v1_fields | {
+        "failure_class",
+        "failure_phase",
+        "setup_controller_actions",
+        "setup_emulator_frames",
+    }
+    schema = document.get("schema")
+    if (
+        (
+            schema == "pokemon.red.private-living-dex-targeted-setup-terminal.v1"
+            and set(document) != v1_fields
+        )
+        or (
+            schema == "pokemon.red.private-living-dex-targeted-setup-terminal.v2"
+            and set(document) != v2_fields
+        )
+        or schema not in {
+            "pokemon.red.private-living-dex-targeted-setup-terminal.v1",
+            "pokemon.red.private-living-dex-targeted-setup-terminal.v2",
+        }
+    ):
         raise RedLivingDexTargetedTrainRunnerError(
             "targeted setup terminal fields differ"
         )
@@ -503,9 +636,7 @@ def _restore_terminal(
         ) from None
     capture_sha256 = document["capture_sha256"]
     if (
-        document["schema"]
-        != "pokemon.red.private-living-dex-targeted-setup-terminal.v1"
-        or document["retry_allowed"] is not False
+        document["retry_allowed"] is not False
         or document["trial_claim_sha256"] != trial.trial_claim_sha256
         or (status is RedLivingDexTargetedSetupStatus.COMPLETE)
         != isinstance(capture_sha256, str)
@@ -520,7 +651,70 @@ def _restore_terminal(
         raise RedLivingDexTargetedTrainRunnerError(
             "targeted setup terminal differs"
         )
+    if schema == "pokemon.red.private-living-dex-targeted-setup-terminal.v2":
+        failure_phase = document["failure_phase"]
+        failure_class = document["failure_class"]
+        if (
+            (status is RedLivingDexTargetedSetupStatus.COMPLETE)
+            != (failure_phase is None and failure_class is None)
+            or (
+                failure_phase is not None
+                and failure_phase not in _TARGETED_SETUP_FAILURE_PHASES
+            )
+            or (
+                failure_class is not None
+                and failure_class not in _TARGETED_SETUP_FAILURE_CLASSES
+            )
+            or any(
+                not _is_nonnegative_int(document[name])
+                for name in (
+                    "setup_controller_actions",
+                    "setup_emulator_frames",
+                )
+            )
+        ):
+            raise RedLivingDexTargetedTrainRunnerError(
+                "targeted setup terminal diagnostics differ"
+            )
     return document
+
+
+def _is_nonnegative_int(value: object) -> bool:
+    return type(value) is int and value >= 0  # type: ignore[operator]
+
+
+def _optional_failure_phase(document: Mapping[str, object]) -> str | None:
+    value = document.get("failure_phase")
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in _TARGETED_SETUP_FAILURE_PHASES:
+        raise RedLivingDexTargetedTrainRunnerError(
+            "targeted setup failure phase differs"
+        )
+    return value
+
+
+def _optional_failure_class(document: Mapping[str, object]) -> str | None:
+    value = document.get("failure_class")
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in _TARGETED_SETUP_FAILURE_CLASSES:
+        raise RedLivingDexTargetedTrainRunnerError(
+            "targeted setup failure class differs"
+        )
+    return value
+
+
+def _setup_failure_class(error: BaseException) -> str:
+    if not isinstance(error, Exception):
+        return "process_interruption"
+    if isinstance(error, RedLivingDexSetupRecipeError):
+        return "setup_recipe_error"
+    if isinstance(error, RedLivingDexProductionRuntimeError):
+        return "production_runtime_error"
+    if isinstance(error, RedLivingDexTargetedTrainRunnerError):
+        return "targeted_runner_error"
+    return "unexpected_error"
 
 
 def _require_resolved(

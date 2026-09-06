@@ -1207,6 +1207,30 @@ def test_same_root_validation_derives_real_menu_without_executing_a_provider() -
     assert result.public_dict()["learner_labels"] == 0
 
 
+def test_same_root_validation_reports_bounded_diagnostic_phases() -> None:
+    slot = build_red_living_dex_prospective_capture_plan().slots[0]
+    recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))
+    meter = _Meter()
+    identity = _identity()
+    phases: list[str] = []
+
+    validate_red_living_dex_setup_recipe(
+        slot,
+        recipe,
+        execution_identity=identity,
+        root=_root(0),
+        arm_factory=_ArmFactory(identity, meter),
+        meter=meter,
+        phase_observer=phases.append,
+    )
+
+    assert phases[0] == "construction_arm"
+    assert phases[-1] == "capture_assembly"
+    assert phases.count("candidate_arm") == len(recipe.providers)
+    assert phases.count("candidate_offer") == len(recipe.providers)
+    assert "final_restore" in phases
+
+
 def test_routed_origin_construction_is_counted_before_candidate_forks() -> None:
     slot = build_red_living_dex_prospective_capture_plan().slots[0]
     local_recipe = _recipe(0, origin_map=int(MapId.ROUTE_1))

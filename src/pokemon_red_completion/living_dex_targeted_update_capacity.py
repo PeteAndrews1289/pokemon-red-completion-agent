@@ -25,6 +25,12 @@ LIVING_DEX_TARGETED_CAPACITY_RESULT_SCHEMA = (
     "pokemon.core.living-dex-targeted-update-capacity-result.v1"
 )
 LIVING_DEX_TARGETED_SCHEDULE_SCHEMA = "pokemon.core.living-dex-targeted-update-schedule.v1"
+LIVING_DEX_TARGETED_ROOT_DIVERSITY_POLICY_SCHEMA = (
+    "pokemon.core.living-dex-targeted-root-diversity-policy.v1"
+)
+LIVING_DEX_TARGETED_ROOT_DIVERSITY_RESULT_SCHEMA = (
+    "pokemon.core.living-dex-targeted-root-diversity-result.v1"
+)
 
 LivingDexTargetedPartition = Literal["train", "development"]
 
@@ -212,6 +218,103 @@ class LivingDexTargetedCapacityResult:
             "train_contexts": self.train_contexts,
             "train_maximum_matching": self.train_maximum_matching,
             "training_targets_emitted": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexTargetedRootDiversityPolicy:
+    """Minimum independent-root coverage for a successor train schedule."""
+
+    minimum_train_physical_roots: int
+    maximum_train_slots_per_physical_root: int
+    minimum_physical_roots_by_focus_kind: tuple[
+        tuple[LivingDexOptionKind, int], ...
+    ]
+
+    def __post_init__(self) -> None:
+        minimums = _kind_counter(
+            self.minimum_physical_roots_by_focus_kind,
+            subject="targeted root diversity",
+        )
+        if (
+            type(self.minimum_train_physical_roots) is not int  # noqa: E721
+            or self.minimum_train_physical_roots < 2
+            or type(self.maximum_train_slots_per_physical_root) is not int  # noqa: E721
+            or self.maximum_train_slots_per_physical_root < 1
+            or any(value < 2 for value in minimums.values())
+        ):
+            raise LivingDexTargetedCapacityError(
+                "targeted root diversity policy differs"
+            )
+
+    @classmethod
+    def v1(cls) -> LivingDexTargetedRootDiversityPolicy:
+        """Prevent the root/focus confounding observed in the first campaign."""
+
+        return cls(
+            minimum_train_physical_roots=4,
+            maximum_train_slots_per_physical_root=3,
+            minimum_physical_roots_by_focus_kind=(
+                (LivingDexOptionKind.ACQUIRE, 2),
+                (LivingDexOptionKind.DEVELOP, 2),
+            ),
+        )
+
+    @property
+    def policy_sha256(self) -> str:
+        return canonical_sha256(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "maximum_train_slots_per_physical_root": (
+                self.maximum_train_slots_per_physical_root
+            ),
+            "minimum_physical_roots_by_focus_kind": {
+                kind.value: count
+                for kind, count in self.minimum_physical_roots_by_focus_kind
+            },
+            "minimum_train_physical_roots": self.minimum_train_physical_roots,
+            "schema": LIVING_DEX_TARGETED_ROOT_DIVERSITY_POLICY_SCHEMA,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexTargetedRootDiversityResult:
+    """Identity-free audit of root concentration in one frozen schedule."""
+
+    policy: LivingDexTargetedRootDiversityPolicy
+    train_slots: int
+    train_physical_roots: int
+    maximum_slots_on_one_physical_root: int
+    physical_roots_by_focus_kind: tuple[tuple[LivingDexOptionKind, int], ...]
+    reasons: tuple[str, ...]
+
+    @property
+    def diversity_sufficient(self) -> bool:
+        return not self.reasons
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "controller_actions": 0,
+            "diversity_sufficient": self.diversity_sufficient,
+            "emulator_frames": 0,
+            "maximum_slots_on_one_physical_root": (
+                self.maximum_slots_on_one_physical_root
+            ),
+            "model_fits": 0,
+            "model_predictions": 0,
+            "physical_roots_by_focus_kind": {
+                kind.value: count for kind, count in self.physical_roots_by_focus_kind
+            },
+            "policy": self.policy.public_dict(),
+            "policy_sha256": self.policy.policy_sha256,
+            "private_identity_fields": 0,
+            "private_path_fields": 0,
+            "reasons": list(self.reasons),
+            "schema": LIVING_DEX_TARGETED_ROOT_DIVERSITY_RESULT_SCHEMA,
+            "teacher_queries": 0,
+            "train_physical_roots": self.train_physical_roots,
+            "train_slots": self.train_slots,
         }
 
 
@@ -477,6 +580,78 @@ def freeze_living_dex_targeted_schedule(
     )
 
 
+def audit_living_dex_targeted_schedule_root_diversity(
+    schedule: LivingDexTargetedSchedule,
+    *,
+    policy: LivingDexTargetedRootDiversityPolicy | None = None,
+) -> LivingDexTargetedRootDiversityResult:
+    """Reject arithmetic schedules that confound focus families with one root."""
+
+    if not isinstance(schedule, LivingDexTargetedSchedule):
+        raise TypeError("targeted root diversity needs a frozen schedule")
+    schedule.__post_init__()
+    active = LivingDexTargetedRootDiversityPolicy.v1() if policy is None else policy
+    if not isinstance(active, LivingDexTargetedRootDiversityPolicy):
+        raise TypeError("targeted root diversity policy differs")
+    active.__post_init__()
+    train = tuple(slot for slot in schedule.slots if slot.partition == "train")
+    concentration = Counter(slot.physical_root_sha256 for slot in train)
+    kind_counts = tuple(
+        (
+            kind,
+            len(
+                {
+                    slot.physical_root_sha256
+                    for slot in train
+                    if slot.focus_kind is kind
+                }
+            ),
+        )
+        for kind, _minimum in active.minimum_physical_roots_by_focus_kind
+    )
+    reasons: list[str] = []
+    if len(concentration) < active.minimum_train_physical_roots:
+        reasons.append("insufficient_distinct_train_physical_roots")
+    if concentration and max(concentration.values()) > (
+        active.maximum_train_slots_per_physical_root
+    ):
+        reasons.append("excessive_train_slot_root_concentration")
+    observed_by_kind = dict(kind_counts)
+    if any(
+        observed_by_kind[kind] < minimum
+        for kind, minimum in active.minimum_physical_roots_by_focus_kind
+    ):
+        reasons.append("insufficient_focus_kind_root_diversity")
+    return LivingDexTargetedRootDiversityResult(
+        policy=active,
+        train_slots=len(train),
+        train_physical_roots=len(concentration),
+        maximum_slots_on_one_physical_root=(
+            max(concentration.values()) if concentration else 0
+        ),
+        physical_roots_by_focus_kind=kind_counts,
+        reasons=tuple(reasons),
+    )
+
+
+def require_living_dex_targeted_schedule_root_diversity(
+    schedule: LivingDexTargetedSchedule,
+    *,
+    policy: LivingDexTargetedRootDiversityPolicy | None = None,
+) -> LivingDexTargetedRootDiversityResult:
+    """Return a safe diversity audit or refuse the successor campaign."""
+
+    result = audit_living_dex_targeted_schedule_root_diversity(
+        schedule,
+        policy=policy,
+    )
+    if not result.diversity_sufficient:
+        raise LivingDexTargetedCapacityError(
+            "targeted successor schedule lacks independent root diversity"
+        )
+    return result
+
+
 def _kind_counter(
     rows: tuple[tuple[LivingDexOptionKind, int], ...],
     *,
@@ -586,13 +761,19 @@ def _matching_assignments(
 __all__ = [
     "LIVING_DEX_TARGETED_CAPACITY_POLICY_SCHEMA",
     "LIVING_DEX_TARGETED_CAPACITY_RESULT_SCHEMA",
+    "LIVING_DEX_TARGETED_ROOT_DIVERSITY_POLICY_SCHEMA",
+    "LIVING_DEX_TARGETED_ROOT_DIVERSITY_RESULT_SCHEMA",
     "LIVING_DEX_TARGETED_SCHEDULE_SCHEMA",
     "LivingDexTargetedCapacityContext",
     "LivingDexTargetedCapacityError",
     "LivingDexTargetedCapacityPolicy",
     "LivingDexTargetedCapacityResult",
+    "LivingDexTargetedRootDiversityPolicy",
+    "LivingDexTargetedRootDiversityResult",
     "LivingDexTargetedSchedule",
     "LivingDexTargetedScheduleSlot",
+    "audit_living_dex_targeted_schedule_root_diversity",
     "audit_living_dex_targeted_update_capacity",
     "freeze_living_dex_targeted_schedule",
+    "require_living_dex_targeted_schedule_root_diversity",
 ]

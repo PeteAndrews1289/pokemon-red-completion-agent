@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New scene: ten lessons reveal two different classrooms
+
+**Visual:** Fill a board with **10/10 TERMINAL · 8,879 ACTIONS · 468,149 FRAMES**. Split the ten
+cards beneath two unlabeled save-state icons. Under the first, show **ACQUIRE ✓ ×4 · STORAGE ✗**.
+Under the second, show **DEVELOP SETUP-CENSORED ×4 · RESUPPLY SETUP-CENSORED**. Keep
+**DEVELOPMENT OPENED 0 · FITS 0 · TEACHERS 0** visible.
+
+**Voiceover:** “The first targeted campaign created five real causal lessons, but it also exposed a
+bad experimental design. Every usable outcome came from one save and every setup failure came from
+the other. Because each save had also been assigned different kinds of goals, training now would
+teach the model which classroom worked—not which Pokémon objective was valuable.”
+
+Replace the two large stacks with at least four smaller root cards. Overlay **MAX 3 LESSONS PER
+ROOT · ACQUIRE ON 2+ ROOTS · DEVELOP ON 2+ ROOTS**. Then show failure receipts containing only
+**PHASE · CLASS · ACTIONS · FRAMES**, while a raw exception and local path are crossed out. End on
+**SOURCE DIVERSE ROOTS → FREEZE SUCCESSOR → COLLECT ONCE → FIT ONLY IF 8+ SETTLE**. Do not depict a
+new model, autonomous Red completion, Crystal transfer or Pokédex completion from this campaign.
+
 ## New scene: training is allowed to reset; the exam is not
 
 **Visual:** Start with **FRESH-ONLY TRAIN 2/10 · EVALUATION 8/8**, then separate the screen into

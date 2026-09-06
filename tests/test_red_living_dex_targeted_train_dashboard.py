@@ -17,7 +17,9 @@ from pokemon_red_completion.red_living_dex_targeted_train_dashboard import (
     red_living_dex_targeted_train_dashboard_snapshot,
 )
 from pokemon_red_completion.red_living_dex_targeted_train_runner import (
+    RedLivingDexTargetedSetupStatus,
     RedLivingDexTargetedTrainAssignment,
+    RedLivingDexTargetedTrainReceipt,
 )
 
 
@@ -73,6 +75,33 @@ def test_targeted_dashboard_rejects_false_completion() -> None:
             _binding(),
             RedLivingDexTargetedTrainDashboardProgress(status="passed"),
         )
+
+
+def test_targeted_dashboard_projects_bounded_setup_diagnostics() -> None:
+    binding = _binding()
+    failed = RedLivingDexTargetedTrainAssignment(binding, 0, "a" * 40)
+    active = RedLivingDexTargetedTrainAssignment(binding, 1, "a" * 40)
+    snapshot = red_living_dex_targeted_train_dashboard_snapshot(
+        binding,
+        RedLivingDexTargetedTrainDashboardProgress(
+            status="running",
+            active_assignment=active,
+            receipts=(
+                RedLivingDexTargetedTrainReceipt(
+                    failed,
+                    RedLivingDexTargetedSetupStatus.FAILED,
+                    None,
+                    "candidate_route",
+                    "production_runtime_error",
+                ),
+            ),
+        ),
+    )
+
+    encoded = str(snapshot.public_dict())
+    assert "candidate_route 1" in encoded
+    assert "production_runtime_error 1" in encoded
+    assert failed.slot.physical_root_sha256 not in encoded
 
 
 def test_targeted_dashboard_rejects_an_active_assignment_from_another_binding() -> None:

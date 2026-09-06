@@ -1,5 +1,34 @@
 # Model-first development roadmap
 
+## Active checkpoint: diversify the Red classroom before fitting
+
+The first ten-slot targeted campaign is terminal. It produced five causal train examples in 8,879
+actions and 468,149 frames, but did not earn a fit: one physical root supplied every settled row
+while the other supplied every setup censor. Because acquisition and storage were assigned to the
+working root and party development plus resupply to the failing root, the schedule cannot tell
+whether the cause was the starting state or the semantic skill family. Development remained sealed
+and no model fit, prediction or teacher query occurred.
+
+The next sequence is:
+
+1. Publish setup diagnostics that retain only bounded phase/class/action/frame data and continue to
+   authenticate historical V1 terminals without rewriting them.
+2. Require a successor schedule to use at least four train physical roots, place no more than three
+   slots on one root, and spread both acquisition and party-development lessons across at least two
+   roots each.
+3. Build or authenticate enough fresh train roots to satisfy that guard without consuming the
+   untouched paired-development bank.
+4. Freeze and preflight one successor train schedule. If either capacity or diversity fails, stop
+   before controller input.
+5. Collect the fixed train denominator once. Fit only if at least eight rows settle, including at
+   least three acquisition and three party-development rows.
+6. Only after an immutable fit exists, open the separate paired Red comparison.
+
+This repair moves directly toward the portable living-Pokédex goal: the learner needs varied causal
+experience about what objective to pursue, while deterministic navigation, battle, capture,
+inventory and recovery skills continue to execute how. Crystal remains deferred until the Red
+decision loop demonstrates useful generalization.
+
 ## Active checkpoint: publish the reset-aware runner and collect the ten Red lessons
 
 The capacity question is closed: two authenticated Red train states support ten bounded reset
