@@ -1681,6 +1681,38 @@ RedLivingDexSetupForkRuntimeFactory = Callable[
     [RedLivingDexSetupSlotRecipe, str, int],
     RedLivingDexSetupForkRuntime,
 ]
+RedLivingDexSetupPhaseObserver = Callable[[str], None]
+
+RED_LIVING_DEX_SETUP_PHASES = frozenset(
+    {
+        "construction_arm",
+        "construction_observe",
+        "construction_restore",
+        "construction_route",
+        "constructed_origin",
+        "candidate_arm",
+        "candidate_binding",
+        "candidate_observe",
+        "candidate_offer",
+        "candidate_provider",
+        "candidate_restore",
+        "candidate_route",
+        "capture_assembly",
+        "final_arm",
+        "final_observe",
+        "final_restore",
+    }
+)
+
+
+def _report_setup_phase(
+    observer: RedLivingDexSetupPhaseObserver | None,
+    phase: str,
+) -> None:
+    if phase not in RED_LIVING_DEX_SETUP_PHASES:
+        raise RedLivingDexSetupRecipeError("setup diagnostic phase differs")
+    if observer is not None:
+        observer(phase)
 
 
 def validate_red_living_dex_setup_recipe(
@@ -1691,6 +1723,7 @@ def validate_red_living_dex_setup_recipe(
     root: RedLivingDexAuthenticatedSetupRoot,
     arm_factory: RedLivingDexSetupForkRuntimeFactory,
     meter: RedLivingDexSetupEffectMeter,
+    phase_observer: RedLivingDexSetupPhaseObserver | None = None,
 ) -> RedLivingDexValidatedSetupCapture:
     """Build one origin and validate every candidate through isolated real seams."""
 
@@ -1712,9 +1745,12 @@ def validate_red_living_dex_setup_recipe(
         raise TypeError("same-root validation needs an isolated-arm factory")
     if type(meter) is not RedLivingDexSetupEffectMeter:
         raise TypeError("same-root validation needs a comprehensive effect meter")
+    if phase_observer is not None and not callable(phase_observer):
+        raise TypeError("same-root validation needs a callable phase observer")
 
     setup_before = _checkpoint(meter)
     used_arm_identities: set[str] = set()
+    _report_setup_phase(phase_observer, "construction_arm")
     construction_arm = _open_arm(
         arm_factory,
         recipe,
@@ -1724,12 +1760,14 @@ def validate_red_living_dex_setup_recipe(
         meter=meter,
         used_arm_identities=used_arm_identities,
     )
+    _report_setup_phase(phase_observer, "construction_restore")
     _load_and_read_back(
         construction_arm,
         root.state_bytes,
         meter=meter,
         subject="construction root",
     )
+    _report_setup_phase(phase_observer, "construction_observe")
     base_fresh = _observe_arm(
         construction_arm,
         meter=meter,
@@ -1742,6 +1780,7 @@ def validate_red_living_dex_setup_recipe(
         construction_actions = 0
         construction_frames = 0
     else:
+        _report_setup_phase(phase_observer, "construction_route")
         (
             origin_fresh,
             construction_report_sha256,
@@ -1798,6 +1837,7 @@ def validate_red_living_dex_setup_recipe(
         construction_route_controller_actions=construction_actions,
         construction_route_emulator_frames=construction_frames,
     )
+    _report_setup_phase(phase_observer, "constructed_origin")
     _validate_constructed_origin(recipe, origin)
     if recipe.construction_route is None:
         if construction_report_sha256 is not None:
@@ -1817,6 +1857,7 @@ def validate_red_living_dex_setup_recipe(
     option_bindings: list[RedLivingDexSetupOptionBinding] = []
     provisional_proofs: list[_ProvisionalFork] = []
     for option_ordinal, provider_recipe in enumerate(recipe.providers):
+        _report_setup_phase(phase_observer, "candidate_arm")
         arm = _open_arm(
             arm_factory,
             recipe,
@@ -1826,12 +1867,14 @@ def validate_red_living_dex_setup_recipe(
             meter=meter,
             used_arm_identities=used_arm_identities,
         )
+        _report_setup_phase(phase_observer, "candidate_restore")
         _load_and_read_back(
             arm,
             origin.state_bytes,
             meter=meter,
             subject="candidate origin",
         )
+        _report_setup_phase(phase_observer, "candidate_observe")
         restored = _observe_arm(arm, meter=meter, subject="candidate origin")
         _require_fresh_at(restored, recipe.origin_boundary, "restored origin")
         if restored.observation_sha256 != origin.fresh.observation_sha256:
@@ -1846,6 +1889,7 @@ def validate_red_living_dex_setup_recipe(
             route_frames = 0
             terminal = recipe.origin_boundary
         else:
+            _report_setup_phase(phase_observer, "candidate_route")
             (
                 fresh,
                 route_report_sha256,
@@ -1875,6 +1919,7 @@ def validate_red_living_dex_setup_recipe(
             destination_envelope_bytes,
         )
         context_before = _checkpoint(meter)
+        _report_setup_phase(phase_observer, "candidate_provider")
         context = arm.build_goal_context(provider_recipe.profile, context_capture)
         context_after = _checkpoint(meter)
         if context_after != context_before:
@@ -1913,6 +1958,7 @@ def validate_red_living_dex_setup_recipe(
             raise RedLivingDexSetupRecipeError("provider registry observed another candidate state")
 
         offer_before = _checkpoint(meter)
+        _report_setup_phase(phase_observer, "candidate_offer")
         observed = context.offer_for(
             provider_recipe.goal_kind,
             context_observation,
@@ -1961,6 +2007,7 @@ def validate_red_living_dex_setup_recipe(
                 else provider_recipe.route.planner_binding_sha256
             ),
         )
+        _report_setup_phase(phase_observer, "candidate_binding")
         option_bindings.append(option_binding)
         provisional_proofs.append(
             _ProvisionalFork(
@@ -1977,6 +2024,7 @@ def validate_red_living_dex_setup_recipe(
             )
         )
 
+    _report_setup_phase(phase_observer, "final_arm")
     final_arm = _open_arm(
         arm_factory,
         recipe,
@@ -1986,12 +2034,14 @@ def validate_red_living_dex_setup_recipe(
         meter=meter,
         used_arm_identities=used_arm_identities,
     )
+    _report_setup_phase(phase_observer, "final_restore")
     _load_and_read_back(
         final_arm,
         origin.state_bytes,
         meter=meter,
         subject="final origin",
     )
+    _report_setup_phase(phase_observer, "final_observe")
     final_fresh = _observe_arm(final_arm, meter=meter, subject="final origin")
     _require_fresh_at(final_fresh, recipe.origin_boundary, "final restored origin")
     if final_fresh.observation_sha256 != origin.fresh.observation_sha256:
@@ -2002,6 +2052,7 @@ def validate_red_living_dex_setup_recipe(
     setup_after = _checkpoint(meter)
     setup_actions, setup_frames = _delta(setup_before, setup_after)
     _require_within_slot_budget(slot, setup_actions, setup_frames)
+    _report_setup_phase(phase_observer, "capture_assembly")
     families = tuple(item.family_sha256 for item in provisional_proofs)
     location_sha256 = _location_sha256(recipe.origin_boundary)
     policy_projection = project_red_living_dex_setup_policy(
@@ -2737,6 +2788,7 @@ __all__ = [
     "RED_LIVING_DEX_SETUP_MINIMUM_SEMANTIC_FAMILIES",
     "RED_LIVING_DEX_SETUP_OFFER_COUNT",
     "RED_LIVING_DEX_SETUP_PHYSICAL_ORIGIN_COUNT",
+    "RED_LIVING_DEX_SETUP_PHASES",
     "RED_LIVING_DEX_SETUP_PROVIDER_RECIPE_SCHEMA",
     "RED_LIVING_DEX_SETUP_RECIPE_PLAN_SCHEMA",
     "RED_LIVING_DEX_SETUP_RECIPE_ROUTE_SCHEMA",
@@ -2748,6 +2800,7 @@ __all__ = [
     "RedLivingDexSetupEffectMeter",
     "RedLivingDexSetupForkRuntime",
     "RedLivingDexSetupForkRuntimeFactory",
+    "RedLivingDexSetupPhaseObserver",
     "RedLivingDexSetupForkProof",
     "RedLivingDexSetupProviderRecipe",
     "RedLivingDexSetupRecipeError",

@@ -1,5 +1,35 @@
 # Handoff
 
+## Latest checkpoint: the first targeted campaign ran; root confounding blocked the fit
+
+Published main `57a2479aea0b6668e834aecfdca156c9dff68b20` passed exact-main GitHub CI
+`33997530000/1`. Its action-free preflight reported ten train slots and zero controller actions,
+frames, outcomes, predictions, fits or development openings. The exact frozen campaign then ran all
+ten train resets to terminal in 8,879 controller actions and 468,149 emulator frames. It retained
+five settled causal examples and five censored setup failures, with no interruption, retry, teacher
+query, prediction, fit or development-root opening.
+
+The result does not clear the preregistered fit gate. All four acquisition slots plus the storage
+slot settled from one physical start; all four party-development slots plus resupply failed setup
+from the other. This makes root health and semantic focus inseparable. The four acquisition rows
+are also repeated measurements from one root, not four independent worlds. They remain valid
+causal rows, but fitting now would teach a confounded and low-diversity sample. See the
+[path-free terminal result](docs/evidence/red-living-dex-targeted-train-campaign-result-v1-2026-09-05.json).
+
+The follow-up branch adds two protections. Future setup terminals retain only a bounded failure
+phase, bounded failure class, and per-attempt action/frame totals; raw exception messages and
+private paths remain absent, and historical V1 terminals stay readable. A title-neutral diversity
+audit now requires at least four train lineages and physical roots, no more than three of ten slots
+on one lineage or root,
+and acquisition plus party-development coverage across at least two physical roots each. The
+historical two-root schedule intentionally fails all three checks; a ten-root fixture passes.
+
+Next: finish qualification and publish these diagnostics and the diversity guard; source or build a
+fresh root-diverse train bank while preserving untouched Red development roots; freeze a successor
+schedule that passes both arithmetic capacity and diversity; collect train outcomes once; and fit
+only if the settled/kind thresholds pass. This is genuine targeted outcome collection, not yet a
+new fitted model, autonomous Red play, Crystal transfer, or living-Pokédex completion.
+
 ## Latest checkpoint: the reset-aware train runner is implemented; private freeze is pending
 
 The action-free schedule freezer and capacity result are published on PR 224. Its first complete

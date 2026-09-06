@@ -8,6 +8,7 @@ private paths.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -128,6 +129,16 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         for item in progress.receipts
     )
     causal_interrupted = sum(_causal_interrupted(item) for item in progress.receipts)
+    failure_phases = Counter(
+        item.setup_failure_phase
+        for item in progress.receipts
+        if item.setup_failure_phase is not None
+    )
+    failure_classes = Counter(
+        item.setup_failure_class
+        for item in progress.receipts
+        if item.setup_failure_class is not None
+    )
     current_number = (
         train_ordinals.index(active.ordinal) + 1 if active is not None else None
     )
@@ -183,6 +194,8 @@ def red_living_dex_targeted_train_dashboard_snapshot(
             f"Setup failures: {setup_failed}; setup interruptions: "
             f"{setup_interrupted}; causal interruptions: {causal_interrupted}"
         ),
+        f"Setup failure phases: {_format_diagnostic_counts(failure_phases)}",
+        f"Setup failure classes: {_format_diagnostic_counts(failure_classes)}",
         f"Development partition: 0 of {development_total} opened",
         "Model fits: 0; model predictions: 0; teacher queries: 0",
     )
@@ -278,6 +291,12 @@ def _focus_counts(
 
 def _format_focus_counts(counts: tuple[tuple[LivingDexOptionKind, int], ...]) -> str:
     return ", ".join(f"{kind.value} {count}" for kind, count in counts)
+
+
+def _format_diagnostic_counts(counts: Counter[str]) -> str:
+    if not counts:
+        return "none recorded"
+    return ", ".join(f"{name} {counts[name]}" for name in sorted(counts))
 
 
 __all__ = [

@@ -19,6 +19,7 @@ from pokemon_red_completion.red_living_dex_claim_first_campaign import (
     RedLivingDexResolvedSetupSlot,
 )
 from pokemon_red_completion.red_living_dex_production_runtime import (
+    RedLivingDexProductionRuntimeError,
     RedLivingDexProductionSetupResolver,
 )
 from pokemon_red_completion.red_living_dex_runtime_contract import (
@@ -157,6 +158,22 @@ class _SyntheticProductionResolver(RedLivingDexProductionSetupResolver):
         return _Scope()
 
 
+class _FailingProductionResolver(_SyntheticProductionResolver):
+    def __call__(self, *_args: object, **_kwargs: object) -> Any:
+        object.__setattr__(self, "calls", self.calls + 1)  # type: ignore[attr-defined]
+
+        class _Scope(AbstractContextManager[RedLivingDexResolvedSetupSlot]):
+            def __enter__(self) -> RedLivingDexResolvedSetupSlot:
+                raise RedLivingDexProductionRuntimeError(
+                    "private diagnostic detail must not be retained"
+                )
+
+            def __exit__(self, *_values: object) -> None:
+                return None
+
+        return _Scope()
+
+
 def test_targeted_runner_executes_one_selected_arm_and_recovers_it(
     tmp_path: Path,
 ) -> None:
@@ -209,3 +226,49 @@ def test_targeted_runner_executes_one_selected_arm_and_recovers_it(
     assert recovered.causal.example == receipt.causal.example
     assert resolver.calls == 2  # type: ignore[attr-defined]
     assert meter.provider_executions == 1
+
+
+def test_targeted_runner_seals_bounded_failure_diagnostics_without_message(
+    tmp_path: Path,
+) -> None:
+    binding = _binding()
+    capability = binding.capabilities[0]
+    identity = _identity()
+    meter = RedLivingDexSetupEffectMeter()
+    resolver = _FailingProductionResolver(
+        capability.recipe,
+        identity,
+        _ArmFactory(identity, meter),
+    )
+    store = _store(tmp_path)
+    assignment = RedLivingDexTargetedTrainAssignment(
+        binding,
+        0,
+        identity.source_commit,
+    )
+
+    receipt = run_red_living_dex_targeted_train_assignment(
+        assignment,
+        store=store,
+        claim_registry=_registry(tmp_path),
+        setup_execution_identity=identity,
+        resolver=resolver,
+        meter=meter,
+    )
+
+    assert receipt.setup_status is RedLivingDexTargetedSetupStatus.FAILED
+    assert receipt.setup_failure_phase == "resolver_reauthentication"
+    assert receipt.setup_failure_class == "production_runtime_error"
+    assert receipt.public_dict()["schema"].endswith(".v2")
+    terminal = store.find_sealed_record(
+        f"lrt-setup-terminal-{assignment.trial.trial_claim_sha256[:32]}",
+        expected_kind="red_living_dex_targeted_setup_terminal",
+    )
+    assert terminal is not None
+    document = terminal.read()
+    assert document["schema"].endswith(".v2")
+    assert document["failure_phase"] == "resolver_reauthentication"
+    assert document["failure_class"] == "production_runtime_error"
+    assert document["setup_controller_actions"] == 0
+    assert document["setup_emulator_frames"] == 0
+    assert "private diagnostic detail" not in str(document)

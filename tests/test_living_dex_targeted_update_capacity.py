@@ -9,8 +9,10 @@ from pokemon_red_completion.living_dex_targeted_update_capacity import (
     LivingDexTargetedCapacityContext,
     LivingDexTargetedCapacityError,
     LivingDexTargetedCapacityPolicy,
+    audit_living_dex_targeted_schedule_root_diversity,
     audit_living_dex_targeted_update_capacity,
     freeze_living_dex_targeted_schedule,
+    require_living_dex_targeted_schedule_root_diversity,
 )
 
 
@@ -189,6 +191,66 @@ def test_freeze_rejects_incomplete_capacity() -> None:
             (_sufficient()[0], *_sufficient()[10:]),
             maximum_train_replays_per_context=5,
         )
+
+
+def test_root_diversity_guard_rejects_the_two_root_confounded_design() -> None:
+    rows = (
+        _context(
+            0,
+            "train",
+            LivingDexOptionKind.ACQUIRE,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        _context(
+            1,
+            "train",
+            LivingDexOptionKind.DEVELOP,
+            LivingDexOptionKind.MANAGE_STORAGE,
+            LivingDexOptionKind.RESUPPLY,
+        ),
+        *_sufficient()[10:],
+    )
+    schedule = freeze_living_dex_targeted_schedule(
+        rows,
+        maximum_train_replays_per_context=5,
+    )
+
+    result = audit_living_dex_targeted_schedule_root_diversity(schedule)
+
+    assert not result.diversity_sufficient
+    assert result.train_lineages == 2
+    assert result.train_physical_roots == 2
+    assert result.maximum_slots_on_one_lineage == 5
+    assert result.maximum_slots_on_one_physical_root == 5
+    assert result.reasons == (
+        "insufficient_distinct_train_lineages",
+        "insufficient_distinct_train_physical_roots",
+        "excessive_train_slot_lineage_concentration",
+        "excessive_train_slot_root_concentration",
+        "insufficient_focus_kind_root_diversity",
+    )
+    encoded = str(result.public_dict())
+    assert rows[0].physical_root_sha256 not in encoded
+    assert rows[1].physical_root_sha256 not in encoded
+    with pytest.raises(LivingDexTargetedCapacityError, match="root diversity"):
+        require_living_dex_targeted_schedule_root_diversity(schedule)
+
+
+def test_root_diversity_guard_accepts_independent_train_roots() -> None:
+    result = require_living_dex_targeted_schedule_root_diversity(
+        freeze_living_dex_targeted_schedule(_sufficient())
+    )
+
+    assert result.diversity_sufficient
+    assert result.train_lineages == 10
+    assert result.train_physical_roots == 10
+    assert result.maximum_slots_on_one_lineage == 1
+    assert result.maximum_slots_on_one_physical_root == 1
+    assert dict(result.physical_roots_by_focus_kind) == {
+        LivingDexOptionKind.ACQUIRE: 4,
+        LivingDexOptionKind.DEVELOP: 4,
+    }
 
 
 def test_schedule_validation_rejects_development_replay_or_cross_partition_overlap() -> None:

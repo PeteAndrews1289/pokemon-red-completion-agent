@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 5: the first targeted lessons found a bad classroom
+
+The first targeted Red campaign finally pressed buttons for learning data. All ten reset slots
+became terminal, consuming 8,879 controller actions and 468,149 frames. Five produced causal rows:
+four successful acquisition choices and one failed storage choice. Five never reached their causal
+decision because setup failed. No failed setup became a label, no development state opened, and no
+model fit was performed.
+
+The pattern was more important than the raw count. Every settled row came from one underlying save;
+every setup failure came from the other. The schedule had also placed all acquisition lessons on the
+working save and all party-development lessons on the failing save. That meant a model trained now
+could confuse “this root works” with “this objective is good.” The campaign therefore stopped at
+five of the required eight examples.
+
+The repair makes that failure cheaper and nonrepeatable. Future setup censors say which bounded
+phase failed, what broad class of failure occurred, and how many actions and frames were spent,
+without preserving a private path or exception message. More importantly, a new diversity gate
+rejects any successor classroom that concentrates the ten lessons on two starts or lineages, or
+assigns an entire strategic family to one root. The next model update must learn across varied
+histories—the same property it will eventually need when moving from Red into Crystal and later
+games.
+
 ## September 5: training stopped pretending to be an exam
 
 The first capacity audit said the evaluation side was ready but training needed eight new worlds.

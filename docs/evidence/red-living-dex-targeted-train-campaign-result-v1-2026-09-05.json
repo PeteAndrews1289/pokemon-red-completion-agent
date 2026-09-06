@@ -1,0 +1,59 @@
+{
+  "campaign": {
+    "causal_train_examples_recorded": 5,
+    "causal_train_examples_required": 8,
+    "controller_actions": 8879,
+    "development_slots_opened": 0,
+    "emulator_frames": 468149,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "setup_censors": 5,
+    "setup_interruptions": 0,
+    "teacher_queries": 0,
+    "train_slots_terminal": 10
+  },
+  "ci": {
+    "attempt": 1,
+    "run_id": 33997530000,
+    "status": "passed"
+  },
+  "interpretation": {
+    "development_fit_gate_passed": false,
+    "fit_authorized": false,
+    "focus_outcomes": {
+      "acquire": {
+        "settled": 4,
+        "setup_censored": 0,
+        "verified_successes": 4
+      },
+      "develop": {
+        "settled": 0,
+        "setup_censored": 4,
+        "verified_successes": 0
+      },
+      "manage_storage": {
+        "settled": 1,
+        "setup_censored": 0,
+        "verified_successes": 0
+      },
+      "resupply": {
+        "settled": 0,
+        "setup_censored": 1,
+        "verified_successes": 0
+      }
+    },
+    "reason": "root_and_focus_family_were_confounded",
+    "settled_physical_root_groups": 1,
+    "setup_censored_physical_root_groups": 1
+  },
+  "plan_sha256": "715c40528b5494a5be194b73a1f8e2eac6a3fc4a802ef34d5de405bcf53269af",
+  "private_identity_fields": 0,
+  "private_path_fields": 0,
+  "runner_sha256": "ea52eaaae716df325ef588e92c5dca7011466ea2f4b98ab30c0927bf4b57566c",
+  "schema": "pokemon.red.public-living-dex-targeted-train-campaign-result.v1",
+  "source": {
+    "bundle_sha256": "7d4e5fde7b85a3e159bd468f528157a0936845a78749b3ad51914d3a4adbf144",
+    "commit": "57a2479aea0b6668e834aecfdca156c9dff68b20"
+  },
+  "status": "terminal_fit_gate_failed"
+}
