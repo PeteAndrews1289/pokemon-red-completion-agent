@@ -1309,8 +1309,8 @@ def run_red_team_balancing(
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
                 break
-            if battles >= 200:
-                raise RuntimeError("Targeted evolution exceeded 200 battles.")
+            if battles >= min(200, policy.max_battles) or steps >= policy.max_steps:
+                raise RuntimeError("Targeted evolution exhausted its bounded training budget.")
             trainee = next((m for m in party.members if m.species_id == precursor_species), None)
             if trainee is None:
                 raise RuntimeError("Targeted evolution lost its precursor.")

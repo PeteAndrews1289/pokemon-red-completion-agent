@@ -590,10 +590,10 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
         factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
     )
     local = factory(object(), object(), None)
-    routed = factory(object(), object(), object())
+    routed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object())
     assert local["enumerate_bindings"] is None
     assert routed["enumerate_bindings"](object()) is sentinel
-    factory(object(), object(), object(), True)
+    factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
     assert received == [{"quote_resource_costs": False}, {"quote_resource_costs": True}]
 
 

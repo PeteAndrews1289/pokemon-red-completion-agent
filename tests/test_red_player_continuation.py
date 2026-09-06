@@ -182,6 +182,16 @@ def test_training_continuation_binds_actual_saved_state_not_original_bytes(case)
             _require_continuation_origin(readiness.private_root, changed)
 
 
+def test_boxed_profile_transition_verifies_old_save_before_new_execution(case):
+    readiness, ancestor = _completed(case)
+    original = readiness.profile
+    evolution = SimpleNamespace(profile_sha256="f" * 64)
+    continued = runner._continue_readiness(readiness, (ancestor,), execution_profile=evolution)
+    assert continued.restore_profile is original
+    assert continued.profile is evolution
+    assert continued.continuation_root_lineage_id == "original-training-root"
+
+
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])
 def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, damage):
     readiness, ancestor = _completed(case)

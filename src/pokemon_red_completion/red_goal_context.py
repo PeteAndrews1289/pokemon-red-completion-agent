@@ -174,6 +174,9 @@ class RedGoalContextRuntime:
     observer: CapturedPokemonRedObserver
     adapter: PokemonRedGoalStateAdapter
     boxed_level_evolution_executor: RedBoxedLevelEvolutionGoalExecutor | None = None
+    boxed_level_evolution_readiness: (
+        Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
+    ) = None
 
     def provider_for(
         self, kind: GoalKind, actions: CountingExecutor
@@ -896,13 +899,20 @@ class _RedTeamGoalProvider:
         observation: RedGoalObservation,
     ) -> RedGoalSkillAvailability:
         raw = observation.raw
-        required_size = self.runtime.profile.manager_config.required_party_size
         if (
             raw.map_id not in {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
             or raw.player_x != 3
             or raw.player_y != 3
-            or BLASTOISE_SPECIES_ID not in observation.party.species_ids()
         ):
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
+        return self.resource_availability(observation)
+
+    def resource_availability(
+        self, observation: RedGoalObservation,
+    ) -> RedGoalSkillAvailability:
+        """Check real resources independently of transport; never invent arrival state."""
+        required_size = self.runtime.profile.manager_config.required_party_size
+        if BLASTOISE_SPECIES_ID not in observation.party.species_ids():
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         if self.kind is GoalKind.DEVELOP_TEAM:
             if observation.party.size < required_size:
@@ -943,6 +953,10 @@ class _RedTeamGoalProvider:
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
+            if self.runtime.boxed_level_evolution_readiness is not None:
+                readiness = self.runtime.boxed_level_evolution_readiness(observation)
+                if not readiness.executable:
+                    return readiness
             try:
                 self._boxed_evolution_request(observation)
             except RedGoalContextError:

@@ -281,6 +281,12 @@ def _player_observer(
     world: StrategicScenarioRouteWorld | None,
     quote_resource_costs: bool = False,
 ) -> RedBoundedPlayerObserver:
+    from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+    if world is not None and any(
+        s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
+    ):
+        from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
+        runtime = bind_native_boxed_evolution(runtime, world)
     router = (
         None
         if world is None
@@ -358,6 +364,11 @@ def _parser() -> argparse.ArgumentParser:
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument(
+        "--boxed-evolution", nargs=3, type=int, default=None,
+        metavar=("SOURCE_NATIONAL", "TARGET_NATIONAL", "LEVEL"),
+        help="declare an existing boxed level-evolution skill after authenticated continuation",
+    )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
@@ -514,6 +525,13 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     expand_local = getattr(args, "expand_local_development", False)
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
         raise PairedRedBoundedPlayerRunError("profile_transition_scope")
+    boxed_evolution = getattr(args, "boxed_evolution", None)
+    if boxed_evolution is not None and (
+        not continuation_chain or not getattr(args, "routed_resource_goals", False)
+        or not isinstance(boxed_evolution, (tuple, list)) or len(boxed_evolution) != 3
+        or any(type(value) is not int for value in boxed_evolution)
+    ):
+        raise PairedRedBoundedPlayerRunError("boxed_evolution_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
@@ -682,6 +700,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     )
     readiness = _continue_readiness(
         readiness, continuation_chain, expanded_profile=expanded_profile,
+        execution_profile=(
+            _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
+            if boxed_evolution is not None else None
+        ),
     )
     if readiness.training_plan is not None and readiness.continuation is not None:
         assert readiness.restore_profile is not None
@@ -697,25 +719,41 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     return readiness
 
 
+def _boxed_evolution_profile(
+    profile: RedGoalContextProfile, values: list[int] | tuple[int, ...],
+) -> RedGoalContextProfile:
+    from pokemon_red_completion.red_goal_context_profile import (
+        build_native_boxed_evolution_profile_payload,
+    )
+    return parse_red_goal_context_profile(build_native_boxed_evolution_profile_payload(
+        profile, source_species=values[0], target_species=values[1], evolution_level=values[2],
+    ))
+
+
 def _continue_readiness(
     readiness: _Readiness, chain: tuple[tuple[str, str], ...],
     *, expanded_profile: RedGoalContextProfile | None = None,
+    execution_profile: RedGoalContextProfile | None = None,
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
+    admitted_profiles = tuple(p for p in (readiness.profile, expanded_profile, execution_profile)
+                              if p is not None)
+    profile_index = 0
     for episode_id, record_sha256 in chain:
         if episode_id in seen:
             raise PairedRedBoundedPlayerRunError("continuation_duplicate_ancestor")
         seen.add(episode_id)
         header = readiness.private_root.open_episode(episode_id).read_header()
         metadata = header.get("metadata")
-        if (
-            expanded_profile is not None and isinstance(metadata, Mapping)
-            and metadata.get("profile_sha256") == expanded_profile.profile_sha256
-        ):
-            # Only the explicit mechanical expansion is admitted; no arbitrary
-            # saved profile and no implicit rollback to an earlier profile.
-            readiness = replace(readiness, profile=expanded_profile)
+        if isinstance(metadata, Mapping):
+            for index, candidate in enumerate(admitted_profiles):
+                if metadata.get("profile_sha256") == candidate.profile_sha256:
+                    if index < profile_index:
+                        raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
+                    profile_index = index
+                    readiness = replace(readiness, profile=candidate)
+                    break
         checkpoint = open_red_player_checkpoint(
             readiness.private_root, episode_id=episode_id,
             expected_record_sha256=record_sha256, original_parent=readiness.capture,
@@ -746,7 +784,7 @@ def _continue_readiness(
     if chain:
         readiness = replace(
             readiness, restore_profile=readiness.profile,
-            profile=expanded_profile or readiness.profile,
+            profile=execution_profile or expanded_profile or readiness.profile,
         )
     return readiness
 

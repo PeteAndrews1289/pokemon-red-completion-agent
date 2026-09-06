@@ -23,8 +23,9 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalBindingSet,
     GoalExecutionReport,
 )
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
+from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import (
@@ -48,7 +49,8 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 )
 
 _WALK_ACTIONS = frozenset({"up", "right", "down", "left"})
-_MECHANICS = frozenset({RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.MART_RESUPPLY})
+_MECHANICS = frozenset({RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.MART_RESUPPLY,
+                       RedGoalMechanic.TARGETED_LEVEL_EVOLUTION})
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
@@ -104,7 +106,8 @@ class RedResourceGoalRouter:
             ):
                 continue
             provider = self.runtime.provider_for(spec.kind, self.actions)
-            if not isinstance(provider, (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider)):
+            if not isinstance(provider, (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider,
+                                         _RedTeamGoalProvider)):
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
@@ -215,6 +218,18 @@ class RedResourceGoalRouter:
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
+        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+            # Known mechanic entry boundaries, connected by the cartridge router.
+            for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
+                try:
+                    plan = self.world.plan_feasible_to_map(
+                        fresh.traversal, int(center), goal_at=(3, 3),
+                    )
+                except RoutePlanningError:
+                    continue
+                if plan.steps and _walking_plan(plan):
+                    return plan
+            return None
         target_map = parameters["map_id"]
         x, y = parameters["player_x"], parameters["player_y"]
         if any(type(value) is not int for value in (target_map, x, y)):

@@ -455,6 +455,18 @@ def test_a_finished_team_runs_the_loop_to_its_exit() -> None:
     assert memory.party[2].species == DUGTRIO_SPECIES_ID
 
 
+def test_targeted_evolution_honors_callers_smaller_step_bound(monkeypatch):
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 40)
+    memory = FakeMemory()
+    memory.set_party([(DIGLETT_SPECIES_ID,30), (BLASTOISE_SPECIES_ID,50),
+                      (DUX_SPECIES_ID,40),(JOLTEON_SPECIES_ID,40),
+                      (SNORLAX_SPECIES_ID,40),(HITMONLEE_SPECIES_ID,40)])
+    with pytest.raises(RuntimeError, match="Targeted evolution exhausted its bounded training"):
+        run(memory, FakeReader([state()]),
+            policy=BalancedTeamPolicy(minimum_level=55,maximum_level_spread=40,required_size=6,max_steps=1),
+            evolution_target=(DIGLETT_SPECIES_ID,DUGTRIO_SPECIES_ID))
+
+
 def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
     memory = FakeMemory()
     memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
