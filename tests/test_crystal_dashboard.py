@@ -104,6 +104,7 @@ def test_crystal_dashboard_projects_human_details_without_binding_identity() -> 
 
     assert document["party"][0]["label"] == "Species #155"  # type: ignore[index]
     assert document["collection"] == {  # type: ignore[index]
+        "observed": True,
         "registered": 3,
         "living": 2,
         "level_cap": 0,
