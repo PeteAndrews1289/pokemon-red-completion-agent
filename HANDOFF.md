@@ -1,5 +1,27 @@
 # Handoff
 
+## Active session — September 6 fresh-state goal chain
+
+The four-root check **finished** from published `cc70f8c9`. Three model-selected goals succeeded:
+two resupplies and one party-development task. No model arm gained a living species. One control
+caught a new species; another raised a PC-menu exception. One construction route failed before
+either policy acted. All four pairs remain terminal, with zero clean descriptive model wins.
+Read the [result audit](docs/audits/red-routed-model-play-2026-09-06.md); 32 immutable records and
+all 23,597 actions / 1,350,732 frames reconcile. No fit, retry, Crystal or full replay occurred.
+
+The next [bounded-chain session](docs/work-sessions/2026-09-06-fresh-goal-chain.md) uses the existing
+player on a separately declared authenticated training context, not a replacement paired root or
+an independent superiority test. The model remains the exact 29-example artifact. Preserve fresh
+state and ledger checks, four-step limits, and distinct model/safety/forced counts. A small private
+failure-diagnostic callback closes the old loop's empty-exception evidence before input.
+
+The local spectator dashboard remains on 8768. The paired producer on 8769 ended normally; do not
+show its last frame as live or relaunch it for motion. The next real producer supplies party,
+ranked choices, collection and actor information. Codex owns implementation and publication;
+no external reviewer was invoked. Follow ACTIVE_PRODUCT_STATE.md and the private operator note.
+
+The following implementation checkpoints are historical.
+
 ## Active session — September 6 routed model/control execution
 
 The missing four-root consumer is implemented in

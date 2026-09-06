@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import json
 import runpy
 import subprocess
 import sys
@@ -368,3 +369,131 @@ def test_public_output_must_be_new_external_and_not_rom_adjacent(tmp_path: Path)
     existing.write_text("{}", encoding="utf-8")
     with pytest.raises(RuntimeError, match="output_isolation"):
         output(existing, rom_path=rom)
+
+
+@pytest.mark.parametrize("with_sink", (False, True))
+def test_failed_arm_retains_a_path_safe_private_cause(tmp_path: Path, with_sink: bool) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    documents = []
+    aborted = []
+    finalized = []
+    writer = SimpleNamespace(
+        append=lambda _name, value, **_kwargs: documents.append(value),
+        abort=lambda reason: aborted.append(reason),
+    )
+    sink = SimpleNamespace(
+        record_event=lambda event: documents.append(event.payload),
+        finalize=lambda: finalized.append(True),
+    )
+    private_path = str(tmp_path / "unpublished-capture")
+    try:
+        raise RuntimeError(f"capture unavailable: {private_path}")
+    except RuntimeError as error:
+        module["_retain_failure"](
+            writer,
+            sink=sink if with_sink else None,
+            recorder=SimpleNamespace(next_step_index=7),
+            episode_id="bounded-diagnostic",
+            error=error,
+        )
+    assert aborted == ["paired_arm_failed"]
+    assert finalized == ([True] if with_sink else [])
+    assert len(documents) == 1
+    document = documents[0]
+    assert document["failure_class"] == "bounded_player_failure"
+    diagnostic = document["private_diagnostic"]
+    assert diagnostic["exception_type"] == "RuntimeError"
+    assert diagnostic["frames"][-1]["function"] == (
+        "test_failed_arm_retains_a_path_safe_private_cause"
+    )
+    assert diagnostic["message_sha256"]
+    assert private_path not in json.dumps(document, default=dict)
+
+
+@pytest.mark.parametrize("origin", ("training", "development", "unspecified"))
+def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    scope = module["_context_scope"](SimpleNamespace(context_origin=origin))
+    assert scope == {
+        "context_origin": origin,
+        "evidence_scope": (
+            "training_context_integration_only"
+            if origin == "training"
+            else "descriptive_development_only"
+        ),
+        "independent_generalization_claim": False,
+    }
+
+
+def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    run_arm = module["_run_arm"]
+    namespace = run_arm.__globals__
+    events = []
+    headers = []
+    aborted = []
+    writer = SimpleNamespace(abort=aborted.append)
+    sink = SimpleNamespace(
+        write_episode_header=lambda **kwargs: headers.append(kwargs),
+        record_event=events.append,
+        finalize=lambda: None,
+    )
+
+    class Emulator:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def load_state_bytes(self, state):
+            assert state == b"authenticated-test-state"
+
+    for name in (
+        "WindowedFrameBudgetController", "PokemonRedStateReader",
+        "build_red_goal_context_runtime", "FrameSafeExecutor", "HardCompositionActionLimiter",
+        "CountingExecutor", "CompositionIndependentBudgetMeter", "_LiveObserver",
+        "ViewerGoalTrajectory",
+    ):
+        monkeypatch.setitem(namespace, name, lambda *_args, **_kwargs: SimpleNamespace())
+    monkeypatch.setitem(namespace, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
+    monkeypatch.setitem(namespace, "EpisodeTrajectorySink", lambda *_args, **_kwargs: sink)
+    monkeypatch.setitem(
+        namespace, "RecordingExecutor",
+        lambda **_kwargs: SimpleNamespace(next_step_index=7),
+    )
+    monkeypatch.setitem(
+        namespace, "PokemonRedObservationEncoder",
+        SimpleNamespace(from_state_reader=lambda _reader: None),
+    )
+
+    def player(**kwargs):
+        try:
+            raise RuntimeError("provider readiness disappeared")
+        except RuntimeError as error:
+            kwargs["failure_observer"](error)
+        raise KeyboardInterrupt
+
+    monkeypatch.setitem(namespace, "run_bounded_player_episode", player)
+    readiness = SimpleNamespace(
+        pair_id="private-failure-wire", decision_limit=4, context_origin="training",
+        source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
+        model_sha256="4" * 64, rom_path=Path("unused-rom"),
+        capture=SimpleNamespace(
+            state_sha256="5" * 64, envelope_sha256="6" * 64,
+            state_bytes=b"authenticated-test-state",
+        ),
+        profile=SimpleNamespace(profile_sha256="7" * 64),
+        private_root=SimpleNamespace(begin_episode=lambda _id: writer),
+        challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
+    )
+    with pytest.raises(KeyboardInterrupt):
+        run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
+    assert headers[0]["metadata"]["evidence_scope"] == "training_context_integration_only"
+    assert [event.kind for event in events] == ["component_failure", "terminal"]
+    diagnostic = events[0].payload["private_diagnostic"]
+    assert diagnostic["exception_type"] == "RuntimeError"
+    assert diagnostic["message"] == "provider readiness disappeared"
+    assert events[0].step_index == 7
+    assert events[1].payload["private_diagnostic"]["exception_type"] == "KeyboardInterrupt"
+    assert aborted == ["paired_arm_failed"]

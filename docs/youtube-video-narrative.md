@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 result: three successful goals, no new model-caught species
+
+**On screen:** distinguish **MODEL: RESUPPLY / DEVELOP / RESUPPLY** from the separate fixed
+control. Show the recorded inventory increases and the control's **LIVING SPECIES 11 → 12**.
+Include **1 SETUP FAILURE · 1 CONTROL-SKILL EXCEPTION** and the complete four-root denominator.
+Use saved results as a results graphic; do not imply footage was retained if it was only streamed.
+
+**Voiceover:** “The model is making real choices now. Its three attempted tasks worked, but they
+were preparation—not new catches. In one comparison, the simpler controller caught a Pokémon
+while the model bought more supplies. That tells us what to test next: can it turn preparation
+into collecting over several decisions, with fresh state after each one?”
+
+No autonomous full game, improved unseen win rate or Crystal transfer is claimed. The model
+remains the same 29-example fit. See the [actual result audit](audits/red-routed-model-play-2026-09-06.md).
+The earlier scene plans below do not supersede this result.
+
 ## Next footage: the trained scorer makes a choice
 
 Show the frozen menu and both recorded choices, then the separate **model** and **control** arms

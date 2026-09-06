@@ -68,6 +68,9 @@ from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
 from pokemon_red_completion.living_dex_goal_policy import (  # noqa: E402
     LivingDexGoalShadowPolicy,
 )
+from pokemon_red_completion.living_dex_paired_development import (  # noqa: E402
+    private_failure_diagnostic,
+)
 from pokemon_red_completion.multi_goal_calibration_model import (  # noqa: E402
     MultiGoalCalibrationModel,
     load_multi_goal_calibration_model,
@@ -151,6 +154,7 @@ class _Readiness:
     protected_paths: tuple[Path, ...]
     continue_after_progress: bool = False
     dashboard_port: int | None = None
+    context_origin: str = "unspecified"
 
 
 @dataclass(frozen=True, slots=True)
@@ -261,6 +265,12 @@ def _completion_predicate(
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pair-id", required=True)
+    parser.add_argument(
+        "--context-origin",
+        choices=("training", "development", "unspecified"),
+        default="unspecified",
+        help="declare input provenance; a known training state is not an unseen test",
+    )
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument("--envelope", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
@@ -382,6 +392,9 @@ def _challenger_arguments(
 def _prepare(args: argparse.Namespace) -> _Readiness:
     if not isinstance(args.pair_id, str) or _PAIR_ID.fullmatch(args.pair_id) is None:
         raise PairedRedBoundedPlayerRunError("pair_id")
+    context_origin = getattr(args, "context_origin", "unspecified")
+    if context_origin not in {"training", "development", "unspecified"}:
+        raise PairedRedBoundedPlayerRunError("context_origin")
     dashboard_port = getattr(args, "dashboard_port", None)
     if dashboard_port is not None and (
         type(dashboard_port) is not int or not 1024 <= dashboard_port <= 65535
@@ -483,6 +496,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         decision_limit=args.decision_limit,
         continue_after_progress=getattr(args, "continue_after_progress", False),
         dashboard_port=dashboard_port,
+        context_origin=context_origin,
         private_root=private_root,
         output_path=output_path,
         protected_paths=(
@@ -508,6 +522,18 @@ def _episode_id(pair_id: str, arm_id: str) -> str:
     except KeyError as error:
         raise PairedRedBoundedPlayerRunError("arm_identity") from error
     return f"{pair_id}-{suffix}"
+
+
+def _context_scope(readiness: _Readiness) -> dict[str, object]:
+    return {
+        "context_origin": readiness.context_origin,
+        "evidence_scope": (
+            "training_context_integration_only"
+            if readiness.context_origin == "training"
+            else "descriptive_development_only"
+        ),
+        "independent_generalization_claim": False,
+    }
 
 
 def _challenger_authority(readiness: _Readiness) -> GoalDecisionAuthority:
@@ -641,6 +667,7 @@ def _run_arm(
         )
         sink.write_episode_header(
             metadata={
+                **_context_scope(readiness),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
                 "arm_id": arm_id,
@@ -720,6 +747,27 @@ def _run_arm(
                 displayed_authority=authority,
                 learned_actor=arm_id != BASELINE_ARM_ID,
             )
+            component_failures = 0
+
+            def record_component_failure(error: BaseException) -> None:
+                nonlocal component_failures
+                component_failures += 1
+                # These are private trajectory diagnostics, never policy inputs
+                # or public comparison claims. Sink failure must stop recovery.
+                assert sink is not None and recorder is not None
+                sink.record_event(
+                    SparseEvent(
+                        event_id=f"{episode_id}:component-failure:{component_failures}",
+                        episode_id=episode_id,
+                        step_index=recorder.next_step_index,
+                        kind="component_failure",
+                        payload=cast(
+                            Mapping[str, JSONValue],
+                            {"private_diagnostic": private_failure_diagnostic(error)},
+                        ),
+                    )
+                )
+
             result = run_bounded_player_episode(
                 observe=observer,
                 authority=authority,
@@ -728,6 +776,7 @@ def _run_arm(
                 budget_meter=meter,
                 completion_satisfied=_completion_predicate(readiness),
                 limits=limits,
+                failure_observer=record_component_failure,
             )
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
@@ -794,7 +843,14 @@ def _retain_failure(
                     episode_id=episode_id,
                     step_index=0 if recorder is None else recorder.next_step_index,
                     kind="terminal",
-                    payload={"status": "failed", "failure_class": failure_class},
+                    payload=cast(
+                        Mapping[str, JSONValue],
+                        {
+                            "status": "failed",
+                            "failure_class": failure_class,
+                            "private_diagnostic": private_failure_diagnostic(error),
+                        },
+                    ),
                 )
             )
             sink.finalize()
@@ -805,6 +861,7 @@ def _retain_failure(
                     "schema": "pokemon.red.paired-bounded-player-terminal.v1",
                     "status": "failed",
                     "failure_class": failure_class,
+                    "private_diagnostic": private_failure_diagnostic(error),
                 },
                 durable=True,
             )
@@ -872,6 +929,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
     summary = {
         **comparison.public_dict(),
+        **_context_scope(readiness),
         "preflight": preflight,
         "source_commit": readiness.source_commit,
         "source_bundle_sha256": readiness.source_bundle_sha256,

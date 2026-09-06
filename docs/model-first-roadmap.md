@@ -1,5 +1,27 @@
 # Model-first development roadmap
 
+## Current checkpoint — real choices executed; sustained collection is next
+
+The four-root check is complete. The 29-example model successfully executed two resupplies and
+one party-development goal. Its collection count did not increase; one control captured a new
+species where the model bought supplies. Another control failed at the PC, and one setup failed
+in navigation. Keep all four roots and zero clean model wins; do not fit or retry these outcomes.
+The [read-only audit](audits/red-routed-model-play-2026-09-06.md) reconciles all recorded effects.
+
+1. Use the existing four-step bounded player on the prospectively declared **different training
+   context**. This is integration/calibration, not an unseen exam or a replacement for the pairs.
+2. Preserve the exact cause if a component fails; do not change goal choices or safety limits.
+3. Record actual model-selected goals, refreshed menus and ledger changes. A stale or exhausted
+   menu is the next engineering finding; a step counter is not learned competence.
+4. Reorient after the first terminal chain. Choose the smallest needed continuation/availability
+   repair or a legitimate train-only contrast curriculum based on that evidence.
+
+The active [session plan](work-sessions/2026-09-06-fresh-goal-chain.md) has a two-hour time box.
+Model updates already began; the priority is useful model-chosen collecting, then broader Red
+mechanics and later Crystal transfer. Do not replace this playing loop with another CI project.
+
+All implementation checkpoints below are historical.
+
 ## Active implementation — routed choices become bounded Red actions
 
 The four-root consumer connects the unchanged 29-example model to the existing routed setup and

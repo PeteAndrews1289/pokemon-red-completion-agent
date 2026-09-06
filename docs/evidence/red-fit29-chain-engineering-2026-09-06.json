@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.bounded-chain-engineering.v1",
+  "source_bundle_sha256": "c4e4028c44962b7407a096722575156e815d9f024e8f264d13b025c16ef37980",
+  "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+  "fitted_examples": 29,
+  "focused_tests_passed": 253,
+  "typed_source_files": 389,
+  "private_component_failure_retention": true,
+  "context_origin_is_explicit": true,
+  "policy_and_budget_changes": false,
+  "full_local_suite_claim": false,
+  "new_chain_actions": 0,
+  "new_chain_model_predictions": 0,
+  "new_model_fits": 0,
+  "independent_generalization_claim": false,
+  "private_path_fields": 0
+}

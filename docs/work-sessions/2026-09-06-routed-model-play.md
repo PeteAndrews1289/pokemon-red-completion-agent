@@ -83,3 +83,16 @@ Final publication-tree verification: the 104-test group passed again, all 389 so
 typing, and full lint, documentation, active-state and public-artifact checks passed. The path-free
 [engineering receipt](../evidence/red-routed-paired-engineering-2026-09-06.json) binds the source
 bundle without claiming gameplay or a full local-suite result.
+
+## Actual run and reorientation
+
+The action-free four-root preflight passed. The actual command then completed from published
+`cc70f8c9`: three model arms succeeded (resupply twice and development once), one setup failed,
+one control raised a PC exception, and the control alone added a species in the final pair.
+There are zero clean descriptive model wins. Every pair stays terminal; no new fit occurred.
+The [read-only audit](../audits/red-routed-model-play-2026-09-06.md) reauthenticated 32 immutable
+records and reconciled 23,597 actions / 1,350,732 frames. Viewer failures were zero.
+
+Close this session and proceed to the [fresh-state chain](2026-09-06-fresh-goal-chain.md).
+PR 232 merged as `9ade430a`; PR 233 CI `34032053589` passed. Ordinary play did not wait for those
+checks. No consumed trial, reserve, sealed Red capture or Crystal context will be replayed.

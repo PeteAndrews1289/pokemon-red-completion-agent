@@ -197,6 +197,7 @@ CompletionPredicate = Callable[[GoalManagerCompositionObservation], bool]
 def _retain_executor_failure(
     binding: ExecutableGoalBinding,
     budget_meter: CompositionBudgetMeter,
+    failure_observer: Callable[[BaseException], None] | None = None,
 ) -> ExecutableGoalBinding:
     """Turn an executor exception into one metered failure for bounded recovery."""
 
@@ -207,10 +208,12 @@ def _retain_executor_failure(
         before = budget_meter.checkpoint()
         try:
             return binding.execute()
-        except GoalExecutionBudgetExhausted:
+        except GoalExecutionBudgetExhausted as error:
+            _report_executor_failure(error, failure_observer, budget_meter)
             raise
-        except Exception:
+        except Exception as error:
             after = budget_meter.checkpoint()
+            _report_executor_failure(error, failure_observer, budget_meter)
             failed = True
             return GoalExecutionReport(
                 actions_executed=(
@@ -238,14 +241,29 @@ def _retain_executor_failure(
 def _retaining_binding_set(
     binding_set: GoalBindingSet,
     budget_meter: CompositionBudgetMeter,
+    failure_observer: Callable[[BaseException], None] | None = None,
 ) -> GoalBindingSet:
     return GoalBindingSet(
         opportunities=binding_set.opportunities,
         bindings=tuple(
-            _retain_executor_failure(binding, budget_meter)
+            _retain_executor_failure(binding, budget_meter, failure_observer)
             for binding in binding_set.bindings
         ),
     )
+
+
+def _report_executor_failure(
+    error: BaseException,
+    observer: Callable[[BaseException], None] | None,
+    budget_meter: CompositionBudgetMeter,
+) -> None:
+    """Retain a private cause before recovery; logging cannot act or be skipped."""
+    if observer is None:
+        return
+    before = budget_meter.checkpoint()
+    observer(error)
+    if budget_meter.checkpoint() != before:
+        raise BoundedPlayerError("failure diagnostic observer attempted game actions")
 
 
 @dataclass(frozen=True, slots=True)
@@ -271,6 +289,7 @@ def run_bounded_player_episode(
     budget_meter: CompositionBudgetMeter,
     completion_satisfied: CompletionPredicate,
     limits: BoundedPlayerLimits | None = None,
+    failure_observer: Callable[[BaseException], None] | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -286,6 +305,8 @@ def run_bounded_player_episode(
         raise TypeError("budget_meter must be a CompositionBudgetMeter")
     if not callable(completion_satisfied):
         raise TypeError("completion_satisfied must be callable")
+    if failure_observer is not None and not callable(failure_observer):
+        raise TypeError("failure_observer must be callable")
     limits = BoundedPlayerLimits() if limits is None else limits
     if not isinstance(limits, BoundedPlayerLimits):
         raise TypeError("limits must be BoundedPlayerLimits")
@@ -361,7 +382,9 @@ def run_bounded_player_episode(
 
         execution = execute_goal_manager_decision(
             situation=current.situation,
-            binding_set=_retaining_binding_set(current.binding_set, budget_meter),
+            binding_set=_retaining_binding_set(
+                current.binding_set, budget_meter, failure_observer
+            ),
             authority=selected_authority,
             trajectory=trajectory,
             require_durable_decision=True,

@@ -1,0 +1,204 @@
+{
+  "controller_actions_reconciled": 23597,
+  "emulator_frames_reconciled": 1350732,
+  "immutable_records_verified": 32,
+  "model_fits": 0,
+  "new_gameplay_actions": 0,
+  "original_comparison_modified": false,
+  "pairs": [
+    {
+      "arms": [
+        {
+          "actor": "model",
+          "capture_items_after": 5,
+          "capture_items_before": 2,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "controller_actions": 379,
+          "emulator_frames": 24241,
+          "execution_exception_type": null,
+          "goal": "resupply",
+          "team_pressure_after": 0.675,
+          "team_pressure_before": 0.6777777777777778,
+          "verified_success": true
+        },
+        {
+          "actor": "control",
+          "capture_items_after": 5,
+          "capture_items_before": 2,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "controller_actions": 379,
+          "emulator_frames": 24241,
+          "execution_exception_type": null,
+          "goal": "resupply",
+          "team_pressure_after": 0.675,
+          "team_pressure_before": 0.6777777777777778,
+          "verified_success": true
+        }
+      ],
+      "pair": 1,
+      "setup_status": "complete"
+    },
+    {
+      "arms": [
+        {
+          "actor": "model",
+          "capture_items_after": 12,
+          "capture_items_before": 12,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 13,
+            "living_target": 120,
+            "registered": 18,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 13,
+            "living_target": 120,
+            "registered": 18,
+            "registered_target": 124
+          },
+          "controller_actions": 19486,
+          "emulator_frames": 1119616,
+          "execution_exception_type": null,
+          "goal": "develop_team",
+          "team_pressure_after": 0.06666666666666676,
+          "team_pressure_before": 0.06944444444444453,
+          "verified_success": true
+        },
+        {
+          "actor": "control",
+          "capture_items_after": 12,
+          "capture_items_before": 12,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 13,
+            "living_target": 120,
+            "registered": 18,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 13,
+            "living_target": 120,
+            "registered": 18,
+            "registered_target": 124
+          },
+          "controller_actions": 202,
+          "emulator_frames": 10321,
+          "execution_exception_type": "RedPCStorageError",
+          "goal": "manage_storage",
+          "team_pressure_after": 0.06944444444444453,
+          "team_pressure_before": 0.06944444444444453,
+          "verified_success": false
+        }
+      ],
+      "pair": 2,
+      "setup_status": "complete"
+    },
+    {
+      "arms": [],
+      "pair": 3,
+      "setup_exception_type": "RouteExecutionError",
+      "setup_status": "failed"
+    },
+    {
+      "arms": [
+        {
+          "actor": "model",
+          "capture_items_after": 7,
+          "capture_items_before": 4,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "controller_actions": 376,
+          "emulator_frames": 23773,
+          "execution_exception_type": null,
+          "goal": "resupply",
+          "team_pressure_after": 0.675,
+          "team_pressure_before": 0.6777777777777778,
+          "verified_success": true
+        },
+        {
+          "actor": "control",
+          "capture_items_after": 3,
+          "capture_items_before": 4,
+          "collection_after": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 12,
+            "living_target": 120,
+            "registered": 15,
+            "registered_target": 124
+          },
+          "collection_before": {
+            "level_cap": 0,
+            "level_cap_target": 120,
+            "living": 11,
+            "living_target": 120,
+            "registered": 14,
+            "registered_target": 124
+          },
+          "controller_actions": 168,
+          "emulator_frames": 11220,
+          "execution_exception_type": null,
+          "goal": "acquire_species",
+          "team_pressure_after": 0.6694444444444445,
+          "team_pressure_before": 0.6777777777777778,
+          "verified_success": true
+        }
+      ],
+      "pair": 4,
+      "setup_status": "complete"
+    }
+  ],
+  "private_path_fields": 0,
+  "schema": "pokemon.red.routed-paired-readonly-audit.v1"
+}

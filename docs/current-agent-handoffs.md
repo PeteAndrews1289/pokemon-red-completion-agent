@@ -1,5 +1,20 @@
 # Current agent handoffs
 
+## Current — audit the completed choices; connect fresh-state play
+
+The [four-root result audit](audits/red-routed-model-play-2026-09-06.md) is complete. The model's
+three attempted goals succeeded, but none added a species; one setup and one control skill failed.
+All four roots are terminal and no clean superiority claim follows. The model remains fitted on
+29 examples; no new fitting occurred. Do not restart the completed producer or consume the reserve.
+
+Codex owns the [short-chain integration](work-sessions/2026-09-06-fresh-goal-chain.md), including
+preserved private causes, actual model/safety counts and refreshed collection observations. If
+requested, Claude should challenge maintenance-versus-collection incentives and training-context
+claims; Antigravity should challenge fresh bindings, durable failure records and viewer isolation.
+Reviewers remain read-only/advisory. Neither reviewed this session, and no approval is implied.
+
+All handoffs below are historical.
+
 ## Active implementation — routed Red model/control consumer
 
 Read the [current session record](work-sessions/2026-09-06-routed-model-play.md). Codex is connecting

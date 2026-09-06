@@ -1,5 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: successful tasks are not the same as collecting
+
+The fitted 29-example model chose real goals in the four-root routed check. It bought
+three more balls in two situations and successfully developed a party member in another. Those
+were genuine model selections, executed through deterministic skills. One scenario failed during
+navigation before either actor chose, and one comparison control hit an unexpected PC menu.
+
+The most informative result was less flattering: the control caught a new species while the
+model bought supplies. The model's three skills all succeeded, yet its living collection never
+grew. This is the distinction the project needs to confront: being good at reliable preparation
+is not yet being good at completing a Pokédex. We retained all four roots, claimed no clean
+policy superiority, and did not fit these development outcomes or replay failures.
+
+The next short chain uses fresh observations after each goal to test whether preparation becomes
+useful collecting. It reuses an existing player loop and explicitly labels training-context
+integration as such. The [audit](audits/red-routed-model-play-2026-09-06.md) verifies every stored
+record and the complete 23,597-action / 1,350,732-frame accounting.
+
 ## September 6: moving the fitted model into actual decisions
 
 After the 29-example update, the missing piece was not another model. The saved roots described
