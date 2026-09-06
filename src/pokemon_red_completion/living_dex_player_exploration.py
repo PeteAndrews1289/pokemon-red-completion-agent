@@ -22,17 +22,19 @@ from pokemon_red_completion.living_dex_goal_policy import (
     LivingDexGoalShadowPolicy,
 )
 
-EXPLORATION_POLICY_ID = "living-dex-player-full-support-v1"
+EXPLORATION_POLICY_ID = "living-dex-player-supported-menu-v2"
 DETERMINISTIC_POLICY_ID = "living-dex-player-nontraining-v1"
 
 
 @dataclass(slots=True)
 class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
-    """Sample once from a 25% uniform / 75% model-softmax mixture.
+    """Sample supported options from a 25% uniform / 75% model-softmax mixture.
 
     Seed and policy identity belong in the prospective run header. Exact
     probabilities belong in the durable decision before any controller input.
     A sample is not a greedy model prediction and must be displayed as such.
+    Support covers the exact projected learner menu, not unsupported physical
+    goals. The inherited safety gate runs first and is never randomized.
     """
 
     seed: int = 0
@@ -66,9 +68,7 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
         base_probability = 1.0
         mix = 0.0
         selected_index = greedy.selected_index
-        if decision.mode is LivingDexGoalDecisionMode.MODEL_SHADOW and set(
-            self.last_menu_indices
-        ) == set(question.available_indices):
+        if decision.mode is LivingDexGoalDecisionMode.MODEL_SHADOW:
             utilities = [item.utility for item in decision.scores]
             peak = max(utilities)
             exponentials = [math.exp(value - peak) for value in utilities]

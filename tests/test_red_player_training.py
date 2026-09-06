@@ -9,12 +9,18 @@ from test_goal_resource_quote import _quote, _quoted_question, _supply_model
 from test_red_living_dex_causal_adapter import _store_and_registry
 
 from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
     GoalDecisionOutcome,
     GoalFailureReason,
+    GoalKind,
+    GoalOpportunity,
 )
 from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectoryObserver
 from pokemon_red_completion.living_dex_option_value import LivingDexOutcomeStatus
-from pokemon_red_completion.living_dex_player_exploration import ExploringLivingDexGoalPolicy
+from pokemon_red_completion.living_dex_player_exploration import (
+    EXPLORATION_POLICY_ID,
+    ExploringLivingDexGoalPolicy,
+)
 from pokemon_red_completion.red_player_training import TRAINING_EVENT, RedPlayerTrainingTrajectory
 from pokemon_red_completion.red_player_training_dataset import load_red_player_training_episode
 from pokemon_red_completion.red_player_training_plan import (
@@ -35,7 +41,7 @@ def _plan(model):
             "decision_limit": 4,
             "root_lineage_id": "goal-root-1",
             "model_sha256": model.model_sha256,
-            "behavior_policy_id": "living-dex-player-full-support-v1",
+            "behavior_policy_id": EXPLORATION_POLICY_ID,
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": "2" * 64,
             "context_id": "3" * 64,
@@ -80,6 +86,7 @@ def _episode(
     zero=False,
     mutate=None,
     return_inputs=False,
+    unsupported_restore=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -117,6 +124,10 @@ def _episode(
     sink.write_episode_header(metadata=metadata)
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
+    if unsupported_restore:
+        source = replace(source, opportunities=(*source.opportunities, GoalOpportunity(
+            "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0
+        )))
     if safety:
         source = replace(source, situation=replace(source.situation, resource_pressure=0.99))
     facts = [_facts(source)]
@@ -206,6 +217,13 @@ def test_native_choices_replay_and_keep_observed_success_failure_and_censor(tmp_
 def test_safety_choices_do_not_become_exploration_rows(tmp_path):
     dataset = _episode(tmp_path, safety=True)
     assert dataset.examples == () and dataset.excluded_nonexploratory == 1
+
+
+def test_supported_menu_with_unsupported_option_survives_real_trajectory_admission(tmp_path):
+    dataset = _episode(tmp_path, unsupported_restore=True)
+    assert len(dataset.examples) == 1 and dataset.excluded_nonexploratory == 0
+    assert len(dataset.examples[0].behavior_probabilities) == 2
+    assert all(p > 0 for p in dataset.examples[0].behavior_probabilities)
 
 
 def test_zero_input_is_retained_in_episode_but_not_used_for_fitting(tmp_path):

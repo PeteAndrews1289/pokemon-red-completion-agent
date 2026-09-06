@@ -89,3 +89,35 @@ seeds 17/23, source training lineage, 29-example behavior model and four-goal bo
 identities are closed, not overwritten. The total remains at most two **controller-started**
 training episodes. Preserve and disclose the zero-input initialization exclusion; it is not an
 outcome selected away because of poor play. After controller input, do not retry an episode.
+
+## R1 A closed; prospective amendment for the never-started B only
+
+R1 A from `ddb1c034` executed **656 actions / 40,368 frames** and four successful goals:
+resupply, acquisition, acquisition, resupply. It then failed while persisting the terminal save:
+ordinary Base64 contained a slash rejected by the path-free record boundary. All decisions and
+outcomes remain in failed manifest `523fd63ff0ccc052480ace639a10e8782ec98fa6b9baec7371fc139f5a7f55d9`.
+There is no durable continuation state. Do not replay this episode to manufacture one.
+
+It generated **zero eligible native examples**. The V1 sampler required support over every
+available physical goal; an available unsupported healing goal disabled exploration even when
+two or three supported model options existed. The log truthfully records all four decisions as
+nontraining. None may be retroactively assigned sampling probabilities or fitted.
+
+Before the remaining B starts, V2 samples the exact **supported model menu**, after the existing
+deterministic safety gate. Unsupported physical options have zero probability outside that menu;
+every option inside it has positive probability. This is not full support over all physical goals.
+The behavior ID and training declaration schema change prospectively. Diagnostic-only replay of
+the four recorded inputs confirms two model-supported menus would be eligible; this produces no
+new outcomes, labels, controller input or training rows. Tests also cover the real private-store
+trajectory admission for a menu with an available unsupported healing option.
+
+Checkpoint payload V2 uses URL-safe Base64; the global path guard remains strict. Legacy V1
+payloads retain their old record address and reader. A real-store roundtrip with binary bytes
+whose ordinary encoding contains slashes is required before B.
+
+Only `red-native-econ-20260906-r1-b-causal` remains in this bounded batch: seed 23,
+same known-train root/profile/29-example behavior model and four-goal limit. Its source and V2
+plan are sealed before input. A remains in the attempt denominator but has no eligible examples,
+irrespective of its successful outcomes. Fit all admissible B samples, including failures, with
+the unchanged 29 prior rows. If B cannot produce them, stop this batch and report the blocker;
+do not add replacement episodes or retrospectively change either episode's targets.

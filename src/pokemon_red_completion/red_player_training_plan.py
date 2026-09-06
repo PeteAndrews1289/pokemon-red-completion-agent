@@ -20,7 +20,7 @@ from pokemon_red_completion.goal_manager_protocol import (
 from pokemon_red_completion.living_dex_player_exploration import EXPLORATION_POLICY_ID
 from pokemon_red_completion.provenance import canonical_sha256
 
-TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v1"
+TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
 
 
 @dataclass(frozen=True, slots=True)

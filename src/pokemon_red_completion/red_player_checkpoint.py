@@ -28,7 +28,8 @@ from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
 
 CHECKPOINT_KIND = "red_bounded_player_checkpoint"
-CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
+LEGACY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
+CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v2"
 MAXIMUM_STATE_BYTES = 512 * 1024
 
 
@@ -48,7 +49,8 @@ class _StateSource(Protocol):
 
 def checkpoint_record_id(episode_id: str) -> str:
     # Fixed-length IDs also work for the longest supported private episode IDs.
-    return "rpc-" + canonical_sha256({"episode_id": episode_id, "schema": CHECKPOINT_SCHEMA})
+    # Keep the address stable when the payload encoding evolves.
+    return "rpc-" + canonical_sha256({"episode_id": episode_id, "schema": LEGACY_CHECKPOINT_SCHEMA})
 
 
 def _sha(value: object) -> str:
@@ -112,7 +114,9 @@ def capture_red_player_terminal(
         "source_commit": source_commit,
         "source_bundle_sha256": _sha(source_bundle_sha256),
         "state_sha256": state_sha256,
-        "state_base64": base64.b64encode(state).decode("ascii"),
+        # Ordinary base64 can contain '/', which the path-free record boundary
+        # correctly rejects. Change this encoding, not the global path guard.
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
         "envelope": envelope.to_dict(),
         "semantic_state_sha256": observation.semantic_state_sha256,
         "collection": observation.collection.public_dict(),
@@ -234,7 +238,6 @@ def open_red_player_checkpoint(
         raise RedPlayerCheckpointError("checkpoint record is absent or changed")
     document = record.read()
     expected = {
-        "schema": CHECKPOINT_SCHEMA,
         "episode_id": episode_id,
         "original_state_sha256": original_parent.state_sha256,
         "original_envelope_sha256": original_parent.envelope_sha256,
@@ -245,7 +248,10 @@ def open_red_player_checkpoint(
         "training_example": False,
         "automatic_resume_authorized": False,
     }
-    if any(document.get(key) != value for key, value in expected.items()):
+    schema = document.get("schema")
+    if schema not in {CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA} or any(
+        document.get(key) != value for key, value in expected.items()
+    ):
         raise RedPlayerCheckpointError("checkpoint parent or scope differs")
     if _join_episode(store, document) != document.get("trajectory_manifest_sha256"):
         raise RedPlayerCheckpointError("checkpoint trajectory identity differs")
@@ -253,7 +259,9 @@ def open_red_player_checkpoint(
     if not isinstance(encoded, str) or len(encoded) > 4 * ((MAXIMUM_STATE_BYTES + 2) // 3):
         raise RedPlayerCheckpointError("checkpoint encoded state differs")
     try:
-        state = base64.b64decode(encoded, validate=True)
+        state = base64.b64decode(
+            encoded, altchars=b"-_" if schema == CHECKPOINT_SCHEMA else None, validate=True
+        )
     except ValueError as error:
         raise RedPlayerCheckpointError("checkpoint encoded state differs") from error
     if not state or hashlib.sha256(state).hexdigest() != document.get("state_sha256"):

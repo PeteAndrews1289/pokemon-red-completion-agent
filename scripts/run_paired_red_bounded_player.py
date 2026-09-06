@@ -736,7 +736,7 @@ def _policy_id(readiness: _Readiness, arm_id: str) -> str:
         return f"goal-manager-{readiness.model_sha256[:16]}"
     if arm_id == CAUSAL_ARM_ID:
         suffix = (
-            "-exploration-economics-v1"
+            "-supported-exploration-economics-v2"
             if readiness.training_plan is not None
             else "-economics-v1"
             if readiness.quote_resource_costs

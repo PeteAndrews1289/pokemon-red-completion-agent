@@ -6,8 +6,9 @@ Read [this session plan](docs/work-sessions/2026-09-06-resource-cost-learning.md
 The cost/reserve treatment is implemented and under local qualification. It leaves old model
 features and all prior targets unchanged. The next output is two short, prospectively declared
 train-only player episodes and a retained-corpus fit—not another teacher or setup campaign.
-No new gameplay or real fit has occurred at this implementation checkpoint; the active model
-still has 29 examples. PR 235 merged; this work is on the next native-training branch.
+The active model still has 29 examples; no new fit yet. PR 235 merged; this work is on the next
+native-training branch. R1 A has now played four successful goals but produced zero eligible
+sampling rows and failed terminal-save persistence. Its immutable records remain diagnostic.
 
 Native sampling is explicitly distinguished from greedy ranking, safety and forced choices.
 The trajectory reader replays the sampling distribution, joins actual execution intervals and
@@ -18,6 +19,12 @@ First-launch finding: the initial A episode failed before goal selection/input b
 wrapper dropped its quote; B never started. The failed record is preserved. A metadata-preserving
 wrapper repair and full execution-path regression test precede the prospectively renamed R1 batch.
 See the session plan for exact new identities and bounds; never reopen the old failed identity.
+
+Latest correction: an available unsupported healing option disabled V1 exploration. V2 samples
+only the supported learner menu after deterministic safety; this is not support over all goals.
+Checkpoint V2 uses URL-safe encoding without weakening the path guard. Only the never-started
+R1 B remains in scope, seed 23. Do not replay A or relabel its deterministic choices as samples.
+See the prospective amendment in the session plan; preserve every attempt in the final report.
 
 All prior sections below describe earlier checkpoints unless confirmed by a newer result.
 

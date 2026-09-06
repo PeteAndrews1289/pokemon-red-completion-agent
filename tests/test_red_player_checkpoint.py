@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 from dataclasses import replace
@@ -20,6 +21,7 @@ from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manag
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
 from pokemon_red_completion.private_artifacts import PrivateArtifactError, initialize_private_root
 from pokemon_red_completion.red_player_checkpoint import (
+    LEGACY_CHECKPOINT_SCHEMA,
     MAXIMUM_STATE_BYTES,
     RedPlayerCheckpointError,
     capture_red_player_terminal,
@@ -140,6 +142,30 @@ def test_durable_state_round_trip_preserves_parent_scope_and_quest_claims(case):
     assert "state_base64" not in json.dumps(summary)
     # Recovery republishes identical durable bytes, never another emulator action.
     assert recover_completed_red_player_checkpoint(store, arguments["episode_id"]) == summary
+
+
+def test_binary_save_with_path_like_base64_round_trips_through_real_private_store(case):
+    store, arguments, _ = case
+    state = b"\xff" * 32
+    assert b"/" in base64.b64encode(state)
+    arguments["emulator"].state = state
+    document = capture_red_player_terminal(**arguments)
+    assert "/" not in document["state_base64"]
+    _complete(store, document)
+    summary = publish_red_player_checkpoint(store, document)
+    checkpoint = _open(store, arguments, summary)
+    assert checkpoint.capture.state_bytes == state
+    assert checkpoint.capture.state_sha256 == hashlib.sha256(state).hexdigest()
+
+
+def test_legacy_checkpoint_payload_remains_readable_at_original_address(case):
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    document["schema"] = LEGACY_CHECKPOINT_SCHEMA
+    document["state_base64"] = base64.b64encode(arguments["emulator"].state).decode("ascii")
+    _complete(store, document)
+    checkpoint = _open(store, arguments, publish_red_player_checkpoint(store, document))
+    assert checkpoint.capture.state_bytes == arguments["emulator"].state
 
 
 @pytest.mark.parametrize("field,value", [

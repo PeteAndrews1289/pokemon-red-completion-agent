@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 from test_goal_resource_quote import _quote, _quoted_question, _supply_model
 
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalOpportunity
 from pokemon_red_completion.living_dex_player_exploration import (
     DETERMINISTIC_POLICY_ID,
     EXPLORATION_POLICY_ID,
@@ -44,6 +44,31 @@ def test_critical_supply_is_disclosed_as_nontraining_without_randomization():
     assert policy.selection_metadata()["behavior_policy_id"] == DETERMINISTIC_POLICY_ID
     assert policy.selection_metadata()["candidate_probabilities"] == [0.0, 1.0]
     assert policy.select(question) == untouched.select(question)
+
+
+def test_available_unsupported_healing_does_not_disable_supported_menu_sampling():
+    question = _quoted_question(_quote())
+    restore = GoalOpportunity(
+        "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0
+    )
+    question = replace(question, opportunities=(*question.opportunities, restore))
+    policy = ExploringLivingDexGoalPolicy(_supply_model(), seed=23)
+    choices = set()
+    for _ in range(20):
+        selected = policy.select(question)
+        probabilities = policy.selection_metadata()["candidate_probabilities"]
+        assert policy.training_eligible
+        assert policy.last_menu_indices == (0, 1)
+        assert probabilities[0] > 0 and probabilities[1] > 0
+        assert probabilities[2] == 0
+        assert sum(probabilities) == pytest.approx(1)
+        assert policy.option_probabilities == tuple(probabilities[:2])
+        choices.add(selected.kind)
+    assert choices == {GoalKind.RESUPPLY, GoalKind.ACQUIRE_SPECIES}
+    emergency = replace(question, situation=replace(question.situation, safety_pressure=0.99))
+    assert policy.select(emergency).kind is GoalKind.RESTORE_TEAM
+    assert not policy.training_eligible
+    assert policy.selection_metadata()["candidate_probabilities"] == [0.0, 0.0, 1.0]
 
 
 def test_returned_metadata_cannot_mutate_the_logged_distribution():
