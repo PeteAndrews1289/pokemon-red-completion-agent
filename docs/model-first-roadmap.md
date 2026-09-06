@@ -1,17 +1,31 @@
 # Model-first development roadmap
 
-## Active session — economic choices to actual player-derived learning
+## Current — actual native player learning complete; use the 31-example model next
 
-The [current bounded session](work-sessions/2026-09-06-resource-cost-learning.md) adds explicit
-funds, purchase costs and reserve quotes beside the unchanged 29-example model. It connects
-prospective stochastic player choices directly to the existing outcome learner. Two four-goal
-training episodes are declared; they reuse one known train lineage and cannot support an
-independent quality claim. No new real fit is claimed until its result is recorded here.
+The [bounded session](work-sessions/2026-09-06-resource-cost-learning.md) produced a real
+**29 → 31** model update from two sampled player outcomes, preserving all previous rows. One
+four-goal episode completed and saved its state; two earlier failed launches remain disclosed.
+The [audit](audits/red-native-player-learning-2026-09-06.md) separates working learning from
+unproved gameplay improvement. These are correlated training examples, not independent tests.
 
-Next: qualify the seam, collect both episodes, retain negative outcomes and prior examples, fit,
-then inspect predictions and actual collection/spending. Do not create another setup factory.
-Afterward, prioritize sustained bounded Red collecting and missing evolution/storage mechanics;
-Crystal remains deferred. Preserve title-neutral state/action interfaces throughout.
+1. Connect the saved terminal checkpoint to the existing bounded player, retaining original
+   lineage/partition and requiring fresh semantic/ledger agreement before any controller input.
+2. Run one short, prospectively declared continuation using the actual 31-example checkpoint.
+   Measure required-specimen progress, model/safety decisions, money/items and failures. Save the
+   resulting state. Do not call greedy diagnostic choices full-support training examples.
+3. If wasteful shopping persists, cap purchase quantities to a justified reserve deficit before
+   adding more shopping lessons. Otherwise prioritize needed evolution/storage behavior.
+4. Version the learning target only where necessary: needed duplicate precursors reduce specimen
+   requirements but currently receive zero species-count completion gain. Never rewrite old labels.
+5. Build sustained bounded Red competence and a living collection before reopening Crystal.
+   Preserve title-neutral state/action interfaces, explicit version/trade/event dependencies,
+   negative outcomes and readable prior artifacts. No new setup factory or CI-only work loop.
+
+The next session is bounded to four hours and stops at a verified continuation plus reorientation.
+The long-term product remains a model that completes games and builds a living Pokédex across
+titles; neither full Red completion by this learned player nor cross-game transfer is established.
+
+All checkpoints below are historical.
 
 ## Current checkpoint — four goals compose; make the progress durable and learn from useful contrasts
 

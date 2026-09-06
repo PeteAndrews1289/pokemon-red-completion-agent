@@ -60,7 +60,10 @@ def test_frame_freshness_tracks_frames_not_work_updates() -> None:
 
 
 def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() -> None:
-    receipt = OVERVIEW["_load_learning_evidence"]()
+    # Keep the older receipt readable independently of the active evidence pointer.
+    receipt = json.loads((ROOT / (
+        "docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json"
+    )).read_text())
     training, component = OVERVIEW["_training_projection"](receipt)
     assert training.samples_after == 29
     assert training.samples_before + training.previously_unfitted + training.newly_collected == 29
@@ -76,6 +79,32 @@ def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() ->
     projection, candidate = OVERVIEW["_training_projection"](changed)
     assert candidate.train_examples == 31
     assert projection.samples_before == 20
+
+
+def test_native_player_fit_display_uses_retained_model_error_not_zero_initialization():
+    receipt = OVERVIEW["_load_learning_evidence"]()
+    assert receipt["schema"] == "pokemon.red.native-player-learning-session.v1"
+    training, component = OVERVIEW["_training_projection"](receipt)
+    assert (training.samples_before, training.samples_after) == (29, 31)
+    assert training.newly_collected == 2
+    assert training.weighted_mse_before == pytest.approx(0.0051474823941508)
+    assert training.weighted_mse_before != receipt["fit"]["fit_report"]["weighted_mse_before"]
+    assert training.weighted_mse_after == pytest.approx(0.004795542884146417)
+    assert training.training_choice_changes == 1
+    assert training.public_dict()["held_out_claim"] is False
+    assert component.train_examples == 31 and component.validation_examples == 0
+    assert component.model_sha256 == receipt["fit"]["model"]["model_sha256"]
+
+
+@pytest.mark.parametrize("field,value", [
+    ("new_settled_examples", 3), ("in_sample_only", False),
+    ("prior_rows_retained", False), ("authority_promotions", 1),
+])
+def test_native_player_fit_display_rejects_false_learning_claims(field, value):
+    receipt = copy.deepcopy(OVERVIEW["_load_learning_evidence"]())
+    receipt["fit"][field] = value
+    with pytest.raises(ProgressDashboardError):
+        OVERVIEW["_training_projection"](receipt)
 
 
 def test_saved_run_recap_uses_actual_choices_resources_and_denominator() -> None:
@@ -148,10 +177,10 @@ def test_saved_recap_loader_refuses_an_unjoined_audit(tmp_path: Path) -> None:
         {"setup_censors": 1},
         {"terminal_lessons": 7},
         {"fit_count": 0},
-        {"successful_examples": 30},
+        {"successful_examples": 500},
         {"weighted_mse_after": float("nan")},
         {"weighted_mse_before": True},
-        {"training_choice_changes": 30},
+        {"training_choice_changes": 500},
     ],
 )
 def test_training_summary_rejects_false_accounting(changes: dict) -> None:

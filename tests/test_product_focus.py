@@ -2203,19 +2203,19 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["model"]["fallbacks"] == 0
     assert public["model"]["mode"] == "shadow"
     assert public["collection"]["observed"] is False
-    assert public["training"]["samples_before"] == 18
-    assert public["training"]["samples_after"] == 29
-    assert public["training"]["newly_collected"] == 6
-    assert public["training"]["previously_unfitted"] == 5
-    assert public["training"]["setup_censors"] == 2
+    assert public["training"]["samples_before"] == 29
+    assert public["training"]["samples_after"] == 31
+    assert public["training"]["newly_collected"] == 2
+    assert public["training"]["previously_unfitted"] == 0
+    assert public["training"]["setup_censors"] == 0
     assert public["training"]["held_out_claim"] is False
     assert public["experiment"]["predictions_committed"] is False
     assert public["learning_components"][0]["validation_examples"] == 0
     assert public["learning_components"][0]["model_sha256"] == (
-        "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a"
+        "95f62eaafc55a053cf65e23a8dcbf99955360040b85ef56ad8eff3e925edb472"
     )
     encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
-    assert "29-example living-Pokédex goal scorer" in encoded
+    assert "31-example living-Pokédex goal scorer" in encoded
     assert "Historical cross-family ledger" in encoded
     assert "supply validation before training" not in encoded
     assert "10 untouched" not in encoded

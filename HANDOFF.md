@@ -1,5 +1,32 @@
 # Handoff
 
+## Current — native learning complete: 31 examples, bounded continuation next
+
+Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the
+[session audit](docs/audits/red-native-player-learning-2026-09-06.md), and
+[result](docs/evidence/red-native-player-learning-result-2026-09-06.json) first.
+R1 B completed four goals, retained two needed specimens (+1 living species), and saved its end
+state. Two sampled outcomes joined all 29 previous rows in an actual 31-example fit. The updated
+model is `95f62eaa...edb472`; exact identities are in the result. Reopening its game checkpoint and
+checking the fresh ledger/model used no controller input. No 31-example live episode has run yet.
+
+The first launch failed before input; R1 A played but remained entirely nontraining and failed
+end-state persistence. Both archives are preserved. Do not replay either, reinterpret their
+labels, or hide them from the attempt denominator. The native batch is now CLOSED.
+
+Post-fit in-sample replay changes the second-shopping preference to continued acquisition; that
+is promising but not a gameplay result. Actual B still spent 12,000 and ended with 649 money and
+19 capture items. Next: a thin authenticated continuation consumer and one bounded prospective
+31-example run, followed by reorientation. Avoid a new teacher/data factory or repeated CI gates.
+Native private model/corpus/checkpoint IDs are reconstructible from the public hashes; private
+operator notes preserve paths and commands outside Git. No external reviewers were invoked.
+
+The engineering notes below are earlier checkpoints, not the current model size or run status.
+
+Final local verification: **7,085 passed, four skipped, one expected failure**, plus clean lint,
+type, registry, documentation/focus and public-artifact checks. Both targeted regression mutations
+were killed. The viewer was refreshed and visually verified with 31 examples and no fake live game.
+
 ## In progress — September 6 economic quotes and native player training
 
 Read [this session plan](docs/work-sessions/2026-09-06-resource-cost-learning.md) first.

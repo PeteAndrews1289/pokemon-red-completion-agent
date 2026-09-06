@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+## Current ownership — native learning audited; continue with the 31-example model
+
+Codex owns implementation and publication. The [native learning audit](docs/audits/red-native-player-learning-2026-09-06.md)
+records two new sampled outcomes, all 29 prior rows retained, a loadable 31-example model and a
+freshly verified saved endpoint. The batch is closed; no launch may retry. Next is one bounded
+continuation, not another broad campaign. Keep actual spending and negative evidence visible.
+
+If requested, Claude should challenge the completion/maintenance incentive and the zero credit
+for needed duplicate precursors; Antigravity should challenge checkpoint lineage, fresh restores,
+quote freshness and live/saved evidence. Both remain read-only advisers, not mandatory gates.
+Neither reviewer nor a subagent was invoked in this session. Earlier sections are historical.
+
 ## Active implementation — September 6 native player training
 
 Codex owns the [economic/native-training session](docs/work-sessions/2026-09-06-resource-cost-learning.md),

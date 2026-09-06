@@ -1,5 +1,20 @@
 # Current agent handoffs
 
+## Current — native learning loop works; demonstrate useful continuation next
+
+Read the [audit](audits/red-native-player-learning-2026-09-06.md) and
+[result](evidence/red-native-player-learning-result-2026-09-06.json). The model now has **31**
+examples: two new sampled player outcomes plus all 29 retained rows. One four-goal episode
+completed with a durable save; the zero-input and post-input failed archives remain preserved.
+No 31-example live continuation has run. Do not retry or relabel completed/failed attempts.
+
+Codex should implement only the thin authenticated continuation consumer, then a short prospective
+run measuring collection and spending. If requested, Claude should audit useful completion credit
+versus easy maintenance; Antigravity should audit fresh state/lineage restoration and viewer truth.
+No external reviewer was invoked here. The exact future sequence is in the audit, not old gates.
+
+All handoffs below are historical.
+
 ## Current — four-goal resource chain audited; persistence and next training contrasts
 
 The [latest session](work-sessions/2026-09-06-durable-player-continuation.md) records the actual

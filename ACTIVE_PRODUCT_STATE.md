@@ -33,20 +33,20 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: In progress: qualify explicit known-cost/reserve quotes and a native player-to-learner adapter, then collect the two prospectively declared four-goal training episodes and fit the existing model with all prior rows retained. Sampling is distinct from safety and forced choices; outcomes come from actual execution. No new real fit is claimed yet. The 29-example checkpoint and all historical terminals remain unchanged; do not build another setup factory or wait for duplicate CI.
+- Next decision: Use the actual 31-example model in one short prospective continuation from the saved, freshly verified training endpoint. Implement only the missing continuation consumer; measure collection and spending, retain failures, and save progress. The native training batch is closed. Do not replay it, create another teacher factory, or wait on duplicate CI.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
+| Authority now | The current goal-value checkpoint contains 31 examples: two sampled player outcomes plus all 29 retained rows. The behavior checkpoint with 29 examples completed four goals and retained two needed specimens (+1 living species), but overspent. The updated model changes one in-sample preference from shopping to acquisition; it has not executed a new live chain. Historical cross-family counters below are not its dataset size. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
 | Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
 | Time box | 1 session / 4 hours |
 
-### Cumulative cross-family learning outputs
+### Historical cross-family counter snapshot
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
@@ -56,25 +56,25 @@ Not the product:
 | Development Episode · development | 29 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
-These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
+This frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-durable-player-viewer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-player-checkpoint-readonly-qualification-2026-09-06.json)
+**2026-09-06-native-player-learning-complete** · status **closed** · evidence [model fit](docs/evidence/red-native-player-learning-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The prior model-assisted chain retained two needed specimens. Future terminal progress can now be stored with its original lineage, and the viewer keeps real completed choices and costs visible after the live producer closes. |
-| Learning output | Maintenance only: 335 focused checks and a real serializer round trip passed, with zero controller actions, frames, predictions, fits or train rows during qualification. The actual model remains fitted on 29 examples; both earlier diagnostic chains remain terminal. |
-| Authority delta | No new learned authority. Optional end-state retention and its reader unblock a later bounded continuation, but a controller-capable continuation consumer is not implemented. Checkpoints are not new independent roots or fitting examples. |
-| Transfer result | Checkpoint round trips preserve original provenance and require fresh semantic/ledger agreement. This is recovery engineering, not cross-game or independent gameplay evidence. Crystal and sealed Red remain closed. |
-| Blocker | A source audit found candidate resource cost is encoded as zero; resource pressure uses item headroom; the causal cost target measures consumed items, not money spent. More easy shopping examples alone cannot teach economical choices. Old historical runs have no end saves. |
-| Decision | Close the persistence/viewer session. Address only the necessary prospective cost/reserve representation before new supply training, preferably with known-cost quotes rather than a new model architecture. Preserve all old rows and diagnostics; do not silently redefine their targets. |
-| Next session | Build and falsify the smallest versioned, identity-free known-cost/reserve treatment, then use existing selected-outcome collection and fitting for a tiny prospectively declared train batch. Retain negative outcomes, actual behavior probabilities and prior rows. Keep CI in the background. |
-| Next falsifier | Can the player distinguish affordable-but-wasteful restocking from a needed reserve refill using real pre-action facts, while old projections/results remain unchanged and new outcomes count only executed choices? |
-| Stop condition | One bounded session, with actual new learning evidence as the next output. Stop rather than build another broad campaign factory, recapture old ended runs, reinterpret old consumable-only cost labels, fit development diagnostics or fabricate full-support behavior. No Crystal, sealed or full replay. |
+| Product alignment | Actual player choices can now become observed-outcome learning without fabricated setup attestations. Two needed specimens were retained, including a new living species. The next product step is sustained Red collecting and missing evolution/storage mechanics, not Crystal or a new teacher. |
+| Learning output | Two sampled player outcomes joined all 29 retained rows in one real 31-example goal-value fit. B completed four goals and saved its state; two failed launches remain disclosed, with no retroactive training labels. Training MSE changed from 0.00514748 to 0.00479554; this is not held-out accuracy. |
+| Authority delta | The native player-to-learner update is complete: 29 to 31 examples, with no authority promotion. The new model reloads and changes one recorded training-menu preference; no 31-example live continuation has executed. |
+| Transfer result | Semantic goal features and the nine old targets remain unchanged; known prices are explicit deterministic quotes. The native checkpoint is usable and its saved endpoint agrees with fresh read-only observations. These are same-lineage Red results, not independent or cross-game evidence. |
+| Blocker | The actual collection run still spent 12000 and ended with 649 money and 19 capture items. Its two new samples are correlated successes. Needed duplicate precursors reduce specimen requirements but receive zero old species-count completion gain. Useful sustained play is not yet established. |
+| Decision | Close this native batch and use its retained endpoint. Connect only a thin authenticated continuation consumer, then test the actual 31-example model in a short prospective chain before more architecture or data-factory work. |
+| Next session | Add the thin same-lineage checkpoint continuation consumer and execute one prospective chain of at most four goals with the 31-example model. Measure required specimens, living species, spending, supplies and model versus safety choices. Save the new terminal state, then reorient. |
+| Next falsifier | Does the 31-example model retain useful collection progress from the verified endpoint without wasting scarce money, while all controller inputs remain bounded and every failure remains visible? |
+| Stop condition | One bounded next session, at most four hours, ending at a verified continuation and reorientation. Do not retry closed attempts, invent targets, fit diagnostics, reinterpret old resource labels, or build another setup factory. No sealed Red, Crystal or full-game replay. |
 
 ### Stop conditions
 

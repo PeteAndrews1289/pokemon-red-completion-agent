@@ -1,15 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## September 6: the next learning loop (implementation, not a result yet)
+## September 6: the player feeds its own experience back into learning
 
 **Explain:** “The player was succeeding at shopping but spending too much. We added the price
-and reserve information it was missing, without pretending the old data contained it. Next we
-let it sample real choices and learn from the outcomes—including failures.”
+and reserve information it was missing, without pretending the old data contained it. Then we
+let it sample real choices and learn from the outcomes. Two genuine samples joined all 29 older
+examples. We finally have the player-to-learning loop working—not just a script collecting logs.”
 
 Show **MODEL + EXPLORATION** only for sampled decisions; show **SAFETY** and **FORCED OPTION**
 separately. Training counters must change only after authenticated new examples and an actual fit.
-The upcoming batch reuses one known training state. Never caption it as an unseen-game test,
+The completed batch reused one known training state. Never caption it as an unseen-game test,
 independent victory, learned money prediction, or an autonomous full-game player.
+
+**Result card:** “29 → 31 FITTED EXAMPLES · ALL PRIOR DATA RETAINED.” Show the four goals and
+two sampled choices separately. Keep “MONEY 12,649 → 649” visible: shopping still needs work.
+The new model changes its preference from shopping to collecting on one recorded input;
+caption that **IN-SAMPLE REPLAY — NOT NEW GAMEPLAY**. The saved endpoint is real and reloads,
+but no updated-model continuation has been executed. Include the two engineering failures:
+lost quote metadata, then sampling/encoded-save integration. Neither was hidden or replayed.
 
 ## September 6: the first complete supply-and-collect sequence
 

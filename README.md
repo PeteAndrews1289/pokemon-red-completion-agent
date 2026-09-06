@@ -6,17 +6,19 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 6, 2026): a fitted goal model, then bounded learned play.**
-> PRs through 231 are merged. The completed eight-lesson batch produced **six factual outcomes and
-> two setup censors**, followed by one real model update on **29 examples**. All 23 pre-run rows
-> are retained. This is a small semantic goal scorer, not an autonomous full-game player.
+> **Current product focus (September 6, 2026): the player now feeds its own observed outcomes to learning.**
+> A four-goal Red episode completed and saved its terminal state. Two genuinely sampled goal
+> outcomes were fitted with all 29 prior examples, producing a **31-example goal-value model**.
+> The run retained two needed specimens, including one new living species, but still overspent.
+> This is a small semantic goal scorer with deterministic skills, not an autonomous full-game player.
 >
-> The next milestone is several model-chosen Red goals with fresh observations and verified living
-> collection progress. The local spectator dashboard separates saved training evidence, live
+> The next milestone is a bounded continuation using the updated model, checking collection
+> progress and resource decisions. The local spectator dashboard separates saved training evidence, live
 > gameplay and current engineering; its [guide](docs/progress-dashboard.md) explains the viewer.
 > Crystal is deferred, not abandoned. See the [roadmap](docs/model-first-roadmap.md),
-> [real training result](docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json), and
-> [post-fit audit](docs/audits/red-goal-model-post-fit-2026-09-06.md).
+> [native training result](docs/evidence/red-native-player-learning-result-2026-09-06.json), and
+> [session audit](docs/audits/red-native-player-learning-2026-09-06.md). The fit and replay use one
+> known training lineage; improved live performance and cross-game transfer remain unproved.
 >
 > Older dated product-focus panels below are historical, regardless of their original heading.
 

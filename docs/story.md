@@ -6,8 +6,15 @@ The 29-example scorer has participated in a real supply-and-capture chain, but o
 revealed a blind spot: success at shopping is not the same as sensible resource use. This session
 adds explicit price/reserve facts beside learned predictions, preserving the old labels. It also
 connects newly sampled player choices to the existing fitter, so both successful and failed
-actions can become experience without another scripted setup campaign. This paragraph records
-implementation intent; the upcoming two-episode batch and fit are not yet completed results.
+actions can become experience without another scripted setup campaign. The resulting episode
+completed four goals and contributed two genuinely sampled outcomes to a **31-example** fit,
+retaining every prior row. Earlier initialization and save failures remain in the audit.
+
+The newly fitted model prefers continued collecting over a second shopping trip on a recorded
+training input. That is a changed learned preference, not yet a demonstrated better run. Actual
+gameplay still overspent, and the next session must test useful continuation rather than celebrate
+training error alone. A needed duplicate precursor also exposes a target limitation: it advances
+the living-specimen plan without increasing the current species-count completion label.
 
 The engineering distinction matters: the model learns observed success/progress/cost outcomes;
 a deterministic quote supplies known prices. Neither is full-game autonomy or demonstrated transfer.

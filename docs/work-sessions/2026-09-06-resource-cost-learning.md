@@ -121,3 +121,25 @@ plan are sealed before input. A remains in the attempt denominator but has no el
 irrespective of its successful outcomes. Fit all admissible B samples, including failures, with
 the unchanged 29 prior rows. If B cannot produce them, stop this batch and report the blocker;
 do not add replacement episodes or retrospectively change either episode's targets.
+
+## Closed result and reorientation
+
+R1 B completed from published `9b0fc4f9`: four goals, 656 actions / 40,368 frames, two needed
+specimens retained (+1 living species), no undeclared losses, and a durable terminal checkpoint.
+Two genuine sampled outcomes were admitted; two nontraining choices were excluded. The real
+retained-data fit produced **31 examples**, preserving all 29 prior rows. The batch is closed.
+
+The updated checkpoint is `95f62eaafc55a053cf65e23a8dcbf99955360040b85ef56ad8eff3e925edb472`.
+Actual prior-model versus updated-model training MSE is **0.00514748 → 0.00479554**. In-sample
+replay changes one supported preference from the second supply trip to acquisition. No updated
+live run, independent gameplay improvement or transfer is claimed. B still spent 12,000 and
+ended with 649 money / 19 capture items. Its saved endpoint freshly verifies without input.
+
+The [audit](../audits/red-native-player-learning-2026-09-06.md) records all three launches,
+the target's missing credit for needed duplicate precursors, and the next narrow continuation
+sequence. The dashboard now projects this native fit from its own bound result rather than
+misrepresenting it as an older setup campaign. Documentation, handoffs and narrative use the
+actual 31-example size; the old cross-family counters are explicitly historical snapshots.
+
+Final local suite: **7,085 passed, four skipped, one expected failure**; lint, typing, registry,
+documentation/focus and public-artifact checks passed. The dashboard was visually verified.
