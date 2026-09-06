@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon.red.training-inventory-unfitted-corpus-repair.v1",
+  "status": "training_only_dependency_repaired_locally",
+  "source_bundle_sha256": "c9d72212f40501ec6375dd304bab3daa8423ead926d4707283e8373912cc0133",
+  "observed_before_repair": {
+    "source_commit": "09a3dbb66632321fb161928e25543b24eeaad996",
+    "stage": "private_exclusion_authentication",
+    "authenticated_contexts": 81,
+    "cause": "Evaluation inventory required a fitted model for the whole 23-row corpus although the intended current prior contains 18 rows.",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "root_claims": 0,
+    "plan_published": false,
+    "model_fits": 0
+  },
+  "repair": {
+    "training_exclusions_use_all_authenticated_rows": true,
+    "prior_model_authenticated_independently": true,
+    "evaluation_complete_corpus_requirement_unchanged": true,
+    "focused_tests_passed": 13,
+    "type_checked_source_files": 385
+  },
+  "action_free_private_recheck": {
+    "train_lineages_excluded": 19,
+    "historical_development_roots_excluded": 4,
+    "supplemental_development_roots_excluded": 3,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "controller_actions": 0,
+    "root_claims": 0
+  },
+  "next": "Publish this bounded follow-up in the same PR, then prepare and preflight the eight-lesson campaign. The earlier preparation created no plan or trial claim."
+}

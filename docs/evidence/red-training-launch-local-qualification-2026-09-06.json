@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon.red.training-launch-local-qualification.v1",
+  "status": "locally_qualified_pending_publication",
+  "source_bundle_sha256": "38bf9489667449412cbe4133fae3629995e4d8b97ee98c62e85aedf3a00d0b47",
+  "verification": {
+    "focused_tests_passed": 80,
+    "type_checked_source_files": 385,
+    "ruff": "passed",
+    "public_artifact_check": "passed",
+    "synthetic_journal_to_existing_fitter": "passed",
+    "synthetic_negative_outcomes_retained": "passed",
+    "immutable_model_reopen": "passed",
+    "own_reserved_root_command_reentry": "passed",
+    "actual_choice_and_full_denominator_gate": "passed"
+  },
+  "authenticated_private_state": {
+    "causal_train_examples": 23,
+    "current_prior_settled_examples": 18,
+    "current_prior_model_sha256": "cbff99900be566347a1ce3d6ccbe0d0c935eb5c6a9a3f961accdbc96c9442a56",
+    "current_prior_record_sha256": "412036cbd47ecb46e757f487ca2132ac725e25e7993f9f9430e08d255cbd4ffb"
+  },
+  "production_effects": {
+    "controller_actions": 0,
+    "new_train_outcomes": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "development_roots_opened": 0,
+    "crystal_accesses": 0
+  },
+  "next": "Publish the coherent repair, freeze and preflight 4/4/2, collect eight bounded train lessons, and fit the existing scorer only after factual admission.",
+  "limitations": [
+    "Synthetic tests are engineering evidence, not gameplay learning data.",
+    "Training uses every retained row with disclosed row weighting; repeated lessons are not independent evaluation worlds.",
+    "Four separate paired Red roots provide descriptive development, not a powered superiority claim.",
+    "A small option-value update is not autonomous full-game play."
+  ]
+}

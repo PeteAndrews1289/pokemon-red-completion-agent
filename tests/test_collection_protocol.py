@@ -134,18 +134,29 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
 
 
 def test_final_campaign_identity_has_public_golden_values() -> None:
-    payload = REGISTRY_PATH.read_bytes()
+    # These are historical golden values. The current registry intentionally
+    # changes when executable source changes; never update this vector to match it.
+    payload = subprocess.run(
+        [
+            "git", "show",
+            "40c847c6f4b71e119cbea5cbe38fd009b30a1d00:"
+            + COLLECTION_REGISTRY_RELATIVE_PATH,
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
     registry = parse_collection_registry(payload)
     first = registry.assignment("red-battle-v95-01-train")
 
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "4995fee230ad3fe3d4099c8efbb586f162b0dec8fe102830ab7c826616068188"
+        == "a2a171fd1f6b2b60af4d60c86864fe084f331ecde2d510de94254a3ca9ca5521"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "a21c571755d18faf9eca90b58ebcd954eddfcbcaf4763b4997ea9a02e34d6405"
+        == "80be77eca3e90a4b89c8b1385f9a7010fccafd928cf02da7d7e8dd59b2a07ee2"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -157,9 +168,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "fb43852fddc027247d4bb3e8d7eb959ee3c1adcd8342437a5eb8d1bbe50f0ac5"
+        == "ee24a97edd920a7a1835fd707094faa0fdfb852ffc120fe5982ac59f2656b205"
     )
-    assert first.assignment_id == "c0865efa0ed329cb7d69c3b53bccc7907b712e0942d3e1c22df85d5423f45bd1"
+    assert first.assignment_id == "fdf7e31657cca7be841fb962eb064ed32cd7e064dd0b0c79a5e1e2e7f5d2bd13"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:

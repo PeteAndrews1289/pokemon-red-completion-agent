@@ -6,7 +6,21 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 5, 2026): freeze repeatable Red training, preserve a real exam.**
+> **Current product focus (September 6, 2026): preserve progress and repair training admission.**
+> Code through PR 228 is published; PR 226 is merged and PRs 227/228 remain pending at audit.
+> Production readers authenticated **23 causal train examples**, all **10 latest setup terminals**
+> and the existing model trained on **18 examples**. Five additional settled examples are retained
+> but unfitted. This is a small semantic goal scorer, not an autonomous full-game player.
+>
+> The recovery audit found command-restart, factual-readiness and fitter-admission gaps. Next is a
+> bounded repair, then eight varied lessons, one refit and a descriptive four-root Red comparison.
+> The long-term goal remains useful model-controlled play and a living Pokédex across games;
+> Crystal execution is deferred. See the [current roadmap](docs/model-first-roadmap.md) and
+> [audit findings](docs/audits/recovery-and-training-readiness-2026-09-06.md).
+>
+> Older dated product-focus panels below are historical, regardless of their original heading.
+
+> **Historical product focus (September 5, 2026): freeze repeatable Red training, preserve a real exam.**
 > Five authentic shadow decisions are now one reproducible calibration set: four skills
 > succeeded and one failed, but threshold accuracy was only **3/5**, with Brier score **0.397811**
 > and log loss **2.458979**. The model was extremely confident about one failed acquisition and

@@ -1,5 +1,68 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 scene: connect the lesson journal to the existing model
+
+**Visual:** Show **RESTART RECOVERY → ACTUAL OUTCOMES → EXISTING FITTER**. Beside it, label
+**80 FOCUSED TESTS PASSED — SIMULATED TEST OUTCOMES, NOT NEW RED EXPERIENCE**. Keep the live
+product counts honest: **23 SAVED LESSONS · CURRENT MODEL TRAINED ON 18** at local qualification.
+
+**Voiceover:** “We closed the missing connection. The training command can resume its own work,
+count the action that really happened, and update the existing model without losing earlier
+lessons—even the unsuccessful ones. The test now follows that whole path, not just isolated
+pieces. Next we run eight real Red lessons and let the qualified data reach the learner directly.”
+
+Only show a completed production training card once its real fit receipt exists. A fitted goal
+scorer remains distinct from a deployed player; sustained model-chosen Pokémon progress is next.
+
+**Development footnote:** Show **23 SAVED LESSONS / PRIOR FIT ON 18** beside a crossed-out circular
+arrow: **MUST ALREADY BE TRAINED BEFORE COLLECTING TRAINING DATA**. Replace it with independent
+checks for **ALL TRAINING EXCLUSIONS** and **NAMED PRIOR MODEL**. Label this an action-free inventory
+repair, not gameplay or a new learning result; the stricter evaluation rule stays in place.
+
+**Preparation follow-up:** Show **8 LESSONS / 4 TRAIN ROOTS · 4 PAIRED ROOTS · 1 RESERVE** with
+**FROZEN, NOT YET PLAYED**. The estimated second reserve was unavailable; it was not fabricated.
+For the CI repair, show a historical fingerprint beside its original revision and current-source
+tests in a separate box. Explain that faster, fail-fast verification shortens engineering feedback
+but does not itself teach Pokémon. Only actual game outcomes advance the learning counter.
+
+Keep the failed parallel run in the account: 6,386 tests passed before another historical-fixture
+error stopped it. The follow-up sweep passed 716 tests. This is a debugging correction, not a
+gameplay milestone; avoid a montage that implies the model was training throughout that wait.
+
+## September 6 scene: the history survived, but readiness needed another look
+
+**Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.
+Show **23 AUTHENTICATED TRAIN ROWS · MODEL FIT ON 18 · 10/10 CAMPAIGN TERMINALS** beside an
+archive/recovery card. Then separate **19 REGRESSION TESTS PASSED** from **COMMAND RESTART AND
+READINESS GAPS FOUND**. Do not show an invented live game or new training curve.
+
+**Voiceover:** “The lost chat did not mean lost work. We recovered the published code and checked
+the saved lessons. But a passing component test was not enough: the new launcher could block its
+own recovery, and the dashboard could mistake a planned lesson for the action actually taken.
+The next step is to repair those boundaries and connect the real admission rules to our existing
+learner. Only then do we collect the next eight lessons.”
+
+End on **REPAIR → 8 LESSONS → SMALL REFIT → DESCRIPTIVE RED CHECK → MULTI-GOAL PLAY**.
+Keep **CRYSTAL DEFERRED · MULTI-GAME LIVING POKÉDEX STILL THE GOAL** visible. Earlier planned scenes
+remain historical concepts; they do not establish current readiness or completed functionality.
+
+## Planned scene: spend four exam cards to build a better classroom
+
+**Visual:** Show ten unopened Red cards. Move four into **TRAIN—EVALUATION STATUS FORFEITED**, four
+into **PAIRED CHECK**, and two into **RESERVE**. Fan the training cards into eight lesson slots with
+**MAX 2 PER ROOT · 4 LINEAGES · ACQUIRE ON 2+ · DEVELOP ON 2+**. Keep all gameplay counters at zero.
+
+**Voiceover:** “We could wait for several more full teacher runs, or make a smaller honest exam now.
+We chose the latter. Four outcomes-unseen states become training permanently; four stay paired and
+two stay in reserve. The system records that trade before it reads an outcome, so none of the
+training states can later be marketed as generalization.”
+
+Before the run, show **PRIVATE PLAN = HASH INDEX, NOT EXECUTION AUTHORITY**, followed by
+**ZERO-FRAME REOBSERVATION → CURRENT CLAIM CHECK → CARTRIDGE REBUILD → EXACT RECIPE MATCH**. On the
+dashboard, separate **8/8 TERMINAL** from **FIT READY: 6+ SETTLED · ACQUIRE 1+ · DEVELOP 3+**.
+End on **PUBLISH → ZERO-EFFECT FREEZE → PREFLIGHT → 8 OUTCOMES → FIT ONLY IF READY**. Label the
+scene **IMPLEMENTED, NOT EXECUTED** and do not depict a new fit or controller authority.
+
 ## New scene: ten lessons reveal two different classrooms
 
 **Visual:** Fill a board with **10/10 TERMINAL · 8,879 ACTIONS · 468,149 FRAMES**. Split the ten

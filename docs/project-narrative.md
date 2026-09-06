@@ -1,5 +1,83 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: close the gap between collecting lessons and updating the learner
+
+The recovery audit led to three bounded repairs, not another learning system. The launcher now
+recognizes its own durable reservations on restart. A shared gate counts what actually happened
+and waits for every scheduled terminal. The existing CPU fitter receives an explicit prior model
+and a fingerprint of the entire pre-run corpus, so earlier examples and negative outcomes cannot
+silently disappear. The campaign can now call that fitter directly when its factual gate passes.
+
+Eighty focused tests passed, including a real synthetic journal-to-model update and reopening the
+same immutable artifact. Those fits are test evidence only. At local qualification the real data
+still contains 23 lessons and its current model was trained on 18. Publication, eight new Red
+lessons and the admitted refit are next. The dashboard now distinguishes collection, fitting and
+a fitted-but-not-deployed scorer; none is presented as autonomous full-game play.
+
+The real-data preparation then caught a circular prerequisite the synthetic end-to-end test did
+not cover: an evaluation inventory expected the model to include all 23 lessons before training
+could collect the next batch. We separated training exclusions from evaluation readiness. This
+keeps every old lesson and the frozen prior without requiring a premature fit. The failure advanced
+zero game frames; 13 further tests and a real-data inventory check verified the repair. This was a
+data-flow integration error, not a Pokémon navigation failure.
+
+The real freeze then succeeded: eight training lessons across four roots, four separate paired
+roots and one reserve. No game input or fitting was counted at preparation. Publication exposed
+another source of wasted time: old tests compared frozen historical fingerprints with current
+code, while a serial test run continued until its 45-minute timeout. We corrected the fixture
+boundaries without relaxing production checks and switched the same test selection to two workers
+with immediate failure reporting. The purpose of this repair is shorter feedback on a reusable
+learning loop, not counting CI as AI progress.
+
+The first parallel run found one more historical/current fixture mismatch near its end. We owned
+that incomplete sweep, corrected the navigation fixture without altering the real frozen registry,
+and ran the entire protocol family and end-of-suite group: all 716 tests passed. No simulated test
+or publication attempt was credited as another game lesson.
+
+## September 6: preserve the work, then test the boundary between components
+
+A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still
+published. The private readers authenticated 23 causal train examples, all ten latest setup
+terminals and the existing model trained on 18 examples. We archived the code history, private
+store, claim ledger and an older untracked reviewer patch without rewriting prior outcomes.
+
+Nineteen focused tests passed, yet the audit found a gap between component correctness and the
+real command: the core runner could recover, but its new launcher rejected already-reserved
+roots before reaching recovery. The dashboard also counted intended lesson types rather than
+factual actions, and the existing fitter lacked the successor's campaign-level admission binding.
+These are open engineering findings, not fixed capabilities or new training results.
+
+We corrected a second problem in the process itself: old handoffs kept calling different plans
+“active.” One current roadmap now supersedes that preserved history. The next work is a bounded
+repair, eight varied lessons, one existing-scorer update and a descriptive four-root Red check.
+Useful multi-goal collection behavior comes next; cross-game living-Pokédex competence remains
+the destination. This audit produced no model authority, new fit or Crystal result.
+
+Earlier narrative entries below describe the understanding at their date. For execution readiness,
+use [the current audit](audits/recovery-and-training-readiness-2026-09-06.md), not an older plan.
+
+## September 5: we chose a smaller exam to reach a real lesson sooner
+
+After the two-root campaign failed its diversity test, the fastest clean-power answer would have
+been several more full teacher runs. Instead, the next design makes a transparent trade: four of
+ten unopened Red evaluation states will become training states before their outcomes are known.
+They can never be described as unseen evaluation again. Four other states remain paired checks and
+two stay in reserve.
+
+The resulting curriculum has eight lessons across four histories, with no history used more than
+twice. The matcher will refuse a split unless acquisition and party development both span multiple
+roots. This weakens the immediate exam but strengthens the data the model actually needs—and avoids
+another multi-day infrastructure loop before the first targeted fit. The retirement planner is
+implemented and tested; no state has been retired, executed or fitted yet.
+
+The execution path now has a deliberately narrow handoff. A private plan is only a hash-authenticated
+index; it cannot itself execute a stored recipe. Before training, the consumer must restore each
+addressed source-validation state without advancing a frame, verify that both its logical and
+physical claims remain unused, regenerate its possible Red actions from cartridge mechanics, and
+match the exact frozen recipe hashes. Only the eight training rows then become addressable. The
+paired and reserve roots remain unreachable from the command, and the dashboard will call fitting
+blocked unless six outcomes settle with the required acquisition and party-development coverage.
+
 ## September 5: the first targeted lessons found a bad classroom
 
 The first targeted Red campaign finally pressed buttons for learning data. All ten reset slots

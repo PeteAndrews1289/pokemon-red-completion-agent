@@ -101,6 +101,42 @@ class LivingDexCausalModelUpdateError(RuntimeError):
 
 
 @dataclass(frozen=True, slots=True)
+class LivingDexCausalModelUpdateAdmission:
+    """Bind a campaign's admitted corpus and its intended immutable prior."""
+
+    prior_model_record_id: str
+    prior_model_sha256: str
+    prior_model_record_sha256: str
+    train_dataset_sha256: str
+    campaign_readiness_sha256: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.prior_model_record_id, str) or re.fullmatch(
+            r"[a-z][a-z0-9-]{0,79}", self.prior_model_record_id
+        ) is None:
+            raise LivingDexCausalModelUpdateError("admission_prior_id")
+        for value in (
+            self.prior_model_sha256,
+            self.prior_model_record_sha256,
+            self.train_dataset_sha256,
+            self.campaign_readiness_sha256,
+        ):
+            if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+                raise LivingDexCausalModelUpdateError("admission_digest")
+
+    @property
+    def admission_sha256(self) -> str:
+        return canonical_sha256({
+            "schema": "pokemon.core.causal-model-update-admission.v1",
+            "prior_model_record_id": self.prior_model_record_id,
+            "prior_model_sha256": self.prior_model_sha256,
+            "prior_model_record_sha256": self.prior_model_record_sha256,
+            "train_dataset_sha256": self.train_dataset_sha256,
+            "campaign_readiness_sha256": self.campaign_readiness_sha256,
+        })
+
+
+@dataclass(frozen=True, slots=True)
 class LivingDexCausalModelUpdateResult:
     """Aggregate result for one immutable corpus-addressed update."""
 
@@ -202,6 +238,7 @@ def fit_living_dex_causal_model_update_from_store(
     store: PrivateArtifactRoot,
     *,
     source: LivingDexCausalIntegrationSource,
+    admission: LivingDexCausalModelUpdateAdmission | None = None,
 ) -> LivingDexCausalModelUpdateResult:
     """Fit or reopen the complete current causal train corpus."""
 
@@ -209,6 +246,10 @@ def fit_living_dex_causal_model_update_from_store(
         raise TypeError("causal update needs a private artifact root")
     if not isinstance(source, LivingDexCausalIntegrationSource):
         raise TypeError("causal update needs its source binding")
+    if admission is not None:
+        if not isinstance(admission, LivingDexCausalModelUpdateAdmission):
+            raise TypeError("causal update admission differs")
+        admission.__post_init__()
     fit_executions = 0
     private_fit_claims = 0
     try:
@@ -218,13 +259,24 @@ def fit_living_dex_causal_model_update_from_store(
                 collection_session=session,
             )
             rows = tuple(item.example for item in authenticated)
+            if admission is None and any(
+                getattr(getattr(item, "identity", None), "repeatable_trial_claim_sha256", None)
+                is not None for item in authenticated
+            ):
+                raise LivingDexCausalModelUpdateError("targeted_admission_required")
             prior_record = store.find_sealed_record(
-                LIVING_DEX_CAUSAL_INTEGRATION_MODEL_ID,
+                admission.prior_model_record_id if admission is not None
+                else LIVING_DEX_CAUSAL_INTEGRATION_MODEL_ID,
                 expected_kind=LIVING_DEX_CAUSAL_INTEGRATION_MODEL_KIND,
             )
             if prior_record is None:
                 raise LivingDexCausalModelUpdateError("prior_model_absent")
             prior = _model_from_record(prior_record)
+            if admission is not None and (
+                prior.model_sha256 != admission.prior_model_sha256
+                or prior_record.summary.record_sha256 != admission.prior_model_record_sha256
+            ):
+                raise LivingDexCausalModelUpdateError("admission_prior_join")
             settled_examples = sum(row.outcome.target_vector is not None for row in rows)
             if (
                 any(row.partition != "train" for row in rows)
@@ -233,6 +285,8 @@ def fit_living_dex_causal_model_update_from_store(
             ):
                 raise LivingDexCausalModelUpdateError("corpus_not_extended")
             dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
+            if admission is not None and dataset_sha256 != admission.train_dataset_sha256:
+                raise LivingDexCausalModelUpdateError("admission_corpus_join")
             if dataset_sha256 == prior.train_dataset_sha256:
                 raise LivingDexCausalModelUpdateError("corpus_not_extended")
             readiness_sha256 = _readiness_sha256(
@@ -240,6 +294,12 @@ def fit_living_dex_causal_model_update_from_store(
                 prior=prior,
                 dataset_sha256=dataset_sha256,
             )
+            if admission is not None:
+                readiness_sha256 = canonical_sha256({
+                    "schema": "pokemon.core.admitted-causal-model-update-readiness.v1",
+                    "corpus_readiness_sha256": readiness_sha256,
+                    "admission_sha256": admission.admission_sha256,
+                })
             claim_document = _claim_document(
                 source=source,
                 prior=prior,
@@ -559,6 +619,7 @@ __all__ = [
     "LIVING_DEX_CAUSAL_UPDATE_RESULT_SCHEMA",
     "MINIMUM_CAUSAL_UPDATE_SETTLED_EXAMPLES",
     "LivingDexCausalModelUpdateError",
+    "LivingDexCausalModelUpdateAdmission",
     "LivingDexCausalModelUpdateResult",
     "fit_living_dex_causal_model_update_from_store",
 ]

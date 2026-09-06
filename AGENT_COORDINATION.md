@@ -1,5 +1,25 @@
 # Three-agent coordination
 
+## Current ownership — September 6 recovery/admission repair
+
+Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the current
+[roadmap](docs/model-first-roadmap.md), and the
+[recovery audit](docs/audits/recovery-and-training-readiness-2026-09-06.md).
+The audit changed documentation/state only, not gameplay code.
+
+- **Codex:** own the smallest command-recovery, factual-readiness and fitter-admission repairs,
+  evidence, integration/publication and final decisions. Do not launch the successor first.
+- **Claude, when requested/available:** read-only review of actual-action labels, negative-row
+  retention, prior/corpus binding, clustering and descriptive four-root statistical language.
+- **Antigravity, when requested/available:** read-only adversarial command-restart testing,
+  own versus foreign claims, terminal reopen, retirement exclusions and title-neutral boundaries.
+
+No external reviewer was invoked in this recovery audit. Do not imply their approval, wait on an
+unavailable reviewer, or let multiple agents edit this worktree. Reviews cannot authorize retries
+or widen model authority. All older overrides below are historical when inconsistent above.
+
+## Historical coordination
+
 > **2026-09-02 repeatable-learning override — authentic training is now the active lane:** Routine
 > development is repeatable; sealed one-shot rigor is reserved for later promotion claims. The
 > first loop pretrained the shared battle MLP, adapted it on twelve authentic Red train roots,

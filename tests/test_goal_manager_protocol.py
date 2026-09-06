@@ -119,33 +119,55 @@ def test_parser_rejects_duplicate_keys_noncanonical_bytes_and_split_drift() -> N
         parse_goal_manager_registry(_canonical(relabeled))
 
 
-def test_generator_check_accepts_only_the_current_source_bound_registry() -> None:
-    subprocess.run(
-        [sys.executable, "scripts/regenerate_goal_manager_registry.py", "--check"],
-        cwd=PROJECT_ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-
-
-def test_committed_loader_binds_registry_to_exact_executable_source(tmp_path: Path) -> None:
+@pytest.fixture
+def prospective_repository(tmp_path: Path) -> Path:
+    """Generate a new test registry without rewriting the historical real one."""
     repository = tmp_path / "repository"
     repository.mkdir()
+    shutil.copy2(PROJECT_ROOT / ".gitignore", repository / ".gitignore")
     shutil.copy2(PROJECT_ROOT / "pyproject.toml", repository / "pyproject.toml")
     shutil.copytree(
         PROJECT_ROOT / "src",
         repository / "src",
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
     )
-    for relative in (
-        GOAL_MANAGER_REGISTRY_RELATIVE_PATH,
-        GOAL_MANAGER_REGISTRY_DIGEST_RELATIVE_PATH,
-    ):
-        target = repository / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(PROJECT_ROOT / relative, target)
+    (repository / "configs").mkdir()
+    (repository / "scripts").mkdir()
+    shutil.copy2(
+        PROJECT_ROOT / "scripts/regenerate_goal_manager_registry.py",
+        repository / "scripts/regenerate_goal_manager_registry.py",
+    )
     subprocess.run(["git", "init", "-q"], cwd=repository, check=True)
+    subprocess.run(
+        [sys.executable, "scripts/regenerate_goal_manager_registry.py"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return repository
+
+
+def test_generator_check_accepts_only_the_current_source_bound_registry(
+    prospective_repository: Path,
+) -> None:
+    command = [sys.executable, "scripts/regenerate_goal_manager_registry.py", "--check"]
+    subprocess.run(
+        command, cwd=prospective_repository, check=True, capture_output=True, text=True
+    )
+    project_file = prospective_repository / "pyproject.toml"
+    project_file.write_text(project_file.read_text() + "\n# source changed\n")
+    stale = subprocess.run(
+        command, cwd=prospective_repository, capture_output=True, text=True
+    )
+    assert stale.returncode != 0
+    assert "goal-manager collection registry is stale" in stale.stderr
+
+
+def test_committed_loader_binds_registry_to_exact_executable_source(
+    prospective_repository: Path,
+) -> None:
+    repository = prospective_repository
     subprocess.run(["git", "add", "."], cwd=repository, check=True)
     subprocess.run(
         [
@@ -183,3 +205,19 @@ def test_committed_loader_binds_registry_to_exact_executable_source(tmp_path: Pa
     }
     with pytest.raises(GoalManagerProtocolError, match="unavailable"):
         load_committed_goal_manager_registry_at_revision(repository, "f" * 40)
+
+    project_file = repository / "pyproject.toml"
+    project_file.write_text(project_file.read_text() + "\n# later implementation\n")
+    subprocess.run(["git", "add", "."], cwd=repository, check=True)
+    subprocess.run(
+        [
+            "git", "-c", "user.name=Goal Manager Test",
+            "-c", "user.email=goal-manager@example.invalid",
+            "-c", "commit.gpgsign=false", "commit", "-qm", "later implementation",
+        ],
+        cwd=repository,
+        check=True,
+    )
+    with pytest.raises(GoalManagerProtocolError, match="does not match"):
+        load_committed_goal_manager_registry(repository)
+    assert load_committed_goal_manager_registry_at_revision(repository, commit) == historical

@@ -9,15 +9,15 @@ private paths.
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 
 from pokemon_red_completion.living_dex_causal_journal import (
     LivingDexCausalTerminalStatus,
 )
+from pokemon_red_completion.living_dex_causal_model_update import LivingDexCausalModelUpdateResult
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionKind,
-    LivingDexOutcomeStatus,
 )
 from pokemon_red_completion.progress_dashboard import (
     DashboardExperimentState,
@@ -30,6 +30,9 @@ from pokemon_red_completion.red_living_dex_causal_inventory import (
 )
 from pokemon_red_completion.red_living_dex_setup_trust import (
     RedLivingDexSetupProtectedEffectCheckpoint,
+)
+from pokemon_red_completion.red_living_dex_targeted_train_readiness import (
+    audit_red_living_dex_targeted_train_readiness,
 )
 from pokemon_red_completion.red_living_dex_targeted_train_runner import (
     RedLivingDexTargetedSetupStatus,
@@ -52,25 +55,30 @@ class RedLivingDexTargetedTrainDashboardProgress:
     effects: RedLivingDexSetupProtectedEffectCheckpoint = (
         RedLivingDexSetupProtectedEffectCheckpoint()
     )
+    fitting: bool = False
+    fit_result: LivingDexCausalModelUpdateResult | None = None
 
     def __post_init__(self) -> None:
         if self.status not in {"waiting", "running", "passed", "failed", "blocked"}:
-            raise RedLivingDexTargetedTrainDashboardError(
-                "targeted dashboard status differs"
-            )
+            raise RedLivingDexTargetedTrainDashboardError("targeted dashboard status differs")
         if self.active_assignment is not None and not isinstance(
             self.active_assignment,
             RedLivingDexTargetedTrainAssignment,
         ):
             raise TypeError("targeted dashboard assignment differs")
         if not isinstance(self.receipts, tuple) or any(
-            not isinstance(item, RedLivingDexTargetedTrainReceipt)
-            for item in self.receipts
+            not isinstance(item, RedLivingDexTargetedTrainReceipt) for item in self.receipts
         ):
             raise TypeError("targeted dashboard receipts differ")
         if not isinstance(self.effects, RedLivingDexSetupProtectedEffectCheckpoint):
             raise TypeError("targeted dashboard effects differ")
         self.effects.__post_init__()
+        if type(self.fitting) is not bool:  # noqa: E721
+            raise TypeError("targeted fitting status differs")
+        if self.fit_result is not None:
+            self.fit_result.__post_init__()
+            if self.fitting:
+                raise RedLivingDexTargetedTrainDashboardError("completed fit still running")
 
 
 def red_living_dex_targeted_train_dashboard_snapshot(
@@ -88,41 +96,38 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         raise TypeError("targeted dashboard needs typed progress")
     progress.__post_init__()
     train_ordinals = tuple(
-        ordinal
-        for ordinal, slot in enumerate(binding.schedule.slots)
-        if slot.partition == "train"
+        ordinal for ordinal, slot in enumerate(binding.schedule.slots) if slot.partition == "train"
     )
-    development_total = sum(
-        slot.partition == "development" for slot in binding.schedule.slots
-    )
+    development_total = sum(slot.partition == "development" for slot in binding.schedule.slots)
     receipt_ordinals = tuple(item.assignment.ordinal for item in progress.receipts)
     if (
         len(receipt_ordinals) != len(set(receipt_ordinals))
         or any(ordinal not in train_ordinals for ordinal in receipt_ordinals)
         or any(item.assignment.binding != binding for item in progress.receipts)
     ):
-        raise RedLivingDexTargetedTrainDashboardError(
-            "targeted dashboard receipt roster differs"
-        )
+        raise RedLivingDexTargetedTrainDashboardError("targeted dashboard receipt roster differs")
     active = progress.active_assignment
     if active is not None and (
         active.binding != binding
         or active.ordinal not in train_ordinals
         or active.ordinal in receipt_ordinals
     ):
-        raise RedLivingDexTargetedTrainDashboardError(
-            "targeted dashboard active slot differs"
-        )
+        raise RedLivingDexTargetedTrainDashboardError("targeted dashboard active slot differs")
     if progress.status == "passed" and len(progress.receipts) != len(train_ordinals):
         raise RedLivingDexTargetedTrainDashboardError(
             "targeted dashboard cannot pass an incomplete campaign"
         )
 
-    settled = sum(_settled_train_example(item) for item in progress.receipts)
+    readiness = audit_red_living_dex_targeted_train_readiness(binding, progress.receipts)
+    settled = readiness.settled_examples
+    settled_by_kind = Counter(dict(readiness.settled_by_kind))
+    minimum_by_kind = dict(binding.schedule.policy.minimum_settled_train_by_kind)
+    fit_gate_met = readiness.ready
+    if (progress.fitting or progress.fit_result is not None) and not fit_gate_met:
+        raise RedLivingDexTargetedTrainDashboardError("unready campaign cannot claim fitting")
     censored = len(progress.receipts) - settled
     setup_failed = sum(
-        item.setup_status is RedLivingDexTargetedSetupStatus.FAILED
-        for item in progress.receipts
+        item.setup_status is RedLivingDexTargetedSetupStatus.FAILED for item in progress.receipts
     )
     setup_interrupted = sum(
         item.setup_status is RedLivingDexTargetedSetupStatus.INTERRUPTED
@@ -139,9 +144,7 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         for item in progress.receipts
         if item.setup_failure_class is not None
     )
-    current_number = (
-        train_ordinals.index(active.ordinal) + 1 if active is not None else None
-    )
+    current_number = train_ordinals.index(active.ordinal) + 1 if active is not None else None
     completed = len(progress.receipts)
     total = len(train_ordinals)
     base_clusters = len(
@@ -174,7 +177,11 @@ def red_living_dex_targeted_train_dashboard_snapshot(
             f"examples and {censored} censored or interrupted slots."
         )
         current_step = "Train outcome campaign sealed"
-        next_step = "Audit sufficiency, then fit once from train examples only"
+        next_step = (
+            "Audit provenance, then fit once from train examples only"
+            if fit_gate_met
+            else "Do not fit; the frozen evidence sufficiency gate was not met"
+        )
     else:
         stage = "Targeted Red outcome collection ready"
         message = (
@@ -191,6 +198,12 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         f"Focus roster: {_format_focus_counts(focus_counts)}",
         f"Outcomes: {settled} settled; {censored} censored or interrupted",
         (
+            f"Fit gate: {'ready' if fit_gate_met else 'blocked'} — settled "
+            f"{settled} of {binding.schedule.policy.minimum_settled_train}; "
+            f"{_format_minimum_progress(settled_by_kind, minimum_by_kind)}"
+        ),
+        "Admission blockers: " + (", ".join(readiness.reasons) or "none"),
+        (
             f"Setup failures: {setup_failed}; setup interruptions: "
             f"{setup_interrupted}; causal interruptions: {causal_interrupted}"
         ),
@@ -199,7 +212,7 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         f"Development partition: 0 of {development_total} opened",
         "Model fits: 0; model predictions: 0; teacher queries: 0",
     )
-    return DashboardSnapshot(
+    snapshot = DashboardSnapshot(
         game="Pokémon Red",
         run_status=progress.status,
         stage=stage,
@@ -257,15 +270,52 @@ def red_living_dex_targeted_train_dashboard_snapshot(
         ),
         events=events,
     )
-
-
-def _settled_train_example(receipt: RedLivingDexTargetedTrainReceipt) -> bool:
-    causal = receipt.causal
-    return bool(
-        causal is not None
-        and causal.example is not None
-        and causal.example.outcome.status is LivingDexOutcomeStatus.SETTLED
-    )
+    result = progress.fit_result
+    if progress.fitting or result is not None:
+        completed_fit = result is not None
+        snapshot = replace(
+            snapshot,
+            stage="Red option-value model fitted" if completed_fit else "Fitting Red option values",
+            message=(
+                f"Model fitted from {result.settled_examples} factual train examples. "
+                "This is a goal scorer, not yet an autonomous full-game player."
+                if result is not None
+                else "Fitting the existing goal scorer from all retained train outcomes."
+            ),
+            model=DashboardModelState(
+                mode="waiting" if completed_fit else "fitting",
+                candidate="Red living-Pokédex option-value scorer",
+                choice="Fitted; not deployed yet" if completed_fit else "Train-only model update",
+            ),
+            experiment=replace(
+                snapshot.experiment,
+                sealed_completed=int(completed_fit),
+                eyebrow="Model fitting — not autonomous play",
+            ),
+            work=replace(
+                snapshot.work,
+                status="complete" if completed_fit else "working",
+                headline="Existing learner updated"
+                if completed_fit
+                else "Training the goal scorer",
+                current_step="Model artifact retained" if completed_fit else "Train-only fitting",
+                next_step="Inspect the model update, then test bounded model-chosen goals",
+            ),
+            events=snapshot.events[:-1]
+            + (f"Model fits retained: {int(completed_fit)}; teacher queries: 0",)
+            + (
+                (
+                    f"Training rows: {result.settled_examples}; added since prior: "
+                    f"{result.added_settled_examples}",
+                    f"Training MSE: {result.prior_training_mse:.6f} -> "
+                    f"{result.updated_training_mse:.6f} (not held-out performance)",
+                    "Repeated lessons are row-weighted, not independent worlds",
+                )
+                if result is not None
+                else ()
+            ),
+        )
+    return snapshot
 
 
 def _causal_interrupted(receipt: RedLivingDexTargetedTrainReceipt) -> bool:
@@ -273,8 +323,7 @@ def _causal_interrupted(receipt: RedLivingDexTargetedTrainReceipt) -> bool:
     return bool(
         causal is not None
         and causal.terminal is not None
-        and causal.terminal.status
-        is LivingDexCausalTerminalStatus.POSTRELEASE_INTERRUPTED
+        and causal.terminal.status is LivingDexCausalTerminalStatus.POSTRELEASE_INTERRUPTED
     )
 
 
@@ -297,6 +346,15 @@ def _format_diagnostic_counts(counts: Counter[str]) -> str:
     if not counts:
         return "none recorded"
     return ", ".join(f"{name} {counts[name]}" for name in sorted(counts))
+
+
+def _format_minimum_progress(
+    settled: Counter[LivingDexOptionKind],
+    minimums: dict[LivingDexOptionKind, int],
+) -> str:
+    return ", ".join(
+        f"{kind.value} {settled[kind]} of {minimum}" for kind, minimum in minimums.items()
+    )
 
 
 __all__ = [

@@ -29,26 +29,26 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Freeze a complete bounded-reset training schedule over the two authenticated train roots, capped at five episodes per root, while allocating eight distinct untouched development roots. Reject the lane before gameplay if any train slot, semantic kind, reset identity, or development separation cannot be reproduced exactly.",
+      "cheapest_falsifier": "Re-enter the train command with its own existing root reservation and require recovery without rerunning terminal trials. Feed readiness a factual action different from its lesson focus and an incomplete denominator; require correct counts and blocked fitting before any new gameplay.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. The census emitted no target and opened no outcome. The immutable eighteen-example option model remains shadow-only, and the ten untouched development roots remain reserved for paired evaluation.",
-        "blocker": "Capacity is no longer the blocker. Two authenticated train roots can supply ten bounded reset episodes at a five-per-root cap, while ten untouched development roots independently fill all eight paired evaluation slots. The missing work is the repeatable schedule and train-only execution rail.",
-        "decision": "Treat ordinary training as repeatable curriculum learning rather than sealed evaluation. Freeze ten train episodes across the two authenticated training roots, never more than five per root, and keep the eight development roots one-shot and untouched. Then collect the complete train denominator, fit once if its prespecified settlement floors pass, and evaluate once on the separate paired bank.",
+        "authority_delta": "None. The existing eighteen-example option model remains shadow-only. The recovery audit authenticated 23 train rows and ten targeted setup terminals but performed no fit, prediction, controller input or new outcome collection.",
+        "blocker": "The eight-lesson private freeze succeeded with four train, four paired and one reserve root. Parallel CI 34011586581 passed 6386 tests, then stopped on one more historical/current fixture mismatch in strategic navigation. Its isolated fixture is corrected and the expanded protocol/end-of-suite sweep passed all 716 tests. Qualify the published consumer. No input or production fit has occurred.",
+        "decision": "Publish the coherent repair through the existing PR 228 stack, freeze and preflight the diverse successor, collect eight bounded train lessons, then let the shared factual gate admit one update through the existing fitter. Preserve every old terminal and all 23 current train rows. Do not open another architecture or teacher-factory project.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-living-dex-repeatable-train-capacity-result-2026-09-05.json",
-          "sha256": "2a181d1769b02480efaf54a6f4a35c4f7c4a8595c56f167f112323625e0f8c6c"
+          "path": "docs/evidence/red-training-retired-bank-freeze-2026-09-06.json",
+          "sha256": "ebf35da1c91cb87dcf24a8c92172d52b0b695126afc6c03b221b463f69a92cb1"
         },
-        "learning_output": "No counter advances. The action-free repeatable census authenticated 81 contexts and measured 10/10 bounded-reset train capacity plus 8/8 distinct paired-development capacity, with zero controller, frame, claim, prediction, outcome, teacher or fit effects.",
-        "next_falsifier": "The schedule freezer must allocate four acquisition, four party-development, one storage and one resupply episode across exactly two train roots with no more than five resets each, plus eight distinct held-out development roots. Any overlap or missing kind closes the schedule before gameplay.",
-        "next_session_goal": "Implement and qualify the repeatable train/paired-development schedule freezer, then build the train-only bounded outcome runner. Preserve the ready development bank and stop before fitting until the complete train denominator is retained.",
-        "product_alignment": "Repeatable training resets are normal curriculum learning; only evaluation needs one-shot lineage separation. This pivot uses existing Red states to produce model lessons now, preserves a credible disjoint exam, and avoids another multi-day clean-power teacher factory.",
-        "session_id": "2026-09-05-repeatable-train-capacity-ready",
+        "learning_output": "No counters advance in this maintenance sub-session. Production readers authenticated 23 train examples, all ten targeted setup terminals (five complete, five failed), and the existing eighteen-example model. Five settled campaign rows remain unfitted. The cumulative 111-example multi-family scorecard is not this option model's corpus size and awaits a separate evidence-backed admission update.",
+        "next_falsifier": "The qualified real command must action-free rebind the existing 4/4/1 plan and authenticate all 23 retained train rows plus the current eighteen-example prior. Actual eight-slot collection must provide six or more settled rows, acquisition at least one and development at least three; the existing fitter must preserve negatives, baseline rows and immutable recovery.",
+        "next_session_goal": "Qualify the batched repair, reuse the completed 4/4/1 freeze and collect eight bounded train lessons with automatic admitted fitting. Then report the actual model update and prepare short model-chosen Red goal episodes using deterministic low-level skills.",
+        "product_alignment": "This maintenance unblocks the next small Red goal-value update, not another route factory. Eight lessons across four training roots broaden causal experience needed for capture, party, storage and resource choices; later bounded multi-goal play must show living-collection progress. Crystal remains deferred while portable feature/action boundaries stay intact.",
+        "session_id": "2026-09-06-red-training-launch-repair",
         "status": "active",
-        "stop_condition": "Stop if the schedule exceeds five episodes on either train root, reuses a development root, chooses any slot from an outcome, cannot retain reset identity, or drifts into a route/species patch, teacher label, sealed Red, Crystal or full replay.",
-        "transfer_result": "None. Crystal remains deferred. The exercised option kinds and outcome schema are title-neutral, but all five outcomes are Red development calibration and support no cross-title claim."
+        "stop_condition": "Stop before new input until command recovery and fit admission pass. Do not exceed two resets per successor train root, reuse a terminal trial, retire an already-opened evaluation root, omit negative rows, invent targets for censors, or use reserves to replace bad outcomes. Four paired roots support descriptive development only, not a powered superiority claim.",
+        "transfer_result": "None. Four non-tied paired wins would have one-sided exact sign-test p=0.0625, so the proposed Red check cannot promise 5-percent statistical superiority. Crystal and cross-title claims remain deferred; bounded Red development may still use honestly labeled descriptive results."
       },
       "learned_authority": {
         "current": "A semantic goal manager has one seven-outcome update, and the title-neutral causal living-Pokedex option model now has an immutable eighteen-example train-only update spanning seven option kinds. Both may score only in authenticated shadow development; deterministic skills and safety constraints retain controller authority because neither model has passed fresh lineage-disjoint evaluation.",
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Freeze the complete 10-episode bounded-reset train schedule and eight-root paired-development schedule. Only a reproducible, outcome-blind freeze may begin train-only outcome collection; development remains untouched until after the fit.",
+      "next_decision": "The recovery, shared factual readiness and current-prior fit connection are locally qualified, and the actual four-train/four-paired/one-reserve plan is frozen. Qualify the repaired publication, collect eight bounded train lessons and automatically fit the existing scorer if the actual-outcome gate passes. Preserve the 23 current rows and do not repeat the terminal ten-slot campaign.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -285,14 +285,15 @@
         "The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.",
         "Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.",
         "Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.",
-        "Authenticated train roots may be reset only under the new bounded repeatable curriculum. Prior one-shot trial identities remain consumed, and no development root may be replayed or used for fitting.",
+        "Authenticated train roots may reset only under a prospectively bounded curriculum. Prior one-shot identities remain consumed. Only four still-unopened roots may prospectively forfeit evaluation status under the explicit bank-retirement plan; preserve provenance and permanent exclusion. Already-opened development, sealed Red and benchmark roots may never be relabeled for fitting.",
+        "The successor requires eight retained train terminals, at least six settled factual rows including acquisition at least one and development at least three, four distinct train roots with at most two resets each, and the declared cross-family diversity. Dashboard and fitter must share this admission gate; assigned focus is not the observed action.",
         "No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane."
       ],
       "time_box": {
-        "maximum_hours": 8,
+        "maximum_hours": 4,
         "maximum_sessions": 1
       },
-      "transfer_test": "After each bounded Red skill survives iterative development and then beats its frozen controls on a separately sealed untouched Red gate, freeze the title-neutral supported feature/action projection and compare Red initialization with the identical zero-initialized learner on separately declared Crystal development tasks. Shared supported failures count against transfer; typed Crystal-only mechanics remain explicit abstentions pending adaptation and earn no completion credit."
+      "transfer_test": "Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit."
     },
     {
       "id": "red-living-dex-multifamily-option-value-curriculum-v4",

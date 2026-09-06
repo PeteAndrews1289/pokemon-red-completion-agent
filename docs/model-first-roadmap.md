@@ -1,6 +1,148 @@
 # Model-first development roadmap
 
-## Active checkpoint: diversify the Red classroom before fitting
+## Current checkpoint — September 6 training-launch repair
+
+Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first. The three recovery/admission
+findings are now repaired locally: the command accepts only its own exact existing reservations;
+dashboard and fitting share actual-choice/full-denominator readiness; and the existing fitter
+binds the intended prior plus every retained baseline row. An explicit `--fit-on-complete` connects
+the bounded campaign to that fitter. It does not promote the model to controller authority.
+
+[Local qualification](evidence/red-training-launch-local-qualification-2026-09-06.json): 80 focused
+tests passed, including genuine synthetic journal publication, a CPU model update retaining negative
+outcomes, and immutable recovery. The 385-file type check and lint passed. The real corpus remains
+23 train examples and the current real model remains fitted on 18; no new gameplay or production
+fit has occurred in this repair checkpoint.
+
+The first action-free preparation exposed one additional circular dependency: evaluation inventory
+required a model fitted on all 23 saved rows before it could supply exclusions for collecting more
+training data. The training-only freezer now authenticates its named 18-example prior independently
+and excludes every train/history lineage from the full current corpus. Evaluation readiness remains
+strict. Thirteen additional tests and the real-data exclusion recheck passed; see
+[the pre-input repair evidence](evidence/red-training-inventory-unfitted-corpus-repair-2026-09-06.json).
+The failed preparation published no plan and consumed no input or root claim.
+
+The successor freeze subsequently succeeded with **four train roots, four paired roots and one
+reserve**, not the projected two reserves. Its eight lessons and two-resets-per-root cap are
+unchanged. [The path-free freeze receipt](evidence/red-training-retired-bank-freeze-2026-09-06.json)
+records zero input, claims, outcomes and fits. Preserve this plan; do not recreate it after a
+publication-only change. CI run 34008794304 timed out at 45 minutes after also reporting five
+historical-registry test failures. Those tests now distinguish a frozen historical registry from
+a newly generated test registry; production authentication remains strict. The same full test
+selection uses two file-grouped workers, fail-fast reporting and a 60-minute safety ceiling.
+
+The parallel follow-up, run `34011586581`, passed 6,386 tests before stopping on another instance
+of that fixture error in strategic navigation. Its correction extends the same isolated-test
+approach and adds source-drift rejection. Sweep the full protocol family and end-of-suite group
+before republishing; the frozen plan, production source bundle and next learning steps are unchanged.
+The expanded local sweep passed all 716 tests in 68.92 seconds; publication qualification is next.
+
+### Execute next; do not reopen the architecture
+
+1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and
+   one batched publication, not another series of tiny CI-only changes.
+2. Reuse the completed 4-train/4-paired/1-reserve freeze. The live command performs action-free
+   preflight before input and retains the 23-row corpus fingerprint and intended current prior.
+   Re-entry must preserve
+   both; the ten old terminal trials remain consumed.
+3. Collect all eight bounded train lessons. Automatically fit the existing option scorer if all
+   eight are terminal and at least six settle, including actual acquisition >=1 and development
+   >=3. Preserve negatives and censors; no replacement by reserves or retry of claimed input.
+4. Audit the fitted artifact and report actual corpus size, training error and changed goal choices.
+   These are training diagnostics, not held-out competence. Keep the new model shadow-only until
+   the separate bounded-control step is declared.
+5. Use the four disjoint paired Red roots for a descriptive comparison, then chain supported
+   model-chosen goals in short Red episodes. Measure retained specimens, evolution/dependency
+   progress, costs and recovery. Useful play, not more infrastructure, is the next product output.
+6. Expand missing Red collection/puzzle/trade mechanics, then test Crystal transfer through the
+   existing semantic adapter boundaries. Multi-game living-Pokédex completion remains the end goal.
+
+Reassess after the declared four-hour engineering time box. Report a concrete blocker if the live
+gate fails; do not create a new teacher factory or claim that simulated test outcomes trained Red.
+
+## Historical checkpoint — September 6 recovery audit
+
+Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first, then the
+[recovery audit and exit criteria](audits/recovery-and-training-readiness-2026-09-06.md).
+This section and all subsequent checkpoints are retained history, even when their old headings
+say “active.” The training-launch checkpoint above is the current sequence.
+
+The goal remains a learned player that completes stories and builds a living Pokédex across
+games. Red comes first; Crystal execution is deferred, not removed from the architecture.
+Source through PR 228 is preserved: PR 226 is merged, PRs 227/228 remain open. The previous
+ten-slot campaign is terminal, with five settled examples and five setup censors. Production
+readers authenticated all 23 causal train rows and the existing eighteen-example model. No new
+fit occurred. The proposed 4-train/4-paired/2-reserve allocation has not been executed or claimed
+as a private freeze.
+
+### Next work, in order
+
+1. **Repair recovery and fit admission (one engineering session, four-hour reassessment).**
+   Re-enter through the production command using only this schedule's existing reservations;
+   terminal trials must not rerun. Count actual selected action kinds, not lesson focus. Share
+   one complete-denominator readiness gate between dashboard and the existing fitter, and bind
+   the intended current prior. Add behavioral regressions before one coherent publication/CI
+   cycle. The current green tests do not establish these properties.
+2. **Freeze/preflight the diverse successor without input.** Permanently exclude four formerly
+   unused development roots from evaluation; retain their source provenance. Allocate eight
+   lessons across four roots, at most two per root, plus four disjoint paired roots and two
+   reserves. Prove both first entry and same-plan re-entry; do not retry the old ten-slot campaign.
+3. **Collect eight bounded train outcomes.** Preserve the full denominator and every negative
+   result. Fit admission requires at least six new settled rows, including actual acquisition
+   >=1 and development >=3, with the declared root/family diversity. Censors remain visible.
+4. **Fit the existing option scorer once.** Retain the entire current 23-row train corpus and
+   append all admitted new rows, explicitly accounting for repeated roots. Bind the model,
+   dataset and fit record immutably. The expected 29–31 rows are a small goal-value update,
+   not a trained general Pokémon player.
+5. **Check behavior on the four separate paired Red roots.** Freeze challenger/control choices
+   before either arm, report all outcomes, costs and interventions. This is descriptive
+   engineering evidence: even four non-tied wins cannot reach one-sided 5% sign-test significance.
+   Do not make a superiority, sealed-benchmark or cross-title claim from this bank.
+6. **Increase useful model control.** Chain several semantic goals in short Red episodes and
+   verify new retained specimens, evolution/dependency progress, resource use and recovery.
+   The model should choose and replan; deterministic mechanics and safety remain explicit.
+7. **Expand Red coverage, then Crystal.** Add missing collection/puzzle/trade/version/event
+   capabilities under declared availability. Port the observation/mechanics adapter only after
+   the Red loop demonstrates useful sustained play, then measure transfer against learning from
+   scratch. No separate full scripted walkthrough is assumed necessary for every title.
+
+Do not open another campaign while the three admission/recovery findings remain unresolved.
+Do not convert this repair into another general infrastructure redesign. If four hours do not
+close the smallest synthetic falsifiers, publish the exact blocker and reassess. At every session
+end update the active-state source, this checkpoint, handoff and narrative together; preserve old
+terminals and never count tests/CI/teacher runs as learning progress.
+
+## Historical checkpoints — superseded, not instructions
+
+### September 5 successor: exchange some exam capacity for diverse training now
+
+To shorten the path to a fitted Red goal scorer, the next design deliberately retires four of the
+ten still-unopened development roots into training. This is not a relabeling trick: the four roots
+lose evaluation status permanently. The prospective split uses four retired roots for eight train
+lessons, four disjoint roots for a paired check, and two untouched reserves. Each train root may
+reset at most twice, and the schedule still has to satisfy the independent-lineage/root and
+cross-family diversity gate.
+
+The action-free planner and Red recipe binder are on PR 227. A stacked strict reader and train-only
+consumer are now implemented locally: the reader carries hashes only; the consumer reobserves the
+source-validation roots, checks current account-wide claim availability, rebuilds cartridge recipes
+and authenticates the exact frozen binding before the existing no-reroll runner becomes reachable.
+The dashboard separately shows campaign completion and fit-gate readiness. The remaining order is:
+
+1. merge the setup-diagnostic/diversity repair on PR 226;
+2. rebase and publish the retirement freezer, then require green exact-main CI;
+3. freeze the 4-train/4-paired/2-reserve split once with zero controller effects;
+4. publish the train-only consumer and pass a zero-effect preflight;
+5. collect eight fixed train outcomes and require at least six settled, including one acquisition
+   and three party-development rows;
+6. fit once from the complete admitted train corpus, then run the four paired roots once;
+7. use the two reserves only for failures defined before execution, never to replace a bad outcome.
+
+This reduces the statistical strength of the immediate Red comparison from eight roots to four,
+but reaches varied learning data much sooner. A later fresh-root producer must rebuild a larger
+evaluation bank before any strong generalization or Crystal-transfer claim.
+
+## Historical checkpoint: diversify the Red classroom before fitting
 
 The first ten-slot targeted campaign is terminal. It produced five causal train examples in 8,879
 actions and 468,149 frames, but did not earn a fit: one physical root supplied every settled row
@@ -29,7 +171,7 @@ experience about what objective to pursue, while deterministic navigation, battl
 inventory and recovery skills continue to execute how. Crystal remains deferred until the Red
 decision loop demonstrates useful generalization.
 
-## Active checkpoint: publish the reset-aware runner and collect the ten Red lessons
+## Historical checkpoint: publish the reset-aware runner and collect the ten Red lessons
 
 The capacity question is closed: two authenticated Red train states support ten bounded reset
 episodes, and at least eight independent development states remain unopened for comparison. The
@@ -64,7 +206,7 @@ or resupply—while deterministic skills still execute the mechanics. Passing it
 for sustained Red play and later Crystal transfer, not proof of story completion or a living
 Pokédex by itself.
 
-## Active checkpoint: repeatable targeted training, then a real paired control
+## Historical checkpoint: repeatable targeted training, then a real paired control
 
 The fresh-only census exposed a process mistake: ordinary training had inherited the one-shot
 independence rule that belongs to evaluation. Only two untouched train roots remained, but ten
@@ -112,7 +254,7 @@ clean. This is engineering readiness only. Publish the coherent source once, req
 run one production capacity census from that exact source. Only a sufficient result opens schedule
 freezing; an insufficient result changes the proposed denominator before any gameplay is spent.
 
-## Active checkpoint: close five-case calibration and design the next honest comparison
+## Historical checkpoint: close five-case calibration and design the next honest comparison
 
 All five declared repeatable Red development contexts are now durable terminals under published
 main `d0e06af3` and exact-main CI `33969161241/1`. The three supplemental outcomes added one real
@@ -135,7 +277,7 @@ start a full game. The next authority question is whether a newly trained semant
 deterministic completion ordering on fresh Red contexts—not whether this five-case scorer happened
 to complete four isolated skills.
 
-## Active checkpoint: publish the exact supplemental runtime, then resume case three
+## Historical checkpoint: publish the exact supplemental runtime, then resume case three
 
 Main `3d443e73` and CI `33964453122/1` passed the structured failure-reason repair. The next launch
 failed closed before claim because the supplemental plan's frozen runtime identity did not equal the
@@ -155,7 +297,7 @@ retain one factual terminal and reorient on calibration, ledger change and typed
 If it stops before claim, repair the generic boundary without consuming or refreezing the input.
 No teacher, development fit, Crystal, sealed Red, route patch or full replay is open.
 
-## Active checkpoint: one success, one overconfident failure; preserve the reason next time
+## Historical checkpoint: one success, one overconfident failure; preserve the reason next time
 
 The first two fixed-order cases have now produced real development evidence. The title-neutral
 model chose resupply and the deterministic skill improved inventory in the first case. It then
@@ -176,7 +318,7 @@ The repair's complete local gate passes 6,769 tests in 18m07s, lint, package and
 typing, documentation/focus checks and every registry reproduction. An action-free private reopen
 confirms two retained terminals, three available claims and zero incomplete claims.
 
-## Latest checkpoint: repair the real runtime boundary, then resume one case
+## Historical checkpoint: repair the real runtime boundary, then resume one case
 
 The first live invocation from main `21bc4994` and green CI `33953858337/1` failed before claim,
 prediction, controller input or frame. All five development cases remain available. The diagnosed
@@ -198,7 +340,7 @@ against the preserved reviewed runtime and stop at its terminal. If it fails aft
 terminal and do not retry; if it fails before claim/input, diagnose the reusable boundary without
 calling it a model result. No development fit, teacher, Crystal, sealed Red or full replay.
 
-## Latest checkpoint: publish the bounded live runner, then permit one case
+## Historical checkpoint: publish the bounded live runner, then permit one case
 
 The one-case Red development runner and view-only timeline are locally qualified. It preserves the
 five-input fixed order, delays ROM construction until after a durable claim, enforces a shared
@@ -215,7 +357,7 @@ typed setup censor or a factual model-selected ledger outcome. Use that evidence
 to repair a reusable component, run the next root, or reject the lane. Do not fit on development,
 patch a route for the case, open Crystal or run a full game.
 
-## Latest checkpoint: five inputs ready; build the bounded live runner
+## Historical checkpoint: five inputs ready; build the bounded live runner
 
 The repeatable internal-source/external-private command passed all five unclaimed development roots
 and the immutable 18-example model in 3.22 seconds with zero protected effects. A three-test
@@ -229,7 +371,7 @@ bounds, fixed prospective case order and typed setup/outcome terminals. ROM-free
 publication. Reorient once more before controller input, then stop after the first terminal result.
 Do not fit on development, seek a preferred outcome, open Crystal or run a full replay.
 
-## Latest checkpoint: close strict bootstrap and use the development tier
+## Historical checkpoint: close strict bootstrap and use the development tier
 
 The interpreter-diagnostic successor merged as main `3a849a12`; exact-main CI `33943983942/1`
 passed. Its single canonical-locale preflight then stopped with every protected counter zero. The
@@ -244,7 +386,7 @@ passes. Then run one synthetic production-resolver rehearsal and reorient before
 The first live step should be one bounded model-selected development choice with factual ledger
 measurement, not another freeze, teacher run, fit, CI-only repair, Crystal task or full replay.
 
-## Latest checkpoint: one final, observable bootstrap successor
+## Historical checkpoint: one final, observable bootstrap successor
 
 Exact main `90b90d22` and CI `33939561868/1` passed, and the exact reviewed 1,477-file runtime
 closure staged successfully. The first strict V2 invocation was still rejected before source or
@@ -259,7 +401,7 @@ production-resolver rehearsal and bounded model scoring; any failure ends this b
 This remains maintenance for the existing eighteen-example model, not another curriculum or a
 Crystal task. See the [V2 rejection](evidence/red-development-five-root-preflight-bootstrap-rejection-v2-2026-09-05.json).
 
-## Latest checkpoint: replace the failed V1 command bootstrap, not the five-case design
+## Historical checkpoint: replace the failed V1 command bootstrap, not the five-case design
 
 Exact main `a4d7c5a7` passed CI `33936419853/1`, then the sole V1 five-root preflight failed
 closed at `development_batch_preflight` with every effect counter at zero. The command had not
@@ -271,7 +413,7 @@ bootstrap, publish it under a new script/source identity, require green exact-ma
 successor zero-effect preflight. Only its success permits a real production-resolver rehearsal.
 See the [failure evidence](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
 
-## Latest checkpoint: publish the locally qualified five-root command
+## Historical checkpoint: publish the locally qualified five-root command
 
 The dedicated development command now admits only historical ordinals 10 and 11 plus supplement ordinals 0 through 2.
 It authenticates the complete train-only corpus and immutable eighteen-example model record,
