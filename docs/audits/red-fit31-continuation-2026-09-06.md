@@ -41,6 +41,17 @@ intact. A complete fresh terminal collection ledger was not retained; do not inv
   clean, locally qualified and published; no duplicate hosted-CI wait preceded this short run.
 - No external reviewer or subagent was invoked. The exact failed identity is closed; no replay.
 
+The broad suite finished: **7,102 passed, one failed, one skipped, three integration cases
+deselected, one expected failure**, in 1,947 seconds. The failure was the strategic registry's
+old hard-coded fingerprint after its source binding was regenerated. A structural comparison
+confirmed that only source-bundle and derived execution hashes changed; assignment roster and
+decision contract did not. The three fixed golden expectations were updated, retaining the exact
+identity assertions rather than replacing them with self-comparisons. This is test/source-binding
+bookkeeping, not another gameplay repair or a claimed second full-suite pass.
+After that expectation-only correction, **161 registry, continuation and product-focus tests
+passed**, with clean lint/docs checks. No emulator was restarted and no functional player code
+changed after the failed attempt.
+
 ## Next session: ordinary unsuccessful searches must not break continued play
 
 1. Treat bounded search exhaustion as an explicit no-acquisition outcome, distinct from a broken

@@ -14,7 +14,10 @@ Next: typed no-find/recovery stops and fresh ledger/safe endpoint retention, the
 development/evolution/storage alternatives. Do not replay the failed identity, raise search limits
 until lucky, fit greedy diagnostics or call an unsupported-menu choice model progress. Focused
 qualification: 87 tests and clean lint/types/docs/artifact checks. Broader local suite was still
-running at launch; its final disposition must be recorded separately.
+running at launch; it finished with 7102 passed and one stale strategic-registry fingerprint
+expectation failure. Only source/derived hashes changed, not assignments or the decision contract.
+Fixed golden expectations were updated; 161 follow-up registry/continuation/focus tests passed.
+No second full-suite pass is claimed. No emulator or fitter remains active. See the audit.
 
 User-confirmed milestones: sustained Red play, model-directed Red story completion and living
 collection, then measurable adaptation to a compatible unfamiliar Red modification before Crystal.

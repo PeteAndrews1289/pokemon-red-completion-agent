@@ -52,5 +52,8 @@ See the [audit](../audits/red-fit31-continuation-2026-09-06.md) and
 Next session is typed no-find/recovery stopping, safe state retention and useful existing alternative
 mechanics. This session stops at its declared failed-attempt/audit boundary, not another repair/run loop.
 
-87 focused tests passed. Full lint, types, docs/focus, registries and public-artifact checks passed;
-the broader local suite was launched once and remains separately tracked while this audit is written.
+87 focused tests passed. Full lint, types, docs/focus, registries and public-artifact checks passed.
+The broader suite finished with 7102 passed, one stale registry fingerprint expectation failure,
+one skipped, three deselected and one expected failure. Reviewed fixed expectations were updated;
+the audit distinguishes this bookkeeping correction from gameplay changes and a full-suite rerun.
+The follow-up registry/continuation/focus suite passed all 161 tests; no further gameplay occurred.
