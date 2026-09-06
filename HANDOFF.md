@@ -1,5 +1,73 @@
 # Handoff
 
+## Current — resource-aware collection chain
+
+The known-training chain from `7762e591` is complete: one genuinely model-selected capture
+increased living species **13 → 14**, then the last ball was gone. The second choice was a
+deterministic exploration fallback, not a learned choice, and exhausted its search bound.
+Both actors tied; all 704 actions / 31,344 frames and two trajectories authenticated. See the
+[result and next session](docs/work-sessions/2026-09-06-resource-aware-goal-chain.md).
+
+The next opt-in adapter connects the existing walking router and fresh destination composer
+to capture/resupply goals. It shares actual resource checks with local providers and leaves
+old profiles, safety thresholds and model weights unchanged. A declared ten-ball purchase
+uses the existing Mart skill, not a new route script. A zero-input read of the real state
+found the supply route and sufficient funds. Qualify/publish before actual execution; this
+checkpoint itself is not a new run or fit. The prior pair ID must not be reused.
+
+The model remains fitted on 29 examples. No new fit, unseen improvement, full-game autonomy
+or Crystal result is claimed. Both older producers ended; the redesigned 8768 overview remains.
+No external reviewers were invoked. The private operator note identifies actual active processes.
+
+## Active session — September 6 fresh-state goal chain
+
+The four-root check **finished** from published `cc70f8c9`. Three model-selected goals succeeded:
+two resupplies and one party-development task. No model arm gained a living species. One control
+caught a new species; another raised a PC-menu exception. One construction route failed before
+either policy acted. All four pairs remain terminal, with zero clean descriptive model wins.
+Read the [result audit](docs/audits/red-routed-model-play-2026-09-06.md); 32 immutable records and
+all 23,597 actions / 1,350,732 frames reconcile. No fit, retry, Crystal or full replay occurred.
+
+The next [bounded-chain session](docs/work-sessions/2026-09-06-fresh-goal-chain.md) uses the existing
+player on a separately declared authenticated training context, not a replacement paired root or
+an independent superiority test. The model remains the exact 29-example artifact. Preserve fresh
+state and ledger checks, four-step limits, and distinct model/safety/forced counts. A small private
+failure-diagnostic callback closes the old loop's empty-exception evidence before input.
+
+The local spectator dashboard remains on 8768. The paired producer on 8769 ended normally; do not
+show its last frame as live or relaunch it for motion. The next real producer supplies party,
+ranked choices, collection and actor information. Codex owns implementation and publication;
+no external reviewer was invoked. Follow ACTIVE_PRODUCT_STATE.md and the private operator note.
+
+The following implementation checkpoints are historical.
+
+## Active session — September 6 routed model/control execution
+
+The missing four-root consumer is implemented in
+`scripts/run_red_living_dex_retired_bank_paired.py`. It authenticates the existing retired-bank
+plan, rederives all recipes, and addresses only development slots 8–11. It uses the unchanged
+saved 29-example model. Before input, verify the current session's actual result; implementation
+and tests alone are not gameplay evidence. The focused integration group passed 104 tests.
+
+Both choices are committed before either selected arm opens. The consumer reuses production setup
+and causal execution, retains failures and actionable private diagnostics, and never retries an
+attempted setup or arm. Recovery may finish only the never-started other arm; completed pairs
+reopen without another prediction or input. The fixed deterministic control is separate and never
+replaces a model choice. All four roots remain in the descriptive denominator, with utility and
+irreversible loss separately reported.
+
+This is bounded **development**: clean published source, local verification and strict
+model/ROM/runtime/plan authentication, without another exact-main CI prerequisite. Old trials
+retain their original constraints. No development fitting, full-player promotion, sealed Red,
+Crystal or full replay is authorized. The live feed uses 8769 behind the overview on 8768 and
+identifies setup versus model/control. View failure cannot replace gameplay. Follow the
+[session record](docs/work-sessions/2026-09-06-routed-model-play.md).
+
+PR 232's first CI run failed on one stale Crystal-dashboard expectation for the new
+`collection.observed` field after 6,880 passes. The one-line assertion fix was pushed as
+`e24d0b0b`; 15 relevant dashboard tests subsequently passed. No Crystal game was opened. Keep
+publication checks separate from the Red learning lane and do not restart the completed fit.
+
 ## Resume here — September 6 spectator viewer and bounded-chain integration
 
 The saved learner remains the **29-example living-Dex scorer** below. No new real input,

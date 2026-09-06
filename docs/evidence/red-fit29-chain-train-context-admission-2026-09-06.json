@@ -1,0 +1,28 @@
+{
+  "controller_actions": 0,
+  "envelope_sha256": "69485bee275743f8d9c8e1d3c5f997632727f191614497859802797335f95372",
+  "evaluation_scope": "training_context_integration_only",
+  "logical_root_sha256": "baaeb96b40a916ff6e283496863ec4a92d42a45da71722f7959d16f89784aa62",
+  "logical_root_unclaimed": false,
+  "model_fits": 0,
+  "model_predictions": 0,
+  "physical_root_sha256": "0761ed902399f4065fc86eceb5af98e1d278a1a35aa0eb0613d27e508a72e74e",
+  "physical_root_unclaimed": false,
+  "private_path_fields": 0,
+  "profile_sha256": "d05d6d21730c15f54d8dd35c9acc973d022f47aa56663a9d5b24e9fbdd1b12f5",
+  "recorded_available_goals": [
+    "acquire_species",
+    "restore_team",
+    "explore"
+  ],
+  "retired_bank_physical_overlap": false,
+  "schema": "pokemon.red.train-context-chain-admission.v1",
+  "slot_id": "red-goal-v1-010-acquire_species-train-01",
+  "source_partition": "train",
+  "state_sha256": "e15c44a75527e38ef28961490714f47c48e8dcbeae7116b7843852aca6056ea0",
+  "root_reuse_scope": "known_training_context_new_bounded_integration",
+  "independent_generalization_claim": false,
+  "old_claims_modified": false,
+  "prior_one_shot_plan_reexecuted": false,
+  "retired_bank_reused": false
+}

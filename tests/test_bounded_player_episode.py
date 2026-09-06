@@ -409,6 +409,7 @@ def test_self_report_must_match_independent_budget_meter() -> None:
 def test_budget_exhaustion_is_a_durable_verified_failure() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer(exhaust_budget=True)
+    failures: list[BaseException] = []
 
     result = run_bounded_player_episode(
         observe=observe,
@@ -418,6 +419,7 @@ def test_budget_exhaustion_is_a_durable_verified_failure() -> None:
         budget_meter=meter,
         completion_satisfied=_complete,
         limits=BoundedPlayerLimits(max_decisions=1, max_replans=0),
+        failure_observer=failures.append,
     )
 
     assert result.stop_reason is BoundedPlayerStopReason.VERIFIED_FAILURE
@@ -430,11 +432,15 @@ def test_budget_exhaustion_is_a_durable_verified_failure() -> None:
     assert state["actions"] == 5
     assert len(sink.decisions) == len(sink.events) == 1
     trajectory.require_settled()
+    assert len(failures) == 1
+    assert isinstance(failures[0], GoalExecutionBudgetExhausted)
+    assert str(failures[0]) == "private budget detail"
 
 
 def test_binding_exception_is_retained_and_replanned_without_private_detail() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer(binding_failure=True)
+    failures: list[BaseException] = []
 
     result = run_bounded_player_episode(
         observe=observe,
@@ -443,6 +449,7 @@ def test_binding_exception_is_retained_and_replanned_without_private_detail() ->
         trajectory=trajectory,
         budget_meter=meter,
         completion_satisfied=_complete,
+        failure_observer=failures.append,
     )
 
     assert result.stop_reason is BoundedPlayerStopReason.COMPLETION_REACHED
@@ -454,6 +461,54 @@ def test_binding_exception_is_retained_and_replanned_without_private_detail() ->
     assert state["actions"] == 10
     assert len(sink.decisions) == len(sink.events) == 2
     assert "private binding detail" not in json.dumps(result.public_dict())
+    assert len(failures) == 1
+    assert isinstance(failures[0], RuntimeError)
+    assert str(failures[0]) == "private binding detail"
+
+
+@pytest.mark.parametrize("diagnostic_acts", (False, True))
+def test_diagnostic_failure_or_hidden_action_stops_before_recovery(
+    diagnostic_acts: bool,
+) -> None:
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(binding_failure=True)
+
+    def retain(error: BaseException) -> None:
+        assert str(error) == "private binding detail"
+        if diagnostic_acts:
+            state["actions"] += 1
+        else:
+            raise OSError("private journal unavailable")
+
+    expected = BoundedPlayerError if diagnostic_acts else OSError
+    with pytest.raises(expected):
+        run_bounded_player_episode(
+            observe=observe,
+            authority=CompletionFirstGoalTeacher(),
+            authority_id="completion-first-v1",
+            trajectory=trajectory,
+            budget_meter=meter,
+            completion_satisfied=_complete,
+            failure_observer=retain,
+        )
+    assert state["actions"] == 5 + int(diagnostic_acts)
+    assert len(sink.decisions) == 1
+
+
+def test_diagnostic_observer_must_be_callable_before_gameplay() -> None:
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer()
+    with pytest.raises(TypeError, match="failure_observer"):
+        run_bounded_player_episode(
+            observe=observe,
+            authority=CompletionFirstGoalTeacher(),
+            authority_id="completion-first-v1",
+            trajectory=trajectory,
+            budget_meter=meter,
+            completion_satisfied=_complete,
+            failure_observer="not-callable",  # type: ignore[arg-type]
+        )
+    assert state["actions"] == 0
 
 
 def test_observation_may_not_hide_controller_input() -> None:

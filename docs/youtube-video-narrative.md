@@ -1,5 +1,46 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6: one real model-chosen catch, then an honest stopping point
+
+**Show:** the saved result **MODEL CHOICE: ACQUIRE · LIVING SPECIES 13 → 14**. Label it
+**KNOWN TRAINING CONTEXT**, with deterministic capture mechanics. Then show **BALLS: 0**,
+**RESUPPLY: NOT BOUND** and **EXPLORATION LIMIT REACHED**. Do not count the fallback as a second
+learned decision. Both actors tied, and the four-step ceiling was not reached.
+
+**Voiceover:** “It chose to catch a new Pokémon, and it did. Then it spent its last ball.
+It knew capture was unavailable, but its menu couldn't yet offer a trip to the shop. So the
+next improvement isn't a bigger model—it's connecting the skills we already have, letting
+each real outcome change what it can choose next.”
+
+The [session record](work-sessions/2026-09-06-resource-aware-goal-chain.md) separates the completed
+result from the resource-aware extension still being qualified. No footage is claimed retained,
+and no new fit, independent superiority, full game or Crystal transfer is implied.
+
+## September 6 result: three successful goals, no new model-caught species
+
+**On screen:** distinguish **MODEL: RESUPPLY / DEVELOP / RESUPPLY** from the separate fixed
+control. Show the recorded inventory increases and the control's **LIVING SPECIES 11 → 12**.
+Include **1 SETUP FAILURE · 1 CONTROL-SKILL EXCEPTION** and the complete four-root denominator.
+Use saved results as a results graphic; do not imply footage was retained if it was only streamed.
+
+**Voiceover:** “The model is making real choices now. Its three attempted tasks worked, but they
+were preparation—not new catches. In one comparison, the simpler controller caught a Pokémon
+while the model bought more supplies. That tells us what to test next: can it turn preparation
+into collecting over several decisions, with fresh state after each one?”
+
+No autonomous full game, improved unseen win rate or Crystal transfer is claimed. The model
+remains the same 29-example fit. See the [actual result audit](audits/red-routed-model-play-2026-09-06.md).
+The earlier scene plans below do not supersede this result.
+
+## Next footage: the trained scorer makes a choice
+
+Show the frozen menu and both recorded choices, then the separate **model** and **control** arms
+starting from the same state. Explain that deterministic navigation and battle skills implement
+the selected goal. The model chooses the objective; it is not generating every button press.
+Retain failed goals, costs and collection losses on screen. Four scenarios are an engineering
+comparison, not evidence of complete-game autonomy or cross-game transfer. The implementation is
+ready and tested; record actual results before narrating any outcome.
+
 ## September 6 spectator scene: make the decisions visible
 
 **Visual:** Use the redesigned local dashboard in Focus view. A genuine game feed is the main

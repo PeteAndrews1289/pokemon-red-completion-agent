@@ -28,11 +28,7 @@ from pokemon_red_completion.red_living_dex_targeted_train_runner import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = (
-    PROJECT_ROOT
-    / "scripts"
-    / "run_red_living_dex_targeted_bank_retirement_train.py"
-)
+SCRIPT = PROJECT_ROOT / "scripts" / "run_red_living_dex_targeted_bank_retirement_train.py"
 RUNNER = runpy.run_path(
     str(SCRIPT),
     run_name="run_red_living_dex_targeted_bank_retirement_train_test",
@@ -103,8 +99,7 @@ def _reentry_fixture(tmp_path, monkeypatch, *, partition="train"):
         root_consumption_sha256=private.root_consumption_sha256,
         state_bytes=private.capture.state_bytes,
         envelope_bytes=(
-            json.dumps(private.capture.envelope.to_dict(), sort_keys=True).encode("ascii")
-            + b"\n"
+            json.dumps(private.capture.envelope.to_dict(), sort_keys=True).encode("ascii") + b"\n"
         ),
     )
     lineage = canonical_sha256(
@@ -117,11 +112,13 @@ def _reentry_fixture(tmp_path, monkeypatch, *, partition="train"):
     # through the same re-entry function used by main, with a real pair ledger.
     schedule = SimpleNamespace(
         schedule_sha256="c" * 64,
-        slots=(SimpleNamespace(
-            physical_root_sha256=root.physical_root_sha256,
-            lineage_sha256=lineage,
-            partition=partition,
-        ),),
+        slots=(
+            SimpleNamespace(
+                physical_root_sha256=root.physical_root_sha256,
+                lineage_sha256=lineage,
+                partition=partition,
+            ),
+        ),
     )
     descriptor = SimpleNamespace(schedule_descriptor=SimpleNamespace(schedule=schedule))
     registry = _registry(tmp_path)
@@ -150,22 +147,23 @@ def _reentry_fixture(tmp_path, monkeypatch, *, partition="train"):
     support = function.__globals__["base"].freezer._PROVIDER_SUPPORT
     monkeypatch.setitem(support, "_observe_root", observe)
 
-    def reenter():
+    def reenter(**kwargs):
         return function(
-            descriptor, (private,), rom_path=Path("synthetic.gb"),
-            rom_bytes=b"synthetic", runtime=None, claim_registry=registry,
+            descriptor,
+            (private,),
+            rom_path=Path("synthetic.gb"),
+            rom_bytes=b"synthetic",
+            runtime=None,
+            claim_registry=registry,
             source_commit="a" * 40,
+            **kwargs,
         )
 
     return private, registry, reservation, observed, reenter
 
 
-def test_command_reobserves_unused_then_own_reserved_root_without_new_claims(
-    tmp_path, monkeypatch
-):
-    private, registry, reservation, observed, reenter = _reentry_fixture(
-        tmp_path, monkeypatch
-    )
+def test_command_reobserves_unused_then_own_reserved_root_without_new_claims(tmp_path, monkeypatch):
+    private, registry, reservation, observed, reenter = _reentry_fixture(tmp_path, monkeypatch)
     first = reenter()
     assert root_claim_is_available(registry, reservation.logical_root_sha256)
     ensure_living_dex_repeatable_root_reservation(registry, reservation)
@@ -177,9 +175,7 @@ def test_command_reobserves_unused_then_own_reserved_root_without_new_claims(
 
 
 @pytest.mark.parametrize("partition", ["train", "development"])
-def test_command_rejects_foreign_claims_before_observation(
-    tmp_path, monkeypatch, partition
-):
+def test_command_rejects_foreign_claims_before_observation(tmp_path, monkeypatch, partition):
     _private, registry, reservation, observed, reenter = _reentry_fixture(
         tmp_path, monkeypatch, partition=partition
     )
@@ -193,9 +189,7 @@ def test_command_rejects_foreign_claims_before_observation(
     assert not observed
 
 
-def test_command_cannot_recover_a_paired_evaluation_root_as_training(
-    tmp_path, monkeypatch
-):
+def test_command_cannot_recover_a_paired_evaluation_root_as_training(tmp_path, monkeypatch):
     _private, registry, reservation, observed, reenter = _reentry_fixture(
         tmp_path, monkeypatch, partition="development"
     )
@@ -205,3 +199,34 @@ def test_command_cannot_recover_a_paired_evaluation_root_as_training(
     ):
         reenter()
     assert not observed
+
+
+def test_paired_consumer_must_prove_ownership_before_reobserving_a_consumed_root(
+    tmp_path, monkeypatch
+):
+    _private, registry, reservation, observed, reenter = _reentry_fixture(
+        tmp_path, monkeypatch, partition="development"
+    )
+    ensure_living_dex_repeatable_root_reservation(registry, reservation)
+    checked = []
+
+    def denied(root, lineage):
+        checked.append((root.physical_root_sha256, lineage))
+        return False
+
+    with pytest.raises(RUNNER["RetiredBankTrainCommandError"]):
+        reenter(owned_development_claim=denied)
+    assert len(checked) == 1
+    assert observed == []
+
+
+def test_paired_ownership_callback_cannot_bypass_foreign_train_reservation(tmp_path, monkeypatch):
+    _private, registry, reservation, observed, reenter = _reentry_fixture(
+        tmp_path, monkeypatch, partition="train"
+    )
+    ensure_living_dex_repeatable_root_reservation(
+        registry, replace(reservation, source_commit="b" * 40)
+    )
+    with pytest.raises(RUNNER["RetiredBankTrainCommandError"]):
+        reenter(owned_development_claim=lambda *_args: True)
+    assert observed == []

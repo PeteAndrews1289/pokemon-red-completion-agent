@@ -1,5 +1,50 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: the model catches one—and reveals the next missing link
+
+The next check finally turned a model-selected goal into a new living specimen. From a known
+training snapshot, the unchanged 29-example scorer chose acquisition and the capture skill
+succeeded: living species rose from 13 to 14. This is deliberately a training-context integration
+result, not unseen mastery. The control made the same choice and tied.
+
+The player then ran out of balls. It correctly recognized that capture was no longer possible,
+but its local-only menu could not express travelling to buy more. The fallback exploration
+reached its search limit. Only the first choice was learned. The fix in progress connects
+existing navigation and supply skills to freshly observed goals; it does not make the search
+longer, edit inventory or tune the model to hide the failure. The lesson is that useful play
+requires consequences to feed the next choice, not just a succession of isolated successes.
+
+## September 6: successful tasks are not the same as collecting
+
+The fitted 29-example model chose real goals in the four-root routed check. It bought
+three more balls in two situations and successfully developed a party member in another. Those
+were genuine model selections, executed through deterministic skills. One scenario failed during
+navigation before either actor chose, and one comparison control hit an unexpected PC menu.
+
+The most informative result was less flattering: the control caught a new species while the
+model bought supplies. The model's three skills all succeeded, yet its living collection never
+grew. This is the distinction the project needs to confront: being good at reliable preparation
+is not yet being good at completing a Pokédex. We retained all four roots, claimed no clean
+policy superiority, and did not fit these development outcomes or replay failures.
+
+The next short chain uses fresh observations after each goal to test whether preparation becomes
+useful collecting. It reuses an existing player loop and explicitly labels training-context
+integration as such. The [audit](audits/red-routed-model-play-2026-09-06.md) verifies every stored
+record and the complete 23,597-action / 1,350,732-frame accounting.
+
+## September 6: moving the fitted model into actual decisions
+
+After the 29-example update, the missing piece was not another model. The saved roots described
+choices reachable by navigation, not just the actions visible at the raw save. The new bounded
+consumer preserves those routed choices and uses the existing mechanics executor. It saves the
+learned and deterministic control choices before either acts, then observes their real outcomes
+from the same origin. Four roots remain a descriptive check, not proof of superiority.
+
+The implementation and 104 focused checks are complete at this checkpoint; real results follow
+separately. Failure records now keep the exception and source location, interrupted actions cannot
+silently retry, and the spectator view identifies who is choosing. This is progress toward a
+model-led living Pokédex loop, not a claim that the small scorer already plays a complete game.
+
 ## September 6: a viewer that explains what is actually learning
 
 The old overview mixed current work with counts from previous experiments. The redesigned local

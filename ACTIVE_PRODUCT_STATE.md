@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The eight-lesson batch and one real fit are complete on qualified main e9b381d0. Move the saved 29-example living-Dex option scorer into explicitly bounded Red development: a descriptive comparison and then successive model-chosen goals with fresh state and collection-ledger verification. Do not repeat the consumed batch or make CI throughput the next learning milestone.
+- Next decision: The first known-training chain caught one species but exhausted its last ball; local-only bindings could not offer resupply. Connect the existing routed transport and destination skills to refreshed capture/supply goals, then run a four-step training-context integration. No new model or CI gate is needed.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The living-Pokedex option-value scorer has an immutable 29-example train-only update spanning seven option kinds and 24 distinct selected-feature rows. It remains non-authoritative shadow-only: no gameplay model choice was executed in the collection batch. This is a different artifact from the older seven-outcome semantic goal manager and the battle scorer; deterministic skills and safety constraints retain controller authority. |
+| Authority now | The unchanged 29-example living-Dex scorer has caused three real routed side goals and one known-training-context capture. That capture increased living species from 13 to 14. The next exploration was a deterministic unsupported choice and failed; no sustained three-choice collection chain or independent superiority exists. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
 | Cheapest falsifier | Use the saved 29-example living-Dex option scorer for at least three successive supported Red goal choices in one bounded development episode. Reobserve semantic state and the living ledger after each execution; stop on stale choices, unverified progress, or an undisclosed replacement policy. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-red-training-and-fit-complete** · status **closed** · evidence [model fit](docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json)
+**2026-09-06-known-train-chain-complete** · status **closed** · evidence [development episode](docs/evidence/red-fit29-known-train-chain-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Real outcomes now reached the existing semantic option learner, including its first three successful party-development examples. The next product output is useful model-chosen collection behavior in Red. The portable state/action boundary remains intact for later Crystal adaptation and the ultimate multi-game living Pokedex. |
-| Learning output | Eight terminals: six factual rows across three roots (acquire 2, develop 3, resupply 1), five successes, one failure, two setup censors. One fit includes 29 rows: 18 previously fitted, five earlier unfitted, six new. Weighted train MSE fell 0.0069591 to 0.0050046; three train-menu choices changed. Cumulative multi-family counters remain their previous verified ledger, not this learner's corpus or this session's total. |
-| Authority delta | No deployment promotion. Exactly one real fit updated the living-Dex option scorer from 18 to 29 examples. Collection used the disclosed focus policy and deterministic skills, with zero gameplay model predictions. The new artifact remains non-authoritative shadow-only pending bounded development integration. |
-| Transfer result | None. The fit reads train only; development and Crystal were not opened. Four future non-tied paired wins would have one-sided exact sign-test p=0.0625. Use that bank for descriptive Red engineering evidence, preserving a separate later promotion and transfer test. |
-| Blocker | Training completed. Independent audit authenticated the saved model and all 29 rows, retaining all 23 pre-run rows unchanged. Two construction-route setup failures share one physical root; their coarse unexpected_error records omit the original exception. Successful evidence is still absent for evolution, exploration, storage and access-unlocking in this learner corpus. No independent result yet establishes the updated scorer's playing ability. |
-| Decision | Close the eight-lesson batch without retries or another fit. Use its immutable 29-example artifact for the next descriptive Red check and short model-selected goal chain. Record real ledger progress, failed skills, resources and interventions. Limit new engineering to that playing loop, actionable failure diagnostics and truthful dashboard state. |
-| Next session | Bind the fitted living-Dex option artifact, perform the declared descriptive Red check, and connect successive model-chosen goals through existing deterministic skills. Show the actual actor, choices, ledger progress, costs and failures in the live view. Reassess after two to four hours rather than expanding a route or CI project. |
-| Next falsifier | The named updated artifact must make actual choices in a short Red episode, with fresh observations between at least three goals and independently verified collection/dependency progress or explicit failure. A descriptive four-root comparison must retain its full denominator and must not become an impossible statistical-superiority gate. |
-| Stop condition | All eight train trials are terminal and may not retry. Preserve every old and new row, negative outcome and setup censor. Four paired roots and one reserve remain unexecuted; never use them to replace bad train outcomes. Do not call training error independent gameplay evidence or promote full-player authority from this small update. |
+| Product alignment | One model-chosen acquisition increased the living collection. The missing reusable capability is resource-aware continuation across destinations, not another full teacher run. |
+| Learning output | The four-step-bounded known-training integration stopped after two decisions per actor: successful acquisition followed by exhausted exploration. Both trajectories authenticated; 704 controller actions and 31,344 frames reconcile. No new fit or train rows. |
+| Authority delta | Exactly one model-ranked acquisition succeeded, adding one living and registered species. The second choice was deterministic_unsupported, not another learned decision. The 29-example artifact is unchanged. |
+| Transfer result | Known-training-context integration only, not an unseen estimate. Both actors gained the same one living species. No Crystal, sealed Red or full replay. |
+| Blocker | The capture used the last ball. Acquisition then correctly became missing_resource, while resupply was missing_capability because only local providers were bound. Exploration reached its 64-leg cap. |
+| Decision | Preserve this pair and its diagnostics. Add an opt-in refreshed route-to-capture/supply seam using existing transport, fresh destination binding and safety limits. Do not change the old route, search cap or model utility. |
+| Next session | Qualify shared local/remote resource prerequisites and route-backed refreshed goals, then run one prospectively declared four-step known-training-context integration. Keep safety choices distinct from learned choices. |
+| Next falsifier | After the supply or capture skill, does the next real observation offer feasible completion goals, and can the unchanged scorer cause successive verified captures within the existing budgets? |
+| Stop condition | Preserve the old pair, all four retired paired roots and all eight training trials. No new fitting on diagnostic outcomes, no root relabeling for independence, no full replay or Crystal. Stop on unavailable route, unsupported field action, stale observation or hard budget. |
 
 ### Stop conditions
 

@@ -176,6 +176,18 @@ class RedGoalContextRuntime:
     adapter: PokemonRedGoalStateAdapter
     boxed_level_evolution_executor: RedBoxedLevelEvolutionGoalExecutor | None = None
 
+    def provider_for(
+        self, kind: GoalKind, actions: CountingExecutor
+    ) -> RedGoalBindingProvider:
+        """Build the declared mechanic; callers still need a fresh, verified offer."""
+
+        if not isinstance(kind, GoalKind) or not isinstance(actions, CountingExecutor):
+            raise TypeError("provider construction needs a goal kind and counted actions")
+        specs = tuple(spec for spec in self.profile.providers if spec.kind is kind)
+        if len(specs) != 1:
+            raise RedGoalContextError("goal context profile lacks one requested provider")
+        return _build_provider(self, specs[0], actions)
+
     def enumerator(self, actions: CountingExecutor) -> RedGoalOpportunityEnumerator:
         if not isinstance(actions, CountingExecutor):
             raise TypeError("goal context actions must be a CountingExecutor")

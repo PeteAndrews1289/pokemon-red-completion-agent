@@ -54,18 +54,25 @@ class RedBoundedPlayerObserver:
     runtime: RedGoalContextRuntime
     actions: CountingExecutor
     collection_projector: CollectionProjector = living_collection_checkpoint
+    enumerate_bindings: Callable[[RedGoalObservation], GoalBindingSet] | None = None
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
         if not callable(self.collection_projector):
             raise TypeError("collection_projector must be callable")
+        if self.enumerate_bindings is not None and not callable(self.enumerate_bindings):
+            raise TypeError("enumerate_bindings must be callable")
 
     def __call__(self) -> GoalManagerCompositionObservation:
         self.last_live_observation = None
         live = self.runtime.adapter.observe()
         if not isinstance(live, RedGoalObservation):
             raise RedBoundedPlayerError("Red adapter returned an invalid observation")
-        binding_set = self.runtime.enumerator(self.actions).enumerate(live)
+        binding_set = (
+            self.runtime.enumerator(self.actions).enumerate(live)
+            if self.enumerate_bindings is None
+            else self.enumerate_bindings(live)
+        )
         if not isinstance(binding_set, GoalBindingSet):
             raise RedBoundedPlayerError("Red enumerator returned an invalid binding set")
         collection = self.collection_projector(live)

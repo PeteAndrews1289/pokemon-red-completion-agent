@@ -1,0 +1,342 @@
+{
+  "controller_actions": 23597,
+  "crystal_execution": 0,
+  "descriptive_model_wins": 0,
+  "emulator_frames": 1350732,
+  "evidence_scope": "descriptive_development_only",
+  "model_fits": 0,
+  "pairs": [
+    {
+      "comparison": {
+        "arms": [
+          {
+            "actor": "model",
+            "controller_actions": 379,
+            "emulator_frames": 24241,
+            "execution_raised": false,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                1,
+                0,
+                0,
+                0.00379,
+                0.0004040166666666667,
+                0,
+                0.021798365122615793,
+                0,
+                0
+              ]
+            },
+            "realized_utility": 3.9774032332107176,
+            "result_sha256": "861f5d5868e0602cc796103a74a63b9e7a866a1dd0cac66a618f03901ac9d2f4",
+            "selected_candidate_index": 2,
+            "status": "settled"
+          },
+          {
+            "actor": "control",
+            "controller_actions": 379,
+            "emulator_frames": 24241,
+            "execution_raised": false,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                1,
+                0,
+                0,
+                0.00379,
+                0.0004040166666666667,
+                0,
+                0.021798365122615793,
+                0,
+                0
+              ]
+            },
+            "realized_utility": 3.9774032332107176,
+            "result_sha256": "dbdc6345eccd97967496b35ec0e917a8cd2ee81e121acc614e03079065c03c6e",
+            "selected_candidate_index": 2,
+            "status": "settled"
+          }
+        ],
+        "commitment_sha256": "075c270cbac722739a53aa0d266379cfb7c3f4f7625f1a11bff005903cd21a75",
+        "descriptive_model_win": false,
+        "evidence_scope": "descriptive_development_only",
+        "model_fits": 0,
+        "model_only_irreversible_loss": false,
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "promotion_authorized": false,
+        "schema": "pokemon.core.living-dex-paired-development.v1",
+        "training_targets_emitted": 0,
+        "utility_delta": 0
+      },
+      "model_fits": 0,
+      "pair_ordinal": 0,
+      "private_path_fields": 0,
+      "promotion_authorized": false,
+      "schema": "pokemon.red.retired-bank-paired-result.v1",
+      "setup_controller_actions": 987,
+      "setup_emulator_frames": 53929,
+      "setup_failure_phase": null,
+      "setup_status": "complete",
+      "setup_terminal_sha256": "4d4823bd6696303627dc1f3d5d3f384da1067dab7d084a8e5a4c7d499a2a624d",
+      "training_targets_emitted": 0
+    },
+    {
+      "comparison": {
+        "arms": [
+          {
+            "actor": "model",
+            "controller_actions": 19486,
+            "emulator_frames": 1119616,
+            "execution_raised": false,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                1,
+                0,
+                0,
+                0.19486,
+                0.018660266666666668,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "realized_utility": 3.9591619733333334,
+            "result_sha256": "a2b5c502478b3c9ca3addd09f33cced3e1d4b7cacd10a5368790cc2118ee9f08",
+            "selected_candidate_index": 0,
+            "status": "settled"
+          },
+          {
+            "actor": "control",
+            "controller_actions": 202,
+            "emulator_frames": 10321,
+            "execution_raised": true,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                0,
+                0,
+                0,
+                0.00202,
+                0.00017201666666666666,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "realized_utility": -0.0004212016666666667,
+            "result_sha256": "37ad53f2ac6973e3b0177c6b8027d09316dd404499509e47496b827138269b65",
+            "selected_candidate_index": 1,
+            "status": "settled"
+          }
+        ],
+        "commitment_sha256": "64ad97fa25d921660e227483e1462e974c5e0788a4b5c5e4a9b8e0c23a6d9a07",
+        "descriptive_model_win": false,
+        "evidence_scope": "descriptive_development_only",
+        "model_fits": 0,
+        "model_only_irreversible_loss": false,
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "promotion_authorized": false,
+        "schema": "pokemon.core.living-dex-paired-development.v1",
+        "training_targets_emitted": 0,
+        "utility_delta": 3.959583175
+      },
+      "model_fits": 0,
+      "pair_ordinal": 1,
+      "private_path_fields": 0,
+      "promotion_authorized": false,
+      "schema": "pokemon.red.retired-bank-paired-result.v1",
+      "setup_controller_actions": 517,
+      "setup_emulator_frames": 25418,
+      "setup_failure_phase": null,
+      "setup_status": "complete",
+      "setup_terminal_sha256": "f1349ac367da5807c280875da2e0d02f1775a1dec933859d90e973aa8b7930ab",
+      "training_targets_emitted": 0
+    },
+    {
+      "comparison": null,
+      "model_fits": 0,
+      "pair_ordinal": 2,
+      "private_path_fields": 0,
+      "promotion_authorized": false,
+      "schema": "pokemon.red.retired-bank-paired-result.v1",
+      "setup_controller_actions": 200,
+      "setup_emulator_frames": 12168,
+      "setup_failure_phase": "construction_route",
+      "setup_status": "failed",
+      "setup_terminal_sha256": "edac440c2ea6505025de278c7df1644f827f9648be3887fe40d759522ad9c20c",
+      "training_targets_emitted": 0
+    },
+    {
+      "comparison": {
+        "arms": [
+          {
+            "actor": "model",
+            "controller_actions": 376,
+            "emulator_frames": 23773,
+            "execution_raised": false,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                1,
+                0,
+                0,
+                0.00376,
+                0.00039621666666666666,
+                0,
+                0.05994550408719346,
+                0,
+                0
+              ]
+            },
+            "realized_utility": 3.9392628742461397,
+            "result_sha256": "1ac630bcdec850b804c70c7f6d6f0e4e636f6606c0e91d68c741b5e4e7dafcda",
+            "selected_candidate_index": 2,
+            "status": "settled"
+          },
+          {
+            "actor": "control",
+            "controller_actions": 168,
+            "emulator_frames": 11220,
+            "execution_raised": false,
+            "outcome": {
+              "censor_reason": null,
+              "schema": "pokemon.core.living-dex-observed-outcome.v1",
+              "status": "settled",
+              "target_names": [
+                "verified_success",
+                "completion_gain",
+                "dependency_unlock_gain",
+                "action_cost",
+                "frame_cost",
+                "resource_cost",
+                "party_cost",
+                "storage_cost",
+                "irreversible_loss"
+              ],
+              "target_values": [
+                1,
+                0.008333333333333333,
+                0,
+                0.00168,
+                0.000187,
+                0.05555555555555555,
+                0,
+                0,
+                0
+              ]
+            },
+            "realized_utility": 4.005200855555556,
+            "result_sha256": "7e53e8fd7370c7daa953e7c94d076892adba84ae4117a8a085ad6c2afd77c1f4",
+            "selected_candidate_index": 0,
+            "status": "settled"
+          }
+        ],
+        "commitment_sha256": "71750851f0f1510cb26d4e9dc5332428de5a903c727df16f277d5177e6023b6b",
+        "descriptive_model_win": false,
+        "evidence_scope": "descriptive_development_only",
+        "model_fits": 0,
+        "model_only_irreversible_loss": false,
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "promotion_authorized": false,
+        "schema": "pokemon.core.living-dex-paired-development.v1",
+        "training_targets_emitted": 0,
+        "utility_delta": -0.06593798130941586
+      },
+      "model_fits": 0,
+      "pair_ordinal": 3,
+      "private_path_fields": 0,
+      "promotion_authorized": false,
+      "schema": "pokemon.red.retired-bank-paired-result.v1",
+      "setup_controller_actions": 903,
+      "setup_emulator_frames": 45805,
+      "setup_failure_phase": null,
+      "setup_status": "complete",
+      "setup_terminal_sha256": "81fd77c4c974e67d952e83fe657e41c5f01f9a9076a3cb62b052716e32946edb",
+      "training_targets_emitted": 0
+    }
+  ],
+  "planned_pairs": 4,
+  "private_path_fields": 0,
+  "promotion_authorized": false,
+  "schema": "pokemon.red.retired-bank-paired-campaign.v1",
+  "sealed_red_access": 0,
+  "settled_pairs": 3,
+  "setup_failures": 1,
+  "source_bundle_sha256": "590c2c50bb93cdc138cef1e76d625f57f8e8d20f0954b6ca2eb002de5dcccc02",
+  "source_commit": "cc70f8c980d5c9666f68ca762b7711f3f7d954a4",
+  "terminal_pairs": 4,
+  "training_targets_emitted": 0,
+  "viewer_failures": 0
+}

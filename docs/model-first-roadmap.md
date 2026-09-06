@@ -1,5 +1,60 @@
 # Model-first development roadmap
 
+## Current checkpoint — one model-chosen catch; resource-aware continuation next
+
+The first known-training chain caught one species through a real model-ranked goal, then lost
+capture availability because it had used its last ball. Local-only skills could not offer a
+supply trip; deterministic exploration reached its limit. This was one learned choice, not a
+four-goal success, and the control tied. The fixed 29-example model is unchanged.
+
+1. Complete the narrow opt-in refreshed capture/supply routing seam using existing composers.
+2. Run a prospectively declared four-step training-context integration with a supported supply
+   destination. Preserve actual model/safety counts and verified collection/resource changes.
+3. Reorient on that result: sustained goal selection and missing training contrasts take priority
+   over new orchestration, repeated CI or full teacher playthroughs.
+4. Expand necessary Red mechanics through real selected-arm training; qualify sustained Red
+   competence before reopening Crystal transfer. The shared semantic interfaces remain intact.
+
+Read the [current session and six-part mission check](work-sessions/2026-09-06-resource-aware-goal-chain.md).
+All checkpoints below are historical, including older headings labeled current.
+
+## Current checkpoint — real choices executed; sustained collection is next
+
+The four-root check is complete. The 29-example model successfully executed two resupplies and
+one party-development goal. Its collection count did not increase; one control captured a new
+species where the model bought supplies. Another control failed at the PC, and one setup failed
+in navigation. Keep all four roots and zero clean model wins; do not fit or retry these outcomes.
+The [read-only audit](audits/red-routed-model-play-2026-09-06.md) reconciles all recorded effects.
+
+1. Use the existing four-step bounded player on the prospectively declared **different training
+   context**. This is integration/calibration, not an unseen exam or a replacement for the pairs.
+2. Preserve the exact cause if a component fails; do not change goal choices or safety limits.
+3. Record actual model-selected goals, refreshed menus and ledger changes. A stale or exhausted
+   menu is the next engineering finding; a step counter is not learned competence.
+4. Reorient after the first terminal chain. Choose the smallest needed continuation/availability
+   repair or a legitimate train-only contrast curriculum based on that evidence.
+
+The active [session plan](work-sessions/2026-09-06-fresh-goal-chain.md) has a two-hour time box.
+Model updates already began; the priority is useful model-chosen collecting, then broader Red
+mechanics and later Crystal transfer. Do not replace this playing loop with another CI project.
+
+All implementation checkpoints below are historical.
+
+## Active implementation — routed choices become bounded Red actions
+
+The four-root consumer connects the unchanged 29-example model to the existing routed setup and
+selected-arm executor. This is a descriptive development run, not a new training factory or a
+powered promotion exam. Both policies commit before either outcome; the fixed control cannot
+choose for the model. Recovery preserves attempted arms, setup failures and the four-root
+denominator. Focused integration passed 104 tests; no new live result is claimed at this checkpoint.
+
+Next execute from one clean published source after local verification. Routine development does
+not wait for a second exact-main CI cycle. Preserve source/input identities, old one-shot
+constraints, privacy and safety. Then reorient using actual results and connect the next
+three-choice fresh-state goal chain. Expand missing Red mechanics from observed needs. Crystal
+remains deferred while shared semantic state/actions remain intact. See the
+[current work session](work-sessions/2026-09-06-routed-model-play.md).
+
 ## Implementation checkpoint — September 6 spectator view and goal-chain control
 
 The local viewer now uses the saved 29-example fit receipt rather than stale hard-coded experiment

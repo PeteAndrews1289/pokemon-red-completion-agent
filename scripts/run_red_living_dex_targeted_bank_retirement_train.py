@@ -18,6 +18,7 @@ import json
 import sys
 import time
 import webbrowser
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, Never
 
@@ -458,6 +459,8 @@ def _observe_retired_roots(
     runtime: RuntimeIdentity,
     claim_registry: Path,
     source_commit: str,
+    owned_development_claim: Callable[[RedLivingDexAuthenticatedSetupRoot, str], bool]
+    | None = None,
 ) -> tuple[RedLivingDexActionFreeRootObservation, ...]:
     support = base.freezer._PROVIDER_SUPPORT
     state = support["_DiagnosticState"]()
@@ -525,6 +528,11 @@ def _observe_retired_roots(
                     root.physical_root_sha256,
                 )
             )
+            # The separate paired consumer may reobserve only its own exact
+            # already-claimed roots during immutable recovery. The train command
+            # never supplies this callback and retains fresh-development admission.
+            if not eligible and owned_development_claim is not None:
+                eligible = owned_development_claim(root, lineage)
         if not eligible:
             raise RetiredBankTrainCommandError("root_reservation_authentication")
 

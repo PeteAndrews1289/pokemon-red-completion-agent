@@ -1,5 +1,45 @@
 # Current agent handoffs
 
+## Current — resource-aware goal continuation
+
+The first known-training chain is terminal: one model-ranked capture (+1 living, +1 registered),
+then one deterministic exploration failure after the last ball was spent. Both actors tied.
+No rows enter fitting; the 29-example artifact is unchanged. The next
+[bounded session](work-sessions/2026-09-06-resource-aware-goal-chain.md) connects existing routing
+and destination skills to refreshed capture/supply offers.
+
+Codex owns coding, tests, actual execution, publication and factual reporting. If requested,
+Claude should challenge train/evaluation claims and maintenance-reward incentives; Antigravity
+should challenge stale origins, destination rechecks, hard budgets and portability. Reviewers
+remain advisory/read-only. Neither was invoked here; routine development does not wait for them.
+
+## Current — audit the completed choices; connect fresh-state play
+
+The [four-root result audit](audits/red-routed-model-play-2026-09-06.md) is complete. The model's
+three attempted goals succeeded, but none added a species; one setup and one control skill failed.
+All four roots are terminal and no clean superiority claim follows. The model remains fitted on
+29 examples; no new fitting occurred. Do not restart the completed producer or consume the reserve.
+
+Codex owns the [short-chain integration](work-sessions/2026-09-06-fresh-goal-chain.md), including
+preserved private causes, actual model/safety counts and refreshed collection observations. If
+requested, Claude should challenge maintenance-versus-collection incentives and training-context
+claims; Antigravity should challenge fresh bindings, durable failure records and viewer isolation.
+Reviewers remain read-only/advisory. Neither reviewed this session, and no approval is implied.
+
+All handoffs below are historical.
+
+## Active implementation — routed Red model/control consumer
+
+Read the [current session record](work-sessions/2026-09-06-routed-model-play.md). Codex is connecting
+the saved 29-example model to the four frozen routed development scenarios, with paired durable
+choices and the existing selected-arm executor. The 104 focused checks pass. Consult the latest
+durable result before assuming real execution has occurred or starting another process.
+
+Codex owns execution and the subsequent fresh-state goal chain. If requested, Claude should
+challenge the paired metric, feature comparison and absence of fitting on development; Antigravity
+should challenge same-origin restoration, recovery and observer/controller separation. Both remain
+read-only and advisory. Neither was invoked in this session, and no approval is implied.
+
 ## Resume checkpoint — September 6
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md), the current

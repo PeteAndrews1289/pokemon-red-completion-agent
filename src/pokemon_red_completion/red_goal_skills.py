@@ -558,7 +558,6 @@ class RedMartResupplyGoalProvider:
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         start = observation.raw
-        projected_capture, projected_recovery = self._projected_resources(observation)
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
@@ -570,30 +569,7 @@ class RedMartResupplyGoalProvider:
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
-            inventory = dict(raw.bag_items or ())
-            new_slots = sum(purchase.item not in inventory for purchase in self.purchases)
-            if len(inventory) + new_slots > 20:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.MISSING_CAPABILITY
-                )
-            cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
-            if raw.player_money is None or raw.player_money < cost:
-                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
-            projected = min(
-                headroom_satisfaction(
-                    projected_capture,
-                    self.adapter.config.desired_capture_items,
-                    subject="capture item",
-                ),
-                headroom_satisfaction(
-                    projected_recovery,
-                    self.adapter.config.desired_recovery_items,
-                    subject="recovery item",
-                ),
-            )
-            if projected <= current.evidence.resources:
-                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
-            return RedGoalSkillAvailability.available()
+            return self.resource_availability(current)
 
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
@@ -665,6 +641,31 @@ class RedMartResupplyGoalProvider:
             estimated_effort=min(1.0, 0.04 + 0.02 * len(self.purchases)),
             estimated_risk=0.02,
         ).offer(observation)
+
+    def resource_availability(
+        self, observation: RedGoalObservation
+    ) -> RedGoalSkillAvailability:
+        """Check actual resources without claiming the player is at the clerk."""
+
+        inventory = dict(observation.raw.bag_items or ())
+        new_slots = sum(purchase.item not in inventory for purchase in self.purchases)
+        if len(inventory) + new_slots > 20:
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
+        cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
+        if observation.raw.player_money is None or observation.raw.player_money < cost:
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
+        capture, recovery = self._projected_resources(observation)
+        projected = min(
+            headroom_satisfaction(
+                capture, self.adapter.config.desired_capture_items, subject="capture item"
+            ),
+            headroom_satisfaction(
+                recovery, self.adapter.config.desired_recovery_items, subject="recovery item"
+            ),
+        )
+        if projected <= observation.evidence.resources:
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+        return RedGoalSkillAvailability.available()
 
     def _projected_resources(
         self,
@@ -1004,9 +1005,19 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey normalizer must be callable")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
+        availability = self.resource_availability(observation)
+        if not availability.executable:
+            assert availability.unavailable_reason is not None
+            return RedGoalBindingOffer.unavailable(self.kind, availability.unavailable_reason)
+        return self._offer_at_source(observation)
+
+    def resource_availability(
+        self, observation: RedGoalObservation
+    ) -> RedGoalSkillAvailability:
+        """Check source needs and real inventory without inventing a source location."""
+
         if observation.raw.battle_state or not observation.input_ready:
-            return RedGoalBindingOffer.unavailable(
-                self.kind,
+            return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.TEMPORARILY_BLOCKED,
             )
         survey = summarize_red_area_survey(
@@ -1015,21 +1026,25 @@ class RedAreaSurveyGoalProvider:
             self.catalog,
         )
         if not survey.missing_species_refs:
-            return RedGoalBindingOffer.unavailable(
-                self.kind,
+            return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.NO_LEGAL_TARGET,
             )
         inventory = dict(observation.raw.bag_items or ())
         if sum(inventory.get(int(item), 0) for item in _ORDINARY_CAPTURE_ITEMS) <= 0:
-            return RedGoalBindingOffer.unavailable(
-                self.kind,
+            return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.MISSING_RESOURCE,
             )
         if observation.immediate_capture_slots <= 0:
-            return RedGoalBindingOffer.unavailable(
-                self.kind,
+            return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.STORAGE_BLOCKED,
             )
+        return RedGoalSkillAvailability.available()
+
+    def _offer_at_source(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
+        survey = summarize_red_area_survey(
+            self.source_id, observation.collection_observation, self.catalog
+        )
+        initial_missing_specimens = survey.missing_specimen_count
         if self.boundary is not None:
             boundary = self.boundary(observation)
             if not isinstance(boundary, RedGoalSkillAvailability):
@@ -1043,7 +1058,6 @@ class RedAreaSurveyGoalProvider:
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
         before_story = self.adapter.graph.completed_ids(observation.game_state)
-        initial_missing_specimens = survey.missing_specimen_count
 
         def execute() -> GoalExecutionReport:
             report = run_red_area_survey(
