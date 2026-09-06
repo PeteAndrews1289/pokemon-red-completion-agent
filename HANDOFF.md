@@ -1,6 +1,37 @@
 # Handoff
 
-## Resume here — September 6 real fit complete; bounded learned play next
+## Resume here — September 6 spectator viewer and bounded-chain integration
+
+The saved learner remains the **29-example living-Dex scorer** below. No new real input,
+prediction, outcome or fit occurred during this dashboard/adapter session. Do not relaunch the
+eight consumed lessons. PR 231 has merged; the current implementation is on the spectator branch.
+
+Read the [session plan and findings](docs/work-sessions/2026-09-06-bounded-play-and-spectator-dashboard.md)
+and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). The loopback overview now has a spectator
+layout, receipt-backed training chart, explicit unknown collection state, freshness labels and
+focus mode. It relays a live producer on port 8769 and falls back to the saved overview on 8768.
+The paired bounded-player command now optionally supplies that feed. Its prospective
+`--continue-after-progress` mode continues a short chain rather than stopping at the first
+collection gain; old defaults and budgets remain intact. These are engineering capabilities,
+not a new claim that the 29-example model has executed a live three-choice episode.
+
+**Next integration seam:** the four frozen paired roots describe routed provider menus, not four
+raw saves that can be handed straight to the generic player. Two raw menus are singletons. Reuse
+the existing production setup resolver and causal selected-arm executor with their exact recipes;
+do not discard setup, weaken train-only access, select easier roots, or silently change the
+comparison. Both model/control first choices must be durable before either outcome. The generic
+paired runner's existing in-memory preflight is not yet that bank's paired-admission consumer.
+
+After the descriptive check, use fresh state and the living ledger for successive supported goals.
+Keep model choices, deterministic safety, forced bridges and skill execution distinct. The viewer
+only reports durably recorded selections; its failure disables the view without changing play.
+Future setup exceptions still need useful private diagnostics; do not rerun old failures to get them.
+
+An eight-hour hourly continuation is configured in the owner task. It must check current jobs and
+this handoff before starting another session; no duplicate campaign or completed-dataset refit.
+Reviewer roles remain read-only and advisory. No external reviewer was consulted this session.
+
+## Completed milestone — September 6 real fit and post-fit audit
 
 Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the current
 [roadmap](docs/model-first-roadmap.md) and
@@ -8,8 +39,8 @@ Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the current
 
 **Do not relaunch the completed eight-lesson campaign.** All eight train trials are terminal.
 The process exited successfully after one actual fit, and its temporary live dashboard stopped
-normally. The overview work card reports completion; its older hard-coded aggregate labels still
-need replacement by an actual job/result feed. Private operator details are in `SESSION-RESUME.md`.
+normally. The overview now uses its immutable result for the current model counts. Private
+operator details are in `SESSION-RESUME.md`.
 
 - Qualified executable: merged PR 230, `e9b381d0bafb114ce3a0ad08b4ed77d95926bb97`, exact-main
   CI `34019391472` attempt 1. Both the PR and main passed the full test check.

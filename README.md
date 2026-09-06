@@ -6,17 +6,17 @@
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 6, 2026): preserve progress and repair training admission.**
-> Code through PR 228 is published; PR 226 is merged and PRs 227/228 remain pending at audit.
-> Production readers authenticated **23 causal train examples**, all **10 latest setup terminals**
-> and the existing model trained on **18 examples**. Five additional settled examples are retained
-> but unfitted. This is a small semantic goal scorer, not an autonomous full-game player.
+> **Current product focus (September 6, 2026): a fitted goal model, then bounded learned play.**
+> PRs through 231 are merged. The completed eight-lesson batch produced **six factual outcomes and
+> two setup censors**, followed by one real model update on **29 examples**. All 23 pre-run rows
+> are retained. This is a small semantic goal scorer, not an autonomous full-game player.
 >
-> The recovery audit found command-restart, factual-readiness and fitter-admission gaps. Next is a
-> bounded repair, then eight varied lessons, one refit and a descriptive four-root Red comparison.
-> The long-term goal remains useful model-controlled play and a living Pokédex across games;
-> Crystal execution is deferred. See the [current roadmap](docs/model-first-roadmap.md) and
-> [audit findings](docs/audits/recovery-and-training-readiness-2026-09-06.md).
+> The next milestone is several model-chosen Red goals with fresh observations and verified living
+> collection progress. The local spectator dashboard separates saved training evidence, live
+> gameplay and current engineering; its [guide](docs/progress-dashboard.md) explains the viewer.
+> Crystal is deferred, not abandoned. See the [roadmap](docs/model-first-roadmap.md),
+> [real training result](docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json), and
+> [post-fit audit](docs/audits/red-goal-model-post-fit-2026-09-06.md).
 >
 > Older dated product-focus panels below are historical, regardless of their original heading.
 

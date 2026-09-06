@@ -11,7 +11,7 @@ import re
 import stat
 import sys
 from collections.abc import Mapping
-from contextlib import suppress
+from contextlib import ExitStack, suppress
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
@@ -20,6 +20,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
+from pokemon_red_completion.bounded_player_dashboard import (  # noqa: E402
+    BoundedPlayerDashboard,
+    ViewerGoalTrajectory,
+)
 from pokemon_red_completion.bounded_player_episode import (  # noqa: E402
     BoundedPlayerLimits,
     run_bounded_player_episode,
@@ -57,9 +61,6 @@ from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
     CompletionFirstGoalTeacher,
     GoalDecisionAuthority,
 )
-from pokemon_red_completion.goal_manager_trajectory import (  # noqa: E402
-    GoalManagerTrajectoryObserver,
-)
 from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
     LivingDexGoalModelRecord,
     load_living_dex_goal_model_record,
@@ -81,6 +82,10 @@ from pokemon_red_completion.private_artifacts import (  # noqa: E402
     EpisodeWriter,
     PrivateArtifactRoot,
     open_private_root,
+)
+from pokemon_red_completion.progress_dashboard import (  # noqa: E402
+    DashboardState,
+    ProgressDashboardServer,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
     canonical_sha256,
@@ -144,6 +149,8 @@ class _Readiness:
     private_root: PrivateArtifactRoot
     output_path: Path
     protected_paths: tuple[Path, ...]
+    continue_after_progress: bool = False
+    dashboard_port: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -192,25 +199,26 @@ class _LiveObserver:
     meter: CompositionIndependentBudgetMeter
     observations: int = 0
     starting_observation: GoalManagerCompositionObservation | None = None
+    viewer: BoundedPlayerDashboard | None = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
             self.meter.begin_decision_window()
         before = self.meter.checkpoint()
         deferred = _DeferredActionExecutor(self.actions)
-        observation = RedBoundedPlayerObserver(
+        bridge = RedBoundedPlayerObserver(
             runtime=self.runtime,
             actions=CountingExecutor(deferred),
-        )()
-        if (
-            self.meter.checkpoint() != before
-            or deferred.attempted_while_disabled
-        ):
+        )
+        observation = bridge()
+        if self.meter.checkpoint() != before or deferred.attempted_while_disabled:
             raise PairedRedBoundedPlayerRunError("action_free_observation")
         deferred.enable()
         if self.starting_observation is None:
             self.starting_observation = observation
         self.observations += 1
+        if self.viewer is not None:
+            self.viewer.safely("observed", bridge.last_live_observation, observation)
         return observation
 
 
@@ -225,8 +233,7 @@ class _ProgressPredicate:
             return False
         return any(
             (
-                current.required_specimens_remaining
-                < self.initial.required_specimens_remaining,
+                current.required_specimens_remaining < self.initial.required_specimens_remaining,
                 current.registered_species > self.initial.registered_species,
                 current.living_species > self.initial.living_species,
                 current.retained_captures > self.initial.retained_captures,
@@ -237,10 +244,18 @@ class _ProgressPredicate:
 
 @dataclass(frozen=True, slots=True)
 class _LivingDexCompletionPredicate:
-    """Keep a calibration rehearsal running until its limit or the ledger is complete."""
+    """Continue a declared goal chain until its limit or the ledger is complete."""
 
     def __call__(self, observation: GoalManagerCompositionObservation) -> bool:
         return observation.collection.required_specimens_remaining == 0
+
+
+def _completion_predicate(
+    readiness: _Readiness,
+) -> _LivingDexCompletionPredicate | _ProgressPredicate:
+    if readiness.challenger_arm_id == CALIBRATION_ARM_ID or readiness.continue_after_progress:
+        return _LivingDexCompletionPredicate()
+    return _ProgressPredicate()
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -262,6 +277,17 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-calibration-model-file-sha256", default=None)
     parser.add_argument("--expected-calibration-summary-file-sha256", default=None)
     parser.add_argument("--decision-limit", type=int, choices=(1, 2, 3, 4), default=2)
+    parser.add_argument(
+        "--continue-after-progress",
+        action="store_true",
+        help="prospective bounded chain; do not stop at the first collection gain",
+    )
+    parser.add_argument(
+        "--dashboard-port",
+        type=int,
+        default=None,
+        help="optional loopback-only spectator feed (use 8769 behind the overview)",
+    )
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
@@ -356,6 +382,11 @@ def _challenger_arguments(
 def _prepare(args: argparse.Namespace) -> _Readiness:
     if not isinstance(args.pair_id, str) or _PAIR_ID.fullmatch(args.pair_id) is None:
         raise PairedRedBoundedPlayerRunError("pair_id")
+    dashboard_port = getattr(args, "dashboard_port", None)
+    if dashboard_port is not None and (
+        type(dashboard_port) is not int or not 1024 <= dashboard_port <= 65535
+    ):
+        raise PairedRedBoundedPlayerRunError("dashboard_port")
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
     require_published_source(PROJECT_ROOT, source)
@@ -424,9 +455,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             )
             if calibration_record.model_file_sha256 != model_file_sha256:
                 raise PairedRedBoundedPlayerRunError("challenger_model_identity")
-            model_sha256 = canonical_goal_manager_model_sha256(
-                calibration_record.model
-            )
+            model_sha256 = canonical_goal_manager_model_sha256(calibration_record.model)
             extra_protected_paths = (summary_path,)
     private_root = open_private_root(
         args.private_artifact_root,
@@ -452,6 +481,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         model_file_sha256=model_file_sha256,
         model_sha256=model_sha256,
         decision_limit=args.decision_limit,
+        continue_after_progress=getattr(args, "continue_after_progress", False),
+        dashboard_port=dashboard_port,
         private_root=private_root,
         output_path=output_path,
         protected_paths=(
@@ -582,6 +613,7 @@ def _run_arm(
     *,
     arm_id: str,
     authority: GoalDecisionAuthority,
+    viewer: BoundedPlayerDashboard | None = None,
 ) -> PairedBoundedPlayerArm:
     episode_id = _episode_id(readiness.pair_id, arm_id)
     limits = _player_limits(readiness.decision_limit)
@@ -589,6 +621,17 @@ def _run_arm(
     sink: EpisodeTrajectorySink | None = None
     recorder: RecordingExecutor[Any, Any] | None = None
     try:
+        if viewer is not None:
+            viewer.safely(
+                "start_arm",
+                learned=arm_id != BASELINE_ARM_ID,
+                model_sha256=readiness.model_sha256,
+                train_examples=(
+                    readiness.causal_record.model.settled_examples
+                    if readiness.causal_record is not None
+                    else None
+                ),
+            )
         writer = readiness.private_root.begin_episode(episode_id)
         sink = EpisodeTrajectorySink(
             writer,
@@ -608,11 +651,17 @@ def _run_arm(
                 "envelope_sha256": readiness.capture.envelope_sha256,
                 "profile_sha256": readiness.profile.profile_sha256,
                 "model_sha256": readiness.model_sha256,
+                "continue_after_progress": readiness.continue_after_progress,
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }
         )
-        with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
+        with PyBoyAdapter(
+            readiness.rom_path,
+            watch=False,
+            speed=None,
+            frame_observer=viewer,
+        ) as emulator:
             emulator.load_state_bytes(readiness.capture.state_bytes)
             frames = WindowedFrameBudgetController(
                 emulator,
@@ -644,8 +693,10 @@ def _run_arm(
             )
             actions = CountingExecutor(hard_actions)
             meter = CompositionIndependentBudgetMeter(hard_actions, frames)
-            observer = _LiveObserver(runtime=runtime, actions=actions, meter=meter)
-            trajectory = GoalManagerTrajectoryObserver(
+            if viewer is not None:
+                viewer.safely("bind_budget", meter.checkpoint)
+            observer = _LiveObserver(runtime=runtime, actions=actions, meter=meter, viewer=viewer)
+            trajectory = ViewerGoalTrajectory(
                 episode_id=episode_id,
                 root_lineage_id=canonical_sha256(
                     {
@@ -665,6 +716,9 @@ def _run_arm(
                 snapshot_provider=snapshot_provider,
                 recorder=recorder,
                 sink=sink,
+                viewer=viewer,
+                displayed_authority=authority,
+                learned_actor=arm_id != BASELINE_ARM_ID,
             )
             result = run_bounded_player_episode(
                 observe=observer,
@@ -672,11 +726,7 @@ def _run_arm(
                 authority_id=arm_id,
                 trajectory=trajectory,
                 budget_meter=meter,
-                completion_satisfied=(
-                    _LivingDexCompletionPredicate()
-                    if readiness.challenger_arm_id == CALIBRATION_ARM_ID
-                    else _ProgressPredicate()
-                ),
+                completion_satisfied=_completion_predicate(readiness),
                 limits=limits,
             )
             if recorder.recording_failures:
@@ -698,6 +748,8 @@ def _run_arm(
         )
         sink.finalize()
         artifact = writer.complete()
+        if viewer is not None:
+            viewer.safely("finished", result)
         return PairedBoundedPlayerArm(
             arm_id=arm_id,
             starting_state_sha256=readiness.capture.state_sha256,
@@ -707,6 +759,8 @@ def _run_arm(
             episode=result,
         )
     except BaseException as error:
+        if viewer is not None:
+            viewer.safely("failed")
         _retain_failure(
             writer,
             sink=sink,
@@ -775,30 +829,42 @@ def _write_exclusive(path: Path, document: Mapping[str, object]) -> None:
 def _run(args: argparse.Namespace) -> dict[str, object]:
     readiness = _prepare(args)
     protected_before = {
-        str(index): _sha256(path)
-        for index, path in enumerate(readiness.protected_paths)
+        str(index): _sha256(path) for index, path in enumerate(readiness.protected_paths)
     }
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
     preflight = _action_free_preflight(readiness)
     challenger_authority = _challenger_authority(readiness)
-    learned = _run_arm(
-        readiness,
-        arm_id=readiness.challenger_arm_id,
-        authority=challenger_authority,
-    )
-    baseline = _run_arm(
-        readiness,
-        arm_id=BASELINE_ARM_ID,
-        authority=CompletionFirstGoalTeacher(),
-    )
+    with ExitStack() as resources:
+        viewer = None
+        if readiness.dashboard_port is not None:
+            state = DashboardState()
+            viewer = BoundedPlayerDashboard(state, decision_limit=readiness.decision_limit)
+            dashboard = resources.enter_context(
+                ProgressDashboardServer(state, port=readiness.dashboard_port)
+            )
+            print(
+                json.dumps({"dashboard_url": dashboard.url, "status": "bounded_play_starting"}),
+                flush=True,
+            )
+        learned = _run_arm(
+            readiness,
+            arm_id=readiness.challenger_arm_id,
+            authority=challenger_authority,
+            viewer=viewer,
+        )
+        baseline = _run_arm(
+            readiness,
+            arm_id=BASELINE_ARM_ID,
+            authority=CompletionFirstGoalTeacher(),
+            viewer=viewer,
+        )
     comparison: PairedBoundedPlayerComparison = compare_paired_bounded_player_arms(
         pair_id=readiness.pair_id,
         learned=learned,
         baseline=baseline,
     )
     protected_after = {
-        str(index): _sha256(path)
-        for index, path in enumerate(readiness.protected_paths)
+        str(index): _sha256(path) for index, path in enumerate(readiness.protected_paths)
     }
     if protected_after != protected_before:
         raise PairedRedBoundedPlayerRunError("protected_input_changed")
@@ -814,6 +880,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_sha256": readiness.model_sha256,
         "challenger_arm_id": readiness.challenger_arm_id,
         "decision_limit": readiness.decision_limit,
+        "continue_after_progress": readiness.continue_after_progress,
+        "viewer_instrumentation_failures": 0 if viewer is None else viewer.failure_count,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,
         "sealed_red_accesses": 0,
@@ -828,8 +896,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         summary["living_dex_causal_shadow"] = {
             "decision_count": challenger_authority.decisions,
             "decisions": [
-                decision.public_dict()
-                for decision in challenger_authority.decision_history
+                decision.public_dict() for decision in challenger_authority.decision_history
             ],
             "deterministic_decision_count": challenger_authority.deterministic_decisions,
             "model_decision_count": challenger_authority.model_decisions,

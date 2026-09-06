@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: a viewer that explains what is actually learning
+
+The old overview mixed current work with counts from previous experiments. The redesigned local
+spectator view now reads the actual completed fit receipt: 29 examples, one update, six new factual
+outcomes and two setup censors. The game screen becomes the visual focus, but a stopped producer
+cannot leave a false LIVE badge. Editing code, collecting data, fitting a model and testing its
+choices have separate labels. The interface stays local and read-only.
+
+The player connection matters beyond presentation. An explicit bounded-chain mode can continue
+after the first collection gain, using the existing fresh-observation and ledger checks. Selections
+reach the viewer only after they are recorded, and safety rules or forced one-option transitions
+do not inflate the learned-choice count. These changes passed 205 focused tests; no new real fit
+or gameplay result is claimed from them.
+
+Inspection also exposed the next real seam: the frozen development bank contains routed provider
+questions, not four ready-made local menus. Two raw saves have only one available option. The
+next session must preserve the setup routes and the same model/control question, then connect
+successive goals. More model architecture would not solve that missing execution connection.
+
 ## September 6: real game outcomes reached the learner
 
 The eight-lesson batch is complete, and the existing living-Dex option-value model was fitted

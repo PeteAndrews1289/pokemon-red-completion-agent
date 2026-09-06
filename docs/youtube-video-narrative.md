@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 spectator scene: make the decisions visible
+
+**Visual:** Use the redesigned local dashboard in Focus view. A genuine game feed is the main
+image; beside it show the actual actor, chosen goal, utility rankings and recorded result. Between
+runs show **NO LIVE GAME**, the completed **29-EXAMPLE MODEL**, and the separate engineering card.
+Do not substitute decorative motion, CI progress or simulated tests for gameplay footage.
+
+**Voiceover:** “The screen now tells us who made the decision. The model can rank a goal, existing
+skills handle the buttons, and an independent observation checks what changed. A safety rule or
+a forced single option gets its own label. The chart shows a real fit, but training error is not
+proof that the model plays better.”
+
+At this checkpoint, the viewer and bounded-chain control are implemented and tested. The updated
+model has not yet produced the planned three-choice live result. The next scene must come from
+that real run, including any failures; do not script a victory before its evidence exists.
+
 ## September 6 result scene: a real model update, not another readiness check
 
 **Visual:** Use authentic collection footage labeled **DATA COLLECTION — DETERMINISTIC SKILLS**.
