@@ -14,6 +14,11 @@ The trajectory reader replays the sampling distribution, joins actual execution 
 reconstructs observed targets. Historical diagnostics are never retrofitted into this dataset.
 Only Codex is implementing; no external review or subagent approval is claimed.
 
+First-launch finding: the initial A episode failed before goal selection/input because a binding
+wrapper dropped its quote; B never started. The failed record is preserved. A metadata-preserving
+wrapper repair and full execution-path regression test precede the prospectively renamed R1 batch.
+See the session plan for exact new identities and bounds; never reopen the old failed identity.
+
 All prior sections below describe earlier checkpoints unless confirmed by a newer result.
 
 ## Current — resource-aware chain COMPLETE; durable continuation and viewer recap

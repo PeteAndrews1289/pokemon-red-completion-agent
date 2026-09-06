@@ -69,3 +69,23 @@ The native fitter writes a separate model/corpus format and never fabricates leg
 one-shot claims or CI attestations. Its model can be read by the bounded-player loader. The small
 fit CLI currently supports a batch collected under one behavior checkpoint; mixed-checkpoint
 history requires explicit typed episode/model inputs, not inferred provenance.
+
+## Pre-input finding and prospective correction
+
+The first launch from `b9d16d1e` stopped before goal selection/controller input: the existing
+failure-retention wrapper reconstructed an executable binding without its new resource quote.
+The immutable failed episode and [diagnostic](../evidence/red-native-player-preinput-failure-2026-09-06.json)
+remain intact. Original episode B never started. No outcome or training data was generated.
+
+The repair uses dataclass replacement in binding wrappers to preserve optional semantic facts,
+and exercises the real failure-retention wrapper during the existing action-free preflight.
+A full player-to-native-outcome test now covers quoted success and post-input failure, not just
+the quote and recorder in isolation. This closes the specific integration hole the original
+7,073 passing ROM-free tests did not cover. No full-suite pass is claimed for later edits yet.
+
+Before any further input, the corrected batch is prospectively named
+`red-native-econ-20260906-r1-a-causal` and `red-native-econ-20260906-r1-b-causal`. Keep the same
+seeds 17/23, source training lineage, 29-example behavior model and four-goal bounds. The old
+identities are closed, not overwritten. The total remains at most two **controller-started**
+training episodes. Preserve and disclose the zero-input initialization exclusion; it is not an
+outcome selected away because of poor play. After controller input, do not retry an episode.

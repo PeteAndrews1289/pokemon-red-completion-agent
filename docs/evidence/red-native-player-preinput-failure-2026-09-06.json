@@ -1,0 +1,19 @@
+{
+  "schema": "pokemon.red.native-player-preinput-failure.v1",
+  "source_commit": "b9d16d1e4ec8272080ecd5dabf723b1ffaa1f1f3",
+  "episode_id": "red-native-econ-20260906-a-causal",
+  "failed_manifest_sha256": "294fadbdea43429018ef177bdf8d7e8e8a5cc27a859b2b79ce3c86b5c903f8be",
+  "status": "failed_before_goal_selection",
+  "controller_actions": 0,
+  "goal_decisions": 0,
+  "new_training_examples": 0,
+  "new_model_fits": 0,
+  "retained_streams": ["episode", "events"],
+  "terminal_step_index": 0,
+  "exception_type": "GoalManagerRuntimeError",
+  "cause": "failure_retention_wrapper_reconstructed_binding_without_resource_quote",
+  "original_episode_reopened": false,
+  "second_original_episode_started": false,
+  "private_path_fields": 0,
+  "interpretation": "Initialization failure, not a failed gameplay choice. The immutable record is preserved. A corrected prospective launch must not be reported as an independent root or as a retry after controller input."
+}

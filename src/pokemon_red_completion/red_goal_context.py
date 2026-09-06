@@ -33,7 +33,6 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 )
 from pokemon_red_completion.goal_manager_context_catalog import GoalManagerContextCapture
 from pokemon_red_completion.goal_manager_runtime import (
-    ExecutableGoalBinding,
     GoalExecutionReport,
     GoalVerification,
 )
@@ -331,16 +330,12 @@ class _ProfileBoundProvider:
             return offer
         binding = offer.binding
         return RedGoalBindingOffer.available(
-            ExecutableGoalBinding(
+            replace(
+                binding,
                 binding_ref=(
                     f"{binding.binding_ref}:profile-{self.profile_sha256}:"
                     f"config-{self.configuration_sha256}"
                 ),
-                kind=binding.kind,
-                estimated_effort=binding.estimated_effort,
-                estimated_risk=binding.estimated_risk,
-                execute=binding.execute,
-                verify=binding.verify,
             )
         )
 

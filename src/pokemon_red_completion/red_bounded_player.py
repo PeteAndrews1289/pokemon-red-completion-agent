@@ -12,6 +12,7 @@ import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
+from pokemon_red_completion.bounded_player_episode import _retaining_binding_set
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
@@ -182,6 +183,9 @@ def preflight_red_bounded_player(
         raise RedBoundedPlayerError("preflight observer returned an invalid observation")
     if checkpoint() != initial_budget:
         raise RedBoundedPlayerError("preflight observation attempted emulator work")
+    # Exercise the same metadata-preserving wrapper as real play, without
+    # invoking a binding. This catches integration mismatches before an episode.
+    _retaining_binding_set(observation.binding_set, budget_meter)
     question = ordered_goal_manager_question(
         assignment_id=assignment_id,
         decision_index=0,

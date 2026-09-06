@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
@@ -228,14 +228,9 @@ def _retain_executor_failure(
             return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
         return binding.verify(report)
 
-    return ExecutableGoalBinding(
-        binding_ref=binding.binding_ref,
-        kind=binding.kind,
-        estimated_effort=binding.estimated_effort,
-        estimated_risk=binding.estimated_risk,
-        execute=execute,
-        verify=verify,
-    )
+    # Wrapping execution must preserve every declared policy fact, including
+    # economic quotes and future fields. Rebuilding the dataclass loses them.
+    return replace(binding, execute=execute, verify=verify)
 
 
 def _retaining_binding_set(
