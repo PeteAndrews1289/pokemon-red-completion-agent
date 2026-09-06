@@ -1,10 +1,13 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Next demonstration: keep the progress, change the decisions
+## Continuation attempt: the search moved, but recovery failed
 
-The next segment should show the actual 31-example checkpoint continuing from a saved game,
-with learned, forced and safety choices labelled separately. Report collection progress alongside
-money spent and failures. Do not present saved footage as live or greedy diagnostics as training.
+The 31-example player resumed the saved game and reached the Mansion. It encountered three wild
+Pokemon, found no target before its short search bound, then failed when recovery selected the
+same goal. Result: 215 actions, zero captures and zero spending; no new learned choice or fit.
+The selection was a deterministic unsupported-menu bridge, not model strategy. The original save
+is intact; a new terminal save was not produced. Use only footage that was actually retained;
+the durable action log is not itself a recorded video. Do not present the failure as improved play.
 
 The planned story arc ends the Red stage with an adaptation challenge: an unfamiliar compatible
 ROM modification, comparing prior Red learning against starting without it. Initial success is

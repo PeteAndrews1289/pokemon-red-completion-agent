@@ -4,8 +4,12 @@
 
 The player now has a real 31-example outcome model, including two newly sampled choices and all
 29 earlier rows. Its predecessor completed a four-goal collection sequence and saved the resulting
-game. The next demonstration is using that updated model to continue the actual saved progress,
-not replaying a familiar start and calling another successful route learning.
+game. The next demonstration used that updated model to continue the actual saved progress,
+not replay a familiar start. It reached the encounter area but found no target within its short
+search budget; recovery then raised an exception instead of preserving a normal unsuccessful
+search. We retained all 215 actions and the failure, with no catch or learning claim. The original
+save remains safe, but this failed child produced no new save. The next repair is useful recovery
+and real alternative tasks, not a longer scripted replay.
 
 Pete sharpened the delivery milestones: useful sustained Red play, model-directed story completion
 and living collection, then a compatible unfamiliar Red ROM modification before Crystal. The hack

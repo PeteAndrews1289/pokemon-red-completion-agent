@@ -1,15 +1,17 @@
 # Current agent handoffs
 
-## Active — saved-state continuation, not another reset campaign
+## Current — continuation failed; ordinary no-find/recovery behavior is next
 
-Codex is implementing the [four-goal 31-example continuation](work-sessions/2026-09-06-fit31-continuation.md).
-The model/checkpoint are already fitted and saved. Qualify the thin consumer, run once, measure
-collection/spending and exact model-versus-scripted choices, then retain the next state and audit.
-No model fit or independent superiority claim follows from this diagnostic.
+The [continuation audit](audits/red-fit31-continuation-2026-09-06.md) closes the one attempt:
+215 actions / 8244 frames, three encounters, no catch, then a repeated-goal recovery exception.
+The resume seam worked; continued play did not. Original save/model remain intact, but the failed
+child has no terminal save or complete fresh terminal ledger. No new fit or learned choice.
+Codex should handle bounded no-find outcomes and typed recovery stopping, then expose useful
+existing mechanics as alternatives. Do not replay this identity or fit its greedy diagnostic row.
 If later requested, reviewers should focus on whether supported learned decisions occur and make
 useful progress, not propose a new provenance framework. No reviewer has been invoked this session.
 The newly agreed first transfer demonstration is a compatible Red modification, followed by Crystal;
-neither is active implementation work yet.
+neither is active implementation work yet. All sections below are historical.
 
 ## Current — native learning loop works; demonstrate useful continuation next
 

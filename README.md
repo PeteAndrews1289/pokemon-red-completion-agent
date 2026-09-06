@@ -12,10 +12,14 @@
 > The run retained two needed specimens, including one new living species, but still overspent.
 > This is a small semantic goal scorer with deterministic skills, not an autonomous full-game player.
 >
-> The next milestone is a bounded continuation using the updated model, checking collection
-> progress and resource decisions. The local spectator dashboard separates saved training evidence, live
+> The first saved-state continuation ran but failed after 215 actions: three encounters, no capture,
+> then a repeated-goal recovery exception. The original save/model remain intact; no new fit or
+> learned choice was demonstrated. Next is typed no-find recovery and useful alternative tasks;
+> see the [continuation audit](docs/audits/red-fit31-continuation-2026-09-06.md).
+> The local spectator dashboard separates saved training evidence, live
 > gameplay and current engineering; its [guide](docs/progress-dashboard.md) explains the viewer.
-> Crystal is deferred, not abandoned. See the [roadmap](docs/model-first-roadmap.md),
+> A compatible unfamiliar Red modification is the first planned adaptation test before Crystal.
+> See the [roadmap](docs/model-first-roadmap.md),
 > [native training result](docs/evidence/red-native-player-learning-result-2026-09-06.json), and
 > [session audit](docs/audits/red-native-player-learning-2026-09-06.md). The fit and replay use one
 > known training lineage; improved live performance and cross-game transfer remain unproved.

@@ -8,10 +8,28 @@ unfamiliar Red ROM modification before Crystal. Compare initial performance and 
 against an otherwise identical learner without Red training. A win on familiar Red is not proof of
 transfer; interface compatibility work is distinct from teaching a replacement walkthrough.
 The long-term product remains transferable play and living collections across games.
-The [active continuation session](work-sessions/2026-09-06-fit31-continuation.md) implements only
+The [completed continuation session](work-sessions/2026-09-06-fit31-continuation.md) implements only
 the first milestone; it does not start hack support, Crystal, or a new teacher.
 
-## Current — actual native player learning complete; use the 31-example model next
+## Current — stop ordinary no-find outcomes from breaking continued play
+
+The continuation authenticated and ran from the saved parent, then failed after one unsupported-menu
+acquisition: 215 actions / 8244 frames, three encounters, zero catches. Search exhaustion was followed
+by a fatal repeated-goal recovery exception. The model remains at 31 examples; no learned decision
+or new save was earned. Read the [audit](audits/red-fit31-continuation-2026-09-06.md).
+
+1. Distinguish bounded unsuccessful search from unsafe control or a broken executor. Preserve
+   negative outcomes and actual costs; do not turn no-find into a fabricated capture success.
+2. Return a typed safe stop when no acceptable recovery alternative exists. Retain a fresh ledger
+   and checkpoint when safe; preserve anti-loop bounds rather than allowing hidden retries.
+3. Inspect and expose useful existing development/evolution/storage choices, so the model can
+   choose something meaningful besides shopping or forced capture. No new teacher/data factory.
+4. Prospectively declare a short next lesson only after the above works. Preserve the consumed
+   diagnostic and original lineage; never fit old greedy choices or increase limits until lucky.
+
+The session is closed at its declared failure/audit stop. All checkpoints below are historical.
+
+## Historical — actual native player learning complete; use the 31-example model next
 
 The [bounded session](work-sessions/2026-09-06-resource-cost-learning.md) produced a real
 **29 → 31** model update from two sampled player outcomes, preserving all previous rows. One

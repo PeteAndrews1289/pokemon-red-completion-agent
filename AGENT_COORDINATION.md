@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+## Current ownership — continuation failed; typed recovery and useful choices next
+
+Codex closes the [attempt and audit](docs/audits/red-fit31-continuation-2026-09-06.md): resume worked,
+but a bounded search without a catch was followed by a repeated-goal recovery exception. No new
+learning or terminal save resulted; the original save/model and failed archive remain intact.
+Next is a small no-find/recovery-state repair and useful existing alternative mechanics, not a
+new campaign framework. Claude/Antigravity were not invoked. If requested next, they should audit
+negative outcomes, safe stopping and whether the model actually has meaningful alternatives.
+All earlier ownership sections are historical.
+
 ## Current ownership — native learning audited; continue with the 31-example model
 
 Codex owns implementation and publication. The [native learning audit](docs/audits/red-native-player-learning-2026-09-06.md)

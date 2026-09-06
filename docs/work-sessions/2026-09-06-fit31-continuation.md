@@ -36,3 +36,21 @@ plan. The original 31 retained learning rows remain unchanged.
 The modification is a later evaluation environment, not a new implementation lane. Beating Red
 does not guarantee beating a hack; success means measurable benefit from prior learning without
 writing a new walkthrough. Cross-title living-Pokedex completion remains the long-term product.
+
+## Closed result
+
+The consumer was implemented and published as `e1dd3af81f0bbbb89b0996df7a9c3fded7a68e61`.
+The one live attempt authenticated its restore, travelled to the capture source, entered three
+wild battles and found no capture within 64 survey legs. Recovery selected the failed goal again
+and terminated with a guard exception: **215 actions / 8244 frames, zero captures, no spending**.
+The selected goal was an unsupported-menu deterministic bridge; the 31-example model did not earn
+a new learned decision. The failed archive is retained, with no replay or fit. Original save is
+safe; no new terminal save or complete fresh terminal collection ledger was produced.
+
+See the [audit](../audits/red-fit31-continuation-2026-09-06.md) and
+[verified aggregate](../evidence/red-fit31-continuation-result-2026-09-06.json).
+Next session is typed no-find/recovery stopping, safe state retention and useful existing alternative
+mechanics. This session stops at its declared failed-attempt/audit boundary, not another repair/run loop.
+
+87 focused tests passed. Full lint, types, docs/focus, registries and public-artifact checks passed;
+the broader local suite was launched once and remains separately tracked while this audit is written.

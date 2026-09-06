@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Use the actual 31-example model in one short prospective continuation from the saved, freshly verified training endpoint. Implement only the missing continuation consumer; measure collection and spending, retain failures, and save progress. The native training batch is closed. Do not replay it, create another teacher factory, or wait on duplicate CI.
+- Next decision: The continuation seam works, but ordinary no-find search exhaustion became a fatal repeated-goal recovery exception. Repair typed stopping and safe failure-state retention, then expose useful existing development/evolution/storage alternatives before another bounded lesson. Model remains at 31 examples; this failed attempt is closed and is not training data.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The current goal-value checkpoint contains 31 examples: two sampled player outcomes plus all 29 retained rows. The behavior checkpoint with 29 examples completed four goals and retained two needed specimens (+1 living species), but overspent. The updated model changes one in-sample preference from shopping to acquisition; it has not executed a new live chain. Historical cross-family counters below are not its dataset size. |
+| Authority now | The goal-value checkpoint still contains 31 examples. Its first real saved-state continuation executed one deterministic unsupported-menu acquisition, failed after 215 actions / 8244 frames, and added no captures or training. Original save and model are intact. Historical cross-family counters below are not this model's dataset size. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
+| Cheapest falsifier | A bounded search finds no needed specimen: preserve its negative outcome, fresh ledger and safe endpoint without repeating the failed action. Then verify that the available menu contains a real model-supported alternative before collecting more experience. |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-native-player-learning-complete** · status **closed** · evidence [model fit](docs/evidence/red-native-player-learning-result-2026-09-06.json)
+**2026-09-06-fit31-continuation-failed** · status **closed** · evidence [falsification](docs/evidence/red-fit31-continuation-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Actual player choices can now become observed-outcome learning without fabricated setup attestations. Two needed specimens were retained, including a new living species. The next product step is sustained Red collecting and missing evolution/storage mechanics, not Crystal or a new teacher. |
-| Learning output | Two sampled player outcomes joined all 29 retained rows in one real 31-example goal-value fit. B completed four goals and saved its state; two failed launches remain disclosed, with no retroactive training labels. Training MSE changed from 0.00514748 to 0.00479554; this is not held-out accuracy. |
-| Authority delta | The native player-to-learner update is complete: 29 to 31 examples, with no authority promotion. The new model reloads and changes one recorded training-menu preference; no 31-example live continuation has executed. |
-| Transfer result | Semantic goal features and the nine old targets remain unchanged; known prices are explicit deterministic quotes. The native checkpoint is usable and its saved endpoint agrees with fresh read-only observations. These are same-lineage Red results, not independent or cross-game evidence. |
-| Blocker | The actual collection run still spent 12000 and ended with 649 money and 19 capture items. Its two new samples are correlated successes. Needed duplicate precursors reduce specimen requirements but receive zero old species-count completion gain. Useful sustained play is not yet established. |
-| Decision | Close this native batch and use its retained endpoint. Connect only a thin authenticated continuation consumer, then test the actual 31-example model in a short prospective chain before more architecture or data-factory work. |
-| Next session | Add the thin same-lineage checkpoint continuation consumer and execute one prospective chain of at most four goals with the 31-example model. Measure required specimens, living species, spending, supplies and model versus safety choices. Save the new terminal state, then reorient. |
-| Next falsifier | Does the 31-example model retain useful collection progress from the verified endpoint without wasting scarce money, while all controller inputs remain bounded and every failure remains visible? |
-| Stop condition | One bounded next session, at most four hours, ending at a verified continuation and reorientation. Do not retry closed attempts, invent targets, fit diagnostics, reinterpret old resource labels, or build another setup factory. No sealed Red, Crystal or full-game replay. |
+| Product alignment | Saved-state continuation now reaches actual gameplay while preserving original lineage. The next reusable capability is handling unsuccessful searches and choosing useful alternatives, which matters for rare-species collection in Red and later games. |
+| Learning output | Zero new examples, fits, captures or learned choices. One failed diagnostic goal recorded 215 actions and 8244 frames; all 51 snapshot hashes authenticate. Resources and party were unchanged. The failure exposes a sustained-play limitation, not an improvement claim. |
+| Authority delta | No new learned choice or fit. The 31-example model was loaded for real continuation, but its one recorded choice was a deterministic unsupported-menu bridge. The failed attempt and original parent save remain preserved. |
+| Transfer result | Same-lineage Red integration only. The updated learner has not demonstrated better gameplay or adaptation. A compatible unfamiliar Red modification remains the first planned transfer demonstration before Crystal. |
+| Blocker | The capture search reached its destination and three wild encounters but no capture before 64 legs. Recovery selected the same failed goal and raised a fatal guard exception. No new terminal checkpoint or fresh terminal collection ledger was retained; the original save is intact. |
+| Decision | Close the failed continuation without replay. Make bounded no-find outcomes and exhausted recovery return typed stops with fresh ledger/safe state retention. Then expose useful existing development/evolution/storage alternatives, not more forced capture or shopping lessons. |
+| Next session | Repair typed no-find/recovery stops and safe failure-state persistence, then inspect supported alternatives before declaring another short player lesson. Reuse existing mechanics and preserve all failed attempts; do not enlarge limits until a favorable catch appears. |
+| Next falsifier | Can ordinary search exhaustion stop or switch tasks while preserving fresh state and negative evidence, without a repeated-goal exception, a hidden retry or an invented successful outcome? |
+| Stop condition | The declared continuation is closed after one failed attempt. No replay, new fit or new gameplay occurs in this closeout. Next session remains bounded to four hours and must address useful play rather than another setup or CI-only loop. No sealed Red, hack, Crystal or full-game execution. |
 
 ### Stop conditions
 

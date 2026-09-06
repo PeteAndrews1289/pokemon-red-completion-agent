@@ -1,13 +1,20 @@
 # Handoff
 
-## Active — 31-example saved-state continuation
+## Current — continuation ran and failed; recover ordinary no-find outcomes next
 
-The [current session](docs/work-sessions/2026-09-06-fit31-continuation.md) connects the completed
-native R1 B endpoint to one single-arm diagnostic chain, at most four goals. The runner now accepts
-an ordered chain of checkpoint episode/hash pairs, inherits the original training lineage, checks
-fresh semantic and ledger agreement before enabling input, and saves the next endpoint. Greedy
-continuation decisions are not admitted to fitting. Targeted tests pass; broad local qualification
-is in progress. No actual continuation has launched at this checkpoint.
+The [session](docs/work-sessions/2026-09-06-fit31-continuation.md) implemented the thin continuation
+consumer and executed the exact published `e1dd3af8` attempt once. Fresh restore/lineage checks passed.
+One deterministic acquisition travelled to the Mansion, encountered three wild Pokemon and exhausted
+64 survey legs without a catch. Recovery then selected the same failed goal; the guard stopped input
+but raised a fatal exception. **215 actions / 8244 frames, no catches, no new learning, no new save.**
+The 31-example model, original parent save and failed archive are intact. The [audit](docs/audits/red-fit31-continuation-2026-09-06.md)
+and [result](docs/evidence/red-fit31-continuation-result-2026-09-06.json) give exact identities.
+
+Next: typed no-find/recovery stops and fresh ledger/safe endpoint retention, then real supported
+development/evolution/storage alternatives. Do not replay the failed identity, raise search limits
+until lucky, fit greedy diagnostics or call an unsupported-menu choice model progress. Focused
+qualification: 87 tests and clean lint/types/docs/artifact checks. Broader local suite was still
+running at launch; its final disposition must be recorded separately.
 
 User-confirmed milestones: sustained Red play, model-directed Red story completion and living
 collection, then measurable adaptation to a compatible unfamiliar Red modification before Crystal.

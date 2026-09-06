@@ -1,5 +1,18 @@
 # The story: teaching a model to actually play Pokémon
 
+## September 6: continuing a save exposes an ordinary-search recovery problem
+
+The newly fitted 31-example player resumed its predecessor's real endpoint. It travelled to the
+capture area, entered three wild battles and caught nothing before the bounded search ended.
+Recovery chose that failed goal again; the guard blocked repetition but raised an exception and
+prevented a new terminal save. All 215 actions / 8244 frames remain in the failed record. Money,
+supplies and party were unchanged, and the original save is safe. No new learning is claimed.
+
+This is a sharper next task than replaying the game: normal unsuccessful searching must return
+usable state and evidence, and the model needs useful alternative tasks. Pete also defined an
+intermediate transfer demonstration: adapt to a compatible unfamiliar Red modification before
+Crystal, while keeping the long-term cross-title living-Pokedex goal.
+
 ## September 6: teaching from the player's own choices
 
 The 29-example scorer has participated in a real supply-and-capture chain, but overspending
