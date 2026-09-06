@@ -12,6 +12,10 @@ scoped reader repair preserves eight train lessons/four paired roots and require
 reserve; the frozen producer/file stay unchanged. Validate the real action-free replay before
 publishing the correction. No trial or fit was consumed, and no campaign is currently running.
 This checkpoint supersedes the older publication-next statements immediately below.
+The correction now passes 26 focused tests plus real action-free recipe replay and prior/corpus
+fit-basis dry run from a clean candidate checkout. See [evidence](docs/evidence/red-training-reserve-reader-repair-2026-09-06.json).
+Only publication/qualification remains before retrying the still-unclaimed launch; no plan is
+refrozen and no consumed controller trial is retried.
 
 - Local code closes all three September 6 findings: owned-reservation command re-entry, actual
   selected-kind/full-terminal readiness, and explicit current-prior/complete-corpus fit admission.

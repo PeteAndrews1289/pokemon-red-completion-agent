@@ -8,6 +8,9 @@ frozen plan has one reserve. Correct that reader, verify real action-free replay
 correction without changing the plan. The four-hour maintenance reassessment rules out new
 architecture or CI redesign: the output must still be eight actual lessons and an admitted update,
 not another preflight count. No production lesson or fit occurred in the rejected invocation.
+The bounded fix now passes 26 focused tests and the **real complete action-free replay plus
+prior/corpus basis dry run**; [evidence](evidence/red-training-reserve-reader-repair-2026-09-06.json).
+Publish/qualify this corrected reader, then proceed directly to the eight still-unclaimed lessons.
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first. The three recovery/admission
 findings are now repaired locally: the command accepts only its own exact existing reservations;

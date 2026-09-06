@@ -131,3 +131,10 @@ The focused producer/reader/freezer/command set passes **26 tests in 251.34 seco
 repair. Lint, documentation, public-artifact checks, generated registry and 385-source type checking
 pass. The actual frozen file still hashes to its original identity. Real action-free replay is
 checked separately; these tests are not game outcomes or model fitting.
+
+Both real action-free checks now pass: exact replay of the unchanged scheduled recipes, then
+prior/corpus fit-basis dry run in a clean candidate checkout on the separate source device. All
+eight scheduled roots were found in the authenticated 81-context catalog. No resolver action,
+trial claim, model prediction, fit or fit-basis publication occurred. This is candidate diagnostic
+evidence, not exact-source CI admission; qualify the published consumer before the real launch.
+See [the path-free result](../evidence/red-training-reserve-reader-repair-2026-09-06.json).
