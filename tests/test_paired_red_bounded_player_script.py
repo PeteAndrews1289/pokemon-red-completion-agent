@@ -410,6 +410,37 @@ def test_failed_arm_retains_a_path_safe_private_cause(tmp_path: Path, with_sink:
     assert private_path not in json.dumps(document, default=dict)
 
 
+def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypatch):
+    module = runpy.run_path(str(SCRIPT))
+    factory = module["_player_observer"]
+    sentinel = object()
+    router = SimpleNamespace(enumerate=lambda _live: sentinel)
+    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", lambda *args: router)
+    monkeypatch.setitem(
+        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
+    )
+    local = factory(object(), object(), None)
+    routed = factory(object(), object(), object())
+    assert local["enumerate_bindings"] is None
+    assert routed["enumerate_bindings"](object()) is sentinel
+
+
+def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_path):
+    module = runpy.run_path(str(SCRIPT))
+    factory = module["_route_world"]
+    decoded = []
+    path = tmp_path / "synthetic.gb"
+    path.write_bytes(b"synthetic")
+    monkeypatch.setitem(
+        factory.__globals__, "StrategicScenarioRouteWorld",
+        SimpleNamespace(from_rom=decoded.append),
+    )
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="cartridge_identity"):
+        factory(SimpleNamespace(routed_resource_goals=True, rom_path=path, rom_sha256="0" * 64))
+    assert not decoded
+    assert factory(SimpleNamespace(routed_resource_goals=False)) is None
+
+
 @pytest.mark.parametrize("origin", ("training", "development", "unspecified"))
 def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> None:
     module = runpy.run_path(str(SCRIPT))
@@ -486,6 +517,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
+        routed_resource_goals=False,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())

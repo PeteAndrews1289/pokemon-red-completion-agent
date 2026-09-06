@@ -73,3 +73,12 @@ The separate registry/product-state/viewer group also passed 154 tests: **253 fo
 across the two non-overlapping file groups. Public-artifact verification passed. PR 232 is merged;
 PR 233's CI passed, but its squash-parent history needs alignment. Keep that publication detail
 separate from source-tree qualification and the next real integration run.
+
+## Closed: one learned capture, then the resource-continuation seam
+
+Both actual arms terminated after two of the permitted four decisions. The model made one
+genuine acquisition choice, gaining one living/registered species, then deterministic exploration
+failed after the last capture ball was spent. Both five-stream trajectories authenticated and
+all 704 actions / 31,344 frames reconcile. No new fit or independent superiority follows.
+The next [resource-aware session](2026-09-06-resource-aware-goal-chain.md) connects existing
+supply and transport skills; this original pair and result remain terminal.

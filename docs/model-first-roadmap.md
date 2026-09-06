@@ -1,5 +1,23 @@
 # Model-first development roadmap
 
+## Current checkpoint — one model-chosen catch; resource-aware continuation next
+
+The first known-training chain caught one species through a real model-ranked goal, then lost
+capture availability because it had used its last ball. Local-only skills could not offer a
+supply trip; deterministic exploration reached its limit. This was one learned choice, not a
+four-goal success, and the control tied. The fixed 29-example model is unchanged.
+
+1. Complete the narrow opt-in refreshed capture/supply routing seam using existing composers.
+2. Run a prospectively declared four-step training-context integration with a supported supply
+   destination. Preserve actual model/safety counts and verified collection/resource changes.
+3. Reorient on that result: sustained goal selection and missing training contrasts take priority
+   over new orchestration, repeated CI or full teacher playthroughs.
+4. Expand necessary Red mechanics through real selected-arm training; qualify sustained Red
+   competence before reopening Crystal transfer. The shared semantic interfaces remain intact.
+
+Read the [current session and six-part mission check](work-sessions/2026-09-06-resource-aware-goal-chain.md).
+All checkpoints below are historical, including older headings labeled current.
+
 ## Current checkpoint — real choices executed; sustained collection is next
 
 The four-root check is complete. The 29-example model successfully executed two resupplies and

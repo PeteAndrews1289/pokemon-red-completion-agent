@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "The saved 29-example living-Dex option model made three real bounded goal choices, each followed by a successful deterministic skill: resupply twice and party development once. This is goal-level development authority, not learned buttons, a sustained player or deployment promotion.",
-        "blocker": "No model arm increased the living collection. One comparison control caught a new species where the model preferred more supplies. Another control hit RedPCStorageError, and one setup hit RouteExecutionError before policy input. Exact private causes are now retained. No three-choice continuous episode exists yet.",
-        "decision": "Close all four paired roots without retries or replacement. Keep the 29-example model unchanged and move to the existing short-chain player on a separately declared authenticated train context for development-only integration. Retain forced/safety decisions separately from genuine model choices; do not repair the old route or PC trial to improve its score.",
+        "authority_delta": "Exactly one model-ranked acquisition succeeded, adding one living and registered species. The second choice was deterministic_unsupported, not another learned decision. The 29-example artifact is unchanged.",
+        "blocker": "The capture used the last ball. Acquisition then correctly became missing_resource, while resupply was missing_capability because only local providers were bound. Exploration reached its 64-leg cap.",
+        "decision": "Preserve this pair and its diagnostics. Add an opt-in refreshed route-to-capture/supply seam using existing transport, fresh destination binding and safety limits. Do not change the old route, search cap or model utility.",
         "evidence": {
           "kind": "development_episode",
-          "path": "docs/evidence/red-routed-paired-play-result-2026-09-06.json",
-          "sha256": "facd2907975ae686c02f90006ec3467b750d6ea3390f4b7efe2b74977b040a08"
+          "path": "docs/evidence/red-fit29-known-train-chain-result-2026-09-06.json",
+          "sha256": "bed594f2b7e996076bc6db81533e8796afdb5507c558e552d18a5c83b4e9990f"
         },
-        "learning_output": "Four planned pairs became terminal: three paired executions and one setup failure. The model succeeded in 3/3 attempted arms, while the full denominator remains four roots. One tie, one positive utility difference confounded by a control exception, and one lower-utility model choice yield zero clean descriptive model wins. All 32 immutable records and 23,597 actions / 1,350,732 frames reconcile. No new fitting rows or fit.",
-        "next_falsifier": "Let the saved model choose over refreshed semantic menus for up to four bounded steps. Measure actual learned choices and living-ledger changes, not just total steps. A first capture followed by a stale or exhausted menu is useful evidence of the exact composition seam still missing.",
-        "next_session_goal": "Use the existing bounded-player command before adding architecture. Prospectively select the first authenticated training context with at least three recorded local options, exclude all four retired train roots and four paired roots, and run at most four steps per actor. Label this train-context integration, not held-out superiority. Reorient on the first terminal result.",
-        "product_alignment": "The learned option scorer now causes real Red goals to execute. The result exposes the remaining mission gap: successful maintenance is not a living Pokedex. The next output is verified collection through successive freshly observed choices, preserving portable semantics for later games.",
-        "session_id": "2026-09-06-routed-model-play-complete",
+        "learning_output": "The four-step-bounded known-training integration stopped after two decisions per actor: successful acquisition followed by exhausted exploration. Both trajectories authenticated; 704 controller actions and 31,344 frames reconcile. No new fit or train rows.",
+        "next_falsifier": "After the supply or capture skill, does the next real observation offer feasible completion goals, and can the unchanged scorer cause successive verified captures within the existing budgets?",
+        "next_session_goal": "Qualify shared local/remote resource prerequisites and route-backed refreshed goals, then run one prospectively declared four-step known-training-context integration. Keep safety choices distinct from learned choices.",
+        "product_alignment": "One model-chosen acquisition increased the living collection. The missing reusable capability is resource-aware continuation across destinations, not another full teacher run.",
+        "session_id": "2026-09-06-known-train-chain-complete",
         "status": "closed",
-        "stop_condition": "All four paired assignments are terminal. Do not retry their setup or arms, replace them with the reserve, fit development outcomes or claim a model win from a broken control. The eight prior train lessons and their single fit remain consumed. The next bounded chain is a new declared integration question on a different training root, not a rerun of those trials.",
-        "transfer_result": "Three Red roots outside this model's fit produced real selections, but the four-root comparison does not demonstrate superiority. Model resupply choices added three balls each; party readiness improved slightly. The control alone gained one living and registered species. No Crystal, sealed Red or full replay occurred."
+        "stop_condition": "Preserve the old pair, all four retired paired roots and all eight training trials. No new fitting on diagnostic outcomes, no root relabeling for independence, no full replay or Crystal. Stop on unavailable route, unsupported field action, stale observation or hard budget.",
+        "transfer_result": "Known-training-context integration only, not an unseen estimate. Both actors gained the same one living species. No Crystal, sealed Red or full replay."
       },
       "learned_authority": {
-        "current": "The immutable 29-example living-Dex option scorer has now selected three real Red goals in bounded development, with successful deterministic execution in each attempted arm. It has not produced sustained multi-goal collection, independent superiority or full-player authority. The older semantic goal-manager and battle scorer remain separate artifacts.",
+        "current": "The unchanged 29-example living-Dex scorer has caused three real routed side goals and one known-training-context capture. That capture increased living species from 13 to 14. The next exploration was a deterministic unsupported choice and failed; no sustained three-choice collection chain or independent superiority exists.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "The fitted model and four-root descriptive check are complete. Test successive choices with fresh state through the existing bounded player, recording actual living-Pokedex progress or an explicit menu/skill limitation. No new architecture or repeated CI qualification is a prerequisite for this ordinary development check.",
+      "next_decision": "The first known-training chain caught one species but exhausted its last ball; local-only bindings could not offer resupply. Connect the existing routed transport and destination skills to refreshed capture/supply goals, then run a four-step training-context integration. No new model or CI gate is needed.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

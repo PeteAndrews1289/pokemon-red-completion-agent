@@ -1,5 +1,24 @@
 # Handoff
 
+## Current — resource-aware collection chain
+
+The known-training chain from `7762e591` is complete: one genuinely model-selected capture
+increased living species **13 → 14**, then the last ball was gone. The second choice was a
+deterministic exploration fallback, not a learned choice, and exhausted its search bound.
+Both actors tied; all 704 actions / 31,344 frames and two trajectories authenticated. See the
+[result and next session](docs/work-sessions/2026-09-06-resource-aware-goal-chain.md).
+
+The next opt-in adapter connects the existing walking router and fresh destination composer
+to capture/resupply goals. It shares actual resource checks with local providers and leaves
+old profiles, safety thresholds and model weights unchanged. A declared ten-ball purchase
+uses the existing Mart skill, not a new route script. A zero-input read of the real state
+found the supply route and sufficient funds. Qualify/publish before actual execution; this
+checkpoint itself is not a new run or fit. The prior pair ID must not be reused.
+
+The model remains fitted on 29 examples. No new fit, unseen improvement, full-game autonomy
+or Crystal result is claimed. Both older producers ended; the redesigned 8768 overview remains.
+No external reviewers were invoked. The private operator note identifies actual active processes.
+
 ## Active session — September 6 fresh-state goal chain
 
 The four-root check **finished** from published `cc70f8c9`. Three model-selected goals succeeded:

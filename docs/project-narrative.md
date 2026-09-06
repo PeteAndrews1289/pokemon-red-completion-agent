@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: the model catches one—and reveals the next missing link
+
+The next check finally turned a model-selected goal into a new living specimen. From a known
+training snapshot, the unchanged 29-example scorer chose acquisition and the capture skill
+succeeded: living species rose from 13 to 14. This is deliberately a training-context integration
+result, not unseen mastery. The control made the same choice and tied.
+
+The player then ran out of balls. It correctly recognized that capture was no longer possible,
+but its local-only menu could not express travelling to buy more. The fallback exploration
+reached its search limit. Only the first choice was learned. The fix in progress connects
+existing navigation and supply skills to freshly observed goals; it does not make the search
+longer, edit inventory or tune the model to hide the failure. The lesson is that useful play
+requires consequences to feed the next choice, not just a succession of isolated successes.
+
 ## September 6: successful tasks are not the same as collecting
 
 The fitted 29-example model chose real goals in the four-root routed check. It bought

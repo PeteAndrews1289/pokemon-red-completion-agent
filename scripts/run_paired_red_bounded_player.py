@@ -108,11 +108,15 @@ from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
     RedGoalContextProfile,
     load_red_goal_context_profile,
 )
+from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
 from pokemon_red_completion.red_trajectory import (  # noqa: E402
     PokemonRedObservationEncoder,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa: E402
+from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
+    StrategicScenarioRouteWorld,
+)
 from pokemon_red_completion.trajectory import (  # noqa: E402
     JSONValue,
     RecordingExecutor,
@@ -155,6 +159,7 @@ class _Readiness:
     continue_after_progress: bool = False
     dashboard_port: int | None = None
     context_origin: str = "unspecified"
+    routed_resource_goals: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -204,16 +209,14 @@ class _LiveObserver:
     observations: int = 0
     starting_observation: GoalManagerCompositionObservation | None = None
     viewer: BoundedPlayerDashboard | None = None
+    route_world: StrategicScenarioRouteWorld | None = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
             self.meter.begin_decision_window()
         before = self.meter.checkpoint()
         deferred = _DeferredActionExecutor(self.actions)
-        bridge = RedBoundedPlayerObserver(
-            runtime=self.runtime,
-            actions=CountingExecutor(deferred),
-        )
+        bridge = _player_observer(self.runtime, CountingExecutor(deferred), self.route_world)
         observation = bridge()
         if self.meter.checkpoint() != before or deferred.attempted_while_disabled:
             raise PairedRedBoundedPlayerRunError("action_free_observation")
@@ -224,6 +227,28 @@ class _LiveObserver:
         if self.viewer is not None:
             self.viewer.safely("observed", bridge.last_live_observation, observation)
         return observation
+
+
+def _player_observer(
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    world: StrategicScenarioRouteWorld | None,
+) -> RedBoundedPlayerObserver:
+    router = None if world is None else RedResourceGoalRouter(runtime, actions, world)
+    return RedBoundedPlayerObserver(
+        runtime=runtime,
+        actions=actions,
+        enumerate_bindings=None if router is None else router.enumerate,
+    )
+
+
+def _route_world(readiness: _Readiness) -> StrategicScenarioRouteWorld | None:
+    if not readiness.routed_resource_goals:
+        return None
+    payload = readiness.rom_path.read_bytes()
+    if hashlib.sha256(payload).hexdigest() != readiness.rom_sha256:
+        raise PairedRedBoundedPlayerRunError("routing_cartridge_identity")
+    return StrategicScenarioRouteWorld.from_rom(payload)
 
 
 @dataclass(slots=True)
@@ -274,6 +299,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument("--envelope", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
+    parser.add_argument(
+        "--routed-resource-goals",
+        action="store_true",
+        help="opt in to fresh walking routes to declared capture and supply destinations",
+    )
     parser.add_argument(
         "--challenger",
         choices=_CHALLENGER_IDS,
@@ -395,6 +425,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
+    routed_resource_goals = getattr(args, "routed_resource_goals", False)
+    if type(routed_resource_goals) is not bool:
+        raise PairedRedBoundedPlayerRunError("routed_resource_goals")
     dashboard_port = getattr(args, "dashboard_port", None)
     if dashboard_port is not None and (
         type(dashboard_port) is not int or not 1024 <= dashboard_port <= 65535
@@ -481,6 +514,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             raise PairedRedBoundedPlayerRunError("pair_id_already_used")
     return _Readiness(
         pair_id=args.pair_id,
+        routed_resource_goals=routed_resource_goals,
         source_commit=source.git_commit,
         source_bundle_sha256=working_source_bundle_sha256(PROJECT_ROOT),
         rom_path=rom_path,
@@ -595,6 +629,7 @@ def _player_limits(decision_limit: int) -> BoundedPlayerLimits:
 def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
     challenger = _challenger_authority(readiness)
+    world = _route_world(readiness)
     with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(readiness.capture.state_bytes)
         initial_frame_count = emulator.frame_count
@@ -611,7 +646,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
         )
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
         result = preflight_red_bounded_player(
-            observe=RedBoundedPlayerObserver(runtime=runtime, actions=actions),
+            observe=_player_observer(runtime, actions, world),
             budget_meter=meter,
             assignment_id=readiness.pair_id,
             authorities=(
@@ -679,6 +714,7 @@ def _run_arm(
                 "profile_sha256": readiness.profile.profile_sha256,
                 "model_sha256": readiness.model_sha256,
                 "continue_after_progress": readiness.continue_after_progress,
+                "routed_resource_goals": readiness.routed_resource_goals,
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }
@@ -722,7 +758,13 @@ def _run_arm(
             meter = CompositionIndependentBudgetMeter(hard_actions, frames)
             if viewer is not None:
                 viewer.safely("bind_budget", meter.checkpoint)
-            observer = _LiveObserver(runtime=runtime, actions=actions, meter=meter, viewer=viewer)
+            observer = _LiveObserver(
+                runtime=runtime,
+                actions=actions,
+                meter=meter,
+                viewer=viewer,
+                route_world=_route_world(readiness),
+            )
             trajectory = ViewerGoalTrajectory(
                 episode_id=episode_id,
                 root_lineage_id=canonical_sha256(
@@ -939,6 +981,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "challenger_arm_id": readiness.challenger_arm_id,
         "decision_limit": readiness.decision_limit,
         "continue_after_progress": readiness.continue_after_progress,
+        "routed_resource_goals": readiness.routed_resource_goals,
         "viewer_instrumentation_failures": 0 if viewer is None else viewer.failure_count,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,

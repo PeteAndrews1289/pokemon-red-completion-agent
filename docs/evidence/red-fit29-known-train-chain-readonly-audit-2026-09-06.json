@@ -1,0 +1,44 @@
+{
+  "arms": [
+    {
+      "acquisition_blocker": "missing_resource",
+      "arm": "learned",
+      "component_failure_count": 1,
+      "controller_actions": 352,
+      "emulator_frames": 15672,
+      "exception_type": "RedAreaExecutionError",
+      "failure_classification": "bounded_exploration_exhausted",
+      "goal_decisions": 2,
+      "manifest_sha256": "7c099e13aca612490a6a3f58683d79ad538059c582cf5582ce25d10624cb6f7c",
+      "resupply_blocker": "missing_capability",
+      "verified_streams": 5
+    },
+    {
+      "acquisition_blocker": "missing_resource",
+      "arm": "baseline",
+      "component_failure_count": 1,
+      "controller_actions": 352,
+      "emulator_frames": 15672,
+      "exception_type": "RedAreaExecutionError",
+      "failure_classification": "bounded_exploration_exhausted",
+      "goal_decisions": 2,
+      "manifest_sha256": "fa7cda6267a569fbe99b4de1f9386eb209c639cc4514147afeb3643d6670022c",
+      "resupply_blocker": "missing_capability",
+      "verified_streams": 5
+    }
+  ],
+  "audit_controller_actions": 0,
+  "audit_emulator_frames": 0,
+  "deterministic_unsupported_choices": 1,
+  "independent_generalization_claim": false,
+  "learned_choices": 1,
+  "model_living_species_gain": 1,
+  "model_registered_species_gain": 1,
+  "new_fits": 0,
+  "private_path_fields": 0,
+  "result_file_sha256": "bed594f2b7e996076bc6db81533e8796afdb5507c558e552d18a5c83b4e9990f",
+  "schema": "pokemon.red.known-train-chain-readonly-audit.v1",
+  "status": "verified",
+  "total_controller_actions": 704,
+  "total_emulator_frames": 31344
+}

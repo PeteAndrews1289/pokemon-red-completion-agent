@@ -1,0 +1,459 @@
+{
+  "baseline": {
+    "arm_id": "completion-first-teacher",
+    "episode": {
+      "authority_decisions": 2,
+      "authority_id": "completion-first-teacher",
+      "completion_satisfied": false,
+      "decisions": 2,
+      "forced_singleton_steps": 0,
+      "private_binding_fields": 0,
+      "private_path_fields": 0,
+      "recovery_attempts": 0,
+      "schema": "pokemon.core.bounded-player-episode-result.v1",
+      "status": "durable_terminal",
+      "steps": [
+        {
+          "actions_executed": 208,
+          "available_goal_count": 3,
+          "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 1,
+          "failure_reason": null,
+          "frames_executed": 11796,
+          "policy_context_sha256": "302b9e771465df56b46aea34752ca6b107391c25b91c3c30765e393cdb4c0e32",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 144,
+          "available_goal_count": 2,
+          "available_menu_sha256": "09799a689f2e2637a8856851acc7ae35271265fac305d4c949134e40e5477839",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 2,
+          "failure_reason": "binding_failed",
+          "frames_executed": 3876,
+          "policy_context_sha256": "7da7dd6c556816231e06caf78301b63c387be9b3f939e0b6d0afc0ce305a50d8",
+          "recovery_attempt": false,
+          "selected_kind": "explore",
+          "selection_mode": "authority",
+          "semantic_state_changed": false,
+          "status": "failed"
+        }
+      ],
+      "stop_reason": "failure_context_unchanged",
+      "teacher_fallbacks": 0,
+      "total_actions": 352,
+      "total_frames": 15672
+    },
+    "progress": {
+      "completion_satisfied": false,
+      "controller_actions": 352,
+      "emulator_frames": 15672,
+      "living_species_gained": 1,
+      "recovery_attempts": 0,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 1,
+      "retained_captures_gained": 1,
+      "storage_headroom_gained": -1,
+      "successful_decisions": 1,
+      "successful_goal_counts": {
+        "acquire_species": 1,
+        "advance_story": 0,
+        "develop_team": 0,
+        "evolve_species": 0,
+        "explore": 0,
+        "manage_storage": 0,
+        "recover_control": 0,
+        "restore_team": 0,
+        "resupply": 0
+      }
+    },
+    "starting_collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "starting_semantic_state_sha256": "1dc1087f55e04a9affbdc8a6328fb29592615bfabf31078c7076c6812f035eb7",
+    "starting_state_sha256": "e15c44a75527e38ef28961490714f47c48e8dcbeae7116b7843852aca6056ea0",
+    "trajectory_manifest_sha256": "fa7cda6267a569fbe99b4de1f9386eb209c639cc4514147afeb3643d6670022c"
+  },
+  "challenger_arm_id": "living-dex-causal-shadow",
+  "context_origin": "training",
+  "continue_after_progress": true,
+  "crystal_accesses": 0,
+  "decision_basis": "equal_progress_and_cost",
+  "decision_limit": 4,
+  "evidence_scope": "training_context_integration_only",
+  "full_game_replays": 0,
+  "independent_generalization_claim": false,
+  "learned": {
+    "arm_id": "living-dex-causal-shadow",
+    "episode": {
+      "authority_decisions": 2,
+      "authority_id": "living-dex-causal-shadow",
+      "completion_satisfied": false,
+      "decisions": 2,
+      "forced_singleton_steps": 0,
+      "private_binding_fields": 0,
+      "private_path_fields": 0,
+      "recovery_attempts": 0,
+      "schema": "pokemon.core.bounded-player-episode-result.v1",
+      "status": "durable_terminal",
+      "steps": [
+        {
+          "actions_executed": 208,
+          "available_goal_count": 3,
+          "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 13,
+            "registered_species": 18,
+            "required_specimens_remaining": 108,
+            "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+            "retained_captures": 12,
+            "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+            "storage_headroom": 11,
+            "total_living_specimens": 15,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 1,
+          "failure_reason": null,
+          "frames_executed": 11796,
+          "policy_context_sha256": "302b9e771465df56b46aea34752ca6b107391c25b91c3c30765e393cdb4c0e32",
+          "recovery_attempt": false,
+          "selected_kind": "acquire_species",
+          "selection_mode": "authority",
+          "semantic_state_changed": true,
+          "status": "succeeded"
+        },
+        {
+          "actions_executed": 144,
+          "available_goal_count": 2,
+          "available_menu_sha256": "09799a689f2e2637a8856851acc7ae35271265fac305d4c949134e40e5477839",
+          "collection_after": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "collection_before": {
+            "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+            "living_species": 14,
+            "registered_species": 19,
+            "required_specimens_remaining": 107,
+            "required_specimens_sha256": "bef74e75c9a93d0d3fd69e3326335ecf53bf41d37dbe6124dde04cb71cd7fea6",
+            "retained_captures": 13,
+            "specimen_ledger_sha256": "45a2bd63ca85a185a8847f36570b495f8b5d215bc86ef16a41495493a484f616",
+            "storage_headroom": 10,
+            "total_living_specimens": 16,
+            "undeclared_specimen_losses": 0
+          },
+          "decision_ordinal": 2,
+          "failure_reason": "binding_failed",
+          "frames_executed": 3876,
+          "policy_context_sha256": "7da7dd6c556816231e06caf78301b63c387be9b3f939e0b6d0afc0ce305a50d8",
+          "recovery_attempt": false,
+          "selected_kind": "explore",
+          "selection_mode": "authority",
+          "semantic_state_changed": false,
+          "status": "failed"
+        }
+      ],
+      "stop_reason": "failure_context_unchanged",
+      "teacher_fallbacks": 0,
+      "total_actions": 352,
+      "total_frames": 15672
+    },
+    "progress": {
+      "completion_satisfied": false,
+      "controller_actions": 352,
+      "emulator_frames": 15672,
+      "living_species_gained": 1,
+      "recovery_attempts": 0,
+      "registered_species_gained": 1,
+      "required_specimens_reduced": 1,
+      "retained_captures_gained": 1,
+      "storage_headroom_gained": -1,
+      "successful_decisions": 1,
+      "successful_goal_counts": {
+        "acquire_species": 1,
+        "advance_story": 0,
+        "develop_team": 0,
+        "evolve_species": 0,
+        "explore": 0,
+        "manage_storage": 0,
+        "recover_control": 0,
+        "restore_team": 0,
+        "resupply": 0
+      }
+    },
+    "starting_collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "starting_semantic_state_sha256": "1dc1087f55e04a9affbdc8a6328fb29592615bfabf31078c7076c6812f035eb7",
+    "starting_state_sha256": "e15c44a75527e38ef28961490714f47c48e8dcbeae7116b7843852aca6056ea0",
+    "trajectory_manifest_sha256": "7c099e13aca612490a6a3f58683d79ad538059c582cf5582ce25d10624cb6f7c"
+  },
+  "living_dex_causal_shadow": {
+    "decision_count": 2,
+    "decisions": [
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": "651e77e57173fa809d6c2b6461f5dec30ec6dbad13af77a0995f04c8fc6d0351",
+        "mode": "model_shadow",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [
+          {
+            "goal_candidate_index": 3,
+            "goal_kind": "acquire_species",
+            "predicted_outcomes": {
+              "action_cost": 0.0012502823643987084,
+              "completion_gain": 0.004958956128654488,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.00013433976522785453,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.004262347659704704,
+              "resource_cost": 0.0435058724710285,
+              "storage_cost": 0.0014601110321486597,
+              "verified_success": 0.5882802456782642
+            },
+            "utility": 2.345947977366979
+          },
+          {
+            "goal_candidate_index": 4,
+            "goal_kind": "explore",
+            "predicted_outcomes": {
+              "action_cost": 0.0025194101581826243,
+              "completion_gain": 0.00011372671864936547,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.0001951911519935068,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0008106791807397014,
+              "resource_cost": 0.0,
+              "storage_cost": 0.00025725906518639575,
+              "verified_success": 0.0
+            },
+            "utility": -0.001007802985571313
+          }
+        ],
+        "selected_candidate_index": 3,
+        "selected_kind": "acquire_species"
+      },
+      {
+        "binding_identity_fields": 0,
+        "menu_sha256": null,
+        "mode": "deterministic_unsupported",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [],
+        "selected_candidate_index": 3,
+        "selected_kind": "explore"
+      }
+    ],
+    "deterministic_decision_count": 1,
+    "model_decision_count": 1,
+    "model_record": {
+      "authority": "non_authoritative_integration_only",
+      "exact_ci_attempt": 1,
+      "exact_ci_run": 34019391472,
+      "file_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+      "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+      "private_path_fields": 0,
+      "settled_examples": 29,
+      "source_bundle_sha256": "646c047db37ec2dce90355029d2df2f87d1bb2dd4f654952dc862aff87b4df3a",
+      "source_commit": "e9b381d0bafb114ce3a0ad08b4ed77d95926bb97",
+      "train_dataset_sha256": "2d41c536942a2e76297823a9f79e426f52f177e98cd225230ec044e7072152ff"
+    },
+    "production_authority": false
+  },
+  "model_file_sha256": "d831fdcf61f9eacfe8c23faaa0736feb1779f364edf8b6e7f89c3bee101ce010",
+  "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+  "pair_id": "red-fit29-chain-train010-v1",
+  "preflight": {
+    "actions_executed": 0,
+    "assignment_id": "red-fit29-chain-train010-v1",
+    "authority_disagreement": false,
+    "available_goal_count": 3,
+    "available_goal_kinds": [
+      "restore_team",
+      "acquire_species",
+      "explore"
+    ],
+    "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
+    "choices": [
+      {
+        "authority_id": "living-dex-causal-shadow",
+        "selected_candidate_index": 3,
+        "selected_kind": "acquire_species"
+      },
+      {
+        "authority_id": "completion-first-teacher",
+        "selected_candidate_index": 3,
+        "selected_kind": "acquire_species"
+      }
+    ],
+    "collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 13,
+      "registered_species": 18,
+      "required_specimens_remaining": 108,
+      "required_specimens_sha256": "ed32d802914f3de19973e7cee7b98a0d32e4b89de05f47dfba39d53046be8b2d",
+      "retained_captures": 12,
+      "specimen_ledger_sha256": "0f3ea7c3ab48d9fbfbc3368595fbca8efe971f686eb84087110b2702774b5069",
+      "storage_headroom": 11,
+      "total_living_specimens": 15,
+      "undeclared_specimen_losses": 0
+    },
+    "emulator_frames": 0,
+    "episode_created": false,
+    "living_dex_causal_shadow": {
+      "decision": {
+        "binding_identity_fields": 0,
+        "menu_sha256": "651e77e57173fa809d6c2b6461f5dec30ec6dbad13af77a0995f04c8fc6d0351",
+        "mode": "model_shadow",
+        "model_sha256": "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a",
+        "private_path_fields": 0,
+        "scores": [
+          {
+            "goal_candidate_index": 3,
+            "goal_kind": "acquire_species",
+            "predicted_outcomes": {
+              "action_cost": 0.0012502823643987084,
+              "completion_gain": 0.004958956128654488,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.00013433976522785453,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.004262347659704704,
+              "resource_cost": 0.0435058724710285,
+              "storage_cost": 0.0014601110321486597,
+              "verified_success": 0.5882802456782642
+            },
+            "utility": 2.345947977366979
+          },
+          {
+            "goal_candidate_index": 4,
+            "goal_kind": "explore",
+            "predicted_outcomes": {
+              "action_cost": 0.0025194101581826243,
+              "completion_gain": 0.00011372671864936547,
+              "dependency_unlock_gain": 0.0,
+              "frame_cost": 0.0001951911519935068,
+              "irreversible_loss": 0.0,
+              "party_cost": 0.0008106791807397014,
+              "resource_cost": 0.0,
+              "storage_cost": 0.00025725906518639575,
+              "verified_success": 0.0
+            },
+            "utility": -0.001007802985571313
+          }
+        ],
+        "selected_candidate_index": 3,
+        "selected_kind": "acquire_species"
+      },
+      "production_authority": false
+    },
+    "policy_context_sha256": "302b9e771465df56b46aea34752ca6b107391c25b91c3c30765e393cdb4c0e32",
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "schema": "pokemon.red.bounded-player-preflight.v1",
+    "semantic_state_sha256": "1dc1087f55e04a9affbdc8a6328fb29592615bfabf31078c7076c6812f035eb7",
+    "status": "ready"
+  },
+  "private_binding_fields": 0,
+  "private_path_fields": 0,
+  "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+  "schema": "pokemon.core.paired-bounded-player-result.v1",
+  "sealed_red_accesses": 0,
+  "source_bundle_sha256": "c4e4028c44962b7407a096722575156e815d9f024e8f264d13b025c16ef37980",
+  "source_commit": "7762e59127d3e74656957a423c2b85079ed59b9c",
+  "status": "complete",
+  "teacher_fallbacks": 0,
+  "teacher_queries": 0,
+  "verdict": "equivalent",
+  "viewer_instrumentation_failures": 0
+}

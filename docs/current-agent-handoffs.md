@@ -1,5 +1,18 @@
 # Current agent handoffs
 
+## Current — resource-aware goal continuation
+
+The first known-training chain is terminal: one model-ranked capture (+1 living, +1 registered),
+then one deterministic exploration failure after the last ball was spent. Both actors tied.
+No rows enter fitting; the 29-example artifact is unchanged. The next
+[bounded session](work-sessions/2026-09-06-resource-aware-goal-chain.md) connects existing routing
+and destination skills to refreshed capture/supply offers.
+
+Codex owns coding, tests, actual execution, publication and factual reporting. If requested,
+Claude should challenge train/evaluation claims and maintenance-reward incentives; Antigravity
+should challenge stale origins, destination rechecks, hard budgets and portability. Reviewers
+remain advisory/read-only. Neither was invoked here; routine development does not wait for them.
+
 ## Current — audit the completed choices; connect fresh-state play
 
 The [four-root result audit](audits/red-routed-model-play-2026-09-06.md) is complete. The model's

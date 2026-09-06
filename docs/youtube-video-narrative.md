@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6: one real model-chosen catch, then an honest stopping point
+
+**Show:** the saved result **MODEL CHOICE: ACQUIRE · LIVING SPECIES 13 → 14**. Label it
+**KNOWN TRAINING CONTEXT**, with deterministic capture mechanics. Then show **BALLS: 0**,
+**RESUPPLY: NOT BOUND** and **EXPLORATION LIMIT REACHED**. Do not count the fallback as a second
+learned decision. Both actors tied, and the four-step ceiling was not reached.
+
+**Voiceover:** “It chose to catch a new Pokémon, and it did. Then it spent its last ball.
+It knew capture was unavailable, but its menu couldn't yet offer a trip to the shop. So the
+next improvement isn't a bigger model—it's connecting the skills we already have, letting
+each real outcome change what it can choose next.”
+
+The [session record](work-sessions/2026-09-06-resource-aware-goal-chain.md) separates the completed
+result from the resource-aware extension still being qualified. No footage is claimed retained,
+and no new fit, independent superiority, full game or Crystal transfer is implied.
+
 ## September 6 result: three successful goals, no new model-caught species
 
 **On screen:** distinguish **MODEL: RESUPPLY / DEVELOP / RESUPPLY** from the separate fixed
