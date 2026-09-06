@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from pokemon_red_completion.bounded_player_episode import _retaining_binding_set
 from pokemon_red_completion.executor import CountingExecutor
@@ -33,6 +33,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalDecisionAuthority,
 )
 from pokemon_red_completion.goal_manager_trajectory import ordered_goal_manager_question
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
@@ -56,6 +57,7 @@ class RedBoundedPlayerObserver:
     actions: CountingExecutor
     collection_projector: CollectionProjector = living_collection_checkpoint
     enumerate_bindings: Callable[[RedGoalObservation], GoalBindingSet] | None = None
+    search_memory: GoalSearchMemory | None = None
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -79,6 +81,18 @@ class RedBoundedPlayerObserver:
         collection = self.collection_projector(live)
         if not isinstance(collection, LivingCollectionCheckpoint):
             raise RedBoundedPlayerError("Red collection projector returned an invalid checkpoint")
+        if self.search_memory is not None:
+            bindings = tuple(
+                replace(binding, search_history=self.search_memory.lookup(
+                    binding.binding_ref, collection.required_specimens_sha256,
+                )) if binding.kind is GoalKind.ACQUIRE_SPECIES else binding
+                for binding in binding_set.bindings
+            )
+            by_ref = {binding.binding_ref: binding.opportunity for binding in bindings}
+            binding_set = GoalBindingSet(tuple(
+                by_ref.get(opportunity.binding_ref, opportunity)
+                for opportunity in binding_set.opportunities
+            ), bindings)
         semantic_document = red_bounded_player_semantic_document(
             live=live,
             binding_set=binding_set,

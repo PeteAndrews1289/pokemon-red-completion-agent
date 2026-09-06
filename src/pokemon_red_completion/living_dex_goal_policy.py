@@ -242,6 +242,11 @@ class LivingDexGoalShadowPolicy:
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
         if not isinstance(question, GoalManagerQuestion):
             raise TypeError("question must be a GoalManagerQuestion")
+        if any(item.search_history is not None for item in question.opportunities):
+            raise LivingDexGoalPolicyError(
+                "history-bearing goals require a history-trained model; "
+                "legacy scorer cannot ignore history"
+            )
         self.last_menu = None
         self.last_menu_indices = ()
         deterministic = self.safety.select(question)

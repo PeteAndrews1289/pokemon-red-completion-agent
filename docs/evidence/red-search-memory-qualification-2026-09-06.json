@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon.red.search-memory-qualification.v1",
+  "status": "engineering_complete_not_history_trained",
+  "classification": "maintenance_for_memory_aware_learning",
+  "source_bundle_sha256": "08ab6eb8749c49f95f407976b45c44789f095b5c806606a6db6be7689e6921cd",
+  "new_training_rows": 0,
+  "model_fits": 0,
+  "current_model_examples": 32,
+  "new_controller_actions": 0,
+  "new_emulator_frames": 0,
+  "authority_promotions": 0,
+  "independent_evaluation": false,
+  "private_path_fields": 0,
+  "qualification": {
+    "memory_tests": 20,
+    "player_contract_tests_before_last_memory_test": 162,
+    "focus_and_registry_tests": 145,
+    "type_checked_source_files": 399,
+    "overlapping_test_counts_not_additive": true,
+    "legacy_save_reopened_action_free": true,
+    "legacy_save_bytes_unchanged": true,
+    "old_history_backfilled": false,
+    "legacy_model_rejects_history_input": true,
+    "availability_changed_by_memory": false
+  },
+  "saved_endpoint": {
+    "checkpoint_record_sha256": "8d83a7223e81c729c3e278de2f00a38595f86529f32826f9dc5d39f45c036b8d",
+    "living_species": 14,
+    "registered_species": 19,
+    "living_specimens": 17,
+    "required_specimens_remaining": 106,
+    "undeclared_losses": 0,
+    "evolution_available": false,
+    "storage_available": false,
+    "development_offered_not_exercised": true
+  },
+  "next_stage": {
+    "name": "memory-aware useful-goal learning loop",
+    "completed_acceptance_items": 2,
+    "total_acceptance_items": 5,
+    "checklist_percent": 40,
+    "is_time_estimate": false,
+    "is_full_project_completion": false,
+    "complete": ["existing_saved_state_learning_loop", "persisted_search_history_contract"],
+    "remaining": ["history_aware_learner", "two_useful_executable_alternatives", "productive_sampled_lesson_and_followup"]
+  }
+}

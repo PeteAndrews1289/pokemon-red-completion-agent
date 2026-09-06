@@ -22,6 +22,7 @@ from enum import StrEnum
 from types import MappingProxyType
 
 from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.provenance import canonical_sha256
 
 _PARTITIONS = frozenset(
@@ -256,12 +257,18 @@ class GoalOpportunity:
     estimated_risk: float | None = None
     unavailable_reason: GoalUnavailableReason | None = None
     resource_quote: GoalResourceQuote | None = None
+    search_history: GoalSearchHistory | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise GoalManagerError("a goal opportunity needs a binding reference")
         if not isinstance(self.kind, GoalKind):
             raise GoalManagerError("goal opportunity kind is unsupported")
+        if self.search_history is not None and (
+            not isinstance(self.search_history, GoalSearchHistory)
+            or self.kind is not GoalKind.ACQUIRE_SPECIES
+        ):
+            raise GoalManagerError("search history requires an acquisition goal")
         if not isinstance(self.availability, GoalAvailability):
             raise GoalManagerError("goal opportunity availability is unsupported")
         if self.resource_quote is not None and (
@@ -316,6 +323,8 @@ class GoalOpportunity:
         }
         if self.resource_quote is not None:
             result["resource_quote"] = self.resource_quote.public_dict()
+        if self.search_history is not None:
+            result["search_history"] = self.search_history.public_dict()
         return result
 
 
@@ -351,7 +360,8 @@ class GoalManagerQuestion:
         if (
             set(value) != {"candidates", "schema", "situation"}
             or value.get("schema") not in {
-                "pokemon.core.goal-manager-input.v1", "pokemon.core.goal-manager-input.v2"
+                "pokemon.core.goal-manager-input.v1", "pokemon.core.goal-manager-input.v2",
+                "pokemon.core.goal-manager-input.v3",
             }
         ):
             raise GoalManagerError("goal-manager policy input schema is invalid")
@@ -393,10 +403,18 @@ class GoalManagerQuestion:
             }
             if (
                 isinstance(raw, Mapping)
-                and value["schema"] == "pokemon.core.goal-manager-input.v2"
+                and value["schema"] in {
+                    "pokemon.core.goal-manager-input.v2", "pokemon.core.goal-manager-input.v3"
+                }
                 and "resource_quote" in raw
             ):
                 expected_keys.add("resource_quote")
+            if (
+                isinstance(raw, Mapping)
+                and value["schema"] == "pokemon.core.goal-manager-input.v3"
+                and "search_history" in raw
+            ):
+                expected_keys.add("search_history")
             if not isinstance(raw, Mapping) or set(raw) != expected_keys:
                 raise GoalManagerError("goal-manager candidate schema is invalid")
             kind_raw = raw.get("kind")
@@ -430,6 +448,8 @@ class GoalManagerQuestion:
                         GoalResourceQuote.from_public_dict(raw["resource_quote"])
                         if "resource_quote" in raw else None
                     ),
+                    search_history=(GoalSearchHistory.from_public_dict(raw["search_history"])
+                                    if "search_history" in raw else None),
                 )
             )
         result = cls(
@@ -458,6 +478,9 @@ class GoalManagerQuestion:
                     MappingProxyType(item.policy_dict()) for item in self.opportunities
                 ),
                 "schema": (
+                    "pokemon.core.goal-manager-input.v3"
+                    if any(item.search_history is not None for item in self.opportunities)
+                    else
                     "pokemon.core.goal-manager-input.v2"
                     if any(item.resource_quote is not None for item in self.opportunities)
                     else "pokemon.core.goal-manager-input.v1"

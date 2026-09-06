@@ -24,12 +24,14 @@ from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCapture,
     parse_goal_manager_context_capture,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
 
 CHECKPOINT_KIND = "red_bounded_player_checkpoint"
 LEGACY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
 CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v2"
+MEMORY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v3"
 MAXIMUM_STATE_BYTES = 512 * 1024
 
 
@@ -77,6 +79,7 @@ def capture_red_player_terminal(
     source_commit: str,
     source_bundle_sha256: str,
     context_origin: str,
+    search_memory: GoalSearchMemory | None = None,
 ) -> dict[str, object]:
     """Capture without input; return private bytes pending trajectory completion."""
     if context_origin not in {"training", "development", "unspecified"}:
@@ -103,7 +106,8 @@ def capture_red_player_terminal(
     state_sha256 = hashlib.sha256(state).hexdigest()
     envelope = replace(parent.envelope, state_sha256=state_sha256)
     return {
-        "schema": CHECKPOINT_SCHEMA,
+        "schema": MEMORY_CHECKPOINT_SCHEMA if search_memory is not None else CHECKPOINT_SCHEMA,
+        **({"search_memory": search_memory.private_dict()} if search_memory is not None else {}),
         "episode_id": episode_id,
         "context_origin": context_origin,
         "original_state_sha256": parent.state_sha256,
@@ -210,6 +214,7 @@ class RedPlayerCheckpoint:
     semantic_state_sha256: str
     collection: Mapping[str, object]
     record_sha256: str
+    search_memory: Mapping[str, object] | None = None
 
     def require_restored_observation(self, observation: GoalManagerCompositionObservation) -> None:
         """Require a fresh adapter read before any future continuation may act."""
@@ -249,7 +254,7 @@ def open_red_player_checkpoint(
         "automatic_resume_authorized": False,
     }
     schema = document.get("schema")
-    if schema not in {CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA} or any(
+    if schema not in {CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA, MEMORY_CHECKPOINT_SCHEMA} or any(
         document.get(key) != value for key, value in expected.items()
     ):
         raise RedPlayerCheckpointError("checkpoint parent or scope differs")
@@ -260,7 +265,7 @@ def open_red_player_checkpoint(
         raise RedPlayerCheckpointError("checkpoint encoded state differs")
     try:
         state = base64.b64decode(
-            encoded, altchars=b"-_" if schema == CHECKPOINT_SCHEMA else None, validate=True
+            encoded, altchars=b"-_" if schema != LEGACY_CHECKPOINT_SCHEMA else None, validate=True
         )
     except ValueError as error:
         raise RedPlayerCheckpointError("checkpoint encoded state differs") from error
@@ -284,6 +289,11 @@ def open_red_player_checkpoint(
         )
     ):
         raise RedPlayerCheckpointError("checkpoint final ledger differs")
+    memory = None
+    if schema == MEMORY_CHECKPOINT_SCHEMA:
+        memory = GoalSearchMemory.from_private_dict(document.get("search_memory")).private_dict()
+    elif "search_memory" in document:
+        raise RedPlayerCheckpointError("legacy checkpoint cannot declare search memory")
     return RedPlayerCheckpoint(
         capture=capture,
         original_state_sha256=original_parent.state_sha256,
@@ -291,4 +301,5 @@ def open_red_player_checkpoint(
         semantic_state_sha256=_sha(document.get("semantic_state_sha256")),
         collection=MappingProxyType(dict(collection)),
         record_sha256=record.summary.record_sha256,
+        search_memory=memory,
     )

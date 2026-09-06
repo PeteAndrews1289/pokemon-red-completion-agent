@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can a resumed chooser distinguish exhausted from genuinely changed opportunities and choose between two actually executable collection goals without raw identities, a fixed route or rewriting old examples?",
+      "cheapest_falsifier": "Can the successor distinguish observed failed-search effort from unknown legacy history, preserve the old corpus, and use a genuinely different collection opportunity without private identity features or a hand-written next-goal rule?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual sampled goal outcome and one fit, 31 to 32 examples. One greedy model goal executed in follow-up; no full-player promotion or independent advantage.",
-        "blocker": "The follow-up still chose acquisition after an exhausted search. Search history does not persist as a learned input; the useful capture/development contrast was not realized. Evolution/storage remain unavailable here.",
-        "decision": "Close the fit and sole diagnostic. Make prior search effort visible and expose a useful collection alternative before collecting more local-search examples.",
+        "authority_delta": "Zero new model rows, fits or executed learned choices. This was the bounded maintenance seam for the named memory-aware learning lesson.",
+        "blocker": "History-aware model representation/fitting is not implemented. The current endpoint still lacks evolution/storage; local development is available but not yet a useful collection alternative. Legacy history is unknown and must not be invented.",
+        "decision": "Close the memory foundation and move directly to the versioned learner plus a real collection alternative. Do not run another history-free acquisition-only loop.",
         "evidence": {
-          "kind": "model_fit",
-          "path": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json",
-          "sha256": "187bbb20ce34ab060ee4a7fea93cbda557fdc67ba15726f61bf12d44e0857392"
+          "kind": "qualification",
+          "path": "docs/evidence/red-search-memory-qualification-2026-09-06.json",
+          "sha256": "412091c2a589d0d9ebd2b8b5bd583b315d6e6c6faafbf5c76bcfcdeeede40475"
         },
-        "learning_output": "One settled negative outcome, 330 actions / 21804 frames. One fit retains all 31 prior rows and yields 32. The excluded initial launch used zero input. Greedy follow-up: 198 actions / 8700 frames, zero catches and zero fitting rows.",
-        "next_falsifier": "Can a resumed chooser distinguish exhausted from genuinely changed opportunities and choose between two actually executable collection goals without raw identities, a fixed route or rewriting old examples?",
-        "next_session_goal": "Persist title-neutral search history across saves and expose a genuinely useful collection alternative before another bounded sampled lesson. Do not repeat acquisition-only searches, grind the established party or build a new teacher.",
-        "product_alignment": "A continued-play learning loop now works, but a living collection needs productive choices rather than endlessly repeated searches. Prioritize search memory and real collection alternatives.",
-        "session_id": "2026-09-06-saved-endpoint-learning",
+        "learning_output": "No new learning data. Twenty memory tests and saved-state read-only inspection qualify the engineering seam. The next-stage checklist is 2 of 5 complete (40%); it is not a time or full-project estimate.",
+        "next_falsifier": "Can the successor distinguish observed failed-search effort from unknown legacy history, preserve the old corpus, and use a genuinely different collection opportunity without private identity features or a hand-written next-goal rule?",
+        "next_session_goal": "Implement a versioned history-aware learner with honest missing-history treatment for all 32 old examples; then demonstrate two useful executable collection alternatives before a short sampled lesson. Do not replay the exhausted local search or arbitrarily grind the party.",
+        "product_alignment": "Sustained collecting requires remembered search effort and productive alternatives, not repeated local searches or an overleveled teacher. This maintenance supplies explicit context for that next learned choice.",
+        "session_id": "2026-09-06-search-memory",
         "status": "closed",
-        "stop_condition": "Both learning identities and the sole post-fit diagnostic are closed. Do not replay them. Next session is four hours maximum; reassess after 90 minutes without a useful alternative. No full replay, sealed Red, hack or Crystal execution.",
-        "transfer_result": "Same original Red train lineage only. No independent root, gameplay superiority or transfer claim. Sustained Red competence still precedes a compatible unfamiliar Red modification and Crystal."
+        "stop_condition": "No rollout or fit was launched. The next session must implement history-aware learning and a useful choice; reorient rather than spend another session on receipts or repeat the same search. No full replay, sealed Red, hack or Crystal.",
+        "transfer_result": "Identity-renamed/reordered and restored ROM-free engineering cases only; no independent gameplay, Red-modification or Crystal transfer result."
       },
       "learned_authority": {
-        "current": "The goal-value model now contains 32 examples after one sampled negative search was fitted with all 31 prior rows retained. The post-fit greedy continuation still chose acquisition and caught nothing. Final state restores correctly; no improved sustained play or collection gain is established.",
+        "current": "The 32-example model is unchanged. Versioned search history now records actual metered searches, projects identity-free effort and survives authenticated checkpoint recovery. Legacy scorers reject the new input instead of silently ignoring it. No new learned action, fit, catch or authority promotion occurred.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Persist title-neutral search history across saves and expose a genuinely useful collection alternative before another bounded sampled lesson. Do not repeat acquisition-only searches, grind the established party or build a new teacher.",
+      "next_decision": "Implement a versioned history-aware learner with honest missing-history treatment for all 32 old examples; then demonstrate two useful executable collection alternatives before a short sampled lesson. Do not replay the exhausted local search or arbitrarily grind the party.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

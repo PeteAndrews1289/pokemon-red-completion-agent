@@ -45,6 +45,7 @@ from pokemon_red_completion.goal_manager_runtime import (
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 
 
 class BoundedPlayerError(RuntimeError):
@@ -290,6 +291,7 @@ def run_bounded_player_episode(
     completion_satisfied: CompletionPredicate,
     limits: BoundedPlayerLimits | None = None,
     failure_observer: Callable[[BaseException], None] | None = None,
+    search_memory: GoalSearchMemory | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -455,6 +457,22 @@ def run_bounded_player_episode(
             raise BoundedPlayerError(
                 "successful bounded goal did not change semantic state"
             )
+        if search_memory is not None and actions > 0 and (
+            execution.selected_kind is GoalKind.ACQUIRE_SPECIES
+            and (
+                execution.passed
+                or execution.verification.failure_reason is GoalFailureReason.SEARCH_EXHAUSTED
+            )
+        ):
+            search_memory.record(
+                question.opportunities[execution.selected_candidate_index].binding_ref,
+                current.collection.required_specimens_sha256,
+                exhausted=not execution.passed, actions=actions, frames=frames,
+            )
+            refreshed = _observe_without_actions(observe, budget_meter, executed_budget)
+            if refreshed.collection != after.collection:
+                raise BoundedPlayerError("search memory refresh changed collection")
+            after = refreshed
         steps.append(
             BoundedPlayerStep(
                 decision_ordinal=decision_index + 1,

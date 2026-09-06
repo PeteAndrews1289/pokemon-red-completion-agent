@@ -61,6 +61,7 @@ from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
     CompletionFirstGoalTeacher,
     GoalDecisionAuthority,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory  # noqa: E402
 from pokemon_red_completion.living_dex_goal_model_record import (  # noqa: E402
     LivingDexGoalModelRecord,
 )
@@ -243,6 +244,7 @@ class _LiveObserver:
     route_world: StrategicScenarioRouteWorld | None = None
     quote_resource_costs: bool = False
     maximum_actions_per_decision: int = 6_000
+    search_memory: GoalSearchMemory | None = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -260,6 +262,7 @@ class _LiveObserver:
         bridge = _player_observer(
             self.runtime, skill_actions, self.route_world, self.quote_resource_costs
         )
+        bridge.search_memory = self.search_memory
         observation = bridge()
         if self.meter.checkpoint() != before or deferred.attempted_while_disabled:
             raise PairedRedBoundedPlayerRunError("action_free_observation")
@@ -720,6 +723,12 @@ def _continue_readiness(
             expected_rom_sha256=readiness.rom_sha256,
             expected_context_origin=readiness.context_origin,
         )
+        if readiness.continuation is not None and readiness.continuation.search_memory is not None:
+            if checkpoint.search_memory is None:
+                raise PairedRedBoundedPlayerRunError("continuation_search_history_lost")
+            GoalSearchMemory.from_private_dict(checkpoint.search_memory).require_extension(
+                GoalSearchMemory.from_private_dict(readiness.continuation.search_memory)
+            )
         split = metadata.get("split") if isinstance(metadata, Mapping) else None
         if not isinstance(split, Mapping) or split.get("partition") != "train":
             raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
@@ -770,9 +779,14 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
     actions = CountingExecutor(
         FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
     )
-    observation = _player_observer(
+    observer = _player_observer(
         runtime, actions, _route_world(readiness), readiness.quote_resource_costs,
-    )()
+    )
+    if getattr(readiness.continuation, "search_memory", None) is not None:
+        observer.search_memory = GoalSearchMemory.from_private_dict(
+            readiness.continuation.search_memory
+        )
+    observation = observer()
     readiness.continuation.require_restored_observation(observation)
     if (
         actions.actions_executed
@@ -1061,6 +1075,12 @@ def _run_arm(
             meter = CompositionIndependentBudgetMeter(hard_actions, frames)
             if viewer is not None:
                 viewer.safely("bind_budget", meter.checkpoint)
+            search_memory = (
+                GoalSearchMemory.from_private_dict(readiness.continuation.search_memory)
+                if readiness.continuation is not None
+                and readiness.continuation.search_memory is not None
+                else None
+            )
             observer = _LiveObserver(
                 runtime=runtime,
                 actions=actions,
@@ -1069,6 +1089,7 @@ def _run_arm(
                 route_world=_route_world(readiness),
                 quote_resource_costs=readiness.quote_resource_costs,
                 maximum_actions_per_decision=limits.max_actions_per_decision,
+                search_memory=search_memory,
             )
             trajectory_class = (
                 ViewerGoalTrajectory
@@ -1152,6 +1173,7 @@ def _run_arm(
                 completion_satisfied=_completion_predicate(readiness),
                 limits=limits,
                 failure_observer=record_component_failure,
+                search_memory=search_memory,
             )
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
@@ -1161,6 +1183,7 @@ def _run_arm(
                     emulator=emulator,
                     meter=meter,
                     observe=observer,
+                    search_memory=search_memory,
                     parent=readiness.capture,
                     result=result,
                     episode_id=episode_id,

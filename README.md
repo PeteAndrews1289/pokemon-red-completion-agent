@@ -2,6 +2,13 @@
 
 ## Latest development checkpoint
 
+Search-history storage and observation are now implemented and tested across saved continuations.
+The next model version still needs to learn from that history; the existing model remains at
+32 examples. No new gameplay improvement is claimed. See the
+[current audit and milestone checklist](docs/audits/red-search-memory-2026-09-06.md).
+
+### Previous learning result
+
 The goal-value learner now has **32 real examples**, retaining all 31 earlier rows and learning
 from a sampled unsuccessful search and its costs. Saved-state training and a post-fit continuation
 both ran. The follow-up still searched without a catch, so improved sustained play is **not yet

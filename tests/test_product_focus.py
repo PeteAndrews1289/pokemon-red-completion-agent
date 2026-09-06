@@ -2194,7 +2194,11 @@ def test_tracked_public_evidence_reader_is_qualified_without_protected_effects()
 
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
-    public = DASHBOARD["product_focus_dashboard_snapshot"](state).public_dict()
+    # This is the historical 29-to-31 fixture, not whichever model the live
+    # dashboard happens to reference after the next real training session.
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-native-player-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](state, evidence=evidence).public_dict()
     assert public["run_status"] == "waiting"
     assert public["actions"] == 0
     assert public["stage_progress"] == 0
@@ -2222,6 +2226,22 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "Brier 0.397811" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_dashboard_projects_saved_negative_search_fit_without_a_gameplay_claim() -> None:
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-saved-endpoint-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](
+        load_product_focus(), evidence=evidence,
+    ).public_dict()
+    assert public["training"]["samples_before"] == 31
+    assert public["training"]["samples_after"] == 32
+    assert public["training"]["newly_collected"] == 1
+    assert public["training"]["held_out_claim"] is False
+    assert public["model"]["decisions"] == public["actions"] == 0
+    assert public["learning_components"][0]["model_sha256"] == (
+        "5b92e48c39a7eff724d9ed0ddb32ed2460997e95cdaecdc16ac5ec603b4683bc"
+    )
 
 
 def test_develop_team_freeze_failure_is_path_free_and_closes_the_exact_lane() -> None:

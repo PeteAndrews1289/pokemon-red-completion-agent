@@ -32,6 +32,7 @@ from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
 from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -193,6 +194,7 @@ class ExecutableGoalBinding:
     execute: GoalExecutor
     verify: GoalVerifier
     resource_quote: GoalResourceQuote | None = None
+    search_history: GoalSearchHistory | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
@@ -213,6 +215,7 @@ class ExecutableGoalBinding:
             estimated_effort=self.estimated_effort,
             estimated_risk=self.estimated_risk,
             resource_quote=self.resource_quote,
+            search_history=self.search_history,
         )
 
 
