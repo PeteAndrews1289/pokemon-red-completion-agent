@@ -21,11 +21,11 @@ from pokemon_red_completion.red_living_dex_targeted_bank_retirement import (
 )
 
 
-def _capabilities() -> tuple[RedLivingDexCausalRootCapability, ...]:
+def _capabilities(root_count: int = 10) -> tuple[RedLivingDexCausalRootCapability, ...]:
     slots = build_red_living_dex_prospective_capture_plan().slots
     recipes = _recipes()
     capabilities: list[RedLivingDexCausalRootCapability] = []
-    for root_ordinal in range(10):
+    for root_ordinal in range(root_count):
         root = _setup_root(300 + root_ordinal)
         observation = replace(
             _provider_root(300 + root_ordinal),

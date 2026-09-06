@@ -35,6 +35,11 @@ ordering being reproduced, then a scoped fixture restoring the original modules 
 The security check was correct; the test's assumed empty interpreter was not. Keep the learning
 counter unchanged until actual outcomes and a saved model update exist.
 
+**First real launch:** Show **CI PASSED → STOPPED BEFORE INPUT**, then **PRODUCER: AT LEAST ONE
+RESERVE / READER: EXACTLY TWO**. The frozen plan has one; the original test only had two. Show the
+new producer-reader cases for one, two and three without implying new gameplay. Keep **8 LESSONS
+UNCHANGED · ZERO NEW OUTCOMES · ZERO NEW FITS** on screen until the real batch proves otherwise.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.

@@ -107,3 +107,27 @@ parallel runtime/invocation set passes 84 tests. The eight-lesson plan and execu
 unchanged. Repository rules require a pull request and the `test` check; do not bypass those rules
 or label the previous failed main run green. Publish the isolated test correction, qualify the
 consumer, then run the already prepared lessons.
+
+## Four-hour reassessment: real launch, zero-input rejection
+
+PR 229 merged as `ba5a01d0`; exact-main CI `34015856963` attempt 1 passed. The first real
+`--fit-on-complete` invocation then failed at schedule-envelope authentication, before claims,
+input, outcomes or fitting. Its arguments and frozen file hash match. The defect is the reader's
+hard-coded `(4, 4, 2)` split: the producer requires at least one reserve and correctly froze
+`(4, 4, 1)`. The plan is not changed or regenerated to work around the failure.
+
+Before repair, producer-to-reader regression cases with nine and eleven roots fail, while ten
+passes. The fix retains exactly four train roots/eight lessons and four paired roots, disjoint
+identities, and a nonempty reserve. Test one, two and three reserves plus missing-group rejection.
+Run the actual action-free replay on the candidate before another publication. No reserve may
+replace a bad outcome and no old terminal may retry.
+
+The engineering time box has been reached. This explicit reassessment keeps only the named
+learning unblock active: real eight-lesson collection, then the existing admitted fitter.
+Do not add architecture, alternate learners or further CI redesign. Report the unchanged real
+23-row corpus/18-example model until production evidence proves otherwise.
+
+The focused producer/reader/freezer/command set passes **26 tests in 251.34 seconds** after the
+repair. Lint, documentation, public-artifact checks, generated registry and 385-source type checking
+pass. The actual frozen file still hashes to its original identity. Real action-free replay is
+checked separately; these tests are not game outcomes or model fitting.

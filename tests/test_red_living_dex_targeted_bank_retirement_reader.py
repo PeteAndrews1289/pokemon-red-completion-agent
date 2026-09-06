@@ -34,8 +34,8 @@ def _expectations() -> RedLivingDexTargetedBankRetirementExpectations:
     )
 
 
-def _payload():  # type: ignore[no-untyped-def]
-    frozen = plan_red_living_dex_targeted_bank_retirement(_capabilities())
+def _payload(root_count: int = 10):  # type: ignore[no-untyped-def]
+    frozen = plan_red_living_dex_targeted_bank_retirement(_capabilities(root_count))
     document = {
         **_expectations().document_fields(),
         "binding": frozen.private_dict(),
@@ -50,8 +50,11 @@ def _payload():  # type: ignore[no-untyped-def]
     return frozen, document, payload
 
 
-def test_retirement_descriptor_authenticates_split_without_execution_authority() -> None:
-    frozen, _document, payload = _payload()
+@pytest.mark.parametrize("root_count, reserve_count", [(9, 1), (10, 2), (11, 3)])
+def test_retirement_descriptor_authenticates_split_without_execution_authority(
+    root_count: int, reserve_count: int,
+) -> None:
+    frozen, _document, payload = _payload(root_count)
 
     descriptor = load_red_living_dex_targeted_bank_retirement_descriptor(
         payload,
@@ -63,14 +66,16 @@ def test_retirement_descriptor_authenticates_split_without_execution_authority()
     assert descriptor.schedule_descriptor.schedule == frozen.binding.schedule
     assert len(descriptor.retired_train_lineages) == 4
     assert len(descriptor.paired_development_lineages) == 4
-    assert len(descriptor.reserve_development_lineages) == 2
+    assert len(descriptor.reserve_development_lineages) == reserve_count
+    assert descriptor.public_dict()["reserve_development_roots"] == reserve_count
     assert not hasattr(descriptor.schedule_descriptor.capabilities[0], "recipe")
     assert descriptor.public_dict()["controller_actions"] == 0
     assert descriptor.public_dict()["outcomes_opened"] == 0
 
 
-def test_retirement_plan_returns_only_a_fresh_exact_red_binding() -> None:
-    frozen, _document, payload = _payload()
+@pytest.mark.parametrize("root_count", [9, 10, 11])
+def test_retirement_plan_returns_only_a_fresh_exact_red_binding(root_count: int) -> None:
+    frozen, _document, payload = _payload(root_count)
 
     restored = authenticate_red_living_dex_targeted_bank_retirement_plan(
         payload,
@@ -80,6 +85,24 @@ def test_retirement_plan_returns_only_a_fresh_exact_red_binding() -> None:
     )
 
     assert restored is frozen.binding
+
+
+@pytest.mark.parametrize(
+    "group",
+    ["retired_train_lineages", "paired_development_lineages", "reserve_development_lineages"],
+)
+def test_retirement_descriptor_preserves_required_train_paired_and_reserve_groups(
+    group: str,
+) -> None:
+    _frozen, _document, payload = _payload(9)
+    descriptor = load_red_living_dex_targeted_bank_retirement_descriptor(
+        payload,
+        expected_plan_sha256=hashlib.sha256(payload).hexdigest(),
+        expectations=_expectations(),
+    )
+
+    with pytest.raises(RedLivingDexTargetedBankRetirementReaderError, match="lineage split"):
+        replace(descriptor, **{group: getattr(descriptor, group)[:-1]})
 
 
 def test_retirement_plan_rejects_metadata_or_lineage_reinterpretation() -> None:

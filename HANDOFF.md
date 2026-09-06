@@ -5,6 +5,14 @@
 Use [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the current
 [roadmap](docs/model-first-roadmap.md), not older checkpoints below.
 
+**Latest launch checkpoint:** PRs 228/229 are merged. Exact-main CI `34015856963` passed on
+`ba5a01d0`. The real launch stopped before any input at schedule-envelope authentication: the
+reader insists on two reserves, but the already frozen valid plan contains one. The narrowly
+scoped reader repair preserves eight train lessons/four paired roots and requires a nonempty
+reserve; the frozen producer/file stay unchanged. Validate the real action-free replay before
+publishing the correction. No trial or fit was consumed, and no campaign is currently running.
+This checkpoint supersedes the older publication-next statements immediately below.
+
 - Local code closes all three September 6 findings: owned-reservation command re-entry, actual
   selected-kind/full-terminal readiness, and explicit current-prior/complete-corpus fit admission.
 - The existing retired-bank train command now accepts `--prior-model-record-id` (required) and

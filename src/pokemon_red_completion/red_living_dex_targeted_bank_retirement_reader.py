@@ -139,7 +139,9 @@ class RedLivingDexTargetedBankRetirementDescriptor:
                 "retired targeted lineage groups differ"
             )
         lineage_sets = tuple(set(group) for group in groups)
-        if tuple(map(len, groups)) != (4, 4, 2) or any(
+        # The producer requires a nonempty reserve, not exactly two roots.
+        # Reserve cardinality cannot change the eight train/four paired slots.
+        if (len(groups[0]), len(groups[1])) != (4, 4) or not groups[2] or any(
             left & right
             for index, left in enumerate(lineage_sets)
             for right in lineage_sets[index + 1 :]
