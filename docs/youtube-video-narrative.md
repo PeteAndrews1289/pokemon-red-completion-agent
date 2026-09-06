@@ -14,6 +14,11 @@ pieces. Next we run eight real Red lessons and let the qualified data reach the 
 Only show a completed production training card once its real fit receipt exists. A fitted goal
 scorer remains distinct from a deployed player; sustained model-chosen Pokémon progress is next.
 
+**Development footnote:** Show **23 SAVED LESSONS / PRIOR FIT ON 18** beside a crossed-out circular
+arrow: **MUST ALREADY BE TRAINED BEFORE COLLECTING TRAINING DATA**. Replace it with independent
+checks for **ALL TRAINING EXCLUSIONS** and **NAMED PRIOR MODEL**. Label this an action-free inventory
+repair, not gameplay or a new learning result; the stricter evaluation rule stays in place.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.

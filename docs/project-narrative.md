@@ -14,6 +14,13 @@ still contains 23 lessons and its current model was trained on 18. Publication, 
 lessons and the admitted refit are next. The dashboard now distinguishes collection, fitting and
 a fitted-but-not-deployed scorer; none is presented as autonomous full-game play.
 
+The real-data preparation then caught a circular prerequisite the synthetic end-to-end test did
+not cover: an evaluation inventory expected the model to include all 23 lessons before training
+could collect the next batch. We separated training exclusions from evaluation readiness. This
+keeps every old lesson and the frozen prior without requiring a premature fit. The failure advanced
+zero game frames; 13 further tests and a real-data inventory check verified the repair. This was a
+data-flow integration error, not a Pokémon navigation failure.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still

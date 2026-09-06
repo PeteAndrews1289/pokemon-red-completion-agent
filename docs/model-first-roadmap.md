@@ -14,6 +14,14 @@ outcomes, and immutable recovery. The 385-file type check and lint passed. The r
 23 train examples and the current real model remains fitted on 18; no new gameplay or production
 fit has occurred in this repair checkpoint.
 
+The first action-free preparation exposed one additional circular dependency: evaluation inventory
+required a model fitted on all 23 saved rows before it could supply exclusions for collecting more
+training data. The training-only freezer now authenticates its named 18-example prior independently
+and excludes every train/history lineage from the full current corpus. Evaluation readiness remains
+strict. Thirteen additional tests and the real-data exclusion recheck passed; see
+[the pre-input repair evidence](evidence/red-training-inventory-unfitted-corpus-repair-2026-09-06.json).
+The failed preparation published no plan and consumed no input or root claim.
+
 ### Execute next; do not reopen the architecture
 
 1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and

@@ -44,6 +44,8 @@ def _args(tmp_path: Path) -> list[str]:
         "1" * 64,
         "--expected-model-record-sha256",
         "2" * 64,
+        "--prior-model-record-id",
+        "test-current-prior",
         "--plan-out",
         str(tmp_path / "retirement.json"),
     ]

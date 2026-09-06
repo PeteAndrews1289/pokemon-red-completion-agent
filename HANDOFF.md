@@ -23,6 +23,14 @@ Use [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the current
 - After a real fit, update counters only from its evidence and prepare bounded model control.
   Four paired roots give descriptive engineering evidence, not statistical superiority.
 
+Preparation follow-up: the first freeze failed before input because an evaluation inventory helper
+required all 23 rows to be fitted already. A separate training-exclusion loader now includes every
+current row without that circular requirement; the freezer independently authenticates its named
+prior (`--prior-model-record-id` is now required there too). The production read-only recheck excludes
+19 train lineages plus seven historical/supplemental development roots. Thirteen additional tests
+pass, including proof that the original evaluation model loader still rejects a stale corpus.
+No private plan or root claim was created by the failed preparation. Publish this in the same PR.
+
 ## Historical checkpoint — September 6 recovery audit
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then

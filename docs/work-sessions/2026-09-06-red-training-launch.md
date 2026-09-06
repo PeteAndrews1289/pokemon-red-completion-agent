@@ -45,3 +45,13 @@ the dashboard and fitter use actual selected kinds and the entire terminal denom
 dashboard can display collection, fitting and a saved-but-not-deployed model separately.
 
 Next is one batched publication followed by private freeze/preflight and the eight real lessons.
+
+## Real-data preparation finding
+
+The first freeze authenticated 81 train/validation contexts but stopped at exclusion inventory,
+with zero frames, claims, outcomes or published plan. The old helper demanded a fitted model for
+the full 23-row corpus instead of the intended 18-row prior: collecting the next training batch
+depended on fitting the incomplete batch first. A bounded follow-up separates training exclusions
+from evaluation readiness, authenticates the named prior independently, and preserves every train
+lineage plus all seven historical/supplemental development roots. Thirteen additional tests pass;
+the production read-only recheck succeeds. This follow-up joins the same PR before new gameplay.

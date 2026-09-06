@@ -62,7 +62,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-red-training-launch-repair** · status **active** · evidence [qualification](docs/evidence/red-training-launch-local-qualification-2026-09-06.json)
+**2026-09-06-red-training-launch-repair** · status **active** · evidence [qualification](docs/evidence/red-training-inventory-unfitted-corpus-repair-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -70,7 +70,7 @@ outputs.
 | Learning output | No counters advance in this maintenance sub-session. Production readers authenticated 23 train examples, all ten targeted setup terminals (five complete, five failed), and the existing eighteen-example model. Five settled campaign rows remain unfitted. The cumulative 111-example multi-family scorecard is not this option model's corpus size and awaits a separate evidence-backed admission update. |
 | Authority delta | None. The existing eighteen-example option model remains shadow-only. The recovery audit authenticated 23 train rows and ten targeted setup terminals but performed no fit, prediction, controller input or new outcome collection. |
 | Transfer result | None. Four non-tied paired wins would have one-sided exact sign-test p=0.0625, so the proposed Red check cannot promise 5-percent statistical superiority. Crystal and cross-title claims remain deferred; bounded Red development may still use honestly labeled descriptive results. |
-| Blocker | The three recovery/admission seams are locally repaired with 80 passing focused tests and the full 385-source type check. Publication and the new private 4/4/2 freeze/preflight remain before gameplay. The real model is still the eighteen-example prior; simulated test fits do not advance product counters. |
+| Blocker | The recovery/admission repair passed 80 focused tests. Real-data preparation then found an evaluation-inventory dependency that incorrectly required all 23 rows fitted before collecting more training. The separate training-exclusion loader passed 13 additional tests and a production read-only recheck; evaluation remains strict. Publish the coherent follow-up and complete the private freeze/preflight before gameplay. |
 | Decision | Publish the coherent repair through the existing PR 228 stack, freeze and preflight the diverse successor, collect eight bounded train lessons, then let the shared factual gate admit one update through the existing fitter. Preserve every old terminal and all 23 current train rows. Do not open another architecture or teacher-factory project. |
 | Next session | Publish the single coherent repair, freeze/preflight 4/4/2 and collect eight bounded train lessons with automatic admitted fitting. Then report the actual model update and prepare short model-chosen Red goal episodes using deterministic low-level skills. |
 | Next falsifier | The qualified real command must action-free rebind the 4/4/2 plan and authenticate all 23 retained train rows plus the current eighteen-example prior. Actual eight-slot collection must provide six or more settled rows, acquisition at least one and development at least three; the existing fitter must preserve negatives, baseline rows and immutable recovery. |
