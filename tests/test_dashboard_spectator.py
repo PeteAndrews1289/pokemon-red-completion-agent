@@ -6,6 +6,7 @@ import runpy
 from dataclasses import replace
 from html.parser import HTMLParser
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -105,6 +106,59 @@ def test_native_player_fit_display_rejects_false_learning_claims(field, value):
     receipt["fit"][field] = value
     with pytest.raises(ProgressDashboardError):
         OVERVIEW["_training_projection"](receipt)
+
+
+def test_main_loop_retains_last_verified_view_during_focus_digest_refresh(monkeypatch):
+    main = OVERVIEW["main"]
+    namespace = main.__globals__
+    actual_load = namespace["load_product_focus"]
+    calls = 0
+    snapshots = []
+    seconds = [0.0]
+
+    def load():
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise namespace["ProductFocusError"]("reorientation evidence file digest differs")
+        return actual_load()
+
+    class Relay:
+        def __init__(self, snapshot, **kwargs):
+            snapshots.append(snapshot)
+
+        def publish(self, snapshot):
+            snapshots.append(snapshot)
+
+        def poll(self):
+            pass
+
+    class Server:
+        url = "http://127.0.0.1:8768/"
+
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+    monkeypatch.setitem(namespace, "load_product_focus", load)
+    monkeypatch.setitem(namespace, "load_dashboard_work_status", lambda _: DashboardWorkState())
+    monkeypatch.setitem(namespace, "DashboardRelayState", Relay)
+    monkeypatch.setitem(namespace, "ProgressDashboardServer", Server)
+    monkeypatch.setitem(namespace, "time", SimpleNamespace(
+        monotonic=lambda: seconds[0],
+        sleep=lambda duration: seconds.__setitem__(0, seconds[0] + duration),
+    ))
+    assert main(["--duration-seconds", "3", "--no-browser"]) == 0
+    assert calls == 3
+    assert snapshots[1].work.status == "blocked"
+    assert snapshots[-1].work.status == "idle"
+    assert all(snapshot.training.samples_after == 31 for snapshot in snapshots)
+    assert all(snapshot.collection_observed is False for snapshot in snapshots)
 
 
 def test_saved_run_recap_uses_actual_choices_resources_and_denominator() -> None:

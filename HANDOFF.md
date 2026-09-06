@@ -27,6 +27,11 @@ Final local verification: **7,085 passed, four skipped, one expected failure**, 
 type, registry, documentation/focus and public-artifact checks. Both targeted regression mutations
 were killed. The viewer was refreshed and visually verified with 31 examples and no fake live game.
 
+A post-suite live refresh check exposed an uncaught transient evidence-digest mismatch. The
+viewer-only repair retains the last verified input set and recovers after a valid update; 157
+dashboard/focus checks pass, including the real main-loop regression. The full-suite count above
+predates this isolated observer repair; no additional gameplay or fitting occurred.
+
 ## In progress — September 6 economic quotes and native player training
 
 Read [this session plan](docs/work-sessions/2026-09-06-resource-cost-learning.md) first.

@@ -17,6 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from product_focus import (  # noqa: E402
+    ProductFocusError,
     ProductFocusState,
     focus_scorecard,
     load_product_focus,
@@ -520,13 +521,15 @@ def main(argv: list[str] | None = None) -> int:
                 if now - last_refresh >= 1.0:
                     last_refresh = now
                     try:
-                        focus = load_product_focus()
-                        work = load_dashboard_work_status(args.work_status_file)
+                        candidate_focus = load_product_focus()
+                        candidate_work = load_dashboard_work_status(args.work_status_file)
                         candidate_evidence = _load_learning_evidence()
                         _training_projection(candidate_evidence)
-                        evidence = candidate_evidence
-                        recap = _load_run_recap()
-                    except (DashboardWorkStatusError, ProgressDashboardError):
+                        candidate_recap = _load_run_recap()
+                        focus, work, evidence, recap = (
+                            candidate_focus, candidate_work, candidate_evidence, candidate_recap
+                        )
+                    except (ProductFocusError, DashboardWorkStatusError, ProgressDashboardError):
                         work = DashboardWorkState(
                             status="blocked",
                             headline="Dashboard refresh needs attention",

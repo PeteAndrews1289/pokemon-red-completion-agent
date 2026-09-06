@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "model_fit",
           "path": "docs/evidence/red-native-player-learning-result-2026-09-06.json",
-          "sha256": "83b981d6dbc4d6d9214f01b7ae5aedcbef23672c70e897ee3f5f2082bdecf162"
+          "sha256": "96671713e6df08a6ad752bd59fc758e0ff830564258429de2b3323a84f60e8f5"
         },
         "learning_output": "Two sampled player outcomes joined all 29 retained rows in one real 31-example goal-value fit. B completed four goals and saved its state; two failed launches remain disclosed, with no retroactive training labels. Training MSE changed from 0.00514748 to 0.00479554; this is not held-out accuracy.",
         "next_falsifier": "Does the 31-example model retain useful collection progress from the verified endpoint without wasting scarce money, while all controller inputs remain bounded and every failure remains visible?",

@@ -211,6 +211,12 @@
       "skipped": 1,
       "xfailed": 1
     },
+    "post_suite_viewer_refresh": {
+      "focused_tests_passed": 157,
+      "full_suite_rerun": false,
+      "scope": "observer_refresh_only_plus_registry_identity",
+      "source_bundle_sha256": "9bc481599eec6fce19ac5cc461dc6bf2198279693df5251f54b78ae6c2847937"
+    },
     "targeted_regression_mutations_attempted": 2,
     "targeted_regression_mutations_killed": 2
   },

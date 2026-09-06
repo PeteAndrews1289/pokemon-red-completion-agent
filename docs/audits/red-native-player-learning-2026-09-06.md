@@ -72,6 +72,13 @@ in the browser: 31 examples, correct training-error values, explicit historical 
 live emulator falsely displayed. Publication uses one consolidated pull request; CI is a background
 publication check, not a dependency for the already completed fit.
 
+Post-suite observer repair: the final live check found that a transient evidence/checksum mismatch
+during a multi-file update escaped the refresh handler and stopped the viewer. The observer now
+keeps the last verified inputs, reports blocked refresh, and resumes when all inputs validate;
+initial startup still requires valid evidence. An actual main-loop regression test and **157**
+dashboard/focus checks pass. This isolated observer change and its registry identity were made
+after the full suite; no second full-suite pass or additional model fit is claimed.
+
 ## Remaining risks, in priority order
 
 1. **Useful behavior is not yet established.** The training update changes a recorded preference,
