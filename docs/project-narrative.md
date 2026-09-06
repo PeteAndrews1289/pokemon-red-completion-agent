@@ -41,6 +41,13 @@ verified module restoration, keeping the production origin guard strict. Cold/wa
 and a broader parallel set pass. This explains another publication delay honestly; it still does
 not count as model training or Pokémon progress.
 
+The next exact-main check passed, but the first real launch still stopped before input: a reader
+assumed two spare roots even though its producer allowed one. Regression tests reproduced this
+for both one and three reserves, exposing an integration contract that the two-reserve fixture
+had hidden. The repair preserves the original eight lessons and all outcome rules. We explicitly
+reassessed the elapsed engineering time; only this direct launch blocker remains in scope before
+real collection and an admitted update. No training claim is made for the failed invocation.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still

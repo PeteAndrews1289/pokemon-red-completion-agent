@@ -2,6 +2,16 @@
 
 ## Current checkpoint — September 6 training-launch repair
 
+**Latest:** PRs 228/229 are merged and exact-main CI `34015856963` passed (`ba5a01d0`). The real
+launch was rejected before input by an inconsistent two-reserve reader assumption; its valid
+frozen plan has one reserve. Correct that reader, verify real action-free replay, and qualify the
+correction without changing the plan. The four-hour maintenance reassessment rules out new
+architecture or CI redesign: the output must still be eight actual lessons and an admitted update,
+not another preflight count. No production lesson or fit occurred in the rejected invocation.
+The bounded fix now passes 26 focused tests and the **real complete action-free replay plus
+prior/corpus basis dry run**; [evidence](evidence/red-training-reserve-reader-repair-2026-09-06.json).
+Publish/qualify this corrected reader, then proceed directly to the eight still-unclaimed lessons.
+
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first. The three recovery/admission
 findings are now repaired locally: the command accepts only its own exact existing reservations;
 dashboard and fitting share actual-choice/full-denominator readiness; and the existing fitter
@@ -46,8 +56,8 @@ the freeze, alter the learner, or turn this into a broader runtime redesign.
 
 ### Execute next; do not reopen the architecture
 
-1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and
-   one batched publication, not another series of tiny CI-only changes.
+1. PRs 228/229 are already merged. Correct and qualify the proven reserve-cardinality mismatch;
+   verify the real pre-input path locally before publishing the bounded follow-up.
 2. Reuse the completed 4-train/4-paired/1-reserve freeze. The live command performs action-free
    preflight before input and retains the 23-row corpus fingerprint and intended current prior.
    Re-entry must preserve
