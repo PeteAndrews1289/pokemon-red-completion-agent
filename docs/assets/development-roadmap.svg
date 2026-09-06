@@ -95,7 +95,7 @@
 <text x="754" y="1573" class="small muted">Legitimate trades and events, special puzzles and unsupported</text>
 <text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-06-search-memory</text>
-<text x="50" y="1767" class="body">Memory contract qualified; model remains at 32 examples. No new gameplay or fit.</text>
+<text x="50" y="1732" class="small muted">2026-09-06-history-aware-learner</text>
+<text x="50" y="1767" class="body">History learner initialized; all 32 old rows preserved. Useful live alternatives still need connecting.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

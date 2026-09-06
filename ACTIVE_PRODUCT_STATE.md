@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Implement a versioned history-aware learner with honest missing-history treatment for all 32 old examples; then demonstrate two useful executable collection alternatives before a short sampled lesson. Do not replay the exhausted local search or arbitrarily grind the party.
+- Next decision: Connect the existing boxed-precursor evolution/storage capability to the native player from its saved field state, qualify actual bounded execution, then collect a short two-useful-action lesson and refit the V2 learner. No arbitrary leveling or acquisition-only replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The 32-example model is unchanged. Versioned search history now records actual metered searches, projects identity-free effort and survives authenticated checkpoint recovery. Legacy scorers reject the new input instead of silently ignoring it. No new learned action, fit, catch or authority promotion occurred. |
+| Authority now | V2 history-compatible initialization ae622e52 preserves the original 32 examples and predictions. Mixed-history fitting and native admission are qualified, but its history coefficients are zero and no authentic history-aware lesson or new authority is claimed. The original 5b92e48c model is preserved. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the successor distinguish observed failed-search effort from unknown legacy history, preserve the old corpus, and use a genuinely different collection opportunity without private identity features or a hand-written next-goal rule? |
+| Cheapest falsifier | Can the current field checkpoint reach and execute an existing boxed-precursor evolution skill while preserving required specimens and bounds, making a useful alternative to local acquisition? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-search-memory** · status **closed** · evidence [qualification](docs/evidence/red-search-memory-qualification-2026-09-06.json)
+**2026-09-06-history-aware-learner** · status **closed** · evidence [qualification](docs/evidence/red-history-aware-learner-qualification-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Sustained collecting requires remembered search effort and productive alternatives, not repeated local searches or an overleveled teacher. This maintenance supplies explicit context for that next learned choice. |
-| Learning output | No new learning data. Twenty memory tests and saved-state read-only inspection qualify the engineering seam. The next-stage checklist is 2 of 5 complete (40%); it is not a time or full-project estimate. |
-| Authority delta | Zero new model rows, fits or executed learned choices. This was the bounded maintenance seam for the named memory-aware learning lesson. |
-| Transfer result | Identity-renamed/reordered and restored ROM-free engineering cases only; no independent gameplay, Red-modification or Crystal transfer result. |
-| Blocker | History-aware model representation/fitting is not implemented. The current endpoint still lacks evolution/storage; local development is available but not yet a useful collection alternative. Legacy history is unknown and must not be invented. |
-| Decision | Close the memory foundation and move directly to the versioned learner plus a real collection alternative. Do not run another history-free acquisition-only loop. |
-| Next session | Implement a versioned history-aware learner with honest missing-history treatment for all 32 old examples; then demonstrate two useful executable collection alternatives before a short sampled lesson. Do not replay the exhausted local search or arbitrarily grind the party. |
-| Next falsifier | Can the successor distinguish observed failed-search effort from unknown legacy history, preserve the old corpus, and use a genuinely different collection opportunity without private identity features or a hand-written next-goal rule? |
-| Stop condition | No rollout or fit was launched. The next session must implement history-aware learning and a useful choice; reorient rather than spend another session on receipts or repeat the same search. No full replay, sealed Red, hack or Crystal. |
+| Product alignment | Portable outcome learning now consumes search effort without invented old histories or a hardcoded penalty. Stable private source keys survive routing. Actual living-collection alternatives, not more learner infrastructure, are the remaining unblock. |
+| Learning output | No new real training data. Versioned fitting works in controlled tests; the authenticated 32-example initialization reproduces prior predictions exactly. The checklist remains 2/5 (40%): a history-compatible model is not yet a model trained on history. |
+| Authority delta | Zero new real examples, fits or controller actions. A separately published V2 initialization preserves all 32 rows and predictions with zero history coefficients; learning the history effect still requires new observed outcomes. |
+| Transfer result | Controlled renamed/reordered and changed-effort tests only. No independent gameplay, Red-modification or Crystal transfer claim. |
+| Blocker | The current native player does not connect its field position to the existing boxed-evolution executor. Duplicate unevolved specimens are present, but neither evolution nor a second useful acquisition source is executable through this menu yet. |
+| Decision | Close learner engineering and stop feature/process expansion. The anti-drift alarm is active after another no-learning session: next work must connect one useful existing collection skill and lead directly to a short sampled lesson. |
+| Next session | Connect the existing boxed-precursor evolution/storage capability to the native player from its saved field state, qualify actual bounded execution, then collect a short two-useful-action lesson and refit the V2 learner. No arbitrary leveling or acquisition-only replay. |
+| Next falsifier | Can the current field checkpoint reach and execute an existing boxed-precursor evolution skill while preserving required specimens and bounds, making a useful alternative to local acquisition? |
+| Stop condition | Learner engineering is closed, not gameplay success. Do not reopen the feature contract or collect another acquisition-only loop. Next work is the smallest existing-skill integration leading to observed learning; stop on a route-repair spree, new factory or loss of specimen safety. |
 
 ### Stop conditions
 

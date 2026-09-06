@@ -1,5 +1,25 @@
 # Current agent handoffs
 
+## Current — history learner ready; connect a useful collection skill
+
+Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
+history while keeping all 32 old examples explicitly unknown. The separate initialized model
+`ae622e52...44cf9` reproduces all old predictions with zero history coefficients: **not a new fit**.
+No gameplay, new training row or authority promotion occurred. A routed/local source-identity
+bug was fixed so movement does not silently reset remembered effort.
+
+The saved box contains duplicate unevolved specimens. Next connect the existing boxed-evolution
+mechanics to the native player from its field endpoint, with routing, healing and specimen
+preservation, then collect a short useful-choice lesson. Do not add another learner feature or
+run an acquisition-only loop. The anti-drift alarm applies after another engineering-only session.
+The infographic remains **2/5 (40%)** because its criterion requires actual history training,
+not just compatible initialization. Earlier current headings below are historical.
+
+Codex owns implementation and publication. No external audit was invoked. If requested, Claude
+should challenge unknown-history/learning claims; Antigravity should challenge routing/PC
+integration and specimen safety. Neither is a routine development approval gate.
+
+
 ## Required shared visual reference
 
 Use the [development infographic](development-roadmap.md) to locate the current task in the full

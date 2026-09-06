@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-06-search-memory**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-06-history-aware-learner**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -14,7 +14,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
-- [ ] Model trained to use history
+- [ ] Model trained to use history ([evidence](../docs/evidence/red-history-aware-learner-qualification-2026-09-06.json))
 - [ ] Two useful executable alternatives
 - [ ] Productive lesson and follow-up
 
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json)
+[Current evidence](../docs/evidence/red-history-aware-learner-qualification-2026-09-06.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-06-history-aware-learner
+
+History learner initialized; all 32 old rows preserved. Useful live alternatives still need connecting.
+
+**Deviation:** No change to the baseline. Another engineering-only session triggers reorientation: stop feature expansion and connect existing collection skills. History training stays unfinished, so the checklist remains 40%.
+
+**Next:** Connect boxed-precursor evolution from the field, then collect and fit a short useful-choice lesson.
 
 ### 2026-09-06-search-memory
 

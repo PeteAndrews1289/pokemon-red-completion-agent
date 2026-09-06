@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6 — a learner that can use memory, not yet evidence that it does
+
+The [history-learner session](audits/red-history-aware-learner-2026-09-06.md) connected saved search
+effort to the outcome learner. Missing historical context stays unknown; all 32 existing examples
+and their targets were retained. A separate initialization preserves the prior predictions and
+starts new history coefficients at zero. Controlled tests show history-dependent learning, but
+no new real gameplay data or fit occurred. That distinction matters more than another model file.
+
+An integration audit found that routing identifiers changed with the player's position and could
+hide source-specific memory. Stable private source keys now survive arrival and movement without
+leaking identities to the model. The game save is unchanged. It contains duplicate unevolved
+specimens, giving us a concrete next lesson: connect existing boxed-evolution mechanics to the
+native player, then learn from useful alternatives. The 40% milestone checklist remains unchanged;
+we did not rewrite its training criterion to count initialization as learned competence.
+
 ## A stable visual reference for the whole project
 
 The [development infographic](development-roadmap.md) now separates verified foundations, the

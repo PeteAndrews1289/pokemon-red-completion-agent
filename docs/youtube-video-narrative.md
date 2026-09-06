@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — memory is wired in; competence still needs evidence
+
+Open with the [same roadmap](development-roadmap.md), still at 40% of its local checklist. Explain
+why it did not jump: we built the history-aware learning path, but have not yet trained it on new
+history-bearing gameplay. The original 32 examples survive unchanged. The new model initialization
+initially makes exactly the same predictions; it is not a secretly improved player.
+
+Show the engineering lesson: a route's identity changes as the player moves, but a search area
+must remain the same remembered place. Separating those identities closes a real integration bug.
+Then show the actual opportunity: duplicate unevolved Pokemon waiting in storage. The next chapter
+must connect their evolution to the player and produce an observed useful-choice lesson, not
+another graph of passing checks. Test-fixture learning is not footage of the game learning.
+
+Evidence and limitations: [session audit](audits/red-history-aware-learner-2026-09-06.md).
+
 ## Recurring visual chapter — where are we on the map?
 
 Use the [development infographic](development-roadmap.md) as the recurring opening and closing
