@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Repair same-plan command recovery, factual complete-denominator readiness and campaign/current-prior admission to the existing fitter. Then qualify and freeze the prospective four-train/four-paired/two-reserve successor, collect eight bounded train lessons and fit once only if its actual-outcome gate passes. Do not repeat the terminal ten-slot campaign.
+- Next decision: The recovery, shared factual readiness and current-prior fit connection are locally qualified. Publish one coherent batch, freeze/preflight the four-train/four-paired/two-reserve successor, collect eight bounded train lessons and automatically fit the existing scorer if the actual-outcome gate passes. Preserve the 23 current rows and do not repeat the terminal ten-slot campaign.
 
 ### Mandatory mission check
 
@@ -62,7 +62,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-recovery-and-training-readiness-audit** · status **active** · evidence [qualification](docs/evidence/red-recovery-audit-2026-09-06.json)
+**2026-09-06-red-training-launch-repair** · status **active** · evidence [qualification](docs/evidence/red-training-launch-local-qualification-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -70,10 +70,10 @@ outputs.
 | Learning output | No counters advance in this maintenance sub-session. Production readers authenticated 23 train examples, all ten targeted setup terminals (five complete, five failed), and the existing eighteen-example model. Five settled campaign rows remain unfitted. The cumulative 111-example multi-family scorecard is not this option model's corpus size and awaits a separate evidence-backed admission update. |
 | Authority delta | None. The existing eighteen-example option model remains shadow-only. The recovery audit authenticated 23 train rows and ten targeted setup terminals but performed no fit, prediction, controller input or new outcome collection. |
 | Transfer result | None. Four non-tied paired wins would have one-sided exact sign-test p=0.0625, so the proposed Red check cannot promise 5-percent statistical superiority. Crystal and cross-title claims remain deferred; bounded Red development may still use honestly labeled descriptive results. |
-| Blocker | PR 228's command rejects its own reserved roots on re-entry. Its dashboard counts intended focus instead of factual selected kinds and can report readiness before all terminals exist. The existing fitter does not bind the targeted campaign admission gate or explicitly select the current eighteen-example prior. PRs 227 and 228 remain pending, not ready to execute. |
-| Decision | Preserve the terminal ten-slot campaign and its five settled lessons. Repair command recovery and shared factual readiness, connect the intended prior and complete train corpus to the existing fitter, then qualify the prospective four-train/four-paired/two-reserve bank. Only a passing repair and zero-effect preflight may open eight new train lessons and one admitted fit. |
-| Next session | Close the three bounded recovery/admission seams, update regression tests, then publish one coherent repair. Reassess after four engineering hours. Only afterward freeze/preflight the prospective 4/4/2 allocation and collect eight lessons with at least six factual settled rows, acquisition at least one and development at least three. |
-| Next falsifier | Behavioral command tests must distinguish unused, own-reserved, foreign and terminal roots without new effects on reopen. One shared fit-admission result must reject incomplete denominators and insufficient actual acquisition/development coverage, preserve all 23 existing train rows, and name the intended prior. |
+| Blocker | The three recovery/admission seams are locally repaired with 80 passing focused tests and the full 385-source type check. Publication and the new private 4/4/2 freeze/preflight remain before gameplay. The real model is still the eighteen-example prior; simulated test fits do not advance product counters. |
+| Decision | Publish the coherent repair through the existing PR 228 stack, freeze and preflight the diverse successor, collect eight bounded train lessons, then let the shared factual gate admit one update through the existing fitter. Preserve every old terminal and all 23 current train rows. Do not open another architecture or teacher-factory project. |
+| Next session | Publish the single coherent repair, freeze/preflight 4/4/2 and collect eight bounded train lessons with automatic admitted fitting. Then report the actual model update and prepare short model-chosen Red goal episodes using deterministic low-level skills. |
+| Next falsifier | The qualified real command must action-free rebind the 4/4/2 plan and authenticate all 23 retained train rows plus the current eighteen-example prior. Actual eight-slot collection must provide six or more settled rows, acquisition at least one and development at least three; the existing fitter must preserve negatives, baseline rows and immutable recovery. |
 | Stop condition | Stop before new input until command recovery and fit admission pass. Do not exceed two resets per successor train root, reuse a terminal trial, retire an already-opened evaluation root, omit negative rows, invent targets for censors, or use reserves to replace bad outcomes. Four paired roots support descriptive development only, not a powered superiority claim. |
 
 ### Stop conditions

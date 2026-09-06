@@ -1,0 +1,47 @@
+# September 6 — launch the next bounded Red learning update
+
+## Working mission check
+
+- **Capability:** a restart-safe learning loop for acquisition, party development, storage and
+  resource choices, using existing Red mechanics rather than another teacher walkthrough.
+- **Learned authority:** repair work itself grants none. Its named unblock is the next immutable
+  option-value update, then model-chosen goals in separate bounded Red situations.
+- **Transfer test:** four disjoint Red paired contexts are a descriptive check; retain portable
+  semantic features/actions while Crystal execution stays deferred.
+- **Cheapest falsifier:** behavioral re-entry after a durable reservation, factual action differing
+  from lesson focus, incomplete campaign rejection and authentic complete-corpus fit admission.
+- **Time box:** reassess after four engineering hours. Batch publication/CI once the coherent
+  repair is ready; use focused local tests for iteration.
+- **Stop condition:** preserve every terminal and negative lesson; no retry of claimed input,
+  invented target, training/evaluation overlap or model fit on an incomplete admitted campaign.
+
+## Execution order
+
+1. Repair owned-root recovery through the command and add behavioral tests.
+2. Share factual, complete-denominator admission between dashboard and fitting.
+3. Bind the intended current prior and all 23 retained train examples to the existing fitter;
+   prove immutable fit recovery. Do not build another learner or general protocol framework.
+4. Qualify/publish the coherent source. Freeze and preflight the proposed 4/4/2 allocation.
+5. Collect the eight declared training lessons, then fit once if the actual-outcome gate passes.
+6. Record model/data changes and the next bounded model-control test; synchronize handoff,
+   roadmap, dashboard and narrative. No full-game replay or Crystal execution in this session.
+
+Starting state: published recovery commit `8f1bfc6b`, 23 authenticated causal train examples,
+existing model fitted on 18, and the old ten-slot campaign terminal with five usable new rows.
+The implementation branch is `codex/red-training-launch-20260906`. Pending PRs 227/228 both passed
+their existing CI, but their audit findings must be repaired before execution.
+
+## Local repair checkpoint
+
+All three seams are implemented and the focused 80-test set passes. The new integration tests
+materialize authentic synthetic journal families, retain all baseline and negative examples,
+fit the existing learner and recover its immutable model. The full type check covers 385 source
+files; lint/public-artifact checks pass. A read-only production recheck still finds 23 real train
+rows and the intended 18-example prior. No new real gameplay or fitting has occurred yet.
+
+The runner requires the prior record ID and offers an explicit `--fit-on-complete`. Before any
+input it seals the complete baseline; preflight validates without publishing that record. Both
+the dashboard and fitter use actual selected kinds and the entire terminal denominator. The
+dashboard can display collection, fitting and a saved-but-not-deployed model separately.
+
+Next is one batched publication followed by private freeze/preflight and the eight real lessons.

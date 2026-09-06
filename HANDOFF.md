@@ -1,6 +1,29 @@
 # Handoff
 
-## Resume here — September 6 recovery audit
+## Resume here — September 6 training-launch repair
+
+Use [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the current
+[roadmap](docs/model-first-roadmap.md), not older checkpoints below.
+
+- Local code closes all three September 6 findings: owned-reservation command re-entry, actual
+  selected-kind/full-terminal readiness, and explicit current-prior/complete-corpus fit admission.
+- The existing retired-bank train command now accepts `--prior-model-record-id` (required) and
+  `--fit-on-complete` (opt-in). Its preflight validates the prior/baseline without publishing the
+  fit basis; a real launch seals that basis before any input. Fit uses the existing CPU learner,
+  not a new model family. A restart reopens immutable outcomes and the same saved fit.
+- 80 focused tests, full 385-source type checking, lint and public-artifact checking passed.
+  See [qualification](docs/evidence/red-training-launch-local-qualification-2026-09-06.json).
+  Real readers reconfirmed 23 train examples and the intended 18-example prior. Unit-test fits
+  are synthetic verification, not production progress.
+- Next: publish the coherent stack via PR 228, qualify its exact main, freeze/preflight 4/4/2,
+  collect eight lessons and fit automatically only if the factual gate passes. No new private
+  freeze, controller input or real model fit has occurred at this local checkpoint.
+- Preserve the old ten terminal slots and all five new lessons. Do not reset claims, consume
+  paired/reserve roots, open sealed Red, run Crystal or launch a full-game teacher replay.
+- After a real fit, update counters only from its evidence and prepare bounded model control.
+  Four paired roots give descriptive engineering evidence, not statistical superiority.
+
+## Historical checkpoint — September 6 recovery audit
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Follow the top of

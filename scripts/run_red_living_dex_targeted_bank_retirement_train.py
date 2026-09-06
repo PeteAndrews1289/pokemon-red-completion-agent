@@ -4,8 +4,9 @@
 The command authenticates exact published source and green CI, verifies the
 private retirement plan byte-for-byte, reobserves its formerly-development
 roots without controller input, and freshly rebuilds every executable recipe.
-Paired development, reserves, fitting, teacher queries, Crystal, and retries
-outside each frozen reset ordinal are structurally unavailable.
+An explicit --fit-on-complete updates the existing learner only after factual
+train admission. Paired development, reserves, teacher queries, Crystal, and
+retries outside each frozen reset ordinal are structurally unavailable.
 """
 
 # ruff: noqa: E402 -- pin project import roots before local imports.
@@ -39,6 +40,14 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 )
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCapture,
+)
+from pokemon_red_completion.living_dex_causal_integration_fit import (
+    LivingDexCausalIntegrationSource,
+)
+from pokemon_red_completion.living_dex_causal_model_update import LivingDexCausalModelUpdateError
+from pokemon_red_completion.living_dex_repeatable_trial_claim import (
+    LivingDexRepeatableRootReservation,
+    observe_living_dex_repeatable_root_eligibility,
 )
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.private_artifacts import open_private_root
@@ -88,6 +97,13 @@ from pokemon_red_completion.red_living_dex_targeted_train_campaign import (
 from pokemon_red_completion.red_living_dex_targeted_train_dashboard import (
     RedLivingDexTargetedTrainDashboardProgress,
     red_living_dex_targeted_train_dashboard_snapshot,
+)
+from pokemon_red_completion.red_living_dex_targeted_train_fit import (
+    fit_red_living_dex_targeted_train_from_store,
+    prepare_red_living_dex_targeted_fit_basis,
+)
+from pokemon_red_completion.red_living_dex_targeted_train_readiness import (
+    audit_red_living_dex_targeted_train_readiness,
 )
 from pokemon_red_completion.red_living_dex_targeted_train_runner import (
     RED_LIVING_DEX_TARGETED_TRAIN_RUNNER_SHA256,
@@ -143,6 +159,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-registry-sha256", required=True)
     parser.add_argument("--expected-model-sha256", required=True)
     parser.add_argument("--expected-model-record-sha256", required=True)
+    parser.add_argument("--prior-model-record-id", required=True)
     parser.add_argument("--expected-route-registry-sha256", required=True)
     parser.add_argument("--expected-runtime-identity-sha256", required=True)
     parser.add_argument("--private-root", required=True, type=Path)
@@ -150,12 +167,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--port", default=DEFAULT_PORT, type=int)
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--fit-on-complete", action="store_true")
     parser.add_argument("--hold-seconds", default=30, type=int)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     stage = "arguments"
+    fit_executions = 0
     try:
         args = _parser().parse_args(argv)
         if args.hold_seconds < 0:
@@ -168,9 +187,7 @@ def main(argv: list[str] | None = None) -> int:
             exact_ci_attempt=args.exact_ci_attempt,
         )
         authenticate_red_living_dex_current_consumer(PROJECT_ROOT, consumer)
-        if working_source_bundle_sha256(PROJECT_ROOT) != (
-            args.expected_source_bundle_sha256
-        ):
+        if working_source_bundle_sha256(PROJECT_ROOT) != (args.expected_source_bundle_sha256):
             raise RetiredBankTrainCommandError("current_source_authentication")
         stage = "schedule_envelope_authentication"
         payload = base._read_schedule(args.schedule)
@@ -206,6 +223,7 @@ def main(argv: list[str] | None = None) -> int:
             rom_bytes=rom_bytes,
             runtime=runtime,
             claim_registry=claim_registry,
+            source_commit=consumer.source_commit,
         )
         world = StrategicScenarioRouteWorld.from_rom(rom_bytes)
         corridors = derive_red_living_dex_provider_corridors(world)
@@ -228,8 +246,24 @@ def main(argv: list[str] | None = None) -> int:
             expectations=expectations,
             freshly_derived_binding=fresh_binding,
         )
-        train_slots = sum(
-            slot.partition == "train" for slot in binding.schedule.slots
+        train_slots = sum(slot.partition == "train" for slot in binding.schedule.slots)
+        stage = "train_fit_basis_authentication"
+        source = LivingDexCausalIntegrationSource(
+            source_commit=consumer.source_commit,
+            source_bundle_sha256=consumer.source_bundle_sha256,
+            exact_ci_run=consumer.exact_ci_run,
+            exact_ci_attempt=consumer.exact_ci_attempt,
+        )
+        store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
+        prepare_red_living_dex_targeted_fit_basis(
+            store,
+            binding,
+            source=source,
+            prior_model_record_id=args.prior_model_record_id,
+            prior_model_sha256=args.expected_model_sha256,
+            prior_model_record_sha256=args.expected_model_record_sha256,
+            claim_registry=claim_registry,
+            dry_run=args.preflight_only,
         )
         if args.preflight_only:
             print(
@@ -264,15 +298,13 @@ def main(argv: list[str] | None = None) -> int:
             rom_bytes=rom_bytes,
             producer_execution_identity=execution_identity,
             runtime_limits=RedLivingDexProductionRuntimeLimits(
-                maximum_controller_actions=(
-                    base.MAXIMUM_CAMPAIGN_CONTROLLER_ACTIONS
-                ),
+                maximum_controller_actions=(base.MAXIMUM_CAMPAIGN_CONTROLLER_ACTIONS),
                 maximum_emulator_frames=base.MAXIMUM_CAMPAIGN_EMULATOR_FRAMES,
             ),
             frame_observer=observer,
         )
-        store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
         publisher = base._LiveProgressPublisher(state, binding, meter)
+        fit_result = None
         with ProgressDashboardServer(state, port=args.port) as dashboard:
             if not args.no_browser:
                 webbrowser.open(dashboard.url)
@@ -296,21 +328,51 @@ def main(argv: list[str] | None = None) -> int:
                 receipts = run_red_living_dex_targeted_train_campaign(
                     binding,
                     source_commit=consumer.source_commit,
-                    execute=lambda assignment: (
-                        run_red_living_dex_targeted_train_assignment(
-                            assignment,
-                            store=store,
-                            claim_registry=claim_registry,
-                            setup_execution_identity=execution_identity,
-                            resolver=resolver,
-                            meter=meter,
-                        )
+                    execute=lambda assignment: run_red_living_dex_targeted_train_assignment(
+                        assignment,
+                        store=store,
+                        claim_registry=claim_registry,
+                        setup_execution_identity=execution_identity,
+                        resolver=resolver,
+                        meter=meter,
                     ),
                     effects=meter.checkpoint,
                     publish_progress=publisher,
                 )
             finally:
                 publisher.close()
+            readiness = audit_red_living_dex_targeted_train_readiness(binding, receipts)
+            if args.fit_on_complete and readiness.ready:
+                stage = "train_model_update"
+                state.publish(
+                    red_living_dex_targeted_train_dashboard_snapshot(
+                        binding,
+                        RedLivingDexTargetedTrainDashboardProgress(
+                            status="passed",
+                            receipts=receipts,
+                            effects=meter.checkpoint(),
+                            fitting=True,
+                        ),
+                    )
+                )
+                fit_result = fit_red_living_dex_targeted_train_from_store(
+                    store,
+                    binding,
+                    receipts,
+                    source=source,
+                )
+                fit_executions = int(not fit_result.recovered_existing_artifact)
+                state.publish(
+                    red_living_dex_targeted_train_dashboard_snapshot(
+                        binding,
+                        RedLivingDexTargetedTrainDashboardProgress(
+                            status="passed",
+                            receipts=receipts,
+                            effects=meter.checkpoint(),
+                            fit_result=fit_result,
+                        ),
+                    )
+                )
             if args.hold_seconds:
                 time.sleep(args.hold_seconds)
         print(
@@ -323,8 +385,11 @@ def main(argv: list[str] | None = None) -> int:
                     "controller_actions": meter.controller_actions,
                     "development_slots_opened": 0,
                     "emulator_frames": meter.emulator_frames,
-                    "model_fits": 0,
-                    "model_predictions": 0,
+                    "model_fits": fit_executions,
+                    "fit_requested": args.fit_on_complete,
+                    "fit_result": fit_result.public_dict() if fit_result is not None else None,
+                    "readiness": readiness.public_dict(),
+                    "gameplay_model_predictions": 0,
                     "private_path_fields": 0,
                     "runner_sha256": RED_LIVING_DEX_TARGETED_TRAIN_RUNNER_SHA256,
                     "schema": RESULT_SCHEMA,
@@ -343,14 +408,17 @@ def main(argv: list[str] | None = None) -> int:
         stage = "arguments"
     except RetiredBankTrainCommandError as error:
         stage = error.stage
+    except LivingDexCausalModelUpdateError as error:
+        stage = "train_model_update_" + error.stage
+        fit_executions = error.fit_executions
     except BaseException:
         pass
     print(
         json.dumps(
             {
                 "development_slots_opened": 0,
-                "model_fits": 0,
-                "model_predictions": 0,
+                "model_fits": fit_executions,
+                "model_predictions": None if stage.startswith("train_model_update") else 0,
                 "private_identity_fields": 0,
                 "private_path_fields": 0,
                 "schema": FAILURE_SCHEMA,
@@ -389,14 +457,14 @@ def _observe_retired_roots(
     rom_bytes: bytes,
     runtime: RuntimeIdentity,
     claim_registry: Path,
+    source_commit: str,
 ) -> tuple[RedLivingDexActionFreeRootObservation, ...]:
     support = base.freezer._PROVIDER_SUPPORT
     state = support["_DiagnosticState"]()
     observe_root = support["_observe_root"]
     schedule = descriptor.schedule_descriptor.schedule
     needed = {
-        (slot.physical_root_sha256, slot.lineage_sha256)
-        for slot in schedule.slots
+        (slot.physical_root_sha256, slot.lineage_sha256): slot.partition for slot in schedule.slots
     }
     observations: list[RedLivingDexActionFreeRootObservation] = []
     found: set[tuple[str, str]] = set()
@@ -406,7 +474,6 @@ def _observe_retired_roots(
         profile = private.profile
         if (
             assignment.partition != "validation"
-            or not private.root_available
             or not isinstance(capture, GoalManagerContextCapture)
             or not isinstance(profile, RedGoalContextProfile)
         ):
@@ -430,14 +497,6 @@ def _observe_retired_roots(
             state_bytes=capture.state_bytes,
             envelope_bytes=envelope_bytes,
         )
-        if not all(
-            root_claim_is_available(claim_registry, digest)
-            for digest in (
-                root.root_consumption_sha256,
-                root.physical_root_sha256,
-            )
-        ):
-            continue
         lineage = canonical_sha256(
             {
                 "root_lineage_id": assignment.root_lineage_id,
@@ -447,6 +506,27 @@ def _observe_retired_roots(
         key = (root.physical_root_sha256, lineage)
         if key not in needed:
             continue
+        if needed[key] == "train":
+            eligible = observe_living_dex_repeatable_root_eligibility(
+                claim_registry,
+                LivingDexRepeatableRootReservation(
+                    schedule_sha256=schedule.schedule_sha256,
+                    logical_root_sha256=root.root_consumption_sha256,
+                    physical_root_sha256=root.physical_root_sha256,
+                    runner_sha256=RED_LIVING_DEX_TARGETED_TRAIN_RUNNER_SHA256,
+                    source_commit=source_commit,
+                ),
+            )
+        else:
+            eligible = all(
+                root_claim_is_available(claim_registry, digest)
+                for digest in (
+                    root.root_consumption_sha256,
+                    root.physical_root_sha256,
+                )
+            )
+        if not eligible:
+            raise RetiredBankTrainCommandError("root_reservation_authentication")
 
         def observe_goal(
             reader: PokemonRedStateReader,
@@ -480,7 +560,7 @@ def _observe_retired_roots(
             raise RetiredBankTrainCommandError("action_free_schedule_replay")
         found.add(key)
         observations.append(observation)
-    if found != needed:
+    if found != set(needed):
         raise RetiredBankTrainCommandError("action_free_schedule_replay")
     return tuple(observations)
 

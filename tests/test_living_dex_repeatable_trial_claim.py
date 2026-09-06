@@ -18,6 +18,7 @@ from pokemon_red_completion.living_dex_repeatable_trial_claim import (
     LivingDexRepeatableTrialClaimError,
     ensure_living_dex_repeatable_root_reservation,
     ensure_living_dex_repeatable_trial_claim,
+    observe_living_dex_repeatable_root_eligibility,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 
@@ -84,6 +85,40 @@ def test_same_base_root_can_hold_distinct_preregistered_reset_claims(
     assert (
         ensure_living_dex_repeatable_trial_claim(registry, first)
         is LivingDexRepeatableClaimDisposition.RECOVERED
+    )
+
+
+def test_eligibility_is_read_only_for_unused_and_owned_roots(tmp_path: Path) -> None:
+    registry = _registry(tmp_path)
+    reservation = _reservation()
+    assert observe_living_dex_repeatable_root_eligibility(registry, reservation)
+    assert observe_claim_first_pair_availability(
+        registry, reservation.logical_root_sha256, reservation.physical_root_sha256
+    )
+    ensure_living_dex_repeatable_root_reservation(registry, reservation)
+    before = {path.name: path.read_bytes() for path in registry.iterdir()}
+    assert observe_living_dex_repeatable_root_eligibility(registry, reservation)
+    assert {path.name: path.read_bytes() for path in registry.iterdir()} == before
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"source_commit": "b" * 40},
+        {"runner_sha256": _sha("other-runner")},
+        {"schedule_sha256": _sha("other-schedule")},
+        {"logical_root_sha256": _sha("other-logical")},
+        {"physical_root_sha256": _sha("other-physical")},
+    ],
+)
+def test_eligibility_rejects_another_campaign_or_partial_root_pair(
+    tmp_path: Path, changes: dict[str, str]
+) -> None:
+    registry = _registry(tmp_path)
+    reservation = _reservation()
+    ensure_living_dex_repeatable_root_reservation(registry, reservation)
+    assert not observe_living_dex_repeatable_root_eligibility(
+        registry, replace(reservation, **changes)
     )
 
 

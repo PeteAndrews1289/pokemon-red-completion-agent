@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -15,6 +16,7 @@ from pokemon_red_completion.living_dex_causal_integration_fit import (
 )
 from pokemon_red_completion.living_dex_causal_model_update import (
     LIVING_DEX_CAUSAL_UPDATE_CLAIM_KIND,
+    LivingDexCausalModelUpdateAdmission,
     LivingDexCausalModelUpdateError,
     fit_living_dex_causal_model_update_from_store,
 )
@@ -227,6 +229,65 @@ def test_update_refuses_missing_prior_model_before_claim(
         fit_living_dex_causal_model_update_from_store(store, source=_source())
 
     assert raised.value.stage == "prior_model_absent"
+    assert not any(path.name.startswith("lc-update-") for path in private.iterdir())
+
+
+def test_admitted_update_uses_the_named_latest_prior_and_reopens_it(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _private, store = _store(tmp_path)
+    prior_rows = _rows(12)
+    _publish_prior(store, prior_rows)
+    _patch_corpus(monkeypatch, store, prior_rows)
+    previous = fit_living_dex_causal_model_update_from_store(store, source=_source())
+    rows = _rows(16)
+    _patch_corpus(monkeypatch, store, rows)
+    admission = LivingDexCausalModelUpdateAdmission(
+        prior_model_record_id=f"lc-update-model-{living_dex_option_train_dataset_sha256(prior_rows)}",
+        prior_model_sha256=previous.model_sha256,
+        prior_model_record_sha256=previous.model_record_sha256,
+        train_dataset_sha256=living_dex_option_train_dataset_sha256(rows),
+        campaign_readiness_sha256="e" * 64,
+    )
+    first = fit_living_dex_causal_model_update_from_store(
+        store, source=_source(), admission=admission
+    )
+    assert first.prior_model_sha256 == previous.model_sha256
+    assert first.added_settled_examples == 4
+    recovered = fit_living_dex_causal_model_update_from_store(
+        store, source=_source(), admission=admission
+    )
+    assert recovered.recovered_existing_artifact
+    assert recovered.model_sha256 == first.model_sha256
+    with pytest.raises(LivingDexCausalModelUpdateError, match="admission_corpus_join"):
+        fit_living_dex_causal_model_update_from_store(
+            store, source=_source(),
+            admission=replace(admission, train_dataset_sha256="f" * 64),
+        )
+    with pytest.raises(LivingDexCausalModelUpdateError, match="admission_prior_join"):
+        fit_living_dex_causal_model_update_from_store(
+            store, source=_source(),
+            admission=replace(admission, prior_model_sha256="f" * 64),
+        )
+
+
+def test_generic_fitter_cannot_silently_admit_reset_campaign_rows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    private, store = _store(tmp_path)
+    rows = _rows()
+    _publish_prior(store, rows)
+    monkeypatch.setattr(
+        update_module, "load_living_dex_authenticated_causal_examples",
+        lambda *args, **kwargs: tuple(
+            SimpleNamespace(
+                example=row,
+                identity=SimpleNamespace(repeatable_trial_claim_sha256="a" * 64),
+            ) for row in rows
+        ),
+    )
+    with pytest.raises(LivingDexCausalModelUpdateError, match="targeted_admission_required"):
+        fit_living_dex_causal_model_update_from_store(store, source=_source())
     assert not any(path.name.startswith("lc-update-") for path in private.iterdir())
 
 

@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6: close the gap between collecting lessons and updating the learner
+
+The recovery audit led to three bounded repairs, not another learning system. The launcher now
+recognizes its own durable reservations on restart. A shared gate counts what actually happened
+and waits for every scheduled terminal. The existing CPU fitter receives an explicit prior model
+and a fingerprint of the entire pre-run corpus, so earlier examples and negative outcomes cannot
+silently disappear. The campaign can now call that fitter directly when its factual gate passes.
+
+Eighty focused tests passed, including a real synthetic journal-to-model update and reopening the
+same immutable artifact. Those fits are test evidence only. At local qualification the real data
+still contains 23 lessons and its current model was trained on 18. Publication, eight new Red
+lessons and the admitted refit are next. The dashboard now distinguishes collection, fitting and
+a fitted-but-not-deployed scorer; none is presented as autonomous full-game play.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still

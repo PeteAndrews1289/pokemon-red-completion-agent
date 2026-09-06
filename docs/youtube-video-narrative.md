@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 scene: connect the lesson journal to the existing model
+
+**Visual:** Show **RESTART RECOVERY → ACTUAL OUTCOMES → EXISTING FITTER**. Beside it, label
+**80 FOCUSED TESTS PASSED — SIMULATED TEST OUTCOMES, NOT NEW RED EXPERIENCE**. Keep the live
+product counts honest: **23 SAVED LESSONS · CURRENT MODEL TRAINED ON 18** at local qualification.
+
+**Voiceover:** “We closed the missing connection. The training command can resume its own work,
+count the action that really happened, and update the existing model without losing earlier
+lessons—even the unsuccessful ones. The test now follows that whole path, not just isolated
+pieces. Next we run eight real Red lessons and let the qualified data reach the learner directly.”
+
+Only show a completed production training card once its real fit receipt exists. A fitted goal
+scorer remains distinct from a deployed player; sustained model-chosen Pokémon progress is next.
+
 ## September 6 scene: the history survived, but readiness needed another look
 
 **Visual:** PR 224 → 225 → 226 marked **MERGED**, PRs 227/228 marked **PENDING AT AUDIT**.

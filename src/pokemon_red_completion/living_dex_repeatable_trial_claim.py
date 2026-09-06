@@ -184,6 +184,35 @@ class LivingDexRepeatableTrialClaim:
         }
 
 
+def observe_living_dex_repeatable_root_eligibility(
+    registry: Path,
+    reservation: LivingDexRepeatableRootReservation,
+) -> bool:
+    """Read-only preflight: a root is unused or owned by this exact campaign.
+
+    An earlier inventory's availability flag is insufficient on restart.  The
+    durable pair binds both roots, schedule, runner and executable source.  No
+    claim is created here; execution must still atomically ensure ownership.
+    """
+
+    if not isinstance(registry, Path):
+        raise TypeError("repeatable reservation needs a claim registry Path")
+    if not isinstance(reservation, LivingDexRepeatableRootReservation):
+        raise TypeError("repeatable reservation differs")
+    reservation.__post_init__()
+    try:
+        if observe_claim_first_pair_availability(
+            registry,
+            reservation.logical_root_sha256,
+            reservation.physical_root_sha256,
+        ):
+            return True
+        expected = reservation.pair_claim
+        return read_root_pair_claim(registry, expected.claim_sha256) == expected
+    except ClaimFirstAdmissionError:
+        return False
+
+
 def ensure_living_dex_repeatable_root_reservation(
     registry: Path,
     reservation: LivingDexRepeatableRootReservation,
@@ -280,6 +309,7 @@ __all__ = [
     "LivingDexRepeatableRootReservation",
     "LivingDexRepeatableTrialClaim",
     "LivingDexRepeatableTrialClaimError",
+    "observe_living_dex_repeatable_root_eligibility",
     "ensure_living_dex_repeatable_root_reservation",
     "ensure_living_dex_repeatable_trial_claim",
 ]

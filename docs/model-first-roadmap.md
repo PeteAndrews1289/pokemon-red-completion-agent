@@ -1,6 +1,42 @@
 # Model-first development roadmap
 
-## Current checkpoint — September 6 recovery audit
+## Current checkpoint — September 6 training-launch repair
+
+Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first. The three recovery/admission
+findings are now repaired locally: the command accepts only its own exact existing reservations;
+dashboard and fitting share actual-choice/full-denominator readiness; and the existing fitter
+binds the intended prior plus every retained baseline row. An explicit `--fit-on-complete` connects
+the bounded campaign to that fitter. It does not promote the model to controller authority.
+
+[Local qualification](evidence/red-training-launch-local-qualification-2026-09-06.json): 80 focused
+tests passed, including genuine synthetic journal publication, a CPU model update retaining negative
+outcomes, and immutable recovery. The 385-file type check and lint passed. The real corpus remains
+23 train examples and the current real model remains fitted on 18; no new gameplay or production
+fit has occurred in this repair checkpoint.
+
+### Execute next; do not reopen the architecture
+
+1. Publish this coherent repair through the existing PR 228 stack; use focused local iteration and
+   one batched publication, not another series of tiny CI-only changes.
+2. Freeze and action-free preflight the prospective 4-train/4-paired/2-reserve allocation. Before
+   input, retain the 23-row corpus fingerprint and intended current prior. Re-entry must preserve
+   both; the ten old terminal trials remain consumed.
+3. Collect all eight bounded train lessons. Automatically fit the existing option scorer if all
+   eight are terminal and at least six settle, including actual acquisition >=1 and development
+   >=3. Preserve negatives and censors; no replacement by reserves or retry of claimed input.
+4. Audit the fitted artifact and report actual corpus size, training error and changed goal choices.
+   These are training diagnostics, not held-out competence. Keep the new model shadow-only until
+   the separate bounded-control step is declared.
+5. Use the four disjoint paired Red roots for a descriptive comparison, then chain supported
+   model-chosen goals in short Red episodes. Measure retained specimens, evolution/dependency
+   progress, costs and recovery. Useful play, not more infrastructure, is the next product output.
+6. Expand missing Red collection/puzzle/trade mechanics, then test Crystal transfer through the
+   existing semantic adapter boundaries. Multi-game living-Pokédex completion remains the end goal.
+
+Reassess after the declared four-hour engineering time box. Report a concrete blocker if the live
+gate fails; do not create a new teacher factory or claim that simulated test outcomes trained Red.
+
+## Historical checkpoint — September 6 recovery audit
 
 Read [ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md) first, then the
 [recovery audit and exit criteria](audits/recovery-and-training-readiness-2026-09-06.md).
