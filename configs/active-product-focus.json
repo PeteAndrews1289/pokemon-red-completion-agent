@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "A bounded search finds no needed specimen: preserve its negative outcome, fresh ledger and safe endpoint without repeating the failed action. Then verify that the available menu contains a real model-supported alternative before collecting more experience.",
+      "cheapest_falsifier": "At the verified saved endpoint, can the existing collector execute genuine sampled goal choices, retain no-find outcomes and costs, and fit new evidence without a teacher replay, a silent profile substitution, loss of prior rows or a false independent-root claim?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new learned choice or fit. The 31-example model was loaded for real continuation, but its one recorded choice was a deterministic unsupported-menu bridge. The failed attempt and original parent save remain preserved.",
-        "blocker": "The capture search reached its destination and three wild encounters but no capture before 64 legs. Recovery selected the same failed goal and raised a fatal guard exception. No new terminal checkpoint or fresh terminal collection ledger was retained; the original save is intact.",
-        "decision": "Close the failed continuation without replay. Make bounded no-find outcomes and exhausted recovery return typed stops with fresh ledger/safe state retention. Then expose useful existing development/evolution/storage alternatives, not more forced capture or shopping lessons.",
+        "authority_delta": "No new executed learned choice, fit or training row. One model proposal was rejected by the anti-loop guard; policy-call counts explicitly include unexecuted proposals. The existing 31-example model is unchanged.",
+        "blocker": "The saved endpoint has local development available under an existing expanded profile, but profile transition and sampled training continuation are not yet connected. Evolution/storage remain unavailable here. Search history is not yet a learned input.",
+        "decision": "Close the successful engineering qualification. Next work must produce a small genuine selected-outcome learning lesson from the saved state, not another receipt or CI loop. Treat development as a bounded contrast, not a new arbitrary party-level goal.",
         "evidence": {
-          "kind": "falsification",
-          "path": "docs/evidence/red-fit31-continuation-result-2026-09-06.json",
-          "sha256": "ef095036df55f5c545b0fb63b63a0203cc12a07bd5d1c07a7c449bc25d9e8650"
+          "kind": "qualification",
+          "path": "docs/evidence/red-search-recovery-result-2026-09-06.json",
+          "sha256": "41a9d8079686e6a0d5a865f9a9c3c5dccdcc426660dd49960e3671490ac615a5"
         },
-        "learning_output": "Zero new examples, fits, captures or learned choices. One failed diagnostic goal recorded 215 actions and 8244 frames; all 51 snapshot hashes authenticate. Resources and party were unchanged. The failure exposes a sustained-play limitation, not an improvement claim.",
-        "next_falsifier": "Can ordinary search exhaustion stop or switch tasks while preserving fresh state and negative evidence, without a repeated-goal exception, a hidden retry or an invented successful outcome?",
-        "next_session_goal": "Repair typed no-find/recovery stops and safe failure-state persistence, then inspect supported alternatives before declaring another short player lesson. Reuse existing mechanics and preserve all failed attempts; do not enlarge limits until a favorable catch appears.",
-        "product_alignment": "Saved-state continuation now reaches actual gameplay while preserving original lineage. The next reusable capability is handling unsuccessful searches and choosing useful alternatives, which matters for rare-species collection in Red and later games.",
-        "session_id": "2026-09-06-fit31-continuation-failed",
+        "learning_output": "Zero new training examples or fits. Same known-state search: 215 actions, 8244 frames, no catches. Unlike the prior failure, a fresh unchanged collection ledger and terminal save now survive and restore exactly. No independent gameplay improvement is claimed.",
+        "next_falsifier": "At the verified saved endpoint, can the existing collector execute genuine sampled goal choices, retain no-find outcomes and costs, and fit new evidence without a teacher replay, a silent profile substitution, loss of prior rows or a false independent-root claim?",
+        "next_session_goal": "Verify the old checkpoint profile before a separately declared expanded local-development profile; connect the existing sampled collector, retain original lineage and 31 prior rows, collect a short fixed-dose contrast, audit/fit settled outcomes and qualify a new bounded continuation.",
+        "product_alignment": "Unsuccessful searches are normal during living-collection play. Their negative outcomes and usable state now survive. Return to learned useful choices; required-precursor development/evolution is preferable to overleveling an established party.",
+        "session_id": "2026-09-06-unsuccessful-search-recovery",
         "status": "closed",
-        "stop_condition": "The declared continuation is closed after one failed attempt. No replay, new fit or new gameplay occurs in this closeout. Next session remains bounded to four hours and must address useful play rather than another setup or CI-only loop. No sealed Red, hack, Crystal or full-game execution.",
-        "transfer_result": "Same-lineage Red integration only. The updated learner has not demonstrated better gameplay or adaptation. A compatible unfamiliar Red modification remains the first planned transfer demonstration before Crystal."
+        "stop_condition": "The single new regression is closed with a durable typed stop and verified saved endpoint. No automatic replay or additional input, fitting, sealed Red, hack, Crystal or full-game execution. Next session is bounded to four hours and must target measured learner outcomes.",
+        "transfer_result": "Known-state same-lineage engineering regression only. Read-only expanded-profile availability is not execution or generalization. Useful Red competence still precedes the unfamiliar compatible Red modification and Crystal."
       },
       "learned_authority": {
-        "current": "The goal-value checkpoint still contains 31 examples. Its first real saved-state continuation executed one deterministic unsupported-menu acquisition, failed after 215 actions / 8244 frames, and added no captures or training. Original save and model are intact. Historical cross-family counters below are not this model's dataset size.",
+        "current": "The model still contains 31 examples. Search recovery now retains a verified save and ledger after 215 actions / 8244 frames without a catch. One executed choice was deterministic; one model-ranked recovery proposal was rejected before input. Zero new fits or training rows. Local development is now verified available read-only at the saved endpoint, not executed.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "The continuation seam works, but ordinary no-find search exhaustion became a fatal repeated-goal recovery exception. Repair typed stopping and safe failure-state retention, then expose useful existing development/evolution/storage alternatives before another bounded lesson. Model remains at 31 examples; this failed attempt is closed and is not training data.",
+      "next_decision": "Safe unsuccessful-search retention is verified in real gameplay. Reuse the saved endpoint for a short, prospectively sampled capture-versus-local-development learning contrast, preserving original lineage and all 31 existing rows. Add only the explicit profile-transition/training continuation seam needed for that lesson; do not grind the established party or run another guardrail/CI-only session.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

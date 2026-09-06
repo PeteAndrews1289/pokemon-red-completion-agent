@@ -1,5 +1,14 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6 — not finding a Pokemon should not erase the session
+
+An unchanged search again found no needed catch, but now its negative result, fresh collection
+ledger and game state survive a clean stop. A read-only restore verified the save. The distinction
+matters: we improved recovery, not intelligence. The 31-example model proposed repeating the search;
+that proposal was blocked before input and must not be sold as executed learned play. Existing local
+development is available for the next bounded learning contrast, not an excuse for arbitrary grinding.
+[Evidence and reorientation](audits/red-search-recovery-2026-09-06.md).
+
 ## Current: make learned progress persist, then test adaptation
 
 The player now has a real 31-example outcome model, including two newly sampled choices and all

@@ -1,5 +1,14 @@
 # Current agent handoffs
 
+## Current — search-recovery endpoint retained
+
+Use [the recovery audit](audits/red-search-recovery-2026-09-06.md) and active state. New regression
+`red-search-recovery-20260906-a-causal` is closed: no catch, but a typed stop, fresh unchanged ledger
+and verified terminal save. Zero new fits/rows; one rejected model proposal is not executed play.
+Next is a short sampled learning contrast at this saved endpoint, using explicit profile transition
+and original lineage. Local development availability was inspected only; evolution/storage are not
+wired here. Codex owns edits/publication; no Claude/Antigravity review is claimed.
+
 ## Current — continuation failed; ordinary no-find/recovery behavior is next
 
 The [continuation audit](audits/red-fit31-continuation-2026-09-06.md) closes the one attempt:

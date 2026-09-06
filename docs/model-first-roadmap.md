@@ -1,5 +1,22 @@
 # Model-first development roadmap
 
+## Current — recovery verified; resume useful selected-outcome learning
+
+The [search-recovery session](audits/red-search-recovery-2026-09-06.md) reproduced the no-catch
+situation and now retains its typed negative outcome, fresh ledger and restorable endpoint.
+No learning gain is claimed; the model remains 31 examples. Local development is available under
+an existing expanded profile, verified read-only. Do not grind the established 63/55-level party.
+
+1. Explicitly verify the old checkpoint profile before adopting a separately declared expanded
+   profile. Preserve lineage; connect the existing sampled collector rather than create a factory.
+2. Collect a short capture/local-development contrast, including no-find outcomes and real costs;
+   retain all 31 prior rows, audit/fit settled sampled outcomes, and test a new bounded continuation.
+3. Prioritize required-precursor evolution/storage and persistent search history next. Safe stopping
+   is not yet learned search-versus-switch judgment or sustained Red competence.
+
+Another maintenance-only session should trigger reorientation. No full replay, hack or Crystal now.
+Older sections below preserve the history; this checkpoint supersedes their next-session wording.
+
 ## Agreed milestones — Red competence, then measured adaptation
 
 The user-confirmed sequence is sustained Red play, repeatable model-directed story completion,

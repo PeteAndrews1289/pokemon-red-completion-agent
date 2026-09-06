@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+## Current ownership — recovery qualified; next session must return to learning
+
+Codex implemented and verified [safe search stopping](docs/audits/red-search-recovery-2026-09-06.md).
+No external reviewer was invoked. If requested, reviewers should challenge actual versus rejected
+model choices, preservation of negative outcomes, and whether the next learning contrast serves
+collection rather than arbitrary overleveling. They should not impose another campaign/CI gate.
+The single regression is closed; the saved endpoint and 31-example model remain private and intact.
+Earlier ownership sections are historical.
+
 ## Current ownership — continuation failed; typed recovery and useful choices next
 
 Codex closes the [attempt and audit](docs/audits/red-fit31-continuation-2026-09-06.md): resume worked,

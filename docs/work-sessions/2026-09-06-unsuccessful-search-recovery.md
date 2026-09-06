@@ -2,6 +2,10 @@
 
 ## Mission check before implementation
 
+**Closed:** [actual result and reorientation](../audits/red-search-recovery-2026-09-06.md).
+The new regression preserved the unsuccessful outcome and verified save. Expanded local
+development availability was inspected without input. No new learning or additional gameplay.
+
 1. **Capability:** stop an unsuccessful search without losing its negative outcome, actual costs,
    fresh collection ledger or safely recoverable game state.
 2. **Learned authority:** maintenance unblocking sustained goal-model play; this repair does not

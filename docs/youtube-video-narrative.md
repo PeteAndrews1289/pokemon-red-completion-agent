@@ -1,5 +1,13 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 6 scene — a useful failure, not a fake success
+
+Show the unchanged 215-action / 8244-frame no-catch search beside the new typed stop and verified
+saved endpoint. Explain that negative outcomes are needed for learning too. The model is still at
+31 examples; its proposed repeated search was blocked before another input, not executed as a
+second learned task. Local development is only the inspected next contrast, not completed footage.
+[Source of claims](audits/red-search-recovery-2026-09-06.md).
+
 ## Continuation attempt: the search moved, but recovery failed
 
 The 31-example player resumed the saved game and reached the Mansion. It encountered three wild

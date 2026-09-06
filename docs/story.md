@@ -1,5 +1,12 @@
 # The story: teaching a model to actually play Pokémon
 
+## September 6 — retaining an honest unsuccessful outcome
+
+The recovery repair reproduced the same no-catch search and retained its exact endpoint instead
+of aborting without a save. This is not a victory montage: zero new catches or training rows, and
+one model proposal stopped before execution. The useful engineering gain is that an ordinary
+unsuccessful search no longer destroys the next starting point. [Audit](audits/red-search-recovery-2026-09-06.md).
+
 ## September 6: continuing a save exposes an ordinary-search recovery problem
 
 The newly fitted 31-example player resumed its predecessor's real endpoint. It travelled to the

@@ -1,5 +1,16 @@
 # Handoff
 
+## Current — unsuccessful-search recovery verified; return to sampled learning
+
+Read [the September 6 recovery audit](docs/audits/red-search-recovery-2026-09-06.md).
+The same unsuccessful search now ends safely with a fresh ledger and restorable endpoint:
+215 actions / 8244 frames, zero catches. Model remains 31 examples; zero new training. One
+model-ranked recovery proposal was rejected before input, not an executed learned choice.
+Local development is verified available under the existing expanded profile, read-only only.
+Next: explicit verified profile transition and a short existing-collector learning contrast;
+retain lineage/31 prior rows, negatives and costs. No arbitrary party grind or new teacher.
+Earlier handoffs below are historical.
+
 ## Current — continuation ran and failed; recover ordinary no-find outcomes next
 
 The [session](docs/work-sessions/2026-09-06-fit31-continuation.md) implemented the thin continuation

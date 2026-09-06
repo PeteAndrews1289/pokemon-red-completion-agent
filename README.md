@@ -1,5 +1,13 @@
 # Pokémon Red Completion Agent
 
+## Latest development checkpoint
+
+The learned-player prototype now preserves an unsuccessful search as a negative outcome with a
+verified, restorable game state. The bounded regression used 215 actions / 8244 frames and caught
+nothing; this is a recovery improvement, **not** a new learning or game-completion claim. The model
+still contains 31 examples. Next is a short sampled learning contrast from the saved endpoint.
+See the [audit and next steps](docs/audits/red-search-recovery-2026-09-06.md).
+
 > **Working on this repository?** Read [MISSION.md](MISSION.md),
 > [NORTH_STAR.md](NORTH_STAR.md), the generated
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
