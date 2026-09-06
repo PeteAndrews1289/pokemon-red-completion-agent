@@ -86,3 +86,24 @@ with a negative assertion that a later committed source change is rejected. The 
 navigation registry and production loader are unchanged. Before another publication, run the
 entire protocol family plus the remaining navigation/training/end-of-suite group together.
 That sweep passed all 716 tests in 68.92 seconds. The production source bundle is unchanged.
+
+## Merged publication and order-dependent test isolation
+
+PR 228 passed its full run `34012772502`: 6,891 passed, four skipped and one expected failure,
+with a 27m13s job time. It merged as `2d074a18`; the merged and tested trees are identical. PR 227
+was closed only after its inclusion was verified. No branch or historical evidence was deleted.
+
+Exact-main run `34013912794` then failed after 7m29s: a synthetic runtime test inherited the real
+emulator module from an earlier test on the same worker. The production origin guard correctly
+rejected that module as outside the synthetic one-package closure. Running runtime-identity tests
+first reproduced the failure locally in 1.85 seconds. This was test-order contamination, not a
+source difference between the passing PR and main.
+
+The synthetic fixture now temporarily removes only inherited PyBoy/SDL modules and restores them
+at teardown. Its positive activation test covers cold and preloaded-module cases and verifies
+restoration; its foreign-module negative test requires the specific origin-rejection reason.
+Production authentication is unchanged. Both serial module orders pass 50 tests, and the broader
+parallel runtime/invocation set passes 84 tests. The eight-lesson plan and executable bundle remain
+unchanged. Repository rules require a pull request and the `test` check; do not bypass those rules
+or label the previous failed main run green. Publish the isolated test correction, qualify the
+consumer, then run the already prepared lessons.

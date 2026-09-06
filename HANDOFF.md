@@ -48,6 +48,14 @@ must pass together before republishing. This changes tests, not the frozen plan 
 The expanded sweep is complete: **716 passed in 68.92 seconds**. Qualify the published consumer,
 then proceed with the same eight lessons and admitted fit; do not recreate their plan.
 
+Publication now includes PR 228 merged as `2d074a18`, after full PR CI `34012772502` passed
+6,891 tests (four skipped, one expected failure). PR 227 is included and closed. Exact-main CI
+`34013912794` failed on a synthetic-runtime fixture inheriting real emulator modules from a prior
+test. This was reproduced locally and corrected only in the test fixture. Both serial import
+orders pass 50 tests; the parallel runtime/invocation set passes 84. Real origin guards remain
+strict. Publish that correction and require its green exact-main run; the previous failed main
+run must not be used as a qualification. The same private freeze and producer remain intact.
+
 ## Historical checkpoint — September 6 recovery audit
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then

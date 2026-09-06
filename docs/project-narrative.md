@@ -34,6 +34,13 @@ that incomplete sweep, corrected the navigation fixture without altering the rea
 and ran the entire protocol family and end-of-suite group: all 716 tests passed. No simulated test
 or publication attempt was credited as another game lesson.
 
+The full PR check then passed 6,891 tests and the work reached main. Identical files exposed one
+more environmental assumption: a synthetic runtime test failed when another test had already
+imported the real emulator. We reproduced that ordering locally, isolated the fake runtime and
+verified module restoration, keeping the production origin guard strict. Cold/warm serial orders
+and a broader parallel set pass. This explains another publication delay honestly; it still does
+not count as model training or Pokémon progress.
+
 ## September 6: preserve the work, then test the boundary between components
 
 A shortened chat history prompted a recovery audit, not a restart. Code through PR 228 was still
