@@ -154,6 +154,8 @@ def bind_capture_storage_support(
         ):
             raise RedCaptureStorageError("capture storage preparation lost its selected source")
         prepared_headroom = fresh.immediate_capture_slots
+        preparation_actions = router.actions.actions_executed - action_start
+        preparation_frames = runtime.emulator.frame_count - frame_start
         result = selected.execute()
         executed.append((selected, result))
         return GoalExecutionReport(
@@ -163,6 +165,7 @@ def bind_capture_storage_support(
                 "box_rotations": 1, "initial_headroom": initial_headroom,
                 "prepared_headroom": prepared_headroom,
                 "collection_preserved": True, "setup_training_rows": 0,
+                "actions_executed": preparation_actions, "frames_executed": preparation_frames,
             }},
         )
 

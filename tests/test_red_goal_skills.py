@@ -604,7 +604,10 @@ def test_area_survey_provider_captures_and_independently_reloads_collection(
 
 
 @pytest.mark.parametrize("unsafe", [False, True])
-def test_area_survey_labels_verified_no_find_without_claiming_success(unsafe) -> None:
+@pytest.mark.parametrize("balls_remaining", [0, 1, 20])
+def test_area_survey_labels_verified_no_find_without_claiming_success(
+    unsafe, balls_remaining,
+) -> None:
     reader = _Reader(raw=_raw(poke_balls=20), ready=True)
     port = _ActionPort(reader)
     actions = CountingExecutor(port)
@@ -625,12 +628,15 @@ def test_area_survey_labels_verified_no_find_without_claiming_success(unsafe) ->
     offer = provider.offer(adapter.observe())
     assert offer.binding is not None
     report = offer.binding.execute()
+    reader.raw = replace(reader.raw, bag_items=_raw(poke_balls=balls_remaining).bag_items)
     if unsafe:
         reader.ready = False
     verdict = offer.binding.verify(report)
     assert verdict.status.value == "failed"
     assert verdict.failure_reason is (
-        GoalFailureReason.OUTCOME_NOT_VERIFIED if unsafe else GoalFailureReason.SEARCH_EXHAUSTED
+        GoalFailureReason.OUTCOME_NOT_VERIFIED if unsafe
+        else GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED if balls_remaining == 0
+        else GoalFailureReason.SEARCH_EXHAUSTED
     )
     assert report.evidence["search_exhausted"] is True
     assert report.evidence["captures"] == 0

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.
+- Next decision: Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-varied-collection** · status **active** · evidence [model fit](docs/evidence/red-varied-collection-learning-2026-09-07.json)
+**2026-09-07-resource-recovery** · status **active** · evidence [qualification](docs/evidence/red-resource-recovery-qualification-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Persistent collection now safely changes storage boxes and learns from a failed capture. Sustainable resources and access to owned precursors are required for a living collection; another ball-only attempt would not address that. |
-| Learning output | One failed native acquisition retained/fitted59to60; all59previous rows and Tzero-row support kept. U607actions42384frames,zero new species,zero specimen losses; storage1to20. |
-| Authority delta | One native acquisition choice and its failure fitted59to60. Helper retrieval and storage rotation are deterministic preparation, not new learned authority. |
-| Transfer result | ROM-free helper/storage variation and one actual box rotation passed. Same-lineage Red evidence only; no independent advantage or cross-game transfer. Refit train MSE did not improve against prior model on the same60rows. |
-| Blocker | U ended with zero balls109currency; no affordable purchase. Storage now has20active slots, but stored evolution precursors are in an inactive box and current evolution retrieval is current-box-only. Exact next preflight offers no goal. |
-| Decision | Stop at the declared resource dead end. New storage-safe varied-collection checklist2/3; the productive goal remains unfinished despite a valid failure fit. Preserve closed mixed5/5. |
-| Next session | Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture. |
+| Product alignment | Use already-owned evolution precursors when capture supplies are unavailable; preserve the living collection and measured preparation costs. |
+| Learning output | Zero new examples, gameplay actions or frames. Model60 retains60examples/23successful and all historical failures. |
+| Authority delta | No new learned authority. Cross-box preparation and precise exhaustion diagnostics are engineering support; model60 remains unchanged. |
+| Transfer result | ROM-free tests vary source box, slot, capacity, collection and resource failures. No live or cross-game transfer claim. |
+| Blocker | Zero balls109currency still blocks capture. Cross-box evolution now passes ROM-free checks; actual U feasibility is pending. |
+| Decision | Qualify actual retained-state playability next. Keep the existing2/3 checklist and all consumed outcomes; preparation cannot close the productive learning criterion. |
+| Next session | Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice. |
 | Next falsifier | Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability? |
-| Stop condition | T/U permanently consumed. No further gameplay: stop on unavailable options, reset-funded recovery, specimen loss, or repeated unsupported capture. Future support alone is not learning. |
+| Stop condition | Never retry T/U, reset funds, discard specimens or manufacture alternatives. Inspect first; support-only execution has zero learning credit. |
 
 ### Stop conditions
 

@@ -61,6 +61,7 @@ def _composer(
     unavailable_reason: GoalUnavailableReason | None = None,
     limits: RoutedSemanticGoalLimits | None = None,
     capture_support: dict[str, int] | None = None,
+    storage_preparation: dict[str, object] | None = None,
 ) -> tuple[
     RoutedSemanticGoalComposer,
     ExecutableGoalBinding,
@@ -100,7 +101,9 @@ def _composer(
         return GoalExecutionReport(
             *destination_values,
             {"semantic_destination": offered_kind.value,
-             **({"capture_support": capture_support} if capture_support is not None else {})},
+             **({"capture_support": capture_support} if capture_support is not None else {}),
+             **({"storage_preparation": storage_preparation}
+                if storage_preparation is not None else {})},
         )
 
     def verify_destination(_report: GoalExecutionReport) -> GoalVerification:

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-varied-collection",
+  "as_of_session": "2026-09-07-resource-recovery",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -198,6 +198,12 @@
       "result": "Storage expanded from 1 to 20 slots; all 25 specimens preserved. Capture failed. The real failure was fitted: 59 to 60 examples, with all earlier data retained. Current milestone: 2/3, not a productive capture.",
       "deviation": "Stopped on zero balls109currency and no available next goal. Closed mixed5/5 preserved; stage exits unchanged. More fitted rows do not establish better play.",
       "next": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture."
+    },
+    {
+      "session": "2026-09-07-resource-recovery",
+      "result": "Cross-box evolution and retained storage costs qualified in145 focused tests; model60 and2/3 unchanged. Live feasibility pending.",
+      "deviation": "Engineering support only; no new learning result or changed stage exit. No new economy subsystem or teacher.",
+      "next": "Inspect exact U/model60. A unique evolution bridge is zero-row support; seek genuine useful choices afterward."
     }
   ],
   "closed_milestones": [

@@ -181,6 +181,7 @@ class RedGoalContextRuntime:
     boxed_level_evolution_readiness: (
         Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
     ) = None
+    boxed_level_evolution_cross_box: bool = False
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -1056,7 +1057,12 @@ class _RedTeamGoalProvider:
             for specimen in collection.specimens
             if specimen.species_ref == source_ref
             and specimen.location is CollectionLocation.BOX
-            and specimen.container_index == current_box
+            and (
+                specimen.container_index == current_box
+                or self.runtime.boxed_level_evolution_cross_box
+            )
+            and specimen.container_index < len(collection.box_counts)
+            and collection.box_counts[specimen.container_index] < collection.box_capacity
         )
         deposit_candidates = tuple(
             (index + 1, member.species_id)
@@ -1067,17 +1073,17 @@ class _RedTeamGoalProvider:
             len(candidates) < 1
             or source_internal in observation.party.species_ids()
             or observation.party.size != 6
-            or current_box >= len(collection.box_counts)
-            or collection.box_counts[current_box] >= collection.box_capacity
             or not deposit_candidates
         ):
             raise RedGoalContextError("boxed evolution has no executable storage binding")
-        precursor = min(candidates, key=lambda item: item.slot_index)
+        precursor = min(candidates, key=lambda item: (
+            item.container_index != current_box, item.container_index, item.slot_index,
+        ))
         deposit_slot, deposit_species = deposit_candidates[-1]
         return RedBoxedLevelEvolutionGoalRequest(
             precursor_internal_species_id=source_internal,
             evolved_internal_species_id=target_internal,
-            current_box_index=current_box,
+            current_box_index=precursor.container_index,
             precursor_box_slot=precursor.slot_index + 1,
             deposit_party_slot=deposit_slot,
             deposit_internal_species_id=deposit_species,

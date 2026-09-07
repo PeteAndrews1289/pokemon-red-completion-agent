@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One native acquisition choice and its failure fitted59to60. Helper retrieval and storage rotation are deterministic preparation, not new learned authority.",
-        "blocker": "U ended with zero balls109currency; no affordable purchase. Storage now has20active slots, but stored evolution precursors are in an inactive box and current evolution retrieval is current-box-only. Exact next preflight offers no goal.",
-        "decision": "Stop at the declared resource dead end. New storage-safe varied-collection checklist2/3; the productive goal remains unfinished despite a valid failure fit. Preserve closed mixed5/5.",
+        "authority_delta": "No new learned authority. Cross-box preparation and precise exhaustion diagnostics are engineering support; model60 remains unchanged.",
+        "blocker": "Zero balls109currency still blocks capture. Cross-box evolution now passes ROM-free checks; actual U feasibility is pending.",
+        "decision": "Qualify actual retained-state playability next. Keep the existing2/3 checklist and all consumed outcomes; preparation cannot close the productive learning criterion.",
         "evidence": {
-          "kind": "model_fit",
-          "path": "docs/evidence/red-varied-collection-learning-2026-09-07.json",
-          "sha256": "d58f1b6791dbe2bc86309b20e1230db7bb9964c69d1d717200140a2d377e22a7"
+          "kind": "qualification",
+          "path": "docs/evidence/red-resource-recovery-qualification-2026-09-07.json",
+          "sha256": "7e45361703f7d54c4874542bdaddbc42cc53954a83dd728794bce636f8d124bb"
         },
-        "learning_output": "One failed native acquisition retained/fitted59to60; all59previous rows and Tzero-row support kept. U607actions42384frames,zero new species,zero specimen losses; storage1to20.",
+        "learning_output": "Zero new examples, gameplay actions or frames. Model60 retains60examples/23successful and all historical failures.",
         "next_falsifier": "Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability?",
-        "next_session_goal": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.",
-        "product_alignment": "Persistent collection now safely changes storage boxes and learns from a failed capture. Sustainable resources and access to owned precursors are required for a living collection; another ball-only attempt would not address that.",
-        "session_id": "2026-09-07-varied-collection",
+        "next_session_goal": "Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice.",
+        "product_alignment": "Use already-owned evolution precursors when capture supplies are unavailable; preserve the living collection and measured preparation costs.",
+        "session_id": "2026-09-07-resource-recovery",
         "status": "active",
-        "stop_condition": "T/U permanently consumed. No further gameplay: stop on unavailable options, reset-funded recovery, specimen loss, or repeated unsupported capture. Future support alone is not learning.",
-        "transfer_result": "ROM-free helper/storage variation and one actual box rotation passed. Same-lineage Red evidence only; no independent advantage or cross-game transfer. Refit train MSE did not improve against prior model on the same60rows."
+        "stop_condition": "Never retry T/U, reset funds, discard specimens or manufacture alternatives. Inspect first; support-only execution has zero learning credit.",
+        "transfer_result": "ROM-free tests vary source box, slot, capacity, collection and resource failures. No live or cross-game transfer claim."
       },
       "learned_authority": {
         "current": "Model a645e264 retains60outcomes,23successful,all59prior retained. U selected acquisition from capture/evolution alternatives but failed after spending both balls.23living/25specimens/28registered,20active boxslots. Model60 unplayed; unchanged next menu has no available option.",
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.",
+      "next_decision": "Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

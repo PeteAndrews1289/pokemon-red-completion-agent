@@ -25,6 +25,13 @@ its productive outcome is unfinished. The earlier mixed-goal5/5 remains closed.
 
 ## Ordered work
 
+Session started September7 at16:41UTC; reassess18:11UTC, stop/reorient18:41UTC.
+The previous full local suite completed7604passed,1skipped,1expected failure;
+GitHub34143810607 is still running. Do not start a duplicate full suite.
+Prioritize cross-box evolution access if no existing live supply recovery is
+available. Keep the six-part mission check above; this is bounded maintenance
+unblocking the next real collection decision, not a new learning result by itself.
+
 1. Inspect existing selling, trainer-reward and item-acquisition providers against
    the actual bag and completed-story flags. Treat remaining trainer income and
    sellable reserves as finite, not renewable. Do not sell key/HM or required

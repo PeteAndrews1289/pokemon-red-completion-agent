@@ -47,6 +47,7 @@ from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
 from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+from pokemon_red_completion.storage_preparation import StoragePreparationSummary
 
 
 class BoundedPlayerError(RuntimeError):
@@ -134,6 +135,7 @@ class BoundedPlayerStep:
     collection_after: LivingCollectionCheckpoint
     selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
     capture_support: CaptureSupportSummary | None = None
+    storage_preparation: StoragePreparationSummary | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -155,6 +157,8 @@ class BoundedPlayerStep:
             "status": self.status.value,
             **({"capture_support": self.capture_support.public_dict()}
                if self.capture_support is not None else {}),
+            **({"storage_preparation": self.storage_preparation.public_dict()}
+               if self.storage_preparation is not None else {}),
         }
 
 
@@ -470,7 +474,10 @@ def run_bounded_player_episode(
             execution.selected_kind is GoalKind.ACQUIRE_SPECIES
             and (
                 execution.passed
-                or execution.verification.failure_reason is GoalFailureReason.SEARCH_EXHAUSTED
+                or execution.verification.failure_reason in {
+                    GoalFailureReason.SEARCH_EXHAUSTED,
+                    GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED,
+                }
             )
         ):
             search_memory.record(
@@ -503,6 +510,10 @@ def run_bounded_player_episode(
                 capture_support=(
                     None if execution_report is None
                     else CaptureSupportSummary.from_evidence(execution_report.evidence)
+                ),
+                storage_preparation=(
+                    None if execution_report is None
+                    else StoragePreparationSummary.from_evidence(execution_report.evidence)
                 ),
             )
         )

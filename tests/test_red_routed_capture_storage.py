@@ -139,7 +139,8 @@ def test_rotation_is_action_free_until_selected_and_preserves_goal_and_full_cost
     assert (report.actions_executed, report.frames_executed) == (18, 113)
     assert report.evidence['storage_preparation'] == {
         'box_rotations': 1, 'initial_headroom': 1, 'prepared_headroom': 20,
-        'collection_preserved': True, 'setup_training_rows': 0}
+        'collection_preserved': True, 'setup_training_rows': 0,
+        'actions_executed': 13, 'frames_executed': 83}
     assert selected.verify(report).status.value == 'succeeded'
     assert f.calls == ['travel', 'face', 'open', ('switch', 2), 'close', 'capture', 'verify']
     with pytest.raises(storage.RedCaptureStorageError, match='consumed'):

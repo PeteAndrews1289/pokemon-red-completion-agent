@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-varied-collection**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-resource-recovery
+
+Cross-box evolution and retained storage costs qualified in145 focused tests; model60 and2/3 unchanged. Live feasibility pending.
+
+**Deviation:** Engineering support only; no new learning result or changed stage exit. No new economy subsystem or teacher.
+
+**Next:** Inspect exact U/model60. A unique evolution bridge is zero-row support; seek genuine useful choices afterward.
 
 ### 2026-09-07-varied-collection
 

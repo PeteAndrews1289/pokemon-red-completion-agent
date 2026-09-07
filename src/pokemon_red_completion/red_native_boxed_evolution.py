@@ -30,7 +30,10 @@ from pokemon_red_completion.red_battle_catalog import (
     pokemon_red_move_ref,
     pokemon_red_species_ref,
 )
-from pokemon_red_completion.red_boxed_level_evolution import BoundedEvolutionTrainingResult
+from pokemon_red_completion.red_boxed_level_evolution import (
+    BoundedEvolutionTrainingResult,
+    SemanticPCBoundaryAccess,
+)
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_internal_species_number,
@@ -106,10 +109,14 @@ def bind_native_boxed_evolution(
     *,
     maximum_quanta: int = 1,
     retain_quantum: Callable[[], None] | None = None,
+    allow_cross_box: bool = False,
 ) -> context.RedGoalContextRuntime:
     """Return an isolated runtime; do not mutate a saved observer's old profile."""
     if type(maximum_quanta) is not int or not 1 <= maximum_quanta <= 128:
         raise ValueError("native evolution quantum limit differs")
+    if type(allow_cross_box) is not bool:
+        raise ValueError("native evolution cross-box mode differs")
+    runtime = replace(runtime, boxed_level_evolution_cross_box=allow_cross_box)
     spec = next(s for s in runtime.profile.providers if s.kind is GoalKind.EVOLVE_SPECIES)
 
     def supported_venues(observation: context.RedGoalObservation) -> tuple[TrainingVenue, ...]:
@@ -162,7 +169,10 @@ def bind_native_boxed_evolution(
             if s.location is CollectionLocation.PARTY
             or (
                 s.location is CollectionLocation.BOX
-                and s.container_index == observation.collection_observation.current_box_index
+                and (
+                    allow_cross_box
+                    or s.container_index == observation.collection_observation.current_box_index
+                )
             )
         ]
         if len(specimens) != 2 or not candidates:
@@ -337,6 +347,12 @@ def bind_native_boxed_evolution(
             raise context.RedGoalContextError("native evolution requires two retained precursors")
         if not readiness(before).executable:
             raise context.RedGoalContextError("native evolution training capability is unavailable")
+        if context._RedTeamGoalProvider(runtime, spec, actions)._boxed_evolution_request(
+            before
+        ) != request:
+            raise context.RedGoalContextError(
+                "native evolution storage request changed before input"
+            )
         retained_helpers = tuple(
             replace(member, slot=index + 1)
             for index, member in enumerate(
@@ -384,9 +400,19 @@ def bind_native_boxed_evolution(
             }
         )
 
+        pc_access: SemanticPCBoundaryAccess = SemanticVenueRouteBinding(to_pc, identity)
+        preparation: dict[str, object] = {}
+        if request.current_box_index != before.collection_observation.current_box_index:
+            from pokemon_red_completion.red_native_evolution_box_access import (
+                prepare_evolution_box,
+            )
+
+            pc_access, preparation = prepare_evolution_box(
+                runtime, world, actions, traversal, to_pc, request,
+            )
         executor = RedGoalBoxedEvolutionExecutor(
             reset_state_sha256=runtime.capture.state_sha256,
-            route_to_pc=SemanticVenueRouteBinding(to_pc, identity),
+            route_to_pc=pc_access,
             route_to_training=SemanticVenueRouteBinding(to_training, identity),
             training_binding_sha256=identity,
             reader=runtime.reader,
@@ -405,6 +431,7 @@ def bind_native_boxed_evolution(
             report,
             actions_executed=actions.actions_executed - action_start,
             frames_executed=runtime.emulator.frame_count - frame_start,
+            evidence={**report.evidence, **preparation},
         )
 
     return replace(

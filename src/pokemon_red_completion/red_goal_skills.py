@@ -1374,7 +1374,11 @@ class RedAreaSurveyGoalProvider:
                 and report.evidence.get("initial_missing_specimens") == initial_missing_specimens
                 and report.evidence.get("final_missing_specimens") == remaining_specimens
             ):
-                return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
+                return GoalVerification.failed(
+                    GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED
+                    if after.capture_item_count == 0
+                    else GoalFailureReason.SEARCH_EXHAUSTED
+                )
             if (
                 not remaining <= initial_missing
                 or remaining_specimens >= initial_missing_specimens

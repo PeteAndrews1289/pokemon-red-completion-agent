@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+
+## Current — cross-box recovery qualified; live inspection next
+
+Model60 and U remain unchanged:60retained examples,23successful;23living species,
+25specimens,28registered,zero balls109currency. Cross-box evolution now passes
+ROM-free checks, including nonzero box targets, exact precursor selection and
+collection preservation. Preparation costs survive the saved parent report;
+new zero-ball failures are distinct from search exhaustion. Historical U is not
+relabelled. No new gameplay or fitting is claimed at this engineering checkpoint.
+
+Prior source18535c2a passed7604 local tests and GitHub34143810607 is green.
+The new source has145 focused checks; broader compatibility is being checked.
+Next inspect actual U/model60 without input. A unique evolution would be a
+zero-row deterministic bridge, not model-selected learning. Keep the local2/3
+milestone and downstream stage exits unchanged. No reset, new teacher, full replay,
+sealed Red or Crystal. No outside reviewers are running; Codex owns implementation.
+See the [current audit](audits/red-resource-recovery-2026-09-07.md).
+Older current-labelled entries below are historical.
+
 ## September7 — storage worked; sustainability did not
 
 The next lesson was an honest failure. Code retrieved the capture helper and

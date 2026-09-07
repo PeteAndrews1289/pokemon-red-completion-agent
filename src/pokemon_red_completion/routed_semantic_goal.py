@@ -431,11 +431,14 @@ class RoutedSemanticGoalComposer:
         after = self._checkpoint()
         actions, frames = _checkpoint_delta(before, after)
         from pokemon_red_completion.capture_support import CaptureSupportSummary
+        from pokemon_red_completion.storage_preparation import StoragePreparationSummary
 
         capture_support = (
             None if destination_execution is None
             else CaptureSupportSummary.from_evidence(destination_execution.evidence)
         )
+        storage = (None if destination_execution is None
+                   else StoragePreparationSummary.from_evidence(destination_execution.evidence))
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
@@ -457,6 +460,7 @@ class RoutedSemanticGoalComposer:
                 "private_route_fields": 0,
                 **({"capture_support": capture_support.public_dict()}
                    if capture_support is not None else {}),
+                **({"storage_preparation": storage.public_dict()} if storage is not None else {}),
             },
         )
         self._attempt = _RoutedSemanticAttempt(

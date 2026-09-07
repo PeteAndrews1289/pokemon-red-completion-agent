@@ -312,6 +312,7 @@ def _player_observer(
             world,
             maximum_quanta=128 if completion_dose else 1,
             retain_quantum=retain_quantum,
+            allow_cross_box=completion_dose,
         )
     router = (
         None

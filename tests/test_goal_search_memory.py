@@ -128,7 +128,9 @@ def test_child_memory_must_retain_prior_records_and_cannot_regress():
         prior.require_extension(child)
 
 
-@pytest.mark.parametrize("reason,expected", [("search_exhausted", 1), ("outcome_not_verified", 0)])
+@pytest.mark.parametrize("reason,expected", [
+    ("search_exhausted", 1), ("capture_items_exhausted", 1), ("outcome_not_verified", 0),
+])
 @pytest.mark.parametrize("stable_source", [None, "private-stable-source"])
 def test_player_records_only_metered_settled_searches(reason, expected, stable_source):
     from test_bounded_player_episode import _observer, _trajectory
