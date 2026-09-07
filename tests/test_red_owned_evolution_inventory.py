@@ -11,6 +11,7 @@ from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_owned_evolution_inventory import (
     inventory_red_owned_level_evolutions,
+    unique_owned_level_evolution,
 )
 
 
@@ -100,3 +101,30 @@ def test_duplicate_rules_are_not_duplicate_choices():
     rule = GRAPH[14][0]
     with pytest.raises(ValueError, match="duplicate"):
         inventory(observation(14, 14), {14: (rule, rule)})
+
+
+def test_unique_supported_target_is_derived_not_selected_by_specimen_order():
+    obs = observation(56, 14, 63, 14)
+    row = unique_owned_level_evolution(obs, GRAPH, target_species=TARGETS)
+    assert (row.source_species_ref, row.target_species_ref, row.evolution_level) == (
+        "pokemon:national:014", "pokemon:national:015", 10,
+    )
+    assert unique_owned_level_evolution(
+        replace(obs, specimens=tuple(reversed(obs.specimens))), GRAPH,
+        target_species=TARGETS,
+    ) == row
+
+
+@pytest.mark.parametrize("numbers", [(14,), (14, 14, 14), (14, 14, 56, 56), (25, 25)])
+def test_unique_binding_refuses_unsupported_or_ambiguous_objectives(numbers):
+    with pytest.raises(ValueError, match="exactly one"):
+        unique_owned_level_evolution(observation(*numbers), GRAPH, target_species=TARGETS)
+
+
+def test_unique_binding_needs_an_accessible_specimen_not_only_daycare_stock():
+    obs = observation(14, 14)
+    obs = replace(obs, specimens=tuple(
+        replace(s, location=CollectionLocation.DAYCARE) for s in obs.specimens
+    ))
+    with pytest.raises(ValueError, match="exactly one"):
+        unique_owned_level_evolution(obs, GRAPH, target_species=TARGETS)

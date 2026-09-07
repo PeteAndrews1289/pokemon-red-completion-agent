@@ -90,3 +90,26 @@ def inventory_red_owned_level_evolutions(
     return tuple(sorted(rows, key=lambda row: (
         row.target_species_ref, row.source_species_ref,
     )))
+
+
+def unique_owned_level_evolution(
+    observation: CollectionObservation,
+    graph: Mapping[int, tuple[Evolution, ...]],
+    *,
+    target_species: frozenset[str],
+) -> RedOwnedEvolutionPrerequisite:
+    """Bind a unique supported target, not an artificial learned target choice.
+
+    The existing native executor requires exactly two copies and can operate on
+    party/box specimens. Do not relax that executor contract through inventory.
+    More than one objective requires real downstream selection, not first-row wins.
+    """
+    rows = tuple(
+        row for row in inventory_red_owned_level_evolutions(
+            observation, graph, target_species=target_species,
+        )
+        if row.retained_source_copies == 2 and row.party_or_box_precursors
+    )
+    if len(rows) != 1:
+        raise ValueError("owned evolution needs exactly one supported surplus target")
+    return rows[0]

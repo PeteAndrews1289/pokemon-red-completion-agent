@@ -1,5 +1,18 @@
 # Next session — economically feasible collection choices
 
+Started September 7, 19:24 UTC; reassess 20:24 UTC, stop by 21:24 UTC.
+The current Hyper Potion sale is unavailable: four remain, below its unchanged
+eight-item retention floor. Add a separate explicit Full Restore sale allowance:
+retain at least six (one per party slot), with four Hyper Potions and all other
+items untouched. X has seven Full Restores. Selling exactly one for 1,500 can
+fund seven 200-cost Poké Balls, leaving 209 cash. This is finite liquidity,
+not renewable income; do not lower the historical Hyper Potion floor.
+The pinned cartridge [price table](https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/data/items/prices.asm)
+lists Full Restore at 3,000; actual half-price proceeds must be verified live.
+Connect the unique owned-surplus target through the tested inventory, not a
+manually entered species. The parent must choose between that real evolution
+and newly affordable resupply; no seed selection to force a desired outcome.
+
 Start at X, not W. X evolved Butterfree successfully and retained all 25 specimens.
 Model61 is unchanged; include X's original zero-row support in the next eligible
 fit. The exact source, save and model are in the

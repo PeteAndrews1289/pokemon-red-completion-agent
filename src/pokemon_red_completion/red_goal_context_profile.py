@@ -633,7 +633,8 @@ def _parse_parameters(
             item = _integer(sale["item_id"], "funding item")
             quantity = _positive_integer(sale["quantity"], "funding quantity")
             retained = _positive_integer(sale["minimum_retained"], "funding reserve")
-            if item != int(ItemId.HYPER_POTION) or quantity > 99 or not 8 <= retained <= 99:
+            floors = {int(ItemId.HYPER_POTION): 8, int(ItemId.FULL_RESTORE): 6}
+            if item not in floors or quantity > 99 or not floors[item] <= retained <= 99:
                 raise RedGoalContextProfileError("Mart funding sale violates protected reserve")
             if any(p["item_id"] == item for p in parsed_purchases):
                 raise RedGoalContextProfileError("Mart cannot sell and rebuy the same item")

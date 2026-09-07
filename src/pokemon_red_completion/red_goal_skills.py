@@ -530,8 +530,9 @@ class RedMartPurchase:
 class RedMartSurplusSale:
     """Finite liquidity bridge; never sell unique assets or the recovery floor.
 
-    Red Hyper Potions cost1500 and sell for750. This deliberately narrow allowlist
-    can be extended only with a separate supply/retention justification.
+    Hyper Potions retain the historical eight-item floor. Full Restores have a
+    separately declared six-item floor (one per party slot); neither rule permits
+    spending the last healing stock. Prices are pinned in data/items/prices.asm.
     """
 
     item: ItemId
@@ -539,16 +540,20 @@ class RedMartSurplusSale:
     minimum_retained: int
 
     def __post_init__(self) -> None:
-        if self.item is not ItemId.HYPER_POTION:
+        floors = {ItemId.HYPER_POTION: 8, ItemId.FULL_RESTORE: 6}
+        if not isinstance(self.item, ItemId) or self.item not in floors:
             raise ValueError("surplus sale item is protected or unsupported")
         if type(self.quantity) is not int or not 1 <= self.quantity <= 99:
             raise ValueError("surplus sale quantity differs")
-        if type(self.minimum_retained) is not int or not 8 <= self.minimum_retained <= 99:
-            raise ValueError("surplus sale must retain at least eight Hyper Potions")
+        if (
+            type(self.minimum_retained) is not int
+            or not floors[self.item] <= self.minimum_retained <= 99
+        ):
+            raise ValueError("surplus sale violates the item-specific recovery reserve")
 
     @property
     def proceeds(self) -> int:
-        return self.quantity * 750
+        return self.quantity * (1500 if self.item is ItemId.FULL_RESTORE else 750)
 
 
 @dataclass(frozen=True, slots=True)
@@ -650,6 +655,15 @@ class RedMartResupplyGoalProvider:
         def execute() -> GoalExecutionReport:
             if before_money is None:
                 raise RedGoalSkillError("Mart resupply lacks money evidence")
+            if funding is not None:
+                fresh = self.reader.read()
+                if (
+                    dict(fresh.bag_items or ()) != before_inventory
+                    or fresh.player_money != before_money
+                    or fresh.party_species_ids != start.party_species_ids
+                    or fresh.party_hp != start.party_hp
+                ):
+                    raise RedGoalSkillError("Mart funding resources changed before sale")
             self.actions.execute(MacroAction(MacroActionKind.MOVE, self.interaction_direction))
             self._settle()
             approached = self.reader.read()

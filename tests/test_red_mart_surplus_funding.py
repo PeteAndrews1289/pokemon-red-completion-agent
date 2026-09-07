@@ -164,22 +164,95 @@ def test_stale_stock_cannot_sell_through_the_retained_reserve(monkeypatch):
         offer.binding.execute()
 
 
+def _restore_provider():
+    return replace(
+        _provider(potions=4, funds=109),
+        purchases=(RedMartPurchase(0, ItemId.POKE_BALL, 7, 200),),
+        funding_sale=RedMartSurplusSale(ItemId.FULL_RESTORE, 1, 6),
+    )
+
+
+def test_full_restore_bridge_has_separate_price_and_preserves_both_healing_stocks(monkeypatch):
+    provider = _restore_provider()
+    reader = provider.reader
+    quote = provider.resource_quote(provider.adapter.observe())
+    assert quote.available_funds == 109 and quote.funding_proceeds == 1500
+    events = []
+
+    def sale(actions, _reader, _emulator, _timing, item, *, quantity, expected_proceeds):
+        assert item is ItemId.FULL_RESTORE and quantity == 1 and expected_proceeds == 1500
+        bag = dict(reader.raw.bag_items)
+        bag[16] = 6
+        reader.raw = replace(reader.raw, bag_items=tuple(bag.items()), player_money=1609)
+        actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        events.append("sale")
+
+    def buy(actions, _emulator, _timing, **kwargs):
+        assert events == ["sale"] and kwargs["quantity"] == 7
+        bag = dict(reader.raw.bag_items)
+        bag[4] = 7
+        reader.raw = replace(
+            reader.raw, bag_items=tuple(bag.items()), bag_item_ids=tuple(bag), player_money=209,
+        )
+        actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        events.append("buy")
+
+    monkeypatch.setattr("pokemon_red_completion.red_goal_skills._sell_mart_item_stack", sale)
+    monkeypatch.setattr("pokemon_red_completion.red_goal_skills._buy_mart_item", buy)
+    monkeypatch.setattr("pokemon_red_completion.red_goal_skills._close_menus", lambda *_: None)
+    offer = provider.offer(provider.adapter.observe())
+    report = offer.binding.execute()
+    assert offer.binding.verify(report).status.value == "succeeded"
+    assert events == ["sale", "buy"] and reader.raw.player_money == 209
+    assert dict(reader.raw.bag_items)[16] == 6
+    assert dict(reader.raw.bag_items)[18] == 4
+
+
+def test_restore_reserve_is_rechecked_before_controller_input(monkeypatch):
+    provider = _restore_provider()
+    offer = provider.offer(provider.adapter.observe())
+    bag = dict(provider.reader.raw.bag_items)
+    bag[16] = 6
+    provider.reader.raw = replace(provider.reader.raw, bag_items=tuple(bag.items()))
+    assert not provider.resource_availability(provider.adapter.observe()).executable
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_skills._sell_mart_item_stack",
+        lambda *_a, **_k: pytest.fail("sold retained recovery stock"),
+    )
+    with pytest.raises(RedGoalSkillError, match="changed before sale"):
+        offer.binding.execute()
+    assert provider.actions.actions_executed == 0
+
+
+@pytest.mark.parametrize("item,quantity,reserve", [
+    (16, 1, 6), (True, 1, 6), (ItemId.FULL_RESTORE, 1, 5),
+    (ItemId.FULL_RESTORE, 1, True), (ItemId.FULL_RESTORE, 0, 6),
+    (ItemId.HYPER_POTION, 1, 6),
+])
+def test_item_specific_floors_and_strict_item_identity(item, quantity, reserve):
+    with pytest.raises(ValueError):
+        RedMartSurplusSale(item, quantity, reserve)
+
+
+@pytest.mark.parametrize("sale_item,quantity,reserve", [
+    (ItemId.HYPER_POTION, 3, 8), (ItemId.FULL_RESTORE, 1, 6),
+])
 @pytest.mark.parametrize("damage", [None, "item", "reserve", "extra"])
-def test_optional_funding_profile_is_explicit_and_protected(damage):
+def test_optional_funding_profile_is_explicit_and_protected(damage, sale_item, quantity, reserve):
     original = _supply_transition_profile()
     providers = []
     for spec in original.providers:
         params = _thaw(spec.parameters)
         if spec.kind is GoalKind.RESUPPLY:
             params["funding_sale"] = {
-                "item_id": int(ItemId.HYPER_POTION),
-                "quantity": 3,
-                "minimum_retained": 8,
+                "item_id": int(sale_item),
+                "quantity": quantity,
+                "minimum_retained": reserve,
             }
             if damage == "item":
                 params["funding_sale"]["item_id"] = int(ItemId.HELIX_FOSSIL)
             if damage == "reserve":
-                params["funding_sale"]["minimum_retained"] = 7
+                params["funding_sale"]["minimum_retained"] = reserve - 1
             if damage == "extra":
                 params["funding_sale"]["override"] = True
         providers.append((spec.kind, spec.mechanic, params))
