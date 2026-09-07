@@ -12,6 +12,8 @@ fainted; living collection means ownership, not current HP. Helper preparation
 substituted Drowzee level 13 into the party and preserved Butterfree in storage. Box
 rotation changed active-box headroom 1 to 20 and preserved the ledger. The exact
 Route 5 (9,13) terminal restores without input and is outside battle.
+An independent comparison of the Z and AA audit inventories also confirmed the
+entire bag, money and all-specimen species multiset are unchanged.
 
 The failure was fitted honestly: model62 to model63, 25 successful outcomes and 53 distinct
 selected feature rows. All 62 prior examples retained; original inventory now
@@ -28,6 +30,8 @@ The capture-helper step added a status-capable party member but did not prepare 
 safe search lead. Failed escapes damaged Beedrill. The first zero-HP observation
 is linked to execution 607; 70 more actions / 3,888 frames followed, including battle
 settlement and continued searching. Not all of that cost is avoidable.
+A new wild encounter is logged at execution 650 with Beedrill still fainted;
+this is the concrete regression the between-action safety guard prevents.
 
 The historical survey eventually returned no capture, and its verifier rejected
 the fainted party with generic outcome_not_verified. The curated Route 5 source
@@ -46,6 +50,13 @@ Targeted ROM-free tests passed (230 across the acquisition, routing, continuatio
 learning and protocol groups; 107 in the initial acquisition/support group).
 No live repair qualification and no retry of AA occurred. The next session must
 still implement/qualify safer lead preparation and legitimate recovery.
+The broader local test run caught a roadmap test whose missing-evidence probe
+assumed the first live checklist item was already complete. Its fixture now
+explicitly marks an item complete before removing evidence, and separately
+permits an uncompleted item with no evidence. The product rule was not weakened.
+The final full ROM-free suite passed: **7,722 passed, one skipped, one expected
+failure**, in 16m49s. The 230-test affected-path group also passed on the final
+runtime source. Lint, documentation/focus and public-artifact checks passed.
 
 ## Reorientation
 
