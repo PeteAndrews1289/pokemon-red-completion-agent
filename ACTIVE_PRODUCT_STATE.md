@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify destination-door arrivals, then one fresh model49 source choice from H's retained endpoint. Ten balls and2709currency available; no replay of consumed attempts.
+- Next decision: Execute one newly declared resource-aware native goal step from I with model50. Respect capture/resupply sampling; fit only the actual native parent outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model87772dfa retains49 examples,16successful. Four genuine regional choices over three destinations all failed; G/H failed navigation. F safety resupply added zero rows. Collection18living/20specimens,10balls2709currency. Model49 has not played. |
+| Authority now | Model df9596bc retains 50 examples, 17 successful. Five regional source choices yielded one Ekans capture and four retained failures. Collection: 19 living species / 21 specimens, five balls and 2,709 currency. J rejected before input; model50 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a fresh model-selected source choice reach its selected capture venue and settle an outcome after destination-door arrivals are corrected, preserving H's actual save? |
+| Cheapest falsifier | Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-funded-navigation** · status **active** · evidence [qualification](docs/evidence/red-regional-funded-navigation-2026-09-07.json)
+**2026-09-07-regional-resource-goals** · status **active** · evidence [qualification](docs/evidence/red-regional-integration-closeout-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Finite legitimate resupply and retained failure learning support continued collection. Destination-dependent arrival repair is maintenance unblocking the existing learned source choice. |
-| Learning output | 47to49 retained examples: two sampled navigation failures, all earlier rows retained. F safety support and deterministic parent choices add zero examples. |
-| Authority delta | No new authority layer. Model47/48 chose Route10/Route4 from four real sources; no destination override. |
-| Transfer result | Four cumulative same-lineage source choices across three destinations. Two distinct cave exits exposed the same arrival bug; no independent advantage. |
-| Blocker | Both new trips stopped at automatic doorway steps absent from the planned landing. Captures have not improved; source/goal integration alone is insufficient. |
-| Decision | Retain both failures and repair cartridge-derived settled warp arrivals. Keep strict live acknowledgements; no coordinate exception. |
-| Next session | Qualify shared door-arrival semantics and continue model49 from H, preserving costs, supplies and all living specimens. |
-| Next falsifier | Can a fresh model-selected source choice reach its selected capture venue and settle an outcome after destination-door arrivals are corrected, preserving H's actual save? |
-| Stop condition | No retries of consumed A-through-H episodes. Stop unexplained drift or collection loss; reassess navigation repair after60minutes; safe closeout10:57UTC. |
+| Product alignment | Regional integration now produced an actual model-directed capture. Resource-aware parent goal selection is the next dependency for sustained collection. |
+| Learning output | Regional checklist closed 5/5. Model45 to50 retains five actual source outcomes: one successful Ekans capture and four failures. Forced/safety support adds no targets. |
+| Authority delta | Destination sampling controlled I's successful acquisition. The next mixed-parent mode lets native exploratory goal selection choose acquisition or resupply; its source proposal is retained but not separately fitted. |
+| Transfer result | Varied positions, resources and three chosen destinations in one Red lineage. No independent advantage or full-player promotion. |
+| Blocker | The source-only runner rejected J before input because the top-level model preferred resupply. Global remaining-specimen history keys also limit cross-objective reuse. |
+| Decision | Preserve I and all failures. Connect the existing parent goal policy with regional proposals; do not force another acquisition or relabel J as played. |
+| Next session | One resource-aware mixed-parent step from I, native goal-only fitting, then a productive fresh continuation. |
+| Next falsifier | Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets? |
+| Stop condition | Never retry consumed episodes or retired J. Stop on parent override, duplicate target credit, unexplained drift or collection loss. Reassess after90minutes; safe closeout10:57UTC. |
 
 ### Stop conditions
 

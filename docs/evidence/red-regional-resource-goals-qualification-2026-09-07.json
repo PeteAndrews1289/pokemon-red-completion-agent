@@ -1,0 +1,14 @@
+{
+  "schema": "pokemon.red.regional-resource-goals-qualification.v1",
+  "session": "2026-09-07-regional-resource-goals",
+  "classification": "engineering_only",
+  "parent_authority_preserved": true,
+  "source_proposal_fitted": false,
+  "actual_native_goal_only": true,
+  "resupply_creates_source_attempt": false,
+  "focused_tests_passed": 65,
+  "new_gameplay": false,
+  "new_model_fit": false,
+  "independent_evaluation": false,
+  "audit": "docs/audits/red-regional-resource-goals-2026-09-07.md"
+}

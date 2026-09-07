@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-regional-funded-navigation",
+  "as_of_session": "2026-09-07-regional-resource-goals",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-regional-funded-navigation-2026-09-07.json"
+      "evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,35 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Regional multi-goal integration",
+    "title": "Resource-aware regional play",
     "items": [
       {
-        "id": "regional-source",
-        "label": "Truthful source continuation",
+        "id": "parent-authority",
+        "label": "Parent retains capture/resupply choice",
         "done": true,
-        "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        "evidence": "docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json"
       },
       {
-        "id": "regional-gain",
-        "label": "Retained regional collection gain",
-        "done": true,
-        "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        "id": "parent-outcome",
+        "label": "Played native goal outcome fitted",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "regional-choices",
-        "label": "Multiple genuine model choices",
-        "done": true,
-        "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
-      },
-      {
-        "id": "regional-fit",
-        "label": "New fit and fresh continuation",
-        "done": true,
-        "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
-      },
-      {
-        "id": "regional-variation",
-        "label": "Variation, costs and interventions",
+        "id": "parent-continuation",
+        "label": "Productive post-fit continuation",
         "done": false,
         "evidence": null
       }
@@ -144,6 +132,12 @@
       "result": "F restored10balls; G/H chose two different destinations and both navigation failures fitted47to49. Collection18/20 retained;2709currency. Checklist4/5 remains pending live repair/variation closeout.",
       "deviation": "Shared destination-door movement was missing from route expectations. Repair uses cartridge semantics, not route coordinates; no stage exit or sampling result changed.",
       "next": "Verify destination-derived arrivals, then a fresh model49 choice from H. All consumed outcomes remain failures."
+    },
+    {
+      "session": "2026-09-07-regional-resource-goals",
+      "result": "Regional integration closed 5/5: model45 to50, one successful capture and four failures. Living19/21 specimens. New resource-aware checklist starts1/3 with local contract tests, not new gameplay.",
+      "deviation": "J stopped before input because the model preferred resupply. The mixed-parent step will fit only actual native goal outcomes; no duplicate source credit. Full stage exits unchanged.",
+      "next": "Run model50 with regional capture and resupply alternatives, fit its actual goal outcome, then a productive fresh continuation."
     }
   ],
   "closed_milestones": [
@@ -181,6 +175,43 @@
           "label": "Productive lesson and follow-up",
           "done": true,
           "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-regional-integration-closeout",
+      "stage": "sustained-red",
+      "title": "Regional multi-goal integration",
+      "items": [
+        {
+          "id": "regional-source",
+          "label": "Truthful source continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        },
+        {
+          "id": "regional-gain",
+          "label": "Retained regional collection gain",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        },
+        {
+          "id": "regional-choices",
+          "label": "Multiple genuine model choices",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
+        },
+        {
+          "id": "regional-fit",
+          "label": "New fit and fresh continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
+        },
+        {
+          "id": "regional-variation",
+          "label": "Variation, costs and interventions",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json"
         }
       ]
     }

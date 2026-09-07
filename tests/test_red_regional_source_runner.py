@@ -131,3 +131,15 @@ def test_regional_history_survives_local_vs_routed_binding_and_checks_ancestor(t
     ready.continuation_chain = ((item.episode_id, "0" * 64),)
     with pytest.raises(ValueError, match="history binding"):
         driver.source_search_memory(ready)
+
+
+@pytest.mark.parametrize("kind,attempts", [("resupply", 0), ("acquire_species", 1)])
+def test_mixed_parent_proposal_history_counts_only_played_acquisition(tmp_path, kind, attempts):
+    from test_red_regional_goal_proposal import recorded
+    store, terminal, *_ = recorded(tmp_path, kind=kind)
+    ready = SimpleNamespace(private_root=store, continuation_chain=(
+        ("goal-episode-1", terminal.summary.record_sha256),))
+    memory = driver.source_search_memory(ready)
+    history = memory.lookup(driver.regional_source_memory_key("wild:Route11:grass"), "f"*64)
+    assert history.attempts == attempts
+    assert history.actions == 7 * attempts

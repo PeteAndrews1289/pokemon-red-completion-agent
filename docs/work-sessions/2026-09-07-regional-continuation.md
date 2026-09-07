@@ -303,3 +303,56 @@ one-goal30,000action/3,000,000frame outer bounds. Preserve all nine historical p
 transitions; no route/destination override. Retain any failure and its final save, fit
 only the actual settled selected-source outcome. No trial exists until the committed
 choice is written; after that, never resample or replay it. No other gameplay declared.
+
+### I success and J pre-input rejection
+
+I chose Route4, traversed the retained southern Route10 endpoint through Lavender/Saffron/
+Cerulean, and captured Ekans6.525actions/29,172frames, five balls spent,19living/21specimens,
+24registered and2709currency. The route did not replay either failed cave exit; do not
+claim a same-path cave retest. Fit49→50 retains every prior row,17successes total.
+Five genuine regional choices across three destinations now have actual costs and outcomes:
+one success, two search failures, two navigation failures. The small regional integration
+checklist is5/5; this is not the full sustained-Red exit or independent advantage.
+
+Privately declared J (seed2026090737,model50,from I) rejected before choice publication or
+controller input. The proposed source was Route5, but the existing top-level model ranked
+resupply over acquisition. The source-only pilot properly refused to override or duplicate
+that parent choice. Retire J's attempt; it adds zero training rows. The actual I save remains.
+Readonly inspection also showed global remaining-specimen history keys reset after Ekans;
+the old failures remain stored, but cross-objective memory reuse is still limited.
+
+## Session5 — resource-aware regional goal step
+
+1. **Capability:** compose regional capture proposals with legitimate resupply/recovery
+   decisions from the same saved state, without forcing capture.
+2. **Learned authority:** the existing model proposes a destination, then the existing
+   native exploratory goal policy chooses capture or resupply. This first mixed-parent
+   step fits only the actual native goal outcome; the proposal is retained but not separately
+   fitted. No double-credit or fabricated target for an unused destination.
+3. **Transfer test:** changed resources after the actual Ekans capture; same-lineage Red
+   development, not an independent or cross-title success claim.
+4. **Cheapest falsifier:** with real capture and resupply alternatives, let native sampling
+   choose and execute one; verify source proposals cannot override the parent or gain a
+   training label when the parent resupplies.
+5. **Time box:**90minutes from07:40UTC, then reassess, overall deadline10:57UTC.
+6. **Stop condition:** parent override, duplicate goal/source fit rows, fabricated supply,
+   lost collection, interrupted input or no genuine alternatives. Retain failed attempts;
+   no J retry, full replay, teacher rewrite, or broader authority promotion.
+
+Use a distinct pre-input proposal record and bind it to the actual native episode header.
+After execution, retain the actual checkpoint/outcome and reconstruct source effort only
+when acquisition was really attempted. Resource parents add no source-search attempt.
+Do not weaken the original destination-only runner's guards. New continuation declaration
+follows implementation qualification; none is authorized by this paragraph alone.
+
+### Prospective mixed-parent K
+
+After local qualification, publication and exact I restoration, execute one step as
+`red-regional-goal-20260907-k-causal`, seed2026090741, model50`df9596bc`, from checkpoint
+`c732c846f6755dcf551116f80e644efabeec6f71c48cbaafda62697de23f2e4b`.
+Preserve the original one-goal30,000action/3,000,000frame bounds and every historical
+profile. A domain-separated source-proposal seed avoids reusing the native goal stream.
+The native exploratory goal policy—not the greedy preflight—chooses the played task.
+Commit the proposal before input; no retry after commitment. Fit only one actual native
+goal example when eligible, never a second proposal target. If no model row is eligible,
+preserve the support outcome without fitting. No other live continuation declared here.

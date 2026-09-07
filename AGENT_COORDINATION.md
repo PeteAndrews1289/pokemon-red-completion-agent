@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+## Active — native resource-aware regional goal
+
+Codex owns implementation/publication through10:57UTC; no outside reviewer or subagent
+was invoked. Model50 and19living/21specimens are verified. J's preinput rejection correctly
+exposed parent resupply authority. Do not override it or double-credit the source proposal.
+If review is requested later, challenge actual-versus-proposed attribution, interrupted
+choice handling and conservative objective-scoped memory. Reviews remain read-only.
+[Current audit](docs/audits/red-regional-resource-goals-2026-09-07.md).
+
 ## Active — funding and shared arrival repair, September7
 
 Codex owns the cycle through10:57UTC. Model49 has four retained regional failures, not

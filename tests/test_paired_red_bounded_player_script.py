@@ -264,6 +264,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         routed_resource_goals=False, save_terminal_checkpoints=enabled,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256="a" * 64 if enabled else None,
+        regional_proposal_record_sha256="b" * 64 if enabled else None,
     )
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
@@ -272,6 +273,9 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
     )
     if not enabled:
         assert "regional_choice_record_sha256" not in headers[0]["metadata"]
+        assert "regional_proposal_record_sha256" not in headers[0]["metadata"]
+    else:
+        assert headers[0]["metadata"]["regional_proposal_record_sha256"] == "b" * 64
     assert order == (
         ["open", "restore", "capture", "durable_state", "close", "trajectory_complete", "publish"]
         if enabled else ["open", "restore", "close", "trajectory_complete"]

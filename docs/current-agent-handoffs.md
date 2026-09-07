@@ -1,5 +1,14 @@
 # Current agent handoffs
 
+## Active — model50 and resource-aware regional play
+
+I succeeded with Ekans6:19living/21specimens,5balls2709currency. Model50 retains50rows,
+17successful. J was rejected before input and is retired without a training row.
+K is prospectively declared, UNLAUNCHED; new runner leaves actual goal selection to the
+native model policy and never separately fits its regional proposal. Checklist1/3 is
+engineering only. Codex owns the cycle; no reviewer is active.
+[Current audit](audits/red-regional-resource-goals-2026-09-07.md).
+
 ## Active — funded regional navigation, September7
 
 Current model49,18living/20specimens,10balls2709currency at H's exact terminal.

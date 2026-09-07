@@ -106,6 +106,8 @@ def _episode(
     if acquire_only:
         plan = RedPlayerTrainingPlan({**plan.document, "decision_limit": 1,
                                       "profile_sha256": plan_profile_sha})
+    elif plan_profile_sha is not None:
+        plan = RedPlayerTrainingPlan({**plan.document, "profile_sha256": plan_profile_sha})
     store.publish_sealed_record(
         f"rp-plan-{plan.plan_sha256}", kind="red_player_training_plan", record=dict(plan.document)
     )

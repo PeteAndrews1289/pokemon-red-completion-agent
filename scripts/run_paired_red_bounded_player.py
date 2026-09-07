@@ -195,6 +195,7 @@ class _Readiness:
     restore_profile: RedGoalContextProfile | None = None
     completion_dose: bool = False
     regional_choice_record_sha256: str | None = None
+    regional_proposal_record_sha256: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -1301,6 +1302,9 @@ def _run_arm(
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **({"regional_choice_record_sha256": readiness.regional_choice_record_sha256}
                    if readiness.regional_choice_record_sha256 is not None else {}),
+                **({"regional_proposal_record_sha256": readiness.regional_proposal_record_sha256}
+                   if getattr(readiness, "regional_proposal_record_sha256", None) is not None
+                   else {}),
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }

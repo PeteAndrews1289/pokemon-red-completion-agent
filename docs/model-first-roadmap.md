@@ -1,5 +1,18 @@
 # Model-first development roadmap
 
+## Active — combine destination proposals with resource-aware goals
+
+The small regional integration checklist is closed5/5: model49 selected Route4 and caught
+Ekans6; fit50 preserves all prior rows. Current19living/21specimens,5balls2709currency.
+J stopped before input when the native parent preferred resupply. Respect that authority.
+
+1. Qualify/publish the mixed-parent runner: proposal is unfitted, actual native goal owns credit.
+2. Play one bounded goal from I with model50; retain the actual outcome and fit if eligible.
+3. Require a productive post-fit continuation before closing this new local1/3 checklist.
+
+No stage exits change. Sustained play, model-led story, living collection, unfamiliar Red
+hack and Crystal remain unfinished. [Audit](audits/red-regional-resource-goals-2026-09-07.md).
+
 ## Active — restore practical regional execution, September7
 
 F replenished10balls; G/H exercised two new destinations but failed at automatic doorway

@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 scene — catching Ekans, then choosing supplies
+
+Show the actual Route4 capture, the retained collection19/21, and model50's50 outcome rows.
+Caption: “One successful regional choice; four earlier failures retained.”
+Do not imply the two previously failed cave exits were replayed successfully.
+
+Next show the action-free menu: the model ranks restocking above capture; the teacher
+prefers capture. Explain why we refused to force the teacher's preference. The new integration
+keeps the destination proposal separate from the actual task choice. Its first live test
+is still pending here; no staged success, extra fitted proposal or full-player claim.
+
 ## September7 scene — the doorway was not the landing
 
 Show the supply transaction, then two model-selected destinations and their failure reports.

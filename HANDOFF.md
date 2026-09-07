@@ -1,5 +1,17 @@
 # Handoff
 
+## Active — model50; regional capture closed, native resource choice next
+
+I captured Ekans6 and retained all prior specimens:19living/21specimens/24registered,
+5balls2709currency. Model50 (`df9596bc`) has50 rows,17successful; no model50 gameplay yet.
+J rejected before input because the parent preferred resupply; no row or retry.
+The small regional checklist closes5/5, not full sustained play.
+
+New mixed-parent integration preserves native capture/resupply authority and fits only
+the actual goal, never the unused source proposal. Engineering checklist1/3; prospective
+K is UNLAUNCHED from I. Read private OPERATOR before any execution. Cycle ends10:57UTC.
+[Current audit](docs/audits/red-regional-resource-goals-2026-09-07.md). Older headings are history.
+
 ## Active — funded regional navigation, September7
 
 Model49 (`87772dfa`) retains49 examples,16successful. F supplied10balls by a verified

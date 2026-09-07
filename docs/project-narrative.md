@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — the model wanted supplies
+
+The next selected destination finally produced a capture: Ekans on Route4. The saved
+collection reached19 living species and21 specimens, and the scorer retained50 outcomes,
+including17 successes. Earlier failed trips remain in its experience.
+
+Then the source-only runner refused to continue. This time the issue was not movement:
+the model preferred restocking, while the teacher preferred catching. The right integration
+is to let that resource decision stand. A new runner proposes where a capture could happen
+but lets the native model choose whether to capture, restock or recover. Only the actual
+goal receives training credit. At this checkpoint that integration is tested, not yet played.
+This is still a small hierarchical learner, not autonomous full-game completion.
+
 ## September7 — failures became useful only when their cause survived
 
 Capture supplies were restored through an actual shop transaction: three explicitly surplus

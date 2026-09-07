@@ -3,22 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-funded-navigation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-resource-goals**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Regional multi-goal integration: 4/5 acceptance items (80%).**
+**Resource-aware regional play: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Truthful source continuation ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
-- [x] Retained regional collection gain ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
-- [x] Multiple genuine model choices ([evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json))
-- [x] New fit and fresh continuation ([evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json))
-- [ ] Variation, costs and interventions
+- [x] Parent retains capture/resupply choice ([evidence](../docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json))
+- [ ] Played native goal outcome fitted
+- [ ] Productive post-fit continuation
 
-Current model: **49 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **50 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-regional-funded-navigation-2026-09-07.json)
+[Current evidence](../docs/evidence/red-regional-integration-closeout-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -93,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-regional-resource-goals
+
+Regional integration closed 5/5: model45 to50, one successful capture and four failures. Living19/21 specimens. New resource-aware checklist starts1/3 with local contract tests, not new gameplay.
+
+**Deviation:** J stopped before input because the model preferred resupply. The mixed-parent step will fit only actual native goal outcomes; no duplicate source credit. Full stage exits unchanged.
+
+**Next:** Run model50 with regional capture and resupply alternatives, fit its actual goal outcome, then a productive fresh continuation.
 
 ### 2026-09-07-regional-funded-navigation
 

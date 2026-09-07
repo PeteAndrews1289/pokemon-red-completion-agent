@@ -44,6 +44,7 @@ from pokemon_red_completion.red_regional_choice_learning import (
     regional_choice_record_id,
     regional_outcome_record_id,
 )
+from pokemon_red_completion.red_regional_goal_proposal import regional_proposal_source_effort
 
 
 def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
@@ -61,6 +62,13 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
             expected_kind=REGIONAL_CHOICE_KIND,
         )
         if choice is None:
+            effort = regional_proposal_source_effort(ready.private_root, episode_id, checkpoint_sha)
+            if effort is not None:
+                source, objective, exhausted, actions, frames = effort
+                memory.record(
+                    regional_source_memory_key(source), objective, exhausted=exhausted,
+                    actions=actions, frames=frames,
+                )
             continue
         outcome = ready.private_root.find_sealed_record(
             regional_outcome_record_id(episode_id),
