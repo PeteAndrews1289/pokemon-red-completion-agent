@@ -18,6 +18,13 @@ from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.local_router import Coordinate, LocalEdge, LocalGraph
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
+from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalContextProfile,
+    RedGoalMechanic,
+    _thaw,
+    build_red_goal_context_profile_payload,
+    parse_red_goal_context_profile,
+)
 from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
     map_id_for_wild_source,
 )
@@ -28,6 +35,45 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
 RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
     "pokemon.red.private-living-dex-wild-corridor.v1"
 )
+
+
+def retarget_red_wild_profile(
+    profile: RedGoalContextProfile, corridor: RedLivingDexWildCorridor,
+) -> RedGoalContextProfile:
+    """Move capture/discovery together, preserving every other skill and bound.
+
+    The caller derives the corridor from the authenticated cartridge. This is
+    an explicit execution-profile transition, never a rewrite of an old save.
+    """
+    if not isinstance(profile, RedGoalContextProfile) or not isinstance(
+        corridor, RedLivingDexWildCorridor
+    ):
+        raise TypeError("regional retargeting needs a profile and derived corridor")
+    wild = {
+        RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+    }
+    if not wild.issubset({spec.mechanic for spec in profile.providers}):
+        raise RedLivingDexWildCorridorError("regional profile needs capture and discovery")
+    if any(spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT
+           for spec in profile.providers):
+        raise RedLivingDexWildCorridorError("regional profile cannot move venue-bound development")
+    providers = []
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.mechanic in wild:
+            derived = corridor.profile_parameters()
+            # Location changes cannot silently increase the old survey budget.
+            for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
+                old_bound, new_bound = parameters[key], derived[key]
+                assert isinstance(old_bound, int) and isinstance(new_bound, int)
+                derived[key] = min(new_bound, old_bound)
+            parameters = derived
+        providers.append((spec.kind, spec.mechanic, parameters))
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
 
 
 class RedLivingDexWildCorridorError(ValueError):

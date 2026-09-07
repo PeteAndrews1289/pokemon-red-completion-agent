@@ -192,6 +192,43 @@ def test_boxed_profile_transition_verifies_old_save_before_new_execution(case):
     assert continued.continuation_root_lineage_id == "original-training-root"
 
 
+def test_regional_chain_preserves_restore_profile_and_rejects_history_rollback(case):
+    readiness, ancestor = _completed(case)
+    first_profile = SimpleNamespace(profile_sha256="a" * 64)
+    second_profile = SimpleNamespace(profile_sha256="b" * 64)
+    first = runner._continue_readiness(
+        readiness, (ancestor,), regional_profiles=(first_profile,),
+    )
+    assert first.restore_profile is readiness.profile
+    assert first.profile is first_profile
+    store, arguments, _ = case
+    child = capture_red_player_terminal(**{
+        **arguments, "parent": first.capture, "episode_id": "regional-parent",
+        "profile_sha256": first_profile.profile_sha256,
+    })
+    _complete(store, child, alter_header=runner._continuation_header(first))
+    record = publish_red_player_checkpoint(store, child)
+    chain = (ancestor, ("regional-parent", record["record_sha256"]))
+    resumed = runner._continue_readiness(
+        readiness, chain, regional_profiles=(first_profile, second_profile),
+    )
+    assert resumed.restore_profile is first_profile
+    assert resumed.profile is second_profile
+    assert resumed.continuation_root_lineage_id == "original-training-root"
+    with pytest.raises(RedPlayerCheckpointError):
+        runner._continue_readiness(readiness, chain, regional_profiles=(second_profile,))
+    rollback = capture_red_player_terminal(**{
+        **arguments, "parent": resumed.capture, "episode_id": "regional-rollback",
+    })
+    _complete(store, rollback, alter_header=runner._continuation_header(resumed))
+    rollback_record = publish_red_player_checkpoint(store, rollback)
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="profile_rollback"):
+        runner._continue_readiness(
+            readiness, (*chain, ("regional-rollback", rollback_record["record_sha256"])),
+            regional_profiles=(first_profile, second_profile),
+        )
+
+
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])
 def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, damage):
     readiness, ancestor = _completed(case)
@@ -259,6 +296,57 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
     monkeypatch.setattr(runner, "detect_source_identity", source)
     with pytest.raises(RuntimeError, match="source verification reached"):
         runner._prepare(args)
+
+
+@pytest.mark.parametrize("sources,routed", [
+    (["wild:Route2:grass"] * 2, True), ([str(i) for i in range(9)], True),
+    ([None], True), (["wild:Route2:grass"], False),
+])
+def test_regional_scope_rejects_bad_declarations_before_source_or_rom(sources, routed):
+    args = SimpleNamespace(
+        pair_id="regional-scope", continue_from_checkpoint=[("old", "a" * 64)],
+        challenger=runner.CAUSAL_ARM_ID, context_origin="training",
+        save_terminal_checkpoints=True, wild_source=sources, routed_resource_goals=routed,
+    )
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="regional_profile_scope"):
+        runner._prepare(args)
+
+
+def test_regional_builder_uses_cartridge_edges_and_keeps_nonwild_provider(monkeypatch):
+    from test_red_living_dex_wild_corridor import _graph, _terrain
+
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.red_goal_context_profile import (
+        RedGoalMechanic,
+        build_red_goal_context_profile_payload,
+        parse_red_goal_context_profile,
+    )
+    from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        RedLivingDexWildCorridorError,
+        derive_red_living_dex_wild_corridor,
+    )
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="regional-builder", providers=(
+            (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+             corridor.profile_parameters()),
+            (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+            (GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+             corridor.profile_parameters()),
+        ),
+    ))
+    world = SimpleNamespace(terrain={13: _terrain()}, local_graphs={13: _graph()},
+                            object_blockers={13: frozenset({(3, 1)})})
+    monkeypatch.setattr(runner, "_route_world", lambda _: world)
+    built, = runner._regional_profiles(profile, ("wild:Route2:grass",), object())
+    assert built.providers[0].parameters["player_x"] == 4
+    assert built.providers[1] == profile.providers[1]
+    world.local_graphs[13] = _graph(one_way=True)
+    with pytest.raises(RedLivingDexWildCorridorError, match="no unobstructed"):
+        runner._regional_profiles(profile, ("wild:Route2:grass",), object())
 
 
 def test_continuation_executes_only_one_arm_without_fit_or_comparison(case, monkeypatch):

@@ -20,6 +20,7 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
 from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridorError,
     derive_red_living_dex_wild_corridor,
+    retarget_red_wild_profile,
 )
 
 
@@ -60,6 +61,69 @@ def _graph(*, one_way: bool = False) -> LocalGraph:
                 ),
             )
     return LocalGraph(edges)
+
+
+def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    old = {**corridor.profile_parameters(), "source_id": "wild:Route11:grass",
+           "map_id": int(MapId.ROUTE_11), "player_x": 17, "player_y": 8,
+           "maximum_encounters": 3, "maximum_legs": 12, "maximum_seek_steps": 20}
+    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="regional-test", providers=(
+            (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, old),
+            (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+            (GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY, old),
+        ),
+    ))
+    moved = retarget_red_wild_profile(profile, corridor)
+    assert moved.profile_sha256 != profile.profile_sha256
+    assert moved.profile_id == profile.profile_id
+    assert moved.providers[1] == profile.providers[1]
+    assert profile.providers[0].parameters["source_id"] == "wild:Route11:grass"
+    for spec in (moved.providers[0], moved.providers[2]):
+        assert spec.parameters["source_id"] == "wild:Route2:grass"
+        assert (spec.parameters["map_id"], spec.parameters["player_y"],
+                spec.parameters["player_x"]) == (int(MapId.ROUTE_2), 3, 1)
+        assert spec.parameters["maximum_encounters"] == 3
+        assert spec.parameters["maximum_legs"] == 12
+        assert spec.parameters["maximum_seek_steps"] == 20
+    assert retarget_red_wild_profile(moved, corridor) == moved
+
+
+def test_regional_retargeting_rejects_missing_survey():
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="no-capture", providers=(
+            (GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY, {}),
+            (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+            (GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+             corridor.profile_parameters()),
+        ),
+    ))
+    with pytest.raises(RedLivingDexWildCorridorError, match="capture and discovery"):
+        retarget_red_wild_profile(profile, corridor)
+
+
+def test_regional_retargeting_does_not_move_mansion_only_battle_dose():
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    parameters = corridor.profile_parameters()
+    development = {**parameters, "map_id": int(MapId.POKEMON_MANSION_1F),
+                   "source_id": "wild:PokemonMansion1F:grass", "completed_battles": 4}
+    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="venue-bound", providers=(
+            (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, parameters),
+            (GoalKind.DEVELOP_TEAM, RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT, development),
+            (GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY, parameters),
+        ),
+    ))
+    with pytest.raises(RedLivingDexWildCorridorError, match="venue-bound development"):
+        retarget_red_wild_profile(profile, corridor)
 
 
 def test_derives_a_reversible_grass_pair_without_a_teacher_route() -> None:

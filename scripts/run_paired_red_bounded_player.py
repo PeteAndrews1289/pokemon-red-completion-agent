@@ -414,6 +414,10 @@ def _parser() -> argparse.ArgumentParser:
         help="declare an existing boxed level-evolution skill after authenticated continuation",
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
+    parser.add_argument(
+        "--wild-source", action="append", default=[],
+        help="ordered cartridge-derived grass-source profile transitions for saved continuations",
+    )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
         "--context-origin",
@@ -567,6 +571,17 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     ):
         raise PairedRedBoundedPlayerRunError("continuation_scope")
     expand_local = getattr(args, "expand_local_development", False)
+    wild_sources = getattr(args, "wild_source", ())
+    if (
+        not isinstance(wild_sources, (list, tuple))
+        or len(wild_sources) > 8
+        or any(not isinstance(source, str) for source in wild_sources)
+        or len(set(wild_sources)) != len(wild_sources)
+        or (wild_sources and (
+            not continuation_chain or not getattr(args, "routed_resource_goals", False)
+        ))
+    ):
+        raise PairedRedBoundedPlayerRunError("regional_profile_scope")
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
         raise PairedRedBoundedPlayerRunError("profile_transition_scope")
     boxed_evolution = getattr(args, "boxed_evolution", None)
@@ -751,15 +766,19 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         if expand_local
         else None
     )
+    execution_profile = (
+        _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
+        if boxed_evolution is not None else None
+    )
+    regional_profiles = _regional_profiles(
+        execution_profile or expanded_profile or profile, tuple(wild_sources), readiness
+    )
     readiness = _continue_readiness(
         readiness,
         continuation_chain,
         expanded_profile=expanded_profile,
-        execution_profile=(
-            _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
-            if boxed_evolution is not None
-            else None
-        ),
+        execution_profile=execution_profile,
+        regional_profiles=regional_profiles,
     )
     if readiness.training_plan is not None and readiness.continuation is not None:
         assert readiness.restore_profile is not None
@@ -805,17 +824,49 @@ def _boxed_evolution_profile(
     )
 
 
+def _regional_profiles(
+    profile: RedGoalContextProfile,
+    sources: tuple[str, ...],
+    readiness: _Readiness,
+) -> tuple[RedGoalContextProfile, ...]:
+    """Derive explicit source transitions; no emulator, policy or input is used."""
+    if not sources:
+        return ()
+    from pokemon_red_completion.red_living_dex_multifamily_curriculum import map_id_for_wild_source
+    from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        derive_red_living_dex_wild_corridor,
+        retarget_red_wild_profile,
+    )
+
+    world = _route_world(readiness)
+    if world is None:
+        raise PairedRedBoundedPlayerRunError("regional_profile_world")
+    result = []
+    for source in sources:
+        map_id = int(map_id_for_wild_source(source))
+        corridor = derive_red_living_dex_wild_corridor(
+            RedEncounterSourceTarget(source), world.terrain[map_id], world.local_graphs[map_id],
+            excluded=world.object_blockers[map_id],
+        )
+        profile = retarget_red_wild_profile(profile, corridor)
+        result.append(profile)
+    return tuple(result)
+
+
 def _continue_readiness(
     readiness: _Readiness,
     chain: tuple[tuple[str, str], ...],
     *,
     expanded_profile: RedGoalContextProfile | None = None,
     execution_profile: RedGoalContextProfile | None = None,
+    regional_profiles: tuple[RedGoalContextProfile, ...] = (),
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
     admitted_profiles = tuple(
-        p for p in (readiness.profile, expanded_profile, execution_profile) if p is not None
+        p for p in (readiness.profile, expanded_profile, execution_profile, *regional_profiles)
+        if p is not None
     )
     profile_index = 0
     for episode_id, record_sha256 in chain:
@@ -871,7 +922,8 @@ def _continue_readiness(
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
-            profile=execution_profile or expanded_profile or readiness.profile,
+            profile=(regional_profiles[-1] if regional_profiles else
+                     execution_profile or expanded_profile or readiness.profile),
         )
     return readiness
 

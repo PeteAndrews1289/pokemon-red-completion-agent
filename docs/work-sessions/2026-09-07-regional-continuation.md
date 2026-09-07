@@ -43,3 +43,24 @@ F is a separate preserved branch, not additive. All prior consumed launchers sta
 
 Stage3 acceptance will be recorded prospectively once the read-only feasibility inspection
 identifies the smallest executable scope. Do not rewrite the closed stage2 checklist.
+
+## First implementation and prospective continuation A
+
+Read-only K inspection confirmed Route11 has a cartridge-backed grass source and a missing
+canonical acquisition target. The existing reversible-corridor derivation is reused; no new
+teacher direction string or route is written. An explicit ordered `--wild-source` transition
+moves acquisition/discovery together, keeps other skills and survey caps unchanged, and
+authenticates every ancestor under its original profile before using the new execution profile.
+The source choice in this first integration is operator-declared, NOT learned regional selection.
+
+After local qualification and action-free readiness, execute at most one fresh continuation A
+from K using model45, seed2026090721, four decisions, existing completion-dose action/frame
+limits, and continue-after-progress enabled. Source: wild:Route11:grass. An initial singleton
+may run only as an explicitly forced bridge; no forced outcome becomes a fitting target.
+Stop and retain on failure rather than rerun A. No later gameplay is declared by this paragraph.
+
+The prospective sustained-play checklist is: (1) truthful regional source/profile continuation,
+(2) verified retained-state regional collection gain, (3) multiple genuine semantic choices,
+(4) retained-outcome fit plus fresh continuation, (5) bounded variation with honest costs and
+intervention reporting. Same-lineage variation is not independent evaluation. Completion of
+this small integration checklist alone cannot establish the full sustained-play stage exit.
