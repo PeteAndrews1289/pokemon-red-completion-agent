@@ -31,7 +31,7 @@ from pokemon_red_completion.red_goal_skills import (
 from pokemon_red_completion.red_pc_storage import face_pc_boundary, open_bills_pc, switch_box
 from pokemon_red_completion.red_routed_capture_support import _without_capture
 from pokemon_red_completion.red_team_training import close_menu
-from pokemon_red_completion.route_executor import execute_route
+from pokemon_red_completion.route_executor import InterruptionHandler, execute_route
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
 if TYPE_CHECKING:
@@ -111,12 +111,18 @@ def bind_capture_storage_support(
             raise RedCaptureStorageError("capture storage plan changed before input")
         action_start, frame_start = router.actions.actions_executed, runtime.emulator.frame_count
         prepare_center_departure(router.actions, runtime.reader)
+        interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
+            router.actions, runtime.reader, maximum_flees=16, maximum_trainer_battles=8,
+            stabilization_frames=180, route_name="bounded capture-storage PC access",
+        )
+        if getattr(router, "routed_recovery", False):
+            from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
+            interruption_handler = guarded_collection_route_handler(
+                router.actions, runtime.reader, route_name="guarded capture-storage PC access",
+            )
         transport = execute_route(
             route, router.actions, traversal,
-            interruption_handler=Gen1RouteInterruptionHandler(
-                router.actions, runtime.reader, maximum_flees=16, maximum_trainer_battles=8,
-                stabilization_frames=180, route_name="bounded capture-storage PC access",
-            ),
+            interruption_handler=interruption_handler,
             replanner=router._replan, limits=_ROUTE_LIMITS,
         )
         at_pc = runtime.adapter.observe()
@@ -145,7 +151,10 @@ def bind_capture_storage_support(
             or fresh.raw.battle_state or not fresh.input_ready
         ):
             raise RedCaptureStorageError("capture storage preparation was not preserved")
-        rebound = replace(router, prepare_capture_storage=False).enumerate(fresh)
+        successor = replace(router, prepare_capture_storage=False)
+        if getattr(router, "routed_recovery", False):
+            successor = replace(successor, prepare_capture_escort=True)
+        rebound = successor.enumerate(fresh)
         selected = next((b for b in rebound.bindings if b.kind is original.kind), None)
         if selected is None or not (
             selected.search_source_ref == source_ref

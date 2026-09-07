@@ -27,7 +27,7 @@ from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
-from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.red_goal_manager import RedGoalBindingProvider, RedGoalObservation
 from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedMartResupplyGoalProvider,
@@ -42,7 +42,11 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedSemanticTransportRoute,
     build_red_routed_semantic_goal_composer,
 )
-from pokemon_red_completion.route_executor import ReplanRequest, RouteExecutionLimits
+from pokemon_red_completion.route_executor import (
+    InterruptionHandler,
+    ReplanRequest,
+    RouteExecutionLimits,
+)
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalLimits
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
@@ -86,6 +90,7 @@ class RedResourceGoalRouter:
     prepare_capture_party: bool = True
     prepare_capture_storage: bool = False
     routed_recovery: bool = False
+    prepare_capture_escort: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -137,6 +142,18 @@ class RedResourceGoalRouter:
             plan = self._plan(spec, fresh)
             if plan is None:
                 continue
+            interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
+                self.actions, self.runtime.reader, maximum_flees=16,
+                maximum_trainer_battles=8, stabilization_frames=180,
+                route_name="bounded resource-goal transport",
+            )
+            if self.routed_recovery:
+                from pokemon_red_completion.red_routed_recovery import (
+                    guarded_collection_route_handler,
+                )
+                interruption_handler = guarded_collection_route_handler(
+                    self.actions, self.runtime.reader, route_name="guarded resource-goal transport",
+                )
             transport = RedSemanticTransportRoute(
                 binding_ref=f"red-resource-route:{spec.configuration_sha256}",
                 origin_observation_sha256=origin,
@@ -151,14 +168,7 @@ class RedResourceGoalRouter:
                 actions=self.actions,
                 traversal_observer=traversal,
                 emulator=self.runtime.emulator,
-                interruption_handler=Gen1RouteInterruptionHandler(
-                    self.actions,
-                    self.runtime.reader,
-                    maximum_flees=16,
-                    maximum_trainer_battles=8,
-                    stabilization_frames=180,
-                    route_name="bounded resource-goal transport",
-                ),
+                interruption_handler=interruption_handler,
                 replanner=self._replan,
                 route_limits=_ROUTE_LIMITS,
                 prepare_departure=lambda: prepare_center_departure(
@@ -175,11 +185,19 @@ class RedResourceGoalRouter:
                     observation_sha256=red_living_dex_setup_fresh_observation_sha256(current),
                 )
 
+            destination_provider: RedGoalBindingProvider = provider
+            if self.routed_recovery and isinstance(provider, RedAreaSurveyGoalProvider):
+                from pokemon_red_completion.red_capture_preparation import (
+                    EscortPreparedCaptureProvider,
+                )
+                destination_provider = EscortPreparedCaptureProvider(
+                    provider, self.runtime, self.actions,
+                )
             destination = RedFreshGoalDestinationBinder(
                 kind=spec.kind,
                 boundary=transport.terminal_boundary,
                 observe_fresh=observe_fresh,
-                provider=provider,
+                provider=destination_provider,
             )
             binding = build_red_routed_semantic_goal_composer(
                 binding_ref=f"red-resource-goal:{origin}:{spec.configuration_sha256}",
@@ -216,7 +234,10 @@ class RedResourceGoalRouter:
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("capture support enumeration changed the game")
         if self.routed_recovery:
-            from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
+            from pokemon_red_completion.red_capture_preparation import (
+                bind_capture_escort,
+                prepare_capture_escort,
+            )
             from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
 
             def prepare_escort() -> None:
@@ -226,6 +247,8 @@ class RedResourceGoalRouter:
                 self, result, observation,
                 prepare_escort=prepare_escort,
             )
+            if self.prepare_capture_escort:
+                result = bind_capture_escort(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("recovery enumeration changed the game")
         return self._with_quotes(result, observation) if self.quote_resource_costs else result

@@ -26,7 +26,7 @@ from pokemon_red_completion.red_dual_capability_curriculum_runtime import depend
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import _POKEMON_CENTER_MAPS, prepare_center_departure
 from pokemon_red_completion.red_party import PokemonRedPartyReader
-from pokemon_red_completion.route_executor import execute_route
+from pokemon_red_completion.route_executor import InterruptionHandler, execute_route
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
 if TYPE_CHECKING:
@@ -83,12 +83,18 @@ def bind_capture_party_support(
         action_start, frame_start = router.actions.actions_executed, runtime.emulator.frame_count
         before = dependency_specimen_ledger(runtime.adapter.observe().collection_observation)
         prepare_center_departure(router.actions, runtime.reader)
+        interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
+            router.actions, runtime.reader, maximum_flees=16, maximum_trainer_battles=8,
+            stabilization_frames=180, route_name="bounded capture-helper PC access",
+        )
+        if getattr(router, "routed_recovery", False):
+            from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
+            interruption_handler = guarded_collection_route_handler(
+                router.actions, runtime.reader, route_name="guarded capture-helper PC access",
+            )
         transport = execute_route(
             route, router.actions, traversal,
-            interruption_handler=Gen1RouteInterruptionHandler(
-                router.actions, runtime.reader, maximum_flees=16, maximum_trainer_battles=8,
-                stabilization_frames=180, route_name="bounded capture-helper PC access",
-            ),
+            interruption_handler=interruption_handler,
             replanner=router._replan, limits=_ROUTE_LIMITS,
         )
         if not transport.passed:
@@ -100,7 +106,10 @@ def bind_capture_party_support(
         fresh = runtime.adapter.observe()
         if dependency_specimen_ledger(fresh.collection_observation) != before:
             raise RedCapturePartyError("PC preparation changed the complete living collection")
-        rebound = replace(router, prepare_capture_party=False).enumerate(fresh)
+        successor = replace(router, prepare_capture_party=False)
+        if getattr(router, "routed_recovery", False):
+            successor = replace(successor, prepare_capture_escort=True)
+        rebound = successor.enumerate(fresh)
         selected = next((b for b in rebound.bindings if b.kind is original.kind), None)
         if selected is None or not (
             selected.search_source_ref == source_ref

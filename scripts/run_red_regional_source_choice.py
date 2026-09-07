@@ -157,6 +157,8 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
             world,
             maximum_actions=ready.training_plan.maximum_actions,
             maximum_frames=ready.training_plan.maximum_frames,
+            routed_recovery=ready.routed_recovery,
+            prepare_capture_storage=ready.completion_dose,
         )
         memory = source_search_memory(ready)
         menu = (

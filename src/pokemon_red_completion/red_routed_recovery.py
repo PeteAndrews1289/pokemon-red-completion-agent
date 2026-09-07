@@ -8,12 +8,13 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING
 
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
+    strongest_usable_move_slot,
 )
 from pokemon_red_completion.goal_manager import (
     GoalDecisionOutcome,
@@ -26,8 +27,9 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.observation import PokemonRedStateReader, RawGameState
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import (
     dependency_specimen_ledger,
 )
@@ -56,12 +58,25 @@ class RedRoutedRecoveryError(RuntimeError):
     """Routed Pokémon Center recovery cannot preserve the party and collection."""
 
 
+def guarded_collection_route_handler(
+    actions: RouteActionPort, reader: PokemonRedStateReader, *, route_name: str,
+) -> RecoveryRouteInterruptionHandler:
+    """Bind protected living slots from the actual prepared party, not old indices."""
+    raw = reader.read()
+    return RecoveryRouteInterruptionHandler(
+        actions, reader,
+        post_prep_species=tuple(raw.party_species_ids or ()),
+        post_prep_living_slots=tuple(i for i, hp in enumerate(raw.party_hp or ()) if hp > 0),
+        route_name=route_name,
+    )
+
+
 @dataclass(slots=True)
 class RecoveryRouteInterruptionHandler:
     """Resolve interruptions and halt if a new faint occurs or field is unsettled."""
 
     executor: RouteActionPort
-    reader: object
+    reader: PokemonRedStateReader
     post_prep_species: tuple[int, ...]
     post_prep_living_slots: tuple[int, ...]
     maximum_flees: int = 16
@@ -79,6 +94,7 @@ class RecoveryRouteInterruptionHandler:
                 maximum_trainer_battles=self.maximum_trainer_battles,
                 stabilization_frames=self.stabilization_frames,
                 route_name=self.route_name,
+                move_slot_policy=self._safe_trainer_move,
             )
 
     @property
@@ -93,10 +109,15 @@ class RecoveryRouteInterruptionHandler:
         readiness = self.reader.read_input_readiness()
         if raw.battle_state != 0 or not readiness.ready:
             raise RedRoutedRecoveryError("field not settled after route interruption")
+        self._require_preserved_living_slots(raw)
+        return receipt
+
+    def _require_preserved_living_slots(self, raw: RawGameState) -> None:
         current_species = tuple(raw.party_species_ids or ())
         current_hp = tuple(raw.party_hp or ())
         if (
-            len(current_species) != len(self.post_prep_species)
+            raw.party_count != len(self.post_prep_species)
+            or len(current_species) != len(self.post_prep_species)
             or len(current_hp) != len(self.post_prep_species)
         ):
             raise RedRoutedRecoveryError(
@@ -107,11 +128,29 @@ class RecoveryRouteInterruptionHandler:
                 "party species changed during route interruption"
             )
         for slot in self.post_prep_living_slots:
-            if current_hp[slot] == 0:
+            if current_hp[slot] <= 0:
                 raise RedRoutedRecoveryError(
                     f"party slot {slot} fainted during route interruption"
                 )
-        return receipt
+
+    def _safe_trainer_move(self, raw: RawGameState) -> int:
+        """Use the existing battle ranker without permitting sacrificial moves."""
+        self._require_preserved_living_slots(raw)
+        if raw.battler_moves is None or raw.battler_pp is None:
+            raise RedRoutedRecoveryError("route battle lacks observed move/PP state")
+        safe_pp = []
+        for move_id, pp in zip(raw.battler_moves, raw.battler_pp, strict=True):
+            allowed = False
+            if move_id and pp & 0x3F:
+                move = RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move_id))
+                allowed = (
+                    move.category != "status" and move.power > 0
+                    and "self_destruct" not in move.effect_flags
+                )
+            safe_pp.append(pp if allowed else 0)
+        if not any(pp & 0x3F for pp in safe_pp):
+            raise RedRoutedRecoveryError("route battle has no sustainable offensive move")
+        return strongest_usable_move_slot(replace(raw, active_party_pp=tuple(safe_pp)))
 
 
 def _is_at_nurse_boundary(raw: RawGameState) -> bool:

@@ -83,6 +83,8 @@ def enumerate_red_regional_acquisitions(
     *,
     maximum_actions: int,
     maximum_frames: int,
+    routed_recovery: bool = False,
+    prepare_capture_storage: bool = False,
 ) -> tuple[RedRegionalAcquisitionCandidate, ...]:
     """Return up to eight low-estimated-effort real ordinary-grass options.
 
@@ -124,6 +126,8 @@ def enumerate_red_regional_acquisitions(
             maximum_controller_actions=maximum_actions,
             maximum_emulator_frames=maximum_frames,
             quote_resource_costs=True,
+            routed_recovery=routed_recovery,
+            prepare_capture_storage=prepare_capture_storage,
         ).enumerate(observation)
         bindings = [
             binding for binding in routed.bindings if binding.kind is GoalKind.ACQUIRE_SPECIES
