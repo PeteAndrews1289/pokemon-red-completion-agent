@@ -74,3 +74,18 @@ Proceed from C's terminal with model38, seed2026090704 and up to4 completion-dos
 This is continuation D, not a replay of C or an independent root. Keep every sampled failure,
 inspect before another cycle, and measure actual history-feature evidence before checking off
 the memory-trained milestone. Do not force an evolution choice or select a seed from predictions.
+
+## D retained search exhaustion; bounded learning continuation batch
+
+D selected acquisition, exhausted the bounded search, remembered334 actions/22152 frames,
+then selected exploration and again reached its survey bound. It preserved18 specimens and15
+living species. Its second choice saw genuine nonzero remembered acquisition effort, but selected
+exploration: that unselected acquisition gets no training target. Retain and fit both real failures.
+
+Next permit at most three sequential continuations E/F/G, seeds2026090705/06/07 respectively,
+each up to4 choices with the existing completion dose, from the immediately previous admitted
+terminal using its all-rows-retained fit. No seed screening, root reset, success-selected omission,
+or teacher choice. Inspect every result before continuing; stop the batch on unsafe/unadmitted
+termination or when the useful-play checklist is actually satisfied. A bounded exhausted search
+is experience, not an instruction to patch the environment or hide the option. Audit after this
+batch before declaring more work. No sealed evaluation, Crystal or full-game execution.
