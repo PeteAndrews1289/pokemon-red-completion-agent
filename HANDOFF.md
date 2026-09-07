@@ -1,5 +1,29 @@
 # Handoff
 
+## Final current — linked collect/fit/continue closed3/3; model58
+
+Fresh R completed two successful model-selected source choices with automatic fits:
+model56→Route5/Mankey12→fit57→Route24/Abra12→fit58. Each next step used the actual
+preceding save and updated model.998actions/60588frames total, two eligible source rows,
+zero native-parent rows.22living/25specimens/27registered,zero losses. All57prior rows
+retained;58examples,22successful. Model58 has not played. Q remains a retained failure.
+[Result](docs/evidence/red-incremental-learning-completion-2026-09-07.json).
+
+Exact final save verifies1ball109currency,one current-box slot;Drowzee13HP28/39Hypnosis16PP.
+OnlyRoute5 remains a supported source, needing one more Mankey for later evolution. Stop
+the source-only cycle here: do not invent a second candidate. Next integrate mixed resource,
+storage and evolution goals using existing components, preserving the living collection.
+
+Current model dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae;
+checkpoint4ba7fb0096ed48df5df9304efbf10e1ec4b851710614f292e3f04aab20dbdbdc;
+sourcec1d4fb557eb0730826e52a3ec96b37eb61285871. Private inspect_incremental_after_r.py
+reconstructs the exact chain read-only; launchers Q/R are consumed and never run again.
+
+Broad regression7504passed/1skip/1xfail;44overlapping focused checks cover late command
+additions separately. No outside agents invoked. The six-hour cycle grew45→58examples and
+16→22living species (18→25specimens). Six of13new eligible outcomes succeeded; this is not
+a measured generalization win rate. Full Red story/living-dex completion and transfer remain open.
+
 ## Current — model56; automatic failure fit verified, two-step milestone unfinished
 
 Q's first source choice selected Route24 and exhausted its finite search after212actions/

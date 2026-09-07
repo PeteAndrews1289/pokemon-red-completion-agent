@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset.
+- Next decision: Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model f902d537 retains56 outcomes,20successful,all55 prior retained. Q model55 chose Route24; search failed and was automatically fitted.21living/23specimens/26registered,4balls109currency;model56 unplayed. |
+| Authority now | Model dbfedde6 retains58 outcomes,22successful,all57 prior retained. R completed two successful linked source choices with automatic fits:22living/25specimens/27registered,1ball109currency. Model58 unplayed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches? |
+| Cheapest falsifier | Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-incremental-cycle-review** · status **active** · evidence [qualification](docs/evidence/red-incremental-learning-closeout-2026-09-07.json)
+**2026-09-07-incremental-learning-complete** · status **active** · evidence [qualification](docs/evidence/red-incremental-learning-completion-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reducing intervention between real gameplay, fitting and saved continuation directly supports sustained learning; the existing deterministic skills remain disclosed. |
-| Learning output | 55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion. |
-| Authority delta | One real model55 source choice; forced parent excluded. Model56 fitted automatically but has not played. |
-| Transfer result | One preserved Red lineage: actual source choice, affordable resources and effect-aware capture. No independent advantage or cross-title transfer. |
-| Blocker | A short source search exhausted without progress. Automatic fitting works, but two real linked productive steps and renewable resources remain unproven. |
-| Decision | Preserve Q's failure and exact endpoint. Audit search throughput before any new prospective bounded lesson; viewer must separate verified saved counts from live state. |
-| Next session | Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset. |
-| Next falsifier | Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches? |
-| Stop condition | Q cycle stopped at its first failure. No retry or second Q step. Finish the saved-state/viewer/regression audit by10:57UTC; future work starts from actual Q/model56. |
+| Learning output | R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed. |
+| Authority delta | Model56 chose Route5 and captured Mankey12; fitted57 chose Route24 and retained another Abra12. Each source choice supplied one row; native parents added zero. |
+| Transfer result | Two productive same-lineage Red continuations, not independent generalization or cross-title transfer. Safe-failure replanning opt-in was not exercised because both R steps succeeded. |
+| Blocker | Only one source remains available; the source-only learner cannot make a genuine next destination choice. One ball,109currency and one current-box slot require mixed-goal composition. |
+| Decision | Close the bounded loop milestone without claiming the sustained-Red stage. Reuse the existing mixed-parent/resource/storage/evolution machinery next; no third source-only cycle. |
+| Next session | Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset. |
+| Next falsifier | Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice? |
+| Stop condition | R completed its two-step limit and both fits; never retry Q or R. No new live start after10:45UTC; safe six-hour closeout10:57UTC. No fake alternatives, reset, sealed evaluation or full replay. |
 
 ### Stop conditions
 

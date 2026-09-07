@@ -1,5 +1,12 @@
 # Current agent handoffs
 
+Final current is R/model58: two successful linked source choices and fits; all earlier rows
+retained.22living/25specimens/27registered,1ball109currency,one boxslot. Actual save verified.
+Local loop3/3; next mixed-goal integration must handle finite resources/storage and use
+existing evolution/party mechanics. Only one source remains; no invented strategic choice.
+Q/R consumed, no replay. Model58unplayed. No outside reviewer invoked during this cycle.
+[Final evidence](evidence/red-incremental-learning-completion-2026-09-07.json).
+
 Latest: Q/model56,56retained outcomes/20successful. Automatic failure-fit path executed;
 two consecutive live learning steps remain unproven.21living/23specimens/26registered,
 4balls109currency verified from actual Q save. Q is consumed/stopped, Q02 unclaimed.

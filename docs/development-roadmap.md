@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-cycle-review**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-learning-complete**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Bounded collect / fit / continue: 2/3 acceptance items (67%).**
+**Bounded collect / fit / continue: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Retained inventory and loop qualified ([evidence](../docs/evidence/red-incremental-cycle-qualification-2026-09-07.json))
-- [ ] Two real linked learning steps
-- [x] Saved endpoint and viewer evidence audited ([evidence](../docs/evidence/red-incremental-learning-closeout-2026-09-07.json))
+- [x] Two real linked learning steps ([evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json))
+- [x] Saved endpoint and viewer evidence audited ([evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json))
 
-Current model: **56 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **58 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-incremental-learning-closeout-2026-09-07.json)
+[Current evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-incremental-learning-complete
+
+R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed.
+
+**Deviation:** Q preserved as a failed first-step cycle. Fresh R used actual Q/model56 and completed both successes. Safe-failure continuation is prospective opt-in, not a retry. Stage exits unchanged.
+
+**Next:** Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset.
 
 ### 2026-09-07-incremental-cycle-review
 

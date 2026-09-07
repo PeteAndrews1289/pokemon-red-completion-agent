@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## September7 closeout — two linked successes close the local loop
+
+Fresh R used actual Q/model56, captured Mankey, fitted57, captured a needed duplicate Abra,
+and fitted58. Exact22living/25specimens preserved; bounded loop checklist3/3. Q remains
+a failure; neither Q nor R is retried. [Evidence](evidence/red-incremental-learning-completion-2026-09-07.json).
+The safe-search-replan option did not execute its failure branch live because both Rsteps
+succeeded. Next broaden the existing loop to real mixed goals, since just one capture source,
+one ball and one boxslot remain. No sustained-Red stage exit or long-term baseline changed.
+
 ## September7 — retain the failed automatic cycle, do not rename it completion
 
 Q model55 selected Route24; bounded search failed and automatically fitted model56.

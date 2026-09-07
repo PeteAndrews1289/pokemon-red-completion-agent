@@ -1,5 +1,25 @@
 # Model-first development roadmap
 
+## Final current — linked learning works; move to mixed goals
+
+R closed the bounded collect/fit/continue checklist3/3 with two successful captures and
+automatic updates56→58.22living/25specimens,zero losses.1ball109currency and one boxslot
+remain; only one supported source remains, so another destination-only cycle is not useful.
+[Evidence](evidence/red-incremental-learning-completion-2026-09-07.json).
+
+Next session:
+
+1. Inspect the real mixed-parent menu at R/model58; preserve actual safety/unsupported modes.
+2. Reuse existing resource, storage and evolution components to offer useful semantic choices.
+   Do not write another teacher or replay from Pallet Town to connect these local mechanics.
+3. Extend retained-inventory fitting to the actual played parent or source authority, never both
+   for one decision. Forced support remains excluded from learning counts.
+4. Demonstrate a bounded mixed-goal chain with useful outcomes and explicit resource/intervention
+   accounting. Then vary contexts; do not promote model authority from the same lineage alone.
+
+The sustained-Red stage itself remains open; model-led story, living collection, compatible
+unfamiliar Red hack and Crystal retain their unchanged downstream exit criteria.
+
 ## Current — automatic fitting works; sustained continuation remains the target
 
 Model56 retains56 outcomes,20successful. Q's first search failed and was automatically

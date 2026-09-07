@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 closeout — two productive steps without manual relaunching
+
+The final cycle selected Route5, caught Mankey12, fitted its updated scorer, then selected
+Route24 and caught a second Abra12 needed for later evolution while retaining the original.
+Both steps succeeded; the system carried the real save and updated model between them.
+The six-hour cycle therefore ends at58retained training examples (from45),22living species
+(from16) and25specimens (from18). Six of13new eligible outcomes succeeded; failures stayed.
+
+This closes a bounded integration milestone, not the full player. One ball,109money and a
+nearly full current box reveal the next real task: mixed resource, storage and evolution
+decisions. The destination-only loop now has just one useful source and must not pretend
+it still offers a strategic choice. That boundary is a reason to integrate existing skills,
+not to start another full-game teacher run.
+
 ## September7 — learning from a failed continuation automatically
 
 The six-hour cycle advanced the retained learner from45 to56examples and the living

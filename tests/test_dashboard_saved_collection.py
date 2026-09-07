@@ -65,16 +65,22 @@ def test_saved_state_rejects_inconsistent_or_untyped_counts(change: dict) -> Non
 
 
 def test_committed_saved_state_is_loaded_by_exact_hash(tmp_path: Path) -> None:
-    actual = OVERVIEW["_load_saved_collection"]()
+    # Numerical fixture stays fixed while the active saved-state pointer advances.
+    reference = {
+        "schema": "pokemon.dashboard.saved-state-reference.v1",
+        "path": "docs/evidence/red-incremental-saved-collection-2026-09-07.json",
+        "sha256": "c782296f33b86ea75a94a86f177a6966f9ae7d08a1c25fb510e02df725aec03d",
+    }
+    changed = tmp_path / "reference.json"
+    changed.write_text(json.dumps(reference))
+    actual = OVERVIEW["_load_saved_collection"](changed)
     assert (actual.living_species, actual.specimens, actual.capture_items, actual.money) == (
         21,
         23,
         4,
         109,
     )
-    reference = json.loads((ROOT / "configs/dashboard-saved-state.json").read_text())
     reference["sha256"] = "0" * 64
-    changed = tmp_path / "reference.json"
     changed.write_text(json.dumps(reference))
     with pytest.raises(ProgressDashboardError, match="unavailable or changed"):
         OVERVIEW["_load_saved_collection"](changed)

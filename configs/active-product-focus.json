@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches?",
+      "cheapest_falsifier": "Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One real model55 source choice; forced parent excluded. Model56 fitted automatically but has not played.",
-        "blocker": "A short source search exhausted without progress. Automatic fitting works, but two real linked productive steps and renewable resources remain unproven.",
-        "decision": "Preserve Q's failure and exact endpoint. Audit search throughput before any new prospective bounded lesson; viewer must separate verified saved counts from live state.",
+        "authority_delta": "Model56 chose Route5 and captured Mankey12; fitted57 chose Route24 and retained another Abra12. Each source choice supplied one row; native parents added zero.",
+        "blocker": "Only one source remains available; the source-only learner cannot make a genuine next destination choice. One ball,109currency and one current-box slot require mixed-goal composition.",
+        "decision": "Close the bounded loop milestone without claiming the sustained-Red stage. Reuse the existing mixed-parent/resource/storage/evolution machinery next; no third source-only cycle.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-incremental-learning-closeout-2026-09-07.json",
-          "sha256": "b3dd41ebe42e417962b46a18d62c487a1532b9c6e16b2e49d7fb915e7da090c6"
+          "path": "docs/evidence/red-incremental-learning-completion-2026-09-07.json",
+          "sha256": "77b26c48f60096ed28350f1f12a586105d0820a9b06c71bbdde71631a5fa950f"
         },
-        "learning_output": "55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion.",
-        "next_falsifier": "Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches?",
-        "next_session_goal": "Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset.",
+        "learning_output": "R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed.",
+        "next_falsifier": "Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice?",
+        "next_session_goal": "Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset.",
         "product_alignment": "Reducing intervention between real gameplay, fitting and saved continuation directly supports sustained learning; the existing deterministic skills remain disclosed.",
-        "session_id": "2026-09-07-incremental-cycle-review",
+        "session_id": "2026-09-07-incremental-learning-complete",
         "status": "active",
-        "stop_condition": "Q cycle stopped at its first failure. No retry or second Q step. Finish the saved-state/viewer/regression audit by10:57UTC; future work starts from actual Q/model56.",
-        "transfer_result": "One preserved Red lineage: actual source choice, affordable resources and effect-aware capture. No independent advantage or cross-title transfer."
+        "stop_condition": "R completed its two-step limit and both fits; never retry Q or R. No new live start after10:45UTC; safe six-hour closeout10:57UTC. No fake alternatives, reset, sealed evaluation or full replay.",
+        "transfer_result": "Two productive same-lineage Red continuations, not independent generalization or cross-title transfer. Safe-failure replanning opt-in was not exercised because both R steps succeeded."
       },
       "learned_authority": {
-        "current": "Model f902d537 retains56 outcomes,20successful,all55 prior retained. Q model55 chose Route24; search failed and was automatically fitted.21living/23specimens/26registered,4balls109currency;model56 unplayed.",
+        "current": "Model dbfedde6 retains58 outcomes,22successful,all57 prior retained. R completed two successful linked source choices with automatic fits:22living/25specimens/27registered,1ball109currency. Model58 unplayed.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset.",
+      "next_decision": "Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

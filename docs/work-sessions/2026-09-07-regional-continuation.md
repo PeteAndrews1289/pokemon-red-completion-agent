@@ -1,5 +1,18 @@
 # Regional continuation — six-hour development cycle
 
+## Final result — R closes the linked-loop milestone3/3
+
+Two genuine source choices succeeded with automatic fits and actual saved continuity:
+Route5/Mankey12 thenRoute24/Abra12. Model56→57→58,allprior retained;22successful outcomes
+total. Exact22living/25specimens/27registered,1ball109currency,one boxslot,zero losses.
+The optional safe-search-failure replan branch was not exercised because both Rsteps succeeded.
+Only one source remains; no further source-only cycle. Model58unplayed after its final fit.
+[Final audit and next session](../audits/red-six-hour-learning-closeout-2026-09-07.md).
+
+Broad regression7504passed/1skip/1xfail; final207focused checks include the late13test additions.
+Do not add overlapping totals. No outside auditors or subagents invoked. Overall45→58examples,
+16→22living species,18→25specimens; full sustained-Red,story,living-dex and transfer exits unchanged.
+
 ## Session9 — ordinary search failure should permit a bounded learned replan
 
 Q's retained execution trace contains64 real grass displacements and five encounters,

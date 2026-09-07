@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-incremental-cycle-review",
+  "as_of_session": "2026-09-07-incremental-learning-complete",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-incremental-learning-closeout-2026-09-07.json"
+      "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -49,14 +49,14 @@
       {
         "id": "two-real-continuations",
         "label": "Two real linked learning steps",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
       },
       {
         "id": "saved-cycle-audit",
         "label": "Saved endpoint and viewer evidence audited",
         "done": true,
-        "evidence": "docs/evidence/red-incremental-learning-closeout-2026-09-07.json"
+        "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
       }
     ]
   },
@@ -174,6 +174,12 @@
       "result": "55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion.",
       "deviation": "The declared cycle stopped after its first failed search; the second remained unclaimed. Preserve the two-real-steps criterion as unfinished. Saved-viewer work is maintenance, not model progress.",
       "next": "Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset."
+    },
+    {
+      "session": "2026-09-07-incremental-learning-complete",
+      "result": "R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed.",
+      "deviation": "Q preserved as a failed first-step cycle. Fresh R used actual Q/model56 and completed both successes. Safe-failure continuation is prospective opt-in, not a retry. Stage exits unchanged.",
+      "next": "Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset."
     }
   ],
   "closed_milestones": [

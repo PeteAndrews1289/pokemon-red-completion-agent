@@ -1,5 +1,11 @@
 # Three-agent coordination
 
+Final current: R/model58, two successful linked choices/fits,22living/25specimens; bounded
+loop checklist3/3. Codex owns final publication and next mixed-goal integration. No outside
+reviewer invoked. If requested later, challenge resource/storage/evolution availability at
+the exact one-ball/one-source endpoint and parent-versus-source training credit. Do not
+reopen Q/R or interpret a local3/3 checklist as sustained Red or independent advantage.
+
 Latest Q/model56 supersedes the checkpoints below. One failed source search was automatically
 fitted; the second cycle step was never started. Preserve actual Q/model56 and all23specimens.
 Codex remains sole implementation/publication owner through10:57UTC. No outside audit was

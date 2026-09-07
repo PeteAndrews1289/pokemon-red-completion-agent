@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 final scene — the learner carries its own next step
+
+Show the real chain:56-example scorer choosesRoute5; Mankey is caught;57-example scorer
+choosesRoute24; a second Abra is retained;58-example scorer is saved. Two successful
+linked steps, no manual per-example launcher. The live view ends and the dashboard clearly
+switches to the last verified save:22living species,25specimens,1ball109money.
+
+The honest ending: this is not autonomous Red completion. Resource/storage/evolution choices
+are next. Across the six-hour cycle,13new eligible outcomes were retained,including failures,
+and six new living species were added. Show actual receipts and gameplay, not staged movement.
+
 ## September7 — the honest automatic-learning demonstration
 
 Show the real saved collection:21retained species,23specimens,26registered;4balls109money.
