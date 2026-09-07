@@ -111,6 +111,71 @@ def test_native_model_rejects_missing_retained_row_and_wrong_expected_weights(
         )
 
 
+def test_regional_source_fit_retains_prior_and_does_not_count_deterministic_parent(
+    tmp_path,
+    monkeypatch,
+):
+    from test_red_regional_choice_learning import _recorded
+
+    from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
+    from pokemon_red_completion.red_regional_choice_learning import (
+        REGIONAL_CHOICE_KIND,
+        REGIONAL_OUTCOME_KIND,
+        regional_choice_record_id,
+        regional_outcome_record_id,
+    )
+
+    store, item, example = _recorded(tmp_path, failed=True)
+    base = tuple(
+        _example(
+            i,
+            selected=i,
+            outcome=_settled(
+                success=bool(i),
+                completion=i * 0.1,
+                unlock=0,
+                action_cost=0.2,
+            ),
+        )
+        for i in range(2)
+    )
+    monkeypatch.setattr(
+        fitting,
+        "load_living_dex_authenticated_causal_examples",
+        lambda _: tuple(SimpleNamespace(example=row) for row in base),
+    )
+    choice = store.find_sealed_record(
+        regional_choice_record_id(item.episode_id), expected_kind=REGIONAL_CHOICE_KIND
+    ).read()
+    outcome = store.find_sealed_record(
+        regional_outcome_record_id(item.episode_id), expected_kind=REGIONAL_OUTCOME_KIND
+    ).read()
+    parent = RedPlayerEpisodeInput(
+        RedPlayerTrainingPlan(choice["parent_plan"]),
+        item.episode_id,
+        outcome["manifest_sha256"],
+        item.behavior_record,
+    )
+    arguments = dict(
+        prior=_prior(base),
+        episodes=(parent,),
+        regional_choices=(item,),
+        source_commit="e" * 40,
+        source_bundle_sha256="f" * 64,
+    )
+    result = fit_red_player_update(store, **arguments)
+    assert result["new_settled_examples"] == result["regional_source_examples"] == 1
+    assert result["fit_report"]["settled_examples"] == 3
+    record = store.find_sealed_record(
+        "rp-model-" + result["model"]["model_sha256"], expected_kind="red_player_model"
+    ).read()
+    assert set(record["retained_example_sha256"]) == {
+        canonical_sha256(row.public_dict()) for row in (*base, example)
+    }
+    with pytest.raises(ValueError, match="duplicated"):
+        fit_red_player_update(store, **{**arguments, "regional_choices": (item, item)})
+
+
 def test_history_bootstrap_authenticates_actual_retained_corpus_without_refitting(
     tmp_path, monkeypatch
 ):

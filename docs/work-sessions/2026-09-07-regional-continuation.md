@@ -141,3 +141,47 @@ an exhausted local source from an unseen local target while global knowledge rem
 Next is an action-free C restoration with this corrected menu. Do not execute a fake
 exploration alternative merely to obtain a training row. If only one useful goal remains,
 reorient to actual destination/collection alternatives rather than another forced-only episode.
+
+## Session 2 — meaningful acquisition destination choices
+
+The [support audit](../audits/red-regional-support-2026-09-07.md) closes the support section.
+The real C restoration removed exhausted exploration, but capture remains the only
+supported learned kind. Do not weaken the one-option-per-kind goal contract or execute
+another meaningless alternative. Reuse the existing lower-level living-Dex option menu.
+
+Mission check for the next bounded section:
+
+1. **Capability:** select a reachable useful acquisition source from an accumulated save.
+2. **Learned authority:** the existing value model ranks/samples actual destination
+   alternatives below goal selection; the operator no longer chooses the played region.
+3. **Transfer test:** fresh saved-state continuations with changed resources and missing
+   specimens; same-lineage integration only. Independent roots/hack/Crystal stay later.
+4. **Cheapest falsifier:** enumerate at least two genuinely executable, distinguishable
+   ordinary-grass acquisition options from C with zero input. No fabricated alternatives.
+5. **Time box:** two hours from the start of this section, then reassess; the original
+   six-hour deadline still applies. Aim for actual selection/outcome/fitting in this section.
+6. **Stop condition:** stop on fewer than two useful options, safety override, stale origin,
+   failed preservation or unusable trace. Preserve failures; never resample a nicer outcome.
+
+Implementation order: bounded cartridge-backed option enumeration; identity-free scoring
+and disclosed25%uniform/75%softmax sampling; durable pre-input choice; one existing bounded
+acquisition execution; independent terminal/outcome admission; retain all prior rows when
+fitting. Begin with at most eight reachable options and one capture decision per episode.
+Use a separate destination-decision record so a deterministic parent goal cannot be
+misreported as a learned choice or double-count the same outcome. No gameplay is authorized
+by this paragraph until its exact seed, origin and execution bounds are recorded below.
+
+### Prospective source-choice D
+
+After source qualification, inspect C's exact saved terminal without model sampling or
+controller input. If at least two useful, distinguishable ordinary-grass options survive,
+execute exactly one acquisition as `red-regional-source-20260907-d-causal`, seed2026090731,
+model45 (`7cf5f570`), from C checkpoint`dba11f02106a8c08113637867571297d475c35f8ffecbf4d4cdbc2120accf7ab`.
+Preserve the full ancestor chain, C's four-ball supply profile, and explicit Route24-local
+discovery transition. Retain existing completion-dose limits; one goal decision only.
+The model samples among at most eight options using25%uniform/75%softmax; commit the full
+distribution and selected profile before input. Do not replace the sampled destination
+or resample this identity after its choice record exists, even after interruption.
+The parent acquisition must be deterministic, so only the source choice can yield one row.
+No parent/counterfactual duplication, full-game execution, independent-evaluation or
+cross-title claim. Stop and preserve the actual terminal on success or failure.

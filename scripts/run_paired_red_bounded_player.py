@@ -193,6 +193,7 @@ class _Readiness:
     continuation_root_lineage_id: str | None = None
     restore_profile: RedGoalContextProfile | None = None
     completion_dose: bool = False
+    regional_choice_record_sha256: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -585,7 +586,6 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         not isinstance(wild_sources, (list, tuple))
         or len(wild_sources) > 8
         or any(not isinstance(source, (str, Path)) for source in wild_sources)
-        or len(set(wild_sources)) != len(wild_sources)
         or (wild_sources and (
             not continuation_chain or not getattr(args, "routed_resource_goals", False)
         ))
@@ -917,13 +917,18 @@ def _continue_readiness(
         header = readiness.private_root.open_episode(episode_id).read_header()
         metadata = header.get("metadata")
         if isinstance(metadata, Mapping):
-            for index, candidate in enumerate(admitted_profiles):
-                if metadata.get("profile_sha256") == candidate.profile_sha256:
-                    if index < profile_index:
-                        raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
-                    profile_index = index
-                    readiness = replace(readiness, profile=candidate)
-                    break
+            matches = [
+                index for index, candidate in enumerate(admitted_profiles)
+                if metadata.get("profile_sha256") == candidate.profile_sha256
+            ]
+            forward = [index for index in matches if index >= profile_index]
+            if matches and not forward:
+                raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
+            if forward:
+                # Explicitly declared revisits are valid; an undeclared rollback
+                # is not. Repeated hashes must match the remaining ordered suffix.
+                profile_index = forward[0]
+                readiness = replace(readiness, profile=admitted_profiles[profile_index])
         checkpoint = open_red_player_checkpoint(
             readiness.private_root,
             episode_id=episode_id,
@@ -1293,6 +1298,8 @@ def _run_arm(
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
+                **({"regional_choice_record_sha256": readiness.regional_choice_record_sha256}
+                   if readiness.regional_choice_record_sha256 is not None else {}),
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }
@@ -1576,7 +1583,11 @@ def _require_causal_decision_or_forced_bridge(authority: Any, episode: Any) -> N
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    readiness = _prepare(args)
+    return _run_prepared(_prepare(args))
+
+
+def _run_prepared(readiness: _Readiness) -> dict[str, object]:
+    """Execute one already-authenticated scope; reused by the source-choice layer."""
     protected_before = {
         str(index): _sha256(path) for index, path in enumerate(readiness.protected_paths)
     }

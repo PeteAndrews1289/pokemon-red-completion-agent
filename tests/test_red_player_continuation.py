@@ -227,6 +227,13 @@ def test_regional_chain_preserves_restore_profile_and_rejects_history_rollback(c
             readiness, (*chain, ("regional-rollback", rollback_record["record_sha256"])),
             regional_profiles=(first_profile, second_profile),
         )
+    revisited = runner._continue_readiness(
+        readiness, (*chain, ("regional-rollback", rollback_record["record_sha256"])),
+        regional_profiles=(first_profile, second_profile, readiness.profile),
+    )
+    assert revisited.restore_profile is readiness.profile
+    assert revisited.profile is readiness.profile
+    assert len(revisited.continuation_chain) == 3
 
 
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])
@@ -299,7 +306,7 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
 
 
 @pytest.mark.parametrize("sources,routed", [
-    (["wild:Route2:grass"] * 2, True), ([str(i) for i in range(9)], True),
+    ([str(i) for i in range(9)], True),
     ([None], True), (["wild:Route2:grass"], False),
 ])
 def test_regional_scope_rejects_bad_declarations_before_source_or_rom(sources, routed):

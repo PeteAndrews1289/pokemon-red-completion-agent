@@ -92,6 +92,9 @@ def _episode(
     return_inputs=False,
     unsupported_restore=False,
     history=False,
+    acquire_only=False,
+    plan_profile_sha=None,
+    before_episode=None,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -100,9 +103,13 @@ def _episode(
         model = upgrade_option_value_model_for_search_history(model)
     policy = ExploringLivingDexGoalPolicy(model, seed=17)
     plan = _plan(policy.model)
+    if acquire_only:
+        plan = RedPlayerTrainingPlan({**plan.document, "decision_limit": 1,
+                                      "profile_sha256": plan_profile_sha})
     store.publish_sealed_record(
         f"rp-plan-{plan.plan_sha256}", kind="red_player_training_plan", record=dict(plan.document)
     )
+    extra_metadata = {} if before_episode is None else before_episode(store, plan, policy.model)
     writer = store.begin_episode("goal-episode-1")
     sink = EpisodeTrajectorySink(writer, "goal-episode-1", "pokemon.red", durable_writes=True)
     recorder.sink = sink
@@ -121,6 +128,7 @@ def _episode(
             )
         }
     )
+    metadata.update(extra_metadata)
     metadata.update(
         {
             "player_training_plan": dict(plan.document),
@@ -132,6 +140,10 @@ def _episode(
     sink.write_episode_header(metadata=metadata)
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
+    if acquire_only:
+        source = replace(source, opportunities=(source.opportunities[0], GoalOpportunity(
+            "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0,
+        )))
     if history:
         source = replace(
             source,

@@ -27,6 +27,10 @@ from pokemon_red_completion.red_player_model import (
 )
 from pokemon_red_completion.red_player_training_dataset import load_red_player_training_episode
 from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
+from pokemon_red_completion.red_regional_choice_learning import (
+    RedRegionalChoiceInput,
+    load_red_regional_choice_example,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,6 +48,7 @@ def fit_red_player_update(
     episodes: tuple[RedPlayerEpisodeInput, ...],
     source_commit: str,
     source_bundle_sha256: str,
+    regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
 
@@ -69,7 +74,12 @@ def fit_red_player_update(
         )
         for item in episodes
     )
-    rows = (*base, *(row for dataset in datasets for row in dataset.examples))
+    if len({item.episode_id for item in regional_choices}) != len(regional_choices):
+        raise ValueError("regional training choice inventory is duplicated")
+    regional_rows = tuple(
+        load_red_regional_choice_example(store, item) for item in regional_choices
+    )
+    rows = (*base, *(row for dataset in datasets for row in dataset.examples), *regional_rows)
     hashes = tuple(sorted(canonical_sha256(row.public_dict()) for row in rows))
     if isinstance(prior, RedPlayerModelRecord):
         if not set(prior.retained_example_sha256).issubset(hashes):
@@ -97,6 +107,17 @@ def fit_red_player_update(
         "independent_evaluation": False,
     }
     corpus_sha = canonical_sha256(corpus)
+    if regional_choices:
+        corpus["regional_choices"] = [
+            {
+                "episode_id": item.episode_id,
+                "choice_record_sha256": item.choice_record_sha256,
+                "outcome_record_sha256": item.outcome_record_sha256,
+                "behavior_model_sha256": item.behavior_record.model.model_sha256,
+            }
+            for item in regional_choices
+        ]
+        corpus_sha = canonical_sha256(corpus)
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
@@ -140,6 +161,7 @@ def fit_red_player_update(
         "prior_rows_retained": True,
         "controller_actions": 0,
         "authority_promotions": 0,
+        **({"regional_source_examples": len(regional_rows)} if regional_choices else {}),
     }
 
 

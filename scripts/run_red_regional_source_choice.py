@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+"""Choose one useful Red capture destination, then reuse the bounded player.
+
+The existing native goal remains deterministic in this first hierarchical
+integration. The separately logged destination choice uses the current value
+model with full-support exploration. No automatic retries or model fits.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from dataclasses import replace
+from typing import Any, cast
+
+import run_paired_red_bounded_player as base
+
+from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+from pokemon_red_completion.living_dex_option_value import LivingDexObservedArmExample
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_goal_context_profile import (
+    _thaw,
+    build_red_goal_context_profile_payload,
+)
+from pokemon_red_completion.red_living_dex_causal_adapter import (
+    red_living_dex_outcome_from_observations,
+)
+from pokemon_red_completion.red_player_checkpoint import open_red_player_checkpoint
+from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
+from pokemon_red_completion.red_regional_acquisition import (
+    enumerate_red_regional_acquisitions,
+    regional_acquisition_menu,
+    sample_regional_acquisition,
+)
+from pokemon_red_completion.red_regional_choice_learning import (
+    REGIONAL_CHOICE_KIND,
+    REGIONAL_CHOICE_SCHEMA,
+    REGIONAL_OUTCOME_KIND,
+    REGIONAL_OUTCOME_SCHEMA,
+    RedRegionalChoiceInput,
+    load_red_regional_choice_example,
+    regional_choice_record_id,
+    regional_outcome_record_id,
+)
+
+
+def inspect_sources(ready: base._Readiness) -> tuple[Any, ...]:
+    """Restore the exact parent and enumerate without predictions or controller input."""
+    if ready.continuation is None or ready.training_plan is None or ready.causal_record is None:
+        raise ValueError("regional source choice requires an authenticated train continuation")
+    world = base._route_world(ready)
+    if world is None:
+        raise ValueError("regional source choice needs cartridge routing")
+    with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(ready.capture.state_bytes)
+        base._verify_continuation_restore(ready, emulator)
+        before, frame = emulator.save_state_bytes(), emulator.frame_count
+        controller = base.ReadOnlyController(emulator)
+        reader = base.PokemonRedStateReader(controller)
+        runtime = base.build_red_goal_context_runtime(
+            profile=ready.profile,
+            capture=ready.capture,
+            emulator=controller,
+            reader=reader,
+        )
+        actions = base.CountingExecutor(
+            base.FrameSafeExecutor(
+                controller,
+                base.DEFAULT_NEW_GAME_TIMING.controller_timing(),
+            )
+        )
+        observed = runtime.adapter.observe()
+        candidates = enumerate_red_regional_acquisitions(
+            runtime,
+            observed,
+            actions,
+            world,
+            maximum_actions=ready.training_plan.maximum_actions,
+            maximum_frames=ready.training_plan.maximum_frames,
+        )
+        memory = base._execution_search_memory(ready) or GoalSearchMemory()
+        menu = regional_acquisition_menu(observed, candidates, memory)
+        if (
+            before != emulator.save_state_bytes()
+            or frame != emulator.frame_count
+            or (emulator.pressed_buttons or actions.actions_executed)
+        ):
+            raise ValueError("regional inspection changed the saved game")
+        return observed, candidates, menu
+
+
+def _require_capture_parent(preflight: dict[str, Any]) -> None:
+    if preflight.get("status") == "ready_for_forced_bridge" and (
+        preflight.get("available_goal_kinds") == ["acquire_species"]
+        and preflight.get("model_queries") == 0
+    ):
+        return
+    decision = preflight.get("living_dex_causal_shadow", {}).get("decision", {})
+    if decision.get("selected_kind") != GoalKind.ACQUIRE_SPECIES.value or (
+        decision.get("mode") not in {"deterministic_unsupported", "deterministic_safety"}
+    ):
+        raise ValueError("regional parent would override or duplicate the source choice")
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    ready = base._prepare(args)
+    if ready.decision_limit != 1 or not ready.save_terminal_checkpoints:
+        raise ValueError("regional pilot requires one saved bounded acquisition")
+    assert ready.training_plan is not None and ready.causal_record is not None
+    episode_id = cast(str, ready.training_plan.document["episode_id"])
+    choice_id = regional_choice_record_id(episode_id)
+    if ready.private_root.find_sealed_record(choice_id, expected_kind=REGIONAL_CHOICE_KIND):
+        raise ValueError("regional choice identity already consumed; never resample")
+    observed, candidates, menu = inspect_sources(ready)
+    selection = sample_regional_acquisition(
+        ready.causal_record.model,
+        menu,
+        seed=cast(int, ready.training_plan.document["seed"]),
+    )
+    selected = candidates[cast(int, selection["selected_candidate_index"])]
+    ready = replace(
+        ready,
+        profile=selected.profile,
+        training_plan=RedPlayerTrainingPlan(
+            {
+                **ready.training_plan.document,
+                "profile_sha256": selected.profile.profile_sha256,
+            }
+        ),
+    )
+    _require_capture_parent(base._action_free_preflight(ready))
+    declarations = []
+    for candidate in candidates:
+        profile_bytes = build_red_goal_context_profile_payload(
+            profile_id=candidate.profile.profile_id,
+            providers=tuple(
+                (spec.kind, spec.mechanic, _thaw(spec.parameters))
+                for spec in candidate.profile.providers
+            ),
+        )
+        declarations.append(
+            {
+                "source_id": candidate.source_id,
+                "profile_sha256": candidate.profile.profile_sha256,
+                "profile": json.loads(profile_bytes),
+                "estimated_effort": candidate.binding.estimated_effort,
+                "estimated_risk": candidate.binding.estimated_risk,
+            }
+        )
+    assert ready.training_plan is not None
+    declaration = {
+        "schema": REGIONAL_CHOICE_SCHEMA,
+        "episode_id": episode_id,
+        "parent_plan": dict(ready.training_plan.document),
+        "before": observed.public_dict(),
+        "menu": menu.policy_dict(),
+        "selection": selection,
+        "candidates": declarations,
+        "controller_input_before_commit": False,
+        "independent_evaluation": False,
+    }
+    record = ready.private_root.publish_sealed_record(
+        choice_id,
+        kind=REGIONAL_CHOICE_KIND,
+        record=declaration,
+    )
+    choice_sha = record.summary.record_sha256
+    ready = replace(ready, regional_choice_record_sha256=choice_sha)
+    print(
+        json.dumps(
+            {
+                "status": "source_choice_committed_before_input",
+                "candidate_count": len(candidates),
+                "selected_source": selected.source_id,
+                "selection": selection,
+                "choice_record_sha256": choice_sha,
+            }
+        ),
+        flush=True,
+    )
+    result = base._run_prepared(ready)
+    episode = cast(dict[str, Any], result["episode"])
+    steps = episode["steps"]
+    if (
+        len(steps) != 1
+        or steps[0]["selected_kind"] != "acquire_species"
+        or (steps[0]["status"] not in {"succeeded", "failed"})
+    ):
+        raise ValueError("source choice did not execute one settled acquisition")
+    checkpoint_sha = cast(list[dict[str, str]], result["terminal_checkpoints"])[0]["record_sha256"]
+    checkpoint = open_red_player_checkpoint(
+        ready.private_root,
+        episode_id=episode_id,
+        expected_record_sha256=checkpoint_sha,
+        original_parent=ready.capture,
+        expected_profile_sha256=ready.profile.profile_sha256,
+        expected_rom_sha256=ready.rom_sha256,
+        expected_context_origin="training",
+    )
+    terminal_ready = replace(
+        ready, capture=checkpoint.capture, continuation=checkpoint, restore_profile=ready.profile
+    )
+    with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(checkpoint.capture.state_bytes)
+        base._verify_continuation_restore(terminal_ready, emulator)
+        before, frame = emulator.save_state_bytes(), emulator.frame_count
+        controller = base.ReadOnlyController(emulator)
+        runtime = base.build_red_goal_context_runtime(
+            profile=ready.profile,
+            capture=checkpoint.capture,
+            emulator=controller,
+            reader=base.PokemonRedStateReader(controller),
+        )
+        after = runtime.adapter.observe().public_dict()
+        if (
+            before != emulator.save_state_bytes()
+            or frame != emulator.frame_count
+            or (emulator.pressed_buttons)
+        ):
+            raise ValueError("regional terminal observation changed the game")
+    assert ready.training_plan is not None
+    outcome = red_living_dex_outcome_from_observations(
+        observed.public_dict(),
+        after,
+        succeeded=steps[0]["status"] == "succeeded",
+        actions=episode["total_actions"],
+        frames=episode["total_frames"],
+        maximum_actions=ready.training_plan.maximum_actions,
+        maximum_frames=ready.training_plan.maximum_frames,
+    )
+    example = LivingDexObservedArmExample(
+        canonical_sha256({"schema": REGIONAL_CHOICE_SCHEMA, "choice_record_sha256": choice_sha}),
+        "train",
+        menu,
+        cast(int, selection["selected_candidate_index"]),
+        tuple(cast(list[float], selection["probabilities"])),
+        outcome,
+    )
+    outcome_record = ready.private_root.publish_sealed_record(
+        regional_outcome_record_id(episode_id),
+        kind=REGIONAL_OUTCOME_KIND,
+        record={
+            "schema": REGIONAL_OUTCOME_SCHEMA,
+            "episode_id": episode_id,
+            "choice_record_sha256": choice_sha,
+            "manifest_sha256": result["trajectory_manifest_sha256"],
+            "terminal_checkpoint_sha256": checkpoint_sha,
+            "after": after,
+            "example": example.public_dict(),
+        },
+    )
+    admitted = load_red_regional_choice_example(
+        ready.private_root,
+        RedRegionalChoiceInput(
+            episode_id,
+            choice_sha,
+            outcome_record.summary.record_sha256,
+            ready.causal_record,
+        ),
+    )
+    return {
+        "schema": "pokemon.red.regional-acquisition-result.v1",
+        "episode_id": episode_id,
+        "selected_source": selected.source_id,
+        "candidate_count": len(candidates),
+        "choice_record_sha256": choice_sha,
+        "outcome_record_sha256": outcome_record.summary.record_sha256,
+        "manifest_sha256": result["trajectory_manifest_sha256"],
+        "checkpoint_sha256": checkpoint_sha,
+        "model_sha256": ready.model_sha256,
+        "eligible_examples": 1,
+        "example": admitted.public_dict(),
+        "parent_episode": episode,
+        "parent_learning_examples": 0,
+        "model_fitted": False,
+        "independent_evaluation": False,
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = base._parser()
+    result = _run(parser.parse_args(argv))
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
