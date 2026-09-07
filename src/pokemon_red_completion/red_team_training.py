@@ -303,7 +303,7 @@ def pulse(
     actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180
 ) -> None:
     actions.execute(MacroAction(kind, value))
-    actions.execute(MacroAction(MacroActionKind.WAIT, frames))
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
@@ -330,7 +330,15 @@ def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None
 def training_attack_pp(member: PartyMemberObservation) -> int:
     damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
     if not damaging:
-        return member.total_pp
+        from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+
+        # Unknown roster species still have known move mechanics. Status PP
+        # cannot keep an exhausted attacker away from the healer.
+        damaging = {
+            move.move_id
+            for move in member.known_moves
+            if RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move.move_id)).power > 0
+        }
     return sum(move.current_pp for move in member.known_moves if move.move_id in damaging)
 
 
@@ -589,14 +597,25 @@ def swap_field_party_slots(
         pulse(actions, MacroActionKind.OPEN_MENU)
         select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
         pulse(actions, MacroActionKind.CONFIRM)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            raise RuntimeError(f"{label} did not open the party list before source selection.")
         select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
         open_party_member_submenu(actions, emulator, label=label)
         if row > emulator.read_u8(RamAddress.MAX_MENU_ITEM):
             close_menu(actions, reader)
             continue
-        _walk_cursor_to(actions, emulator, row)
+        select_cursor(actions, emulator, row, hideout_timing, "member SWITCH candidate")
         pulse(actions, MacroActionKind.CONFIRM)
-        _walk_cursor_to(actions, emulator, second_index)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            close_menu(actions, reader)
+            continue
+        select_cursor(actions, emulator, second_index, hideout_timing, "party destination slot")
         pulse(actions, MacroActionKind.CONFIRM)
         close_menu(actions, reader)
 

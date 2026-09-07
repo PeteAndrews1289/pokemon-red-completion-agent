@@ -1945,6 +1945,98 @@ def test_internal_indices_are_not_pokedex_ordinals() -> None:
     assert observed.species_ids() != (BLASTOISE_SPECIES_ID,)
 
 
+@pytest.mark.parametrize("frames", [1, 120, 180])
+def test_training_pulse_advances_the_declared_wait_through_real_executor(frames):
+    from test_executor import RecordingController
+
+    from pokemon_red_completion.executor import ControllerTiming, FrameSafeExecutor
+
+    controller = RecordingController()
+    executor = FrameSafeExecutor(
+        controller, ControllerTiming(press_frames=2, release_frames=3, wait_frames=1)
+    )
+    red_team_training.pulse(executor, MacroActionKind.CONFIRM, frames=frames)
+    assert controller.frame_count == 5 + frames
+    assert controller.events[-1] == ("tick", frames)
+
+
+@pytest.mark.parametrize("attack_pp,status_pp,expected", [(0, 70, 0), (5, 70, 5), (5, 0, 5)])
+def test_unlisted_trainee_attack_capacity_excludes_status_move_pp(attack_pp, status_pp, expected):
+    from dataclasses import replace
+    from pokemon_red_completion.party import MoveObservation
+
+    memory = FakeMemory()
+    memory.set_party([(163, 36)])
+    member = PokemonRedPartyReader(memory).read().lead
+    member = replace(
+        member,
+        moves=(
+            MoveObservation(move_id=52, current_pp=attack_pp),
+            MoveObservation(move_id=39, current_pp=min(status_pp, 30)),
+            MoveObservation(move_id=45, current_pp=max(0, status_pp - 30)),
+        ),
+    )
+    assert red_team_training.training_attack_pp(member) == expected
+
+
+class DelayedFieldMenuMemory(FakeMemory):
+    """Menu transitions become observable only after a real wait duration."""
+
+    remaining = 0
+
+    def apply(self, action):
+        if action.kind is MacroActionKind.WAIT:
+            self.remaining = max(0, self.remaining - action.repeat)
+            return
+        if self.remaining:
+            return
+        super().apply(action)
+        if action.kind in {MacroActionKind.OPEN_MENU, MacroActionKind.CONFIRM}:
+            self.remaining = 90
+
+
+@pytest.mark.parametrize("first,second", [(0, 1), (0, 5), (3, 1), (5, 0)])
+def test_party_swap_waits_for_delayed_menu_transitions_across_roster_slots(first, second):
+    memory = DelayedFieldMenuMemory()
+    memory.set_party([(species, 50) for species in FINAL_FORM_ROSTER])
+    expected = list(FINAL_FORM_ROSTER)
+    expected[first], expected[second] = expected[second], expected[first]
+    red_team_training.swap_field_party_slots(
+        FakeExecutor(memory),
+        FakeReader([state()]),
+        memory,
+        first_index=first,
+        second_index=second,
+        label="delayed semantic swap",
+        hideout_timing=None,
+    )
+    assert tuple(m.species for m in memory.party) == tuple(expected)
+    assert memory.swaps == [(first, second)]
+
+
+class FrozenTargetCursorMemory(FakeMemory):
+    def _move(self, direction):
+        if self.stage != "party_target":
+            super()._move(direction)
+
+
+def test_party_swap_does_not_confirm_a_destination_that_was_not_reached():
+    memory = FrozenTargetCursorMemory()
+    memory.set_party([(species, 50) for species in FINAL_FORM_ROSTER])
+    with pytest.raises(RuntimeError, match="party destination slot"):
+        red_team_training.swap_field_party_slots(
+            FakeExecutor(memory),
+            FakeReader([state()]),
+            memory,
+            first_index=0,
+            second_index=5,
+            label="stuck destination",
+            hideout_timing=None,
+        )
+    assert not memory.swaps
+    assert tuple(m.species for m in memory.party) == FINAL_FORM_ROSTER
+
+
 class MisplacedSwitchMemory(FakeMemory):
     """A fake whose SWITCH row is not where the move list predicts.
 
