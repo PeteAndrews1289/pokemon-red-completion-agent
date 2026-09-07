@@ -16,6 +16,7 @@ is where nearly all the cost has been.
 
 from __future__ import annotations
 
+import inspect
 import json
 from collections.abc import Callable
 
@@ -83,6 +84,30 @@ TACKLE_MOVE_ID = 0x21
 FIELD_MOVES_PER_MEMBER = 0
 TRAINING_MAP = int(MapId.POKEMON_MANSION_1F)
 CENTER_MAP = int(MapId.CINNABAR_POKECENTER)
+
+
+@pytest.fixture(autouse=True)
+def legacy_curriculum_never_uses_collection_only_helpers(monkeypatch):
+    """Exercise legacy paths with the new branch's dependencies unavailable.
+
+    This guards the historical Route11 compatibility review: the collection
+    algorithm is deliberately different and must not leak into old receipts.
+    The separate shared-experience test module explicitly exercises that mode.
+    """
+    parameter = inspect.signature(run_red_team_balancing).parameters[
+        "collection_shared_experience"
+    ]
+    assert parameter.default is False
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("legacy training reached a collection-only helper")
+
+    for name in (
+        "collection_damage_pp",
+        "collection_recipient_needs_recovery",
+        "collection_finisher",
+    ):
+        monkeypatch.setattr(red_team_training, name, forbidden)
 
 # The roster the Red adapter's own plan names, in the order it names it.
 FINAL_FORM_ROSTER = (

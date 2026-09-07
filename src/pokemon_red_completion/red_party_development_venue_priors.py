@@ -537,7 +537,7 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
         observed_ast_sha256=("495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"),
-        current_ast_sha256=("f5bad32daa7387e871ef1e5c22b3347400d9cff12c63c34a4ab982701a81249d"),
+        current_ast_sha256=("da363e070497e5898b3c62665f07e6e91131eabb6846fa14b49267be5f1d79c7"),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
@@ -545,7 +545,8 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "preserve-measured-path-plus-opt-in-targeted-development-remains-"
             "disabled-on-historical-route-11-plus-evolution-only-budget-"
             "tightening-does-not-change-historical-non-evolution-branch-"
-            "plus-direct-evolution-and-quantum-default-disabled"
+            "plus-direct-evolution-and-quantum-default-disabled-"
+            "plus-shared-experience-default-disabled-preserves-legacy-path"
         ),
     ),
     _SourceCompatibilityWaiver(
@@ -574,6 +575,12 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
         observed_ast_sha256=("94b42d7891d670ee5a2f834c2dc77c6aa27976eba19884123c49be0206866753"),
         current_ast_sha256=("5e40386a31d3b213abe997da1e652ed4f7b6f5ee1843b3a6eedef4ca6d7a9e32"),
         justification_id="cave-only-pacing-and-exit-constants-do-not-affect-route-11",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="module-assignments.red-team-training",
+        observed_ast_sha256=("43f064a06b86a30baff50d807e984c4fbf3d7851d1823c15d73a2845f288686f"),
+        current_ast_sha256=("95477dd9413e035442e6bffa43c3fe9a13df67138cb33be8d701b4e687e4e8c4"),
+        justification_id="new-collection-only-move-effects-constant-unread-on-legacy-path",
     ),
     _SourceCompatibilityWaiver(
         element_id="module-assignments.training-venue",
