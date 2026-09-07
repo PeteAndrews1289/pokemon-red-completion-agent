@@ -1,0 +1,50 @@
+{
+  "schema": "pokemon.red.resource-recovery-live.v1",
+  "episode_id": "red-resource-recovery-20260907-v-causal",
+  "source_commit": "264ec7fb6d991c0d44db74efb8c3489ec7e58443",
+  "source_bundle_sha256": "d76bf91ef626403a9d5ef3590897e78a80e9f8d0880d08671a204b9fd3b7a1da",
+  "manifest_sha256": "8d753d0bc38e63f0929f848c61662851af04d57b50539fda8160e38dfacb444a",
+  "checkpoint_sha256": "361216a3988f95a272606dfa33b0e1862043327e96d35ed8d5263765eb3b2f03",
+  "proposal_record_sha256": "4b2b8f63d645528f79316b69edc77d4267506ebf99d5a7f57fcc74a3544de15a",
+  "model_sha256": "a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2",
+  "status": "failed",
+  "failure_reason": "binding_failed",
+  "component_failure": "Collection recovery repeated without a completed XP battle.",
+  "consumed": true,
+  "retry_allowed": false,
+  "selected_kind": "evolve_species",
+  "selection_mode": "forced_singleton",
+  "controller_actions": 536,
+  "emulator_frames": 38268,
+  "authority_decisions": 0,
+  "new_examples": 0,
+  "model_fitted": false,
+  "cross_box_rotation_observed": true,
+  "precursor_withdrawal_observed": true,
+  "completed_xp_battles": 0,
+  "collection": {
+    "living_species": 23,
+    "total_specimens": 25,
+    "registered_species": 28,
+    "undeclared_losses": 0,
+    "active_box_headroom": 1
+  },
+  "recipient": {
+    "national_species": 11,
+    "level": 4,
+    "hp": 5,
+    "max_hp": 18,
+    "experience": 64
+  },
+  "terminal_audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "input_ready": true,
+    "in_battle": false
+  },
+  "interpretation": "PC access worked, but actual recovery did not heal the newly withdrawn party member. No evolution or learned decision occurred. Failed support must join the next eligible fit inventory.",
+  "repair": "Verify whole-party Center recovery after withdrawal and orient at the nurse using the existing stationary-facing guard; leave legacy teacher behavior unchanged.",
+  "limitation": "Preparation summaries propagate on returned reports; V raised later in training, so its parent retains total costs and private failure trace but not the separate preparation subtotal.",
+  "next": "Qualify the repair, then inspect a fresh continuation from V/model60. Never rerun V or reset resources."
+}

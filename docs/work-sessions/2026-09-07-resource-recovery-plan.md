@@ -25,6 +25,14 @@ its productive outcome is unfinished. The earlier mixed-goal5/5 remains closed.
 
 ## Ordered work
 
+Mid-session V review: cross-box retrieval worked;536actions38268frames, zero XP
+battles or learning rows. The exact retained Route11 endpoint contains Metapod4
+at5/18HP. The native whole-party recovery repair passed154 targeted/caller/source
+checks, including four facings through the real Center provider. Next allow one
+fresh bounded continuation from V, retaining its failed zero-row support in any
+next fit. Do not repeat V or return to U. If the menu is still a singleton, its
+execution remains support rather than learning. Original time box remains in force.
+
 Session started September7 at16:41UTC; reassess18:11UTC, stop/reorient18:41UTC.
 The previous full local suite completed7604passed,1skipped,1expected failure;
 GitHub34143810607 is still running. Do not start a duplicate full suite.

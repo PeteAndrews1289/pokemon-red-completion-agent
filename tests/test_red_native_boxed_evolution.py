@@ -278,10 +278,20 @@ def test_partial_evolution_resumes_in_party_without_repeating_storage(
     calls = []
 
     def train(actions, *args, **kwargs):
+        assert reader.raw.party_hp == reader.raw.party_max_hp
         calls.append(kwargs)
         actions.execute(MacroAction(MacroActionKind.WAIT))
         raise EvolutionTrainingPaused(4, 0)
 
+    def restore(current, actions):
+        assert current.reader is reader
+        if reader.raw.party_hp != reader.raw.party_max_hp:
+            actions.execute(MacroAction(MacroActionKind.WAIT))
+            reader.raw = replace(reader.raw, party_hp=reader.raw.party_max_hp)
+            return 1
+        return 0
+
+    monkeypatch.setattr(module, "restore_native_center_party", restore)
     monkeypatch.setattr(module.context, "run_red_team_balancing", train)
     monkeypatch.setattr(
         module,
@@ -295,7 +305,7 @@ def test_partial_evolution_resumes_in_party_without_repeating_storage(
     assert offer.binding is not None
     report = offer.binding.execute()
     assert report.evidence["evolution_partial"] is True
-    assert report.actions_executed == 1
+    assert report.actions_executed == (1 if trainee_hp == 40 else 2)
     assert calls[0]["allow_direct_evolution"] is True
     assert offer.binding.verify(report).status.value == "failed"
     assert (

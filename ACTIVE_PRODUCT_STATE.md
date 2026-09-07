@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice.
+- Next decision: Inspect V/model60 after whole-party Center recovery qualification; preserve V as consumed zero-row support in the next genuine goal choice and fit.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model a645e264 retains60outcomes,23successful,all59prior retained. U selected acquisition from capture/evolution alternatives but failed after spending both balls.23living/25specimens/28registered,20active boxslots. Model60 unplayed; unchanged next menu has no available option. |
+| Authority now | Model60 retains60outcomes/23successful. V was a zero-row forced evolution bridge: box access worked, recovery failed before XP.23living/25specimens/28registered preserved; Metapod4 is now in party,HP5/18. No new model play or fit. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability? |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-resource-recovery** · status **active** · evidence [qualification](docs/evidence/red-resource-recovery-qualification-2026-09-07.json)
+**2026-09-07-resource-recovery-v** · status **active** · evidence [falsification](docs/evidence/red-resource-recovery-live-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Use already-owned evolution precursors when capture supplies are unavailable; preserve the living collection and measured preparation costs. |
-| Learning output | Zero new examples, gameplay actions or frames. Model60 retains60examples/23successful and all historical failures. |
-| Authority delta | No new learned authority. Cross-box preparation and precise exhaustion diagnostics are engineering support; model60 remains unchanged. |
-| Transfer result | ROM-free tests vary source box, slot, capacity, collection and resource failures. No live or cross-game transfer claim. |
-| Blocker | Zero balls109currency still blocks capture. Cross-box evolution now passes ROM-free checks; actual U feasibility is pending. |
-| Decision | Qualify actual retained-state playability next. Keep the existing2/3 checklist and all consumed outcomes; preparation cannot close the productive learning criterion. |
-| Next session | Authenticate U/model60 with qualified cross-box access. Inspect the real goal menu without input; a unique evolution is support, not a learned choice. |
+| Learning output | V536actions38268frames,zero XP battles,zero learned decisions/examples. All25specimens retained; model60 unchanged. |
+| Authority delta | None: deterministic singleton support, not an imitation target or model decision. |
+| Transfer result | Actual cross-box rotation/retrieval passed; recovery failed. Four-facing and nonlead-healing ROM-free tests qualify the native repair, not cross-game performance. |
+| Blocker | V retrieved Metapod4 at5/18HP but the legacy recovery assumed nurse-facing orientation and never healed it. Native post-withdrawal whole-party recovery is now under qualification. |
+| Decision | Qualify whole-party Center recovery, then a fresh V continuation. The2/3 milestone remains open; PC success is not evolution. |
+| Next session | Inspect V/model60 after whole-party Center recovery qualification; preserve V as consumed zero-row support in the next genuine goal choice and fit. |
 | Next falsifier | Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability? |
-| Stop condition | Never retry T/U, reset funds, discard specimens or manufacture alternatives. Inspect first; support-only execution has zero learning credit. |
+| Stop condition | V and all older attempts consumed. Start only from its retained terminal; no reset, new teacher or invented support row. |
 
 ### Stop conditions
 

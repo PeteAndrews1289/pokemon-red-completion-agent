@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-resource-recovery",
+  "as_of_session": "2026-09-07-resource-recovery-v",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -204,6 +204,12 @@
       "result": "Cross-box evolution and retained storage costs qualified in145 focused tests; model60 and2/3 unchanged. Live feasibility pending.",
       "deviation": "Engineering support only; no new learning result or changed stage exit. No new economy subsystem or teacher.",
       "next": "Inspect exact U/model60. A unique evolution bridge is zero-row support; seek genuine useful choices afterward."
+    },
+    {
+      "session": "2026-09-07-resource-recovery-v",
+      "result": "V retrieved Metapod4 across boxes and preserved25specimens, but failed before XP because recovery did not heal it. Zero learning rows; model60 and2/3 unchanged.",
+      "deviation": "One bounded support attempt, not a new model decision. Preserve its failure; native recovery repair replaces an inherited nurse-facing assumption, not the teacher.",
+      "next": "Inspect V/model60 after whole-party recovery tests, then one actual goal choice with V support retained."
     }
   ],
   "closed_milestones": [

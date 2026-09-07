@@ -1,22 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
 
-## Current — cross-box recovery qualified; live inspection next
+## Current — V retrieved the precursor; recovery repair qualified
 
-Model60 and U remain unchanged:60retained examples,23successful;23living species,
-25specimens,28registered,zero balls109currency. Cross-box evolution now passes
-ROM-free checks, including nonzero box targets, exact precursor selection and
-collection preservation. Preparation costs survive the saved parent report;
-new zero-ball failures are distinct from search exhaustion. Historical U is not
-relabelled. No new gameplay or fitting is claimed at this engineering checkpoint.
+V ran once from U/model60:536actions38268frames, zero learned decisions or rows.
+It rotated boxes, retrieved Metapod4, and preserved all25specimens/23living species.
+Training stopped before any XP battle because recovery never healed its5/18HP.
+The exact V terminal is authenticated on Route11, with the precursor already in
+party; V is consumed and may not retry. Model60/60examples/23successful is unchanged.
 
-Prior source18535c2a passed7604 local tests and GitHub34143810607 is green.
-The new source has145 focused checks; broader compatibility is being checked.
-Next inspect actual U/model60 without input. A unique evolution would be a
-zero-row deterministic bridge, not model-selected learning. Keep the local2/3
-milestone and downstream stage exits unchanged. No reset, new teacher, full replay,
-sealed Red or Crystal. No outside reviewers are running; Codex owns implementation.
+The native repair verifies the actual party after withdrawal and faces the nurse
+before interacting. Four-facing/nonlead-health tests exercise the real Center
+provider. Historical teacher code is unchanged. Next inspect V/model60 and retain
+V's zero-row support beside the next eligible fit; never rewind U or count this
+bridge as learning. The local2/3 milestone and downstream stage exits stay fixed.
+No outside reviewer or full replay is running; Codex owns the bounded continuation.
 See the [current audit](audits/red-resource-recovery-2026-09-07.md).
+
+Narrative point: a party being healthy before a PC exchange does not prove the
+newly withdrawn Pokemon is healthy. The system must verify changed state, not
+assume that reaching a location means its intended interaction succeeded.
 Older current-labelled entries below are historical.
 
 ## September7 — storage worked; sustainability did not

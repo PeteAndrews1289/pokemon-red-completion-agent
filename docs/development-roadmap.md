@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery-v**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-resource-recovery-v
+
+V retrieved Metapod4 across boxes and preserved25specimens, but failed before XP because recovery did not heal it. Zero learning rows; model60 and2/3 unchanged.
+
+**Deviation:** One bounded support attempt, not a new model decision. Preserve its failure; native recovery repair replaces an inherited nurse-facing assumption, not the teacher.
+
+**Next:** Inspect V/model60 after whole-party recovery tests, then one actual goal choice with V support retained.
 
 ### 2026-09-07-resource-recovery
 

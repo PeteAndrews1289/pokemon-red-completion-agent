@@ -1,5 +1,33 @@
 # Resource recovery — engineering checkpoint
 
+## Live V — storage worked, recovery did not
+
+Published264ec7fb restored U/model60 with zero input and exposed one evolution
+option. V then ran once as deterministic singleton support:536actions38268frames,
+zero learned decisions/examples. Actual box rotation and Metapod withdrawal passed;
+all25specimens/23living/28registered were preserved. The trainer stopped before
+any battle because recovery repeated without XP. V is permanently consumed.
+
+An authenticated zero-input audit restored its terminal on Route11. Metapod4 was
+in slot6 with5/18HP and64XP. Every recorded Metapod observation remained at5HP.
+The return approached the nurse from the right, then left the Center without
+healing; legacy recovery assumes upward facing and lacks a whole-party success
+requirement. The native repair now rechecks the changed party after withdrawal,
+orients at the counter and uses the existing whole-party restore/verifier before
+training. It does not rewrite the historical teacher.
+
+The new tests exercise all four facings through the real Center provider, a
+damaged nonlead member, rejected partial healing and changed specimens/currency,
+and recovery-before-training wiring. The previous2/3 milestone stays unchanged.
+Preparation subtotals still disappear if a later component throws: V retains the
+full536-action cost and exact private failure, not a fabricated setup subtotal.
+
+Next inspect a fresh continuation from V/model60. Retain V's zero-row support with
+the next eligible fit. Do not retry V, rewind U, or claim that PC success is evolution.
+[Live evidence](../evidence/red-resource-recovery-live-2026-09-07.json).
+
+## Earlier qualification
+
 The mission remains model-directed Red play and a preserved living collection,
 then a compatible unfamiliar Red modification and Crystal. This repair unblocks
 the next collection decision; it is not additional learned authority.

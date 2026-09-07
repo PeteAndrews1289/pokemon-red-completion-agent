@@ -20,7 +20,7 @@ from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_cartridge import wild_tables
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
-from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.party import PartyObservation
@@ -55,6 +55,41 @@ from pokemon_red_completion.red_team_training import (
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 from pokemon_red_completion.training_venue import TrainingVenue
+
+
+def restore_native_center_party(
+    runtime: context.RedGoalContextRuntime, actions: CountingExecutor,
+) -> int:
+    """Recheck the actual party after storage; a restored old party is insufficient.
+
+    A computed PC return may reach the nurse facing sideways. Use the existing
+    stationary-facing guard and whole-party verifier, not the old teacher's
+    lead-specific PP signature or an assumed successful interaction.
+    """
+    from pokemon_red_completion.red_goal_skills import _raw_party_restored
+    from pokemon_red_completion.red_pc_storage import face_pc_boundary
+
+    before = runtime.adapter.observe()
+    offered = RedCenterRestoreGoalProvider(
+        actions, runtime.reader, runtime.emulator, runtime.adapter,
+    ).offer(before)
+    if offered.binding is None:
+        return 0
+    if (before.raw.player_x, before.raw.player_y) == (3, 3):
+        face_pc_boundary(actions, runtime.reader, "up")
+    report = offered.binding.execute()
+    after = runtime.adapter.observe()
+    if (
+        offered.binding.verify(report).status is not GoalDecisionOutcome.SUCCEEDED
+        or not _raw_party_restored(after.raw)
+        or after.collection_observation != before.collection_observation
+        or after.raw.bag_items != before.raw.bag_items
+        or after.raw.player_money != before.raw.player_money
+    ):
+        raise context.RedGoalContextError(
+            "native Center recovery did not preserve and heal the party"
+        )
+    return 1
 
 
 def native_training_move_slot(state: RawGameState) -> int:
@@ -190,6 +225,7 @@ def bind_native_boxed_evolution(
         source_id: int,
         target_id: int,
     ) -> BoundedEvolutionTrainingResult:
+        initial_heals = restore_native_center_party(runtime, actions)
         trainee = next(
             (m for m in runtime.adapter.observe().party.members if m.species_id == source_id), None
         )
@@ -231,7 +267,7 @@ def bind_native_boxed_evolution(
             report_label="native bounded collection evolution",
             checkpoint_count=1,
         )
-        return BoundedEvolutionTrainingResult(battles, heals)
+        return BoundedEvolutionTrainingResult(battles, heals + initial_heals)
 
     def train(
         actions: CountingExecutor,
@@ -375,14 +411,7 @@ def bind_native_boxed_evolution(
             raise RoutePlanningError("native evolution requires walking-only PC access")
         # Plan before any input. Healing is declared skill preparation, not a
         # model-selected outcome; all costs stay inside the outer goal budget.
-        heal = RedCenterRestoreGoalProvider(
-            actions,
-            runtime.reader,
-            runtime.emulator,
-            runtime.adapter,
-        ).offer(before)
-        if heal.binding is not None:
-            heal.binding.execute()
+        restore_native_center_party(runtime, actions)
         # Old checkpoints may contain the already-healed farewell screen. They
         # have no restore offer; explicitly finish that interaction too.
         finish_center_dialogue(actions, runtime.reader)
