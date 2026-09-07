@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect the existing boxed-precursor evolution/storage capability to the native player from its saved field state, qualify actual bounded execution, then collect a short two-useful-action lesson and refit the V2 learner. No arbitrary leveling or acquisition-only replay.
+- Next decision: From the saved healed Center endpoint, falsify the advertised first PC-route edge against actual control/collision state; repair only that reusable mismatch, qualify one complete surplus-precursor evolution, then resume bounded selected-outcome learning. No Mansion replay or new learner features.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | V2 history-compatible initialization ae622e52 preserves the original 32 examples and predictions. Mixed-history fitting and native admission are qualified, but its history coefficients are zero and no authentic history-aware lesson or new authority is claimed. The original 5b92e48c model is preserved. |
+| Authority now | Model 1b26aa44 has 35 retained examples after two actual native fits, including all 32 prior rows and three new failures. The model selected evolution after an exhausted search, reached and healed at the Center, but PC access failed. No useful collection gain or history-effort advantage is demonstrated. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the current field checkpoint reach and execute an existing boxed-precursor evolution skill while preserving required specimens and bounds, making a useful alternative to local acquisition? |
+| Cheapest falsifier | Why does the planner advertise an eastward PC approach while actual movement at the saved Center boundary fails? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-history-aware-learner** · status **closed** · evidence [qualification](docs/evidence/red-history-aware-learner-qualification-2026-09-06.json)
+**2026-09-06-native-boxed-evolution** · status **closed** · evidence [qualification](docs/evidence/red-native-boxed-evolution-result-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Portable outcome learning now consumes search effort without invented old histories or a hardcoded penalty. Stable private source keys survive routing. Actual living-collection alternatives, not more learner infrastructure, are the remaining unblock. |
-| Learning output | No new real training data. Versioned fitting works in controlled tests; the authenticated 32-example initialization reproduces prior predictions exactly. The checklist remains 2/5 (40%): a history-compatible model is not yet a model trained on history. |
-| Authority delta | Zero new real examples, fits or controller actions. A separately published V2 initialization preserves all 32 rows and predictions with zero history coefficients; learning the history effect still requires new observed outcomes. |
-| Transfer result | Controlled renamed/reordered and changed-effort tests only. No independent gameplay, Red-modification or Crystal transfer claim. |
-| Blocker | The current native player does not connect its field position to the existing boxed-evolution executor. Duplicate unevolved specimens are present, but neither evolution nor a second useful acquisition source is executable through this menu yet. |
-| Decision | Close learner engineering and stop feature/process expansion. The anti-drift alarm is active after another no-learning session: next work must connect one useful existing collection skill and lead directly to a short sampled lesson. |
-| Next session | Connect the existing boxed-precursor evolution/storage capability to the native player from its saved field state, qualify actual bounded execution, then collect a short two-useful-action lesson and refit the V2 learner. No arbitrary leveling or acquisition-only replay. |
-| Next falsifier | Can the current field checkpoint reach and execute an existing boxed-precursor evolution skill while preserving required specimens and bounds, making a useful alternative to local acquisition? |
-| Stop condition | Learner engineering is closed, not gameplay success. Do not reopen the feature contract or collect another acquisition-only loop. Next work is the smallest existing-skill integration leading to observed learning; stop on a route-repair spree, new factory or loss of specimen safety. |
+| Product alignment | Actual selected-outcome learning resumed and an evolution choice reached a Center. The missing reusable skill is now live PC access, not another teacher, model feature or full-game run. |
+| Learning output | 35 retained examples; three new observed negatives, two actual fits. No counterfactual targets or collection gains. Useful memory-aware play stays 2/5 (40%): successful alternatives and effort-sensitive learning remain unproved. |
+| Authority delta | Three actual sampled choices and two fits (32 to 33 to 35 examples); all new outcomes failed. No promotion or successful evolution. |
+| Transfer result | Same-lineage Red development only. No independent evaluation, unfamiliar Red modification or Crystal execution. |
+| Blocker | Indoor PC routing advertises an 11-step path but execution cannot traverse its first eastward approach. Original roster and all 17 specimens remain; the final Center checkpoint is ready and fully healed. |
+| Decision | Stop collection after the declared follow-up. Keep all negative outcomes. Reorient on the smallest live PC control/collision mismatch rather than more learner or campaign work. |
+| Next session | From the saved healed Center endpoint, falsify the advertised first PC-route edge against actual control/collision state; repair only that reusable mismatch, qualify one complete surplus-precursor evolution, then resume bounded selected-outcome learning. No Mansion replay or new learner features. |
+| Next falsifier | Why does the planner advertise an eastward PC approach while actual movement at the saved Center boundary fails? |
+| Stop condition | Both A and B are closed without retry. Continue only from the preserved final Center endpoint under a new declared bounded task. Stop on fixed direction patches or another feature/process expansion. |
 
 ### Stop conditions
 

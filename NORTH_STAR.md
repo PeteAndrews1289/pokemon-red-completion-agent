@@ -72,6 +72,9 @@ capability, fit, gameplay result or blocker changes our position:
 4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
    mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
 
+At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
+or recommendation. Do not manufacture feedback or confuse it with measured progress.
+
 Stage exit criteria stay stable. Material changes require an explicit entry in
 [roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
 the evidence/user direction, tradeoffs and effect on the final product. Never silently replace

@@ -25,7 +25,13 @@
 
 ## Status
 
-In progress. No new gameplay, fit or learning progress claimed.
+Closed. [Actual results and audit](../audits/red-native-boxed-evolution-2026-09-06.md):
+three new observed negatives, two fits, 35 retained examples; no collection gain or evolution.
+The first exploration failure was fitted, then one prospectively declared continuation B used
+its saved endpoint and updated model, seed 2026090603, with the same bounds. B selected acquire
+then evolve, reached/healed at Center, and failed before PC storage input. Neither A nor B retried.
+The final saved Center and full collection are retained. Next: the exact PC control/collision
+mismatch, not another acquisition-only loop. Final 35-example gameplay evaluation remains undone.
 
 ## Prospective bounded lesson
 

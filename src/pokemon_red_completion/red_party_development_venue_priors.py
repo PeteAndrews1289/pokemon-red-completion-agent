@@ -558,14 +558,15 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "c419c28563c8f5640e464d4c2ee4fcbc3c360e54da5d4af3e5a3bfc53d2964e6"
+            "4d5ef52284dcc1b43d7c23a9d2184f6affe2d5d36db4c553d55635e097c802a8"
         ),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
             "default-and-unused-live-guard-fallback-plus-ten-of-fifty-heals-"
             "preserve-measured-path-plus-opt-in-targeted-development-remains-"
-            "disabled-on-historical-route-11"
+            "disabled-on-historical-route-11-plus-evolution-only-budget-"
+            "tightening-does-not-change-historical-non-evolution-branch"
         ),
     ),
     _SourceCompatibilityWaiver(

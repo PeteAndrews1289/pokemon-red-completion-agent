@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6 — real learning returns; a skill fails at its last connection
+
+We connected the existing boxed-evolution mechanics to the native player and resumed outcome
+learning: 32 to 35 examples, without discarding earlier data. None of the three new choices
+produced collection progress. Exploration failed; capture exhausted its search; the model then
+selected evolution and reached a Pokémon Center, where the party was healed. The indoor PC
+approach failed before storage operations began. Every specimen was preserved.
+
+This is a useful negative result, not a success story: wiring and unit tests had overstated how
+close the existing skill was to end-to-end usability. The next task is the observed PC
+control/collision mismatch from the saved Center, not another training architecture.
+The [audit](audits/red-native-boxed-evolution-2026-09-06.md) records the boundaries and evidence.
+
 ## September 6 — a learner that can use memory, not yet evidence that it does
 
 The [history-learner session](audits/red-history-aware-learner-2026-09-06.md) connected saved search

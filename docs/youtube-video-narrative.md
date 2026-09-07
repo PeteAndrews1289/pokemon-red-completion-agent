@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — the model chose evolution, but the executor could not reach the PC
+
+The honest on-screen sequence is search, no catch, then a model-selected switch to evolution.
+The agent reached the Center and healed, but failed on its indoor route to the PC. No Pokémon
+was withdrawn or evolved. All 17 specimens survived, and the saved endpoint means the next
+debugging session can start at the actual failure instead of replaying earlier travel.
+
+Two fits moved the dataset from 32 to 35 examples; all three new results were negative.
+Show this as debugging a hierarchical agent, not as a model completing Red or learning to evolve
+successfully. The key distinction: the model selected a useful objective, but the deterministic
+skill still failed to carry it out. [Evidence and audit](audits/red-native-boxed-evolution-2026-09-06.md).
+
 ## Latest chapter — memory is wired in; competence still needs evidence
 
 Open with the [same roadmap](development-roadmap.md), still at 40% of its local checklist. Explain

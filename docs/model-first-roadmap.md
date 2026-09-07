@@ -1,5 +1,23 @@
 # Model-first development roadmap
 
+## Current — 35 examples; saved Center PC access is the next blocker
+
+The [native evolution audit](audits/red-native-boxed-evolution-2026-09-06.md) records real
+training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
+The model chose exploration, then acquisition and evolution across two linked continuations.
+Evolution reached and healed at Cinnabar Center, but the indoor PC approach failed before any
+deposit, withdrawal or training battle. All 17 specimens and 14 living species remain.
+
+Latest model: `1b26aa44...46adb8`; latest checkpoint: `b64023f4...fc85a4`.
+Both attempts are closed; do not rerun their launchers. Their source was `3a33af17`.
+The private operator notes identify the exact model/corpus, checkpoint lineage and launch scripts.
+
+Next: inspect the advertised first PC-route edge from the **saved healed Center**, reconcile
+control/collision truth, qualify one complete surplus-precursor evolution, then resume learning.
+No Mansion replay, fixed walk string, arbitrary party grinding or new learner feature.
+Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
+Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
+
 ## Current — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search

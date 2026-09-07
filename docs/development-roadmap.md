@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-06-history-aware-learner**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-06-native-boxed-evolution**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -14,8 +14,8 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
-- [ ] Model trained to use history ([evidence](../docs/evidence/red-history-aware-learner-qualification-2026-09-06.json))
-- [ ] Two useful executable alternatives
+- [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
+- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
 - [ ] Productive lesson and follow-up
 
 Current model: **32 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-history-aware-learner-qualification-2026-09-06.json)
+[Current evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-06-native-boxed-evolution
+
+32 to 35 examples; three real failures retained. Evolution reached/healed at Center but PC routing failed. No collection gain; 2/5 stays unchanged.
+
+**Deviation:** One prospectively declared post-fit continuation followed A's saved endpoint; neither episode retried. No baseline or exit criteria changed.
+
+**Next:** Qualify the saved Center's PC control/collision boundary, then one complete useful evolution.
 
 ### 2026-09-06-history-aware-learner
 

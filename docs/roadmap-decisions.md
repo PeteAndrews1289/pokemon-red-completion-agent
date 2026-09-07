@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## 2026-09-06 native evolution session — no baseline change
+
+After A's negative exploration result was fitted, one prospectively declared continuation B
+followed its saved endpoint under the updated model. This extended the session's initial single
+lesson into one collect/fit/continue cycle; neither attempt was retried or presented as an
+independent root. Three observed failures were retained. The useful-play checklist stays 2/5:
+an advertised evolution skill failed before PC operations, so its criterion is not completed.
+See the [audit](audits/red-native-boxed-evolution-2026-09-06.md). The long-term sequence is unchanged.
+
 The stable reference is [baseline red-first-v1](../configs/development-roadmap-baseline-v1.json),
 shown in the [development infographic](development-roadmap.md). The mission and North Star still
 outrank this reference. Status can change after evidence; the destination and exit criteria must

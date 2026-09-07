@@ -1,30 +1,95 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-06-history-aware-learner",
+  "as_of_session": "2026-09-06-native-boxed-evolution",
   "current_stage": "adaptive-red",
   "stages": {
-    "foundation": {"status":"verified","evidence":"docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"},
-    "adaptive-red": {"status":"current","evidence":"docs/evidence/red-history-aware-learner-qualification-2026-09-06.json"},
-    "sustained-red": {"status":"planned","evidence":null},
-    "red-story": {"status":"planned","evidence":null},
-    "red-collection": {"status":"planned","evidence":null},
-    "red-hack": {"status":"planned","evidence":null},
-    "crystal": {"status":"planned","evidence":null},
-    "cross-generation": {"status":"planned","evidence":null}
+    "foundation": {
+      "status": "verified",
+      "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+    },
+    "adaptive-red": {
+      "status": "current",
+      "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+    },
+    "sustained-red": {
+      "status": "planned",
+      "evidence": null
+    },
+    "red-story": {
+      "status": "planned",
+      "evidence": null
+    },
+    "red-collection": {
+      "status": "planned",
+      "evidence": null
+    },
+    "red-hack": {
+      "status": "planned",
+      "evidence": null
+    },
+    "crystal": {
+      "status": "planned",
+      "evidence": null
+    },
+    "cross-generation": {
+      "status": "planned",
+      "evidence": null
+    }
   },
   "milestone": {
-    "title":"Useful memory-aware play",
-    "items":[
-      {"id":"saved-loop","label":"Saved-state learning loop","done":true,"evidence":"docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"},
-      {"id":"memory","label":"Persisted search-history contract","done":true,"evidence":"docs/evidence/red-search-memory-qualification-2026-09-06.json"},
-      {"id":"history-model","label":"Model trained to use history","done":false,"evidence":"docs/evidence/red-history-aware-learner-qualification-2026-09-06.json"},
-      {"id":"alternatives","label":"Two useful executable alternatives","done":false,"evidence":null},
-      {"id":"useful-followup","label":"Productive lesson and follow-up","done":false,"evidence":null}
+    "title": "Useful memory-aware play",
+    "items": [
+      {
+        "id": "saved-loop",
+        "label": "Saved-state learning loop",
+        "done": true,
+        "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+      },
+      {
+        "id": "memory",
+        "label": "Persisted search-history contract",
+        "done": true,
+        "evidence": "docs/evidence/red-search-memory-qualification-2026-09-06.json"
+      },
+      {
+        "id": "history-model",
+        "label": "Model trained to use history",
+        "done": false,
+        "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+      },
+      {
+        "id": "alternatives",
+        "label": "Two useful executable alternatives",
+        "done": false,
+        "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+      },
+      {
+        "id": "useful-followup",
+        "label": "Productive lesson and follow-up",
+        "done": false,
+        "evidence": null
+      }
     ]
   },
-  "reviews":[
-    {"session":"2026-09-06-search-memory","result":"Memory contract qualified; model remains at 32 examples. No new gameplay or fit.","deviation":"None from the Red-first sequence. This session was an engineering prerequisite, not learned progress.","next":"History-aware learner, useful alternatives, then a short measured lesson."},
-    {"session":"2026-09-06-history-aware-learner","result":"History learner initialized; all 32 old rows preserved. Useful live alternatives still need connecting.","deviation":"No change to the baseline. Another engineering-only session triggers reorientation: stop feature expansion and connect existing collection skills. History training stays unfinished, so the checklist remains 40%.","next":"Connect boxed-precursor evolution from the field, then collect and fit a short useful-choice lesson."}
+  "reviews": [
+    {
+      "session": "2026-09-06-search-memory",
+      "result": "Memory contract qualified; model remains at 32 examples. No new gameplay or fit.",
+      "deviation": "None from the Red-first sequence. This session was an engineering prerequisite, not learned progress.",
+      "next": "History-aware learner, useful alternatives, then a short measured lesson."
+    },
+    {
+      "session": "2026-09-06-history-aware-learner",
+      "result": "History learner initialized; all 32 old rows preserved. Useful live alternatives still need connecting.",
+      "deviation": "No change to the baseline. Another engineering-only session triggers reorientation: stop feature expansion and connect existing collection skills. History training stays unfinished, so the checklist remains 40%.",
+      "next": "Connect boxed-precursor evolution from the field, then collect and fit a short useful-choice lesson."
+    },
+    {
+      "session": "2026-09-06-native-boxed-evolution",
+      "result": "32 to 35 examples; three real failures retained. Evolution reached/healed at Center but PC routing failed. No collection gain; 2/5 stays unchanged.",
+      "deviation": "One prospectively declared post-fit continuation followed A's saved endpoint; neither episode retried. No baseline or exit criteria changed.",
+      "next": "Qualify the saved Center's PC control/collision boundary, then one complete useful evolution."
+    }
   ]
 }
