@@ -62,7 +62,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-resource-goals** · status **active** · evidence [qualification](docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
+**2026-09-07-regional-resource-goals-closeout** · status **active** · evidence [qualification](docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |

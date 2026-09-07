@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-resource-goals**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-resource-goals-closeout**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-aware regional play: 1/3 acceptance items (33%).**
+**Resource-aware regional play: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Parent retains capture/resupply choice ([evidence](../docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json))
-- [ ] Played native goal outcome fitted
+- [x] Played native goal outcome fitted ([evidence](../docs/evidence/red-regional-resource-goals-result-2026-09-07.json))
 - [ ] Productive post-fit continuation
 
-Current model: **50 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **53 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-regional-integration-closeout-2026-09-07.json)
+[Current evidence](../docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-regional-resource-goals-closeout
+
+K model-selected resupply succeeded; L/M source searches failed. Model50 to53,18successful outcomes;19living/21specimens,4balls1109currency. Checklist2/3; productive follow-up remains open.
+
+**Deviation:** Stopped after two declared failed post-resupply searches. No consumed retry or stage exit change. Species-listed capture helper is a practical blocker.
+
+**Next:** Inspect actual stored catch support and qualify reusable capture preparation; no unchanged ball-only search.
 
 ### 2026-09-07-regional-resource-goals
 
