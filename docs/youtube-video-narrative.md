@@ -1,5 +1,14 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 follow-up scene — the next goal has to be real
+
+Show the saved collection, then the distinction between choosing where to catch and
+choosing what to do next. Future evolution objectives can now change without rewriting
+the old run, and a single remaining capture source no longer blocks other native goals.
+The wiring passed136 focused checks; it has not added a training example. The remaining
+question is practical: Abra has no attack, and the old trainer cannot simply reuse the
+capped starter. Do not present a configured evolution target as a successful evolution.
+
 ## September7 final scene — the learner carries its own next step
 
 Show the real chain:56-example scorer choosesRoute5; Mankey is caught;57-example scorer

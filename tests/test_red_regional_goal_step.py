@@ -30,10 +30,12 @@ def prepared(case, monkeypatch):
         causal_record=SimpleNamespace(model=model),
     )
     candidates = (_candidate(), _candidate("wild:Route11:grass", 0.7))
+    ready = replace(ready, profile=candidates[0].profile)
     observed = _observation()
     menu = regional_acquisition_menu(observed, candidates, GoalSearchMemory())
     monkeypatch.setattr(driver.source.base, "_prepare", lambda _: ready)
-    monkeypatch.setattr(driver.source, "inspect_sources", lambda _: (observed, candidates, menu))
+    monkeypatch.setattr(driver.source, "inspect_sources",
+                        lambda _, **kw: (observed, candidates, menu))
     # The diagnostic greedy choice is resupply. Actual runtime sampling owns
     # the decision and may instead choose acquisition.
     monkeypatch.setattr(
@@ -117,3 +119,37 @@ def test_interruption_after_proposal_does_not_retry_or_fit(case, monkeypatch):
         driver._run(SimpleNamespace())
     with pytest.raises(ValueError, match="already consumed"):
         driver._run(SimpleNamespace())
+
+
+@pytest.mark.parametrize("count", [0, 1])
+def test_native_goals_do_not_require_or_sample_multiple_sources(case, monkeypatch, count):
+    ready, candidates = prepared(case, monkeypatch)
+    candidates = candidates[:count]
+    def inspect(actual, *, allow_no_choice):
+        assert actual is ready and allow_no_choice is True
+        return _observation(), candidates, None
+    monkeypatch.setattr(driver.source, "inspect_sources", inspect)
+    monkeypatch.setattr(driver.source, "sample_regional_acquisition",
+                        lambda *_a, **_k: pytest.fail("no genuine source choice exists"))
+    def run(actual):
+        assert actual.profile == (candidates[0].profile if count else ready.profile)
+        doc = actual.private_root.find_sealed_record(
+            driver.regional_proposal_record_id(actual.training_plan.document["episode_id"]),
+            expected_kind=driver.REGIONAL_PROPOSAL_KIND,
+        ).read()
+        assert doc["selection"] is None and doc["menu"] is None
+        assert doc["source_mode"] == ("unique_binding" if count else "no_source")
+        assert doc["selected_source"] == (candidates[0].source_id if count else None)
+        return {
+            "episode": {"steps": [{"selected_kind": "evolve_species", "status": "succeeded"}]},
+            "terminal_checkpoints": [{"record_sha256": "c" * 64}],
+            "trajectory_manifest_sha256": "d" * 64,
+        }
+    monkeypatch.setattr(driver.source.base, "_run_prepared", run)
+    monkeypatch.setattr(driver, "regional_proposal_source_effort", lambda *_: None)
+    monkeypatch.setattr(driver, "load_red_player_training_episode",
+                        lambda *_a, **_k: SimpleNamespace(examples=(object(),)))
+    result = driver._run(SimpleNamespace())
+    assert result["eligible_examples"] == 1 and result["eligible_source_examples"] == 0
+    assert result["candidate_count"] == count
+    assert result["parent_episode"]["steps"][0]["selected_kind"] == "evolve_species"

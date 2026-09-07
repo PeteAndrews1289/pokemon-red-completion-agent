@@ -389,13 +389,56 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--discovery-source", "wild:Route24:grass",
         "--capture-status-support",
         "--affordable-capture-supply",
+        "--evolution-objective", "63:64:16",
     ])
     assert args.regional_transitions == [
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
         "discovery:wild:Route24:grass",
         "capture-status",
         "affordable-capture-supply",
+        "evolution:63:64:16",
     ]
+
+
+@pytest.mark.parametrize("value", ["63:64", "63:64:16:1", "0:64:16", "63:63:16",
+                                        "63:64:101", "63:64:-1", "true:64:16"])
+def test_future_evolution_argument_rejects_malformed_targets(value):
+    import argparse
+    with pytest.raises(argparse.ArgumentTypeError):
+        runner._evolution_objective_argument(value)
+
+
+def test_future_evolution_preserves_historical_supply_profiles(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.observation import ItemId, MapId
+    from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfileError
+
+    before = runner._boxed_evolution_profile(_supply_transition_profile(), (77, 78, 40))
+    supplied = runner._boxed_evolution_profile(
+        _supply_transition_profile(MapId.CERULEAN_MART, ItemId.POKE_BALL), (77, 78, 40),
+    )
+    previous_hashes = before.profile_sha256, supplied.profile_sha256
+    source = Path("private-supply.json")
+    monkeypatch.setattr(runner, "_route_world", lambda _: object())
+    monkeypatch.setattr(runner, "_regular_external", lambda path, **_: path)
+    monkeypatch.setattr(runner, "load_red_goal_context_profile", lambda _: supplied)
+    ready = SimpleNamespace(rom_path=Path("private-cartridge"))
+    old, future = runner._regional_profiles(before, (source, "evolution:63:64:16"), ready)
+    assert old == supplied and old.profile_sha256 == previous_hashes[1]
+    assert before.profile_sha256 == previous_hashes[0]
+    evolution = next(s for s in future.providers if s.kind is GoalKind.EVOLVE_SPECIES)
+    assert dict(evolution.parameters) == {
+        "source_species_ref": "pokemon:national:063", "target_species_ref": "pokemon:national:064",
+        "evolution_level": 16,
+    }
+    assert tuple(s for s in old.providers if s.kind is not GoalKind.EVOLVE_SPECIES) == tuple(
+        s for s in future.providers if s.kind is not GoalKind.EVOLVE_SPECIES
+    )
+    # Moving the future change before an old supply profile must still fail.
+    with pytest.raises(RedGoalContextProfileError, match="non-supply skill"):
+        runner._regional_profiles(before, ("evolution:63:64:16", source), ready)
 
 
 def test_regional_supply_loads_private_profile_and_rejects_non_supply_change(monkeypatch):

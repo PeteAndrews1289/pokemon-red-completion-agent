@@ -1,5 +1,16 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 follow-up — changing the future without rewriting the past
+
+The next collection step exposed two integration assumptions. Changing an evolution
+target altered historical settings; the regional wrapper also assumed there must
+always be several capture destinations. Ordered future objectives and native goals
+with zero/one source now address those assumptions, with retained-outcome fitting
+that keeps support separate from learned choices.136 focused tests qualify that
+wiring, not new gameplay. The next test asks whether the actual non-attacking trainee
+can be developed safely. Prior direct-attacking evolution success does not answer it.
+The model remains at58 examples and the verified collection at22living species.
+
 ## September7 closeout — two productive steps without manual relaunching
 
 The final cycle selected Route5, caught Mankey12, fitted its updated scorer, then selected

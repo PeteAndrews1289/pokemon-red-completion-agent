@@ -1,5 +1,11 @@
 # Three-agent coordination
 
+Current September7 mixed-goal session: Codex owns implementation and publication.
+136 ROM-free checks qualify ordered future targets, zero/one-source native choice
+and native retained fitting. No gameplay or model update yet; R/model58 preserved.
+No external reviewers or subagents are active. The next audit question is actual
+non-attacking-trainee execution, not another source-only capture or teacher run.
+
 Final current: R/model58, two successful linked choices/fits,22living/25specimens; bounded
 loop checklist3/3. Codex owns final publication and next mixed-goal integration. No outside
 reviewer invoked. If requested later, challenge resource/storage/evolution availability at

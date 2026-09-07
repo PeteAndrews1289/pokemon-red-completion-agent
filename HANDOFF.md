@@ -1,5 +1,21 @@
 # Handoff
 
+## Current — mixed-goal wiring qualified; actual feasibility next
+
+September 7 session started 12:50 UTC; reassess by14:20, close by14:50.
+Model58 and R's22living/25specimens remain unchanged; no new gameplay or fit.
+`--evolution-objective SOURCE:TARGET:LEVEL` now appends a future objective after
+historical regional/supply profiles. Keep the old global boxed target unchanged.
+The native-goal wrapper accepts zero/one capture sources without sampling a fake
+destination. `fit_incremental_goal_results` retains actual native outcomes and
+intervening zero-row support, never source-proposal credit.136 focused tests pass.
+
+Next check is action-free at the actual R save. Current direct-evolution code does
+not qualify a low-level non-attacking Abra, and its fallback refuses the capped
+escort. Do not run a known-bad training attempt or weaken that guard. The mixed
+checklist is3/5 engineering, not learner progress; wider stage exits are unchanged.
+See [session plan](docs/work-sessions/2026-09-07-mixed-goal-continuation-plan.md).
+
 ## Final current — linked collect/fit/continue closed3/3; model58
 
 Next-session inspection is done: actual restore/capture menu has only one learned option.

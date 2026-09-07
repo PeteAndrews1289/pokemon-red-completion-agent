@@ -3,18 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-learning-complete**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-mixed-goal-integration**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Bounded collect / fit / continue: 3/3 acceptance items (100%).**
+**Mixed collection / evolution learning: 3/5 acceptance items (60%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Retained inventory and loop qualified ([evidence](../docs/evidence/red-incremental-cycle-qualification-2026-09-07.json))
-- [x] Two real linked learning steps ([evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json))
-- [x] Saved endpoint and viewer evidence audited ([evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json))
+- [x] Future objectives preserve history ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
+- [x] Native goals with zero or one source ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
+- [x] Actual native outcome inventory qualified ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
+- [ ] Useful mixed goals executable at save
+- [ ] Played mixed choice retained and fitted
 
 Current model: **58 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -91,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-mixed-goal-integration
+
+136 focused checks qualify ordered objectives, zero/one-source native selection and incremental native fitting. Engineering only; model58 and R remain unchanged. Mixed checklist3/5, not new learning.
+
+**Deviation:** No stage-exit change. Inspect trainer feasibility before any input: non-attacking low-level trainees and capped escorts are not covered by the prior direct-evolution success.
+
+**Next:** Action-free prospective objective and actual mixed-menu inspection, then a bounded learned goal only if executable.
 
 ### 2026-09-07-incremental-learning-complete
 

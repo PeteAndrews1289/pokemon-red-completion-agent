@@ -40,20 +40,27 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     proposal_id = regional_proposal_record_id(episode_id)
     if ready.private_root.find_sealed_record(proposal_id, expected_kind=REGIONAL_PROPOSAL_KIND):
         raise ValueError("regional goal proposal already consumed; never resample")
-    observed, candidates, menu = source.inspect_sources(ready)
-    selection = source.sample_regional_acquisition(
-        ready.causal_record.model,
-        menu,
-        seed=regional_proposal_seed(cast(int, ready.training_plan.document["seed"])),
-    )
-    selected = candidates[cast(int, selection["selected_candidate_index"])]
+    observed, candidates, menu = source.inspect_sources(ready, allow_no_choice=True)
+    selection = None
+    if len(candidates) >= 2:
+        selection = source.sample_regional_acquisition(
+            ready.causal_record.model,
+            menu,
+            seed=regional_proposal_seed(cast(int, ready.training_plan.document["seed"])),
+        )
+        selected = candidates[cast(int, selection["selected_candidate_index"])]
+    else:
+        # A unique destination is a binding, not a learned source choice.
+        # With none, retain the native profile and its non-capture goals.
+        selected = candidates[0] if candidates else None
+    profile = selected.profile if selected is not None else ready.profile
     ready = replace(
         ready,
-        profile=selected.profile,
+        profile=profile,
         training_plan=RedPlayerTrainingPlan(
             {
                 **ready.training_plan.document,
-                "profile_sha256": selected.profile.profile_sha256,
+                "profile_sha256": profile.profile_sha256,
             }
         ),
     )
@@ -68,23 +75,26 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "schema": REGIONAL_PROPOSAL_SCHEMA,
             "episode_id": episode_id,
             "parent_plan": dict(ready.training_plan.document),
-            "profile_sha256": selected.profile.profile_sha256,
+            "profile_sha256": profile.profile_sha256,
             "profile": json.loads(
                 source.build_red_goal_context_profile_payload(
-                    profile_id=selected.profile.profile_id,
+                    profile_id=profile.profile_id,
                     providers=tuple(
                         (
                             spec.kind,
                             spec.mechanic,
                             cast(Mapping[str, object], source._thaw(spec.parameters)),
                         )
-                        for spec in selected.profile.providers
+                        for spec in profile.providers
                     ),
                 )
             ),
-            "selected_source": selected.source_id,
+            "selected_source": selected.source_id if selected is not None else None,
+            "source_mode": "sampled" if selection is not None else (
+                "unique_binding" if selected is not None else "no_source"
+            ),
             "before": observed.public_dict(),
-            "menu": menu.policy_dict(),
+            "menu": menu.policy_dict() if menu is not None else None,
             "selection": selection,
             "candidate_sources": [row.source_id for row in candidates],
             "source_proposal_fitted": False,
@@ -99,7 +109,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         json.dumps(
             {
                 "status": "regional_proposal_committed_before_input",
-                "selected_source": selected.source_id,
+                "selected_source": selected.source_id if selected is not None else None,
                 "proposal_record_sha256": proposal.summary.record_sha256,
                 "parent_will_choose_goal": True,
                 "source_proposal_fitted": False,
@@ -129,7 +139,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "manifest_sha256": result["trajectory_manifest_sha256"],
         "checkpoint_sha256": checkpoint,
         "proposal_record_sha256": proposal.summary.record_sha256,
-        "proposed_source": selected.source_id,
+        "proposed_source": selected.source_id if selected is not None else None,
         "candidate_count": len(candidates),
         "parent_episode": parent,
         "eligible_examples": len(dataset.examples),

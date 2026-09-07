@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset.
+- Next decision: Verify the actual mixed-goal menu and safe non-attacking-trainee development before a model-selected continuation; stop if the existing trainer cannot execute it.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | Model dbfedde6 retains58 outcomes,22successful,all57 prior retained. R completed two successful linked source choices with automatic fits:22living/25specimens/27registered,1ball109currency. Model58 unplayed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice? |
+| Cheapest falsifier | Does a prospective duplicate-Abra evolution objective expose an actually executable mixed goal at R, preserving historical profiles and the living collection? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-incremental-learning-complete** · status **active** · evidence [qualification](docs/evidence/red-incremental-learning-completion-2026-09-07.json)
+**2026-09-07-mixed-goal-integration** · status **active** · evidence [qualification](docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Reducing intervention between real gameplay, fitting and saved continuation directly supports sustained learning; the existing deterministic skills remain disclosed. |
-| Learning output | R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed. |
-| Authority delta | Model56 chose Route5 and captured Mankey12; fitted57 chose Route24 and retained another Abra12. Each source choice supplied one row; native parents added zero. |
-| Transfer result | Two productive same-lineage Red continuations, not independent generalization or cross-title transfer. Safe-failure replanning opt-in was not exercised because both R steps succeeded. |
-| Blocker | Only one source remains available; the source-only learner cannot make a genuine next destination choice. One ball,109currency and one current-box slot require mixed-goal composition. |
-| Decision | Close the bounded loop milestone without claiming the sustained-Red stage. Reuse the existing mixed-parent/resource/storage/evolution machinery next; no third source-only cycle. |
-| Next session | Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset. |
-| Next falsifier | Can the existing mixed-parent player expose a useful safe next goal at R's actual low-resource, nearly-full-box endpoint without a fabricated source choice? |
-| Stop condition | R completed its two-step limit and both fits; never retry Q or R. No new live start after10:45UTC; safe six-hour closeout10:57UTC. No fake alternatives, reset, sealed evaluation or full replay. |
+| Product alignment | Changing goals without rewriting history and retaining actual mixed outcomes unblocks sustained collection; no preflight or support action counts as learning. |
+| Learning output | Engineering only: zero new gameplay or fitted examples. Model58 and R's22living/25specimens remain the latest measured endpoint. |
+| Authority delta | No new played authority yet. Ordered future objectives, zero/one-source native selection and retained native-outcome fitting are ROM-free qualified. |
+| Transfer result | ROM-free checks vary transition ordering, source cardinality and support-versus-learned outcomes; no gameplay generalization or cross-title transfer measured. |
+| Blocker | Evolution training feasibility remains unverified at R: low-level Abra has no damaging move and the current fallback refuses a capped escort. Do not equate a configured objective with an executable skill. |
+| Decision | Inspect the actual saved-state menu before any input. Stop on unsupported evolution execution rather than consuming a known-bad lesson or fabricating a second capture source. |
+| Next session | Verify the actual mixed-goal menu and safe non-attacking-trainee development before a model-selected continuation; stop if the existing trainer cannot execute it. |
+| Next falsifier | Does a prospective duplicate-Abra evolution objective expose an actually executable mixed goal at R, preserving historical profiles and the living collection? |
+| Stop condition | Reorient by14:20UTC without a useful learner choice; close by14:50UTC. Stop on historical-profile mutation, lost specimens, unsupported battle control or no genuine alternative. Never retry Q/R, reset resources or open sealed/Crystal contexts. |
 
 ### Stop conditions
 

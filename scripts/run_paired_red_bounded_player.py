@@ -418,6 +418,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
+        "--evolution-objective", dest="regional_transitions", action="append",
+        type=_evolution_objective_argument,
+        help="ordered future boxed evolution SOURCE:TARGET:LEVEL; preserves earlier profiles",
+    )
+    parser.add_argument(
         "--wild-source", dest="regional_transitions", action="append", default=[],
         help="ordered cartridge-derived grass-source profile transitions for saved continuations",
     )
@@ -831,6 +836,18 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     return readiness
 
 
+def _evolution_objective_argument(value: str) -> str:
+    parts = value.split(":")
+    if (
+        len(parts) != 3 or any(not part.isascii() or not part.isdecimal() for part in parts)
+        or not all(1 <= int(part) <= 151 for part in parts[:2])
+        or not 2 <= int(parts[2]) <= 100
+        or int(parts[0]) == int(parts[1])
+    ):
+        raise argparse.ArgumentTypeError("evolution objective needs SOURCE:TARGET:LEVEL")
+    return "evolution:" + ":".join(str(int(part)) for part in parts)
+
+
 def _boxed_evolution_profile(
     profile: RedGoalContextProfile,
     values: list[int] | tuple[int, ...],
@@ -866,6 +883,9 @@ def _regional_profiles(
     )
 
     for source in sources:
+        if isinstance(source, str) and source.startswith("evolution:"):
+            _evolution_objective_argument(source.removeprefix("evolution:"))
+            continue
         if (
             isinstance(source, Path) or source.startswith("discovery:")
             or source in {"capture-status", "affordable-capture-supply"}
@@ -879,6 +899,12 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if isinstance(source, str) and source.startswith("evolution:"):
+            profile = _boxed_evolution_profile(
+                profile, tuple(int(value) for value in source.split(":")[1:]),
+            )
+            result.append(profile)
+            continue
         if source == "affordable-capture-supply":
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_affordable_ball_supply_profile,

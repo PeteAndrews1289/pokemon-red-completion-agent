@@ -1,5 +1,18 @@
 # Model-first development roadmap
 
+## Current — mixed-goal wiring; verify the real next action
+
+Ordered future evolution targets now preserve historical profiles; zero/one-source
+contexts reach native goal selection without invented destination samples. Native
+incremental fitting is ROM-free qualified, including zero-row support.136 focused
+checks passed. No new gameplay or fit: model58 and R remain the latest endpoint.
+
+The next falsifier is actual evolution feasibility. The low-level duplicate Abra
+cannot attack; the current direct trainer's fallback also excludes the capped
+escort. Verify the real menu without input, then stop/reorient if no genuine
+executable mixed choice exists. Do not replay or relabel deterministic support as
+learning. Mixed checklist3/5 is engineering only; sustained Red remains open.
+
 ## Final current — linked learning works; move to mixed goals
 
 [Prepared next-session plan](work-sessions/2026-09-07-mixed-goal-continuation-plan.md)

@@ -1,5 +1,12 @@
 # Current agent handoffs
 
+Current September7 mixed-goal session: objective ordering and zero/one-source native
+selection are qualified; native incremental fitting retains actual outcomes and
+zero-row support.136 focused tests, no new gameplay/fit. R/model58 stays intact.
+Codex owns the action-free feasibility check and publication. No outside audit is
+pending. Challenge the low-level non-attacking trainee and capped-escort limitation
+before claiming evolution is an available mixed-goal alternative.
+
 Final current is R/model58: two successful linked source choices and fits; all earlier rows
 retained.22living/25specimens/27registered,1ball109currency,one boxslot. Actual save verified.
 Local loop3/3; next mixed-goal integration must handle finite resources/storage and use

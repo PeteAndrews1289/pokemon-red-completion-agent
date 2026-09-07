@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-incremental-learning-complete",
+  "as_of_session": "2026-09-07-mixed-goal-integration",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -38,25 +38,37 @@
     }
   },
   "milestone": {
-    "title": "Bounded collect / fit / continue",
+    "title": "Mixed collection / evolution learning",
     "items": [
       {
-        "id": "incremental-inventory",
-        "label": "Retained inventory and loop qualified",
+        "id": "ordered-objective",
+        "label": "Future objectives preserve history",
         "done": true,
-        "evidence": "docs/evidence/red-incremental-cycle-qualification-2026-09-07.json"
+        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
       },
       {
-        "id": "two-real-continuations",
-        "label": "Two real linked learning steps",
+        "id": "native-source-cardinality",
+        "label": "Native goals with zero or one source",
         "done": true,
-        "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
       },
       {
-        "id": "saved-cycle-audit",
-        "label": "Saved endpoint and viewer evidence audited",
+        "id": "native-retained-fitting",
+        "label": "Actual native outcome inventory qualified",
         "done": true,
-        "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+      },
+      {
+        "id": "mixed-execution-feasibility",
+        "label": "Useful mixed goals executable at save",
+        "done": false,
+        "evidence": null
+      },
+      {
+        "id": "mixed-learned-outcome",
+        "label": "Played mixed choice retained and fitted",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -180,9 +192,40 @@
       "result": "R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed.",
       "deviation": "Q preserved as a failed first-step cycle. Fresh R used actual Q/model56 and completed both successes. Safe-failure continuation is prospective opt-in, not a retry. Stage exits unchanged.",
       "next": "Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset."
+    },
+    {
+      "session": "2026-09-07-mixed-goal-integration",
+      "result": "136 focused checks qualify ordered objectives, zero/one-source native selection and incremental native fitting. Engineering only; model58 and R remain unchanged. Mixed checklist3/5, not new learning.",
+      "deviation": "No stage-exit change. Inspect trainer feasibility before any input: non-attacking low-level trainees and capped escorts are not covered by the prior direct-evolution success.",
+      "next": "Action-free prospective objective and actual mixed-menu inspection, then a bounded learned goal only if executable."
     }
   ],
   "closed_milestones": [
+    {
+      "session": "2026-09-07-incremental-learning-complete",
+      "stage": "sustained-red",
+      "title": "Bounded collect / fit / continue",
+      "items": [
+        {
+          "id": "incremental-inventory",
+          "label": "Retained inventory and loop qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-cycle-qualification-2026-09-07.json"
+        },
+        {
+          "id": "two-real-continuations",
+          "label": "Two real linked learning steps",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        },
+        {
+          "id": "saved-cycle-audit",
+          "label": "Saved endpoint and viewer evidence audited",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        }
+      ]
+    },
     {
       "session": "2026-09-07-complete-evolution-learning",
       "stage": "adaptive-red",
