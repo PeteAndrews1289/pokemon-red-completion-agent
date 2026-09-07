@@ -77,3 +77,17 @@ The changed-state menu has exploration plus noncritical restoration, not two sup
 alternatives. Next inspect another reachable useful source and the smallest way to expose real
 alternatives without changing the learner's safety rules. Public evidence records A explicitly.
 104 focused checks,50 protocol checks,400-file types,lint/docs/public checks passed.
+
+## Prospective B — shortest reachable ordinary source with multiple missing targets
+
+The action-free A restore is byte-identical and preserves19specimens. Read-only route inspection
+found Route5 (190 steps, one missing canonical species), Route4 (256, one), Route24 (287, two),
+and Route10 (576, one). Select Route24 for B because it is the shortest ordinary-grass source
+with multiple missing targets, not because a model predicted its outcome. Safari locations had
+computed routes but use different capture rules; the new source transition rejects them.
+
+After local qualification/readiness, B may execute once from A's checkpoint9143c3dd with
+model45, seed2026090722, four decisions, the same bounded completion dose and continuation
+after progress. Preserve prior wild-source declarations in order and append Route24. No reset,
+retry of A or fitting of its deterministic steps. Retain B's terminal/outcomes and inspect before
+any successor. A computed route is a candidate, not a claim that the live route will pass.

@@ -832,6 +832,7 @@ def _regional_profiles(
     """Derive explicit source transitions; no emulator, policy or input is used."""
     if not sources:
         return ()
+    from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
     from pokemon_red_completion.red_living_dex_multifamily_curriculum import map_id_for_wild_source
     from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
     from pokemon_red_completion.red_living_dex_wild_corridor import (
@@ -839,6 +840,10 @@ def _regional_profiles(
         retarget_red_wild_profile,
     )
 
+    for source in sources:
+        methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
+        if not methods or any(method.kind is not RedAcquisitionKind.WILD for method in methods):
+            raise PairedRedBoundedPlayerRunError("regional_source_requires_ordinary_wild_capture")
     world = _route_world(readiness)
     if world is None:
         raise PairedRedBoundedPlayerRunError("regional_profile_world")

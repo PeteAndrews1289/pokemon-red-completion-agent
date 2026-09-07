@@ -349,6 +349,15 @@ def test_regional_builder_uses_cartridge_edges_and_keeps_nonwild_provider(monkey
         runner._regional_profiles(profile, ("wild:Route2:grass",), object())
 
 
+@pytest.mark.parametrize("source", ["wild:SafariZoneCenter:grass", "wild:UnknownMap:grass"])
+def test_regional_builder_rejects_special_capture_rules_before_cartridge(source, monkeypatch):
+    def world(_):
+        raise AssertionError("must reject unsupported mechanics before cartridge access")
+    monkeypatch.setattr(runner, "_route_world", world)
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="ordinary_wild_capture"):
+        runner._regional_profiles(object(), (source,), object())
+
+
 def test_continuation_executes_only_one_arm_without_fit_or_comparison(case, monkeypatch):
     readiness, ancestor = _completed(case)
     readiness = runner._continue_readiness(readiness, (ancestor,))
