@@ -2,6 +2,9 @@
 
 ## Current — 35 examples; saved Center PC access is the next blocker
 
+Final local regression: 7184 passed, 1 skipped, 1 xfailed (17m08s); 400-source-file type check,
+formatting, docs, focus, public-artifact and registry checks passed. No gameplay or fitter is active.
+
 The [native evolution audit](docs/audits/red-native-boxed-evolution-2026-09-06.md) records real
 training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
 The model chose exploration, then acquisition and evolution across two linked continuations.

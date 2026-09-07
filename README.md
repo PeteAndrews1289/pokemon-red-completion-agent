@@ -7,10 +7,14 @@ percentage belongs only to its named checklist—not overall game or project com
 
 ## Latest development checkpoint
 
-Search-history storage and observation are now implemented and tested across saved continuations.
-The next model version still needs to learn from that history; the existing model remains at
-32 examples. No new gameplay improvement is claimed. See the
-[current audit and milestone checklist](docs/audits/red-search-memory-2026-09-06.md).
+The goal-value learner now has **35 retained examples**, including three new observed failures
+and all 32 earlier examples. The model selected evolution after an exhausted search, reached
+and healed at Cinnabar Center, then failed on the indoor PC approach before storage operations.
+All 17 specimens were preserved. No successful evolution, collection gain or improved sustained
+play is claimed. The next task starts from that saved Center—not a full replay.
+See the [current audit and next steps](docs/audits/red-native-boxed-evolution-2026-09-06.md).
+The dashboard and development infographic show the same state; useful memory-aware play remains
+2 of 5 acceptance items, not overall project completion.
 
 ### Previous learning result
 

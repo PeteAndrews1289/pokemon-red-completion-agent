@@ -64,7 +64,11 @@ The first broad run stopped after 1,170 passes at a historical Route 11 source-c
 assertion. Review found the changed lines apply only to targeted evolution; the historical
 non-evolution/fixed-dose route is unchanged. Its exact reviewed compatibility fingerprint was
 updated, without altering old measurements or weakening the drift check. Final regression
-results will be recorded at closeout.
+results: **7,184 passed, 1 skipped, 1 expected failure**, one SDL warning, in **17m08s**.
+The final run used source checkpoint `274f6d8d`; gameplay and fits remain bound to `3a33af17`.
+Documentation, public-artifact, focus, formatting and regenerated-registry checks also passed.
+The infographic was visually inspected and its header/reference refreshed to 35 examples;
+the running dashboard's actual status endpoint also reports the new model and current blocker.
 
 ## Reorientation and candid feedback
 
@@ -77,3 +81,8 @@ an end-to-end usable skill. The bottleneck is now a small live execution mismatc
 learner design. Next session should reproduce that mismatch from the saved Center boundary,
 qualify one complete evolution, then resume a short measured learning loop. If it expands into
 route-specific patching, stop and reassess. No additional features or teacher factory are needed.
+
+PC access alone will not satisfy the evolution gate: the 32-battle dose, fixed escort constraints
+and resumability after partial training also need qualification. Do not assume this dose can finish
+the configured evolution. A capped-but-incomplete training result must remain incomplete, not be
+promoted to success or followed by arbitrary grinding. Keep the next acceptance check end-to-end.
