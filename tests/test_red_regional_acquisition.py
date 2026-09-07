@@ -59,7 +59,7 @@ def test_source_projection_excludes_identity_and_preserves_observed_history():
     observation = _observation()
     memory = GoalSearchMemory()
     memory.record(
-        first.binding.search_memory_source,
+        regional.regional_source_memory_key(first.source_id),
         living_completion_checkpoint(observation).required_specimens_sha256,
         exhausted=True,
         actions=71,

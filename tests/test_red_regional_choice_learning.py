@@ -125,6 +125,8 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
                         "frames_executed": 60,
                         "selected_kind": "acquire_species",
                         "status": status,
+                        "failure_reason": "search_exhausted" if failed else None,
+                        "collection_before": {"required_specimens_sha256": "f" * 64},
                         "collection_after": {"living_species": 2},
                     }
                 ],

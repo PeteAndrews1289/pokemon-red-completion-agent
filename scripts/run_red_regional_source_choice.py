@@ -31,6 +31,7 @@ from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPla
 from pokemon_red_completion.red_regional_acquisition import (
     enumerate_red_regional_acquisitions,
     regional_acquisition_menu,
+    regional_source_memory_key,
     sample_regional_acquisition,
 )
 from pokemon_red_completion.red_regional_choice_learning import (
@@ -43,6 +44,58 @@ from pokemon_red_completion.red_regional_choice_learning import (
     regional_choice_record_id,
     regional_outcome_record_id,
 )
+
+
+def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
+    """Rebuild regional effort from played ancestors, not position-dependent bindings.
+
+    The normal player still preserves its original search ledger unchanged.
+    This separate projection covers only explicitly logged regional choices.
+    """
+    from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+
+    memory = GoalSearchMemory()
+    for episode_id, checkpoint_sha in ready.continuation_chain:
+        choice = ready.private_root.find_sealed_record(
+            regional_choice_record_id(episode_id),
+            expected_kind=REGIONAL_CHOICE_KIND,
+        )
+        if choice is None:
+            continue
+        outcome = ready.private_root.find_sealed_record(
+            regional_outcome_record_id(episode_id),
+            expected_kind=REGIONAL_OUTCOME_KIND,
+        )
+        terminal = ready.private_root.find_sealed_record(
+            checkpoint_record_id(episode_id),
+            expected_kind=CHECKPOINT_KIND,
+        )
+        if outcome is None or terminal is None:
+            raise ValueError("regional ancestor lacks its settled outcome")
+        joined = ready.private_root.open_episode(episode_id)
+        if (
+            terminal.summary.record_sha256 != checkpoint_sha
+            or outcome.read()["terminal_checkpoint_sha256"] != checkpoint_sha
+            or outcome.read()["choice_record_sha256"] != choice.summary.record_sha256
+            or outcome.read()["manifest_sha256"] != joined.manifest_sha256
+            or joined.read_header()["metadata"].get("regional_choice_record_sha256")
+            != choice.summary.record_sha256
+        ):
+            raise ValueError("regional ancestor history binding differs")
+        document = choice.read()
+        selected = document["candidates"][document["selection"]["selected_candidate_index"]]
+        steps = terminal.read()["terminal_result"]["steps"]
+        if len(steps) != 1 or steps[0]["status"] not in {"succeeded", "failed"}:
+            raise ValueError("regional ancestor did not settle one acquisition")
+        step = steps[0]
+        memory.record(
+            regional_source_memory_key(selected["source_id"]),
+            step["collection_before"]["required_specimens_sha256"],
+            exhausted=step.get("failure_reason") == "search_exhausted",
+            actions=step["actions_executed"],
+            frames=step["frames_executed"],
+        )
+    return memory
 
 
 def inspect_sources(ready: base._Readiness) -> tuple[Any, ...]:
@@ -79,7 +132,7 @@ def inspect_sources(ready: base._Readiness) -> tuple[Any, ...]:
             maximum_actions=ready.training_plan.maximum_actions,
             maximum_frames=ready.training_plan.maximum_frames,
         )
-        memory = base._execution_search_memory(ready) or GoalSearchMemory()
+        memory = source_search_memory(ready)
         menu = regional_acquisition_menu(observed, candidates, memory)
         if (
             before != emulator.save_state_bytes()

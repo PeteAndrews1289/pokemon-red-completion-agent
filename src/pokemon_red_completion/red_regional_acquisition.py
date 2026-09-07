@@ -52,6 +52,11 @@ SOURCE_CHOICE_POLICY = "living-dex-regional-source-softmax-v1"
 MAXIMUM_SOURCE_CANDIDATES = 8
 
 
+def regional_source_memory_key(source_id: str) -> str:
+    """Stable across routed and already-local capture bindings."""
+    return "pokemon.red:regional-acquisition:" + source_id
+
+
 @dataclass(frozen=True, slots=True)
 class RedRegionalAcquisitionCandidate:
     source_id: str
@@ -159,7 +164,7 @@ def regional_acquisition_menu(
             ),
             availability=LivingDexOptionAvailability.AVAILABLE,
             search_history=memory.lookup(
-                candidate.binding.search_memory_source,
+                regional_source_memory_key(candidate.source_id),
                 ledger.required_specimens_sha256,
             ),
         )

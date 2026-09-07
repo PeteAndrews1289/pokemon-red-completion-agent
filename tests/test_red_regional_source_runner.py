@@ -105,3 +105,29 @@ def test_source_identity_is_committed_before_run_and_never_resampled(case, monke
     with pytest.raises(ValueError, match="already consumed"):
         driver._run(SimpleNamespace())
     assert len(committed) == 1
+
+
+def test_regional_history_survives_local_vs_routed_binding_and_checks_ancestor(tmp_path):
+    from test_red_regional_choice_learning import _recorded
+
+    from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+
+    store, item, _ = _recorded(tmp_path, failed=True)
+    record = store.find_sealed_record(
+        checkpoint_record_id(item.episode_id), expected_kind=CHECKPOINT_KIND
+    )
+    choice = store.find_sealed_record(
+        driver.regional_choice_record_id(item.episode_id), expected_kind=driver.REGIONAL_CHOICE_KIND
+    ).read()
+    source = choice["candidates"][choice["selection"]["selected_candidate_index"]]["source_id"]
+    ready = SimpleNamespace(
+        private_root=store, continuation_chain=((item.episode_id, record.summary.record_sha256),)
+    )
+    memory = driver.source_search_memory(ready)
+    history = memory.lookup(driver.regional_source_memory_key(source), "f" * 64)
+    assert (history.attempts, history.exhausted, history.actions, history.frames) == (1, 1, 1, 60)
+    assert memory.lookup(driver.regional_source_memory_key(source), "a" * 64).attempts == 0
+    assert memory.lookup(driver.regional_source_memory_key("unplayed"), "f" * 64).attempts == 0
+    ready.continuation_chain = ((item.episode_id, "0" * 64),)
+    with pytest.raises(ValueError, match="history binding"):
+        driver.source_search_memory(ready)

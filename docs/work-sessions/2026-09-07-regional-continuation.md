@@ -202,3 +202,12 @@ bounds and25%uniform/75%softmax policy. Require two useful choices and exact act
 restore first. Preserve observed D failure/history; do not reset to C or rerun D.
 Same pre-input commitment, selected-outcome-only admission and terminal-preservation rules.
 The regional checklist remains2/5 until multiple actual source decisions are demonstrated.
+
+E's initial action-free inspection found four options but exposed a history-lookup mismatch:
+the prior routed capture and now-local capture used different binding identities. D's actual
+failed-search record remained intact. Before E input, the regional menu now reconstructs
+source/objective-keyed effort from authenticated played regional ancestors, separate from
+the unchanged historical native ledger. Unplayed sources and changed specimen objectives
+remain zero tracked attempts, not claims of never-attempted history. This is not a rewrite
+of D's data or fit. Reinspect E and require Route24 to expose D's1attempt/1exhaustion,
+356actions/16,836frames before proceeding. No E sampling or controller input has occurred.
