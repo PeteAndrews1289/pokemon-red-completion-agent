@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher.
+- Next decision: Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model64 retains64 real outcomes,25successful and54distinct rows. Model63 selectedRoute24 and failed safely after ten encounters/two ball spends. All25specimens, five balls209currency and six healthy members remain. Recovery was zero-row support; model64 has not played. |
+| Authority now | Model65 retains65 actual outcomes,26successful and55distinct rows. Model64 chose Route5 and retained a second Mankey with one ball.25living/26specimens,fourballs209currency,sixfullHPmembers. All64priorrows retained; model65 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a resource-bounded continuation of a healthy but unsuccessful search retain a useful model-selected capture without hiding prior costs? |
+| Cheapest falsifier | Can the newly owned Mankey duplicate become an executable evolution alternative beside the remaining capture source, and can model65 complete a chosen objective without losing the base form? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-safe-capture-integration** · status **active** · evidence [falsification](docs/evidence/red-safe-capture-integration-2026-09-07.json)
+**2026-09-07-bounded-search-continuation** · status **active** · evidence [falsification](docs/evidence/red-bounded-search-continuation-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Working skills now compose from a fainted retained party into healthy capture search. The remaining test is useful collection with measured search and resource costs; a failed fit is not proof of stronger play. |
-| Learning output | 63 to 64 actual outcomes; 25 successful and 54 distinct selected rows. All63 earlier rows and43native/14regional entries retained. No collection gain. |
-| Authority delta | Model63 sampled Route24 versus Route5 and controlled the played destination. Deterministic recovery and forced capture parents earned zero extra rows. |
-| Transfer result | Exact historical and new-mode restores plus full model inventory verified without input. Preparation tests vary roster/HP/PP and stale source state; same-lineage gameplay is not independent or Crystal transfer. |
-| Blocker | Safe recovery and transport worked. Ten wild encounters included two Abra; two balls were spent with no catch. Productive acquisition remains unverified, not another observed navigation or fainting failure. |
-| Decision | Stop at the declared failed search, retain healthy Route24/model64 and all earlier failures. Safe-chain2/3, Phase3 unchanged. Next qualify finite resource-aware continuation instead of rebuilding working recovery. |
-| Next session | Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher. |
-| Next falsifier | Can a resource-bounded continuation of a healthy but unsuccessful search retain a useful model-selected capture without hiding prior costs? |
-| Stop condition | Recovery and capture consumed. No retry/reset, hidden healing, counterfactual labels or new teacher. A fresh future continuation must retain this endpoint/model and stop at unsafe state or reserves. |
+| Product alignment | The second Mankey allows future Primeape evolution while retaining the base form. Turn this prerequisite into varied useful play, not more source-only collection. |
+| Learning output | 64 to65 actual outcomes,26successful,55distinct rows. All64priorrows and44native/15regional entries retained. One duplicate specimen; zero distinct-species gain. |
+| Authority delta | Model64 selected Route5 versus Route24 at probability0.784165. One actual outcome fitted; forced capture parent earned zero duplicate labels. |
+| Transfer result | Exact save and historical model inventory authenticated without input. ROM-free report/routing tests pass; same-lineage Red practice is not independent transfer. |
+| Blocker | Only Route24 remains a capture source. Duplicate Mankey creates an evolution prerequisite, not yet a qualified mixed-goal alternative. |
+| Decision | Safe retained acquisition closes3/3; Phase3 remains current. Stop the source-only cycle after one real success and inspect mixed acquisition/evolution next. |
+| Next session | Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset. |
+| Next falsifier | Can the newly owned Mankey duplicate become an executable evolution alternative beside the remaining capture source, and can model65 complete a chosen objective without losing the base form? |
+| Stop condition | First trial consumed and fitted, second never claimed. No replay/reset, synthetic choices, hidden supplies, sealedRed or Crystal. |
 
 ### Stop conditions
 

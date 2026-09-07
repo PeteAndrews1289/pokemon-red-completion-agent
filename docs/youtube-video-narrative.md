@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 7 — a useful duplicate, not a new species
+
+The learned destination scorer chose Route5, and deterministic navigation/capture
+skills retained a second Mankey using one ball. All26specimens and a healthy full
+party survived. That matters for a living Pokedex: one Mankey can stay while the
+other develops toward Primeape. It does not mean Primeape is already obtained.
+The collection remains25distinct living species and30registrations.
+
+One actual selected-source outcome updated model64 to65 with all earlier rows
+retained. The runner stopped before a second attempt because there was only one
+remaining capture source. This was a correct transition point toward mixed
+capture/evolution goals, not evidence the model had finished learning Pokemon.
+The current safe-acquisition milestone is3/3; sustained Red competence is unfinished.
+
+A live audit also caught a reporting wrapper that dropped the new search counters.
+The action-linked trace still proved the capture; the wrapper was repaired for
+future runs, without rewriting or replaying the consumed episode. Flash supplied
+a scoped first draft, and Codex found/corrected integration gaps. Faster drafting
+is useful, but it is not the same as demonstrated end-to-end acceleration.
+
 ## September 7 footage beat — a safe failure is different from a broken player
 
 Show AA's fainted Beedrill, then the real Center recovery and Blastoise taking the

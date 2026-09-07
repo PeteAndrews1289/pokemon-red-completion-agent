@@ -1,5 +1,31 @@
 # Current agent handoffs
 
+## Current — useful duplicate captured and fitted; model65 retained
+
+Model64 selected Route5 versus Route24 and caught a second Mankey12 with one ball.
+334actions/20,628frames, one verified status attempt. Exact saved endpoint:
+Route5(9,13),26specimens/25living species/30registered, four balls209currency,
+six full-HP members; zero losses. The duplicate permits future Primeape development
+while preserving Mankey; Primeape is not yet evolved and95required specimens remain.
+
+Model65 retains all64priorrows:65outcomes,26successful,55distinct selected rows,
+44native/15regional entries. It has not played. The second source trial was never
+claimed because only Route24 remains. Safe acquisition closes3/3; Phase3 stays open.
+No reset, retry, synthetic second choice, teacher, sealedRed or Crystal execution.
+
+Next: inspect an actual mixed acquisition/evolution menu from this saved endpoint,
+using the existing Mankey precursor and completion-dose trainer. Then one genuinely
+model-selected goal and retained fit, if feasible. Do not repeat source-only setup.
+Codex owns integration/publication; Flash may draft a narrowly named isolated
+test/report task, never private data or gameplay. Reserve Claude for a consequential
+evidence/learning-design audit; no external audit is currently running.
+
+Gameplay/fit source c99d18ae, model1eae0943, checkpoint5135f211. The post-run routed
+summary repair is prospective only; consumed evidence was not rewritten.
+Details and quotas: [bounded-search audit](audits/red-bounded-search-continuation-2026-09-07.md).
+Recommended next session: Astra Extra High, Fast off; review the mixed-goal boundary,
+then return to High for routine execution. No measured speed or token-cost ratio.
+
 ## Current — real recovery, safe failed search, model64 retained
 
 The actual fainted AA party recovered through a Pokemon Center: 163 actions and

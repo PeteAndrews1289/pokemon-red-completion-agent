@@ -1,5 +1,29 @@
 # Agent review and adjudication log
 
+## September 7 — Flash survey summary and live integration audit
+
+Flash3.8High used its isolated branch only; reviewed draft f76cc46d. Codex accepted
+the explicit typed marker, bounded counts and optional recorded stop cause. Initial
+draft:55tests passed/one inconsistent None assertion failed. Codex also rejected a
+flat-field detector that would mistake generic exploration for capture reporting.
+Flash revised both; Codex preserved positional compatibility and wired Red reports.
+
+The actual capture succeeded, but Codex's terminal audit found the routed composer
+dropped the new marker. The prospective repair now passes success/exhaustion,
+unexecuted-destination and malformed-report tests;261combined checks pass. The old
+episode remains unchanged and its action trace independently verifies the capture.
+This exposes a real limitation of the draft/review loop: component tests are not
+end-to-end integration coverage. Keep Flash scoped and require active-path review.
+
+Provider cumulative duration466seconds/two turns, not a measured overall speedup.
+No Claude audit used. At23:50UTC, Gemini79.64%five-hour/94.50%weekly remaining;
+resets02:11UTC September8/23:22UTC September11. Separate Claude83%/92%remaining;
+resets22:09EDT September7/09:59EDT September11. Account-wide, not task-attributed.
+
+Decision: useful narrow drafting; Codex owns integration and gameplay. Next use the
+new Mankey prerequisite for a mixed-goal lesson. Do not request another broad agent
+architecture audit or claim that more training rows prove better play.
+
 ## Flash bounded follow-up — September 7 safe-capture integration
 
 Accepted after review: eight independent recovery route-interruption tests from

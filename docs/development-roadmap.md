@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-safe-capture-integration**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-bounded-search-continuation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Safe retained acquisition chain: 2/3 acceptance items (67%).**
+**Safe retained acquisition chain: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Recover the actual retained party ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
 - [x] Qualify safe capture-search preparation ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
-- [ ] Retain and fit a useful source capture
+- [x] Retain and fit a useful source capture ([evidence](../docs/evidence/red-bounded-search-continuation-2026-09-07.json))
 
-Current model: **64 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **65 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json)
+[Current evidence](../docs/evidence/red-bounded-search-continuation-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-bounded-search-continuation
+
+Model64 chose Route5, caught a second Mankey12 using one ball, and fitted65 outcomes while retaining all prior rows.26specimens/25living,all6healthy. Safe acquisition3/3closed.
+
+**Deviation:** Two-choice maximum ended after one success because only one capture source remained. No fake second choice or replay. Post-run routed-summary omission repaired prospectively; stage exits unchanged.
+
+**Next:** Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset.
 
 ### 2026-09-07-safe-capture-integration
 

@@ -61,3 +61,27 @@ review/tests and live preparation overlapped, so this is not an end-to-end speed
 Latest23:38UTC quota: Gemini79.78%five-hour/94.86%weekly remaining, resetting02:11UTC
 September8/23:22UTC September11. Account-wide readings, not per-task attribution.
 Claude was not used. Stop further drafting revisions and perform the actual trial.
+
+## Result and reorientation
+
+Completed one of at most two actual source choices. Model64 selected Route5 at
+probability0.784165 and retained a second Mankey12 using one ball,334actions and
+20,628frames. All26specimens remain,25distinct living species/30registered;
+four balls209currency and six full-HP party members. Model65 fitted the outcome,
+retaining all64priorrows:65total,26successful,55distinct,44native/15regional entries.
+The second trial was never claimed: only Route24 remains a capture source.
+
+Exact checkpoint5135f211 and full inventory restored without input or frame advance.
+Cartridge graph confirms Mankey-to-Primeape at28; two Mankey now allow retaining one
+while developing the other. This closes safe acquisition3/3, not Phase3. No Primeape,
+independent evaluation, post-fit model65 gameplay or new species is claimed.
+
+Post-run audit found the routed composer dropped the capture_survey marker. Narrow
+typed forwarding and regression tests repair it prospectively; consumed c99d18ae
+evidence stays unchanged. Final261targeted checks include39registry tests; separate
+119fitting/continuation tests passed.403package files type-check and lint passes.
+The current source CI remains running; previous40eac0f6 and1a2ff13f are green.
+
+Natural stopping point: saved outcome/fit audited, next mixed acquisition/evolution
+step defined. No second forced source question, reset or automatic replay. See
+[closeout audit](../audits/red-bounded-search-continuation-2026-09-07.md).

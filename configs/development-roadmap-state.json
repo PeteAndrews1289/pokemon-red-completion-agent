@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-safe-capture-integration",
+  "as_of_session": "2026-09-07-bounded-search-continuation",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+      "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "productive-source-continuation",
         "label": "Retain and fit a useful source capture",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
       }
     ]
   },
@@ -246,6 +246,12 @@
       "result": "Recovery succeeded163actions/9156frames. Fresh Route24 choice failed safely664actions/36600frames: ten encounters, two Abra throws, no capture. Model63to64, allpriorrows/25specimensretained. Safe-chain2/3.",
       "deviation": "Stopped on the preregistered failed-search boundary. No reset/retry or easier replacement for productive capture. Flash contributed eight reviewed tests; engineering is now live-qualified but does not close Phase3.",
       "next": "Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher."
+    },
+    {
+      "session": "2026-09-07-bounded-search-continuation",
+      "result": "Model64 chose Route5, caught a second Mankey12 using one ball, and fitted65 outcomes while retaining all prior rows.26specimens/25living,all6healthy. Safe acquisition3/3closed.",
+      "deviation": "Two-choice maximum ended after one success because only one capture source remained. No fake second choice or replay. Post-run routed-summary omission repaired prospectively; stage exits unchanged.",
+      "next": "Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset."
     }
   ],
   "closed_milestones": [
