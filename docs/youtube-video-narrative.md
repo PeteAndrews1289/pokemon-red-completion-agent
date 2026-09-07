@@ -1,5 +1,13 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Active — regional continuation, September 7
+
+Suggested scene: the player leaves its saved position, reaches cartridge-derived grass and
+catches a new living species. Then explain the limitation: that capture was a forced bridge,
+not AI choosing between strategies. The subsequent exploration failed; both choices stayed out
+of the training corpus.17living species,19specimens,still45training examples. The next challenge
+is making useful alternatives available so the learner can actually decide what to do next.
+
 ## Final chapter for this milestone — a learned-policy choice that finishes
 
 Use K's actual capture of the evolution screen and recorded goal choice if presenting this session.

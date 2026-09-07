@@ -1,5 +1,14 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## Active — regional continuation, September 7
+
+The next test exposed the difference between adding mechanics and giving the learner choices.
+A cartridge-derived source transition let the saved player catch another living species on
+Route11, preserving19specimens. But it was the only available option, and the next menu offered
+only exploration plus noncritical recovery. Neither choice was eligible model training.
+The useful result is retained progress and a precise limitation: connect genuine alternatives,
+not inflate training counts with deterministic behavior. Model remains45examples.
+
 ## September7 closeout — the learner finally chose a complete evolution
 
 The small integration milestone is complete. The goal-selection model grew from35 to45 retained

@@ -1,5 +1,13 @@
 # Roadmap baseline and deviations
 
+## September 7 — regional integration after the closed useful-play checklist
+
+Preserve the previous5/5 checklist under closed_milestones; begin a new five-item regional
+integration checklist under sustained-red. The stage exits and baseline are unchanged.
+Source/profile continuation and retained collection gain are verified by A. The gain was forced,
+not learned; genuine choices, fit/follow-up and variation remain open. This checklist is an
+integration substage, not proof of sustained autonomous play.
+
 ## 2026-09-07 learning integration — original checklist completed, limits retained
 
 The bounded native option and retained-data fit completed the original5/5 minimal checklist:

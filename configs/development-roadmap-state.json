@@ -1,20 +1,20 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-complete-evolution-learning",
-  "current_stage": "adaptive-red",
+  "as_of_session": "2026-09-07-regional-continuation",
+  "current_stage": "sustained-red",
   "stages": {
     "foundation": {
       "status": "verified",
       "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
     },
     "adaptive-red": {
-      "status": "current",
+      "status": "verified",
       "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
     },
     "sustained-red": {
-      "status": "planned",
-      "evidence": null
+      "status": "current",
+      "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,37 +38,37 @@
     }
   },
   "milestone": {
-    "title": "Useful memory-aware play",
+    "title": "Regional multi-goal integration",
     "items": [
       {
-        "id": "saved-loop",
-        "label": "Saved-state learning loop",
+        "id": "regional-source",
+        "label": "Truthful source continuation",
         "done": true,
-        "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+        "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
       },
       {
-        "id": "memory",
-        "label": "Persisted search-history contract",
+        "id": "regional-gain",
+        "label": "Retained regional collection gain",
         "done": true,
-        "evidence": "docs/evidence/red-search-memory-qualification-2026-09-06.json"
+        "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
       },
       {
-        "id": "history-model",
-        "label": "Model trained to use history",
-        "done": true,
-        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        "id": "regional-choices",
+        "label": "Multiple genuine model choices",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "alternatives",
-        "label": "Two useful executable alternatives",
-        "done": true,
-        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        "id": "regional-fit",
+        "label": "New fit and fresh continuation",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "useful-followup",
-        "label": "Productive lesson and follow-up",
-        "done": true,
-        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        "id": "regional-variation",
+        "label": "Variation, costs and interventions",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -120,6 +120,51 @@
       "result": "Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens. Minimal checklist5/5; not full Red or sustained competence.",
       "deviation": "Explicit larger completion dose and correlated practice reset from D; F retained, failed B excluded, all eligible failures kept. No stage exit changes or independent evaluation claim.",
       "next": "Start sustained-play integration: give retained Route11 endpoint a useful reachable next source, then varied multi-goal episodes with model45."
+    },
+    {
+      "session": "2026-09-07-regional-continuation",
+      "result": "In progress: regional A retained17 living/19 specimens. Forced capture succeeded; unsupported fallback exploration failed. Zero model predictions and zero new fit rows; model45 unchanged.",
+      "deviation": "Operator-declared source transition reuses cartridge-derived corridors. The new checklist is an integration substage, not the full sustained-play exit; closed stage2 checklist preserved.",
+      "next": "Connect a useful next source and genuine alternatives from A; no reset or replay."
+    }
+  ],
+  "closed_milestones": [
+    {
+      "session": "2026-09-07-complete-evolution-learning",
+      "stage": "adaptive-red",
+      "title": "Useful memory-aware play",
+      "items": [
+        {
+          "id": "saved-loop",
+          "label": "Saved-state learning loop",
+          "done": true,
+          "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+        },
+        {
+          "id": "memory",
+          "label": "Persisted search-history contract",
+          "done": true,
+          "evidence": "docs/evidence/red-search-memory-qualification-2026-09-06.json"
+        },
+        {
+          "id": "history-model",
+          "label": "Model trained to use history",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        },
+        {
+          "id": "alternatives",
+          "label": "Two useful executable alternatives",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        },
+        {
+          "id": "useful-followup",
+          "label": "Productive lesson and follow-up",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        }
+      ]
     }
   ]
 }

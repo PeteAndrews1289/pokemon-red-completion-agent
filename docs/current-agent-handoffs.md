@@ -1,5 +1,12 @@
 # Current agent handoffs
 
+## Active — regional continuation, September 7
+
+Current six-hour cycle: regional A is consumed,17 living/19 specimens retained, model45
+unchanged. Forced capture and deterministic-unsupported exploration contributed zero fit rows.
+Codex owns the next useful-source/alternative integration. No reviewer is active; do not rerun A.
+See [session](work-sessions/2026-09-07-regional-continuation.md) and private OPERATOR for exact state.
+
 ## Final current — 5/5 minimal integration checks; model45
 
 Read the [final audit](audits/red-complete-evolution-learning-2026-09-07.md).

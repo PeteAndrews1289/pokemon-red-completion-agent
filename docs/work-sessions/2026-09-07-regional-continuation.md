@@ -64,3 +64,16 @@ The prospective sustained-play checklist is: (1) truthful regional source/profil
 (4) retained-outcome fit plus fresh continuation, (5) bounded variation with honest costs and
 intervention reporting. Same-lineage variation is not independent evaluation. Completion of
 this small integration checklist alone cannot establish the full sustained-play stage exit.
+
+## A result and reorientation
+
+A completed two steps,467actions/30276frames: forced capture succeeded219/16824, then
+deterministic-unsupported exploration failed248/13452 at64bounded survey legs. Living16→17,
+registered21→22,total specimens18→19, no losses. Checkpoint9143c3dd retains the new specimen.
+The exact admission audit excludes both decisions: zero examples and zero model predictions.
+Do not fit or rerun A. Model45 remains unchanged; this is engineering/collection progress.
+
+The changed-state menu has exploration plus noncritical restoration, not two supported learned
+alternatives. Next inspect another reachable useful source and the smallest way to expose real
+alternatives without changing the learner's safety rules. Public evidence records A explicitly.
+104 focused checks,50 protocol checks,400-file types,lint/docs/public checks passed.

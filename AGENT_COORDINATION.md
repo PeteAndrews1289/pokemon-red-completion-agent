@@ -1,5 +1,11 @@
 # Three-agent coordination
 
+## Active — regional continuation, September 7
+
+Codex owns the regional-continuation work through10:57UTC. A added one living species via a
+forced bridge and no model training rows. No outside reviewer/subagent is active. Next is useful
+source/alternative composition from A, with deterministic actions explicitly excluded from fits.
+
 ## Final current — integration closed; sustained-play boundary next
 
 [Final audit](docs/audits/red-complete-evolution-learning-2026-09-07.md): minimal checklist5/5,

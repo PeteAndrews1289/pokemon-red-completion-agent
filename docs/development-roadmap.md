@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-complete-evolution-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-continuation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Useful memory-aware play: 5/5 acceptance items (100%).**
+**Regional multi-goal integration: 2/5 acceptance items (40%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
-- [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
-- [x] Model trained to use history ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
-- [x] Two useful executable alternatives ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
-- [x] Productive lesson and follow-up ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
+- [x] Truthful source continuation ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
+- [x] Retained regional collection gain ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
+- [ ] Multiple genuine model choices
+- [ ] New fit and fresh continuation
+- [ ] Variation, costs and interventions
 
 Current model: **45 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -32,7 +32,7 @@ Teacher and deterministic mechanics support learning; they are not the final pla
 
 [Current evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json)
 
-### 02. Make useful Red decisions — current
+### 02. Make useful Red decisions — verified
 
 Remember failed searches and choose productive alternatives.
 
@@ -42,13 +42,15 @@ Search history must inform learned choices, not a scripted rule forcing another 
 
 [Current evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json)
 
-### 03. Sustain model-directed play — planned
+### 03. Sustain model-directed play — current
 
 Combine navigation, battles, captures, resources and recovery.
 
 **Exit criterion:** Repeated multi-goal progress across varied Red situations, with measured costs, interventions and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
+
+[Current evidence](../docs/evidence/red-regional-continuation-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-regional-continuation
+
+In progress: regional A retained17 living/19 specimens. Forced capture succeeded; unsupported fallback exploration failed. Zero model predictions and zero new fit rows; model45 unchanged.
+
+**Deviation:** Operator-declared source transition reuses cartridge-derived corridors. The new checklist is an integration substage, not the full sustained-play exit; closed stage2 checklist preserved.
+
+**Next:** Connect a useful next source and genuine alternatives from A; no reset or replay.
 
 ### 2026-09-07-complete-evolution-learning
 

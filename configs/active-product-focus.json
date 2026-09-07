@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution?",
+      "cheapest_falsifier": "Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No production promotion. K made a genuine model-policy choice under exploration; F's forced bridge stays excluded. All prior rows retained.",
-        "blocker": "The completed K save has no supported next goal in this Mansion-scoped walking-only profile. Sustained regional play and independently measured history advantage remain unproved.",
-        "decision": "Close the minimal useful-play checklist5/5. Preserve K and F. Next bind useful next-source continuation and test varied bounded Red situations; no more work in the consumed batch.",
+        "authority_delta": "No authority expansion. Exact replay admission excludes both non-exploratory choices; zero model predictions used.",
+        "blocker": "After one canonical capture, acquisition becomes unavailable; exploration plus noncritical recovery yields no two-option learned menu. Regional choice remains operator-declared.",
+        "decision": "Keep the new specimen and inspect the nearest useful supported source/alternative before another bounded continuation.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-complete-evolution-learning-2026-09-07.json",
-          "sha256": "f816cf9855b0ed6be7069a73e09cd86adca64dfd5655ba9b9d55e66db766f3b9"
+          "path": "docs/evidence/red-regional-continuation-2026-09-07.json",
+          "sha256": "9db788cd50fae2a7795df98685611fd81bfb4d62ac2b83a804656c7996f2ed97"
         },
-        "learning_output": "Model35 to45: ten new retained examples, two successful. One selected nonzero-history row fitted with measured prediction sensitivity. K productively completed model-selected evolution after history fitting.",
-        "next_falsifier": "Can model45 resume from the evolved Route11 endpoint, reach a legitimate collection source through existing skills, and make another productive choice without a training-root reset?",
-        "next_session_goal": "Begin sustained model-directed Red play from the retained endpoint with honest reachable goals, then varied multi-goal tests and retained-data fitting.",
-        "product_alignment": "Minimal learning integration completed, not the whole product. Next close the regional action-space gap instead of replaying this successful lesson.",
-        "session_id": "2026-09-07-complete-evolution-learning",
-        "status": "closed",
-        "stop_condition": "Session closed at productive K and its retained-data fit; L/M/N cancelled unused. No sealed access, full replay, Crystal or competence claim.",
-        "transfer_result": "Correlated Red training only, including explicit practice reset from D. One-row in-sample history sensitivity; independent advantage, ROM-hack and Crystal transfer remain unproved."
+        "learning_output": "No new examples or fitting. Model45 retained. A's two choices are ineligible: forced capture plus deterministic-unsupported exploration.",
+        "next_falsifier": "Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting?",
+        "next_session_goal": "Produce genuine model choices across useful collection opportunities and fit eligible outcomes without resetting progress.",
+        "product_alignment": "Regional transport and capture work from the retained endpoint. This is engineering progress unblocking sustained model decisions, not learned regional selection.",
+        "session_id": "2026-09-07-regional-continuation",
+        "status": "active",
+        "stop_condition": "No replay of A. Reorient after90minutes without executable alternatives; stop safely at10:57UTC, preserve traces and all specimens.",
+        "transfer_result": "One same-lineage Red source transition; no independent or cross-game claim."
       },
       "learned_authority": {
-        "current": "Model7cf5f570 retains45 examples,16 successful. One authentic selected history-bearing row influences predictions. Post-history-fit K chose and completed Rapidash40, preserving18 specimens; minimal checklist5/5, no sustained-play or transfer claim.",
+        "current": "Model7cf5f570 retains45 examples. Prior minimal integration5/5. Regional A added one species through a forced bridge, then deterministic exploration failed; zero new fit rows,17 living/19 specimens retained.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Preserve checkpoint6eebc7ad; connect useful next-source continuation from Route11, then measure varied multi-goal progress with model45. Do not repeat the closed training batch.",
+      "next_decision": "Preserve regional A checkpoint9143c3dd (17 living/19 specimens); connect another reachable useful source and genuine model alternatives. A produced zero training rows; do not replay it.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

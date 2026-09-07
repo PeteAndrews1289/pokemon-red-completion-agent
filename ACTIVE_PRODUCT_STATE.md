@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve checkpoint6eebc7ad; connect useful next-source continuation from Route11, then measure varied multi-goal progress with model45. Do not repeat the closed training batch.
+- Next decision: Preserve regional A checkpoint9143c3dd (17 living/19 specimens); connect another reachable useful source and genuine model alternatives. A produced zero training rows; do not replay it.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model7cf5f570 retains45 examples,16 successful. One authentic selected history-bearing row influences predictions. Post-history-fit K chose and completed Rapidash40, preserving18 specimens; minimal checklist5/5, no sustained-play or transfer claim. |
+| Authority now | Model7cf5f570 retains45 examples. Prior minimal integration5/5. Regional A added one species through a forced bridge, then deterministic exploration failed; zero new fit rows,17 living/19 specimens retained. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
+| Cheapest falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-complete-evolution-learning** · status **closed** · evidence [qualification](docs/evidence/red-complete-evolution-learning-2026-09-07.json)
+**2026-09-07-regional-continuation** · status **active** · evidence [qualification](docs/evidence/red-regional-continuation-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Minimal learning integration completed, not the whole product. Next close the regional action-space gap instead of replaying this successful lesson. |
-| Learning output | Model35 to45: ten new retained examples, two successful. One selected nonzero-history row fitted with measured prediction sensitivity. K productively completed model-selected evolution after history fitting. |
-| Authority delta | No production promotion. K made a genuine model-policy choice under exploration; F's forced bridge stays excluded. All prior rows retained. |
-| Transfer result | Correlated Red training only, including explicit practice reset from D. One-row in-sample history sensitivity; independent advantage, ROM-hack and Crystal transfer remain unproved. |
-| Blocker | The completed K save has no supported next goal in this Mansion-scoped walking-only profile. Sustained regional play and independently measured history advantage remain unproved. |
-| Decision | Close the minimal useful-play checklist5/5. Preserve K and F. Next bind useful next-source continuation and test varied bounded Red situations; no more work in the consumed batch. |
-| Next session | Begin sustained model-directed Red play from the retained endpoint with honest reachable goals, then varied multi-goal tests and retained-data fitting. |
-| Next falsifier | Can model45 resume from the evolved Route11 endpoint, reach a legitimate collection source through existing skills, and make another productive choice without a training-root reset? |
-| Stop condition | Session closed at productive K and its retained-data fit; L/M/N cancelled unused. No sealed access, full replay, Crystal or competence claim. |
+| Product alignment | Regional transport and capture work from the retained endpoint. This is engineering progress unblocking sustained model decisions, not learned regional selection. |
+| Learning output | No new examples or fitting. Model45 retained. A's two choices are ineligible: forced capture plus deterministic-unsupported exploration. |
+| Authority delta | No authority expansion. Exact replay admission excludes both non-exploratory choices; zero model predictions used. |
+| Transfer result | One same-lineage Red source transition; no independent or cross-game claim. |
+| Blocker | After one canonical capture, acquisition becomes unavailable; exploration plus noncritical recovery yields no two-option learned menu. Regional choice remains operator-declared. |
+| Decision | Keep the new specimen and inspect the nearest useful supported source/alternative before another bounded continuation. |
+| Next session | Produce genuine model choices across useful collection opportunities and fit eligible outcomes without resetting progress. |
+| Next falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
+| Stop condition | No replay of A. Reorient after90minutes without executable alternatives; stop safely at10:57UTC, preserve traces and all specimens. |
 
 ### Stop conditions
 

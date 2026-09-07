@@ -1,5 +1,13 @@
 # Model-first development roadmap
 
+## Active — regional continuation, September 7
+
+The new regional integration checklist is2/5: explicit source continuation and retained
+collection gain. A's forced capture succeeded; the later unsupported fallback exploration failed.
+Model45 remains45examples, with zero new model predictions/fit rows. This does not satisfy the
+full sustained-play stage exit. Next: a genuinely useful next source/alternative from A, then
+model-selected outcomes, fit/follow-up and bounded variation. No convenient-root reset.
+
 ## Final current — useful-play integration complete; sustained play next
 
 The [final audit](audits/red-complete-evolution-learning-2026-09-07.md) closes the five-item
