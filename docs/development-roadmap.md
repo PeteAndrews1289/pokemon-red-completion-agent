@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-owned-precursor-bridge**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-collection-prerequisites-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Storage-safe varied collection: 2/3 acceptance items (67%).**
+**Storage-safe varied collection: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Legitimate supply support retained ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
 - [x] Storage-safe capture preparation ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
-- [ ] Useful varied outcome played and fitted ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
+- [x] Useful varied outcome played and fitted ([evidence](../docs/evidence/red-collection-prerequisites-learning-2026-09-07.json))
 
-Current model: **61 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **62 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-owned-precursor-bridge-2026-09-07.json)
+[Current evidence](../docs/evidence/red-collection-prerequisites-learning-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-collection-prerequisites-learning
+
+Closed 3/3: model-selected Beedrill evolution retained and fitted, 61 to 62 outcomes. 25 living species/25 specimens, 30 registered; seven balls and 209 currency remain.
+
+**Deviation:** Zero balls made resupply mandatory, so Y stayed zero-row support. Parent observer settings repaired after exact hash probe; Z then made the real choice. No baseline exit changed; Phase3 remains current.
+
+**Next:** Short retained-state acquisition chain with genuine source-choice authority, duplicate demand, measured resource costs and no resets.
 
 ### 2026-09-07-owned-precursor-bridge
 

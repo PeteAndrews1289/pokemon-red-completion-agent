@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-owned-precursor-bridge",
+  "as_of_session": "2026-09-07-collection-prerequisites-learning",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-owned-precursor-bridge-2026-09-07.json"
+      "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "productive-varied-outcome",
         "label": "Useful varied outcome played and fitted",
-        "done": false,
-        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        "done": true,
+        "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
       }
     ]
   },
@@ -228,6 +228,12 @@
       "result": "Metapod evolved into Butterfree: +978 XP, 24 living species, all 25 specimens retained. Forced support; model61 unchanged. Only one surplus evolution target remains.",
       "deviation": "Stopped at the planned inventory falsifier: nine other missing evolution targets require duplicate acquisition. No fake alternatives or new fit.",
       "next": "Existing reserve-aware supply and duplicate demand must create real acquire/evolve choices; retain X's zero-row support."
+    },
+    {
+      "session": "2026-09-07-collection-prerequisites-learning",
+      "result": "Closed 3/3: model-selected Beedrill evolution retained and fitted, 61 to 62 outcomes. 25 living species/25 specimens, 30 registered; seven balls and 209 currency remain.",
+      "deviation": "Zero balls made resupply mandatory, so Y stayed zero-row support. Parent observer settings repaired after exact hash probe; Z then made the real choice. No baseline exit changed; Phase3 remains current.",
+      "next": "Short retained-state acquisition chain with genuine source-choice authority, duplicate demand, measured resource costs and no resets."
     }
   ],
   "closed_milestones": [

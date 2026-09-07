@@ -1,7 +1,48 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
 
-## Current — Butterfree retained; real collection prerequisites identified
+## Current — model-selected Beedrill retained and model62 fitted
+
+Z chose evolution over capture under the declared exploratory model policy
+(selected probability 0.34379). Kakuna level 4 became Beedrill level 10 in 1,980 actions /
+163,082 frames. The other Kakuna and Butterfree survived: 25 living species,
+25 specimens, 30 registrations, no undeclared losses. All seven balls and
+209 currency remain. The exact healthy Route 11 endpoint reopened without input.
+
+The fit advanced 61 to 62 actual outcomes, 25 successful and 52 distinct selected
+feature rows. All prior rows and original X/Y zero-row support are retained:
+40 native episodes and 12 regional choices. The unused Route24 source proposal
+was not fitted. Model62 has not played; this is same-lineage development, not
+independent advantage, full-player competence or transfer.
+
+Y first purchased seven balls by selling one of seven Full Restores, retaining
+six plus four Hyper Potions. That mandatory safety step earned no label. A
+restore mismatch then exposed legacy observer settings; replaying the parent's
+authenticated completion dose matched the original save hash exactly. The repair
+preserves old/new parent modes and never rewrites a save or bypasses verification.
+
+**Storage-safe varied collection is closed at 3/3. Phase 3 remains current.**
+Its unchanged exit still requires repeated multi-goal progress across varied
+situations, measured costs and recovery. Next use a short retained-state
+acquisition chain: when the native goal is forced capture, learn the genuine
+destination choice through the existing source-choice path. Do not turn another
+source proposal or safety step into a model outcome.
+
+[Audit](audits/red-collection-prerequisites-learning-2026-09-07.md).
+[Next plan](work-sessions/2026-09-07-retained-collection-chain-plan.md).
+Published executable source 9b0fd3b0; package bundle 3445bb87.
+Dashboard now shows the saved Beedrill result and actual model62 fit.
+Y/Z are consumed. No gameplay, fit, external agent or scheduled continuation
+is running at closeout. Supply-code CI passed; restore-code CI caught an older
+test fixture, now corrected locally. Final publication CI is pending.
+
+Narrative: the player turned preserved ownership and legitimate supplies into
+a real capture-versus-evolution decision, then learned from its chosen result.
+The long-term cross-game living-Dex goal is unchanged.
+Recommended next session: **Astra High, Fast off** for the retained multi-goal
+learning loop; no evidence here justifies Max/Ultra by default.
+
+## Historical — Butterfree retained; real collection prerequisites identified
 
 X successfully evolved the healed Metapod from level 4 into Butterfree at level 10:
 +978 XP, 1,744 actions, 150,928 frames. Living species increased 23 to 24 and

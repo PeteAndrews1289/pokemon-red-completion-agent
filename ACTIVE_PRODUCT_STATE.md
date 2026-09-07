@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect actual collection prerequisites to economically feasible acquire/evolve/resupply alternatives from X; retain model61 and pending X zero-row support.
+- Next decision: Run a short retained-state collection chain from Z/model62, learning actual source choices and useful duplicate acquisitions without resets.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model61 retains 61 outcomes, 24 successful. X's forced evolution added Butterfree (+978 XP), not a learning example. 24 living species, 25 specimens, 29 registered; no losses. X pending as zero-row support for next fit. |
+| Authority now | Model62 retains 62 real outcomes, 25 successful. Z's exploratory evolution added Beedrill while preserving the other Kakuna and Butterfree: 25 living species, 25 specimens, 30 registered. All prior rows and X/Y zero-row support retained; seven balls and 209 currency remain. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can existing reserve-aware funding and duplicate capture support expose a real second useful objective from X without erasing living specimens? |
+| Cheapest falsifier | Can model62 select a genuine reachable capture source and retain a useful specimen from Z without another engineering prerequisite or forced-parent label? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-owned-precursor-bridge** · status **active** · evidence [falsification](docs/evidence/red-owned-precursor-bridge-2026-09-07.json)
+**2026-09-07-collection-prerequisites-learning** · status **active** · evidence [falsification](docs/evidence/red-collection-prerequisites-learning-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Successful evolution preserves a living precursor; prerequisite inventory identifies which duplicate captures unlock further living collection. |
-| Learning output | No new rows or fit. Model61 unchanged; forced evolution gained 978 XP and one living species while preserving all 25 specimens. |
-| Authority delta | No new learned authority. One forced evolution succeeded; reusable action-free inventory now exposes actual duplicate-acquisition prerequisites. |
-| Transfer result | Inventory variation tests and live retained-state evolution passed. This is same-lineage deterministic support, not independent learned advantage or transfer. |
-| Blocker | Only one owned-surplus evolution objective remains. Nine missing level targets need another precursor; zero balls and 109 currency constrain acquisition. |
-| Decision | Stop at the planned real-alternatives falsifier. Preserve X; create feasible supply/acquisition choices next instead of decorative evolution candidates. |
-| Next session | Connect actual collection prerequisites to economically feasible acquire/evolve/resupply alternatives from X; retain model61 and pending X zero-row support. |
-| Next falsifier | Can existing reserve-aware funding and duplicate capture support expose a real second useful objective from X without erasing living specimens? |
-| Stop condition | X and prior attempts consumed. No further forced evolution this session, reset-funded supplies, sacrificed sole specimens or fake alternative rows. |
+| Product alignment | Preserved ownership and legitimate supplies enabled a real collection choice and retained learning outcome; sustained Red play remains the next stage objective. |
+| Learning output | 61 to 62 outcomes, 25 successful and 52 distinct selected rows. Z evolved Kakuna4 to Beedrill10; no losses. X/Y support retained with zero labels. |
+| Authority delta | One genuine model-guided capture-versus-evolution choice played and fitted. Unique evolution target was cartridge/ledger-derived; mechanics remain deterministic. |
+| Transfer result | Exact terminal and inventory/fit audits passed; parent-dose restore repair is tested both ways. This is same-lineage development, not independent advantage or transfer. |
+| Blocker | Model62 has not played. The current native menu is acquisition-only; use genuine regional destination choices next. Finite supplies and no spare precursors limit longer chains. |
+| Decision | Close storage-safe varied collection at 3/3, keep Phase3 current, and proceed to a short retained-state acquisition sequence rather than another teacher or broad redesign. |
+| Next session | Run a short retained-state collection chain from Z/model62, learning actual source choices and useful duplicate acquisitions without resets. |
+| Next falsifier | Can model62 select a genuine reachable capture source and retain a useful specimen from Z without another engineering prerequisite or forced-parent label? |
+| Stop condition | Y/Z and all prior attempts consumed. No retry, forced-source labels, duplicated training credit, reset-funded supplies or sacrificed sole specimens. |
 
 ### Stop conditions
 

@@ -1,4 +1,17 @@
-# Next session — economically feasible collection choices
+# Completed session — economically feasible collection choices
+
+Outcome: Y safely bought seven balls but was mandatory safety, so it added no
+label. The parent-dose restore repair preserved the immutable save fingerprint.
+Z then selected and completed Beedrill evolution from a genuine capture/evolve
+menu; one actual outcome fitted model61 to62. All 25 specimens remain,
+25 living/30 registered; seven balls and 209 currency. X/Y zero-row support was
+retained without labels. The current milestone closed 3/3, not all of Phase 3.
+[Audit](../audits/red-collection-prerequisites-learning-2026-09-07.md).
+[Next plan](2026-09-07-retained-collection-chain-plan.md).
+
+The initial two-skills-means-model-choice assumption below was falsified before
+input: zero capture items trigger unchanged mandatory resupply. That justified
+one supply bridge before Z; no safety threshold or learning admission was relaxed.
 
 Started September 7, 19:24 UTC; reassess 20:24 UTC, stop by 21:24 UTC.
 The current Hyper Potion sale is unavailable: four remain, below its unchanged

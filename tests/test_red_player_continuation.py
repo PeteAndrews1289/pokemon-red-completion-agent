@@ -265,7 +265,11 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
 
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", runtime)
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
-    monkeypatch.setattr(runner, "_player_observer", lambda *_: observe)
+    def player_observer(*_args, completion_dose=False):
+        assert completion_dose is False  # This historical fixture predates completion dose.
+        return observe
+
+    monkeypatch.setattr(runner, "_player_observer", player_observer)
     if damage is None:
         runner._verify_continuation_restore(readiness, emulator)
     else:

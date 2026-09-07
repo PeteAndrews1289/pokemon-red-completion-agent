@@ -136,7 +136,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         f"{percentage}%</text>"
     )
     text(82, 495, f"{done} of {len(items)} acceptance items verified", "body")
-    text(82, 529, "Not Red completion. Not a time estimate.", "small muted")
+    text(82, 529, "Checklist only. Not phase completion or a time estimate.", "small muted")
     for i, item in enumerate(items):
         y = 342 + i * 44
         color = "#57dfb1" if item["done"] else "#8594ad"

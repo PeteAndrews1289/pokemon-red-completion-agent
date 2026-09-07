@@ -36,7 +36,7 @@ def test_current_graphic_and_accessible_page_are_reproducible(project):
     ElementTree.fromstring(svg)
     assert "40%" in svg and "32 goal-value examples" in svg
     assert "PHASE 02" in svg and "not demonstrated" in svg
-    assert "Not Red completion. Not a time estimate." in svg
+    assert "Checklist only. Not phase completion or a time estimate." in svg
     assert "Transfer and learn Crystal" in svg
     assert "cross-game living Dex" in svg
     (project / SVG).write_text((project / SVG).read_text() + "<!-- stale -->")
