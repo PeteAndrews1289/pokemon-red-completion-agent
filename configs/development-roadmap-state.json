@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-resource-recovery-closeout",
+  "as_of_session": "2026-09-07-optional-recovery-learning",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+      "evidence": "docs/evidence/red-optional-recovery-learning-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -216,6 +216,12 @@
       "result": "Cross-box retrieval demonstrated; recovery repair passed154 checks. V successor has two game goals but zero model scores; no new play or fit. Model60 and2/3 unchanged.",
       "deviation": "Stopped before deterministic fallback. The next priority is compatible optional-recovery model coverage, not another support replay; no stage exits changed.",
       "next": "Version the optional-recovery projection, preserve historical decisions, then one genuine V-successor choice and fit."
+    },
+    {
+      "session": "2026-09-07-optional-recovery-learning",
+      "result": "Recovery v3 preserved historical predictions. W healed Metapod from 5 to 18 HP and fitted outcome 61, preserving 25 specimens and V support. No XP or collection gain.",
+      "deviation": "The actual exploratory choice was healing, not evolution. Kept the productive-collection criterion open:2/3 unchanged. Bounded slow retired-campaign regression and checked active callers separately.",
+      "next": "One bounded productive evolution from W/model61, then genuine automatically enumerated owned-precursor alternatives. No reset, teacher factory or unsupported fallback."
     }
   ],
   "closed_milestones": [

@@ -11,8 +11,8 @@ from pokemon_red_completion.red_player_training_plan import (
 )
 
 
-def completion_plan():
-    original = _plan(SimpleNamespace(model_sha256="1" * 64))
+def completion_plan(feature_version=1):
+    original = _plan(SimpleNamespace(model_sha256="1" * 64, feature_version=feature_version))
     continuation = continue_red_player_training(
         original,
         capture=SimpleNamespace(state_sha256="2" * 64, envelope_sha256="3" * 64),
@@ -25,13 +25,19 @@ def completion_plan():
     return original, continuation, declare_completion_dose(continuation)
 
 
-def test_completion_dose_is_new_plan_and_preserves_old_normalization():
-    original, continuation, complete = completion_plan()
+@pytest.mark.parametrize("feature_version", [1, 2, 3])
+def test_completion_dose_is_new_plan_and_preserves_old_normalization(feature_version):
+    original, continuation, complete = completion_plan(feature_version)
     assert original.maximum_actions == continuation.maximum_actions == 6000
     assert original.maximum_frames == continuation.maximum_frames == 600000
     assert complete.maximum_actions == 30000
     assert complete.maximum_frames == 3000000
     assert len({p.plan_sha256 for p in (original, continuation, complete)}) == 3
+    assert (
+        original.document["behavior_policy_id"]
+        == continuation.document["behavior_policy_id"]
+        == complete.document["behavior_policy_id"]
+    )
     assert dict(complete.document)["continuation_checkpoint_sha256"] == "4" * 64
     with pytest.raises(ValueError, match="authenticated continuation"):
         declare_completion_dose(original)

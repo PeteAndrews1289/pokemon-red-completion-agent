@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify optional recovery as a versioned model choice while preserving old vectors, predictions and trajectory replay; then one actual V-successor choice and fit.
+- Next decision: One bounded evolution continuation from W/model61, honestly zero-row if forced; then automatic owned-precursor alternatives and a productive model-selected collection outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model60 retains60outcomes/23successful. V was a zero-row forced evolution bridge: box access worked, recovery failed before XP.23living/25specimens/28registered preserved; Metapod4 is now in party,HP5/18. No new model play or fit. |
+| Authority now | Model61 retains61outcomes/24successful. W selected optional healing with probability0.79605, restored Metapod5to18HP, and fitted one actual outcome. All60prior rows and original V zero-row support retained.23living/25specimens/28registered; no XP or evolution. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the exact V menu produce two model scores without weakening mandatory recovery or changing any historical model prediction or recorded decision? |
+| Cheapest falsifier | Can the healed W continuation finish its already-declared evolution without a retry, then expose two real collection objectives instead of prescribing every nested target? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-resource-recovery-closeout** · status **active** · evidence [falsification](docs/evidence/red-resource-recovery-closeout-2026-09-07.json)
+**2026-09-07-optional-recovery-learning** · status **active** · evidence [falsification](docs/evidence/red-optional-recovery-learning-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Use already-owned evolution precursors when capture supplies are unavailable; preserve the living collection and measured preparation costs. |
-| Learning output | V536actions38268frames,zero XP battles,zero learned decisions/examples. All25specimens retained; model60 unchanged. |
-| Authority delta | None: deterministic singleton support, not an imitation target or model decision. |
-| Transfer result | Actual cross-box rotation/retrieval passed; recovery failed. Four-facing and nonlead-healing ROM-free tests qualify the native repair, not cross-game performance. |
-| Blocker | Actual V successor has evolve/restore available, but restore is not in the learned option mapping. The policy returns deterministic_unsupported with zero scores. No W input or fit. |
-| Decision | Stop before fallback. Box access is demonstrated and recovery is qualified; the next session must increase model choice coverage, not repeat deterministic logistics. Local2/3 unchanged. |
-| Next session | Qualify optional recovery as a versioned model choice while preserving old vectors, predictions and trajectory replay; then one actual V-successor choice and fit. |
-| Next falsifier | Can the exact V menu produce two model scores without weakening mandatory recovery or changing any historical model prediction or recorded decision? |
-| Stop condition | V and all earlier attempts consumed. No W declared or executed. Preserve V support; stop on fallback, relabelled old rows, weakened safety or reset-funded progress. |
+| Product alignment | Learn when to restore the party while preserving experience and living specimens, then return to useful collection work. |
+| Learning output | One successful recovery choice:48actions4056frames; one real fit60to61.24successful examples,51distinct selected rows; all25specimens preserved. |
+| Authority delta | Optional recovery is now a prospectively versioned scored action. One actual sampled recovery choice was executed and fitted; mandatory safety is unchanged. |
+| Transfer result | ROM-free pressure and ordering variants plus exact historical replay passed. Live result is one same-lineage Red recovery, not independent advantage or cross-game transfer. |
+| Blocker | The healed successor offers only evolution, so its next bridge is forced and cannot count as another learned choice. Nested evolution targets remain manually declared. |
+| Decision | Recovery-learning session complete. Retain W/model61, close no collection criterion for healing alone; next test productive evolution and dynamic collection objectives. Local2/3 unchanged. |
+| Next session | One bounded evolution continuation from W/model61, honestly zero-row if forced; then automatic owned-precursor alternatives and a productive model-selected collection outcome. |
+| Next falsifier | Can the healed W continuation finish its already-declared evolution without a retry, then expose two real collection objectives instead of prescribing every nested target? |
+| Stop condition | W and every earlier attempt consumed. No reset or rewritten V behavior. One forced bridge at most before genuine objective alternatives; stop on no XP, specimen loss or repeated recovery without progress. |
 
 ### Stop conditions
 

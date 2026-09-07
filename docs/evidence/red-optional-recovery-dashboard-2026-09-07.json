@@ -1,0 +1,145 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "One model-guided optional recovery choice from the retained Red training save; original V zero-row support preserved.",
+  "session_evidence": "docs/evidence/red-optional-recovery-learning-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 48,
+    "frames": 4056,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-optional-recovery-20260907-w-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "dc5541e41e4d96a80f39eb0b63bd55da4b8ca1a8db7f5f82c91fc71243d2a547",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 51,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 61,
+      "successful_examples": 24,
+      "total_examples": 61,
+      "train_dataset_sha256": "ba90a28183f1b729ad8a6e24a6aff0bba811f2f6ea9d1ed37eb1a8839a63f45c",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.010700155033064132,
+      "weighted_mse_before": 0.024762219079778377
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "7fb9cfa283c392b204c1f68f68754127e5c9229eac521bebe7787a1b3a551e6f",
+      "file_sha256": "203bd353f5ed2f361a93b32808f6e6fc42bc9fc892cbc971d9e637c976083603",
+      "independent_evaluation": false,
+      "model_sha256": "0ad8b42ff07ee3380192535db45bb5f7d13c4a98ce9450b21dd47630fee43beb",
+      "prior_model_sha256": "0fcdf3f5bdbc7cc33875d38781e9e2d59292399ed0ee5c4032a9b3f654327c33",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 61,
+      "source_bundle_sha256": "cb4b33e0f5cf6fdcfe309befb2ae64e726bf0bb06e101cb16d29a6b1fd817343",
+      "source_commit": "960fac1606f05e2a4eeee0e354786c42e38f7164"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0872229511470253,
+        0.0000060986210880241106,
+        0.000034684133628607266,
+        0.004295414283644929,
+        0.003226602199360146,
+        0.0013083766702791082,
+        0.00041708324991734187,
+        9.555343025860184e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 61,
+      "total_examples": 61,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010723573982138449
+    },
+    "regional_source_examples": 12,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08722313095687356,
+        0.000005139586508447341,
+        0.000034683818120157394,
+        0.0041880826605712514,
+        0.0031483333404550965,
+        0.0012884995604878179,
+        0.0004125730569337991,
+        9.523176270204159e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 61,
+      "total_examples": 61,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010700155033064129
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "The deterministic healing skill spent one Hyper Potion for 13 HP. The outcome records this resource cost, but prospective cost was zero and item selection was not learned.",
+    "One recovery observation does not establish general recovery competence or independent advantage.",
+    "Only high-level choice is learned; mechanics remain deterministic.",
+    "No XP, capture or evolution occurred. The post-withdrawal native evolution repair remains ROM-free qualified, not live-validated by this healing episode.",
+    "The next nested evolution objective is still explicitly declared, not autonomously selected from all available collection needs."
+  ],
+  "next_session": "Verify one bounded useful evolution from the actual healed save, then expose competing owned-precursor objectives instead of manually prescribing every nested target.",
+  "current_limitation": "Recovery learned from one actual outcome; collection milestone remains2/3. Healthy Metapod4, all25specimens preserved, zero balls109currency. Only evolution is currently available, so the next bridge is not a learned choice."
+}

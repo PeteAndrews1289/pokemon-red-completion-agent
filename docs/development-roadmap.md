@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery-closeout**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-optional-recovery-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Storage-safe capture preparation ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
 - [ ] Useful varied outcome played and fitted ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
 
-Current model: **60 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **61 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json)
+[Current evidence](../docs/evidence/red-optional-recovery-learning-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-optional-recovery-learning
+
+Recovery v3 preserved historical predictions. W healed Metapod from 5 to 18 HP and fitted outcome 61, preserving 25 specimens and V support. No XP or collection gain.
+
+**Deviation:** The actual exploratory choice was healing, not evolution. Kept the productive-collection criterion open:2/3 unchanged. Bounded slow retired-campaign regression and checked active callers separately.
+
+**Next:** One bounded productive evolution from W/model61, then genuine automatically enumerated owned-precursor alternatives. No reset, teacher factory or unsupported fallback.
 
 ### 2026-09-07-resource-recovery-closeout
 

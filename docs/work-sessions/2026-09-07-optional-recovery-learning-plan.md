@@ -90,7 +90,21 @@ No W gameplay, proposal, bootstrap publication or fit exists at this point.
    not close merely because a recovery model was initialized or one extra row
    was fitted. Require the original useful varied outcome criterion.
 
-## Secondary findings, not prerequisites for another process campaign
+## Session result — completed
+
+The optional-recovery implementation was published as960fac16. W made one real
+model-guided exploratory choice between healing and evolution, selected healing,
+and succeeded in48actions/4056frames. Its outcome was fitted into model61 while
+preserving all60prior rows and V's original zero-row support. All25 specimens
+survived; Metapod recovered from5/18 to18/18HP. No XP or evolution occurred.
+The deterministic item skill spent one Hyper Potion for13HP; that observed
+resource cost is recorded, but prospective cost and item selection need improvement.
+Read-only save verification passed. No successor or background gameplay is running.
+The collection milestone remains2/3; the
+[next session](2026-09-07-owned-precursor-choice-plan.md) and
+[audit](../audits/red-optional-recovery-learning-2026-09-07.md) record the boundaries.
+
+## Remaining secondary findings
 
 - Capture quotes currently cover Mart purchases, not capture-item scarcity.
   The selected acquisition advertised zero resource cost. Plan an explicit

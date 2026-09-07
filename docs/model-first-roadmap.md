@@ -1,21 +1,34 @@
 # Model-first development roadmap
 
 
-## In progress — optional recovery without losing old experience
+## Current — optional recovery played and fitted; model61
 
-The September 7 session resumed at 18:00 UTC. Native v3 can score optional healing
-alongside productive goals; emergency recovery remains deterministic. Two new
-columns append to the frozen legacy vectors. Actual read-only validation reopened
-all 60 retained examples and replayed all 35 native episodes: 24 excluded decisions
-remain excluded, and every historical candidate prediction is exactly unchanged.
-This is compatibility evidence, not learned recovery or new gameplay.
+W's model-guided exploratory choice selected healing over evolution with probability
+0.79605. It succeeded in 48 actions / 4,056 frames: level-4 Metapod healed from 5/18 to 18/18 HP.
+All 25 specimens / 23 living species / 28 registrations survived; no XP, capture or evolution.
+The fit from 60 to 61 outcomes preserved every original row and V's zero-row support
+under its original behavior model: 24 successful examples, 51 distinct selected rows.
+Model61 has not played. The deterministic healing skill spent one Hyper Potion for
+13 HP; that cost was recorded, but choosing the item was not learned.
 
-V/model60 remains the saved endpoint. Next publish the qualified initialization,
-inspect V without input, and collect one genuine model-policy outcome. Retain V's
-original zero-row support using its original behavior model in the mixed-version
-fit. Do not rerun V or relabel an unsupported choice as training.
-[Working plan](work-sessions/2026-09-07-optional-recovery-learning-plan.md). Local storage-safe varied collection stays 2/3.
-Codex owns implementation; no outside reviewer or subagent is active.
+The v3 option representation preserves old layouts and predictions exactly. Its
+new recovery columns were initialized, then updated from one real outcome—not a
+claim of general recovery competence. Mandatory safety remains deterministic.
+The authenticated W successor offers only evolution; it is a forced bridge with
+zero model queries, not another learned choice. W and all earlier attempts are
+consumed. No successor, full replay, sealed Red or Crystal execution is started.
+
+[Session audit](audits/red-optional-recovery-learning-2026-09-07.md).
+[Next plan](work-sessions/2026-09-07-owned-precursor-choice-plan.md):
+at most one productive evolution bridge from the healthy save, then automatically
+enumerated, genuinely competing owned-precursor targets. Current collection milestone
+stays2/3; healing does not replace its useful varied-collection criterion.
+
+Narrative: the model gained a real new choice without forgetting earlier experience.
+The next bottleneck is useful goal breadth, not another teacher or a larger checklist.
+Codex audited and published the work; no external review or subagent was invoked.
+The short run is finished; the dashboard shows the saved outcome. No background
+gameplay or coding continuation is scheduled. Older sections below are historical.
 
 ## Historical — V retrieved the precursor; recovery repair qualified
 
