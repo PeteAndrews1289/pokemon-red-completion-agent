@@ -1184,6 +1184,7 @@ def _mart_provider(
             ItemId(_integer(sale, "item_id")), _integer(sale, "quantity"),
             _integer(sale, "minimum_retained"),
         ) if sale is not None else None),
+        affordable_ball_purchase=parameters.get("affordable_ball_purchase", False) is True,
     )
 
 

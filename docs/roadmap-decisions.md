@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## September7 — resource integration closed; practical affordability next
+
+N's new Route10 capture and fit54 meet the unchanged productive-follow-up criterion:
+resource-aware regional checklist3/3. This does not close sustained Red play. The next
+prospective checklist is affordable purchase qualification, real resource/helper restoration,
+and a productive fresh continuation. Three status attempts yielded zero verified sleep;
+all four balls were spent. Neither capture-efficiency advantage nor renewable income is
+claimed. Stage IDs and full roadmap exits remain unchanged.
+
 ## September7 — native resource choice works; capture preparation is the blocker
 
 Regional integration closed5/5 after one actual capture and four fitted failures.

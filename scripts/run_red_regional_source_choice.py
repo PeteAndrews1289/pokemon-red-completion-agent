@@ -81,18 +81,21 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
         if outcome is None or terminal is None:
             raise ValueError("regional ancestor lacks its settled outcome")
         joined = ready.private_root.open_episode(episode_id)
+        metadata = cast(dict[str, object], joined.read_header()["metadata"])
         if (
             terminal.summary.record_sha256 != checkpoint_sha
             or outcome.read()["terminal_checkpoint_sha256"] != checkpoint_sha
             or outcome.read()["choice_record_sha256"] != choice.summary.record_sha256
             or outcome.read()["manifest_sha256"] != joined.manifest_sha256
-            or joined.read_header()["metadata"].get("regional_choice_record_sha256")
+            or metadata.get("regional_choice_record_sha256")
             != choice.summary.record_sha256
         ):
             raise ValueError("regional ancestor history binding differs")
         document = choice.read()
-        selected = document["candidates"][document["selection"]["selected_candidate_index"]]
-        steps = terminal.read()["terminal_result"]["steps"]
+        candidates = cast(list[dict[str, Any]], document["candidates"])
+        selection = cast(dict[str, int], document["selection"])
+        selected = candidates[selection["selected_candidate_index"]]
+        steps = cast(dict[str, Any], terminal.read()["terminal_result"])["steps"]
         if len(steps) != 1 or steps[0]["status"] not in {"succeeded", "failed"}:
             raise ValueError("regional ancestor did not settle one acquisition")
         step = steps[0]
@@ -196,7 +199,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         profile_bytes = build_red_goal_context_profile_payload(
             profile_id=candidate.profile.profile_id,
             providers=tuple(
-                (spec.kind, spec.mechanic, _thaw(spec.parameters))
+                (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
                 for spec in candidate.profile.providers
             ),
         )
@@ -311,6 +314,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "example": example.public_dict(),
         },
     )
+    assert ready.causal_record is not None
     admitted = load_red_regional_choice_example(
         ready.private_root,
         RedRegionalChoiceInput(

@@ -12,6 +12,26 @@ def _count(value: object, name: str) -> int:
     return value
 
 
+def affordable_purchase_quantity(
+    *, available_funds: int, unit_price: int, maximum_quantity: int,
+    current_stock: int, stack_limit: int,
+) -> int:
+    """Integer-only bounded quantity from actual cash and inventory headroom.
+
+    Zero means no legal purchase. No borrowing, implied sale, replenishment,
+    desired outcome or model score participates in these known economic facts.
+    """
+    for name, value in (
+        ("funds", available_funds), ("unit price", unit_price),
+        ("maximum quantity", maximum_quantity), ("current stock", current_stock),
+        ("stack limit", stack_limit),
+    ):
+        _count(value, name)
+    if not unit_price or not maximum_quantity or not stack_limit or current_stock > stack_limit:
+        raise ValueError("affordable purchase bounds differ")
+    return min(maximum_quantity, available_funds // unit_price, stack_limit - current_stock)
+
+
 @dataclass(frozen=True, slots=True)
 class GoalResourceReserve:
     """An interchangeable resource class, without item or title identity."""

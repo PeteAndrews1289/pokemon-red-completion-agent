@@ -124,6 +124,14 @@ class RedResourceGoalRouter:
                     opportunity, unavailable_reason=availability.unavailable_reason
                 )
                 continue
+            if (
+                isinstance(provider, RedMartResupplyGoalProvider)
+                and provider.affordable_ball_purchase
+            ):
+                fixed_provider = provider.affordable_provider(observation)
+                if fixed_provider is None:
+                    raise RedResourceGoalRoutingError("available purchase lost its fixed quote")
+                provider = fixed_provider
             plan = self._plan(spec, fresh)
             if plan is None:
                 continue

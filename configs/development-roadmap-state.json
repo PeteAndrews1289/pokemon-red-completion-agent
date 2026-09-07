@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-regional-resource-goals-closeout",
+  "as_of_session": "2026-09-07-affordable-continuation",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
+      "evidence": "docs/evidence/red-capture-status-result-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Resource-aware regional play",
+    "title": "Affordable sustained continuation",
     "items": [
       {
-        "id": "parent-authority",
-        "label": "Parent retains capture/resupply choice",
+        "id": "affordable-quote",
+        "label": "Affordable purchase and exact cost qualified",
         "done": true,
-        "evidence": "docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json"
+        "evidence": "docs/evidence/red-affordable-supply-qualification-2026-09-07.json"
       },
       {
-        "id": "parent-outcome",
-        "label": "Played native goal outcome fitted",
-        "done": true,
-        "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
+        "id": "restored-resources",
+        "label": "Real resources/helper readiness restored",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "parent-continuation",
-        "label": "Productive post-fit continuation",
+        "id": "productive-affordable-followup",
+        "label": "Fresh productive model continuation",
         "done": false,
         "evidence": null
       }
@@ -144,6 +144,18 @@
       "result": "K model-selected resupply succeeded; L/M source searches failed. Model50 to53,18successful outcomes;19living/21specimens,4balls1109currency. Checklist2/3; productive follow-up remains open.",
       "deviation": "Stopped after two declared failed post-resupply searches. No consumed retry or stage exit change. Species-listed capture helper is a practical blocker.",
       "next": "Inspect actual stored catch support and qualify reusable capture preparation; no unchanged ball-only search."
+    },
+    {
+      "session": "2026-09-07-capture-status-closeout",
+      "result": "N selectedRoute10, capturedVoltorb16 and fitted53 to54.20living/22specimens,zero losses. Resource-aware checklist3/3 closed.",
+      "deviation": "Three status attempts,zero verified status successes; all four balls spent. No catch-efficiency claim. Stage exits unchanged.",
+      "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
+    },
+    {
+      "session": "2026-09-07-affordable-continuation",
+      "result": "Affordable-continuation checklist1/3: exact bounded purchase qualified with266 relevant tests. Model54 and N retained; no new gameplay yet.",
+      "deviation": "Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.",
+      "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
     }
   ],
   "closed_milestones": [
@@ -218,6 +230,31 @@
           "label": "Variation, costs and interventions",
           "done": true,
           "evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-capture-status-closeout",
+      "stage": "sustained-red",
+      "title": "Resource-aware regional play",
+      "items": [
+        {
+          "id": "parent-authority",
+          "label": "Parent retains capture/resupply choice",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json"
+        },
+        {
+          "id": "parent-outcome",
+          "label": "Played native goal outcome fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
+        },
+        {
+          "id": "parent-continuation",
+          "label": "Productive post-fit continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-capture-status-result-2026-09-07.json"
         }
       ]
     }

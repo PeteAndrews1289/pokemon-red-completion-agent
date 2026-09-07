@@ -1,5 +1,14 @@
 # Current agent handoffs
 
+## Current — model54 and N are the retained endpoint
+
+N captured Voltorb16 on model-selected Route10, preserving22specimens/20living species.
+Fit54 retains all53 earlier rows,19successful. Exact restore passed;zero balls1109currency,
+injured Drowzee helper. Three Hypnosis attempts but zero observed sleep successes; no efficiency
+claim. Resource-aware checklist3/3 closed; affordable continuation0/3 starts prospectively.
+Codex owns work through10:57UTC. No external agents invoked; future audits should challenge
+quotes, resource sustainability, actual status observations and support-versus-learning credit.
+
 ## Current — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;

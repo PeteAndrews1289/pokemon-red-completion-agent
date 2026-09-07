@@ -1,5 +1,18 @@
 # Handoff
 
+## Current — model54; productive follow-up closed, affordable continuation next
+
+N selected Route10 and caught Voltorb16:1263actions76296frames,20living species/22specimens,
+25registered and zero losses. Exact restore passed. Fit53→54 retains all53 prior rows,
+19successful total. Model54 has not played. PC support executed once, Hypnosis attempted
+three times, **zero status successes observed**; all four balls spent. Do not claim sleep
+improved capture efficiency. Cash1109 remains and the helper is injured.
+
+Resource-aware regional checklist closes3/3, not sustained-play/full-game completion.
+The next checklist is1/3: affordable purchasing is qualified locally; actual resource/helper restoration
+and a productive fresh model continuation. No hidden item sale, cash injection or reset.
+[Evidence](docs/evidence/red-capture-status-result-2026-09-07.json).
+
 ## Current — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;

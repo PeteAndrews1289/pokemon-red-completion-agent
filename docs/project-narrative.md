@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — a real capture, and an important qualification
+
+The learner selected Route10 and captured a level16 Voltorb. Its continuing save now contains
+20living species and22specimens; the new fit retains54 outcomes, including earlier failures.
+A reusable support skill inspected actual stored moves, retrieved a sleep-capable helper
+through the PC, and preserved the whole collection and field-move carriers.
+
+The tempting story would be that sleep solved capture efficiency. The evidence does not say
+that: three Hypnosis attempts produced zero verified status successes, and the catch spent
+all four remaining balls. What worked was the connected model-choice→PC→capture→retained-save
+loop. Affordable resupply and better capture efficiency are the next practical work, not a
+reason to claim autonomous full-game competence or cross-title transfer.
+
 ## Current — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;

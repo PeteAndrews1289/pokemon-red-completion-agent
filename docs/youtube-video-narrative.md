@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 segment — show the catch, disclose the cost
+
+Show the learned Route10 destination choice, PC helper substitution, and the new Voltorb16
+in the retained box. Overlay:20living species /22specimens;54retained training outcomes.
+Keep previous failures visible. This closes the small resource-aware integration checklist,
+not the full Pokémon project.
+
+Narration: “The helper knew Hypnosis because we read its actual moves—not because its species
+was on a special list. But none of the three attempts gave us verified sleep, and the catch
+used our last four balls. The system completed the sequence; we have not proved the helper
+made it more efficient.” Next visual:zero balls,1109cash, a fixed ten-ball purchase rejected;
+explain the affordable-resupply dependency without pretending it is a completed learned skill.
+
 ## Current — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;

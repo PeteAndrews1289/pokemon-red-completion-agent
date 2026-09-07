@@ -1,5 +1,22 @@
 # Capture preparation engineering — September 7
 
+## Actual N result and reorientation
+
+N completed a model-selected Route10 acquisition: Voltorb16,1263actions76296frames.
+The exact terminal restored20living species/22specimens/25registered,zero losses,
+zero balls and1109currency. One PC preparation and three status attempts executed;
+**zero successful status observations**. Hypnosis PP20→17 and helper HP15 are observed.
+The catch used all four balls: no capture-efficiency improvement is established.
+
+Fit53→54 retains all53 earlier rows,19successful outcomes total. The final model has
+not played. The small resource-aware checklist closes3/3, while affordable continuation
+starts0/3; sustained-play and later stage exits are unchanged.
+[Path-free evidence](../evidence/red-capture-status-result-2026-09-07.json).
+
+Next qualify a smaller affordable purchase from actual funds, restore helper readiness,
+and try another useful model-selected continuation. Do not retry N or inject resources.
+The following section preserves the pre-execution engineering checkpoint.
+
 ## Scope and claim boundary
 
 This is deterministic skill maintenance unblocking model53's existing acquisition and

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -567,6 +567,7 @@ class RedMartResupplyGoalProvider:
     wait_frames: int = DEFAULT_LAVENDER_TIMING.wait_frames
     kind: GoalKind = GoalKind.RESUPPLY
     funding_sale: RedMartSurplusSale | None = None
+    affordable_ball_purchase: bool = False
 
     def __post_init__(self) -> None:
         if not isinstance(self.map_id, MapId):
@@ -588,8 +589,43 @@ class RedMartResupplyGoalProvider:
             raise ValueError("Mart cannot sell and rebuy the same resource")
         if type(self.wait_frames) is not int or self.wait_frames <= 0:  # noqa: E721
             raise ValueError("Mart wait_frames must be a positive integer")
+        if type(self.affordable_ball_purchase) is not bool or (
+            self.affordable_ball_purchase and (
+                len(self.purchases) != 1 or self.purchases[0].item not in _ORDINARY_CAPTURE_ITEMS
+                or self.funding_sale is not None
+            )
+        ):
+            raise ValueError("affordable Mart support needs one ordinary ball and no sale")
+
+    def affordable_provider(
+        self, observation: RedGoalObservation,
+    ) -> RedMartResupplyGoalProvider | None:
+        """Freeze an exact purchase before transport; never increase it on arrival."""
+        if not self.affordable_ball_purchase:
+            return self
+        from pokemon_red_completion.goal_resource_quote import affordable_purchase_quantity
+
+        money = observation.raw.player_money
+        if money is None:
+            return None
+        purchase = self.purchases[0]
+        quantity = affordable_purchase_quantity(
+            available_funds=money, unit_price=purchase.unit_price,
+            maximum_quantity=purchase.quantity,
+            current_stock=dict(observation.raw.bag_items or ()).get(int(purchase.item), 0),
+            stack_limit=99,
+        )
+        return None if not quantity else replace(
+            self, purchases=(replace(purchase, quantity=quantity),), affordable_ball_purchase=False,
+        )
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
+        if self.affordable_ball_purchase:
+            fixed = self.affordable_provider(observation)
+            return (
+                RedGoalBindingOffer.unavailable(self.kind, GoalUnavailableReason.MISSING_RESOURCE)
+                if fixed is None else fixed.offer(observation)
+            )
         start = observation.raw
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
@@ -711,6 +747,12 @@ class RedMartResupplyGoalProvider:
     def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check actual resources without claiming the player is at the clerk."""
 
+        if self.affordable_ball_purchase:
+            fixed = self.affordable_provider(observation)
+            return (
+                RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
+                if fixed is None else fixed.resource_availability(observation)
+            )
         inventory = dict(observation.raw.bag_items or ())
         new_slots = sum(purchase.item not in inventory for purchase in self.purchases)
         if len(inventory) + new_slots > 20:
@@ -739,6 +781,11 @@ class RedMartResupplyGoalProvider:
         This neither changes quantities nor sends input. Execution still checks
         exact bag and money deltas independently at the actual clerk boundary.
         """
+        if self.affordable_ball_purchase:
+            fixed = self.affordable_provider(observation)
+            if fixed is None:
+                raise RedGoalSkillError("no affordable Mart purchase can be quoted")
+            return fixed.resource_quote(observation)
         funds = observation.raw.player_money
         if funds is None or not self.resource_availability(observation).executable:
             raise RedGoalSkillError("cannot quote an unavailable Mart purchase")

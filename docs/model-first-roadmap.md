@@ -1,5 +1,19 @@
 # Model-first development roadmap
 
+## Current — affordable continuation after model54
+
+The resource-aware regional checklist is closed3/3: N selected Route10, caught Voltorb16
+and fitted53→54, preserving every earlier row and22specimens.20living species,25registered.
+This is a bounded integration milestone, not sustained-play, story or living-dex completion.
+
+1. Qualify a generic affordable ball purchase from actual funds, with exact quoted costs.
+2. Restore real supplies/helper readiness from N's zero-ball,1109-currency endpoint.
+3. Continue the existing learner through a fresh useful collection choice; retain failures.
+
+New local checklist0/3. N used all four balls and recorded no successful sleep despite three
+attempts. Catch efficiency and renewable income remain unresolved; do not call the economy
+sustainable. Long-term Red→compatible hack→Crystal goals and stage exits are unchanged.
+
 ## Current — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;

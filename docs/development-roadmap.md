@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-resource-goals-closeout**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-affordable-continuation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-aware regional play: 2/3 acceptance items (67%).**
+**Affordable sustained continuation: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Parent retains capture/resupply choice ([evidence](../docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json))
-- [x] Played native goal outcome fitted ([evidence](../docs/evidence/red-regional-resource-goals-result-2026-09-07.json))
-- [ ] Productive post-fit continuation
+- [x] Affordable purchase and exact cost qualified ([evidence](../docs/evidence/red-affordable-supply-qualification-2026-09-07.json))
+- [ ] Real resources/helper readiness restored
+- [ ] Fresh productive model continuation
 
-Current model: **53 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **54 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
+[Current evidence](../docs/evidence/red-capture-status-result-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,22 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-affordable-continuation
+
+Affordable-continuation checklist1/3: exact bounded purchase qualified with266 relevant tests. Model54 and N retained; no new gameplay yet.
+
+**Deviation:** Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.
+
+**Next:** Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.
+
+### 2026-09-07-capture-status-closeout
+
+N selectedRoute10, capturedVoltorb16 and fitted53 to54.20living/22specimens,zero losses. Resource-aware checklist3/3 closed.
+
+**Deviation:** Three status attempts,zero verified status successes; all four balls spent. No catch-efficiency claim. Stage exits unchanged.
+
+**Next:** Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.
 
 ### 2026-09-07-regional-resource-goals-closeout
 

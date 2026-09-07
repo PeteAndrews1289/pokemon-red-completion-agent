@@ -1,5 +1,27 @@
 # Regional continuation — six-hour development cycle
 
+## Session7 — affordable continuation from N/model54
+
+Session6 completed its bounded falsifier: model-selected Route10 capture, Voltorb16,
+20living/22specimens, fit54 retaining all53 earlier outcomes. Resource-aware checklist3/3
+closed. Three status attempts,zero observed successes,all four balls spent; no efficiency
+claim. Exact restore passed. N is consumed; zero balls1109currency and an injured helper remain.
+
+1. **Capability:** purchase a bounded affordable reserve from actual available cash, rather
+   than reject an otherwise useful partial restock because a fixed batch is unaffordable.
+2. **Learned authority:** maintenance unblocks model54's named next sustained resource and
+   collection choices. Forced support steps are excluded; fit only genuinely eligible outcomes.
+3. **Transfer test:** vary money, stack capacity and quantity bounds in ROM-free cases, then
+   verify the actual saved-state quote and exact in-game resource deltas.
+4. **Cheapest falsifier:** can1109currency buy five200-currency balls without hidden sales,
+   resource injection, quote drift or exceeding the declared batch cap?
+5. **Time box:** ninety minutes from09:15UTC or the overall10:57UTC closeout, whichever is earlier.
+6. **Stop condition:** unsafe/inconsistent costs, inventory loss, absent readiness or no
+   executable next option at the time box. No repeated empty-resource searches.
+
+New local checklist0/3: affordability qualification, actual restored resources/readiness,
+then a productive fresh model continuation. Do not confuse this with full sustained play.
+
 ## Session6 — capture preparation, after K/L/M stop
 
 K model-selected resupply succeeded and fitted50→51. L/M failed destination searches

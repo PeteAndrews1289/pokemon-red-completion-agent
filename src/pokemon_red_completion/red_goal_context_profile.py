@@ -233,6 +233,26 @@ def build_red_goal_context_profile_payload(
     return payload
 
 
+def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Explicit cash-only affordability transition, preserving all other skills."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            parameters.pop("funding_sale", None)
+            parameters["affordable_ball_purchase"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("affordable supply requires an existing Mart skill")
+    changed = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
 def build_acquisition_replanning_profile_payload(
     profile: RedGoalContextProfile,
     *,
@@ -580,7 +600,8 @@ def _parse_parameters(
                 "player_y",
                 "interaction_direction",
                 "purchases",
-            } | ({"funding_sale"} if "funding_sale" in row else set()),
+            } | ({"funding_sale"} if "funding_sale" in row else set())
+            | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set()),
         )
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
@@ -589,6 +610,21 @@ def _parse_parameters(
         if len({item["item_id"] for item in parsed_purchases}) != len(parsed_purchases):
             raise RedGoalContextProfileError("Mart profile purchases an item twice")
         sale_fields = {}
+        affordability_fields = {}
+        if "affordable_ball_purchase" in row:
+            value = row["affordable_ball_purchase"]
+            if type(value) is not bool or (
+                value and (
+                    len(parsed_purchases) != 1
+                    or parsed_purchases[0]["item_id"] not in {
+                        int(ItemId.POKE_BALL), int(ItemId.GREAT_BALL), int(ItemId.ULTRA_BALL),
+                    } or "funding_sale" in row
+                )
+            ):
+                raise RedGoalContextProfileError(
+                    "affordable supply needs one ordinary ball/no sale"
+                )
+            affordability_fields = {"affordable_ball_purchase": value}
         if "funding_sale" in row:
             sale = row["funding_sale"]
             if not isinstance(sale, dict):
@@ -613,6 +649,7 @@ def _parse_parameters(
             ),
             "purchases": parsed_purchases,
             **sale_fields,
+            **affordability_fields,
         }
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         _exact_keys(

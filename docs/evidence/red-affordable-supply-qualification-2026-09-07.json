@@ -1,0 +1,15 @@
+{
+  "schema": "pokemon.red.affordable-supply-qualification.v1",
+  "source_bundle_sha256": "003318885aec4b722d3d9b10c0f8c62cc90e0265147f8b2810ccc5716261cfe0",
+  "focused_tests_passed": 152,
+  "broader_overlapping_tests_passed": 266,
+  "type_checked_modules": 411,
+  "repository_lint_passed": true,
+  "quantity_rule": "min(maximum_batch, available_funds // unit_price, stack_headroom)",
+  "purchase_frozen_before_transport": true,
+  "hidden_funding_allowed": false,
+  "new_gameplay": false,
+  "new_training_examples": 0,
+  "complete_suite_pass": false,
+  "independent_evaluation": false
+}

@@ -33,18 +33,18 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable.
+- Next decision: Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model62fac575 retains53 outcomes,18successful. K chose and completed resupply; L/M source searches failed. Current19 living species/21specimens,4balls1109currency. All consumed attempts preserved; model53 has not played. |
+| Authority now | Model30eca788 retains54 outcomes,19successful. N chose Route10 and caught Voltorb16:20living species/22specimens,25registered,zero balls1109currency. PC support and3status attempts executed;zero verified status successes. Model54 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup? |
-| Time box | 1 session / 4 hours |
+| Cheapest falsifier | Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice? |
+| Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-resource-goals-closeout** · status **active** · evidence [qualification](docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
+**2026-09-07-affordable-continuation** · status **active** · evidence [qualification](docs/evidence/red-capture-status-result-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The resource decision now belongs to the model. Efficient capture preparation is the named skill dependency blocking sustainable living collection. |
-| Learning output | Model50 to53: one successful native resupply and two failed destination outcomes, all prior rows retained. Resource-aware checklist2/3; productive follow-up remains open. |
-| Authority delta | Native model selected resupply over capture and executed it; one actual native row fitted. Unused source proposal received no credit. L/M source choices executed and their failures remained fitted. |
-| Transfer result | Native resupply plus varied saved-state source attempts in one lineage; no independent advantage or full-player promotion. |
-| Blocker | Two bounded post-resupply searches failed. The existing capture helper uses a three-species allowlist absent from the party; useful status support and resource-efficient preparation are not connected. |
-| Decision | Stop unchanged capture attempts after L/M. Preserve M and model53; inspect actual stored catch-support moves and qualify reusable capture preparation. |
-| Next session | Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable. |
-| Next falsifier | Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup? |
-| Stop condition | No unchanged ball-only searches after L/M. Stop on unsafe target damage, missing status evidence, collection loss or ninety minutes without executable preparation; overall closeout10:57UTC. |
+| Product alignment | The model now continues collection after resource recovery, but costly captures exhaust its finite stock. Affordable legitimate resupply is the next practical dependency. |
+| Learning output | Fit53 to54 retains all prior rows plus the successful Route10 source outcome. Resource-aware regional checklist closed3/3; affordable continuation starts0/3. |
+| Authority delta | Model53 selected the played destination. PC/status setup was deterministic support, not an extra row; parent remains excluded. |
+| Transfer result | Species-swapped capability tests and actual PC/capture composition in the same Red lineage. No independent advantage or transfer. |
+| Blocker | No balls remain. Cash buys five ordinary balls, but the existing fixed batch requires ten. The status helper is injured; no status-efficiency advantage is established. |
+| Decision | Preserve the successful N endpoint; implement the smallest generic affordability rule and resume bounded resource/collection choices. |
+| Next session | Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting. |
+| Next falsifier | Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice? |
+| Stop condition | Reassess after90 minutes without executable restoration or at10:57UTC. No injected funds, inventory loss, hidden item sales, consumed retries or unchanged resource-starved searches. |
 
 ### Stop conditions
 
