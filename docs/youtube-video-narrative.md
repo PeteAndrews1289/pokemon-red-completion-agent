@@ -2,11 +2,12 @@
 
 ## Active — regional continuation, September 7
 
-Suggested scene: the player leaves its saved position, reaches cartridge-derived grass and
-catches a new living species. Then explain the limitation: that capture was a forced bridge,
-not AI choosing between strategies. The subsequent exploration failed; both choices stayed out
-of the training corpus.17living species,19specimens,still45training examples. The next challenge
-is making useful alternatives available so the learner can actually decide what to do next.
+The character travelled, caught two new species and bought supplies—but that still did
+not mean the model had learned to choose a region. Those five decisions were deterministic,
+so none became a training example. The collection grew to18 living species/20 specimens.
+Two failed surveys showed why a local exploration option must check the local encounter
+table, not just whether the entire Pokédex is unfinished. This is the current bridge from
+working mechanics to meaningful model decisions, not a whole-game autonomous result.
 
 ## Final chapter for this milestone — a learned-policy choice that finishes
 

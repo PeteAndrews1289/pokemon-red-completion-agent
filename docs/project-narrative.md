@@ -2,12 +2,13 @@
 
 ## Active — regional continuation, September 7
 
-The next test exposed the difference between adding mechanics and giving the learner choices.
-A cartridge-derived source transition let the saved player catch another living species on
-Route11, preserving19specimens. But it was the only available option, and the next menu offered
-only exploration plus noncritical recovery. Neither choice was eligible model training.
-The useful result is retained progress and a precise limitation: connect genuine alternatives,
-not inflate training counts with deterministic behavior. Model remains45examples.
+Regional continuation exposed a practical gap: useful components alone do not make a
+learned player. Two captures increased the retained collection from16 to18 living species,
+and a routed purchase replenished four balls without resetting the game. Yet all five
+choices were deterministic, not model-directed. We kept that distinction in the dataset:
+zero new examples, unchanged45-row model. The failed surveys exposed a local-versus-global
+knowledge bug; the repair checks cartridge grass encounters before offering exploration.
+The next learning question is real choice among useful collection opportunities.
 
 ## September7 closeout — the learner finally chose a complete evolution
 

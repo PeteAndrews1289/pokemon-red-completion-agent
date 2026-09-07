@@ -2,10 +2,11 @@
 
 ## Active — regional continuation, September 7
 
-Current six-hour cycle: regional A is consumed,17 living/19 specimens retained, model45
-unchanged. Forced capture and deterministic-unsupported exploration contributed zero fit rows.
-Codex owns the next useful-source/alternative integration. No reviewer is active; do not rerun A.
-See [session](work-sessions/2026-09-07-regional-continuation.md) and private OPERATOR for exact state.
+A/B/C consumed;18 living species/20 specimens retained, four balls and129currency after
+verified resupply. Five non-exploratory decisions yield zero new fit rows; model45 unchanged.
+Codex owns source-local discovery qualification and genuine collection choices next.
+No reviewer is active. See [session](work-sessions/2026-09-07-regional-continuation.md) and
+private OPERATOR; preserve the current save and never replay A/B/C.
 
 ## Final current — 5/5 minimal integration checks; model45
 

@@ -10,6 +10,7 @@ from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalContextProfileError,
     RedGoalMechanic,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
@@ -19,6 +20,7 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
 )
 from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridorError,
+    bind_red_local_discovery_profile,
     derive_red_living_dex_wild_corridor,
     retarget_red_wild_profile,
 )
@@ -90,6 +92,54 @@ def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():
         assert spec.parameters["maximum_legs"] == 12
         assert spec.parameters["maximum_seek_steps"] == 20
     assert retarget_red_wild_profile(moved, corridor) == moved
+
+
+def _local_discovery_profile(numbers=None):
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    params = corridor.profile_parameters()
+    if numbers is not None:
+        params["source_species_numbers"] = numbers
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="local-discovery", providers=(
+            (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+             corridor.profile_parameters()),
+            (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+            (GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY, params),
+        ),
+    ))
+
+
+def test_local_discovery_uses_cartridge_slots_not_canonical_acquisition(monkeypatch):
+    from pokemon_red_completion import gen1_cartridge as cartridge
+    monkeypatch.setattr(cartridge, "internal_to_dex", lambda _: {90: 16, 91: 13, 92: 16})
+    def tables(_, *, medium):
+        assert medium == "grass"
+        return {int(MapId.ROUTE_2): [(2, 90), (3, 91), (4, 92)],
+                int(MapId.ROUTE_11): [(9, 92)]}
+    monkeypatch.setattr(cartridge, "wild_tables", tables)
+    original = _local_discovery_profile()
+    bound = bind_red_local_discovery_profile(original, "wild:Route2:grass", b"fixture")
+    assert bound.providers[:2] == original.providers[:2]
+    assert bound.providers[2].parameters["source_species_numbers"] == (13, 16)
+    assert "source_species_numbers" not in original.providers[2].parameters
+    assert bound.profile_sha256 != original.profile_sha256
+    with pytest.raises(RedLivingDexWildCorridorError, match="source differs"):
+        bind_red_local_discovery_profile(original, "wild:Route11:grass", b"fixture")
+    # A regional retarget cannot carry stale sighting facts from its old source.
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    assert "source_species_numbers" not in retarget_red_wild_profile(
+        bound, corridor,
+    ).providers[2].parameters
+
+
+@pytest.mark.parametrize("numbers", [[], [True], [0], [152], [9, 9], [16, 9]])
+def test_profile_rejects_invalid_local_discovery_species(numbers):
+    with pytest.raises(RedGoalContextProfileError, match="local discovery species"):
+        _local_discovery_profile(numbers)
 
 
 def test_regional_retargeting_rejects_missing_survey():

@@ -707,6 +707,36 @@ def test_area_survey_reserves_master_ball_for_nonordinary_targets() -> None:
     assert offer.kind is GoalKind.ACQUIRE_SPECIES
 
 
+def test_local_discovery_refuses_exhausted_source_but_not_unseen_target() -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    provider = RedEncounterDiscoveryGoalProvider(
+        source_id="wild:Route1:grass", area_executor=_DiscoveryExecutor(reader, actions),
+        actions=actions, emulator=port, adapter=adapter, source_species_numbers=(9,),
+    )
+    observed = adapter.observe()
+    assert observed.evidence.world_knowledge.satisfaction < 1.0
+    assert provider.offer(observed).unavailable_reason is GoalUnavailableReason.NO_LEGAL_TARGET
+    assert replace(provider, source_species_numbers=(9, 16)).offer(observed).binding is not None
+    assert replace(provider, source_species_numbers=None).offer(observed).binding is not None
+    assert actions.actions_executed == 0
+
+
+@pytest.mark.parametrize("numbers", [(), (True,), (0,), (152,), (9, 9), (16, 9)])
+def test_local_discovery_rejects_invalid_species(numbers) -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    with pytest.raises(RedGoalSkillError, match="local species"):
+        RedEncounterDiscoveryGoalProvider(
+            source_id="wild:Route1:grass", area_executor=_DiscoveryExecutor(reader, actions),
+            actions=actions, emulator=port, adapter=_adapter(reader),
+            source_species_numbers=numbers,
+        )
+
+
 def test_encounter_discovery_learns_a_new_sighting_without_capturing() -> None:
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)

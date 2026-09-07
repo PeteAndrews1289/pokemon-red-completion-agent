@@ -124,3 +124,20 @@ resource recovery, preserve its terminal and stop before another wasted survey. 
 no fitting row if safety-selected. The source table confirms all local encounter species have
 already been seen; discovery currently checks global knowledge, so local exhaustion is the
 next narrow availability repair. C has not run when this correction is published.
+
+## C result and source-local discovery repair
+
+C succeeded154actions9180frames: four balls purchased for800,129currency remains,
+18living/20specimens preserved. Safety-selected,zero model predictions,zero fit rows;
+checkpointdba11f02 and manifest3a8b873f are retained. C is consumed and cannot replay.
+
+The new explicit `--discovery-source` transition derives sighting coverage from the
+cartridge's grass slots, not the canonical acquisition list and not water encounters.
+Only the discovery provider receives the local species set. Old profiles retain their
+original meaning, so restoration cannot silently change old masks. A fresh regional retarget
+clears old local coverage; explicitly derive it for the new source. ROM-free tests distinguish
+an exhausted local source from an unseen local target while global knowledge remains incomplete.
+
+Next is an action-free C restoration with this corrected menu. Do not execute a fake
+exploration alternative merely to obtain a training row. If only one useful goal remains,
+reorient to actual destination/collection alternatives rather than another forced-only episode.

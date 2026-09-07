@@ -96,6 +96,14 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-regional-continuation
 
+Two new living species retained; collection18/20. Routed supply bought four balls. Five non-exploratory choices excluded; model45 unchanged.
+
+**Deviation:** No stage-exit change. Stop repeating exhausted local exploration; qualify cartridge-local availability before pursuing genuine model alternatives.
+
+**Next:** Verify C saved-state compatibility and useful candidate choices; continue within the six-hour window.
+
+### 2026-09-07-regional-continuation
+
 In progress: regional A retained17 living/19 specimens. Forced capture succeeded; unsupported fallback exploration failed. Zero model predictions and zero new fit rows; model45 unchanged.
 
 **Deviation:** Operator-declared source transition reuses cartridge-derived corridors. The new checklist is an integration substage, not the full sustained-play exit; closed stage2 checklist preserved.

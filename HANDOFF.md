@@ -2,12 +2,13 @@
 
 ## Active — regional continuation, September 7
 
-Regional A is consumed: forced Route11 capture succeeded,16→17 living and18→19 specimens;
-then deterministic-unsupported exploration failed at64survey legs. Zero model predictions and
-zero fitting rows: model45 is unchanged. Source/profile continuation is implemented and tested,
-not learned regional selection. Checkpoint9143c3dd and exact manifest are in private OPERATOR.
-Read [active session](docs/work-sessions/2026-09-07-regional-continuation.md). Continue the six-hour
-window until10:57UTC through useful sources/real alternatives; do not replay A or old K/F.
+A/B/C are consumed. Two regional captures raised living16→18 and specimens18→20;
+C bought four balls for800, leaving129currency. All five steps were forced, safety or
+unsupported fallback: zero model predictions/fit rows, unchanged model45. Preserve
+checkpointdba11f02; exact artifacts are in private OPERATOR. Local discovery now has an
+explicit cartridge-grass coverage transition, preserving historical profile semantics.
+Next: qualify the corrected menu and connect genuine choices, not another forced-only run.
+The six-hour window ends10:57UTC. See [session](docs/work-sessions/2026-09-07-regional-continuation.md).
 
 ## Final current — minimal learning integration complete, 45 retained examples
 

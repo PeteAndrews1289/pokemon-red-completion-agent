@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority expansion. Exact replay admission excludes both non-exploratory choices; zero model predictions used.",
-        "blocker": "After one canonical capture, acquisition becomes unavailable; exploration plus noncritical recovery yields no two-option learned menu. Regional choice remains operator-declared.",
-        "decision": "Keep the new specimen and inspect the nearest useful supported source/alternative before another bounded continuation.",
+        "authority_delta": "No authority expansion. Exact admission excludes all five non-exploratory decisions; zero model predictions used.",
+        "blocker": "Useful skills execute, but region selection is operator-declared and the top-level menu lacks genuine supported alternatives. Global-only discovery offered exhausted local sightings; source-local masking is being qualified.",
+        "decision": "Preserve the resupplied terminal, qualify the corrected local menu and reorient toward real destination/collection choices rather than another forced episode.",
         "evidence": {
           "kind": "qualification",
           "path": "docs/evidence/red-regional-continuation-2026-09-07.json",
-          "sha256": "9db788cd50fae2a7795df98685611fd81bfb4d62ac2b83a804656c7996f2ed97"
+          "sha256": "352e708128a4e6015c5a79de246c73a9a606124f4218b02f2fe2ceae5e1a47e4"
         },
-        "learning_output": "No new examples or fitting. Model45 retained. A's two choices are ineligible: forced capture plus deterministic-unsupported exploration.",
+        "learning_output": "No new examples or fitting. Model45 retained; A/B/C supply five explicitly excluded non-exploratory decisions.",
         "next_falsifier": "Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting?",
         "next_session_goal": "Produce genuine model choices across useful collection opportunities and fit eligible outcomes without resetting progress.",
-        "product_alignment": "Regional transport and capture work from the retained endpoint. This is engineering progress unblocking sustained model decisions, not learned regional selection.",
+        "product_alignment": "Two regional captures and one verified purchase preserve accumulating collection progress. These are engineering support steps, not learned regional play.",
         "session_id": "2026-09-07-regional-continuation",
         "status": "active",
-        "stop_condition": "No replay of A. Reorient after90minutes without executable alternatives; stop safely at10:57UTC, preserve traces and all specimens.",
-        "transfer_result": "One same-lineage Red source transition; no independent or cross-game claim."
+        "stop_condition": "No replay of A/B/C. Reorient before90minutes without genuine model alternatives; stop safely at10:57UTC and preserve all traces/specimens.",
+        "transfer_result": "Two same-lineage Red sources and a shop transition; no independent or cross-game claim."
       },
       "learned_authority": {
-        "current": "Model7cf5f570 retains45 examples. Prior minimal integration5/5. Regional A added one species through a forced bridge, then deterministic exploration failed; zero new fit rows,17 living/19 specimens retained.",
+        "current": "Model7cf5f570 retains45 examples. Regional A/B added two species and C restored four balls; all five choices were forced/safety/fallback, zero model predictions or fit rows. Collection18 living/20 specimens.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Preserve regional A checkpoint9143c3dd (17 living/19 specimens); connect another reachable useful source and genuine model alternatives. A produced zero training rows; do not replay it.",
+      "next_decision": "Preserve C checkpointdba11f02 with18 living/20 specimens and four balls. Verify source-local discovery masking, then expose genuinely useful learned choices; do not repeat forced-only regional episodes.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -995,6 +995,7 @@ class RedEncounterDiscoveryGoalProvider:
     maximum_seek_steps: int = 2_000
     maximum_encounters: int = 72
     kind: GoalKind = GoalKind.EXPLORE
+    source_species_numbers: tuple[int, ...] | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.source_id, str) or not self.source_id:
@@ -1005,6 +1006,14 @@ class RedEncounterDiscoveryGoalProvider:
                 raise ValueError(f"{name} must be a positive integer")
         if self.boundary is not None and not callable(self.boundary):
             raise RedGoalSkillError("encounter-discovery boundary must be callable")
+        if self.source_species_numbers is not None and (
+            not isinstance(self.source_species_numbers, tuple)
+            or not self.source_species_numbers
+            or any(type(number) is not int or not 1 <= number <= 151
+                   for number in self.source_species_numbers)
+            or self.source_species_numbers != tuple(sorted(set(self.source_species_numbers)))
+        ):
+            raise RedGoalSkillError("encounter-discovery local species are invalid")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
@@ -1013,6 +1022,10 @@ class RedEncounterDiscoveryGoalProvider:
                     GoalUnavailableReason.TEMPORARILY_BLOCKED
                 )
             if current.evidence.world_knowledge.satisfaction >= 1.0:
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+            if self.source_species_numbers is not None and set(
+                self.source_species_numbers
+            ).issubset(current.collection.pokedex.seen_target_numbers):
                 return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if self.boundary is not None:
                 result = self.boundary(current)

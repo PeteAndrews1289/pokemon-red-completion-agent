@@ -2,9 +2,11 @@
 
 ## Active — regional continuation, September 7
 
-Codex owns the regional-continuation work through10:57UTC. A added one living species via a
-forced bridge and no model training rows. No outside reviewer/subagent is active. Next is useful
-source/alternative composition from A, with deterministic actions explicitly excluded from fits.
+Codex owns the regional-continuation work through10:57UTC. A/B added two living species;
+C restored four balls. All five decisions are excluded from fitting; model45 is unchanged.
+No outside reviewer or subagent is active. Next: qualify source-local discovery masking and
+expose actual collection/destination choices. Review learning claims against the retained
+traces; do not mistake deterministic support work for model authority.
 
 ## Final current — integration closed; sustained-play boundary next
 

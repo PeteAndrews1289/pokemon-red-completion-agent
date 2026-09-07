@@ -459,6 +459,10 @@ def _wild_provider(
         boundary=boundary,
         maximum_seek_steps=_integer(parameters, "maximum_seek_steps"),
         maximum_encounters=_integer(parameters, "maximum_encounters"),
+        source_species_numbers=(
+            cast(tuple[int, ...], parameters["source_species_numbers"])
+            if "source_species_numbers" in parameters else None
+        ),
     )
 
 

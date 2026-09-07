@@ -422,6 +422,11 @@ def _parser() -> argparse.ArgumentParser:
         "--supply-profile", dest="regional_transitions", type=Path, action="append",
         help="ordered private profile transition changing only the existing Mart supply skill",
     )
+    parser.add_argument(
+        "--discovery-source", dest="regional_transitions", action="append",
+        type=lambda value: f"discovery:{value}",
+        help="explicit source-local sighting coverage from the authenticated cartridge",
+    )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
         "--context-origin",
@@ -849,7 +854,7 @@ def _regional_profiles(
     )
 
     for source in sources:
-        if isinstance(source, Path):
+        if isinstance(source, Path) or source.startswith("discovery:"):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
         if not methods or any(method.kind is not RedAcquisitionKind.WILD for method in methods):
@@ -859,6 +864,16 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if isinstance(source, str) and source.startswith("discovery:"):
+            from pokemon_red_completion.red_living_dex_wild_corridor import (
+                bind_red_local_discovery_profile,
+            )
+
+            profile = bind_red_local_discovery_profile(
+                profile, source.removeprefix("discovery:"), world.rom,
+            )
+            result.append(profile)
+            continue
         if isinstance(source, Path):
             from pokemon_red_completion.red_goal_context_profile import (
                 require_resupply_only_profile_transition,

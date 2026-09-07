@@ -2,11 +2,11 @@
 
 ## Active — regional continuation, September 7
 
-The new regional integration checklist is2/5: explicit source continuation and retained
-collection gain. A's forced capture succeeded; the later unsupported fallback exploration failed.
-Model45 remains45examples, with zero new model predictions/fit rows. This does not satisfy the
-full sustained-play stage exit. Next: a genuinely useful next source/alternative from A, then
-model-selected outcomes, fit/follow-up and bounded variation. No convenient-root reset.
+Regional integration remains2/5, not full sustained-play completion. A/B retained two new
+species; C bought four balls. All five decisions were non-exploratory, so model45 remains45
+examples with no new model predictions. Source-local discovery fixes exhausted-area offers.
+Next: verify the corrected saved-state menu, then expose genuinely useful lower-level
+collection/destination choices. Do not repeat deterministic-only episodes to inflate progress.
 
 ## Final current — useful-play integration complete; sustained play next
 

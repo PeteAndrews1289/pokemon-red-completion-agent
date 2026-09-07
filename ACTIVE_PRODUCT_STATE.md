@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve regional A checkpoint9143c3dd (17 living/19 specimens); connect another reachable useful source and genuine model alternatives. A produced zero training rows; do not replay it.
+- Next decision: Preserve C checkpointdba11f02 with18 living/20 specimens and four balls. Verify source-local discovery masking, then expose genuinely useful learned choices; do not repeat forced-only regional episodes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model7cf5f570 retains45 examples. Prior minimal integration5/5. Regional A added one species through a forced bridge, then deterministic exploration failed; zero new fit rows,17 living/19 specimens retained. |
+| Authority now | Model7cf5f570 retains45 examples. Regional A/B added two species and C restored four balls; all five choices were forced/safety/fallback, zero model predictions or fit rows. Collection18 living/20 specimens. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
@@ -66,15 +66,15 @@ outputs.
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Regional transport and capture work from the retained endpoint. This is engineering progress unblocking sustained model decisions, not learned regional selection. |
-| Learning output | No new examples or fitting. Model45 retained. A's two choices are ineligible: forced capture plus deterministic-unsupported exploration. |
-| Authority delta | No authority expansion. Exact replay admission excludes both non-exploratory choices; zero model predictions used. |
-| Transfer result | One same-lineage Red source transition; no independent or cross-game claim. |
-| Blocker | After one canonical capture, acquisition becomes unavailable; exploration plus noncritical recovery yields no two-option learned menu. Regional choice remains operator-declared. |
-| Decision | Keep the new specimen and inspect the nearest useful supported source/alternative before another bounded continuation. |
+| Product alignment | Two regional captures and one verified purchase preserve accumulating collection progress. These are engineering support steps, not learned regional play. |
+| Learning output | No new examples or fitting. Model45 retained; A/B/C supply five explicitly excluded non-exploratory decisions. |
+| Authority delta | No authority expansion. Exact admission excludes all five non-exploratory decisions; zero model predictions used. |
+| Transfer result | Two same-lineage Red sources and a shop transition; no independent or cross-game claim. |
+| Blocker | Useful skills execute, but region selection is operator-declared and the top-level menu lacks genuine supported alternatives. Global-only discovery offered exhausted local sightings; source-local masking is being qualified. |
+| Decision | Preserve the resupplied terminal, qualify the corrected local menu and reorient toward real destination/collection choices rather than another forced episode. |
 | Next session | Produce genuine model choices across useful collection opportunities and fit eligible outcomes without resetting progress. |
 | Next falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
-| Stop condition | No replay of A. Reorient after90minutes without executable alternatives; stop safely at10:57UTC, preserve traces and all specimens. |
+| Stop condition | No replay of A/B/C. Reorient before90minutes without genuine model alternatives; stop safely at10:57UTC and preserve all traces/specimens. |
 
 ### Stop conditions
 

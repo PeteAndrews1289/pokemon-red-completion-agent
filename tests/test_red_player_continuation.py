@@ -364,9 +364,11 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--profile", "profile", "--private-artifact-root", "private", "--out", "out",
         "--wild-source", "wild:Route11:grass", "--supply-profile", "shop.json",
         "--wild-source", "wild:Route24:grass",
+        "--discovery-source", "wild:Route24:grass",
     ])
     assert args.regional_transitions == [
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
+        "discovery:wild:Route24:grass",
     ]
 
 
@@ -390,6 +392,21 @@ def test_regional_supply_loads_private_profile_and_rejects_non_supply_change(mon
                         lambda path: replace(after, profile_id="foreign"))
     with pytest.raises(RedGoalContextProfileError, match="manager contract"):
         runner._regional_profiles(before, (source,), ready)
+
+
+def test_regional_discovery_transition_uses_world_rom_and_current_profile(monkeypatch):
+    from pokemon_red_completion import red_living_dex_wild_corridor as corridor
+    before, after = object(), object()
+    monkeypatch.setattr(runner, "_route_world", lambda _: SimpleNamespace(rom=b"verified-world"))
+    seen = []
+    def bind(profile, source, rom):
+        seen.append((profile, source, rom))
+        return after
+    monkeypatch.setattr(corridor, "bind_red_local_discovery_profile", bind)
+    assert runner._regional_profiles(
+        before, ("discovery:wild:Route24:grass",), object(),
+    ) == (after,)
+    assert seen == [(before, "wild:Route24:grass", b"verified-world")]
 
 
 def test_continuation_executes_only_one_arm_without_fit_or_comparison(case, monkeypatch):

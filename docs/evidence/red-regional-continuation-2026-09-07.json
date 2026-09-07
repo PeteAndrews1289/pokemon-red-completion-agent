@@ -109,9 +109,9 @@
     },
     "excluded_nonexploratory": 2
   },
-  "scope": "First region/source continuation is working, not learned regional selection. Operator-declared source, one forced capture and one deterministic-unsupported exploration. All prior specimens retained; neither step admitted for fitting. No independent evaluation.",
+  "scope": "A/B each added one species through non-learned capture; C bought four balls through deterministic safety. All five decisions excluded from fitting; model45 unchanged. Explicit regional choices remain operator-declared. Source-local discovery repair prevents exhausted searches; useful learned alternatives remain the next blocker. No independent evaluation.",
   "checks": {
-    "focused_tests_passed": 104,
+    "focused_tests_passed": 193,
     "protocol_tests_passed": 50,
     "typechecked_files": 400,
     "lint": true,
@@ -124,5 +124,192 @@
     "crystal_accesses": 0,
     "authority_promotions": 0,
     "independent_evaluation": false
+  },
+  "successors": [
+    {
+      "episode_id": "red-regional-20260907-b-causal",
+      "source_commit": "1508bcf30464ddeadc9f1a812bd87ae977f3d496",
+      "source_bundle_sha256": "88ec46df2eff19d205d11d5910b59a980a4dae6172407cf99f15319334ca63c7",
+      "manifest_sha256": "187a320d97dc8c79d4f8d786110ccb22fe6be64b5fa6e017be27eac4880d74fc",
+      "checkpoint_sha256": "e1ef888300644503b3a0af73daf9bac174497bf9484f82b62dfe63abc4ca63c1",
+      "plan_sha256": "6a2923cdfd602247452aaa48927cbc0bbea719f228159bb00227e59c13044d7e",
+      "result": {
+        "authority_decisions": 2,
+        "authority_id": "living-dex-causal-shadow",
+        "completion_satisfied": false,
+        "decisions": 2,
+        "forced_singleton_steps": 0,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "recovery_attempts": 0,
+        "schema": "pokemon.core.bounded-player-episode-result.v1",
+        "status": "durable_terminal",
+        "steps": [
+          {
+            "actions_executed": 554,
+            "available_goal_count": 2,
+            "available_menu_sha256": "41a90de9b79eddf879135c11cca807cfeeeaa41cb2ecddaa4895279bfac220fc",
+            "collection_after": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 18,
+              "registered_species": 23,
+              "required_specimens_remaining": 102,
+              "required_specimens_sha256": "6352748636df49812e6bbf219964e9b41c10b5f07e81cbf8143d6c641ef2f722",
+              "retained_captures": 18,
+              "specimen_ledger_sha256": "30c14b194cae73c5f2f75debc80c0faa1ce11ded44d8352cbf44774e0f859505",
+              "storage_headroom": 6,
+              "total_living_specimens": 20,
+              "undeclared_specimen_losses": 0
+            },
+            "collection_before": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 17,
+              "registered_species": 22,
+              "required_specimens_remaining": 103,
+              "required_specimens_sha256": "7ac789d4d9e57d97abd49d58d8e5998b1dd1bca1c59cdb4c9ef0e0ffefddf3e2",
+              "retained_captures": 17,
+              "specimen_ledger_sha256": "0ee52fac0eeeccab308ab727beadbb3c3b33353514ec77546cf99e0e546d8362",
+              "storage_headroom": 7,
+              "total_living_specimens": 19,
+              "undeclared_specimen_losses": 0
+            },
+            "decision_ordinal": 1,
+            "failure_reason": null,
+            "frames_executed": 31753,
+            "policy_context_sha256": "24c374e723d13aa5a552dbffeded30036bd9e45e5e9788add6a7a61878c547ff",
+            "recovery_attempt": false,
+            "selected_kind": "acquire_species",
+            "selection_mode": "authority",
+            "semantic_state_changed": true,
+            "status": "succeeded"
+          },
+          {
+            "actions_executed": 230,
+            "available_goal_count": 2,
+            "available_menu_sha256": "09799a689f2e2637a8856851acc7ae35271265fac305d4c949134e40e5477839",
+            "collection_after": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 18,
+              "registered_species": 23,
+              "required_specimens_remaining": 102,
+              "required_specimens_sha256": "6352748636df49812e6bbf219964e9b41c10b5f07e81cbf8143d6c641ef2f722",
+              "retained_captures": 18,
+              "specimen_ledger_sha256": "30c14b194cae73c5f2f75debc80c0faa1ce11ded44d8352cbf44774e0f859505",
+              "storage_headroom": 6,
+              "total_living_specimens": 20,
+              "undeclared_specimen_losses": 0
+            },
+            "collection_before": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 18,
+              "registered_species": 23,
+              "required_specimens_remaining": 102,
+              "required_specimens_sha256": "6352748636df49812e6bbf219964e9b41c10b5f07e81cbf8143d6c641ef2f722",
+              "retained_captures": 18,
+              "specimen_ledger_sha256": "30c14b194cae73c5f2f75debc80c0faa1ce11ded44d8352cbf44774e0f859505",
+              "storage_headroom": 6,
+              "total_living_specimens": 20,
+              "undeclared_specimen_losses": 0
+            },
+            "decision_ordinal": 2,
+            "failure_reason": "binding_failed",
+            "frames_executed": 11844,
+            "policy_context_sha256": "a7f8f5b8f96a9170efc3efe5f26ebc278fe502c4bed9e8a870bb8d9f9b9a751e",
+            "recovery_attempt": false,
+            "selected_kind": "explore",
+            "selection_mode": "authority",
+            "semantic_state_changed": false,
+            "status": "failed"
+          }
+        ],
+        "stop_reason": "failure_context_unchanged",
+        "teacher_fallbacks": 0,
+        "total_actions": 784,
+        "total_frames": 43597
+      },
+      "model_predictions_used": 0,
+      "decision_modes": [
+        "deterministic_unsupported",
+        "deterministic_unsupported"
+      ],
+      "eligible_examples": 0,
+      "excluded_nonexploratory": 2
+    },
+    {
+      "episode_id": "red-regional-20260907-c-causal",
+      "source_commit": "2ef1000489262c2f0284ab0e14fed143ec1fe306",
+      "source_bundle_sha256": "4751497b6c010d1251c59c94594a9fb113831177a3b27effe136e44080b780cd",
+      "manifest_sha256": "3a8b873f7383a77550c74f55db5c5613af2957f5499e4c82ef9226a8f9476d52",
+      "checkpoint_sha256": "dba11f02106a8c08113637867571297d475c35f8ffecbf4d4cdbc2120accf7ab",
+      "plan_sha256": "5811800e9336b7a3865307f9f5aee4e12bb40fcca6fa10ade57d6fb373811b87",
+      "result": {
+        "authority_decisions": 1,
+        "authority_id": "living-dex-causal-shadow",
+        "completion_satisfied": false,
+        "decisions": 1,
+        "forced_singleton_steps": 0,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "recovery_attempts": 0,
+        "schema": "pokemon.core.bounded-player-episode-result.v1",
+        "status": "durable_terminal",
+        "steps": [
+          {
+            "actions_executed": 154,
+            "available_goal_count": 3,
+            "available_menu_sha256": "373a879f1e165052fcb53d260514ea4ca649e0940e64ded61045b18852d26ae4",
+            "collection_after": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 18,
+              "registered_species": 23,
+              "required_specimens_remaining": 102,
+              "required_specimens_sha256": "6352748636df49812e6bbf219964e9b41c10b5f07e81cbf8143d6c641ef2f722",
+              "retained_captures": 18,
+              "specimen_ledger_sha256": "30c14b194cae73c5f2f75debc80c0faa1ce11ded44d8352cbf44774e0f859505",
+              "storage_headroom": 6,
+              "total_living_specimens": 20,
+              "undeclared_specimen_losses": 0
+            },
+            "collection_before": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 18,
+              "registered_species": 23,
+              "required_specimens_remaining": 102,
+              "required_specimens_sha256": "6352748636df49812e6bbf219964e9b41c10b5f07e81cbf8143d6c641ef2f722",
+              "retained_captures": 18,
+              "specimen_ledger_sha256": "30c14b194cae73c5f2f75debc80c0faa1ce11ded44d8352cbf44774e0f859505",
+              "storage_headroom": 6,
+              "total_living_specimens": 20,
+              "undeclared_specimen_losses": 0
+            },
+            "decision_ordinal": 1,
+            "failure_reason": null,
+            "frames_executed": 9180,
+            "policy_context_sha256": "b1fd14994da90fcff7716a9cb100e3f0c161cc088e55a8e8ee5f0b6bedbcb16c",
+            "recovery_attempt": false,
+            "selected_kind": "resupply",
+            "selection_mode": "authority",
+            "semantic_state_changed": true,
+            "status": "succeeded"
+          }
+        ],
+        "stop_reason": "decision_limit",
+        "teacher_fallbacks": 0,
+        "total_actions": 154,
+        "total_frames": 9180
+      },
+      "model_predictions_used": 0,
+      "decision_modes": [
+        "deterministic_safety"
+      ],
+      "eligible_examples": 0,
+      "excluded_nonexploratory": 1
+    }
+  ],
+  "latest_collection": {
+    "living_species": 18,
+    "total_living_specimens": 20,
+    "registered_species": 23,
+    "undeclared_specimen_losses": 0
   }
 }

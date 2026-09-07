@@ -515,6 +515,17 @@ def _parse_parameters(
         }
         if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
             required.add("completed_battles")
+        local_species = row.get("source_species_numbers")
+        if "source_species_numbers" in row:
+            if mechanic is not RedGoalMechanic.WILD_CORRIDOR_DISCOVERY or (
+                not isinstance(local_species, list)
+                or not local_species
+                or any(type(number) is not int or not 1 <= number <= 151
+                       for number in local_species)
+                or local_species != sorted(set(local_species))
+            ):
+                raise RedGoalContextProfileError("local discovery species are invalid")
+            required.add("source_species_numbers")
         _exact_keys(row, required)
         source_id = _bounded_text(row["source_id"], "source identity")
         label = _bounded_text(row["label"], "corridor label")
@@ -549,6 +560,8 @@ def _parse_parameters(
             parsed["completed_battles"] = _positive_integer(
                 row["completed_battles"], "development battle dose"
             )
+        if local_species is not None:
+            parsed["source_species_numbers"] = local_species
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(

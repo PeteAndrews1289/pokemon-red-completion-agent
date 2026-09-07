@@ -37,6 +37,48 @@ RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
 )
 
 
+def bind_red_local_discovery_profile(
+    profile: RedGoalContextProfile, source_id: str, rom: bytes,
+) -> RedGoalContextProfile:
+    """Declare local sighting coverage from all cartridge slots, not canonical targets.
+
+    The explicit profile transition leaves historical observations unchanged.
+    Grass slots alone supply this walking corridor. Unseen water encounters
+    cannot keep an exhausted grass survey incorrectly available.
+    """
+    from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
+    from pokemon_red_completion.red_collection import (
+        RED_SOLO_COLLECTION_CONTRACT,
+        red_species_number,
+    )
+
+    from .goal_manager import GoalKind
+
+    discovery = next((spec for spec in profile.providers if spec.kind is GoalKind.EXPLORE), None)
+    if discovery is None or discovery.mechanic is not RedGoalMechanic.WILD_CORRIDOR_DISCOVERY:
+        raise RedLivingDexWildCorridorError("local discovery needs the existing corridor skill")
+    map_id = int(map_id_for_wild_source(source_id))
+    if discovery.parameters["source_id"] != source_id or discovery.parameters["map_id"] != map_id:
+        raise RedLivingDexWildCorridorError("local discovery source differs from its profile")
+    dex = internal_to_dex(rom)
+    # The verifier measures this contract's seen numbers, not excluded species.
+    targets = {red_species_number(ref) for ref in RED_SOLO_COLLECTION_CONTRACT.target_species}
+    slots = wild_tables(rom, medium="grass").get(map_id, ())
+    numbers = sorted({dex[species] for _, species in slots} & targets)
+    if not numbers:
+        raise RedLivingDexWildCorridorError("local discovery source has no target encounters")
+    providers = []
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.kind is GoalKind.EXPLORE:
+            parameters["source_species_numbers"] = numbers
+        providers.append((spec.kind, spec.mechanic, parameters))
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def retarget_red_wild_profile(
     profile: RedGoalContextProfile, corridor: RedLivingDexWildCorridor,
 ) -> RedGoalContextProfile:
