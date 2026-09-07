@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve C checkpointdba11f02 with18 living/20 specimens and four balls. Verify source-local discovery masking, then expose genuinely useful learned choices; do not repeat forced-only regional episodes.
+- Next decision: Preserve E checkpointcfb720c3; inspect surplus inventory and legitimate resupply. Qualify the smallest safe funding path before more source choices. Never reset to regain balls or money.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model7cf5f570 retains45 examples. Regional A/B added two species and C restored four balls; all five choices were forced/safety/fallback, zero model predictions or fit rows. Collection18 living/20 specimens. |
+| Authority now | Model81077e4c retains47 examples,16successful. D/E add two sampled source failures; E is a post-fit continuation. Collection18living/20specimens; zero balls,129currency. Model47 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-continuation** · status **active** · evidence [qualification](docs/evidence/red-regional-continuation-2026-09-07.json)
+**2026-09-07-regional-source-learning** · status **active** · evidence [qualification](docs/evidence/red-regional-source-learning-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Two regional captures and one verified purchase preserve accumulating collection progress. These are engineering support steps, not learned regional play. |
-| Learning output | No new examples or fitting. Model45 retained; A/B/C supply five explicitly excluded non-exploratory decisions. |
-| Authority delta | No authority expansion. Exact admission excludes all five non-exploratory decisions; zero model predictions used. |
-| Transfer result | Two same-lineage Red sources and a shop transition; no independent or cross-game claim. |
-| Blocker | Useful skills execute, but region selection is operator-declared and the top-level menu lacks genuine supported alternatives. Global-only discovery offered exhausted local sightings; source-local masking is being qualified. |
-| Decision | Preserve the resupplied terminal, qualify the corrected local menu and reorient toward real destination/collection choices rather than another forced episode. |
-| Next session | Produce genuine model choices across useful collection opportunities and fit eligible outcomes without resetting progress. |
+| Product alignment | The learner now chooses acquisition destinations and learns their actual costs/failures. Sustainable resource management is the next dependency for living-Pokedex progress. |
+| Learning output | 45 to47 retained examples: two real sampled destination failures, two fits, all prior rows preserved. A/B/C and deterministic source parents contribute zero rows. |
+| Authority delta | Bounded acquisition-destination sampling now uses the existing model over four real options. Top-level parent and low-level mechanics remain deterministic; no full-player promotion. |
+| Transfer result | Two same-lineage source decisions with changed position/history/resources, both Route24. No independent, multi-source success or cross-game claim. |
+| Blocker | D/E both exhausted their search. E consumed the last four balls;129currency cannot buy another ball. No independent advantage or reliable collection shown. |
+| Decision | Preserve E, inspect legitimate resource recovery and catchability constraints, then continue varied source choices only when supplies are available. |
+| Next session | Restore legitimate capture resources without resetting E or losing required specimens; unblock further learned destination outcomes. |
 | Next falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
-| Stop condition | No replay of A/B/C. Reorient before90minutes without genuine model alternatives; stop safely at10:57UTC and preserve all traces/specimens. |
+| Stop condition | No replay of A/B/C/D/E. No injected money, protected-item sale or invented capture availability. Reorient after90minutes without a feasible resource path; stop safely at10:57UTC. |
 
 ### Stop conditions
 

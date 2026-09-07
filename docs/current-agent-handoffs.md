@@ -1,5 +1,13 @@
 # Current agent handoffs
 
+## Active — learned regional choices, September7
+
+Model47,18living/20specimens,zero balls/129currency. D/E source selections are consumed;
+both failures remain fitted. E is a genuine post-fit continuation carrying D search history.
+Next: inspect legitimate resources and restore practical collection capability. Preserve E;
+no reset or injected cash. No reviewer is active. Codex owns this bounded cycle to10:57UTC.
+[Audit](audits/red-regional-source-learning-2026-09-07.md); private OPERATOR has exact identities.
+
 ## Active — regional continuation, September 7
 
 A/B/C consumed;18 living species/20 specimens retained, four balls and129currency after

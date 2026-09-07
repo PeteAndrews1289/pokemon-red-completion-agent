@@ -3,22 +3,22 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-continuation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-source-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Regional multi-goal integration: 2/5 acceptance items (40%).**
+**Regional multi-goal integration: 4/5 acceptance items (80%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Truthful source continuation ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
 - [x] Retained regional collection gain ([evidence](../docs/evidence/red-regional-continuation-2026-09-07.json))
-- [ ] Multiple genuine model choices
-- [ ] New fit and fresh continuation
+- [x] Multiple genuine model choices ([evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json))
+- [x] New fit and fresh continuation ([evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json))
 - [ ] Variation, costs and interventions
 
-Current model: **45 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **47 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +50,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-regional-continuation-2026-09-07.json)
+[Current evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-regional-source-learning
+
+Two actual source choices fitted45 to47; both search failures retained. E used saved source history and model46. Collection18/20 preserved; zero balls remain.
+
+**Deviation:** Choice is hierarchical acquisition-destination authority, not multiple top-level kinds. No stage-exit change or independent advantage. Checklist4/5 only.
+
+**Next:** Legitimate resource recovery from E, then varied source outcomes; never reset to regain supplies.
 
 ### 2026-09-07-regional-continuation
 

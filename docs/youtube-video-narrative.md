@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Active — learned regional choices, September7
+
+Show the four-option source menu, the committed sample, the actual search, then the saved
+failure and47-example model. Caption: “Model chooses destination with exploration;
+deterministic skills control navigation/capture.” The second model preferred Route10, but
+exploration sampled Route24 again. Do not edit that into a story of optimal judgment.
+
+The honest cliffhanger:18living species and20specimens preserved, but the balls ran out.
+Can the player recover resources and resume collecting without a reset? The next section
+answers that. Two fitted failures are a working learning loop, not evidence it can finish Red.
+[Audit](audits/red-regional-source-learning-2026-09-07.md).
+
 ## Active — regional continuation, September 7
 
 The character travelled, caught two new species and bought supplies—but that still did

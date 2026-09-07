@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-regional-continuation",
+  "as_of_session": "2026-09-07-regional-source-learning",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+      "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -55,14 +55,14 @@
       {
         "id": "regional-choices",
         "label": "Multiple genuine model choices",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
       },
       {
         "id": "regional-fit",
         "label": "New fit and fresh continuation",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
       },
       {
         "id": "regional-variation",
@@ -132,6 +132,12 @@
       "result": "Two new living species retained; collection18/20. Routed supply bought four balls. Five non-exploratory choices excluded; model45 unchanged.",
       "deviation": "No stage-exit change. Stop repeating exhausted local exploration; qualify cartridge-local availability before pursuing genuine model alternatives.",
       "next": "Verify C saved-state compatibility and useful candidate choices; continue within the six-hour window."
+    },
+    {
+      "session": "2026-09-07-regional-source-learning",
+      "result": "Two actual source choices fitted45 to47; both search failures retained. E used saved source history and model46. Collection18/20 preserved; zero balls remain.",
+      "deviation": "Choice is hierarchical acquisition-destination authority, not multiple top-level kinds. No stage-exit change or independent advantage. Checklist4/5 only.",
+      "next": "Legitimate resource recovery from E, then varied source outcomes; never reset to regain supplies."
     }
   ],
   "closed_milestones": [

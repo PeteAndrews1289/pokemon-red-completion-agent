@@ -1,5 +1,19 @@
 # Model-first development roadmap
 
+## Active — learned regional choices, September7
+
+Regional integration is4/5 of its bounded checklist. The model chose a capture destination
+twice from four real options; both failed searches were fitted,45→47examples, all earlier
+rows retained. E followed the D fit and used D's stable source history. This is meaningful
+bounded authority, not reliable collection or independent advantage. Model47 has not played.
+
+Next: legitimate resource recovery from E (18living/20specimens,zero balls,129currency),
+then varied model-selected sources with measured costs/interventions. Inspect before adding
+a mechanic; preserve required/unique items and recovery reserves. No reset or injected funds.
+Reorient after90minutes without a feasible resource path. The six-hour cycle ends10:57UTC.
+Full sustained Red, story completion, living collection, unfamiliar hack and Crystal remain
+the same ordered goals. [Audit](audits/red-regional-source-learning-2026-09-07.md).
+
 ## Active — regional continuation, September 7
 
 Regional integration remains2/5, not full sustained-play completion. A/B retained two new

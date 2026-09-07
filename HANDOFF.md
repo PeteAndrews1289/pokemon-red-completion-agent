@@ -1,5 +1,16 @@
 # Handoff
 
+## Active — learned regional choices, September7
+
+Model81077e4c retains47 examples,16successful. D/E are two actual sampled acquisition-destination
+choices, both failed searches;45→47 fitted with all earlier rows preserved. E played after the
+D fit and used recorded source history. Final E:18living/20specimens/23registered,zero balls,
+129currency,zero specimen loss. Model47 has not played. D/E and A/B/C are consumed.
+Regional checklist4/5, not full sustained Red. Next: legitimate resource recovery from E;
+no reset, injected funds or unavailable capture attempts. Exact identities/private launch state
+remain in OPERATOR. Six-hour cycle continues until10:57UTC.
+See [audit](docs/audits/red-regional-source-learning-2026-09-07.md).
+
 ## Active — regional continuation, September 7
 
 A/B/C are consumed. Two regional captures raised living16→18 and specimens18→20;

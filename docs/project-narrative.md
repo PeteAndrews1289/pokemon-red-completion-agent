@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## Active — learned regional choices, September7
+
+We moved a real decision to the learner: where to search next. It chose among four reachable
+capture destinations, and both played outcomes were retained as failures. The model grew
+from45 to47 examples without losing earlier experience. The second choice followed a fit
+and saw the first failed search in its memory. Low-level execution remained deterministic.
+
+This exposed the next practical limit: four unsuccessful capture attempts consumed the
+remaining balls. The saved collection is intact, but129currency cannot fund another ball.
+The next work is legitimate resource management—not a reset that hides the cost. The small
+integration checklist is4/5; reliable sustained play and cross-game transfer remain unproved.
+[Audit](audits/red-regional-source-learning-2026-09-07.md).
+
 ## Active — regional continuation, September 7
 
 Regional continuation exposed a practical gap: useful components alone do not make a

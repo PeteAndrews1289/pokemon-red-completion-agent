@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+## Active — learned regional choices, September7
+
+Codex owns the active cycle through10:57UTC. D/E supplied two genuine source-choice failures,
+fitted45→47; parent goals remain deterministic and excluded. Regional checklist4/5.
+Next: practical funding/resupply from E's zero-ball endpoint, then varied capture choices.
+No outside agent/subagent was invoked. If later requested, reviewers should challenge resource
+sustainability, catchability and real learned authority—not reopen sealed gates.
+[Audit](docs/audits/red-regional-source-learning-2026-09-07.md).
+
 ## Active — regional continuation, September 7
 
 Codex owns the regional-continuation work through10:57UTC. A/B added two living species;

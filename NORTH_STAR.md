@@ -20,6 +20,11 @@ The deterministic teacher is an oracle, demonstrator, verifier, and emergency sa
 It is not the final player. A fixed route completing Red does not count as learned progress unless
 the work also increases model authority or produces evidence needed to do so.
 
+Destination selection is learned authority only when real alternatives are exposed and the
+selected destination controls the played attempt. Preserve failed searches and their resource
+costs; fitting failures alone does not establish practical collection competence. Resource
+recovery must use legitimate game mechanics, not resets that conceal unsustainable spending.
+
 ## Authority order
 
 When documents disagree, use this order:
