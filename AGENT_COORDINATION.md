@@ -1,5 +1,27 @@
 # Three-agent coordination
 
+## Current — U/model60; resource recovery is next
+
+The fresh acquisition failed after607actions42384frames and two spent balls.
+Storage preparation worked: active headroom1→20, all25specimens/23living species
+preserved,28registered. Fit59→60 retains all59prior examples and T's zero-row supply
+support;23successful examples total. This is a failed capture learned from, not a
+new species or demonstrated performance improvement. Model60 has not played.
+
+The exact next restore passes with zero input/frames, but no goal is available:
+0balls109currency; evolution precursors remain safely in inactive box0 while box1
+is active. Storage-safe varied collection is2/3; productive outcome remains open.
+The older mixed-goal5/5 stays closed. No teacher/full replay, sealed Red or Crystal.
+
+Codex owns the narrow resource/box-access repair and publication. No Claude,
+Antigravity or subagent was invoked in this session. No outside review is pending.
+If requested at the next design/promotion point: Claude should challenge scarcity
+features, retained failure attribution and the slightly worse same-row training
+MSE; Antigravity should challenge cross-box/finite-resource composition and transfer
+claims. Both remain read-only. Routine implementation does not wait for them.
+[Next plan](docs/work-sessions/2026-09-07-resource-recovery-plan.md).
+Earlier checkpoints below are historical.
+
 Current September7 shared-experience closeout: Codex implemented/published the
 bounded collection mode and audited S. Actual model-selected Abra→Kadabra succeeded;
 fit59 retains58prior rows,23living/25specimens. Mixed checklist5/5 is closed. No outside

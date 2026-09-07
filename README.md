@@ -7,18 +7,19 @@ percentage belongs only to its named checklist—not overall game or project com
 
 ## Latest development checkpoint
 
-The goal-value learner has **59 retained examples**. Its latest exploratory choice selected
-evolution from genuine capture/evolution alternatives, developed a Teleport-only Abra12 into
-Kadabra16, and preserved the original Abra10. The verified collection is **23 living species /
-25 specimens**, with zero undeclared losses. The successful goal was fitted while retaining all
-58 earlier examples. The mixed collection/evolution checklist is **5/5 complete**.
+The goal-value learner has **60 retained examples**. Its latest acquisition choice failed,
+and the failure was fitted while retaining all59earlier examples. Capture preparation did
+successfully open **20 active storage slots**, preserving **23 living species /25 specimens**
+with zero losses. No Pokémon was caught this session. The earlier mixed collection/evolution
+milestone remains closed5/5; the new storage-safe varied-collection checklist is **2/3**.
 
 This is a learned goal selector using deterministic game mechanics—not a demonstrated full-game
-player or independent generalization result. Model59 has not played yet. Next: varied collection,
-legitimate supplies and storage composition from the actual saved endpoint. The dashboard and
-infographic distinguish this completed local milestone from the unfinished sustained-Red stage.
-See the [session audit](docs/audits/red-shared-experience-learning-2026-09-07.md) and
-[next-session plan](docs/work-sessions/2026-09-07-varied-collection-plan.md).
+player or independent generalization result. Model60 has not played yet. The exact save has
+zero balls109currency and no available next goal. Next: legitimate resource recovery, access
+to stored evolution precursors and better scarcity inputs. The dashboard and infographic keep
+this local checklist separate from the unfinished sustained-Red stage.
+See the [session audit](docs/audits/red-varied-collection-2026-09-07.md) and
+[next-session plan](docs/work-sessions/2026-09-07-resource-recovery-plan.md).
 
 ### Previous engineering checkpoint
 

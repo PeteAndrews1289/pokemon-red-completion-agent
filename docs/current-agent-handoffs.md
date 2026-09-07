@@ -1,5 +1,25 @@
 # Current agent handoffs
 
+## Current — U/model60; resource recovery is next
+
+The fresh acquisition failed after607actions42384frames and two spent balls.
+Storage preparation worked: active headroom1→20, all25specimens/23living species
+preserved,28registered. Fit59→60 retains all59prior examples and T's zero-row supply
+support;23successful examples total. This is a failed capture learned from, not a
+new species or demonstrated performance improvement. Model60 has not played.
+
+The exact next restore passes with zero input/frames, but no goal is available:
+0balls109currency; evolution precursors remain safely in inactive box0 while box1
+is active. Storage-safe varied collection is2/3; productive outcome remains open.
+The older mixed-goal5/5 stays closed. No teacher/full replay, sealed Red or Crystal.
+
+[Audit](audits/red-varied-collection-2026-09-07.md) and
+[next plan](work-sessions/2026-09-07-resource-recovery-plan.md) supersede older entries.
+T/U are consumed. The actual capture saw Abra at full HP, spent two balls and failed;
+no status success, useful acquisition or independent advantage should be claimed.
+No reviewer is running; Codex owns code/publication. Future reviews should examine
+resource-feature quality and cross-box access, not request another teacher run.
+
 Current is S/model59: real exploratory evolution succeeded, Abra12→Kadabra16 while
 Abra10/all25specimens remain.23living/28registered; mixed checklist5/5 closed.
 Exact terminal and prospective continuation restored without input. Model59 unplayed;

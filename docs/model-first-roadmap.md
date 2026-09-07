@@ -1,5 +1,26 @@
 # Model-first development roadmap
 
+## Current — U/model60; resource recovery is next
+
+The fresh acquisition failed after607actions42384frames and two spent balls.
+Storage preparation worked: active headroom1→20, all25specimens/23living species
+preserved,28registered. Fit59→60 retains all59prior examples and T's zero-row supply
+support;23successful examples total. This is a failed capture learned from, not a
+new species or demonstrated performance improvement. Model60 has not played.
+
+The exact next restore passes with zero input/frames, but no goal is available:
+0balls109currency; evolution precursors remain safely in inactive box0 while box1
+is active. Storage-safe varied collection is2/3; productive outcome remains open.
+The older mixed-goal5/5 stays closed. No teacher/full replay, sealed Red or Crystal.
+
+Next: [resource recovery and stored-precursor access](work-sessions/2026-09-07-resource-recovery-plan.md).
+First prove a legitimate useful option exists at this save. Then fix precise
+capture-exhaustion/preparation telemetry and scarce-resource representation; only
+then another retained model choice. Additional fits without productive play do not
+close the current milestone. Stage exits and long-term sequence remain unchanged.
+[Session audit](audits/red-varied-collection-2026-09-07.md).
+Earlier current-labeled entries below are historical.
+
 ## Current — a useful mixed choice learned; broaden collection next
 
 S's actual exploratory policy chose evolution over capture. Shared XP developed

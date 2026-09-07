@@ -1,5 +1,39 @@
 # Handoff
 
+## Current — U/model60; resource recovery is next
+
+The fresh acquisition failed after607actions42384frames and two spent balls.
+Storage preparation worked: active headroom1→20, all25specimens/23living species
+preserved,28registered. Fit59→60 retains all59prior examples and T's zero-row supply
+support;23successful examples total. This is a failed capture learned from, not a
+new species or demonstrated performance improvement. Model60 has not played.
+
+The exact next restore passes with zero input/frames, but no goal is available:
+0balls109currency; evolution precursors remain safely in inactive box0 while box1
+is active. Storage-safe varied collection is2/3; productive outcome remains open.
+The older mixed-goal5/5 stays closed. No teacher/full replay, sealed Red or Crystal.
+
+Model `a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2`;
+checkpoint `554a66c2f765d40508c7d75d94ded7df7149cb1bff2caef096c34f9ddb16d13f`;
+episode `red-varied-collection-20260907-u-causal`;
+manifest `cbb967d98f24ce2cb1204bbdfc355da437fa39b771041f227c8c2ec2d80a3ca1`.
+U executable3b54894b/bundlef9cece1a is historical; later test/docs edits do not
+rewrite that binding. T/U consumed; never rerun their private launchers.
+
+[Audit](docs/audits/red-varied-collection-2026-09-07.md),
+[next plan](docs/work-sessions/2026-09-07-resource-recovery-plan.md),
+[evidence](docs/evidence/red-varied-collection-learning-2026-09-07.json).
+Codex owns implementation/publication; no outside audit or gameplay is pending.
+CI prevention: when changing shared execution settings, run the complete affected
+caller test module as well as new feature tests before pushing; do not rely only
+on selected test names. Batch related repairs after local verification. Keep the
+existing remote checks and failure notifications intact.
+At publication, affected script/storage51checks and dashboard/focus/fit147checks
+pass, as do repository lint and410-file typing. Full latest local regression is
+still running; latest GitHub recheck is pending. Neither is claimed green. See
+the private operator note for the already-running process; do not duplicate it.
+Prior headings below are historical checkpoints, not instructions to resume S.
+
 ## Current — mixed-goal learning complete; S/model59 retained
 
 S's exploratory native goal selected evolution, developed Abra12 into Kadabra16

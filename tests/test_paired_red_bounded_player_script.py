@@ -628,11 +628,14 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
                         completion_dose=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
-        {"quote_resource_costs": False, "maximum_controller_actions": 6000,
+        {"quote_resource_costs": False, "prepare_capture_storage": False,
+         "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": True, "maximum_controller_actions": 6000,
+        {"quote_resource_costs": True, "prepare_capture_storage": False,
+         "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": False, "maximum_controller_actions": 30000,
+        {"quote_resource_costs": False, "prepare_capture_storage": True,
+         "maximum_controller_actions": 30000,
          "maximum_emulator_frames": 3000000},
     ]
 

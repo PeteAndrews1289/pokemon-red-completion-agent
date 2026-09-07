@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 scene — the empty bag is part of the lesson
+
+Show the genuine PC preparation: helper retrieved, box changed, storage1→20,
+all25specimens preserved. Then show the actual acquisition failure and the bag at
+zero Poké Balls. Do not edit this into a successful catch. The model chose the
+high-level task; deterministic mechanics still controlled movement, PC and battle.
+
+Suggested narration: “We made room for more Pokémon, but the learner spent its last
+two balls without a catch. We kept that failure in training. Now the problem is
+not moving faster—it is choosing a task we can actually afford, or developing
+Pokémon we already own.” Display60retained examples,23living species and the local
+2/3 checklist separately. Training count is not a competence score.
+
+The latest save is a stopped checkpoint, not live gameplay. Show the resource
+blocker and next plan; no full-game or cross-title competence is demonstrated.
+[Audit](audits/red-varied-collection-2026-09-07.md).
+
 ## September7 scene — the Pokémon that could not attack
 
 Open with two Abra: one remains in storage for the living Pokédex; the duplicate

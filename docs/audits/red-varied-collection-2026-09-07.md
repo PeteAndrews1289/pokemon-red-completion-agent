@@ -1,5 +1,68 @@
 # Varied resource-aware collection — September7
 
+## Final verdict — model60 retained; productive item still open
+
+U used published executable3b54894b and sampled acquisition with probability
+0.7770940079911632 from real capture/evolution alternatives. Its607actions42384frames
+included helper retrieval and storage rotation: headroom1→20, all25specimens kept.
+Capture nevertheless failed with `search_exhausted`; no new living species or evolution.
+The actual trace reached Abra12 at30/30HP and consumed both balls with no capture.
+No status attempt occurred. This establishes item depletion, not the exact RNG or
+escape-text cause. The original broad failure reason is retained, not rewritten.
+
+Fit59→60 retained all59prior rows, T's zero-row support and U's genuine negative
+outcome.23successful examples,50distinct selected feature rows,12regional source
+examples unchanged. Native episode inventory33→35 includes T and U, not two new
+training labels. The sampled source proposal was not fitted separately. No fallback,
+seed search, parent override, full replay, sealed access or Crystal work occurred.
+
+Independent read-only checkpoint/model inventory verification passed. Route24,
+23living/25specimens/28registered,0balls109currency,20active boxslots,healthy party,
+no battle. Model60 has not played. Its exact next preflight, with0inputs/0frames,
+fails because **no goal is available**. The prospective storage-safe varied checklist
+stays **2/3**: supply/storage passed, productive acquisition did not. Closed mixed5/5
+is preserved. [Path-free result](../evidence/red-varied-collection-learning-2026-09-07.json).
+
+## Findings and next decision
+
+- Current-box-only evolution cannot retrieve the useful duplicates after rotation.
+  They are preserved in box0; active box1 is empty. General storage access is next,
+  not another custom evolution teacher or a claim that rotation alone solves storage.
+- Scarce capture inputs are weakly represented: the chosen candidate's resource_cost
+  and uncertainty are zero. Spending both balls becomes aggregate resource_cost
+  2/23, diluted by21recovery items. Audit typed scarcity, not just sample count.
+- Refitted-model training MSE0.010792937775465751 is slightly worse than the prior
+  model's0.010457972314989182 on the same60rows. Ridge optimizes a regularized
+  objective; no model-improvement or calibrated-success claim follows from this fit.
+- The nested storage_preparation report is not forwarded into the parent step.
+  Real checkpoint/trace evidence verifies its result, but the compact telemetry
+  should retain preparation costs and outcome without another training label.
+
+Stop here under the declared resource condition. Follow the
+[resource-recovery plan](../work-sessions/2026-09-07-resource-recovery-plan.md): legitimate
+supplies or accessible owned evolution, precise exhaustion diagnosis, then a fresh
+useful bounded model choice. Do not replay T/U or reset to regain funds.
+
+## CI follow-up
+
+The original compatibility repair passed GitHub run34137137746. New storage work
+then failed runs34138930218 and34139289790 because an existing observer-wiring
+test omitted the added `prepare_capture_storage` setting. This was a missed
+integration expectation, not a live storage failure. The corrected test explicitly
+requiresFalse for both old modes andTrue for completion-dose mode, preserving
+the opt-in boundary. Entire affected script/storage modules:51tests passed.
+No workflow, assertion or notification was disabled. Full local regression was
+started but remains pending at publication; do not call latest source full-suite
+green. It has advanced beyond70percent without a reported failure. The exact
+CI-failing module plus storage tests passed51checks; dashboard/focus/roadmap/fit
+checks passed147; repository lint and typing across410source files passed.
+The full7581-test result and green34137137746 belong to the earlier compatibility
+repair. Publish this verified expectation repair/documentation together while the
+long full run finishes; a fresh GitHub run is separately pending. This avoids
+another idle publication gate without removing any check or inventing a pass.
+
+Everything below records earlier qualification checkpoints, not the current state.
+
 This session follows the closed mixed-goal5/5 milestone. The new local checklist
 is required supply support, storage-safe capture preparation, and one actual
 varied native outcome with retained fitting. None replaces a full-roadmap exit.

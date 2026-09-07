@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can S/model59 continue through legitimate resupply and another supported collection objective without consuming its last storage slot or confusing forced support with learned progress?",
+      "cheapest_falsifier": "Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual native mixed-goal choice executed and fitted. Shared-XP mechanics are deterministic; the model selected evolution with exploration, not by an override.",
-        "blocker": "No blocker remains for this mixed-goal milestone. Next actual S menu has resupply/capture, but resupply is deterministic_safety. One ball,309currency and one immediate boxslot constrain continuation.",
-        "decision": "Close mixed collection/evolution checklist5/5; reorient to varied, resource-aware collection and storage composition. Do not replay S or count safety support as learning.",
+        "authority_delta": "One native acquisition choice and its failure fitted59to60. Helper retrieval and storage rotation are deterministic preparation, not new learned authority.",
+        "blocker": "U ended with zero balls109currency; no affordable purchase. Storage now has20active slots, but stored evolution precursors are in an inactive box and current evolution retrieval is current-box-only. Exact next preflight offers no goal.",
+        "decision": "Stop at the declared resource dead end. New storage-safe varied-collection checklist2/3; the productive goal remains unfinished despite a valid failure fit. Preserve closed mixed5/5.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-shared-experience-learning-2026-09-07.json",
-          "sha256": "2eab4433592ece517ad6224fc5acb0b7614ba7100eeb8d0524046f006ee5c7db"
+          "path": "docs/evidence/red-varied-collection-learning-2026-09-07.json",
+          "sha256": "d58f1b6791dbe2bc86309b20e1230db7bb9964c69d1d717200140a2d377e22a7"
         },
-        "learning_output": "One successful native goal fitted58to59;23living species,25specimens,zero losses.3143actions265058frames. Seven retained XP checkpoints and exact terminal restore verified.",
-        "next_falsifier": "Can S/model59 continue through legitimate resupply and another supported collection objective without consuming its last storage slot or confusing forced support with learned progress?",
-        "next_session_goal": "Preserve S/model59, perform only necessary legitimate supply support, then expose a varied collection/evolution objective and fit the next genuine model choice. Bind PC storage before headroom reaches zero.",
-        "product_alignment": "A previously non-attacking specimen can now develop into a new retained species. The model chose the task, while reusable mechanics handled switching, damage and preservation.",
-        "session_id": "2026-09-07-shared-experience-learning",
+        "learning_output": "One failed native acquisition retained/fitted59to60; all59previous rows and Tzero-row support kept. U607actions42384frames,zero new species,zero specimen losses; storage1to20.",
+        "next_falsifier": "Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability?",
+        "next_session_goal": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.",
+        "product_alignment": "Persistent collection now safely changes storage boxes and learns from a failed capture. Sustainable resources and access to owned precursors are required for a living collection; another ball-only attempt would not address that.",
+        "session_id": "2026-09-07-varied-collection",
         "status": "active",
-        "stop_condition": "S completed and is permanently consumed. Natural milestone stopping point; no further gameplay launched. Stop next work on resource/storage dead ends, unverified XP, losses or repeated nonproductive recovery.",
-        "transfer_result": "ROM-free recipient/helper/slot/resource variation passed. Actual Abra evolution is same-lineage Red evidence only; no independent advantage, unfamiliar-ROM or Crystal transfer claim."
+        "stop_condition": "T/U permanently consumed. No further gameplay: stop on unavailable options, reset-funded recovery, specimen loss, or repeated unsupported capture. Future support alone is not learning.",
+        "transfer_result": "ROM-free helper/storage variation and one actual box rotation passed. Same-lineage Red evidence only; no independent advantage or cross-game transfer. Refit train MSE did not improve against prior model on the same60rows."
       },
       "learned_authority": {
-        "current": "Model c9d0a76b retains59 outcomes,23successful,all58 prior retained. S sampled evolution from capture/evolution alternatives, developed Abra12 into Kadabra16 and retained Abra10.23living/25specimens/28registered. Model59 unplayed.",
+        "current": "Model a645e264 retains60outcomes,23successful,all59prior retained. U selected acquisition from capture/evolution alternatives but failed after spending both balls.23living/25specimens/28registered,20active boxslots. Model60 unplayed; unchanged next menu has no available option.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Continue varied model-selected collection from S/model59, integrating actual resource and storage limits; no reset or teacher replay.",
+      "next_decision": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

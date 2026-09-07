@@ -1,0 +1,147 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "One deterministic supply continuation and one model-selected acquisition from the same retained Red training lineage.",
+  "session_evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 607,
+    "frames": 42384,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-varied-collection-20260907-u-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "bf19aab37efab49890954bf4a11f160e2dc611cb764d132a81e942d849f75500",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 50,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 60,
+      "successful_examples": 23,
+      "total_examples": 60,
+      "train_dataset_sha256": "e0f58ea2e1e08b1f992c02027c6afc5ed0b28aae2ad7e43de3a17c9ab63ffef4",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.010792937775465753,
+      "weighted_mse_before": 0.024496897867702906
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "649fb640c587281ae422c1014fc9a605f1919dfd39dc776c23464f1a8a5013a1",
+      "file_sha256": "25bff6eee159ea0beb108bb4832db7cba95b2a8995a6947541d24dab5db515b0",
+      "independent_evaluation": false,
+      "model_sha256": "a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2",
+      "prior_model_sha256": "c9d0a76b6262723da8875c105eca3d5c08f5591b16766c710edf0d77c2a0cd4f",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 60,
+      "source_bundle_sha256": "f9cece1a7a955d7d399bea39c23ae6d2242863728ae1d56709cf75161457c867",
+      "source_commit": "3b54894b1a2cd120d19427b31d2eb35b85d42a70"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08496535527339898,
+        0.000005291387066128247,
+        0.00003493002804541116,
+        0.0042247491051395185,
+        0.0031760370916694446,
+        0.001299255645908025,
+        0.0004149298570306165,
+        0.0000012024466445206048,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 60,
+      "total_examples": 60,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010457972314989182
+    },
+    "regional_source_examples": 12,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08797886471733653,
+        0.000005183182345274393,
+        0.0000349847220281004,
+        0.004224514956028105,
+        0.0031757065903285286,
+        0.0013000638347361786,
+        0.00041616139236655045,
+        9.605840224991449e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 60,
+      "total_examples": 60,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010792937775465751
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Capture execution encountered Abra12 at full HP30/30; the retained snapshots show both Poké Balls consumed with no capture. Do not infer the exact escape/RNG cause from these snapshots.",
+    "Storage preparation preserved25specimens and opened20active slots. Its nested preparation summary is not propagated into the public parent step; checkpoint/trace audit supplies the evidence, not a fabricated summary.",
+    "The unchanged post-U model60 preflight restores exactly but has no available goal. Zero balls,109currency and current-box-only evolution access are concrete continuation blockers.",
+    "The selected capture candidate represented resource_cost and uncertainty as zero despite scarcity. These are feature-quality findings, not a calibrated guarantee of success.",
+    "On the same60training rows, prior-model MSE0.010457972314989182 is below refitted-model MSE0.010792937775465751. Ridge fitting optimizes a regularized objective; more data is not demonstrated performance improvement.",
+    "Only high-level goal choice is learned; navigation, battles, capture support and PC controls remain deterministic.",
+    "Model60 has not played; no independent advantage, Red story completion or cross-game transfer is demonstrated."
+  ],
+  "next_session": "Audit sustainable resource recovery, typed capture-item exhaustion and cross-box evolution access from U/model60. No unchanged capture replay or reset.",
+  "current_limitation": "Storage-safe varied collection2/3: supply/storage work verified, but productive capture remains unfinished. Model60/save retained; zero balls109currency, no available next goal."
+}

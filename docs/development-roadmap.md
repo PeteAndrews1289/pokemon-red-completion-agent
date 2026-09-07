@@ -3,22 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-shared-experience-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-varied-collection**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Mixed collection / evolution learning: 5/5 acceptance items (100%).**
+**Storage-safe varied collection: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Future objectives preserve history ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
-- [x] Native goals with zero or one source ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
-- [x] Actual native outcome inventory qualified ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
-- [x] Useful mixed goals executable at save ([evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json))
-- [x] Played mixed choice retained and fitted ([evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json))
+- [x] Legitimate supply support retained ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
+- [x] Storage-safe capture preparation ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
+- [ ] Useful varied outcome played and fitted ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
 
-Current model: **59 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **60 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json)
+[Current evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -93,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-varied-collection
+
+Storage expanded from 1 to 20 slots; all 25 specimens preserved. Capture failed. The real failure was fitted: 59 to 60 examples, with all earlier data retained. Current milestone: 2/3, not a productive capture.
+
+**Deviation:** Stopped on zero balls109currency and no available next goal. Closed mixed5/5 preserved; stage exits unchanged. More fitted rows do not establish better play.
+
+**Next:** Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture.
 
 ### 2026-09-07-shared-experience-learning
 

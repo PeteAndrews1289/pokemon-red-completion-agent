@@ -41,7 +41,10 @@ in1030.36seconds. The initial targeted run passed153 and exposed one additional
 stale operational fingerprint; the full run passed after its reviewed update.
 Legacy runtime tests execute with the new helpers unavailable; collection-mode
 tests remain separate. Lint, changed-module typing, docs/focus and public-artifact
-checks also passed. Remote CI has not yet been claimed green for the repair.
+checks also passed. GitHub CI run34137137746 subsequently passed on exact repair
+commitcde8f13d44920a33f658e1d4da4a5177bfac65fb. Later storage commits exposed a
+separate observer-test expectation; see the varied-collection audit, not this
+historical repair result, for the latest branch status.
 The repair itself was bounded; the broader local verification took17minutes.
 
 Include `test_red_party_development_venue_priors.py` whenever changing training

@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — storage worked; sustainability did not
+
+The next lesson was an honest failure. Code retrieved the capture helper and
+switched to a roomier PC box, preserving25specimens and opening20slots. The learned
+goal policy had chosen acquisition over evolution, but its attempt spent both
+remaining balls on an uncaught Abra. No new species joined the collection.
+
+That failed decision and its costs were fitted as example60, with every earlier
+example and the intervening non-learning supply step retained. It did not prove
+the model improved: same-row unregularized training error actually rose slightly.
+The checkpoint audit found no next playable option—zero balls,109currency and
+useful evolution precursors in the inactive box. The next engineering question is
+resource-aware continued play, not another showcase capture or full-game teacher.
+
+This is why a living Pokédex is a useful objective: catching and evolving once is
+not enough. The player must keep its specimens accessible and sustain its supplies.
+The [local milestone remains2/3](development-roadmap.md), while model-led Red story
+completion and transfer remain unproved. [Audit](audits/red-varied-collection-2026-09-07.md).
+
 ## September7 — from Teleport-only to a new living species
 
 This session produced a real learning result. The goal policy could choose capture

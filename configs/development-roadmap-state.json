@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-shared-experience-learning",
+  "as_of_session": "2026-09-07-varied-collection",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+      "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,37 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Mixed collection / evolution learning",
+    "title": "Storage-safe varied collection",
     "items": [
       {
-        "id": "ordered-objective",
-        "label": "Future objectives preserve history",
+        "id": "legitimate-supply",
+        "label": "Legitimate supply support retained",
         "done": true,
-        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
       },
       {
-        "id": "native-source-cardinality",
-        "label": "Native goals with zero or one source",
+        "id": "capture-storage",
+        "label": "Storage-safe capture preparation",
         "done": true,
-        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
       },
       {
-        "id": "native-retained-fitting",
-        "label": "Actual native outcome inventory qualified",
-        "done": true,
-        "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
-      },
-      {
-        "id": "mixed-execution-feasibility",
-        "label": "Useful mixed goals executable at save",
-        "done": true,
-        "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
-      },
-      {
-        "id": "mixed-learned-outcome",
-        "label": "Played mixed choice retained and fitted",
-        "done": true,
-        "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+        "id": "productive-varied-outcome",
+        "label": "Useful varied outcome played and fitted",
+        "done": false,
+        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
       }
     ]
   },
@@ -204,6 +192,12 @@
       "result": "S selected evolution with probability0.1553, developed Abra12 into Kadabra16, retained Abra10/all25specimens, and fitted58to59. Exact23living/28registered. Mixed checklist5/5 closed.",
       "deviation": "The first real model-selected evolution quantum served as the component falsifier inside the same retained attempt; no separate diagnostic branch/reset or forced demonstration. Stage exits unchanged.",
       "next": "Continue from S/model59 through legitimate supply support, varied collection objectives and storage composition. Keep support-only episodes out of learning counts; broaden evidence before claiming generalization."
+    },
+    {
+      "session": "2026-09-07-varied-collection",
+      "result": "Storage expanded from 1 to 20 slots; all 25 specimens preserved. Capture failed. The real failure was fitted: 59 to 60 examples, with all earlier data retained. Current milestone: 2/3, not a productive capture.",
+      "deviation": "Stopped on zero balls109currency and no available next goal. Closed mixed5/5 preserved; stage exits unchanged. More fitted rows do not establish better play.",
+      "next": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture."
     }
   ],
   "closed_milestones": [
@@ -353,6 +347,43 @@
           "label": "Fresh productive model continuation",
           "done": true,
           "evidence": "docs/evidence/red-affordable-capture-learning-result-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-shared-experience-learning",
+      "stage": "sustained-red",
+      "title": "Mixed collection / evolution learning",
+      "items": [
+        {
+          "id": "ordered-objective",
+          "label": "Future objectives preserve history",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "native-source-cardinality",
+          "label": "Native goals with zero or one source",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "native-retained-fitting",
+          "label": "Actual native outcome inventory qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "mixed-execution-feasibility",
+          "label": "Useful mixed goals executable at save",
+          "done": true,
+          "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+        },
+        {
+          "id": "mixed-learned-outcome",
+          "label": "Played mixed choice retained and fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
         }
       ]
     }
