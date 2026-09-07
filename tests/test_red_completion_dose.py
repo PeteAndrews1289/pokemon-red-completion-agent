@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
-from run_paired_red_bounded_player import _player_limits
+from run_paired_red_bounded_player import _checkpoint_completion_dose, _player_limits
 from test_red_player_training import _plan
 
 from pokemon_red_completion.red_player_training_plan import (
@@ -84,3 +84,78 @@ def test_completion_plan_still_authenticates_its_parent_checkpoint(completion):
     with pytest.raises(ValueError, match="checkpoint differs"):
         _require_continuation_origin(SimpleNamespace(find_sealed_record=find), plan)
     assert len(calls) == 1
+
+
+@pytest.mark.parametrize("feature_version", [1, 2, 3])
+def test_restore_dose_comes_from_authenticated_parent_not_successor(feature_version):
+    original, continued, completed = completion_plan(feature_version)
+    for plan, expected in ((original, False), (continued, False), (completed, True)):
+        assert _checkpoint_completion_dose({
+            "metadata": {"player_training_plan": plan.document},
+        }) is expected
+    assert _checkpoint_completion_dose({"metadata": {}}) is False
+    with pytest.raises(ValueError):
+        _checkpoint_completion_dose({"metadata": {"player_training_plan": {
+            **completed.document, "maximum_actions": 30001,
+        }}})
+    with pytest.raises(RuntimeError, match="continuation_parent_plan"):
+        _checkpoint_completion_dose({"metadata": {"player_training_plan": "v4"}})
+
+
+@pytest.mark.parametrize("parent_dose,successor_dose", [(False, True), (True, False)])
+def test_restore_observer_uses_parent_dose_and_still_authenticates(
+    monkeypatch, parent_dose, successor_dose,
+):
+    import run_paired_red_bounded_player as module
+
+    calls = []
+    expected = object()
+    readiness = SimpleNamespace(
+        continuation=SimpleNamespace(
+            collection={}, search_memory=None,
+            require_restored_observation=lambda observation: calls.append(observation),
+        ),
+        restore_profile=object(), profile=object(), capture=object(),
+        quote_resource_costs=True, restore_completion_dose=parent_dose,
+        completion_dose=successor_dose,
+    )
+    emulator = SimpleNamespace(frame_count=0, pressed_buttons=())
+    monkeypatch.setattr(module, "build_red_goal_context_runtime", lambda **_kw: object())
+    monkeypatch.setattr(module, "_route_world", lambda _ready: None)
+    def observer(*_args, **kwargs):
+        assert kwargs["completion_dose"] is parent_dose
+        return lambda: expected
+    monkeypatch.setattr(module, "_player_observer", observer)
+    module._verify_continuation_restore(readiness, emulator)
+    assert calls == [expected]
+
+
+@pytest.mark.parametrize("parent_dose", [False, True])
+def test_continuation_chain_carries_final_parent_observer_mode(monkeypatch, parent_dose):
+    from dataclasses import MISSING, fields
+
+    import run_paired_red_bounded_player as module
+
+    _, continued, completed = completion_plan()
+    plan = completed if parent_dose else continued
+    profile = SimpleNamespace(profile_sha256="a" * 64)
+    header = {"metadata": {
+        "player_training_plan": plan.document, "profile_sha256": profile.profile_sha256,
+        "split": {"partition": "train", "root_lineage_id": "one-root"},
+    }}
+    checkpoint = SimpleNamespace(capture=object(), search_memory=None)
+    required = {
+        f.name: None for f in fields(module._Readiness)
+        if f.default is MISSING and f.default_factory is MISSING
+    }
+    ready = module._Readiness(**{
+        **required, "profile": profile,
+        "private_root": SimpleNamespace(open_episode=lambda _id: SimpleNamespace(
+            read_header=lambda: header,
+        )),
+    }, completion_dose=not parent_dose)
+    monkeypatch.setattr(module, "open_red_player_checkpoint", lambda *_a, **_k: checkpoint)
+    continued_ready = module._continue_readiness(ready, (("parent", "b" * 64),))
+    assert continued_ready.restore_completion_dose is parent_dose
+    assert continued_ready.completion_dose is not parent_dose
+    assert continued_ready.restore_profile is profile

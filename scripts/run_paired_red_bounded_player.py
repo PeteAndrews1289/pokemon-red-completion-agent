@@ -196,6 +196,7 @@ class _Readiness:
     continuation_chain: tuple[tuple[str, str], ...] = ()
     continuation_root_lineage_id: str | None = None
     restore_profile: RedGoalContextProfile | None = None
+    restore_completion_dose: bool = False
     completion_dose: bool = False
     regional_choice_record_sha256: str | None = None
     regional_proposal_record_sha256: str | None = None
@@ -1052,6 +1053,7 @@ def _continue_readiness(
             readiness,
             capture=checkpoint.capture,
             continuation=checkpoint,
+            restore_completion_dose=_checkpoint_completion_dose(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
@@ -1066,6 +1068,25 @@ def _continue_readiness(
             ),
         )
     return readiness
+
+
+def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
+    """Restore the parent's recorded observer settings, not the successor's.
+
+    Completion-dose execution exposes storage-supported capture opportunities.
+    Reconstructing its terminal with legacy settings changes the semantic hash
+    even when the emulator bytes and complete specimen ledger match exactly.
+    """
+    from pokemon_red_completion.red_player_training_plan import COMPLETION_TRAINING_PLAN_SCHEMA
+
+    metadata = header.get("metadata")
+    plan = metadata.get("player_training_plan") if isinstance(metadata, Mapping) else None
+    if plan is None:
+        return False
+    if not isinstance(plan, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_plan")
+    parsed = RedPlayerTrainingPlan(plan)
+    return parsed.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
 
 
 def _continuation_header(readiness: _Readiness) -> dict[str, object]:
@@ -1102,6 +1123,7 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         actions,
         _route_world(readiness),
         readiness.quote_resource_costs,
+        completion_dose=getattr(readiness, "restore_completion_dose", False),
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
         living_completion_checkpoint,
