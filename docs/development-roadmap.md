@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-learning-cycle**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-cycle-review**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Bounded collect / fit / continue: 1/3 acceptance items (33%).**
+**Bounded collect / fit / continue: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Retained inventory and loop qualified ([evidence](../docs/evidence/red-incremental-cycle-qualification-2026-09-07.json))
 - [ ] Two real linked learning steps
-- [ ] Saved endpoint and viewer evidence audited
+- [x] Saved endpoint and viewer evidence audited ([evidence](../docs/evidence/red-incremental-learning-closeout-2026-09-07.json))
 
-Current model: **55 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **56 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-affordable-capture-learning-result-2026-09-07.json)
+[Current evidence](../docs/evidence/red-incremental-learning-closeout-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-incremental-cycle-review
+
+55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion.
+
+**Deviation:** The declared cycle stopped after its first failed search; the second remained unclaimed. Preserve the two-real-steps criterion as unfinished. Saved-viewer work is maintenance, not model progress.
+
+**Next:** Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset.
 
 ### 2026-09-07-incremental-learning-cycle
 

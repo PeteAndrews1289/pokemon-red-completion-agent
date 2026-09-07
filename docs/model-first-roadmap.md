@@ -1,5 +1,21 @@
 # Model-first development roadmap
 
+## Current — automatic fitting works; sustained continuation remains the target
+
+Model56 retains56 outcomes,20successful. Q's first search failed and was automatically
+fitted; second step unclaimed. Exact21living/23specimens/26registered,4balls109currency,
+zero losses. [Result](evidence/red-incremental-learning-closeout-2026-09-07.json).
+Bounded collect/fit/continue is2/3, not full sustained-play completion.
+
+1. Inspect the retained finite-search trace and expose encounter/search-cost diagnostics.
+2. Qualify a useful, bounded source lesson; preserve the actual Q endpoint and model56.
+3. Demonstrate two genuine linked learner steps with automatic outcome retention/fitting.
+4. Then broaden resource recovery and goal composition; measure intervention burden and
+   collection throughput before claiming sustained competence or expanding model authority.
+
+Long-term model-led Red story/living collection, compatible unfamiliar Red modification,
+Crystal and later games remain unchanged. No full replay or new teacher is the next step.
+
 ## Current — affordable continuation after model54
 
 The resource-aware regional checklist is closed3/3: N selected Route10, caught Voltorb16

@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## September7 — retain the failed automatic cycle, do not rename it completion
+
+Q model55 selected Route24; bounded search failed and automatically fitted model56.
+Only one of two allowed steps executed. The second remains unclaimed and the two-real-steps
+criterion remains false. Saved-state audit advances the local checklist to2/3, not the
+full sustained-Red stage. [Evidence](evidence/red-incremental-learning-closeout-2026-09-07.json).
+No baseline exit changed. Next work examines useful encounter opportunity and diagnostics
+before a new prospective lesson. The saved-state viewer is maintenance, not learner progress.
+
 ## September7 — resource integration closed; practical affordability next
 
 N's new Route10 capture and fit54 meet the unchanged productive-follow-up criterion:

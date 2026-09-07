@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 — the honest automatic-learning demonstration
+
+Show the real saved collection:21retained species,23specimens,26registered;4balls109money.
+During this six-hour cycle the learner grew45→56retained examples, including failures.
+The last source choice exhausted its search; the system saved that outcome, fitted the
+next model and stopped itself rather than pretending the second planned step happened.
+
+Explain the distinction: the goal/destination scorer is trained; deterministic skills
+still move, battle and catch. We have a working bounded learning loop, not a model that
+independently completes Red. The next demonstration should be two useful linked learner
+steps from the real saved state, not a prerecorded full-game route or decorative movement.
+
 ## September7 — show the earned Abra and the next training update
 
 Route24 was selected among two real destinations. Show the one-ball Abra10 capture and

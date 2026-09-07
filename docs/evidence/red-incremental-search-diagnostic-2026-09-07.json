@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.retained-search-diagnostic.v1",
+  "manifest_sha256": "c9a0ab0082537c87c02dbbfe079798d811edcfae7cf09b85f45fc5ea58fb1499",
+  "recorded_actions": 212,
+  "recorded_frames": 10236,
+  "wild_encounter_starts": 5,
+  "wild_battle_ends": 5,
+  "overworld_movement_inputs": 66,
+  "overworld_movements_with_displacement": 64,
+  "movement_inputs_missing_position": 0,
+  "controller_actions": 0,
+  "model_queries": 0,
+  "model_fits": 0,
+  "snapshot_deduplication_is_encounter_count": false,
+  "independent_evaluation": false,
+  "private_path_fields": 0
+}

@@ -35,6 +35,7 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DashboardModelState,
     DashboardRunRecap,
     DashboardRunStep,
+    DashboardSavedCollection,
     DashboardSnapshot,
     DashboardTrainingState,
     DashboardWorkState,
@@ -44,6 +45,31 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
 
 DEFAULT_PRODUCT_FOCUS_PORT = DASHBOARD_DEFAULT_PORT + 3
 DEFAULT_WORK_STATUS_PATH = PROJECT_ROOT / ".dashboard-status" / "product-focus.json"
+
+
+def _load_saved_collection(
+    path: Path = PROJECT_ROOT / "configs" / "dashboard-saved-state.json",
+    *, repository_root: Path = PROJECT_ROOT,
+) -> DashboardSavedCollection | None:
+    """Read a public, hash-bound saved observation; never open a private save."""
+    if not path.exists():
+        return None
+    try:
+        reference = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(reference, dict) or set(reference) != {"schema", "path", "sha256"}:
+            raise ValueError("saved state reference differs")
+        if reference["schema"] != "pokemon.dashboard.saved-state-reference.v1":
+            raise ValueError("saved state reference schema differs")
+        receipt = dict(_read_public_receipt(reference, repository_root=repository_root))
+        if receipt.pop("schema", None) != "pokemon.dashboard.saved-collection.v1":
+            raise ValueError("saved collection schema differs")
+        if receipt.pop("live", None) is not False or receipt.pop("controller_actions", None) != 0:
+            raise ValueError("saved collection observation claim differs")
+        return DashboardSavedCollection(**receipt)
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        raise ProgressDashboardError(
+            "saved collection evidence is unavailable or changed"
+        ) from error
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -329,6 +355,7 @@ def product_focus_dashboard_snapshot(
     work: DashboardWorkState | None = None,
     evidence: Mapping[str, object] | None = None,
     recap: DashboardRunRecap | None = None,
+    saved_collection: DashboardSavedCollection | None = None,
 ) -> DashboardSnapshot:
     """Project current evidence, without borrowing old gameplay counts as live state."""
     lane = state.active_lane
@@ -378,6 +405,7 @@ def product_focus_dashboard_snapshot(
         learning_components=(component,),
         training=training,
         last_run=recap,
+        saved_collection=saved_collection,
         work=work or DashboardWorkState(),
         events=(
             f"Saved model · {training.samples_before} → {training.samples_after} real examples",
@@ -470,7 +498,10 @@ def main(argv: list[str] | None = None) -> int:
         )
     evidence = _load_learning_evidence()
     recap = _load_run_recap()
-    snapshot = product_focus_dashboard_snapshot(focus, work=work, evidence=evidence, recap=recap)
+    saved_collection = _load_saved_collection()
+    snapshot = product_focus_dashboard_snapshot(
+        focus, work=work, evidence=evidence, recap=recap, saved_collection=saved_collection,
+    )
     if args.port == args.live_port:
         raise ProgressDashboardError("overview and live observer ports must differ")
     state = DashboardRelayState(snapshot, live_port=args.live_port)
@@ -526,9 +557,11 @@ def main(argv: list[str] | None = None) -> int:
                         candidate_evidence = _load_learning_evidence()
                         _training_projection(candidate_evidence)
                         candidate_recap = _load_run_recap()
+                        candidate_saved_collection = _load_saved_collection()
                         focus, work, evidence, recap = (
                             candidate_focus, candidate_work, candidate_evidence, candidate_recap
                         )
+                        saved_collection = candidate_saved_collection
                     except (ProductFocusError, DashboardWorkStatusError, ProgressDashboardError):
                         work = DashboardWorkState(
                             status="blocked",
@@ -542,7 +575,8 @@ def main(argv: list[str] | None = None) -> int:
                         )
                     state.publish(
                         product_focus_dashboard_snapshot(
-                            focus, work=work, evidence=evidence, recap=recap
+                            focus, work=work, evidence=evidence, recap=recap,
+                            saved_collection=saved_collection,
                         )
                     )
                     state.poll()

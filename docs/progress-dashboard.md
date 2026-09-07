@@ -1,5 +1,14 @@
 # Pokémon Learning Observatory
 
+The persistent local overview now separates **last verified saved collection** from live
+game observations. When the emulator is idle, the collection panel shows receipt-backed
+registered/living/specimen counts, supplies, money, location and verification time, explicitly
+labeled **not live gameplay**. It does not fabricate a frame, party view, live location or
+running status. Live feed counts take precedence when present; the saved record stays separate.
+The public receipt is hash-bound by `configs/dashboard-saved-state.json`; no private save or
+model is opened by the viewer. Missing saved evidence shows unknowns; altered evidence is
+rejected. On refresh failure the last validated observation remains visibly historical.
+
 > **Authoritative product view:** The generated
 > [active product state](../ACTIVE_PRODUCT_STATE.md) and the view-only focus dashboard replace the
 > historical gates below as the answer to “what are we doing now?” Run

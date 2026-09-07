@@ -1,5 +1,12 @@
 # Current agent handoffs
 
+Latest: Q/model56,56retained outcomes/20successful. Automatic failure-fit path executed;
+two consecutive live learning steps remain unproven.21living/23specimens/26registered,
+4balls109currency verified from actual Q save. Q is consumed/stopped, Q02 unclaimed.
+No reviewers were invoked this cycle. Next audit: search throughput and retained diagnostics,
+then a prospective bounded continuation from Q, never a replay from P or a reset of Q.
+[Evidence](evidence/red-incremental-learning-closeout-2026-09-07.json).
+
 Latest is P/model55: Abra10 captured,21living/23specimens/26registered,4balls109currency,
 all54 previous rows retained. Affordable checklist3/3closed. Next bounded cycle1/3 engineering;
 review exact model/checkpoint continuity, preserved negative rows and stop-on-failure behavior.

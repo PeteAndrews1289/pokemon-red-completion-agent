@@ -1,5 +1,11 @@
 # Three-agent coordination
 
+Latest Q/model56 supersedes the checkpoints below. One failed source search was automatically
+fitted; the second cycle step was never started. Preserve actual Q/model56 and all23specimens.
+Codex remains sole implementation/publication owner through10:57UTC. No outside audit was
+invoked. Future read-only reviewers should challenge finite search throughput, evidence loss,
+actual next-step model/checkpoint continuity and the remaining two-real-steps criterion.
+
 Current: P/model55 retained, affordable capture3/3closed. The next bounded collect/fit/continue
 cycle is under qualification; Codex remains sole operator/publication owner through10:57UTC.
 No subagent or external audit was invoked. Later reviewers should challenge retained-row and

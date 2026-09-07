@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence.
+- Next decision: Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model6154f7f5 retains55 outcomes,20successful. P chose Route24 and caught Abra10 with one ball:21living/23specimens/26registered,4balls109currency. Model55 has not played; no losses. |
+| Authority now | Model f902d537 retains56 outcomes,20successful,all55 prior retained. Q model55 chose Route24; search failed and was automatically fitted.21living/23specimens/26registered,4balls109currency;model56 unplayed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can two consecutive genuine source choices fit incrementally, retaining all prior rows and binding the next step to the actual saved state and new model? |
+| Cheapest falsifier | Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-incremental-learning-cycle** · status **active** · evidence [qualification](docs/evidence/red-affordable-capture-learning-result-2026-09-07.json)
+**2026-09-07-incremental-cycle-review** · status **active** · evidence [qualification](docs/evidence/red-incremental-learning-closeout-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reducing intervention between real gameplay, fitting and saved continuation directly supports sustained learning; the existing deterministic skills remain disclosed. |
-| Learning output | 54 to55 examples,20successful, all prior retained. P caught Abra10 with one ball; affordable continuation closed3/3. Incremental cycle engineering is1/3, no live cycle yet. |
-| Authority delta | P used model54 to choose Route24; its forced native parent added no row. Fit55 retains all54 earlier examples. |
+| Learning output | 55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion. |
+| Authority delta | One real model55 source choice; forced parent excluded. Model56 fitted automatically but has not played. |
 | Transfer result | One preserved Red lineage: actual source choice, affordable resources and effect-aware capture. No independent advantage or cross-title transfer. |
-| Blocker | Continuation and corpus assembly still require handwritten per-example launch work. This limits useful data throughput; renewable income and broad autonomy remain unsolved. |
-| Decision | Reuse the existing chooser, fitter and save admission in a finite collect/fit/continue cycle; no new policy or trust framework. |
-| Next session | Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence. |
-| Next falsifier | Can two consecutive genuine source choices fit incrementally, retaining all prior rows and binding the next step to the actual saved state and new model? |
-| Stop condition | At most two fresh source choices for the first real cycle. Stop after a failed step/fit, absent genuine alternatives, unsafe terminal, or the10:57UTC closeout. No retries or resets. |
+| Blocker | A short source search exhausted without progress. Automatic fitting works, but two real linked productive steps and renewable resources remain unproven. |
+| Decision | Preserve Q's failure and exact endpoint. Audit search throughput before any new prospective bounded lesson; viewer must separate verified saved counts from live state. |
+| Next session | Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset. |
+| Next falsifier | Can a declared finite source lesson expose enough real encounter opportunity to yield two actual linked learner steps without hiding failed searches? |
+| Stop condition | Q cycle stopped at its first failure. No retry or second Q step. Finish the saved-state/viewer/regression audit by10:57UTC; future work starts from actual Q/model56. |
 
 ### Stop conditions
 

@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — learning from a failed continuation automatically
+
+The six-hour cycle advanced the retained learner from45 to56examples and the living
+collection from16 to21species (18 to23specimens). Four of the11new eligible outcomes
+succeeded; failures remain in the training data. This is one adaptively developed Red
+lineage, not a measured win rate or evidence of independent generalization.
+
+The practical additions were regional choice, legitimate supply recovery, affordable
+restocking and capture preparation based on observed move effects. A later bounded loop
+collected a real failed source search and fitted it automatically without rewriting a
+launcher for each example. Its second step did not execute: useful sustained play remains
+unfinished. The viewer now distinguishes verified saved progress from live gameplay.
+
 ## September7 — the next ball actually caught Abra
 
 The learner chose Route24 and the adapted capture skill skipped setup against an observed

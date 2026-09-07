@@ -1,0 +1,144 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Q model55 chose Route24; a bounded search failed without collection or resource loss. The automatic fitter retained all55 earlier rows and added the actual failure, yielding56.",
+  "session_evidence": "docs/evidence/red-incremental-learning-closeout-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 212,
+    "frames": 10236,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-incremental-20260907-q-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "d60a89f40636884faf4bde19560fe7464f034b6aec1d78964f0356b46b227794",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 46,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 56,
+      "successful_examples": 20,
+      "total_examples": 56,
+      "train_dataset_sha256": "7a781e1f29c6474d6464e5ccb9edb0fcc640d27b1f54916f549e55686e7c7fac",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.008797151937605576,
+      "weighted_mse_before": 0.022775593153912168
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "3ba4af9999176abf27292129f79e054cfca42d849d633d4bc27bbd4a161cc2cf",
+      "file_sha256": "206253d4eed8c6285eb15f39206cbfec0230b9fbcd67a52e9af12908a1b71714",
+      "independent_evaluation": false,
+      "model_sha256": "f902d53722bdeebfc5f8d90761da513192a1c49ea58ee96c8275e822eccf5efd",
+      "prior_model_sha256": "6154f7f5a2459587117620892c52f2daa2860afabc314224300dd2bd8a9862a2",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 56,
+      "source_bundle_sha256": "45caac5d688155e70b963be6d13bfbe1c68c90da8e4f0b2b51857e902d4a1387",
+      "source_commit": "84f2b6bcd9690e06c126e7c55925cfea83e0fdd0"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07522933680434886,
+        0.000006086127553031761,
+        0.00003516788271346875,
+        0.004469702854139486,
+        0.0033593948154794287,
+        0.0016597784992310842,
+        0.0004540355283826726,
+        0.0000014013398977874607,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 56,
+      "total_examples": 56,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.00946832265019398
+    },
+    "regional_source_examples": 10,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06950746270622365,
+        0.000004051439332936528,
+        0.000035155141562350876,
+        0.004463993673888789,
+        0.0033560698265510257,
+        0.0013755230795698802,
+        0.00043131788239445337,
+        7.936889270804944e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 56,
+      "total_examples": 56,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.008797151937605574
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Only one cycle step executed; two real linked steps remain unproven.",
+    "A finite search exhausted without progress; failure was fitted, not retried.",
+    "Same-lineage, adaptively developed train outcomes are not independent model quality evidence.",
+    "Resources remain finite; broad resource recovery, story autonomy and transfer are unfinished."
+  ],
+  "next_session": "Inspect search diagnostics, then resume a bounded learner from the actual Q save and model56; never rerun Q.",
+  "current_limitation": "The cycle stopped after one failed search. Two linked productive learning steps remain unproven; four balls and109currency remain."
+}

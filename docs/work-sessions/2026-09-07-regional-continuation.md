@@ -1,5 +1,37 @@
 # Regional continuation — six-hour development cycle
 
+## Session9 — ordinary search failure should permit a bounded learned replan
+
+Q's retained execution trace contains64 real grass displacements and five encounters,
+none Abra. It did not stall against a wall. Q remains stopped; no input is replayed.
+
+1. **Capability:** allow an explicitly declared finite cycle to fit a safe exhausted search,
+   then replan from its real saved endpoint instead of requiring a manual launch each time.
+2. **Learned authority:** the next genuine source choice uses the newly fitted model and
+   retained failure history; no preferred destination or successful target is substituted.
+3. **Transfer test:** vary typed failure reasons, loss markers and continuation results in
+   ROM-free cases, then one new at-most-two-step cycle from Q/model56, if ready by10:45UTC.
+4. **Cheapest falsifier:** a search-exhausted terminal with unchanged collection can advance
+   to the next model choice; navigation/control failure, changed collection or loss must stop.
+5. **Time box:**10:30–10:50UTC, within the six-hour10:57UTC closeout. No new live start after10:45.
+6. **Stop condition:** missing safe terminal, wrong saved/model identity, fitting failure,
+   absent real alternatives, or the finite two-step/action/frame budget. Defaults retain
+   the old first-failure stop; Q's old declaration is not amended or restarted.
+
+## Session8 result — automatic failure fit, saved endpoint preserved
+
+Q01 completed one actual Route24 source choice under model55, failed its finite search
+after212actions/10236frames, and automatically fitted56. All55 prior rows retained,
+20successful total,10regional examples. The cycle stopped; Q02 remained unclaimed.
+Exact saved-state read-only audit passed:21living/23specimens/26registered,4balls109cash,
+all party alive,zero specimen loss. Two linked live learning steps remain unproven.
+
+Viewer follow-up is maintenance under the existing mission check: expose only hash-bound
+public saved observations, separately from live state, with no controller/model access.
+Cheapest falsifier: feed disconnection or a mismatched receipt must not fabricate live
+collection/frame data. The existing local dashboard stays local; no cloud publication.
+Time box remains the overall10:57UTC stop. Final regression and documentation audit follow.
+
 ## Session8 — bounded collect/fit/continue without a handwritten launch per example
 
 P closes the affordable-continuation checklist3/3: model54 chose Route24, caught Abra10

@@ -88,6 +88,51 @@ def test_failed_choice_is_fitted_once_then_stops(tmp_path, monkeypatch):
     assert result['stop_reason'] == 'failed_step_retained_and_fitted'
 
 
+def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(tmp_path, monkeypatch):
+    args, records, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
+    original = cycle.source._run
+    def exhausted(actual):
+        result = original(actual)
+        result['parent_episode']['steps'][0].update(
+            failure_reason='search_exhausted', semantic_state_changed=False,
+            collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
+            collection_after={'living_species': 21, 'undeclared_specimen_losses': 0},
+        )
+        return result
+    monkeypatch.setattr(cycle.source, '_run', exhausted)
+    args.continue_after_search_exhaustion = True
+    result = cycle._run(args)
+    assert len(played) == len(fits) == 2
+    assert played[1]['expected_living_dex_model_sha256'] == records[1].model.model_sha256
+    assert played[1]['continue_from_checkpoint'][-1] == ['cycle-fixture-01-causal', '1'*64]
+    assert result['stop_reason'] == 'step_limit'
+    assert result['automatic_retry'] is False
+
+
+@pytest.mark.parametrize('change', [
+    {'failure_reason': 'world_state_diverged'}, {'semantic_state_changed': True},
+    {'collection_after': {'living_species': 20, 'undeclared_specimen_losses': 1}},
+    {'collection_before': None},
+    {'collection_before': {'undeclared_specimen_losses': True},
+     'collection_after': {'undeclared_specimen_losses': True}},
+])
+def test_other_failed_states_never_qualify_for_automatic_replanning(change):
+    step = {'status': 'failed', 'failure_reason': 'search_exhausted',
+        'semantic_state_changed': False,
+        'collection_before': {'living_species': 21, 'undeclared_specimen_losses': 0},
+        'collection_after': {'living_species': 21, 'undeclared_specimen_losses': 0}}
+    assert cycle._safe_exhausted_search({'steps': [step]})
+    step.update(change)
+    assert not cycle._safe_exhausted_search({'steps': [step]})
+
+
+def test_opt_in_does_not_continue_other_failure(tmp_path, monkeypatch):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
+    args.continue_after_search_exhaustion = True
+    assert cycle._run(args)['stop_reason'] == 'failed_step_retained_and_fitted'
+    assert len(played) == len(fits) == 1
+
+
 def test_fit_error_preserves_source_receipt_and_never_continues(tmp_path, monkeypatch):
     args, _, _, played, fits, files = harness(tmp_path, monkeypatch, fit_fails=True)
     with pytest.raises(ValueError, match='fit admission'):

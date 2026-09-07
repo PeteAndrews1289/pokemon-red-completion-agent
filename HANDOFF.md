@@ -1,5 +1,27 @@
 # Handoff
 
+## Current — model56; automatic failure fit verified, two-step milestone unfinished
+
+Q's first source choice selected Route24 and exhausted its finite search after212actions/
+10236frames. The cycle automatically fitted the actual failure, retaining all55 earlier
+rows;56examples,20successful. Q02 was never claimed; Q is stopped and must not be restarted.
+Exact saved restoration verifies21living species,23specimens,26registered,4balls109currency,
+zero losses. Model56 has not played. [Result](docs/evidence/red-incremental-learning-closeout-2026-09-07.json).
+
+The bounded collect/fit/continue checklist is2/3: retained inventory/loop and saved-state
+audit done; two real linked steps remain open. This is not full sustained play, model-led
+story completion, living-dex completion or independent learned advantage. The local viewer
+now distinguishes the last verified saved collection from a live feed; no fabricated movement.
+
+Next: diagnose finite search throughput from the retained trace, expose useful encounter
+opportunity in a prospective bounded lesson, then continue from actual Q/model56. Preserve
+failed outcomes and explicit resource limits. No reset, full replay, sealed Red or Crystal.
+Codex is sole operator; no external reviewers/subagents were invoked during this cycle.
+
+Current model f902d53722bdeebfc5f8d90761da513192a1c49ea58ee96c8275e822eccf5efd;
+checkpoint8d8eb81df8c665b1d3a0b4007ba01a679c41bfbc68016bec3108f1d6a97e046a.
+Private OPERATOR and inspect_incremental_after_q.py identify exact paths; never publish them.
+
 ## Current — model55; affordable capture closed, incremental cycle next
 
 P captured Abra10 on model-selected Route24 with one ball:21living/23specimens/26registered,

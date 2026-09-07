@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Bounded collect/fit/continue using existing source choices and immutable saves.
 
-No automatic retries: any failed step stops after its eligible outcome is fitted.
+No automatic retries: by default a failed step stops after its outcome is fitted.
+An explicit opt-in permits a fresh choice after verified safe search exhaustion.
 An exception preserves existing episode/choice artifacts and aborts the cycle.
 The second step must restore the first step's actual checkpoint and fitted model.
 """
@@ -28,9 +29,29 @@ from pokemon_red_completion.red_player_model import (
 def _parser() -> argparse.ArgumentParser:
     parser = source.base._parser()
     parser.add_argument("--learning-steps", type=int, choices=(1, 2, 3, 4), default=2)
+    parser.add_argument("--continue-after-search-exhaustion", action="store_true")
     parser.add_argument("--behavior-model-record", nargs=2, action="append", default=[],
                         metavar=("SHA256", "PATH"))
     return parser
+
+
+def _safe_exhausted_search(parent: dict[str, Any]) -> bool:
+    """Only the existing verified, unchanged-collection failure permits replanning."""
+    steps = parent.get("steps")
+    if not isinstance(steps, list) or len(steps) != 1:
+        return False
+    step = steps[0]
+    if not isinstance(step, dict):
+        return False
+    before, after = step.get("collection_before"), step.get("collection_after")
+    return (
+        step.get("status") == "failed"
+        and step.get("failure_reason") == "search_exhausted"
+        and step.get("semantic_state_changed") is False
+        and isinstance(before, dict) and before == after
+        and type(before.get("undeclared_specimen_losses")) is int
+        and before.get("undeclared_specimen_losses") == 0
+    )
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
@@ -38,6 +59,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise ValueError("learning cycle step bound differs")
     if not args.train_player or args.decision_limit != 1 or not args.completion_dose:
         raise ValueError("learning cycle requires bounded single-choice training")
+    continue_search = getattr(args, "continue_after_search_exhaustion", False)
+    if type(continue_search) is not bool:
+        raise ValueError("search continuation declaration must be boolean")
     initial = source.base._prepare(args)
     if initial.continuation is None or not isinstance(initial.causal_record, RedPlayerModelRecord):
         raise ValueError("learning cycle requires a retained native model and saved endpoint")
@@ -95,7 +119,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         results.append({"ordinal": ordinal, "outcome": outcome, "fit": fitted})
         parent = cast(dict[str, Any], outcome["parent_episode"])
-        if len(parent["steps"]) != 1 or parent["steps"][0]["status"] != "succeeded":
+        failed = len(parent["steps"]) != 1 or parent["steps"][0]["status"] != "succeeded"
+        if failed and not (continue_search and _safe_exhausted_search(parent)):
             stop = "failed_step_retained_and_fitted"
             break
         model = cast(dict[str, str], fitted["model"])
@@ -116,6 +141,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "maximum_controller_actions": args.learning_steps * 30_000,
         "maximum_emulator_frames": args.learning_steps * 3_000_000,
         "independent_evaluation": False, "automatic_retry": False,
+        "continue_after_search_exhaustion": continue_search,
         "sealed_red_accesses": 0, "crystal_accesses": 0, "full_game_replays": 0,
     }
     source.base._write_exclusive(original, summary)
