@@ -143,3 +143,16 @@ at most K/L/M/N with fixed seeds2026090711/12/13/14, up to4 choices apiece, from
 practice terminal after its all-retained fit. Stop at the first productive post-fit model choice
 and audit; otherwise stop after N and reorient. No sampling-policy change or seed screening.
 This is training under exploration, not a baseline comparison or proof that memory improved play.
+
+## Closeout — K met the unchanged final check
+
+K selected evolution under the model's exploratory policy, completed Rapidash40 and gained a living
+species with all18 specimens retained. Its15659 actions/1356025 frames settled successfully and
+were fitted model44→45. All45 rows retained,16 successful; only one selected row carries nonzero
+history. In-sample history sensitivity persists (maximum prediction change0.1216094259).
+K reloaded with identical bytes, zero actions/frames and a healthy party. Final state16 living,
+21 registered; no next supported goal in this region. Do not call that sustained autonomy.
+
+Minimal useful-play checklist5/5 complete; stop this portion here. L/M/N cancelled unused.
+Next session addresses supported next-source continuation from saved K and varied multi-goal play.
+No final-model45 gameplay, independent memory advantage, full Red win or transfer is claimed.

@@ -1,5 +1,17 @@
 # Current agent handoffs
 
+## Final current — 5/5 minimal integration checks; model45
+
+Read the [final audit](audits/red-complete-evolution-learning-2026-09-07.md).
+The goal selector retains45 examples, including10 new outcomes. H trains a genuine history
+effect; K is the productive post-fit evolution, not a forced step. Best K state:16 living species,
+21 registered,18 specimens; restoration verified without input. F remains retained separately.
+
+Next is sustained play, starting with a useful next source from Route11. The current profile
+offers none, so do not call this a whole-game autonomous player. Model45 has not played yet.
+If requested, Claude audits learning/generalization claims; Antigravity audits region mechanics.
+Neither was invoked this session. All earlier headings here are historical.
+
 ## Current — 41 retained examples; actual history learning remains
 
 Read the [current audit](audits/red-complete-evolution-learning-2026-09-07.md) and active state.

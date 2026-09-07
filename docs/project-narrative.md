@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 closeout — the learner finally chose a complete evolution
+
+The small integration milestone is complete. The goal-selection model grew from35 to45 retained
+examples. One real selected example taught it an effect from prior search effort; removing that
+history changes predictions. A later exploratory model-policy choice completed Rapidash40 and
+preserved the living precursor. It was not a forced or teacher-selected goal.
+
+We retained the unsuccessful choices, an excluded partial episode, and the separately labelled
+forced continuation. The newest game state has16 living species and18 specimens, not the sum of
+parallel practice branches. This evidence is deliberately narrow: one history-bearing example and
+correlated Red training do not prove generalization or better play than a baseline.
+
+The next obstacle is visible and concrete: after evolution the player is on Route11, outside the
+profile's supported collection region. Next we connect useful regional continuation and test varied
+multi-goal play, rather than repeating the successful lesson. [Final audit](audits/red-complete-evolution-learning-2026-09-07.md).
+
 ## September7 — from working skills to actual retained learning
 
 The model chose a capture that added a living species. We retained that success and the failures

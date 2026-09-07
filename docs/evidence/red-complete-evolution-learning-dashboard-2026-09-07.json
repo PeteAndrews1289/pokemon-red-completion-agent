@@ -1,0 +1,133 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Latest K fit44 to45; whole session35 to45. K was a productive post-history-fit model-policy choice under exploration. Model45 has not yet played.",
+  "session_evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "completed_episode": {
+    "actions": 15659,
+    "frames": 1356025,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-complete-evolution-20260907-k-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "b5eeb483bb6678d817c59138050d0c4da312d9a5436be64e7715f6ecc7a80f4e",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 35,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 45,
+      "successful_examples": 16,
+      "total_examples": 45,
+      "train_dataset_sha256": "db593f1aa848be3353813763b3d85abf656a26f54434ef3d4f5826071c5c2447",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.008029602921117445,
+      "weighted_mse_before": 0.02210431100208477
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "8cc06bbe8bd6489ff39442d116b93ca6e1a6c01d37af82982238d040a0c7d696",
+      "file_sha256": "296b63d757e032fbd6fef66bb15de6294a6fcdea43d8b4df64a6491d5cf3cd6c",
+      "independent_evaluation": false,
+      "model_sha256": "7cf5f57042a7d2023821f32d7eeb25af70b80d761cc0ee02af1f9a4ea235ab41",
+      "prior_model_sha256": "2c1a55ed2678d45306762ab5604f2b32cc995502f1611bfa8222c0ef322b0d04",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 45,
+      "source_bundle_sha256": "69a134eb3e1175af61781565920fad94a369ce0756a966b88806c4ebf605cf82",
+      "source_commit": "0ed9a8f1136c5d7d9fbb4bd355ce767aed86d90b"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06792524207965665,
+        0.000003126474698011885,
+        0.00005976781579504827,
+        0.00758444251118826,
+        0.005730002794491569,
+        0.00028672839585734065,
+        0.00020712711834965764,
+        6.423768993009861e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 45,
+      "total_examples": 45,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009088564396326205
+    },
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06186448333586529,
+        0.000002646712117977799,
+        0.00004426423456943876,
+        0.005625732248822256,
+        0.0042364326523525175,
+        0.0002865038093097054,
+        0.00020572187152629605,
+        6.41425493504598e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 45,
+      "total_examples": 45,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.008029602921117443
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  }
+}

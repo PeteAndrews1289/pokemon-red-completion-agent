@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+## Final current — integration closed; sustained-play boundary next
+
+[Final audit](docs/audits/red-complete-evolution-learning-2026-09-07.md): minimal checklist5/5,
+model45, one fitted selected-history example and a productive post-fit model-policy evolution.
+No independent advantage is claimed; K was sampled with exploration, not a benchmark victory.
+
+Codex owns the next supported-source/region connection and varied multi-goal integration.
+No external reviewer/subagent was invoked this session. If requested, Claude should challenge
+one-row history evidence, adaptive stopping and correlated resets; Antigravity should challenge
+the zero-option Route11 endpoint and source/transport composition. Reviews stay read-only.
+Do not reopen the consumed A-through-K work or turn the next stage into another approval campaign.
+
 ## Current — capture/evolution integration; finish measured history learning
 
 The [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) reports model41,

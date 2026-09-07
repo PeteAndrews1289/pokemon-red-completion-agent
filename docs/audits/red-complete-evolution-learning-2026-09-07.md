@@ -1,4 +1,35 @@
-# Complete options and retained-data learning — in progress
+# Complete options and retained-data learning — completed integration
+
+## Final verdict
+
+The original five-item minimal integration checklist is complete. Model35→45 retains10 new
+examples (two successful) and every old row. H supplied the first selected nonzero-history row;
+removing its history changes model45's predicted outcome vector by up to0.1216094259. This
+is one-row in-sample sensitivity, not proof of improved decisions or independent generalization.
+
+After that history fit, I/J sampled unsuccessful exploration; both remain fitted. K then made a
+genuine model-policy evolution choice under exploration (selected probability0.323571214),
+completed Rapidash40, and preserved18 specimens. Living15→16, registered20→21,15659 actions
+and1356025 frames. This is a productive post-fit follow-up, not forced continuation. Its new
+successful outcome was fitted model44→45; model45 itself has not yet played.
+
+K's saved state restores byte-identically with zero inputs/frames, all party members healthy,
+and no missing specimens. It is ready on Route11 but has zero supported next goals in this
+walking-only, Mansion-scoped profile. Retain K and earlier F; never add their collections together.
+The session stops at the prospectively declared first productive follow-up. L/M/N are cancelled
+unused; this adaptive stopping rule cannot establish a success rate or independent advantage.
+All attempted episodes A/B/C/D/E/F/H/I/J/K are disclosed below or in the linked evidence/plan.
+
+Next: connect a legitimate reachable next collection source from this saved region, using existing
+cartridge routing/skills, then require varied multi-goal progress and explicit intervention counts.
+The next risk is narrow decision coverage and region composition, not basic XP throughput.
+
+Final checks:172 focused integration tests,165 dashboard/focus tests,50 source-protocol tests,
+400-file type check and lint passed. These are scoped sets, not a full-suite or independent
+mutation score. Documentation and infographic were regenerated and visually reviewed. No outside
+reviewer was invoked, and hosted CI is not being claimed complete here.
+
+The earlier notes below record intermediate states rather than overriding this final verdict.
 
 ## Verified position
 

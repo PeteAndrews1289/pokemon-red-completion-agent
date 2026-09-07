@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.red.complete-evolution-learning.v1",
   "session": "2026-09-07-complete-evolution-learning",
-  "status": "active",
+  "status": "complete",
   "training_a": {
     "episode": "red-complete-evolution-20260907-a-causal",
     "manifest_sha256": "9b754296b907228ddcc9e34d68b3e7016fac6c0391e48385cd2375027192180c",
@@ -12,12 +12,25 @@
     "fit_admitted": true
   },
   "model": {
-    "sha256": "64165737d3fb90f61b622f5e0cca3e42a7a7a3cb4e713e28130041b9940f00b5",
-    "retained_examples": 41,
-    "successful_examples": 15,
+    "authority": "bounded_development_only",
+    "ci_is_training_dependency": false,
+    "corpus_sha256": "8cc06bbe8bd6489ff39442d116b93ca6e1a6c01d37af82982238d040a0c7d696",
+    "file_sha256": "296b63d757e032fbd6fef66bb15de6294a6fcdea43d8b4df64a6491d5cf3cd6c",
+    "independent_evaluation": false,
+    "model_sha256": "7cf5f57042a7d2023821f32d7eeb25af70b80d761cc0ee02af1f9a4ea235ab41",
+    "prior_model_sha256": "2c1a55ed2678d45306762ab5604f2b32cc995502f1611bfa8222c0ef322b0d04",
+    "private_path_fields": 0,
+    "schema": "pokemon.red.native-player-model.v1",
+    "settled_examples": 45,
+    "source_bundle_sha256": "69a134eb3e1175af61781565920fad94a369ce0756a966b88806c4ebf605cf82",
+    "source_commit": "0ed9a8f1136c5d7d9fbb4bd355ce767aed86d90b",
+    "retained_examples": 45,
+    "successful_examples": 16,
     "previous_examples": 35,
+    "new_examples": 10,
+    "new_successful_examples": 2,
     "unselected_targets": 0,
-    "selected_nonzero_history_examples": 0
+    "selected_nonzero_history_examples": 1
   },
   "training_b": {
     "episode": "red-complete-evolution-20260907-b-causal.failed.partial",
@@ -41,10 +54,11 @@
     "independent_generalization": false,
     "crystal_execution": false,
     "full_game_replay": false,
-    "checklist_completed": 3,
-    "checklist_total": 5
+    "checklist_completed": 5,
+    "checklist_total": 5,
+    "checklist_scope": "minimal learning integration only; not sustained play or independent competence"
   },
-  "next": "Best progressed save F retained. G cancelled unused. Declared H/I/J correlated practice branch from D targets actual selected-history training; no new mechanics or replay.",
+  "next": "Stop completed integration at K. L/M/N cancelled unused. Connect useful next-source/region continuation from retained K for sustained play, with varied scenarios and explicit costs/interventions.",
   "training_c": {
     "episode": "red-complete-evolution-20260907-c-causal",
     "manifest_sha256": "6cf8eabc66287e518feaebd9b0aa6fcbd0ef06f4444bd0b933b189846423aff7",
@@ -126,5 +140,101 @@
     "specimens_retained": 18,
     "verified_recovery_saves": 59,
     "stop_reason": "insufficient_available_goals"
+  },
+  "training_h": {
+    "episode": "red-complete-evolution-20260907-h-causal",
+    "manifest_sha256": "5e6708c3a9c3f31b565ebb2fbe2c1b423ec6620e05d70a33be2910c0aa8e7fe1",
+    "checkpoint_sha256": "3075487a95f290b142bcba3dd8af12f7c195fdf240a8f2ca083cac948a37520c",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "acquire_species",
+        "status": "failed",
+        "actions": 198,
+        "frames": 8700,
+        "living_before": 15,
+        "living_after": 15,
+        "selection_mode": "authority"
+      }
+    ]
+  },
+  "training_i": {
+    "episode": "red-complete-evolution-20260907-i-causal",
+    "manifest_sha256": "f407ffc6a2950e0725b80865bfcc0916cd27143d7a90ed5293cac3d13ee714fc",
+    "checkpoint_sha256": "550f368339cebc12eada401b2fc7a861ec4135177ad1df84548f78dabba5ce0b",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "explore",
+        "status": "failed",
+        "actions": 250,
+        "frames": 13488,
+        "living_before": 15,
+        "living_after": 15,
+        "selection_mode": "authority"
+      }
+    ]
+  },
+  "training_j": {
+    "episode": "red-complete-evolution-20260907-j-causal",
+    "manifest_sha256": "8413d0e41045bf9afea1de2f1ee53f5d2c822d9c1c3705aa86d0e4b242938276",
+    "checkpoint_sha256": "b5054083fde3cba84d6ef895b3100ff994ce2e6ae00a0410bb620f79cadbacdb",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "explore",
+        "status": "failed",
+        "actions": 178,
+        "frames": 7056,
+        "living_before": 15,
+        "living_after": 15,
+        "selection_mode": "authority"
+      }
+    ]
+  },
+  "training_k": {
+    "episode": "red-complete-evolution-20260907-k-causal",
+    "manifest_sha256": "37e35836f9a31b4f9e6a6982f11dde4203fbfebff2adcb796077acf6c438b9a7",
+    "checkpoint_sha256": "6eebc7ad386f3dfc203d836081286bc3a76f87f6faeb4bbe71ef45bef25d1efb",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "evolve_species",
+        "status": "succeeded",
+        "actions": 15659,
+        "frames": 1356025,
+        "living_before": 15,
+        "living_after": 16,
+        "selection_mode": "authority"
+      }
+    ]
+  },
+  "history_audit": {
+    "selected_nonzero_history_examples": 1,
+    "model_sha256": "7cf5f57042a7d2023821f32d7eeb25af70b80d761cc0ee02af1f9a4ea235ab41",
+    "retained_decision_sha256": "1ae267800bd1953278c616c219c7304cc09b29e8522ed7d14f34ac0083b2e1f4",
+    "max_absolute_prediction_change_on_history_removal": 0.1216094258624728,
+    "in_sample_only": true,
+    "proven_history_advantage": false
+  },
+  "restoration": {
+    "checkpoint_sha256": "6eebc7ad386f3dfc203d836081286bc3a76f87f6faeb4bbe71ef45bef25d1efb",
+    "byte_identical": true,
+    "actions": 0,
+    "frames": 0,
+    "living_species": 16,
+    "registered_species": 21,
+    "specimens": 18,
+    "healthy_party": true,
+    "input_ready": true,
+    "available_goals": 0
+  },
+  "tests": {
+    "focused_integration_passed": 172,
+    "dashboard_and_focus_passed": 165,
+    "source_protocol_passed": 50,
+    "typechecked_files": 400,
+    "lint_passed": true,
+    "full_suite_this_session": false
   }
 }

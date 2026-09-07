@@ -55,8 +55,8 @@
       {
         "id": "history-model",
         "label": "Model trained to use history",
-        "done": false,
-        "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+        "done": true,
+        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
       },
       {
         "id": "alternatives",
@@ -67,8 +67,8 @@
       {
         "id": "useful-followup",
         "label": "Productive lesson and follow-up",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
       }
     ]
   },
@@ -117,9 +117,9 @@
     },
     {
       "session": "2026-09-07-complete-evolution-learning",
-      "result": "In progress: model35 to41; capture plus completed forced evolution. Best state16 living/18 specimens. Actual selected-history training still absent; checklist3/5.",
-      "deviation": "Corrected evolution accounting and continuation/reporting/save boundaries. F retained; declared correlated practice from D targets history learning rather than new route work.",
-      "next": "Complete H/I/J selected-history practice and audit productive follow-up; no source expansion in this batch."
+      "result": "Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens. Minimal checklist5/5; not full Red or sustained competence.",
+      "deviation": "Explicit larger completion dose and correlated practice reset from D; F retained, failed B excluded, all eligible failures kept. No stage exit changes or independent evaluation claim.",
+      "next": "Start sustained-play integration: give retained Route11 endpoint a useful reachable next source, then varied multi-goal episodes with model45."
     }
   ]
 }

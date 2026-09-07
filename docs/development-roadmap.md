@@ -9,16 +9,16 @@ A learned player that finishes Pokemon games and builds a living Pokedex across 
 
 ## Current milestone
 
-**Useful memory-aware play: 3/5 acceptance items (60%).**
+**Useful memory-aware play: 5/5 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
-- [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
+- [x] Model trained to use history ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
 - [x] Two useful executable alternatives ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
-- [ ] Productive lesson and follow-up
+- [x] Productive lesson and follow-up ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
 
-Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **45 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -94,11 +94,11 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-complete-evolution-learning
 
-In progress: model35 to41; capture plus completed forced evolution. Best state16 living/18 specimens. Actual selected-history training still absent; checklist3/5.
+Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens. Minimal checklist5/5; not full Red or sustained competence.
 
-**Deviation:** Corrected evolution accounting and continuation/reporting/save boundaries. F retained; declared correlated practice from D targets history learning rather than new route work.
+**Deviation:** Explicit larger completion dose and correlated practice reset from D; F retained, failed B excluded, all eligible failures kept. No stage exit changes or independent evaluation claim.
 
-**Next:** Complete H/I/J selected-history practice and audit productive follow-up; no source expansion in this batch.
+**Next:** Start sustained-play integration: give retained Route11 endpoint a useful reachable next source, then varied multi-goal episodes with model45.
 
 ### 2026-09-07-party-selection
 

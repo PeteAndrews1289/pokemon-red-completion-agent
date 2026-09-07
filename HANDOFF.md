@@ -1,5 +1,23 @@
 # Handoff
 
+## Final current — minimal learning integration complete, 45 retained examples
+
+The [final audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) closes the unchanged
+useful-play checklist5/5. Model `7cf5f570` has45 retained rows (16 successful), up from35.
+H supplied one authentic selected-history example; its learned prediction effect is measured,
+but only in-sample. I/J failures remain fitted. Post-history-fit K selected evolution under the
+exploratory model policy and completed Rapidash40 with18 specimens intact, living15→16.
+
+Latest admitted K checkpoint `6eebc7ad...d1efb` restores exactly with zero input/frame changes.
+Healthy party, Route11; no next supported source in this profile. Keep F too; these are parallel
+training histories, not additive collections. B remains failed-partial/excluded; F is forced-only,
+no fit row. All launchers and fitters through K are consumed. G/L/M/N cancelled unused.
+
+Next: give the saved region a legitimate reachable next source through existing skills, then
+test varied multi-goal play with model45. Do not replay the closed success or build new sealed gates.
+Model45 itself has not played; sustained autonomy, history advantage and transfer remain unproved.
+Earlier “Current” headings below are historical. Private OPERATOR retains exact identities.
+
 ## Current — 41 examples; capture and complete evolution qualified
 
 Read the [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md).

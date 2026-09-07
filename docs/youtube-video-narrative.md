@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Final chapter for this milestone — a learned-policy choice that finishes
+
+Use K's actual capture of the evolution screen and recorded goal choice if presenting this session.
+Label it “model-policy choice with exploration; deterministic mechanics execute.” The model chose
+evolution among genuine alternatives, finished Rapidash40, and retained the precursor. Do not splice
+F's forced continuation into a claim that the model chose it.
+
+The learner now retains45 examples, including successes and failures. One authentic selected-history
+row changes learned predictions; that is integration evidence, not proof of independent superiority.
+Show the5/5 checklist as this small milestone only. End on the next honest problem: the saved player
+has no supported next source in its current region, so sustained play is still ahead.
+[Final audit and boundaries](audits/red-complete-evolution-learning-2026-09-07.md).
+
 ## Latest chapter — a model-selected catch, then an honest boundary
 
 Show C's real capture and the collection counter increasing. Then show the separately labelled

@@ -1,31 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1870" viewBox="0 0 1420 1870" role="img" aria-labelledby="title description">
 <title id="title">Pokemon development roadmap</title>
-<desc id="description">3 of 5 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game living Pokedex.</desc>
+<desc id="description">5 of 5 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game living Pokedex.</desc>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>
 <rect width="1420" height="1870" fill="#0b1221"/>
 <path d="M1120 0H1420V225Z" fill="#172947"/>
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a living Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">35 goal-value examples  /  Full model-led Red win: not demonstrated</text>
+<text x="50" y="215" class="small">45 goal-value examples  /  Full model-led Red win: not demonstrated</text>
 <rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 02</text>
 <text x="80" y="349" class="heading">Useful memory-aware play</text>
-<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">60%</text>
-<text x="82" y="495" class="body">3 of 5 acceptance items verified</text>
+<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">100%</text>
+<text x="82" y="495" class="body">5 of 5 acceptance items verified</text>
 <text x="82" y="529" class="small muted">Not Red completion. Not a time estimate.</text>
 <text x="705" y="342" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="342" class="body">Saved-state learning loop</text>
 <text x="705" y="386" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="386" class="body">Persisted search-history contract</text>
-<text x="705" y="430" class="small" style="fill:#8594ad">NEXT</text>
+<text x="705" y="430" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="430" class="body">Model trained to use history</text>
 <text x="705" y="474" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="474" class="body">Two useful executable alternatives</text>
-<text x="705" y="518" class="small" style="fill:#8594ad">NEXT</text>
+<text x="705" y="518" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="518" class="body">Productive lesson and follow-up</text>
 <rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>
-<rect x="80" y="577" width="756" height="8" rx="4" fill="#ffd36a"/>
+<rect x="80" y="577" width="1260" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
 <text x="740" y="695" class="small" style="fill:#57dfb1">VERIFIED</text>
 <text x="870" y="695" class="small" style="fill:#ffd36a">CURRENT</text>
@@ -96,7 +96,7 @@
 <text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
 <text x="50" y="1732" class="small muted">2026-09-07-complete-evolution-learning</text>
-<text x="50" y="1767" class="body">In progress: model35 to41; capture plus completed forced evolution. Best state16 living/18 specimens. Actual selected-history</text>
-<text x="50" y="1792" class="body">training still absent; checklist3/5.</text>
+<text x="50" y="1767" class="body">Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens.</text>
+<text x="50" y="1792" class="body">Minimal checklist5/5; not full Red or sustained competence.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

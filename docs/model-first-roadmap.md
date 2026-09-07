@@ -1,5 +1,22 @@
 # Model-first development roadmap
 
+## Final current — useful-play integration complete; sustained play next
+
+The [final audit](audits/red-complete-evolution-learning-2026-09-07.md) closes the five-item
+minimal integration checklist. Model35→45,10 retained new outcomes, one selected-history training
+example and a productive post-fit evolution. This is not independent learned advantage or Red completion.
+
+1. Preserve K's exact saved endpoint (16 living species,18 specimens); do not replay its success.
+2. Connect a legitimate reachable next collection source using existing cartridge routing and skills.
+   The present Mansion-scoped walking-only profile offers no next goal on Route11.
+3. Exercise model45 across varied multi-goal situations; count actual progress, costs, failures,
+   deterministic bridges and human interventions. Fit retained outcomes and test continuations.
+4. Expand battle/navigation authority only with evidence. Full Red, living collection, unfamiliar
+   compatible hack and Crystal remain later stages with unchanged exits.
+
+The closed infographic checklist remains visible as the handoff into stage3; it is not an estimate
+of full-project completion. Start a new stage3 checklist prospectively next session, preserving this one.
+
 ## Current — useful mechanics connected; finish the history lesson
 
 [Current audit](audits/red-complete-evolution-learning-2026-09-07.md): model35→41, one new

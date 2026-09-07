@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## 2026-09-07 learning integration — original checklist completed, limits retained
+
+The bounded native option and retained-data fit completed the original5/5 minimal checklist:
+one authentic selected-history row affects learned predictions, and a later exploratory model
+choice completes evolution productively. Model35→45; all eligible failures retained. B remains
+excluded, F remains a forced bridge, and H was a prospectively declared correlated reset to D
+for history practice while preserving progressed F. These adaptations are training, not a
+success-rate experiment. L/M/N stopped unused at the declared productive follow-up K.
+
+No baseline stage ID or exit changed. The completed checklist stays visible for handoff; next
+session starts stage3's checklist prospectively and retains this result. The next dependency is
+regional/source composition from the saved Route11 endpoint, not another teacher or sealed gate.
+One-row in-sample sensitivity does not establish history advantage, sustained autonomy or transfer.
+See the [final audit](audits/red-complete-evolution-learning-2026-09-07.md).
+
 ## 2026-09-07 party-selection session — component success, unchanged learning exits
 
 The timing-corrected continuation stopped on exhausted attack PP hidden by status PP. One
