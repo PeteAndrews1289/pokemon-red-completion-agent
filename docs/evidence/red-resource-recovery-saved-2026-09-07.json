@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 UTC",
+  "location": "Route 11 — stopped; withdrawn Metapod needs recovery",
+  "registered_species": 28,
+  "living_species": 23,
+  "specimens": 25,
+  "capture_items": 0,
+  "money": 109,
+  "checkpoint_sha256": "361216a3988f95a272606dfa33b0e1862043327e96d35ed8d5263765eb3b2f03",
+  "live": false,
+  "controller_actions": 0
+}

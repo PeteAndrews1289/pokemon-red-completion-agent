@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery-v**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-resource-recovery-closeout**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-resource-recovery-closeout
+
+Cross-box retrieval demonstrated; recovery repair passed154 checks. V successor has two game goals but zero model scores; no new play or fit. Model60 and2/3 unchanged.
+
+**Deviation:** Stopped before deterministic fallback. The next priority is compatible optional-recovery model coverage, not another support replay; no stage exits changed.
+
+**Next:** Version the optional-recovery projection, preserve historical decisions, then one genuine V-successor choice and fit.
 
 ### 2026-09-07-resource-recovery-v
 

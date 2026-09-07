@@ -1,5 +1,26 @@
 # Resource recovery — engineering checkpoint
 
+## Final reorientation — stop before unsupported selection
+
+The native recovery repair is published as74a95fed;154 targeted/caller/source
+checks passed, plus whole-repository lint and412-module typing. W's action-free
+inspection restored V and found evolve_species plus restore_team. However the
+actual model policy returned deterministic_unsupported with zero scores: restore
+is absent from its option mapping, so only one supported alternative remains.
+No W gameplay, proposal, declaration or fit occurred. No future work is scheduled.
+
+This is the natural boundary for this engineering session. Cross-box retrieval
+is demonstrated; the healing correction is ROM-free qualified but not yet live
+validated. Model60 stays60examples/23successful, and the local milestone stays2/3.
+Do not spend another session on deterministic logistics before expanding useful
+learned decisions. The [next plan](../work-sessions/2026-09-07-optional-recovery-learning-plan.md)
+targets optional recovery with backward-compatible model/trajectory semantics.
+
+CI34143810607 is green for18535c2a. Newer264ec7fb and74a95fed checks were still
+running at review; no new full-suite/remote-green claim is made. No checks or
+failure notifications were disabled. The dashboard's fit panel remains the last
+actual U fit; its saved collection and work status now identify V and this stop.
+
 ## Live V — storage worked, recovery did not
 
 Published264ec7fb restored U/model60 with zero input and exposed one evolution

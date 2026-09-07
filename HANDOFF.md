@@ -11,10 +11,12 @@ party; V is consumed and may not retry. Model60/60examples/23successful is uncha
 
 The native repair verifies the actual party after withdrawal and faces the nurse
 before interacting. Four-facing/nonlead-health tests exercise the real Center
-provider. Historical teacher code is unchanged. Next inspect V/model60 and retain
-V's zero-row support beside the next eligible fit; never rewind U or count this
-bridge as learning. The local2/3 milestone and downstream stage exits stay fixed.
-No outside reviewer or full replay is running; Codex owns the bounded continuation.
+provider. Historical teacher code is unchanged. Actual V-successor inspection
+found evolve/restore available, but restore is outside the learned option mapping:
+deterministic_unsupported, zero model scores. No W input, proposal or fit occurred.
+The local2/3 milestone stays fixed. Session stopped; no gameplay or coding is
+running in the background. Next follow the [optional-recovery learning plan](docs/work-sessions/2026-09-07-optional-recovery-learning-plan.md).
+Preserve V's zero-row support with the next eligible fit. Never rewind U or V.
 See the [current audit](docs/audits/red-resource-recovery-2026-09-07.md).
 
 Narrative point: a party being healthy before a PC exchange does not prove the

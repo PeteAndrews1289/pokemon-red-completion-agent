@@ -1,5 +1,11 @@
 # Next session — make the retained collection playable again
 
+Session closed at the model-coverage boundary: V's box access worked, recovery
+was repaired, and its fresh menu exposed two goals but only one supported model
+candidate. No W input or fit. Continue with the
+[optional-recovery learning plan](2026-09-07-optional-recovery-learning-plan.md),
+not another U/V replay. The starting-state instructions below are historical.
+
 Start from U/model60, not S/T or a funded reset. U failed capture after spending its
 two balls; all25specimens/23living species survive,20active storage slots are free,
 and109currency remains. Exact model60 preflight restores without input but returns

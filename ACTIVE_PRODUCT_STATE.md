@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Inspect V/model60 after whole-party Center recovery qualification; preserve V as consumed zero-row support in the next genuine goal choice and fit.
+- Next decision: Qualify optional recovery as a versioned model choice while preserving old vectors, predictions and trajectory replay; then one actual V-successor choice and fit.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | Model60 retains60outcomes/23successful. V was a zero-row forced evolution bridge: box access worked, recovery failed before XP.23living/25specimens/28registered preserved; Metapod4 is now in party,HP5/18. No new model play or fit. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability? |
+| Cheapest falsifier | Can the exact V menu produce two model scores without weakening mandatory recovery or changing any historical model prediction or recorded decision? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,7 +62,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-resource-recovery-v** · status **active** · evidence [falsification](docs/evidence/red-resource-recovery-live-2026-09-07.json)
+**2026-09-07-resource-recovery-closeout** · status **active** · evidence [falsification](docs/evidence/red-resource-recovery-closeout-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -70,11 +70,11 @@ outputs.
 | Learning output | V536actions38268frames,zero XP battles,zero learned decisions/examples. All25specimens retained; model60 unchanged. |
 | Authority delta | None: deterministic singleton support, not an imitation target or model decision. |
 | Transfer result | Actual cross-box rotation/retrieval passed; recovery failed. Four-facing and nonlead-healing ROM-free tests qualify the native repair, not cross-game performance. |
-| Blocker | V retrieved Metapod4 at5/18HP but the legacy recovery assumed nurse-facing orientation and never healed it. Native post-withdrawal whole-party recovery is now under qualification. |
-| Decision | Qualify whole-party Center recovery, then a fresh V continuation. The2/3 milestone remains open; PC success is not evolution. |
-| Next session | Inspect V/model60 after whole-party Center recovery qualification; preserve V as consumed zero-row support in the next genuine goal choice and fit. |
-| Next falsifier | Can the exact zero-ball109currency save expose a legitimate recovery or cross-box evolution option without a reset or fabricated affordability? |
-| Stop condition | V and all older attempts consumed. Start only from its retained terminal; no reset, new teacher or invented support row. |
+| Blocker | Actual V successor has evolve/restore available, but restore is not in the learned option mapping. The policy returns deterministic_unsupported with zero scores. No W input or fit. |
+| Decision | Stop before fallback. Box access is demonstrated and recovery is qualified; the next session must increase model choice coverage, not repeat deterministic logistics. Local2/3 unchanged. |
+| Next session | Qualify optional recovery as a versioned model choice while preserving old vectors, predictions and trajectory replay; then one actual V-successor choice and fit. |
+| Next falsifier | Can the exact V menu produce two model scores without weakening mandatory recovery or changing any historical model prediction or recorded decision? |
+| Stop condition | V and all earlier attempts consumed. No W declared or executed. Preserve V support; stop on fallback, relabelled old rows, weakened safety or reset-funded progress. |
 
 ### Stop conditions
 

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-resource-recovery-v",
+  "as_of_session": "2026-09-07-resource-recovery-closeout",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -210,6 +210,12 @@
       "result": "V retrieved Metapod4 across boxes and preserved25specimens, but failed before XP because recovery did not heal it. Zero learning rows; model60 and2/3 unchanged.",
       "deviation": "One bounded support attempt, not a new model decision. Preserve its failure; native recovery repair replaces an inherited nurse-facing assumption, not the teacher.",
       "next": "Inspect V/model60 after whole-party recovery tests, then one actual goal choice with V support retained."
+    },
+    {
+      "session": "2026-09-07-resource-recovery-closeout",
+      "result": "Cross-box retrieval demonstrated; recovery repair passed154 checks. V successor has two game goals but zero model scores; no new play or fit. Model60 and2/3 unchanged.",
+      "deviation": "Stopped before deterministic fallback. The next priority is compatible optional-recovery model coverage, not another support replay; no stage exits changed.",
+      "next": "Version the optional-recovery projection, preserve historical decisions, then one genuine V-successor choice and fit."
     }
   ],
   "closed_milestones": [
