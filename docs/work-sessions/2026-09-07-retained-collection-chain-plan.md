@@ -53,3 +53,21 @@ exist. Renewable income and broader battle authority remain explicit limits.
 
 Recommended: **Astra High, Fast off**. Prioritize a measured short gameplay chain
 over a larger design exercise; increase effort only for a concrete hard decision.
+
+## First-result reorientation — AA
+
+AA selected Route5 from two real sources and failed after 678 actions / 46,596
+frames. Model63 retains its failed outcome and all 62 prior rows. No acquisition;
+all 25 specimens survive, but Beedrill fainted while fleeing. Seven balls and
+209 currency are unchanged. The exact terminal restore passed without input.
+The chain is stopped; AA will not retry and AB–AD will not execute this session.
+
+Bounded maintenance before closeout: stop a source survey at the first settled
+fainted-party boundary, preserve its partial counts, and distinguish that safety
+failure from an ordinary no-find. This unblocks the next retained-state recovery
+and acquisition experiment; it grants no new authority or transfer claim. Cheapest
+falsifier: a ROM-free executor that faints a party member during a flee must not
+receive another search input, and a capture followed by a faint must not count as
+success. Allow 30 minutes for repair/tests, then close out without gameplay.
+Safer lead preparation and legitimate recovery remain the next measured step;
+do not hide the actual damage with a reset or retroactively relabel AA.

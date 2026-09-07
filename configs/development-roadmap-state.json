@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-collection-prerequisites-learning",
+  "as_of_session": "2026-09-07-retained-acquisition-safety",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
+      "evidence": "docs/evidence/red-retained-acquisition-safety-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Storage-safe varied collection",
+    "title": "Safe retained acquisition chain",
     "items": [
       {
-        "id": "legitimate-supply",
-        "label": "Legitimate supply support retained",
-        "done": true,
-        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        "id": "retained-party-recovery",
+        "label": "Recover the actual retained party",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "capture-storage",
-        "label": "Storage-safe capture preparation",
-        "done": true,
-        "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        "id": "capture-ready-lead",
+        "label": "Qualify safe capture-search preparation",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "productive-varied-outcome",
-        "label": "Useful varied outcome played and fitted",
-        "done": true,
-        "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
+        "id": "productive-source-continuation",
+        "label": "Retain and fit a useful source capture",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -234,6 +234,12 @@
       "result": "Closed 3/3: model-selected Beedrill evolution retained and fitted, 61 to 62 outcomes. 25 living species/25 specimens, 30 registered; seven balls and 209 currency remain.",
       "deviation": "Zero balls made resupply mandatory, so Y stayed zero-row support. Parent observer settings repaired after exact hash probe; Z then made the real choice. No baseline exit changed; Phase3 remains current.",
       "next": "Short retained-state acquisition chain with genuine source-choice authority, duplicate demand, measured resource costs and no resets."
+    },
+    {
+      "session": "2026-09-07-retained-acquisition-safety",
+      "result": "AA selected Route 5 and failed: no capture, Beedrill fainted. All 25 specimens, seven balls and 209 currency retained; model62 to model63, all prior rows preserved. Exact save verified.",
+      "deviation": "Planned2-4-step chain stopped at its first failed skill. Minimal ROM-free search-stop repair added; no retry or live repair claim. Prior3/3 milestone archived intact; new recovery checklist is prospective0/3, not a Phase3 percentage.",
+      "next": "Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry."
     }
   ],
   "closed_milestones": [
@@ -420,6 +426,31 @@
           "label": "Played mixed choice retained and fitted",
           "done": true,
           "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-collection-prerequisites-learning",
+      "stage": "sustained-red",
+      "title": "Storage-safe varied collection",
+      "items": [
+        {
+          "id": "legitimate-supply",
+          "label": "Legitimate supply support retained",
+          "done": true,
+          "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        },
+        {
+          "id": "capture-storage",
+          "label": "Storage-safe capture preparation",
+          "done": true,
+          "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        },
+        {
+          "id": "productive-varied-outcome",
+          "label": "Useful varied outcome played and fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
         }
       ]
     }

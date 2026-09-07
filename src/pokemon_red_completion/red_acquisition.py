@@ -15,6 +15,7 @@ denominator.
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Protocol
@@ -356,10 +357,11 @@ class RedAreaExecutionReport:
     flees: int
     box_switches: int
     search_exhausted: bool = False
+    safety_stopped: bool = False
 
     @property
     def passed(self) -> bool:
-        return not self.final_missing_species_refs
+        return not self.safety_stopped and not self.final_missing_species_refs
 
 
 def plan_red_acquisition(
@@ -558,6 +560,7 @@ def run_red_area_survey(
     *,
     policy: RedAreaExecutionPolicy | None = None,
     catalog: RedAcquisitionCatalog | None = None,
+    safety_check: Callable[[], bool] | None = None,
 ) -> RedAreaExecutionReport:
     """Execute one bounded source survey through a semantic game adapter."""
 
@@ -569,7 +572,25 @@ def run_red_area_survey(
     flees = 0
     box_switches = 0
 
+    def safety_stop(action_count: int) -> RedAreaExecutionReport | None:
+        if safety_check is None:
+            return None
+        safe = safety_check()
+        if type(safe) is not bool:
+            raise TypeError("area safety check must return a bool")
+        if safe:
+            return None
+        final = summarize_red_area_survey(source_id, executor.read_collection(), catalog)
+        return RedAreaExecutionReport(
+            source_id, initial.missing_species_refs, final.missing_species_refs,
+            action_count, encounters_seen, captures, flees, box_switches,
+            safety_stopped=True,
+        )
+
     for action_count in range(policy.max_actions + 1):
+        stopped = safety_stop(action_count)
+        if stopped is not None:
+            return stopped
         observation = executor.read_collection()
         encountered = executor.encountered_species_ref()
         survey = summarize_red_area_survey(source_id, observation, catalog)
@@ -658,6 +679,9 @@ def run_red_area_survey(
                 )
             captures += 1
             if policy.capture_quota is not None and captures >= policy.capture_quota:
+                stopped = safety_stop(action_count + 1)
+                if stopped is not None:
+                    return stopped
                 final = summarize_red_area_survey(
                     source_id,
                     after_observation,

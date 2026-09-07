@@ -1263,7 +1263,8 @@ class RedAreaSurveyGoalProvider:
     def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check source needs and real inventory without inventing a source location."""
 
-        if observation.raw.battle_state or not observation.input_ready:
+        if (observation.raw.battle_state or not observation.input_ready
+                or any(member.hp <= 0 for member in observation.party.members)):
             return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.TEMPORARILY_BLOCKED,
             )
@@ -1312,8 +1313,12 @@ class RedAreaSurveyGoalProvider:
                 self.area_executor,
                 policy=self.policy,
                 catalog=self.catalog,
+                safety_check=lambda: all(
+                    member.hp > 0 for member in self.adapter.observe().party.members
+                ),
             )
-            if report.captures and self.normalize_after_capture is not None:
+            if (report.captures and not report.safety_stopped
+                    and self.normalize_after_capture is not None):
                 self.normalize_after_capture()
             final_survey = summarize_red_area_survey(
                 self.source_id,
@@ -1331,7 +1336,11 @@ class RedAreaSurveyGoalProvider:
                     "encounters_seen": report.encounters_seen,
                     "captures": report.captures,
                     "search_exhausted": report.search_exhausted,
-                    "source_normalized": self.normalize_after_capture is not None,
+                    "safety_stopped": report.safety_stopped,
+                    "source_normalized": bool(
+                        report.captures and not report.safety_stopped
+                        and self.normalize_after_capture is not None
+                    ),
                     "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
                     "final_missing": len(report.final_missing_species_refs),
@@ -1357,6 +1366,13 @@ class RedAreaSurveyGoalProvider:
             after_story = self.adapter.graph.completed_ids(after.game_state)
             if before_story.difference(after_story):
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+            if report.evidence.get("safety_stopped") is True:
+                return GoalVerification.failed(
+                    GoalFailureReason.RESOURCE_LOST
+                    if not after.raw.battle_state
+                    and any(member.hp <= 0 for member in after.party.members)
+                    else GoalFailureReason.OUTCOME_NOT_VERIFIED
+                )
             if self.boundary is not None:
                 normalized_boundary = self.boundary(after)
                 if not isinstance(normalized_boundary, RedGoalSkillAvailability):

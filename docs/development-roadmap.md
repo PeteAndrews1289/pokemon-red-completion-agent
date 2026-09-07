@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-collection-prerequisites-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-retained-acquisition-safety**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Storage-safe varied collection: 3/3 acceptance items (100%).**
+**Safe retained acquisition chain: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Legitimate supply support retained ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
-- [x] Storage-safe capture preparation ([evidence](../docs/evidence/red-varied-collection-learning-2026-09-07.json))
-- [x] Useful varied outcome played and fitted ([evidence](../docs/evidence/red-collection-prerequisites-learning-2026-09-07.json))
+- [ ] Recover the actual retained party
+- [ ] Qualify safe capture-search preparation
+- [ ] Retain and fit a useful source capture
 
-Current model: **62 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **63 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-collection-prerequisites-learning-2026-09-07.json)
+[Current evidence](../docs/evidence/red-retained-acquisition-safety-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-retained-acquisition-safety
+
+AA selected Route 5 and failed: no capture, Beedrill fainted. All 25 specimens, seven balls and 209 currency retained; model62 to model63, all prior rows preserved. Exact save verified.
+
+**Deviation:** Planned2-4-step chain stopped at its first failed skill. Minimal ROM-free search-stop repair added; no retry or live repair claim. Prior3/3 milestone archived intact; new recovery checklist is prospective0/3, not a Phase3 percentage.
+
+**Next:** Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry.
 
 ### 2026-09-07-collection-prerequisites-learning
 

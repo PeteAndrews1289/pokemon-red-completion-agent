@@ -1,0 +1,152 @@
+{
+  "schema": "pokemon.red.retained-acquisition-safety.v1",
+  "classification": "Failed model-directed destination choice retained and fitted; survey safety repair is ROM-free only",
+  "source_commit": "5499c5b07abeb01c50b19f8ff99374ec0016b956",
+  "source_bundle_sha256": "3445bb876356716b0ba9577942402269afda8c621b2c8fc996d67d361f4d787d",
+  "episode_id": "red-retained-collection-20260907-aa-causal",
+  "manifest_sha256": "4ca0b11509f72f3721301e1cb13c63529ad1cd988892a919a01a2e448d50d809",
+  "checkpoint_sha256": "2f55d3c2739c07814302a37875d13b42802589e314b8faf20285919747998406",
+  "choice_record_sha256": "279dd3eaa4e8511eb71315b931228af32f6ad2b61d5495b893e41343047b8ddf",
+  "outcome_record_sha256": "a4d419f3ae52dbfde5a96f883fb4904fddc8bf617f85cb3d72f2dec6dc317db2",
+  "behavior_model_sha256": "bbfa9e701a1022268b996b55f584447ef92800f693aea13fd0afc15b3aae3fc0",
+  "candidate_sources": [
+    "wild:Route5:grass",
+    "wild:Route24:grass"
+  ],
+  "selected_source": "wild:Route5:grass",
+  "selected_probability": 0.5002510577957293,
+  "verified_success": false,
+  "failure_reason": "outcome_not_verified",
+  "actions": 678,
+  "frames": 46596,
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 25,
+    "registered_species": 30,
+    "required_specimens_remaining": 95,
+    "required_specimens_sha256": "8923e44470ea8ab4ec6f191286d4986bcc5a087190ee0fa45922e370d15a8c06",
+    "retained_captures": 25,
+    "specimen_ledger_sha256": "bd96c06b940b11e9f09c0f257a775e4dc7e2ce21b788d43402125708feb2b947",
+    "storage_headroom": 20,
+    "total_living_specimens": 25,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "capture_items_before": 7,
+    "capture_items_after": 7,
+    "money_before": 209,
+    "money_after": 209,
+    "bag_unchanged": true
+  },
+  "storage_preparation": {
+    "actions_executed": 36,
+    "box_rotations": 1,
+    "collection_preserved": true,
+    "frames_executed": 4512,
+    "initial_headroom": 1,
+    "prepared_headroom": 20,
+    "setup_training_rows": 0
+  },
+  "capture_support": {
+    "party_preparations": 1,
+    "status_attempts": 0,
+    "verified_status_observations": 0
+  },
+  "diagnosis": {
+    "retained_lead": "Beedrill",
+    "level": 10,
+    "hp_before": 35,
+    "hp_after": 0,
+    "first_faint_execution_index": 607,
+    "subsequent_actions": 70,
+    "subsequent_frames": 3888,
+    "subsequent_cost_includes_battle_settlement": true,
+    "observed": "Evolved low-level lead remained first while the source search fled encounters. Search continued after fainting; no capture or throw occurred.",
+    "catalog_scope": "The curated Route5 source currently targets Mankey duplicates, not every species present in its wild table.",
+    "limitation": "The generic historical failure receipt did not preserve the full survey report. Diagnosis uses action-linked snapshots and the exact retained endpoint; AA is not relabeled."
+  },
+  "training": {
+    "retained_examples": 63,
+    "successful_examples": 25,
+    "distinct_selected_feature_rows": 53,
+    "new_examples": 1,
+    "model_fitted": true,
+    "model_sha256": "7b29e6223c96ce0532bdeade28ad05a7cd1096357540cd50b304c26b52e6c33c",
+    "model_record_sha256": "199f775fcf7e6c1bf17b66977368676cc8964fd33fd886e7d075261e9ceb0306",
+    "corpus_sha256": "94d5d7d61fe29dac26c8018cff80091ddc6b037d4b962ae105993f748733929c",
+    "corpus_record_sha256": "e8a1ed2cf7616a5685e0edf07698f445cee0c8b01e7babcb0e2db58b5a92b8f2",
+    "prior_rows_retained": true,
+    "retained_native_episodes": 41,
+    "retained_regional_choices": 13,
+    "parent_learning_examples": 0,
+    "unselected_action_targets": 0,
+    "updated_model_has_played": false
+  },
+  "observed_outcome": {
+    "censor_reason": null,
+    "schema": "pokemon.core.living-dex-observed-outcome.v1",
+    "status": "settled",
+    "target_names": [
+      "verified_success",
+      "completion_gain",
+      "dependency_unlock_gain",
+      "action_cost",
+      "frame_cost",
+      "resource_cost",
+      "party_cost",
+      "storage_cost",
+      "irreversible_loss"
+    ],
+    "target_values": [
+      0,
+      0,
+      0,
+      0.0226,
+      0.015532,
+      0,
+      0.16666666666666663,
+      0,
+      0
+    ]
+  },
+  "read_only_audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "input_ready": true,
+    "in_battle": false,
+    "active_box": 1,
+    "box_counts": [
+      19,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "specimen_ledger_unchanged": true
+  },
+  "repair": {
+    "scope": "Stop survey on independently observed fainted-party boundary; retain partial counts and reject unsafe capture success.",
+    "rom_free_qualified": true,
+    "live_qualified": false,
+    "no_aa_replay": true,
+    "source_bundle_sha256": "733e2ec2f9d3d1fe80e7c84a2a52029368bfbcdb850e8637e3a9ed7549d57583"
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0
+  },
+  "next_step": "Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry."
+}

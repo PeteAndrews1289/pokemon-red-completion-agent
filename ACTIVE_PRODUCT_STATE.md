@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run a short retained-state collection chain from Z/model62, learning actual source choices and useful duplicate acquisitions without resets.
+- Next decision: Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model62 retains 62 real outcomes, 25 successful. Z's exploratory evolution added Beedrill while preserving the other Kakuna and Butterfree: 25 living species, 25 specimens, 30 registered. All prior rows and X/Y zero-row support retained; seven balls and 209 currency remain. |
+| Authority now | Model63 retains 63 real outcomes, 25 successful and 53 distinct selected rows. AA selected Route5 from two genuine destinations and failed with no capture; its actual party cost is fitted. All 25 specimens, seven balls and 209 currency remain; Beedrill is fainted. Model63 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can model62 select a genuine reachable capture source and retain a useful specimen from Z without another engineering prerequisite or forced-parent label? |
+| Cheapest falsifier | Can AA's fainted party be recovered without a reset, and can a freshly prepared lead support a useful model-selected source capture without another unsafe search? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-collection-prerequisites-learning** · status **active** · evidence [falsification](docs/evidence/red-collection-prerequisites-learning-2026-09-07.json)
+**2026-09-07-retained-acquisition-safety** · status **active** · evidence [falsification](docs/evidence/red-retained-acquisition-safety-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Preserved ownership and legitimate supplies enabled a real collection choice and retained learning outcome; sustained Red play remains the next stage objective. |
-| Learning output | 61 to 62 outcomes, 25 successful and 52 distinct selected rows. Z evolved Kakuna4 to Beedrill10; no losses. X/Y support retained with zero labels. |
-| Authority delta | One genuine model-guided capture-versus-evolution choice played and fitted. Unique evolution target was cartridge/ledger-derived; mechanics remain deterministic. |
-| Transfer result | Exact terminal and inventory/fit audits passed; parent-dose restore repair is tested both ways. This is same-lineage development, not independent advantage or transfer. |
-| Blocker | Model62 has not played. The current native menu is acquisition-only; use genuine regional destination choices next. Finite supplies and no spare precursors limit longer chains. |
-| Decision | Close storage-safe varied collection at 3/3, keep Phase3 current, and proceed to a short retained-state acquisition sequence rather than another teacher or broad redesign. |
-| Next session | Run a short retained-state collection chain from Z/model62, learning actual source choices and useful duplicate acquisitions without resets. |
-| Next falsifier | Can model62 select a genuine reachable capture source and retain a useful specimen from Z without another engineering prerequisite or forced-parent label? |
-| Stop condition | Y/Z and all prior attempts consumed. No retry, forced-source labels, duplicated training credit, reset-funded supplies or sacrificed sole specimens. |
+| Product alignment | A real destination choice exposed a composition failure between evolution and capture. Keep the failed experience and fix the actual safety handoff, not a new teacher or full replay. |
+| Learning output | 62 to 63 outcomes; 25 successful, 53 distinct selected rows. One failed source choice and party cost fitted; 41 native episodes and 13 regional entries retained. Zero new specimens. |
+| Authority delta | Model62 chose Route5 versus Route24 and controlled the played destination. Forced capture, helper retrieval and box rotation earned zero extra labels. |
+| Transfer result | Exact AA terminal and prior-data retention verified without input; regression tests stop searching after a faint. Repair is not yet live-qualified; no independent advantage or transfer claim. |
+| Blocker | Beedrill remained the lead after evolving, then fainted during escape; the old survey continued. AA's retained state needs recovery and a safer lead before fresh capture play. |
+| Decision | Stop the planned chain at AA. Retain its failure/model63, add the minimal search-stop guard, and prepare a recovery-plus-acquisition session. Phase3 exit is unchanged. |
+| Next session | Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry. |
+| Next falsifier | Can AA's fainted party be recovered without a reset, and can a freshly prepared lead support a useful model-selected source capture without another unsafe search? |
+| Stop condition | AA and all earlier attempts consumed; AB-AD not executed. No retry/reset, hidden healing, protected-specimen sacrifice, duplicated labels or broad route rewrite. |
 
 ### Stop conditions
 

@@ -1,7 +1,40 @@
 # Current agent handoffs
 
 
-## Current — model-selected Beedrill retained and model62 fitted
+## Current — failed source choice retained; model63 fitted
+
+AA selected Route 5 over Route 24 under model62's exploratory source policy,
+probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
+Beedrill level 10 remained the lead and fainted during escape; the old search continued.
+All 25 specimens, 30 registrations, seven balls and 209 currency remain. Drowzee13 joined
+the party as capture support; Butterfree is boxed. Active box 1 has 20 free slots.
+The exact Route 5 (9,13) terminal was verified without controller input.
+
+Model63 retains 63 actual outcomes, 25 successful and 53 distinct selected feature
+rows; all 62 prior rows retained, 41 native episodes / 13 regional choices. AA's failure
+and 1/6 party cost were fitted, not hidden. Forced capture/setup earned no duplicate
+label. Model63 has not played; there is no new acquisition or transfer result.
+
+The 2–4-step chain stopped at AA. A focused ROM-free repair now stops a survey on
+fainting and preserves partial counts; it does not yet qualify safer lead selection
+or live recovery. Next recover AA legitimately, prepare a capability-derived safe
+lead, then play one fresh model-selected source. AA is consumed; do not reset to
+Z or automatically run AB–AD. Phase 3 remains current, the previous 3/3 milestone is
+archived intact, and the new safe-chain checklist is prospective 0/3.
+
+[Audit](audits/red-retained-acquisition-safety-2026-09-07.md).
+[Next plan](work-sessions/2026-09-07-safe-retained-acquisition-plan.md).
+Gameplay/fit source 5499c5b0; repair tests are separate from that actual result.
+No gameplay, fit, external agent or scheduled continuation runs at closeout.
+
+Narrative: an evolution worked, but the next skill inherited an unsuitable lead.
+This is the difference between individual working skills and a reliable player.
+Keep the failure, teach its actual cost, and repair the handoff between skills.
+The long-term cross-game living-Pokedex goal and North Star remain unchanged.
+Recommended next session: **Astra High, Fast off** for bounded recovery and
+capture integration; this is a task judgment, not a benchmark comparison.
+
+## Historical — model-selected Beedrill retained and model62 fitted
 
 Z chose evolution over capture under the declared exploratory model policy
 (selected probability 0.34379). Kakuna level 4 became Beedrill level 10 in 1,980 actions /
