@@ -69,10 +69,25 @@ def test_skill_recovery_is_read_only_and_not_an_admitted_checkpoint(mode):
             capture_red_skill_recovery(emulator=emulator, meter=meter)
         return
     record = capture_red_skill_recovery(emulator=emulator, meter=meter)
-    assert base64.b64decode(record["state_base64"]) == emulator.state
+    assert base64.urlsafe_b64decode(record["state_base64"]) == emulator.state
     assert record["state_sha256"] == hashlib.sha256(emulator.state).hexdigest()
     assert record["admitted_continuation"] is record["training_target"] is False
     assert (record["actions"], record["frames"]) == (2, 37)
+
+
+def test_skill_recovery_serializes_binary_state_through_real_private_writer(case):
+    store, _, _ = case
+    emulator = _Emulator()
+    # Ordinary base64 produces '/' here. The actual private writer must accept
+    # URL-safe encoding without weakening its unrelated filesystem-path guard.
+    emulator.state = bytes(range(256))
+    record = capture_red_skill_recovery(emulator=emulator, meter=_Meter())
+    assert "/" not in record["state_base64"]
+    with store.begin_episode("skill-recovery-test") as writer:
+        writer.append("episode", {"episode_id": "skill-recovery-test"})
+        writer.append("skill_recovery", record, durable=True)
+    assert list(store.open_episode("skill-recovery-test").iter_stream("skill_recovery")) == [record]
+    assert base64.urlsafe_b64decode(record["state_base64"]) == emulator.state
 
 
 @pytest.fixture

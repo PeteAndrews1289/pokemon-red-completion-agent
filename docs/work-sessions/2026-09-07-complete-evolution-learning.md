@@ -89,3 +89,11 @@ or teacher choice. Inspect every result before continuing; stop the batch on uns
 termination or when the useful-play checklist is actually satisfied. A bounded exhausted search
 is experience, not an instruction to patch the environment or hide the option. Audit after this
 batch before declaring more work. No sealed evaluation, Crystal or full-game execution.
+
+E selected evolution and completed a safe training quantum, but the new recovery stream used
+ordinary Base64, whose slash characters correctly fail the private path guard. The official
+terminal still saved the progressed party. Retain E and its fitted failure (model40 to41).
+Repair the encoding to the existing terminal-save URL-safe form and exercise the real durable
+writer with all byte values. Continue the already-declared F from E's admitted terminal; do not
+restart E or weaken the global private-path check. This is infrastructure failure, not inability
+to battle, and supplies no positive evolution label.

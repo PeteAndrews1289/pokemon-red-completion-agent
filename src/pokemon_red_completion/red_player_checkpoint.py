@@ -81,7 +81,7 @@ def capture_red_skill_recovery(
         "admitted_continuation": False,
         "training_target": False,
         "state_sha256": hashlib.sha256(state).hexdigest(),
-        "state_base64": base64.b64encode(state).decode("ascii"),
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
         "actions": before.controller_actions,
         "frames": before.emulator_frames,
     }
