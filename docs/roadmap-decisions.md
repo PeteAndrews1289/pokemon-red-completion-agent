@@ -1,5 +1,15 @@
 # Roadmap baseline and deviations
 
+## September7 — native resource choice works; capture preparation is the blocker
+
+Regional integration closed5/5 after one actual capture and four fitted failures.
+Its archived checklist remains unchanged. The prospective resource-aware substage reached
+2/3: native resupply chose and succeeded, but two post-fit searches both failed. The third
+criterion is not weakened or closed. Stop unchanged searches and qualify reusable capture
+preparation; the inherited helper's species allowlist is not a transferable capability.
+This is maintenance unblocking the same learned acquisition loop, not a new product stage.
+All story/living-dex/hack/Crystal exits and the six-hour deadline remain unchanged.
+
 ## September 7 — regional integration after the closed useful-play checklist
 
 Preserve the previous5/5 checklist under closed_milestones; begin a new five-item regional

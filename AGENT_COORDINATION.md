@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+## Current — model53; capture efficiency blocks the productive follow-up
+
+K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
+both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
+19living species,24registered,4balls1109currency. The checklist remains2/3, not completed.
+No unchanged capture attempt follows the declared two-failure stop. Next qualify reusable
+capture preparation from actual stored members and move effects, not a species-specific helper.
+Model53 has not played. No external reviewer was invoked; Codex owns work through10:57UTC.
+
 ## Active — native resource-aware regional goal
 
 Codex owns implementation/publication through10:57UTC; no outside reviewer or subagent

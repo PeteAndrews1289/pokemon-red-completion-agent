@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json"
+      "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -49,8 +49,8 @@
       {
         "id": "parent-outcome",
         "label": "Played native goal outcome fitted",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
       },
       {
         "id": "parent-continuation",
@@ -138,6 +138,12 @@
       "result": "Regional integration closed 5/5: model45 to50, one successful capture and four failures. Living19/21 specimens. New resource-aware checklist starts1/3 with local contract tests, not new gameplay.",
       "deviation": "J stopped before input because the model preferred resupply. The mixed-parent step will fit only actual native goal outcomes; no duplicate source credit. Full stage exits unchanged.",
       "next": "Run model50 with regional capture and resupply alternatives, fit its actual goal outcome, then a productive fresh continuation."
+    },
+    {
+      "session": "2026-09-07-regional-resource-goals-closeout",
+      "result": "K model-selected resupply succeeded; L/M source searches failed. Model50 to53,18successful outcomes;19living/21specimens,4balls1109currency. Checklist2/3; productive follow-up remains open.",
+      "deviation": "Stopped after two declared failed post-resupply searches. No consumed retry or stage exit change. Species-listed capture helper is a practical blocker.",
+      "next": "Inspect actual stored catch support and qualify reusable capture preparation; no unchanged ball-only search."
     }
   ],
   "closed_milestones": [

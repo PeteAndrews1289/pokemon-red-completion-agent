@@ -1,5 +1,14 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Current — model53; capture efficiency blocks the productive follow-up
+
+K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
+both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
+19living species,24registered,4balls1109currency. The checklist remains2/3, not completed.
+No unchanged capture attempt follows the declared two-failure stop. Next qualify reusable
+capture preparation from actual stored members and move effects, not a species-specific helper.
+Model53 has not played. No external reviewer was invoked; Codex owns work through10:57UTC.
+
 ## September7 scene — catching Ekans, then choosing supplies
 
 Show the actual Route4 capture, the retained collection19/21, and model50's50 outcome rows.

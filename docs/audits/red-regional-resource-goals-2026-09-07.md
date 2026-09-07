@@ -1,5 +1,27 @@
 # Regional resource-aware goal integration — September 7
 
+## Actual K/L/M closeout — productive follow-up still open
+
+K respected the native model's resupply choice:118actions7308frames, ten balls bought
+for2000,15balls709currency afterward, zero lost specimens. One native outcome fitted50→51;
+the unused Route5 proposal supplied no target or capture effort.
+
+L selected Route10 and failed after1187actions70488frames, spending ten balls.
+M selected Route24 and failed after1100actions56497frames, spending one ball and earning
+400 from trainer battles. Both negative source outcomes fitted; model53 retains53 rows,
+18successful. Final19living/21specimens/24registered,4balls1109currency.
+[Evidence](../evidence/red-regional-resource-goals-result-2026-09-07.json).
+
+The declared two-failure stop applies. Checklist2/3 remains open; there is no productive
+post-fit capture to claim. L's ten balls were thrown against full-HP Voltorb. Code review
+finds the existing weakening helper accepts only Rattata/Caterpie/Pidgey, none in this
+party. That is an adapter limitation, not proof no safe move exists. Next inspect actual
+stored catch-support members and qualify non-damaging status preparation.
+
+Earlier sections preserve the pre-execution checkpoint. Local qualification:
+65focused and139protocol/dashboard tests,404-file types, lint/docs/public checks;
+full ROM-free suite is still running. No outside audit or independent evaluation.
+
 ## Verified closeout
 
 I selected Route4 under model49 and captured Ekans6: 525 actions, 29,172 frames.

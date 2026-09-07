@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets?",
+      "cheapest_falsifier": "Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Destination sampling controlled I's successful acquisition. The next mixed-parent mode lets native exploratory goal selection choose acquisition or resupply; its source proposal is retained but not separately fitted.",
-        "blocker": "The source-only runner rejected J before input because the top-level model preferred resupply. Global remaining-specimen history keys also limit cross-objective reuse.",
-        "decision": "Preserve I and all failures. Connect the existing parent goal policy with regional proposals; do not force another acquisition or relabel J as played.",
+        "authority_delta": "Native model selected resupply over capture and executed it; one actual native row fitted. Unused source proposal received no credit. L/M source choices executed and their failures remained fitted.",
+        "blocker": "Two bounded post-resupply searches failed. The existing capture helper uses a three-species allowlist absent from the party; useful status support and resource-efficient preparation are not connected.",
+        "decision": "Stop unchanged capture attempts after L/M. Preserve M and model53; inspect actual stored catch-support moves and qualify reusable capture preparation.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-regional-integration-closeout-2026-09-07.json",
-          "sha256": "2d1eee93b4882f1a0abc33a41e899da39dca6d093fecb9713be6d502ece368ff"
+          "path": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json",
+          "sha256": "0925ce699cd42bcb16af378ab336bea01f3a827a484be1b4fb0e605f4d1e9514"
         },
-        "learning_output": "Regional checklist closed 5/5. Model45 to50 retains five actual source outcomes: one successful Ekans capture and four failures. Forced/safety support adds no targets.",
-        "next_falsifier": "Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets?",
-        "next_session_goal": "One resource-aware mixed-parent step from I, native goal-only fitting, then a productive fresh continuation.",
-        "product_alignment": "Regional integration now produced an actual model-directed capture. Resource-aware parent goal selection is the next dependency for sustained collection.",
+        "learning_output": "Model50 to53: one successful native resupply and two failed destination outcomes, all prior rows retained. Resource-aware checklist2/3; productive follow-up remains open.",
+        "next_falsifier": "Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup?",
+        "next_session_goal": "Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable.",
+        "product_alignment": "The resource decision now belongs to the model. Efficient capture preparation is the named skill dependency blocking sustainable living collection.",
         "session_id": "2026-09-07-regional-resource-goals",
         "status": "active",
-        "stop_condition": "Never retry consumed episodes or retired J. Stop on parent override, duplicate target credit, unexplained drift or collection loss. Reassess after90minutes; safe closeout10:57UTC.",
-        "transfer_result": "Varied positions, resources and three chosen destinations in one Red lineage. No independent advantage or full-player promotion."
+        "stop_condition": "No unchanged ball-only searches after L/M. Stop on unsafe target damage, missing status evidence, collection loss or ninety minutes without executable preparation; overall closeout10:57UTC.",
+        "transfer_result": "Native resupply plus varied saved-state source attempts in one lineage; no independent advantage or full-player promotion."
       },
       "learned_authority": {
-        "current": "Model df9596bc retains 50 examples, 17 successful. Five regional source choices yielded one Ekans capture and four retained failures. Collection: 19 living species / 21 specimens, five balls and 2,709 currency. J rejected before input; model50 has not played.",
+        "current": "Model62fac575 retains53 outcomes,18successful. K chose and completed resupply; L/M source searches failed. Current19 living species/21specimens,4balls1109currency. All consumed attempts preserved; model53 has not played.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Execute one newly declared resource-aware native goal step from I with model50. Respect capture/resupply sampling; fit only the actual native parent outcome.",
+      "next_decision": "Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

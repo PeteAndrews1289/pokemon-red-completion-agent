@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute one newly declared resource-aware native goal step from I with model50. Respect capture/resupply sampling; fit only the actual native parent outcome.
+- Next decision: Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model df9596bc retains 50 examples, 17 successful. Five regional source choices yielded one Ekans capture and four retained failures. Collection: 19 living species / 21 specimens, five balls and 2,709 currency. J rejected before input; model50 has not played. |
+| Authority now | Model62fac575 retains53 outcomes,18successful. K chose and completed resupply; L/M source searches failed. Current19 living species/21specimens,4balls1109currency. All consumed attempts preserved; model53 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets? |
+| Cheapest falsifier | Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-resource-goals** · status **active** · evidence [qualification](docs/evidence/red-regional-integration-closeout-2026-09-07.json)
+**2026-09-07-regional-resource-goals** · status **active** · evidence [qualification](docs/evidence/red-regional-resource-goals-result-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Regional integration now produced an actual model-directed capture. Resource-aware parent goal selection is the next dependency for sustained collection. |
-| Learning output | Regional checklist closed 5/5. Model45 to50 retains five actual source outcomes: one successful Ekans capture and four failures. Forced/safety support adds no targets. |
-| Authority delta | Destination sampling controlled I's successful acquisition. The next mixed-parent mode lets native exploratory goal selection choose acquisition or resupply; its source proposal is retained but not separately fitted. |
-| Transfer result | Varied positions, resources and three chosen destinations in one Red lineage. No independent advantage or full-player promotion. |
-| Blocker | The source-only runner rejected J before input because the top-level model preferred resupply. Global remaining-specimen history keys also limit cross-objective reuse. |
-| Decision | Preserve I and all failures. Connect the existing parent goal policy with regional proposals; do not force another acquisition or relabel J as played. |
-| Next session | One resource-aware mixed-parent step from I, native goal-only fitting, then a productive fresh continuation. |
-| Next falsifier | Can the existing native exploratory goal policy choose and execute capture or resupply with a real regional capture alternative, without source override or double-counted targets? |
-| Stop condition | Never retry consumed episodes or retired J. Stop on parent override, duplicate target credit, unexplained drift or collection loss. Reassess after90minutes; safe closeout10:57UTC. |
+| Product alignment | The resource decision now belongs to the model. Efficient capture preparation is the named skill dependency blocking sustainable living collection. |
+| Learning output | Model50 to53: one successful native resupply and two failed destination outcomes, all prior rows retained. Resource-aware checklist2/3; productive follow-up remains open. |
+| Authority delta | Native model selected resupply over capture and executed it; one actual native row fitted. Unused source proposal received no credit. L/M source choices executed and their failures remained fitted. |
+| Transfer result | Native resupply plus varied saved-state source attempts in one lineage; no independent advantage or full-player promotion. |
+| Blocker | Two bounded post-resupply searches failed. The existing capture helper uses a three-species allowlist absent from the party; useful status support and resource-efficient preparation are not connected. |
+| Decision | Stop unchanged capture attempts after L/M. Preserve M and model53; inspect actual stored catch-support moves and qualify reusable capture preparation. |
+| Next session | Qualify reusable non-damaging capture support from actual party/storage and move effects, then a bounded useful model continuation if executable. |
+| Next falsifier | Can semantic move effects identify a real catch-support member without a species allowlist, preserve every specimen and improve the next bounded capture setup? |
+| Stop condition | No unchanged ball-only searches after L/M. Stop on unsafe target damage, missing status evidence, collection loss or ninety minutes without executable preparation; overall closeout10:57UTC. |
 
 ### Stop conditions
 

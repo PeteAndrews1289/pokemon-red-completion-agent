@@ -1,5 +1,27 @@
 # Regional continuation — six-hour development cycle
 
+## Session6 — capture preparation, after K/L/M stop
+
+K model-selected resupply succeeded and fitted50→51. L/M failed destination searches
+and fitted51→53;19living/21specimens preserved,4balls1109currency. No further unchanged
+capture attempt follows the prospectively declared two-failure stop. Checklist stays2/3.
+
+1. **Capability:** prepare resource-efficient captures using semantic move effects and
+   real available party/storage, not a species-specific helper allowlist.
+2. **Learned authority:** maintenance unblocks the existing model's regional acquisition
+   and resupply choices. Setup is disclosed deterministic support, not a new training row.
+3. **Transfer test:** species-swapped ROM-free move-effect cases; actual stored-member
+   inspection, then a fresh retained-save bounded capture with unchanged model authority.
+4. **Cheapest falsifier:** can a non-damaging sleep/paralysis option be identified and used
+   without target damage, invented status success, lost specimens or unbounded attempts?
+5. **Time box:** ninety minutes from08:15UTC, then reassess; overall cycle ends10:57UTC.
+6. **Stop condition:** absent safe real helper, unverifiable status/move mechanics, unsafe
+   switching, specimen loss or no executable preparation at the time box. Preserve M.
+
+First inspect the actual roster and existing shared mechanics. Prefer a narrow reusable
+status-support adapter over speculative damage estimates or another teacher route.
+No new live attempt is declared yet; no full replay, sealed work or Crystal.
+
 Window: September 7, 2026, 04:57–10:57 UTC. User authorizes successive bounded sessions
 within this window; audit/reorient between them. No full-game or sealed execution.
 
