@@ -1326,21 +1326,27 @@ class RedAreaSurveyGoalProvider:
             )
             status_reports = tuple(getattr(self.area_executor, "capture_status_reports", ()))
             escape_bypasses = getattr(self.area_executor, "capture_escape_bypasses", 0)
+            survey_evidence = {
+                "semantic_actions": report.actions_executed,
+                "encounters_seen": report.encounters_seen,
+                "captures": report.captures,
+                "flees": report.flees,
+                "search_exhausted": report.search_exhausted,
+                "safety_stopped": report.safety_stopped,
+                **({"search_stop_reason": report.search_stop_reason}
+                   if report.search_stop_reason is not None else {}),
+            }
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
                 frames_executed=self.emulator.frame_count - before_frames,
                 evidence={
                     "bounded": True,
-                    "semantic_actions": report.actions_executed,
-                    "encounters_seen": report.encounters_seen,
-                    "captures": report.captures,
-                    "search_exhausted": report.search_exhausted,
-                    "safety_stopped": report.safety_stopped,
+                    **survey_evidence,
+                    "capture_survey": survey_evidence,
                     "source_normalized": bool(
                         report.captures and not report.safety_stopped
                         and self.normalize_after_capture is not None
                     ),
-                    "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
                     "final_missing": len(report.final_missing_species_refs),
                     "initial_missing_specimens": initial_missing_specimens,

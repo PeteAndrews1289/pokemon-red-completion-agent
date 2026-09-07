@@ -358,6 +358,7 @@ class RedAreaExecutionReport:
     box_switches: int
     search_exhausted: bool = False
     safety_stopped: bool = False
+    search_stop_reason: str | None = None
 
     @property
     def passed(self) -> bool:
@@ -644,6 +645,7 @@ def run_red_area_survey(
                     flees,
                     box_switches,
                     search_exhausted=True,
+                    search_stop_reason="survey_leg_limit_exceeded",
                 )
             if executor.encountered_species_ref() is not None:
                 encounters_seen += 1

@@ -639,6 +639,12 @@ def test_area_survey_labels_verified_no_find_without_claiming_success(
         else GoalFailureReason.SEARCH_EXHAUSTED
     )
     assert report.evidence["search_exhausted"] is True
+    assert report.evidence["search_stop_reason"] == "survey_leg_limit_exceeded"
+    assert report.evidence["capture_survey"] == {
+        "semantic_actions": 1, "encounters_seen": 0, "captures": 0, "flees": 0,
+        "search_exhausted": True, "safety_stopped": False,
+        "search_stop_reason": "survey_leg_limit_exceeded",
+    }
     assert report.evidence["captures"] == 0
     assert report.evidence["encounters_seen"] == 0
     assert (
@@ -693,6 +699,7 @@ def test_area_survey_stops_on_faint_without_another_search_or_normalization(when
     assert report.evidence["safety_stopped"] is True
     assert report.evidence["source_normalized"] is False
     assert report.evidence["search_exhausted"] is False
+    assert "search_stop_reason" not in report.evidence
     assert report.evidence["captures"] == int(when == "after_capture")
     assert report.evidence["flees"] == int(when == "after_flee")
     assert report.evidence["encounters_seen"] == int(when != "before_execution")

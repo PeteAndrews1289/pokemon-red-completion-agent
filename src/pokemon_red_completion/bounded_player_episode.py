@@ -17,6 +17,7 @@ from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.capture_support import CaptureSupportSummary
+from pokemon_red_completion.capture_survey import CaptureSurveySummary
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
@@ -136,6 +137,7 @@ class BoundedPlayerStep:
     selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
     capture_support: CaptureSupportSummary | None = None
     storage_preparation: StoragePreparationSummary | None = None
+    capture_survey: CaptureSurveySummary | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -157,6 +159,8 @@ class BoundedPlayerStep:
             "status": self.status.value,
             **({"capture_support": self.capture_support.public_dict()}
                if self.capture_support is not None else {}),
+            **({"capture_survey": self.capture_survey.public_dict()}
+               if self.capture_survey is not None else {}),
             **({"storage_preparation": self.storage_preparation.public_dict()}
                if self.storage_preparation is not None else {}),
         }
@@ -510,6 +514,10 @@ def run_bounded_player_episode(
                 capture_support=(
                     None if execution_report is None
                     else CaptureSupportSummary.from_evidence(execution_report.evidence)
+                ),
+                capture_survey=(
+                    None if execution_report is None
+                    else CaptureSurveySummary.from_evidence(execution_report.evidence)
                 ),
                 storage_preparation=(
                     None if execution_report is None

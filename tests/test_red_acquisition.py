@@ -430,6 +430,7 @@ def test_search_exhaustion_retains_actual_partial_or_negative_outcome(
 
     report = run_red_area_survey("wild:Route1:grass", ExhaustedSurvey(encounters))
     assert report.search_exhausted is True
+    assert report.search_stop_reason == "survey_leg_limit_exceeded"
     assert report.passed is False
     assert report.encounters_seen == 1
     assert report.captures == captures

@@ -88,13 +88,16 @@ def test_failed_choice_is_fitted_once_then_stops(tmp_path, monkeypatch):
     assert result['stop_reason'] == 'failed_step_retained_and_fitted'
 
 
-def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(tmp_path, monkeypatch):
+@pytest.mark.parametrize("resource_state_changed", [False, True])
+def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(
+    tmp_path, monkeypatch, resource_state_changed,
+):
     args, records, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
     original = cycle.source._run
     def exhausted(actual):
         result = original(actual)
         result['parent_episode']['steps'][0].update(
-            failure_reason='search_exhausted', semantic_state_changed=False,
+            failure_reason='search_exhausted', semantic_state_changed=resource_state_changed,
             collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
             collection_after={'living_species': 21, 'undeclared_specimen_losses': 0},
         )
@@ -110,7 +113,8 @@ def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(tmp_path,
 
 
 @pytest.mark.parametrize('change', [
-    {'failure_reason': 'world_state_diverged'}, {'semantic_state_changed': True},
+    {'failure_reason': 'world_state_diverged'}, {'semantic_state_changed': None},
+    {'semantic_state_changed': 1}, {'failure_reason': 'capture_items_exhausted'},
     {'collection_after': {'living_species': 20, 'undeclared_specimen_losses': 1}},
     {'collection_before': None},
     {'collection_before': {'undeclared_specimen_losses': True},

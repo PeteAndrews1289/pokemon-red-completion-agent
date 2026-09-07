@@ -47,7 +47,11 @@ def _safe_exhausted_search(parent: dict[str, Any]) -> bool:
     return (
         step.get("status") == "failed"
         and step.get("failure_reason") == "search_exhausted"
-        and step.get("semantic_state_changed") is False
+        # Travel and failed throws legitimately change location/resources. The
+        # provider's typed SEARCH_EXHAUSTED verification already requires a
+        # settled field and living party; the next source runner rechecks them.
+        # Preserve the full collection, not a fictitious cost-free game state.
+        and type(step.get("semantic_state_changed")) is bool
         and isinstance(before, dict) and before == after
         and type(before.get("undeclared_specimen_losses")) is int
         and before.get("undeclared_specimen_losses") == 0
