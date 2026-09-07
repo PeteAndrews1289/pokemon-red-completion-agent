@@ -7,6 +7,11 @@ the learner from **32 to 35 retained examples** through two actual fits. All thr
 were failures. This is real selected-outcome training, **not demonstrated improvement in play**.
 The final 35-example model has not had a post-fit gameplay evaluation.
 
+Read-only replay of B's two recorded menus changes the greedy choice from acquisition to
+exploration in both cases. This is in-sample behavior change, not improvement: exploration
+also failed in A. The [dashboard fit projection](../evidence/red-native-evolution-learning-2026-09-06.json)
+therefore reports the actual 33-to-35 latest fit and two changed choices without a success claim.
+
 | Continuation | Actual model choice | Actions / frames | Observed result |
 | --- | --- | --- | --- |
 | A | Explore | 164 / 5,520 | Binding failed; no collection change |

@@ -18,7 +18,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
 - [ ] Productive lesson and follow-up
 
-Current model: **32 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
