@@ -1,5 +1,23 @@
 # Model-first development roadmap
 
+## Current — safe XP and resumption work; make evolution useful
+
+The [resumable evolution audit](audits/red-resumable-evolution-2026-09-07.md) qualifies native PC
+preparation, no-storage resumption and a four-battle / 508-XP component result. All 17 specimens
+survive; reload matches without input. Ponyta has not evolved. Model 35 and checklist 2/5 remain.
+
+1. Measure remaining XP and safe venue throughput before any new input. The current four-battle
+   dose demonstrates mechanics, not efficient completion; avoid repeated long recovery travel.
+2. Qualify one bounded multi-quantum evolution using existing skills and retained lineage.
+   Preserve the living precursor and stop on unsafe or route-specific workarounds.
+3. Keep partial XP distinct from completed evolution in verification and learning credit.
+   These private component diagnostics are excluded from fitting and do not replace player saves.
+4. Run a short model-selected collection lesson with useful executable alternatives and a measured
+   follow-up. No feature expansion, full replay, unfamiliar hack or Crystal until Red evidence.
+
+No baseline exits were changed. This is another maintenance result, so the anti-drift alarm stays
+visible: next work must turn functioning execution into a useful collection outcome and lesson.
+
 ## Current — the route works; qualify viable collection development
 
 The [Center audit](audits/red-center-pc-boundary-2026-09-06.md) identifies unfinished farewell

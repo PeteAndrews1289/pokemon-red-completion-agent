@@ -1,5 +1,28 @@
 # Handoff
 
+## Current — resumable XP works; complete evolution is next
+
+Read [active state](ACTIVE_PRODUCT_STATE.md) and the
+[resumable evolution audit](docs/audits/red-resumable-evolution-2026-09-07.md).
+Native PC preparation now binds facing and preserves the living precursor. In-party resumption
+avoids repeated storage. Explicit direct-trainee mode keeps the original safety/escort caps;
+cartridge type/level filtering and usable damaging-move selection repaired two actual failures.
+Final component continuation: four battle intervals, +508 XP, 606 actions / 49,469 frames,
+Ponyta still level32, 17 specimens / 14 living species retained. Action-free reload matched.
+
+Model `1b26aa44` /35 examples and official checkpoint `b64023f4` are unchanged. No fit, learned
+outcome, full evolution or collection gain occurred. Checklist stays 2/5. Diagnostic terminal
+`0fc2d4df...602c` is retained privately, NOT an admitted player checkpoint. Four invocations are
+closed (including one zero-input rejection); never rerun the consumed diagnostic launchers.
+The final report writer failed on `asdict(mappingproxy)` after the executor returned. Original
+failure stays intact; a separate action-free reconstruction establishes the measured XP result.
+
+Next: measure remaining XP / safe venue throughput before a bounded multi-quantum evolution.
+Do not spend another session repeatedly collecting tiny XP doses without a feasible completion
+budget. Partial quanta currently verify as incomplete, not successful goals; settle their credit
+and terminal provenance before model lessons. No new features, teacher replay or Crystal.
+Private OPERATOR notes retain exact paths. Earlier current headings below are history.
+
 ## Current — Center farewell repaired; reorient on viable evolution training
 
 Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the

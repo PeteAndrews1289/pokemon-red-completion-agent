@@ -435,6 +435,27 @@ def run(memory: FakeMemory, reader: FakeReader, **overrides: object) -> object:
     )
 
 
+@pytest.mark.parametrize("quantum", [0, -1, True, "1", 5])
+def test_evolution_quantum_rejects_invalid_or_over_budget_values(quantum):
+    memory = FakeMemory()
+    with pytest.raises(ValueError, match="quantum exceeds"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(max_battles=4),
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            evolution_battle_quantum=quantum,
+        )
+
+
+@pytest.mark.parametrize(
+    "options", [{"allow_direct_evolution": True}, {"evolution_battle_quantum": 1}]
+)
+def test_evolution_controls_cannot_change_non_evolution_training(options):
+    with pytest.raises(ValueError, match="require an evolution target"):
+        run(FakeMemory(), FakeReader([state()]), **options)
+
+
 def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(monkeypatch):
     from types import SimpleNamespace
 

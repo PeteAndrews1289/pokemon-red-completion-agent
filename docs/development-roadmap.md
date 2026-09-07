@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-06-center-pc-boundary**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-resumable-evolution**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -15,7 +15,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
 - [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
-- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
+- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-resumable-evolution-2026-09-07.json))
 - [ ] Productive lesson and follow-up
 
 Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-center-pc-boundary-2026-09-06.json)
+[Current evidence](../docs/evidence/red-resumable-evolution-2026-09-07.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-resumable-evolution
+
+Native PC preparation and no-storage resumption qualified. Final component: four battles, +508 XP, 17 specimens retained; reload verified without input. No completed evolution or fit; model35 and 2/5 unchanged.
+
+**Deviation:** Prospectively declared retained-state component continuations exposed venue and move assumptions; one rejected before input. Report serialization failed after gameplay and was reconstructed read-only. No baseline exits changed.
+
+**Next:** Measure evolution throughput and bounded feasibility, complete an actual evolution, then resume a model-selected collection lesson.
 
 ### 2026-09-06-center-pc-boundary
 

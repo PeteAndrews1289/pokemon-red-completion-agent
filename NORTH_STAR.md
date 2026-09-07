@@ -11,6 +11,11 @@ living Pokédex across the versions, trades, and event inputs that completion re
 
 Pokémon Red is the first curriculum and evaluation environment. It is not the product.
 
+An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
+Collection development must be practical to complete, preserve living specimens, and ultimately
+support a measured model-selected lesson. Keep partial progress, final goal success and learned
+advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
+
 The deterministic teacher is an oracle, demonstrator, verifier, and emergency safety authority.
 It is not the final player. A fixed route completing Red does not count as learned progress unless
 the work also increases model authority or produces evidence needed to do so.

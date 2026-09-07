@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 7 — the trainee finally earns its own experience
+
+The PC now faces the machine, stores a party member and retrieves a surplus precursor through
+the native skill. Progress can resume with that precursor already in-party. Then two old
+assumptions surfaced in live testing: a venue was chosen only by level despite an unsafe type
+matchup, and a move-slot fallback repeatedly selected Tail Whip on the new team. Cartridge-aware
+eligibility and selection from actual damaging moves repaired those specific mismatches.
+
+The final bounded continuation produced four battle intervals and 508 XP while retaining every
+specimen. A report-writer error happened afterward; the saved game and trace let us reconstruct
+the result without replaying it. This was deterministic skill qualification, not a new model fit
+or completed evolution. The learner still has 35 examples. The next challenge is making evolution
+efficient enough to become a useful choice the model can learn. [Audit](audits/red-resumable-evolution-2026-09-07.md).
+
 ## September 6 — a wall that was actually a conversation
 
 The saved failure let us inspect the problem without replaying the journey. The nurse had healed

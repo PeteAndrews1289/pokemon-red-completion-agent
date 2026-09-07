@@ -1,5 +1,11 @@
 # Resumable collection evolution
 
+Status: closed after the final declared component continuation and read-only restoration audit.
+See the [closeout audit](../audits/red-resumable-evolution-2026-09-07.md) and
+[path-free measurements](../evidence/red-resumable-evolution-2026-09-07.json).
+Final component: four battle intervals, +508 XP, no evolution or fitting. Model35 / checklist2/5
+are unchanged. Next decision: practical evolution throughput and partial-progress credit.
+
 ## Mission check
 
 - Capability: complete PC interaction and earn safe evolution experience in bounded,

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-06-center-pc-boundary",
+  "as_of_session": "2026-09-07-resumable-evolution",
   "current_stage": "adaptive-red",
   "stages": {
     "foundation": {
@@ -10,7 +10,7 @@
     },
     "adaptive-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-center-pc-boundary-2026-09-06.json"
+      "evidence": "docs/evidence/red-resumable-evolution-2026-09-07.json"
     },
     "sustained-red": {
       "status": "planned",
@@ -62,7 +62,7 @@
         "id": "alternatives",
         "label": "Two useful executable alternatives",
         "done": false,
-        "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+        "evidence": "docs/evidence/red-resumable-evolution-2026-09-07.json"
       },
       {
         "id": "useful-followup",
@@ -96,6 +96,12 @@
       "result": "Farewell completion repaired; 11 computed PC steps passed with zero replans. PC opened in a standalone diagnostic. No fit or collection gain; 35 examples and 2/5 unchanged.",
       "deviation": "Stopped before evolution because audit proved the participation-only trainer cannot fight with the existing capped escort. The bounded engineering session triggers reorientation; no milestone was weakened.",
       "next": "Bind PC orientation and qualify safe, resumable evolution training without mandatory capped-escort use."
+    },
+    {
+      "session": "2026-09-07-resumable-evolution",
+      "result": "Native PC preparation and no-storage resumption qualified. Final component: four battles, +508 XP, 17 specimens retained; reload verified without input. No completed evolution or fit; model35 and 2/5 unchanged.",
+      "deviation": "Prospectively declared retained-state component continuations exposed venue and move assumptions; one rejected before input. Report serialization failed after gameplay and was reconstructed read-only. No baseline exits changed.",
+      "next": "Measure evolution throughput and bounded feasibility, complete an actual evolution, then resume a model-selected collection lesson."
     }
   ]
 }

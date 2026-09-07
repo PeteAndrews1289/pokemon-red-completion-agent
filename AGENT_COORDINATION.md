@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+## Current — resumable evolution component qualified; throughput and learning credit next
+
+Codex owns the [resumable evolution closeout](docs/audits/red-resumable-evolution-2026-09-07.md).
+Four battle intervals /508 XP and action-free restoration are qualified; full evolution is not.
+No new model fit: 35 examples remain. The work is deterministic skill maintenance unblocking
+the existing model's collection choice, not expanded learner authority.
+
+No outside reviewer or subagent was invoked. At the next requested review, Claude should focus
+on partial-progress credit versus completed-goal truth and exclusion of component diagnostics
+from fitting. Antigravity should focus on practical XP throughput, safe venue eligibility and
+resumption without storage replay. Neither should turn ordinary development into a new sealed
+campaign. Codex adjudicates and publishes; reviewers remain read-only. Follow active state.
+
 ## Current — Center control repaired; complete operation still unqualified
 
 Codex closed the [Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md).

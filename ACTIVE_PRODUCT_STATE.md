@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify one end-to-end collection development operation: bind PC orientation, use safe eligible trainee/support battles instead of mandatory capped escort participation, and preserve/resume partial training. Then resume model-selected learning; no new features or full replay.
+- Next decision: Estimate remaining evolution XP and practical cost, then qualify one bounded multi-quantum evolution from the retained diagnostic lineage. Preserve partial-progress truth before collecting a model-selected lesson; no new learner features or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model 1b26aa44 retains 35 examples; this session performed no fitting. Center dialogue completion and standalone PC access are qualified, but native evolution cannot use the capped escort and now rejects that offer before input. No collection gain or history-effort advantage is demonstrated. |
+| Authority now | Model 1b26aa44 retains 35 examples; no fitting this session. Native PC preparation and in-party resumption now work; the final component continuation gained 508 XP in four battles. No completed evolution, collection gain or history-effort advantage is demonstrated. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a safe existing trainee battle strategy earn evolution experience without relying on the capped starter, and resume after a bounded partial result? |
+| Cheapest falsifier | Can the existing safe training skill complete a living-precursor-preserving evolution at useful cost, rather than merely accumulate tiny XP quanta? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-center-pc-boundary** · status **closed** · evidence [qualification](docs/evidence/red-center-pc-boundary-2026-09-06.json)
+**2026-09-07-resumable-evolution** · status **closed** · evidence [qualification](docs/evidence/red-resumable-evolution-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Repair verified interaction completion and reject impossible training offers before spending controller work. This is engineering toward useful collection actions, not new learned competence. |
-| Learning output | No new learning; 35 retained examples and 2/5 (40%) remain. The unchanged 11-step PC route passed after farewell completion, and a standalone specialist opened the PC with no specimen change. |
-| Authority delta | None. Two component diagnostics, no model-selected outcomes or fits; all 35 examples preserved. |
-| Transfer result | Same-lineage Red development only. No independent evaluation, unfamiliar Red modification or Crystal execution. |
-| Blocker | Farewell dialogue caused the apparent route collision and is repaired. Complete evolution remains blocked by a mandatory escort already beyond its level cap, unbound PC orientation and unqualified partial-training resumption. |
-| Decision | Close the bounded control repair. The engineering-only session triggers reorientation: qualify one useful end-to-end evolution operation before further learner expansion or acquisition-only sampling. |
-| Next session | Qualify one end-to-end collection development operation: bind PC orientation, use safe eligible trainee/support battles instead of mandatory capped escort participation, and preserve/resume partial training. Then resume model-selected learning; no new features or full replay. |
-| Next falsifier | Can a safe existing trainee battle strategy earn evolution experience without relying on the capped starter, and resume after a bounded partial result? |
-| Stop condition | Both component diagnostics are closed and excluded from fitting. The original saved player endpoint is unchanged and still contains farewell dialogue. No battle or storage change was authorized in these diagnostics. Reorient before a new bounded development task. |
+| Product alignment | Unblock collection evolution through safe direct trainee battles and durable partial progress, preserving the living precursor. This is deterministic skill qualification, not learned competence. |
+| Learning output | No new fit or model-selected outcome. The final component gained 508 XP in four battle intervals, with 17 specimens retained and action-free restoration verified. Model35 and checklist2/5 remain. |
+| Authority delta | None. All four component diagnostics remain excluded from fitting; no official player checkpoint was replaced. |
+| Transfer result | Same-lineage Red component evidence only; no independent evaluation, unfamiliar modification or Crystal execution. |
+| Blocker | Complete evolution and efficient XP throughput remain unqualified. Partial quanta are not completed-goal successes; learning-credit integration remains unfinished. A private report serialization error was reconstructed without replay. |
+| Decision | Close this skill repair and reorient on measured evolution throughput, then a complete operation and a model-selected lesson. Do not begin another broad trainer or provenance project. |
+| Next session | Estimate remaining evolution XP and practical cost, then qualify one bounded multi-quantum evolution from the retained diagnostic lineage. Preserve partial-progress truth before collecting a model-selected lesson; no new learner features or full replay. |
+| Next falsifier | Can the existing safe training skill complete a living-precursor-preserving evolution at useful cost, rather than merely accumulate tiny XP quanta? |
+| Stop condition | All four diagnostic invocations are closed; no controller-started retries. Retain original report-writer failure and negative terminals. Diagnostic state is not an admitted player episode; no fitting, sealed evaluation or full replay. |
 
 ### Stop conditions
 

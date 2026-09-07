@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — Tail Whip was not a training strategy
+
+Show the native PC preparation, then contrast the retained failed trace with the corrected
+damaging-move continuation. The old move-slot assumption belonged to a different party; on
+Ponyta it selected Tail Whip. The corrected component gained 508 XP across four battle intervals.
+Label the footage **deterministic skill diagnostic**, not autonomous learned gameplay.
+
+The ending is deliberately honest: Ponyta is still level 32, every specimen survives, and the
+saved state reloads correctly. A diagnostic report failed to serialize after gameplay; we kept
+the failure and reconstructed its evidence instead of repeating the run for a clean-looking
+result. No new model fit occurred. Next is an efficient complete evolution and a model-selected
+lesson, not a claim that the agent can already finish Red. [Audit](audits/red-resumable-evolution-2026-09-07.md).
+
 ## Latest chapter — it was not a wall; the nurse was still talking
 
 Show the real failed-movement screen beside the repaired component diagnostic: the nurse's

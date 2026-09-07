@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## 2026-09-07 resumable evolution — useful partial execution, unchanged exits
+
+The original single component pilot exposed type-incompatible venue selection after successful
+PC preparation. Prospectively declared retained-state continuations exposed an old move-slot
+assumption and a zero-input recovery-eligibility bug. The final corrected continuation gained
+508 XP. A post-execution report serialization failure was reconstructed without controller work.
+Codex closed all four invocations and retained every negative; none is admitted for fitting.
+
+The session extended its diagnostics but did not change stage order or success criteria.
+Full evolution remains incomplete, the useful-play checklist stays2/5, and model35 is unchanged.
+Next is bounded throughput/completion feasibility and useful learning credit, not a broader
+teacher rewrite. See the [audit](audits/red-resumable-evolution-2026-09-07.md).
+
 ## 2026-09-06 Center boundary session — stop at the next capability contradiction
 
 The planned complete evolution was not attempted: live qualification repaired the dialogue
