@@ -22,6 +22,9 @@ from pokemon_red_completion.provenance import canonical_sha256
 
 TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
 CONTINUATION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v3"
+COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
+COMPLETION_ACTIONS = 30_000
+COMPLETION_FRAMES = 3_000_000
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,10 +33,17 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        continuation = document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
-        if document.get("schema") not in {
-            TRAINING_PLAN_SCHEMA, CONTINUATION_TRAINING_PLAN_SCHEMA,
-        } or document.get("partition") != "train":
+        completion = document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
+        continuation = completion or document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
+        if (
+            document.get("schema")
+            not in {
+                TRAINING_PLAN_SCHEMA,
+                CONTINUATION_TRAINING_PLAN_SCHEMA,
+                COMPLETION_TRAINING_PLAN_SCHEMA,
+            }
+            or document.get("partition") != "train"
+        ):
             raise ValueError("player training declaration differs")
         expected_fields = {
             "schema",
@@ -59,10 +69,24 @@ class RedPlayerTrainingPlan:
             "episode_retry_after_input",
         }
         if continuation:
-            expected_fields.update({
-                "origin_state_sha256", "origin_envelope_sha256", "restore_profile_sha256",
-                "continuation_episode_id", "continuation_checkpoint_sha256",
-            })
+            expected_fields.update(
+                {
+                    "origin_state_sha256",
+                    "origin_envelope_sha256",
+                    "restore_profile_sha256",
+                    "continuation_episode_id",
+                    "continuation_checkpoint_sha256",
+                }
+            )
+        if completion:
+            expected_fields.update({"maximum_actions", "maximum_frames"})
+            if (
+                type(document.get("maximum_actions")) is not int
+                or type(document.get("maximum_frames")) is not int
+                or document["maximum_actions"] != COMPLETION_ACTIONS
+                or document["maximum_frames"] != COMPLETION_FRAMES
+            ):
+                raise ValueError("completion training dose differs")
         if set(document) != expected_fields:
             raise ValueError("player training declaration fields differ")
         if any(
@@ -107,6 +131,36 @@ class RedPlayerTrainingPlan:
     def plan_sha256(self) -> str:
         return canonical_sha256(dict(self.document))
 
+    @property
+    def maximum_actions(self) -> int:
+        return (
+            COMPLETION_ACTIONS
+            if self.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
+            else 6000
+        )
+
+    @property
+    def maximum_frames(self) -> int:
+        return (
+            COMPLETION_FRAMES
+            if self.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
+            else 600000
+        )
+
+
+def declare_completion_dose(plan: RedPlayerTrainingPlan) -> RedPlayerTrainingPlan:
+    """Prospectively bind a larger option; never reinterpret old trajectories."""
+    if plan.document["schema"] != CONTINUATION_TRAINING_PLAN_SCHEMA:
+        raise ValueError("completion dose requires authenticated continuation")
+    return RedPlayerTrainingPlan(
+        {
+            **plan.document,
+            "schema": COMPLETION_TRAINING_PLAN_SCHEMA,
+            "maximum_actions": COMPLETION_ACTIONS,
+            "maximum_frames": COMPLETION_FRAMES,
+        }
+    )
+
 
 def continue_red_player_training(
     original: RedPlayerTrainingPlan,
@@ -128,18 +182,20 @@ def continue_red_player_training(
         or original.document["root_lineage_id"] != root_lineage_id
     ):
         raise ValueError("continued training origin differs")
-    return RedPlayerTrainingPlan({
-        **original.document,
-        "schema": CONTINUATION_TRAINING_PLAN_SCHEMA,
-        "origin_state_sha256": original.document["state_sha256"],
-        "origin_envelope_sha256": original.document["envelope_sha256"],
-        "state_sha256": capture.state_sha256,
-        "envelope_sha256": capture.envelope_sha256,
-        "profile_sha256": execution_profile_sha256,
-        "restore_profile_sha256": restore_profile_sha256,
-        "continuation_episode_id": episode_id,
-        "continuation_checkpoint_sha256": checkpoint_sha256,
-    })
+    return RedPlayerTrainingPlan(
+        {
+            **original.document,
+            "schema": CONTINUATION_TRAINING_PLAN_SCHEMA,
+            "origin_state_sha256": original.document["state_sha256"],
+            "origin_envelope_sha256": original.document["envelope_sha256"],
+            "state_sha256": capture.state_sha256,
+            "envelope_sha256": capture.envelope_sha256,
+            "profile_sha256": execution_profile_sha256,
+            "restore_profile_sha256": restore_profile_sha256,
+            "continuation_episode_id": episode_id,
+            "continuation_checkpoint_sha256": checkpoint_sha256,
+        }
+    )
 
 
 def declare_red_player_training(

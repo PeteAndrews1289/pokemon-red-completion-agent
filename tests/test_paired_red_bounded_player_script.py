@@ -47,7 +47,8 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
         begin_decision_window=outer.begin_decision_window,
     )
 
-    def player(_runtime, actions, *_args):
+    def player(_runtime, actions, *_args, completion_dose=False):
+        assert completion_dose is False
         assert isinstance(actions.delegate, hard_type)
         skill_ports.append(actions)
 
@@ -259,7 +260,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=enabled,
-        quote_resource_costs=False, training_plan=None, continuation=None,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
@@ -391,7 +392,7 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
     readiness = SimpleNamespace(
         challenger_arm_id=causal_id,
         model_sha256="b" * 64,
-        quote_resource_costs=False, training_plan=None, continuation=None,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
 
     assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
@@ -690,7 +691,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=False,
-        quote_resource_costs=False, training_plan=None, continuation=None,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())

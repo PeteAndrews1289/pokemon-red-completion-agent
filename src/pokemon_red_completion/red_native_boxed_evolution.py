@@ -9,6 +9,8 @@ species. Both preparation and training share the caller's hard action budget.
 
 from __future__ import annotations
 
+import time
+from collections import Counter
 from collections.abc import Callable
 from dataclasses import replace
 from typing import cast
@@ -35,6 +37,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedCenterRestoreGoalProvider,
     finish_center_dialogue,
 )
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_team_training import (
     EvolutionTrainingPaused,
     training_type_matchup_acceptable,
@@ -79,8 +82,12 @@ def native_training_move_slot(state: RawGameState) -> int:
 def bind_native_boxed_evolution(
     runtime: context.RedGoalContextRuntime,
     world: StrategicScenarioRouteWorld,
+    *,
+    maximum_quanta: int = 1,
 ) -> context.RedGoalContextRuntime:
     """Return an isolated runtime; do not mutate a saved observer's old profile."""
+    if type(maximum_quanta) is not int or not 1 <= maximum_quanta <= 128:
+        raise ValueError("native evolution quantum limit differs")
     spec = next(s for s in runtime.profile.providers if s.kind is GoalKind.EVOLVE_SPECIES)
 
     def readiness(observation: context.RedGoalObservation) -> context.RedGoalSkillAvailability:
@@ -135,7 +142,7 @@ def bind_native_boxed_evolution(
             )
         return context.RedGoalSkillAvailability.available()
 
-    def train(
+    def train_quantum(
         actions: CountingExecutor,
         source_id: int,
         target_id: int,
@@ -202,6 +209,67 @@ def bind_native_boxed_evolution(
             checkpoint_count=1,
         )
         return BoundedEvolutionTrainingResult(battles, heals)
+
+    def train(
+        actions: CountingExecutor,
+        source_id: int,
+        target_id: int,
+    ) -> BoundedEvolutionTrainingResult:
+        # The outer player action/frame limit is never reset between quanta.
+        # Diagnostic callers retain the original single-quantum interface.
+        if maximum_quanta == 1:
+            return train_quantum(actions, source_id, target_id)
+        source = red_species_ref(red_internal_species_number(source_id))
+        target = red_species_ref(red_internal_species_number(target_id))
+        initial = runtime.adapter.observe()
+        initial_story = runtime.adapter.graph.completed_ids(initial.game_state)
+        counts = Counter(s.species_ref for s in initial.collection_observation.specimens)
+        expected = counts.copy()
+        expected[source] -= 1
+        expected[target] += 1
+        if counts[source] != 2 or expected[source] < 1:
+            raise context.RedGoalContextError("complete evolution must retain its precursor")
+        started = time.monotonic()
+        battles = heals = 0
+        for _ in range(maximum_quanta):
+            if time.monotonic() - started >= 600:
+                raise context.RedGoalContextError("complete evolution wall limit reached")
+            previous = next(
+                m
+                for m in PokemonRedPartyReader(runtime.emulator).read().members
+                if m.species_id == source_id
+            )
+            try:
+                result = train_quantum(actions, source_id, target_id)
+                battles += result.battles_completed
+                heals += result.healing_trips
+            except EvolutionTrainingPaused as paused:
+                battles += paused.battles
+                heals += paused.healing_trips
+            after = runtime.adapter.observe()
+            observed = Counter(s.species_ref for s in after.collection_observation.specimens)
+            if (
+                observed not in (counts, expected)
+                or runtime.adapter.graph.completed_ids(after.game_state) != initial_story
+                or any(m.hp <= 0 for m in after.party.members)
+                or runtime.reader.read().battle_state != 0
+                or not runtime.reader.read_input_readiness().ready
+            ):
+                raise context.RedGoalContextError("complete evolution changed collection or safety")
+            if observed == expected:
+                return BoundedEvolutionTrainingResult(battles, heals)
+            current = next(
+                m
+                for m in PokemonRedPartyReader(runtime.emulator).read().members
+                if m.species_id == source_id
+            )
+            if (
+                previous.experience is None
+                or current.experience is None
+                or current.experience <= previous.experience
+            ):
+                raise context.RedGoalContextError("complete evolution made no verified XP progress")
+        raise EvolutionTrainingPaused(battles, heals)
 
     def partial_report(paused: EvolutionTrainingPaused) -> GoalExecutionReport:
         # Final verification independently observes the collection. A partial
@@ -285,6 +353,7 @@ def bind_native_boxed_evolution(
                 "max_steps": 2_000,
                 "direct_evolution": True,
                 "battle_quantum": 4,
+                "maximum_quanta": maximum_quanta,
                 "pc_facing": "up",
             }
         )

@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-party-selection** · status **closed** · evidence [qualification](docs/evidence/red-party-selection-evolution-2026-09-07.json)
+**2026-09-07-complete-evolution-learning** · status **active** · evidence [qualification](docs/evidence/red-party-selection-evolution-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | A real collection evolution now works. The next session must turn that capability into model-chosen learning, not more mechanics breadth. |
-| Learning output | No fit or model-selected outcome. Ponyta35 to Rapidash40, +21221 XP across two retained-state diagnostics;161 reported completed battles. All17 specimens retained; living14 to15 and registered19 to20. Model35/checklist2of5 unchanged. |
+| Learning output | Baseline is model35 and verified component Rapidash40. No new outcome or fit yet this cycle. |
 | Authority delta | None. Both attempts are closed component diagnostics; no official checkpoint replacement or fit admission. |
 | Transfer result | Same-lineage Red component result only; no learned advantage, hack or Crystal generalization. |
 | Blocker | Complete evolution now works through private bounded orchestration. The public native callback still returns after four battles and partial XP has no explicit outcome credit; a complete model-facing option and fresh lesson remain. |
-| Decision | Close mechanics qualification at verified Rapidash40. Integrate existing bounded continuation into player authority next; no broader trainer or learner-feature work. |
-| Next session | Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer. |
+| Decision | Implement the bounded complete option and explicitly declared completion-dose training, then execute the fixed-seed saved-state lesson and fit. Prior diagnostics stay excluded. |
+| Next session | Complete the useful memory-aware play checklist through actual model-selected outcomes and retained-data fitting. |
 | Next falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
-| Stop condition | Both attempts closed; final terminal0612b1bd is diagnostic only. No more controller work this session; no retry, fit, sealed evaluation or full replay. |
+| Stop condition | Fresh training and post-fit episodes only; stop and inspect any failure before declaring a successor. No consumed retry, diagnostic fitting or full replay. |
 
 ### Stop conditions
 

@@ -192,6 +192,7 @@ class _Readiness:
     continuation_chain: tuple[tuple[str, str], ...] = ()
     continuation_root_lineage_id: str | None = None
     restore_profile: RedGoalContextProfile | None = None
+    completion_dose: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -245,6 +246,7 @@ class _LiveObserver:
     quote_resource_costs: bool = False
     maximum_actions_per_decision: int = 6_000
     search_memory: GoalSearchMemory | None = None
+    completion_dose: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -254,13 +256,19 @@ class _LiveObserver:
         # Preserve the concrete hard-limited skill interface around the
         # observation gate. The original episode-wide limiter remains below
         # the gate; this fresh per-offer limiter cannot reset that total.
-        skill_actions = CountingExecutor(HardCompositionActionLimiter(
-            deferred,
-            maximum_actions_per_decision=self.maximum_actions_per_decision,
-            maximum_episode_actions=self.maximum_actions_per_decision,
-        ))
+        skill_actions = CountingExecutor(
+            HardCompositionActionLimiter(
+                deferred,
+                maximum_actions_per_decision=self.maximum_actions_per_decision,
+                maximum_episode_actions=self.maximum_actions_per_decision,
+            )
+        )
         bridge = _player_observer(
-            self.runtime, skill_actions, self.route_world, self.quote_resource_costs
+            self.runtime,
+            skill_actions,
+            self.route_world,
+            self.quote_resource_costs,
+            completion_dose=self.completion_dose,
         )
         bridge.search_memory = self.search_memory
         observation = bridge()
@@ -280,13 +288,21 @@ def _player_observer(
     actions: CountingExecutor,
     world: StrategicScenarioRouteWorld | None,
     quote_resource_costs: bool = False,
+    *,
+    completion_dose: bool = False,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+
     if world is not None and any(
         s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
     ):
         from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
-        runtime = bind_native_boxed_evolution(runtime, world)
+
+        runtime = bind_native_boxed_evolution(
+            runtime,
+            world,
+            maximum_quanta=128 if completion_dose else 1,
+        )
     router = (
         None
         if world is None
@@ -350,7 +366,10 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pair-id", required=True)
     parser.add_argument(
-        "--continue-from-checkpoint", nargs=2, action="append", default=[],
+        "--continue-from-checkpoint",
+        nargs=2,
+        action="append",
+        default=[],
         metavar=("EPISODE", "SHA256"),
         help="single-arm diagnostic continuation; repeat in ancestor order from --state/--envelope",
     )
@@ -360,12 +379,21 @@ def _parser() -> argparse.ArgumentParser:
         help="single-arm prospective training; no comparison claim",
     )
     parser.add_argument(
-        "--expand-local-development", action="store_true",
+        "--expand-local-development",
+        action="store_true",
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
     parser.add_argument(
-        "--boxed-evolution", nargs=3, type=int, default=None,
+        "--completion-dose",
+        action="store_true",
+        help="declare bounded complete evolution: 30000 actions / 3000000 frames per choice",
+    )
+    parser.add_argument(
+        "--boxed-evolution",
+        nargs=3,
+        type=int,
+        default=None,
         metavar=("SOURCE_NATIONAL", "TARGET_NATIONAL", "LEVEL"),
         help="declare an existing boxed level-evolution skill after authenticated continuation",
     )
@@ -526,9 +554,16 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
         raise PairedRedBoundedPlayerRunError("profile_transition_scope")
     boxed_evolution = getattr(args, "boxed_evolution", None)
+    completion_dose = getattr(args, "completion_dose", False)
+    if type(completion_dose) is not bool or (
+        completion_dose and (boxed_evolution is None or not continuation_chain)
+    ):
+        raise PairedRedBoundedPlayerRunError("completion_dose_scope")
     if boxed_evolution is not None and (
-        not continuation_chain or not getattr(args, "routed_resource_goals", False)
-        or not isinstance(boxed_evolution, (tuple, list)) or len(boxed_evolution) != 3
+        not continuation_chain
+        or not getattr(args, "routed_resource_goals", False)
+        or not isinstance(boxed_evolution, (tuple, list))
+        or len(boxed_evolution) != 3
         or any(type(value) is not int for value in boxed_evolution)
     ):
         raise PairedRedBoundedPlayerRunError("boxed_evolution_scope")
@@ -666,6 +701,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         routed_resource_goals=routed_resource_goals,
         quote_resource_costs=quote_resource_costs,
         training_plan=training_plan,
+        completion_dose=completion_dose,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -696,49 +732,75 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     )
     expanded_profile = (
         parse_red_goal_context_profile(build_acquisition_replanning_profile_payload(profile))
-        if expand_local else None
+        if expand_local
+        else None
     )
     readiness = _continue_readiness(
-        readiness, continuation_chain, expanded_profile=expanded_profile,
+        readiness,
+        continuation_chain,
+        expanded_profile=expanded_profile,
         execution_profile=(
             _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
-            if boxed_evolution is not None else None
+            if boxed_evolution is not None
+            else None
         ),
     )
     if readiness.training_plan is not None and readiness.continuation is not None:
         assert readiness.restore_profile is not None
         assert readiness.continuation_root_lineage_id is not None
         ancestor_id, ancestor_sha = readiness.continuation_chain[-1]
-        readiness = replace(readiness, training_plan=continue_red_player_training(
-            readiness.training_plan, capture=readiness.capture,
-            root_lineage_id=readiness.continuation_root_lineage_id,
-            episode_id=ancestor_id, checkpoint_sha256=ancestor_sha,
-            restore_profile_sha256=readiness.restore_profile.profile_sha256,
-            execution_profile_sha256=readiness.profile.profile_sha256,
-        ))
+        readiness = replace(
+            readiness,
+            training_plan=continue_red_player_training(
+                readiness.training_plan,
+                capture=readiness.capture,
+                root_lineage_id=readiness.continuation_root_lineage_id,
+                episode_id=ancestor_id,
+                checkpoint_sha256=ancestor_sha,
+                restore_profile_sha256=readiness.restore_profile.profile_sha256,
+                execution_profile_sha256=readiness.profile.profile_sha256,
+            ),
+        )
+    if completion_dose and readiness.training_plan is not None:
+        from pokemon_red_completion.red_player_training_plan import declare_completion_dose
+
+        readiness = replace(
+            readiness,
+            training_plan=declare_completion_dose(readiness.training_plan),
+        )
     return readiness
 
 
 def _boxed_evolution_profile(
-    profile: RedGoalContextProfile, values: list[int] | tuple[int, ...],
+    profile: RedGoalContextProfile,
+    values: list[int] | tuple[int, ...],
 ) -> RedGoalContextProfile:
     from pokemon_red_completion.red_goal_context_profile import (
         build_native_boxed_evolution_profile_payload,
     )
-    return parse_red_goal_context_profile(build_native_boxed_evolution_profile_payload(
-        profile, source_species=values[0], target_species=values[1], evolution_level=values[2],
-    ))
+
+    return parse_red_goal_context_profile(
+        build_native_boxed_evolution_profile_payload(
+            profile,
+            source_species=values[0],
+            target_species=values[1],
+            evolution_level=values[2],
+        )
+    )
 
 
 def _continue_readiness(
-    readiness: _Readiness, chain: tuple[tuple[str, str], ...],
-    *, expanded_profile: RedGoalContextProfile | None = None,
+    readiness: _Readiness,
+    chain: tuple[tuple[str, str], ...],
+    *,
+    expanded_profile: RedGoalContextProfile | None = None,
     execution_profile: RedGoalContextProfile | None = None,
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
-    admitted_profiles = tuple(p for p in (readiness.profile, expanded_profile, execution_profile)
-                              if p is not None)
+    admitted_profiles = tuple(
+        p for p in (readiness.profile, expanded_profile, execution_profile) if p is not None
+    )
     profile_index = 0
     for episode_id, record_sha256 in chain:
         if episode_id in seen:
@@ -755,8 +817,10 @@ def _continue_readiness(
                     readiness = replace(readiness, profile=candidate)
                     break
         checkpoint = open_red_player_checkpoint(
-            readiness.private_root, episode_id=episode_id,
-            expected_record_sha256=record_sha256, original_parent=readiness.capture,
+            readiness.private_root,
+            episode_id=episode_id,
+            expected_record_sha256=record_sha256,
+            original_parent=readiness.capture,
             expected_profile_sha256=readiness.profile.profile_sha256,
             expected_rom_sha256=readiness.rom_sha256,
             expected_context_origin=readiness.context_origin,
@@ -771,19 +835,26 @@ def _continue_readiness(
         if not isinstance(split, Mapping) or split.get("partition") != "train":
             raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
         lineage = split.get("root_lineage_id")
-        if not isinstance(lineage, str) or not lineage or (
-            readiness.continuation_root_lineage_id is not None
-            and readiness.continuation_root_lineage_id != lineage
+        if (
+            not isinstance(lineage, str)
+            or not lineage
+            or (
+                readiness.continuation_root_lineage_id is not None
+                and readiness.continuation_root_lineage_id != lineage
+            )
         ):
             raise PairedRedBoundedPlayerRunError("continuation_training_lineage")
         readiness = replace(
-            readiness, capture=checkpoint.capture, continuation=checkpoint,
+            readiness,
+            capture=checkpoint.capture,
+            continuation=checkpoint,
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
         readiness = replace(
-            readiness, restore_profile=readiness.profile,
+            readiness,
+            restore_profile=readiness.profile,
             profile=execution_profile or expanded_profile or readiness.profile,
         )
     return readiness
@@ -811,14 +882,18 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
     controller = ReadOnlyController(emulator)
     runtime = build_red_goal_context_runtime(
         profile=getattr(readiness, "restore_profile", None) or readiness.profile,
-        capture=readiness.capture, emulator=controller,
+        capture=readiness.capture,
+        emulator=controller,
         reader=PokemonRedStateReader(controller),
     )
     actions = CountingExecutor(
         FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
     )
     observer = _player_observer(
-        runtime, actions, _route_world(readiness), readiness.quote_resource_costs,
+        runtime,
+        actions,
+        _route_world(readiness),
+        readiness.quote_resource_costs,
     )
     if getattr(readiness.continuation, "search_memory", None) is not None:
         observer.search_memory = GoalSearchMemory.from_private_dict(
@@ -961,17 +1036,24 @@ def _policy_id(readiness: _Readiness, arm_id: str) -> str:
     raise PairedRedBoundedPlayerRunError("challenger_identity")
 
 
-def _player_limits(decision_limit: int) -> BoundedPlayerLimits:
+def _player_limits(decision_limit: int, *, completion_dose: bool = False) -> BoundedPlayerLimits:
     if type(decision_limit) is not int or decision_limit not in {1, 2, 3, 4}:  # noqa: E721
         raise PairedRedBoundedPlayerRunError("decision_limit")
+    from pokemon_red_completion.red_player_training_plan import (
+        COMPLETION_ACTIONS,
+        COMPLETION_FRAMES,
+    )
+
+    actions = COMPLETION_ACTIONS if completion_dose else 6_000
+    frames = COMPLETION_FRAMES if completion_dose else 600_000
     return BoundedPlayerLimits(
         max_decisions=decision_limit,
         max_replans=decision_limit - 1,
         min_available_goals=2,
-        max_actions_per_decision=6_000,
-        max_frames_per_decision=600_000,
-        max_total_actions=6_000 * decision_limit,
-        max_total_frames=600_000 * decision_limit,
+        max_actions_per_decision=actions,
+        max_frames_per_decision=frames,
+        max_total_actions=actions * decision_limit,
+        max_total_frames=frames * decision_limit,
     )
 
 
@@ -1025,11 +1107,7 @@ def _require_safe_checkpoint_boundary(
 ) -> None:
     before = meter.checkpoint()
     observation = runtime.adapter.observe()
-    if (
-        meter.checkpoint() != before
-        or not observation.input_ready
-        or observation.raw.battle_state
-    ):
+    if meter.checkpoint() != before or not observation.input_ready or observation.raw.battle_state:
         raise PairedRedBoundedPlayerRunError("terminal_checkpoint_unsafe_boundary")
 
 
@@ -1041,7 +1119,7 @@ def _run_arm(
     viewer: BoundedPlayerDashboard | None = None,
 ) -> PairedBoundedPlayerArm:
     episode_id = _episode_id(readiness.pair_id, arm_id)
-    limits = _player_limits(readiness.decision_limit)
+    limits = _player_limits(readiness.decision_limit, completion_dose=readiness.completion_dose)
     writer: EpisodeWriter | None = None
     sink: EpisodeTrajectorySink | None = None
     recorder: RecordingExecutor[Any, Any] | None = None
@@ -1138,6 +1216,7 @@ def _run_arm(
                 quote_resource_costs=readiness.quote_resource_costs,
                 maximum_actions_per_decision=limits.max_actions_per_decision,
                 search_memory=search_memory,
+                completion_dose=readiness.completion_dose,
             )
             trajectory_class = (
                 ViewerGoalTrajectory
@@ -1155,10 +1234,7 @@ def _run_arm(
                     "maximum_frames": limits.max_frames_per_decision,
                 }
             )
-            if (
-                readiness.continuation is not None
-                and not readiness.continuation_root_lineage_id
-            ):
+            if readiness.continuation is not None and not readiness.continuation_root_lineage_id:
                 raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(
                 episode_id=episode_id,
@@ -1173,9 +1249,9 @@ def _run_arm(
                         "envelope_sha256": readiness.capture.envelope_sha256,
                     }
                 ),
-                partition="train" if (
-                    readiness.training_plan is not None or readiness.continuation is not None
-                ) else "development",
+                partition="train"
+                if (readiness.training_plan is not None or readiness.continuation is not None)
+                else "development",
                 environment_id=GAME_ID,
                 actor=arm_id,
                 policy_id=_policy_id(readiness, arm_id),

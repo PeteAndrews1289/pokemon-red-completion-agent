@@ -28,6 +28,7 @@ from pokemon_red_completion.red_living_dex_causal_adapter import (
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_training import TRAINING_EVENT, TRAINING_EVENT_SCHEMA
 from pokemon_red_completion.red_player_training_plan import (
+    COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
     RedPlayerTrainingPlan,
 )
@@ -177,7 +178,10 @@ def load_red_player_training_episode(
             or payload.get("has_controller_input") is not (actions > 0)
         ):
             raise ValueError("player training counters differ")
-        if payload.get("maximum_actions") != 6000 or payload.get("maximum_frames") != 600000:
+        if (
+            payload.get("maximum_actions") != plan.maximum_actions
+            or payload.get("maximum_frames") != plan.maximum_frames
+        ):
             raise ValueError("player training dose differs")
         start, end = payload.get("start_step"), payload.get("end_step")
         if type(start) is not int or type(end) is not int or not 0 <= start <= end:
@@ -208,8 +212,8 @@ def load_red_player_training_episode(
                 succeeded=decision.outcome_status is GoalDecisionOutcome.SUCCEEDED,
                 actions=actions,
                 frames=frames,
-                maximum_actions=6000,
-                maximum_frames=600000,
+                maximum_actions=plan.maximum_actions,
+                maximum_frames=plan.maximum_frames,
             )
         if row.outcome != expected:
             raise ValueError("player training target does not match observed evidence")
@@ -237,11 +241,15 @@ def _mapping(value: object) -> Mapping[str, object]:
 
 def _require_continuation_origin(store: PrivateArtifactRoot, plan: RedPlayerTrainingPlan) -> None:
     """Join the new sampled episode to the completed saved parent, never its old choices."""
-    if plan.document["schema"] != CONTINUATION_TRAINING_PLAN_SCHEMA:
+    if plan.document["schema"] not in {
+        CONTINUATION_TRAINING_PLAN_SCHEMA,
+        COMPLETION_TRAINING_PLAN_SCHEMA,
+    }:
         return
     ancestor_id = cast(str, plan.document["continuation_episode_id"])
     record = store.find_sealed_record(
-        checkpoint_record_id(ancestor_id), expected_kind=CHECKPOINT_KIND,
+        checkpoint_record_id(ancestor_id),
+        expected_kind=CHECKPOINT_KIND,
     )
     if (
         record is None

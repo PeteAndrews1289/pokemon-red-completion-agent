@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-party-selection**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-complete-evolution-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-complete-evolution-learning
+
+In progress: complete bounded option and declared training-dose integration. No new fit or gameplay outcome yet; model35/checklist2of5 unchanged.
+
+**Deviation:** Explicit larger dose is sized from measured evolution cost; old training plans retain original limits and normalization. No stage exit changes.
+
+**Next:** Run the prospectively declared fixed-seed model-selected lesson, admit real outcomes, fit and test a saved-state follow-up.
 
 ### 2026-09-07-party-selection
 
