@@ -318,6 +318,7 @@ def _player_observer(
             actions,
             world,
             quote_resource_costs=quote_resource_costs,
+            prepare_capture_storage=completion_dose,
             maximum_controller_actions=30_000 if completion_dose else 6_000,
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )

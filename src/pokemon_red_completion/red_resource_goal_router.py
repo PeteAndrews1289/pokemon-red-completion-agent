@@ -84,6 +84,7 @@ class RedResourceGoalRouter:
     maximum_emulator_frames: int = 600_000
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
+    prepare_capture_storage: bool = False
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -198,6 +199,12 @@ class RedResourceGoalRouter:
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
         result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        if self.prepare_capture_storage:
+            from pokemon_red_completion.red_routed_capture_storage import (
+                bind_capture_storage_support,
+            )
+
+            result = bind_capture_storage_support(self, result, observation)
         if self.prepare_capture_party and any(
             spec.parameters.get("capture_status_support") is True
             for spec in self.runtime.profile.providers
