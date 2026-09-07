@@ -1,5 +1,10 @@
 # Next session — productive evolution and genuine target choices
 
+Session started September 7 at 19:09 UTC; midpoint review 20:09 UTC and
+two-hour stopping point 21:09 UTC. Use the mission check below. First execute at
+most one bounded W successor with the existing source, then inspect actual
+progress before expanding target-selection code. No prior trial may retry.
+
 Start from W/model61. W is consumed: healing succeeded and its one outcome was
 fitted. All 25 specimens remain; Metapod4 is healthy at 18/18HP on Route11.
 The exact saved successor exposes only evolution, with zero model queries and

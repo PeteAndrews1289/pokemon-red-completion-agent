@@ -85,6 +85,12 @@ capability, fit, gameplay result or blocker changes our position:
 At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
 or recommendation. Do not manufacture feedback or confuse it with measured progress.
 
+End every session report with a recommendation for the **next session's model and thinking
+effort**, plus whether Fast mode is worthwhile and a brief task-specific reason. Pete's current
+priority is verified product progress rather than minimizing usage; do not default to a cheaper
+model solely because the regular allowance is low. A recommendation is not permission to consume
+a reset or change the selected model. Reassess this guidance if Pete changes the budget priority.
+
 Stage exit criteria stay stable. Material changes require an explicit entry in
 [roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
 the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
