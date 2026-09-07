@@ -62,6 +62,7 @@ class RamAddress(IntEnum):
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
+    ENEMY_STATUS = 0xCFE9
     ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
@@ -938,6 +939,33 @@ class RedCurrentBoxState:
             raise ValueError("box species IDs must be positive integers")
         if any(type(level) is not int or not 1 <= level <= 100 for level in self.levels):
             raise ValueError("box levels must be between 1 and 100")
+
+
+@dataclass(frozen=True, slots=True)
+class RedBoxMoveMember:
+    """Action-free current-box move inventory; not an active battle member."""
+
+    box_slot: int
+    species_id: int
+    level: int
+    moves: tuple[int, ...]
+    pp: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if type(self.box_slot) is not int or not 1 <= self.box_slot <= RED_BOX_CAPACITY:
+            raise ValueError("boxed move inventory slot differs")
+        if type(self.species_id) is not int or not 1 <= self.species_id <= 255:
+            raise ValueError("boxed move inventory species differs")
+        if type(self.level) is not int or not 1 <= self.level <= 100:
+            raise ValueError("boxed move inventory level differs")
+        if (
+            not isinstance(self.moves, tuple) or not isinstance(self.pp, tuple)
+            or len(self.moves) != 4 or len(self.pp) != 4
+            or any(type(move) is not int or not 0 <= move <= 165 for move in self.moves)
+            or any(type(pp) is not int or not 0 <= pp <= 63 for pp in self.pp)
+            or any(move == 0 and pp != 0 for move, pp in zip(self.moves, self.pp, strict=True))
+        ):
+            raise ValueError("boxed move inventory moves/PP differ")
 
 
 @dataclass(frozen=True, slots=True)
@@ -3770,6 +3798,48 @@ class PokemonRedStateReader:
             species_ids=species_ids,
             levels=levels,
         )
+
+    def read_enemy_capture_status(self) -> int | None:
+        """Read target status only in a live wild battle; stale RAM is unknown.
+
+        Pinned pret/pokered macros/ram.asm battle_struct: species at offset0,
+        HP at1, party/box position at3, status at4. No existing snapshot field or
+        checkpoint serialization changes.
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        return self._memory.read_u8(RamAddress.ENEMY_STATUS)
+
+    def read_current_box_move_members(self) -> tuple[RedBoxMoveMember, ...]:
+        """Read moves/PP with the already-verified 33-byte boxed structure.
+
+        Pinned box_struct uses moves at8 and PP at29, shared with party_struct.
+        Cross-check membership before and after; never infer usable party HP
+        or a future withdrawal from this storage-only inventory.
+        """
+        before = self.read_current_box_state()
+        members = tuple(
+            RedBoxMoveMember(
+                box_slot=index + 1,
+                species_id=species,
+                level=level,
+                moves=tuple(self._memory.read_u8(
+                    int(RamAddress.CURRENT_BOX_MONS) + index * RED_BOX_STRUCT_STRIDE
+                    + PARTY_MOVES_OFFSET + slot
+                ) for slot in range(4)),
+                pp=tuple(self._memory.read_u8(
+                    int(RamAddress.CURRENT_BOX_MONS) + index * RED_BOX_STRUCT_STRIDE
+                    + PARTY_PP_OFFSET + slot
+                ) & 0x3F for slot in range(4)),
+            )
+            for index, (species, level) in enumerate(zip(
+                before.species_ids, before.levels, strict=True
+            ))
+        )
+        if self.read_current_box_state() != before:
+            raise SemanticStateError("current-box move inventory changed during observation")
+        return members
 
     def read_all_box_states(self) -> RedBoxCollectionState:
         """Read all twelve boxes without exposing banked bytes to a planner.

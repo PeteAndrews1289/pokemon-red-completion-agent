@@ -20,7 +20,9 @@ stored catch-support members and qualify non-damaging status preparation.
 
 Earlier sections preserve the pre-execution checkpoint. Local qualification:
 65focused and139protocol/dashboard tests,404-file types, lint/docs/public checks;
-full ROM-free suite is still running. No outside audit or independent evaluation.
+the broader ROM-free suite was intentionally interrupted after5210 passes,1 skip,
+3 deselections and1 expected failure in1154.25 seconds (not a full-suite pass).
+No outside audit or independent evaluation. [Capture-support engineering follows](red-capture-status-support-2026-09-07.md).
 
 ## Verified closeout
 

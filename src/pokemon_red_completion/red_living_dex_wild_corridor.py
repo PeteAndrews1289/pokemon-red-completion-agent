@@ -37,6 +37,28 @@ RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
 )
 
 
+def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Explicitly opt into bounded, observed sleep/paralysis preparation.
+
+    Historical profiles remain byte-for-byte unchanged. This is deterministic
+    execution support, not an additional learned decision or training target.
+    """
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["capture_status_support"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedLivingDexWildCorridorError("capture status needs an existing corridor capture")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_red_local_discovery_profile(
     profile: RedGoalContextProfile, source_id: str, rom: bytes,
 ) -> RedGoalContextProfile:
@@ -111,6 +133,8 @@ def retarget_red_wild_profile(
                 old_bound, new_bound = parameters[key], derived[key]
                 assert isinstance(old_bound, int) and isinstance(new_bound, int)
                 derived[key] = min(new_bound, old_bound)
+            if "capture_status_support" in parameters:
+                derived["capture_status_support"] = parameters["capture_status_support"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(

@@ -82,6 +82,18 @@ class PokemonRedBattleCatalog:
         except KeyError as error:
             raise RedBattleCatalogError("unknown Pokémon Red move reference") from error
 
+    def capture_status_effect(self, move_ref: str, /) -> str | None:
+        """Return only pure sleep/paralysis effects, never damaging side effects.
+
+        This adds mechanics metadata without changing historical model features.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        mechanics = self.resolve_move(move_ref)
+        if mechanics.category != "status" or mechanics.power != 0:
+            return None
+        effect = _MOVE_EFFECT_BY_ID[identifier]
+        return {"SLEEP_EFFECT": "sleep", "PARALYZE_EFFECT": "paralysis"}.get(effect)
+
     def type_effectiveness(
         self,
         attacking_type: str,
@@ -635,6 +647,9 @@ _SPECIES_SOURCE = """\
 190|grass,poison"""
 
 _MOVE_BY_ID = MappingProxyType(_build_moves())
+_MOVE_EFFECT_BY_ID = MappingProxyType({
+    int(row.split("|")[0]): row.split("|")[1] for row in _MOVE_SOURCE.splitlines()
+})
 _SPECIES_BY_ID = MappingProxyType(_build_species())
 
 RED_BATTLE_CATALOG = PokemonRedBattleCatalog()

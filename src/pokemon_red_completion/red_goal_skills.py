@@ -1259,6 +1259,7 @@ class RedAreaSurveyGoalProvider:
                 self.area_executor.read_collection(),
                 self.catalog,
             )
+            status_reports = tuple(getattr(self.area_executor, "capture_status_reports", ()))
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
                 frames_executed=self.emulator.frame_count - before_frames,
@@ -1274,6 +1275,13 @@ class RedAreaSurveyGoalProvider:
                     "final_missing": len(report.final_missing_species_refs),
                     "initial_missing_specimens": initial_missing_specimens,
                     "final_missing_specimens": final_survey.missing_specimen_count,
+                    **({"capture_status_reports": status_reports, "capture_support": {
+                        "status_attempts": len(status_reports),
+                        "verified_status_observations": sum(
+                            row.get("status_success") is True for row in status_reports
+                        ),
+                        "party_preparations": 0,
+                    }} if status_reports else {}),
                 },
             )
 

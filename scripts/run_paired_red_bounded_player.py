@@ -430,6 +430,11 @@ def _parser() -> argparse.ArgumentParser:
         type=lambda value: f"discovery:{value}",
         help="explicit source-local sighting coverage from the authenticated cartridge",
     )
+    parser.add_argument(
+        "--capture-status-support", dest="regional_transitions", action="append_const",
+        const="capture-status",
+        help="explicit opt-in to bounded observed non-damaging capture status preparation",
+    )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
         "--context-origin",
@@ -856,7 +861,10 @@ def _regional_profiles(
     )
 
     for source in sources:
-        if isinstance(source, Path) or source.startswith("discovery:"):
+        if (
+            isinstance(source, Path) or source.startswith("discovery:")
+            or source == "capture-status"
+        ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
         if not methods or any(method.kind is not RedAcquisitionKind.WILD for method in methods):
@@ -866,6 +874,14 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if source == "capture-status":
+            from pokemon_red_completion.red_living_dex_wild_corridor import (
+                bind_red_capture_status_profile,
+            )
+
+            profile = bind_red_capture_status_profile(profile)
+            result.append(profile)
+            continue
         if isinstance(source, str) and source.startswith("discovery:"):
             from pokemon_red_completion.red_living_dex_wild_corridor import (
                 bind_red_local_discovery_profile,

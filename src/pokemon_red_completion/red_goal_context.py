@@ -419,6 +419,7 @@ def _wild_provider(
         forward_directions=_directions(parameters, "forward_directions"),
         starting_endpoint=_text(parameters, "starting_endpoint"),
         max_legs=_integer(parameters, "maximum_legs"),
+        capture_status_support=parameters.get("capture_status_support", False) is True,
     )
 
     def boundary(observation: RedGoalObservation) -> RedGoalSkillAvailability:

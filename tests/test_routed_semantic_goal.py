@@ -60,6 +60,7 @@ def _composer(
     destination_ref: str = "private:destination",
     unavailable_reason: GoalUnavailableReason | None = None,
     limits: RoutedSemanticGoalLimits | None = None,
+    capture_support: dict[str, int] | None = None,
 ) -> tuple[
     RoutedSemanticGoalComposer,
     ExecutableGoalBinding,
@@ -98,7 +99,8 @@ def _composer(
         meter.spend(*destination_spend)
         return GoalExecutionReport(
             *destination_values,
-            {"semantic_destination": offered_kind.value},
+            {"semantic_destination": offered_kind.value,
+             **({"capture_support": capture_support} if capture_support is not None else {})},
         )
 
     def verify_destination(_report: GoalExecutionReport) -> GoalVerification:
@@ -142,6 +144,14 @@ def _composer(
         limits=limits or RoutedSemanticGoalLimits(10, 100),
     )
     return composer, composer.binding(), meter, events
+
+
+def test_capture_support_counts_survive_routing_without_forwarding_private_evidence():
+    counts = {'status_attempts': 3, 'verified_status_observations': 1, 'party_preparations': 0}
+    _, binding, _, _ = _composer(capture_support=counts)
+    report = binding.execute()
+    assert report.evidence['capture_support'] == counts
+    assert 'private_route' not in report.evidence
 
 
 def test_success_keeps_route_out_of_the_policy_kind_and_verifies_in_order() -> None:

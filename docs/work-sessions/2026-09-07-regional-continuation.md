@@ -20,7 +20,10 @@ capture attempt follows the prospectively declared two-failure stop. Checklist s
 
 First inspect the actual roster and existing shared mechanics. Prefer a narrow reusable
 status-support adapter over speculative damage estimates or another teacher route.
-No new live attempt is declared yet; no full replay, sealed work or Crystal.
+Actual action-free boxed-move inspection found Drowzee13 with Hypnosis20PP; Oddish/Pikachu
+currently lack a qualifying status move. The new capability-based PC/status adapter is in
+ROM-free qualification: [engineering audit](../audits/red-capture-status-support-2026-09-07.md).
+No live status-assisted attempt has run yet; no full replay, sealed work or Crystal.
 
 Window: September 7, 2026, 04:57–10:57 UTC. User authorizes successive bounded sessions
 within this window; audit/reorient between them. No full-game or sealed execution.

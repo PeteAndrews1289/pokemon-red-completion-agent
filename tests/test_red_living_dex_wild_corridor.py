@@ -20,6 +20,7 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
 )
 from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridorError,
+    bind_red_capture_status_profile,
     bind_red_local_discovery_profile,
     derive_red_living_dex_wild_corridor,
     retarget_red_wild_profile,
@@ -92,6 +93,22 @@ def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():
         assert spec.parameters["maximum_legs"] == 12
         assert spec.parameters["maximum_seek_steps"] == 20
     assert retarget_red_wild_profile(moved, corridor) == moved
+    supported = bind_red_capture_status_profile(profile)
+    assert "capture_status_support" not in profile.providers[0].parameters
+    assert supported.providers[0].parameters["capture_status_support"] is True
+    assert supported.providers[1:] == profile.providers[1:]
+    assert supported.profile_sha256 != profile.profile_sha256
+    assert retarget_red_wild_profile(supported, corridor).providers[0].parameters[
+        "capture_status_support"
+    ] is True
+    for bad in (1, "true", None):
+        with pytest.raises(RedGoalContextProfileError):
+            parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+                profile_id="invalid-capture-support", providers=((
+                    GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                    {**old, "capture_status_support": bad},
+                ),),
+            ))
 
 
 def _local_discovery_profile(numbers=None):

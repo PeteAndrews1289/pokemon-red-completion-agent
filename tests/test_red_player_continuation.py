@@ -387,10 +387,12 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--wild-source", "wild:Route11:grass", "--supply-profile", "shop.json",
         "--wild-source", "wild:Route24:grass",
         "--discovery-source", "wild:Route24:grass",
+        "--capture-status-support",
     ])
     assert args.regional_transitions == [
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
         "discovery:wild:Route24:grass",
+        "capture-status",
     ]
 
 

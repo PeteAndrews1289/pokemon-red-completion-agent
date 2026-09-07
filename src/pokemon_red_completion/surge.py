@@ -2272,6 +2272,7 @@ class LiveWildEncounterExecutor:
         timing: SurgeTiming,
         *,
         label: str,
+        capture_status_support: bool = False,
     ) -> None:
         if not label.strip():
             raise ValueError("live wild encounter label must not be empty")
@@ -2280,6 +2281,10 @@ class LiveWildEncounterExecutor:
         self._reader = reader
         self._timing = timing
         self._label = label
+        if type(capture_status_support) is not bool:
+            raise ValueError("capture status support must be boolean")
+        self._capture_status_support = capture_status_support
+        self.capture_status_reports: list[dict[str, object]] = []
         self._party_reader = PokemonRedPartyReader(emulator)
 
     def read_collection(self) -> CollectionObservation:
@@ -2325,6 +2330,18 @@ class LiveWildEncounterExecutor:
                 f"{self._label} capture lacks an enemy species",
                 reason_code="capture_species_missing",
             )
+        if self._capture_status_support:
+            from pokemon_red_completion.red_capture_status_runtime import RedCaptureStatusPreparer
+
+            prepare = RedCaptureStatusPreparer(self._emulator, self._executor, self._reader)
+            try:
+                return _try_catch_wild(
+                    self._emulator, self._executor, self._reader, raw.enemy_species_id,
+                    self._label, max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
+                    before_throw=prepare,
+                )
+            finally:
+                self.capture_status_reports.extend(prepare.reports)
         policy = _wild_capture_policy(raw.enemy_species_id)
         if raw.enemy_hp is None or raw.enemy_max_hp is None:
             raise RedAreaExecutionError(
@@ -2437,6 +2454,7 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         forward_directions: tuple[str, ...],
         starting_endpoint: str,
         max_legs: int,
+        capture_status_support: bool = False,
     ) -> None:
         if not forward_directions:
             raise ValueError("live wild corridor requires movement directions")
@@ -2444,7 +2462,10 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
             raise ValueError("starting_endpoint must be south or north")
         if type(max_legs) is not int or max_legs <= 0:
             raise ValueError("max_legs must be a positive integer")
-        super().__init__(emulator, executor, reader, timing, label=label)
+        super().__init__(
+            emulator, executor, reader, timing, label=label,
+            capture_status_support=capture_status_support,
+        )
         self._forward_directions = forward_directions
         self._starting_endpoint = starting_endpoint
         self._max_legs = max_legs
@@ -2956,6 +2977,7 @@ def _try_catch_wild(
     label: str,
     *,
     max_throws: int,
+    before_throw: Callable[[], bool] | None = None,
 ) -> bool:
     if species_id is None:
         raise SurgeChapterError(f"{label} capture received no target species.")
@@ -2968,6 +2990,14 @@ def _try_catch_wild(
         raise SurgeChapterError(f"{label} capture has no ordinary capture balls remaining.")
     throws = min(starting_balls, max_throws)
     for throws_used in range(1, throws + 1):
+        if before_throw is not None and not before_throw():
+            if (
+                reader.read().battle_state != 0
+                or _living_specimen_count(reader) != starting_specimens
+                or _ordinary_capture_ball_total(_bag(emulator)) != starting_balls - throws_used + 1
+            ):
+                raise SurgeChapterError(f"{label} preparation exit changed collection or balls.")
+            return False
         ball = _next_ordinary_capture_ball(_bag(emulator))
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)

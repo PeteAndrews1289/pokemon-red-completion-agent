@@ -16,6 +16,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import StrEnum
 
+from pokemon_red_completion.capture_support import CaptureSupportSummary
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
@@ -132,6 +133,7 @@ class BoundedPlayerStep:
     collection_before: LivingCollectionCheckpoint
     collection_after: LivingCollectionCheckpoint
     selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
+    capture_support: CaptureSupportSummary | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -151,6 +153,8 @@ class BoundedPlayerStep:
             "selection_mode": self.selection_mode.value,
             "semantic_state_changed": self.semantic_state_changed,
             "status": self.status.value,
+            **({"capture_support": self.capture_support.public_dict()}
+               if self.capture_support is not None else {}),
         }
 
 
@@ -496,6 +500,10 @@ def run_bounded_player_episode(
                 collection_before=current.collection,
                 collection_after=after.collection,
                 selection_mode=selection_mode,
+                capture_support=(
+                    None if execution_report is None
+                    else CaptureSupportSummary.from_evidence(execution_report.evidence)
+                ),
             )
         )
         if recovery_attempt:

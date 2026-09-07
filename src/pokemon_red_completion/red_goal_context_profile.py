@@ -516,6 +516,12 @@ def _parse_parameters(
         if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
             required.add("completed_battles")
         local_species = row.get("source_species_numbers")
+        if "capture_status_support" in row:
+            if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
+                type(row["capture_status_support"]) is not bool
+            ):
+                raise RedGoalContextProfileError("capture status support differs")
+            required.add("capture_status_support")
         if "source_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_DISCOVERY or (
                 not isinstance(local_species, list)
@@ -562,6 +568,8 @@ def _parse_parameters(
             )
         if local_species is not None:
             parsed["source_species_numbers"] = local_species
+        if "capture_status_support" in row:
+            parsed["capture_status_support"] = row["capture_status_support"]
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(
