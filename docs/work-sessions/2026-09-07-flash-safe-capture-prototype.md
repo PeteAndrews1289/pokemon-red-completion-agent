@@ -63,3 +63,14 @@ existing capture-party, routed-support and indexed party-menu tests. This establ
 the isolated planning behavior, not safe live transport. Next Codex must connect the
 recovery and execution boundaries, exercise stale plans across actual swaps, and verify
 the old-save/new-runtime boundary before promoting this into the active player.
+
+## Routed Center recovery prototype
+
+- Implemented `bind_routed_center_recovery` in `src/pokemon_red_completion/red_routed_recovery.py`.
+- Connects escort preparation with walking transport to a real Center nurse boundary (x=3, y=7), nursing approach, dialogue handling, and independent state verification.
+- Replaces/creates unavailable `RESTORE_TEAM` without overwriting available skills or duplicating kind.
+- Enforces strict pre-input state verification (rejecting stale HP/traversal/ledger/resources before escort callback).
+- Meters all prep, transport, and heal frames and actions from before execution.
+- Halts transport immediately if a post-battle new faint occurs or field does not settle.
+- Verifies full party restoration (`_raw_party_restored`), genuine HP change, and strict preservation of living Pokédex ledger, bag, and money.
+- Verified by ROM-free tests in `tests/test_red_routed_recovery.py`.
