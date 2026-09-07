@@ -334,6 +334,28 @@ def test_center_healing_does_not_complete_while_farewell_is_visible(pages):
     assert report.actions_executed == 2 + 2 * pages
 
 
+@pytest.mark.parametrize("visible,at_nurse", [(True, True), (False, True), (True, False)])
+def test_travel_departure_reuses_farewell_only_at_its_boundary(visible, at_nurse):
+    from pokemon_red_completion.red_goal_skills import prepare_center_departure
+
+    reader = _Reader(
+        raw=replace(_raw(), map_id=MapId.CINNABAR_POKECENTER,
+                    player_x=3 if at_nurse else 4, player_y=3), ready=True,
+    )
+    reader.dialogue = visible
+
+    class Port(_ActionPort):
+        def execute(self, action):
+            if action.kind is MacroActionKind.CANCEL:
+                reader.dialogue = False
+            return super().execute(action)
+
+    actions = CountingExecutor(Port(reader))
+    prepare_center_departure(actions, reader)
+    assert actions.actions_executed == (2 if visible and at_nurse else 0)
+    assert reader.raw.player_x == (3 if at_nurse else 4)
+
+
 def test_center_farewell_stuck_fails_without_movement():
     reader = _Reader(
         raw=replace(_raw(), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3), ready=True

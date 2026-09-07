@@ -27,3 +27,18 @@
 Partial evolution has no XP reward in the current target. It remains incomplete/costly rather
 than a positive completed-goal label. This session aims to supply completed options instead of
 introducing a new reward feature. Independent learned advantage remains unproved by this loop.
+
+## First lesson retained; reorientation before continuation
+
+Episode A selected acquisition, then stopped after12 inputs/288 frames with unchanged collection.
+Its read-only terminal audit proves the fully healed Center nurse farewell is still visible despite
+ready movement flags. The existing farewell recovery was only connected to evolution, not other
+routed goals. Reuse that exact bounded recovery at authenticated transport departure; preserve
+the chosen goal, original route origin, all preparation costs and the final independent verifier.
+Do not add a new walk string or force evolution.
+
+The actual failed choice was admitted and fitted: model35→36, all previous rows retained,
+zero counterfactual targets. A and its fit are closed. Prospectively run one post-fit training
+continuation B from A's saved terminal with seed2026090702, up to2 choices, the same declared
+completion dose, and no retry. If B creates eligible outcomes, retain and fit them before any
+subsequent declared cycle. These are correlated training results, not independent evaluation.

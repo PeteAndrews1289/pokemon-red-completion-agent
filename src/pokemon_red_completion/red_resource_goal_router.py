@@ -31,6 +31,7 @@ from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedMartResupplyGoalProvider,
+    prepare_center_departure,
 )
 from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
@@ -49,8 +50,13 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 )
 
 _WALK_ACTIONS = frozenset({"up", "right", "down", "left"})
-_MECHANICS = frozenset({RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.MART_RESUPPLY,
-                       RedGoalMechanic.TARGETED_LEVEL_EVOLUTION})
+_MECHANICS = frozenset(
+    {
+        RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.MART_RESUPPLY,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+    }
+)
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
@@ -106,8 +112,10 @@ class RedResourceGoalRouter:
             ):
                 continue
             provider = self.runtime.provider_for(spec.kind, self.actions)
-            if not isinstance(provider, (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider,
-                                         _RedTeamGoalProvider)):
+            if not isinstance(
+                provider,
+                (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider, _RedTeamGoalProvider),
+            ):
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
@@ -142,6 +150,9 @@ class RedResourceGoalRouter:
                 ),
                 replanner=self._replan,
                 route_limits=_ROUTE_LIMITS,
+                prepare_departure=lambda: prepare_center_departure(
+                    self.actions, self.runtime.reader
+                ),
             )
 
             def observe_fresh() -> FreshRedGoalObservation:
@@ -223,7 +234,9 @@ class RedResourceGoalRouter:
             for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
                 try:
                     plan = self.world.plan_feasible_to_map(
-                        fresh.traversal, int(center), goal_at=(3, 3),
+                        fresh.traversal,
+                        int(center),
+                        goal_at=(3, 3),
                     )
                 except RoutePlanningError:
                     continue

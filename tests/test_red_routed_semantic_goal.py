@@ -166,9 +166,7 @@ class _Provider:
         def verify(report: GoalExecutionReport) -> GoalVerification:
             self.world.events.append("destination_verify")
             if report.actions_executed != 1:
-                return GoalVerification.failed(
-                    GoalFailureReason.OUTCOME_NOT_VERIFIED
-                )
+                return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             return GoalVerification.succeeded()
 
         return RedGoalBindingOffer.available(
@@ -232,10 +230,39 @@ def test_red_composition_routes_then_binds_the_real_semantic_goal() -> None:
     assert verdict == GoalVerification.succeeded()
     assert world.at == (2, 4)
     assert world.events.index("action:right") < world.events.index("provider_offer")
-    assert world.events.index("provider_offer") < world.events.index(
-        "destination_execute"
-    )
+    assert world.events.index("provider_offer") < world.events.index("destination_execute")
     assert world.events[-1] == "destination_verify"
+
+
+@pytest.mark.parametrize("changed_origin", [False, True])
+def test_departure_preparation_is_counted_and_cannot_replace_route_origin(changed_origin):
+    world = _World()
+    actions = CountingExecutor(world)
+
+    def prepare():
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=5))
+        if changed_origin:
+            world.at = (9, 9)
+
+    transport = _transport(world, actions, prepare_departure=prepare)
+    binding = build_red_routed_semantic_goal_composer(
+        binding_ref="private:prepared-route",
+        transport=transport,
+        destination=_destination(world, actions),
+        estimated_effort=0.4,
+        estimated_risk=0.1,
+        limits=RoutedSemanticGoalLimits(10, 100),
+    ).binding()
+    assert actions.actions_executed == 0
+    if changed_origin:
+        with pytest.raises(RedRoutedSemanticGoalError, match="changed the route origin"):
+            binding.execute()
+        assert actions.actions_executed == 1
+        assert "action:right" not in world.events
+    else:
+        report = binding.execute()
+        assert report.actions_executed == 3 and report.frames_executed == 11
+        assert binding.verify(report) == GoalVerification.succeeded()
 
 
 def test_public_contracts_hide_route_destination_and_controller_identity() -> None:
@@ -314,9 +341,7 @@ def test_transport_verifier_fails_closed_after_terminal_drift() -> None:
     report = binding.execute()
     world.at = (4, 3)
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.OUTCOME_NOT_VERIFIED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
 
 
 def test_transport_verifier_rejects_an_observer_with_frame_effects() -> None:
@@ -326,9 +351,7 @@ def test_transport_verifier_rejects_an_observer_with_frame_effects() -> None:
     report = binding.execute()
     world.observation_frame_effect = 1
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.WORLD_STATE_DIVERGED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
 
 
 def test_fresh_observation_requires_red_and_traversal_coherence() -> None:

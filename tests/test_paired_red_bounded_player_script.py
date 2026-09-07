@@ -595,7 +595,16 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     assert local["enumerate_bindings"] is None
     assert routed["enumerate_bindings"](object()) is sentinel
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
-    assert received == [{"quote_resource_costs": False}, {"quote_resource_costs": True}]
+    factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
+            completion_dose=True)
+    assert received == [
+        {"quote_resource_costs": False, "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": True, "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": False, "maximum_controller_actions": 30000,
+         "maximum_emulator_frames": 3000000},
+    ]
 
 
 def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_path):
