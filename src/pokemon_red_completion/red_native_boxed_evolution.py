@@ -1,7 +1,8 @@
 """Native-player wiring for the existing boxed-evolution skill.
 
-No new teacher or policy: cartridge routes connect the Center, PC and training
-boundary; the existing participation trainer owns battle mechanics. Only a
+Cartridge routes connect the Center, PC and training boundary; the existing
+trainer owns battle mechanics with explicit direct-trainee opt-in and a
+mechanics-based damaging-move selector. This is a deterministic skill, not a new learner. Only a
 surplus precursor is eligible, so acquiring its evolution cannot erase a living
 species. Both preparation and training share the caller's hard action budget.
 """
@@ -15,10 +16,17 @@ from typing import cast
 from pokemon_red_completion import red_goal_context as context
 from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_cartridge import wild_tables
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
 from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
+from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_battle_catalog import (
+    PokemonRedBattleCatalog,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
+)
 from pokemon_red_completion.red_boxed_level_evolution import BoundedEvolutionTrainingResult
 from pokemon_red_completion.red_collection import red_internal_species_number, red_species_ref
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import SemanticVenueRouteBinding
@@ -27,8 +35,45 @@ from pokemon_red_completion.red_goal_skills import (
     RedCenterRestoreGoalProvider,
     finish_center_dialogue,
 )
+from pokemon_red_completion.red_team_training import (
+    EvolutionTrainingPaused,
+    training_type_matchup_acceptable,
+)
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
+
+
+def native_training_move_slot(state: RawGameState) -> int:
+    """Choose usable damage by mechanics, never an older party's slot order.
+
+    The venue's independent per-turn HP/PP guard still runs. Unsupported
+    special-damage and risky self-damaging moves are not silently improvised.
+    """
+    from pokemon_red_completion.red_team_training import _PauseForTeamTrainingRecovery
+
+    catalog = PokemonRedBattleCatalog()
+    if state.active_party_species_id is None or state.enemy_species_id is None:
+        raise _PauseForTeamTrainingRecovery
+    own = catalog.resolve_species(pokemon_red_species_ref(state.active_party_species_id)).types
+    enemy = catalog.resolve_species(pokemon_red_species_ref(state.enemy_species_id)).types
+    candidates = []
+    for index, (move_id, pp) in enumerate(
+        zip(state.battler_moves or (), state.battler_pp or (), strict=True)
+    ):
+        if not move_id or pp <= 0 or index + 1 == (state.player_disabled_move_slot or 0):
+            continue
+        move = catalog.resolve_move(pokemon_red_move_ref(move_id))
+        if move.power <= 0 or move.effect_flags.intersection(
+            {"recoil", "self_destruct", "ohko", "charge", "recharge"}
+        ):
+            continue
+        effectiveness = catalog.type_effectiveness(move.type_name, enemy)
+        score = move.power * move.accuracy * effectiveness * (1.5 if move.type_name in own else 1.0)
+        if score > 0:
+            candidates.append((score, -(index + 1)))
+    if not candidates:
+        raise _PauseForTeamTrainingRecovery
+    return -max(candidates)[1]
 
 
 def bind_native_boxed_evolution(
@@ -46,28 +91,31 @@ def bind_native_boxed_evolution(
         candidates = [
             s
             for s in specimens
-            if s.location is CollectionLocation.BOX
-            and s.container_index == observation.collection_observation.current_box_index
+            if s.location is CollectionLocation.PARTY
+            or (
+                s.location is CollectionLocation.BOX
+                and s.container_index == observation.collection_observation.current_box_index
+            )
         ]
         if len(specimens) != 2 or not candidates:
             return context.RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.NO_LEGAL_TARGET
             )
-        # The existing evolution trainer is participation-only. It cannot earn
-        # experience once its fixed escort has reached its own battle cap.
-        # Reject that setup before routing or moving any specimen into the party.
+        # The native mode permits safe direct trainee battles; the starter is
+        # still required for the existing escape mechanism, not mandatory XP.
         from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
-        from pokemon_red_completion.red_team_training import ESCORT_LEVEL_CAP
 
         escort = next(
             (m for m in observation.party.members if m.species_id == BLASTOISE_SPECIES_ID),
             None,
         )
-        if escort is None or escort.level >= ESCORT_LEVEL_CAP:
+        if escort is None:
             return context.RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.MISSING_CAPABILITY
             )
-        precursor = min(candidates, key=lambda s: s.slot_index)
+        precursor = min(
+            candidates, key=lambda s: (s.location is not CollectionLocation.PARTY, s.slot_index)
+        )
         policy = context.MANSION_TEAM_POLICY
         ceiling = (
             precursor.level - policy.minimum_direct_level_advantage
@@ -86,6 +134,97 @@ def bind_native_boxed_evolution(
                 GoalUnavailableReason.MISSING_CAPABILITY
             )
         return context.RedGoalSkillAvailability.available()
+
+    def train(
+        actions: CountingExecutor,
+        source_id: int,
+        target_id: int,
+    ) -> BoundedEvolutionTrainingResult:
+        trainee = next(
+            (m for m in runtime.adapter.observe().party.members if m.species_id == source_id), None
+        )
+        if trainee is None:
+            raise context.RedGoalContextError("native training lost its in-party precursor")
+        tables = wild_tables(world.rom)
+        from pokemon_red_completion.team_training import training_safety_ceiling
+
+        ceiling = training_safety_ceiling(trainee, context.MANSION_TEAM_POLICY)
+        venues = tuple(
+            replace(venue, move_slot=native_training_move_slot)
+            for venue in (
+                context.ROUTE_11_TRAINING_VENUE,
+                context.DIGLETTS_CAVE_TRAINING_VENUE,
+                context.MANSION_TRAINING_VENUE,
+            )
+            if any(
+                level <= ceiling and training_type_matchup_acceptable(trainee.species_id, species)
+                for level, species in tables.get(venue.map_id, ())
+            )
+        )
+        if not venues:
+            raise context.RedGoalContextError(
+                "no cartridge encounter permits safe direct evolution"
+            )
+        _, battles, heals = context.run_red_team_balancing(
+            actions,
+            runtime.reader,
+            runtime.emulator,
+            policy=replace(context.MANSION_TEAM_POLICY, max_battles=32, max_steps=2_000),
+            venues=venues,
+            intent=context.MANSION_BALANCED_TEAM_TRAINING_INTENT,
+            flee_timing=context.MANSION_TRAINING_FLEE_TIMING,
+            hideout_timing=context.DEFAULT_HIDEOUT_TIMING,
+            flee_func=cast(Callable[..., None], context._flee),
+            volatile_enemy_species=context.MANSION_VOLATILE_ENEMY_SPECIES,
+            escort_enemy_species=context.MANSION_ESCORT_ENEMY_SPECIES,
+            max_consecutive_flees=context.MANSION_MAX_CONSECUTIVE_FLEES,
+            cancel_interval=context.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            evolution_target=(source_id, target_id),
+            allow_direct_evolution=True,
+            evolution_battle_quantum=4,
+            report_label="native bounded collection evolution",
+            checkpoint_count=1,
+        )
+        return BoundedEvolutionTrainingResult(battles, heals)
+
+    def partial_report(paused: EvolutionTrainingPaused) -> GoalExecutionReport:
+        # Final verification independently observes the collection. A partial
+        # quantum never carries an exact-evolution or success assertion.
+        return GoalExecutionReport(
+            0,
+            0,
+            {
+                "bounded": True,
+                "evolution_partial": True,
+                "completed_training_battles": paused.battles,
+                "healing_trips": paused.healing_trips,
+            },
+        )
+
+    def resume(source_id: int, target_id: int, actions: CountingExecutor) -> GoalExecutionReport:
+        before = runtime.adapter.observe()
+        if (
+            not readiness(before).executable
+            or before.party.species_ids().count(source_id) != 1
+            or red_species_ref(red_internal_species_number(source_id))
+            != spec.parameters["source_species_ref"]
+            or red_species_ref(red_internal_species_number(target_id))
+            != spec.parameters["target_species_ref"]
+        ):
+            raise context.RedGoalContextError("resumed evolution lost its unique declared trainee")
+        action_start, frame_start = actions.actions_executed, runtime.emulator.frame_count
+        try:
+            result = train(actions, source_id, target_id)
+            report = GoalExecutionReport(
+                0, 0, {"bounded": True, "completed_training_battles": result.battles_completed}
+            )
+        except EvolutionTrainingPaused as paused:
+            report = partial_report(paused)
+        return replace(
+            report,
+            actions_executed=actions.actions_executed - action_start,
+            frames_executed=runtime.emulator.frame_count - frame_start,
+        )
 
     def execute(
         request: context.RedBoxedLevelEvolutionGoalRequest,
@@ -124,37 +263,15 @@ def bind_native_boxed_evolution(
         finish_center_dialogue(actions, runtime.reader)
         identity = canonical_sha256(
             {
-                "schema": "pokemon.red.native-boxed-evolution.v1",
+                "schema": "pokemon.red.native-boxed-evolution.v2",
                 "profile": runtime.profile.profile_sha256,
                 "max_battles": 32,
                 "max_steps": 2_000,
+                "direct_evolution": True,
+                "battle_quantum": 4,
+                "pc_facing": "up",
             }
         )
-
-        def train(source_id: int, target_id: int) -> BoundedEvolutionTrainingResult:
-            _, battles, heals = context.run_red_team_balancing(
-                actions,
-                runtime.reader,
-                runtime.emulator,
-                policy=replace(context.MANSION_TEAM_POLICY, max_battles=32, max_steps=2_000),
-                venues=(
-                    context.ROUTE_11_TRAINING_VENUE,
-                    context.DIGLETTS_CAVE_TRAINING_VENUE,
-                    context.MANSION_TRAINING_VENUE,
-                ),
-                intent=context.MANSION_BALANCED_TEAM_TRAINING_INTENT,
-                flee_timing=context.MANSION_TRAINING_FLEE_TIMING,
-                hideout_timing=context.DEFAULT_HIDEOUT_TIMING,
-                flee_func=cast(Callable[..., None], context._flee),
-                volatile_enemy_species=context.MANSION_VOLATILE_ENEMY_SPECIES,
-                escort_enemy_species=context.MANSION_ESCORT_ENEMY_SPECIES,
-                max_consecutive_flees=context.MANSION_MAX_CONSECUTIVE_FLEES,
-                cancel_interval=context.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
-                evolution_target=(source_id, target_id),
-                report_label="native bounded collection evolution",
-                checkpoint_count=1,
-            )
-            return BoundedEvolutionTrainingResult(battles, heals)
 
         executor = RedGoalBoxedEvolutionExecutor(
             reset_state_sha256=runtime.capture.state_sha256,
@@ -164,11 +281,15 @@ def bind_native_boxed_evolution(
             reader=runtime.reader,
             traversal_observer=traversal,
             observe_collection=lambda: runtime.adapter.observe().collection_observation,
-            train_evolution=train,
+            train_evolution=lambda source_id, target_id: train(actions, source_id, target_id),
             emulator=runtime.emulator,
             replanner=world.replanner(),
+            pc_facing="up",
         )
-        report = executor(request, actions)
+        try:
+            report = executor(request, actions)
+        except EvolutionTrainingPaused as paused:
+            report = partial_report(paused)
         return replace(
             report,
             actions_executed=actions.actions_executed - action_start,
@@ -176,5 +297,8 @@ def bind_native_boxed_evolution(
         )
 
     return replace(
-        runtime, boxed_level_evolution_executor=execute, boxed_level_evolution_readiness=readiness
+        runtime,
+        boxed_level_evolution_executor=execute,
+        boxed_level_evolution_readiness=readiness,
+        party_level_evolution_executor=resume,
     )

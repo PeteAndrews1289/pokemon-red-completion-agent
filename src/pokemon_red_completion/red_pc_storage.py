@@ -119,6 +119,35 @@ class RedPCSwitchBoxReport:
         )
 
 
+def face_pc_boundary(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    *,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> None:
+    """Orient at an already-bound PC tile and prove no movement occurred."""
+    if direction not in {"up", "down", "left", "right"}:
+        raise ValueError("PC facing must be cardinal")
+    before = reader.read()
+    if before.battle_state != 0 or not reader.read_input_readiness().ready:
+        raise RedPCStorageError("PC facing requires settled overworld control")
+    if reader.read_bottom_dialogue_box_visible():
+        raise RedPCStorageError("PC facing is blocked by dialogue")
+    if reader.read_player_facing() != direction:
+        actions.execute(MacroAction(MacroActionKind.MOVE, direction))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))
+    after = reader.read()
+    if (
+        (before.map_id, before.player_y, before.player_x)
+        != (after.map_id, after.player_y, after.player_x)
+        or after.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or reader.read_player_facing() != direction
+    ):
+        raise RedPCStorageError("PC facing did not preserve its bound position")
+
+
 def open_bills_pc(
     actions: ActionExecutor,
     reader: PokemonRedStateReader,

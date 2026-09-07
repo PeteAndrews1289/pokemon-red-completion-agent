@@ -558,7 +558,7 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "4d5ef52284dcc1b43d7c23a9d2184f6affe2d5d36db4c553d55635e097c802a8"
+            "f5bad32daa7387e871ef1e5c22b3347400d9cff12c63c34a4ab982701a81249d"
         ),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
@@ -566,7 +566,8 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "default-and-unused-live-guard-fallback-plus-ten-of-fifty-heals-"
             "preserve-measured-path-plus-opt-in-targeted-development-remains-"
             "disabled-on-historical-route-11-plus-evolution-only-budget-"
-            "tightening-does-not-change-historical-non-evolution-branch"
+            "tightening-does-not-change-historical-non-evolution-branch-"
+            "plus-direct-evolution-and-quantum-default-disabled"
         ),
     ),
     _SourceCompatibilityWaiver(

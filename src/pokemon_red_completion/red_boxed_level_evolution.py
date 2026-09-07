@@ -213,9 +213,12 @@ class BoxedLevelEvolutionPlan:
     route_to_pc: SemanticPCBoundaryAccess
     route_to_training: SemanticVenueRouteBinding
     training_binding_sha256: str
+    pc_facing: str | None = None
 
     def __post_init__(self) -> None:
         _require_sha256(self.reset_state_sha256, "boxed evolution reset state")
+        if self.pc_facing not in {None, "up", "down", "left", "right"}:
+            raise RedBoxedLevelEvolutionError("boxed evolution PC facing differs")
         _require_sha256(self.training_binding_sha256, "boxed evolution training binding")
         if not isinstance(self.species_binding, RedDependencySpeciesBinding):
             raise TypeError("boxed evolution needs a species binding")
@@ -294,6 +297,8 @@ class BoxedLevelEvolutionPlan:
                     "pc_boundary_binding_sha256": self.route_to_pc.binding_sha256,
                 }
             )
+        if self.pc_facing is not None:
+            document["pc_facing"] = self.pc_facing
         return canonical_sha256(document)
 
     def public_dict(self) -> dict[str, object]:
@@ -469,6 +474,15 @@ class RedBoxedLevelEvolutionAdapter:
         self._require_ready(scenario, before_ledger)
         action_start = self.actions.actions_executed
         first_access = self._enter_pc()
+
+        if self.plan.pc_facing is not None:
+            from pokemon_red_completion.red_pc_storage import face_pc_boundary
+
+            face_pc_boundary(
+                self.actions,
+                self.reader,  # type: ignore[arg-type]
+                self.plan.pc_facing,  # type: ignore[arg-type]
+            )
 
         open_bills_pc(self.actions, self.reader)  # type: ignore[arg-type]
         deposit = deposit_party_member(

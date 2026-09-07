@@ -96,6 +96,18 @@ def test_bottom_dialogue_requires_frame_not_ready_movement_flags(corrupt):
     assert reader.read_bottom_dialogue_box_visible() is (corrupt is None)
 
 
+@pytest.mark.parametrize("encoded,direction", [(0, "down"), (4, "up"), (8, "left"), (12, "right")])
+def test_player_facing_decodes_cardinal_sprite_state(encoded, direction):
+    assert (
+        PokemonRedStateReader(RecordingMemory({0xC109: encoded})).read_player_facing() == direction
+    )
+
+
+def test_invalid_player_facing_does_not_guess():
+    with pytest.raises(SemanticStateError, match="facing"):
+        PokemonRedStateReader(RecordingMemory({0xC109: 3})).read_player_facing()
+
+
 class BankedRecordingMemory(RecordingMemory):
     def __init__(
         self,

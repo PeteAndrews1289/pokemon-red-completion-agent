@@ -4064,6 +4064,14 @@ class PokemonRedStateReader:
             return False
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
 
+    def read_player_facing(self) -> str:
+        """Decode the sprite's settled facing inside the revision adapter."""
+        value = self._memory.read_u8(RamAddress.PLAYER_FACING_DIRECTION)
+        directions = {0: "down", 4: "up", 8: "left", 12: "right"}
+        if value not in directions:
+            raise SemanticStateError("player facing is not a cardinal direction")
+        return directions[value]
+
     def read_bottom_dialogue_box_visible(self) -> bool:
         """Recognize Red's standard text frame, not its language or contents.
 
