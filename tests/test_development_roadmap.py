@@ -53,10 +53,22 @@ def test_status_drift_is_caught_before_publication(project, change):
         other = next(key for key in state["stages"] if key != state["current_stage"])
         state["stages"][other]["status"] = "current"
     else:
+        # Exercise a false completion claim even when the live roadmap's first
+        # item is still planned. Removing an already-null field is not a probe.
+        state["milestone"]["items"][0]["done"] = True
         state["milestone"]["items"][0]["evidence"] = None
     (project / STATE).write_text(json.dumps(state))
     with pytest.raises(ValueError):
         load_roadmap(project)
+
+
+def test_planned_checklist_item_does_not_require_completed_evidence(project):
+    state = json.loads((project / STATE).read_text())
+    state["milestone"]["items"][0]["done"] = False
+    state["milestone"]["items"][0]["evidence"] = None
+    (project / STATE).write_text(json.dumps(state))
+    _, loaded, _, _ = load_roadmap(project)
+    assert loaded["milestone"]["items"][0]["done"] is False
 
 
 def test_graphic_updates_current_position_and_checklist_without_static_claims(project):
