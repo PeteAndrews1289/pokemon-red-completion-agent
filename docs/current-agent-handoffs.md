@@ -1,7 +1,39 @@
 # Current agent handoffs
 
 
-## Current — optional recovery played and fitted; model61
+## Current — Butterfree retained; real collection prerequisites identified
+
+X successfully evolved the healed Metapod from level 4 into Butterfree at level 10:
++978 XP, 1,744 actions, 150,928 frames. Living species increased 23 to 24 and
+registrations 28 to 29. All 25 specimens and the other Metapod survived; bag and
+109 currency were unchanged. The exact save reopened without input.
+
+This was a forced supporting goal: zero model queries, zero new rows and no fit.
+Model61 remains unchanged. Retain X's pending zero-row support in the next real
+fit; neither W nor X may retry. Live play is stopped.
+
+The cartridge/all-box prerequisite inventory found ten missing level-evolution
+targets with owned precursors, but nine need a duplicate caught first. Only Kakuna
+has an owned surplus for Beedrill. Its two interchangeable copies are one objective,
+not two meaningful alternatives. The tested reusable inventory is action-free;
+it is not yet connected to live target choice and does not prove execution readiness.
+
+The planned two-evolution-choice assumption failed. Next connect existing
+reserve-aware supply and duplicate-capture demand to real acquire/evolve/resupply
+alternatives. Do not hand-pick another species or add a teacher to mask this.
+The collection milestone remains 2/3; Phase 3 is not complete.
+
+[Audit](audits/red-owned-precursor-bridge-2026-09-07.md).
+[Next plan](work-sessions/2026-09-07-collection-prerequisites-plan.md).
+Dashboard saved collection shows X; training evidence remains the actual W/model61
+fit. No synthetic fit was added to make the viewer look current. No external agent
+review or background gameplay is running.
+
+Narrative: completing an evolution exposed the next real dependency—catching spare
+precursors without consuming the living collection or exhausting the economy.
+Recommended next session: **Astra High, Fast off**.
+
+## Historical — optional recovery played and fitted; model61
 
 W's model-guided exploratory choice selected healing over evolution with probability
 0.79605. It succeeded in 48 actions / 4,056 frames: level-4 Metapod healed from 5/18 to 18/18 HP.

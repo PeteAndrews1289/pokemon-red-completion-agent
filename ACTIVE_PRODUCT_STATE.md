@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: One bounded evolution continuation from W/model61, honestly zero-row if forced; then automatic owned-precursor alternatives and a productive model-selected collection outcome.
+- Next decision: Connect actual collection prerequisites to economically feasible acquire/evolve/resupply alternatives from X; retain model61 and pending X zero-row support.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model61 retains61outcomes/24successful. W selected optional healing with probability0.79605, restored Metapod5to18HP, and fitted one actual outcome. All60prior rows and original V zero-row support retained.23living/25specimens/28registered; no XP or evolution. |
+| Authority now | Model61 retains 61 outcomes, 24 successful. X's forced evolution added Butterfree (+978 XP), not a learning example. 24 living species, 25 specimens, 29 registered; no losses. X pending as zero-row support for next fit. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the healed W continuation finish its already-declared evolution without a retry, then expose two real collection objectives instead of prescribing every nested target? |
+| Cheapest falsifier | Can existing reserve-aware funding and duplicate capture support expose a real second useful objective from X without erasing living specimens? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-optional-recovery-learning** · status **active** · evidence [falsification](docs/evidence/red-optional-recovery-learning-2026-09-07.json)
+**2026-09-07-owned-precursor-bridge** · status **active** · evidence [falsification](docs/evidence/red-owned-precursor-bridge-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Learn when to restore the party while preserving experience and living specimens, then return to useful collection work. |
-| Learning output | One successful recovery choice:48actions4056frames; one real fit60to61.24successful examples,51distinct selected rows; all25specimens preserved. |
-| Authority delta | Optional recovery is now a prospectively versioned scored action. One actual sampled recovery choice was executed and fitted; mandatory safety is unchanged. |
-| Transfer result | ROM-free pressure and ordering variants plus exact historical replay passed. Live result is one same-lineage Red recovery, not independent advantage or cross-game transfer. |
-| Blocker | The healed successor offers only evolution, so its next bridge is forced and cannot count as another learned choice. Nested evolution targets remain manually declared. |
-| Decision | Recovery-learning session complete. Retain W/model61, close no collection criterion for healing alone; next test productive evolution and dynamic collection objectives. Local2/3 unchanged. |
-| Next session | One bounded evolution continuation from W/model61, honestly zero-row if forced; then automatic owned-precursor alternatives and a productive model-selected collection outcome. |
-| Next falsifier | Can the healed W continuation finish its already-declared evolution without a retry, then expose two real collection objectives instead of prescribing every nested target? |
-| Stop condition | W and every earlier attempt consumed. No reset or rewritten V behavior. One forced bridge at most before genuine objective alternatives; stop on no XP, specimen loss or repeated recovery without progress. |
+| Product alignment | Successful evolution preserves a living precursor; prerequisite inventory identifies which duplicate captures unlock further living collection. |
+| Learning output | No new rows or fit. Model61 unchanged; forced evolution gained 978 XP and one living species while preserving all 25 specimens. |
+| Authority delta | No new learned authority. One forced evolution succeeded; reusable action-free inventory now exposes actual duplicate-acquisition prerequisites. |
+| Transfer result | Inventory variation tests and live retained-state evolution passed. This is same-lineage deterministic support, not independent learned advantage or transfer. |
+| Blocker | Only one owned-surplus evolution objective remains. Nine missing level targets need another precursor; zero balls and 109 currency constrain acquisition. |
+| Decision | Stop at the planned real-alternatives falsifier. Preserve X; create feasible supply/acquisition choices next instead of decorative evolution candidates. |
+| Next session | Connect actual collection prerequisites to economically feasible acquire/evolve/resupply alternatives from X; retain model61 and pending X zero-row support. |
+| Next falsifier | Can existing reserve-aware funding and duplicate capture support expose a real second useful objective from X without erasing living specimens? |
+| Stop condition | X and prior attempts consumed. No further forced evolution this session, reset-funded supplies, sacrificed sole specimens or fake alternative rows. |
 
 ### Stop conditions
 

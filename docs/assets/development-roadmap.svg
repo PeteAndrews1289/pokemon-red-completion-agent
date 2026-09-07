@@ -91,8 +91,8 @@
 <text x="754" y="1573" class="small muted">Legitimate trades and events, special puzzles and unsupported</text>
 <text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-07-optional-recovery-learning</text>
-<text x="50" y="1767" class="body">Recovery v3 preserved historical predictions. W healed Metapod from 5 to 18 HP and fitted outcome 61, preserving 25 specimens</text>
-<text x="50" y="1792" class="body">and V support. No XP or collection gain.</text>
+<text x="50" y="1732" class="small muted">2026-09-07-owned-precursor-bridge</text>
+<text x="50" y="1767" class="body">Metapod evolved into Butterfree: +978 XP, 24 living species, all 25 specimens retained. Forced support; model61 unchanged.</text>
+<text x="50" y="1792" class="body">Only one surplus evolution target remains.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

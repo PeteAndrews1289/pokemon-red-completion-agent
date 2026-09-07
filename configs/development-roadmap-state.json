@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-optional-recovery-learning",
+  "as_of_session": "2026-09-07-owned-precursor-bridge",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-optional-recovery-learning-2026-09-07.json"
+      "evidence": "docs/evidence/red-owned-precursor-bridge-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -222,6 +222,12 @@
       "result": "Recovery v3 preserved historical predictions. W healed Metapod from 5 to 18 HP and fitted outcome 61, preserving 25 specimens and V support. No XP or collection gain.",
       "deviation": "The actual exploratory choice was healing, not evolution. Kept the productive-collection criterion open:2/3 unchanged. Bounded slow retired-campaign regression and checked active callers separately.",
       "next": "One bounded productive evolution from W/model61, then genuine automatically enumerated owned-precursor alternatives. No reset, teacher factory or unsupported fallback."
+    },
+    {
+      "session": "2026-09-07-owned-precursor-bridge",
+      "result": "Metapod evolved into Butterfree: +978 XP, 24 living species, all 25 specimens retained. Forced support; model61 unchanged. Only one surplus evolution target remains.",
+      "deviation": "Stopped at the planned inventory falsifier: nine other missing evolution targets require duplicate acquisition. No fake alternatives or new fit.",
+      "next": "Existing reserve-aware supply and duplicate demand must create real acquire/evolve choices; retain X's zero-row support."
     }
   ],
   "closed_milestones": [

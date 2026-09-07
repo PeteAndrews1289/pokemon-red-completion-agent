@@ -1,0 +1,75 @@
+{
+  "schema": "pokemon.red.owned-precursor-bridge.v1",
+  "classification": "successful deterministic support; no new learned choice or fit",
+  "source_commit": "1ab2d748ebad7e159d250121f76e2d41b4f5c9ee",
+  "source_bundle_sha256": "cb4b33e0f5cf6fdcfe309befb2ae64e726bf0bb06e101cb16d29a6b1fd817343",
+  "episode_id": "red-owned-precursor-20260907-x-causal",
+  "manifest_sha256": "7bd50cf73793b36af3ef0f35c47f074a19ed7819e2e9eaee045bd7d7386081f2",
+  "checkpoint_sha256": "3ac1dbe149858e067a71e83d8b47bbbe8d8443606bf0d6efa15107f8e44ee38d",
+  "model_sha256": "0ad8b42ff07ee3380192535db45bb5f7d13c4a98ce9450b21dd47630fee43beb",
+  "selected_kind": "evolve_species",
+  "selection_mode": "forced_singleton",
+  "verified_success": true,
+  "actions": 1744,
+  "frames": 150928,
+  "evolution": {
+    "source": "Metapod",
+    "target": "Butterfree",
+    "level_before": 4,
+    "level_after": 10,
+    "experience_gain": 978,
+    "source_copy_retained": true
+  },
+  "collection": {
+    "living_before": 23,
+    "living_after": 24,
+    "registered_before": 28,
+    "registered_after": 29,
+    "total_specimens": 25,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "bag_unchanged": true,
+    "money_unchanged": true,
+    "money": 109,
+    "capture_items": 0
+  },
+  "training": {
+    "retained_examples": 61,
+    "new_examples": 0,
+    "model_queries": 0,
+    "model_fitted": false,
+    "pending_zero_row_support": ["red-owned-precursor-20260907-x-causal"]
+  },
+  "read_only_audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "input_ready": true,
+    "in_battle": false
+  },
+  "owned_level_inventory": {
+    "source": "cartridge evolution graph and audited all-box specimen ledger",
+    "missing_targets_with_owned_precursors": 10,
+    "targets_with_owned_surplus": 1,
+    "targets_needing_duplicate_acquisition": 9,
+    "surplus_target": "Beedrill",
+    "equivalent_kakuna_copies_count_as_one_objective": true,
+    "execution_readiness_claimed": false,
+    "live_model_target_selection_connected": false
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0
+  },
+  "milestone": {
+    "name": "Storage-safe varied collection",
+    "completed": 2,
+    "total": 3,
+    "productive_model_selected_varied_outcome_completed": false
+  }
+}

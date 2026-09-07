@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-optional-recovery-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-owned-precursor-bridge**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-optional-recovery-learning-2026-09-07.json)
+[Current evidence](../docs/evidence/red-owned-precursor-bridge-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-owned-precursor-bridge
+
+Metapod evolved into Butterfree: +978 XP, 24 living species, all 25 specimens retained. Forced support; model61 unchanged. Only one surplus evolution target remains.
+
+**Deviation:** Stopped at the planned inventory falsifier: nine other missing evolution targets require duplicate acquisition. No fake alternatives or new fit.
+
+**Next:** Existing reserve-aware supply and duplicate demand must create real acquire/evolve choices; retain X's zero-row support.
 
 ### 2026-09-07-optional-recovery-learning
 

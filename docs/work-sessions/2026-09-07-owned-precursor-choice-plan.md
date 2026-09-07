@@ -1,4 +1,12 @@
-# Next session — productive evolution and genuine target choices
+# Completed session — productive evolution and genuine target choices
+
+Result: X completed Metapod-to-Butterfree, +978 XP and one living species, with
+all 25 specimens retained. Model61 did not fit a forced choice. The inventory
+falsifier triggered: only one surplus evolution target remains, while nine
+other missing level-evolution targets need duplicate acquisition.
+Stop before speculative target-selection execution; follow the
+[prerequisite plan](2026-09-07-collection-prerequisites-plan.md).
+See the [audit](../audits/red-owned-precursor-bridge-2026-09-07.md).
 
 Session started September 7 at 19:09 UTC; midpoint review 20:09 UTC and
 two-hour stopping point 21:09 UTC. Use the mission check below. First execute at

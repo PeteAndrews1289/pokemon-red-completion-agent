@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 UTC",
+  "location": "Route 11 — saved after supported evolution; Butterfree level 10, all party healthy",
+  "registered_species": 29,
+  "living_species": 24,
+  "specimens": 25,
+  "capture_items": 0,
+  "money": 109,
+  "checkpoint_sha256": "3ac1dbe149858e067a71e83d8b47bbbe8d8443606bf0d6efa15107f8e44ee38d",
+  "live": false,
+  "controller_actions": 0
+}
