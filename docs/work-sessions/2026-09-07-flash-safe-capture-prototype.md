@@ -37,3 +37,29 @@ unblocking the next learned acquisition, not a learning result.
 Selection is a conservative health/offense heuristic, not proof of route safety or the best escort.
 Fixed-damage moves with zero catalog power remain unsupported. No specimen identity is invented
 for two members identical in every observed field. No runtime integration, gameplay or fitting here.
+
+## Codex review
+
+The first draft passed its 11 proposed tests. Independent review tests exposed two
+self-destructive-only move cases and an inconsistent preparation-error contract:
+three failures, twelve passes. Codex excluded self-destructive moves from qualifying
+offensive capacity, translated only the catalog's known error into the preparation
+error, and added an oversized-threshold rejection test. This does not prevent an
+executor from choosing a dangerous move later; battle safety remains a separate
+integration requirement, especially for a member with both normal and dangerous moves.
+
+The raw blueprint's Drowzee-specific expectation and statement that Center healing
+rejects fainted members were corrected during transcription. No species is prescribed
+by the selector. Center healing is precisely the existing means to revive this party.
+
+CLI file access was denied in the new worktree. No permission bypass was used:
+Flash produced source from a bounded code packet, and Codex transcribed/compacted it
+into the isolated branch before testing. Do not describe this as autonomous repository
+editing or a repository-wide architecture audit. The raw draft and reviewed successor
+are kept in separate local commits; neither is a live gameplay result.
+
+Final local ROM-free check: 39 tests passed across the new planner/review tests and
+existing capture-party, routed-support and indexed party-menu tests. This establishes
+the isolated planning behavior, not safe live transport. Next Codex must connect the
+recovery and execution boundaries, exercise stale plans across actual swaps, and verify
+the old-save/new-runtime boundary before promoting this into the active player.

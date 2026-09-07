@@ -70,10 +70,8 @@ class RedCaptureLeadPlan:
 def _validate_threshold(threshold: float) -> None:
     if isinstance(threshold, bool) or not isinstance(threshold, (int, float)):
         raise ValueError("minimum_hp_ratio must be a real number")
-    if not math.isfinite(threshold):
-        raise ValueError("minimum_hp_ratio must be finite")
-    if not (0.0 < threshold <= 1.0):
-        raise ValueError("minimum_hp_ratio must satisfy 0 < x <= 1")
+    if not (0.0 < threshold <= 1.0) or not math.isfinite(threshold):
+        raise ValueError("minimum_hp_ratio must be finite and satisfy 0 < x <= 1")
 
 
 def _evaluate_member(
@@ -95,11 +93,12 @@ def _evaluate_member(
         try:
             ref = pokemon_red_move_ref(move.move_id)
             mechanics = RED_BATTLE_CATALOG.resolve_move(ref)
-        except RedBattleCatalogError:
-            raise
-        except Exception as err:
-            raise RedBattleCatalogError(f"unknown move catalog id {move.move_id}") from err
-        if mechanics.category != "status" and mechanics.power > 0:
+        except RedBattleCatalogError as err:
+            raise RedCaptureLeadError("escort move mechanics are unsupported") from err
+        if (
+            mechanics.category != "status" and mechanics.power > 0
+            and "self_destruct" not in mechanics.effect_flags
+        ):
             has_damaging_move = True
             offensive_pp += move.current_pp
     return has_damaging_move, offensive_pp
@@ -113,6 +112,9 @@ def plan_capture_lead(
     A healthy escort with other fainted members is for guarded recovery only.
     This does not grant capture permission, which requires all members alive.
     Fixed-damage zero-power moves are conservatively unsupported.
+    Self-destructive moves do not qualify as sustainable offensive capacity.
+    This predicate does not choose battle moves or guarantee safe escape: the
+    integrating executor must still guard actual battle actions and resources.
     """
     if not isinstance(party, PartyObservation):
         raise TypeError("party must be a PartyObservation")

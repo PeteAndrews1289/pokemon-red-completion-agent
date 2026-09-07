@@ -8,12 +8,13 @@ from pokemon_red_completion.party import (
     PartyObservation,
     StatusCondition,
 )
-from pokemon_red_completion.red_battle_catalog import RedBattleCatalogError
 from pokemon_red_completion.red_capture_lead import RedCaptureLeadError, plan_capture_lead
 
 
 def member(slot, *, species_id=25, level=20, hp=50, max_hp=50,
-           status=StatusCondition.HEALTHY, moves=(MoveObservation(1, 35),)):
+           status=StatusCondition.HEALTHY, moves=None):
+    if moves is None:
+        moves = (MoveObservation(1, 35),)
     return PartyMemberObservation(slot, species_id, level, hp, max_hp, status=status, moves=moves)
 
 
@@ -102,5 +103,5 @@ def test_all_unqualified_rejected():
 
 
 def test_unknown_move_catalog_fails_closed():
-    with pytest.raises(RedBattleCatalogError):
+    with pytest.raises(RedCaptureLeadError):
         plan_capture_lead(party(member(1, moves=(MoveObservation(999, 10),))))
