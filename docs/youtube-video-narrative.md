@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — it was not a wall; the nurse was still talking
+
+Show the real failed-movement screen beside the repaired component diagnostic: the nurse's
+farewell closes, then the same planned route reaches the PC. No replacement walk string was
+needed. Clearly label this footage as an engineering diagnostic, not autonomous learning.
+
+The more important lesson: a skill can have tested parts yet still be impossible as a whole.
+The evolution trainer always used the starter for shared experience, but the starter was beyond
+the trainer's fighting cap. We now catch that contradiction before spending gameplay time.
+Next is a complete safe training operation that can resume partial progress. No new fit or
+collection gain happened here; the goal model still contains 35 examples. The PC-open diagnostic
+also explicitly faced the machine, so do not claim the native evolution pipeline is complete.
+See the [audit](audits/red-center-pc-boundary-2026-09-06.md) for exact evidence boundaries.
+
 ## Latest chapter — the model chose evolution, but the executor could not reach the PC
 
 The honest on-screen sequence is search, no catch, then a model-selected switch to evolution.

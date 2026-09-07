@@ -23,7 +23,10 @@ from pokemon_red_completion.red_boxed_level_evolution import BoundedEvolutionTra
 from pokemon_red_completion.red_collection import red_internal_species_number, red_species_ref
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import SemanticVenueRouteBinding
 from pokemon_red_completion.red_goal_boxed_evolution import RedGoalBoxedEvolutionExecutor
-from pokemon_red_completion.red_goal_skills import RedCenterRestoreGoalProvider
+from pokemon_red_completion.red_goal_skills import (
+    RedCenterRestoreGoalProvider,
+    finish_center_dialogue,
+)
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
@@ -49,6 +52,20 @@ def bind_native_boxed_evolution(
         if len(specimens) != 2 or not candidates:
             return context.RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.NO_LEGAL_TARGET
+            )
+        # The existing evolution trainer is participation-only. It cannot earn
+        # experience once its fixed escort has reached its own battle cap.
+        # Reject that setup before routing or moving any specimen into the party.
+        from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
+        from pokemon_red_completion.red_team_training import ESCORT_LEVEL_CAP
+
+        escort = next(
+            (m for m in observation.party.members if m.species_id == BLASTOISE_SPECIES_ID),
+            None,
+        )
+        if escort is None or escort.level >= ESCORT_LEVEL_CAP:
+            return context.RedGoalSkillAvailability.unavailable(
+                GoalUnavailableReason.MISSING_CAPABILITY
             )
         precursor = min(candidates, key=lambda s: s.slot_index)
         policy = context.MANSION_TEAM_POLICY
@@ -78,6 +95,8 @@ def bind_native_boxed_evolution(
         source = red_species_ref(red_internal_species_number(request.precursor_internal_species_id))
         if sum(s.species_ref == source for s in before.collection_observation.specimens) != 2:
             raise context.RedGoalContextError("native evolution requires two retained precursors")
+        if not readiness(before).executable:
+            raise context.RedGoalContextError("native evolution training capability is unavailable")
         action_start = actions.actions_executed
         frame_start = runtime.emulator.frame_count
         traversal = Gen1TraversalObserver(runtime.reader)
@@ -100,6 +119,9 @@ def bind_native_boxed_evolution(
         ).offer(before)
         if heal.binding is not None:
             heal.binding.execute()
+        # Old checkpoints may contain the already-healed farewell screen. They
+        # have no restore offer; explicitly finish that interaction too.
+        finish_center_dialogue(actions, runtime.reader)
         identity = canonical_sha256(
             {
                 "schema": "pokemon.red.native-boxed-evolution.v1",

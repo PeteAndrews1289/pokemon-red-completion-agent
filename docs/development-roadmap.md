@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-06-native-boxed-evolution**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-06-center-pc-boundary**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json)
+[Current evidence](../docs/evidence/red-center-pc-boundary-2026-09-06.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-06-center-pc-boundary
+
+Farewell completion repaired; 11 computed PC steps passed with zero replans. PC opened in a standalone diagnostic. No fit or collection gain; 35 examples and 2/5 unchanged.
+
+**Deviation:** Stopped before evolution because audit proved the participation-only trainer cannot fight with the existing capped escort. The bounded engineering session triggers reorientation; no milestone was weakened.
+
+**Next:** Bind PC orientation and qualify safe, resumable evolution training without mandatory capped-escort use.
 
 ### 2026-09-06-native-boxed-evolution
 

@@ -643,9 +643,7 @@ class RedMartResupplyGoalProvider:
             estimated_risk=0.02,
         ).offer(observation)
 
-    def resource_availability(
-        self, observation: RedGoalObservation
-    ) -> RedGoalSkillAvailability:
+    def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check actual resources without claiming the player is at the clerk."""
 
         inventory = dict(observation.raw.bag_items or ())
@@ -682,11 +680,15 @@ class RedMartResupplyGoalProvider:
         reserves = []
         for resource, items, count, target in (
             (
-                "capture", _CAPTURE_ITEMS, observation.capture_item_count,
+                "capture",
+                _CAPTURE_ITEMS,
+                observation.capture_item_count,
                 self.adapter.config.desired_capture_items,
             ),
             (
-                "recovery", _RECOVERY_ITEMS, observation.recovery_item_count,
+                "recovery",
+                _RECOVERY_ITEMS,
+                observation.recovery_item_count,
                 self.adapter.config.desired_recovery_items,
             ),
         ):
@@ -725,6 +727,51 @@ class RedMartResupplyGoalProvider:
 
     def _settle(self) -> None:
         self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=self.wait_frames))
+
+
+def finish_center_dialogue(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    maximum_attempts: int = 16,
+    settle_frames: int = 120,
+) -> None:
+    """Leave an already-healed nurse interaction without guessing walk inputs.
+
+    Only a verified Center/nurse boundary may use this recovery. CANCEL advances
+    farewell text without starting another healing interaction after it closes.
+    A missing text frame is necessary, not sufficient: movement flags must also
+    settle and the restored party and position must remain unchanged.
+    """
+    if maximum_attempts <= 0 or settle_frames <= 0:
+        raise ValueError("Center dialogue bounds must be positive")
+    start = reader.read()
+    if (
+        start.map_id not in _POKEMON_CENTER_MAPS
+        or (start.player_x, start.player_y) != (3, 3)
+        or start.battle_state != 0
+        or not _raw_party_restored(start)
+    ):
+        raise RedGoalSkillError("Center dialogue recovery requires a healed nurse boundary")
+    for attempt in range(maximum_attempts + 1):
+        raw = reader.read()
+        if (
+            (raw.map_id, raw.player_x, raw.player_y)
+            != (start.map_id, start.player_x, start.player_y)
+            or raw.battle_state != 0
+            or raw.party_species_ids != start.party_species_ids
+            or not _raw_party_restored(raw)
+        ):
+            raise RedGoalSkillError("Center dialogue recovery changed its safe boundary")
+        visible = reader.read_bottom_dialogue_box_visible()
+        if not visible and reader.read_input_readiness().ready:
+            return
+        if attempt == maximum_attempts:
+            break
+        if visible:
+            actions.execute(MacroAction(MacroActionKind.CANCEL))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=settle_frames))
+    raise RedGoalSkillError("Center farewell did not release overworld control")
 
 
 @dataclass(frozen=True, slots=True)
@@ -795,6 +842,12 @@ class RedCenterRestoreGoalProvider:
                     break
             else:
                 raise RedGoalSkillError("Center recovery did not restore the party")
+            finish_center_dialogue(
+                self.actions,
+                self.reader,
+                maximum_attempts=self.dialogue_attempts,
+                settle_frames=self.settle_frames,
+            )
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
                 frames_executed=self.emulator.frame_count - before_frames,
@@ -1031,9 +1084,7 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey source identity is absent")
         if self.boundary is not None and not callable(self.boundary):
             raise RedGoalSkillError("area-survey boundary must be callable")
-        if self.normalize_after_capture is not None and not callable(
-            self.normalize_after_capture
-        ):
+        if self.normalize_after_capture is not None and not callable(self.normalize_after_capture):
             raise RedGoalSkillError("area-survey normalizer must be callable")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
@@ -1043,9 +1094,7 @@ class RedAreaSurveyGoalProvider:
             return RedGoalBindingOffer.unavailable(self.kind, availability.unavailable_reason)
         return self._offer_at_source(observation)
 
-    def resource_availability(
-        self, observation: RedGoalObservation
-    ) -> RedGoalSkillAvailability:
+    def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check source needs and real inventory without inventing a source location."""
 
         if observation.raw.battle_state or not observation.input_ready:

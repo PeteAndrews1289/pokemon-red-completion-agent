@@ -41,7 +41,7 @@ def runtime_fixture(tmp_path, *, source=77, target=78, evolution_level=40, count
             BLASTOISE_SPECIES_ID,
             *(red_internal_species_id(n) for n in (83, 51, 143, 135, 106)),
         ),
-        party_levels=(63, 55, 55, 55, 55, 55),
+        party_levels=(54, 55, 55, 55, 55, 55),
         party_hp=(150, 40, 40, 40, 40, 40),
         party_max_hp=(150, 40, 40, 40, 40, 40),
         party_status=(0,) * 6,
@@ -102,6 +102,37 @@ def test_native_availability_preserves_precursor_and_declares_engine_multiplicit
     assert offer.unavailable_reason is reason
     assert (offer.binding is not None) == (reason is None)
     assert runtime.boxed_level_evolution_executor is None
+    assert actions.actions_executed == 0
+
+
+@pytest.mark.parametrize("escort_level,available", [(54, True), (55, False), (63, False)])
+def test_native_evolution_requires_an_escort_that_can_still_fight(
+    tmp_path, escort_level, available
+):
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    reader.raw = replace(reader.raw, party_levels=(escort_level, 55, 55, 55, 55, 55))
+    native = bind_native_boxed_evolution(runtime, object())
+    actions = CountingExecutor(_ActionDelegate())
+    offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
+    assert (offer.binding is not None) is available
+    if not available:
+        assert offer.unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert actions.actions_executed == 0
+
+
+def test_native_execution_rechecks_escort_before_any_input(tmp_path):
+    from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
+
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    native = bind_native_boxed_evolution(runtime, object())
+    reader.raw = replace(reader.raw, party_levels=(63, 55, 55, 55, 55, 55))
+    actions = CountingExecutor(_ActionDelegate())
+    request = RedBoxedLevelEvolutionGoalRequest(
+        red_internal_species_id(77), red_internal_species_id(78), 0, 1, 6,
+        red_internal_species_id(106),
+    )
+    with pytest.raises(Exception, match="training capability is unavailable"):
+        native.boxed_level_evolution_executor(request, actions)
     assert actions.actions_executed == 0
 
 
@@ -230,6 +261,7 @@ def test_native_wiring_executes_existing_engine_with_same_budgets_and_observers(
         lambda *args: SimpleNamespace(offer=lambda _: SimpleNamespace(binding=None)),
     )
     received = []
+    monkeypatch.setattr(module, "finish_center_dialogue", lambda actions, reader: None)
 
     def engine(**kwargs):
         received.append(kwargs)

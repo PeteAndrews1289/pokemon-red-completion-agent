@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 6 — a wall that was actually a conversation
+
+The saved failure let us inspect the problem without replaying the journey. The nurse had healed
+the party but was still speaking. Idle movement flags did not mean the game was accepting walking
+inputs. We added a verified end to the interaction; the same computed 11-step route then worked
+without replanning. A separate diagnostic opened the PC and preserved every stored specimen.
+
+The important audit finding came next: an older evolution trainer forced the starter to finish
+battles but also forbade it from fighting above its cap. Our starter was already beyond that cap.
+Rather than spend another run watching it flee, the skill now rejects that setup before acting.
+We still need safe trainee participation, PC-facing integration and resumable partial evolution.
+This session improved execution truth, not model competence: 35 examples remain and no new
+evolution is claimed. [Evidence and limitations](audits/red-center-pc-boundary-2026-09-06.md).
+
 ## September 6 — real learning returns; a skill fails at its last connection
 
 We connected the existing boxed-evolution mechanics to the native player and resumed outcome

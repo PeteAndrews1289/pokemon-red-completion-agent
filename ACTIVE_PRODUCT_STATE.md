@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From the saved healed Center endpoint, falsify the advertised first PC-route edge against actual control/collision state; repair only that reusable mismatch, qualify one complete surplus-precursor evolution, then resume bounded selected-outcome learning. No Mansion replay or new learner features.
+- Next decision: Qualify one end-to-end collection development operation: bind PC orientation, use safe eligible trainee/support battles instead of mandatory capped escort participation, and preserve/resume partial training. Then resume model-selected learning; no new features or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model 1b26aa44 has 35 retained examples after two actual native fits, including all 32 prior rows and three new failures. The model selected evolution after an exhausted search, reached and healed at the Center, but PC access failed. No useful collection gain or history-effort advantage is demonstrated. |
+| Authority now | Model 1b26aa44 retains 35 examples; this session performed no fitting. Center dialogue completion and standalone PC access are qualified, but native evolution cannot use the capped escort and now rejects that offer before input. No collection gain or history-effort advantage is demonstrated. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Why does the planner advertise an eastward PC approach while actual movement at the saved Center boundary fails? |
+| Cheapest falsifier | Can a safe existing trainee battle strategy earn evolution experience without relying on the capped starter, and resume after a bounded partial result? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-native-boxed-evolution** · status **closed** · evidence [qualification](docs/evidence/red-native-boxed-evolution-result-2026-09-06.json)
+**2026-09-06-center-pc-boundary** · status **closed** · evidence [qualification](docs/evidence/red-center-pc-boundary-2026-09-06.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Actual selected-outcome learning resumed and an evolution choice reached a Center. The missing reusable skill is now live PC access, not another teacher, model feature or full-game run. |
-| Learning output | 35 retained examples; three new observed negatives, two actual fits. No counterfactual targets or collection gains. Useful memory-aware play stays 2/5 (40%): successful alternatives and effort-sensitive learning remain unproved. |
-| Authority delta | Three actual sampled choices and two fits (32 to 33 to 35 examples); all new outcomes failed. No promotion or successful evolution. |
+| Product alignment | Repair verified interaction completion and reject impossible training offers before spending controller work. This is engineering toward useful collection actions, not new learned competence. |
+| Learning output | No new learning; 35 retained examples and 2/5 (40%) remain. The unchanged 11-step PC route passed after farewell completion, and a standalone specialist opened the PC with no specimen change. |
+| Authority delta | None. Two component diagnostics, no model-selected outcomes or fits; all 35 examples preserved. |
 | Transfer result | Same-lineage Red development only. No independent evaluation, unfamiliar Red modification or Crystal execution. |
-| Blocker | Indoor PC routing advertises an 11-step path but execution cannot traverse its first eastward approach. Original roster and all 17 specimens remain; the final Center checkpoint is ready and fully healed. |
-| Decision | Stop collection after the declared follow-up. Keep all negative outcomes. Reorient on the smallest live PC control/collision mismatch rather than more learner or campaign work. |
-| Next session | From the saved healed Center endpoint, falsify the advertised first PC-route edge against actual control/collision state; repair only that reusable mismatch, qualify one complete surplus-precursor evolution, then resume bounded selected-outcome learning. No Mansion replay or new learner features. |
-| Next falsifier | Why does the planner advertise an eastward PC approach while actual movement at the saved Center boundary fails? |
-| Stop condition | Both A and B are closed without retry. Continue only from the preserved final Center endpoint under a new declared bounded task. Stop on fixed direction patches or another feature/process expansion. |
+| Blocker | Farewell dialogue caused the apparent route collision and is repaired. Complete evolution remains blocked by a mandatory escort already beyond its level cap, unbound PC orientation and unqualified partial-training resumption. |
+| Decision | Close the bounded control repair. The engineering-only session triggers reorientation: qualify one useful end-to-end evolution operation before further learner expansion or acquisition-only sampling. |
+| Next session | Qualify one end-to-end collection development operation: bind PC orientation, use safe eligible trainee/support battles instead of mandatory capped escort participation, and preserve/resume partial training. Then resume model-selected learning; no new features or full replay. |
+| Next falsifier | Can a safe existing trainee battle strategy earn evolution experience without relying on the capped starter, and resume after a bounded partial result? |
+| Stop condition | Both component diagnostics are closed and excluded from fitting. The original saved player endpoint is unchanged and still contains farewell dialogue. No battle or storage change was authorized in these diagnostics. Reorient before a new bounded development task. |
 
 ### Stop conditions
 

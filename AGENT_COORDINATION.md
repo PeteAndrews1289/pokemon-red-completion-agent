@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+## Current — Center control repaired; complete operation still unqualified
+
+Codex closed the [Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md).
+The PC route works once nurse dialogue closes. Standalone PC opening passed without changing
+specimens; this is not a learned result or complete native evolution. Model stays 35 examples.
+The next decision is safe, resumable collection development without a mandatory capped escort,
+plus verified PC facing. Do not expand the model, replay the game or raise the escort cap.
+
+No external agent was invoked. If requested, Claude should challenge end-to-end experience and
+partial-progress claims; Antigravity should challenge interaction orientation, dialogue/control
+truth and specimen-preserving recovery. Both remain read-only advisers, not a routine gate.
+Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md); older current headings are history.
+
 ## Current — 35 examples; saved Center PC access is the next blocker
 
 The [native evolution audit](docs/audits/red-native-boxed-evolution-2026-09-06.md) records real

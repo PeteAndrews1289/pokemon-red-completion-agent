@@ -1,5 +1,24 @@
 # Model-first development roadmap
 
+## Current — the route works; qualify viable collection development
+
+The [Center audit](audits/red-center-pc-boundary-2026-09-06.md) identifies unfinished farewell
+dialogue, not a wall, as the PC-route failure. Bounded dialogue completion and the unchanged
+11-step route passed; standalone Bill's PC opening preserved the party and boxes. No model fit
+or collection gain occurred. The 35-example model and 2/5 useful-play checklist are unchanged.
+
+1. Bind verified PC-facing interaction to native skill execution; coordinates alone are insufficient.
+2. Qualify safe trainee/support battles: mandatory participation-only evolution cannot work with
+   our escort already over its level cap. Offers now reject that impossible setup before input.
+3. Make partial evolution progress durable and resumable when the precursor is already in-party.
+   Check bounded experience feasibility before storage changes; do not increase caps until lucky.
+4. Qualify a whole useful operation, then collect and fit model-selected outcomes. No learner
+   feature expansion, acquisition-only loop, full replay, unfamiliar hack or Crystal execution.
+
+This engineering-only session triggers reorientation under the North Star. Keep the existing
+four-hour session bound, reassess after 90 minutes without a viable operation, and stop if the
+repair becomes another teacher project. See [active state](../ACTIVE_PRODUCT_STATE.md).
+
 ## Current — 35 examples; saved Center PC access is the next blocker
 
 The [native evolution audit](audits/red-native-boxed-evolution-2026-09-06.md) records real

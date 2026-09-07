@@ -1,5 +1,34 @@
 # Handoff
 
+## Current — Center farewell repaired; reorient on viable evolution training
+
+Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the
+[Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md). The apparent collision
+was still-open nurse text, not bad terrain. A 4-action diagnostic reproduced it; the repaired
+qualification closed dialogue, completed 11 computed steps without replanning, and opened Bill's
+PC in 31 actions / 2304 frames with party and boxes unchanged. This is component evidence only:
+the diagnostic explicitly faced the PC, which the native engine does not yet guarantee.
+
+Model remains `1b26aa44` / 35 examples, saved checkpoint remains `b64023f4` and still contains
+the original farewell screen. No player save was replaced, no fitting or storage change occurred.
+The two new private diagnostic scripts are consumed and excluded from fitting. Private operator
+notes retain exact locations and measurements. Do not rerun old player episodes.
+
+The audit found a deeper deterministic blocker: mandatory participation-only evolution uses an
+escort capped at 55, while the saved Blastoise is 63. Native offers and execution now reject this
+impossible setup before input. Do not raise the cap to brute-force it. Next qualify safe trainee
+or eligible-support battles, PC-facing binding and resumable partial evolution. The boxed-only
+provider currently cannot resume a precursor already in the party. Stop learner feature expansion
+and acquisition-only sampling until one useful operation works end-to-end. Checklist stays 2/5.
+
+The engineering-only session triggers reorientation, not another hidden continuation. No agent
+or outside reviewer was invoked; earlier sections below are historical.
+
+Local verification: 370 focused gameplay/control tests, 112 protocol/focus/roadmap tests,
+400-file types, lint/docs/focus/public-artifact checks passed. The earlier registry selection's
+one stale current-source golden is repaired and its entire protocol file passed. No full-suite
+claim for this session. Regenerated current bundle: `3adc80a8...ba2f1e7`.
+
 ## Current — 35 examples; saved Center PC access is the next blocker
 
 Final local regression: 7184 passed, 1 skipped, 1 xfailed (17m08s); 400-source-file type check,

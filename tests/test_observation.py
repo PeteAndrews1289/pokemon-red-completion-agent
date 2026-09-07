@@ -81,6 +81,21 @@ class RecordingMemory:
         return self.values.get(int(address), 0)
 
 
+@pytest.mark.parametrize("corrupt", [None, 0, 8, 19, 100, 119])
+def test_bottom_dialogue_requires_frame_not_ready_movement_flags(corrupt):
+    # Literal independently specified screenshot-frame tiles, not constants
+    # imported from the detector under test. Middle border and lower corners
+    # distinguish a frame from lone font tiles and unrelated smaller menus.
+    base = 0xC3A0 + 240
+    values = {base: 0x79, base + 19: 0x7B, base + 100: 0x7D, base + 119: 0x7E}
+    values.update({base + x: 0x7A for x in range(1, 19)})
+    if corrupt is not None:
+        values[base + corrupt] = 0
+    reader = PokemonRedStateReader(RecordingMemory(values))
+    assert reader.read_input_readiness().ready
+    assert reader.read_bottom_dialogue_box_visible() is (corrupt is None)
+
+
 class BankedRecordingMemory(RecordingMemory):
     def __init__(
         self,

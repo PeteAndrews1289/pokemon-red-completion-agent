@@ -1,0 +1,45 @@
+{
+  "schema": "pokemon.red.center-pc-boundary-qualification.v1",
+  "session": "2026-09-06-center-pc-boundary",
+  "parent_checkpoint_sha256": "b64023f4e479871367e1b9389cf2b54d784ada60c25b94de14f2d59752fc85a4",
+  "diagnostic_only": true,
+  "fit_admission": false,
+  "reproduction": {
+    "movement_requests": 2,
+    "actions": 4,
+    "frames": 96,
+    "displacement": 0,
+    "movement_flags_ready": true,
+    "farewell_visible_in_game_image": true
+  },
+  "repaired_qualification": {
+    "dialogue_visible_before": true,
+    "dialogue_visible_after": false,
+    "dialogue_actions": 8,
+    "computed_route_steps_completed": 11,
+    "route_replans": 0,
+    "pc_menu_opened": true,
+    "explicit_pc_facing_input": true,
+    "actions": 31,
+    "frames": 2304,
+    "party_unchanged": true,
+    "boxes_unchanged": true,
+    "held_buttons_at_end": 0
+  },
+  "audit": {
+    "evolution_trainer_participation_only": true,
+    "escort_level_cap": 55,
+    "saved_escort_level": 63,
+    "native_capped_escort_offer_rejected_before_input": true,
+    "pc_facing_not_yet_bound_by_native_engine": true,
+    "complete_evolution_qualified": false
+  },
+  "learning": {
+    "examples_before": 35,
+    "examples_after": 35,
+    "new_fit_count": 0,
+    "new_model_selected_outcomes": 0,
+    "collection_gain": 0,
+    "independent_transfer_claim": false
+  }
+}

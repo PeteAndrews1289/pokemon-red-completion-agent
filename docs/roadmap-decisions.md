@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## 2026-09-06 Center boundary session — stop at the next capability contradiction
+
+The planned complete evolution was not attempted: live qualification repaired the dialogue
+boundary, then code inspection proved that participation-only training cannot use the saved
+escort above its cap. Reorientation replaces another futile run with safe, resumable trainee
+development and verified PC facing. This is a bounded engineering stop, not a lowered milestone;
+the useful-play checklist stays 2/5 and the Red-first baseline is unchanged. See the
+[audit](audits/red-center-pc-boundary-2026-09-06.md).
+
 ## 2026-09-06 native evolution session — no baseline change
 
 After A's negative exploration result was fitted, one prospectively declared continuation B

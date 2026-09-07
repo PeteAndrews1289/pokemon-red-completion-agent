@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-06-native-boxed-evolution",
+  "as_of_session": "2026-09-06-center-pc-boundary",
   "current_stage": "adaptive-red",
   "stages": {
     "foundation": {
@@ -10,7 +10,7 @@
     },
     "adaptive-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json"
+      "evidence": "docs/evidence/red-center-pc-boundary-2026-09-06.json"
     },
     "sustained-red": {
       "status": "planned",
@@ -90,6 +90,12 @@
       "result": "32 to 35 examples; three real failures retained. Evolution reached/healed at Center but PC routing failed. No collection gain; 2/5 stays unchanged.",
       "deviation": "One prospectively declared post-fit continuation followed A's saved endpoint; neither episode retried. No baseline or exit criteria changed.",
       "next": "Qualify the saved Center's PC control/collision boundary, then one complete useful evolution."
+    },
+    {
+      "session": "2026-09-06-center-pc-boundary",
+      "result": "Farewell completion repaired; 11 computed PC steps passed with zero replans. PC opened in a standalone diagnostic. No fit or collection gain; 35 examples and 2/5 unchanged.",
+      "deviation": "Stopped before evolution because audit proved the participation-only trainer cannot fight with the existing capped escort. The bounded engineering session triggers reorientation; no milestone was weakened.",
+      "next": "Bind PC orientation and qualify safe, resumable evolution training without mandatory capped-escort use."
     }
   ]
 }

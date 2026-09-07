@@ -55,6 +55,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedMartResupplyGoalProvider,
     RedProgressGoalProvider,
     RedRouteGoalProvider,
+    finish_center_dialogue,
 )
 from pokemon_red_completion.red_party import party_observation_from_raw
 from pokemon_red_completion.route_executor import TraversalSnapshot
@@ -111,6 +112,7 @@ class _Reader:
     def __init__(self, *, raw: RawGameState, ready: bool) -> None:
         self.raw = raw
         self.ready = ready
+        self.dialogue = False
         self.pokedex = RedPokedexState(frozenset({9}), frozenset({9}))
         self.boxes = RedBoxCollectionState(
             tuple(RedCurrentBoxState(index, (), ()) for index in range(12)),
@@ -129,6 +131,9 @@ class _Reader:
 
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(0 if self.ready else 1, 0, 0, 0, 0)
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        return self.dialogue
 
 
 class _Observer:
@@ -298,6 +303,65 @@ def test_center_restore_reaches_nurse_and_verifies_whole_party_recovery() -> Non
     assert offer.binding.verify(report).status.value == "succeeded"
     assert reader.raw.player_y == 3
     assert reader.raw.party_hp == reader.raw.party_max_hp
+
+
+@pytest.mark.parametrize("pages", [1, 3, 7])
+def test_center_healing_does_not_complete_while_farewell_is_visible(pages):
+    reader = _Reader(
+        raw=replace(_raw(hp=100), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3),
+        ready=True,
+    )
+
+    class FarewellPort(_CenterPort):
+        cancels = 0
+
+        def execute(self, action):
+            result = super().execute(action)
+            if action.kind is MacroActionKind.CONFIRM:
+                reader.dialogue = True
+            if action.kind is MacroActionKind.CANCEL:
+                self.cancels += 1
+                reader.dialogue = self.cancels < pages
+            return result
+
+    port = FarewellPort(reader)
+    offer = RedCenterRestoreGoalProvider(
+        CountingExecutor(port), reader, port, _adapter(reader), settle_frames=1
+    ).offer(_adapter(reader).observe())
+    report = offer.binding.execute()
+    assert port.cancels == pages
+    assert not reader.dialogue
+    assert report.actions_executed == 2 + 2 * pages
+
+
+def test_center_farewell_stuck_fails_without_movement():
+    reader = _Reader(
+        raw=replace(_raw(), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3), ready=True
+    )
+    reader.dialogue = True
+    actions = CountingExecutor(_ActionPort(reader))
+    with pytest.raises(RedGoalSkillError, match="farewell"):
+        finish_center_dialogue(actions, reader, maximum_attempts=2, settle_frames=1)
+    assert actions.actions_executed == 4
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+
+
+@pytest.mark.parametrize("change", ["battle", "location", "unhealed"])
+def test_center_farewell_rejects_unsafe_boundary_before_input(change):
+    raw = replace(_raw(), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3)
+    raw = replace(
+        raw,
+        **{
+            "battle": {"battle_state": 1},
+            "location": {"player_x": 4},
+            "unhealed": {"party_hp": (1,)},
+        }[change],
+    )
+    reader = _Reader(raw=raw, ready=True)
+    actions = CountingExecutor(_ActionPort(reader))
+    with pytest.raises(RedGoalSkillError, match="healed nurse boundary"):
+        finish_center_dialogue(actions, reader)
+    assert actions.actions_executed == 0
 
 
 class _MartPort(_ActionPort):
@@ -518,8 +582,11 @@ def test_area_survey_labels_verified_no_find_without_claiming_success(unsafe) ->
             raise RedAreaExecutionError("bounded search", reason_code="survey_leg_limit_exceeded")
 
     provider = RedAreaSurveyGoalProvider(
-        source_id="wild:Route1:grass", area_executor=ExhaustedArea(reader, actions),
-        actions=actions, emulator=port, adapter=adapter,
+        source_id="wild:Route1:grass",
+        area_executor=ExhaustedArea(reader, actions),
+        actions=actions,
+        emulator=port,
+        adapter=adapter,
     )
     offer = provider.offer(adapter.observe())
     assert offer.binding is not None
