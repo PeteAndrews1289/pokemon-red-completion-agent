@@ -519,9 +519,7 @@ def without_warp_transit(
             return False
         if start_at[1] <= 1 and target[1] < start_at[1]:
             return False
-        return not (
-            start_at[1] >= max_x - 1 and target[1] > start_at[1]
-        )
+        return not (start_at[1] >= max_x - 1 and target[1] > start_at[1])
 
     return LocalGraph(
         {
@@ -529,9 +527,7 @@ def without_warp_transit(
                 ()
                 if source in absorbing
                 else tuple(
-                    edge
-                    for edge in outgoing
-                    if source != start_at or safe_start_departure(edge)
+                    edge for edge in outgoing if source != start_at or safe_start_departure(edge)
                 )
             )
             for source, outgoing in graph.edges.items()
@@ -789,7 +785,21 @@ def _warp_transition(
         and candidate.exit_action is None
         for candidate in graph.neighbors(target_map)
     )
-    if (
+    if edge.exit_action not in {None, "up", "down", "left", "right"}:
+        raise RoutePlanningError(f"unsupported directional warp action {edge.exit_action!r}")
+    if graph.warp_arrivals is not None:
+        index = edge.destination_warp_index
+        locations = graph.warp_locations.get(target_map, ())
+        arrivals = graph.warp_arrivals.get(target_map, ())
+        if (
+            index is None
+            or index >= len(locations)
+            or len(arrivals) != len(locations)
+            or locations[index] != arrival
+        ):
+            raise RoutePlanningError("warp lacks consistent declared destination arrivals")
+        arrival = arrivals[index]
+    elif (
         edge.exit_action == "down"
         and not action_in_approach
         and (edge.kind == "return" or destination_triggers_on_entry)
@@ -800,8 +810,6 @@ def _warp_transition(
         # Forest settles beyond the door, while Route 6 -> Underground Path
         # lands on its directional return warp.
         arrival = arrival[0] + 1, arrival[1]
-    elif edge.exit_action not in {None, "up", "down", "left", "right"}:
-        raise RoutePlanningError(f"unsupported directional warp action {edge.exit_action!r}")
     action = approach.edges[-1].action if action_in_approach else edge.exit_action
     if action is None:  # pragma: no cover - guarded by the cases above
         raise RoutePlanningError("warp transition has no triggering action")

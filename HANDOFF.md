@@ -1,5 +1,17 @@
 # Handoff
 
+## Active — funded regional navigation, September7
+
+Model49 (`87772dfa`) retains49 examples,16successful. F supplied10balls by a verified
+surplus sale. G/H chose Route10/Route4 and failed at two cave-exit doorway steps; both
+failures fitted, no retry. H checkpoint`4b50bd00` retains18living/20specimens,10balls,
+2709currency. [Current audit](docs/audits/red-regional-funded-navigation-2026-09-07.md).
+
+Destination-door arrival repair passes180focused tests/402-file types; prior full suite
+7367passes. New source still needs publication and fresh live continuation; do not claim
+the repair has played. No next trial is launched. Read private OPERATOR before execution.
+Cycle ends10:57UTC; no outside agents, sealed work, full replay or Crystal.
+
 ## Active — learned regional choices, September7
 
 Model81077e4c retains47 examples,16successful. D/E are two actual sampled acquisition-destination

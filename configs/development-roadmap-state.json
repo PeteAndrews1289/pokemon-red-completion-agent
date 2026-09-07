@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-regional-source-learning",
+  "as_of_session": "2026-09-07-regional-funded-navigation",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
+      "evidence": "docs/evidence/red-regional-funded-navigation-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -138,6 +138,12 @@
       "result": "Two actual source choices fitted45 to47; both search failures retained. E used saved source history and model46. Collection18/20 preserved; zero balls remain.",
       "deviation": "Choice is hierarchical acquisition-destination authority, not multiple top-level kinds. No stage-exit change or independent advantage. Checklist4/5 only.",
       "next": "Legitimate resource recovery from E, then varied source outcomes; never reset to regain supplies."
+    },
+    {
+      "session": "2026-09-07-regional-funded-navigation",
+      "result": "F restored10balls; G/H chose two different destinations and both navigation failures fitted47to49. Collection18/20 retained;2709currency. Checklist4/5 remains pending live repair/variation closeout.",
+      "deviation": "Shared destination-door movement was missing from route expectations. Repair uses cartridge semantics, not route coordinates; no stage exit or sampling result changed.",
+      "next": "Verify destination-derived arrivals, then a fresh model49 choice from H. All consumed outcomes remain failures."
     }
   ],
   "closed_milestones": [

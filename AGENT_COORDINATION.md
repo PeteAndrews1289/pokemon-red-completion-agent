@@ -1,5 +1,13 @@
 # Three-agent coordination
 
+## Active — funding and shared arrival repair, September7
+
+Codex owns the cycle through10:57UTC. Model49 has four retained regional failures, not
+collection competence. No external reviewer or subagent was invoked. Current maintenance
+unblocks the source learner: destination-door arrivals must match actual automatic movement.
+If later requested, review destination semantics versus departure heuristics, retained
+failure bias, finite funding and unsupported success claims. No new approval campaign.
+
 ## Active — learned regional choices, September7
 
 Codex owns the active cycle through10:57UTC. D/E supplied two genuine source-choice failures,

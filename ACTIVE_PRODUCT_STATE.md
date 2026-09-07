@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve E checkpointcfb720c3; inspect surplus inventory and legitimate resupply. Qualify the smallest safe funding path before more source choices. Never reset to regain balls or money.
+- Next decision: Qualify destination-door arrivals, then one fresh model49 source choice from H's retained endpoint. Ten balls and2709currency available; no replay of consumed attempts.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model81077e4c retains47 examples,16successful. D/E add two sampled source failures; E is a post-fit continuation. Collection18living/20specimens; zero balls,129currency. Model47 has not played. |
+| Authority now | Model87772dfa retains49 examples,16successful. Four genuine regional choices over three destinations all failed; G/H failed navigation. F safety resupply added zero rows. Collection18living/20specimens,10balls2709currency. Model49 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
+| Cheapest falsifier | Can a fresh model-selected source choice reach its selected capture venue and settle an outcome after destination-door arrivals are corrected, preserving H's actual save? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-regional-source-learning** · status **active** · evidence [qualification](docs/evidence/red-regional-source-learning-2026-09-07.json)
+**2026-09-07-regional-funded-navigation** · status **active** · evidence [qualification](docs/evidence/red-regional-funded-navigation-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner now chooses acquisition destinations and learns their actual costs/failures. Sustainable resource management is the next dependency for living-Pokedex progress. |
-| Learning output | 45 to47 retained examples: two real sampled destination failures, two fits, all prior rows preserved. A/B/C and deterministic source parents contribute zero rows. |
-| Authority delta | Bounded acquisition-destination sampling now uses the existing model over four real options. Top-level parent and low-level mechanics remain deterministic; no full-player promotion. |
-| Transfer result | Two same-lineage source decisions with changed position/history/resources, both Route24. No independent, multi-source success or cross-game claim. |
-| Blocker | D/E both exhausted their search. E consumed the last four balls;129currency cannot buy another ball. No independent advantage or reliable collection shown. |
-| Decision | Preserve E, inspect legitimate resource recovery and catchability constraints, then continue varied source choices only when supplies are available. |
-| Next session | Restore legitimate capture resources without resetting E or losing required specimens; unblock further learned destination outcomes. |
-| Next falsifier | Can the model choose between genuinely useful supported goals after reaching a new collection source from the saved endpoint, with no reset and no forced-choice fitting? |
-| Stop condition | No replay of A/B/C/D/E. No injected money, protected-item sale or invented capture availability. Reorient after90minutes without a feasible resource path; stop safely at10:57UTC. |
+| Product alignment | Finite legitimate resupply and retained failure learning support continued collection. Destination-dependent arrival repair is maintenance unblocking the existing learned source choice. |
+| Learning output | 47to49 retained examples: two sampled navigation failures, all earlier rows retained. F safety support and deterministic parent choices add zero examples. |
+| Authority delta | No new authority layer. Model47/48 chose Route10/Route4 from four real sources; no destination override. |
+| Transfer result | Four cumulative same-lineage source choices across three destinations. Two distinct cave exits exposed the same arrival bug; no independent advantage. |
+| Blocker | Both new trips stopped at automatic doorway steps absent from the planned landing. Captures have not improved; source/goal integration alone is insufficient. |
+| Decision | Retain both failures and repair cartridge-derived settled warp arrivals. Keep strict live acknowledgements; no coordinate exception. |
+| Next session | Qualify shared door-arrival semantics and continue model49 from H, preserving costs, supplies and all living specimens. |
+| Next falsifier | Can a fresh model-selected source choice reach its selected capture venue and settle an outcome after destination-door arrivals are corrected, preserving H's actual save? |
+| Stop condition | No retries of consumed A-through-H episodes. Stop unexplained drift or collection loss; reassess navigation repair after60minutes; safe closeout10:57UTC. |
 
 ### Stop conditions
 

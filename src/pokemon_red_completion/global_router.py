@@ -104,6 +104,9 @@ class MacroGraph:
     #: interior loads. Underground exits use this to point at their own route
     #: rather than the outside map from which the tunnel was entered.
     retained_outside_overrides: Mapping[int, int] = field(default_factory=dict)
+    #: Explicit title-qualified settled arrivals, in raw warp order. None is
+    #: the legacy metadata-free contract; an empty/missing entry is not a guess.
+    warp_arrivals: Mapping[int, tuple[Coordinate, ...]] | None = None
 
     def neighbors(self, node: int) -> tuple[MacroEdge, ...]:
         return tuple(self.edges.get(node, ()))

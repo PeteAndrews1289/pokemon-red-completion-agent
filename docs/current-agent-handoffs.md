@@ -1,5 +1,14 @@
 # Current agent handoffs
 
+## Active — funded regional navigation, September7
+
+Current model49,18living/20specimens,10balls2709currency at H's exact terminal.
+F safety supply yielded zero fit rows; G/H destination choices yielded two negative rows.
+Two cave exits exposed the same destination-door movement assumption. Locally qualified
+repair keeps strict arrival checks; fresh live verification remains next. All prior trials
+are consumed. [Audit](audits/red-regional-funded-navigation-2026-09-07.md).
+Codex implements/publishes. No outside agent was used; optional reviews stay read-only.
+
 ## Active — learned regional choices, September7
 
 Model47,18living/20specimens,zero balls/129currency. D/E source selections are consumed;

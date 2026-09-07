@@ -156,6 +156,7 @@ CALIBRATION_ARM_ID = "multi-goal-calibration-shadow"
 BASELINE_ARM_ID = "completion-first-teacher"
 _CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID, CALIBRATION_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
+_MAX_REGIONAL_TRANSITIONS = 32
 
 
 class PairedRedBoundedPlayerRunError(RuntimeError):
@@ -584,7 +585,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     wild_sources = getattr(args, "regional_transitions", getattr(args, "wild_source", ()))
     if (
         not isinstance(wild_sources, (list, tuple))
-        or len(wild_sources) > 8
+        or len(wild_sources) > _MAX_REGIONAL_TRANSITIONS
         or any(not isinstance(source, (str, Path)) for source in wild_sources)
         or (wild_sources and (
             not continuation_chain or not getattr(args, "routed_resource_goals", False)

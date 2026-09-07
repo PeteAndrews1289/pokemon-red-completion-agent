@@ -1,5 +1,19 @@
 # Model-first development roadmap
 
+## Active — restore practical regional execution, September7
+
+F replenished10balls; G/H exercised two new destinations but failed at automatic doorway
+steps. Model47→49; all failures retained,16successes total. Current18living/20specimens
+and2709currency remain usable. This is real choice/outcome training, not practical success.
+
+1. Publish the narrowly tested destination-door arrival repair; exact live checks stay strict.
+2. Continue model49 once from H's actual terminal, with unchanged bounded source sampling.
+3. Audit a genuinely played destination outcome, resource costs and intervention burden.
+4. Close the small regional integration checklist only with its explicit evidence; reliable
+   sustained collection, model-led story, living dex, hack and Crystal remain later exits.
+
+No full replay, coordinate fix or outcome cherry-picking. [Audit](audits/red-regional-funded-navigation-2026-09-07.md).
+
 ## Active — learned regional choices, September7
 
 Regional integration is4/5 of its bounded checklist. The model chose a capture destination

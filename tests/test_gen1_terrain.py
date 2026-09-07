@@ -36,6 +36,7 @@ from pokemon_red_completion.gen1_terrain import (
     Terrain,
     automatic_warp_tiles,
     directional_warp_tiles,
+    door_tiles,
     steps_between,
     terrain_for,
     terrain_from_blocks,
@@ -109,9 +110,7 @@ def cartridge(
         (0, 3, 5, 7, 13, 14, 17, 22, 23, 0xFF)
     )
 
-    for index, values in enumerate(
-        ((0x12, 0x17), (0x5C,), (0x4B,), (0x0F,))
-    ):
+    for index, values in enumerate(((0x12, 0x17), (0x5C,), (0x4B,), (0x0F,))):
         address = 0x4600 + 4 * index
         pointer_at = TEST_WARP_CARPET_POINTERS + 2 * index
         data[pointer_at : pointer_at + 2] = address.to_bytes(2, "little")
@@ -531,6 +530,26 @@ def test_directional_warp_tiles_preserve_action_order_and_banked_pointers() -> N
         "left": frozenset({0x4B}),
         "right": frozenset({0x0F}),
     }
+
+
+def test_destination_doors_exclude_automatic_stairs_and_preserve_sparse_tilesets() -> None:
+    rom = cartridge(block_ids=[[0]], blocks={0: CORNERS})
+    decoded = door_tiles(rom)
+    assert decoded[0] == frozenset({0x1B, 0x58})
+    assert decoded[8] == frozenset({0x54})  # 0x32 is an automatic warp, not a door.
+    assert decoded[11] == frozenset()  # 0x13 is a staircase.
+    assert decoded[1] == frozenset()
+
+
+def test_destination_door_reader_rejects_bad_pointer_and_missing_terminator() -> None:
+    bad = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    bad[TEST_DOOR_TILE_POINTERS + 1 : TEST_DOOR_TILE_POINTERS + 3] = b"\x00\x20"
+    with pytest.raises(CartridgeReadError, match="outside the bank window"):
+        door_tiles(bytes(bad))
+    bad = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    bad[TEST_DOOR_TILE_POINTERS + 3 * 13] = 0
+    with pytest.raises(CartridgeReadError, match="does not end"):
+        door_tiles(bytes(bad))
 
 
 def test_automatic_warp_tables_refuse_bad_pointer_and_duplicate_tileset() -> None:

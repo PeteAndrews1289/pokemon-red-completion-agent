@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 scene — the doorway was not the landing
+
+Show the supply transaction, then two model-selected destinations and their failure reports.
+Freeze the cave exit: first the doorway, then the game's automatic step outside. Explain:
+“We were checking the arrival strictly—but predicting the wrong final square.”
+
+The fix reads the cartridge's door rule and preserves strict verification. Do not stage a
+successful repair replay before it exists. Current factual card:49 retained goal-value
+examples,16successful;18living species/20specimens,10balls2709currency. Four regional
+source choices have failed, and all remain training evidence. No claim of independent
+advantage, autonomous Red completion or cross-game transfer.
+
 ## Active — learned regional choices, September7
 
 Show the four-option source menu, the committed sample, the actual search, then the saved

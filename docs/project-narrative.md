@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — failures became useful only when their cause survived
+
+Capture supplies were restored through an actual shop transaction: three explicitly surplus
+Hyper Potions funded ten balls while eight remained protected. That was deterministic
+support, not a training example. The model then selected two different destinations, but
+both trips failed at cave exits. The recorded before/after positions revealed why: Red
+automatically steps down from a destination door, regardless of how the source warp is entered.
+
+The repair now reads destination door semantics from the cartridge. It does not permit
+unexplained drift or patch the two coordinates. Model47→49 retains both failed choices and
+their costs; no new captures came from them. The earlier collection18living/20specimens
+survived, and trainer battles raised the saved cash to2709. Fresh live repair verification
+remains unfinished at this checkpoint. This distinction matters: a working learning loop
+can still be learning about a broken skill instead of becoming a useful player.
+
 ## Active — learned regional choices, September7
 
 We moved a real decision to the learner: where to search next. It chose among four reachable

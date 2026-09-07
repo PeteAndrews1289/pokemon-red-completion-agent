@@ -253,3 +253,53 @@ Same30,000action/3,000,000frame outer limits, existing bounded shop/route contro
 decision then save/stop. No learned-row claim for a safety-selected replenishment.
 Verify the sale before opening BUY; exact final expectation379currency,10balls and24total
 recovery items. Stop without retry if any sale, purchase or preserved-state proof fails.
+
+### F result and privately declared G/H continuations
+
+F succeeded191actions/11,676frames with the exact quoted sale and purchase. It contributed
+zero fit rows. G (seed2026090734,model47,from F) chose Route10; H (seed2026090735,model48,
+from G) chose Route4. Both were declared in private main-guarded launchers before sampling,
+used unchanged one-goal30,000action/3,000,000frame outer limits and preserved their actual
+endpoints. G failed1148actions/76,180frames; H failed368actions/24,204frames. Each failed at
+a different Rock Tunnel exit: the cartridge performed a downward doorway step absent from
+the planned arrival. Both failures fitted47→49, all prior rows retained,16successes total.
+Ten balls and18living/20specimens remain; G also earned2330currency in trainer battles.
+Neither failure may be replayed. Further gameplay pauses for the shared arrival repair.
+The complete ROM-free suite under323bcc06 passed7367 tests (one skip,one expected failure)
+in996.95seconds. This does not qualify the next source change automatically.
+
+## Session4 — destination-derived doorway arrivals
+
+1. **Capability:** derive settled warp arrivals from cartridge destination semantics,
+   including automatic movement after arriving at a door.
+2. **Learned authority:** maintenance only; unblock the existing regional source learner,
+   without another teacher, controller override or fitted diagnostic replay.
+3. **Transfer test:** arbitrary ROM-free map/tile fixtures distinguish doors from stairs;
+   compare both retained cave-exit traces, then continue from the latest actual endpoint.
+4. **Cheapest falsifier:** a left-entered source warp can still arrive one square down from
+   a destination door; a non-door destination must not acquire that extra step.
+5. **Time box:**60minutes from07:14UTC, then reassess; overall deadline10:57UTC remains.
+6. **Stop condition:** uncertain cartridge classification, invalid arrival, unexplained
+   new drift or exhausted bounds. Never weaken exact observed arrival verification.
+
+The primary [door movement implementation](https://github.com/pret/pokered/blob/master/engine/overworld/auto_movement.asm)
+tests the destination's door tile, not the direction used to leave the source. Separate
+door tiles from the broader automatic-warp union and carry explicit settled arrivals across
+the title adapter. Preserve raw warp coordinates and old metadata-free graph behavior.
+
+The H successor also needs nine explicit historical profile transitions (source changes
+plus local-discovery/supply profiles), exceeding the initial eight-entry CLI limit. Raise
+only that finite metadata bound to32, with9/32accepted and33rejected tests. This unblocks
+the named fresh learned continuation; it does not increase controller budgets or permit
+dropping old profiles, rollback, retries or new model authority.
+
+### Prospective I after local repair qualification
+
+After publication and exact action-free H restore, execute at most one acquisition as
+`red-regional-source-20260907-i-causal`, seed2026090736, model49`87772dfa`, from checkpoint
+`4b50bd0076629b1f46c054c0d569982bd15a010c79200d22cb6655faf662936d`.
+Require at least two useful sources; unchanged25%uniform/75%softmax sampling and
+one-goal30,000action/3,000,000frame outer bounds. Preserve all nine historical profile
+transitions; no route/destination override. Retain any failure and its final save, fit
+only the actual settled selected-source outcome. No trial exists until the committed
+choice is written; after that, never resample or replay it. No other gameplay declared.

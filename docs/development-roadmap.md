@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-source-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-regional-funded-navigation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -18,7 +18,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] New fit and fresh continuation ([evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json))
 - [ ] Variation, costs and interventions
 
-Current model: **47 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **49 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +50,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-regional-source-learning-2026-09-07.json)
+[Current evidence](../docs/evidence/red-regional-funded-navigation-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-regional-funded-navigation
+
+F restored10balls; G/H chose two different destinations and both navigation failures fitted47to49. Collection18/20 retained;2709currency. Checklist4/5 remains pending live repair/variation closeout.
+
+**Deviation:** Shared destination-door movement was missing from route expectations. Repair uses cartridge semantics, not route coordinates; no stage exit or sampling result changed.
+
+**Next:** Verify destination-derived arrivals, then a fresh model49 choice from H. All consumed outcomes remain failures.
 
 ### 2026-09-07-regional-source-learning
 
