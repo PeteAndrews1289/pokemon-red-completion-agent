@@ -1,5 +1,17 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 7 engineering update — faster drafts still need evidence
+
+Flash now drafts bounded components with scoped file access in an isolated worktree.
+Its recovery adapter exposed nonexistent imports and mismatched controller interfaces
+when Codex ran the tests. Codex corrected those and added independent state-preservation
+checks; 272 targeted ROM-free tests pass across the integration. This illustrates
+supervised multi-agent engineering, not autonomous correctness or proven cost savings.
+
+The game has not advanced during this repair: AA/model63 remains the retained state.
+Safe escort preparation, legitimate Center recovery and capture must still be qualified
+as a connected live sequence. No new model example is credited for this maintenance.
+
 
 ## Current — failed source choice retained; model63 fitted
 

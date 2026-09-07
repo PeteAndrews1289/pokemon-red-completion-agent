@@ -1,5 +1,85 @@
 # Current agent handoffs
 
+## September 7 — scoped Flash drafting and Codex integration review
+
+Flash was granted file access only to its isolated worktree source, tests and docs.
+Its direct-write recovery draft is retained as commit `10f346f5`; Codex brought the
+draft into the integration branch, not main, and corrected it separately. No push
+or gameplay was performed. Claude was not invoked for review.
+
+The first direct-write draft failed test collection on nonexistent imports. The
+revision produced 11 passing and four failing tests; Codex repaired the remaining
+controller-interface fixtures and strengthened full member-state preservation,
+stale-state checks, post-preparation position checks and fresh heal verification.
+The combined targeted suite now passes 272 ROM-free tests, including independent
+Codex falsifiers and existing recovery, routing, checkpoint and party-menu coverage.
+This is not a mutation score or a saved-state qualification.
+
+New code adds opt-in routed Center recovery, real escort-swap verification, and
+refusal of fainted-party source admission before prediction, commitment or input.
+Legacy checkpoints restore with recovery disabled unless their recorded metadata
+explicitly enables it. Preparation and healing do not create imitation labels.
+
+**Next:** finish safe-lead integration before capture travel/search and after PC
+substitution; qualify old-save/new-runtime restoration and battle interruption
+behavior from AA, then perform one legitimate bounded recovery and a fresh model63
+source attempt when safe. Do not retry AA or launch the old AB–AD script. No new
+capture, game outcome or fit occurred; model63 and all 63 examples remain unchanged.
+The safe-chain milestone remains 0/3; this repair is not Phase 3 completion.
+
+Collaboration verdict: accept bounded Flash drafts plus adversarial Codex review;
+do not infer broad autonomous architecture readiness or guaranteed speed savings.
+The revision took about twelve minutes and still needed correction. Keep the next
+assignment smaller and supply exact interfaces and failing tests.
+
+Post-session quota snapshot, September 7 about 6:19 p.m. Eastern:
+Antigravity Gemini 82.97% five-hour remaining (reset tonight 10:11 p.m.) and
+94.58% weekly remaining (reset September 11, 7:22 p.m.). Separate Claude account:
+83% five-hour remaining (reset tonight 10:10 p.m.), 92% weekly remaining
+(reset September 11, 10 a.m.). These are account-wide remaining allowances,
+not an attribution of all consumption to this task.
+
+[Detailed review](work-sessions/2026-09-07-flash-safe-capture-prototype.md).
+
+## Standing collaboration preference — September 7
+
+Flash prepares bounded architecture/component maps and integration proposals; Codex and Claude
+verify the consequential details before Codex implements. No sweeping active-worktree rewrite.
+After every external-agent session report the service's five-hour and weekly usage/reset times
+when exposed, plus unavailable fields explicitly. Check capacity before substantial dispatch too.
+See [the durable workflow](three-agent-workflow.md) for role boundaries and usage-reporting rules.
+This changes collaboration practice, not the active product lane or learning counters.
+
+## Isolated Flash prototype — ready for Codex integration review
+
+Branch `agent/flash-capture-preparation-20260907`, reviewed local head
+`5adcef216d041e85ad1888c13702e038b7197063`, starts from the unchanged published
+`29fe6a31`. Raw draft `accf7b15` is retained separately. Neither commit is pushed,
+merged into this checkout, or connected to live gameplay.
+
+Flash supplied a pure escort planner, test proposals and an integration blueprint
+through a bounded source packet because headless file access was denied. Codex
+transcribed/compacted them in the isolated worktree, corrected the blueprint's
+species-specific expectation and mistaken Center-healing claim, and added independent
+tests. The draft's 11 tests passed; Codex probes caught self-destructive-only escorts
+and inconsistent error handling (three failures). Reviewed result: 39 focused tests,
+lint, documentation/focus and whitespace checks passed. No Claude audit was used.
+
+Next inspect that branch's `red_capture_lead.py` and its two test modules, then connect
+legitimate recovery, old-restore/new-runtime separation, stale-plan requalification
+and refusal-versus-played-outcome admission in the active branch. Cherry-pick or port
+only reviewed changes; do not merge merely because pure planner tests pass. The
+planner does not execute swaps or guarantee safe battle moves/escape. Live integration
+must guard those independently and preserve real AA/model63 evidence.
+
+Narrative: Flash accelerated a draft, while adversarial review found failures its own
+tests missed. This is isolated engineering progress toward reliable skill composition,
+not a new learned decision, capture, successful recovery or Phase 3 completion.
+
+Usage checked after the external session: Antigravity Gemini approximately 96.9% of
+five-hour and 96.8% of weekly allowance remained; Claude 83% and 92% respectively.
+Account-level snapshot only; future sessions must query fresh figures and reset times.
+
 
 ## Current — failed source choice retained; model63 fitted
 

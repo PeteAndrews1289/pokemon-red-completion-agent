@@ -13,6 +13,20 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Authorized isolated-draft exception — September 7
+
+The user authorizes Flash to edit explicitly named source/test/doc files in its own
+worktree. Codex owns task scope, independent tests, integration and publication.
+This is not permission for concurrent edits in the active checkout, shared/private
+artifact access, controller input, fitting, credential access or broad shell execution.
+A branch isolates Git changes, not saves, processes or secrets. Local file grants
+must name the isolated tree, and deliverables stay unqualified until inspected.
+Use short implementation/revision loops with actual interfaces and concrete failing
+tests; stop expanding a draft when direct Codex correction is cheaper. Reserve Claude
+for consequential independent audits rather than every draft. Report service quota
+after each external session, without confusing Antigravity's third-party pool with
+the user's separate Claude subscription.
+
 ### Codex — implementation owner
 
 - owns the active implementation plan;
@@ -65,6 +79,44 @@ coverage, declared metrics, exact transfer questions and no private identities. 
 at most three claims, each with a cross-title counterexample, missing shared observable, smallest
 Red/Crystal falsifier, decision impact and work to delete. Claude audits evidence; Codex adjudicates
 and implements. There is no three-agent vote.
+
+### Flash architecture preparation lane
+
+Pete's September 7 preference is to use Flash for larger, bounded architecture preparation
+packages that Codex and Claude verify. Flash may map existing components, draft interfaces and
+data-flow diagrams, compare integration designs, identify reusable code, and propose regression
+matrices. Give it a defined subsystem and deliverable, not permission for a sweeping active-code
+rewrite. The current recovery/capture handoff is the first applicable subsystem; do not reopen
+Crystal or unrelated architecture while sustained Red play remains the active lane.
+
+Codex reviews the plan and owns integration. Claude challenges consequential assumptions,
+state/checkpoint compatibility, failure classification, and test quality. Reviews must check actual
+code rather than merely agree with each other. Neither reviewer is infallible. Read-only remains
+the default; advisory code prototypes require an explicitly scoped separate worktree and cannot
+touch live checkpoints, training data, gameplay, or publication. Avoid adding a new subsystem when
+existing skills can be connected. Promote only the smallest verified changes serving the named
+gameplay/learning outcome.
+
+### External-agent usage reporting
+
+Before substantial external-agent work, and after every Claude or Antigravity session (including
+failed or partial sessions), query the service's own usage display. Include in the user-facing
+closeout for each service used:
+
+- exact model/effort actually requested and whether the session completed;
+- five-hour usage used/remaining and reset time, when the service exposes that window;
+- weekly usage used/remaining and reset time, when exposed;
+- any separately reported model-specific quota or credits, with its actual label;
+- observation time and any unavailable fields or access error.
+
+Prefer the supported CLI usage command; an authorized app usage screen is the fallback. Do not
+assume both providers use identical windows. Missing or unsupported data must say unavailable,
+not zero or unlimited. Never derive subscription percentages from tokens, API-equivalent dollar
+estimates, a model's self-report, or successful access. These are account-level readings shared
+with other work: before/after changes cannot isolate this session's consumption if other usage
+occurred. Do not purchase credits, redeem resets, switch to paid API billing, extract credentials,
+or bypass permissions merely to obtain quota data. A quota-display problem is not a reason to
+turn a short review into a tooling project; report it plainly and proceed within known capacity.
 
 ## Source of truth and write safety
 

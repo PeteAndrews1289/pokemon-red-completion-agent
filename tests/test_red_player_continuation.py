@@ -94,6 +94,23 @@ def test_continuation_changes_state_not_lineage_or_partition(case):
     continued.continuation.require_restored_observation(case[2])
 
 
+@pytest.mark.parametrize("parent_mode", [False, True])
+def test_recovery_restore_mode_is_taken_from_recorded_parent_not_successor(case, parent_mode):
+    store, arguments, _observation = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document, alter_header={
+        "split": {"partition": "train", "root_lineage_id": "original-training-root"},
+        "routed_recovery": parent_mode,
+    })
+    record = publish_red_player_checkpoint(store, document)
+    readiness = replace(_readiness(store, arguments), routed_recovery=not parent_mode)
+    resumed = runner._continue_readiness(
+        readiness, ((arguments["episode_id"], record["record_sha256"]),),
+    )
+    assert resumed.restore_routed_recovery is parent_mode
+    assert resumed.routed_recovery is not parent_mode
+
+
 @pytest.mark.parametrize("partition", ["development", "validation", "test", "unassigned"])
 def test_continuation_never_relabels_other_partitions(case, partition):
     readiness, ancestor = _completed(case, {"partition": partition, "root_lineage_id": "foreign"})
@@ -242,7 +259,9 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     readiness, ancestor = _completed(case)
     readiness = runner._continue_readiness(readiness, (ancestor,))
     original_profile = readiness.profile
-    readiness = replace(readiness, profile=SimpleNamespace(profile_sha256="e" * 64))
+    readiness = replace(
+        readiness, profile=SimpleNamespace(profile_sha256="e" * 64), routed_recovery=True,
+    )
     emulator = SimpleNamespace(frame_count=12, pressed_buttons=frozenset())
     seen = []
 
@@ -265,8 +284,9 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
 
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", runtime)
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
-    def player_observer(*_args, completion_dose=False):
+    def player_observer(*_args, completion_dose=False, routed_recovery=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
+        assert routed_recovery is False
         return observe
 
     monkeypatch.setattr(runner, "_player_observer", player_observer)

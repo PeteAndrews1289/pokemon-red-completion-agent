@@ -98,7 +98,7 @@ AA selected Route 5 and failed: no capture, Beedrill fainted. All 25 specimens, 
 
 **Deviation:** Planned2-4-step chain stopped at its first failed skill. Minimal ROM-free search-stop repair added; no retry or live repair claim. Prior3/3 milestone archived intact; new recovery checklist is prospective0/3, not a Phase3 percentage.
 
-**Next:** Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry.
+**Next:** Scoped Flash recovery draft and Codex integration pass 272 targeted ROM-free tests; no live recovery or new fit. Finish capture/PC lead preparation and verify old-save/new-runtime behavior, then legitimately recover AA and let model63 choose a fresh source. Preserve AA; no reset or retry.
 
 ### 2026-09-07-collection-prerequisites-learning
 

@@ -47,8 +47,12 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
         begin_decision_window=outer.begin_decision_window,
     )
 
-    def player(_runtime, actions, *_args, completion_dose=False, retain_quantum=None):
+    def player(
+        _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
+        retain_quantum=None,
+    ):
         assert completion_dose is False
+        assert routed_recovery is False
         assert retain_quantum is None
         assert isinstance(actions.delegate, hard_type)
         skill_ports.append(actions)
@@ -261,7 +265,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False, save_terminal_checkpoints=enabled,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=enabled,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256="a" * 64 if enabled else None,
         regional_proposal_record_sha256="b" * 64 if enabled else None,
@@ -625,16 +629,16 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     assert routed.enumerate_bindings(object()) is sentinel
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
     completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
-                        completion_dose=True)
+                        completion_dose=True, routed_recovery=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
-        {"quote_resource_costs": False, "prepare_capture_storage": False,
+        {"quote_resource_costs": False, "prepare_capture_storage": False, "routed_recovery": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": True, "prepare_capture_storage": False,
+        {"quote_resource_costs": True, "prepare_capture_storage": False, "routed_recovery": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": False, "prepare_capture_storage": True,
+        {"quote_resource_costs": False, "prepare_capture_storage": True, "routed_recovery": True,
          "maximum_controller_actions": 30000,
          "maximum_emulator_frames": 3000000},
     ]
@@ -732,7 +736,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False, save_terminal_checkpoints=False,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=False,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256=None,
     )

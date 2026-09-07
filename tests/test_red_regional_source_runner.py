@@ -14,6 +14,39 @@ from pokemon_red_completion.red_regional_acquisition import regional_acquisition
 case = checkpoint_case
 
 
+@pytest.mark.parametrize("bad_slot", [0, 1])
+def test_fainted_member_refuses_before_prediction_commit_or_input(monkeypatch, bad_slot):
+    from test_red_goal_skills import _adapter, _raw, _Reader
+
+    raw = _raw()
+    raw = replace(
+        raw, party_count=2, party_species_ids=raw.party_species_ids * 2,
+        party_levels=raw.party_levels * 2,
+        party_hp=(0, 180) if bad_slot == 0 else (180, 0),
+        party_max_hp=(180, 180), party_status=(0, 0),
+        party_moves=raw.party_moves * 2, party_pp=raw.party_pp * 2,
+    )
+    observed = _adapter(_Reader(raw=raw, ready=True)).observe()
+    root = SimpleNamespace(find_sealed_record=lambda *_a, **_k: None)
+    ready = SimpleNamespace(
+        decision_limit=1, save_terminal_checkpoints=True,
+        training_plan=SimpleNamespace(document={"episode_id": "unclaimed-source"}),
+        causal_record=object(), private_root=root,
+    )
+    monkeypatch.setattr(driver.base, "_prepare", lambda _: ready)
+    monkeypatch.setattr(driver, "inspect_sources", lambda _: (observed, (), None))
+    monkeypatch.setattr(driver, "sample_regional_acquisition",
+                        lambda *_a, **_k: pytest.fail("unsafe source was sampled"))
+    monkeypatch.setattr(driver.base, "_run_prepared",
+                        lambda *_a: pytest.fail("unsafe source was executed"))
+    with pytest.raises(ValueError, match="recovery before choice"):
+        driver._run(SimpleNamespace())
+
+
+def test_starting_health_check_preserves_a_healthy_source_context():
+    driver.require_source_attempt_ready(_observation())
+
+
 @pytest.mark.parametrize("mode", ["deterministic_unsupported", "deterministic_safety"])
 def test_source_parent_accepts_capture_only_without_second_learned_label(mode):
     driver._require_capture_parent(

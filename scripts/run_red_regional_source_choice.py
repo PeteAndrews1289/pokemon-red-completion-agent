@@ -23,6 +23,7 @@ from pokemon_red_completion.red_goal_context_profile import (
     _thaw,
     build_red_goal_context_profile_payload,
 )
+from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_living_dex_causal_adapter import (
     red_living_dex_outcome_from_observations,
 )
@@ -45,6 +46,20 @@ from pokemon_red_completion.red_regional_choice_learning import (
     regional_outcome_record_id,
 )
 from pokemon_red_completion.red_regional_goal_proposal import regional_proposal_source_effort
+
+
+def require_source_attempt_ready(observed: RedGoalObservation) -> None:
+    """Refuse an unsafe starting context before source sampling or commitment.
+
+    Keep historical enumeration/fingerprints and actual failed attempts intact.
+    This is an admission check, not a replacement for execution-time safety.
+    """
+    if (
+        observed.raw.battle_state or not observed.input_ready
+        or not observed.party.members
+        or any(member.hp <= 0 for member in observed.party.members)
+    ):
+        raise ValueError("regional source needs settled party recovery before choice")
 
 
 def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
@@ -180,6 +195,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if ready.private_root.find_sealed_record(choice_id, expected_kind=REGIONAL_CHOICE_KIND):
         raise ValueError("regional choice identity already consumed; never resample")
     observed, candidates, menu = inspect_sources(ready)
+    require_source_attempt_ready(observed)
     selection = sample_regional_acquisition(
         ready.causal_record.model,
         menu,
@@ -266,7 +282,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         expected_context_origin="training",
     )
     terminal_ready = replace(
-        ready, capture=checkpoint.capture, continuation=checkpoint, restore_profile=ready.profile
+        ready, capture=checkpoint.capture, continuation=checkpoint, restore_profile=ready.profile,
+        restore_routed_recovery=ready.routed_recovery,
     )
     with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(checkpoint.capture.state_bytes)

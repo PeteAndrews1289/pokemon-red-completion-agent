@@ -197,7 +197,9 @@ class _Readiness:
     continuation_root_lineage_id: str | None = None
     restore_profile: RedGoalContextProfile | None = None
     restore_completion_dose: bool = False
+    restore_routed_recovery: bool = False
     completion_dose: bool = False
+    routed_recovery: bool = False
     regional_choice_record_sha256: str | None = None
     regional_proposal_record_sha256: str | None = None
 
@@ -254,6 +256,7 @@ class _LiveObserver:
     maximum_actions_per_decision: int = 6_000
     search_memory: GoalSearchMemory | None = None
     completion_dose: bool = False
+    routed_recovery: bool = False
     retain_quantum: Callable[[], None] | None = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
@@ -277,6 +280,7 @@ class _LiveObserver:
             self.route_world,
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
+            routed_recovery=self.routed_recovery,
             retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
@@ -299,6 +303,7 @@ def _player_observer(
     quote_resource_costs: bool = False,
     *,
     completion_dose: bool = False,
+    routed_recovery: bool = False,
     retain_quantum: Callable[[], None] | None = None,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
@@ -324,6 +329,7 @@ def _player_observer(
             world,
             quote_resource_costs=quote_resource_costs,
             prepare_capture_storage=completion_dose,
+            routed_recovery=routed_recovery,
             maximum_controller_actions=30_000 if completion_dose else 6_000,
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
@@ -409,6 +415,11 @@ def _parser() -> argparse.ArgumentParser:
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument(
+        "--routed-recovery",
+        action="store_true",
+        help="enable guarded walking-to-Center recovery after verified continuation restore",
+    )
     parser.add_argument(
         "--completion-dose",
         action="store_true",
@@ -632,6 +643,13 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
         raise PairedRedBoundedPlayerRunError("profile_transition_scope")
     boxed_evolution = getattr(args, "boxed_evolution", None)
+    routed_recovery = getattr(args, "routed_recovery", False)
+    if type(routed_recovery) is not bool or (
+        routed_recovery and (
+            not getattr(args, "routed_resource_goals", False) or not continuation_chain
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
     completion_dose = getattr(args, "completion_dose", False)
     if type(completion_dose) is not bool or (
         completion_dose and (boxed_evolution is None or not continuation_chain)
@@ -781,6 +799,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         quote_resource_costs=quote_resource_costs,
         training_plan=training_plan,
         completion_dose=completion_dose,
+        routed_recovery=routed_recovery,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1054,6 +1073,7 @@ def _continue_readiness(
             capture=checkpoint.capture,
             continuation=checkpoint,
             restore_completion_dose=_checkpoint_completion_dose(header),
+            restore_routed_recovery=_checkpoint_routed_recovery(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
@@ -1068,6 +1088,17 @@ def _continue_readiness(
             ),
         )
     return readiness
+
+
+def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
+    """Old endpoints use old opportunity menus; new ones retain their opt-in."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("routed_recovery", False)
+    if type(enabled) is not bool:
+        raise PairedRedBoundedPlayerRunError("continuation_parent_routed_recovery")
+    return enabled
 
 
 def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
@@ -1124,6 +1155,7 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         _route_world(readiness),
         readiness.quote_resource_costs,
         completion_dose=getattr(readiness, "restore_completion_dose", False),
+        routed_recovery=getattr(readiness, "restore_routed_recovery", False),
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
         living_completion_checkpoint,
@@ -1324,6 +1356,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
                 world,
                 readiness.quote_resource_costs,
                 completion_dose=readiness.completion_dose,
+                routed_recovery=readiness.routed_recovery,
             ),
             budget_meter=meter,
             assignment_id=readiness.pair_id,
@@ -1415,6 +1448,7 @@ def _run_arm(
                 "model_sha256": readiness.model_sha256,
                 "continue_after_progress": readiness.continue_after_progress,
                 "routed_resource_goals": readiness.routed_resource_goals,
+                "routed_recovery": readiness.routed_recovery,
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -1493,6 +1527,7 @@ def _run_arm(
                 maximum_actions_per_decision=limits.max_actions_per_decision,
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
+                routed_recovery=readiness.routed_recovery,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             trajectory_class = (

@@ -1,5 +1,14 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 7 development beat — draft, challenge, repair
+
+Show the isolated Flash draft beside the test failures it initially missed, followed
+by the Codex corrections and 272 passing targeted checks. The lesson is that parallel
+coding can produce useful drafts, but working interfaces and independent verification
+matter more than an agent saying its work is ready. Do not present the simulated
+recovery test as footage of a real recovery. AA/model63 is unchanged; the next real
+demonstration remains healing that retained party and playing a fresh learned source.
+
 
 ## Current — failed source choice retained; model63 fitted
 

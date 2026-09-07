@@ -1,5 +1,35 @@
 # Flash safe capture-lead prototype — September 7
 
+## Latest — direct-write recovery draft reviewed, live qualification pending
+
+User-authorized scoped file permissions resolved the earlier access limitation below.
+Flash wrote a routed Center recovery adapter and tests directly in the isolated tree.
+The first draft failed collection on nonexistent imports. After concrete feedback,
+the revision passed 11 tests and failed four on invented controller-action fields.
+Draft commit `10f346f5` preserves that state. Codex brought it into an integration
+branch, corrected it, and added independent protection against changed member levels,
+PP, moves, max HP, counts and player position.
+
+Codex also connected an opt-in recovery mode, authenticated parent-mode restoration,
+an actual escort swap with fresh verification, and source admission that refuses
+a fainted party before prediction, commitment or controller input. No changed
+historical checkpoint hashes, old-outcome deletion or manufactured recovery labels.
+
+The combined targeted suite passes **272 tests**. This includes simulated Center
+provider execution and independent failures, not a private-ROM or live battle test.
+The source remains local/unpublished. No gameplay or fitting occurred this turn.
+Capture lead qualification before hazardous capture travel/search and after PC
+changes remains unfinished; legitimate AA recovery and model63 execution follow
+only after that connected path is qualified. Raw draft claims below are historical
+agent reports and are superseded by these independently checked results.
+
+Flash's revision took about twelve minutes and still needed Codex correction:
+use smaller interface-bounded tasks, not sweeping architecture generation. No Claude
+review was spent. Service quota after completion: Gemini 82.97% five-hour / 94.58%
+weekly remaining; separate Claude 83% / 92%. Reset times are in the current handoff.
+
+## Earlier pure-planner session
+
 Advisory prototype from Gemini 3.8 Flash High, transcribed and compacted by Codex
 into an isolated branch. Not integrated or live-qualified. This is maintenance
 unblocking the next learned acquisition, not a learning result.

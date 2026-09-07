@@ -1,5 +1,46 @@
 # Three-agent coordination
 
+## September 7 — scoped Flash drafting and Codex integration review
+
+Flash was granted file access only to its isolated worktree source, tests and docs.
+Its direct-write recovery draft is retained as commit `10f346f5`; Codex brought the
+draft into the integration branch, not main, and corrected it separately. No push
+or gameplay was performed. Claude was not invoked for review.
+
+The first direct-write draft failed test collection on nonexistent imports. The
+revision produced 11 passing and four failing tests; Codex repaired the remaining
+controller-interface fixtures and strengthened full member-state preservation,
+stale-state checks, post-preparation position checks and fresh heal verification.
+The combined targeted suite now passes 272 ROM-free tests, including independent
+Codex falsifiers and existing recovery, routing, checkpoint and party-menu coverage.
+This is not a mutation score or a saved-state qualification.
+
+New code adds opt-in routed Center recovery, real escort-swap verification, and
+refusal of fainted-party source admission before prediction, commitment or input.
+Legacy checkpoints restore with recovery disabled unless their recorded metadata
+explicitly enables it. Preparation and healing do not create imitation labels.
+
+**Next:** finish safe-lead integration before capture travel/search and after PC
+substitution; qualify old-save/new-runtime restoration and battle interruption
+behavior from AA, then perform one legitimate bounded recovery and a fresh model63
+source attempt when safe. Do not retry AA or launch the old AB–AD script. No new
+capture, game outcome or fit occurred; model63 and all 63 examples remain unchanged.
+The safe-chain milestone remains 0/3; this repair is not Phase 3 completion.
+
+Collaboration verdict: accept bounded Flash drafts plus adversarial Codex review;
+do not infer broad autonomous architecture readiness or guaranteed speed savings.
+The revision took about twelve minutes and still needed correction. Keep the next
+assignment smaller and supply exact interfaces and failing tests.
+
+Post-session quota snapshot, September 7 about 6:19 p.m. Eastern:
+Antigravity Gemini 82.97% five-hour remaining (reset tonight 10:11 p.m.) and
+94.58% weekly remaining (reset September 11, 7:22 p.m.). Separate Claude account:
+83% five-hour remaining (reset tonight 10:10 p.m.), 92% weekly remaining
+(reset September 11, 10 a.m.). These are account-wide remaining allowances,
+not an attribution of all consumption to this task.
+
+[Detailed review](docs/work-sessions/2026-09-07-flash-safe-capture-prototype.md).
+
 
 ## Current — failed source choice retained; model63 fitted
 

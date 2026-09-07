@@ -1,5 +1,16 @@
 # Agent review and adjudication log
 
+## Flash direct-write loop — September 7
+
+Accepted: scoped isolated file editing and reuse of existing Center mechanics.
+Rejected as live-ready: first draft could not import; revision passed 11/15 proposed
+tests but used nonexistent controller fields. Codex corrected those and expanded
+stale-state, full member/PP preservation and final-boundary falsifiers. The integration
+passes 272 targeted ROM-free tests; no live saved-state qualification, fitting or
+publication occurred. Claude was conserved, not silently treated as having approved.
+The next gate is safe capture/PC preparation plus a retained-state recovery, not another
+broad architecture rewrite. See [session details](work-sessions/2026-09-07-flash-safe-capture-prototype.md).
+
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 

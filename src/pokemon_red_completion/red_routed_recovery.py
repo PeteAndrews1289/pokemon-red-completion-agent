@@ -133,17 +133,21 @@ def _party_needs_recovery(observation: RedGoalObservation) -> bool:
 
 def _member_facts(
     raw: RawGameState,
-) -> tuple[tuple[int, int, int, int], ...]:
+) -> tuple[tuple[object, ...], ...]:
     species = raw.party_species_ids or ()
     hps = raw.party_hp or ()
     max_hps = raw.party_max_hp or ()
     statuses = raw.party_status or ()
-    return tuple(
-        (sp, hp, max_hp, st)
-        for sp, hp, max_hp, st in zip(
-            species, hps, max_hps, statuses, strict=False
-        )
-    )
+    try:
+        facts = tuple(zip(
+            species, hps, max_hps, statuses, raw.party_levels or (),
+            raw.party_moves or (), raw.party_pp or (), strict=True,
+        ))
+    except ValueError as error:
+        raise RedRoutedRecoveryError("incomplete party state") from error
+    if len(facts) != raw.party_count:
+        raise RedRoutedRecoveryError("party count disagrees with member records")
+    return facts
 
 
 def _make_center_provider(
@@ -252,7 +256,9 @@ def bind_routed_center_recovery(
                 "living collection ledger changed before execution"
             )
         if (
-            tuple(current.raw.party_hp or ()) != start_party_hp
+            current.party != observation.party
+            or _member_facts(current.raw) != _member_facts(observation.raw)
+            or tuple(current.raw.party_hp or ()) != start_party_hp
             or tuple(current.raw.party_status or ()) != start_party_status
             or tuple(current.raw.party_species_ids or ()) != start_party_species
             or tuple(current.raw.party_moves or ()) != start_party_moves
@@ -272,6 +278,10 @@ def bind_routed_center_recovery(
             raise RedRoutedRecoveryError(
                 "field not settled after escort preparation"
             )
+        if (
+            after_prep_traversal.map_id, after_prep_traversal.at, after_prep_traversal.mode
+        ) != (start.map_id, start.at, start.mode):
+            raise RedRoutedRecoveryError("escort preparation moved the player")
         if (
             dependency_specimen_ledger(after_prep.collection_observation)
             != start_ledger
@@ -360,9 +370,7 @@ def bind_routed_center_recovery(
         ):
             raise RedRoutedRecoveryError("not at verified Center nurse boundary")
 
-        if (raw_nurse.player_x, raw_nurse.player_y) == (3, 3) and hasattr(
-            router.runtime.reader, "read_player_facing"
-        ):
+        if (raw_nurse.player_x, raw_nurse.player_y) == (3, 3):
             face_pc_boundary(router.actions, router.runtime.reader, "up")
 
         center_provider = _make_center_provider(router)

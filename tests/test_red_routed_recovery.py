@@ -176,24 +176,23 @@ def make_fixture(monkeypatch):
             frame_count += 1
             raw = state["raw"]
             if (
-                action.action_kind is MacroActionKind.MOVE
-                and action.action == "up"
+                action.kind is MacroActionKind.MOVE
+                and action.value == "up"
             ):
                 if raw.player_y is not None and raw.player_y > 3:
                     state["raw"] = replace(raw, player_y=raw.player_y - 1)
-            elif action.action_kind is MacroActionKind.CONFIRM:
-                if raw.player_y == 3:
-                    species = raw.party_species_ids or (15, 25)
-                    state["raw"] = replace(
-                        raw,
-                        party_hp=(30, 30),
-                        party_status=(0, 0),
-                        party_pp=((10, 10), (10, 10)),
-                    )
-                    state["party"] = make_test_party(
-                        30, 30, sp1=species[0], sp2=species[1]
-                    )
-                    state["safety"] = 1.0
+            elif action.kind is MacroActionKind.CONFIRM and raw.player_y == 3:
+                species = raw.party_species_ids or (15, 25)
+                state["raw"] = replace(
+                    raw,
+                    party_hp=(30, 30),
+                    party_status=(0, 0),
+                    party_pp=((10, 10), (10, 10)),
+                )
+                state["party"] = make_test_party(
+                    30, 30, sp1=species[0], sp2=species[1]
+                )
+                state["safety"] = 1.0
 
     class FakeEmulator:
         @property
@@ -204,6 +203,7 @@ def make_fixture(monkeypatch):
         read=read_raw,
         read_input_readiness=lambda: SimpleNamespace(ready=True),
         read_bottom_dialogue_box_visible=lambda: False,
+        read_player_facing=lambda: "up",
     )
     adapter = SimpleNamespace(
         observe=observe,

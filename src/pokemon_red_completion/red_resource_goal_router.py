@@ -85,6 +85,7 @@ class RedResourceGoalRouter:
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
     prepare_capture_storage: bool = False
+    routed_recovery: bool = False
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -214,6 +215,19 @@ class RedResourceGoalRouter:
             result = bind_capture_party_support(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("capture support enumeration changed the game")
+        if self.routed_recovery:
+            from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
+            from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
+
+            def prepare_escort() -> None:
+                prepare_capture_escort(self.runtime, self.actions)
+
+            result = bind_routed_center_recovery(
+                self, result, observation,
+                prepare_escort=prepare_escort,
+            )
+        if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
+            raise RedResourceGoalRoutingError("recovery enumeration changed the game")
         return self._with_quotes(result, observation) if self.quote_resource_costs else result
 
     def _with_quotes(
