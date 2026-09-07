@@ -91,3 +91,26 @@ model45, seed2026090722, four decisions, the same bounded completion dose and co
 after progress. Preserve prior wild-source declarations in order and append Route24. No reset,
 retry of A or fitting of its deterministic steps. Retain B's terminal/outcomes and inspect before
 any successor. A computed route is a candidate, not a claim that the live route will pass.
+
+## B result and prospective C — resource recovery, not another region reset
+
+B preserved the save and caught Oddish:17→18 living,19→20 specimens,22→23 registered.
+Capture554actions31753frames succeeded; exploration230actions11844frames failed at
+the declared survey bound. Both decisions were deterministic-unsupported, so admission
+excludes both: zero new training examples or model predictions, unchanged model45.
+The action-free terminal inspection found zero balls,19 bag stacks and six capture slots.
+Route24 still needs Abra specimens; acquisition is resource-blocked, not source-complete.
+
+Connect the existing Mart supply skill to reachable Cerulean Mart through an explicit
+ordered supply-only profile transition. Other providers and the manager contract must be
+identical. The cartridge router supplies travel; this adds no teacher walk sequence.
+Shop stock/price come from the pinned primary [Mart table](https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/data/items/marts.asm)
+and [prices](https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/data/items/prices.asm):
+ten Poké Balls at200 each, menu index0. The existing tested clerk stance is reused;
+the provider must still validate money, bag capacity, interaction and actual purchase.
+
+After local qualification, source publication and action-free readiness, C may run once
+from B checkpointe1ef8883 using model45,seed2026090723,four decisions and unchanged
+completion-dose bounds. Preserve Route11→Route24 source history, then change only supply.
+Stop and retain on failure. No forced/fallback step enters fitting; admit and fit only if
+genuine exploratory model choices actually occur. No successful-purchase claim is made yet.

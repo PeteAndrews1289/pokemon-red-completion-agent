@@ -358,6 +358,40 @@ def test_regional_builder_rejects_special_capture_rules_before_cartridge(source,
         runner._regional_profiles(object(), (source,), object())
 
 
+def test_regional_transition_parser_preserves_interleaved_source_supply_order():
+    args = runner._parser().parse_args([
+        "--pair-id", "parse-only", "--state", "state", "--envelope", "envelope",
+        "--profile", "profile", "--private-artifact-root", "private", "--out", "out",
+        "--wild-source", "wild:Route11:grass", "--supply-profile", "shop.json",
+        "--wild-source", "wild:Route24:grass",
+    ])
+    assert args.regional_transitions == [
+        "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
+    ]
+
+
+def test_regional_supply_loads_private_profile_and_rejects_non_supply_change(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    from pokemon_red_completion.observation import ItemId, MapId
+    from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfileError
+    before = _supply_transition_profile()
+    after = _supply_transition_profile(MapId.CERULEAN_MART, ItemId.POKE_BALL)
+    source = Path("private-supply.json")
+    seen = []
+    monkeypatch.setattr(runner, "_route_world", lambda _: object())
+    monkeypatch.setattr(runner, "_regular_external",
+                        lambda path, **kw: seen.append((path, kw["subject"])) or path)
+    monkeypatch.setattr(runner, "load_red_goal_context_profile", lambda path: after)
+    ready = SimpleNamespace(rom_path=Path("private-cartridge"))
+    assert runner._regional_profiles(before, (source,), ready) == (after,)
+    assert seen == [(source, "supply_profile")]
+    monkeypatch.setattr(runner, "load_red_goal_context_profile",
+                        lambda path: replace(after, profile_id="foreign"))
+    with pytest.raises(RedGoalContextProfileError, match="manager contract"):
+        runner._regional_profiles(before, (source,), ready)
+
+
 def test_continuation_executes_only_one_arm_without_fit_or_comparison(case, monkeypatch):
     readiness, ancestor = _completed(case)
     readiness = runner._continue_readiness(readiness, (ancestor,))

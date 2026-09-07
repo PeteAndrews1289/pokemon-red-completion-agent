@@ -167,6 +167,32 @@ def build_native_boxed_evolution_profile_payload(
     )
 
 
+def require_resupply_only_profile_transition(
+    before: RedGoalContextProfile, after: RedGoalContextProfile,
+) -> None:
+    """An explicit regional shop change may not alter any other playing skill."""
+    if not isinstance(before, RedGoalContextProfile) or not isinstance(
+        after, RedGoalContextProfile
+    ):
+        raise TypeError("resupply transition needs two context profiles")
+    if before.profile_id != after.profile_id or before.manager_config != after.manager_config:
+        raise RedGoalContextProfileError("resupply transition changes the manager contract")
+    original = {spec.kind: spec for spec in before.providers}
+    changed = {spec.kind: spec for spec in after.providers}
+    if original.keys() != changed.keys() or GoalKind.RESUPPLY not in original:
+        raise RedGoalContextProfileError("resupply transition changes the provider inventory")
+    for kind, spec in original.items():
+        if kind is GoalKind.RESUPPLY:
+            if spec.mechanic is not RedGoalMechanic.MART_RESUPPLY or (
+                changed[kind].mechanic is not RedGoalMechanic.MART_RESUPPLY
+            ):
+                raise RedGoalContextProfileError(
+                    "resupply transition requires the existing Mart skill"
+                )
+        elif changed[kind] != spec:
+            raise RedGoalContextProfileError("resupply transition changes a non-supply skill")
+
+
 def load_red_goal_context_profile(path: str | Path) -> RedGoalContextProfile:
     """Read one profile without retaining its private filesystem location."""
 

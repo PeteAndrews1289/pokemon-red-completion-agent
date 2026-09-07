@@ -415,8 +415,12 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
-        "--wild-source", action="append", default=[],
+        "--wild-source", dest="regional_transitions", action="append", default=[],
         help="ordered cartridge-derived grass-source profile transitions for saved continuations",
+    )
+    parser.add_argument(
+        "--supply-profile", dest="regional_transitions", type=Path, action="append",
+        help="ordered private profile transition changing only the existing Mart supply skill",
     )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
@@ -571,11 +575,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     ):
         raise PairedRedBoundedPlayerRunError("continuation_scope")
     expand_local = getattr(args, "expand_local_development", False)
-    wild_sources = getattr(args, "wild_source", ())
+    wild_sources = getattr(args, "regional_transitions", getattr(args, "wild_source", ()))
     if (
         not isinstance(wild_sources, (list, tuple))
         or len(wild_sources) > 8
-        or any(not isinstance(source, str) for source in wild_sources)
+        or any(not isinstance(source, (str, Path)) for source in wild_sources)
         or len(set(wild_sources)) != len(wild_sources)
         or (wild_sources and (
             not continuation_chain or not getattr(args, "routed_resource_goals", False)
@@ -773,6 +777,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     regional_profiles = _regional_profiles(
         execution_profile or expanded_profile or profile, tuple(wild_sources), readiness
     )
+    readiness = replace(readiness, protected_paths=(
+        *readiness.protected_paths,
+        *(path.resolve() for path in wild_sources if isinstance(path, Path)),
+    ))
     readiness = _continue_readiness(
         readiness,
         continuation_chain,
@@ -826,7 +834,7 @@ def _boxed_evolution_profile(
 
 def _regional_profiles(
     profile: RedGoalContextProfile,
-    sources: tuple[str, ...],
+    sources: tuple[str | Path, ...],
     readiness: _Readiness,
 ) -> tuple[RedGoalContextProfile, ...]:
     """Derive explicit source transitions; no emulator, policy or input is used."""
@@ -841,6 +849,8 @@ def _regional_profiles(
     )
 
     for source in sources:
+        if isinstance(source, Path):
+            continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
         if not methods or any(method.kind is not RedAcquisitionKind.WILD for method in methods):
             raise PairedRedBoundedPlayerRunError("regional_source_requires_ordinary_wild_capture")
@@ -849,6 +859,17 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if isinstance(source, Path):
+            from pokemon_red_completion.red_goal_context_profile import (
+                require_resupply_only_profile_transition,
+            )
+
+            path = _regular_external(source, subject="supply_profile", rom_path=readiness.rom_path)
+            candidate = load_red_goal_context_profile(path)
+            require_resupply_only_profile_transition(profile, candidate)
+            profile = candidate
+            result.append(profile)
+            continue
         map_id = int(map_id_for_wild_source(source))
         corridor = derive_red_living_dex_wild_corridor(
             RedEncounterSourceTarget(source), world.terrain[map_id], world.local_graphs[map_id],
