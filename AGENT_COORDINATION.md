@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+## Current — throughput sufficient; verify party selection next
+
+The [latest audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP and level 35,
+but no complete evolution or fit. Two diagnostic attempts stopped safely; their states and
+failures remain retained. Codex owns a narrow party-selection verification repair next.
+If reviewers are requested, Claude should challenge partial-prefix accounting and diagnostic
+fit exclusions; Antigravity should challenge selected-member/target truth and residual-menu
+recovery. No outside agent was used this session. Model 35 and checklist 2/5 are unchanged.
+
 ## Current — resumable evolution component qualified; throughput and learning credit next
 
 Codex owns the [resumable evolution closeout](docs/audits/red-resumable-evolution-2026-09-07.md).

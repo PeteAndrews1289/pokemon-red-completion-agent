@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — the XP bar moved; the menu was the obstacle
+
+Show the actual progression from Ponyta 32 to 35, with +9,606 XP and retained saves. Label it
+as deterministic skill qualification, not model learning. The first attempt ran for about 18
+seconds before an unnecessary venue transition failed; the successor's party-order check caught
+a wrong swap before another battle. Every specimen survived, but evolution remains unfinished.
+
+Use the contrast to explain why fast simulation does not remove interaction-state bugs. We now
+keep a safe current venue and must verify party-member selection before confirming a swap.
+Do not imply that the model learned these repairs or that it can finish Red autonomously.
+[Evidence boundaries](audits/red-evolution-completion-2026-09-07.md).
+
 ## Latest chapter — Tail Whip was not a training strategy
 
 Show the native PC preparation, then contrast the retained failed trace with the corrected

@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 7 — grinding was fast; changing state was the hard part
+
+A bounded continuation gained 9,606 XP and took Ponyta from 32 to 35 in about 18 seconds. That
+falsified our concern that basic grinding would consume the next session. The problems were
+transitions: reaching a new level triggered an unnecessary journey, and resuming afterward
+exposed a wrong party selection. Exact verification stopped both attempts without losing any
+specimen. The retained states let us investigate without replaying the journey.
+
+A safe-current-venue rule is now tested; selected-member verification is next. This is still
+deterministic skill work: no new model fit or complete evolution is claimed. The engineering
+lesson is to prove who an interaction is acting on, not merely trust that a cursor moved.
+[Audit and measurements](audits/red-evolution-completion-2026-09-07.md).
+
 ## September 7 — the trainee finally earns its own experience
 
 The PC now faces the machine, stores a party member and retrieves a surplus precursor through

@@ -146,7 +146,10 @@ def bind_native_boxed_evolution(
         if trainee is None:
             raise context.RedGoalContextError("native training lost its in-party precursor")
         tables = wild_tables(world.rom)
-        from pokemon_red_completion.team_training import training_safety_ceiling
+        from pokemon_red_completion.team_training import (
+            member_can_train_at,
+            training_safety_ceiling,
+        )
 
         ceiling = training_safety_ceiling(trainee, context.MANSION_TEAM_POLICY)
         venues = tuple(
@@ -165,6 +168,19 @@ def bind_native_boxed_evolution(
             raise context.RedGoalContextError(
                 "no cartridge encounter permits safe direct evolution"
             )
+        # A higher encounter level alone does not justify travel. Keep a
+        # currently executable safe venue for this bounded quantum; otherwise
+        # the historical trainer may invoke a transition from an unsupported
+        # field boundary. This is local continuity, not a learned venue policy.
+        current = runtime.reader.read()
+        local_venues = tuple(
+            venue
+            for venue in venues
+            if venue.is_in_map(current)
+            and member_can_train_at(trainee, context.MANSION_TEAM_POLICY, venue.band)
+        )
+        if local_venues:
+            venues = local_venues
         _, battles, heals = context.run_red_team_balancing(
             actions,
             runtime.reader,

@@ -247,6 +247,45 @@ def test_partial_evolution_resumes_in_party_without_repeating_storage(
     )
 
 
+@pytest.mark.parametrize(
+    "current_map,level,expected_maps",
+    [(22, 35, [22]), (165, 35, [165]), (165, 32, [22, 165]), (171, 35, [22, 165])],
+)
+def test_native_quantum_keeps_only_an_eligible_current_venue(
+    tmp_path, monkeypatch, current_map, level, expected_maps
+):
+    from types import SimpleNamespace
+
+    import pokemon_red_completion.red_native_boxed_evolution as module
+    from pokemon_red_completion.red_team_training import EvolutionTrainingPaused
+
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    source = red_internal_species_id(77)
+    reader.raw = replace(
+        reader.raw,
+        map_id=current_map,
+        party_species_ids=(*reader.raw.party_species_ids[:5], source),
+        party_levels=(63, 55, 55, 55, 55, level),
+    )
+    reader.boxes = replace(
+        reader.boxes,
+        boxes=(RedCurrentBoxState(0, (source,), (30,)), *reader.boxes.boxes[1:]),
+    )
+    monkeypatch.setattr(module, "wild_tables", lambda rom: {22: [(10, 0x21)], 165: [(10, 0x21)]})
+    received = []
+
+    def train(*args, **kwargs):
+        received.extend(venue.map_id for venue in kwargs["venues"])
+        raise EvolutionTrainingPaused(4, 0)
+
+    monkeypatch.setattr(module.context, "run_red_team_balancing", train)
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
+    native.party_level_evolution_executor(
+        source, red_internal_species_id(78), CountingExecutor(_ActionDelegate())
+    )
+    assert received == expected_maps
+
+
 def test_unimplemented_low_level_venue_does_not_become_an_evolution_offer(tmp_path):
     runtime, _, _ = runtime_fixture(tmp_path, source=11, target=12, evolution_level=10, level=4)
     native = bind_native_boxed_evolution(runtime, object())

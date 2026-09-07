@@ -1,5 +1,18 @@
 # Model-first development roadmap
 
+## Current — XP is fast; close the party-selection boundary
+
+The [latest audit](audits/red-evolution-completion-2026-09-07.md) measures +9,606 XP, level 32 to 35,
+in about 18 seconds before a travel failure. Keeping a safe current venue is implemented and
+ROM-free-tested, but the successor stopped on a wrong party swap before live qualification.
+All 17 specimens remain. Full evolution, learned lesson and checklist advancement are unfinished.
+
+1. Verify the selected party member and swap target from actual menu state before confirmation.
+2. Test multiple roster orders and residual dialog/menu states; do not add a fixed cursor patch.
+3. Continue the retained terminal under a fresh bounded evolution attempt; no reset/retry.
+4. Verify exact evolution and precursor retention, then collect a model-selected lesson with
+   honest partial-progress accounting. No new features, full replay or Crystal.
+
 ## Current — safe XP and resumption work; make evolution useful
 
 The [resumable evolution audit](audits/red-resumable-evolution-2026-09-07.md) qualifies native PC

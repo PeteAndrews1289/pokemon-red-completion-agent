@@ -1,5 +1,24 @@
 # Handoff
 
+## Current — level 35; party-selection verification blocks completion
+
+The [throughput audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP,
+level 32 to 35, with all 17 specimens retained. Eighteen returned quanta report 72 completed
+training battles; the terminal also retains progress from a later failed prefix. Full evolution
+is still incomplete. Model `1b26aa44` / 35 examples and official checkpoint `b64023f4` are unchanged.
+
+Two new diagnostic attempts are closed. The first failed during unnecessary venue travel;
+its saved boundary still showed dialogue. A native local-safe-venue retention fix passes tests,
+but its successor failed earlier on a wrong party swap (40 actions), so it is not live-qualified.
+Final diagnostic terminal: `db557b27...78b8d`, Ponyta slot two, level 35, XP 42,882, 91/93 HP.
+Both saves reload exactly without inputs; all counts preserved. Do not rerun consumed launchers
+or admit these diagnostics as player training data. Private OPERATOR notes retain exact paths.
+
+Next: verify actual selected party source/target before a swap, across residual menu states and
+party orders. Then complete one bounded evolution and return to a model-selected lesson.
+XP throughput is no longer the leading concern. No route rewrite or new learner feature.
+110 focused tests and 400-file types passed; see the audit for remaining evidence boundaries.
+
 ## Current — resumable XP works; complete evolution is next
 
 Read [active state](ACTIVE_PRODUCT_STATE.md) and the

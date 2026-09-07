@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Estimate remaining evolution XP and practical cost, then qualify one bounded multi-quantum evolution from the retained diagnostic lineage. Preserve partial-progress truth before collecting a model-selected lesson; no new learner features or full replay.
+- Next decision: Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model 1b26aa44 retains 35 examples; no fitting this session. Native PC preparation and in-party resumption now work; the final component continuation gained 508 XP in four battles. No completed evolution, collection gain or history-effort advantage is demonstrated. |
+| Authority now | Model 1b26aa44 retains 35 examples; no fitting or new model-selected outcomes. The component gained 9606 XP and reached level35, but full evolution failed at travel and then party selection. All17 specimens remain; no learned advantage is demonstrated. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing safe training skill complete a living-precursor-preserving evolution at useful cost, rather than merely accumulate tiny XP quanta? |
+| Cheapest falsifier | Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-resumable-evolution** · status **closed** · evidence [qualification](docs/evidence/red-resumable-evolution-2026-09-07.json)
+**2026-09-07-evolution-completion** · status **closed** · evidence [qualification](docs/evidence/red-evolution-completion-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Unblock collection evolution through safe direct trainee battles and durable partial progress, preserving the living precursor. This is deterministic skill qualification, not learned competence. |
-| Learning output | No new fit or model-selected outcome. The final component gained 508 XP in four battle intervals, with 17 specimens retained and action-free restoration verified. Model35 and checklist2/5 remain. |
-| Authority delta | None. All four component diagnostics remain excluded from fitting; no official player checkpoint was replaced. |
-| Transfer result | Same-lineage Red component evidence only; no independent evaluation, unfamiliar modification or Crystal execution. |
-| Blocker | Complete evolution and efficient XP throughput remain unqualified. Partial quanta are not completed-goal successes; learning-credit integration remains unfinished. A private report serialization error was reconstructed without replay. |
-| Decision | Close this skill repair and reorient on measured evolution throughput, then a complete operation and a model-selected lesson. Do not begin another broad trainer or provenance project. |
-| Next session | Estimate remaining evolution XP and practical cost, then qualify one bounded multi-quantum evolution from the retained diagnostic lineage. Preserve partial-progress truth before collecting a model-selected lesson; no new learner features or full replay. |
-| Next falsifier | Can the existing safe training skill complete a living-precursor-preserving evolution at useful cost, rather than merely accumulate tiny XP quanta? |
-| Stop condition | All four diagnostic invocations are closed; no controller-started retries. Retain original report-writer failure and negative terminals. Diagnostic state is not an admitted player episode; no fitting, sealed evaluation or full replay. |
+| Product alignment | Measure whether safe experience can become a useful collection evolution. XP throughput is sufficient; correct state-dependent party interaction is the remaining blocker. |
+| Learning output | No fit or model-selected outcome. Component XP33276 to42882, level32 to35; 18 returned quanta report72 battles, plus retained failed-prefix progress. All17 specimens preserved. Model35/checklist2of5 unchanged. |
+| Authority delta | None. Both attempts are closed diagnostic continuations; no official checkpoint replacement or fitting admission. |
+| Transfer result | Same-lineage Red diagnostics only; no generalization or cross-title result. |
+| Blocker | A level-triggered venue transition attempted unsupported field Dig. The safe-current-venue correction is ROM-free-tested, but its successor failed on wrong party source selection before live qualification. Movement-ready flags do not prove settled menu state. |
+| Decision | Stop after the declared successor and repair observed party source/target selection next. No new venue or larger trainer is justified by fast measured XP throughput. |
+| Next session | Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature. |
+| Next falsifier | Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset? |
+| Stop condition | Both controller-started attempts are permanently closed; preserve all terminals and failed prefixes. Final diagnostic terminal db557b27 is not an admitted player checkpoint. No retry, fit, sealed evaluation or full replay. |
 
 ### Stop conditions
 

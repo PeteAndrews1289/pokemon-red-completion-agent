@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-resumable-evolution",
+  "as_of_session": "2026-09-07-evolution-completion",
   "current_stage": "adaptive-red",
   "stages": {
     "foundation": {
@@ -10,7 +10,7 @@
     },
     "adaptive-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-resumable-evolution-2026-09-07.json"
+      "evidence": "docs/evidence/red-evolution-completion-2026-09-07.json"
     },
     "sustained-red": {
       "status": "planned",
@@ -62,7 +62,7 @@
         "id": "alternatives",
         "label": "Two useful executable alternatives",
         "done": false,
-        "evidence": "docs/evidence/red-resumable-evolution-2026-09-07.json"
+        "evidence": "docs/evidence/red-evolution-completion-2026-09-07.json"
       },
       {
         "id": "useful-followup",
@@ -102,6 +102,12 @@
       "result": "Native PC preparation and no-storage resumption qualified. Final component: four battles, +508 XP, 17 specimens retained; reload verified without input. No completed evolution or fit; model35 and 2/5 unchanged.",
       "deviation": "Prospectively declared retained-state component continuations exposed venue and move assumptions; one rejected before input. Report serialization failed after gameplay and was reconstructed read-only. No baseline exits changed.",
       "next": "Measure evolution throughput and bounded feasibility, complete an actual evolution, then resume a model-selected collection lesson."
+    },
+    {
+      "session": "2026-09-07-evolution-completion",
+      "result": "Ponyta level 32 to 35, +9606 XP in about 18 seconds; all 17 specimens retained. Travel failed, then successor stopped on wrong party selection. No evolution or fit; 2/5 unchanged.",
+      "deviation": "One prospectively declared retained-state successor tested local venue continuity but stopped before training. Both attempts closed; no baseline exit changed.",
+      "next": "Verify selected party source and target, complete a bounded evolution, then a model-selected lesson."
     }
   ]
 }

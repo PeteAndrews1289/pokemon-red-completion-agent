@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## 2026-09-07 completion attempt — no baseline change
+
+The bounded XP continuation was fast but stopped at unsupported venue travel. A prospectively
+declared local-continuity successor then stopped on incorrect party selection. Both are closed;
+no reset, replacement success or fit occurred. Codex retained all progress and chose party-menu
+verification as the next narrow blocker. The new current-venue rule is not yet live-qualified.
+Full evolution remains unfinished and checklist 2/5 stays unchanged; no exit criterion moved.
+See the [audit](audits/red-evolution-completion-2026-09-07.md).
+
 ## 2026-09-07 resumable evolution — useful partial execution, unchanged exits
 
 The original single component pilot exposed type-incompatible venue selection after successful

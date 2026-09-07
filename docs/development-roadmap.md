@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-resumable-evolution**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-evolution-completion**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -15,7 +15,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
 - [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
-- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-resumable-evolution-2026-09-07.json))
+- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-evolution-completion-2026-09-07.json))
 - [ ] Productive lesson and follow-up
 
 Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-resumable-evolution-2026-09-07.json)
+[Current evidence](../docs/evidence/red-evolution-completion-2026-09-07.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-evolution-completion
+
+Ponyta level 32 to 35, +9606 XP in about 18 seconds; all 17 specimens retained. Travel failed, then successor stopped on wrong party selection. No evolution or fit; 2/5 unchanged.
+
+**Deviation:** One prospectively declared retained-state successor tested local venue continuity but stopped before training. Both attempts closed; no baseline exit changed.
+
+**Next:** Verify selected party source and target, complete a bounded evolution, then a model-selected lesson.
 
 ### 2026-09-07-resumable-evolution
 
