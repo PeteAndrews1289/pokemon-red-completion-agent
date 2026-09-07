@@ -49,16 +49,20 @@ class GoalResourceQuote:
     The penalty is spend/funds plus the fraction of bought units above declared
     reserve targets. Both are dimensionless known facts. The caller applies its
     existing resource-cost weight; no predicted outcome or prior label changes.
+    An explicitly funded V2 quote keeps real cash separate from sale proceeds;
+    V1 bytes and semantics remain unchanged. Proceeds are finite, not free cash.
     """
 
     available_funds: int
     purchase_cost: int
     reserves: tuple[GoalResourceReserve, ...]
+    funding_proceeds: int = 0
 
     def __post_init__(self) -> None:
         _count(self.available_funds, "available funds")
         _count(self.purchase_cost, "purchase cost")
-        if not 0 < self.purchase_cost <= self.available_funds:
+        _count(self.funding_proceeds, "funding proceeds")
+        if not 0 < self.purchase_cost <= self.available_funds + self.funding_proceeds:
             raise ValueError("quoted purchase must be positive and affordable")
         if (
             not isinstance(self.reserves, tuple)
@@ -73,25 +77,42 @@ class GoalResourceQuote:
     def cost_units(self) -> float:
         purchased = sum(item.purchased for item in self.reserves)
         excess = sum(item.excess_purchased for item in self.reserves)
-        return self.purchase_cost / self.available_funds + excess / purchased
+        return (
+            self.purchase_cost / (self.available_funds + self.funding_proceeds) + excess / purchased
+        )
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.core.goal-resource-quote.v1",
+            "schema": (
+                "pokemon.core.goal-resource-quote.v2"
+                if self.funding_proceeds
+                else "pokemon.core.goal-resource-quote.v1"
+            ),
             "available_funds": self.available_funds,
             "purchase_cost": self.purchase_cost,
             "reserves": [item.public_dict() for item in self.reserves],
+            **({"funding_proceeds": self.funding_proceeds} if self.funding_proceeds else {}),
         }
 
     @classmethod
     def from_public_dict(cls, value: object) -> GoalResourceQuote:
+        funded = (
+            isinstance(value, Mapping)
+            and value.get("schema") == "pokemon.core.goal-resource-quote.v2"
+        )
         if (
             not isinstance(value, Mapping)
-            or set(value) != {"schema", "available_funds", "purchase_cost", "reserves"}
-            or value["schema"] != "pokemon.core.goal-resource-quote.v1"
+            or set(value)
+            != {"schema", "available_funds", "purchase_cost", "reserves"}
+            | ({"funding_proceeds"} if funded else set())
+            or value["schema"]
+            not in {"pokemon.core.goal-resource-quote.v1", "pokemon.core.goal-resource-quote.v2"}
             or not isinstance(value["reserves"], (list, tuple))
         ):
             raise ValueError("resource quote schema differs")
+        funding = _count(value["funding_proceeds"], "funding proceeds") if funded else 0
+        if funded and funding <= 0:
+            raise ValueError("funded quote must declare positive sale proceeds")
         reserves = []
         for raw in value["reserves"]:
             if (
@@ -112,4 +133,5 @@ class GoalResourceQuote:
             available_funds=_count(value["available_funds"], "available funds"),
             purchase_cost=_count(value["purchase_cost"], "purchase cost"),
             reserves=tuple(reserves),
+            funding_proceeds=funding,
         )

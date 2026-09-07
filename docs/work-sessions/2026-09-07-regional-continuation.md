@@ -211,3 +211,45 @@ the unchanged historical native ledger. Unplayed sources and changed specimen ob
 remain zero tracked attempts, not claims of never-attempted history. This is not a rewrite
 of D's data or fit. Reinspect E and require Route24 to expose D's1attempt/1exhaustion,
 356actions/16,836frames before proceeding. No E sampling or controller input has occurred.
+
+## Session3 — legitimate resource recovery
+
+E has completed and is consumed:506actions/36,552frames,zero capture gain, four balls spent.
+Both D/E failures fitted45→47; checklist4/5. [Audit](../audits/red-regional-source-learning-2026-09-07.md).
+Read-only inventory inspection found11Hyper Potions and7Full Restores, plus6Full Heals and
+3Revives; no disposable Nugget. Protect fossils, keys, HMs/TMs and all other items.
+
+Mission check:
+
+1. **Capability:** replenish capture resources from a genuine low-cash saved endpoint.
+2. **Learned authority:** this safety/resupply support may produce no fit row; it unblocks
+   the existing model-selected destination loop, not a new scripted teacher campaign.
+3. **Transfer test:** a shared quote distinguishes cash from explicit sale proceeds;
+   exact items and shop controls remain in Red. No cross-game execution claim.
+4. **Cheapest falsifier:** prove one finite surplus sale can buy10balls while retaining
+   at least8Hyper Potions and every other inventory item/specimen unchanged.
+5. **Time box:**90minutes to an executable funding path, then reassess; end by10:57UTC.
+6. **Stop condition:** unavailable stock, inadequate reserve, uncertain quoted proceeds,
+   menu mismatch or any unexpected inventory/money/party change. Never inject cash or
+   restore a consumed save to undo spending. Finite surplus is not renewable income.
+
+Reuse the existing exact-stack Mart sale executor and walking router. Add an optional,
+strict surplus-sale declaration to resupply; old profiles/quotes preserve their bytes and
+meaning. The narrow first allowance is Hyper Potion surplus only, with750sale proceeds
+per item; the Red [price table](https://github.com/pret/pokered/blob/master/data/items/prices.asm)
+lists1500purchase price. Confirm exact in-game proceeds at execution. Selling3raises2250;
+with129cash, buying10balls for2000 leaves379,8Hyper Potions,7Full Restores,6Full Heals,
+3Revives. This is a bounded liquidity bridge, not a sustainable money-making solution.
+Publish tested source and declare the exact new continuation before controller input.
+
+### Prospective funding continuation F
+
+After action-free exact-E restoration and a truthful funded quote, execute one resupply
+decision as `red-regional-funded-20260907-f-causal`, seed2026090733, model47, from
+E checkpoint`cfb720c31ef03069574a31ca1b6cbb60934271ef0a278d77f91fc4bd2e6ae31c`.
+The explicit supply-only profile transition funds10Poké Balls by selling3Hyper Potions
+only if current cash is insufficient, preserving at least8Hyper Potions and all other items.
+Same30,000action/3,000,000frame outer limits, existing bounded shop/route controls, one
+decision then save/stop. No learned-row claim for a safety-selected replenishment.
+Verify the sale before opening BUY; exact final expectation379currency,10balls and24total
+recovery items. Stop without retry if any sale, purchase or preserved-state proof fails.

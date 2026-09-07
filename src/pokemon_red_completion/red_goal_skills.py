@@ -41,6 +41,7 @@ from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _buy_mart_item,
     _close_menus,
+    _sell_mart_item_stack,
 )
 from pokemon_red_completion.observation import (
     ItemId,
@@ -526,6 +527,31 @@ class RedMartPurchase:
 
 
 @dataclass(frozen=True, slots=True)
+class RedMartSurplusSale:
+    """Finite liquidity bridge; never sell unique assets or the recovery floor.
+
+    Red Hyper Potions cost1500 and sell for750. This deliberately narrow allowlist
+    can be extended only with a separate supply/retention justification.
+    """
+
+    item: ItemId
+    quantity: int
+    minimum_retained: int
+
+    def __post_init__(self) -> None:
+        if self.item is not ItemId.HYPER_POTION:
+            raise ValueError("surplus sale item is protected or unsupported")
+        if type(self.quantity) is not int or not 1 <= self.quantity <= 99:
+            raise ValueError("surplus sale quantity differs")
+        if type(self.minimum_retained) is not int or not 8 <= self.minimum_retained <= 99:
+            raise ValueError("surplus sale must retain at least eight Hyper Potions")
+
+    @property
+    def proceeds(self) -> int:
+        return self.quantity * 750
+
+
+@dataclass(frozen=True, slots=True)
 class RedMartResupplyGoalProvider:
     """Buy an exact ball-and-recovery reserve from a verified clerk stance."""
 
@@ -540,6 +566,7 @@ class RedMartResupplyGoalProvider:
     adapter: PokemonRedGoalStateAdapter
     wait_frames: int = DEFAULT_LAVENDER_TIMING.wait_frames
     kind: GoalKind = GoalKind.RESUPPLY
+    funding_sale: RedMartSurplusSale | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.map_id, MapId):
@@ -554,6 +581,11 @@ class RedMartResupplyGoalProvider:
             raise ValueError("Mart resupply needs at least one purchase")
         if len({purchase.item for purchase in self.purchases}) != len(self.purchases):
             raise ValueError("Mart resupply cannot purchase an item twice")
+        if self.funding_sale is not None and (
+            not isinstance(self.funding_sale, RedMartSurplusSale)
+            or any(p.item is self.funding_sale.item for p in self.purchases)
+        ):
+            raise ValueError("Mart cannot sell and rebuy the same resource")
         if type(self.wait_frames) is not int or self.wait_frames <= 0:  # noqa: E721
             raise ValueError("Mart wait_frames must be a positive integer")
 
@@ -577,6 +609,7 @@ class RedMartResupplyGoalProvider:
         before_inventory = dict(start.bag_items or ())
         before_money = start.player_money
         total_cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
+        funding = self._required_funding(observation)
 
         def execute() -> GoalExecutionReport:
             if before_money is None:
@@ -591,6 +624,33 @@ class RedMartResupplyGoalProvider:
                 or approached.battle_state
             ):
                 raise RedGoalSkillError("Mart clerk interaction moved off its boundary")
+            if funding is not None:
+                if (
+                    dict(approached.bag_items or ()) != before_inventory
+                    or approached.player_money != before_money
+                    or approached.party_species_ids != start.party_species_ids
+                    or approached.party_hp != start.party_hp
+                ):
+                    raise RedGoalSkillError("Mart funding resources changed before sale")
+                _sell_mart_item_stack(
+                    self.actions, self.reader, self.emulator, DEFAULT_LAVENDER_TIMING,
+                    funding.item, quantity=funding.quantity, expected_proceeds=funding.proceeds,
+                )
+                sold = self.reader.read()
+                expected_sold = dict(before_inventory)
+                expected_sold[int(funding.item)] -= funding.quantity
+                if (
+                    dict(sold.bag_items or ()) != expected_sold
+                    or sold.player_money != before_money + funding.proceeds
+                    or sold.party_species_ids != start.party_species_ids
+                    or sold.party_hp != start.party_hp
+                    or (sold.map_id, sold.player_x, sold.player_y)
+                    != (start.map_id, start.player_x, start.player_y)
+                    or sold.battle_state
+                ):
+                    raise RedGoalSkillError(
+                        "Mart funding sale changed protected inventory or party"
+                    )
             self._open_buy_list()
             for purchase in self.purchases:
                 target = before_inventory.get(int(purchase.item), 0) + purchase.quantity
@@ -607,6 +667,8 @@ class RedMartResupplyGoalProvider:
             after = self.reader.read()
             after_inventory = dict(after.bag_items or ())
             expected_inventory = dict(before_inventory)
+            if funding is not None:
+                expected_inventory[int(funding.item)] -= funding.quantity
             for purchase in self.purchases:
                 expected_inventory[int(purchase.item)] = (
                     expected_inventory.get(int(purchase.item), 0) + purchase.quantity
@@ -617,7 +679,8 @@ class RedMartResupplyGoalProvider:
                 or after.player_y != self.player_y
                 or after.battle_state
                 or after_inventory != expected_inventory
-                or after.player_money != before_money - total_cost
+                or after.player_money
+                != before_money + (funding.proceeds if funding else 0) - total_cost
                 or not self.reader.read_input_readiness().ready
             ):
                 raise RedGoalSkillError("Mart resupply failed its inventory/economy proof")
@@ -629,6 +692,8 @@ class RedMartResupplyGoalProvider:
                     "purchase_count": len(self.purchases),
                     "quantity_purchased": sum(purchase.quantity for purchase in self.purchases),
                     "money_spent": total_cost,
+                    **({"sale_proceeds": funding.proceeds, "surplus_units_sold": funding.quantity}
+                       if funding else {}),
                 },
             )
 
@@ -651,7 +716,9 @@ class RedMartResupplyGoalProvider:
         if len(inventory) + new_slots > 20:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
-        if observation.raw.player_money is None or observation.raw.player_money < cost:
+        funding = self._required_funding(observation)
+        proceeds = funding.proceeds if funding else 0
+        if observation.raw.player_money is None or observation.raw.player_money + proceeds < cost:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
         capture, recovery = self._projected_resources(observation)
         projected = min(
@@ -695,11 +762,22 @@ class RedMartResupplyGoalProvider:
             purchased = sum(item.quantity for item in self.purchases if item.item in items)
             if purchased:
                 reserves.append(GoalResourceReserve(resource, count, target, purchased))
+        funding = self._required_funding(observation)
         return GoalResourceQuote(
             available_funds=funds,
             purchase_cost=sum(item.quantity * item.unit_price for item in self.purchases),
             reserves=tuple(reserves),
+            funding_proceeds=funding.proceeds if funding else 0,
         )
+
+    def _required_funding(self, observation: RedGoalObservation) -> RedMartSurplusSale | None:
+        funds = observation.raw.player_money
+        cost = sum(p.quantity * p.unit_price for p in self.purchases)
+        sale = self.funding_sale
+        if funds is None or funds >= cost or sale is None:
+            return None
+        available = dict(observation.raw.bag_items or ()).get(int(sale.item), 0)
+        return sale if available - sale.quantity >= sale.minimum_retained else None
 
     def _projected_resources(
         self,
@@ -707,6 +785,9 @@ class RedMartResupplyGoalProvider:
     ) -> tuple[int, int]:
         capture = observation.capture_item_count
         recovery = observation.recovery_item_count
+        funding = self._required_funding(observation)
+        if funding is not None:
+            recovery -= funding.quantity
         for purchase in self.purchases:
             if purchase.item in _CAPTURE_ITEMS:
                 capture += purchase.quantity

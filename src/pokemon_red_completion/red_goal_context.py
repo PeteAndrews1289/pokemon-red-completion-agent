@@ -75,6 +75,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedGoalSkillAvailability,
     RedMartPurchase,
     RedMartResupplyGoalProvider,
+    RedMartSurplusSale,
     RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
 )
@@ -1166,6 +1167,8 @@ def _mart_provider(
         )
         for item in raw_purchases
     )
+    raw_sale = parameters.get("funding_sale")
+    sale = _parameter_mapping(raw_sale) if raw_sale is not None else None
     return RedMartResupplyGoalProvider(
         map_id=MapId(_integer(parameters, "map_id")),
         player_x=_integer(parameters, "player_x"),
@@ -1176,6 +1179,10 @@ def _mart_provider(
         reader=runtime.reader,
         emulator=runtime.emulator,
         adapter=runtime.adapter,
+        funding_sale=(RedMartSurplusSale(
+            ItemId(_integer(sale, "item_id")), _integer(sale, "quantity"),
+            _integer(sale, "minimum_retained"),
+        ) if sale is not None else None),
     )
 
 

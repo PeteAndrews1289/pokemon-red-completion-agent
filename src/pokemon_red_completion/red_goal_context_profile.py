@@ -572,7 +572,7 @@ def _parse_parameters(
                 "player_y",
                 "interaction_direction",
                 "purchases",
-            },
+            } | ({"funding_sale"} if "funding_sale" in row else set()),
         )
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
@@ -580,6 +580,22 @@ def _parse_parameters(
         parsed_purchases = [_parse_purchase(item) for item in purchases]
         if len({item["item_id"] for item in parsed_purchases}) != len(parsed_purchases):
             raise RedGoalContextProfileError("Mart profile purchases an item twice")
+        sale_fields = {}
+        if "funding_sale" in row:
+            sale = row["funding_sale"]
+            if not isinstance(sale, dict):
+                raise RedGoalContextProfileError("Mart funding sale must be a mapping")
+            _exact_keys(sale, {"item_id", "quantity", "minimum_retained"})
+            item = _integer(sale["item_id"], "funding item")
+            quantity = _positive_integer(sale["quantity"], "funding quantity")
+            retained = _positive_integer(sale["minimum_retained"], "funding reserve")
+            if item != int(ItemId.HYPER_POTION) or quantity > 99 or not 8 <= retained <= 99:
+                raise RedGoalContextProfileError("Mart funding sale violates protected reserve")
+            if any(p["item_id"] == item for p in parsed_purchases):
+                raise RedGoalContextProfileError("Mart cannot sell and rebuy the same item")
+            sale_fields = {"funding_sale": {
+                "item_id": item, "quantity": quantity, "minimum_retained": retained,
+            }}
         return {
             "map_id": int(_map_id(row["map_id"])),
             "player_x": _integer(row["player_x"], "Mart x coordinate"),
@@ -588,6 +604,7 @@ def _parse_parameters(
                 row["interaction_direction"], "Mart interaction"
             ),
             "purchases": parsed_purchases,
+            **sale_fields,
         }
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         _exact_keys(

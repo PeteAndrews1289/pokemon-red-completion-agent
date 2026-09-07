@@ -207,8 +207,9 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         return SimpleNamespace(manifest_sha256="9" * 64)
 
     writer = SimpleNamespace(append=append, complete=complete, abort=lambda _reason: None)
+    headers = []
     sink = SimpleNamespace(
-        write_episode_header=lambda **_kwargs: None,
+        write_episode_header=lambda **kwargs: headers.append(kwargs),
         record_event=lambda _event: None, finalize=lambda: None,
     )
     for name in (
@@ -262,9 +263,15 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=enabled,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256="a" * 64 if enabled else None,
     )
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
+    assert headers[0]["metadata"].get("regional_choice_record_sha256") == (
+        "a" * 64 if enabled else None
+    )
+    if not enabled:
+        assert "regional_choice_record_sha256" not in headers[0]["metadata"]
     assert order == (
         ["open", "restore", "capture", "durable_state", "close", "trajectory_complete", "publish"]
         if enabled else ["open", "restore", "close", "trajectory_complete"]
@@ -720,6 +727,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=False,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256=None,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
