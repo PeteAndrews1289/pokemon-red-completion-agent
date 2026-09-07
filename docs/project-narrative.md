@@ -1,5 +1,13 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — the next ball actually caught Abra
+
+The learner chose Route24 and the adapted capture skill skipped setup against an observed
+escape-capable moveset. It caught Abra10 using one ball, preserving23 specimens/21living
+species. The55-example fit retained every prior row. This establishes one useful real
+continuation, not statistical proof of capture efficiency or generalization. The next work
+reduces handwritten coordination between the existing collect, fit and resume steps.
+
 ## September7 — making the earned resources usable
 
 The next continuation bought only what its actual cash could afford: five balls, not a fixed

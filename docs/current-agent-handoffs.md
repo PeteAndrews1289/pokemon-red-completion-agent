@@ -1,5 +1,10 @@
 # Current agent handoffs
 
+Latest is P/model55: Abra10 captured,21living/23specimens/26registered,4balls109currency,
+all54 previous rows retained. Affordable checklist3/3closed. Next bounded cycle1/3 engineering;
+review exact model/checkpoint continuity, preserved negative rows and stop-on-failure behavior.
+No new teacher/full replay/transfer claim. [Audit](audits/red-incremental-learning-cycle-2026-09-07.md).
+
 Latest endpoint is O, not N:5balls109currency,20living/22specimens/25registered,helper healed.
 Both O steps excluded; model54 unchanged. Escape-aware first-throw support is being qualified
 before another learned source choice. Do not retry O or infer that this proves efficient play.

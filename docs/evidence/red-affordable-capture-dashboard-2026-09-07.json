@@ -1,0 +1,145 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "O legitimately restocked and healed with zero eligible rows; P model54 chose Route24 and caught Abra10 with one ball, preserving23 specimens. Fit55 retains all54 earlier rows.",
+  "session_evidence": "docs/evidence/red-affordable-capture-learning-result-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 346,
+    "frames": 22140,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-affordable-source-20260907-p-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "acbe7567289f75ae98838ee181863b1aa27b5eb093104ad7b1aa011fb631fc30",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 45,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 55,
+      "successful_examples": 20,
+      "total_examples": 55,
+      "train_dataset_sha256": "dba442623511ccc343852cff6daa6efb2136006ece7616dcb057669dbd71c105",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.007899180421955507,
+      "weighted_mse_before": 0.02300348752139166
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "14bf0f83d77fc240eeb0cb73dcae35b421c71651362a4c45a2dac3bdb552f12a",
+      "file_sha256": "fe22f76d5b8f5b37d549ea6460d19b0a8857009665692027a5a9e3233227da83",
+      "independent_evaluation": false,
+      "model_sha256": "6154f7f5a2459587117620892c52f2daa2860afabc314224300dd2bd8a9862a2",
+      "prior_model_sha256": "30eca78810db340109d448aa51c39e44fda6252f7787d6d38b36a163aed01a9f",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 55,
+      "source_bundle_sha256": "232b3c6f94f2fe391e64c07b7c4874143ffb66d1c1893800b56d5b8f5bc8da3e",
+      "source_commit": "1a9f7723452904fa7726a9814b3d42ae48640da6"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07222920554919476,
+        0.000004283403896782292,
+        0.00003569066882927033,
+        0.004574995658463155,
+        0.003418999071539609,
+        0.0033149924374629492,
+        0.000578870875616846,
+        8.460873292861333e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 55,
+      "total_examples": 55,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009350875972481406
+    },
+    "regional_source_examples": 9,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06137917294966989,
+        0.0000034625448739000148,
+        0.000035680255720251334,
+        0.0045296890518494405,
+        0.00340595999999143,
+        0.0013061821763242125,
+        0.0004318689647495714,
+        6.078544208723573e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 55,
+      "total_examples": 55,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.007899180421955507
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "One PC preparation and three status attempts executed; zero verified status successes.",
+    "Capture used all four remaining balls. No catch-efficiency improvement is established.",
+    "Model54 retains all53 prior outcomes plus N; final model has not played.",
+    "Same-lineage adaptive development only; no independent advantage, full-game or transfer claim.",
+    "All consumed attempts and failed searches remain preserved."
+  ],
+  "next_session": "Affordable purchases from actual funds, restore helper health, then a bounded model54 continuation.",
+  "current_limitation": "Zero balls,1109currency and an injured helper; fixed ten-ball purchase is unaffordable. Status success remains unverified."
+}

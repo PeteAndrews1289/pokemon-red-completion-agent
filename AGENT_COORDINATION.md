@@ -1,5 +1,10 @@
 # Three-agent coordination
 
+Current: P/model55 retained, affordable capture3/3closed. The next bounded collect/fit/continue
+cycle is under qualification; Codex remains sole operator/publication owner through10:57UTC.
+No subagent or external audit was invoked. Later reviewers should challenge retained-row and
+actual model/checkpoint continuity, not demand a full-game replay for this local integration.
+
 Current September7 follow-up: O restored resources with zero eligible learning rows;
 model54 unchanged, checklist2/3. Escape-aware capture preparation is under qualification
 before a fresh learned source choice. Codex remains sole implementation/publication owner

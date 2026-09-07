@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-affordable-continuation",
+  "as_of_session": "2026-09-07-incremental-learning-cycle",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-capture-status-result-2026-09-07.json"
+      "evidence": "docs/evidence/red-affordable-capture-learning-result-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Affordable sustained continuation",
+    "title": "Bounded collect / fit / continue",
     "items": [
       {
-        "id": "affordable-quote",
-        "label": "Affordable purchase and exact cost qualified",
+        "id": "incremental-inventory",
+        "label": "Retained inventory and loop qualified",
         "done": true,
-        "evidence": "docs/evidence/red-affordable-supply-qualification-2026-09-07.json"
+        "evidence": "docs/evidence/red-incremental-cycle-qualification-2026-09-07.json"
       },
       {
-        "id": "restored-resources",
-        "label": "Real resources/helper readiness restored",
-        "done": true,
-        "evidence": "docs/evidence/red-affordable-continuation-result-2026-09-07.json"
+        "id": "two-real-continuations",
+        "label": "Two real linked learning steps",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "productive-affordable-followup",
-        "label": "Fresh productive model continuation",
+        "id": "saved-cycle-audit",
+        "label": "Saved endpoint and viewer evidence audited",
         "done": false,
         "evidence": null
       }
@@ -156,6 +156,18 @@
       "result": "Affordable-continuation checklist2/3: O purchased five balls and restored helper health, exact save preserved. Both support steps excluded; model54 unchanged.",
       "deviation": "Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.",
       "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
+    },
+    {
+      "session": "2026-09-07-affordable-capture-closeout",
+      "result": "P captured Abra with one ball,21living/23specimens,fit55 retaining all54 earlier rows. Affordable continuation3/3closed.",
+      "deviation": "Escape-aware deterministic preparation was required before the productive source choice; no baseline exit changed.",
+      "next": "Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence."
+    },
+    {
+      "session": "2026-09-07-incremental-learning-cycle",
+      "result": "Incremental inventory/loop82focused tests passed; no live cycle yet. Model55 and P preserved. Checklist1/3.",
+      "deviation": "Replace handwritten per-example assembly with existing authenticated collection/fitting machinery. No change to model authority or stage exits.",
+      "next": "Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence."
     }
   ],
   "closed_milestones": [
@@ -255,6 +267,31 @@
           "label": "Productive post-fit continuation",
           "done": true,
           "evidence": "docs/evidence/red-capture-status-result-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-affordable-capture-closeout",
+      "stage": "sustained-red",
+      "title": "Affordable sustained continuation",
+      "items": [
+        {
+          "id": "affordable-quote",
+          "label": "Affordable purchase and exact cost qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-supply-qualification-2026-09-07.json"
+        },
+        {
+          "id": "restored-resources",
+          "label": "Real resources/helper readiness restored",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-continuation-result-2026-09-07.json"
+        },
+        {
+          "id": "productive-affordable-followup",
+          "label": "Fresh productive model continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-capture-learning-result-2026-09-07.json"
         }
       ]
     }

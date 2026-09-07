@@ -109,7 +109,7 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
     return memory
 
 
-def inspect_sources(ready: base._Readiness) -> tuple[Any, ...]:
+def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) -> tuple[Any, ...]:
     """Restore the exact parent and enumerate without predictions or controller input."""
     if ready.continuation is None or ready.training_plan is None or ready.causal_record is None:
         raise ValueError("regional source choice requires an authenticated train continuation")
@@ -144,7 +144,10 @@ def inspect_sources(ready: base._Readiness) -> tuple[Any, ...]:
             maximum_frames=ready.training_plan.maximum_frames,
         )
         memory = source_search_memory(ready)
-        menu = regional_acquisition_menu(observed, candidates, memory)
+        menu = (
+            None if allow_no_choice and len(candidates) < 2
+            else regional_acquisition_menu(observed, candidates, memory)
+        )
         if (
             before != emulator.save_state_bytes()
             or frame != emulator.frame_count

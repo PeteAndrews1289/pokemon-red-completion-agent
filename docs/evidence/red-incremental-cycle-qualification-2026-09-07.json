@@ -1,0 +1,16 @@
+{
+  "schema": "pokemon.red.incremental-cycle-qualification.v1",
+  "source_bundle_sha256": "45caac5d688155e70b963be6d13bfbe1c68c90da8e4f0b2b51857e902d4a1387",
+  "focused_tests_passed": 82,
+  "broader_overlapping_tests_passed": 256,
+  "type_checked_modules": 411,
+  "claims": [
+    "Reconstructs the prior explicit episode/model inventory without scanning private roots.",
+    "Delegates actual outcome admission and retained-row checks to the existing fitter.",
+    "Second fake-runtime step uses the first real result checkpoint and updated model.",
+    "Failed-step outcome is fitted once before stopping; fitting error prevents continuation."
+  ],
+  "new_gameplay": false,
+  "new_training_examples": 0,
+  "independent_evaluation": false
+}

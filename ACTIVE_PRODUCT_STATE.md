@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint.
+- Next decision: Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model30eca788 retains54 outcomes,19successful. N caught Voltorb:20living/22specimens/25registered. O bought five balls and healed the helper, leaving109currency; zero losses and zero new fitting rows. Model54 has not made a played exploratory choice. |
+| Authority now | Model6154f7f5 retains55 outcomes,20successful. P chose Route24 and caught Abra10 with one ball:21living/23specimens/26registered,4balls109currency. Model55 has not played; no losses. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup? |
+| Cheapest falsifier | Can two consecutive genuine source choices fit incrementally, retaining all prior rows and binding the next step to the actual saved state and new model? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-affordable-continuation** · status **active** · evidence [qualification](docs/evidence/red-affordable-continuation-result-2026-09-07.json)
+**2026-09-07-incremental-learning-cycle** · status **active** · evidence [qualification](docs/evidence/red-affordable-capture-learning-result-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Real resource management unblocks sustained collection without resetting. Capture preparation must preserve the encounter opportunity, not simply use every available helper. |
-| Learning output | Model54 retains all54 rows,19successful. O's two successful support steps add zero fitting rows. Affordable continuation is2/3; productive learned follow-up remains. |
-| Authority delta | O used deterministic safety and forced restoration; zero learned predictions or eligible rows. N remains the latest fitted destination choice. |
-| Transfer result | Actual affordable restock and retained health recovery in the same Red lineage. Escape-effect controls are adapter tests, not cross-game or independent advantage. |
-| Blocker | Nearby remaining targets may escape during a setup turn. Five balls and109 currency remain; avoid switch-first preparation when actual enemy moves can end the encounter. |
-| Decision | Preserve O and use observed move effects to skip risky setup before the next selected capture. |
-| Next session | Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint. |
-| Next falsifier | Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup? |
-| Stop condition | Reassess after90 minutes without executable restoration or at10:57UTC. No injected funds, inventory loss, hidden item sales, consumed retries or unchanged resource-starved searches. |
+| Product alignment | Reducing intervention between real gameplay, fitting and saved continuation directly supports sustained learning; the existing deterministic skills remain disclosed. |
+| Learning output | 54 to55 examples,20successful, all prior retained. P caught Abra10 with one ball; affordable continuation closed3/3. Incremental cycle engineering is1/3, no live cycle yet. |
+| Authority delta | P used model54 to choose Route24; its forced native parent added no row. Fit55 retains all54 earlier examples. |
+| Transfer result | One preserved Red lineage: actual source choice, affordable resources and effect-aware capture. No independent advantage or cross-title transfer. |
+| Blocker | Continuation and corpus assembly still require handwritten per-example launch work. This limits useful data throughput; renewable income and broad autonomy remain unsolved. |
+| Decision | Reuse the existing chooser, fitter and save admission in a finite collect/fit/continue cycle; no new policy or trust framework. |
+| Next session | Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence. |
+| Next falsifier | Can two consecutive genuine source choices fit incrementally, retaining all prior rows and binding the next step to the actual saved state and new model? |
+| Stop condition | At most two fresh source choices for the first real cycle. Stop after a failed step/fit, absent genuine alternatives, unsafe terminal, or the10:57UTC closeout. No retries or resets. |
 
 ### Stop conditions
 

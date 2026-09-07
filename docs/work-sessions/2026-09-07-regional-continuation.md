@@ -1,5 +1,29 @@
 # Regional continuation — six-hour development cycle
 
+## Session8 — bounded collect/fit/continue without a handwritten launch per example
+
+P closes the affordable-continuation checklist3/3: model54 chose Route24, caught Abra10
+using one ball, and fitted55 with all54 previous rows retained. Exact restore passed:
+21living/23specimens/26registered,4balls109currency. One escape-setup bypass, no status
+attempt or invented success.55-example model has not played. This is not full sustained play.
+
+1. **Capability:** reuse a bounded collect/fit/continue loop from the actual terminal,
+   preserving the accumulated training inventory without handwritten per-example assembly.
+2. **Learned authority:** each genuine destination choice uses the latest fitted model;
+   forced support remains excluded and every settled failure remains retained.
+3. **Transfer test:** fake runtime cases vary result, checkpoint, prior inventory and stop
+   conditions; then at most two new genuine source choices from P's retained endpoint.
+4. **Cheapest falsifier:** can two consecutive source outcomes fit incrementally with all
+   old rows retained and the second step bound to the first's real model/checkpoint?
+5. **Time box:** sixty minutes from09:50UTC; safe overall closeout10:57UTC.
+6. **Stop condition:** missing inventory, duplicate claim, source or model mismatch, no
+   genuine alternatives, failed gameplay/fit, resource exhaustion or unsafe terminal.
+   No retry, reset, full replay, sealed evaluation or new teacher.
+
+Use existing source-selection, fitting and save-admission machinery. This is orchestration,
+not a new policy or replacement trust framework. Keep the dashboard honest about saved
+evidence versus live movement if time remains after the named learner unblock.
+
 ## Session7 follow-up — protect the actual encounter opportunity
 
 O bought five balls for1000 and restored the party using three healing items. Exact restore:

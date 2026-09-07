@@ -1,5 +1,13 @@
 # Handoff
 
+## Current — model55; affordable capture closed, incremental cycle next
+
+P captured Abra10 on model-selected Route24 with one ball:21living/23specimens/26registered,
+4balls109currency; exact restore passed, no losses. Fit55 retains all54 earlier rows,
+20successful total. The final model has not played. Affordable checklist3/3 is archived;
+next1/3 checklist is bounded collect/fit/continue. No real cycle has launched yet.
+[Audit](docs/audits/red-incremental-learning-cycle-2026-09-07.md). Codex owns work through10:57UTC.
+
 ## Current — O restored resources; escape-aware follow-up next
 
 O succeeded at purchase and healing,877actions54612frames; exact restore passed5balls,

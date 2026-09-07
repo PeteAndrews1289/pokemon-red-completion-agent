@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-affordable-continuation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-incremental-learning-cycle**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Affordable sustained continuation: 2/3 acceptance items (67%).**
+**Bounded collect / fit / continue: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Affordable purchase and exact cost qualified ([evidence](../docs/evidence/red-affordable-supply-qualification-2026-09-07.json))
-- [x] Real resources/helper readiness restored ([evidence](../docs/evidence/red-affordable-continuation-result-2026-09-07.json))
-- [ ] Fresh productive model continuation
+- [x] Retained inventory and loop qualified ([evidence](../docs/evidence/red-incremental-cycle-qualification-2026-09-07.json))
+- [ ] Two real linked learning steps
+- [ ] Saved endpoint and viewer evidence audited
 
-Current model: **54 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **55 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-capture-status-result-2026-09-07.json)
+[Current evidence](../docs/evidence/red-affordable-capture-learning-result-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,22 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-incremental-learning-cycle
+
+Incremental inventory/loop82focused tests passed; no live cycle yet. Model55 and P preserved. Checklist1/3.
+
+**Deviation:** Replace handwritten per-example assembly with existing authenticated collection/fitting machinery. No change to model authority or stage exits.
+
+**Next:** Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence.
+
+### 2026-09-07-affordable-capture-closeout
+
+P captured Abra with one ball,21living/23specimens,fit55 retaining all54 earlier rows. Affordable continuation3/3closed.
+
+**Deviation:** Escape-aware deterministic preparation was required before the productive source choice; no baseline exit changed.
+
+**Next:** Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence.
 
 ### 2026-09-07-affordable-continuation
 

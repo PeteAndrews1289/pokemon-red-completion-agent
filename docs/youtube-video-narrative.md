@@ -1,5 +1,12 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 — show the earned Abra and the next training update
+
+Route24 was selected among two real destinations. Show the one-ball Abra10 capture and
+the55-example update;21living species/23specimens,all earlier outcomes retained. Disclose
+the actual opponent-move observation and deterministic first-throw rule. Next explain the
+bounded collect/fit/continue integration, without presenting it as full-game autonomy.
+
 ## September7 follow-up — spend the money the save actually has
 
 Show the five-ball purchase and verified party recovery. Overlay:109currency remains,
