@@ -97,3 +97,11 @@ Repair the encoding to the existing terminal-save URL-safe form and exercise the
 writer with all byte values. Continue the already-declared F from E's admitted terminal; do not
 restart E or weaken the global private-path check. This is infrastructure failure, not inability
 to battle, and supplies no positive evolution label.
+
+F's initial preflight rejected before creating an episode or controller input: E's progressed
+endpoint offers only evolution. The episode runtime already permits explicitly labelled forced
+singleton bridges and excludes them from model training, but continuation preflight demanded two
+choices. Align authenticated-continuation preflight with that existing runtime behavior, without
+asking either authority for a fake decision. Fresh-root paired preflight remains unchanged and
+zero-option states still fail. F remains unconsumed and may start after this repair; no forced
+bridge is evidence for two alternatives, learned evolution, or an additional training example.

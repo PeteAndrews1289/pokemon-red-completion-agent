@@ -313,6 +313,33 @@ def test_successful_step_can_settle_before_an_unavailable_followup_menu() -> Non
     trajectory.require_settled()
 
 
+@pytest.mark.parametrize("allowed", [False, True])
+@pytest.mark.parametrize("empty", [False, True])
+def test_saved_initial_bridge_never_becomes_a_model_decision(allowed, empty):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(
+        singleton_after_first=True, no_goals_after_first=empty, fail_first=False,
+    )
+    state["stage"] = 1
+    authority = _CountingAuthority()
+    def run():
+        return run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="learned-goal-manager",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=_complete,
+            limits=BoundedPlayerLimits(allow_initial_forced_bridge=allowed),
+        )
+    if not allowed or empty:
+        with pytest.raises(BoundedPlayerError, match="genuine semantic choice"):
+            run()
+        assert state["actions"] == 0 and not sink.decisions
+    else:
+        result = run()
+        assert result.forced_singleton_steps == 1 and result.authority_decisions == 0
+        assert result.steps[0].selection_mode is GoalSelectionMode.FORCED_SINGLETON
+        assert state["actions"] == 5
+    assert authority.calls == 0
+
+
 def test_single_available_followup_is_a_forced_bridge_not_model_authority() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer(

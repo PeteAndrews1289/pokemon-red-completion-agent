@@ -167,11 +167,14 @@ def preflight_red_bounded_player(
     budget_meter: CompositionBudgetMeter,
     assignment_id: str,
     authorities: tuple[tuple[str, GoalDecisionAuthority], ...],
+    allow_forced_bridge: bool = False,
 ) -> RedBoundedPlayerPreflight:
     """Observe and compare authorities without executing a binding or opening an episode."""
 
     if not callable(observe):
         raise TypeError("observe must be callable")
+    if type(allow_forced_bridge) is not bool:
+        raise TypeError("allow_forced_bridge must be a bool")
     checkpoint = getattr(budget_meter, "checkpoint", None)
     if not callable(checkpoint):
         raise TypeError("budget_meter must expose checkpoint")
@@ -206,10 +209,11 @@ def preflight_red_bounded_player(
         situation=observation.situation,
         opportunities=observation.binding_set.opportunities,
     )
-    if len(question.available_indices) < 2:
+    forced_bridge = allow_forced_bridge and len(question.available_indices) == 1
+    if len(question.available_indices) < 2 and not forced_bridge:
         raise RedBoundedPlayerError("preflight snapshot lacks a genuine semantic choice")
     choices_list: list[RedBoundedPlayerPreflightChoice] = []
-    for authority_id, authority in authorities:
+    for authority_id, authority in (() if forced_bridge else authorities):
         choices_list.append(_preflight_choice(authority_id, authority, question))
         if checkpoint() != initial_budget:
             raise RedBoundedPlayerError(

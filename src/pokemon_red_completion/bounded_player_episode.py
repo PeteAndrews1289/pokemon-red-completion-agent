@@ -77,17 +77,22 @@ class BoundedPlayerLimits:
     ``min_available_goals`` is the minimum menu width required to invoke the
     learned or baseline authority.  After at least one genuine choice, an
     exactly-one-option menu may execute as a separately labelled forced bridge.
+    Authenticated saved continuations can explicitly allow that bridge at their
+    first step too; it still never invokes model authority or creates a fit target.
     """
 
     max_decisions: int = 2
     max_replans: int = 1
     min_available_goals: int = 2
+    allow_initial_forced_bridge: bool = False
     max_actions_per_decision: int = 6_000
     max_frames_per_decision: int = 600_000
     max_total_actions: int = 12_000
     max_total_frames: int = 1_200_000
 
     def __post_init__(self) -> None:
+        if type(self.allow_initial_forced_bridge) is not bool:
+            raise BoundedPlayerError("initial forced bridge flag must be boolean")
         for name in (
             "max_decisions",
             "min_available_goals",
@@ -339,7 +344,7 @@ def run_bounded_player_episode(
         forced_singleton = (
             available_count == 1
             and limits.min_available_goals > 1
-            and bool(steps)
+            and (bool(steps) or limits.allow_initial_forced_bridge)
         )
         if available_count < limits.min_available_goals and not forced_singleton:
             if not steps:

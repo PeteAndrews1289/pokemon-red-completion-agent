@@ -1114,12 +1114,19 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
                 (readiness.challenger_arm_id, challenger),
                 (BASELINE_ARM_ID, CompletionFirstGoalTeacher()),
             ),
+            allow_forced_bridge=readiness.continuation is not None,
         )
         if meter.checkpoint() != CompositionBudgetCheckpoint(0, 0):
             raise PairedRedBoundedPlayerRunError("preflight_budget")
     if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
         raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
     public = result.public_dict()
+    if not result.choices:
+        # The runtime already executes singleton bridges without model authority
+        # or fit targets. A saved continuation must not demand a fictitious choice.
+        public["status"] = "ready_for_forced_bridge"
+        public["model_queries"] = 0
+        return public
     if isinstance(challenger, LivingDexGoalShadowPolicy):
         if challenger.last_decision is None or challenger.decisions != 1:
             raise PairedRedBoundedPlayerRunError("causal_preflight_decision")
@@ -1149,6 +1156,8 @@ def _run_arm(
 ) -> PairedBoundedPlayerArm:
     episode_id = _episode_id(readiness.pair_id, arm_id)
     limits = _player_limits(readiness.decision_limit, completion_dose=readiness.completion_dose)
+    if readiness.continuation is not None:
+        limits = replace(limits, allow_initial_forced_bridge=True)
     writer: EpisodeWriter | None = None
     sink: EpisodeTrajectorySink | None = None
     recorder: RecordingExecutor[Any, Any] | None = None
