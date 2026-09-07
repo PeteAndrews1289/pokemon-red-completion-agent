@@ -62,3 +62,15 @@ After tests, allow one fresh correlated training branch C from the last admitted
 seed2026090703, up to4 choices with completion dose. This is a prospectively declared training
 reset under corrected composition semantics, not a replay/repair of consumed B or an independent
 root. B stays excluded; no outcome-balanced substitution. Stop and audit C before further work.
+
+## C accepted useful capture; post-fit continuation D
+
+C chose acquisition and caught a new species (living14 to15, specimens17 to18), then selected
+exploration and exhausted its bounded 64 survey legs without a sighting. Both outcomes were
+retained and fitted: model36 to38, 15 successful examples, all previous rows retained. This is
+useful training, not proof of learned advantage. C's terminal is admitted; B remains excluded.
+
+Proceed from C's terminal with model38, seed2026090704 and up to4 completion-dose choices.
+This is continuation D, not a replay of C or an independent root. Keep every sampled failure,
+inspect before another cycle, and measure actual history-feature evidence before checking off
+the memory-trained milestone. Do not force an evolution choice or select a seed from predictions.
