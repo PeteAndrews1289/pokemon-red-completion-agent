@@ -1,4 +1,5 @@
 from dataclasses import replace
+from types import SimpleNamespace
 
 import pytest
 from test_red_goal_context import (
@@ -27,6 +28,15 @@ from pokemon_red_completion.red_goal_context_profile import (
 )
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
 from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
+
+
+@pytest.fixture(autouse=True)
+def native_encounter_tables(monkeypatch):
+    # Explicit, nonuniform fixture; individual execution tests override it.
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_native_boxed_evolution.wild_tables",
+        lambda rom: {22: [(10, 0x21), (15, 0x6C)], 165: [(20, 0x3B)]},
+    )
 
 
 @pytest.mark.parametrize(
@@ -77,6 +87,55 @@ def test_native_training_refuses_status_only_or_self_destruct():
     )
     with pytest.raises(_PauseForTeamTrainingRecovery):
         native_training_move_slot(state)
+
+
+@pytest.mark.parametrize("hp,disabled,allowed", [(100, 0, True), (90, 0, False), (100, 1, False)])
+def test_collection_turn_guard_uses_real_moves_health_and_disable(hp, disabled, allowed):
+    from pokemon_red_completion.observation import RawGameState
+    from pokemon_red_completion.red_native_boxed_evolution import native_training_move_guard
+    from pokemon_red_completion.red_team_training import _PauseForTeamTrainingRecovery
+
+    raw = RawGameState(
+        game_started=True,
+        map_id=22,
+        player_x=0,
+        player_y=0,
+        party_count=2,
+        battle_state=1,
+        active_party_species_id=BLASTOISE_SPECIES_ID,
+        enemy_species_id=0x21,
+        active_party_moves=(33, 0, 0, 0),
+        active_party_pp=(20, 0, 0, 0),
+        active_party_hp=hp,
+        active_party_max_hp=100,
+        player_disabled_move_slot=disabled,
+    )
+    # Tackle is usable even though the historic Blastoise move list omits it.
+    if allowed:
+        native_training_move_guard(raw)
+    else:
+        with pytest.raises(_PauseForTeamTrainingRecovery):
+            native_training_move_guard(raw)
+
+
+def test_storage_cannot_deposit_the_only_finisher(tmp_path):
+    from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
+
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    reader.raw = replace(reader.raw, party_moves=(((100, 0, 0, 0),) * 5 + ((33, 0, 0, 0),)))
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
+    actions = CountingExecutor(_ActionDelegate())
+    request = RedBoxedLevelEvolutionGoalRequest(
+        red_internal_species_id(77),
+        red_internal_species_id(78),
+        0,
+        1,
+        6,
+        red_internal_species_id(106),
+    )
+    with pytest.raises(Exception, match="remove the safe finisher"):
+        native.boxed_level_evolution_executor(request, actions)
+    assert actions.actions_executed == 0
 
 
 def runtime_fixture(tmp_path, *, source=77, target=78, evolution_level=40, count=2, level=32):
@@ -146,7 +205,7 @@ def test_native_availability_preserves_precursor_and_declares_engine_multiplicit
     tmp_path, count, reason
 ):
     runtime, _, _ = runtime_fixture(tmp_path, count=count)
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     actions = CountingExecutor(_ActionDelegate())
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert offer.unavailable_reason is reason
@@ -159,7 +218,7 @@ def test_native_availability_preserves_precursor_and_declares_engine_multiplicit
 def test_native_direct_evolution_can_use_a_capped_escape_escort(tmp_path, escort_level, available):
     runtime, reader, _ = runtime_fixture(tmp_path)
     reader.raw = replace(reader.raw, party_levels=(escort_level, 55, 55, 55, 55, 55))
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     actions = CountingExecutor(_ActionDelegate())
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert (offer.binding is not None) is available
@@ -168,14 +227,14 @@ def test_native_direct_evolution_can_use_a_capped_escape_escort(tmp_path, escort
     assert actions.actions_executed == 0
 
 
-def test_native_execution_rechecks_escort_before_any_input(tmp_path):
+def test_native_execution_rechecks_finisher_capability_before_any_input(tmp_path):
     from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
 
     runtime, reader, _ = runtime_fixture(tmp_path)
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     reader.raw = replace(
         reader.raw,
-        party_species_ids=(red_internal_species_id(16), *reader.raw.party_species_ids[1:]),
+        party_moves=((100, 0, 0, 0),) * 6,
     )
     actions = CountingExecutor(_ActionDelegate())
     request = RedBoxedLevelEvolutionGoalRequest(
@@ -249,7 +308,7 @@ def test_partial_evolution_resumes_in_party_without_repeating_storage(
 
 @pytest.mark.parametrize(
     "current_map,level,expected_maps",
-    [(22, 35, [22]), (165, 35, [165]), (165, 32, [22, 165]), (171, 35, [22, 165])],
+    [(22, 35, [22]), (165, 35, [165]), (165, 32, [165]), (171, 35, [165])],
 )
 def test_native_quantum_keeps_only_an_eligible_current_venue(
     tmp_path, monkeypatch, current_map, level, expected_maps
@@ -286,13 +345,13 @@ def test_native_quantum_keeps_only_an_eligible_current_venue(
     assert received == expected_maps
 
 
-def test_unimplemented_low_level_venue_does_not_become_an_evolution_offer(tmp_path):
+def test_low_level_recipient_can_share_experience_without_a_direct_fighting_venue(tmp_path):
     runtime, _, _ = runtime_fixture(tmp_path, source=11, target=12, evolution_level=10, level=4)
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, CountingExecutor(_ActionDelegate())).offer(
         native.adapter.observe()
     )
-    assert offer.unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert offer.binding is not None
 
 
 def test_profile_transition_preserves_every_other_skill_and_rejects_wrong_evolution(tmp_path):
@@ -314,7 +373,7 @@ def test_profile_transition_preserves_every_other_skill_and_rejects_wrong_evolut
 def test_field_resource_check_keeps_real_position_and_does_not_advertise_local_skill(tmp_path):
     runtime, reader, _ = runtime_fixture(tmp_path)
     reader.raw = replace(reader.raw, map_id=MapId.POKEMON_MANSION_1F, player_x=5, player_y=22)
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     provider = native.provider_for(GoalKind.EVOLVE_SPECIES, CountingExecutor(_ActionDelegate()))
     observed = native.adapter.observe()
     assert provider.resource_availability(observed).executable
@@ -326,7 +385,7 @@ def test_native_executor_refuses_consuming_only_precursor_before_any_input(tmp_p
     from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
 
     runtime, _, _ = runtime_fixture(tmp_path, count=1)
-    native = bind_native_boxed_evolution(runtime, object())
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
     actions = CountingExecutor(_ActionDelegate())
     request = RedBoxedLevelEvolutionGoalRequest(
         red_internal_species_id(77),
@@ -470,8 +529,9 @@ def test_native_wiring_executes_existing_engine_with_same_budgets_and_observers(
     assert training[0][1]["policy"].max_battles == 32
     assert training[0][1]["policy"].max_steps == 2000
     assert training[0][1]["allow_direct_evolution"] is True
+    assert training[0][1]["collection_shared_experience"] is True
     assert training[0][1]["evolution_battle_quantum"] == 4
-    assert [v.map_id for v in training[0][1]["venues"]] == [MapId.ROUTE_11]
+    assert [v.map_id for v in training[0][1]["venues"]] == [MapId.ROUTE_11, MapId.DIGLETTS_CAVE]
     assert received[0]["pc_facing"] == "up"
     assert training[0][1]["evolution_target"] == (
         red_internal_species_id(77),

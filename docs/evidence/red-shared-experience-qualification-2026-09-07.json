@@ -1,0 +1,20 @@
+{
+  "schema": "pokemon.red.shared-experience-qualification.v1",
+  "source_bundle_sha256": "ba485bec157a958a3a22a0da3bf1efd03b5057c869fc860d24f8569bca2e8575",
+  "focused_tests_passed": 342,
+  "typed_changed_modules": 2,
+  "claims": [
+    "Explicit bounded collection mode separates the XP recipient from a health-, PP-, level- and type-qualified finisher without altering the default parity trainer.",
+    "Non-attacking recipients do not require attack PP; finishers require usable immediate damage. Current slots and actual enemies are rechecked.",
+    "Native venue availability and execution use cartridge encounters and the same finisher predicates; PC preparation cannot deposit the only finisher.",
+    "Completed collection battles require an observed recipient XP increase. Zero XP, fainting, exhausted resources and repeated nonproductive recovery fail closed.",
+    "Existing outer limits, living-specimen preservation, quantum retention and exact evolution verification remain in force. Low-level mechanics are deterministic, not learned."
+  ],
+  "new_gameplay": false,
+  "new_training_examples": 0,
+  "model_settled_examples": 58,
+  "model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+  "independent_evaluation": false,
+  "live_shared_experience_qualified": false,
+  "next_check": "Inspect the exact retained R state and its computed route, then a bounded real lesson only if supported. No sealed access, reset or full replay."
+}

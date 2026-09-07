@@ -1,5 +1,17 @@
 # Handoff
 
+## In progress — bounded shared-experience collection mode
+
+September7,14:03UTC session; reassess15:33, close/reorient16:03.
+The explicit collection mode separates recipient/finisher and preserves the default
+parity trainer. Native venues use cartridge encounters; per-turn damage selection
+is mechanics-based. No attack-PP healing loop for non-attacking recipients. Actual
+XP is required after a completed battle; storage cannot remove the sole helper.
+342 targeted checks and changed-module typing pass. No gameplay or fit yet:
+model58/R and all25specimens remain unchanged. Next exact-save feasibility and a
+bounded productive lesson, not another source-only capture or full replay.
+[Qualification](docs/evidence/red-shared-experience-qualification-2026-09-07.json).
+
 ## Current — mixed-goal wiring qualified; stopped at actual feasibility
 
 September 7 session started 12:50 UTC; reassess by14:20, close by14:50.

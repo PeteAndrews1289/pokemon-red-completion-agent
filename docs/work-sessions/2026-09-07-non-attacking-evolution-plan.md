@@ -3,6 +3,9 @@
 This plan follows the actual action-free mixed-goal falsifier, not a failed live
 trial. R/model58 and all25specimens remain intact. No successor has been claimed.
 
+Session started September7 at14:03UTC. Reassess by15:33UTC; close or reorient
+by16:03UTC. The six-part mission check below is the implementation contract.
+
 ## Mission check
 
 1. **Capability:** develop a retained, non-attacking specimen through shared battle
