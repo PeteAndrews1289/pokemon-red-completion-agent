@@ -1,5 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — the collection finally gained Rapidash
+
+The retained Ponyta reached40 and evolved, while a second Ponyta stayed safely boxed. All17
+specimens survived; the living collection grew14 to15. The successful continuation took about
+30 seconds for109 battles. Two real interface bugs had mattered more than emulation speed:
+wait duration was passed in the wrong action field, and status-move PP masked exhausted attacks.
+Correcting those contracts let existing skills finish the evolution without another trainer.
+
+This is a component milestone, not evidence the model learned evolution or can finish Red.
+The model still has35 examples; these diagnostics are excluded. Private orchestration joined
+four-battle chunks, so the next work is exposing that bounded complete option to model choice
+and learning from a fresh outcome. [Evidence and limits](audits/red-party-selection-evolution-2026-09-07.md).
+
 ## September 7 — grinding was fast; changing state was the hard part
 
 A bounded continuation gained 9,606 XP and took Ponyta from 32 to 35 in about 18 seconds. That

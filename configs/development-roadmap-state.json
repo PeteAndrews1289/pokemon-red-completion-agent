@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-evolution-completion",
+  "as_of_session": "2026-09-07-party-selection",
   "current_stage": "adaptive-red",
   "stages": {
     "foundation": {
@@ -10,7 +10,7 @@
     },
     "adaptive-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-evolution-completion-2026-09-07.json"
+      "evidence": "docs/evidence/red-party-selection-evolution-2026-09-07.json"
     },
     "sustained-red": {
       "status": "planned",
@@ -62,7 +62,7 @@
         "id": "alternatives",
         "label": "Two useful executable alternatives",
         "done": false,
-        "evidence": "docs/evidence/red-evolution-completion-2026-09-07.json"
+        "evidence": "docs/evidence/red-party-selection-evolution-2026-09-07.json"
       },
       {
         "id": "useful-followup",
@@ -108,6 +108,12 @@
       "result": "Ponyta level 32 to 35, +9606 XP in about 18 seconds; all 17 specimens retained. Travel failed, then successor stopped on wrong party selection. No evolution or fit; 2/5 unchanged.",
       "deviation": "One prospectively declared retained-state successor tested local venue continuity but stopped before training. Both attempts closed; no baseline exit changed.",
       "next": "Verify selected party source and target, complete a bounded evolution, then a model-selected lesson."
+    },
+    {
+      "session": "2026-09-07-party-selection",
+      "result": "Ponyta35 evolved into Rapidash40; all17 specimens retained, living14 to15, registered19 to20. No new model fit or selected outcome; checklist2/5 unchanged.",
+      "deviation": "One prospectively declared successor repaired damaging-PP exhaustion after the timing-fixed continuation stopped. Both diagnostics closed. Private multi-quantum orchestration does not yet qualify a complete model-facing alternative; exits unchanged.",
+      "next": "Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer."
     }
   ]
 }

@@ -37,3 +37,15 @@ Repair the fallback using actual damaging-move mechanics, not a new species allo
 the historical declared-roster branch. After PP regression tests, declare one successor from
 that terminal under the same global bounds. This is new retained-state work, not a reset or
 retry of the consumed attempt. Stop after its result and audit before more controller work.
+
+## Closed result and reorientation
+
+The successor completed Rapidash at level 40, retaining the boxed Ponyta at level 30 and all
+17 specimens. Living species increased from 14 to 15; registered species from 19 to 20.
+It returned 109 completed training battles in 29.807 seconds. Both attempts are closed;
+read-only terminal restoration matched without controller input. No diagnostic entered fitting.
+
+361 focused tests, 400-file type checking, lint and documentation checks passed. Model 35
+and the useful-play checklist (2/5) are unchanged: private multi-quantum orchestration is not yet
+a complete model-facing option. Next connect the existing bounded continuation to player choice,
+then collect a fresh eligible lesson and fit. See the [audit](../audits/red-party-selection-evolution-2026-09-07.md).

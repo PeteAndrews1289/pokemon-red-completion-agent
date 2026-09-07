@@ -1963,6 +1963,7 @@ def test_training_pulse_advances_the_declared_wait_through_real_executor(frames)
 @pytest.mark.parametrize("attack_pp,status_pp,expected", [(0, 70, 0), (5, 70, 5), (5, 0, 5)])
 def test_unlisted_trainee_attack_capacity_excludes_status_move_pp(attack_pp, status_pp, expected):
     from dataclasses import replace
+
     from pokemon_red_completion.party import MoveObservation
 
     memory = FakeMemory()

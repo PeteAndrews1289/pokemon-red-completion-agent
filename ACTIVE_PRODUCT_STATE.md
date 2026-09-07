@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature.
+- Next decision: Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model 1b26aa44 retains 35 examples; no fitting or new model-selected outcomes. The component gained 9606 XP and reached level35, but full evolution failed at travel and then party selection. All17 specimens remain; no learned advantage is demonstrated. |
+| Authority now | Model 1b26aa44 retains 35 examples; no new fit or model-selected outcome. Deterministic continuation evolved Ponyta35 to Rapidash40, retained all17 specimens and increased living species14 to15. Private orchestration is not model-facing complete-goal qualification. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset? |
+| Cheapest falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
 | Time box | 1 session / 4 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-evolution-completion** · status **closed** · evidence [qualification](docs/evidence/red-evolution-completion-2026-09-07.json)
+**2026-09-07-party-selection** · status **closed** · evidence [qualification](docs/evidence/red-party-selection-evolution-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Measure whether safe experience can become a useful collection evolution. XP throughput is sufficient; correct state-dependent party interaction is the remaining blocker. |
-| Learning output | No fit or model-selected outcome. Component XP33276 to42882, level32 to35; 18 returned quanta report72 battles, plus retained failed-prefix progress. All17 specimens preserved. Model35/checklist2of5 unchanged. |
-| Authority delta | None. Both attempts are closed diagnostic continuations; no official checkpoint replacement or fitting admission. |
-| Transfer result | Same-lineage Red diagnostics only; no generalization or cross-title result. |
-| Blocker | A level-triggered venue transition attempted unsupported field Dig. The safe-current-venue correction is ROM-free-tested, but its successor failed on wrong party source selection before live qualification. Movement-ready flags do not prove settled menu state. |
-| Decision | Stop after the declared successor and repair observed party source/target selection next. No new venue or larger trainer is justified by fast measured XP throughput. |
-| Next session | Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature. |
-| Next falsifier | Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset? |
-| Stop condition | Both controller-started attempts are permanently closed; preserve all terminals and failed prefixes. Final diagnostic terminal db557b27 is not an admitted player checkpoint. No retry, fit, sealed evaluation or full replay. |
+| Product alignment | A real collection evolution now works. The next session must turn that capability into model-chosen learning, not more mechanics breadth. |
+| Learning output | No fit or model-selected outcome. Ponyta35 to Rapidash40, +21221 XP across two retained-state diagnostics;161 reported completed battles. All17 specimens retained; living14 to15 and registered19 to20. Model35/checklist2of5 unchanged. |
+| Authority delta | None. Both attempts are closed component diagnostics; no official checkpoint replacement or fit admission. |
+| Transfer result | Same-lineage Red component result only; no learned advantage, hack or Crystal generalization. |
+| Blocker | Complete evolution now works through private bounded orchestration. The public native callback still returns after four battles and partial XP has no explicit outcome credit; a complete model-facing option and fresh lesson remain. |
+| Decision | Close mechanics qualification at verified Rapidash40. Integrate existing bounded continuation into player authority next; no broader trainer or learner-feature work. |
+| Next session | Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer. |
+| Next falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
+| Stop condition | Both attempts closed; final terminal0612b1bd is diagnostic only. No more controller work this session; no retry, fit, sealed evaluation or full replay. |
 
 ### Stop conditions
 

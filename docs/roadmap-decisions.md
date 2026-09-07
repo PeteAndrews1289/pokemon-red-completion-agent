@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## 2026-09-07 party-selection session — component success, unchanged learning exits
+
+The timing-corrected continuation stopped on exhausted attack PP hidden by status PP. One
+prospectively declared retained-state successor repaired that fallback and completed Rapidash40.
+Both diagnostics closed; no reset, fit admission or official checkpoint replacement. Living14
+to15 is real component progress, but private orchestration is not a complete model-facing option.
+Checklist2/5 and every baseline exit remain unchanged. Codex chose player integration and a
+fresh useful lesson next, not another trainer expansion. See the [audit](audits/red-party-selection-evolution-2026-09-07.md).
+
 ## 2026-09-07 completion attempt — no baseline change
 
 The bounded XP continuation was fast but stopped at unsupported venue travel. A prospectively

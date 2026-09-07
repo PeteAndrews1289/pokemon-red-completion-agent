@@ -1,5 +1,20 @@
 # Model-first development roadmap
 
+## Current — evolution works; turn it into a model-selected lesson
+
+The [latest audit](audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40, retained
+Ponyta30 and living14 to15. The final successor completed109 battles in29.807 seconds. This is
+deterministic component qualification, not a new fit. Model35 / useful-play checklist2of5 remain.
+
+1. Expose the existing multi-quantum continuation as one bounded player option, with aggregate
+   budgets, retained intermediate state and exact collection verification; no new trainer.
+2. Test partial progress, PP recovery, interrupted continuation and no-progress stops. Incomplete
+   XP must not be mislabeled a completed evolution; the current outcome adapter has no XP term.
+3. Collect a fresh model-selected useful-choice lesson, fit eligible retained data and run a short
+   post-fit follow-up. Component diagnostics stay excluded and official checkpoint stays intact.
+4. Advance the existing checklist only on these measured results, then reorient toward sustained
+   Red play. No exit change, sealed campaign, full replay or Crystal work.
+
 ## Current — XP is fast; close the party-selection boundary
 
 The [latest audit](audits/red-evolution-completion-2026-09-07.md) measures +9,606 XP, level 32 to 35,

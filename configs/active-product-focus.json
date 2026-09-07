@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset?",
+      "cheapest_falsifier": "Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Both attempts are closed diagnostic continuations; no official checkpoint replacement or fitting admission.",
-        "blocker": "A level-triggered venue transition attempted unsupported field Dig. The safe-current-venue correction is ROM-free-tested, but its successor failed on wrong party source selection before live qualification. Movement-ready flags do not prove settled menu state.",
-        "decision": "Stop after the declared successor and repair observed party source/target selection next. No new venue or larger trainer is justified by fast measured XP throughput.",
+        "authority_delta": "None. Both attempts are closed component diagnostics; no official checkpoint replacement or fit admission.",
+        "blocker": "Complete evolution now works through private bounded orchestration. The public native callback still returns after four battles and partial XP has no explicit outcome credit; a complete model-facing option and fresh lesson remain.",
+        "decision": "Close mechanics qualification at verified Rapidash40. Integrate existing bounded continuation into player authority next; no broader trainer or learner-feature work.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-evolution-completion-2026-09-07.json",
-          "sha256": "9a9a400b52a5afa338d1e0b9381b5e9391bfd60bf5075fcdec3c8da08161cebf"
+          "path": "docs/evidence/red-party-selection-evolution-2026-09-07.json",
+          "sha256": "99cc5973f97d2531e7e743ad443eb93291a4f369e7403fbad638a6c393a43eac"
         },
-        "learning_output": "No fit or model-selected outcome. Component XP33276 to42882, level32 to35; 18 returned quanta report72 battles, plus retained failed-prefix progress. All17 specimens preserved. Model35/checklist2of5 unchanged.",
-        "next_falsifier": "Can a fresh observed party-menu binding swap exactly the intended members and resume the retained level-35 trainee without a reset?",
-        "next_session_goal": "Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature.",
-        "product_alignment": "Measure whether safe experience can become a useful collection evolution. XP throughput is sufficient; correct state-dependent party interaction is the remaining blocker.",
-        "session_id": "2026-09-07-evolution-completion",
+        "learning_output": "No fit or model-selected outcome. Ponyta35 to Rapidash40, +21221 XP across two retained-state diagnostics;161 reported completed battles. All17 specimens retained; living14 to15 and registered19 to20. Model35/checklist2of5 unchanged.",
+        "next_falsifier": "Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution?",
+        "next_session_goal": "Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer.",
+        "product_alignment": "A real collection evolution now works. The next session must turn that capability into model-chosen learning, not more mechanics breadth.",
+        "session_id": "2026-09-07-party-selection",
         "status": "closed",
-        "stop_condition": "Both controller-started attempts are permanently closed; preserve all terminals and failed prefixes. Final diagnostic terminal db557b27 is not an admitted player checkpoint. No retry, fit, sealed evaluation or full replay.",
-        "transfer_result": "Same-lineage Red diagnostics only; no generalization or cross-title result."
+        "stop_condition": "Both attempts closed; final terminal0612b1bd is diagnostic only. No more controller work this session; no retry, fit, sealed evaluation or full replay.",
+        "transfer_result": "Same-lineage Red component result only; no learned advantage, hack or Crystal generalization."
       },
       "learned_authority": {
-        "current": "Model 1b26aa44 retains 35 examples; no fitting or new model-selected outcomes. The component gained 9606 XP and reached level35, but full evolution failed at travel and then party selection. All17 specimens remain; no learned advantage is demonstrated.",
+        "current": "Model 1b26aa44 retains 35 examples; no new fit or model-selected outcome. Deterministic continuation evolved Ponyta35 to Rapidash40, retained all17 specimens and increased living species14 to15. Private orchestration is not model-facing complete-goal qualification.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Verify actual party source and target selection before confirming swaps from retained menu states; then complete one bounded evolution and collect a model-selected lesson. No new trainer, route rewrite or learner feature.",
+      "next_decision": "Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

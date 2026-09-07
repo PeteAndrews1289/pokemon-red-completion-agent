@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+## Current — complete component works; learning integration is the only next lane
+
+The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40 and
+retained Ponyta30, living14 to15 with all17 specimens. Model35 and checklist2/5 remain unchanged:
+the successful orchestration is still private component qualification, not a model-selected goal.
+Codex owns bounded player integration and the next fresh measured lesson. No external reviewer
+or subagent was invoked. If requested next, Claude should challenge partial-progress labels,
+fit exclusions and success claims; Antigravity should challenge aggregate continuation bounds,
+recovery and the complete-option/player interface. Reviewers remain read-only; no new sealed gate.
+
 ## Current — throughput sufficient; verify party selection next
 
 The [latest audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP and level 35,

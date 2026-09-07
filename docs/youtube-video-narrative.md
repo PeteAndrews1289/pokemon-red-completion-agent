@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — Rapidash, without losing Ponyta
+
+Show the actual level40 evolution and the retained boxed Ponyta30 beside the living-species
+counter moving14 to15. Label it **deterministic skill qualification**. The final continuation
+completed109 battles in about30 seconds; the learning model has not changed this session.
+
+Explain the concrete bugs: a120/180-frame wait was effectively one frame, and70 points of
+status-move PP did not mean an exhausted Pokémon could attack. The corrected skill now produces
+a real collection gain. End with the honest next step: let the model choose this complete option
+and learn from its outcome, not claim it already plays the whole game. [Audit](audits/red-party-selection-evolution-2026-09-07.md).
+
 ## Latest chapter — the XP bar moved; the menu was the obstacle
 
 Show the actual progression from Ponyta 32 to 35, with +9,606 XP and retained saves. Label it

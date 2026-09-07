@@ -1,5 +1,21 @@
 # Handoff
 
+## Current — Rapidash40 verified; connect the complete option to learning
+
+The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Ponyta35 to
+Rapidash40, +21221 XP, all17 specimens retained, living14 to15 and registered19 to20. The spare
+Ponyta30 remains boxed. Corrected real wait duration and observed swap targeting; a second
+failure exposed status PP counted as attacks, now repaired from move mechanics. Both consumed
+diagnostics are closed and reload exactly without input. Final terminal `0612b1bd...d682` remains
+private and diagnostic-only; consult OPERATOR for exact paths. No launcher may be rerun.
+
+Model `1b26aa44` /35 examples and official checkpoint `b64023f4` are unchanged. No new fit or
+model-selected outcome; useful-play checklist stays2/5. Successful private orchestration chained
+28 bounded callbacks (109 battles /29.807 seconds); the native model-facing callback still stops
+after four battles. Next integrate bounded complete evolution into the player, then a fresh
+model-selected lesson and fit. Do not count partial XP as successful evolution or admit diagnostics.
+Do not broaden the teacher or resume gameplay before the next declared session plan.
+
 ## Current — level 35; party-selection verification blocks completion
 
 The [throughput audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP,

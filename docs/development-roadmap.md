@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-evolution-completion**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-party-selection**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -15,7 +15,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
 - [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
-- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-evolution-completion-2026-09-07.json))
+- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-party-selection-evolution-2026-09-07.json))
 - [ ] Productive lesson and follow-up
 
 Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-evolution-completion-2026-09-07.json)
+[Current evidence](../docs/evidence/red-party-selection-evolution-2026-09-07.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-party-selection
+
+Ponyta35 evolved into Rapidash40; all17 specimens retained, living14 to15, registered19 to20. No new model fit or selected outcome; checklist2/5 unchanged.
+
+**Deviation:** One prospectively declared successor repaired damaging-PP exhaustion after the timing-fixed continuation stopped. Both diagnostics closed. Private multi-quantum orchestration does not yet qualify a complete model-facing alternative; exits unchanged.
+
+**Next:** Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer.
 
 ### 2026-09-07-evolution-completion
 
