@@ -69,6 +69,16 @@ Do not repeat the current source-only loop or reset its resources.
 
 ## Remaining limitations and next session
 
+The final action-free mixed-parent inspection exposes `restore_team` and `acquire_species`,
+but still returns `deterministic_unsupported`: restoration is not a learned option, leaving
+only one scoreable kind. No episode, frame or input was created. A proposed Abra-to-Kadabra
+target change then failed **before input**: changing the global boxed-evolution argument
+also changed the reconstruction of an earlier supply-only profile transition. The existing
+guard correctly rejected the unrelated historical edit. This does not demonstrate that
+Abra evolution is unsupported; it identifies an ordering seam in the continuation command.
+The first repair should be an explicit prospective evolution-target transition after old
+profiles are restored, not a weaker supply guard or a rewritten old episode.
+
 Training is real, but narrow: the fitted option-value scorer ranks supported semantic goals
 and destinations; deterministic mechanics still execute movement, battles and captures.
 These correlated train outcomes do not establish independent advantage, a learned Red win,
@@ -76,7 +86,8 @@ vision-only understanding or transfer. No sealed Red, Crystal or full-game run w
 
 The next smallest useful implementation is **mixed-goal continuation**, not another teacher:
 
-1. `run_red_regional_goal_step.py` currently requires a multi-source proposal even before its
+1. Add an ordered prospective evolution objective that preserves every historical profile.
+   Then `run_red_regional_goal_step.py`, which currently requires a multi-source proposal before its
    native parent chooses a task. Permit zero/one-source contexts to reach genuine native goals
    without inventing source-choice targets. Keep source proposals unfitted.
 2. Reuse current resource/storage/party/evolution providers at the actual R endpoint. Inspect

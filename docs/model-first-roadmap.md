@@ -2,6 +2,9 @@
 
 ## Final current — linked learning works; move to mixed goals
 
+[Prepared next-session plan](work-sessions/2026-09-07-mixed-goal-continuation-plan.md)
+records the exact implementation seam, falsifier and two-hour stop rules.
+
 R closed the bounded collect/fit/continue checklist3/3 with two successful captures and
 automatic updates56→58.22living/25specimens,zero losses.1ball109currency and one boxslot
 remain; only one supported source remains, so another destination-only cycle is not useful.
@@ -9,7 +12,9 @@ remain; only one supported source remains, so another destination-only cycle is 
 
 Next session:
 
-1. Inspect the real mixed-parent menu at R/model58; preserve actual safety/unsupported modes.
+1. The action-free R menu contains restore/capture but only one learned option. A global
+   evolution-target change incorrectly affects old supply transitions and was rejected before
+   input. Add an ordered prospective target change, preserving the historical profiles and guards.
 2. Reuse existing resource, storage and evolution components to offer useful semantic choices.
    Do not write another teacher or replay from Pallet Town to connect these local mechanics.
 3. Extend retained-inventory fitting to the actual played parent or source authority, never both

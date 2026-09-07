@@ -2,6 +2,11 @@
 
 ## Final current — linked collect/fit/continue closed3/3; model58
 
+Next-session inspection is done: actual restore/capture menu has only one learned option.
+Global Abra→Kadabra target replacement was rejected before input because it changes an old
+supply-only transition's non-supply fields. Add an ordered prospective evolution objective;
+never weaken that guard or rewrite earlier profiles. No new gameplay or fit resulted.
+
 Fresh R completed two successful model-selected source choices with automatic fits:
 model56→Route5/Mankey12→fit57→Route24/Abra12→fit58. Each next step used the actual
 preceding save and updated model.998actions/60588frames total, two eligible source rows,
