@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — from working skills to actual retained learning
+
+The model chose a capture that added a living species. We retained that success and the failures
+around it, taking the learner from35 to41 examples. A separately labelled deterministic continuation
+then completed Rapidash40, with a living precursor preserved and18 total specimens intact.
+
+The integration exposed distinct problems: evolution was mistaken for species loss; a private
+save used the wrong encoding; and continuation/reporting assumed every step involved a choice.
+Those are repaired without giving deterministic steps learning credit. The accepted final state
+holds16 living species, but its region has no supported next source in the current profile.
+
+The honest remaining question is whether memory changes learned decisions. The current corpus
+still has no selected example with nonzero search history, so that milestone stays open.
+The next bounded practice branch targets precisely that gap, without claiming sustained play.
+[Evidence and limits](audits/red-complete-evolution-learning-2026-09-07.md).
+
 ## September7 — the collection finally gained Rapidash
 
 The retained Ponyta reached40 and evolved, while a second Ponyta stayed safely boxed. All17

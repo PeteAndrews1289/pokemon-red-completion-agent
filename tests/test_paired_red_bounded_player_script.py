@@ -373,6 +373,23 @@ def test_challenger_arguments_require_the_complete_calibration_bundle() -> None:
         )
 
 
+@pytest.mark.parametrize("forced,acted,queried,allowed", [
+    (1, 0, 0, True), (0, 0, 0, False), (1, 1, 0, False), (1, 0, 1, False),
+])
+def test_terminal_summary_preserves_forced_only_result_without_fake_prediction(
+    forced, acted, queried, allowed,
+):
+    module = runpy.run_path(str(SCRIPT))
+    check = module["_require_causal_decision_or_forced_bridge"]
+    authority = SimpleNamespace(last_decision=None, decisions=queried)
+    episode = SimpleNamespace(forced_singleton_steps=forced, authority_decisions=acted)
+    if allowed:
+        check(authority, episode)
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="causal_outcome"):
+            check(authority, episode)
+
+
 def test_episode_identity_distinguishes_both_learned_challengers() -> None:
     module = runpy.run_path(str(SCRIPT))
     episode_id = module["_episode_id"]

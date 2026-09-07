@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Correct living-target evolution accounting, retain private diagnostic saves, run declared fresh correlated C, then fit and audit.
+- Next decision: Finish the declared history-bearing practice lesson and follow-up; keep F's best progressed save, no route expansion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model0bddf97e retains36 examples. A's failed acquisition is fitted; model-selected B completed Rapidash40 but composition rejected it. B excluded; checklist2/5 unchanged. |
+| Authority now | Model64165737 retains41 examples,15 successful. Accepted capture and forced evolution brought best state to16 living/21 registered with18 specimens. No selected nonzero-history row; checklist3/5. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
@@ -66,12 +66,12 @@ outputs.
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Keep model-selected collection progress as the immediate objective. No extra mechanics breadth or independent generalization claim. |
-| Learning output | Model35 to36: one retained failed acquisition. Post-fit B selected evolution and gained a living species, but its outer episode failed and supplies no fit row. |
-| Authority delta | One real failed acquisition admitted and fitted; all historical rows retained. B's successful skill remains a failed partial episode and is excluded. |
+| Product alignment | Capture and complete evolution qualified: checklist3/5. Fit and useful model follow-up remain, not source or route expansion. |
+| Learning output | Model35 to41: six real outcomes fitted, including one productive capture. F completed forced evolution, excluded from fitting. Zero selected nonzero-history examples so far. |
+| Authority delta | No production promotion. Model chose capture/evolution attempts; forced F has zero model choices and no fit target. |
 | Transfer result | Same-lineage Red component result only; no learned advantage, hack or Crystal generalization. |
-| Blocker | B completed Rapidash40 but legacy composition accounting rejected the legitimate species transformation. Correct living-target accounting and retain diagnostic quantum saves before fresh branch C. |
-| Decision | Run prospectively declared C under corrected ledger; fit only complete eligible outcomes, then test useful follow-up. |
+| Blocker | Final F endpoint has no supported next source in this walking-only profile. History learning still lacks selected nonzero-history rows. |
+| Decision | Keep progressed F intact; bounded H/I/J practice branch from history-bearing D targets actual memory learning without more mechanics. |
 | Next session | Complete the useful memory-aware play checklist through actual model-selected outcomes and retained-data fitting. |
 | Next falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
 | Stop condition | Fresh training and post-fit episodes only; stop and inspect any failure before declaring a successor. No consumed retry, diagnostic fitting or full replay. |

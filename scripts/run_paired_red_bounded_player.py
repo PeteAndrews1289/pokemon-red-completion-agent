@@ -1473,6 +1473,15 @@ def _write_exclusive(path: Path, document: Mapping[str, object]) -> None:
         raise
 
 
+def _require_causal_decision_or_forced_bridge(authority: Any, episode: Any) -> None:
+    if authority.last_decision is None and not (
+        episode.forced_singleton_steps > 0
+        and episode.authority_decisions == 0
+        and authority.decisions == 0
+    ):
+        raise PairedRedBoundedPlayerRunError("causal_outcome_decision")
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     readiness = _prepare(args)
     protected_before = {
@@ -1592,8 +1601,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if readiness.causal_record is not None:
         if not isinstance(challenger_authority, LivingDexGoalShadowPolicy):
             raise PairedRedBoundedPlayerRunError("challenger_model_identity")
-        if challenger_authority.last_decision is None:
-            raise PairedRedBoundedPlayerRunError("causal_outcome_decision")
+        _require_causal_decision_or_forced_bridge(challenger_authority, learned.episode)
         summary["living_dex_causal_shadow"] = {
             "counts_include_unexecuted_proposals": True,
             "settled_authority_goal_count": learned.episode.authority_decisions,

@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Latest chapter — a model-selected catch, then an honest boundary
+
+Show C's real capture and the collection counter increasing. Then show the separately labelled
+forced evolution into Rapidash and the retained Ponyta. Best save:16 living species,18 specimens.
+The learner now retains41 examples, including unsuccessful choices; do not present forced F as
+a new learned decision. Its59 durable recovery saves demonstrate recoverability.
+
+Explain that a collection ledger initially counted evolution as losing the precursor species;
+the correct rule allows one verified transformation while preserving another living precursor.
+Show the next limitation honestly: the current profile offers no useful next source in that region.
+The narrow practice batch now targets learned use of actual search history, not another route demo.
+[Current audit](audits/red-complete-evolution-learning-2026-09-07.md).
+
 ## Latest chapter — Rapidash, without losing Ponyta
 
 Show the actual level40 evolution and the retained boxed Ponyta30 beside the living-species

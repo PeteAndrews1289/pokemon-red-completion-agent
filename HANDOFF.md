@@ -1,5 +1,21 @@
 # Handoff
 
+## Current — 41 examples; capture and complete evolution qualified
+
+Read the [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md).
+Model `64165737` retains41 examples (15 successful), up from35. C's model-selected capture
+succeeded. E selected evolution; F's separately labelled forced continuation completed Rapidash40.
+Best admitted save F:16 living,21 registered,18 specimens; checkpoint `9d7eef7d...779e6`.
+Its59 recovery saves verify. The final report was reconstructed read-only after a summary assertion;
+game and checkpoint were already complete. B stays failed-partial and excluded. No consumed replay.
+
+Checklist3/5: capture/evolution alternatives now execute. Selected-history training and a useful
+learned follow-up remain. Model41 has zero selected nonzero-history examples. F has no supported
+next source in the current walking-only profile; do not fabricate availability. Keep F intact.
+The declared H/I/J practice branch starts from history-bearing D with model41, not from F;
+it is correlated training, not independent evaluation. G is cancelled unused. See session plan
+and private OPERATOR. No new source/route work or external reviewer in this batch.
+
 ## Current — Rapidash40 verified; connect the complete option to learning
 
 The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Ponyta35 to

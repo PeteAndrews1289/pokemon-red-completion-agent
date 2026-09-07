@@ -61,8 +61,8 @@
       {
         "id": "alternatives",
         "label": "Two useful executable alternatives",
-        "done": false,
-        "evidence": "docs/evidence/red-party-selection-evolution-2026-09-07.json"
+        "done": true,
+        "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
       },
       {
         "id": "useful-followup",
@@ -117,9 +117,9 @@
     },
     {
       "session": "2026-09-07-complete-evolution-learning",
-      "result": "In progress: model35 to36; failed acquisition fitted. Post-fit evolution reached Rapidash40 but outer ledger rejected it; B excluded, 2/5 unchanged.",
-      "deviation": "Explicit larger dose is sized from measured evolution cost; old training plans retain original limits and normalization. No stage exit changes.",
-      "next": "Verify corrected living-target accounting, run declared C, then fit and test a productive follow-up."
+      "result": "In progress: model35 to41; capture plus completed forced evolution. Best state16 living/18 specimens. Actual selected-history training still absent; checklist3/5.",
+      "deviation": "Corrected evolution accounting and continuation/reporting/save boundaries. F retained; declared correlated practice from D targets history learning rather than new route work.",
+      "next": "Complete H/I/J selected-history practice and audit productive follow-up; no source expansion in this batch."
     }
   ]
 }

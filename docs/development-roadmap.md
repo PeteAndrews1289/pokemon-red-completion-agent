@@ -9,13 +9,13 @@ A learned player that finishes Pokemon games and builds a living Pokedex across 
 
 ## Current milestone
 
-**Useful memory-aware play: 2/5 acceptance items (40%).**
+**Useful memory-aware play: 3/5 acceptance items (60%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Saved-state learning loop ([evidence](../docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json))
 - [x] Persisted search-history contract ([evidence](../docs/evidence/red-search-memory-qualification-2026-09-06.json))
 - [ ] Model trained to use history ([evidence](../docs/evidence/red-native-boxed-evolution-result-2026-09-06.json))
-- [ ] Two useful executable alternatives ([evidence](../docs/evidence/red-party-selection-evolution-2026-09-07.json))
+- [x] Two useful executable alternatives ([evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json))
 - [ ] Productive lesson and follow-up
 
 Current model: **35 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -94,11 +94,11 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-complete-evolution-learning
 
-In progress: model35 to36; failed acquisition fitted. Post-fit evolution reached Rapidash40 but outer ledger rejected it; B excluded, 2/5 unchanged.
+In progress: model35 to41; capture plus completed forced evolution. Best state16 living/18 specimens. Actual selected-history training still absent; checklist3/5.
 
-**Deviation:** Explicit larger dose is sized from measured evolution cost; old training plans retain original limits and normalization. No stage exit changes.
+**Deviation:** Corrected evolution accounting and continuation/reporting/save boundaries. F retained; declared correlated practice from D targets history learning rather than new route work.
 
-**Next:** Verify corrected living-target accounting, run declared C, then fit and test a productive follow-up.
+**Next:** Complete H/I/J selected-history practice and audit productive follow-up; no source expansion in this batch.
 
 ### 2026-09-07-party-selection
 

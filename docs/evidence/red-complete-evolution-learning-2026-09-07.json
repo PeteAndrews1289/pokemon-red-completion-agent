@@ -12,11 +12,12 @@
     "fit_admitted": true
   },
   "model": {
-    "sha256": "0bddf97e610be656d4e94fb0a56f0b517e5a4be1ac64817a4021ec3515ef50ec",
-    "retained_examples": 36,
-    "successful_examples": 14,
+    "sha256": "64165737d3fb90f61b622f5e0cca3e42a7a7a3cb4e713e28130041b9940f00b5",
+    "retained_examples": 41,
+    "successful_examples": 15,
     "previous_examples": 35,
-    "unselected_targets": 0
+    "unselected_targets": 0,
+    "selected_nonzero_history_examples": 0
   },
   "training_b": {
     "episode": "red-complete-evolution-20260907-b-causal.failed.partial",
@@ -40,8 +41,90 @@
     "independent_generalization": false,
     "crystal_execution": false,
     "full_game_replay": false,
-    "checklist_completed": 2,
+    "checklist_completed": 3,
     "checklist_total": 5
   },
-  "next": "Declared fresh branch C from admitted A with corrected living-target ledger and private per-quantum diagnostic saves. B remains consumed and excluded."
+  "next": "Best progressed save F retained. G cancelled unused. Declared H/I/J correlated practice branch from D targets actual selected-history training; no new mechanics or replay.",
+  "training_c": {
+    "episode": "red-complete-evolution-20260907-c-causal",
+    "manifest_sha256": "6cf8eabc66287e518feaebd9b0aa6fcbd0ef06f4444bd0b933b189846423aff7",
+    "checkpoint_sha256": "519458e8d03b124975e989b65f85c03ea21532443f2d5a2225ceb72fa1aaea19",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "acquire_species",
+        "status": "succeeded",
+        "actions": 381,
+        "frames": 24480,
+        "living_before": 14,
+        "living_after": 15
+      },
+      {
+        "kind": "explore",
+        "status": "failed",
+        "actions": 196,
+        "frames": 8664,
+        "living_before": 15,
+        "living_after": 15
+      }
+    ]
+  },
+  "training_d": {
+    "episode": "red-complete-evolution-20260907-d-causal",
+    "manifest_sha256": "5f72dd1d7cfa91a1de9bdeaef1b17e9c25f7687f702f2251e3ca4f444f170b39",
+    "checkpoint_sha256": "e38b0c64bcadd4fdbd9e7179e0c5d5d5f9b0c4351f603af04b0abca1913ee5e5",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "acquire_species",
+        "status": "failed",
+        "actions": 334,
+        "frames": 22152,
+        "living_before": 15,
+        "living_after": 15
+      },
+      {
+        "kind": "explore",
+        "status": "failed",
+        "actions": 232,
+        "frames": 11880,
+        "living_before": 15,
+        "living_after": 15
+      }
+    ]
+  },
+  "training_e": {
+    "episode": "red-complete-evolution-20260907-e-causal",
+    "manifest_sha256": "2fa8ba1808b5d6759386f3485c6cb8be93d23ae61077f16a4f4d87633d273f2b",
+    "checkpoint_sha256": "0ab130806b085dd8dbffdec227d9e6cc9f60aa1d161b11847cd5d6d274a5b8ef",
+    "fit_admitted": true,
+    "steps": [
+      {
+        "kind": "evolve_species",
+        "status": "failed",
+        "actions": 720,
+        "frames": 61646,
+        "living_before": 15,
+        "living_after": 15
+      }
+    ]
+  },
+  "training_f": {
+    "episode": "red-complete-evolution-20260907-f-causal",
+    "manifest_sha256": "de956b530ced23a21cddf8ce1d764414f428f1718e9e15c0477e6a0741afda3b",
+    "checkpoint_sha256": "9d7eef7d3c72e04aaeacd6594e37e65c1fc033a11f72e0fe7bb9647e676779e6",
+    "episode_complete": true,
+    "report_reconstructed_read_only": true,
+    "fit_admitted": false,
+    "forced_steps": 1,
+    "model_choices": 0,
+    "actions": 14045,
+    "frames": 1218379,
+    "living_before": 15,
+    "living_after": 16,
+    "registered_after": 21,
+    "specimens_retained": 18,
+    "verified_recovery_saves": 59,
+    "stop_reason": "insufficient_available_goals"
+  }
 }

@@ -105,3 +105,27 @@ choices. Align authenticated-continuation preflight with that existing runtime b
 asking either authority for a fake decision. Fresh-root paired preflight remains unchanged and
 zero-option states still fail. F remains unconsumed and may start after this repair; no forced
 bridge is evidence for two alternatives, learned evolution, or an additional training example.
+
+## F completed; review before the final history lesson
+
+F completed Rapidash40: living15 to16, registered20 to21, all18 specimens retained and59 private
+quantum saves hash-verified. Its forced-only episode and terminal checkpoint are complete; a
+later summary assertion incorrectly required a model prediction. Reconstructed that report
+read-only and repaired the zero-model-query reporting case. F may never rerun and is not a fit row.
+G is cancelled, not consumed: the final Route11 endpoint has no available source in this
+Mansion-scoped walking-only profile. Connecting a new source or regional transport belongs to
+the next sustained-play integration, not another fixed-route patch here.
+
+The capture/evolution mechanics criterion is now qualified, but history training is not: a
+read-only audit of model41's authenticated corpus finds zero selected rows with nonzero prior
+search effort. Available-but-unselected history is not a label. Checklist moves2/5 to3/5 only.
+
+For the remaining narrow learning criterion, declare training-practice branch H from D's
+authenticated terminal (the first current-ledger checkpoint with nonzero search history and
+genuine capture/evolution alternatives), using model41 and seed2026090708, up to4 choices.
+This is an explicit correlated curriculum reset, not continuing F, replaying D, independently
+evaluating performance, or replacing the best progressed save F. Preserve every branch and
+failure. No state chosen on a new prediction or preferred outcome. Then allow at most I/J,
+seeds2026090709/10, each from the immediately preceding admitted practice terminal after its
+all-rows-retained fit. Stop and audit if no genuine supported choice remains or after this batch.
+No new mechanics, source expansion, teacher choice, sealed access or full replay in this batch.

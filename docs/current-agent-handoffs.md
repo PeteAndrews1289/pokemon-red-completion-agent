@@ -1,5 +1,17 @@
 # Current agent handoffs
 
+## Current — 41 retained examples; actual history learning remains
+
+Read the [current audit](audits/red-complete-evolution-learning-2026-09-07.md) and active state.
+Capture and complete evolution now execute; best save holds16 living species and18 specimens.
+Final evolution was a forced continuation with zero model queries; do not count it as training.
+Model41 has15 successful examples but no selected row carrying nonzero search history. Checklist3/5.
+
+Codex is running the declared H/I/J practice branch from D while preserving the progressed F save.
+This is correlated practice, not F continuation or independent evaluation. No reviewer was invoked.
+If requested, Claude should audit learning claims and Antigravity should audit region/continuation
+boundaries. Neither should turn this into new sealed gates or more source expansion this batch.
+
 ## Current — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search

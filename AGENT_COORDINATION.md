@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+## Current — capture/evolution integration; finish measured history learning
+
+The [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) reports model41,
+accepted capture and completed forced evolution. Checklist3/5, not full Red or learned competence.
+Codex owns the declared history-practice batch and publication. No reviewer/subagent was invoked.
+If requested later, Claude should challenge selected-history evidence, correlated resets and
+exclusion of forced/failed-partial outcomes. Antigravity should challenge collection transformation,
+durable saves and the region boundary that prevents sustained play. Reviewers remain read-only;
+their approval is not a routine training gate.
+
 ## Current — complete component works; learning integration is the only next lane
 
 The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40 and

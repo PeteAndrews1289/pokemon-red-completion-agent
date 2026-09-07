@@ -1,5 +1,17 @@
 # Model-first development roadmap
 
+## Current — useful mechanics connected; finish the history lesson
+
+[Current audit](audits/red-complete-evolution-learning-2026-09-07.md): model35→41, one new
+productive model-selected capture, complete forced evolution, best save16 living/18 specimens.
+Useful memory-aware play is3/5. Model41's corpus contains zero selected nonzero-history examples.
+
+1. Finish declared H/I/J practice from authenticated history-bearing D, retaining all outcomes.
+2. Measure the fitted history effect on actual selected rows; do not label unselected options.
+3. Require a productive post-fit model-controlled follow-up before closing the checklist.
+4. Preserve best save F; then connect useful region/source continuation for sustained play.
+   No new mechanics or route expansion during the current learning batch.
+
 ## Current — evolution works; turn it into a model-selected lesson
 
 The [latest audit](audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40, retained
