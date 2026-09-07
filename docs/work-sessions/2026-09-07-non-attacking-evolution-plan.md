@@ -6,6 +6,12 @@ trial. R/model58 and all25specimens remain intact. No successor has been claimed
 Session started September7 at14:03UTC. Reassess by15:33UTC; close or reorient
 by16:03UTC. The six-part mission check below is the implementation contract.
 
+**Outcome:** S completed the real model-selected Abra evolution and fitted58→59;
+mixed-goal milestone5/5. The first real quantum supplied the component falsifier
+inside that same attempt, avoiding a separate branch/reset. No model override was
+used. See the [session audit](../audits/red-shared-experience-learning-2026-09-07.md)
+and [next-session plan](2026-09-07-varied-collection-plan.md).
+
 ## Mission check
 
 1. **Capability:** develop a retained, non-attacking specimen through shared battle

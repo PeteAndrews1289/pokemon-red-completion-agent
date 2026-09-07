@@ -3,22 +3,22 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-mixed-goal-integration**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-shared-experience-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Mixed collection / evolution learning: 3/5 acceptance items (60%).**
+**Mixed collection / evolution learning: 5/5 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Future objectives preserve history ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
 - [x] Native goals with zero or one source ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
 - [x] Actual native outcome inventory qualified ([evidence](../docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json))
-- [ ] Useful mixed goals executable at save
-- [ ] Played mixed choice retained and fitted
+- [x] Useful mixed goals executable at save ([evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json))
+- [x] Played mixed choice retained and fitted ([evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json))
 
-Current model: **58 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **59 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +50,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-incremental-learning-completion-2026-09-07.json)
+[Current evidence](../docs/evidence/red-shared-experience-learning-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-shared-experience-learning
+
+S selected evolution with probability0.1553, developed Abra12 into Kadabra16, retained Abra10/all25specimens, and fitted58to59. Exact23living/28registered. Mixed checklist5/5 closed.
+
+**Deviation:** The first real model-selected evolution quantum served as the component falsifier inside the same retained attempt; no separate diagnostic branch/reset or forced demonstration. Stage exits unchanged.
+
+**Next:** Continue from S/model59 through legitimate supply support, varied collection objectives and storage composition. Keep support-only episodes out of learning counts; broaden evidence before claiming generalization.
 
 ### 2026-09-07-mixed-goal-integration
 

@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+Current September7 shared-experience closeout: Codex implemented/published the
+bounded collection mode and audited S. Actual model-selected Abra→Kadabra succeeded;
+fit59 retains58prior rows,23living/25specimens. Mixed checklist5/5 is closed. No outside
+agents are running or were invoked. Next owners should follow the
+[varied-collection plan](docs/work-sessions/2026-09-07-varied-collection-plan.md).
+If reviews are requested later, challenge exploratory-success versus learned-advantage
+claims, different-recipient reuse, storage headroom and support-only fit attribution.
+Do not replay S, request another teacher campaign or block routine development on CI.
+
 Current September7 mixed-goal session: Codex owns implementation and publication.
 136 ROM-free checks qualify ordered future targets, zero/one-source native choice
 and native retained fitting. Actual R restore/future objective passed; evolution

@@ -1,0 +1,298 @@
+{
+  "schema": "pokemon.red.shared-experience-learning.v1",
+  "status": "model_selected_evolution_succeeded_and_fitted",
+  "source_commit": "940620065417c972b45b52d4f7be9c7762965d15",
+  "source_bundle_sha256": "ba485bec157a958a3a22a0da3bf1efd03b5057c869fc860d24f8569bca2e8575",
+  "episode_id": "red-shared-experience-20260907-s-causal",
+  "manifest_sha256": "2bb6a75c3694ed8ef491af3f7d0aa246316bc896e066b1f290cfe8928711b725",
+  "checkpoint_sha256": "1b5cd2f83f744da861d96768b409178ffceeda9ad8b465e7e7b6ef49e6c2dc67",
+  "starting_model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+  "final_model_sha256": "c9d0a76b6262723da8875c105eca3d5c08f5591b16766c710edf0d77c2a0cd4f",
+  "selected_goal": "evolve_species",
+  "selected_probability": 0.155274471478384,
+  "exploration_mix": 0.25,
+  "selected_source_proposal_fitted": false,
+  "source_acquisition_attempted": false,
+  "parent_overridden": false,
+  "parent_episode": {
+    "authority_decisions": 1,
+    "authority_id": "living-dex-causal-shadow",
+    "completion_satisfied": false,
+    "decisions": 1,
+    "forced_singleton_steps": 0,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "recovery_attempts": 0,
+    "schema": "pokemon.core.bounded-player-episode-result.v1",
+    "status": "durable_terminal",
+    "steps": [
+      {
+        "actions_executed": 3143,
+        "available_goal_count": 3,
+        "available_menu_sha256": "39bb53d9a08e3ae38a4884a45e9ff813132c668fe8150ea2341ff5ad893ba3c0",
+        "collection_after": {
+          "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+          "living_species": 23,
+          "registered_species": 28,
+          "required_specimens_remaining": 97,
+          "required_specimens_sha256": "f23459dc40ad8e67a17bfe39b0900b72a7822d2f79aa5f43187620f71ad79b29",
+          "retained_captures": 23,
+          "specimen_ledger_sha256": "9e704338f993e8c1a4e638b6615882388385049c94f76f3896669e8d7aecafbb",
+          "storage_headroom": 1,
+          "total_living_specimens": 25,
+          "undeclared_specimen_losses": 0
+        },
+        "collection_before": {
+          "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+          "living_species": 22,
+          "registered_species": 27,
+          "required_specimens_remaining": 98,
+          "required_specimens_sha256": "24607b7784e8a4f42a0254705e1e9b593f6ae2ed318ad8566d75c852c464232c",
+          "retained_captures": 22,
+          "specimen_ledger_sha256": "cefe4ec02ad77430df61c9a63cefc2c087b72251cda209c2aca59d1fd2afbc9d",
+          "storage_headroom": 1,
+          "total_living_specimens": 25,
+          "undeclared_specimen_losses": 0
+        },
+        "decision_ordinal": 1,
+        "failure_reason": null,
+        "frames_executed": 265058,
+        "policy_context_sha256": "4df55d9a63ca6754fd87ca086981e3349803874573f58338c6575992021adecb",
+        "recovery_attempt": false,
+        "selected_kind": "evolve_species",
+        "selection_mode": "authority",
+        "semantic_state_changed": true,
+        "status": "succeeded"
+      }
+    ],
+    "stop_reason": "decision_limit",
+    "teacher_fallbacks": 0,
+    "total_actions": 3143,
+    "total_frames": 265058
+  },
+  "transformation": {
+    "source_national": 63,
+    "target_national": 64,
+    "starting_level": 12,
+    "final_level": 16,
+    "final_experience": 2594,
+    "original_Abra_level10_retained": true,
+    "new_move": "Confusion"
+  },
+  "retained_quantum_observations": [
+    {
+      "actions": 903,
+      "frames": 65981,
+      "species": 148,
+      "level": 12,
+      "xp": 1247,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 1209,
+      "frames": 90885,
+      "species": 148,
+      "level": 13,
+      "xp": 1509,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 1454,
+      "frames": 111721,
+      "species": 148,
+      "level": 14,
+      "xp": 1747,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 1822,
+      "frames": 142349,
+      "species": 148,
+      "level": 14,
+      "xp": 2026,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 2174,
+      "frames": 171021,
+      "species": 148,
+      "level": 15,
+      "xp": 2281,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 2762,
+      "frames": 226645,
+      "species": 148,
+      "level": 15,
+      "xp": 2528,
+      "fainted": 0,
+      "battle": 0
+    },
+    {
+      "actions": 3143,
+      "frames": 265058,
+      "species": 38,
+      "level": 16,
+      "xp": 2594,
+      "fainted": 0,
+      "battle": 0
+    }
+  ],
+  "saved_state": {
+    "living_species": 23,
+    "specimens": 25,
+    "registered_species": 28,
+    "undeclared_losses": 0,
+    "capture_items": 1,
+    "money": 309,
+    "immediate_box_slots": 1,
+    "location": "Route11",
+    "party_levels": [
+      16,
+      55,
+      55,
+      55,
+      55,
+      64
+    ],
+    "terminal_restored_exactly": true
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "51b89ac823f9a62444415acae51308555355c3e0f7d3032acb76829c3b273bc3",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 49,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 59,
+      "successful_examples": 23,
+      "total_examples": 59,
+      "train_dataset_sha256": "fe98d723174cd1023d84b170c22cc22c6bc6d3cd45d93046912a41701debaf8a",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.009555841998685265,
+      "weighted_mse_before": 0.024627096933369355
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "329d7e391d45cd3b03f2a0000a0774da8b0839e5748ba6c5dd3ae64d6c9b845a",
+      "file_sha256": "c72e7c9a5a497f6415b51ce33874453fe0095bbad4221b64cf455afb956d5b71",
+      "independent_evaluation": false,
+      "model_sha256": "c9d0a76b6262723da8875c105eca3d5c08f5591b16766c710edf0d77c2a0cd4f",
+      "prior_model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 59,
+      "source_bundle_sha256": "ba485bec157a958a3a22a0da3bf1efd03b5057c869fc860d24f8569bca2e8575",
+      "source_commit": "940620065417c972b45b52d4f7be9c7762965d15"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08594237070460752,
+        0.000005918890760835287,
+        0.00003623287569081173,
+        0.004258360046138756,
+        0.003199915211771024,
+        0.0013104038123650456,
+        0.0004184332747737677,
+        8.032613266861545e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 59,
+      "total_examples": 59,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010574715341937161
+    },
+    "regional_source_examples": 12,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07676899364669804,
+        0.000005165052886229493,
+        0.000035242911435281644,
+        0.004262255056983832,
+        0.003203841226790191,
+        0.0013076312558766392,
+        0.00041864656347177467,
+        8.022740254047879e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 59,
+      "total_examples": 59,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009555841998685265
+    }
+  },
+  "final_model_post_fit_gameplay": false,
+  "next_preflight": {
+    "available_goal_kinds": [
+      "resupply",
+      "acquire_species"
+    ],
+    "selection_mode": "deterministic_safety",
+    "selected_kind": "resupply",
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "independent_evaluation": false,
+  "full_game_replays": 0,
+  "sealed_red_accesses": 0,
+  "crystal_accesses": 0,
+  "mixed_milestone": {
+    "completed": 5,
+    "total": 5
+  },
+  "limitations": [
+    "One same-lineage exploratory success is not independent learned advantage, reliable generalization, or a full-game player.",
+    "Evolution was selected with probability0.155274471478384; greedy preflight favored capture. No seed search or parent override was used.",
+    "Only goal choice is learned here; movement, switching, battle moves, PC operation and evolution verification are deterministic mechanics.",
+    "Model59 has not played. Its next read-only preflight selects resupply under deterministic_safety, with zero learned scores.",
+    "Only one ball and one immediate box slot remain.309 currency is finite; the Route6 trainer payout is not renewable income.",
+    "Seven quantum checkpoints retain observed XP, but a compact public per-quantum battle/healing/PP summary remains an observability improvement."
+  ]
+}

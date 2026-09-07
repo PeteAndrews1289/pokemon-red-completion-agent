@@ -1,5 +1,27 @@
 # Handoff
 
+## Current — mixed-goal learning complete; S/model59 retained
+
+S's exploratory native goal selected evolution, developed Abra12 into Kadabra16
+with Confusion, and retained Abra10/all25specimens.23living/28registered,zero losses.
+3,143actions265,058frames; seven verified XP checkpoints. Fit58→59 retained every
+earlier row;23successful examples total. No source-proposal credit or parent override.
+Mixed checklist5/5 is closed; sustained Red and independent generalization are not.
+
+Model `c9d0a76b6262723da8875c105eca3d5c08f5591b16766c710edf0d77c2a0cd4f`;
+checkpoint `1b5cd2f83f744da861d96768b409178ffceeda9ad8b465e7e7b6ef49e6c2dc67`;
+episode `red-shared-experience-20260907-s-causal`;
+manifest `2bb6a75c3694ed8ef491af3f7d0aa246316bc896e066b1f290cfe8928711b725`.
+Executable `940620065417c972b45b52d4f7be9c7762965d15` is published onPR236.
+
+Exact terminal and next-session restore passed without input. Route11,one ball,
+309currency,one immediate boxslot; all party healthy,Blastoise64,Kadabra16. Model59
+has not played. Its next unchanged-objective preflight selects deterministic safety
+resupply, not a learned goal. Retain support and carry it with the next eligible fit.
+S is consumed; no successor launched. Next: [varied collection plan](docs/work-sessions/2026-09-07-varied-collection-plan.md).
+342 targeted checks,44 protocol checks,lint/types/docs/focus passed; no fresh full-suite
+or remote-CI green claimed. No external agents invoked. [Audit](docs/audits/red-shared-experience-learning-2026-09-07.md).
+
 ## In progress — bounded shared-experience collection mode
 
 September7,14:03UTC session; reassess15:33, close/reorient16:03.

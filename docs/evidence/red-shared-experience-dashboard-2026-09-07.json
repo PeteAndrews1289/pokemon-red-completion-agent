@@ -1,0 +1,146 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "S model58 selected evolution from a real capture/evolution menu. Shared XP developed Abra12 into Kadabra16 while retaining Abra10. Fit59 retains all58 prior rows.",
+  "session_evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 3143,
+    "frames": 265058,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-shared-experience-20260907-s-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "51b89ac823f9a62444415acae51308555355c3e0f7d3032acb76829c3b273bc3",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 49,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 59,
+      "successful_examples": 23,
+      "total_examples": 59,
+      "train_dataset_sha256": "fe98d723174cd1023d84b170c22cc22c6bc6d3cd45d93046912a41701debaf8a",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.009555841998685265,
+      "weighted_mse_before": 0.024627096933369355
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "329d7e391d45cd3b03f2a0000a0774da8b0839e5748ba6c5dd3ae64d6c9b845a",
+      "file_sha256": "c72e7c9a5a497f6415b51ce33874453fe0095bbad4221b64cf455afb956d5b71",
+      "independent_evaluation": false,
+      "model_sha256": "c9d0a76b6262723da8875c105eca3d5c08f5591b16766c710edf0d77c2a0cd4f",
+      "prior_model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 59,
+      "source_bundle_sha256": "ba485bec157a958a3a22a0da3bf1efd03b5057c869fc860d24f8569bca2e8575",
+      "source_commit": "940620065417c972b45b52d4f7be9c7762965d15"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08594237070460752,
+        0.000005918890760835287,
+        0.00003623287569081173,
+        0.004258360046138756,
+        0.003199915211771024,
+        0.0013104038123650456,
+        0.0004184332747737677,
+        8.032613266861545e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 59,
+      "total_examples": 59,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010574715341937161
+    },
+    "regional_source_examples": 12,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07676899364669804,
+        0.000005165052886229493,
+        0.000035242911435281644,
+        0.004262255056983832,
+        0.003203841226790191,
+        0.0013076312558766392,
+        0.00041864656347177467,
+        8.022740254047879e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 59,
+      "total_examples": 59,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009555841998685265
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "One same-lineage exploratory success is not independent learned advantage, reliable generalization, or a full-game player.",
+    "Evolution was selected with probability0.155274471478384; greedy preflight favored capture. No seed search or parent override was used.",
+    "Only goal choice is learned here; movement, switching, battle moves, PC operation and evolution verification are deterministic mechanics.",
+    "Model59 has not played. Its next read-only preflight selects resupply under deterministic_safety, with zero learned scores.",
+    "Only one ball and one immediate box slot remain.309 currency is finite; the Route6 trainer payout is not renewable income.",
+    "Seven quantum checkpoints retain observed XP, but a compact public per-quantum battle/healing/PP summary remains an observability improvement."
+  ],
+  "next_session": "Continue from S/model59: legitimate resupply, varied collection objectives and storage access before the final box slot is consumed.",
+  "current_limitation": "Mixed-goal checklist5/5 is complete; sustained Red play and generalization remain open. The next resupply is deterministic support, not a learned result."
+}

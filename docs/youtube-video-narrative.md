@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 scene — the Pokémon that could not attack
+
+Open with two Abra: one remains in storage for the living Pokédex; the duplicate
+only knows Teleport. Explain the new separation between XP recipient and finisher.
+Show the actual evolution choice, the retained level12→13→14→15→16 progression,
+then Kadabra learning Confusion. End on the verified collection23living/25specimens
+and model59, with all earlier training examples retained.
+
+Suggested narration: “The model chose the goal. The game mechanics were still
+handled by code: move there, use the PC, switch Pokémon and check the result.
+This time that combination produced a new species—and the real outcome went back
+into training.” Clarify that exploration selected evolution at15.5% probability;
+do not call this proof of optimal strategy, a fully autonomous player or transfer.
+The saved checkpoint is not a live feed once the run ends. Mixed-goal5/5 is a local
+milestone; broader Red play and living-collection completion still lie ahead.
+
+[Evidence and limitations](audits/red-shared-experience-learning-2026-09-07.md).
+
 ## September7 follow-up scene — the next goal has to be real
 
 Show the saved collection, then the distinction between choosing where to catch and

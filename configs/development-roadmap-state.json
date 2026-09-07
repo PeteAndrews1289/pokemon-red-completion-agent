@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-mixed-goal-integration",
+  "as_of_session": "2026-09-07-shared-experience-learning",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+      "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -61,14 +61,14 @@
       {
         "id": "mixed-execution-feasibility",
         "label": "Useful mixed goals executable at save",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
       },
       {
         "id": "mixed-learned-outcome",
         "label": "Played mixed choice retained and fitted",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
       }
     ]
   },
@@ -198,6 +198,12 @@
       "result": "136 focused checks qualify mixed-goal wiring. Exact R restore with the ordered new objective passed, but evolution remains unavailable and selection deterministic_unsupported. Zero input/frames/new examples; model58 unchanged. Mixed checklist3/5.",
       "deviation": "Stopped at the declared pre-input falsifier: low-level non-attacking specimens are not supported by the direct trainer. No stage-exit change, fake choice or consumed live attempt.",
       "next": "Qualify bounded shared-experience development, then a real model-selected mixed goal and retained fit. Preserve R and all25specimens."
+    },
+    {
+      "session": "2026-09-07-shared-experience-learning",
+      "result": "S selected evolution with probability0.1553, developed Abra12 into Kadabra16, retained Abra10/all25specimens, and fitted58to59. Exact23living/28registered. Mixed checklist5/5 closed.",
+      "deviation": "The first real model-selected evolution quantum served as the component falsifier inside the same retained attempt; no separate diagnostic branch/reset or forced demonstration. Stage exits unchanged.",
+      "next": "Continue from S/model59 through legitimate supply support, varied collection objectives and storage composition. Keep support-only episodes out of learning counts; broaden evidence before claiming generalization."
     }
   ],
   "closed_milestones": [

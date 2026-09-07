@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify reusable shared-experience development for non-attacking specimens; then collect and fit an actual mixed-goal outcome from the retained save.
+- Next decision: Continue varied model-selected collection from S/model59, integrating actual resource and storage limits; no reset or teacher replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model dbfedde6 retains58 outcomes,22successful,all57 prior retained. R completed two successful linked source choices with automatic fits:22living/25specimens/27registered,1ball109currency. Model58 unplayed. |
+| Authority now | Model c9d0a76b retains59 outcomes,23successful,all58 prior retained. S sampled evolution from capture/evolution alternatives, developed Abra12 into Kadabra16 and retained Abra10.23living/25specimens/28registered. Model59 unplayed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a bounded shared-experience quantum develop the non-attacking recipient without losses or a recovery loop, then expose a genuinely executable evolution alternative? |
+| Cheapest falsifier | Can S/model59 continue through legitimate resupply and another supported collection objective without consuming its last storage slot or confusing forced support with learned progress? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-mixed-goal-integration** · status **active** · evidence [falsification](docs/evidence/red-mixed-goal-feasibility-2026-09-07.json)
+**2026-09-07-shared-experience-learning** · status **active** · evidence [model fit](docs/evidence/red-shared-experience-learning-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Changing goals without rewriting history and retaining actual mixed outcomes unblocks sustained collection; no preflight or support action counts as learning. |
-| Learning output | Engineering and action-free falsification only: zero input, frames, episodes or new fitted examples. Exact R/model58 restored;22living/25specimens preserved. Mixed checklist3/5 remains open. |
-| Authority delta | No new played authority yet. Ordered future objectives, zero/one-source native selection and retained native-outcome fitting are ROM-free qualified. |
-| Transfer result | ROM-free variation and exact same-save preflight only. Historical restore and prospective objective separation passed; no gameplay generalization or cross-title transfer measured. |
-| Blocker | Exact R inspection confirms evolution missing-capability, resupply missing-resource and storage missing-capability. Only restore/capture are available; the selector remains deterministic_unsupported. Both Abra know only Teleport. |
-| Decision | Stop the session at its pre-input falsifier. Next qualify bounded non-attacking-specimen development, preserving old parity-trainer behavior and all retained specimens; no known-bad evolution trial. |
-| Next session | Qualify reusable shared-experience development for non-attacking specimens; then collect and fit an actual mixed-goal outcome from the retained save. |
-| Next falsifier | Can a bounded shared-experience quantum develop the non-attacking recipient without losses or a recovery loop, then expose a genuinely executable evolution alternative? |
-| Stop condition | Reached before input: no executable evolution alternative with the current trainer. No successor claimed. Preserve R/model58; no retry, resource reset, sealed access or full replay. Reorient before the next development session. |
+| Product alignment | A previously non-attacking specimen can now develop into a new retained species. The model chose the task, while reusable mechanics handled switching, damage and preservation. |
+| Learning output | One successful native goal fitted58to59;23living species,25specimens,zero losses.3143actions265058frames. Seven retained XP checkpoints and exact terminal restore verified. |
+| Authority delta | One actual native mixed-goal choice executed and fitted. Shared-XP mechanics are deterministic; the model selected evolution with exploration, not by an override. |
+| Transfer result | ROM-free recipient/helper/slot/resource variation passed. Actual Abra evolution is same-lineage Red evidence only; no independent advantage, unfamiliar-ROM or Crystal transfer claim. |
+| Blocker | No blocker remains for this mixed-goal milestone. Next actual S menu has resupply/capture, but resupply is deterministic_safety. One ball,309currency and one immediate boxslot constrain continuation. |
+| Decision | Close mixed collection/evolution checklist5/5; reorient to varied, resource-aware collection and storage composition. Do not replay S or count safety support as learning. |
+| Next session | Preserve S/model59, perform only necessary legitimate supply support, then expose a varied collection/evolution objective and fit the next genuine model choice. Bind PC storage before headroom reaches zero. |
+| Next falsifier | Can S/model59 continue through legitimate resupply and another supported collection objective without consuming its last storage slot or confusing forced support with learned progress? |
+| Stop condition | S completed and is permanently consumed. Natural milestone stopping point; no further gameplay launched. Stop next work on resource/storage dead ends, unverified XP, losses or repeated nonproductive recovery. |
 
 ### Stop conditions
 

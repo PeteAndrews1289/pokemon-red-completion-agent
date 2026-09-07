@@ -1,5 +1,14 @@
 # Current agent handoffs
 
+Current is S/model59: real exploratory evolution succeeded, Abra12→Kadabra16 while
+Abra10/all25specimens remain.23living/28registered; mixed checklist5/5 closed.
+Exact terminal and prospective continuation restored without input. Model59 unplayed;
+next menu resupply/capture is gated by deterministic safety resupply. Preserve this
+as support-only work before the next genuine model choice. One ball309currency,
+one immediate boxslot. No successor or outside agent is active. Codex owns publication.
+[Audit](audits/red-shared-experience-learning-2026-09-07.md) and
+[next plan](work-sessions/2026-09-07-varied-collection-plan.md) supersede the checkpoints below.
+
 Current September7 mixed-goal session: objective ordering and zero/one-source native
 selection are qualified; native incremental fitting retains actual outcomes and
 zero-row support.136 focused tests, no new gameplay/fit. R/model58 stays intact.

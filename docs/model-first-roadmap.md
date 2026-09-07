@@ -1,5 +1,20 @@
 # Model-first development roadmap
 
+## Current — a useful mixed choice learned; broaden collection next
+
+S's actual exploratory policy chose evolution over capture. Shared XP developed
+Abra12 into Kadabra16, preserved Abra10 and all25specimens, and fitted58→59 with every
+prior row retained.23living species,28registered. Mixed collection/evolution5/5 is
+closed; sustained Red and generalization remain open.
+
+The [session audit](audits/red-shared-experience-learning-2026-09-07.md) confirms exact
+restoration and seven retained XP checkpoints. Next follow the
+[varied-collection plan](work-sessions/2026-09-07-varied-collection-plan.md): legitimate
+resource support, another useful completion objective, and PC capacity composition
+before consuming the final boxslot. Model59 has not played; its current resupply is
+deterministic safety support and must not become a fabricated training example.
+No full replay, teacher factory, sealed test or Crystal execution is needed here.
+
 ## Current — mixed-goal wiring; verify the real next action
 
 Ordered future evolution targets now preserve historical profiles; zero/one-source

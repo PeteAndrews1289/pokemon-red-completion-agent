@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — from Teleport-only to a new living species
+
+This session produced a real learning result. The goal policy could choose capture
+or evolution, and its exploratory draw chose evolution. The deterministic skill
+withdrew the duplicate Abra, switched it out to earn battle experience, evolved it
+into Kadabra16 and kept the original Abra10. The new Kadabra knows Confusion.
+All25specimens survived; the living collection grew22→23 and the learned scorer's
+retained outcomes grew58→59. The mixed-goal milestone is complete, not the whole game.
+
+The reusable fix was to distinguish the Pokémon receiving XP from the Pokémon
+finishing the battle. Healing cannot give Teleport an attack, and a helper's old
+parity-level cap should not prohibit a separately declared collection objective.
+The original trainer rules were preserved; the new mode verifies actual XP, helper
+resources and specimen preservation under existing bounded controls.
+
+There is an important limit to the story: the greedy scorer preferred capture.
+Evolution was sampled at15.5% probability, so success supplies useful experience,
+not proof that the model already knew the best strategy. Seven retained XP saves
+and the final state verify the outcome. Next: varied recipients, legitimate resource
+recovery and storage composition from the actual save. No staged replay or new
+full-game teacher was needed. [Audit](audits/red-shared-experience-learning-2026-09-07.md).
+
 ## September7 follow-up — changing the future without rewriting the past
 
 The next collection step exposed two integration assumptions. Changing an evolution

@@ -7,14 +7,29 @@ percentage belongs only to its named checklist—not overall game or project com
 
 ## Latest development checkpoint
 
-The goal-value learner now has **35 retained examples**, including three new observed failures
+The goal-value learner has **59 retained examples**. Its latest exploratory choice selected
+evolution from genuine capture/evolution alternatives, developed a Teleport-only Abra12 into
+Kadabra16, and preserved the original Abra10. The verified collection is **23 living species /
+25 specimens**, with zero undeclared losses. The successful goal was fitted while retaining all
+58 earlier examples. The mixed collection/evolution checklist is **5/5 complete**.
+
+This is a learned goal selector using deterministic game mechanics—not a demonstrated full-game
+player or independent generalization result. Model59 has not played yet. Next: varied collection,
+legitimate supplies and storage composition from the actual saved endpoint. The dashboard and
+infographic distinguish this completed local milestone from the unfinished sustained-Red stage.
+See the [session audit](docs/audits/red-shared-experience-learning-2026-09-07.md) and
+[next-session plan](docs/work-sessions/2026-09-07-varied-collection-plan.md).
+
+### Previous engineering checkpoint
+
+The earlier goal-value learner had **35 retained examples**, including three new observed failures
 and all 32 earlier examples. The model selected evolution after an exhausted search, reached
 and healed at Cinnabar Center, then failed on the indoor PC approach before storage operations.
 All 17 specimens were preserved. No successful evolution, collection gain or improved sustained
 play is claimed. The next task starts from that saved Center—not a full replay.
 See the [current audit and next steps](docs/audits/red-native-boxed-evolution-2026-09-06.md).
-The dashboard and development infographic show the same state; useful memory-aware play remains
-2 of 5 acceptance items, not overall project completion.
+At that checkpoint, useful memory-aware play was2 of5 acceptance items; this historical
+snapshot is superseded by the latest result above.
 
 ### Previous learning result
 
